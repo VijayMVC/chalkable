@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Chalkable.Data.Common
+namespace Chalkable.Common
 {
     public static class StringTools
     {

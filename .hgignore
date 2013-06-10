@@ -7,3 +7,4 @@ syntax: glob
 *.suo
 **/bin/*
 packages/**/*
+.nuget/*

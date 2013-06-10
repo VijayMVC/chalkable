@@ -7,7 +7,7 @@ using Chalkable.Web.Authentication;
 
 namespace Chalkable.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : ChalkableController
     {
 
         public ActionResult Index()
