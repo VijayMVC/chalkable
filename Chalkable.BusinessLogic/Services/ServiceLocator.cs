@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Configuration;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
-using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BusinessLogic.Services
 {
     public class ServiceLocator
     {
-        public ServiceContext Context { get; private set; }
+        public UserContext Context { get; private set; }
 
-        public ServiceLocator(ServiceContext context)
+        public ServiceLocator(UserContext context)
         {
             Context = context;
         }
@@ -20,8 +18,7 @@ namespace Chalkable.BusinessLogic.Services
     {
         public static ServiceLocatorMaster CreateMasterSysAdmin()
         {
-            var connectionString = ConfigurationManager.ConnectionStrings["ChalkableMaster"].ConnectionString;
-            var context = new ServiceContext(connectionString, Guid.Empty, "Virtual system admin", CoreRoles.SUPER_ADMIN_ROLE);
+            var context = new UserContext(Guid.Empty, null, "Virtual system admin", null, null, CoreRoles.SUPER_ADMIN_ROLE);
             var serviceLocator = new ServiceLocatorMaster(context);
             return serviceLocator;
         }
@@ -38,7 +35,7 @@ namespace Chalkable.BusinessLogic.Services
                 role = CoreRoles.GetById(user.SchoolUsers[0].Role);
             else
                 throw new Exception("User does not belong to any role");
-            var context = new ServiceContext(connectionString, user.Id, user.Login, role);
+            var context = new UserContext(connectionString, user.Id, user.Login, role);
             var serviceLocator = new ServiceLocatorMaster(context);
             return serviceLocator;
         }*/

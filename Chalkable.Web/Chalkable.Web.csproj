@@ -117,7 +117,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authentication\ChalkableMembershipProvider.cs" />
+    <Compile Include="Authentication\ChalkableAuthentication.cs" />
+    <Compile Include="Authentication\ChalkableIdentity.cs" />
+    <Compile Include="Authentication\ChalkablePrincipal.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -130,7 +132,9 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
     <Content Include="loaderio-f0d51fdd912a285e8c3b581c292489c8.html" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

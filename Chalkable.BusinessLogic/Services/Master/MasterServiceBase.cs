@@ -12,12 +12,12 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         protected UnitOfWork Read()
         {
-            return new UnitOfWork(ServiceLocator.Context.ConnectionString, false);
+            return new UnitOfWork(ServiceLocator.Context.MasterConnectionString, false);
         }
 
         protected UnitOfWork Update()
         {
-            return new UnitOfWork(ServiceLocator.Context.ConnectionString, true);
+            return new UnitOfWork(ServiceLocator.Context.MasterConnectionString, true);
         }
     }
 }

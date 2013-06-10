@@ -8,14 +8,14 @@ namespace Chalkable.BusinessLogic.Services.Master
 {
     public interface IServiceLocatorMaster
     {
-        ServiceContext Context { get; }
+        UserContext Context { get; }
         IUserService UserService { get; }
     }
 
     public class ServiceLocatorMaster : ServiceLocator, IServiceLocatorMaster
     {
         private IUserService userService;
-        public ServiceLocatorMaster(ServiceContext context) : base(context)
+        public ServiceLocatorMaster(UserContext context) : base(context)
         {
             userService = new UserService(this);
         }

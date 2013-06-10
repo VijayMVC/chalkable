@@ -3,6 +3,7 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Security;
 using Chalkable.BusinessLogic.Services;
+using Chalkable.Web.Authentication;
 
 namespace Chalkable.Web.Controllers
 {
@@ -16,13 +17,12 @@ namespace Chalkable.Web.Controllers
 
         public ActionResult LogOn(string userName, string password, bool remember)
         {
-            var b = DateTime.Now;
-            var provider = Membership.Provider;
-            if (provider.ValidateUser(userName, password))
+            var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
+            var context = serviceLocator.UserService.Login(userName, password);
+            if (context != null)
             {
-                FormsAuthentication.SetAuthCookie(userName, remember);
-                var dt = (DateTime.Now - b).TotalSeconds;
-                return Json(new { Success = true, UserName = userName, ProcessTime = dt, CallTime = b }, JsonRequestBehavior.AllowGet);
+                ChalkableAuthentication.SignIn(context, remember);
+                return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { Success = false, UserName = userName }, JsonRequestBehavior.AllowGet);
         }
@@ -30,7 +30,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult LogOut()
         {
             var userName = ControllerContext.HttpContext.User.Identity.Name;
-            FormsAuthentication.SignOut();
+            ChalkableAuthentication.SignOut();
             return Json(new { Success = true, UserName = userName }, JsonRequestBehavior.AllowGet);
         }
 

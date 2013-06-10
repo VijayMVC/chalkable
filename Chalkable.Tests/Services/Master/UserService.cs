@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.BusinessLogic.Services;
+﻿using Chalkable.BusinessLogic.Services;
 using NUnit.Framework;
 
 namespace Chalkable.Tests.Services.Master
@@ -17,7 +12,7 @@ namespace Chalkable.Tests.Services.Master
             var created = sl.UserService.CreateSysAdmin("sysadmin", "qqqq");
             var loggedIn = sl.UserService.Login("sysadmin", "qqqq");
             Assert.NotNull(loggedIn);
-            Assert.AreEqual(created.Id, loggedIn.Id);
+            Assert.AreEqual(created.Id, loggedIn.UserId);
         }
     }
 }
