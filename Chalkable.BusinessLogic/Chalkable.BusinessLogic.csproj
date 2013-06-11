@@ -47,7 +47,6 @@
     <Compile Include="Services\Master\ServiceLocatorMaster.cs" />
     <Compile Include="Services\Master\UserService.cs" />
     <Compile Include="Services\School\AddressService.cs" />
-    <Compile Include="Services\School\ClassService.cs" />
     <Compile Include="Services\School\GradeLevelService.cs" />
     <Compile Include="Services\School\PersonService.cs" />
     <Compile Include="Services\School\SchoolServiceBase.cs" />
