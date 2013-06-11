@@ -23,15 +23,5 @@ namespace Chalkable.Data.School.Model
         public IList<MarkingPeriodClass> MarkingPeriodClasses { get; set; } 
     }
 
-    public class MarkingPeriodClass
-    {
-        public Guid Id { get; set; }
-        public Guid ClassRef { get; set; }
-        public Guid MarkingPeriodRef { get; set; }
 
-        [DataEntityAttr]
-        public Class Class { get; set; }
-        [DataEntityAttr]
-        public MarkingPeriod MarkingPeriod { get; set; }
-    }
 }

@@ -1,21 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
-
-    public class AnnouncementType
-    {
-        public Guid Id { get; set; }
-        public bool IsSystem { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public bool Gradable { get; set; }
-    }
 
     public class Announcement
     {
@@ -36,6 +24,11 @@ namespace Chalkable.Data.School.Model
         public AnnouncementType AnnouncementType { get; set; }
         [DataEntityAttr]
         public MarkingPeriodClass MarkingPeriodClass { get; set; }
+
+        public IList<AnnouncementReminder> AnnouncementReminders { get; set; }
+        public IList<AnnouncementQnA> AnnouncementQnAs { get; set; }
+        public IList<AnnouncementAttachment> AnnouncementAttachments { get; set; }
+        public IList<AnnouncementApplication> AnnouncementApplications { get; set; } 
     }
 
 
