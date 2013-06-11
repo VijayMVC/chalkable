@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\SettingsTest.cs" />
     <Compile Include="DataAccess\Master\DataAccessTestBase.cs" />
     <Compile Include="DataAccess\Master\UserDataAccessTest.cs" />
     <Compile Include="DataAccess\OrmTest.cs" />

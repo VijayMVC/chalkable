@@ -43,6 +43,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\BaseSecurity.cs" />
     <Compile Include="Security\CoreRole.cs" />
+    <Compile Include="Services\Master\ISchoolService.cs" />
     <Compile Include="Services\Master\MasterServiceBase.cs" />
     <Compile Include="Services\Master\ServiceLocatorMaster.cs" />
     <Compile Include="Services\Master\UserService.cs" />

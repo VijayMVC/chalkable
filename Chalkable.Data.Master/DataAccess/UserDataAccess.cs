@@ -98,15 +98,7 @@ namespace Chalkable.Data.Master.DataAccess
 
         public void Create(User user)
         {
-            var sql = @"Insert into [User] (Id, Login, Password, IsSysAdmin, IsDeveloper) values (@id, @login, @password, @issysadmin, @isdeveloper)";
-            ExecuteNonQueryParametrized(sql, new Dictionary<string, object>
-                {
-                    {"@id", user.Id},
-                    {"@login", user.Login},
-                    {"@password", user.Password},
-                    {"@issysadmin", user.IsSysAdmin},
-                    {"@isdeveloper", user.IsDeveloper},
-                });
+            SimpleInsert(user);
         }
     }
 }
