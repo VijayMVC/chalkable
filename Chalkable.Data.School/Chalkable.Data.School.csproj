@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="DataAccess\AddressDataAccess.cs" />
     <Compile Include="DataAccess\ClassDataAccess.cs" />
+    <Compile Include="DataAccess\GradeLevelDataAccess.cs" />
     <Compile Include="DataAccess\PersonDataAccess.cs" />
     <Compile Include="Model\Address.cs" />
     <Compile Include="Model\Announcement.cs" />
