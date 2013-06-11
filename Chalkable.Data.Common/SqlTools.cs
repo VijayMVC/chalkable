@@ -1,0 +1,197 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Reflection;
+
+namespace Chalkable.Data.Common
+{
+    public static class SqlTools
+    {
+        public static int ReadInt32(DbDataReader reader, string field)
+        {
+            return reader.GetInt32(reader.GetOrdinal(field));
+        }
+
+        public static long ReadInt64(DbDataReader reader, string field)
+        {
+            return reader.GetInt64(reader.GetOrdinal(field));
+        }
+
+        public static long? ReadInt64Null(DbDataReader reader, string field)
+        {
+            if (reader.IsDBNull(reader.GetOrdinal(field)))
+                return null;
+            return ReadInt64(reader, field);
+        }
+
+        public static string ReadStringNull(DbDataReader reader, string field)
+        {
+            if (reader.IsDBNull(reader.GetOrdinal(field)))
+                return null;
+            return reader.GetString(reader.GetOrdinal(field));
+        }
+
+        public static DateTime ReadDateTime(DbDataReader reader, string field)
+        {
+            return reader.GetDateTime(reader.GetOrdinal(field));
+        }
+
+        public static DateTime? ReadDateTimeNull(DbDataReader reader, string field)
+        {
+            if (reader.IsDBNull(reader.GetOrdinal(field)))
+                return null;
+            return reader.GetDateTime(reader.GetOrdinal(field));
+        }
+
+        public static int? ReadInt32Null(DbDataReader reader, string field)
+        {
+            if (reader.IsDBNull(reader.GetOrdinal(field)))
+                return null;
+            return reader.GetInt32(reader.GetOrdinal(field));
+        }
+
+        public static bool ReadBool(DbDataReader reader, string field)
+        {
+            return reader.GetBoolean(reader.GetOrdinal(field));
+        }
+
+        public static bool? ReadBoolNull(DbDataReader reader, string field)
+        {
+            int ordinal = reader.GetOrdinal(field);
+            if (reader.IsDBNull(ordinal))
+                return null;
+            return reader.GetBoolean(ordinal);
+        }
+
+        public static double ReadDouble(DbDataReader reader, string field)
+        {
+            return reader.GetDouble(reader.GetOrdinal(field));
+        }
+
+        public static decimal ReadDecimal(DbDataReader reader, string field)
+        {
+            return reader.GetDecimal(reader.GetOrdinal(field));
+        }
+
+        public static Guid ReadGuid(DbDataReader reader, string field)
+        {
+            return reader.GetGuid(reader.GetOrdinal(field));
+        }
+
+        public static decimal? ReadDecimalNull(DbDataReader reader, string field)
+        {
+            if (reader.IsDBNull(reader.GetOrdinal(field)))
+                return null;
+            return ReadDecimal(reader, field);
+        }
+
+        public static bool ColumnExists(this DbDataReader reader, string columnName)
+        {
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                if (reader.GetName(i) == columnName)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool IsNullableEnum(this Type t)
+        {
+            return t.IsGenericType &&
+                   t.GetGenericTypeDefinition() == typeof(Nullable<>) &&
+                   t.GetGenericArguments()[0].IsEnum;
+        }
+
+        private static object Read(DbDataReader reader, string field, Type type)
+        {
+            if (!reader.ColumnExists(field))
+                return null;
+            if (type == typeof(Guid))
+                return ReadGuid(reader, field);
+            if (type == typeof (int))
+                return ReadInt32(reader, field);
+            if (type == typeof(int?))
+                return ReadInt32Null(reader, field);
+            if (type == typeof(bool))
+                return ReadBool(reader, field);
+            if (type == typeof(bool?))
+                return ReadBoolNull(reader, field);
+
+            if (type == typeof(DateTime))
+                return ReadDateTime(reader, field);
+            if (type == typeof(DateTime?))
+                return ReadDateTimeNull(reader, field);
+
+            if (type == typeof(long))
+                return ReadInt64(reader, field);
+            if (type == typeof(long?))
+                return ReadInt64Null(reader, field);
+
+            if (type == typeof(decimal))
+                return ReadDecimal(reader, field);
+            if (type == typeof(decimal?))
+                return ReadDecimalNull(reader, field);
+
+            if (type == typeof(string))
+                return ReadStringNull(reader, field);
+
+            if (type == typeof(double))
+                return ReadDouble(reader, field);
+
+            if (type.IsEnum)
+                return ReadInt32(reader, field);
+
+            if (type.IsNullableEnum())
+                return ReadInt32Null(reader, field);
+            
+            return null;
+        }
+
+        public static object Read(this DbDataReader reader, Type t)
+        {
+            var props = t.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            var res = Activator.CreateInstance(t);
+            foreach (var propertyInfo in props)
+                if (propertyInfo.CanWrite)
+                {
+                    object value;
+                    if (propertyInfo.GetCustomAttribute<DataEntityAttr>() != null)
+                        value = reader.Read(propertyInfo.PropertyType);
+                    else
+                        value = Read(reader, propertyInfo.Name, propertyInfo.PropertyType);
+                    if(value != null)    
+                        propertyInfo.SetValue(res, value);
+                }
+            return res;
+        }
+
+        public static T Read<T>(this DbDataReader reader) where T : new()
+        {
+            var t = typeof (T);
+            return (T)reader.Read(t);
+        }
+
+        public static T ReadOrNull<T>(this DbDataReader reader) where T : new()
+        {
+            if (reader.Read())
+            {
+                var t = typeof(T);
+                return (T)reader.Read(t);    
+            }
+            return default(T);
+        }
+        
+        public static IList<T> ReadList<T>(this DbDataReader reader) where T : new()
+        {
+            var res = new List<T>();
+            while (reader.Read())
+            {
+                var o = reader.Read<T>();
+                res.Add(o);
+            }
+            return res;
+        }
+    }
+}
