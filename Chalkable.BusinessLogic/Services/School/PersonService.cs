@@ -1,5 +1,6 @@
 ﻿using System;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -20,6 +21,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Add(string email, string firstName, string lastName, string localId, int? schoolId, string role, string gender, string salutation, DateTime? birthDate)
         {
+            if(!BaseSecurity.IsAdminEditor(Context))
+                throw new ChalkableSecurityException();
+
             using (var uow = Update())
             {
                 var da = new PersonDataAccess(uow);
@@ -41,6 +45,9 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public void Delete(string id)
         {
+            if (!BaseSecurity.IsAdminEditor(Context))
+                throw new ChalkableSecurityException();
+
             using (var uow = Update())
             {
                 var da = new PersonDataAccess(uow);
