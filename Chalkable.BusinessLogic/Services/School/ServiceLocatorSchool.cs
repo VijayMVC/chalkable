@@ -6,15 +6,13 @@ using System.Threading.Tasks;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
-
-    public interface IServiceLocatorMaster
+    public interface IServiceLocatorSchool
     {
         UserContext Context { get; }
         IPersonService PersonService { get; }
         IAddressSerivce AddressSerivce { get; }
     }
-
-    public class ServiceLocatorSchool : ServiceLocator , IServiceLocatorMaster
+    public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
     {
         private IPersonService personService;
         private IAddressSerivce addressSerivce;

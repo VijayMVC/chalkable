@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -17,7 +12,8 @@ namespace Chalkable.BusinessLogic.Services.School
     }
     public class AddressService : SchoolServiceBase, IAddressSerivce
     {
-        public AddressService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
+        public AddressService(IServiceLocatorSchool serviceLocator)
+            : base(serviceLocator)
         {
         }
 

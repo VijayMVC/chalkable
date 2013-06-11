@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -18,7 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
     public class PersonService : SchoolServiceBase, IPersonService
     {
-        public PersonService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
+        public PersonService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
         }
 

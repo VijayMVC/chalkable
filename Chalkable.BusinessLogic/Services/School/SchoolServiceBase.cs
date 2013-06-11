@@ -10,13 +10,13 @@ namespace Chalkable.BusinessLogic.Services.School
 
     public class SchoolServiceBase
     {
-        protected IServiceLocatorMaster ServiceLocator { get; private set; }
+        protected IServiceLocatorSchool ServiceLocator { get; private set; }
         protected UserContext Context
         {
             get { return ServiceLocator.Context; }
         }
 
-        public SchoolServiceBase(IServiceLocatorMaster serviceLocator)
+        public SchoolServiceBase(IServiceLocatorSchool serviceLocator)
         {
             ServiceLocator = serviceLocator;
         }
