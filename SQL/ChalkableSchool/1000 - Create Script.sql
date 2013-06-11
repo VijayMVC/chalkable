@@ -21,20 +21,3 @@ CREATE TABLE Person
 	[Email] nvarchar(256) not null
 )
 GO
-
-CREATE TABLE StudentInfo
-(
-	[Id] uniqueidentifier NOT NULL primary key ,
-	[PersonRef] uniqueidentifier NOT NULL Constraint FK_StudentInfo_Person Foreign Key References Person(Id),
-	[IEP] [bit] NOT NULL,
-	[EnrollmentDate] [datetime2](7) NULL,
-	[PreviousSchool] [nvarchar](1024) NULL,
-	[PreviousSchoolPhone] [nvarchar](255) NULL,
-	[PreviousSchoolNote] [nvarchar](max) NULL,
-	[GradeLevelRef] uniqueidentifier NOT NULL Constraint FK_StudentInfo_GradeLevel Foreign Key References GradeLevel(Id)
-)
-GO
-
-Alter Table StudentInfo
-	Add Constraint UQ_StudentInfo_PersonRef unique (PersonRef)
-GO
