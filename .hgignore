@@ -1,0 +1,10 @@
+syntax: glob
+**/bin/**/*
+**/*.user
+**/obj/**/*
+**/csx/**/*
+*.user
+*.suo
+**/bin/*
+packages/**/*
+.nuget/*
