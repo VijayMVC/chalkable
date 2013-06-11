@@ -1,12 +1,3 @@
-create table Person
-(
-	 [Id] [uniqueidentifier] primary key NOT NULL,
-	 RoleRef int not null,
-	 LastMailNotification datetime2 null,
-	 SisId int null
-)
-go
-
 CREATE TABLE [dbo].[Address](
 	[Id] [uniqueidentifier] primary key NOT NULL,
 	[Value] [nvarchar](2048) NOT NULL,
