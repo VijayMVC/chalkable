@@ -11,16 +11,24 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         UserContext Context { get; }
         IPersonService PersonService { get; }
+        IAddressSerivce AddressSerivce { get; }
     }
 
     public class ServiceLocatorSchool : ServiceLocator , IServiceLocatorMaster
     {
         private IPersonService personService;
+        private IAddressSerivce addressSerivce;
         public ServiceLocatorSchool(UserContext context) : base(context)
         {
             personService = new PersonService(this);
+            addressSerivce = new AddressService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
+
+        public IAddressSerivce AddressSerivce
+        {
+            get { return addressSerivce; }
+        }
     }
 }
