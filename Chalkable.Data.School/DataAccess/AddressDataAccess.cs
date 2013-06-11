@@ -29,6 +29,16 @@ namespace Chalkable.Data.School.DataAccess
             SimpleDelete(address);
         }
 
+        public IList<Address> GetAddresses()
+        {
+            var sql = "select * from Address";
+            var conds = new Dictionary<string, object>();
+            using (var reader = ExecuteReaderParametrized(sql, conds))
+            {
+                return reader.ReadList<Address>();
+            }
+        } 
+
         public Address GetAddressById(Guid id)
         {
             var sql = "select * from Address";

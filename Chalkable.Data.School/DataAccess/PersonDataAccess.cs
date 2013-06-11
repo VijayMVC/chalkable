@@ -29,17 +29,6 @@ namespace Chalkable.Data.School.DataAccess
             SimpleDelete(person);
         }
 
-        //public IList<Person> GetPersons()
-        //{
-        //    var conds = new Dictionary<string, object>();
-        //    var sql = "select * from [Person]";
-        //    using (var reader = ExecuteReaderParametrized(sql, conds))
-        //    {
-        //        var res = reader.ReadList<Person>();
-        //        return res;
-        //    }
-        //}
-
         public Person GetById(Guid id)
         {
             var conds = new Dictionary<string, object> { { "@id", id } };
