@@ -41,9 +41,16 @@
   <ItemGroup>
     <Compile Include="DataAccessBase.cs" />
     <Compile Include="DataEntittyAttr.cs" />
+    <Compile Include="Orm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlTools.cs" />
     <Compile Include="UnitOfWork.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
+      <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
+      <Name>Chalkable.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

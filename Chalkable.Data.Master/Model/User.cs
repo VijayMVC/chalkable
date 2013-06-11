@@ -9,6 +9,7 @@ namespace Chalkable.Data.Master.Model
         public Guid Id { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+        [NotDbFieldAttr]
         public IList<SchoolUser> SchoolUsers { get; set; }
         public bool IsSysAdmin { get; set;}
         public bool IsDeveloper { get; set; }

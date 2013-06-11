@@ -34,7 +34,7 @@ namespace Chalkable.Data.Common
         }
 
 
-        private SqlCommand GetStoredProcedureCommandWithParams(string name, Dictionary<string, object> parameters)
+        private SqlCommand GetStoredProcedureCommandWithParams(string name, IDictionary<string, object> parameters)
         {
             var command = GetStoredProcedureCommand(name);
             command.Parameters.Clear();
@@ -42,7 +42,7 @@ namespace Chalkable.Data.Common
             return command;
         }
 
-        private void AddParamsToCommand(DbCommand command, Dictionary<string, object> parameters)
+        private void AddParamsToCommand(DbCommand command, IDictionary<string, object> parameters)
         {
             if (parameters != null)
             {
@@ -57,7 +57,7 @@ namespace Chalkable.Data.Common
             }
         }
 
-        protected SqlDataReader ExecuteStoredProcedureReader(string name, Dictionary<string, object> parameters)
+        protected SqlDataReader ExecuteStoredProcedureReader(string name, IDictionary<string, object> parameters)
         {
             using (var command = GetStoredProcedureCommandWithParams(name, parameters))
             {
@@ -75,7 +75,7 @@ namespace Chalkable.Data.Common
             }
         }
 
-        public void ExecuteNonQueryParametrized(string sql, Dictionary<string, object> parameters)
+        public void ExecuteNonQueryParametrized(string sql, IDictionary<string, object> parameters)
         {
             using (SqlCommand command = GetTextCommandWithParams(sql, parameters))
             {
@@ -83,7 +83,7 @@ namespace Chalkable.Data.Common
             }
         }
 
-        private SqlCommand GetTextCommandWithParams(string sql, Dictionary<string, object> parameters)
+        private SqlCommand GetTextCommandWithParams(string sql, IDictionary<string, object> parameters)
         {
             SqlCommand command = GetTextCommand(sql);
             command.Parameters.Clear();
@@ -100,6 +100,24 @@ namespace Chalkable.Data.Common
             command.CommandType = CommandType.Text;
             command.CommandText = sql;
             return command;
+        }
+
+        protected void SimpleInsert<T>(T obj)
+        {
+            var q = Orm.SimpleInsert(obj);
+            ExecuteNonQueryParametrized(q.Sql, q.Parameters);
+        }
+
+        protected void SimpleUpdate<T>(T obj)
+        {
+            var q = Orm.SimpleUpdate(obj);
+            ExecuteNonQueryParametrized(q.Sql, q.Parameters);
+        }
+
+        protected void SimpleDelete<T>(T obj)
+        {
+            var q = Orm.SimpleUpdate(obj);
+            ExecuteNonQueryParametrized(q.Sql, q.Parameters);
         }
     }
 }
