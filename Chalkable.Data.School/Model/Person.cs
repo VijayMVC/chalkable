@@ -24,8 +24,6 @@ namespace Chalkable.Data.School.Model
         public string Email { get; set; }
         [NotDbFieldAttr]
         public IList<Address> Addresses { get; set; }
-
-        [DataEntityAttr]
         public StudentInfo StudentInfo { get; set; }
     }
 }
