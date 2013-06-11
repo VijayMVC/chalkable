@@ -1,7 +1,7 @@
-CREATE view [dbo].[vwPerson]
+Create view [vwPerson]
 as
 select 	
-	Person.Id as PersonId,
+	Person.Id as Id,
 	Person.RoleRef as RoleId,
 	Person.FirstName as FirstName,
 	Person.LastName as LastName,
