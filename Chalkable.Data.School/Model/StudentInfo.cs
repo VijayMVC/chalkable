@@ -10,7 +10,6 @@ namespace Chalkable.Data.School.Model
     public class StudentInfo
     {
         public Guid Id { get; set; }
-        public Guid PersonRef { get; set; }
         public bool IEP { get; set; }
         public DateTime? EnrollmentDate { get; set; }
         public string PreviousSchool { get; set; }
