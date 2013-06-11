@@ -22,7 +22,7 @@ namespace Chalkable.Data.School.Model
         public DateTime? LastMailNotification { get; set; }
         public int? SisId { get; set; }
         public string Email { get; set; }
-
+        [NotDbFieldAttr]
         public IList<Address> Addresses { get; set; } 
     }
 }

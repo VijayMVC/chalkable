@@ -6,12 +6,12 @@ as
 
 declare @glIds table 
 (
-	id int not null
+	id uniqueidentifier not null
 ) 
 if @gradeLevelIds is not null
 begin
 	insert into @glIds
-	select cast(s as int) from dbo.split(',', @gradeLevelIds)
+	select cast(s as uniqueidentifier) from dbo.split(',', @gradeLevelIds)
 end
 
 
@@ -22,9 +22,7 @@ begin
 	set @callerGradeLevelId = (select GradeLevelRef from StudentInfo where PersonRef = @callerId)
 end
 	
-declare @allCount int;
-set @allCount = 
-(select COUNT(*) from vwPerson
+select COUNT(*) as AllCount from vwPerson
 where
 	(@personId is null or  PersonId = @personId)
 	and (@roleId is null or RoleId = @roleId)
@@ -35,8 +33,8 @@ where
 							join Class on ClassPerson.ClassRef = Class.Id 
 							where Class.TeacherRef = @teacherId
 							))
-	and (@classId is null or ((@roleId is null or @roleId = 3) and PersonId in (select PersonRef from SchoolPerson where ClassPerson.ClassRef = @classId))
-						  or ((@roleId is null or @roleId = 2) and PersonId in (select TeacherRef from Class where Class = @classId))
+	and (@classId is null or ((@roleId is null or @roleId = 3) and PersonId in (select PersonRef from ClassPerson where ClassPerson.ClassRef = @classId))
+						  or ((@roleId is null or @roleId = 2) and PersonId in (select TeacherRef from Class where Id = @classId))
 		)
 	and (@callerRoleId = 1 or @callerRoleId = 5 or @callerRoleId = 7 or @callerRoleId = 8 or @callerRoleId = 2 or @callerRoleId = 9
 		or(@callerRoleId = 3 and (PersonId = @callerId 
@@ -55,7 +53,6 @@ where
 				(select * from Class where Class.TeacherRef = vwPerson.PersonId and Class.GradeLevelRef in (select id from @glIds))
 			)
 		)
-)						
 
 -- Sort Type
 -- 0 : by FisrtName
@@ -64,10 +61,9 @@ where
 select * from
 (						
 	select 
-		vwSchoolPerson.*,
-		@allCount as AllCount,
-		ROW_NUMBER() OVER(ORDER BY case when @sortType = 0 then vwSchoolPerson.FirstName else vwSchoolPerson.LastName end) as RowNumber
-	from vwSchoolPerson
+		vwPerson.*,
+		ROW_NUMBER() OVER(ORDER BY case when @sortType = 0 then vwPerson.FirstName else vwPerson.LastName end) as RowNumber
+	from vwPerson
 	where
 	(@personId is null or  PersonId = @personId)
 	and (@roleId is null or RoleId = @roleId)
@@ -78,8 +74,8 @@ select * from
 							join Class on ClassPerson.ClassRef = Class.Id 
 							where Class.TeacherRef = @teacherId
 							))
-	and (@classId is null or ((@roleId is null or @roleId = 3) and PersonId in (select PersonRef from SchoolPerson where ClassPerson.ClassRef = @classId))
-						  or ((@roleId is null or @roleId = 2) and PersonId in (select TeacherRef from Class where Class = @classId))
+	and (@classId is null or ((@roleId is null or @roleId = 3) and PersonId in (select PersonRef from ClassPerson where ClassPerson.ClassRef = @classId))
+						  or ((@roleId is null or @roleId = 2) and PersonId in (select TeacherRef from Class where Id = @classId))
 		)
 	and (@callerRoleId = 1 or @callerRoleId = 5 or @callerRoleId = 7 or @callerRoleId = 8 or @callerRoleId = 2 or @callerRoleId = 9
 		or(@callerRoleId = 3 and (PersonId = @callerId 
