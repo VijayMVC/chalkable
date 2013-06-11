@@ -5,6 +5,11 @@ namespace Chalkable.BusinessLogic.Services.Master
     public class MasterServiceBase
     {
         protected IServiceLocatorMaster ServiceLocator { get; private set; }
+        protected UserContext Context
+        {
+            get { return ServiceLocator.Context; }
+        }
+
         public MasterServiceBase(IServiceLocatorMaster serviceLocator)
         {
             ServiceLocator = serviceLocator;
