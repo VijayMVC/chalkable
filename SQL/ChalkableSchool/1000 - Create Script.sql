@@ -34,3 +34,7 @@ CREATE TABLE StudentInfo
 	[GradeLevelRef] uniqueidentifier NOT NULL Constraint FK_StudentInfo_GradeLevel Foreign Key References GradeLevel(Id)
 )
 GO
+
+Alter Table StudentInfo
+	Add Constraint UQ_StudentInfo_PersonRef unique (PersonRef)
+GO

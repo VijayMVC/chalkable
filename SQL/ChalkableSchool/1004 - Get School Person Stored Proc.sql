@@ -1,4 +1,4 @@
-CREATE procedure [dbo].[spGetPersons]
+Create procedure [dbo].[spGetPersons]
 	@personId uniqueidentifier, @callerId uniqueidentifier, @roleId int, @start int, @count int, @startFrom nvarchar(255)
 	, @teacherId uniqueidentifier, @classId uniqueidentifier, @filter1 nvarchar(255), @filter2 nvarchar(255), @filter3 nvarchar(255)
 	, @gradeLevelIds nvarchar(1024), @sortType int
@@ -24,7 +24,7 @@ end
 	
 declare @allCount int;
 set @allCount = 
-(select COUNT(*) from vwSchoolPerson
+(select COUNT(*) from vwPerson
 where
 	(@personId is null or  PersonId = @personId)
 	and (@roleId is null or RoleId = @roleId)
@@ -32,10 +32,10 @@ where
 	and (@teacherId is null or 
 		PersonId in (select ClassPerson.PersonRef from 
 							ClassPerson 
-							join Class on ClassSchoolPerson.ClassRef = Class.Id 
+							join Class on ClassPerson.ClassRef = Class.Id 
 							where Class.TeacherRef = @teacherId
 							))
-	and (@classId is null or ((@roleId is null or @roleId = 3) and PersonId in (select SchoolPersonRef from ClassSchoolPerson where ClassSchoolPerson.ClassRef = @classId))
+	and (@classId is null or ((@roleId is null or @roleId = 3) and PersonId in (select PersonRef from SchoolPerson where ClassPerson.ClassRef = @classId))
 						  or ((@roleId is null or @roleId = 2) and PersonId in (select TeacherRef from Class where Class = @classId))
 		)
 	and (@callerRoleId = 1 or @callerRoleId = 5 or @callerRoleId = 7 or @callerRoleId = 8 or @callerRoleId = 2 or @callerRoleId = 9
@@ -50,9 +50,9 @@ where
 		 or FirstName like @filter3 or LastName like @filter3)
 	and (
 			@gradeLevelIds is null 
-			or (vwSchoolPerson.RoleId = 3 and exists(select * from @glIds as x where x.id = GradeLevelId))
-			or (vwSchoolPerson.RoleId = 2 and exists
-				(select * from Class where Class.TeacherRef = vwSchoolPerson.SchoolPersonId and Class.GradeLevelRef in (select id from @glIds))
+			or (vwPerson.RoleId = 3 and exists(select * from @glIds as x where x.id = GradeLevelId))
+			or (vwPerson.RoleId = 2 and exists
+				(select * from Class where Class.TeacherRef = vwPerson.PersonId and Class.GradeLevelRef in (select id from @glIds))
 			)
 		)
 )						
@@ -75,10 +75,10 @@ select * from
 	and (@teacherId is null or 
 		PersonId in (select ClassPerson.PersonRef from 
 							ClassPerson 
-							join Class on ClassSchoolPerson.ClassRef = Class.Id 
+							join Class on ClassPerson.ClassRef = Class.Id 
 							where Class.TeacherRef = @teacherId
 							))
-	and (@classId is null or ((@roleId is null or @roleId = 3) and PersonId in (select SchoolPersonRef from ClassSchoolPerson where ClassSchoolPerson.ClassRef = @classId))
+	and (@classId is null or ((@roleId is null or @roleId = 3) and PersonId in (select PersonRef from SchoolPerson where ClassPerson.ClassRef = @classId))
 						  or ((@roleId is null or @roleId = 2) and PersonId in (select TeacherRef from Class where Class = @classId))
 		)
 	and (@callerRoleId = 1 or @callerRoleId = 5 or @callerRoleId = 7 or @callerRoleId = 8 or @callerRoleId = 2 or @callerRoleId = 9
@@ -93,10 +93,11 @@ select * from
 		 or FirstName like @filter3 or LastName like @filter3)
 	and (
 			@gradeLevelIds is null 
-			or (vwSchoolPerson.RoleId = 3 and exists(select * from @glIds as x where x.id = GradeLevelId))
-			or (vwSchoolPerson.RoleId = 2 and exists
-				(select * from Class where Class.TeacherRef = vwSchoolPerson.SchoolPersonId and Class.GradeLevelRef in (select id from @glIds))
+			or (vwPerson.RoleId = 3 and exists(select * from @glIds as x where x.id = GradeLevelId))
+			or (vwPerson.RoleId = 2 and exists
+				(select * from Class where Class.TeacherRef = vwPerson.PersonId and Class.GradeLevelRef in (select id from @glIds))
 			)
+		
 		
 )						
 ) x
