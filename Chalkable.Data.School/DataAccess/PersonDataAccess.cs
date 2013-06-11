@@ -47,6 +47,7 @@ namespace Chalkable.Data.School.DataAccess
 
         private const string INSERT_TEMPLATE = "insert into {0} ({1}) values({2})";
         private const string UPDATE_TEMPLATE = "update {0} set {1} where {2}";
+        //private const string DELETE_TEMPLATE = "delete "
 
         private string BuildUpdateQuery(string tableName, IDictionary<string, object> conditions, IDictionary<string, object> whereConditions)
         {
@@ -78,7 +79,6 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Delete()
         {
-            
         }
     }
 }

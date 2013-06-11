@@ -39,18 +39,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\PersonDataAccess.cs" />
+    <Compile Include="Model\Address.cs" />
     <Compile Include="Model\Announcement.cs" />
+    <Compile Include="Model\AnnouncementApplication.cs" />
+    <Compile Include="Model\AnnouncementAttachment.cs" />
+    <Compile Include="Model\AnnouncementQnA.cs" />
+    <Compile Include="Model\AnnouncementRecipient.cs" />
+    <Compile Include="Model\AnnouncementRecipientData.cs" />
+    <Compile Include="Model\AnnouncementReminder.cs" />
+    <Compile Include="Model\AnnouncementType.cs" />
     <Compile Include="Model\Class.cs" />
+    <Compile Include="Model\ClassPerson.cs" />
     <Compile Include="Model\CourseInfo.cs" />
     <Compile Include="Model\GradeLevel.cs" />
     <Compile Include="Model\MarkingPeriod.cs" />
+    <Compile Include="Model\MarkingPeriodClass.cs" />
     <Compile Include="Model\Person.cs" />
     <Compile Include="Model\SchoolYear.cs" />
+    <Compile Include="Model\StudentInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DataAccess\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Chalkable.Data.Common\Chalkable.Data.Common.csproj">
       <Project>{ceb50b03-b84b-4194-9bee-f1a2ebd17686}</Project>
