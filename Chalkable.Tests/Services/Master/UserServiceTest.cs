@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace Chalkable.Tests.Services.Master
 {
-    public class UserServiceTest : OnDataBaseTest
+    public class UserServiceTest : ServiceTestBase
     {
         [Test]
         public void CreateLoginTest()

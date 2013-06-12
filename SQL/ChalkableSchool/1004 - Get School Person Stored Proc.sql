@@ -19,7 +19,7 @@ declare @callerRoleId int = (select RoleRef from Person where Id = @callerId);
 declare @callerGradeLevelId uniqueidentifier = null;
 if(@callerRoleId = 3)
 begin
-	set @callerGradeLevelId = (select GradeLevelRef from StudentInfo where PersonRef = @callerId)
+	set @callerGradeLevelId = (select GradeLevelRef from StudentInfo where Id = @callerId)
 end
 	
 select COUNT(*) as AllCount from vwPerson

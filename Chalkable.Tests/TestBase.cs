@@ -9,24 +9,12 @@ namespace Chalkable.Tests
 {
     public partial class TestBase 
     {
-        protected const string DB_NAME = "ChalkableTestDb";
-
-        protected void BeforCreateDB(string chalkableConnection, string masterConnection)
-        {
-            string closeConnections =
-                String.Format(
-                    "if exists(select db_id('{0}') where db_id('{0}') is not null) ALTER DATABASE {0} SET SINGLE_USER WITH ROLLBACK IMMEDIATE",
-                    DB_NAME);
-            ExecuteQuery(masterConnection, closeConnections);
-            string dropQuery =
-                String.Format("if exists(select db_id('{0}') where db_id('{0}') is not null) drop database {0}", DB_NAME);
-            ExecuteQuery(masterConnection, dropQuery);
-        }
-
-
+        protected const string MASTER_DB_NAME = "ChalkableMasterTest";
+        protected const string SCHOOL_DB_TEMPLATE_NAME = "ChalkableSchoolTemplateTest";
+        
         public static void ExecuteQuery(string connectionString, string sql)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (var connection = new SqlConnection(connectionString))
             {
                 ExecuteQuery(connection, sql);
             }

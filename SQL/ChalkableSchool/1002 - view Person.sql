@@ -20,7 +20,7 @@ select
 	StudentInfo.PreviousSchoolPhone as PreviousSchoolPhone
 from 
 	Person
-	left join StudentInfo on StudentInfo.PersonRef = Person.Id
+	left join StudentInfo on StudentInfo.Id = Person.Id
 	left join GradeLevel on StudentInfo.GradeLevelRef = GradeLevel.Id	
 GO
 

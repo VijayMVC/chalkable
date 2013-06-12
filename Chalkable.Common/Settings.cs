@@ -23,6 +23,15 @@ namespace Chalkable.Common
             }
         }
 
+        public static string SchoolTemplateConnectionString
+        {
+            get
+            {
+                var connectionString = ConfigurationManager.ConnectionStrings["ChalkableSchoolTemplate"].ConnectionString;
+                return connectionString;
+            }
+        }
+
         private const string APPLICATION_CONFIG = "ChalkableConfiguration";
         static Settings()
         {

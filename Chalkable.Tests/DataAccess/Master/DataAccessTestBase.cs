@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 using NUnit.Framework;
 
@@ -20,7 +21,7 @@ namespace Chalkable.Tests.DataAccess.Master
         {
             CreateMasterDb();
 
-            var connectionString = ConfigurationManager.ConnectionStrings["ChalkableMaster"].ConnectionString;
+            var connectionString = Settings.MasterConnectionString;
             UnitOfWork = new UnitOfWork(connectionString, true);
             
         }
