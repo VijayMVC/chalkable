@@ -34,6 +34,24 @@ namespace Chalkable.Data.Common
             return Fields(t);
         }
 
+        private const string COMPLEX_RESULT_SET_FORMAT = " {0}.{1} as {0}_{1}";
+        public static IList<string> ComplexFields(Type t)
+        {
+            var fields = Fields(t);
+            var objName = t.Name;
+            return fields.Select(x => string.Format(COMPLEX_RESULT_SET_FORMAT, objName, x)).ToList();
+        } 
+
+        public static string ComplexResultSetQuery(IList<Type> types)
+        {
+            var res = new StringBuilder();
+            foreach (var type in types)
+            {
+                res.Append(ComplexFields(type).JoinString(","));
+            }
+            return res.ToString();
+        }
+
         public static DbQuery SimpleInsert<T>(T obj)
         {
             var res = new DbQuery();
@@ -88,12 +106,12 @@ namespace Chalkable.Data.Common
             var b = new StringBuilder();
             var t = typeof(T);
             b.AppendFormat("Delete from [{0}]", t.Name);
-            b = BuildSqlWhere(b, conditioins);
+            b = BuildSqlWhere(b, t, conditioins);
             res.Sql = b.ToString();
             return res;
         }
 
-        private static StringBuilder BuildSqlWhere(StringBuilder builder, Dictionary<string, object> conds)
+        public static StringBuilder BuildSqlWhere(StringBuilder builder, Type t, Dictionary<string, object> conds)
         {
             if (conds != null && conds.Count > 0)
             {
@@ -106,7 +124,7 @@ namespace Chalkable.Data.Common
                     {
                         builder.Append(" and ");
                     }
-                    builder.Append(cond.Key).Append(" =@").Append(cond.Key);
+                    builder.AppendFormat("[{0}].{1} =@{1}", t.Name, cond.Key);
                 }
             }
             return builder;
@@ -119,7 +137,7 @@ namespace Chalkable.Data.Common
             var b = new StringBuilder();
             var t = typeof (T);
             b.AppendFormat("Select * from [{0}]", t.Name);
-            b = BuildSqlWhere(b, conds);
+            b = BuildSqlWhere(b, t, conds);
             res.Sql = b.ToString();
             return res;
         }

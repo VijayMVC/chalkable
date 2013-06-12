@@ -51,6 +51,8 @@
     <Compile Include="Services\Master\UserService.cs" />
     <Compile Include="Services\School\AddressService.cs" />
     <Compile Include="Services\School\AnnouncementQnAService.cs" />
+    <Compile Include="Services\School\AnnouncementReminderService.cs" />
+    <Compile Include="Services\School\AnnouncementService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
     <Compile Include="Services\School\CourseInfoService.cs" />
     <Compile Include="Services\School\GradeLevelService.cs" />

@@ -39,19 +39,16 @@ namespace Chalkable.Data.School.DataAccess
         public AnnouncementQnA GetWithAnnouncement(Guid id)
         {
             var conds = new Dictionary<string, object> {{"id", id}};
-            var format = " {0}.{1} as {0}_{1}";
-            var fields = Orm.Fields<AnnouncementQnA>().Select(x => string.Format(format, typeof(AnnouncementQnA).Name, x)).ToList();
-            fields.AddRange(Orm.Fields<AnnouncementQnA>().Select(x => string.Format(format, typeof(Announcement).Name, x)));
-            
+            var types = new List<Type> {typeof (AnnouncementQnA), typeof (Announcement)};
             var b = new StringBuilder();
             b.AppendFormat(@"select {0}
                            from [AnnouncementQnA] 
                            join left Announcement a.Id = [AnnouncementQnA].AnnouncementRef
-                           where [AnnouncementQnA].Id = @id", fields.JoinString(","));
+                           where [AnnouncementQnA].Id = @id", Orm.ComplexResultSetQuery(types));
             var sql = b.ToString();
             using (var reader = ExecuteReaderParametrized(sql, conds))
             {
-                return reader.ReadOrNull<AnnouncementQnA>();
+                return reader.ReadOrNull<AnnouncementQnA>(true);
             }
         }
 

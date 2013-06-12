@@ -16,6 +16,11 @@ namespace Chalkable.BusinessLogic.Services.School
         IGradeLevelService GradeLevelService { get; }
         IMarkingPeriodService MarkingPeriodService { get; }
         IClassService ClassService { get; }
+        ISchoolYearService SchoolYearService { get; }
+        ICourseInfoService CourseInfoService { get; }
+        IAnnouncementQnAService AnnouncementQnAService { get; }
+        IAnnouncementService AnnouncementService { get; }
+        IAnnouncementReminderService AnnouncementReminderService { get; }
        
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -26,6 +31,12 @@ namespace Chalkable.BusinessLogic.Services.School
         private IGradeLevelService gradeLevelService;
         private IMarkingPeriodService markingPeriodService;
         private IClassService classService;
+        private ISchoolYearService schoolYearService;
+        private ICourseInfoService courseInfoService;
+        private AnnouncementQnAService announcementQnAService;
+        private AnnouncementReminderService announcementReminderService;
+        private AnnouncementService announcementService;
+
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -36,6 +47,11 @@ namespace Chalkable.BusinessLogic.Services.School
             gradeLevelService = new GradeLevelService(this);
             markingPeriodService = new MarkingPeriodService(this);
             classService = new ClassService(this);
+            schoolYearService = new SchoolYearService(this);
+            courseInfoService = new CourseInfoService(this);
+            announcementQnAService = new AnnouncementQnAService(this);
+            announcementReminderService = new AnnouncementReminderService(this);
+            announcementService = new AnnouncementService(this);
         }
 
         public IPersonService PersonService
@@ -60,7 +76,26 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             get { return classService; }
         }
-
+        public ISchoolYearService SchoolYearService
+        {
+            get { return schoolYearService; }
+        }
+        public ICourseInfoService CourseInfoService
+        {
+            get { return courseInfoService; }
+        }
+        public IAnnouncementQnAService AnnouncementQnAService
+        {
+            get { return announcementQnAService; }
+        }
+        public IAnnouncementService AnnouncementService
+        {
+            get { return announcementService; }
+        }
+        public IAnnouncementReminderService AnnouncementReminderService
+        {
+            get { return announcementReminderService; }
+        }
         public IServiceLocatorMaster ServiceLocatorMaster
         {
             get { return serviceLocatorMaster; }

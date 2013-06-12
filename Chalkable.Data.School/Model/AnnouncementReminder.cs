@@ -13,7 +13,10 @@ namespace Chalkable.Data.School.Model
         public DateTime? RemindDate { get; set; }
         public bool Processed { get; set; }
         public Guid AnnouncementRef { get; set; }
-        public int Before { get; set; }
+        public int? Before { get; set; }
         public Guid PersonRef { get; set; }
+        
+        [DataEntityAttr]
+        public Announcement Announcement { get; set; }
     }
 }
