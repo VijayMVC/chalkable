@@ -28,7 +28,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Delete(Guid classId)
         {
-            var conds = new Dictionary<string, object> {{"@classId", classId}};
+            var conds = new Dictionary<string, object> {{"classId", classId}};
             SimpleDelete<MarkingPeriodClass>(conds);
         }
         
@@ -36,15 +36,15 @@ namespace Chalkable.Data.School.DataAccess
         {
             var conds = new Dictionary<string, object>
                 {
-                    {"@classId", classId},
-                    {"@markingPeriodId", markingPeriodId}
+                    {"classId", classId},
+                    {"markingPeriodId", markingPeriodId}
                 };
            SimpleDelete<MarkingPeriodClass>(conds);
         }
         
         public IList<MarkingPeriodClass> GetList(Guid classId)
         {
-            var conds = new Dictionary<string, object> {{"@classId", classId}};
+            var conds = new Dictionary<string, object> {{"classId", classId}};
             return SelectMany<MarkingPeriodClass>(conds);
         } 
         

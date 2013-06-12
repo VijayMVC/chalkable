@@ -122,8 +122,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 cClass.Description = description;
                 cClass.TeacherRef = Guid.Parse(teacherId);
                 cClass.GradeLevelRef = Guid.Parse(gradeLevelId);
+                classDa.Update(cClass);
                 uow.Commit();
-               
                 return cClass;
             }
         }

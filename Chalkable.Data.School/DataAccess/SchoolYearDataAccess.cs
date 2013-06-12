@@ -29,12 +29,12 @@ namespace Chalkable.Data.School.DataAccess
         }
         public SchoolYear GetById(Guid id)
         {
-            var conds = new Dictionary<string, object> {{"@id", id}};
+            var conds = new Dictionary<string, object> {{"id", id}};
             return SelectOne<SchoolYear>(conds);
         }
         public SchoolYear GetByDate(DateTime date)
         {
-            var conds = new Dictionary<string, object> {{"@date", date}};
+            var conds = new Dictionary<string, object> {{"date", date}};
             var sqlCommand = "select * from SchoolYear where StartDate <= @date and EndDate >= @date";
             using (var reader = ExecuteReaderParametrized(sqlCommand, conds))
             {
@@ -62,9 +62,9 @@ namespace Chalkable.Data.School.DataAccess
             var sqlCommand = "select count(*) as AllCount from SchoolYear where Id != @id and StartDate <= @endDate and EndDate >= @startDate";
             var conds = new Dictionary<string, object>
                 {
-                    {"@id", schoolYear.Id},    
-                    {"@startDate", startDate},
-                    {"@endDate", endDate}
+                    {"id", schoolYear.Id},    
+                    {"startDate", startDate},
+                    {"endDate", endDate}
                 };
             using (var reader = ExecuteReaderParametrized(sqlCommand, conds))
             {

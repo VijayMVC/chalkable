@@ -149,7 +149,7 @@ namespace Chalkable.Data.Common
             return null;
         }
 
-        public static object Read(this DbDataReader reader, Type t)
+        public static object Read(this DbDataReader reader, Type t, bool complexResultSet = false)
         {
             var props = t.GetProperties(BindingFlags.Instance | BindingFlags.Public);
             var res = Activator.CreateInstance(t);
@@ -158,37 +158,42 @@ namespace Chalkable.Data.Common
                 {
                     object value;
                     if (propertyInfo.GetCustomAttribute<DataEntityAttr>() != null)
-                        value = reader.Read(propertyInfo.PropertyType);
+                        value = reader.Read(propertyInfo.PropertyType, complexResultSet);
                     else
-                        value = Read(reader, propertyInfo.Name, propertyInfo.PropertyType);
+                    {
+                        var fieldName = propertyInfo.Name;
+                        if (complexResultSet)
+                            fieldName = string.Format("{0}_{1}", t.Name, fieldName);
+                        value = Read(reader, fieldName, propertyInfo.PropertyType);    
+                    }
                     if(value != null)    
                         propertyInfo.SetValue(res, value);
                 }
             return res;
         }
 
-        public static T Read<T>(this DbDataReader reader) where T : new()
+        public static T Read<T>(this DbDataReader reader, bool complexResultSet = false) where T : new()
         {
             var t = typeof (T);
-            return (T)reader.Read(t);
+            return (T)reader.Read(t, complexResultSet);
         }
 
-        public static T ReadOrNull<T>(this DbDataReader reader) where T : new()
+        public static T ReadOrNull<T>(this DbDataReader reader, bool complexResultSet = false) where T : new()
         {
             if (reader.Read())
             {
                 var t = typeof(T);
-                return (T)reader.Read(t);    
+                return (T)reader.Read(t, complexResultSet);    
             }
             return default(T);
         }
-        
-        public static IList<T> ReadList<T>(this DbDataReader reader) where T : new()
+
+        public static IList<T> ReadList<T>(this DbDataReader reader, bool complexResultSet = false) where T : new()
         {
             var res = new List<T>();
             while (reader.Read())
             {
-                var o = reader.Read<T>();
+                var o = reader.Read<T>(complexResultSet);
                 res.Add(o);
             }
             return res;

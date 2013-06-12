@@ -106,7 +106,7 @@ namespace Chalkable.Data.Common
                     {
                         builder.Append(" and ");
                     }
-                    builder.Append(cond.Key).Append("=@").Append(cond.Key);
+                    builder.Append(cond.Key).Append(" =@ ").Append(cond.Key);
                 }
             }
             return builder;
@@ -138,7 +138,7 @@ namespace Chalkable.Data.Common
             var b = new StringBuilder();
             var res = SimpleSelect<T>(conds);
             b.Append(res.Sql);
-            b.AppendFormat("select count(x.*) as AllCount from ({0})x ", res.Sql);
+            b.AppendFormat("select count(*) as AllCount from ({0});", res.Sql);
             b.Append("select y.* from (");
             b.AppendFormat("  select x.*, row_number() over(order by x.{1}) as RowNumber from ({0}) x", res.Sql, orderColumn);
             b.AppendFormat(")y where RowNumber >= {0} and RowNumber <= {1}", start, count);

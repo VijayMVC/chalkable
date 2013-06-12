@@ -26,7 +26,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public Class GetById(Guid id)
         {
-            var conds = new Dictionary<string, object> {{"@id", id}};
+            var conds = new Dictionary<string, object> {{"Id", id}};
             return SelectOne<Class>(conds);
         }
     }

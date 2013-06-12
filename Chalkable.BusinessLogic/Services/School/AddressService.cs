@@ -54,6 +54,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 address.Value = value;
                 address.Note = note;
                 address.Type = (int) type;
+                da.Update(address);
                 uow.Commit();
                 return address;
             }

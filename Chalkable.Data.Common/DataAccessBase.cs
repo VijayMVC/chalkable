@@ -121,9 +121,9 @@ namespace Chalkable.Data.Common
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
         }
 
-        public void SimpleDelete<T>( Guid id)
+        protected void SimpleDelete<T>(Guid id)
         {
-            var conds = new Dictionary<string, object> {{"@id", id}};
+            var conds = new Dictionary<string, object> {{"id", id}};
             var q = Orm.SimpleDelete<T>(conds);
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
         }

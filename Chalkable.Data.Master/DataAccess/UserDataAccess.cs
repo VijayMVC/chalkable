@@ -17,10 +17,24 @@ namespace Chalkable.Data.Master.DataAccess
             var p1 = new StringBuilder();
             var p2 = new StringBuilder();
             p1.Append("select * from [User]");
-            p2.Append(@"select * from
-                            [User]
-                            join SchoolUser on [User].Id = SchoolUser.UserRef
-                            join School on SchoolUser.SchoolRef = School.Id");
+            p2.Append(@"select 
+                              [User].Id as User_Id,
+                              [User].Login as User_Login,
+                              [User].Password as User_Password,
+                              [User].IsSysAdmin as User_IsSysAdmin,
+                              [User].IsDeveloper as User_IsDeveloper,
+                              SchoolUser.Id as SchoolUser_Id,
+                              SchoolUser.UserRef as SchoolUser_UserRef,
+                              SchoolUser.SchoolRef as SchoolUser_SchoolRef,
+                              SchoolUser.Role as SchoolUser_Role,
+                              School.Id as School_Id,
+                              School.Name as School_Name,
+                              School.ServerUrl as School_ServerUrl,
+                              School.DistrictRef as School_DistrictRef,
+                              School.IsEmpty as School_IsEmpty
+                        from [User]
+                        join SchoolUser on [User].Id = SchoolUser.UserRef
+                        join School on SchoolUser.SchoolRef = School.Id");
             if (conditions.Count > 0)
             {
                 p1.Append(" where ");
@@ -55,7 +69,7 @@ namespace Chalkable.Data.Master.DataAccess
                 if (res != null)
                 {
                     reader.NextResult();
-                    var sul = reader.ReadList<SchoolUser>();
+                    var sul = reader.ReadList<SchoolUser>(true);
                     res.SchoolUsers = sul;
                 }
                 return res;
@@ -82,7 +96,7 @@ namespace Chalkable.Data.Master.DataAccess
             {
                 var res = reader.ReadList<User>();
                 reader.NextResult();
-                var sul = reader.ReadList<SchoolUser>();
+                var sul = reader.ReadList<SchoolUser>(true);
                 var sulDic = res.ToDictionary(x => x.Id, x=>new List<SchoolUser>());
                 foreach (var schoolUser in sul)
                 {

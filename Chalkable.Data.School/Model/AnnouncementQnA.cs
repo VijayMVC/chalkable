@@ -17,5 +17,15 @@ namespace Chalkable.Data.School.Model
         public int State { get; set; }
         public DateTime AnsweredTime { get; set; }
         public DateTime QuestionTime { get; set; }
+
+        [DataEntityAttr]
+        public Announcement Announcement { get; set; }
+    }
+
+    public enum AnnouncementQnAState
+    {
+        Asked = 0,
+        Answered = 1,
+        Unanswered = 2
     }
 }

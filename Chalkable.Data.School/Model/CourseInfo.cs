@@ -11,7 +11,7 @@ namespace Chalkable.Data.School.Model
         public Guid Id { get; set; }
         public string Code { get; set; }
         public string Title { get; set; }
-        public Guid ChalkableDepartmentRef { get; set; }
+        public Guid? ChalkableDepartmentRef { get; set; }
         public int? SisId { get; set; }
     }
 }

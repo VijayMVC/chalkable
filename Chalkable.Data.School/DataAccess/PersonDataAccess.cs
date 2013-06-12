@@ -31,7 +31,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public Person GetById(Guid id)
         {
-            var conds = new Dictionary<string, object> { { "@id", id } };
+            var conds = new Dictionary<string, object> { { "id", id } };
             return SelectOne<Person>(conds);
         }
 

@@ -36,7 +36,7 @@ namespace Chalkable.Data.School.DataAccess
         
         public Address GetAddressById(Guid id)
         {
-            var conds = new Dictionary<string, object>{{"@id", id}};
+            var conds = new Dictionary<string, object>{{"Id", id}};
             return SelectOne<Address>(conds);
         }
     }

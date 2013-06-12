@@ -20,7 +20,7 @@ namespace Chalkable.Data.School.DataAccess
         }
         public void Delete(Guid classId)
         {
-            var conds = new Dictionary<string, object> {{"@classId", classId}};
+            var conds = new Dictionary<string, object> {{"classId", classId}};
             SimpleDelete<ClassPerson>(conds);
         }
     }

@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\AnnouncementSecurity.cs" />
     <Compile Include="Security\BaseSecurity.cs" />
     <Compile Include="Security\CoreRole.cs" />
     <Compile Include="Services\Master\SchoolService.cs" />
@@ -49,7 +50,9 @@
     <Compile Include="Services\Master\ServiceLocatorMaster.cs" />
     <Compile Include="Services\Master\UserService.cs" />
     <Compile Include="Services\School\AddressService.cs" />
+    <Compile Include="Services\School\AnnouncementQnAService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
+    <Compile Include="Services\School\CourseInfoService.cs" />
     <Compile Include="Services\School\GradeLevelService.cs" />
     <Compile Include="Services\School\MarkingPeriodService.cs" />
     <Compile Include="Services\School\PersonService.cs" />
