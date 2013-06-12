@@ -47,6 +47,7 @@
       <DependentUpon>ChlkResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Constants.cs" />
+    <Compile Include="DateTimeTools.cs" />
     <Compile Include="Exceptions\BlobNotFoundException.cs" />
     <Compile Include="Exceptions\ChalkableException.cs" />
     <Compile Include="Exceptions\ChalkableSecurityException.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Exceptions\UnassignedUserException.cs" />
     <Compile Include="Exceptions\UnknownRoleExceptioin.cs" />
     <Compile Include="Exceptions\UnknownRoleException.cs" />
+    <Compile Include="PaginatedList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="StringTools.cs" />

@@ -112,7 +112,7 @@ namespace Chalkable.Data.Common
             return builder;
         }
 
-
+        
         public static DbQuery SimpleSelect<T>(Dictionary<string, object> conds)
         {
             var res = new DbQuery {Parameters = conds};
@@ -120,6 +120,29 @@ namespace Chalkable.Data.Common
             var t = typeof (T);
             b.AppendFormat("Select * from [{0}]", t.Name);
             b = BuildSqlWhere(b, conds);
+            res.Sql = b.ToString();
+            return res;
+        }
+
+        public static DbQuery CountSelect<T>(Dictionary<string, object> conds, string resultName)
+        {
+            var b = new StringBuilder();
+            var res = SimpleSelect<T>(conds);
+            b.AppendFormat("Select Count(*) as {1} from ({0})", res.Sql, resultName);
+            res.Sql = b.ToString();
+            return res;
+        }
+
+        public static DbQuery PaginationSelect<T>(Dictionary<string, object> conds, string orderColumn, int start, int count)
+        {
+            var b = new StringBuilder();
+            var res = SimpleSelect<T>(conds);
+            b.Append(res.Sql);
+            b.AppendFormat("select count(x.*) as AllCount from ({0})x ", res.Sql);
+            b.Append("select y.* from (");
+            b.AppendFormat("  select x.*, row_number() over(order by x.{1}) as RowNumber from ({0}) x", res.Sql, orderColumn);
+            b.AppendFormat(")y where RowNumber >= {0} and RowNumber <= {1}", start, count);
+            b.AppendFormat("order by x.{0}", orderColumn);
             res.Sql = b.ToString();
             return res;
         }

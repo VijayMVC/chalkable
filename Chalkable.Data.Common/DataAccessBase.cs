@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using Chalkable.Common;
 
 namespace Chalkable.Data.Common
 {
@@ -135,8 +136,8 @@ namespace Chalkable.Data.Common
 
         protected T SelectOne<T>(Dictionary<string, object> conditions) where T : new() 
         {
-            var res = Orm.SimpleSelect<T>(conditions);
-            using (var reader = ExecuteReaderParametrized(res.Sql, res.Parameters as Dictionary<string, object>))
+            var command = Orm.SimpleSelect<T>(conditions);
+            using (var reader = ExecuteReaderParametrized(command.Sql, command.Parameters as Dictionary<string, object>))
             {
                 return reader.ReadOrNull<T>();
             }
@@ -148,11 +149,44 @@ namespace Chalkable.Data.Common
         }
         protected IList<T> SelectMany<T>(Dictionary<string, object> conditions) where T : new()
         {
-            var res = Orm.SimpleSelect<T>(conditions);
-            using (var reader = ExecuteReaderParametrized(res.Sql, res.Parameters as Dictionary<string, object>))
+            var q = Orm.SimpleSelect<T>(conditions);
+            using (var reader = ExecuteReaderParametrized(q.Sql, q.Parameters as Dictionary<string, object>))
             {
                 return reader.ReadList<T>();
             }    
+        }
+
+        protected PaginatedList<T> PaginatedSelect<T>(string orderByColumn, int start, int count) where T : new()
+        {
+            var conds = new Dictionary<string, object>();
+            return PaginatedSelect<T>(conds, orderByColumn, start, count);
         } 
+
+        protected PaginatedList<T> PaginatedSelect<T>(Dictionary<string, object> conditions, string orderByColumn, int start, int count) where T : new()
+        {
+            var q = Orm.PaginationSelect<T>(conditions, orderByColumn, start, count);
+            using (var reader = ExecuteReaderParametrized(q.Sql, q.Parameters as Dictionary<string, object>))
+            {
+                if (reader.Read())
+                {
+                    var allCount = SqlTools.ReadInt32(reader, "AllCount");
+                    reader.NextResult();
+                    var res = reader.ReadList<T>();
+                    return new PaginatedList<T>(res, start / count, count, allCount);
+                }
+                return new PaginatedList<T>(new List<T>(), start /count, count, 0);
+            }
+        }
+
+        protected bool Exists<T>(Dictionary<string, object> conditions) where T : new()
+        {
+            var resName = "AllCount";
+            var q = Orm.CountSelect<T>(conditions, resName);
+            using (var reader = ExecuteReaderParametrized(q.Sql, q.Parameters as Dictionary<string, object>))
+            {
+                return reader.Read() && SqlTools.ReadInt32(reader, resName) > 0;
+            }
+        }
+
     }
 }

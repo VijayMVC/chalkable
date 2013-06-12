@@ -46,6 +46,7 @@
     <Compile Include="DataAccess\MarkingPeriodClassDataAccess.cs" />
     <Compile Include="DataAccess\MarkingPeriodDataAccess.cs" />
     <Compile Include="DataAccess\PersonDataAccess.cs" />
+    <Compile Include="DataAccess\SchoolYearDataAccess.cs" />
     <Compile Include="Model\Address.cs" />
     <Compile Include="Model\Announcement.cs" />
     <Compile Include="Model\AnnouncementApplication.cs" />

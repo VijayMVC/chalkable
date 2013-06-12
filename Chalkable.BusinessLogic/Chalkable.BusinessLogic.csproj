@@ -54,6 +54,7 @@
     <Compile Include="Services\School\MarkingPeriodService.cs" />
     <Compile Include="Services\School\PersonService.cs" />
     <Compile Include="Services\School\SchoolServiceBase.cs" />
+    <Compile Include="Services\School\SchoolYearService.cs" />
     <Compile Include="Services\School\ServiceLocatorSchool.cs" />
     <Compile Include="Services\UserContext.cs" />
     <Compile Include="Services\ServiceLocator.cs" />

@@ -17,6 +17,11 @@ namespace Chalkable.BusinessLogic.Services
         public string SchoolName { get; private set; }
         public CoreRole Role { get; private set; }
         public string SchoolServerUrl { get; private set; }
+        public string SchoolTimeZoneId { get; private set; }
+        public DateTime NowSchoolTime
+        {
+            get { return DateTime.UtcNow.ConvertFromUtc(SchoolTimeZoneId); }
+        }
 
         public UserContext(Guid id, Guid? schoolId, string login, string schoolName, string schoolServerUrl, CoreRole role)
         {
@@ -26,6 +31,9 @@ namespace Chalkable.BusinessLogic.Services
             SchoolId = schoolId;
             Login = login;
             Role = role;
+
+            //TODO : school timezone
+            SchoolTimeZoneId = "UTC";
 
             if (schoolId.HasValue)
                 SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, SchoolServerUrl, schoolId);

@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Security
         }
         public static bool IsAdminGrader(UserContext context)
         {
-            return context.Role ==  CoreRoles.ADMIN_GRADE_ROLE;
+            return IsSysAdmin(context) || context.Role ==  CoreRoles.ADMIN_GRADE_ROLE;
         }
         public static bool IsAdminEditor(UserContext context)
         {
