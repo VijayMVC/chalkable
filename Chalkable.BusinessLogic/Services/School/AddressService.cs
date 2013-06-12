@@ -66,8 +66,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new AddressDataAccess(uow);
-                var address = da.GetAddressById(Guid.Parse(id));
-                da.Delete(address);
+                da.Delete(Guid.Parse(id));
                 uow.Commit();
             }
         }

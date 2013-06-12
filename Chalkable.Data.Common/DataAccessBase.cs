@@ -119,5 +119,40 @@ namespace Chalkable.Data.Common
             var q = Orm.SimpleUpdate(obj);
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
         }
+
+        public void SimpleDelete<T>( Guid id)
+        {
+            var conds = new Dictionary<string, object> {{"@id", id}};
+            var q = Orm.SimpleDelete<T>(conds);
+            ExecuteNonQueryParametrized(q.Sql, q.Parameters);
+        }
+
+        public void SimpleDelete<T>(Dictionary<string, object> conds)
+        {
+            var q = Orm.SimpleDelete<T>(conds);
+            ExecuteNonQueryParametrized(q.Sql, q.Parameters);
+        }
+
+        protected T SelectOne<T>(Dictionary<string, object> conditions) where T : new() 
+        {
+            var res = Orm.SimpleSelect<T>(conditions);
+            using (var reader = ExecuteReaderParametrized(res.Sql, res.Parameters as Dictionary<string, object>))
+            {
+                return reader.ReadOrNull<T>();
+            }
+        }
+
+        protected IList<T> SelectMany<T>() where T : new()
+        {
+            return SelectMany<T>(new Dictionary<string, object>());
+        }
+        protected IList<T> SelectMany<T>(Dictionary<string, object> conditions) where T : new()
+        {
+            var res = Orm.SimpleSelect<T>(conditions);
+            using (var reader = ExecuteReaderParametrized(res.Sql, res.Parameters as Dictionary<string, object>))
+            {
+                return reader.ReadList<T>();
+            }    
+        } 
     }
 }

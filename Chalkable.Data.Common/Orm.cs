@@ -81,6 +81,48 @@ namespace Chalkable.Data.Common
             res.Sql = b.ToString();
             return res;
         }
+
+        public static DbQuery SimpleDelete<T>(Dictionary<string, object> conditioins)
+        {
+            var res = new DbQuery { Parameters = conditioins };
+            var b = new StringBuilder();
+            var t = typeof(T);
+            b.AppendFormat("Delete from [{0}]", t.Name);
+            b = BuildSqlWhere(b, conditioins);
+            res.Sql = b.ToString();
+            return res;
+        }
+
+        private static StringBuilder BuildSqlWhere(StringBuilder builder, Dictionary<string, object> conds)
+        {
+            if (conds != null && conds.Count > 0)
+            {
+                builder.Append(" where ");
+                bool first = true;
+                foreach (var cond in conds)
+                {
+                    if (first) first = false;
+                    else
+                    {
+                        builder.Append(" and ");
+                    }
+                    builder.Append(cond.Key).Append("=@").Append(cond.Key);
+                }
+            }
+            return builder;
+        }
+
+
+        public static DbQuery SimpleSelect<T>(Dictionary<string, object> conds)
+        {
+            var res = new DbQuery {Parameters = conds};
+            var b = new StringBuilder();
+            var t = typeof (T);
+            b.AppendFormat("Select * from [{0}]", t.Name);
+            b = BuildSqlWhere(b, conds);
+            res.Sql = b.ToString();
+            return res;
+        }
     }
 
     public class DbQuery

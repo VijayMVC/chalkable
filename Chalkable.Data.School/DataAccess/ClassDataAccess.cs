@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
@@ -22,9 +19,15 @@ namespace Chalkable.Data.School.DataAccess
         {
             SimpleUpdate(cClass);
         }
-        public void Delete(Class cClass)
+        public void Delete(Guid id)
         {
-            SimpleDelete(cClass);
+            SimpleDelete<Class>(id);
+        }
+
+        public Class GetById(Guid id)
+        {
+            var conds = new Dictionary<string, object> {{"@id", id}};
+            return SelectOne<Class>(conds);
         }
     }
 }

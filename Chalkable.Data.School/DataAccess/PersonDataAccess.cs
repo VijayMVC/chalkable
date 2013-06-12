@@ -32,12 +32,7 @@ namespace Chalkable.Data.School.DataAccess
         public Person GetById(Guid id)
         {
             var conds = new Dictionary<string, object> { { "@id", id } };
-            var sql = "select * from [Person] where Id = @id";
-            using (var reader = ExecuteReaderParametrized(sql, conds))
-            {
-                var res = reader.ReadOrNull<Person>();
-                return res;
-            }
+            return SelectOne<Person>(conds);
         }
 
         private const string FILTER_FORMAT = "%{0}%";

@@ -23,31 +23,21 @@ namespace Chalkable.Data.School.DataAccess
         {
             SimpleUpdate(address);
         }
-
-        public void Delete(Address address)
+        
+        public void Delete(Guid id)
         {
-            SimpleDelete(address);
-        }
+            SimpleDelete<Address>(id);
+        } 
 
         public IList<Address> GetAddresses()
         {
-            var sql = "select * from Address";
-            var conds = new Dictionary<string, object>();
-            using (var reader = ExecuteReaderParametrized(sql, conds))
-            {
-                return reader.ReadList<Address>();
-            }
+            return SelectMany<Address>();
         } 
-
+        
         public Address GetAddressById(Guid id)
         {
-            var sql = "select * from Address";
             var conds = new Dictionary<string, object>{{"@id", id}};
-            using (var reader = ExecuteReaderParametrized(sql, conds))
-            {
-                var res = reader.ReadOrNull<Address>();
-                return res;
-            }
+            return SelectOne<Address>(conds);
         }
     }
 }
