@@ -21,7 +21,9 @@ namespace Chalkable.Data.Master.Model
         public string Name { get; set; }
         public const string SERVER_URL_FIELD = "ServerUrl";
         public string ServerUrl { get; set; }
-        public Guid DistrictRef { get; set; }
+        public Guid? DistrictRef { get; set; }
+        public const string IS_EMPTY_FIELD = "IsEmpty";
+        public bool IsEmpty { get; set; }
     }
 
     public class SchoolUser

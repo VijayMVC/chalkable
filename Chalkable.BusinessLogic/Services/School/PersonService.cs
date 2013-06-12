@@ -25,7 +25,8 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
-
+            if (!Context.SchoolId.HasValue)
+                throw new UnassignedUserException();
             using (var uow = Update())
             {
                 var da = new PersonDataAccess(uow);
