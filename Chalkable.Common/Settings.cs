@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Configuration;
 
 namespace Chalkable.Common
 {
@@ -28,7 +27,14 @@ namespace Chalkable.Common
         static Settings()
         {
             var section = ConfigurationManager.GetSection(APPLICATION_CONFIG);
-            configuration = section as ApplicationConfiguration;
+            configuration = (ApplicationConfiguration)section;
+            Servers = new string[configuration.Servers.Count];
+            int i = 0;
+            foreach (var server in configuration.Servers)
+            {
+                Servers[i] = server.ToString();
+                i++;
+            }
         }
 
         private static ApplicationConfiguration configuration;
@@ -37,7 +43,7 @@ namespace Chalkable.Common
             get { return configuration; }
         }
 
-        private static List<string> servers;
+        public static string[] Servers { get; private set; }
     }
 
     public class ApplicationConfiguration : ConfigurationSection

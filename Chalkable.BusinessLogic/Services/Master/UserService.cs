@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
@@ -16,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         User GetByLogin(string login);
         User GetById(Guid id);
         User CreateSysAdmin(string login, string password);
-        User CreateSchoolUser(string login, string password, string schoolId, string role);
+        User CreateSchoolUser(string login, string password, Guid schoolId, string role);
         void ChangePassword(string login, string newPassword);
         IList<User> GetUsers();
     }
@@ -109,7 +108,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             throw new NotImplementedException();
         }
 
-        private User CreateUser(string login, string password, string schoolId, string role, bool isSysAdmin, bool isDeveloper)
+        private User CreateUser(string login, string password, Guid? schoolId, string role, bool isSysAdmin, bool isDeveloper)
         {
             using (var uow = Update())
             {
@@ -125,13 +124,15 @@ namespace Chalkable.BusinessLogic.Services.Master
                 userDa.Create(user);
                 if (!(isDeveloper || isSysAdmin))
                 {
+                    if (!schoolId.HasValue)
+                        throw new NullReferenceException();
                     var schoolUserDa = new SchoolUserDataAccess(uow);
                     var schoolUser = new SchoolUser
                     {
                         Id = Guid.NewGuid(),
                         Role = CoreRoles.GetByName(role).Id,
                         UserRef = user.Id,
-                        SchoolRef = Guid.Parse(schoolId)
+                        SchoolRef = schoolId.Value
                     };
                     schoolUserDa.Create(schoolUser);
                 }
@@ -140,9 +141,9 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public User CreateSchoolUser(string login, string password, string schoolId, string role)
+        public User CreateSchoolUser(string login, string password, Guid schoolId, string role)
         {
-            if(!(BaseSecurity.IsSysAdmin(Context) || (BaseSecurity.IsAdminEditor(Context) && Context.SchoolId.ToString() == schoolId)))
+            if(!(BaseSecurity.IsSysAdmin(Context) || (BaseSecurity.IsAdminEditor(Context) && Context.SchoolId == schoolId)))
                 throw new ChalkableSecurityException();
 
             return CreateUser(login, password, schoolId, role, false, false);

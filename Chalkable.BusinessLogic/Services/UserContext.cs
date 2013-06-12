@@ -2,7 +2,7 @@
 using System.Globalization;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
-using Chalkable.Data.Common;
+using Chalkable.Common.Exceptions;
 
 namespace Chalkable.BusinessLogic.Services
 {
@@ -30,6 +30,16 @@ namespace Chalkable.BusinessLogic.Services
             if (schoolId.HasValue)
                 SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, SchoolServerUrl, schoolId);
             MasterConnectionString = Settings.MasterConnectionString;
+        }
+
+        public void SwitchSchool(Guid schoolId, string schoolName, string schoolServerUrl)
+        {
+            if (Role != CoreRoles.SUPER_ADMIN_ROLE)
+                throw new ChalkableSecurityException("Only sys admin is able to switch between schools");
+            SchoolServerUrl = schoolServerUrl;
+            SchoolName = schoolName;
+            SchoolId = schoolId;
+            SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, SchoolServerUrl, schoolId);   
         }
 
         private const char DELIMITER = '\n';

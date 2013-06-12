@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -39,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\DistrictDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
     <Compile Include="DataAccess\SchoolUserDataAccess.cs" />
     <Compile Include="DataAccess\UserDataAccess.cs" />
@@ -46,6 +48,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
+      <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
+      <Name>Chalkable.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Chalkable.Data.Common\Chalkable.Data.Common.csproj">
       <Project>{CEB50B03-B84B-4194-9BEE-F1A2EBD17686}</Project>
       <Name>Chalkable.Data.Common</Name>

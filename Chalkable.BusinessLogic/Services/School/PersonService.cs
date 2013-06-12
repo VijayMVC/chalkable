@@ -9,7 +9,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
     public interface IPersonService
     {
-        void Add(string email, string password, string firstName, string lastName, string localId, int? schoolId, string role, string gender, string salutation, DateTime? birthDate);
+        void Add(string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate);
         void Delete(string id);
     }
 
@@ -21,7 +21,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         //TODO: needs tests
-        public void Add(string email, string password, string firstName, string lastName, string localId, int? schoolId, string role, string gender, string salutation, DateTime? birthDate)
+        public void Add(string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -30,7 +30,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new PersonDataAccess(uow);
                 var roleId = CoreRoles.GetByName(role).Id;
-                var user = ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUser(email, password, Context.SchoolId.ToString(), role);
+                var user = ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUser(email, password, Context.SchoolId.Value, role);
                 
                 var person = new Person
                     {

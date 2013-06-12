@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.Common;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
@@ -18,7 +15,7 @@ namespace Chalkable.Tests.DataAccess.Master
         public void GetUserTest()
         {
             var da = new UserDataAccess(UnitOfWork);
-            User user = new User()
+            User user = new User
                 {
                     Id = Guid.NewGuid(),
                     IsDeveloper = false,

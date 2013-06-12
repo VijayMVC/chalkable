@@ -19,6 +19,7 @@ namespace Chalkable.Data.Master.Model
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public const string SERVER_URL_FIELD = "ServerUrl";
         public string ServerUrl { get; set; }
         public Guid DistrictRef { get; set; }
     }
@@ -33,6 +34,12 @@ namespace Chalkable.Data.Master.Model
         public User User { get; set; }
         [DataEntityAttr]
         public School School { get; set; }
+    }
+
+    public class District
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
     }
 
 }
