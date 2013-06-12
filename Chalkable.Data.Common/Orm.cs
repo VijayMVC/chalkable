@@ -106,7 +106,7 @@ namespace Chalkable.Data.Common
                     {
                         builder.Append(" and ");
                     }
-                    builder.Append(cond.Key).Append(" =@ ").Append(cond.Key);
+                    builder.Append(cond.Key).Append(" =@").Append(cond.Key);
                 }
             }
             return builder;

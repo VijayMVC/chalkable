@@ -14,7 +14,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         Data.Master.Model.School GetById(Guid id);
         Data.Master.Model.School Create(Guid districtId, string name, IList<UserInfo> principals);
         void CreateEmpty();
-        District Create(string name);
+        District CreateDistrict(string name);
     }
 
     public class SchoolService : MasterServiceBase, ISchoolService
@@ -49,7 +49,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
         
-        public District Create(string name)
+        public District CreateDistrict(string name)
         {
             using (var uow = Update())
             {

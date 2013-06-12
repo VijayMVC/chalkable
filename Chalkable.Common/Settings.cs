@@ -39,9 +39,9 @@ namespace Chalkable.Common
             configuration = (ApplicationConfiguration)section;
             Servers = new string[configuration.Servers.Count];
             int i = 0;
-            foreach (var server in configuration.Servers)
+            foreach (var key in configuration.Servers.AllKeys)
             {
-                Servers[i] = server.ToString();
+                Servers[i] = configuration.Servers[key].Value;
                 i++;
             }
         }
