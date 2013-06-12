@@ -42,6 +42,11 @@ namespace Chalkable.Data.School.DataAccess
            SimpleDelete<MarkingPeriodClass>(conds);
         }
         
+        public IList<MarkingPeriodClass> GetList(Guid classId)
+        {
+            var conds = new Dictionary<string, object> {{"@classId", classId}};
+            return SelectMany<MarkingPeriodClass>(conds);
+        } 
         
         public string BuildSelectCommand(string resultSet, IDictionary<string, object> conditions)
         {

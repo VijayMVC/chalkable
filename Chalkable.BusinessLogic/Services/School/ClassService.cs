@@ -15,6 +15,9 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IClassService
     {
         Class Add(string schoolYearId, string courseInfoId, string name, string description, string teacherId, string gradeLevelId, List<string> markingPeriodsId);
+        Class Edit(string classId, string courseInfoId, string name, string description, string teacherId, string gradeLevelId, List<string> markingPeriodsId);
+        Class AddStudent(string classId, string schoolPersonId);
+        Class DeleteStudent(string classId, string schoolPersonId);
         void Delete(string id);
     }
 
@@ -90,6 +93,49 @@ namespace Chalkable.BusinessLogic.Services.School
                 da.Delete(guidId);
                 uow.Commit();
             }
+        }
+        
+        public Class Edit(string classId, string courseInfoId, string name, string description, string teacherId, string gradeLevelId, List<string> markingPeriodsId)
+        {
+            if (!BaseSecurity.IsAdminEditor(Context))
+                throw new ChalkableSecurityException();
+
+            using (var uow = Update())
+            {
+                var classDa = new ClassDataAccess(uow);
+                var cClass = classDa.GetById(Guid.Parse(classId));
+                var mpcDa = new MarkingPeriodClassDataAccess(uow);
+                var markingPeriodClasses = mpcDa.GetList(Guid.Parse(classId));
+                var mpcForDelete = markingPeriodClasses.Where(x => !markingPeriodsId.Contains(x.MarkingPeriodRef.ToString()));
+                var mpIdsForAdd = markingPeriodsId.Where(x => mpcForDelete.Any(y => y.MarkingPeriodRef.ToString() != x));
+
+                foreach (var markingPeriodClass in mpcForDelete)
+                {
+                    mpcDa.Delete(markingPeriodClass);
+                }
+                foreach (var mpId in mpIdsForAdd)
+                {
+                    AddMarkingPeriod(cClass, mpId, uow);
+                }
+                cClass.Name = name;
+                cClass.CourseInfoRef = Guid.Parse(courseInfoId);
+                cClass.Description = description;
+                cClass.TeacherRef = Guid.Parse(teacherId);
+                cClass.GradeLevelRef = Guid.Parse(gradeLevelId);
+                uow.Commit();
+               
+                return cClass;
+            }
+        }
+
+        public Class AddStudent(string classId, string schoolPersonId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Class DeleteStudent(string classId, string schoolPersonId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

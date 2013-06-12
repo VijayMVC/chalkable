@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
@@ -15,6 +16,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         User GetByLogin(string login);
         User GetById(Guid id);
         User CreateSysAdmin(string login, string password);
+        User CreateSchoolUser(string login, string password, string schoolId, string role);
         void ChangePassword(string login, string newPassword);
         IList<User> GetUsers();
     }
@@ -94,21 +96,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public User CreateSysAdmin(string login, string password)
         {
-            using (var uow = Update())
-            {
-                var da = new UserDataAccess(uow);
-                User user = new User
-                    {
-                        Id = Guid.NewGuid(),
-                        IsDeveloper = false,
-                        IsSysAdmin = true,
-                        Login = login,
-                        Password = PasswordMd5(password)
-                    };
-                da.Create(user);
-                uow.Commit();
-                return user;
-            }
+            return CreateUser(login, password, null, null, true, false);
         }
 
         public void ChangePassword(string login, string newPassword)
@@ -119,6 +107,45 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IList<User> GetUsers()
         {
             throw new NotImplementedException();
+        }
+
+        private User CreateUser(string login, string password, string schoolId, string role, bool isSysAdmin, bool isDeveloper)
+        {
+            using (var uow = Update())
+            {
+                var userDa = new UserDataAccess(uow);
+                var user = new User
+                {
+                    Id = Guid.NewGuid(),
+                    IsDeveloper = isDeveloper,
+                    IsSysAdmin = isSysAdmin,
+                    Login = login,
+                    Password = PasswordMd5(password)
+                };
+                userDa.Create(user);
+                if (!(isDeveloper || isSysAdmin))
+                {
+                    var schoolUserDa = new SchoolUserDataAccess(uow);
+                    var schoolUser = new SchoolUser
+                    {
+                        Id = Guid.NewGuid(),
+                        Role = CoreRoles.GetByName(role).Id,
+                        UserRef = user.Id,
+                        SchoolRef = Guid.Parse(schoolId)
+                    };
+                    schoolUserDa.Create(schoolUser);
+                }
+                uow.Commit();
+                return user;
+            }
+        }
+
+        public User CreateSchoolUser(string login, string password, string schoolId, string role)
+        {
+            if(!(BaseSecurity.IsSysAdmin(Context) || (BaseSecurity.IsAdminEditor(Context) && Context.SchoolId.ToString() == schoolId)))
+                throw new ChalkableSecurityException();
+
+            return CreateUser(login, password, schoolId, role, false, false);
         }
     }
 }
