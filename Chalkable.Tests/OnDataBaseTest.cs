@@ -16,14 +16,21 @@ namespace Chalkable.Tests
             {
                 string dropQuery = String.Format("drop database {0}", MASTER_DB_NAME);
                 ExecuteQuery(masterConnection, dropQuery);
-                dropQuery = String.Format("drop database {0}", SCHOOL_DB_TEMPLATE_NAME);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+
+            try
+            {
+                string dropQuery = String.Format("drop database {0}", SCHOOL_DB_TEMPLATE_NAME);
                 ExecuteQuery(masterConnection, dropQuery);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
             }
-            
         }
         
 

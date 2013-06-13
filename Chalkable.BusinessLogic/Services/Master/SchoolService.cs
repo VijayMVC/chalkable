@@ -35,7 +35,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                     DistrictRef = null,
                     Id = Guid.NewGuid(),
                     Name = "Empty",
-                    ServerUrl = server
+                    ServerUrl = server,
+                    IsEmpty = true
                 };
                 var da = new SchoolDataAccess(uow);
                 da.Create(school);

@@ -149,7 +149,7 @@ namespace Chalkable.Data.Common
             return null;
         }
 
-        public static object Read(this DbDataReader reader, Type t, bool complexResultSet = false)
+        public static object Read(this DbDataReader reader, Type t, bool fullFieldNames = false)
         {
             var props = t.GetProperties(BindingFlags.Instance | BindingFlags.Public);
             var res = Activator.CreateInstance(t);
@@ -158,11 +158,11 @@ namespace Chalkable.Data.Common
                 {
                     object value;
                     if (propertyInfo.GetCustomAttribute<DataEntityAttr>() != null)
-                        value = reader.Read(propertyInfo.PropertyType, complexResultSet);
+                        value = reader.Read(propertyInfo.PropertyType, fullFieldNames);
                     else
                     {
                         var fieldName = propertyInfo.Name;
-                        if (complexResultSet)
+                        if (fullFieldNames)
                             fieldName = string.Format("{0}_{1}", t.Name, fieldName);
                         value = Read(reader, fieldName, propertyInfo.PropertyType);    
                     }
