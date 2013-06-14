@@ -52,26 +52,60 @@ namespace Chalkable.Data.Common
             return res.ToString();
         }
 
-        //TODO: insert list objects 
         //TODO: insert from select 
 
         public static DbQuery SimpleInsert<T>(T obj)
         {
-            var res = new DbQuery();
-            res.Parameters = new Dictionary<string, object>();
+            return SimpleListInsert(new List<T> { obj });
+        } 
+
+        public static DbQuery SimpleListInsert<T>(IList<T> objs)
+        {
+            var res = new DbQuery {Parameters = new Dictionary<string, object>()};
             var b = new StringBuilder();
-            var t = typeof (T);
+            var t = typeof(T);
             var fields = Fields(t);
             b.Append("Insert into [").Append(t.Name).Append("] (");
-            b.Append(fields.Select(x=>"[" + x + "]").JoinString(",")).Append(") values (");
-            b.Append(fields.Select(x => "@" + x).JoinString(",")).Append(")");
-            res.Sql = b.ToString();
-            foreach (var field in fields)
+            b.Append(fields.Select(x => "[" + x + "]").JoinString(",")).Append(")");
+            if (objs.Count > 0)
+                b.Append(" values ");
+
+            for (int i = 0; i < objs.Count; i++)
             {
-                res.Parameters.Add("@" + field, t.GetProperty(field).GetValue(obj));
+                b.Append("(").Append(fields.Select(x => "@" + x + "_" + i.ToString()).JoinString(",")).Append(")");
+                if (i != objs.Count - 1)
+                {
+                    b.Append(",");
+                }
+                foreach (var field in fields)
+                {
+                    var fieldValue = t.GetProperty(field).GetValue(objs[i]);
+                    res.Parameters.Add(field + "_" + i.ToString(), fieldValue);
+                }                
             }
+            res.Sql = b.ToString();
             return res;
         }
+
+ 
+
+        //public static DbQuery SimpleInsert<T>(T obj)
+        //{
+        //    var res = new DbQuery();
+        //    res.Parameters = new Dictionary<string, object>();
+        //    var b = new StringBuilder();
+        //    var t = typeof (T);
+        //    var fields = Fields(t);
+        //    b.Append("Insert into [").Append(t.Name).Append("] (");
+        //    b.Append(fields.Select(x=>"[" + x + "]").JoinString(",")).Append(") values (");
+        //    b.Append(fields.Select(x => "@" + x).JoinString(",")).Append(")");
+        //    res.Sql = b.ToString();
+        //    foreach (var field in fields)
+        //    {
+        //        res.Parameters.Add("@" + field, t.GetProperty(field).GetValue(obj));
+        //    }
+        //    return res;
+        //}
 
         //public static DbQuery SimpleUpdate<T>(T obj)
         //{

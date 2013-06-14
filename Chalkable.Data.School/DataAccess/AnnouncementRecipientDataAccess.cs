@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
@@ -21,7 +18,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Create(IList<AnnouncementRecipient> announcementRecipients)
         {
-            throw new NotImplementedException();
+            SimpleInsert(announcementRecipients);
         }
 
         public void Delete(Guid announcementId)

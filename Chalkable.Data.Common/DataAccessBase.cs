@@ -109,6 +109,12 @@ namespace Chalkable.Data.Common
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
         }
 
+        protected void SimpleInsert<T>(IList<T> objs)
+        {
+            var q = Orm.SimpleListInsert(objs);
+            ExecuteNonQueryParametrized(q.Sql, q.Parameters);
+        }
+
         protected void SimpleUpdate<T>(T obj)
         {
             var q = Orm.SimpleUpdate(obj);
