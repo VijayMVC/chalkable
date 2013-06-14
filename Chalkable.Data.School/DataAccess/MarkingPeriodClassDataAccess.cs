@@ -10,9 +10,14 @@ namespace Chalkable.Data.School.DataAccess
 {
     public class MarkingPeriodClassDataAccess : DataAccessBase
     {
+
         public MarkingPeriodClassDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
+
+        private const string MARKING_PERIOD_REF_FIELD = "markingPeriodRef";
+        private const string CLASS_REF_FIELD = "classRef";
+        
         public void Create(MarkingPeriodClass markingPeriodClass)
         {
             SimpleInsert(markingPeriodClass);
@@ -28,7 +33,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Delete(Guid classId)
         {
-            var conds = new Dictionary<string, object> {{"classId", classId}};
+            var conds = new Dictionary<string, object> { {CLASS_REF_FIELD, classId } };
             SimpleDelete<MarkingPeriodClass>(conds);
         }
         
@@ -36,15 +41,25 @@ namespace Chalkable.Data.School.DataAccess
         {
             var conds = new Dictionary<string, object>
                 {
-                    {"classId", classId},
-                    {"markingPeriodId", markingPeriodId}
+                    {CLASS_REF_FIELD, classId},
+                    {MARKING_PERIOD_REF_FIELD, markingPeriodId}
                 };
            SimpleDelete<MarkingPeriodClass>(conds);
         }
         
+        public MarkingPeriodClass Get(Guid classId, Guid markingPeriodId)
+        {
+            var conds = new Dictionary<string, object>
+                {
+                    {CLASS_REF_FIELD, classId},
+                    {MARKING_PERIOD_REF_FIELD, markingPeriodId}
+                };
+            return SelectOne<MarkingPeriodClass>(conds);
+        }
+
         public IList<MarkingPeriodClass> GetList(Guid classId)
         {
-            var conds = new Dictionary<string, object> {{"classId", classId}};
+            var conds = new Dictionary<string, object> { { CLASS_REF_FIELD, classId } };
             return SelectMany<MarkingPeriodClass>(conds);
         } 
         
@@ -76,13 +91,12 @@ namespace Chalkable.Data.School.DataAccess
                 return reader.Read() && SqlTools.ReadInt32(reader, "[Count]") > 0;
             }
         }
-        
         public bool Exists(Guid classId, Guid markingPeriodId)
         {
             return Exists(new Dictionary<string, object>
                 {
-                    {"@classId", classId},
-                    {"@markingPeriodId", markingPeriodId}
+                    {CLASS_REF_FIELD, classId},
+                    {MARKING_PERIOD_REF_FIELD, markingPeriodId}
                 });
         }
     }

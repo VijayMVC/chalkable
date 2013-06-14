@@ -14,7 +14,7 @@ namespace Chalkable.Data.School.Model
         public Guid PersonRef { get; set; }
         public string Question { get; set; }
         public string Answer { get; set; }
-        public int State { get; set; }
+        public AnnouncementQnAState State { get; set; }
         public DateTime AnsweredTime { get; set; }
         public DateTime QuestionTime { get; set; }
 

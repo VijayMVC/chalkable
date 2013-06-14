@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services;
+using Chalkable.Common;
 
 namespace Chalkable.BusinessLogic.Security
 {

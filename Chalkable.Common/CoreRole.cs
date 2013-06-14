@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chalkable.BusinessLogic.Security
+namespace Chalkable.Common
 {
     public class CoreRole
     {

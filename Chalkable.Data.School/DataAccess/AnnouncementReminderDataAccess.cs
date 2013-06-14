@@ -27,6 +27,11 @@ namespace Chalkable.Data.School.DataAccess
         {
             SimpleDelete(announcementReminder);
         }
+        public void Delete(Guid announcementId)
+        {
+            var conds = new Dictionary<string, object> {{"announcementRef", announcementId}};
+            SimpleDelete<AnnouncementReminder>(conds);
+        }
 
         public AnnouncementReminder GetById(Guid id)
         {
@@ -42,8 +47,16 @@ namespace Chalkable.Data.School.DataAccess
             b = Orm.BuildSqlWhere(b, annRType, conds);
             using (var reader = ExecuteReaderParametrized(b.ToString(), conds))
             {
-                return reader.ReadOrNull<AnnouncementReminder>(true);
+                var res = reader.ReadOrNull<AnnouncementReminder>(true);
+                res.Announcement = reader.ReadOrNull<Announcement>(true);
+                return res;
             }
         }
+
+        public IList<AnnouncementReminder> GetList(Guid announcementId)
+        {
+            var conds = new Dictionary<string, object> {{"announcementRef", announcementId}};
+            return SelectMany<AnnouncementReminder>(conds);
+        } 
     }
 }

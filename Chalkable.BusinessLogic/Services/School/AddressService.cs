@@ -9,9 +9,9 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAddressSerivce
     {
-        Address Add(string personId, string value, string note, AddressType type);
-        Address Edit(string id, string value, string note, AddressType type);
-        void Delete(string id);
+        Address Add(Guid personId, string value, string note, AddressType type);
+        Address Edit(Guid id, string value, string note, AddressType type);
+        void Delete(Guid id);
         IList<Address> GetAddress();
     }
     public class AddressService : SchoolServiceBase, IAddressSerivce
@@ -22,7 +22,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
         //TODO: security
-        public Address Add(string personId, string value, string note, AddressType type)
+        public Address Add(Guid personId, string value, string note, AddressType type)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -33,8 +33,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     {
                         Id = Guid.NewGuid(),
                         Note = note,
-                        PersonRef = Guid.Parse(personId),
-                        Type = (int) type,
+                        PersonRef = personId,
+                        Type = type,
                         Value = value
                     };
                 da.Create(address);
@@ -43,31 +43,31 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public Address Edit(string id, string value, string note, AddressType type)
+        public Address Edit(Guid id, string value, string note, AddressType type)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new AddressDataAccess(uow);
-                var address = da.GetAddressById(Guid.Parse(id));
+                var address = da.GetAddressById(id);
                 address.Value = value;
                 address.Note = note;
-                address.Type = (int) type;
+                address.Type = type;
                 da.Update(address);
                 uow.Commit();
                 return address;
             }
         }
 
-        public void Delete(string id)
+        public void Delete(Guid id)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new AddressDataAccess(uow);
-                da.Delete(Guid.Parse(id));
+                da.Delete(id);
                 uow.Commit();
             }
         }

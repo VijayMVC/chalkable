@@ -47,6 +47,7 @@
       <DependentUpon>ChlkResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Constants.cs" />
+    <Compile Include="CoreRole.cs" />
     <Compile Include="DateTimeTools.cs" />
     <Compile Include="Exceptions\BlobNotFoundException.cs" />
     <Compile Include="Exceptions\ChalkableException.cs" />

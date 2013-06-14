@@ -2,6 +2,7 @@
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Common;
 
 namespace Chalkable.BusinessLogic.Services
 {

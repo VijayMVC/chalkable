@@ -13,15 +13,15 @@ namespace Chalkable.BusinessLogic.Services.School
 
     public interface IAnnouncementQnAService
     {
-        AnnouncementQnA AskQuestion(string announcementId, string question);
-        AnnouncementQnA Answer(string announcementQnAId, string question, string answer);
+        AnnouncementQnA AskQuestion(Guid announcementId, string question);
+        AnnouncementQnA Answer(Guid announcementQnAId, string question, string answer);
 
-        AnnouncementQnA EditAnswer(string announcementQnAId, string question);
-        AnnouncementQnA EditQuestion(string announcementQnAId, string answer);
-        void Delete(string announcementQnAId);
-        AnnouncementQnA MarkUnanswered(string announcementQnAId);
+        AnnouncementQnA EditAnswer(Guid announcementQnAId, string question);
+        AnnouncementQnA EditQuestion(Guid announcementQnAId, string answer);
+        void Delete(Guid announcementQnAId);
+        AnnouncementQnA MarkUnanswered(Guid announcementQnAId);
         //IList<AnnouncementQnAComplex> GetAnnouncementQnAsComplex(int announcementId);
-        AnnouncementQnA GetAnnouncmentQnA(string announcementQnAId);
+        AnnouncementQnA GetAnnouncmentQnA(Guid announcementQnAId);
     }
 
 
@@ -34,8 +34,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         //TODO : notification sending 
         //TODO : tests 
-        
-        public AnnouncementQnA AskQuestion(string announcementId, string question)
+
+        public AnnouncementQnA AskQuestion(Guid announcementId, string question)
         {
             //TODO : security
             using (var uow = Update())
@@ -44,11 +44,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 var annQnA = new AnnouncementQnA
                     {
                         Id = Guid.NewGuid(),
-                        AnnouncementRef = Guid.Parse(announcementId),
+                        AnnouncementRef = announcementId,
                         PersonRef = Context.UserId,
                         Question = question,
                         QuestionTime = Context.NowSchoolTime,
-                        State = (int) AnnouncementQnAState.Asked
+                        State = AnnouncementQnAState.Asked
 
                     };
                 da.Create(annQnA);
@@ -58,15 +58,16 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public AnnouncementQnA Answer(string announcementQnAId, string question, string answer)
+        public AnnouncementQnA Answer(Guid announcementQnAId, string question, string answer)
         {
             using (var uow = Update())
             {
                 var da = new AnnouncementQnADataAccess(uow);
-                var annQnA = da.GetWithAnnouncement(Guid.Parse(announcementQnAId));
+                var annQnA = da.GetWithAnnouncement(announcementQnAId);
                 if(!AnnouncementSecurity.CanModifyAnnouncement(annQnA.Announcement, Context))
                     throw new ChalkableSecurityException();
 
+                annQnA.State = AnnouncementQnAState.Answered;
                 annQnA.Question = question;
                 annQnA.Answer = answer;
                 annQnA.AnsweredTime = Context.NowSchoolTime;
@@ -77,12 +78,12 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public AnnouncementQnA EditAnswer(string announcementQnAId, string question)
+        public AnnouncementQnA EditAnswer(Guid announcementQnAId, string question)
         {
             using (var uow = Update())
             {
                 var da = new AnnouncementQnADataAccess(uow);
-                var annQnA = da.GetWithAnnouncement(Guid.Parse(announcementQnAId));
+                var annQnA = da.GetWithAnnouncement(announcementQnAId);
                 if (!AnnouncementSecurity.CanModifyAnnouncement(annQnA.Announcement, Context))
                     throw new ChalkableSecurityException();
 
@@ -94,12 +95,12 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public AnnouncementQnA EditQuestion(string announcementQnAId, string answer)
+        public AnnouncementQnA EditQuestion(Guid announcementQnAId, string answer)
         {
             using (var uow = Update())
             {
                 var da = new AnnouncementQnADataAccess(uow);
-                var annQnA = da.GetWithAnnouncement(Guid.Parse(announcementQnAId));
+                var annQnA = da.GetWithAnnouncement(announcementQnAId);
                 if (!AnnouncementSecurity.CanModifyAnnouncement(annQnA.Announcement, Context))
                     throw new ChalkableSecurityException();
 
@@ -111,12 +112,12 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void Delete(string announcementQnAId)
+        public void Delete(Guid announcementQnAId)
         {
             using (var uow = Update())
             {
                 var da = new AnnouncementQnADataAccess(uow);
-                var guidId = Guid.Parse(announcementQnAId);
+                var guidId = announcementQnAId;
                 var annQnA = da.GetWithAnnouncement(guidId);
                 if (!AnnouncementSecurity.CanModifyAnnouncement(annQnA.Announcement, Context))
                     throw new ChalkableSecurityException();
@@ -126,29 +127,29 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public AnnouncementQnA MarkUnanswered(string announcementQnAId)
+        public AnnouncementQnA MarkUnanswered(Guid announcementQnAId)
         {
             using (var uow = Update())
             {
                 var da = new AnnouncementQnADataAccess(uow);
-                var annQnA = da.GetWithAnnouncement(Guid.Parse(announcementQnAId));
+                var annQnA = da.GetWithAnnouncement(announcementQnAId);
                 if (!AnnouncementSecurity.CanModifyAnnouncement(annQnA.Announcement, Context))
                     throw new ChalkableSecurityException();
 
-                annQnA.State = (int) AnnouncementQnAState.Unanswered;
+                annQnA.State = AnnouncementQnAState.Unanswered;
                 da.Update(annQnA);
                 uow.Commit();
                 return annQnA;
             }
         }
 
-        public AnnouncementQnA GetAnnouncmentQnA(string announcementQnAId)
+        public AnnouncementQnA GetAnnouncmentQnA(Guid announcementQnAId)
         {
             //TODO : security 
             using (var uow = Read())
             {
                 var da = new AnnouncementQnADataAccess(uow);
-                return da.GetById(Guid.Parse(announcementQnAId));
+                return da.GetById(announcementQnAId);
             }
         }
     }

@@ -32,7 +32,7 @@ ALTER TABLE [dbo].[Address] CHECK CONSTRAINT [FK_Address_Person]
 GO
 
 CREATE TABLE [dbo].[AnnouncementType](
-	[Id] [uniqueidentifier] primary key NOT NULL,
+	[Id] int primary key identity NOT NULL,
 	[IsSystem] [bit] NOT NULL,
 	[Name] [nvarchar](255) NOT NULL,
 	[Description] [nvarchar](1024) NULL,
@@ -120,7 +120,7 @@ CREATE TABLE [dbo].[Announcement](
 	[Content] [nvarchar](max) NULL,
 	[Created] [datetime2](7) NOT NULL,
 	[Expires] [datetime2](7) NOT NULL,
-	[AnnouncementTypeRef] [uniqueidentifier] NOT NULL constraint [FK_Announcement_AnnouncementType] foreign key references AnnouncementType(Id),
+	[AnnouncementTypeRef] int NOT NULL constraint [FK_Announcement_AnnouncementType] foreign key references AnnouncementType(Id),
 	[State] [int] NOT NULL,
 	[GradingStyle] [int] NOT NULL,
 	[Subject] [nvarchar](255) NULL,

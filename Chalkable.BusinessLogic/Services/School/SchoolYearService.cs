@@ -15,10 +15,10 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface ISchoolYearService
     {
         SchoolYear Add(string name,string description, DateTime startDate, DateTime endDate);
-        SchoolYear Edit(string id, string name, string description, DateTime startDate, DateTime endDate);
-        SchoolYear GetSchoolYearById(string id);
+        SchoolYear Edit(Guid id, string name, string description, DateTime startDate, DateTime endDate);
+        SchoolYear GetSchoolYearById(Guid id);
         PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue);
-        void Delete(string schoolYearId);
+        void Delete(Guid schoolYearId);
         SchoolYear GetCurrentSchoolYear();
         IList<SchoolYear> GetSortedYears();
     }
@@ -65,14 +65,14 @@ namespace Chalkable.BusinessLogic.Services.School
                         && (dataAccess.IsOverlaped(startDate, endDate, schoolYear)));
         }
 
-        public SchoolYear Edit(string id, string name, string description, DateTime startDate, DateTime endDate)
+        public SchoolYear Edit(Guid id, string name, string description, DateTime startDate, DateTime endDate)
         {
             if(BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new SchoolYearDataAccess(uow);
-                var schoolYear = da.GetById(Guid.Parse(id));
+                var schoolYear = da.GetById(id);
 
                 if(IsOverlaped(startDate, endDate, da, schoolYear))
                     throw new ChalkableException(ChlkResources.ERR_SCHOOL_YEAR_OVERLAPPING_DATA);
@@ -89,12 +89,12 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public SchoolYear GetSchoolYearById(string id)
+        public SchoolYear GetSchoolYearById(Guid id)
         {
             using (var uow = Read())
             {
                 var da = new SchoolYearDataAccess(uow);
-                return da.GetById(Guid.Parse(id));
+                return da.GetById(id);
             }
         }
 
@@ -107,14 +107,14 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void Delete(string schoolYearId)
+        public void Delete(Guid schoolYearId)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new SchoolYearDataAccess(uow);
-                da.Delete(Guid.Parse(schoolYearId));
+                da.Delete(schoolYearId);
                 uow.Commit();
             }
         }

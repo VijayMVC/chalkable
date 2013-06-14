@@ -16,5 +16,8 @@ namespace Chalkable.Data.School.Model
         public string PreviousSchoolPhone { get; set; }
         public string PreviousSchoolNote { get; set; }
         public Guid GradeLevelRef { get; set; }
+
+        [DataEntityAttr]
+        public GradeLevel GradeLevel { get; set; }
     }
 }

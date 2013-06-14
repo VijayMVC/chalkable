@@ -16,7 +16,7 @@ namespace Chalkable.Data.School.Model
         public int? Before { get; set; }
         public Guid PersonRef { get; set; }
         
-        [DataEntityAttr]
+        [NotDbFieldAttr]
         public Announcement Announcement { get; set; }
     }
 }

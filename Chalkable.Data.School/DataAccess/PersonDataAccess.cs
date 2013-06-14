@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using Chalkable.Common;
@@ -36,6 +37,8 @@ namespace Chalkable.Data.School.DataAccess
         }
 
         private const string FILTER_FORMAT = "%{0}%";
+        
+       
         public PersonQueryResult GetPersons(PersonQuery query)
         {
             

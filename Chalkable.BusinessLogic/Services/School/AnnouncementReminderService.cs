@@ -10,10 +10,10 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAnnouncementReminderService
     {
-        IList<AnnouncementReminder> GetReminders(string announcementId);
-        Announcement AddReminder(string announcementId, int? before);
-        Announcement DeleteReminder(string reminderId);
-        AnnouncementReminder EditReminder(string reminderId, int? before);// Append Method
+        IList<AnnouncementReminder> GetReminders(Guid announcementId);
+        Announcement AddReminder(Guid announcementId, int? before);
+        Announcement DeleteReminder(Guid reminderId);
+        AnnouncementReminder EditReminder(Guid reminderId, int? before);// Append Method
         void ProcessReminders(int? count);
     }
 
@@ -27,12 +27,12 @@ namespace Chalkable.BusinessLogic.Services.School
         //TODO: notification sending
         //TODO: tests
 
-        public IList<AnnouncementReminder> GetReminders(string announcementId)
+        public IList<AnnouncementReminder> GetReminders(Guid announcementId)
         {
             throw new NotImplementedException();
         }
 
-        public Announcement AddReminder(string announcementId, int? before)
+        public Announcement AddReminder(Guid announcementId, int? before)
         {
             using (var uow = Update())
             {
@@ -40,7 +40,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var reminder = new AnnouncementReminder
                     {
                         Id = Guid.NewGuid(),
-                        AnnouncementRef = Guid.Parse(announcementId),
+                        AnnouncementRef = announcementId,
                         PersonRef = Context.UserId,
                         Before = before,
 
@@ -52,17 +52,17 @@ namespace Chalkable.BusinessLogic.Services.School
            
         }
 
-        public Announcement DeleteReminder(string reminderId)
+        public Announcement DeleteReminder(Guid reminderId)
         {
             throw new NotImplementedException();
         }
 
-        public AnnouncementReminder EditReminder(string reminderId, int? before)
+        public AnnouncementReminder EditReminder(Guid reminderId, int? before)
         {
             using (var uow = Update())
             {
                 var da = new AnnouncementReminderDataAccess(uow);
-                var reminder = da.GetById(Guid.Parse(reminderId));
+                var reminder = da.GetById(reminderId);
                 
                 var annExpires = reminder.Announcement.Expires;
                 var nowLocalTime = Context.NowSchoolTime;

@@ -12,8 +12,8 @@ namespace Chalkable.Data.School.Model
         public Guid Id { get; set; }
         public Guid AnnouncementRef { get; set; }
         public bool ToAll { get; set; }
-        public int RoleRef { get; set; }
-        public Guid GradeLevelRef { get; set; }
-        public Guid PersonRef { get; set; }
+        public int? RoleRef { get; set; }
+        public Guid? GradeLevelRef { get; set; }
+        public Guid? PersonRef { get; set; }
     }
 }

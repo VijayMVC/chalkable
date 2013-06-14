@@ -40,8 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\AddressDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementQnADataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementRecipientDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementReminderDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementTypeDataAccess.cs" />
     <Compile Include="DataAccess\ClassDataAccess.cs" />
     <Compile Include="DataAccess\ClassPersonDataAccess.cs" />
     <Compile Include="DataAccess\CourseInfoDataAccess.cs" />
@@ -50,6 +53,7 @@
     <Compile Include="DataAccess\MarkingPeriodDataAccess.cs" />
     <Compile Include="DataAccess\PersonDataAccess.cs" />
     <Compile Include="DataAccess\SchoolYearDataAccess.cs" />
+    <Compile Include="DataAccess\StudentAnnouncementDataAccess.cs" />
     <Compile Include="Model\Address.cs" />
     <Compile Include="Model\Announcement.cs" />
     <Compile Include="Model\AnnouncementApplication.cs" />
@@ -62,11 +66,13 @@
     <Compile Include="Model\Class.cs" />
     <Compile Include="Model\ClassPerson.cs" />
     <Compile Include="Model\CourseInfo.cs" />
+    <Compile Include="Model\FinalGrade.cs" />
     <Compile Include="Model\GradeLevel.cs" />
     <Compile Include="Model\MarkingPeriod.cs" />
     <Compile Include="Model\MarkingPeriodClass.cs" />
     <Compile Include="Model\Person.cs" />
     <Compile Include="Model\SchoolYear.cs" />
+    <Compile Include="Model\StudentAnnouncement.cs" />
     <Compile Include="Model\StudentInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

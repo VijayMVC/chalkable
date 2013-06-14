@@ -14,11 +14,11 @@ namespace Chalkable.BusinessLogic.Services.School
 
     public interface ICourseInfoService
     {
-        CourseInfo Add(string code, string title, string chalkableDepartmentId = null);
-        CourseInfo Edit(string courseInfoId, string code, string title, string chalkableDepartmentId = null);
-        void Delete(string id);
+        CourseInfo Add(string code, string title, Guid? chalkableDepartmentId = null);
+        CourseInfo Edit(Guid courseInfoId, string code, string title, Guid? chalkableDepartmentId = null);
+        void Delete(Guid id);
         PaginatedList<CourseInfo> GetCourseInfos(int start, int count);
-        CourseInfo GetCourseById(string id);
+        CourseInfo GetCourseById(Guid id);
     }
 
     public class CourseInfoService : SchoolServiceBase, ICourseInfoService
@@ -28,7 +28,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
         //TODO: needs test
-        public CourseInfo Add(string code, string title, string chalkableDepartmentId = null)
+        public CourseInfo Add(string code, string title, Guid? chalkableDepartmentId = null)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -41,7 +41,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         Id = Guid.NewGuid(),
                         Code = code,
                         Title = title,
-                        ChalkableDepartmentRef = chalkableDepartmentId != null ? Guid.Parse(chalkableDepartmentId) : (Guid?)null
+                        ChalkableDepartmentRef = chalkableDepartmentId
                     };
                 da.Create(courseInfo);
                 uow.Commit();
@@ -49,7 +49,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public CourseInfo Edit(string courseInfoId, string code, string title, string chalkableDepartmentId = null)
+        public CourseInfo Edit(Guid courseInfoId, string code, string title, Guid? chalkableDepartmentId = null)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -57,24 +57,24 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new CourseInfoDataAccess(uow);
-                var courseInfo = da.GetById(Guid.Parse(courseInfoId));
+                var courseInfo = da.GetById(courseInfoId);
                 courseInfo.Title = title;
                 courseInfo.Code = code;
-                courseInfo.ChalkableDepartmentRef = chalkableDepartmentId != null ? Guid.Parse(chalkableDepartmentId) : (Guid?) null;
+                courseInfo.ChalkableDepartmentRef = chalkableDepartmentId;
                 da.Update(courseInfo);
                 uow.Commit();
                 return courseInfo;
             } 
         }
 
-        public void Delete(string id)
+        public void Delete(Guid id)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new CourseInfoDataAccess(uow);
-                da.Delete(Guid.Parse(id));
+                da.Delete(id);
                 uow.Commit();
             }
         }
@@ -88,12 +88,12 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public CourseInfo GetCourseById(string id)
+        public CourseInfo GetCourseById(Guid id)
         {
             using (var uow = Read())
             {
                 var da = new CourseInfoDataAccess(uow);
-                return da.GetById(Guid.Parse(id));
+                return da.GetById(id);
             }
         }
     }

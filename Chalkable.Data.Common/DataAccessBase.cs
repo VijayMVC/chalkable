@@ -114,6 +114,11 @@ namespace Chalkable.Data.Common
             var q = Orm.SimpleUpdate(obj);
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
         }
+        protected void SimpleUpdate<T>(Dictionary<string, object> updateParams, Dictionary<string, object> conditions)
+        {
+            var q = Orm.SimpleUpdate<T>(updateParams, conditions);
+            ExecuteNonQueryParametrized(q.Sql, q.Parameters);
+        }
 
         protected void SimpleDelete<T>(T obj)
         {

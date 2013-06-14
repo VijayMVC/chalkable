@@ -32,5 +32,20 @@ namespace Chalkable.Data.School.DataAccess
             return SelectOne<MarkingPeriod>(conds);
         }
 
+        private const string TILL_DATE_PARAM = "tillDate";
+
+        public MarkingPeriod GetLast(DateTime tillDate)
+        {
+            var sqlCommand = @"select top 1 * from MarkingPeriod 
+                               where StartDate <= @{0}
+                               order by EndDate desc ";
+            var conds = new Dictionary<string, object>{{TILL_DATE_PARAM, tillDate}};
+            sqlCommand = string.Format(sqlCommand, TILL_DATE_PARAM);
+            using (var reader = ExecuteReaderParametrized(sqlCommand, conds))
+            {
+                return reader.ReadOrNull<MarkingPeriod>();
+            }
+        }
+
     }
 }

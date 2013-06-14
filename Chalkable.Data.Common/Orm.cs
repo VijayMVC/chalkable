@@ -14,7 +14,7 @@ namespace Chalkable.Data.Common
             return propertyInfo.GetCustomAttribute<DataEntityAttr>() == null
                 && propertyInfo.GetCustomAttribute<NotDbFieldAttr>() == null;
         }
-
+        
         public static List<string> Fields(Type t)
         {
             var res = new List<string>();
@@ -35,7 +35,7 @@ namespace Chalkable.Data.Common
         }
 
         private const string COMPLEX_RESULT_SET_FORMAT = " {0}.{1} as {0}_{1}";
-        public static IList<string> ComplexFields(Type t)
+        public static IList<string> FullFieldsNames(Type t)
         {
             var fields = Fields(t);
             var objName = t.Name;
@@ -47,10 +47,13 @@ namespace Chalkable.Data.Common
             var res = new StringBuilder();
             foreach (var type in types)
             {
-                res.Append(ComplexFields(type).JoinString(","));
+                res.Append(FullFieldsNames(type).JoinString(","));
             }
             return res.ToString();
         }
+
+        //TODO: insert list objects 
+        //TODO: insert from select 
 
         public static DbQuery SimpleInsert<T>(T obj)
         {
@@ -70,36 +73,90 @@ namespace Chalkable.Data.Common
             return res;
         }
 
-        public static DbQuery SimpleUpdate<T>(T obj)
-        {
-            var res = new DbQuery();
-            res.Parameters = new Dictionary<string, object>();
-            var b = new StringBuilder();
-            var t = typeof(T);
-            var fields = Fields(t);
+        //public static DbQuery SimpleUpdate<T>(T obj)
+        //{
+        //    var res = new DbQuery();
+        //    res.Parameters = new Dictionary<string, object>();
+        //    var b = new StringBuilder();
+        //    var t = typeof(T);
+        //    var fields = Fields(t);
             
-            b.Append("Update [").Append(t.Name).Append("] set ");
-            b.Append(fields.Select(x => "[" + x + "]=@" + x).JoinString(",")).Append(" where [Id] = @Id");
-            res.Sql = b.ToString();
-            foreach (var field in fields)
+        //    b.Append("Update [").Append(t.Name).Append("] set ");
+        //    b.Append(fields.Select(x => "[" + x + "]=@" + x).JoinString(",")).Append(" where [Id] = @Id");
+        //    res.Sql = b.ToString();
+        //    foreach (var field in fields)
+        //    {
+        //        res.Parameters.Add("@" + field, t.GetProperty(field).GetValue(obj));
+        //    }
+        //    return res;
+        //}
+
+         public static DbQuery SimpleUpdate<T>(T obj)
+         {
+             var t = typeof(T);
+             var fields = Fields(t);
+             var updateParams = fields.ToDictionary(field => field, field => t.GetProperty(field).GetValue(obj));
+             var conds = new Dictionary<string, object> {{"id", t.GetProperty("Id").GetValue(obj)}};
+             return SimpleUpdate(t, fields.Select(x => x.ToLower()).ToList(), updateParams, conds);
+         }
+
+         public static DbQuery SimpleUpdate<T>(Dictionary<string, object> updateParams, Dictionary<string, object> conditions)
+         {
+             var t = typeof(T);
+             var fields = Fields(t).Select(x => x.ToLower()).ToList();
+             return SimpleUpdate(t, fields, updateParams, conditions);
+         }
+
+         private static DbQuery SimpleUpdate(Type t, IList<string> fields, Dictionary<string, object> updateParams,
+                                             Dictionary<string, object> conditions)
+         {
+            var res = new DbQuery {Parameters = new Dictionary<string, object>()};
+            var b = new StringBuilder();
+            b.Append("Update [").Append(t.Name).Append("] set");
+            var setParams = new Dictionary<string, string>();
+            var setParamsPrefix = "set_param_";
+            foreach (var updateParam in updateParams)
             {
-                res.Parameters.Add("@" + field, t.GetProperty(field).GetValue(obj));
+                if (!fields.Contains(updateParam.Key))
+                {
+                    var setParamName = setParamsPrefix + updateParam.Key;
+                    if (!res.Parameters.ContainsKey(setParamName))
+                        res.Parameters.Add(setParamName, updateParam.Value);
+                    if (!setParams.ContainsKey(updateParam.Key))
+                        setParams.Add(updateParam.Key, setParamName);       
+                }
             }
+            b.Append(setParams.Select(x=> "["  + x.Key + "]=@" + x.Value).JoinString(","));
+            b = BuildSqlWhere(b, t, conditions);
+            foreach (var condition in conditions)
+            {
+                if(!res.Parameters.ContainsKey(condition.Key))
+                    res.Parameters.Add(condition);
+            }
+            res.Sql = b.ToString();
             return res;
-        }
+         }
+
+        //public static DbQuery SimpleDelete<T>(T obj)
+        //{
+        //    var res = new DbQuery();
+        //    res.Parameters = new Dictionary<string, object>();
+        //    var b = new StringBuilder();
+        //    var t = typeof(T);
+        //    b.Append("Delete from [").Append(t.Name).Append("] where Id = @Id");
+        //    res.Parameters.Add("@Id", t.GetProperty("Id").GetValue(obj));
+        //    res.Sql = b.ToString();
+        //    return res;
+        //}
+
 
         public static DbQuery SimpleDelete<T>(T obj)
         {
-            var res = new DbQuery();
-            res.Parameters = new Dictionary<string, object>();
-            var b = new StringBuilder();
             var t = typeof(T);
-            b.Append("Delete from [").Append(t.Name).Append("] where Id = @Id");
-            res.Parameters.Add("@Id", t.GetProperty("Id").GetValue(obj));
-            res.Sql = b.ToString();
-            return res;
+            var conds = new Dictionary<string, object> {{"Id", t.GetProperty("Id").GetValue(obj)}};
+            return SimpleDelete<T>(conds);
         }
-
+        
         public static DbQuery SimpleDelete<T>(Dictionary<string, object> conditioins)
         {
             var res = new DbQuery { Parameters = conditioins };

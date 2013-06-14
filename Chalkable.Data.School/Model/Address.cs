@@ -12,7 +12,7 @@ namespace Chalkable.Data.School.Model
         public Guid Id { get; set; }
         public string Value { get; set; }
         public string Note { get; set; }
-        public int Type { get; set; }
+        public AddressType Type { get; set; }
         public Guid PersonRef { get; set; }
         public int? SisId { get; set; }
     }
