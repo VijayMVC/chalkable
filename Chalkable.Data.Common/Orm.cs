@@ -67,8 +67,7 @@ namespace Chalkable.Data.Common
             var fields = Fields(t);
             b.Append("Insert into [").Append(t.Name).Append("] (");
             b.Append(fields.Select(x => "[" + x + "]").JoinString(",")).Append(")");
-            if (objs.Count > 0)
-                b.Append(" values ");
+            b.Append(" values ");
 
             for (int i = 0; i < objs.Count; i++)
             {

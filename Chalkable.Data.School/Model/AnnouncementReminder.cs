@@ -14,7 +14,7 @@ namespace Chalkable.Data.School.Model
         public bool Processed { get; set; }
         public Guid AnnouncementRef { get; set; }
         public int? Before { get; set; }
-        public Guid PersonRef { get; set; }
+        public Guid? PersonRef { get; set; }
         
         [NotDbFieldAttr]
         public Announcement Announcement { get; set; }

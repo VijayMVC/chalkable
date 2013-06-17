@@ -10,7 +10,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IMarkingPeriodService
     {
-        MarkingPeriod GetById(Guid id);
+        MarkingPeriod GetMarkingPeriodById(Guid id);
         MarkingPeriod GetLastMarkingPeriod(DateTime tillDate);
         MarkingPeriodClass GetMarkingPeriodClass(Guid classId, Guid markingPeriodId);
     }
@@ -21,7 +21,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public MarkingPeriod GetById(Guid id)
+        public MarkingPeriod GetMarkingPeriodById(Guid id)
         {
             using (var uow = Read())
             {

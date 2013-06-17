@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services
             else if (user.IsDeveloper)
                 role = CoreRoles.DEVELOPER_ROLE;
             else if (user.SchoolUsers != null && user.SchoolUsers.Count > 0)
-                role = CoreRoles.GetById(user.SchoolUsers[0].Role);
+                role = CoreRoles.GetMarkingPeriodById(user.SchoolUsers[0].Role);
             else
                 throw new Exception("User does not belong to any role");
             var context = new UserContext(connectionString, user.Id, user.Login, role);

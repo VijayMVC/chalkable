@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.BusinessLogic.Security;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -29,47 +31,63 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<AnnouncementReminder> GetReminders(Guid announcementId)
         {
-            throw new NotImplementedException();
+            using (var uow = Read())
+            {
+                var da = new AnnouncementReminderDataAccess(uow);
+                return da.GetList(announcementId, Context.UserId);
+            }
         }
 
         public Announcement AddReminder(Guid announcementId, int? before)
         {
             using (var uow = Update())
             {
+                var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId); // security here 
                 var da = new AnnouncementReminderDataAccess(uow);
                 var reminder = new AnnouncementReminder
                     {
                         Id = Guid.NewGuid(),
-                        AnnouncementRef = announcementId,
+                        AnnouncementRef = ann.Id,
                         PersonRef = Context.UserId,
                         Before = before,
-
                     };
                 da.Create(reminder);
                 uow.Commit();
-                throw new NotImplementedException();
+                return ann;
             }
-           
         }
 
         public Announcement DeleteReminder(Guid reminderId)
         {
-            throw new NotImplementedException();
-        }
+            using (var uow = Update())
+            {
+                var da = new AnnouncementReminderDataAccess(uow);
+                var reminder = da.GetById(reminderId, Context.UserId);
+                if(!AnnouncementSecurity.IsReminderOwner(reminder, Context))
+                    throw new ChalkableSecurityException();
+                da.Delete(reminder);
+                uow.Commit();
+                return reminder.Announcement;
+            }
+         }
 
         public AnnouncementReminder EditReminder(Guid reminderId, int? before)
         {
             using (var uow = Update())
             {
                 var da = new AnnouncementReminderDataAccess(uow);
-                var reminder = da.GetById(reminderId);
+                var reminder = da.GetById(reminderId, Context.UserId);
                 
+                if(!AnnouncementSecurity.IsReminderOwner(reminder, Context))
+                    throw new ChalkableSecurityException();
+
+                reminder.Before = before;
                 var annExpires = reminder.Announcement.Expires;
                 var nowLocalTime = Context.NowSchoolTime;
                 reminder.RemindDate = before.HasValue && annExpires >= nowLocalTime ? annExpires.AddDays(-before.Value) : nowLocalTime;
                 da.Update(reminder);
                 uow.Commit();
-                throw new NotImplementedException();
+                return reminder;
             }
         }
 

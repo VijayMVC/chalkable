@@ -11,6 +11,8 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
+        private const string ANNOUNCEMENT_REF_FIELD = "announcementRef";
+
         public void Create(AnnouncementRecipient announcementRecipient)
         {
             SimpleInsert(announcementRecipient);
@@ -23,8 +25,14 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Delete(Guid announcementId)
         {
-            var conds = new Dictionary<string, object> {{"announcementRef", announcementId}};
+            var conds = new Dictionary<string, object> {{ANNOUNCEMENT_REF_FIELD, announcementId}};
             SimpleDelete<AnnouncementRecipient>(conds);
+        }
+
+        public IList<AnnouncementRecipient> GetList(Guid announcementId)
+        {
+            var conds = new Dictionary<string, object> {{ANNOUNCEMENT_REF_FIELD, announcementId}};
+            return SelectMany<AnnouncementRecipient>(conds);
         }
     }
 }

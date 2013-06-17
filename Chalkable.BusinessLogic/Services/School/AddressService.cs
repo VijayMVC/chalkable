@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -13,6 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Address Edit(Guid id, string value, string note, AddressType type);
         void Delete(Guid id);
         IList<Address> GetAddress();
+
     }
     public class AddressService : SchoolServiceBase, IAddressSerivce
     {
@@ -74,6 +76,9 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public IList<Address> GetAddress()
         {
+            if(!BaseSecurity.IsAdminOrTeacher(Context))
+                throw new ChalkableSecurityException();
+
             using (var uow = Read())
             {
                 var da = new AddressDataAccess(uow);

@@ -11,7 +11,7 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public IList<GradeLevel> GetGradeLeveles()
+        public IList<GradeLevel> GetGradeLevels()
         {
             return SelectMany<GradeLevel>();
         }

@@ -31,10 +31,17 @@ namespace Chalkable.Data.School.DataAccess
             SimpleDelete<AnnouncementReminder>(conds);
         }
 
-        public AnnouncementReminder GetById(Guid id)
+        public AnnouncementReminder GetById(Guid id, Guid personId)
         {
             var conds = new Dictionary<string, object> {{"id", id}};
-            var annRType = typeof (AnnouncementReminder);
+            var res = GetReminders(conds, personId);
+            return res[0];
+        }
+
+        private IList<AnnouncementReminder> GetReminders(Dictionary<string, object> conditions, Guid personId)
+        {
+
+            var annRType = typeof(AnnouncementReminder);
             var types = new List<Type> { annRType, typeof(Announcement) };
             var sql = string.Format(@"select {0} 
                                       from AnnouncementReminder 
@@ -42,19 +49,28 @@ namespace Chalkable.Data.School.DataAccess
                                       , Orm.ComplexResultSetQuery(types));
             var b = new StringBuilder();
             b.Append(sql);
-            b = Orm.BuildSqlWhere(b, annRType, conds);
-            using (var reader = ExecuteReaderParametrized(b.ToString(), conds))
+            b = Orm.BuildSqlWhere(b, annRType, conditions);
+            b.Append(@" and ((Announcement.PersonRef = @personId and AnnouncementReminder.PersonRef is null)
+                             or (AnnouncementReminder.PersonRef is not null and AnnouncementReminder.PersonRef = @personId)");
+            conditions.Add("@personId", personId);
+            using (var reader = ExecuteReaderParametrized(b.ToString(), conditions))
             {
-                var res = reader.ReadOrNull<AnnouncementReminder>(true);
-                res.Announcement = reader.ReadOrNull<Announcement>(true);
+                var res = new List<AnnouncementReminder>();
+                while (reader.Read())
+                {
+                    var reminder = reader.Read<AnnouncementReminder>();
+                    reminder.Announcement = reader.Read<Announcement>();
+                    res.Add(reminder);
+                }
                 return res;
             }
+        } 
+        
+        public IList<AnnouncementReminder> GetList(Guid announcementId, Guid personId)
+        {
+            var conds = new Dictionary<string, object> {{"AnnouncementRef", announcementId}};
+            return GetReminders(conds, personId);
         }
 
-        public IList<AnnouncementReminder> GetList(Guid announcementId)
-        {
-            var conds = new Dictionary<string, object> {{"announcementRef", announcementId}};
-            return SelectMany<AnnouncementReminder>(conds);
-        } 
     }
 }

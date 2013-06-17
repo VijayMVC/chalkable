@@ -27,7 +27,7 @@ namespace Chalkable.Data.School.Model
         public string Content { get; set; }
         public DateTime Created { get; set; }
         public DateTime Expires { get; set; }
-        public Guid AnnouncementTypeRef { get; set; }
+        public int AnnouncementTypeRef { get; set; }
         public AnnouncementState State { get; set; }
         public GradingStyleEnum GradingStyle { get; set; }
         public string Subject { get; set; }

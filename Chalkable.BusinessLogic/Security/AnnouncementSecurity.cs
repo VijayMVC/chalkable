@@ -25,5 +25,13 @@ namespace Chalkable.BusinessLogic.Security
         {
             return BaseSecurity.IsSysAdmin(context) || announcement.PersonRef == context.UserId;
         }
+
+
+        public static bool IsReminderOwner(AnnouncementReminder announcementReminder, UserContext context)
+        {
+            return announcementReminder.PersonRef.HasValue &&
+                   announcementReminder.PersonRef.Value == context.UserId ||
+                   announcementReminder.Announcement.PersonRef == context.UserId;
+        }
     }
 }

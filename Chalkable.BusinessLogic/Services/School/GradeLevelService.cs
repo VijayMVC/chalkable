@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -23,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new GradeLevelDataAccess(uow);
-                return da.GetGradeLeveles();
+                return da.GetGradeLevels();
             }
         }
     }
