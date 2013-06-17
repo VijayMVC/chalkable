@@ -62,6 +62,7 @@ namespace Chalkable.Data.School.DataAccess
             announcement.AnnouncementReminders = reader.ReadList<AnnouncementReminder>();
             reader.NextResult();
             announcement.Owner = reader.ReadOrNull<Person>();
+            announcement.AnnouncementApplications = new List<AnnouncementApplication>();
             return announcement;
         }
         private AnnouncementQueryResult GetAnnouncementsComplex(string procedureName, Dictionary<string, object> parameters, AnnouncementsQuery query)

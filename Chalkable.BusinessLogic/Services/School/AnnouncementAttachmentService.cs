@@ -30,7 +30,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Announcement AddAttachment(Guid announcementId, byte[] content, string name, string uuid)
         {
-            var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
+            var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             if(!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
                 throw new ChalkableSecurityException();
 

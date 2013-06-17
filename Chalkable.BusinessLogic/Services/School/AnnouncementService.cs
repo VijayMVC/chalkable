@@ -38,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         IList<AnnouncementRecipient> GetAnnouncementRecipients(Guid announcementId);
-        int GetNewAnnouncementItemOrder(Announcement announcement);
+        int GetNewAnnouncementItemOrder(AnnouncementDetails announcement);
 
         IList<AnnouncementType> GetAnnouncementTypes();
         AnnouncementType GetAnnouncementTypeById(int id);
@@ -400,9 +400,30 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public int GetNewAnnouncementItemOrder(Announcement announcement)
+        public int GetNewAnnouncementItemOrder(AnnouncementDetails announcement)
         {
-            throw new NotImplementedException();
+            var attOrder = announcement.AnnouncementAttachments.Max(x => (int?)x.Order);
+            var appOrder = announcement.AnnouncementApplications.Max(x => (int?)x.Order);
+            int order = 0;
+            if (attOrder.HasValue)
+            {
+                if (appOrder.HasValue)
+                {
+                    order = Math.Max(attOrder.Value, appOrder.Value) + 1;
+                }
+                else
+                {
+                    order = attOrder.Value + 1;
+                }
+            }
+            else
+            {
+                if (appOrder.HasValue)
+                {
+                    order = appOrder.Value + 1;
+                }
+            }
+            return order;
         }
     }
 }
