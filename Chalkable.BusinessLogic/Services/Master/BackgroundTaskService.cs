@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using Chalkable.Common;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
@@ -8,8 +8,9 @@ namespace Chalkable.BusinessLogic.Services.Master
     public interface IBackgroundTaskService
     {
         BackgroundTask ScheduleTask(BackgroundTaskTypeEnum type, DateTime scheduled, Guid? schoolRef, string data);
-        BackgroundTask GetTaskToProcess();
-        IList<BackgroundTask> GetTasks(int start, int count);
+        BackgroundTask GetTaskToProcess(DateTime now);
+        PaginatedList<BackgroundTask> GetTasks(int start, int count);
+        void Complete(Guid id, bool success);
     }
     
     public class BackgroundTaskService : MasterServiceBase, IBackgroundTaskService
@@ -37,22 +38,37 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new BackgroundTaskDataAccess(uow);
                 da.Create(task);
+                uow.Commit();
             }
             return task;
         }
 
-        public BackgroundTask GetTaskToProcess()
+        public BackgroundTask GetTaskToProcess(DateTime now)
         {
             using (var uow = Read())
             {
                 var da = new BackgroundTaskDataAccess(uow);
-                return da.GetTaskForProcessing();
+                return da.GetTaskForProcessing(now);
             }
         }
 
-        public IList<BackgroundTask> GetTasks(int start, int count)
+        public PaginatedList<BackgroundTask> GetTasks(int start, int count)
         {
-            throw new NotImplementedException();
+            using (var uow = Read())
+            {
+                var da = new BackgroundTaskDataAccess(uow);
+                return da.GetTasks(start, count);
+            }
+        }
+
+        public void Complete(Guid id, bool success)
+        {
+            using (var uow = Update())
+            {
+                var da = new BackgroundTaskDataAccess(uow);
+                da.Complete(id, success);
+                uow.Commit();
+            }
         }
     }
 }

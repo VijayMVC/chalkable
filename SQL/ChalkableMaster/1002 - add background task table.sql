@@ -11,7 +11,7 @@ Create Table BackgroundTask
 )
 GO
 
-Create procedure spGetBackgroundTaskForProcessing
+create procedure spGetBackgroundTaskForProcessing
 	@currentTime DateTime2
 as
 declare @id uniqueidentifier = null;
@@ -19,12 +19,13 @@ set @id =
 (select top 1 Id from 
 BackgroundTask bt
 where 
-	Scheduled >= @currentTime
+	Scheduled <= @currentTime
 	and [State] = 0
-	and not exists (select * from BackgroundTask where SchoolRef = bt.SchoolRef and [State] = 1)
+	and not exists (select * from BackgroundTask where (SchoolRef = bt.SchoolRef or (SchoolRef is null and bt.SchoolRef is null))and [State] = 1 )
 order by
 	Scheduled
 );
-update BackgroundTask set [State] = 1 where Id = @id;
+update BackgroundTask set [State] = 1, [Started] = @currentTime where Id = @id;
 select * from BackgroundTask where Id = @id
 GO
+

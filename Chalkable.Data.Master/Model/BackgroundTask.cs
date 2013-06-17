@@ -9,9 +9,12 @@ namespace Chalkable.Data.Master.Model
     public class BackgroundTask
     {
         public Guid? SchoolRef { get; set; }
+        public const string ID_FIELD_NAME = "Id";
         public Guid Id { get; set; }
         public BackgroundTaskTypeEnum Type { get; set; }
+        public const string STATE_FIELD_NAME = "State";
         public BackgroundTaskStateEnum State { get; set; }
+        public const string SCHEDULED_FIELD_NAME = "Scheduled";
         public DateTime Scheduled { get; set; }
         public DateTime Created { get; set; }
         public string Data { get; set; }
