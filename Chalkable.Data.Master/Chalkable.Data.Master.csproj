@@ -40,10 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\BackgroundTaskDataAccess.cs" />
     <Compile Include="DataAccess\DistrictDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
     <Compile Include="DataAccess\SchoolUserDataAccess.cs" />
     <Compile Include="DataAccess\UserDataAccess.cs" />
+    <Compile Include="Model\BackgroundTask.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

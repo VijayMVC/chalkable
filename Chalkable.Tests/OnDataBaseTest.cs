@@ -55,6 +55,7 @@ namespace Chalkable.Tests
             var masterSqlRoot = Path.Combine(SQLRoot, "ChalkableMaster");
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1000 - Create DB Script.sql"));
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1001 - add field Empty to school.sql"));
+            ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1002 - add background task table.sql"));
 
             var schoolSqlRoot = Path.Combine(SQLRoot, "ChalkableSchool");
             ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1000 - Create Script.sql"));

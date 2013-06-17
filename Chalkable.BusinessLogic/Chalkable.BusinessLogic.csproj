@@ -50,6 +50,7 @@
     <Compile Include="Services\Master\SchoolService.cs" />
     <Compile Include="Services\Master\MasterServiceBase.cs" />
     <Compile Include="Services\Master\ServiceLocatorMaster.cs" />
+    <Compile Include="Services\Master\BackgroundTaskService.cs" />
     <Compile Include="Services\Master\UserService.cs" />
     <Compile Include="Services\School\AddressService.cs" />
     <Compile Include="Services\School\AnnouncementAttachmentService.cs" />
