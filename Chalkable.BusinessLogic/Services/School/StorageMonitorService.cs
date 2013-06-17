@@ -115,9 +115,19 @@ public interface IStorageMonitorService
             blob.Delete();
         }
         
+       
         public void DeleteBlob(string containderName, string key)
         {
-            throw new NotImplementedException();
+            var client = GetBlobClient();
+            var container = client.GetContainerReference(containderName);
+            
+            if(!container.Exists())
+                throw new BlobNotFoundException(ChlkResources.ERR_BLOB_WITH_NAME_NOT_EXISTS);
+
+            var blob = container.GetBlobReferenceFromServer(BuildBlobAddress(containderName, key));
+            if(!blob.Exists())
+                throw new BlobNotFoundException(ChlkResources.ERR_BLOB_WITH_ADDRESS_NOT_EXISTS);
+            blob.Delete();
         }
 
 

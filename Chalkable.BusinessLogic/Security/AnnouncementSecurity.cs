@@ -38,5 +38,10 @@ namespace Chalkable.BusinessLogic.Security
         {
             return BaseSecurity.IsAdminEditor(context) || context.UserId == announcementQnA.Answerer.Id;
         }
+
+        public static bool CanDeleteAttachment(AnnouncementAttachment announcementAttachment, UserContext context)
+        {
+            return BaseSecurity.IsSysAdmin(context) || announcementAttachment.PersonRef == context.UserId;
+        }
     }
 }

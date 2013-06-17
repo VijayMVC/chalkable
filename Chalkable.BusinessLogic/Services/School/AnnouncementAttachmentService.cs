@@ -16,8 +16,6 @@ namespace Chalkable.BusinessLogic.Services.School
         Announcement AddAttachment(Guid announcementId, byte[] content, string name, string uuid);
         void DeleteAttachment(Guid announcementAttachmentId);
         PaginatedList<AnnouncementAttachment> GetAttachments(Guid announcementId, int start, int count, bool needsAllAttachments = true);
-        PaginatedList<AnnouncementAttachment> GetAttachments(Guid[] announcementIds, int start, int count, bool needsAllAttachments = true);
-        IList<AnnouncementAttachment> GetAnnouncementsAttachments(IEnumerable<Guid> announcementIds);
         AnnouncementAttachment GetAttachmentById(Guid announcementAttachmentId);
     }
 
@@ -61,32 +59,32 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new AnnouncementAttachmentDataAccess(uow);
-                var annAtt = da.GetById(announcementAttachmentId);
+                var annAtt = GetAttachmentById(announcementAttachmentId);
+                if(!AnnouncementSecurity.CanDeleteAttachment(annAtt, Context))
+                    throw new ChalkableSecurityException();
+              
                 da.Delete(annAtt);
-
-               // ServiceLocator.StorageMonitorService.DeleteBlob(annAtt.Id.ToString()); Delete blob 
+                ServiceLocator.StorageMonitorService.DeleteBlob(ATTACHMENT_CONTAINER_ADDRESS, annAtt.Id.ToString()); 
                 uow.Commit();
             }
         }
 
         public PaginatedList<AnnouncementAttachment> GetAttachments(Guid announcementId, int start, int count, bool needsAllAttachments = true)
         {
-            throw new NotImplementedException();
-        }
-
-        public PaginatedList<AnnouncementAttachment> GetAttachments(Guid[] announcementIds, int start, int count, bool needsAllAttachments = true)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<AnnouncementAttachment> GetAnnouncementsAttachments(IEnumerable<Guid> announcementIds)
-        {
-            throw new NotImplementedException();
+            using (var uow = Read())
+            {
+                var da = new AnnouncementAttachmentDataAccess(uow);
+                return da.GetPaginatedList(announcementId, Context.UserId, Context.Role.Id, start, count, needsAllAttachments);
+            }
         }
 
         public AnnouncementAttachment GetAttachmentById(Guid announcementAttachmentId)
         {
-            throw new NotImplementedException();
+            using (var uow = Read())
+            {
+                var da = new AnnouncementAttachmentDataAccess(uow);
+                return da.GetById(announcementAttachmentId, Context.UserId, Context.Role.Id);
+            }
         }
     }
 }

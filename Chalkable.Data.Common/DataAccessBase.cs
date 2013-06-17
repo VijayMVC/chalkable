@@ -176,7 +176,18 @@ namespace Chalkable.Data.Common
         protected PaginatedList<T> PaginatedSelect<T>(Dictionary<string, object> conditions, string orderByColumn, int start, int count) where T : new()
         {
             var q = Orm.PaginationSelect<T>(conditions, orderByColumn, start, count);
-            using (var reader = ExecuteReaderParametrized(q.Sql, q.Parameters as Dictionary<string, object>))
+            return ReadPaginatedResult<T>(q, start, count);
+        }
+
+        protected PaginatedList<T> PaginatedSelect<T>(DbQuery innerSelect, string orderByColumn, int start, int count) where T : new()
+        {
+            var q = Orm.PaginationSelect<T>(innerSelect, orderByColumn, start, count);
+            return ReadPaginatedResult<T>(q, start, count);
+        } 
+
+        private PaginatedList<T> ReadPaginatedResult<T>(DbQuery dbQuery,int start, int count) where T : new()
+        {
+            using (var reader = ExecuteReaderParametrized(dbQuery.Sql, dbQuery.Parameters as Dictionary<string, object>))
             {
                 if (reader.Read())
                 {
@@ -185,9 +196,10 @@ namespace Chalkable.Data.Common
                     var res = reader.ReadList<T>();
                     return new PaginatedList<T>(res, start / count, count, allCount);
                 }
-                return new PaginatedList<T>(new List<T>(), start /count, count, 0);
+                return new PaginatedList<T>(new List<T>(), start / count, count, 0);
             }
         }
+
 
         protected bool Exists<T>(Dictionary<string, object> conditions) where T : new()
         {

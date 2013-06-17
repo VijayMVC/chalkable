@@ -86,43 +86,6 @@ namespace Chalkable.Data.Common
             return res;
         }
 
- 
-
-        //public static DbQuery SimpleInsert<T>(T obj)
-        //{
-        //    var res = new DbQuery();
-        //    res.Parameters = new Dictionary<string, object>();
-        //    var b = new StringBuilder();
-        //    var t = typeof (T);
-        //    var fields = Fields(t);
-        //    b.Append("Insert into [").Append(t.Name).Append("] (");
-        //    b.Append(fields.Select(x=>"[" + x + "]").JoinString(",")).Append(") values (");
-        //    b.Append(fields.Select(x => "@" + x).JoinString(",")).Append(")");
-        //    res.Sql = b.ToString();
-        //    foreach (var field in fields)
-        //    {
-        //        res.Parameters.Add("@" + field, t.GetProperty(field).GetValue(obj));
-        //    }
-        //    return res;
-        //}
-
-        //public static DbQuery SimpleUpdate<T>(T obj)
-        //{
-        //    var res = new DbQuery();
-        //    res.Parameters = new Dictionary<string, object>();
-        //    var b = new StringBuilder();
-        //    var t = typeof(T);
-        //    var fields = Fields(t);
-            
-        //    b.Append("Update [").Append(t.Name).Append("] set ");
-        //    b.Append(fields.Select(x => "[" + x + "]=@" + x).JoinString(",")).Append(" where [Id] = @Id");
-        //    res.Sql = b.ToString();
-        //    foreach (var field in fields)
-        //    {
-        //        res.Parameters.Add("@" + field, t.GetProperty(field).GetValue(obj));
-        //    }
-        //    return res;
-        //}
 
          public static DbQuery SimpleUpdate<T>(T obj)
          {
@@ -170,18 +133,6 @@ namespace Chalkable.Data.Common
             return res;
          }
 
-        //public static DbQuery SimpleDelete<T>(T obj)
-        //{
-        //    var res = new DbQuery();
-        //    res.Parameters = new Dictionary<string, object>();
-        //    var b = new StringBuilder();
-        //    var t = typeof(T);
-        //    b.Append("Delete from [").Append(t.Name).Append("] where Id = @Id");
-        //    res.Parameters.Add("@Id", t.GetProperty("Id").GetValue(obj));
-        //    res.Sql = b.ToString();
-        //    return res;
-        //}
-
 
         public static DbQuery SimpleDelete<T>(T obj)
         {
@@ -205,7 +156,7 @@ namespace Chalkable.Data.Common
         {
             if (conds != null && conds.Count > 0)
             {
-                builder.Append(" where ");
+                builder.Append(" where (");
                 bool first = true;
                 foreach (var cond in conds)
                 {
@@ -217,6 +168,7 @@ namespace Chalkable.Data.Common
                     builder.AppendFormat("[{0}].{1} =@{1}", t.Name, cond.Key);
                 }
             }
+            builder.Append(")");
             return builder;
         }
 
@@ -243,14 +195,18 @@ namespace Chalkable.Data.Common
 
         public static DbQuery PaginationSelect<T>(Dictionary<string, object> conds, string orderColumn, int start, int count)
         {
+            return PaginationSelect<T>(SimpleSelect<T>(conds), orderColumn, start, count);
+        }
+
+        public static DbQuery PaginationSelect<T>(DbQuery innerSelect, string orderColumn, int start, int count)
+        {
             var b = new StringBuilder();
-            var res = SimpleSelect<T>(conds);
-            b.AppendFormat("select count(*) as AllCount from ({0}) x; ", res.Sql);
-            b.AppendFormat("select x.* from ({0}) x ",  res.Sql);
-            b.AppendFormat("order by x.{0} ", orderColumn);
-            b.AppendFormat("OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", start, count);
-            res.Sql = b.ToString();
-            return res;
+            b.AppendFormat("select count(*) as AllCount from ({0}) x;", innerSelect.Sql);
+            b.AppendFormat("select x.* from ({0}) x ", innerSelect.Sql);
+            b.AppendFormat(" order by x.{0} ", orderColumn);
+            b.AppendFormat(" OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", start, count);
+            innerSelect.Sql = b.ToString();
+            return innerSelect;
         }
     }
 
