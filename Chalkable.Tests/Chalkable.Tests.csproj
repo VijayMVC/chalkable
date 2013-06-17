@@ -49,6 +49,7 @@
     <Compile Include="DataAccess\OrmTest.cs" />
     <Compile Include="OnDataBaseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Master\BackgrounTaskServiceTest.cs" />
     <Compile Include="Services\Master\SchoolServiceTest.cs" />
     <Compile Include="Services\Master\UserServiceTest.cs" />
     <Compile Include="Services\ServiceTestBase.cs" />
