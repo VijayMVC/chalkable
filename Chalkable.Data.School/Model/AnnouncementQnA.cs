@@ -18,9 +18,21 @@ namespace Chalkable.Data.School.Model
         public DateTime AnsweredTime { get; set; }
         public DateTime QuestionTime { get; set; }
 
-        [DataEntityAttr]
-        public Announcement Announcement { get; set; }
+        //[NotDbFieldAttr]
+        //public Announcement Announcement { get; set; }
+
     }
+
+    public class AnnouncementQnAComplex : AnnouncementQnA
+    {
+        [NotDbFieldAttr]
+        public Person Asker { get; set; }
+        [NotDbFieldAttr]
+        public Person Answerer { get; set; }
+        [NotDbFieldAttr]
+        public bool IsOwner { get; set; }        
+    }
+
 
     public enum AnnouncementQnAState
     {

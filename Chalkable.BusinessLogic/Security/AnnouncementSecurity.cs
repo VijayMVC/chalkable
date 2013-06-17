@@ -33,5 +33,10 @@ namespace Chalkable.BusinessLogic.Security
                    announcementReminder.PersonRef.Value == context.UserId ||
                    announcementReminder.Announcement.PersonRef == context.UserId;
         }
+
+        public static bool CanModifyAnnouncementQnA(AnnouncementQnAComplex announcementQnA, UserContext context)
+        {
+            return BaseSecurity.IsAdminEditor(context) || context.UserId == announcementQnA.Answerer.Id;
+        }
     }
 }

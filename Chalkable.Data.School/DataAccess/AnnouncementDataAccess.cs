@@ -46,6 +46,8 @@ namespace Chalkable.Data.School.DataAccess
         {
             var announcement = reader.ReadOrNull<AnnouncementDetails>();
             reader.NextResult();
+            announcement.AnnouncementQnAs = reader.ReadList<AnnouncementQnAComplex>();
+            reader.NextResult();
             announcement.StudentAnnouncements = new List<StudentAnnouncementDetails>();
             while (reader.Read())
             {

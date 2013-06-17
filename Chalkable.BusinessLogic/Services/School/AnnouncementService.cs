@@ -321,7 +321,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (expires.Date >= Context.NowSchoolTime.Date)
             {
                 //TODO: thing about this ... to many calls to db 
-                var annReminders = da.GetList(announcement.Id);
+                var annReminders = da.GetList(announcement.Id, Context.UserId);
                 foreach (var reminder in annReminders)
                 {
                     reminder.RemindDate = reminder.Before.HasValue ? expires.AddDays(-reminder.Before.Value) : dateNow;

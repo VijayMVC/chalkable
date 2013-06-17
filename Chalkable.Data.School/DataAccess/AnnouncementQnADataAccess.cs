@@ -15,6 +15,14 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
+
+        private const string GET_ANNOUNCEMENT_QNA_PROCEDURE = "spGetAnnouncementsQnA";
+        private const string CALLER_ID_PARAM = "callerId";
+        private const string ASKER_ID_PARAM = "askerId";
+        private const string ANSWERER_ID_PARAM = "answererId";
+        private const string ANNOUNCEMENT_ID_PARAM = "announcementId";
+        private const string ANNOUNCEMENT_QNA_ID_PARAM = "announcementQnAId";
+
         public void Create(AnnouncementQnA announcementQnA)
         {
             SimpleInsert(announcementQnA);
@@ -35,22 +43,60 @@ namespace Chalkable.Data.School.DataAccess
             var conds = new Dictionary<string, object> {{"id", id}};
             return SelectOne<AnnouncementQnA>(conds);
         }
-        
-        public AnnouncementQnA GetWithAnnouncement(Guid id)
+        public AnnouncementQnAQueryResult GetAnnouncementQnA(AnnouncementQnAQuery query)
         {
-            var conds = new Dictionary<string, object> {{"id", id}};
-            var types = new List<Type> {typeof (AnnouncementQnA), typeof (Announcement)};
-            var b = new StringBuilder();
-            b.AppendFormat(@"select {0}
-                           from [AnnouncementQnA] 
-                           join left Announcement a.Id = [AnnouncementQnA].AnnouncementRef
-                           where [AnnouncementQnA].Id = @id", Orm.ComplexResultSetQuery(types));
-            var sql = b.ToString();
-            using (var reader = ExecuteReaderParametrized(sql, conds))
+            var parameter = new Dictionary<string, object>
+                {
+                    {ANNOUNCEMENT_QNA_ID_PARAM, query.Id},
+                    {ANNOUNCEMENT_ID_PARAM, query.AnnouncementId},
+                    {ASKER_ID_PARAM, query.AskerId},
+                    {ANSWERER_ID_PARAM, query.AnswererId},
+                    {CALLER_ID_PARAM, query.CallerId}
+                };
+            using (var reader = ExecuteStoredProcedureReader(GET_ANNOUNCEMENT_QNA_PROCEDURE, parameter))
             {
-                return reader.ReadOrNull<AnnouncementQnA>(true);
+                var res = new List<AnnouncementQnAComplex>();
+                while (reader.Read())
+                {
+                    var annQnA = reader.Read<AnnouncementQnAComplex>();
+                    annQnA.Asker = new Person
+                        {
+                            Id = SqlTools.ReadGuid(reader, "AskerId"),
+                            FirstName = SqlTools.ReadStringNull(reader, "AskerFirstName"),
+                            LastName = SqlTools.ReadStringNull(reader, "AskerLastName"),
+                            Gender = SqlTools.ReadStringNull(reader, "AskerGender")
+                        };
+                    annQnA.Answerer = new Person
+                        {
+                            Id = SqlTools.ReadGuid(reader, "AnswererId"),
+                            FirstName = SqlTools.ReadStringNull(reader, "AnswererFirstName"),
+                            LastName = SqlTools.ReadStringNull(reader, "AnswererLastName"),
+                            Gender = SqlTools.ReadStringNull(reader, "AnswererGender")
+                        };
+                    res.Add(annQnA);
+                }
+                return new AnnouncementQnAQueryResult 
+                    {
+                        AnnouncementQnAs = res,
+                        Query = query
+                    };
             }
-        }
+        } 
 
+    }
+
+    public class AnnouncementQnAQuery
+    {
+        public Guid? Id { get; set; }
+        public Guid? AskerId { get; set; }
+        public Guid? AnswererId { get; set; }
+        public Guid? AnnouncementId { get; set; }
+        public Guid CallerId { get; set; }
+    }
+
+    public class AnnouncementQnAQueryResult
+    {
+        public AnnouncementQnAQuery Query { get; set; }
+        public IList<AnnouncementQnAComplex> AnnouncementQnAs { get; set; }
     }
 }
