@@ -245,9 +245,8 @@ namespace Chalkable.Data.Common
         {
             var b = new StringBuilder();
             var res = SimpleSelect<T>(conds);
-            b.Append(res.Sql);
-            b.AppendFormat("select count(*) as AllCount from ({0});", res.Sql);
-            b.AppendFormat("select x.* from ({0})x",  res.Sql);
+            b.AppendFormat("select count(*) as AllCount from ({0}) x; ", res.Sql);
+            b.AppendFormat("select x.* from ({0}) x ",  res.Sql);
             b.AppendFormat("order by x.{0} ", orderColumn);
             b.AppendFormat("OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", start, count);
             res.Sql = b.ToString();
