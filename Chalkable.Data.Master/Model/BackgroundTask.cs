@@ -8,9 +8,11 @@ namespace Chalkable.Data.Master.Model
 {
     public class BackgroundTask
     {
+        public const string SCHOOL_REF_FIELD_NAME = "SchoolRef";
         public Guid? SchoolRef { get; set; }
         public const string ID_FIELD_NAME = "Id";
         public Guid Id { get; set; }
+        public const string Type_FIELD_NAME = "Type";
         public BackgroundTaskTypeEnum Type { get; set; }
         public const string STATE_FIELD_NAME = "State";
         public BackgroundTaskStateEnum State { get; set; }

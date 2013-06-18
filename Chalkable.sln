@@ -24,6 +24,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{FB56BD
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.BackgroundTaskProducer", "Chalkable.BackgroundTaskProducer\Chalkable.BackgroundTaskProducer.csproj", "{6086E0A9-9729-4E4A-A28C-261582F83827}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.BackgroundTaskProcessor", "Chalkable.BackgroundTaskProcessor\Chalkable.BackgroundTaskProcessor.csproj", "{57307F26-31D4-4759-B22D-C60C7F02DEDB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +66,14 @@ Global
 		{3615F16A-B37F-40B4-B58D-CC39FA8F6646}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3615F16A-B37F-40B4-B58D-CC39FA8F6646}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3615F16A-B37F-40B4-B58D-CC39FA8F6646}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6086E0A9-9729-4E4A-A28C-261582F83827}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6086E0A9-9729-4E4A-A28C-261582F83827}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6086E0A9-9729-4E4A-A28C-261582F83827}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6086E0A9-9729-4E4A-A28C-261582F83827}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57307F26-31D4-4759-B22D-C60C7F02DEDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57307F26-31D4-4759-B22D-C60C7F02DEDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57307F26-31D4-4759-B22D-C60C7F02DEDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57307F26-31D4-4759-B22D-C60C7F02DEDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

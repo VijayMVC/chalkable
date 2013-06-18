@@ -14,6 +14,9 @@ namespace Chalkable.BusinessLogic.Services.Master
         BackgroundTask GetTaskToProcess(DateTime now);
         PaginatedList<BackgroundTask> GetTasks(int start, int count);
         void Complete(Guid id, bool success);
+        BackgroundTask Find(Guid? schoolId, BackgroundTaskStateEnum state, BackgroundTaskTypeEnum type);
+        PaginatedList<BackgroundTaskService.BackgroundTaskLogItem> GetLogItems(Guid backgroundTaskId, int start, int count);
+        void SaveLog(BackgroundTaskService.BackgroundTaskLog log);
     }
     
     public class BackgroundTaskService : MasterServiceBase, IBackgroundTaskService
@@ -132,6 +135,15 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var da = new BackgroundTaskDataAccess(uow);
                 da.Complete(id, success);
                 uow.Commit();
+            }
+        }
+
+        public BackgroundTask Find(Guid? schoolId, BackgroundTaskStateEnum state, BackgroundTaskTypeEnum type)
+        {
+            using (var uow = Read())
+            {
+                var da = new BackgroundTaskDataAccess(uow);
+                return da.Find(schoolId, state, type);
             }
         }
 

@@ -5,13 +5,13 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>1.8</ProductVersion>
-    <ProjectGuid>d0243bce-6845-4df4-afe5-948ff21831b2</ProjectGuid>
+    <ProjectGuid>ef9b1f0a-b574-4327-953f-6ad261e02ceb</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Chalkable.Azure</RootNamespace>
-    <AssemblyName>Chalkable.Azure</AssemblyName>
+    <RootNamespace>TaskProducer</RootNamespace>
+    <AssemblyName>TaskProducer</AssemblyName>
     <StartDevelopmentStorage>True</StartDevelopmentStorage>
-    <Name>Chalkable.Azure</Name>
+    <Name>TaskProducer</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,38 +35,6 @@
     <ServiceDefinition Include="ServiceDefinition.csdef" />
     <ServiceConfiguration Include="ServiceConfiguration.Local.cscfg" />
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Chalkable.BackgroundTaskProcessor\Chalkable.BackgroundTaskProcessor.csproj">
-      <Name>Chalkable.BackgroundTaskProcessor</Name>
-      <Project>{57307f26-31d4-4759-b22d-c60c7f02dedb}</Project>
-      <Private>True</Private>
-      <RoleType>Worker</RoleType>
-      <RoleName>Chalkable.BackgroundTaskProcessor</RoleName>
-      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
-    </ProjectReference>
-    <ProjectReference Include="..\Chalkable.BackgroundTaskProducer\Chalkable.BackgroundTaskProducer.csproj">
-      <Name>Chalkable.BackgroundTaskProducer</Name>
-      <Project>{6086e0a9-9729-4e4a-a28c-261582f83827}</Project>
-      <Private>True</Private>
-      <RoleType>Worker</RoleType>
-      <RoleName>Chalkable.BackgroundTaskProducer</RoleName>
-      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
-    </ProjectReference>
-    <ProjectReference Include="..\Chalkable.Web\Chalkable.Web.csproj">
-      <Name>Chalkable.Web</Name>
-      <Project>{60802bf0-af2e-47f8-a792-7135dc7565d0}</Project>
-      <Private>True</Private>
-      <RoleType>Web</RoleType>
-      <RoleName>Chalkable.Web</RoleName>
-      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Profiles" />
-  </ItemGroup>
-  <ItemGroup>
-    <PublishProfile Include="Profiles\chalkablestaging-1Production.azurePubxml" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>
