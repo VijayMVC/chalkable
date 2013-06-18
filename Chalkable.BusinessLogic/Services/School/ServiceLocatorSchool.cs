@@ -23,6 +23,9 @@ namespace Chalkable.BusinessLogic.Services.School
         IAnnouncementReminderService AnnouncementReminderService { get; }
         IAnnouncementAttachmentService AnnouncementAttachmentService { get; }
         IStorageMonitorService StorageMonitorService { get; }
+        IPhoneService PhoneService { get; }
+        IPrivateMessageService PrivateMessageService { get; }
+        IRoomService RoomService { get; }
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
     {
@@ -39,6 +42,10 @@ namespace Chalkable.BusinessLogic.Services.School
         private IAnnouncementService announcementService;
         private IAnnouncementAttachmentService announcementAttachmentService;
         private IStorageMonitorService storageMonitorService;
+        private IPhoneService phoneService;
+        private IPrivateMessageService privateMessageService;
+        private IRoomService roomService;
+
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -56,6 +63,9 @@ namespace Chalkable.BusinessLogic.Services.School
             announcementService = new AnnouncementService(this);
             announcementAttachmentService = new AnnouncementAttachmentService(this);
             storageMonitorService = new StorageMonitorService(this);
+            phoneService = new PhoneService(this);
+            privateMessageService = new PrivateMessageService(this);
+            roomService = new RoomService(this);
         }
 
         public IPersonService PersonService
@@ -109,6 +119,19 @@ namespace Chalkable.BusinessLogic.Services.School
         public IStorageMonitorService StorageMonitorService
         {
             get { return storageMonitorService; }
+        }
+
+        public IPhoneService PhoneService
+        {
+            get { return phoneService; }
+        }
+        public IPrivateMessageService PrivateMessageService
+        {
+            get { return privateMessageService; }
+        }
+        public IRoomService RoomService
+        {
+            get { return roomService; }
         }
 
         public IServiceLocatorMaster ServiceLocatorMaster

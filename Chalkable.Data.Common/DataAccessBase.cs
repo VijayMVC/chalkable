@@ -167,21 +167,23 @@ namespace Chalkable.Data.Common
             }    
         }
 
-        protected PaginatedList<T> PaginatedSelect<T>(string orderByColumn, int start, int count) where T : new()
+        protected PaginatedList<T> PaginatedSelect<T>(string orderByColumn, int start, int count, Orm.OrderType orderType = Orm.OrderType.Asc) where T : new()
         {
             var conds = new Dictionary<string, object>();
-            return PaginatedSelect<T>(conds, orderByColumn, start, count);
+            return PaginatedSelect<T>(conds, orderByColumn, start, count, orderType);
         } 
 
-        protected PaginatedList<T> PaginatedSelect<T>(Dictionary<string, object> conditions, string orderByColumn, int start, int count) where T : new()
+        protected PaginatedList<T> PaginatedSelect<T>(Dictionary<string, object> conditions, string orderByColumn,
+                                                      int start, int count, Orm.OrderType orderType = Orm.OrderType.Asc) where T : new()
         {
-            var q = Orm.PaginationSelect<T>(conditions, orderByColumn, start, count);
+            var q = Orm.PaginationSelect<T>(conditions, orderByColumn, orderType, start, count);
             return ReadPaginatedResult<T>(q, start, count);
         }
 
-        protected PaginatedList<T> PaginatedSelect<T>(DbQuery innerSelect, string orderByColumn, int start, int count) where T : new()
+        protected PaginatedList<T> PaginatedSelect<T>(DbQuery innerSelect, string orderByColumn, int start, int count,
+                                                      Orm.OrderType orderType = Orm.OrderType.Asc) where T : new()
         {
-            var q = Orm.PaginationSelect<T>(innerSelect, orderByColumn, start, count);
+            var q = Orm.PaginationSelect<T>(innerSelect, orderByColumn,orderType, start, count);
             return ReadPaginatedResult<T>(q, start, count);
         } 
 

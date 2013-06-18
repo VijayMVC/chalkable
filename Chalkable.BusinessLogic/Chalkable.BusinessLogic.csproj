@@ -47,6 +47,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\AnnouncementSecurity.cs" />
     <Compile Include="Security\BaseSecurity.cs" />
+    <Compile Include="Security\PrivateMessageSecurity.cs" />
     <Compile Include="Services\Master\SchoolService.cs" />
     <Compile Include="Services\Master\MasterServiceBase.cs" />
     <Compile Include="Services\Master\ServiceLocatorMaster.cs" />
@@ -62,6 +63,9 @@
     <Compile Include="Services\School\GradeLevelService.cs" />
     <Compile Include="Services\School\MarkingPeriodService.cs" />
     <Compile Include="Services\School\PersonService.cs" />
+    <Compile Include="Services\School\PhoneService.cs" />
+    <Compile Include="Services\School\PrivateMessageService.cs" />
+    <Compile Include="Services\School\RoomService.cs" />
     <Compile Include="Services\School\SchoolServiceBase.cs" />
     <Compile Include="Services\School\SchoolYearService.cs" />
     <Compile Include="Services\School\ServiceLocatorSchool.cs" />
