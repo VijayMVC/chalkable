@@ -18,6 +18,11 @@ NAMESPACE('chlk', function (){
                             .appendTo('#main');
 
                         return data;
+                    }).then(function(data){
+                        new ria.dom.Dom()
+                            .fromHTML(ASSET('~/assets/jade/SysAdminSidebar.jade')())
+                            .appendTo("#sidebar");
+                        return data;
                     });
             }
         ]);
