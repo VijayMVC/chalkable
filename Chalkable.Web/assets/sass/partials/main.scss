@@ -1,0 +1,228 @@
+@import "compass/css3/border-radius";
+@import "compass/css3/transition";
+
+@import "partials/main/login";
+@import "partials/main/funds";
+@import "partials/main/classes";
+@import "partials/main/calendar";
+@import "partials/main/news-feed";
+@import "partials/main/private-messages";
+@import "partials/main/profile";
+@import "partials/main/people";
+@import "partials/main/chlk-toolbar";
+@import "partials/main/settings";
+@import "partials/main/grading";
+
+@import "partials/main/applications";
+@import "partials/main/purchase-order";
+@import "partials/main/setup";
+@import "partials/main/attendance";
+@import "partials/main/class-schedule";
+@import "partials/main/signup";
+@import "partials/main/developer";
+@import "partials/main/announcement";
+@import "partials/main/register";
+
+BODY {
+  .x-fieldset {
+    border: none;
+  }
+
+  DIV.page{
+    #content {
+      #main {
+        .right-tb-with-line{
+          .chlk-toolbar{
+            height: 35px !important;
+
+            .x-toolbar-right{
+              border-left: 1px solid #CFCFCF;
+            }
+          }
+        }
+
+        > DIV:not(.chlk-paginator):not(.invisible-panel):not(.x4-reset):not(.x-form-field-wrap) {
+          background: #c9c9c9 !important;
+          border: 1px solid #a1a1a1;
+          border-bottom-color: #fbfbfb;
+          border-right-color: #fbfbfb;
+          padding: 3px;
+          margin-bottom: 15px;
+
+          &.new-type{
+            background: none !important;
+            border: none;
+          }
+
+          @include border-radius(9px);
+
+          &.validation-summary-errors{
+            background: white !important;
+            border: none;
+            border-top: 1px solid #979797;
+            width: 281px;
+            padding: 9px 12px;
+            margin-left: 185px;
+          }
+        }
+
+        .gradient{
+          @include border-radius(6px);
+          @include background(linear-gradient(top, #ffffff, #f0f0f0));
+          border: 1px solid #c1c1c1;
+          border-bottom-width: 2px;
+        }
+
+        .new-type2{
+          border: 1px solid;
+          border-color: #9a9898 #e2e2e2 #e2e2e2 #9a9898;
+          background: #ededed;
+          @include border-radius(5px);
+        }
+
+        .status {
+          padding: 5px;
+
+        }
+
+        .inside-container{
+          border: none !important;
+          @include border-radius(0px !important);
+
+          .chlk-toolbar{
+            height: 35px !important;
+          }
+
+          .x-toolbar-right{
+            border-left: 1px solid #CFCFCF;
+          }
+
+          .chlk-toolbar{
+            @include border-radius(0px !important);
+            margin: 0;
+
+            BUTTON{
+              margin: 0 auto;
+            }
+          }
+        }
+
+        #attachments {
+          LABEL {
+            width: 100% !important;
+            display: block;
+          }
+        }
+
+        .x-toolbar {
+          background: inherit;
+
+          &.chlk-paginator{
+            border: none;
+          }
+        }
+
+        .x-toolbar2 {
+          padding: 10px;
+        }
+
+        .x-panel-body {
+          background-color: transparent;
+          border: none;
+        }
+
+        .x-form-item {
+          label {
+            font-size: 1.2em;
+            font-weight: bold;
+            padding-left: 5px;
+          }
+        }
+
+        .remove-btn {
+          display: inline-block;
+          margin-left: 5px;
+        }
+
+        .recipient {
+          display: inline-block;
+          margin-right: 15px;
+        }
+
+        .x-grid3-row {
+          /*height: 80px;*/
+          margin: 0;
+          padding: 0;
+          border: none;
+
+          &.moving{
+            width: 660px !important;
+            position: absolute;
+            z-index: 100000;
+            padding: 3px 2px 0 !important;
+
+            .feed-item{
+              @include border-radius(7px 7px 0 0 !important);
+            }
+          }
+        }
+
+        #status {
+          .announcement-type {
+            color: #424f56;
+            font-weight: bold;
+            display: inline-block;
+            margin-right: 2px;
+            font-size: 0.9em;
+            font-family: 'Myriad Pro', Arial, serif;
+          }
+        }
+      }
+    }
+  }
+}
+
+.relative{
+  position: relative;
+}
+
+.tb-combo{
+  >DIV.x-form-field-wrap{
+    height: 35px;
+    margin: -1px 0 0 0 !important;
+    line-height: 35px;
+    border-left: 1px solid white;
+
+    INPUT{
+      background: transparent;
+      color: #828282;
+      border: none;
+      text-align: center;
+    }
+
+    IMG.x-form-trigger{
+      background: url(images/attendance/button-triangle.png) center center no-repeat;
+      border: none;
+      top: 8px;
+    }
+  }
+
+  &:not(.no-right-line){
+    border-radius: 0 5px 5px 0;
+
+    >DIV.x-form-field-wrap{
+      border-right: 1px solid #c8c8c8;
+    }
+  }
+}
+
+//LOADERS
+
+.horizontal-loader{
+  height: 20px;
+  position: absolute;
+  background: url(images/loaders/horizontal.gif) center center no-repeat;
+  left: 0;
+  right: 0;
+  bottom: -25px;
+}
