@@ -59,31 +59,7 @@
         @:demo
     }
     ">
-    <div id="sidebar">
-            @if (IsSectionDefined("LogoSection"))
-            {
-                @RenderSection("LogoSection", false)
-            }
-            else
-            {
-                <a href="#" id="home-logo" title="Home"></a>
-            }
-            @if (IsSectionDefined("SidebarControls"))
-            {
-            <div id="sidebar-controls">
-                <div class="search-wrapper">
-                    <div id="search-bar"></div>
-                </div>
-                <div class="wrapper">
-                    @RenderSection("SidebarControls", false)
-                </div>
-                <div id="invite-button-container"></div>
-            </div>
-            }
-
-            @RenderSection("Sidebar", false)
-        </div>
-
+        <div id="sidebar"></div>
         <div id="content">
             <div class="ribbon"></div>
             <div id="content-wrapper">

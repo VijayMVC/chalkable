@@ -70,7 +70,7 @@ ria.__REQUIRE = ria.__REQUIRE || {};
         });
     };
 
-    var AssetAliases = [/ASSET\('([^']+)'\)/g];
+    var AssetAliases = [/ASSET\(['"]([^'"]+)['"]\)/g];
 
     ria.__REQUIRE.addCurrentModuleCallback = function (ns, callback) {
         var R = ria.__REQUIRE.ModuleDescriptor,
@@ -81,7 +81,7 @@ ria.__REQUIRE = ria.__REQUIRE || {};
 
             while(m = ASSET_REGEX.exec(fn)) {
                 root.addDependency(R.getById(resolve(m[1])));
-                fn = fn.substring(m.index + m[1].length);
+                //fn = fn.substring(m.index + m[1].length);
             }
         });
 
