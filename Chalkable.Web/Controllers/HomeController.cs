@@ -39,5 +39,10 @@ namespace Chalkable.Web.Controllers
             ServiceLocatorFactory.CreateMasterSysAdmin().UserService.CreateSysAdmin(userName, password);
             return Json(new { Success = true, UserName = userName }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult SysAdmin()
+        {
+            return View();
+        }
     }
 }

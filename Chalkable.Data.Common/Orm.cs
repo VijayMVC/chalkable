@@ -9,6 +9,18 @@ namespace Chalkable.Data.Common
 {
     public static class Orm
     {
+
+        public enum OrderType
+        {
+            Asc = 1,
+            Desc = 2
+        }
+        private static IDictionary<OrderType, string> orederTypesMap = new Dictionary<OrderType, string>
+            {
+                {OrderType.Asc, "ASC"},
+                {OrderType.Desc, "DESC"}
+            }; 
+
         private static bool IsDbField(PropertyInfo propertyInfo)
         {
             return propertyInfo.GetCustomAttribute<DataEntityAttr>() == null
@@ -193,22 +205,24 @@ namespace Chalkable.Data.Common
             return res;
         }
 
-        public static DbQuery PaginationSelect<T>(Dictionary<string, object> conds, string orderColumn, int start, int count)
+        public static DbQuery PaginationSelect<T>(Dictionary<string, object> conds, string orderColumn, OrderType orderType, int start, int count)
         {
-            return PaginationSelect<T>(SimpleSelect<T>(conds), orderColumn, start, count);
+            return PaginationSelect<T>(SimpleSelect<T>(conds), orderColumn, orderType, start, count);
         }
 
-        public static DbQuery PaginationSelect<T>(DbQuery innerSelect, string orderColumn, int start, int count)
+        public static DbQuery PaginationSelect<T>(DbQuery innerSelect, string orderColumn, OrderType orderType, int start, int count)
         {
             var b = new StringBuilder();
             b.AppendFormat("select count(*) as AllCount from ({0}) x;", innerSelect.Sql);
             b.AppendFormat("select x.* from ({0}) x ", innerSelect.Sql);
-            b.AppendFormat(" order by x.{0} ", orderColumn);
+            b.AppendFormat(" order by x.{0} {1}", orderColumn, orederTypesMap[orderType]);
             b.AppendFormat(" OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", start, count);
             innerSelect.Sql = b.ToString();
             return innerSelect;
         }
+
     }
+
 
     public class DbQuery
     {

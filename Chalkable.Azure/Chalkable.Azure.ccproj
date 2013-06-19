@@ -37,6 +37,22 @@
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Chalkable.BackgroundTaskProcessor\Chalkable.BackgroundTaskProcessor.csproj">
+      <Name>Chalkable.BackgroundTaskProcessor</Name>
+      <Project>{57307f26-31d4-4759-b22d-c60c7f02dedb}</Project>
+      <Private>True</Private>
+      <RoleType>Worker</RoleType>
+      <RoleName>Chalkable.BackgroundTaskProcessor</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.BackgroundTaskProducer\Chalkable.BackgroundTaskProducer.csproj">
+      <Name>Chalkable.BackgroundTaskProducer</Name>
+      <Project>{6086e0a9-9729-4e4a-a28c-261582f83827}</Project>
+      <Private>True</Private>
+      <RoleType>Worker</RoleType>
+      <RoleName>Chalkable.BackgroundTaskProducer</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
     <ProjectReference Include="..\Chalkable.Web\Chalkable.Web.csproj">
       <Name>Chalkable.Web</Name>
       <Project>{60802bf0-af2e-47f8-a792-7135dc7565d0}</Project>

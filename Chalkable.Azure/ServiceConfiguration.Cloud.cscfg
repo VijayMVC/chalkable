@@ -6,4 +6,16 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=8eYjpx8vLrE9pbz04+kXJZ9k2bvaXgvZMirMzHXUT9Ybwjb/cJC1DIoRsr486Rhe6s1Yg+NRsD9dtgbS8Nsizg==" />
     </ConfigurationSettings>
   </Role>
+  <Role name="Chalkable.BackgroundTaskProducer">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+    </ConfigurationSettings>
+  </Role>
+  <Role name="Chalkable.BackgroundTaskProcessor">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+    </ConfigurationSettings>
+  </Role>
 </ServiceConfiguration>
