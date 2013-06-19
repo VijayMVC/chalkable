@@ -76,6 +76,7 @@
     <Compile Include="Model\Course.cs" />
     <Compile Include="Model\Date.cs" />
     <Compile Include="Model\FinalGrade.cs" />
+    <Compile Include="Model\FinalGradeAnnouncementType.cs" />
     <Compile Include="Model\GradeLevel.cs" />
     <Compile Include="Model\MarkingPeriod.cs" />
     <Compile Include="Model\MarkingPeriodClass.cs" />
@@ -87,7 +88,9 @@
     <Compile Include="Model\ScheduleSection.cs" />
     <Compile Include="Model\SchoolYear.cs" />
     <Compile Include="Model\StudentAnnouncement.cs" />
+    <Compile Include="Model\StudentFinalGrade.cs" />
     <Compile Include="Model\StudentInfo.cs" />
+    <Compile Include="Model\StudentParent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
