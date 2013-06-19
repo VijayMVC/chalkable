@@ -1,0 +1,17 @@
+syntax: glob
+**/bin/**/*
+**/*.user
+**/obj/**/*
+**/csx/**/*
+*.user
+*.suo
+**/bin/*
+packages/**/*
+.nuget/*
+Chalkable.Web/.idea/
+Chalkable.Web/app/ria/.svn/
+Chalkable.Web/.sass-cache
+Chalkable.Web/Content/partials
+Chalkable.Web/Content/index.css
+Chalkable.Web/Content/screen-index.css
+Chalkable.Web/Content/screen.css
