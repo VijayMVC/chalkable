@@ -10,3 +10,4 @@ packages/**/*
 .nuget/*
 Chalkable.Web/.idea/
 Chalkable.Web/app/ria/.svn/
+Chalkable.Web/.sass-cache

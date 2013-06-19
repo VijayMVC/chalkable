@@ -9,16 +9,12 @@
     <link href="@Url.StaticContent("/Content/screen-index.css")" rel="stylesheet" type="text/css" />
 }
 
-
-
 @section ContentSection {
 <div id="wrapper">
 <div id="toppanel">
    <div id="panel">
       <div class="tab">
-         @*<a id="close" class="closer" href="#">*@
          <button id="close" class="toplogin closer">Close</button>
-         @*</a>*@			
       </div>
       <div class="content clearfix">
         <section class="signinarea">
@@ -93,9 +89,7 @@
 <div class="tab" id="signinanchor">
 	<ul class="login">
 		<li id="toggle">
-		    @*<div id="open" class="open" >*@
-		        <button id="open" class="toplogin open">Sign in </button>
-		    @*</div>*@
+		     <button id="open" class="toplogin open">Sign in </button>
 		</li>
 	</ul>
 </div> <div class="content clearfix"></div>
@@ -291,15 +285,13 @@
 @Html.Partial("Footer")
 
 @section BottomScripts {
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery.waypoints.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery.fancybox.js")"></script>
 
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/jquery-ui.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/all_not_minified.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/signIn_Flip_Shake.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/waypoints.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/cycle.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/jquery.fancybox.js")"></script>
-
-
+    
 }
 @section LogOnTracking {
  <!--mixpanel-->
