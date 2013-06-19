@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
@@ -18,14 +19,27 @@ namespace Chalkable.Data.School.DataAccess
         {
             SimpleInsert(period);
         }
+        public void Create(IList<Period> periods)
+        {
+            SimpleInsert(periods);
+        }
+
         public void Update(Period period)
         {
             SimpleUpdate(period);
         }
-         public void Delete(Guid id)
-         {
+        public void Delete(Guid id)
+        {
              SimpleDelete<Period>(new Dictionary<string, object>{{"Id", id}});
+        }
+
+         public void Delete(IList<Guid> markingPeriodIds)
+         {
+             var mpIds = markingPeriodIds.Select(x => x.ToString()).JoinString(",");
+             var sql = string.Format("delete from Period where MarkingPeriodRef in ({0})", mpIds);
+             ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
          }
+
 
         public Period GeComplextById(Guid id)
         {

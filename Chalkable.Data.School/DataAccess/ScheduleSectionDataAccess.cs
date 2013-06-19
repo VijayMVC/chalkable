@@ -91,5 +91,12 @@ namespace Chalkable.Data.School.DataAccess
         {
             return SelectOne<ScheduleSection>(new Dictionary<string, object> {{"Id", id}});
         }
+
+        public IList<ScheduleSection> GetSections(IList<Guid> markingPeriodIds)
+        {
+            var mpIds = markingPeriodIds.Select(x => x.ToString()).JoinString(",");
+            var sql = string.Format("select * from ScheduleSection where MarkingPeriodRef in ({0})", mpIds);
+            return ReadMany<ScheduleSection>(new DbQuery { Sql = sql, Parameters = new Dictionary<string, object>() });
+        }
     }
 }

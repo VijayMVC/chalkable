@@ -127,7 +127,67 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<Period> ReGeneratePeriods(IList<Guid> markingPeriodIds, int? startTime = null, int? length = null, int? lengthBetweenPeriods = null, int? periodCount = null)
         {
-            throw new NotImplementedException();
+            startTime = startTime ?? 475;
+            length = length ?? 45;
+            lengthBetweenPeriods = lengthBetweenPeriods ?? 2;
+            periodCount = periodCount ?? 9;
+
+            if (!(markingPeriodIds != null && markingPeriodIds.Count > 0))
+                throw new ChalkableException();
+
+            using (var uow = Update())
+            {
+                var sections = new ScheduleSectionDataAccess(uow).GetSections(markingPeriodIds);
+                if (markingPeriodIds.Any(mpId => sections.All(x => x.MarkingPeriodRef != mpId)))
+                {
+                    throw new ChalkableException(ChlkResources.ERR_PERIOD_NO_SCHEDULE_SECTION);
+                }
+                if (!BaseSecurity.IsAdminEditor(Context))
+                    throw new ChalkableSecurityException();
+
+                IStateMachine machine = new SchoolStateMachine(Context.SchoolId.Value, ServiceLocator.ServiceLocatorMaster);
+                if (!machine.CanApply(StateActionEnum.SectionsAdd))
+                    throw new InvalidSchoolStatusException();
+
+                IList<Period> res = new List<Period>();
+                if (ServiceLocator.ScheduleSectionService.CanDeleteSections(markingPeriodIds.ToList()))
+                {
+
+                    var da = new PeriodDataAccess(uow);
+                    da.Delete(markingPeriodIds);
+                    foreach (var markingPeriodId in markingPeriodIds)
+                    {
+                        foreach (var scheduleSection in sections)
+                        {
+                            if (scheduleSection.MarkingPeriodRef == markingPeriodId)
+                            {
+                                for (int i = 0; i < periodCount; i++)
+                                {
+                                    var periodStartTime = startTime + (length + lengthBetweenPeriods) * i;
+                                    var periodEndTime = periodStartTime + length;
+                                    var period = new Period
+                                    {
+                                        SectionRef = scheduleSection.Id,
+                                        StartTime = periodStartTime.Value,
+                                        EndTime = periodEndTime.Value,
+                                        MarkingPeriodRef = markingPeriodId
+                                    };
+                                    res.Add(period);
+                                }
+                            }
+                        }
+                    }
+                    da.Create(res);
+                    uow.Commit();
+                }
+                else
+                {
+                    throw new ChalkableException(ChlkResources.ERR_CANT_CHANGE_GENERAL_PERIODS);
+                }
+                machine.Apply(StateActionEnum.DailyPeriodsAdd);
+                return res;
+            }
+
         }
     }
 }
