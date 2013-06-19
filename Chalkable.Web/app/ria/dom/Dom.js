@@ -15,9 +15,6 @@
 NAMESPACE('ria.dom', function () {
     "use strict";
 
-    // TODO: fix this
-    ASSET('lib/sizzle.js');
-
     var global = ('undefined' !== typeof window ? window.document : null),
         __find = Sizzle,
         __is = Sizzle.matchesSelector;
@@ -104,7 +101,8 @@ NAMESPACE('ria.dom', function () {
                                 .valueOf()
                                 .pop();
 
-                            return checkEventHandlerResult(e, handler_(new ria.dom.Dom(selectorTarget), e));
+                            if (selectorTarget)
+                                return checkEventHandlerResult(e, handler_(new ria.dom.Dom(selectorTarget), e));
                         };
 
                         element.addEventListener(evt, h, false);
