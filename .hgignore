@@ -8,3 +8,5 @@ syntax: glob
 **/bin/*
 packages/**/*
 .nuget/*
+Chalkable.Web/.idea/
+Chalkable.Web/app/ria/.svn/
