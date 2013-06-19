@@ -23,6 +23,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             SimpleInsert(periods);
         }
+
         public void Update(Period period)
         {
             SimpleUpdate(period);
@@ -32,12 +33,13 @@ namespace Chalkable.Data.School.DataAccess
              SimpleDelete<Period>(new Dictionary<string, object>{{"Id", id}});
         }
 
-        public void Delete(IList<Guid> markingPeriodIds)
-        {
-            var mpIds = markingPeriodIds.Select(x => x.ToString()).JoinString(",");
-            var sql = string.Format("delete from Period where MarkingPeriodRef in ({0})", mpIds);
-            ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
-        }
+         public void Delete(IList<Guid> markingPeriodIds)
+         {
+             var mpIds = markingPeriodIds.Select(x => x.ToString()).JoinString(",");
+             var sql = string.Format("delete from Period where MarkingPeriodRef in ({0})", mpIds);
+             ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
+         }
+
 
         public Period GeComplextById(Guid id)
         {

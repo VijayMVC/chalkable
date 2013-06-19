@@ -20,7 +20,7 @@ NAMESPACE('chlk', function (){
                         return data;
                     }).then(function(data){
                         new ria.dom.Dom()
-                            .fromHTML(ASSET('~/assets/jade/SysAdminSidebar.jade')())
+                            .fromHTML(ASSET('~/assets/jade/sidebars/SysAdminSidebar.jade')())
                             .appendTo("#sidebar");
                         return data;
                     });

@@ -163,15 +163,15 @@ namespace Chalkable.BusinessLogic.Services.School
                             {
                                 for (int i = 0; i < periodCount; i++)
                                 {
-                                    var periodStartTime = startTime + (length + lengthBetweenPeriods)*i;
+                                    var periodStartTime = startTime + (length + lengthBetweenPeriods) * i;
                                     var periodEndTime = periodStartTime + length;
                                     var period = new Period
-                                        {
-                                            SectionRef = scheduleSection.Id,
-                                            StartTime = periodStartTime.Value,
-                                            EndTime = periodEndTime.Value,
-                                            MarkingPeriodRef = markingPeriodId
-                                        };
+                                    {
+                                        SectionRef = scheduleSection.Id,
+                                        StartTime = periodStartTime.Value,
+                                        EndTime = periodEndTime.Value,
+                                        MarkingPeriodRef = markingPeriodId
+                                    };
                                     res.Add(period);
                                 }
                             }
@@ -187,6 +187,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 machine.Apply(StateActionEnum.DailyPeriodsAdd);
                 return res;
             }
+
         }
     }
 }

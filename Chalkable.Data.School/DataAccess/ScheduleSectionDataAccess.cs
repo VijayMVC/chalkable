@@ -87,16 +87,16 @@ namespace Chalkable.Data.School.DataAccess
             return ReadMany<ScheduleSection>(new DbQuery {Sql = b.ToString(), Parameters = conds});
         } 
 
+        public ScheduleSection GetById(Guid id)
+        {
+            return SelectOne<ScheduleSection>(new Dictionary<string, object> {{"Id", id}});
+        }
+
         public IList<ScheduleSection> GetSections(IList<Guid> markingPeriodIds)
         {
             var mpIds = markingPeriodIds.Select(x => x.ToString()).JoinString(",");
             var sql = string.Format("select * from ScheduleSection where MarkingPeriodRef in ({0})", mpIds);
-            return ReadMany<ScheduleSection>(new DbQuery {Sql = sql, Parameters = new Dictionary<string, object>()});
-        } 
-
-        public ScheduleSection GetById(Guid id)
-        {
-            return SelectOne<ScheduleSection>(new Dictionary<string, object> {{"Id", id}});
+            return ReadMany<ScheduleSection>(new DbQuery { Sql = sql, Parameters = new Dictionary<string, object>() });
         }
     }
 }
