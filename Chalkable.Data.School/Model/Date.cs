@@ -10,8 +10,8 @@ namespace Chalkable.Data.School.Model
     {
         public Guid Id { get; set; }
         public DateTime DateTime { get; set; }
-        public Guid ScheduleSectionRef { get; set; }
-        public Guid MarkingPeriodRef { get; set; }
+        public Guid? ScheduleSectionRef { get; set; }
+        public Guid? MarkingPeriodRef { get; set; }
         public bool IsSchoolDay { get; set; }
         public int? SisId { get; set; }
     }

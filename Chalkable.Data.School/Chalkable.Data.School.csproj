@@ -48,6 +48,7 @@
     <Compile Include="DataAccess\AnnouncementTypeDataAccess.cs" />
     <Compile Include="DataAccess\CalendarDateDataAccess.cs" />
     <Compile Include="DataAccess\ClassDataAccess.cs" />
+    <Compile Include="DataAccess\ClassPeriodDataAccess.cs" />
     <Compile Include="DataAccess\ClassPersonDataAccess.cs" />
     <Compile Include="DataAccess\CourseDataAccess.cs" />
     <Compile Include="DataAccess\GradeLevelDataAccess.cs" />
@@ -70,11 +71,16 @@
     <Compile Include="Model\AnnouncementRecipientData.cs" />
     <Compile Include="Model\AnnouncementReminder.cs" />
     <Compile Include="Model\AnnouncementType.cs" />
+    <Compile Include="Model\AttendanceReason.cs" />
     <Compile Include="Model\Class.cs" />
+    <Compile Include="Model\ClassAttendance.cs" />
+    <Compile Include="Model\ClassDiscipline.cs" />
+    <Compile Include="Model\ClassDisciplineType.cs" />
     <Compile Include="Model\ClassPeriod.cs" />
     <Compile Include="Model\ClassPerson.cs" />
     <Compile Include="Model\Course.cs" />
     <Compile Include="Model\Date.cs" />
+    <Compile Include="Model\DisciplineType.cs" />
     <Compile Include="Model\FinalGrade.cs" />
     <Compile Include="Model\FinalGradeAnnouncementType.cs" />
     <Compile Include="Model\GradeLevel.cs" />

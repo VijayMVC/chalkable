@@ -139,7 +139,7 @@ namespace Chalkable.Data.Common
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
         }
 
-        public void SimpleDelete<T>(Dictionary<string, object> conds)
+        protected void SimpleDelete<T>(Dictionary<string, object> conds)
         {
             var q = Orm.SimpleDelete<T>(conds);
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
@@ -151,17 +151,17 @@ namespace Chalkable.Data.Common
                 return action(reader);
             }
         }
-        protected T ReadOne<T>(DbQuery query) where T : new()
+        protected T ReadOne<T>(DbQuery query, bool complexResultSet = false) where T : new()
         {
-            return Read(query, reader => reader.Read<T>());
+            return Read(query, reader => reader.Read<T>(complexResultSet));
         }
-        protected T ReadOneOrNull<T>(DbQuery query) where T : new()
+        protected T ReadOneOrNull<T>(DbQuery query, bool complexResultSet = false) where T : new()
         {
-            return Read(query, reader => reader.ReadOrNull<T>());
+            return Read(query, reader => reader.ReadOrNull<T>(complexResultSet));
         }
-        protected IList<T> ReadMany<T>(DbQuery query) where T : new()
+        protected IList<T> ReadMany<T>(DbQuery query, bool complexResultSet = false) where T : new()
         {
-             return Read(query, reader => reader.ReadList<T>());
+            return Read(query, reader => reader.ReadList<T>(complexResultSet));
         } 
 
         protected T SelectOne<T>(Dictionary<string, object> conditions) where T : new() 
@@ -219,17 +219,16 @@ namespace Chalkable.Data.Common
                 return new PaginatedList<T>(new List<T>(), start / count, count, 0);
             }
         }
-
-
+        
         protected bool Exists<T>(Dictionary<string, object> conditions) where T : new()
         {
             var resName = "AllCount";
-            var q = Orm.CountSelect<T>(conditions, resName);
-            using (var reader = ExecuteReaderParametrized(q.Sql, q.Parameters as Dictionary<string, object>))
-            {
-                return reader.Read() && SqlTools.ReadInt32(reader, resName) > 0;
-            }
+            return Exists(Orm.CountSelect<T>(conditions, resName));   
         }
 
+        protected bool Exists(DbQuery query, string resName = "AllCount")
+        {
+            return Read(query, reader => reader.Read() && SqlTools.ReadInt32(reader, resName) > 0);
+        }
     }
 }

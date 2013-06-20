@@ -201,11 +201,15 @@ namespace Chalkable.Data.Common
 
         public static DbQuery CountSelect<T>(Dictionary<string, object> conds, string resultName)
         {
+            return CountSelect(SimpleSelect<T>(conds), resultName);
+        }
+
+        public static DbQuery CountSelect(DbQuery query, string resultName)
+        {
             var b = new StringBuilder();
-            var res = SimpleSelect<T>(conds);
-            b.AppendFormat("Select Count(*) as {1} from ({0})", res.Sql, resultName);
-            res.Sql = b.ToString();
-            return res;
+            b.AppendFormat("Select Count(*) as {1} from ({0})", query.Sql, resultName);
+            query.Sql = b.ToString();
+            return query;
         }
 
         public static DbQuery PaginationSelect<T>(Dictionary<string, object> conds, string orderColumn, OrderType orderType, int start, int count)

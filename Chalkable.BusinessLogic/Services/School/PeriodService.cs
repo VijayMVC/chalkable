@@ -121,8 +121,10 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var calendarDate = ServiceLocator.CalendarDateService.GetCalendarDateByDate(date);
-                return new PeriodDataAccess(uow).GetPeriodOrNull(calendarDate.ScheduleSectionRef, time);
+                if(calendarDate.ScheduleSectionRef.HasValue)
+                    return new PeriodDataAccess(uow).GetPeriodOrNull(calendarDate.ScheduleSectionRef.Value, time);
             }
+            return null;
         }
 
         public IList<Period> ReGeneratePeriods(IList<Guid> markingPeriodIds, int? startTime = null, int? length = null, int? lengthBetweenPeriods = null, int? periodCount = null)

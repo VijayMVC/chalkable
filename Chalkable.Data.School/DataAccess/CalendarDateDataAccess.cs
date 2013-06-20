@@ -91,12 +91,12 @@ namespace Chalkable.Data.School.DataAccess
         {
             return GetDate(query, ReadOneOrNull<Date>);
         }
-        private Date GetDate(DateQuery query, Func<DbQuery, Date> acion)
+        private Date GetDate(DateQuery query, Func<DbQuery, bool, Date> acion)
         {
             var b = new StringBuilder();
             b.Append("select * from Date");
             var q = BuildConditionQuery(b, query);
-            return acion(q);
+            return acion(q, false);
         }
 
         public IList<Date> GetDates(DateQuery query)
