@@ -19,7 +19,7 @@ namespace Chalkable.Data.School.Model
         public int? SisId { get; set; }
     }
 
-    public class ClassComplex
+    public class ClassComplex : Class
     {
         public Person Teacher { get; set; }
         public MarkingPeriodClass MarkingPeriodClass { get; set; }
