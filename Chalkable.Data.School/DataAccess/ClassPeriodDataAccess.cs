@@ -32,7 +32,7 @@ namespace Chalkable.Data.School.DataAccess
             return Exists(BuildGetClassPeriodsQuery(query));
         }
 
-        public bool HasStudentsTwoClassesInPeriod(Guid periodId, Guid classId)
+        public bool IsClassStudentsAssignedToPeriod(Guid periodId, Guid classId)
         {
             var sql = @"select * from ClassPerson
                         where ClassRef = @classId and PersonRef in (
@@ -42,6 +42,19 @@ namespace Chalkable.Data.School.DataAccess
             var conds = new Dictionary<string, object> {{"periodId", periodId}, {"classId", classId}};
             var query = new DbQuery{Sql = sql, Parameters = conds};
             return Exists(query);
+        }
+
+        public bool IsStudentAlreadyAssignedToClassPeriod(Guid personId, Guid classId)
+        {
+            var sql = @"select * from ClassPeriod cPeriod
+                        where cPeriod.ClassRef = @classId and cPeriod.PeriodRef in (
+	                        select cPeriod.PeriodRef from ClassPeriod cPeriod
+	                        join ClassPerson cPerson on cPerson.ClassRef = cPeriod.ClassRef and cPerson.PersonRef = @personId)";
+
+            var conds = new Dictionary<string, object> { { "personId", personId }, { "classId", classId } };
+            var query = new DbQuery { Sql = sql, Parameters = conds };
+            return Exists(query);
+            
         }
 
 

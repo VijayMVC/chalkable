@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.BusinessLogic.Services.School.Notifications;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -29,6 +30,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IPeriodService PeriodService { get; }
         ICalendarDateService CalendarDateService { get; }
         IScheduleSectionService ScheduleSectionService { get; }
+        IClassPeriodService ClassPeriodService { get; }
+        INotificationService NotificationService { get; }
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
     {
@@ -51,6 +54,8 @@ namespace Chalkable.BusinessLogic.Services.School
         private IPeriodService periodService;
         private ICalendarDateService calendarDateService;
         private IScheduleSectionService scheduleSectionService;
+        private IClassPeriodService classPeriodService;
+        private INotificationService notificationService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -74,6 +79,8 @@ namespace Chalkable.BusinessLogic.Services.School
             periodService = new PeriodService(this);
             calendarDateService = new CalendarDateService(this);
             scheduleSectionService = new ScheduleSectionService(this);
+            classPeriodService = new ClassPeriodService(this);
+            notificationService = new NotificationService(this);
         }
 
         public IPersonService PersonService
@@ -160,6 +167,16 @@ namespace Chalkable.BusinessLogic.Services.School
         public IScheduleSectionService ScheduleSectionService
         {
             get { return scheduleSectionService; }
+        }
+
+        public IClassPeriodService ClassPeriodService
+        {
+            get { return classPeriodService; }
+        }
+
+        public INotificationService NotificationService
+        {
+            get { return notificationService; }
         }
     }
 }

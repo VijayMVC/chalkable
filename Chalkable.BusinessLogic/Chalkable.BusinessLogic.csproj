@@ -65,6 +65,9 @@
     <Compile Include="Services\School\CourseService.cs" />
     <Compile Include="Services\School\GradeLevelService.cs" />
     <Compile Include="Services\School\MarkingPeriodService.cs" />
+    <Compile Include="Services\School\Notifications\NotificationBuilder.cs" />
+    <Compile Include="Services\School\Notifications\NotificationService.cs" />
+    <Compile Include="Services\School\Notifications\NotificationTemplateProvider.cs" />
     <Compile Include="Services\School\PeriodService.cs" />
     <Compile Include="Services\School\PersonService.cs" />
     <Compile Include="Services\School\PhoneService.cs" />
@@ -94,6 +97,10 @@
     <ProjectReference Include="..\Chalkable.Data.School\Chalkable.Data.School.csproj">
       <Project>{c5753c2a-f2bc-4f96-846b-548fc67191b2}</Project>
       <Name>Chalkable.Data.School</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GCObjectRenderer\GCObjectRenderer.csproj">
+      <Project>{ccd7266b-94bb-45ef-bc49-0f608da006f3}</Project>
+      <Name>GCObjectRenderer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

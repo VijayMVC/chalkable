@@ -17,11 +17,16 @@ namespace Chalkable.Data.School.DataAccess
 
         private const string MARKING_PERIOD_REF_FIELD = "markingPeriodRef";
         private const string CLASS_REF_FIELD = "classRef";
-        
+       
         public void Create(MarkingPeriodClass markingPeriodClass)
         {
             SimpleInsert(markingPeriodClass);
         }
+        public void Create(IList<MarkingPeriodClass> markingPeriodClasses)
+        {
+            SimpleInsert(markingPeriodClasses);
+        }
+        
         public void Update(MarkingPeriodClass markingPeriodClass)
         {
             SimpleUpdate(markingPeriodClass);
@@ -30,6 +35,17 @@ namespace Chalkable.Data.School.DataAccess
         {
             SimpleDelete(markingPeriodClass);
         }
+        //TODO: build generel method for list deleting 
+        public void Delete(List<MarkingPeriodClass> markingPeriodClasses)
+        {
+            var b = new StringBuilder();
+            foreach (var markingPeriodClass in markingPeriodClasses)
+            {
+                b.AppendFormat("delete from MarkingPeriodClass where Id = {0} ", markingPeriodClass.Id);
+            }
+            ExecuteNonQueryParametrized(b.ToString(), new Dictionary<string, object>());
+        }
+
 
         public void Delete(Guid classId)
         {

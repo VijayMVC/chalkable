@@ -44,7 +44,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableException(ChlkResources.ERR_OTHER_CLASS_ALREADY_ASSIGNED_TO_ROOM);
                 if (da.Exists(new ClassPeriodQuery { ClassIds = new List<Guid> {classId}, PeriodId = periodId }))
                     throw new ChalkableException(ChlkResources.ERR_CLASS_ALREADY_ASSIGNED_TO_PERIOD);
-                if (da.HasStudentsTwoClassesInPeriod(periodId, classId))
+                if (da.IsClassStudentsAssignedToPeriod(periodId, classId))
                     throw new ChalkableException(ChlkResources.ERR_STUDENT_BAD_CLASS_PERIOD);
 
                 var res = new ClassPeriod

@@ -18,4 +18,13 @@ namespace Chalkable.Data.School.Model
         public Guid GradeLevelRef { get; set; }
         public int? SisId { get; set; }
     }
+
+    public class ClassComplex
+    {
+        public Person Teacher { get; set; }
+        public MarkingPeriodClass MarkingPeriodClass { get; set; }
+        public GradeLevel GradeLevel { get; set; }
+        public Course Course { get; set; }
+        public int StudentsCount { get; set; }
+    }
 }

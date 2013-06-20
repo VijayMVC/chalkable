@@ -128,7 +128,7 @@ namespace Chalkable.Data.Common
 
         protected void SimpleDelete<T>(T obj)
         {
-            var q = Orm.SimpleUpdate(obj);
+            var q = Orm.SimpleDelete(obj);
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
         }
 
