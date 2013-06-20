@@ -98,7 +98,6 @@ namespace Chalkable.Data.School.DataAccess
             var q = BuildConditionQuery(b, query);
             return acion(q, false);
         }
-
         public IList<Date> GetDates(DateQuery query)
         {
             var b = new StringBuilder();
@@ -107,7 +106,15 @@ namespace Chalkable.Data.School.DataAccess
             b.AppendFormat(" order by DateTime desc OFFSET 0 ROWS FETCH NEXT {0} ROWS ONLY", query.Count);
             q.Sql = string.Format("select * from ({0})x order by x.DateTime", b);
             return ReadMany<Date>(q);
-        } 
+        }
+ 
+        public bool Exists(DateQuery query)
+        {
+            var b = new StringBuilder();
+            var dbQuery = BuildConditionQuery(b, query);
+            dbQuery.Sql = "select * from Date " + dbQuery.Sql;
+            return Exists(dbQuery);
+        }
     }
 
     public class DateQuery

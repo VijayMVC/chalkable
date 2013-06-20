@@ -57,19 +57,20 @@ namespace Chalkable.Data.School.DataAccess
             return Exists<SchoolYear>(conds);
         }
 
-        public bool IsOverlaped(DateTime startDate, DateTime endDate, SchoolYear schoolYear)
+        public bool IsOverlaped(DateTime startDate, DateTime endDate, Guid? currentSchoolYearId)
         {
-            var sqlCommand = "select count(*) as AllCount from SchoolYear where Id != @id and StartDate <= @endDate and EndDate >= @startDate";
+            var sqlCommand = "select * from SchoolYear where StartDate <= @endDate and EndDate >= @startDate";
             var conds = new Dictionary<string, object>
-                {
-                    {"id", schoolYear.Id},    
+                {  
                     {"startDate", startDate},
                     {"endDate", endDate}
                 };
-            using (var reader = ExecuteReaderParametrized(sqlCommand, conds))
+            if (currentSchoolYearId.HasValue)
             {
-                return reader.Read() && SqlTools.ReadInt32(reader, "AllCount") > 0;
+                conds.Add("id", currentSchoolYearId);
+                sqlCommand += " and Id != @id";
             }
+            return Exists(new DbQuery {Sql = sqlCommand, Parameters = conds});
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new SchoolYearDataAccess(uow);
-                if(IsOverlaped(startDate, endDate))
+                if(IsOverlaped(startDate, endDate, da))
                     throw new ChalkableException(ChlkResources.ERR_SCHOOL_YEAR_OVERLAPPING_DATA);
                 if (da.Exists(name))
                     throw new ChalkableException(ChlkResources.ERR_SCHOOL_YEAR_ALREADY_EXISTS);
@@ -59,10 +59,10 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
         
-        private bool IsOverlaped(DateTime startDate, DateTime endDate, SchoolYearDataAccess dataAccess = null, SchoolYear schoolYear = null)
+        private bool IsOverlaped(DateTime startDate, DateTime endDate, SchoolYearDataAccess dataAccess, SchoolYear schoolYear = null)
         {
-            return startDate >= endDate || (schoolYear != null &&  dataAccess != null 
-                        && (dataAccess.IsOverlaped(startDate, endDate, schoolYear)));
+            var id = schoolYear != null ? schoolYear.Id : (Guid?) null;
+            return startDate >= endDate || (dataAccess.IsOverlaped(startDate, endDate, id));
         }
 
         public SchoolYear Edit(Guid id, string name, string description, DateTime startDate, DateTime endDate)

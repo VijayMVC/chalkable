@@ -60,6 +60,23 @@ namespace Chalkable.Data.School.DataAccess
             var conds = new Dictionary<string, object>();
             conds.Add("date", date);
             return ReadOneOrNull<MarkingPeriod>(new DbQuery {Sql = b.ToString(), Parameters = conds});
-        } 
+        }
+
+        public bool IsOverlaped(DateTime startDate, DateTime endDate, Guid? currentMarkingPeriodId)
+        {
+            var sqlCommand = "select * from SchoolYear where StartDate <= @endDate and EndDate >= @startDate";
+            var conds = new Dictionary<string, object>
+                {
+                    {"startDate", startDate},
+                    {"endDate", endDate}
+                };
+            if (currentMarkingPeriodId.HasValue)
+            {
+                sqlCommand += " and Id != @id";
+                conds.Add("@id", currentMarkingPeriodId);
+            }
+            return Exists(new DbQuery {Sql = sqlCommand, Parameters = conds});
+        }
+
     }
 }

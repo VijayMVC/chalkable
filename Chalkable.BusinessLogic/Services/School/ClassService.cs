@@ -69,7 +69,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if(markingPeriod.SchoolYearRef.ToString() != cClass.SchoolYearRef.ToString())
                 throw new ChalkableException(ChlkResources.ERR_CLASS_YEAR_DIFFERS_FROM_MP_YEAR);
             var mpClassDa = new MarkingPeriodClassDataAccess(unitOfWork);
-            if (!mpClassDa.Exists(cClass.Id, markingPeriod.Id))
+            if (!mpClassDa.Exists(new MarkingPeriodClassQuery{ClassId = cClass.Id, MarkingPeriodId = markingPeriodId}))
             {
                 return new MarkingPeriodClass
                     {
@@ -98,7 +98,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new ClassDataAccess(uow);
                 var mpcDa = new MarkingPeriodClassDataAccess(uow);
                 var classPersonDa = new ClassPersonDataAccess(uow);
-                mpcDa.Delete(id);
+                mpcDa.Delete(new MarkingPeriodClassQuery {Id = id});
                 classPersonDa.Delete(new ClassPersonQuery{Id = id});
                 da.Delete(id);
                 uow.Commit();
@@ -115,7 +115,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var classDa = new ClassDataAccess(uow);
                 var cClass = classDa.GetById(classId);
                 var mpcDa = new MarkingPeriodClassDataAccess(uow);
-                var markingPeriodClasses = mpcDa.GetList(classId);
+                var markingPeriodClasses = mpcDa.GetList(new MarkingPeriodClassQuery{ClassId = classId});
                 var mpcForDelete = markingPeriodClasses.Where(x => !markingPeriodsId.Contains(x.MarkingPeriodRef)).ToList();
                 var mpIdsForAdd = markingPeriodsId.Where(x => mpcForDelete.Any(y => y.MarkingPeriodRef != x)).ToList();
 
@@ -195,7 +195,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (mp.SchoolYearRef != c.SchoolYearRef)
                     throw new ChalkableException(ChlkResources.ERR_CLASS_YEAR_DIFFERS_FROM_MP_YEAR);
 
-                if (!mpcDa.Exists(classId, markingPeriodId))
+                if (!mpcDa.Exists(new MarkingPeriodClassQuery{ClassId = classId, MarkingPeriodId = markingPeriodId}))
                 {
                     mpcDa.Create(new MarkingPeriodClass
                         {
@@ -216,7 +216,12 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                new MarkingPeriodClassDataAccess(uow).Delete(classId, markingPeriodId);
+                new MarkingPeriodClassDataAccess(uow)
+                    .Delete(new MarkingPeriodClassQuery
+                    {
+                        ClassId = classId,
+                        MarkingPeriodId = markingPeriodId
+                    });
                 uow.Commit();
             }
             return GetClassById(classId);

@@ -45,75 +45,46 @@ namespace Chalkable.Data.School.DataAccess
             }
             ExecuteNonQueryParametrized(b.ToString(), new Dictionary<string, object>());
         }
-
-
-        public void Delete(Guid classId)
+       
+        public void Delete(MarkingPeriodClassQuery query)
         {
-            var conds = new Dictionary<string, object> { {CLASS_REF_FIELD, classId } };
-            SimpleDelete<MarkingPeriodClass>(conds);
-        }
-        
-        public void Delete(Guid classId, Guid markingPeriodId)
-        {
-            var conds = new Dictionary<string, object>
-                {
-                    {CLASS_REF_FIELD, classId},
-                    {MARKING_PERIOD_REF_FIELD, markingPeriodId}
-                };
-           SimpleDelete<MarkingPeriodClass>(conds);
-        }
-        
-        public MarkingPeriodClass Get(Guid classId, Guid markingPeriodId)
-        {
-            var conds = new Dictionary<string, object>
-                {
-                    {CLASS_REF_FIELD, classId},
-                    {MARKING_PERIOD_REF_FIELD, markingPeriodId}
-                };
-            return SelectOne<MarkingPeriodClass>(conds);
+            SimpleDelete<MarkingPeriodClass>(BuildConditions(query));
         }
 
-        public IList<MarkingPeriodClass> GetList(Guid classId)
+        public MarkingPeriodClass GetMarkingPeriodClassOrNull(MarkingPeriodClassQuery query)
         {
-            var conds = new Dictionary<string, object> { { CLASS_REF_FIELD, classId } };
-            return SelectMany<MarkingPeriodClass>(conds);
+            return SelectOneOrNull<MarkingPeriodClass>(BuildConditions(query));
+        }
+        public MarkingPeriodClass GetMarkingPeriodClass(MarkingPeriodClassQuery query)
+        {
+            return SelectOne<MarkingPeriodClass>(BuildConditions(query));
+        }
+        public IList<MarkingPeriodClass> GetList(MarkingPeriodClassQuery query)
+        {
+            return SelectMany<MarkingPeriodClass>(BuildConditions(query));
         } 
-        
-        public string BuildSelectCommand(string resultSet, IDictionary<string, object> conditions)
-        {
-            var sql = new StringBuilder();
-            sql.AppendFormat("select {0} from MarkingPeriodClass ", resultSet);
-            if (conditions.Count > 0)
-                sql.Append("where");
-            bool isFirst = true;
-            foreach (var cond in conditions)
-            {
-                if (isFirst) isFirst = false;
-                else
-                {
-                    sql.Append(" and ");
-                }
-                sql.AppendFormat("{0}=@{0}", cond.Key);
-            }
-            return sql.ToString();
-        }
 
-        public bool Exists(Dictionary<string, object> conds)
+        public bool Exists(MarkingPeriodClassQuery query)
         {
-            var sql = new StringBuilder();
-            var sqlCommand = BuildSelectCommand("count(*) as [Count]", conds);
-            using (var reader = ExecuteReaderParametrized(sqlCommand, conds))
-            {
-                return reader.Read() && SqlTools.ReadInt32(reader, "[Count]") > 0;
-            }
+            return Exists<MarkingPeriodClass>(BuildConditions(query));
         }
-        public bool Exists(Guid classId, Guid markingPeriodId)
+        private Dictionary<string, object> BuildConditions(MarkingPeriodClassQuery query)
         {
-            return Exists(new Dictionary<string, object>
-                {
-                    {CLASS_REF_FIELD, classId},
-                    {MARKING_PERIOD_REF_FIELD, markingPeriodId}
-                });
-        }
+            var res = new Dictionary<string, object>();
+            if(query.Id.HasValue)
+                res.Add("Id", query.Id);
+            if(query.ClassId.HasValue)
+                res.Add(CLASS_REF_FIELD, query.ClassId);
+            if(query.MarkingPeriodId.HasValue)
+                res.Add(MARKING_PERIOD_REF_FIELD, query.MarkingPeriodId);
+            return res;
+        } 
+    }
+
+    public class MarkingPeriodClassQuery
+    {
+        public Guid? Id { get; set; }
+        public Guid? ClassId { get; set; }
+        public Guid? MarkingPeriodId { get; set; }
     }
 }
