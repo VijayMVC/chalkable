@@ -45,6 +45,24 @@ namespace Chalkable.Data.School.DataAccess
         }
 
 
+        public IList<Class> GetAvailableClasses(Guid periodId)
+        {
+            var sql = @"select c.* from ClassPeriod cp
+                        join Class c on c.Id = cp.ClassRef
+                        where cp.PeriodRef = @periodId";
+            var conds = new Dictionary<string, object> {{"periodId", periodId}};
+            return ReadMany<Class>(new DbQuery {Sql = sql, Parameters = conds});
+        } 
+        public IList<Room> GetAvailableRooms(Guid periodId)
+        {
+            var sql = @"select r.* from ClassPeriod cp 
+                        join Room r on r.Id = cp.RoomRef
+                        where cp.PeriodRef = @periodId";
+            var conds = new Dictionary<string, object> { { "periodId", periodId } };
+            return ReadMany<Room>(new DbQuery { Sql = sql, Parameters = conds });
+        } 
+
+
         public IList<ClassPeriod> GetClassPeriods(ClassPeriodQuery query)
         {
             var res = BuildGetClassPeriodsQuery(query);
@@ -60,7 +78,6 @@ namespace Chalkable.Data.School.DataAccess
                            , Orm.ComplexResultSetQuery(types));
             return BuildGetClassPeriodsConditions(b, query);
         }
-
         private DbQuery BuildGetClassPeriodsConditions(StringBuilder builder, ClassPeriodQuery query)
         {
             var conds = new Dictionary<string, object>();

@@ -98,12 +98,18 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<Class> GetAvailableClasses(Guid periodId)
         {
-            throw new NotImplementedException();
+            using (var uow = Read())
+            {
+                return new ClassPeriodDataAccess(uow).GetAvailableClasses(periodId);
+            }
         }
 
         public IList<Room> GetAvailableRooms(Guid periodId)
         {
-            throw new NotImplementedException();
+            using (var uow = Read())
+            {
+                return new ClassPeriodDataAccess(uow).GetAvailableRooms(periodId);
+            }
         }
 
         public ClassPeriod GetClassPeriodForSchoolPersonByDate(Guid personId, DateTime dateTime)
