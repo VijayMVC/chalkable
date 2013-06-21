@@ -44,6 +44,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 Guid? schoolId = null;
                 string schoolName = null;
                 string schoolServerUrl = null;
+                string schoolTimeZone = null;
                 CoreRole role;
                 
                 if (user.SchoolUsers != null && user.SchoolUsers.Count > 0)
@@ -54,6 +55,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         schoolId = su.SchoolRef;
                         schoolName = su.School.Name;
                         schoolServerUrl = su.School.ServerUrl;
+                        schoolTimeZone = su.School.TimeZone;
                         role = CoreRoles.GetById(su.Role);
                     }
                     else
@@ -69,7 +71,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         throw new Exception("User's role can not be defined");
                 }
                 
-                var res = new UserContext(user.Id, schoolId, user.Login, schoolName, schoolServerUrl, role);
+                var res = new UserContext(user.Id, schoolId, user.Login, schoolName, schoolTimeZone, schoolServerUrl, role);
                 return res;
             }
         }

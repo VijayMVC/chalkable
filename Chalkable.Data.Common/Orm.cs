@@ -182,8 +182,8 @@ namespace Chalkable.Data.Common
                     else
                         builder.AppendFormat("[{0}].{1} is null", t.Name, cond.Key);
                 }
+                builder.Append(")");
             }
-            builder.Append(")");
             return builder;
         }
 
@@ -193,7 +193,7 @@ namespace Chalkable.Data.Common
             var res = new DbQuery {Parameters = conds};
             var b = new StringBuilder();
             var t = typeof (T);
-            b.AppendFormat("Select * from [{0}]", t.Name);
+            b.AppendFormat("Select * from [{0}] ", t.Name);
             b = BuildSqlWhere(b, t, conds);
             res.Sql = b.ToString();
             return res;

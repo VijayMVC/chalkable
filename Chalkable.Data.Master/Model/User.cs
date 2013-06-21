@@ -27,6 +27,7 @@ namespace Chalkable.Data.Master.Model
         public bool IsEmpty { get; set; }
         public SchoolStatus Status { get; set; }
         public ImportSystemType ImportSystemType { get; set; }
+        public string TimeZone { get; set; }
     }
 
     public class SchoolUser

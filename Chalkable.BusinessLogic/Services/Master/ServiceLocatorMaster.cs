@@ -5,7 +5,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 {
     public interface IServiceLocatorMaster
     {
-        IServiceLocatorSchool SchoolServiceLocator(Guid schoolId, string schoolName, string schoolServerUrl);
+        IServiceLocatorSchool SchoolServiceLocator(Guid schoolId, string schoolName, string schoolTimeZone, string schoolServerUrl);
         UserContext Context { get; }
         IUserService UserService { get; }
         ISchoolService SchoolService { get; }
@@ -33,9 +33,9 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IBackgroundTaskService BackgroundTaskService { get { return backgroundTaskService; } }
         public IPreferenceService PreferenceService { get { return preferenceService; } }
 
-        public IServiceLocatorSchool SchoolServiceLocator(Guid schoolId, string schoolName, string schoolServerUrl)
+        public IServiceLocatorSchool SchoolServiceLocator(Guid schoolId, string schoolName, string schoolTimeZone, string schoolServerUrl)
         {
-            Context.SwitchSchool(schoolId, schoolName, schoolServerUrl);
+            Context.SwitchSchool(schoolId, schoolName, schoolTimeZone, schoolServerUrl);
             var serviceLocator = new ServiceLocatorSchool(this);
             return serviceLocator;
         }
