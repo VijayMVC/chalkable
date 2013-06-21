@@ -41,7 +41,7 @@ namespace Chalkable.Data.Master.DataAccess
 
         public School GetById(Guid id)
         {
-            return SelectOne<School>(new Dictionary<string, object> { { "Id", id } });
+            return SelectOneOrNull<School>(new Dictionary<string, object> { { "Id", id } });
         }
 
         //TODO: next methods runs on the school db server under master database
