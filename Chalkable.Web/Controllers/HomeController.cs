@@ -33,16 +33,19 @@ namespace Chalkable.Web.Controllers
             ChalkableAuthentication.SignOut();
             return Json(new { Success = true, UserName = userName }, JsonRequestBehavior.AllowGet);
         }
+        
+        public ActionResult SysAdmin()
+        {
+            return View();
+        }
 
+
+        //TODO: test only. don't forget to remove :)
         public ActionResult Create(string userName, string password)
         {
             ServiceLocatorFactory.CreateMasterSysAdmin().UserService.CreateSysAdmin(userName, password);
             return Json(new { Success = true, UserName = userName }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult SysAdmin()
-        {
-            return View();
-        }
     }
 }
