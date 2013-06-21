@@ -66,6 +66,7 @@
     <Compile Include="CreateEmptySchoolTaskHandler.cs" />
     <Compile Include="ITaskHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SisImportDataTaskHandler.cs" />
     <Compile Include="TaskProcessor.cs" />
     <Compile Include="WorkerRole.cs" />
   </ItemGroup>
@@ -89,6 +90,14 @@
     <ProjectReference Include="..\Chalkable.Data.Master\Chalkable.Data.Master.csproj">
       <Project>{C9ACB7A6-1755-424A-B0BB-3B0C5B13EC15}</Project>
       <Name>Chalkable.Data.Master</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.SisConnector\Chalkable.SisConnector.csproj">
+      <Project>{C6A26439-411D-4D8C-9BCE-1A34E7EE604F}</Project>
+      <Name>Chalkable.SisConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.SisImportFacade\Chalkable.SisImportFacade.csproj">
+      <Project>{BD404053-D827-4695-9F57-5003A337428C}</Project>
+      <Name>Chalkable.SisImportFacade</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
