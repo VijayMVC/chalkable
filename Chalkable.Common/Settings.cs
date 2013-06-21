@@ -68,6 +68,12 @@ namespace Chalkable.Common
         {
             get { return (KeyValueConfigurationCollection)this["Servers"]; }
         }
+
+        [ConfigurationProperty("EmptySchoolsReserved")]
+        public int EmptySchoolsReserved
+        {
+            get { return (int)this["EmptySchoolsReserved"]; }
+        }
     }
 
 }

@@ -1,138 +1,33 @@
 ﻿@using System.Configuration
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"  itemscope itemtype="Education">
-
 <head>
     <title>@ViewBag.Title</title>
-    <!--Facebook Metadata /-->
-    <meta property="fb:page_id" content="www.facebook.com/chalkable" />
-    <meta property="og:image" content="https://chalkable.com/Content/images/index/slider_imgs/admin_attend.jpg" />
-    <meta property="og:description" content="Chalkable is an app store for school and a platform to make those apps work."/>
-    <meta property="og:title" content="Chalkable"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-
-    <meta name="google" content="notranslate">
-    <meta http-equiv="Content-Language" content="en" />
-
-    <meta itemprop="name" content="Chalkable">
-    <meta itemprop="description" content="I just signed up for Chalkable to get amazing apps into my school. Check it out for yourself.">
+    @ChlkHelpers.RenderPageMetadata()
     <meta itemprop="image" content="@Url.Content("~/favicon.ico")">
     <link rel="icon" href="@Url.Content("~/favicon.ico")" />
 
-
-    <!--Fonts-->
-    <link href='https://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css' />
-    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css' />
-    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css' />
-
-    <!-- Whole Site CSS -->
-    <link href="@Url.StaticContent("/Content/screen.css")" rel="stylesheet" media="screen, projection" type="text/css" />
-  
-  <link href="@Url.StaticContent("/Scripts/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css" />
-  <link href="@Url.StaticContent("/Scripts/jquery/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css" />
- 
-
-  <link href="@Url.StaticContent("/Scripts/index/validation/css/validationEngine.jquery.css")" rel="stylesheet" type="text/css" />
-  <link href="@Url.StaticContent("/Scripts/index/validation/css/template.css")" rel="stylesheet" type="text/css"/>  
+    <link href="@Url.StaticContent("/Scripts/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.StaticContent("/Scripts/jquery/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.StaticContent("/Scripts/jquery/validation/css/validationEngine.jquery.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.StaticContent("/Scripts/jquery/validation/css/template.css")" rel="stylesheet" type="text/css"/>  
     <!-- Page specific CSS -->
-  @RenderSection("Styles", false)
-
-
-@if (!Chalkable.Web.Tools.CompilerHelper.IsDebug)
-{
-    <script type="text/javascript">
-
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-25952076-1']);
-        _gaq.push(['_setDomainName', 'chalkable.com']);
-        _gaq.push(['_trackPageview']);
-
-        (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-
-    </script>
-}
-
-
+    @RenderSection("Styles", false)
+    @ChlkHelpers.GoogleAnalytics()
 </head>
-
 <body>
+    <div id="fb-root"></div>
+    <input type="hidden" value=" ServerTime :  @ViewData["CurrentServerDateTime"]"/>
+    <input type="hidden" value=" ServerDbTime:  @ViewData["CurrentServerDBDateTime"]"/>
 
-      <div id="fb-root"></div>
-      <input type="hidden" value=" ServerTime :  @ViewData["CurrentServerDateTime"]"/>
-      <input type="hidden" value=" ServerDbTime:  @ViewData["CurrentServerDBDateTime"]"/>
-      	<div id="page-header">
-          Revision: @Chalkable.Web.Tools.CompilerHelper.Version
-      	</div>
-
-    @if (IsSectionDefined("ContentSection"))
-    {
-        @RenderSection("ContentSection", false)  
-        @RenderBody()
-    }
-    else
-    {
-     
-        <div class="page 
-        @if ((ViewData.ContainsKey("Prefix") && !string.IsNullOrEmpty("Prefix")) || (ViewData.ContainsKey("DeveloperId") && !string.IsNullOrEmpty("DeveloperId")))
-        {
-            @:demo
-        }
-        ">
-        <div id="sidebar">
-            @if (IsSectionDefined("LogoSection"))
-            {
-                @RenderSection("LogoSection", false)
-            }
-            else
-            {
-                <a href="#" id="home-logo" title="Home"></a>
-            }
-            @if (IsSectionDefined("SidebarControls"))
-            {
-            <div id="sidebar-controls">
-                <div class="search-wrapper">
-                    <div id="search-bar"></div>
-                </div>
-                <div class="wrapper">
-                    @RenderSection("SidebarControls", false)
-                </div>
-                <div id="invite-button-container"></div>
-            </div>
-            }
-
-            @RenderSection("Sidebar", false)
-        </div>
-
-        <div id="content">
-            <div class="ribbon"></div>
-            <div id="content-wrapper">
-                <div id="main-top">
-                </div>
-                <div id="main-wrapper">
-                    <div id="main" class="container-ajax-loader">
-                        @RenderBody()
-                    </div>
-                </div>
-
-                <div id="footer">&copy; <script>var dt = new Date();document.write(dt.getFullYear());</script> Chalkable
-                    <div class="footer-buttons">
-                        <a id="register-button" href="@Url.Content("~/SignUp/Admin")">Register</a>
-                        <a id="demo-button" href="@Url.Content("~/DemoSchool/Demo")">Try demo</a>
-                    </div>
-                   
-                </div>
-            </div>
-        </div>
-
+    <div id="page-header">
+        Revision: @Chalkable.Web.Tools.CompilerHelper.Version
     </div>
-  }
 
+    @RenderSection("ContentSection", false)  
+    @RenderBody()
 
-    @if ((ViewData.ContainsKey("Prefix") && !string.IsNullOrEmpty("Prefix")) || (ViewData.ContainsKey("DeveloperId") && !string.IsNullOrEmpty("DeveloperId")))
+    @if ((ViewData.ContainsKey("Prefix") && !string.IsNullOrEmpty((string)ViewData["Prefix"])) || (ViewData.ContainsKey("DeveloperId") && !string.IsNullOrEmpty((string)ViewData["DeveloperId"])))
     {
         <div id="demo-footer">
             @if (ViewData.ContainsKey("DeveloperId") && !string.IsNullOrEmpty(Convert.ToString(ViewData["DeveloperId"])))
@@ -171,6 +66,8 @@
             }
 
             <div class="border"></div>
+            
+
             <div id="roles-buttons">
                 @if (ViewData.ContainsKey("DeveloperId") && !string.IsNullOrEmpty(Convert.ToString(ViewData["DeveloperId"])))
                 {
@@ -207,62 +104,30 @@
 
 	<div class="chlk-tooltip" id="chlk-tooltip-item"><div class="tooltip-content"></div><div class="tooltip-triangle"></div></div>
 
-     <script type="text/javascript" src='https://platform.twitter.com/anywhere.js?id=@ViewData["TwitterApplicationId"]&v=1' ></script>
+    <script type="text/javascript" src='https://platform.twitter.com/anywhere.js?id=@ViewData["TwitterApplicationId"]&v=1' ></script>
     <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery-1.8.3.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/es5-shim.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/extjs/ext-jquery-adapter.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/extjs/ext-jquery-adapter-fixes.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/extjs/ext-all4.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/extjs/ext-all.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/extjs/ux-all.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery.menu-aim.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/autoresize.jquery.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery.maskedinput-1.3.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery.quicksand.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/shared-all.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/chlk-messages.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery.transit.min.js")"></script> <!--for CSS3 animation (announcement-details : transition())-->
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/jquery.scrollTo.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/extjs/superboxselect/superboxselect.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/highcharts/highcharts.js")"></script>
-    <script type="text/javascript"  src="@Url.StaticContent("/Scripts/jquery/snippet/jquery.snippet.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/api/chlk-post-message-api.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/html5shiv.js")"></script>
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery-ui.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/validation/languages/jquery.validationEngine-en.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/validation/jquery.validationEngine.js")"></script>
-    <!--[if IE 6]><script  type="text/javascript" src="@Url.StaticContent("/Scripts/index/jq.png-min.js")"></script><![endif]-->
-
-    <!-- <script type="text/javascript" src="https://platform.linkedin.com/in.js">
-        api_key: @ViewData["LinkedInApplicationId"]
-    </script>-->
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery-ui.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/snippet/jquery.snippet.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery.signaturepad.min.js")"></script>
-    
-     <script type='text/javascript'>/*{literal}<![CDATA[*/window.olark || (function (i) { var e = window, h = document, a = e.location.protocol == "https:" ? "https:" : "http:", g = i.name, b = "load"; (function () { e[g] = function () { (c.s = c.s || []).push(arguments) }; var c = e[g]._ = {}, f = i.methods.length; while (f--) { (function (j) { e[g][j] = function () { e[g]("call", j, arguments) } })(i.methods[f]) } c.l = i.loader; c.i = arguments.callee; c.f = setTimeout(function () { if (c.f) { (new Image).src = a + "//" + c.l.replace(".js", ".png") + "&" + escape(e.location.href) } c.f = null }, 20000); c.p = { 0: +new Date }; c.P = function (j) { c.p[j] = new Date - c.p[0] }; function d() { c.P(b); e[g](b) } e.addEventListener ? e.addEventListener(b, d, false) : e.attachEvent("on" + b, d); (function () { function l(j) { j = "head"; return ["<", j, "></", j, "><", z, ' onl' + 'oad="var d=', B, ";d.getElementsByTagName('head')[0].", y, "(d.", A, "('script')).", u, "='", a, "//", c.l, "'", '"', "></", z, ">"].join("") } var z = "body", s = h[z]; if (!s) { return setTimeout(arguments.callee, 100) } c.P(1); var y = "appendChild", A = "createElement", u = "src", r = h[A]("div"), G = r[y](h[A](g)), D = h[A]("iframe"), B = "document", C = "domain", q; r.style.display = "none"; s.insertBefore(r, s.firstChild).id = g; D.frameBorder = "0"; D.id = g + "-loader"; if (/MSIE[ ]+6/.test(navigator.userAgent)) { D.src = "javascript:false" } D.allowTransparency = "true"; G[y](D); try { D.contentWindow[B].open() } catch (F) { i[C] = h[C]; q = "javascript:var d=" + B + ".open();d.domain='" + h.domain + "';"; D[u] = q + "void(0);" } try { var H = D.contentWindow[B]; H.write(l()); H.close() } catch (E) { D[u] = q + 'd.write("' + l().replace(/"/g, String.fromCharCode(92) + '"') + '");d.close();' } c.P(2) })() })() })({ loader: (function (a) { return "static.olark.com/jsclient/loader0.js?ts=" + (a ? a[1] : (+new Date)) })(document.cookie.match(/olarkld=([0-9]+)/)), name: "olark", methods: ["configure", "extend", "declare", "identify"] });
-    /* custom configuration goes here (www.olark.com&frasl;documentation) */
-         olark.identify('7960-903-10-2178');/*]]>{/literal}*/</script>
-    
-    @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)
-    {
-        <script type="text/javascript" src="@Url.StaticContent("/Scripts/hwa/base.js")"></script>
-        <script type="text/javascript">
-            var _ = window.location.href.toString().match(/http?s:\/\/[^\/]+/);
-            var WEB_SITE_ROOT = _ + '@Url.Content("~/")';
-            hwa.BASE_MODULE_URL = _ + '@Url.StaticContent("/Scripts/")';
-        </script>
-        
-         
-    }
-    else
-    {
-        <script type="text/javascript">var WEB_SITE_ROOT = window.location.href.toString().match(/http?s:\/\/[^\/]+/) + '@Url.Content("~/")';</script>
-    }
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery.scrollTo.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/validation/languages/jquery.validationEngine-en.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/validation/jquery.validationEngine.js")"></script>
 
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/chlk-messages.js")"></script>
     
-
-  
-
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/html5shiv.js")"></script>
+    
+    <!--[if IE 6]><script  type="text/javascript" src="@Url.StaticContent("/Scripts/index/jq.png-min.js")"></script><![endif]-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    
+    
+   @ChlkHelpers.LinkedIn(ViewData["LinkedInApplicationId"]) 
+   @ChlkHelpers.Olark()
+   @ChlkHelpers.RenderSiteRoot(Url)
     
     <script type="text/javascript">
         function prepareClassesInfo(classesAdvancedData){
@@ -367,48 +232,9 @@
         }
     </script>
     
-     <script type="text/javascript">
-         (function (d, s, id) {
-             var js, fjs = d.getElementsByTagName(s)[0];
-             if (d.getElementById(id)) return;
-             js = d.createElement(s); js.id = id;
-             js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-             fjs.parentNode.insertBefore(js, fjs);
-         }(document, 'script', 'facebook-jssdk'));
-        
-     </script>
-
-    <!-- start Mixpanel -->
-    <script type="text/javascript">
-        (function (e, b) {
-            if (!b.__SV) {
-                var a, f, i, g; window.mixpanel = b; a = e.createElement("script"); a.type = "text/javascript"; a.async = !0; a.src = ("https:" === e.location.protocol ? "https:" : "http:") + "//cdn.mxpnl.com/libs/mixpanel-2.2.min.js"; f = e.getElementsByTagName("script")[0]; f.parentNode.insertBefore(a, f); b._i = []; b.init = function (a, e, d) {
-                    function f(b, h) { var a = h.split("."); 2 == a.length && (b = b[a[0]], h = a[1]); b[h] = function () { b.push([h].concat(Array.prototype.slice.call(arguments, 0))) } } var c = b; "undefined" !== typeof d ? c = b[d] =
-                        [] : d = "mixpanel"; c.people = c.people || []; c.toString = function (b) { var a = "mixpanel"; "mixpanel" !== d && (a += "." + d); b || (a += " (stub)"); return a }; c.people.toString = function () { return c.toString(1) + ".people (stub)" }; i = "disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.increment".split(" "); for (g = 0; g < i.length; g++) f(c, i[g]); b._i.push([a, e, d])
-                };
-                b.__SV = 1.2;
-            }
-        })(document, window.mixpanel || []);
-        mixpanel.init("@ConfigurationManager.AppSettings["mixpanel-token"]");
-    </script>
-    
-    <script type="text/javascript">
-        function hideURLbar() {
-            window.scrollTo(0, 0);
-            addEventListener("load", function () { setTimeout(hideURLbar, 0); }, false);
-        }
-        
-        $(window).load(function() {
-            if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
-                $('input:-webkit-autofill').each(function() {
-                    var text = $(this).val();
-                    var name = $(this).attr('name');
-                    $(this).after(this.outerHTML).remove();
-                    $('input[name=' + name + ']').val(text);
-                });
-            }
-        });
-    </script>
+    @ChlkHelpers.Facebook()
+    @ChlkHelpers.MixPanel()
+    @ChlkHelpers.WebKitAutofill()
 
     @RenderSection("BottomScripts", false)
     @RenderSection("TeacherTracking", false)

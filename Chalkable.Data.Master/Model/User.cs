@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Enums;
 
 namespace Chalkable.Data.Master.Model
 {
@@ -24,6 +25,9 @@ namespace Chalkable.Data.Master.Model
         public Guid? DistrictRef { get; set; }
         public const string IS_EMPTY_FIELD = "IsEmpty";
         public bool IsEmpty { get; set; }
+        public SchoolStatus Status { get; set; }
+        public ImportSystemType ImportSystemType { get; set; }
+        public string TimeZone { get; set; }
     }
 
     public class SchoolUser
@@ -44,4 +48,20 @@ namespace Chalkable.Data.Master.Model
         public string Name { get; set; }
     }
 
+    public enum SchoolStatus
+    {
+        Created = 1,
+        DataImported = 2,
+        PersonalInfoImported = 3,
+        GradeLevels = 4,
+        MarkingPeriods = 5,
+        BlockScheduling = 6,
+        DailyPeriods = 7,
+        ScheduleInfoImported = 8,
+        InvitedUser = 9 ,
+        TeacherLogged = 10,
+        InvitedStudent = 11,
+        StudentLogged = 12 ,
+        PayingCustomer = 13
+    }
 }

@@ -9,6 +9,18 @@ namespace Chalkable.Data.Common
 {
     public static class Orm
     {
+
+        public enum OrderType
+        {
+            Asc = 1,
+            Desc = 2
+        }
+        private static IDictionary<OrderType, string> orederTypesMap = new Dictionary<OrderType, string>
+            {
+                {OrderType.Asc, "ASC"},
+                {OrderType.Desc, "DESC"}
+            }; 
+
         private static bool IsDbField(PropertyInfo propertyInfo)
         {
             return propertyInfo.GetCustomAttribute<DataEntityAttr>() == null
@@ -165,10 +177,13 @@ namespace Chalkable.Data.Common
                     {
                         builder.Append(" and ");
                     }
-                    builder.AppendFormat("[{0}].{1} =@{1}", t.Name, cond.Key);
+                    if (cond.Value != null)
+                        builder.AppendFormat("[{0}].{1} =@{1}", t.Name, cond.Key);
+                    else
+                        builder.AppendFormat("[{0}].{1} is null", t.Name, cond.Key);
                 }
+                builder.Append(")");
             }
-            builder.Append(")");
             return builder;
         }
 
@@ -178,7 +193,7 @@ namespace Chalkable.Data.Common
             var res = new DbQuery {Parameters = conds};
             var b = new StringBuilder();
             var t = typeof (T);
-            b.AppendFormat("Select * from [{0}]", t.Name);
+            b.AppendFormat("Select * from [{0}] ", t.Name);
             b = BuildSqlWhere(b, t, conds);
             res.Sql = b.ToString();
             return res;
@@ -186,29 +201,35 @@ namespace Chalkable.Data.Common
 
         public static DbQuery CountSelect<T>(Dictionary<string, object> conds, string resultName)
         {
-            var b = new StringBuilder();
-            var res = SimpleSelect<T>(conds);
-            b.AppendFormat("Select Count(*) as {1} from ({0})", res.Sql, resultName);
-            res.Sql = b.ToString();
-            return res;
+            return CountSelect(SimpleSelect<T>(conds), resultName);
         }
 
-        public static DbQuery PaginationSelect<T>(Dictionary<string, object> conds, string orderColumn, int start, int count)
+        public static DbQuery CountSelect(DbQuery query, string resultName)
         {
-            return PaginationSelect<T>(SimpleSelect<T>(conds), orderColumn, start, count);
+            var b = new StringBuilder();
+            b.AppendFormat("Select Count(*) as {1} from ({0})", query.Sql, resultName);
+            query.Sql = b.ToString();
+            return query;
         }
 
-        public static DbQuery PaginationSelect<T>(DbQuery innerSelect, string orderColumn, int start, int count)
+        public static DbQuery PaginationSelect<T>(Dictionary<string, object> conds, string orderColumn, OrderType orderType, int start, int count)
+        {
+            return PaginationSelect<T>(SimpleSelect<T>(conds), orderColumn, orderType, start, count);
+        }
+
+        public static DbQuery PaginationSelect<T>(DbQuery innerSelect, string orderColumn, OrderType orderType, int start, int count)
         {
             var b = new StringBuilder();
             b.AppendFormat("select count(*) as AllCount from ({0}) x;", innerSelect.Sql);
             b.AppendFormat("select x.* from ({0}) x ", innerSelect.Sql);
-            b.AppendFormat(" order by x.{0} ", orderColumn);
+            b.AppendFormat(" order by x.{0} {1}", orderColumn, orederTypesMap[orderType]);
             b.AppendFormat(" OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", start, count);
             innerSelect.Sql = b.ToString();
             return innerSelect;
         }
+
     }
+
 
     public class DbQuery
     {

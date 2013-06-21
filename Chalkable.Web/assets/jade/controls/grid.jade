@@ -1,0 +1,6 @@
+mixin Grid(data, tplClass, needsPaging)
+    .grid
+        .items
+            +RenderWith(data.items, tplClass)
+        if needsPaging = true
+            +Paginator(data)

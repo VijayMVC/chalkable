@@ -31,7 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public Announcement AddAttachment(Guid announcementId, byte[] content, string name, string uuid)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
-            if(!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
+            if(!AnnouncementSecurity.CanAttach(ann, Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
@@ -49,6 +49,19 @@ namespace Chalkable.BusinessLogic.Services.School
                         Order = ServiceLocator.AnnouncementService.GetNewAnnouncementItemOrder(ann)
                     });
                 ServiceLocator.StorageMonitorService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, id.ToString(), content);
+
+                //TODO: notification sending
+                //if (ann.State != AnnouncementState.Draft)
+                //{
+                //    if (Context.UserId == ann.PersonRef)
+                //    {
+                //        ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotification(announcementId);
+                //    }
+                //    else
+                //    {
+                //        ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToPerson(announcementId, Context.UserId);
+                //    }
+                //}
                 uow.Commit();
             }
             return ann;

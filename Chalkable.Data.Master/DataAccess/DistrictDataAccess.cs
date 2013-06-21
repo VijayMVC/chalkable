@@ -20,5 +20,10 @@ namespace Chalkable.Data.Master.DataAccess
         {
             return SelectOne<District>(new Dictionary<string, object> {{"Id", id}});
         }
+
+        public IList<School> GetSchools(bool empty)
+        {
+            return SelectMany<School>(new Dictionary<string, object> {{School.IS_EMPTY_FIELD, empty}});
+        }
     }
 }

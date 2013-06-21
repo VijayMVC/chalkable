@@ -1,0 +1,6 @@
+mixin ActionLink(controller, action)
+    link = self.getLink(ria.__API.clone(arguments))
+    -attributes.href=attributes.href || 'javascript:'
+    -attributes['data-link'] = link
+    A.action-link(attributes)
+        block

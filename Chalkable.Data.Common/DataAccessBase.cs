@@ -128,7 +128,7 @@ namespace Chalkable.Data.Common
 
         protected void SimpleDelete<T>(T obj)
         {
-            var q = Orm.SimpleUpdate(obj);
+            var q = Orm.SimpleDelete(obj);
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
         }
 
@@ -139,19 +139,40 @@ namespace Chalkable.Data.Common
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
         }
 
-        public void SimpleDelete<T>(Dictionary<string, object> conds)
+        protected void SimpleDelete<T>(Dictionary<string, object> conds)
         {
             var q = Orm.SimpleDelete<T>(conds);
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
         }
+        private T Read<T>(DbQuery query, Func<DbDataReader, T> action)
+        {
+            using (var reader = ExecuteReaderParametrized(query.Sql, query.Parameters as Dictionary<string, object>))
+            {
+                return action(reader);
+            }
+        }
+        protected T ReadOne<T>(DbQuery query, bool complexResultSet = false) where T : new()
+        {
+            return Read(query, reader => reader.Read<T>(complexResultSet));
+        }
+        protected T ReadOneOrNull<T>(DbQuery query, bool complexResultSet = false) where T : new()
+        {
+            return Read(query, reader => reader.ReadOrNull<T>(complexResultSet));
+        }
+        protected IList<T> ReadMany<T>(DbQuery query, bool complexResultSet = false) where T : new()
+        {
+            return Read(query, reader => reader.ReadList<T>(complexResultSet));
+        } 
 
         protected T SelectOne<T>(Dictionary<string, object> conditions) where T : new() 
         {
             var command = Orm.SimpleSelect<T>(conditions);
-            using (var reader = ExecuteReaderParametrized(command.Sql, command.Parameters as Dictionary<string, object>))
-            {
-                return reader.ReadOrNull<T>();
-            }
+            return ReadOne<T>(command);
+        }
+        protected T SelectOneOrNull<T>(Dictionary<string, object> conditions) where T : new()
+        {
+            var command = Orm.SimpleSelect<T>(conditions);
+            return ReadOneOrNull<T>(command);
         }
 
         protected IList<T> SelectMany<T>() where T : new()
@@ -161,27 +182,26 @@ namespace Chalkable.Data.Common
         protected IList<T> SelectMany<T>(Dictionary<string, object> conditions) where T : new()
         {
             var q = Orm.SimpleSelect<T>(conditions);
-            using (var reader = ExecuteReaderParametrized(q.Sql, q.Parameters as Dictionary<string, object>))
-            {
-                return reader.ReadList<T>();
-            }    
+            return ReadMany<T>(q);
         }
 
-        protected PaginatedList<T> PaginatedSelect<T>(string orderByColumn, int start, int count) where T : new()
+        protected PaginatedList<T> PaginatedSelect<T>(string orderByColumn, int start, int count, Orm.OrderType orderType = Orm.OrderType.Asc) where T : new()
         {
             var conds = new Dictionary<string, object>();
-            return PaginatedSelect<T>(conds, orderByColumn, start, count);
+            return PaginatedSelect<T>(conds, orderByColumn, start, count, orderType);
         } 
 
-        protected PaginatedList<T> PaginatedSelect<T>(Dictionary<string, object> conditions, string orderByColumn, int start, int count) where T : new()
+        protected PaginatedList<T> PaginatedSelect<T>(Dictionary<string, object> conditions, string orderByColumn,
+                                                      int start, int count, Orm.OrderType orderType = Orm.OrderType.Asc) where T : new()
         {
-            var q = Orm.PaginationSelect<T>(conditions, orderByColumn, start, count);
+            var q = Orm.PaginationSelect<T>(conditions, orderByColumn, orderType, start, count);
             return ReadPaginatedResult<T>(q, start, count);
         }
 
-        protected PaginatedList<T> PaginatedSelect<T>(DbQuery innerSelect, string orderByColumn, int start, int count) where T : new()
+        protected PaginatedList<T> PaginatedSelect<T>(DbQuery innerSelect, string orderByColumn, int start, int count,
+                                                      Orm.OrderType orderType = Orm.OrderType.Asc) where T : new()
         {
-            var q = Orm.PaginationSelect<T>(innerSelect, orderByColumn, start, count);
+            var q = Orm.PaginationSelect<T>(innerSelect, orderByColumn,orderType, start, count);
             return ReadPaginatedResult<T>(q, start, count);
         } 
 
@@ -199,17 +219,16 @@ namespace Chalkable.Data.Common
                 return new PaginatedList<T>(new List<T>(), start / count, count, 0);
             }
         }
-
-
+        
         protected bool Exists<T>(Dictionary<string, object> conditions) where T : new()
         {
             var resName = "AllCount";
-            var q = Orm.CountSelect<T>(conditions, resName);
-            using (var reader = ExecuteReaderParametrized(q.Sql, q.Parameters as Dictionary<string, object>))
-            {
-                return reader.Read() && SqlTools.ReadInt32(reader, resName) > 0;
-            }
+            return Exists(Orm.CountSelect<T>(conditions, resName));   
         }
 
+        protected bool Exists(DbQuery query, string resName = "AllCount")
+        {
+            return Read(query, reader => reader.Read() && SqlTools.ReadInt32(reader, resName) > 0);
+        }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Master.DataAccess;
@@ -15,6 +14,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         Data.Master.Model.School Create(Guid districtId, string name, IList<UserInfo> principals);
         void CreateEmpty();
         District CreateDistrict(string name);
+        IList<Data.Master.Model.School> GetSchools(bool empty);
     }
 
     public class SchoolService : MasterServiceBase, ISchoolService
@@ -36,7 +36,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                     Id = Guid.NewGuid(),
                     Name = "Empty",
                     ServerUrl = server,
-                    IsEmpty = true
+                    IsEmpty = true,
+                    TimeZone = "UTC"
                 };
                 var da = new SchoolDataAccess(uow);
                 da.Create(school);
@@ -62,12 +63,21 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
+        public IList<Data.Master.Model.School> GetSchools(bool empty)
+        {
+            using (var uow = Read())
+            {
+                var da = new DistrictDataAccess(uow);
+                return da.GetSchools(empty);
+            }
+        }
+
         public Data.Master.Model.School Create(Guid districtId, string name, IList<UserInfo> principals)
         {
             Data.Master.Model.School school = GetEmpty();
             if (school == null)
                 return null;
-            var schoolSl = ServiceLocator.SchoolServiceLocator(school.Id, school.Name, school.ServerUrl);
+            var schoolSl = ServiceLocator.SchoolServiceLocator(school.Id, school.Name, school.TimeZone, school.ServerUrl);
             foreach (var principal in principals)
             {
                 schoolSl.PersonService.Add(principal.Login, principal.Password, principal.FirstName, principal.LastName, CoreRoles.ADMIN_GRADE_ROLE.Name, principal.Gender, principal.Salutation, principal.BirthDate);

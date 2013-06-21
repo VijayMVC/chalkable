@@ -40,7 +40,7 @@ $(document).ready(function () {
         var divEl = $('div.the-password');
         if (!divEl.hasClass('shaking')){
             divEl.addClass('shaking');
-            divEl.effect('shake', options, 650, function () {
+            divEl.effect('shake', options, 100, function () {
                 fieldPassword.focus();
                 divEl.removeClass('shaking');
             });

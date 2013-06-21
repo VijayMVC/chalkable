@@ -43,5 +43,10 @@ namespace Chalkable.BusinessLogic.Security
         {
             return BaseSecurity.IsSysAdmin(context) || announcementAttachment.PersonRef == context.UserId;
         }
+        public static bool CanAttach(AnnouncementDetails announcementDetails, UserContext context)
+        {
+            return CanModifyAnnouncement(announcementDetails, context) ||
+                   announcementDetails.StudentAnnouncements.Any(x => x.PersonRef == context.UserId);
+        }
     }
 }
