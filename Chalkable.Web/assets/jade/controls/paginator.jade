@@ -1,0 +1,17 @@
+mixin Paginator(data)
+    -start = data.pageindex*data.pagesize + 1;
+    -end = start + data.pagesize - 1;
+    .paginator-container
+        .left-container
+            A(class='first-page' + (data.haspreviouspage ? '' : ' disabled'))
+            A(class='prev-page' + (data.haspreviouspage ? '' : ' disabled'))
+            .info-container
+                label(for='current-page') Page
+                input(name='current-page', value=(data.pageindex+1))
+                span
+                    | of #{data.totalpages}
+            A(class='next-page' + (data.hasnextpage ? '' : ' disabled'))
+            A(class='last-page' + (data.hasnextpage ? '' : ' disabled'))
+        .right-container
+            SPAN
+                |Displaying #{start} - #{end} of #{data.totalcount}
