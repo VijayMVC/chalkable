@@ -21,9 +21,22 @@ namespace Chalkable.Data.School.DataAccess
         {
             SimpleUpdate(markingPeriod);
         }
+
+
         public void Delete(MarkingPeriod markingPeriod)
         {
             SimpleDelete(markingPeriod);
+        }
+
+        public void ChangeWeekDays(IList<Guid> markingPeriodIds, int weekDays)
+        {
+            var b = new StringBuilder();
+            foreach (var markingPeriodId in markingPeriodIds)
+            {
+                b.AppendFormat(" update MarkingPeriod set WeekDays = @weekDays where Id ={0} ", markingPeriodId);
+            }
+            var conds = new Dictionary<string, object> {{"weekDays", weekDays}};
+            ExecuteNonQueryParametrized(b.ToString(), conds);
         }
 
         public MarkingPeriod GetById(Guid id)

@@ -71,6 +71,12 @@
     <Compile Include="Model\AnnouncementRecipientData.cs" />
     <Compile Include="Model\AnnouncementReminder.cs" />
     <Compile Include="Model\AnnouncementType.cs" />
+    <Compile Include="Model\ApplicationInstall\ApplicationInstall.cs" />
+    <Compile Include="Model\ApplicationInstall\ApplicationInstallAction.cs" />
+    <Compile Include="Model\ApplicationInstall\ApplicationInstallActionClasses.cs" />
+    <Compile Include="Model\ApplicationInstall\ApplicationInstallActionDepartment.cs" />
+    <Compile Include="Model\ApplicationInstall\ApplicationInstallActionGradeLevel.cs" />
+    <Compile Include="Model\ApplicationInstall\ApplicationInstallActionRole.cs" />
     <Compile Include="Model\AttendanceReason.cs" />
     <Compile Include="Model\Class.cs" />
     <Compile Include="Model\ClassAttendance.cs" />
@@ -91,6 +97,8 @@
     <Compile Include="Model\Person.cs" />
     <Compile Include="Model\Phone.cs" />
     <Compile Include="Model\PrivateMessage.cs" />
+    <Compile Include="Model\ReportDownload.cs" />
+    <Compile Include="Model\ReportMailDelivery.cs" />
     <Compile Include="Model\Room.cs" />
     <Compile Include="Model\ScheduleSection.cs" />
     <Compile Include="Model\SchoolYear.cs" />

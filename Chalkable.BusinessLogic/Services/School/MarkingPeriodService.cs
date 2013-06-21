@@ -24,6 +24,7 @@ namespace Chalkable.BusinessLogic.Services.School
         MarkingPeriodClass GetMarkingPeriodClass(Guid classId, Guid markingPeriodId);
         IList<MarkingPeriod> GetMarkingPeriods(Guid schoolYearId);
         MarkingPeriod GetMarkingPeriodByDate(DateTime date, bool useLastExisting = false);
+        bool ChangeWeekDays(IList<Guid> markingPeriodIds, int weekDays);
     }
 
     public class MarkingPeriodService : SchoolServiceBase, IMarkingPeriodService
@@ -172,6 +173,28 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
                 ServiceLocator.CalendarDateService.ClearCalendarDates(id);
                 return mp;
+            }
+        }
+
+
+        //TODO : think how to rewrite this for better performance
+        public bool ChangeWeekDays(IList<Guid> markingPeriodIds, int weekDays)
+        {
+            if(!BaseSecurity.IsAdminEditor(Context))
+                throw new ChalkableSecurityException();
+            
+            using (var uow = Update())
+            {
+                var mpDa = new MarkingPeriodDataAccess(uow);
+                var cdDa = new CalendarDateDataAccess(uow);
+                foreach (var markingPeriodId in markingPeriodIds)
+                {
+                    if(cdDa.Exists(new DateQuery{MarkingPeriodId = markingPeriodId}))
+                        throw new ChalkableException("Can't change markingPeriod week days ");
+                }
+                mpDa.ChangeWeekDays(markingPeriodIds, weekDays);
+                uow.Commit();
+                return true;
             }
         }
     }
