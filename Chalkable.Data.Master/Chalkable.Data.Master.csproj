@@ -46,7 +46,6 @@
     <Compile Include="DataAccess\SchoolUserDataAccess.cs" />
     <Compile Include="DataAccess\UserDataAccess.cs" />
     <Compile Include="Model\BackgroundTask.cs" />
-    <Compile Include="Model\ImportSystemType.cs" />
     <Compile Include="Model\Preference.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

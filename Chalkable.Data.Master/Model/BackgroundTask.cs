@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Chalkable.Common;
 
 namespace Chalkable.Data.Master.Model
 {
@@ -12,7 +11,7 @@ namespace Chalkable.Data.Master.Model
         public Guid? SchoolRef { get; set; }
         public const string ID_FIELD_NAME = "Id";
         public Guid Id { get; set; }
-        public const string Type_FIELD_NAME = "Type";
+        public const string TYPE_FIELD_NAME = "Type";
         public BackgroundTaskTypeEnum Type { get; set; }
         public const string STATE_FIELD_NAME = "State";
         public BackgroundTaskStateEnum State { get; set; }
@@ -21,6 +20,46 @@ namespace Chalkable.Data.Master.Model
         public DateTime Created { get; set; }
         public string Data { get; set; }
         public DateTime? Started { get; set; }
+
+        public void SetData(object data)
+        {
+            Data = data.ToString();
+        }
+
+        public T GetData<T>()
+        {
+            var res = (T)Activator.CreateInstance(typeof(T), new object[] { Data });
+            return res;
+        }
+    }
+
+    public class SisImportTaskData
+    {
+        private const string FORMAT = "{0},{1},{2}";
+        public Guid SchoolId { get; private set; }
+        public int SisSchoolId { get; private set; }
+        public IList<int> SchoolYearIds { get; private set; }
+
+        public override string ToString()
+        {
+            return string.Format(FORMAT, SchoolId, SisSchoolId, SchoolYearIds.JoinString(","));
+        }
+
+        public SisImportTaskData(Guid schoolId, int sisSchoolId, IList<int> schoolYearIds)
+        {
+            SchoolId = schoolId;
+            SisSchoolId = sisSchoolId;
+            SchoolYearIds = schoolYearIds;
+        }
+
+        public SisImportTaskData(string str)
+        {
+            var intList = str.Split(',').ToList();
+            SchoolId = Guid.Parse(intList[0]);
+            SisSchoolId = int.Parse(intList[1]);
+            SchoolYearIds = intList.Skip(2).Select(int.Parse).ToList();
+        }
+
     }
 
     public enum BackgroundTaskTypeEnum
