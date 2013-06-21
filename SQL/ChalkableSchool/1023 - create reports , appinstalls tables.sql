@@ -1,13 +1,14 @@
 CREATE TABLE [dbo].[ReportDownload](
 	[Id] uniqueidentifier primary key NOT NULL,
 	[Format] [int] NOT NULL,
-	[ImportSystemType] [int] NOT NULL constraint FK_ReportDownload_ImportSystemType foreign key references ImportSystemType([Type]),
+	[ImportSystemType] [int] NOT NULL,
 	[PersonRef] uniqueidentifier NOT NULL constraint FK_ReportDownload_Person foreign key references Person(Id),
 	[ReportType] int not null ,
 	[DownloadDate] [datetime2](7) NOT NULL,
 	[FriendlyName] [nvarchar](1024) NOT NULL,
 )
 go
+
 
 CREATE TABLE [dbo].[ReportMailDelivery](
 	[Id] uniqueidentifier primary key NOT NULL,
@@ -17,7 +18,7 @@ CREATE TABLE [dbo].[ReportMailDelivery](
 	[PersonRef] uniqueidentifier NOT NULL constraint FK_ReportMailDelivery_Person foreign key references Person(Id),
 	[SendHour] [int] NULL,
 	[SendDay] [int] NULL,
-	[LastSentMarkingPeriodRef] [int] NULL,
+	[LastSentMarkingPeriodRef] uniqueidentifier NULL constraint FK_ReportMailDelivery_MarkingPeriod foreign key references MarkingPeriod(Id),
 	[LastSentTime] [datetime2](7) NULL
 )
 go
