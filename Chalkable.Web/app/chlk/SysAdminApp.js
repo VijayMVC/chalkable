@@ -4,6 +4,7 @@ REQUIRE('ria.dom.ready');
 
 REQUIRE('chlk.controllers.SysAdminController');
 REQUIRE('chlk.controls.ActionLinkControl');
+REQUIRE('chlk.controls.GridControl');
 
 NAMESPACE('chlk', function (){
 

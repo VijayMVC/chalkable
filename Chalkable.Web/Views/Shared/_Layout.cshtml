@@ -32,7 +32,7 @@
     @RenderSection("ContentSection", false)  
     @RenderBody()
 
-    @if ((ViewData.ContainsKey("Prefix") && !string.IsNullOrEmpty("Prefix")) || (ViewData.ContainsKey("DeveloperId") && !string.IsNullOrEmpty("DeveloperId")))
+    @if ((ViewData.ContainsKey("Prefix") && !string.IsNullOrEmpty((string)ViewData["Prefix"])) || (ViewData.ContainsKey("DeveloperId") && !string.IsNullOrEmpty((string)ViewData["DeveloperId"])))
     {
         <div id="demo-footer">
             @if (ViewData.ContainsKey("DeveloperId") && !string.IsNullOrEmpty(Convert.ToString(ViewData["DeveloperId"])))

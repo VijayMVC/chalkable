@@ -2,7 +2,7 @@ REQUIRE('chlk.controls.Base');
 
 NAMESPACE('chlk.controls', function () {
 
-    /** @class chlk.controls.ActionLinkControl */
+    /** @class app.controls.ActionLink */
     CLASS(
         'ActionLinkControl', EXTENDS(chlk.controls.Base), [
             OVERRIDE, VOID, function onCreate_() {
@@ -11,16 +11,31 @@ NAMESPACE('chlk.controls', function () {
             },
 
             [[Array]],
-            String, function getLink(args) {
-                return args
-                    .map(function (_) { return encodeURIComponent(_); })
-                    .join(',');
+            String, function getLink(values) {
+                return encodeURIComponent(values.map(function(_) { return JSON.stringify(_.valueOf ? _.valueOf() : _) }).join(','));
             },
 
-            [ria.mvc.DomEventBind('click', 'A.action-link[data-link]')],
+            [[String]],
+            Array, function parseLink_(link) {
+                return JSON.parse(String('[' + decodeURIComponent(link) + ']'));
+            },
+
+            [ria.mvc.DomEventBind('click', 'A[data-link]')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function onActionLinkClick(node, event) {
-                alert(node.getData('link'));
+                var link = node.getData('link');
+                var args = this.parseLink_(link);
+                var controller = args.shift(),
+                    action = args.shift();
+
+                var state = this.context.getState();
+                state.setController(controller);
+                state.setAction(action);
+                state.setParams(args);
+                state.setPublic(false);
+
+                this.context.stateUpdated();
+
                 return false;
             }
         ]);

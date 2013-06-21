@@ -5,7 +5,7 @@ REQUIRE('chlk.activities.Schools');
 
 NAMESPACE('chlk.controllers', function (){
 
-    /** @class chlk.controllers.SysAdminController */
+    /** @class chlk.controllers.SysAdmin */
     CLASS(
         [ria.mvc.ControllerUri('index')],
         'SysAdminController', EXTENDS(chlk.controllers.BaseController), [
@@ -13,7 +13,7 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.SchoolService, 'schoolService',
 
-        VOID, function indexAction() {
+        function indexAction() {
             var result = this.schoolService
                 .getSchools()
                 .attach(this.validateResponse_());
