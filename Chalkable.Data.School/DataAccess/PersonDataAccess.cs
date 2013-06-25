@@ -52,6 +52,8 @@ namespace Chalkable.Data.School.DataAccess
 
             parameters.Add("@teacherId", query.TeacherId);
             parameters.Add("@classId", query.ClassId);
+            parameters.Add("@callerRoleId", query.CallerRoleId);
+            
 
             string filter1 = null;
             string filter2 = null;
@@ -106,6 +108,7 @@ namespace Chalkable.Data.School.DataAccess
         public Guid? TeacherId { get; set; }
         public Guid? PersonId { get; set; }
         public Guid? CallerId { get; set; }
+        public int CallerRoleId { get; set; }
         public Guid? SchoolId { get; set; }
 
         public string StartFrom { get; set; }

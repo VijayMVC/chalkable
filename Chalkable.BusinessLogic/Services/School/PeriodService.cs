@@ -17,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Period Add(Guid markingPeriodId, int startTime, int endTime, Guid sectionId);
         void Delete(Guid id);
         Period Edit(Guid id, int startTime, int endTime);
-        IList<Period> GetPeriods(Guid markingPeriodId, Guid? sectionId);
+        IList<Period> GetPeriods(Guid? markingPeriodId, Guid? sectionId);
         Period GetPeriod(int time, DateTime date);
         IList<Period> ReGeneratePeriods(IList<Guid> markingPeriodIds, int? startTime = null, int? length = null, int? lengthBetweenPeriods = null, int? periodCount = null);
     }
@@ -108,7 +108,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Period> GetPeriods(Guid markingPeriodId, Guid? sectionId)
+        public IList<Period> GetPeriods(Guid? markingPeriodId, Guid? sectionId)
         {
             using (var uow = Read())
             {

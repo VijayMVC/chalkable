@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -12,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void Add(string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate);
         void Delete(string id);
+        IList<Person> GetPersons();
     }
 
     public class PersonService : SchoolServiceBase, IPersonService
@@ -61,6 +63,26 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new PersonDataAccess(uow);
                 da.Delete(da.GetById(Guid.Parse(id)));
                 uow.Commit();
+            }
+        }
+
+        public IList<Person> GetPersons()
+        {
+            if (!BaseSecurity.IsAdminOrTeacher(Context))
+                throw new ChalkableSecurityException();
+
+            using (var uow = Read())
+            {
+                var da = new PersonDataAccess(uow);
+                var query = new PersonQuery
+                    {
+                        CallerId = Context.UserId,
+                        Count = int.MaxValue, 
+                        Start = 0,
+                        CallerRoleId = Context.Role.Id
+                    };
+                var res = da.GetPersons(query);
+                return res.Persons;
             }
         }
     }

@@ -20,7 +20,7 @@ namespace Chalkable.SisConnector.Services
         {
             ServiceLocatorMaster = ServiceLocatorFactory.CreateMasterSysAdmin();
             var school = ServiceLocatorMaster.SchoolService.GetById(schoolId);
-            ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(school.Id, school.Name, school.TimeZone, school.ServerUrl);
+            ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(school.Id);
             SchoolId = schoolId;
             SisSchoolId = sisSchoolId;
             Log = log;

@@ -15,12 +15,12 @@
       <Import moduleName="Diagnostics" />
     </Imports>
   </WebRole>
-  <WorkerRole name="Chalkable.BackgroundTaskProducer" vmsize="Small">
+  <WorkerRole name="Chalkable.BackgroundTaskProcessor" vmsize="Small">
     <Imports>
       <Import moduleName="Diagnostics" />
     </Imports>
   </WorkerRole>
-  <WorkerRole name="Chalkable.BackgroundTaskProcessor" vmsize="Small">
+  <WorkerRole name="Chalkable.BackgroundTaskProducer" vmsize="Small">
     <Imports>
       <Import moduleName="Diagnostics" />
     </Imports>
