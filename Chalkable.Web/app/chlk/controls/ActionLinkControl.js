@@ -20,7 +20,7 @@ NAMESPACE('chlk.controls', function () {
                 return JSON.parse(String('[' + decodeURIComponent(link) + ']'));
             },
 
-            [ria.mvc.DomEventBind('click', 'A[data-link]')],
+            [ria.mvc.DomEventBind('click', 'A[data-link]:not(.disabled)')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function onActionLinkClick(node, event) {
                 var link = node.getData('link');

@@ -12,39 +12,32 @@ NAMESPACE('chlk.controls', function () {
                 ASSET('~/assets/jade/controls/paginator.jade')(this);
             },
 
-            [ria.mvc.DomEventBind('click', '.paginator-container .first-page:not(.disabled)')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            Boolean, function onFirstPageClick(node, event) {
-                console.info('onFirstPageClick', node, event);
-                return false;
-            },
-
-            [ria.mvc.DomEventBind('click', '.paginator-container .last-page:not(.disabled)')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            Boolean, function onLastPageClick(node, event) {
-                console.info('onLastPageClick', node, event);
-                return false;
-            },
-
-            [ria.mvc.DomEventBind('click', '.paginator-container .next-page:not(.disabled)')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            Boolean, function onNextPageClick(node, event) {
-                console.info('onNextPageClick', node, event);
-                return false;
-            },
-
-            [ria.mvc.DomEventBind('click', '.paginator-container .prev-page:not(.disabled)')],
+            [ria.mvc.DomEventBind('submit', '.paginator-container form')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function onPrevPageClick(node, event) {
-                console.info('onPrevPageClick', node, event);
+                console.info(node.find('.controller-name').valueOf()[0].value, node.find('.action-name').valueOf()[0].value, node.find('.page-value').valueOf()[0].value, event);
+                /*var state = this.context.getState();
+                state.setController(controller);
+                state.setAction(action);
+                state.setParams(args);
+                state.setPublic(false);
+
+                this.context.stateUpdated();*/
+
                 return false;
             },
 
             Object, function preparePaginationData(data) {
+                var start = data.pageindex*data.pagesize + 1;
                 return {
-                    hasFirstLink: true,
-                    hasLastLink: true,
-                    lastPageIndex: 5,
+                    hasPreviousPage: data.haspreviouspage,
+                    hasNextPage: data.hasnextpage,
+                    lastPageIndex: data.totalpages - 1,
+                    prevPageIndex: data.pageindex - 1,
+                    nextPageIndex: data.pageindex + 1,
+                    totalCount: data.totalcount,
+                    start: start,
+                    end: start + data.pagesize - 1,
                     pageSize: 10
                 }
             }

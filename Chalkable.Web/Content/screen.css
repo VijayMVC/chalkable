@@ -920,7 +920,90 @@ BODY DIV.page #content #main > SPAN.demo .buttons-container a.Admin:active {
 }
 /* line 47, ../assets/sass/partials/controls/_grid.scss */
 .grid .container .body .row .td {
+  padding: 3px 6px;
   display: table-cell;
+}
+
+/* line 1, ../assets/sass/partials/controls/_paginator.scss */
+.paginator-container {
+  font: normal 11px arial,tahoma, helvetica, sans-serif;
+  margin-top: 3px;
+}
+/* line 5, ../assets/sass/partials/controls/_paginator.scss */
+.paginator-container .left-container {
+  float: left;
+}
+/* line 8, ../assets/sass/partials/controls/_paginator.scss */
+.paginator-container .left-container .first-page {
+  background: url(images/common/navigation-first.png) 0 0 no-repeat;
+}
+/* line 12, ../assets/sass/partials/controls/_paginator.scss */
+.paginator-container .left-container .prev-page {
+  background: url(images/common/navigation-prev.png) 0 0 no-repeat;
+}
+/* line 16, ../assets/sass/partials/controls/_paginator.scss */
+.paginator-container .left-container .next-page {
+  background: url(images/common/navigation-next.png) 0 0 no-repeat;
+}
+/* line 20, ../assets/sass/partials/controls/_paginator.scss */
+.paginator-container .left-container .last-page {
+  background: url(images/common/navigation-last.png) 0 0 no-repeat;
+}
+/* line 24, ../assets/sass/partials/controls/_paginator.scss */
+.paginator-container .left-container .info-container {
+  display: inline-block;
+  background: url(images/common/notification-total-of.png) 0 0 no-repeat;
+  width: 103px;
+  height: 33px;
+  padding: 0 9px;
+}
+/* line 31, ../assets/sass/partials/controls/_paginator.scss */
+.paginator-container .left-container .info-container INPUT {
+  width: 30px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  border: 1px solid gray;
+  padding: 3px;
+  margin: 5px;
+  text-align: right;
+  margin-left: 14px;
+  height: 14px;
+}
+/* line 41, ../assets/sass/partials/controls/_paginator.scss */
+.paginator-container .left-container .info-container INPUT[type="submit"] {
+  display: none;
+}
+/* line 47, ../assets/sass/partials/controls/_paginator.scss */
+.paginator-container .left-container > A {
+  height: 33px;
+  width: 28px;
+  display: inline-block;
+}
+/* line 52, ../assets/sass/partials/controls/_paginator.scss */
+.paginator-container .left-container > A.disabled {
+  opacity: 0.6;
+}
+/* line 56, ../assets/sass/partials/controls/_paginator.scss */
+.paginator-container .left-container > A:not(.disabled) {
+  cursor: pointer;
+}
+/* line 59, ../assets/sass/partials/controls/_paginator.scss */
+.paginator-container .left-container > A:not(.disabled):hover {
+  opacity: 0.8;
+}
+/* line 65, ../assets/sass/partials/controls/_paginator.scss */
+.paginator-container .left-container > * {
+  vertical-align: top;
+  margin-right: 2px;
+}
+/* line 71, ../assets/sass/partials/controls/_paginator.scss */
+.paginator-container .right-container {
+  float: right;
+  padding-right: 10px;
+  font: normal 11px/32px Arial;
 }
 
 /* line 7, ../assets/sass/partials/controls/_action-bar.scss */
