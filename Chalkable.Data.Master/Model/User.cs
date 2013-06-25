@@ -42,12 +42,6 @@ namespace Chalkable.Data.Master.Model
         public School School { get; set; }
     }
 
-    public class District
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-    }
-
     public enum SchoolStatus
     {
         Created = 1,

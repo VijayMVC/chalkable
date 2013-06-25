@@ -1,7 +1,7 @@
 Create procedure [dbo].[spGetPersons]
 	@personId uniqueidentifier, @callerId uniqueidentifier, @roleId int, @start int, @count int, @startFrom nvarchar(255)
 	, @teacherId uniqueidentifier, @classId uniqueidentifier, @filter1 nvarchar(255), @filter2 nvarchar(255), @filter3 nvarchar(255)
-	, @gradeLevelIds nvarchar(1024), @sortType int
+	, @gradeLevelIds nvarchar(1024), @sortType int, @callerRoleId int
 as
 
 declare @glIds table 
@@ -14,8 +14,6 @@ begin
 	select cast(s as uniqueidentifier) from dbo.split(',', @gradeLevelIds)
 end
 
-
-declare @callerRoleId int = (select RoleRef from Person where Id = @callerId);
 declare @callerGradeLevelId uniqueidentifier = null;
 if(@callerRoleId = 3)
 begin

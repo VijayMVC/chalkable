@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -17,7 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Course Add(string code, string title, Guid? chalkableDepartmentId = null);
         Course Edit(Guid courseInfoId, string code, string title, Guid? chalkableDepartmentId = null);
         void Delete(Guid id);
-        PaginatedList<Course> GetCourseInfos(int start, int count);
+        PaginatedList<Course> GetCourses(int start = 0, int count = int.MaxValue);
         Course GetCourseById(Guid id);
     }
 
@@ -79,7 +75,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public PaginatedList<Course> GetCourseInfos(int start, int count)
+        public PaginatedList<Course> GetCourses(int start, int count)
         {
             using (var uow = Read())
             {
