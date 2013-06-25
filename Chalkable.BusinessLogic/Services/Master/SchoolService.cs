@@ -59,7 +59,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new DistrictDataAccess(uow);
                 var res = new District {Id = new Guid(), Name = name};
-                da.Create(res);
+                da.Insert(res);
                 uow.Commit();
                 return res;
             }
@@ -69,7 +69,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             using (var uow = Read())
             {
-                var da = new DistrictDataAccess(uow);
+                var da = new SchoolDataAccess(uow);
                 return da.GetSchools(empty);
             }
         }

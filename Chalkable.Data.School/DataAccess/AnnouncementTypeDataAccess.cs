@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class AnnouncementTypeDataAccess : DataAccessBase
+    public class AnnouncementTypeDataAccess : DataAccessBase<AnnouncementType>
     {
         public AnnouncementTypeDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -16,12 +12,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public AnnouncementType GetById(int id)
         {
-            var conds = new Dictionary<string, object> {{"id", id}};
-            return SelectOne<AnnouncementType>(conds);
+            return SelectOne<AnnouncementType>(new Dictionary<string, object> {{"Id", id}});
         }
-        public IList<AnnouncementType> GetList()
-        {
-            return SelectMany<AnnouncementType>();
-        } 
     }
 }

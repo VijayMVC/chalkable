@@ -139,7 +139,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         UserRef = user.Id,
                         SchoolRef = schoolId.Value
                     };
-                    schoolUserDa.Create(schoolUser);
+                    schoolUserDa.Insert(schoolUser);
                 }
                 uow.Commit();
                 return user;

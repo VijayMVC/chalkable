@@ -8,20 +8,10 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class CalendarDateDataAccess : DataAccessBase
+    public class DateDataAccess : DataAccessBase<Date>
     {
-        public CalendarDateDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public DateDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
-        }
-
-        public void Create(Date date)
-        {
-            SimpleInsert(date);
-        }
-
-        public void Update(Date date)
-        {
-            SimpleUpdate(date);
         }
 
         public void Delete(DateQuery query)

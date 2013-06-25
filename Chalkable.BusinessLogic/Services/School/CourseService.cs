@@ -39,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         Title = title,
                         ChalkableDepartmentRef = chalkableDepartmentId
                     };
-                da.Create(courseInfo);
+                da.Insert(courseInfo);
                 uow.Commit();
                 return courseInfo;
             }
@@ -80,7 +80,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new CourseDataAccess(uow);
-                return  da.GetCourses(start, count);
+                return  da.GetPage(start, count);
             }
         }
 

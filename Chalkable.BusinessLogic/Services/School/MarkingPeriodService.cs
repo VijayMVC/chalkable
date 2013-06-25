@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Logic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -100,7 +98,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new MarkingPeriodDataAccess(uow);
                 var sy = new SchoolYearDataAccess(uow).GetById(schoolYearId);
                 var mp = AddMarkingPeriod(da, sy, startDate, endDate, name, description, weekDays);
-                da.Create(mp);
+                da.Insert(mp);
                 machine.Apply(StateActionEnum.MarkingPeriodsAdd);
                 if (generatePeriods)
                 {
@@ -145,7 +143,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if(mpcDa.Exists(new MarkingPeriodClassQuery{MarkingPeriodId = id}))
                     throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_ASSIGNED_TO_CLASS);
 
-                var cdDa = new CalendarDateDataAccess(uow);
+                var cdDa = new DateDataAccess(uow);
                 if(cdDa.Exists(new DateQuery{MarkingPeriodId = id}))
                     throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_CANT_DELETE);
 
@@ -186,7 +184,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var mpDa = new MarkingPeriodDataAccess(uow);
-                var cdDa = new CalendarDateDataAccess(uow);
+                var cdDa = new DateDataAccess(uow);
                 foreach (var markingPeriodId in markingPeriodIds)
                 {
                     if(cdDa.Exists(new DateQuery{MarkingPeriodId = markingPeriodId}))

@@ -5,18 +5,13 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class AnnouncementRecipientDataAccess : DataAccessBase
+    public class AnnouncementRecipientDataAccess : DataAccessBase<AnnouncementRecipientData>
     {
         public AnnouncementRecipientDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
 
         private const string ANNOUNCEMENT_REF_FIELD = "announcementRef";
-
-        public void Create(AnnouncementRecipient announcementRecipient)
-        {
-            SimpleInsert(announcementRecipient);
-        }
 
         public void Create(IList<AnnouncementRecipient> announcementRecipients)
         {

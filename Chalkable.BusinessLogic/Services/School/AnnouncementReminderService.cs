@@ -51,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         PersonRef = Context.UserId,
                         Before = before,
                     };
-                da.Create(reminder);
+                da.Insert(reminder);
                 uow.Commit();
                 return ann;
             }

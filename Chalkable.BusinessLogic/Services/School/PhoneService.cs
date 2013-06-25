@@ -35,7 +35,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new PhoneDataAccess(uow).GetList();
+                return new PhoneDataAccess(uow).GetAll();
             }
         }
 
@@ -54,7 +54,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         IsPrimary = isPrimary,
                         Type = type
                     };
-                da.Create(phone);
+                da.Insert(phone);
                 uow.Commit();
                 return phone;
             }
@@ -85,7 +85,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var phone = da.GetById(id);
                 if (!(BaseSecurity.IsAdminEditor(Context) || Context.UserId == phone.PersonRef))
                     throw new ChalkableSecurityException();
-                da.Delete(phone);
+                da.Delete(phone.Id);
                 uow.Commit();
             }
         }

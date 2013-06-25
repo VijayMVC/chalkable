@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
@@ -52,7 +50,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         QuestionTime = Context.NowSchoolTime,
                         State = AnnouncementQnAState.Asked
                     };
-                da.Create(annQnA);
+                da.Insert(annQnA);
                 //TODO : send asked ann notification to teacher
                 uow.Commit();
                 return annQnA;
@@ -122,7 +120,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
                     throw new ChalkableSecurityException();
 
-                da.Delete(annQnA);
+                da.Delete(annQnA.Id);
                 uow.Commit();
             }
         }

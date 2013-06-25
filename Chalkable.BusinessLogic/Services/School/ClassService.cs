@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
@@ -55,7 +53,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         SchoolYearRef = schoolYearId,
                         TeacherRef = teacherId
                     };
-                da.Create(cClass);
+                da.Insert(cClass);
                 CreateMarkingPeriodClasses(cClass, markingPeriodsId, uow);
                 uow.Commit();
                 return GetClassById(cClass.Id);
@@ -85,7 +83,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var mpClassDa = new MarkingPeriodClassDataAccess(unitOfWork);
             var mpClasses = markingPeriodIds.Select(mpId => CreateMarkingPeriodClass(cClass, mpId, unitOfWork)).ToList();
-            mpClassDa.Create(mpClasses);
+            mpClassDa.Insert(mpClasses);
         }
 
         public void Delete(Guid id)
@@ -147,7 +145,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 if (!classPersonDa.Exists(new ClassPersonQuery {ClassId = classId, PersonId = personId}))
                 {
-                    classPersonDa.Create(new ClassPerson
+                    classPersonDa.Insert(new ClassPerson
                         {
                             Id = Guid.NewGuid(),
                             PersonRef = personId,
@@ -197,7 +195,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 if (!mpcDa.Exists(new MarkingPeriodClassQuery{ClassId = classId, MarkingPeriodId = markingPeriodId}))
                 {
-                    mpcDa.Create(new MarkingPeriodClass
+                    mpcDa.Insert(new MarkingPeriodClass
                         {
                             Id = Guid.NewGuid(),
                             ClassRef = classId,

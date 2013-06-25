@@ -7,7 +7,7 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Data.Master.DataAccess
 {
-    public class SchoolDataAccess : DataAccessBase
+    public class SchoolDataAccess : DataAccessBase<School>
     {
         public SchoolDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -39,11 +39,6 @@ namespace Chalkable.Data.Master.DataAccess
             return SelectMany<School>(new Dictionary<string, object> {{School.IS_EMPTY_FIELD, true}});
         }
 
-        public School GetById(Guid id)
-        {
-            return SelectOneOrNull<School>(new Dictionary<string, object> { { "Id", id } });
-        }
-
         //TODO: next methods runs on the school db server under master database
         public void CreateSchoolDataBase(string dbName)
         {
@@ -61,6 +56,11 @@ namespace Chalkable.Data.Master.DataAccess
                 while (reader.Read())
                     res.Add(SqlTools.ReadStringNull(reader, "name"));
             return res;
+        }
+
+        public IList<School> GetSchools(bool empty)
+        {
+            return SelectMany<School>(new Dictionary<string, object> { { School.IS_EMPTY_FIELD, empty } });
         }
 
         public SisSync GetSyncData(Guid schoolId)

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Logic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -131,7 +128,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     scheduleSection.Number++;
                 }
                 da.Update(sections);
-                da.Create(ss);
+                da.Insert(ss);
                 machine.Apply(StateActionEnum.SectionsAdd);
                 uow.Commit();
                 return ss;

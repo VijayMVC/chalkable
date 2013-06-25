@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
-using Chalkable.Common;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class AnnouncementQnADataAccess : DataAccessBase
+    public class AnnouncementQnADataAccess : DataAccessBase<AnnouncementQnA>
     {
         public AnnouncementQnADataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -22,27 +18,7 @@ namespace Chalkable.Data.School.DataAccess
         private const string ANSWERER_ID_PARAM = "answererId";
         private const string ANNOUNCEMENT_ID_PARAM = "announcementId";
         private const string ANNOUNCEMENT_QNA_ID_PARAM = "announcementQnAId";
-
-        public void Create(AnnouncementQnA announcementQnA)
-        {
-            SimpleInsert(announcementQnA);
-        }
-
-        public void Update(AnnouncementQnA announcementQnA)
-        {
-            SimpleUpdate(announcementQnA);
-        }
-
-        public void Delete(AnnouncementQnA announcementQnA)
-        {
-            SimpleDelete(announcementQnA);
-        }
-
-        public AnnouncementQnA GetById(Guid id)
-        {
-            var conds = new Dictionary<string, object> {{"id", id}};
-            return SelectOne<AnnouncementQnA>(conds);
-        }
+        
         public AnnouncementQnAQueryResult GetAnnouncementQnA(AnnouncementQnAQuery query)
         {
             var parameter = new Dictionary<string, object>

@@ -1,37 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class SchoolYearDataAccess : DataAccessBase
+    public class SchoolYearDataAccess : DataAccessBase<SchoolYear>
     {
         public SchoolYearDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
 
-        public void Create(SchoolYear schoolYear)
-        {
-            SimpleInsert(schoolYear);
-        }
-        public void Update(SchoolYear schoolYear)
-        {
-            SimpleUpdate(schoolYear);
-        }
-        public void Delete(Guid id)
-        {
-            SimpleDelete<SchoolYear>(id);
-        }
-        public SchoolYear GetById(Guid id)
-        {
-            var conds = new Dictionary<string, object> {{"id", id}};
-            return SelectOne<SchoolYear>(conds);
-        }
         public SchoolYear GetByDate(DateTime date)
         {
             var conds = new Dictionary<string, object> {{"date", date}};

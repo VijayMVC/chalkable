@@ -5,31 +5,11 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class ClassDataAccess : DataAccessBase
+    public class ClassDataAccess : DataAccessBase<Class>
     {
         public ClassDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-
-        public void Create(Class cClass)
-        {
-            SimpleInsert(cClass);
-        }
-        public void Update(Class cClass)
-        {
-            SimpleUpdate(cClass);
-        }
-        public void Delete(Guid id)
-        {
-            SimpleDelete<Class>(id);
-        }
-
-        public Class GetById(Guid id)
-        {
-            var conds = new Dictionary<string, object> {{"Id", id}};
-            return SelectOne<Class>(conds);
-        }
-
 
         private const string GET_CLASSES_PROC = "spGetClasses";
         private const string SCHOOL_YEAR_ID_PARAM = "schoolYearId";
@@ -42,7 +22,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public ClassQueryResult GetClassesComplex(ClassQuery query, Guid callerId)
         {
-            var parameters = new Dictionary<string, object>()
+            var parameters = new Dictionary<string, object>
                 {
                     {SCHOOL_YEAR_ID_PARAM, query.SchoolYearId},
                     {MARKING_PERIOD_ID_PARAM, query.MarkingPeriodId},

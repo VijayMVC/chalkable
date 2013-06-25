@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -183,7 +181,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new AnnouncementTypeDataAccess(uow);
-                var res = da.GetList();
+                var res = da.GetAll();
                 if (BaseSecurity.IsAdminViewer(Context))
                 {
                     res.First(x => x.SystemType == SystemAnnouncementType.Admin).CanCreate = true;
@@ -329,7 +327,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     da.Update(reminder);
                 }
             }
-            else da.Delete(announcement.Id);
+            else da.DeleteByAnnouncementId(announcement.Id);
             return announcement;
         }
         private Announcement SetMarkingPeriodToAnnouncement(Announcement announcement, Guid? classId, Guid? markingPeriodId)

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -48,7 +45,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         ToPersonRef = toPersonId,
                         Sent = Context.NowSchoolTime
                     };
-                da.Create(message);
+                da.Insert(message);
                 uow.Commit();
                 //todo : notification sending 
                 return message;

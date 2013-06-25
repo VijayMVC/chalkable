@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -38,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new AnnouncementAttachmentDataAccess(uow);
                 var id = Guid.NewGuid();
-                da.Create(new AnnouncementAttachment
+                da.Insert(new AnnouncementAttachment
                     {
                         Id = id,
                         AnnouncementRef = ann.Id,
@@ -76,7 +72,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if(!AnnouncementSecurity.CanDeleteAttachment(annAtt, Context))
                     throw new ChalkableSecurityException();
               
-                da.Delete(annAtt);
+                da.Delete(annAtt.Id);
                 ServiceLocator.StorageMonitorService.DeleteBlob(ATTACHMENT_CONTAINER_ADDRESS, annAtt.Id.ToString()); 
                 uow.Commit();
             }

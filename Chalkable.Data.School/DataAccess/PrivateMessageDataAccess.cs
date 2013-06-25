@@ -1,33 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class PrivateMessageDataAccess : DataAccessBase
+    public class PrivateMessageDataAccess : DataAccessBase<PrivateMessage>
     {
         public PrivateMessageDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
-        }
-
-        public void Create(PrivateMessage privateMessage)
-        {
-            SimpleInsert(privateMessage);
-        }
-        public void Update(PrivateMessage privateMessage)
-        {
-            SimpleUpdate(privateMessage);
-        }
-
-        public PrivateMessage GetById(Guid id)
-        {
-            var conds = new Dictionary<string, object> {{"Id", id}};
-            return SelectOne<PrivateMessage>(conds);
         }
 
         private DbQuery BuildGetMessagesQuery(IList<int> roles, string keyword, bool? read, Guid personId, bool isIncome)

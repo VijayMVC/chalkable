@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using Chalkable.Common;
@@ -9,33 +8,12 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class PersonDataAccess : DataAccessBase
+    public class PersonDataAccess : DataAccessBase<Person>
     {
         public PersonDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
         
-        public void Create(Person person)
-        {
-            SimpleInsert(person);
-        }
-
-        public void Update(Person person)
-        {
-            SimpleUpdate(person);
-        }
-
-        public void Delete(Person person)
-        {
-            SimpleDelete(person);
-        }
-
-        public Person GetById(Guid id)
-        {
-            var conds = new Dictionary<string, object> { { "id", id } };
-            return SelectOne<Person>(conds);
-        }
-
         private const string FILTER_FORMAT = "%{0}%";
         
        

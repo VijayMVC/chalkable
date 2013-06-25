@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Logic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -68,7 +66,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         MarkingPeriodRef = markingPeriodId,
                         SectionRef = sectionId
                     };
-                da.Create(period);
+                da.Insert(period);
                 uow.Commit();
                 return period;
             }
@@ -179,7 +177,7 @@ namespace Chalkable.BusinessLogic.Services.School
                             }
                         }
                     }
-                    da.Create(res);
+                    da.Insert(res);
                     uow.Commit();
                 }
                 else

@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\BackgroundTaskDataAccess.cs" />
+    <Compile Include="DataAccess\ChalkableDepartmentDataAccess.cs" />
     <Compile Include="DataAccess\DistrictDataAccess.cs" />
     <Compile Include="DataAccess\PreferenceDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />

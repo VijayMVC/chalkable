@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class AnnouncementDataAccess : DataAccessBase
+    public class AnnouncementDataAccess : DataAccessBase<Announcement>
     {
         public AnnouncementDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -114,11 +112,6 @@ namespace Chalkable.Data.School.DataAccess
                 return BuildGetDetailsResult(reader);
             }
         }
-        
-        public void Update(Announcement announcement)
-        {
-            SimpleUpdate(announcement);
-        }
 
         public void Delete(Guid? id, Guid? personId, Guid? classId, int? announcementTypeId, AnnouncementState? state)
         {
@@ -133,12 +126,6 @@ namespace Chalkable.Data.School.DataAccess
             ExecuteStoredProcedureReader(DELETE_PROCEDURE, parameters);
         }
         
-        public Announcement GetById(Guid id)
-        {
-            var conds = new Dictionary<string, object> {{ID_PARAM, id}};
-            return  SelectOne<Announcement>(conds);
-        }
-
         public AnnouncementQueryResult GetStudentAnnouncements(AnnouncementsQuery query)
         {
             var parameters = new Dictionary<string, object>{{"gradedOnly", query.GradedOnly}};

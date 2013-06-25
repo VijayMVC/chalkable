@@ -8,26 +8,12 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class MarkingPeriodDataAccess : DataAccessBase
+    public class MarkingPeriodDataAccess : DataAccessBase<MarkingPeriod>
     {
         public MarkingPeriodDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-        public void Create(MarkingPeriod markingPeriod)
-        {
-            SimpleInsert(markingPeriod);
-        }
-        public void Update(MarkingPeriod markingPeriod)
-        {
-            SimpleUpdate(markingPeriod);
-        }
-
-
-        public void Delete(MarkingPeriod markingPeriod)
-        {
-            SimpleDelete(markingPeriod);
-        }
-
+        
         public void ChangeWeekDays(IList<Guid> markingPeriodIds, int weekDays)
         {
             var b = new StringBuilder();
@@ -37,12 +23,6 @@ namespace Chalkable.Data.School.DataAccess
             }
             var conds = new Dictionary<string, object> {{"weekDays", weekDays}};
             ExecuteNonQueryParametrized(b.ToString(), conds);
-        }
-
-        public MarkingPeriod GetById(Guid id)
-        {
-            var conds = new Dictionary<string, object> {{"id", id}};
-            return SelectOne<MarkingPeriod>(conds);
         }
 
         private const string TILL_DATE_PARAM = "tillDate";

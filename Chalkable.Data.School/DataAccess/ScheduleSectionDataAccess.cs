@@ -2,25 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.Common;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class ScheduleSectionDataAccess : DataAccessBase
+    public class ScheduleSectionDataAccess : DataAccessBase<ScheduleSection>
     {
         public ScheduleSectionDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
-        }
-        public void Create(ScheduleSection scheduleSection)
-        {
-            SimpleInsert(scheduleSection);
-        }
-        public void Update(ScheduleSection scheduleSection)
-        {
-            SimpleUpdate(scheduleSection);
         }
 
         public void Update(IList<ScheduleSection> scheduleSections)
@@ -86,11 +77,6 @@ namespace Chalkable.Data.School.DataAccess
             b.Append("  order by ScheduleSection.Number ");
             return ReadMany<ScheduleSection>(new DbQuery {Sql = b.ToString(), Parameters = conds});
         } 
-
-        public ScheduleSection GetById(Guid id)
-        {
-            return SelectOne<ScheduleSection>(new Dictionary<string, object> {{"Id", id}});
-        }
 
         public IList<ScheduleSection> GetSections(IList<Guid> markingPeriodIds)
         {

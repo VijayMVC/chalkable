@@ -6,26 +6,18 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class AnnouncementReminderDataAccess : DataAccessBase
+    public class AnnouncementReminderDataAccess : DataAccessBase<AnnouncementReminder>
     {
         public AnnouncementReminderDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
-        }
-
-        public void Create(AnnouncementReminder announcementReminder)
-        {
-            SimpleInsert(announcementReminder);
-        }
-        public void Update(AnnouncementReminder announcementReminder)
-        {
-            SimpleUpdate(announcementReminder);
         }
         
         public void Delete(AnnouncementReminder announcementReminder)
         {
             SimpleDelete(announcementReminder);
         }
-        public void Delete(Guid announcementId)
+        
+         public void DeleteByAnnouncementId(Guid announcementId)
         {
             var conds = new Dictionary<string, object> {{"announcementRef", announcementId}};
             SimpleDelete<AnnouncementReminder>(conds);

@@ -104,7 +104,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Update())
             {
                 var da = new BackgroundTaskDataAccess(uow);
-                da.Create(task);
+                da.Insert(task);
                 uow.Commit();
             }
             return task;

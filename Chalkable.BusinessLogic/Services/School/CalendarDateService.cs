@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -34,7 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                var da = new CalendarDateDataAccess(uow);
+                var da = new DateDataAccess(uow);
                 var res = da.GetDate(new DateQuery {FromDate = date, ToDate = date});
                 if (res == null)
                 {
@@ -76,7 +73,7 @@ namespace Chalkable.BusinessLogic.Services.School
                             if (d.DateTime == date) res = d;
                         }
                     }
-                    da.Create(res);
+                    da.Insert(res);
                 }
                 uow.Commit();
                 return res;
@@ -87,7 +84,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new CalendarDateDataAccess(uow).GetDate(new DateQuery{Id = id});
+                return new DateDataAccess(uow).GetDate(new DateQuery{Id = id});
             }
         }
 
@@ -95,7 +92,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new CalendarDateDataAccess(uow).GetDbDateTime();
+                return new DateDataAccess(uow).GetDbDateTime();
             }
         }
 
@@ -106,7 +103,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Read())
             {
-                return new CalendarDateDataAccess(uow)
+                return new DateDataAccess(uow)
                     .GetDates(new DateQuery
                         {
                             MarkingPeriodId = markingPeriodId,
@@ -132,7 +129,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     }
                 }
 
-                var da = new CalendarDateDataAccess(uow);
+                var da = new DateDataAccess(uow);
                 return da.GetDates(new DateQuery
                     {
                         SchoolYearId = schoolYearId,
@@ -150,7 +147,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                new CalendarDateDataAccess(uow).Delete(new DateQuery{ MarkingPeriodId = markingPeriodId});
+                new DateDataAccess(uow).Delete(new DateQuery{ MarkingPeriodId = markingPeriodId});
                 uow.Commit();
             }
         }
@@ -183,7 +180,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var cdDate = GetById(id);
                 cdDate.ScheduleSectionRef = sectionId;
-                new CalendarDateDataAccess(uow).Update(cdDate);
+                new DateDataAccess(uow).Update(cdDate);
                 uow.Commit();
             }
         }

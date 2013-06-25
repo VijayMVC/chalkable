@@ -48,7 +48,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         Salutation = salutation,
                         RoleRef = roleId
                     };
-                da.Create(person);
+                da.Insert(person);
                 uow.Commit();
             }
         }
@@ -61,7 +61,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new PersonDataAccess(uow);
-                da.Delete(da.GetById(Guid.Parse(id)));
+                da.Delete(Guid.Parse(id));
                 uow.Commit();
             }
         }

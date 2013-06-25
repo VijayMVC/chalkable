@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -29,7 +28,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             var defaultList = DefaultList();
             using (var uow = new UnitOfWork(Settings.MasterConnectionString, false))
             {
-                var preferences = new PreferenceDataAccess(uow).GetList();
+                var preferences = new PreferenceDataAccess(uow).GetAll();
                 foreach (var defaultelem in defaultList)
                 {
                     var preference = preferences.FirstOrDefault(x => x.Key == defaultelem.Key);
@@ -83,7 +82,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         Value = value.ToString(),
                         Hint = cache[key].Hint
                     });
-                    da.Create(preference);
+                    da.Insert(preference);
                 }
                 else
                 {

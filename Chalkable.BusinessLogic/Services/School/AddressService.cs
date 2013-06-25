@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -39,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         Type = type,
                         Value = value
                     };
-                da.Create(address);
+                da.Insert(address);
                 uow.Commit();
                 return address;
             }
@@ -52,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new AddressDataAccess(uow);
-                var address = da.GetAddressById(id);
+                var address = da.GetById(id);
                 address.Value = value;
                 address.Note = note;
                 address.Type = type;
@@ -82,7 +81,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new AddressDataAccess(uow);
-                return da.GetAddresses();
+                return da.GetAll();
             }
         }
     }

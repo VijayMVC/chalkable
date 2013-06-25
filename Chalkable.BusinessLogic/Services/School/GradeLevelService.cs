@@ -19,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new GradeLevelDataAccess(uow);
-                return da.GetGradeLevels();
+                return da.GetAll();
             }
         }
     }

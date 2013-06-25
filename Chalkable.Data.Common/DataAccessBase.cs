@@ -1,66 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using Chalkable.Common;
 
 namespace Chalkable.Data.Common
 {
-    public class DataAccessBase
+    public class DataAccessBase<TEntity> where TEntity : new()
     {
-        private const string AT_SIGN = "@";
         private UnitOfWork unitOfWork;
         public DataAccessBase(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
-
-        private SqlCommand GetStoredProcedureCommand(string name)
-        {
-            var command = new SqlCommand();
-            command.Connection = unitOfWork.Connection;
-            if (unitOfWork.Transaction != null)
-                command.Transaction = unitOfWork.Transaction;
-            command.CommandType = CommandType.StoredProcedure;
-            command.CommandText = name;
-            return command;
-        }
-
-        private string CompleteToParam(string name)
-        {
-            if (!name.StartsWith(AT_SIGN))
-                name = AT_SIGN + name;
-            return name;
-        }
-
-
-        private SqlCommand GetStoredProcedureCommandWithParams(string name, IDictionary<string, object> parameters)
-        {
-            var command = GetStoredProcedureCommand(name);
-            command.Parameters.Clear();
-            AddParamsToCommand(command, parameters);
-            return command;
-        }
-
-        private void AddParamsToCommand(DbCommand command, IDictionary<string, object> parameters)
-        {
-            if (parameters != null)
-            {
-                foreach (var pair in parameters)
-                {
-                    
-                    if (pair.Value != null)
-                        command.Parameters.Add(new SqlParameter(CompleteToParam(pair.Key), pair.Value));
-                    else
-                        command.Parameters.Add(new SqlParameter(CompleteToParam(pair.Key), DBNull.Value));
-                }
-            }
-        }
-
+        
         protected SqlDataReader ExecuteStoredProcedureReader(string name, IDictionary<string, object> parameters)
         {
-            using (var command = GetStoredProcedureCommandWithParams(name, parameters))
+            using (var command = unitOfWork.GetStoredProcedureCommandWithParams(name, parameters))
             {
                 var res = command.ExecuteReader();
                 return res;
@@ -69,7 +25,7 @@ namespace Chalkable.Data.Common
 
         public DbDataReader ExecuteReaderParametrized(string sql, Dictionary<string, object> parameters)
         {
-            using (SqlCommand command = GetTextCommandWithParams(sql, parameters))
+            using (SqlCommand command = unitOfWork.GetTextCommandWithParams(sql, parameters))
             {
                 DbDataReader res = command.ExecuteReader();
                 return res;
@@ -78,29 +34,10 @@ namespace Chalkable.Data.Common
 
         public void ExecuteNonQueryParametrized(string sql, IDictionary<string, object> parameters)
         {
-            using (SqlCommand command = GetTextCommandWithParams(sql, parameters))
+            using (SqlCommand command = unitOfWork.GetTextCommandWithParams(sql, parameters))
             {
                 command.ExecuteNonQuery();
             }
-        }
-
-        private SqlCommand GetTextCommandWithParams(string sql, IDictionary<string, object> parameters)
-        {
-            SqlCommand command = GetTextCommand(sql);
-            command.Parameters.Clear();
-            AddParamsToCommand(command, parameters);
-            return command;
-        }
-
-        private SqlCommand GetTextCommand(string sql)
-        {
-            var command = new SqlCommand();
-            command.Connection = unitOfWork.Connection;
-            if (unitOfWork.Transaction != null)
-                command.Transaction = unitOfWork.Transaction;
-            command.CommandType = CommandType.Text;
-            command.CommandText = sql;
-            return command;
         }
 
         protected void SimpleInsert<T>(T obj)
@@ -229,6 +166,48 @@ namespace Chalkable.Data.Common
         protected bool Exists(DbQuery query, string resName = "AllCount")
         {
             return Read(query, reader => reader.Read() && SqlTools.ReadInt32(reader, resName) > 0);
+        }
+
+        public TEntity GetById(Guid id)
+        {
+            return SelectOne<TEntity>(new Dictionary<string, object> {{"Id", id}});
+        }
+
+        public TEntity GetByIdOrNull(Guid id)
+        {
+            return SelectOneOrNull<TEntity>(new Dictionary<string, object> { { "Id", id } });
+        }
+
+        public IList<TEntity> GetAll()
+        {
+            return SelectMany<TEntity>();
+        }
+
+        public PaginatedList<TEntity> GetPage(int start, int count, string orderBy = null)
+        {
+            if (string.IsNullOrEmpty(orderBy))
+                orderBy = "Id";
+            return PaginatedSelect<TEntity>(orderBy, start, count);
+        }
+
+        public void Insert(TEntity entity)
+        {
+            SimpleInsert(entity);
+        }
+
+        public void Insert(IList<TEntity> entities)
+        {
+            SimpleInsert(entities);
+        }
+
+        public void Update(TEntity entity)
+        {
+            SimpleUpdate(entity);
+        }
+
+        public void Delete(Guid id)
+        {
+            SimpleDelete(id);
         }
     }
 }

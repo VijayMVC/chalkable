@@ -46,7 +46,7 @@
     <Compile Include="DataAccess\AnnouncementRecipientDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementReminderDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementTypeDataAccess.cs" />
-    <Compile Include="DataAccess\CalendarDateDataAccess.cs" />
+    <Compile Include="DataAccess\DateDataAccess.cs" />
     <Compile Include="DataAccess\ClassDataAccess.cs" />
     <Compile Include="DataAccess\ClassPeriodDataAccess.cs" />
     <Compile Include="DataAccess\ClassPersonDataAccess.cs" />

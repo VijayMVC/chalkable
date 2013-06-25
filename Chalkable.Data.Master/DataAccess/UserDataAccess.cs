@@ -7,7 +7,7 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Data.Master.DataAccess
 {
-    public class UserDataAccess : DataAccessBase
+    public class UserDataAccess : DataAccessBase<User>
     {
         public UserDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -113,13 +113,6 @@ namespace Chalkable.Data.Master.DataAccess
         public void Create(User user)
         {
             SimpleInsert(user);
-        }
-    }
-
-    public class ChalkableDepartmentDataAccess : DataAccessBase
-    {
-        public ChalkableDepartmentDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
-        {
         }
     }
 }

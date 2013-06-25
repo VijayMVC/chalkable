@@ -53,7 +53,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         EndDate = endDate
                     };
                 
-                da.Create(schoolYear);
+                da.Insert(schoolYear);
                 uow.Commit();
                 return schoolYear;
             }

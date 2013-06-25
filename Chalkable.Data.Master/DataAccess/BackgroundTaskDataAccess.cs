@@ -6,15 +6,10 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Data.Master.DataAccess
 {
-    public class BackgroundTaskDataAccess : DataAccessBase
+    public class BackgroundTaskDataAccess : DataAccessBase<BackgroundTask>
     {
         public BackgroundTaskDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
-        }
-
-        public void Create(BackgroundTask task)
-        {
-            SimpleInsert(task);
         }
 
         public BackgroundTask GetTaskForProcessing(DateTime now)
@@ -27,7 +22,7 @@ namespace Chalkable.Data.Master.DataAccess
 
         public PaginatedList<BackgroundTask> GetTasks(int start, int count)
         {
-            return PaginatedSelect<BackgroundTask>(BackgroundTask.SCHEDULED_FIELD_NAME, start, count);
+            return GetPage(start, count, BackgroundTask.SCHEDULED_FIELD_NAME);
         }
 
         public void Complete(Guid id, bool success)

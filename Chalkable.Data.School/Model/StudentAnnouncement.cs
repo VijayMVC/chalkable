@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chalkable.Data.School.Model
 {
@@ -16,6 +12,7 @@ namespace Chalkable.Data.School.Model
     public class StudentAnnouncement
     {
         public Guid Id { get; set; }
+        public const string ANNOUNCEMENT_REF_FIELD_NAME = "AnnouncementRef";
         public Guid AnnouncementRef { get; set; }
         public Guid PersonRef { get; set; }
         public int? GradeValue { get; set; }
