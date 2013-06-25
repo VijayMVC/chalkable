@@ -1,0 +1,13 @@
++ActionLink('index', 'index')#home-logo Home
+#sidebar-controls
+    .search-wrapper
+        #search-bar
+    .wrapper
+        .buttons-row
+            +ActionLink('index', 'index').one-third-button.peoples.pressed(title="View Schools") Schools
+            +ActionLink('index', 'apps').one-third-button.apps(title="View Applications") Apps
+            +ActionLink('index', 'settings').one-third-button.settings(title="View System Types") Settings
+        .buttons-row
+            +ActionLink('index', 'funds').one-third-button.statistic(title="View Purchase Order") Purchase Order
+            +ActionLink('index', 'settings').one-third-button.settings(title="View Signups") Signups
+#invite-button-container
