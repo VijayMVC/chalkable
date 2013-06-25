@@ -115,4 +115,11 @@ namespace Chalkable.Data.Master.DataAccess
             SimpleInsert(user);
         }
     }
+
+    public class ChalkableDepartmentDataAccess : DataAccessBase
+    {
+        public ChalkableDepartmentDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        {
+        }
+    }
 }

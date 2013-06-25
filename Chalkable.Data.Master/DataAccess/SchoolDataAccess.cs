@@ -63,6 +63,17 @@ namespace Chalkable.Data.Master.DataAccess
             return res;
         }
 
-        
+        public SisSync GetSyncData(Guid schoolId)
+        {
+            return SelectOneOrNull<SisSync>(new Dictionary<string, object> {{"Id", schoolId}});
+        }
+
+        public void SetSyncData(SisSync sisSync)
+        {
+            if (GetSyncData(sisSync.Id) != null)
+                SimpleUpdate(sisSync);
+            else
+                SimpleInsert(sisSync);
+        }
     }
 }

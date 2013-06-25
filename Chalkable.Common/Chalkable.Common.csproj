@@ -46,6 +46,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ChlkResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ComparablePair.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CoreRole.cs" />
     <Compile Include="DateTimeTools.cs" />

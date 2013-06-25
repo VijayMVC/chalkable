@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
@@ -61,9 +60,11 @@ namespace Chalkable.Data.School.DataAccess
             }
         } 
 
-        public IList<Period> GetComplexPeriods(Guid? sectionId, Guid markingPeriodId)
+        public IList<Period> GetComplexPeriods(Guid? sectionId, Guid? markingPeriodId)
         {
-            var conds = new Dictionary<string, object> {{"markingPeriodRef", markingPeriodId}};
+            var conds = new Dictionary<string, object>();
+            if (markingPeriodId.HasValue)
+                conds.Add("markingPeriodRef", markingPeriodId);
             if (sectionId.HasValue)
                 conds.Add("sectionRef", sectionId);
             return GetComplexPeriods(conds);

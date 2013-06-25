@@ -41,6 +41,8 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new UserDataAccess(uow);
                 var user = da.GetUser(login, PasswordMd5(password), null);
+                if (user == null)
+                    return null;
                 Guid? schoolId = null;
                 string schoolName = null;
                 string schoolServerUrl = null;

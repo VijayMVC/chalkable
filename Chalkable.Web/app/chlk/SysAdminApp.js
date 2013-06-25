@@ -12,6 +12,13 @@ NAMESPACE('chlk', function (){
     /** @class chlk.SysAdminApp */
     CLASS(
         'SysAdminApp', EXTENDS(ria.mvc.Application), [
+            OVERRIDE, ria.mvc.Dispatcher, function initDispatcher_() {
+                var dispatcher = BASE();
+
+                dispatcher.setDefaultControllerId('sysadmin');
+                dispatcher.setDefaultControllerAction('schools');
+                return dispatcher;
+            },
             OVERRIDE, ria.async.Future, function onStart_() {
                 return BASE()
                     .then(function (data) {
