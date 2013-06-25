@@ -1,0 +1,22 @@
+@import "compass/css3/border-radius";
+@import "compass/css3/images";
+
+$border-color: #a1a1a1;
+
+.action-bar{
+  .container{
+    height: 34px;
+    @include border-radius(5px);
+    border-bottom: 1px solid $border-color;
+    border-top: 1px solid white;
+
+    >A{
+      text-decoration: none;
+      font: normal 11px/34px arial,tahoma,verdana,helvetica;
+      color: #333;
+      height: 34px;
+      font-style: italic;
+      display: inline-block;
+    }
+  }
+}

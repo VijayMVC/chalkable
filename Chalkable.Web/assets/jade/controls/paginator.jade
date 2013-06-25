@@ -1,8 +1,11 @@
-mixin Paginator(data)
+mixin Paginator(controller, action, data)
+    pd = self.preparePaginationData(data)
     -start = data.pageindex*data.pagesize + 1;
     -end = start + data.pagesize - 1;
     .paginator-container
         .left-container
+            +ActionLink(controller, action, 0)(class = pd.hasFirstLink ? '' : 'disabled')
+
             A(class='first-page' + (data.haspreviouspage ? '' : ' disabled'))
             A(class='prev-page' + (data.haspreviouspage ? '' : ' disabled'))
             .info-container
@@ -15,3 +18,4 @@ mixin Paginator(data)
         .right-container
             SPAN
                 |Displaying #{start} - #{end} of #{data.totalcount}
+        .clear

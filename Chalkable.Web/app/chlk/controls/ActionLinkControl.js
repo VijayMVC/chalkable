@@ -2,7 +2,7 @@ REQUIRE('chlk.controls.Base');
 
 NAMESPACE('chlk.controls', function () {
 
-    /** @class app.controls.ActionLink */
+    /** @class chlk.controls.ActionLinkControl */
     CLASS(
         'ActionLinkControl', EXTENDS(chlk.controls.Base), [
             OVERRIDE, VOID, function onCreate_() {

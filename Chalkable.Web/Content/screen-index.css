@@ -3,62 +3,62 @@ button.toplogin {
   border: none !important;
 }
 
-/* line 5, ../assets/sass/partials/index/developers.scss */
+/* line 5, ../assets/sass/partials/index/_developers.scss */
 #demo_top_wrapper.faq_sticky_navigation.developers {
   position: relative !important;
   left: 0;
 }
 
-/* line 10, ../assets/sass/partials/index/developers.scss */
+/* line 10, ../assets/sass/partials/index/_developers.scss */
 #demo_top_wrapper.faq_sticky_navigation ul li.loginnav.dev.one a.noscroll {
   top: 0px !important;
   position: relative;
 }
 
-/* line 15, ../assets/sass/partials/index/developers.scss */
+/* line 15, ../assets/sass/partials/index/_developers.scss */
 #sticky_navigation.developers {
   top: 90px;
   left: 0;
 }
 
-/* line 20, ../assets/sass/partials/index/developers.scss */
+/* line 20, ../assets/sass/partials/index/_developers.scss */
 .navlogo_faq.developers {
   position: absolute;
   left: 2%;
   top: 9.5%;
 }
 
-/* line 26, ../assets/sass/partials/index/developers.scss */
+/* line 26, ../assets/sass/partials/index/_developers.scss */
 #developers {
   padding-right: 20px;
 }
 
-/* line 30, ../assets/sass/partials/index/developers.scss */
+/* line 30, ../assets/sass/partials/index/_developers.scss */
 .wrapper.developers {
   padding-left: 0px !important;
 }
 
-/* line 36, ../assets/sass/partials/index/developers.scss */
+/* line 36, ../assets/sass/partials/index/_developers.scss */
 #demo_top_wrapper.faq_sticky_navigation ul li.loginnav.dev.one a.noscroll {
   margin-left: 840px;
   padding-left: 0px !important;
 }
-/* line 40, ../assets/sass/partials/index/developers.scss */
+/* line 40, ../assets/sass/partials/index/_developers.scss */
 #demo_top_wrapper.faq_sticky_navigation ul li.loginnav.dev.two a.noscroll {
   margin-left: 840px;
   margin-top: -27px;
   padding-left: 0px !important;
 }
-/* line 47, ../assets/sass/partials/index/developers.scss */
+/* line 47, ../assets/sass/partials/index/_developers.scss */
 #demo_top_wrapper.faq_sticky_navigation ul li.dev_nav.code a {
   color: #0d394f !important;
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.43);
 }
-/* line 51, ../assets/sass/partials/index/developers.scss */
+/* line 51, ../assets/sass/partials/index/_developers.scss */
 #demo_top_wrapper.faq_sticky_navigation ul li.dev_nav.code.off a {
   color: white !important;
 }
-/* line 53, ../assets/sass/partials/index/developers.scss */
+/* line 53, ../assets/sass/partials/index/_developers.scss */
 #demo_top_wrapper.faq_sticky_navigation ul li.dev_nav.code.off a:hover {
   color: #0d394f !important;
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.43);
@@ -73,41 +73,41 @@ button.toplogin {
   -o-transition-duration: 0.1s;
   transition-duration: 0.1s;
 }
-/* line 69, ../assets/sass/partials/index/developers.scss */
+/* line 69, ../assets/sass/partials/index/_developers.scss */
 #demo_top_wrapper.faq_sticky_navigation ul li.loginnav.dev.one a {
   padding-left: 300px;
 }
-/* line 71, ../assets/sass/partials/index/developers.scss */
+/* line 71, ../assets/sass/partials/index/_developers.scss */
 #demo_top_wrapper.faq_sticky_navigation ul li.loginnav.dev.one a.noscroll {
   top: -1px;
   position: relative;
 }
-/* line 77, ../assets/sass/partials/index/developers.scss */
+/* line 77, ../assets/sass/partials/index/_developers.scss */
 #demo_top_wrapper.faq_sticky_navigation ul li.dev_nav a {
   padding-left: 278px;
 }
-/* line 80, ../assets/sass/partials/index/developers.scss */
+/* line 80, ../assets/sass/partials/index/_developers.scss */
 #demo_top_wrapper.faq_sticky_navigation ul li.dev_nav.concepts.active a {
   padding-left: 8px;
   color: #0d394f !important;
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.43);
 }
 
-/* line 89, ../assets/sass/partials/index/developers.scss */
+/* line 89, ../assets/sass/partials/index/_developers.scss */
 ul#nav1 li.dev a {
   position: relative;
   left: -30px;
   top: 2px;
 }
 
-/* line 95, ../assets/sass/partials/index/developers.scss */
+/* line 95, ../assets/sass/partials/index/_developers.scss */
 .splash.dev {
   height: 492px;
   margin-top: -20px;
   padding-top: 0px !important;
 }
 
-/* line 101, ../assets/sass/partials/index/developers.scss */
+/* line 101, ../assets/sass/partials/index/_developers.scss */
 h5.dev_nav_logo {
   float: left;
   color: white;
@@ -125,7 +125,7 @@ h5.dev_nav_logo {
   webkit-font-smoothing: anti-aliased;
 }
 
-/* line 118, ../assets/sass/partials/index/developers.scss */
+/* line 118, ../assets/sass/partials/index/_developers.scss */
 h1.dev {
   font: 44px/41px "delicious-heavy", sans-serif !important;
   color: #2a6a83;
@@ -135,35 +135,35 @@ h1.dev {
   text-transform: none !important;
 }
 
-/* line 127, ../assets/sass/partials/index/developers.scss */
+/* line 127, ../assets/sass/partials/index/_developers.scss */
 .titletext.devs {
   width: 405px !important;
   display: block !important;
   top: -337px;
 }
 
-/* line 133, ../assets/sass/partials/index/developers.scss */
+/* line 133, ../assets/sass/partials/index/_developers.scss */
 .titletext h3.syncs.dev {
   font-size: 24px;
   line-height: 38px;
 }
-/* line 136, ../assets/sass/partials/index/developers.scss */
+/* line 136, ../assets/sass/partials/index/_developers.scss */
 .titletext h3.syncs.dev.low {
   padding-top: 9px;
   margin-bottom: 23px;
 }
 
-/* line 142, ../assets/sass/partials/index/developers.scss */
+/* line 142, ../assets/sass/partials/index/_developers.scss */
 .titletext h3 span.cycle.dev {
   top: -1px !important;
 }
 
-/* line 146, ../assets/sass/partials/index/developers.scss */
+/* line 146, ../assets/sass/partials/index/_developers.scss */
 span.sis_name i.underlines.dev {
   background-position: 0 32px !important;
 }
 
-/* line 151, ../assets/sass/partials/index/developers.scss */
+/* line 151, ../assets/sass/partials/index/_developers.scss */
 .docs-button {
   float: left;
   display: block;
@@ -174,16 +174,16 @@ span.sis_name i.underlines.dev {
   position: relative;
   margin-right: 40px;
 }
-/* line 160, ../assets/sass/partials/index/developers.scss */
+/* line 160, ../assets/sass/partials/index/_developers.scss */
 .docs-button:hover {
   background-position: 0px -66px;
 }
-/* line 163, ../assets/sass/partials/index/developers.scss */
+/* line 163, ../assets/sass/partials/index/_developers.scss */
 .docs-button:active {
   background-position: 0px -132px;
 }
 
-/* line 169, ../assets/sass/partials/index/developers.scss */
+/* line 169, ../assets/sass/partials/index/_developers.scss */
 .p_dev {
   font-size: 20px;
   font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -197,7 +197,7 @@ span.sis_name i.underlines.dev {
   padding-right: 10px;
 }
 
-/* line 183, ../assets/sass/partials/index/developers.scss */
+/* line 183, ../assets/sass/partials/index/_developers.scss */
 #dev .dev_content {
   float: left;
   width: 1022px;
@@ -210,20 +210,20 @@ span.sis_name i.underlines.dev {
   border-radius: 0px;
 }
 
-/* line 196, ../assets/sass/partials/index/developers.scss */
+/* line 196, ../assets/sass/partials/index/_developers.scss */
 .dev_vids_wrapper {
   width: 100%;
   margin: 0 auto;
   height: 271px;
 }
 
-/* line 202, ../assets/sass/partials/index/developers.scss */
+/* line 202, ../assets/sass/partials/index/_developers.scss */
 .vid_1, .vid_2, .vid_3 {
   float: left;
   display: block;
 }
 
-/* line 208, ../assets/sass/partials/index/developers.scss */
+/* line 208, ../assets/sass/partials/index/_developers.scss */
 .my_apps_vid {
   width: 270px;
   height: 157px;
@@ -234,12 +234,12 @@ span.sis_name i.underlines.dev {
   background-repeat: no-repeat;
   background-position: 14px 0;
 }
-/* line 219, ../assets/sass/partials/index/developers.scss */
+/* line 219, ../assets/sass/partials/index/_developers.scss */
 .my_apps_vid:hover {
   cursor: pointer;
 }
 
-/* line 225, ../assets/sass/partials/index/developers.scss */
+/* line 225, ../assets/sass/partials/index/_developers.scss */
 #embedded_assingment_vid {
   z-index: 10001;
   width: 270px;
@@ -250,12 +250,12 @@ span.sis_name i.underlines.dev {
   display: block !important;
   background-image: url(images/index/embedded_vid_img.png) !important;
 }
-/* line 236, ../assets/sass/partials/index/developers.scss */
+/* line 236, ../assets/sass/partials/index/_developers.scss */
 #embedded_assingment_vid:hover {
   cursor: pointer;
 }
 
-/* line 242, ../assets/sass/partials/index/developers.scss */
+/* line 242, ../assets/sass/partials/index/_developers.scss */
 .biodigital_vid {
   width: 270px;
   height: 152px;
@@ -264,7 +264,7 @@ span.sis_name i.underlines.dev {
   margin: 30px;
 }
 
-/* line 252, ../assets/sass/partials/index/developers.scss */
+/* line 252, ../assets/sass/partials/index/_developers.scss */
 #dev_biodigital_vid {
   width: 270px;
   height: 152px;
@@ -275,7 +275,7 @@ span.sis_name i.underlines.dev {
   box-shadow: 0px 0px 25px 3px rgba(0, 0, 0, 0.4);
   background-image: url(images/index/my_apps_vid_img.jpg);
 }
-/* line 261, ../assets/sass/partials/index/developers.scss */
+/* line 261, ../assets/sass/partials/index/_developers.scss */
 #dev_biodigital_vid:hover {
   cursor: pointer;
   display: block;
@@ -284,7 +284,7 @@ span.sis_name i.underlines.dev {
   outline: 4px inset rgba(154, 1, 1, 0.31);
 }
 
-/* line 270, ../assets/sass/partials/index/developers.scss */
+/* line 270, ../assets/sass/partials/index/_developers.scss */
 .vid_title {
   font-size: 21px;
   font-family: "oswald", sans-serif;
@@ -298,7 +298,7 @@ span.sis_name i.underlines.dev {
 
 /* line 2566, ../sass/screen.scss */
 /* line 2825, src/screen-index.scss */
-/* line 284, ../assets/sass/partials/index/developers.scss */
+/* line 284, ../assets/sass/partials/index/_developers.scss */
 #lowerbuttons.devpage {
   width: 500px !important;
   height: 0px !important;
@@ -306,28 +306,28 @@ span.sis_name i.underlines.dev {
   top: 40px;
   left: -10px;
 }
-/* line 292, ../assets/sass/partials/index/developers.scss */
+/* line 292, ../assets/sass/partials/index/_developers.scss */
 #lowerbuttons.devpage button.demo.code:hover {
   background-image: -webkit-gradient(linear, left bottom, left top, from(#3e82a0), to(#1299d4));
   background-image: -moz-linear-gradient(90deg, #3e82a0 0%, #1299d4 100%);
 }
-/* line 296, ../assets/sass/partials/index/developers.scss */
+/* line 296, ../assets/sass/partials/index/_developers.scss */
 #lowerbuttons.devpage button.demo.code:active {
   position: relative;
   top: 1px;
 }
-/* line 302, ../assets/sass/partials/index/developers.scss */
+/* line 302, ../assets/sass/partials/index/_developers.scss */
 #lowerbuttons.devpage button.signup.concepts:hover {
   background-image: -webkit-gradient(linear, left bottom, left top, from(#af4137), to(#d9392a));
   background-image: -moz-linear-gradient(90deg, #af4137 0%, #d9392a 100%);
 }
-/* line 306, ../assets/sass/partials/index/developers.scss */
+/* line 306, ../assets/sass/partials/index/_developers.scss */
 #lowerbuttons.devpage button.signup.concepts:active {
   position: relative;
   top: 1px;
 }
 
-/* line 316, ../assets/sass/partials/index/developers.scss */
+/* line 316, ../assets/sass/partials/index/_developers.scss */
 span.button_under_title1 {
   font-size: 16px;
   font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -342,7 +342,7 @@ span.button_under_title1 {
   bottom: -10px;
   left: 53px;
 }
-/* line 330, ../assets/sass/partials/index/developers.scss */
+/* line 330, ../assets/sass/partials/index/_developers.scss */
 span.button_under_title2 {
   font-size: 16px;
   font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -358,12 +358,12 @@ span.button_under_title2 {
   left: 161px;
 }
 
-/* line 347, ../assets/sass/partials/index/developers.scss */
+/* line 347, ../assets/sass/partials/index/_developers.scss */
 .dev_content_box, faq_content.dev.concepts1 {
   height: 1100px;
 }
 
-/* line 351, ../assets/sass/partials/index/developers.scss */
+/* line 351, ../assets/sass/partials/index/_developers.scss */
 h2.dev_heading {
   font-size: 30px;
   font-family: 'oswald', sans-serif;
@@ -377,7 +377,7 @@ h2.dev_heading {
   padding: 20px 0 0 55px;
 }
 
-/* line 365, ../assets/sass/partials/index/developers.scss */
+/* line 365, ../assets/sass/partials/index/_developers.scss */
 .dev_content_image {
   height: 0px;
   width: 89%;
@@ -387,12 +387,12 @@ h2.dev_heading {
   -webkit-box-shadow: inset 3px 3px 4px rgba(62, 62, 62, 0.18), 2px 2px 2px rgba(234, 234, 234, 0.85);
   box-shadow: inset 3px 3px 4px rgba(62, 62, 62, 0.18), 2px 2px 2px rgba(234, 234, 234, 0.85);
 }
-/* line 373, ../assets/sass/partials/index/developers.scss */
+/* line 373, ../assets/sass/partials/index/_developers.scss */
 .dev_content_image.one {
   margin-bottom: 60px;
 }
 
-/* line 380, ../assets/sass/partials/index/developers.scss */
+/* line 380, ../assets/sass/partials/index/_developers.scss */
 .vid_title.under {
   font-size: 20px;
   font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -407,47 +407,47 @@ h2.dev_heading {
   bottom: -310px;
 }
 
-/* line 395, ../assets/sass/partials/index/developers.scss */
+/* line 395, ../assets/sass/partials/index/_developers.scss */
 #lowerbuttons.devpage_low {
   position: relative;
   bottom: 90px;
   left: -15px;
   margin: 0 auto;
 }
-/* line 401, ../assets/sass/partials/index/developers.scss */
+/* line 401, ../assets/sass/partials/index/_developers.scss */
 #lowerbuttons.devpage_low button.demo.code:hover {
   background-image: -webkit-gradient(linear, left bottom, left top, from(#3e82a0), to(#1299d4));
   background-image: -moz-linear-gradient(90deg, #3e82a0 0%, #1299d4 100%);
 }
-/* line 405, ../assets/sass/partials/index/developers.scss */
+/* line 405, ../assets/sass/partials/index/_developers.scss */
 #lowerbuttons.devpage_low button.signup.concepts:hover {
   background-image: -webkit-gradient(linear, left bottom, left top, from(#af4137), to(#d9392a));
   background-image: -moz-linear-gradient(90deg, #af4137 0%, #d9392a 100%);
 }
-/* line 409, ../assets/sass/partials/index/developers.scss */
+/* line 409, ../assets/sass/partials/index/_developers.scss */
 #lowerbuttons.devpage_low button.demo.code:active, #lowerbuttons.devpage_low button.signup.concepts:active {
   position: relative;
   top: 1px;
 }
 
-/* line 417, ../assets/sass/partials/index/developers.scss */
+/* line 417, ../assets/sass/partials/index/_developers.scss */
 #floatingbuttons.dev {
   margin-top: 23px !important;
   width: 458px;
   top: 20px !important;
 }
 
-/* line 425, ../assets/sass/partials/index/developers.scss */
+/* line 425, ../assets/sass/partials/index/_developers.scss */
 h3.dev-head {
   font-family: "oswald" !important;
   text-transform: none !important;
 }
 
-/* line 430, ../assets/sass/partials/index/developers.scss */
+/* line 430, ../assets/sass/partials/index/_developers.scss */
 .details_box .contents .details.dev {
   width: 452px !important;
 }
-/* line 432, ../assets/sass/partials/index/developers.scss */
+/* line 432, ../assets/sass/partials/index/_developers.scss */
 .details_box .contents .details.dev p {
   font-size: 18px;
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8);
@@ -457,25 +457,25 @@ h3.dev-head {
 }
 
 /* line 1332, ../sass/screen.scss */
-/* line 443, ../assets/sass/partials/index/developers.scss */
+/* line 443, ../assets/sass/partials/index/_developers.scss */
 img.down-arrow-dev {
   position: relative;
   left: 408px;
   bottom: 4px;
 }
 
-/* line 449, ../assets/sass/partials/index/developers.scss */
+/* line 449, ../assets/sass/partials/index/_developers.scss */
 .khan-dev-img {
   padding-top: 53px;
   padding-left: 62px;
 }
 
-/* line 454, ../assets/sass/partials/index/developers.scss */
+/* line 454, ../assets/sass/partials/index/_developers.scss */
 .api-explorer-dev {
   margin-left: -43px;
 }
 
-/* line 458, ../assets/sass/partials/index/developers.scss */
+/* line 458, ../assets/sass/partials/index/_developers.scss */
 h3.dev-ready {
   font-family: "delicious-heavy" !important;
   color: #2a6a83 !important;
@@ -483,37 +483,37 @@ h3.dev-ready {
   font-size: 41px !important;
 }
 
-/* line 465, ../assets/sass/partials/index/developers.scss */
+/* line 465, ../assets/sass/partials/index/_developers.scss */
 .price_bott_section.dev {
   margin-bottom: -85px !important;
 }
 
-/* line 6, ../assets/sass/partials/index/developer_docs.scss */
+/* line 6, ../assets/sass/partials/index/_developer_docs.scss */
 BODY #docs_top_wrapper.faq_sticky_navigation.developers {
   position: relative !important;
   left: 0;
 }
-/* line 13, ../assets/sass/partials/index/developer_docs.scss */
+/* line 13, ../assets/sass/partials/index/_developer_docs.scss */
 BODY #docs_top_wrapper.faq_sticky_navigation ul li.loginnav.dev.one a.noscroll {
   margin-left: 840px;
   padding-left: 0px !important;
 }
-/* line 17, ../assets/sass/partials/index/developer_docs.scss */
+/* line 17, ../assets/sass/partials/index/_developer_docs.scss */
 BODY #docs_top_wrapper.faq_sticky_navigation ul li.loginnav.dev.two a.noscroll {
   margin-left: 840px;
   margin-top: -27px;
   padding-left: 0px !important;
 }
-/* line 24, ../assets/sass/partials/index/developer_docs.scss */
+/* line 24, ../assets/sass/partials/index/_developer_docs.scss */
 BODY #docs_top_wrapper.faq_sticky_navigation ul li.dev_nav.code a {
   color: #0d394f !important;
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.43);
 }
-/* line 28, ../assets/sass/partials/index/developer_docs.scss */
+/* line 28, ../assets/sass/partials/index/_developer_docs.scss */
 BODY #docs_top_wrapper.faq_sticky_navigation ul li.dev_nav.code.off a {
   color: white !important;
 }
-/* line 30, ../assets/sass/partials/index/developer_docs.scss */
+/* line 30, ../assets/sass/partials/index/_developer_docs.scss */
 BODY #docs_top_wrapper.faq_sticky_navigation ul li.dev_nav.code.off a:hover {
   color: #0d394f !important;
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.43);
@@ -528,66 +528,66 @@ BODY #docs_top_wrapper.faq_sticky_navigation ul li.dev_nav.code.off a:hover {
   -o-transition-duration: 0.1s;
   transition-duration: 0.1s;
 }
-/* line 46, ../assets/sass/partials/index/developer_docs.scss */
+/* line 46, ../assets/sass/partials/index/_developer_docs.scss */
 BODY #docs_top_wrapper.faq_sticky_navigation ul li.loginnav.dev.one a {
   padding-left: 300px;
 }
-/* line 48, ../assets/sass/partials/index/developer_docs.scss */
+/* line 48, ../assets/sass/partials/index/_developer_docs.scss */
 BODY #docs_top_wrapper.faq_sticky_navigation ul li.loginnav.dev.one a.noscroll {
   top: -15px;
   position: relative;
 }
-/* line 54, ../assets/sass/partials/index/developer_docs.scss */
+/* line 54, ../assets/sass/partials/index/_developer_docs.scss */
 BODY #docs_top_wrapper.faq_sticky_navigation ul li.dev_nav a {
   padding-left: 278px;
 }
-/* line 57, ../assets/sass/partials/index/developer_docs.scss */
+/* line 57, ../assets/sass/partials/index/_developer_docs.scss */
 BODY #docs_top_wrapper.faq_sticky_navigation ul li.dev_nav.concepts.active a {
   padding-left: 8px;
   color: #0d394f !important;
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.43);
 }
-/* line 64, ../assets/sass/partials/index/developer_docs.scss */
+/* line 64, ../assets/sass/partials/index/_developer_docs.scss */
 BODY #outer-wrap {
   width: 100%;
   background: #f5f5f5;
 }
-/* line 69, ../assets/sass/partials/index/developer_docs.scss */
+/* line 69, ../assets/sass/partials/index/_developer_docs.scss */
 BODY span.monaco {
   font: normal 18px monaco, consolas, "lucida console", monospace;
   color: #6DA372;
   text-shadow: 0px 1px 0px white;
 }
-/* line 73, ../assets/sass/partials/index/developer_docs.scss */
+/* line 73, ../assets/sass/partials/index/_developer_docs.scss */
 BODY span.monaco.blue {
   color: #0000FD;
 }
-/* line 77, ../assets/sass/partials/index/developer_docs.scss */
+/* line 77, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .wrapper.docs {
   background: #f5f5f5;
   width: 1279px;
   height: auto;
 }
-/* line 81, ../assets/sass/partials/index/developer_docs.scss */
+/* line 81, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .wrapper.docs .leftwrap {
   width: 197px;
 }
-/* line 83, ../assets/sass/partials/index/developer_docs.scss */
+/* line 83, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .wrapper.docs .leftwrap .fixed-sider {
   position: fixed;
   opacity: 0;
 }
-/* line 86, ../assets/sass/partials/index/developer_docs.scss */
+/* line 86, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .wrapper.docs .leftwrap .fixed-sider ul {
   list-style-type: none;
 }
-/* line 88, ../assets/sass/partials/index/developer_docs.scss */
+/* line 88, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .wrapper.docs .leftwrap .fixed-sider ul li {
   font: normal 16px/100% arial;
   color: #7b7b7b;
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8);
 }
-/* line 92, ../assets/sass/partials/index/developer_docs.scss */
+/* line 92, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .wrapper.docs .leftwrap .fixed-sider ul li a {
   text-decoration: none;
   color: #7b7b7b !important;
@@ -595,27 +595,27 @@ BODY .wrapper.docs .leftwrap .fixed-sider ul li a {
   padding: 9px 5px 10px 15px;
   border-bottom: 1px solid #C3CFD9;
 }
-/* line 98, ../assets/sass/partials/index/developer_docs.scss */
+/* line 98, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .wrapper.docs .leftwrap .fixed-sider ul li a:hover {
   color: #00008f !important;
 }
-/* line 101, ../assets/sass/partials/index/developer_docs.scss */
+/* line 101, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .wrapper.docs .leftwrap .fixed-sider ul li a:visited {
   text-decoration: none;
 }
-/* line 110, ../assets/sass/partials/index/developer_docs.scss */
+/* line 110, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .midwrap {
   width: 900px;
   margin: 0 auto;
 }
-/* line 115, ../assets/sass/partials/index/developer_docs.scss */
+/* line 115, ../assets/sass/partials/index/_developer_docs.scss */
 BODY h1.docs {
   font: normal 38px/150% delicious-heavy;
   color: #868686;
   text-align: center;
   padding: 40px 0 5px 0;
 }
-/* line 121, ../assets/sass/partials/index/developer_docs.scss */
+/* line 121, ../assets/sass/partials/index/_developer_docs.scss */
 BODY hr {
   width: 177px;
   margin: 9px auto 31px;
@@ -624,57 +624,57 @@ BODY hr {
   border: 0;
   border-top: 2px solid #CCC;
 }
-/* line 130, ../assets/sass/partials/index/developer_docs.scss */
+/* line 130, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box {
   width: 100%;
   background: #e6e6e6;
   padding: 15px 20px 15px 20px;
 }
-/* line 134, ../assets/sass/partials/index/developer_docs.scss */
+/* line 134, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box ul {
   list-style-type: disc;
   padding: 10px 0 5px 10px;
 }
-/* line 137, ../assets/sass/partials/index/developer_docs.scss */
+/* line 137, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box ul.num {
   list-style-type: decimal;
   padding-left: 23px;
 }
-/* line 141, ../assets/sass/partials/index/developer_docs.scss */
+/* line 141, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box ul li {
   font: normal 16px/26px arial;
   color: #727272;
   padding-bottom: 10px;
   text-shadow: 0px 1px 0px white;
 }
-/* line 148, ../assets/sass/partials/index/developer_docs.scss */
+/* line 148, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box h2.docshead {
   font: normal 28px oswald;
   color: #7b7b7b;
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8);
   text-align: center;
 }
-/* line 154, ../assets/sass/partials/index/developer_docs.scss */
+/* line 154, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box #vidyard_container {
   margin: 0 auto;
   height: 324px;
   padding: 3% 21%;
   top: -100px !important;
 }
-/* line 159, ../assets/sass/partials/index/developer_docs.scss */
+/* line 159, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box #vidyard_container .vidyard_wrapper {
   position: absolute !important;
   float: none !important;
 }
-/* line 162, ../assets/sass/partials/index/developer_docs.scss */
+/* line 162, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box #vidyard_container .vidyard_wrapper.docs {
   width: 512px !important;
 }
-/* line 165, ../assets/sass/partials/index/developer_docs.scss */
+/* line 165, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box #vidyard_container .vidyard_wrapper img {
   margin: 0 auto;
 }
-/* line 170, ../assets/sass/partials/index/developer_docs.scss */
+/* line 170, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box p.docs {
   text-align: center;
   font: normal 16px/100% Arial, sans-serif;
@@ -682,67 +682,67 @@ BODY .gray-box p.docs {
   text-shadow: 0px 1px 0px white;
   line-height: 25px;
 }
-/* line 176, ../assets/sass/partials/index/developer_docs.scss */
+/* line 176, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box p.docs.center {
   text-align: center !important;
   padding-bottom: 0px !important;
 }
-/* line 180, ../assets/sass/partials/index/developer_docs.scss */
+/* line 180, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box p.docs.left {
   text-align: left !important;
 }
-/* line 183, ../assets/sass/partials/index/developer_docs.scss */
+/* line 183, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box p.docs.code {
   padding-bottom: 15px;
 }
-/* line 187, ../assets/sass/partials/index/developer_docs.scss */
+/* line 187, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box pre {
   padding: 15px;
   margin: -9px 0px 23px;
   overflow: auto;
   overflow-Y: hidden;
 }
-/* line 192, ../assets/sass/partials/index/developer_docs.scss */
+/* line 192, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box pre.js {
   margin: 5px !important;
 }
-/* line 196, ../assets/sass/partials/index/developer_docs.scss */
+/* line 196, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box pre code {
   margin: 5px;
   padding: 0px;
   display: block;
   line-height: 18px;
 }
-/* line 205, ../assets/sass/partials/index/developer_docs.scss */
+/* line 205, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box code {
   background-color: #FCFCFC;
   color: #676767;
   font: normal 18px monaco, consolas, "lucida console", monospace;
 }
-/* line 210, ../assets/sass/partials/index/developer_docs.scss */
+/* line 210, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box pre {
   background-color: #FCFCFC;
 }
-/* line 212, ../assets/sass/partials/index/developer_docs.scss */
+/* line 212, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .gray-box pre > code {
   margin: 0px;
   padding: 5px;
   border: 1px dashed #BCBCBC;
   background-color: #FCFCFC;
 }
-/* line 221, ../assets/sass/partials/index/developer_docs.scss */
+/* line 221, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .clear-box {
   width: 100%;
   background: none;
   padding: 15px 5px 15px 5px;
 }
-/* line 225, ../assets/sass/partials/index/developer_docs.scss */
+/* line 225, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .clear-box h2.docshead {
   font: normal 28px/300% oswald;
   color: #7b7b7b;
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8);
 }
-/* line 230, ../assets/sass/partials/index/developer_docs.scss */
+/* line 230, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .clear-box p.docs {
   text-align: left;
   padding-bottom: 15px;
@@ -751,17 +751,17 @@ BODY .clear-box p.docs {
   text-shadow: 0px 1px 0px white;
   line-height: 25px;
 }
-/* line 238, ../assets/sass/partials/index/developer_docs.scss */
+/* line 238, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .clear-box ul {
   list-style-type: disc;
   padding: 10px 0 5px 10px;
 }
-/* line 241, ../assets/sass/partials/index/developer_docs.scss */
+/* line 241, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .clear-box ul.num {
   list-style-type: decimal;
   padding-left: 23px;
 }
-/* line 245, ../assets/sass/partials/index/developer_docs.scss */
+/* line 245, ../assets/sass/partials/index/_developer_docs.scss */
 BODY .clear-box ul li {
   font: normal 16px/26px arial;
   color: #727272;
@@ -769,158 +769,158 @@ BODY .clear-box ul li {
   text-shadow: 0px 1px 0px white;
 }
 
-/* line 255, ../assets/sass/partials/index/developer_docs.scss */
+/* line 255, ../assets/sass/partials/index/_developer_docs.scss */
 strong {
   font-weight: bolder !important;
 }
-/* line 257, ../assets/sass/partials/index/developer_docs.scss */
+/* line 257, ../assets/sass/partials/index/_developer_docs.scss */
 strong.left {
   margin-left: -23px;
 }
 
-/* line 261, ../assets/sass/partials/index/developer_docs.scss */
+/* line 261, ../assets/sass/partials/index/_developer_docs.scss */
 .slider {
   display: none;
 }
 
-/* line 265, ../assets/sass/partials/index/developer_docs.scss */
+/* line 265, ../assets/sass/partials/index/_developer_docs.scss */
 a {
   text-decoration: underline;
 }
-/* line 267, ../assets/sass/partials/index/developer_docs.scss */
+/* line 267, ../assets/sass/partials/index/_developer_docs.scss */
 a:hover {
   color: #00008f;
 }
 
 /* prettify code---*/
-/* line 273, ../assets/sass/partials/index/developer_docs.scss */
+/* line 273, ../assets/sass/partials/index/_developer_docs.scss */
 .pln {
   color: #000;
 }
 
 @media screen {
-  /* line 278, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 278, ../assets/sass/partials/index/_developer_docs.scss */
   .str {
     color: #080;
   }
 
-  /* line 281, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 281, ../assets/sass/partials/index/_developer_docs.scss */
   .kwd {
     color: #0000FD;
   }
 
-  /* line 284, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 284, ../assets/sass/partials/index/_developer_docs.scss */
   .com {
     color: #800;
   }
 
-  /* line 287, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 287, ../assets/sass/partials/index/_developer_docs.scss */
   .typ {
     color: #606;
   }
 
-  /* line 290, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 290, ../assets/sass/partials/index/_developer_docs.scss */
   .lit {
     color: #066;
   }
 
-  /* line 293, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 293, ../assets/sass/partials/index/_developer_docs.scss */
   .pun, .opn, .clo {
     color: #660;
   }
 
-  /* line 296, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 296, ../assets/sass/partials/index/_developer_docs.scss */
   .tag {
     color: #008;
   }
 
-  /* line 299, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 299, ../assets/sass/partials/index/_developer_docs.scss */
   .atn {
     color: #606;
   }
 
-  /* line 302, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 302, ../assets/sass/partials/index/_developer_docs.scss */
   .atv {
     color: #080;
   }
 
-  /* line 305, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 305, ../assets/sass/partials/index/_developer_docs.scss */
   .dec, .var {
     color: #606;
   }
 
-  /* line 308, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 308, ../assets/sass/partials/index/_developer_docs.scss */
   .fun {
     color: red;
   }
 }
 @media print, projection {
-  /* line 314, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 314, ../assets/sass/partials/index/_developer_docs.scss */
   .str {
     color: #060;
   }
 
-  /* line 317, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 317, ../assets/sass/partials/index/_developer_docs.scss */
   .kwd {
     color: #0000FD;
     font-weight: bold;
   }
 
-  /* line 321, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 321, ../assets/sass/partials/index/_developer_docs.scss */
   .com {
     color: #600;
     font-style: italic;
   }
 
-  /* line 325, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 325, ../assets/sass/partials/index/_developer_docs.scss */
   .typ {
     color: #404;
     font-weight: bold;
   }
 
-  /* line 329, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 329, ../assets/sass/partials/index/_developer_docs.scss */
   .lit {
     color: #044;
   }
 
-  /* line 332, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 332, ../assets/sass/partials/index/_developer_docs.scss */
   .pun, .opn, .clo {
     color: #440;
   }
 
-  /* line 335, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 335, ../assets/sass/partials/index/_developer_docs.scss */
   .tag {
     color: #006;
     font-weight: bold;
   }
 
-  /* line 339, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 339, ../assets/sass/partials/index/_developer_docs.scss */
   .atn {
     color: #404;
   }
 
-  /* line 342, ../assets/sass/partials/index/developer_docs.scss */
+  /* line 342, ../assets/sass/partials/index/_developer_docs.scss */
   .atv {
     color: #060;
   }
 }
-/* line 347, ../assets/sass/partials/index/developer_docs.scss */
+/* line 347, ../assets/sass/partials/index/_developer_docs.scss */
 pre.prettyprint {
   padding: 2px;
   border: 1px solid #888;
 }
 
-/* line 352, ../assets/sass/partials/index/developer_docs.scss */
+/* line 352, ../assets/sass/partials/index/_developer_docs.scss */
 ol.linenums {
   margin-top: 0;
   margin-bottom: 0;
 }
 
-/* line 358, ../assets/sass/partials/index/developer_docs.scss */
+/* line 358, ../assets/sass/partials/index/_developer_docs.scss */
 li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
   list-style-type: none;
 }
-/* line 361, ../assets/sass/partials/index/developer_docs.scss */
+/* line 361, ../assets/sass/partials/index/_developer_docs.scss */
 li.L1, li.L3, li.L5, li.L7, li.L9 {
   background: rgba(118, 228, 255, 0.1);
 }

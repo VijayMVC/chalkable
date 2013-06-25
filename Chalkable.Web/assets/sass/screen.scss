@@ -125,6 +125,7 @@ BODY {
   width: 100%;
   display: table;
   position: relative;
+  margin: 0;
 
   &.demo{
     >DIV.application-preview-window{
@@ -301,7 +302,9 @@ BODY {
   }
 }
 
-@import "partials/sidebar";
-@import "partials/demo";
+@import "partials/_sidebar";
+@import "partials/_demo";
+@import "partials/_controls";
+@import "partials/_main";
 
 
