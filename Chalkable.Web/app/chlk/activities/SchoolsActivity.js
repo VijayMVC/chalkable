@@ -1,24 +1,11 @@
-REQUIRE('ria.mvc.DomActivity');
-
-REQUIRE('ria.dom.Dom');
-
+REQUIRE('chlk.activities.TemplateActivity');
 REQUIRE('chlk.templates.Schools');
 
 NAMESPACE('chlk.activities', function () {
 
-    /** @class chlk.activities.Schools */
+    /** @class chlk.activities.SchoolsActivity */
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
-        'SchoolsActivity', EXTENDS(ria.mvc.DomActivity), [
-            OVERRIDE, ria.dom.Dom, function onDomCreate_() {
-                var dom = new ria.dom.Dom();
-                return dom.fromHTML('<div>Loading...</div>');
-            },
-
-            OVERRIDE, VOID, function onRender_(data) {
-                var tpl = new chlk.templates.Schools;
-                tpl.assign(data);
-                tpl.renderTo(this.dom.empty());
-            }
-        ]);
+        [chlk.activities.BindTemplate(chlk.templates.Schools)],
+        'SchoolsActivity', EXTENDS(chlk.activities.TemplateActivity), [ ]);
 });

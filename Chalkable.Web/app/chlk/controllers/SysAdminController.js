@@ -5,7 +5,7 @@ REQUIRE('chlk.activities.SchoolsActivity');
 
 NAMESPACE('chlk.controllers', function (){
 
-    /** @class chlk.controllers.SysAdmin */
+    /** @class chlk.controllers.SysAdminController */
     CLASS(
         'SysAdminController', EXTENDS(chlk.controllers.BaseController), [
 
@@ -20,6 +20,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.SchoolsActivity, result);
         },
         VOID, function addSchoolAction() {
+            //return this.ShadeView(chlk.activities.BaseDialogActivity, {});
         },
         VOID, function appsAction() {},
         VOID, function settingsAction() {},
