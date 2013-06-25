@@ -1,0 +1,9 @@
+mixin Grid(data, tplClass, needsPaging)
+    .grid
+        .items
+            +RenderWith(data, tplClass)
+        if needsPaging = true
+        .paging
+             span.prev Previous
+             span.current #{data.page}
+             span.next Next

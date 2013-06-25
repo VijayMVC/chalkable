@@ -1,0 +1,28 @@
+@import "compass/css3/border-radius";
+
+.swf-preview {
+	background: url(images/loader.gif) 10px 10px no-repeat;
+	width: 100%;
+
+	.preview-toolbar {
+		* { display: inline-block; }
+
+		INPUT {
+			width: 25px;
+		}
+
+		text-align: center;
+	}
+
+	.preview-src {
+		IMG {
+			margin: 10px 1px;
+			padding: 10px;
+			background: white;
+			border: 2px solid #333;
+			max-height: 85%;
+			max-width: 90%;
+			@include border-radius(15px);
+		}
+	}
+}
