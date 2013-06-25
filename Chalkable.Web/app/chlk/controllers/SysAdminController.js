@@ -1,24 +1,25 @@
 REQUIRE('chlk.services.SchoolService');
 REQUIRE('chlk.controllers.BaseController');
-REQUIRE('chlk.activities.Schools');
+REQUIRE('chlk.activities.SchoolsActivity');
 
 
 NAMESPACE('chlk.controllers', function (){
 
     /** @class chlk.controllers.SysAdmin */
     CLASS(
-        [ria.mvc.ControllerUri('index')],
         'SysAdminController', EXTENDS(chlk.controllers.BaseController), [
 
         [ria.mvc.Inject],
         chlk.services.SchoolService, 'schoolService',
 
-        function indexAction() {
+        function schoolsAction() {
             var result = this.schoolService
                 .getSchools()
                 .attach(this.validateResponse_());
             /* Put activity in stack and render when result is ready */
-            return this.PushView(chlk.activities.Schools, result);
+            return this.PushView(chlk.activities.SchoolsActivity, result);
+        },
+        VOID, function addSchoolAction() {
         },
         VOID, function appsAction() {},
         VOID, function settingsAction() {},
