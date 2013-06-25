@@ -16,6 +16,15 @@ NAMESPACE('chlk.controllers', function (){
 
                this.getView().push(instance);
            },
+           VOID, function ShadeView(activityClass, data) {
+               var instance = new activityClass;
+
+               data.then(function (data) {
+                   instance.refresh(data);
+               });
+
+               this.getView().shade(instance);
+           },
 
            ria.async.Future, function validateResponse_() {
                var head

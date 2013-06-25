@@ -1,7 +1,6 @@
 REQUIRE('chlk.templates.JadeTemplate');
-
 REQUIRE('chlk.models.SchoolList');
-
+REQUIRE('chlk.models.School');
 REQUIRE('chlk.templates.School');
 
 NAMESPACE('chlk.templates', function () {
