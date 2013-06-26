@@ -60,6 +60,9 @@ namespace Chalkable.Data.Common.Storage
             var blobCl = GetBlobClient();
             var container = blobCl.GetContainerReference(containerAddress);
             container.CreateIfNotExists();
+            //BlobContainerPermissions permissions = new BlobContainerPermissions();
+            //permissions.
+            //container.SetPermissions();
             var blob = container.GetBlockBlobReference(BuildBlobAddress(containerAddress, key));
             blob.UploadFromStream(new MemoryStream(content));
         }
