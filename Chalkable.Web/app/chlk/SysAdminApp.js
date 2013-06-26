@@ -3,9 +3,11 @@ REQUIRE('ria.dom.Dom');
 REQUIRE('ria.dom.ready');
 
 REQUIRE('chlk.controllers.SysAdminController');
+REQUIRE('chlk.controllers.SchoolsController');
 REQUIRE('chlk.controls.ActionLinkControl');
 REQUIRE('chlk.controls.GridControl');
 REQUIRE('chlk.controls.PaginatorControl');
+REQUIRE('chlk.controls.ButtonControl');
 
 NAMESPACE('chlk', function (){
 

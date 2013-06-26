@@ -26,7 +26,10 @@ NAMESPACE('chlk.services', function () {
                 return new ria.ajax.JsonGetTask(uri)
                     .run()
                     .then(function (data) {
-                        return Serializer.deserialize(data, clazz);
+                        if(!data.success)
+                            throw chlk.services.DataException('Server error', Error(data.message));
+
+                        return Serializer.deserialize(data.data, clazz);
                     });
             },
 

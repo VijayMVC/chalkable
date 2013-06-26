@@ -12,9 +12,11 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.SchoolService, 'schoolService',
 
-        function schoolsAction() {
+        [chlk.controllers.SidebarButton('people')],
+        [[Number]],
+        function schoolsAction(pageIndex_) {
             var result = this.schoolService
-                .getSchools()
+                .getSchools(pageIndex_|0)
                 .attach(this.validateResponse_());
             /* Put activity in stack and render when result is ready */
             return this.PushView(chlk.activities.SchoolsActivity, result);

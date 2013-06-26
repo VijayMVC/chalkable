@@ -2,6 +2,16 @@ REQUIRE('ria.mvc.Controller');
 
 NAMESPACE('chlk.controllers', function (){
 
+    /** @class chlk.controllers.SidebarButton */
+    ANNOTATION(
+        [[String]],
+        function SidebarButton(clazz) {});
+
+    function toCamelCase(str) {
+        return str.replace(/(\-[a-z])/g, function($1){
+            return $1.substring(1).toUpperCase();
+        });
+    }
 
     /** @class chlk.controllers.BaseController */
    ABSTRACT, CLASS(
@@ -50,6 +60,19 @@ NAMESPACE('chlk.controllers', function (){
                    });
 
                return head;
+           },
+
+           [[ria.mvc.State]],
+           OVERRIDE, VOID, function callAction_(state) {
+              BASE(state);
+               new ria.dom.Dom('#sidebar-controls .pressed').removeClass('pressed');
+               var action = toCamelCase(state.getAction()) + 'Action';
+               var ref = ria.reflection.ReflectionFactory(this.getClass());
+               var method = ref.getMethodReflector(action);
+               if (method.isAnnotatedWith(chlk.controllers.SidebarButton)){
+                   var buttonCls = method.findAnnotation(chlk.controllers.SidebarButton)[0].clazz;
+                   new ria.dom.Dom('#sidebar-controls .' + buttonCls).addClass('pressed');
+               }
            }
 
    ])

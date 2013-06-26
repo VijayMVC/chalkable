@@ -21,9 +21,7 @@
                         .td= item.getSchooltype()
                         .td= item.getSchoolurl()
                         .td.action-links
-                            +ActionLink('sysadmin', 'index').profile
-                            +ActionLink('sysadmin', 'index').view
+                            +ActionLink('schools', 'details', item.getId()).profile
                             +ActionLink('sysadmin', 'index').remove
-                            +ActionLink('sysadmin', 'index').persons
-        +Paginator('sysadmin', 'index', self)
+        +Paginator('sysadmin', 'schools', self)
 

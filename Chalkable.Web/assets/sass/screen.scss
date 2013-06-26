@@ -102,6 +102,13 @@ h1,h2,h3,h4,h5,h6,strong {
 
 .clear{clear:both;}
 
+.left{
+  float: left;
+}
+.right{
+  float: right;
+}
+
 a, a:visited, a:link {
   color: $link-color;
   outline: none !important;
@@ -242,7 +249,7 @@ BODY {
 
       .new-item{
         #main-top {
-          background: url(images/common/paper-bg-top.gif) 1px 0 no-repeat !important;
+          background: url(images/common/paper-bg-top.gif) 1px 0 no-repeat;
         }
 
         #main-wrapper {
@@ -250,13 +257,13 @@ BODY {
         }
 
         #footer {
-          background: url(images/common/paper-bg-bottom.gif) 0 0 no-repeat !important;
+          background: url(images/common/paper-bg-bottom.gif) 0 0 no-repeat;
         }
       }
 
       .attendance{
         #main-top {
-          background: url(images/attendance/paper-top-bg.png) 0 0 no-repeat !important;
+          background: url(images/attendance/paper-top-bg.png) 0 0 no-repeat;
         }
 
         #main-wrapper {
@@ -264,7 +271,7 @@ BODY {
         }
 
         #footer {
-          background: url(images/attendance/paper-bottom-bg.png) 0 0 no-repeat !important;
+          background: url(images/attendance/paper-bottom-bg.png) 0 0 no-repeat;
         }
       }
 
@@ -274,7 +281,7 @@ BODY {
 
         #main-top {
           height: 11px;
-          background: url(images/common/paper-top-bg.png) 0 0 no-repeat !important;
+          background: url(images/common/paper-top-bg.png) 0 0 no-repeat;
         }
 
         #main-wrapper {

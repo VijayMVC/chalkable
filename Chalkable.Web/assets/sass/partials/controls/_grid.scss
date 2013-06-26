@@ -45,8 +45,34 @@ $border-color: #a1a1a1;
         }
 
         .td{
-          padding: 3px 6px;
+          padding: 2px 6px;
           display: table-cell;
+          vertical-align: middle;
+
+          &.action-links{
+            A{
+              display: inline-block;
+              width:16px;
+              height: 16px;
+              vertical-align: middle;
+
+              &.profile{
+                background: url(images/controls/grid/report.png) 0 0 no-repeat;
+              }
+
+              &.view{
+                background: url(images/controls/grid/information.png) 0 0 no-repeat;
+              }
+
+              &.remove{
+                background: url(images/controls/grid/delete.gif) 0 0 no-repeat;
+              }
+
+              &.persons{
+                background: url(images/controls/grid/user.png) 0 0 no-repeat;
+              }
+            }
+          }
         }
       }
     }

@@ -3,20 +3,74 @@
 
 $border-color: #a1a1a1;
 
+DIV#content-wrapper{
+  &.profile{
+    .action-bar{
+      &.buttons{
+        .container{
+          .action-link{
+            &:hover, &.pressed{
+              color: #957633;
+              @include background(linear-gradient(top, #f3eedf, #e1d3a6));
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 .action-bar{
+  &.buttons{
+    .container{
+      .action-link{
+        padding: 0 10px;
+        border-left: 1px solid white;
+        border-right: 1px solid #d0d0d0;
+        color: #828282;
+        font-size: 12px;
+        font-style: normal;
+
+        &:hover, &.pressed{
+          color: #2f7790;
+          @include background(linear-gradient(top, #f6f6f6,#d8d8d8));
+        }
+      }
+
+      >.left{
+        border-right: 1px solid white;
+
+        >.action-link:first-child{
+          border-left: none;
+          @include border-radius(5px 0 0 5px);
+        }
+      }
+
+      >.right{
+        border-left: 1px solid #d0d0d0;
+
+        >.action-link:last-child{
+          border-right: none;
+          @include border-radius(0 5px 5px 0);
+        }
+      }
+    }
+  }
+
   .container{
     height: 34px;
     @include border-radius(5px);
     border-bottom: 1px solid $border-color;
     border-top: 1px solid white;
 
-    >A{
+    .action-link{
       text-decoration: none;
       font: normal 11px/34px arial,tahoma,verdana,helvetica;
       color: #333;
       height: 34px;
       font-style: italic;
       display: inline-block;
+      text-shadow: 1px 1px 0 white;
     }
   }
 }
