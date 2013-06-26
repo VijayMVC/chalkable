@@ -19,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
         bool CanDeleteSections(List<Guid> markingPeriodIds);
         bool CanGetSection(IList<Guid> markingPeriodIds);
 
-        ScheduleSection Add(int number, string name, Guid markingPeriodId);
+        ScheduleSection Add(int number, string name, Guid markingPeriodId, int? sisId = null);
         ScheduleSection Edit(Guid id, int number, string name);
         void Delete(Guid id);
          
@@ -101,11 +101,12 @@ namespace Chalkable.BusinessLogic.Services.School
             return true;
         }
 
-        public ScheduleSection Add(int number, string name, Guid markingPeriodId)
+        public ScheduleSection Add(int number, string name, Guid markingPeriodId, int? sisId = null)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
-
+            if (!Context.SchoolId.HasValue)
+                throw new UnassignedUserException();
             using (var uow = Update())
             {
                 IStateMachine machine = new SchoolStateMachine(Context.SchoolId.Value,
@@ -118,7 +119,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         Id = Guid.NewGuid(),
                         MarkingPeriodRef = markingPeriodId,
                         Name = name,
-                        Number = number
+                        Number = number,
+                        SisId = sisId
                     };
                 var da = new ScheduleSectionDataAccess(uow);
 
@@ -199,7 +201,8 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if(!CanDeleteSections(markingPeriodIds))
                 throw new ChalkableException(ChlkResources.ERR_SCHEDULE_SECTION_CANT_DELETE);
-          
+            if (!Context.SchoolId.HasValue)
+                throw new UnassignedUserException();
             if (markingPeriodIds.Count > 0)
             {
                 using (var uow = Update())
@@ -240,7 +243,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var section = Add(i, names[i], markingPeriod.Id);
                 for (int start = 8 * 60; start < 18 * 60; start += 60)
-                    ServiceLocator.PeriodService.Add(markingPeriod.Id, start, start + 45, section.Id);
+                    ServiceLocator.PeriodService.Add(markingPeriod.Id, start, start + 45, section.Id, i+1);
             }
         }
     }

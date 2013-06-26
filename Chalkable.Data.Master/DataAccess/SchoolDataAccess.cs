@@ -39,6 +39,11 @@ namespace Chalkable.Data.Master.DataAccess
             return SelectMany<School>(new Dictionary<string, object> {{School.IS_EMPTY_FIELD, true}});
         }
 
+        public IList<School> GetSchools()
+        {
+            return SelectMany<School>(new Dictionary<string, object>());
+        } 
+
         //TODO: next methods runs on the school db server under master database
         public void CreateSchoolDataBase(string dbName)
         {

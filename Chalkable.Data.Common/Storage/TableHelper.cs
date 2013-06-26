@@ -7,22 +7,9 @@ using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Chalkable.Data.Common.Storage
 {
-    public class TableHelper<T> where T : TableEntity, new()
+    public class TableHelper<T> : BaseStorageHelper where T : TableEntity, new()
     {
-        private const string CONNECTION_STRING_NAME = "Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString";
-        private CloudStorageAccount storageAccount;
         private string tableName;
-
-        private CloudStorageAccount GetStorageAccount()
-        {
-            if (storageAccount == null)
-            {
-                string connectionString = RoleEnvironment.GetConfigurationSettingValue(CONNECTION_STRING_NAME);
-                storageAccount = CloudStorageAccount.Parse(connectionString);
-            }
-            return storageAccount;
-        }
-
         private CloudTable table = null;
         protected CloudTable GetTable()
         {

@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace Chalkable.Tests.Services.Master
 {
-    public class BackgrounTaskServiceTest : ServiceTestBase
+    public class BackgrounTaskServiceTest : MasterServiceTestBase
     {
         [Test]
         public void CreateGetTest()

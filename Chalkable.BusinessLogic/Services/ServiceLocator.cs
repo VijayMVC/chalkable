@@ -3,16 +3,29 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
+using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BusinessLogic.Services
 {
-    public class ServiceLocator
+    public interface IServiceLocator
+    {
+        IStorageBlobService StorageBlobService { get; }
+    }
+
+    public class ServiceLocator : IServiceLocator
     {
         public UserContext Context { get; private set; }
 
+        private IStorageBlobService storageBlobService;
         public ServiceLocator(UserContext context)
         {
             Context = context;
+            storageBlobService = new StorageBlobService();
+        }
+
+        public IStorageBlobService StorageBlobService
+        {
+            get { return storageBlobService; }
         }
     }
 
@@ -41,5 +54,16 @@ namespace Chalkable.BusinessLogic.Services
             var serviceLocator = new ServiceLocatorMaster(context);
             return serviceLocator;
         }*/
+
+        public static IServiceLocatorSchool CreateSchoolLocator(SchoolUser schoolUser)
+        {
+           var user = schoolUser.User;
+           var school = schoolUser.School;
+           var role = CoreRoles.GetById(schoolUser.Role);
+           var context = new UserContext(schoolUser.UserRef, schoolUser.SchoolRef, user.Login, school.Name,
+                                          school.TimeZone, school.ServerUrl, role);
+           var serviceLocatorMaster = new ServiceLocatorMaster(context);
+           return new ServiceLocatorSchool(serviceLocatorMaster);
+        }
     }
 }

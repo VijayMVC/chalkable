@@ -16,16 +16,6 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public void Create(ClassPeriod classPeriod)
-        {
-            SimpleInsert(classPeriod);
-        }
-
-        public void Delete(Guid id)
-        {
-            SimpleDelete(new Dictionary<string, object> { { "Id", id } });
-        }
-
         public bool Exists(ClassPeriodQuery query)
         {
             return Exists(BuildGetClassPeriodsQuery(query));

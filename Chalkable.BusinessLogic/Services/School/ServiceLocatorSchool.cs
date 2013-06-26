@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.BusinessLogic.Services.Master;
+﻿using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School.Notifications;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
-    public interface IServiceLocatorSchool
+    public interface IServiceLocatorSchool : IServiceLocator
     {
         IServiceLocatorMaster ServiceLocatorMaster { get; }
         UserContext Context { get; }
@@ -18,12 +13,11 @@ namespace Chalkable.BusinessLogic.Services.School
         IMarkingPeriodService MarkingPeriodService { get; }
         IClassService ClassService { get; }
         ISchoolYearService SchoolYearService { get; }
-        ICourseService CourseInfoService { get; }
+        ICourseService CourseService { get; }
         IAnnouncementQnAService AnnouncementQnAService { get; }
         IAnnouncementService AnnouncementService { get; }
         IAnnouncementReminderService AnnouncementReminderService { get; }
         IAnnouncementAttachmentService AnnouncementAttachmentService { get; }
-        IStorageMonitorService StorageMonitorService { get; }
         IPhoneService PhoneService { get; }
         IPrivateMessageService PrivateMessageService { get; }
         IRoomService RoomService { get; }
@@ -42,12 +36,11 @@ namespace Chalkable.BusinessLogic.Services.School
         private IMarkingPeriodService markingPeriodService;
         private IClassService classService;
         private ISchoolYearService schoolYearService;
-        private ICourseService courseInfoService;
+        private ICourseService courseService;
         private IAnnouncementQnAService announcementQnAService;
         private IAnnouncementReminderService announcementReminderService;
         private IAnnouncementService announcementService;
         private IAnnouncementAttachmentService announcementAttachmentService;
-        private IStorageMonitorService storageMonitorService;
         private IPhoneService phoneService;
         private IPrivateMessageService privateMessageService;
         private IRoomService roomService;
@@ -67,12 +60,11 @@ namespace Chalkable.BusinessLogic.Services.School
             markingPeriodService = new MarkingPeriodService(this);
             classService = new ClassService(this);
             schoolYearService = new SchoolYearService(this);
-            courseInfoService = new CourseService(this);
+            courseService = new CourseService(this);
             announcementQnAService = new AnnouncementQnAService(this);
             announcementReminderService = new AnnouncementReminderService(this);
             announcementService = new AnnouncementService(this);
             announcementAttachmentService = new AnnouncementAttachmentService(this);
-            storageMonitorService = new StorageMonitorService(this);
             phoneService = new PhoneService(this);
             privateMessageService = new PrivateMessageService(this);
             roomService = new RoomService(this);
@@ -109,9 +101,9 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             get { return schoolYearService; }
         }
-        public ICourseService CourseInfoService
+        public ICourseService CourseService
         {
-            get { return courseInfoService; }
+            get { return courseService; }
         }
         public IAnnouncementQnAService AnnouncementQnAService
         {
@@ -130,12 +122,6 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             get { return announcementAttachmentService; }
         }
-
-        public IStorageMonitorService StorageMonitorService
-        {
-            get { return storageMonitorService; }
-        }
-
         public IPhoneService PhoneService
         {
             get { return phoneService; }

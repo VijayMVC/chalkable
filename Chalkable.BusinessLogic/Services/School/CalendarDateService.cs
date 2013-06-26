@@ -18,6 +18,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void ClearCalendarDates(Guid markingPeriodId);
         bool CanAssignDate(Guid id, Guid sectionId);
         void AssignDate(Guid id, Guid sectionId);
+        Date Add(DateTime date, bool schoolDay, Guid? markingPeriodId, Guid? scheduleSectionId, int? sisId);
     }
 
     //TODO: needs tests
@@ -182,6 +183,25 @@ namespace Chalkable.BusinessLogic.Services.School
                 cdDate.ScheduleSectionRef = sectionId;
                 new DateDataAccess(uow).Update(cdDate);
                 uow.Commit();
+            }
+        }
+
+        public Date Add(DateTime date, bool schoolDay, Guid? markingPeriodId, Guid? scheduleSectionId, int? sisId)
+        {
+            using (var uow = Update())
+            {
+                var res = new Date
+                    {
+                        Id = Guid.NewGuid(),
+                        DateTime = date,
+                        IsSchoolDay = schoolDay,
+                        MarkingPeriodRef = markingPeriodId,
+                        ScheduleSectionRef = scheduleSectionId,
+                        SisId = sisId
+                    };
+                new DateDataAccess(uow).Insert(res);
+                uow.Commit();
+                return res;
             }
         }
     }

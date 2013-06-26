@@ -31,5 +31,12 @@ namespace Chalkable.BusinessLogic.Security
         {
             return IsAdminViewer(context) || context.Role == CoreRoles.TEACHER_ROLE;
         }
+
+        public static bool HasChalkableRole(UserContext context)
+        {
+            return IsAdminOrTeacher(context) || context.Role == CoreRoles.STUDENT_ROLE
+                   || context.Role == CoreRoles.PARENT_ROLE || context.Role == CoreRoles.DEVELOPER_ROLE
+                   || context.Role == CoreRoles.CHECKIN_ROLE;
+        }
     }
 }

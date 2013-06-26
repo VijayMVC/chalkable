@@ -10,7 +10,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
     public interface ICourseService
     {
-        Course Add(string code, string title, Guid? chalkableDepartmentId = null);
+        Course Add(string code, string title, Guid? chalkableDepartmentId = null, int? sisId = null);
         Course Edit(Guid courseInfoId, string code, string title, Guid? chalkableDepartmentId = null);
         void Delete(Guid id);
         PaginatedList<Course> GetCourses(int start = 0, int count = int.MaxValue);
@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
         //TODO: needs test
-        public Course Add(string code, string title, Guid? chalkableDepartmentId = null)
+        public Course Add(string code, string title, Guid? chalkableDepartmentId = null, int? sisId = null)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();

@@ -1,7 +1,9 @@
 ﻿using System;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Storage;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -44,8 +46,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         Uuid = uuid,
                         Order = ServiceLocator.AnnouncementService.GetNewAnnouncementItemOrder(ann)
                     });
-                ServiceLocator.StorageMonitorService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, id.ToString(), content);
 
+                ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, id.ToString(), content);
                 //TODO: notification sending
                 //if (ann.State != AnnouncementState.Draft)
                 //{
@@ -73,7 +75,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableSecurityException();
               
                 da.Delete(annAtt.Id);
-                ServiceLocator.StorageMonitorService.DeleteBlob(ATTACHMENT_CONTAINER_ADDRESS, annAtt.Id.ToString()); 
+                ServiceLocator.StorageBlobService.DeleteBlob(ATTACHMENT_CONTAINER_ADDRESS, annAtt.Id.ToString()); 
                 uow.Commit();
             }
         }

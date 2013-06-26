@@ -12,15 +12,13 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IMarkingPeriodService
     {
-        MarkingPeriod AddMarkingPeriod(Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays, bool generatePeriods = false);
-        void DeleteMarkingPeriod(Guid id);
-        MarkingPeriod EditMarkingPeriod(Guid id, Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays);
-
-
+        MarkingPeriod Add(Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays, bool generatePeriods = false);
+        void Delete(Guid id);
+        MarkingPeriod Edit(Guid id, Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays);
         MarkingPeriod GetMarkingPeriodById(Guid id);
         MarkingPeriod GetLastMarkingPeriod(DateTime tillDate);
         MarkingPeriodClass GetMarkingPeriodClass(Guid classId, Guid markingPeriodId);
-        IList<MarkingPeriod> GetMarkingPeriods(Guid schoolYearId);
+        IList<MarkingPeriod> GetMarkingPeriods(Guid? schoolYearId);
         MarkingPeriod GetMarkingPeriodByDate(DateTime date, bool useLastExisting = false);
         bool ChangeWeekDays(IList<Guid> markingPeriodIds, int weekDays);
     }
@@ -62,7 +60,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<MarkingPeriod> GetMarkingPeriods(Guid schoolYearId)
+        public IList<MarkingPeriod> GetMarkingPeriods(Guid? schoolYearId)
         {
             using (var uow = Read())
             {
@@ -84,11 +82,12 @@ namespace Chalkable.BusinessLogic.Services.School
             return null;
         }
 
-        public MarkingPeriod AddMarkingPeriod(Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays, bool generatePeriods = false)
+        public MarkingPeriod Add(Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays, bool generatePeriods = false)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
-
+            if (!Context.SchoolId.HasValue)
+                throw new UnassignedUserException();
             using (var uow = Update())
             {
                 IStateMachine machine = new SchoolStateMachine(Context.SchoolId.Value, ServiceLocator.ServiceLocatorMaster);
@@ -133,7 +132,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return markingPeriod;
         }
         
-        public void DeleteMarkingPeriod(Guid id)
+        public void Delete(Guid id)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -156,7 +155,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public MarkingPeriod EditMarkingPeriod(Guid id, Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays)
+        public MarkingPeriod Edit(Guid id, Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();

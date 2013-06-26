@@ -9,7 +9,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IRoomService
     {
-        Room AddRoom(string roomNumber, string description,  string size, int capacity, string phoneNumber);
+        Room AddRoom(string roomNumber, string description, string size, int capacity, string phoneNumber, int? sisId = null);
         Room EditRoom(Guid id, string roomNumber, string description, string size, int capacity, string phoneNumber);
         void DeleteRoom(Guid id);
         PaginatedList<Room> GetRooms(int start = 0, int count = int.MaxValue);
@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public Room AddRoom(string roomNumber, string description, string size, int capacity, string phoneNumber)
+        public Room AddRoom(string roomNumber, string description, string size, int capacity, string phoneNumber, int? sisId = null)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -38,7 +38,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         Description = description,
                         PhoneNumber = phoneNumber,
                         RoomNumber = roomNumber,
-                        Size = size
+                        Size = size, 
+                        SisId = sisId
                     };
                 uow.Commit();
                 return room;

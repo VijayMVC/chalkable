@@ -23,7 +23,7 @@ namespace Chalkable.Data.Common
             }
         }
 
-        public DbDataReader ExecuteReaderParametrized(string sql, Dictionary<string, object> parameters)
+        protected DbDataReader ExecuteReaderParametrized(string sql, Dictionary<string, object> parameters)
         {
             using (SqlCommand command = unitOfWork.GetTextCommandWithParams(sql, parameters))
             {
@@ -32,7 +32,7 @@ namespace Chalkable.Data.Common
             }
         }
 
-        public void ExecuteNonQueryParametrized(string sql, IDictionary<string, object> parameters)
+        protected void ExecuteNonQueryParametrized(string sql, IDictionary<string, object> parameters)
         {
             using (SqlCommand command = unitOfWork.GetTextCommandWithParams(sql, parameters))
             {
