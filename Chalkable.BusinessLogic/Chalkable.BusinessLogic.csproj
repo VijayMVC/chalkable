@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B008FBC2-8AFB-48FF-BA85-97845DDF02D2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Chalkable.BusinessLogic</RootNamespace>
+    <AssemblyName>Chalkable.BusinessLogic</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Logic\SchoolStateMachine.cs" />
+    <Compile Include="Model\RecipientInfo.cs" />
+    <Compile Include="Model\UserInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\AnnouncementSecurity.cs" />
+    <Compile Include="Security\BaseSecurity.cs" />
+    <Compile Include="Security\PrivateMessageSecurity.cs" />
+    <Compile Include="Services\Master\ChalkableDepartmentService.cs" />
+    <Compile Include="Services\Master\PreferenceService.cs" />
+    <Compile Include="Services\Master\SchoolService.cs" />
+    <Compile Include="Services\Master\MasterServiceBase.cs" />
+    <Compile Include="Services\Master\ServiceLocatorMaster.cs" />
+    <Compile Include="Services\Master\BackgroundTaskService.cs" />
+    <Compile Include="Services\Master\UserService.cs" />
+    <Compile Include="Services\School\AddressService.cs" />
+    <Compile Include="Services\School\AnnouncementAttachmentService.cs" />
+    <Compile Include="Services\School\AnnouncementQnAService.cs" />
+    <Compile Include="Services\School\AnnouncementReminderService.cs" />
+    <Compile Include="Services\School\AnnouncementService.cs" />
+    <Compile Include="Services\School\CalendarDateService.cs" />
+    <Compile Include="Services\School\ClassPeriodService.cs" />
+    <Compile Include="Services\School\ClassService.cs" />
+    <Compile Include="Services\School\CourseService.cs" />
+    <Compile Include="Services\School\GradeLevelService.cs" />
+    <Compile Include="Services\School\MarkingPeriodService.cs" />
+    <Compile Include="Services\School\Notifications\NotificationBuilder.cs" />
+    <Compile Include="Services\School\Notifications\NotificationService.cs" />
+    <Compile Include="Services\School\Notifications\NotificationTemplateProvider.cs" />
+    <Compile Include="Services\School\PeriodService.cs" />
+    <Compile Include="Services\School\PersonService.cs" />
+    <Compile Include="Services\School\PhoneService.cs" />
+    <Compile Include="Services\School\PrivateMessageService.cs" />
+    <Compile Include="Services\School\RoomService.cs" />
+    <Compile Include="Services\School\ScheduleSectionService.cs" />
+    <Compile Include="Services\School\SchoolServiceBase.cs" />
+    <Compile Include="Services\School\SchoolYearService.cs" />
+    <Compile Include="Services\School\ServiceLocatorSchool.cs" />
+    <Compile Include="Services\StorageBlobService.cs" />
+    <Compile Include="Services\UserContext.cs" />
+    <Compile Include="Services\ServiceLocator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
+      <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
+      <Name>Chalkable.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.Common\Chalkable.Data.Common.csproj">
+      <Project>{CEB50B03-B84B-4194-9BEE-F1A2EBD17686}</Project>
+      <Name>Chalkable.Data.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.Master\Chalkable.Data.Master.csproj">
+      <Project>{C9ACB7A6-1755-424A-B0BB-3B0C5B13EC15}</Project>
+      <Name>Chalkable.Data.Master</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.School\Chalkable.Data.School.csproj">
+      <Project>{c5753c2a-f2bc-4f96-846b-548fc67191b2}</Project>
+      <Name>Chalkable.Data.School</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GCObjectRenderer\GCObjectRenderer.csproj">
+      <Project>{ccd7266b-94bb-45ef-bc49-0f608da006f3}</Project>
+      <Name>GCObjectRenderer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

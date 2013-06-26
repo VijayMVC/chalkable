@@ -1,0 +1,14 @@
+.chlk-add{
+  background: url(images/icons/add-item.png) 5px 50% no-repeat;
+  padding-left: 25px;
+}
+
+.opacity-button{
+  &:hover{
+    opacity: 0.8;
+  }
+
+  &:active{
+    opacity: 0.6;
+  }
+}
