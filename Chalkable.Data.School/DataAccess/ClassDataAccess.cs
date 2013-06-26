@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
@@ -34,7 +35,14 @@ namespace Chalkable.Data.School.DataAccess
                 };
             using (var reader = ExecuteStoredProcedureReader(GET_CLASSES_PROC, parameters))
             {
+
                 var classes = reader.ReadList<ClassComplex>(true);
+                reader.NextResult();
+                var markingPeriodClasses = reader.ReadList<MarkingPeriodClass>();
+                foreach (var classComplex in classes)
+                {
+                    classComplex.MarkingPeriodClass = markingPeriodClasses.Where(x => x.ClassRef == classComplex.Id).ToList();
+                }
                 return new ClassQueryResult {Classes = classes, Query = query};
             }
         }

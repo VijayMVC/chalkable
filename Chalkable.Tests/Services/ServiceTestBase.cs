@@ -9,15 +9,20 @@ namespace Chalkable.Tests.Services
 {
     public class ServiceTestBase : OnDataBaseTest
     {
-        [SetUp]
-        public void SetUp()
+        
+        protected static void AssertException<TExc>(Action action) where TExc : Exception
         {
-            CreateMasterDb();
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
+            bool wasException = false;
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                if (ex is TExc)
+                    wasException = true;
+            }
+            Assert.IsTrue(wasException);
         }
     }
 }

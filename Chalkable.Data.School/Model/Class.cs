@@ -21,9 +21,12 @@ namespace Chalkable.Data.School.Model
 
     public class ClassComplex : Class
     {
+        [DataEntityAttr]
         public Person Teacher { get; set; }
-        public MarkingPeriodClass MarkingPeriodClass { get; set; }
+        public IList<MarkingPeriodClass> MarkingPeriodClass { get; set; }
+        [DataEntityAttr]
         public GradeLevel GradeLevel { get; set; }
+        [DataEntityAttr]
         public Course Course { get; set; }
         public int StudentsCount { get; set; }
     }
