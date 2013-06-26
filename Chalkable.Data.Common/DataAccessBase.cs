@@ -90,7 +90,11 @@ namespace Chalkable.Data.Common
         }
         protected T ReadOne<T>(DbQuery query, bool complexResultSet = false) where T : new()
         {
-            return Read(query, reader => reader.Read<T>(complexResultSet));
+            return Read(query, reader =>
+                {
+                    reader.Read();
+                    return reader.Read<T>(complexResultSet);
+                });
         }
         protected T ReadOneOrNull<T>(DbQuery query, bool complexResultSet = false) where T : new()
         {
@@ -160,12 +164,14 @@ namespace Chalkable.Data.Common
         protected bool Exists<T>(Dictionary<string, object> conditions) where T : new()
         {
             var resName = "AllCount";
-            return Exists(Orm.CountSelect<T>(conditions, resName));   
+            var q = Orm.CountSelect<T>(conditions, resName);
+            return Read(q, reader => reader.Read() && SqlTools.ReadInt32(reader, resName) > 0);
         }
-
+        
         protected bool Exists(DbQuery query, string resName = "AllCount")
         {
-            return Read(query, reader => reader.Read() && SqlTools.ReadInt32(reader, resName) > 0);
+            var q = Orm.CountSelect(query, resName);
+            return Read(q, reader => reader.Read() && SqlTools.ReadInt32(reader, resName) > 0);
         }
 
         public TEntity GetById(Guid id)
@@ -204,10 +210,10 @@ namespace Chalkable.Data.Common
         {
             SimpleUpdate(entity);
         }
-
+        
         public void Delete(Guid id)
         {
-            SimpleDelete(id);
+            SimpleDelete<TEntity>(id);
         }
     }
 }

@@ -10,12 +10,11 @@ namespace Chalkable.Tests
     [TestFixture]
     public class OnDataBaseTest : TestBase
     {
-        protected void BeforCreateDb(string chalkableConnection, string masterConnection)
+        protected virtual void BeforCreateDb(string chalkableConnection, string masterConnection)
         {
             try
             {
-                string dropQuery = String.Format("drop database {0}", MASTER_DB_NAME);
-                ExecuteQuery(masterConnection, dropQuery);
+                DropDbIfExists(masterConnection, MASTER_DB_NAME);
             }
             catch (Exception ex)
             {
@@ -24,8 +23,7 @@ namespace Chalkable.Tests
 
             try
             {
-                string dropQuery = String.Format("drop database {0}", SCHOOL_DB_TEMPLATE_NAME);
-                ExecuteQuery(masterConnection, dropQuery);
+                DropDbIfExists(masterConnection, SCHOOL_DB_TEMPLATE_NAME);
             }
             catch (Exception ex)
             {
@@ -34,13 +32,42 @@ namespace Chalkable.Tests
         }
         
 
+        protected void RunCreateSchoolScripts(string schoolDbConnectionString)
+        {
+            var schoolSqlRoot = Path.Combine(SQLRoot, "ChalkableSchool");
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1000 - Create Script.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1002 - view Person.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1003 - Split function.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1004 - Get School Person Stored Proc.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1005 - rename column in AnnouncementReminder.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1007 - remove IsCurrent from SchoolYear.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1008 - create apply starring procedures and StudentAnnouncement table.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1009 - create final grade table.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1010 - create GetAnnouncement procedures.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1011 - create GetAnnouncementDetails procedure.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1012 - create CreateAnnouncement procedure.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1013 - create reorderAnnouncement and deleteAnnouncement procedure.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1014 - alter procedure DeleteAnnouncement.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1015 - create GetAnnouncementQnAs procedure.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1016 - create phone, message, period, roominfo.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1017 - create attendance , discipline tables.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1018 - create procedure ReBuildSections.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1019 - renaming courseINfo table to course table.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1020 - create studentParent , finalGradeAnnType, studentFinalGrade tables.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1021 - create studentDailyAttendace, Notification tables.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1022 - recreate  class table.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1023 - create procedure GetClasses.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1024 - create reports , appinstalls tables.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1025 - alter procedure getClasses.sql"));
+    
+        }
+
         protected void CreateMasterDb()
         {
             
-
             var chalkableMasterConnection = Settings.MasterConnectionString;
             var chalkableSchoolTemplateConnection = Settings.SchoolTemplateConnectionString;
-
+            
             var masterConnection = chalkableMasterConnection.Replace(MASTER_DB_NAME, "Master");
             BeforCreateDb(chalkableMasterConnection, masterConnection);
 
@@ -59,33 +86,7 @@ namespace Chalkable.Tests
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1005 - added import system type to school table.sql"));
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1006 - added TimZone to school.sql"));
 
-
-            var schoolSqlRoot = Path.Combine(SQLRoot, "ChalkableSchool");
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1000 - Create Script.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1002 - view Person.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1003 - Split function.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1004 - Get School Person Stored Proc.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1005 - rename column in AnnouncementReminder.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1007 - remove IsCurrent from SchoolYear.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1008 - create apply starring procedures and StudentAnnouncement table.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1009 - create final grade table.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1010 - create GetAnnouncement procedures.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1011 - create GetAnnouncementDetails procedure.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1012 - create CreateAnnouncement procedure.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1013 - create reorderAnnouncement and deleteAnnouncement procedure.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1014 - alter procedure DeleteAnnouncement.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1015 - create GetAnnouncementQnAs procedure.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1016 - create phone, message, period, roominfo.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1017 - create attendance , discipline tables.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1018 - create procedure ReBuildSections.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1019 - renaming courseINfo table to course table.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1020 - create studentParent , finalGradeAnnType, studentFinalGrade tables.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1021 - create studentDailyAttendace, Notification tables.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1022 - recreate  class table.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1023 - create procedure GetClasses.sql"));
-            ExecuteFile(chalkableSchoolTemplateConnection, Path.Combine(schoolSqlRoot, "1024 - create reports , appinstalls tables.sql"));
-
-            
+            RunCreateSchoolScripts(chalkableSchoolTemplateConnection);
         }
     }
 }

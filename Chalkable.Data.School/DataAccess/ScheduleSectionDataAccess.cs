@@ -17,14 +17,22 @@ namespace Chalkable.Data.School.DataAccess
         public void Update(IList<ScheduleSection> scheduleSections)
         {
             var b = new StringBuilder();
-            foreach (var scheduleSection in scheduleSections)
+            var parameters = new Dictionary<string, object>();
+            var index = 0;
+            if (scheduleSections != null && scheduleSections.Count > 0)
             {
-                b.AppendFormat(@" update from ScheduleSection  set Number = {0}, Name = {1}, MarkingPeriodRef = {2}
-                                  where Id = {3} ", scheduleSection.Number, scheduleSection.Name, scheduleSection.Id,
-                               scheduleSection.MarkingPeriodRef);
+                foreach (var scheduleSection in scheduleSections)
+                {
+                    b.AppendFormat(@" update from ScheduleSection  set Number = @{0}, Name = @{1}, MarkingPeriodRef = @{2}
+                                  where Id = @{3} ", "number_" + index, "name_" + index, "markingPeriodId_" + index, "Id_" + index);
 
+                    parameters.Add("name_" + index, scheduleSection.Name);
+                    parameters.Add("number_" + index, scheduleSection.Number);
+                    parameters.Add("Id_" + index, scheduleSection.Id);
+                    parameters.Add("markingPeriodId_" + index, scheduleSection.MarkingPeriodRef);
+                }
+                ExecuteNonQueryParametrized(b.ToString(), parameters);
             }
-            ExecuteNonQueryParametrized(b.ToString(), new Dictionary<string, object> ());
         }
         
        
@@ -41,7 +49,7 @@ namespace Chalkable.Data.School.DataAccess
               if(!query.Parameters.ContainsKey(parameter.Key))
                   query.Parameters.Add(parameter);
             }
-            ExecuteReaderParametrized(b.ToString(), query.Parameters as Dictionary<string, object>);
+            ExecuteNonQueryParametrized(b.ToString(), query.Parameters as Dictionary<string, object>);
         }
 
         private const string REBUILD_SECTION_PROC = "spRebuildSections";
@@ -55,7 +63,7 @@ namespace Chalkable.Data.School.DataAccess
                     {MARKING_PERIODS_IDS_PARAM, markingPeriodIds},
                     {SECTION_NAMES_PARAM, sectionNames}
                 };
-            ExecuteStoredProcedureReader(REBUILD_SECTION_PROC, parameters);
+            ExecuteStoredProcedureReader(REBUILD_SECTION_PROC, parameters).Dispose();
         }
       
         public IList<ScheduleSection> GetSections(Guid markingPeriodId, int? fromNumber, int? tillNumber)
@@ -67,7 +75,7 @@ namespace Chalkable.Data.School.DataAccess
             if (fromNumber.HasValue)
             {
                 conds.Add("fromNumber", fromNumber);
-                b.Append(" and Number => @fromNumber");
+                b.Append(" and Number >= @fromNumber");
             }
             if (tillNumber.HasValue)
             {

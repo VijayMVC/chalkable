@@ -33,7 +33,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public bool Exists(string name)
         {
-            var conds = new Dictionary<string, object> {{"@name", name}};
+            var conds = new Dictionary<string, object> {{"name", name}};
             return Exists<SchoolYear>(conds);
         }
 

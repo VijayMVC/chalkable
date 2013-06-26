@@ -179,18 +179,19 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(Guid id)
         {
+            if (!BaseSecurity.IsAdminEditor(Context))
+                throw new ChalkableSecurityException();
+            
             using (var uow = Update())
             {
                 var da = new ScheduleSectionDataAccess(uow);
                 var ss = da.GetById(id);
-                if (!BaseSecurity.IsAdminEditor(Context))
-                    throw new ChalkableSecurityException();
-
                 if (!CanDeleteSections(new List<Guid> { ss.MarkingPeriodRef }))
                     throw new ChalkableException(ChlkResources.ERR_SCHEDULE_SECTION_CANT_DELETE);
-                
+           
+                var sections = da.GetSections(ss.MarkingPeriodRef, ss.Number, null);
                 da.Delete(ss);
-                AdjustNumbering(da.GetSections(ss.MarkingPeriodRef, ss.Number, null));
+                AdjustNumbering(sections);
                 uow.Commit();
             }
         }

@@ -153,6 +153,7 @@ namespace Chalkable.Data.Common
         {
             var props = t.GetProperties(BindingFlags.Instance | BindingFlags.Public);
             var res = Activator.CreateInstance(t);
+            var abstractTypeName = GetBaseModelName(t);
             foreach (var propertyInfo in props)
                 if (propertyInfo.CanWrite)
                 {
@@ -163,13 +164,20 @@ namespace Chalkable.Data.Common
                     {
                         var fieldName = propertyInfo.Name;
                         if (fullFieldNames)
-                            fieldName = string.Format("{0}_{1}", t.Name, fieldName);
+                            fieldName = string.Format("{0}_{1}", abstractTypeName, fieldName);
                         value = Read(reader, fieldName, propertyInfo.PropertyType);    
                     }
                     if(value != null)    
                         propertyInfo.SetValue(res, value);
                 }
             return res;
+        }
+
+        private static string GetBaseModelName(Type t)
+        {
+            if (t.BaseType != typeof (Object))
+                return GetBaseModelName(t.BaseType);
+            return t.Name;
         }
 
         public static T Read<T>(this DbDataReader reader, bool complexResultSet = false) where T : new()

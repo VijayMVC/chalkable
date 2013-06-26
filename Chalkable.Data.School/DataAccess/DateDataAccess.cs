@@ -17,7 +17,7 @@ namespace Chalkable.Data.School.DataAccess
         public void Delete(DateQuery query)
         {
             var b = new StringBuilder();
-            b.Append("select * from Date ");
+            b.Append("delete from Date ");
             var  q = BuildConditionQuery(b, query);
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
         }
@@ -54,7 +54,7 @@ namespace Chalkable.Data.School.DataAccess
             if (query.ToDate.HasValue)
             {
                 conds.Add("@toDate", query.ToDate);
-                builder.AppendFormat(" {0} DaterTime <= @toDate ", where);
+                builder.AppendFormat(" {0} DateTime <= @toDate ", where);
                 where = "and";
             }
             if (query.SchoolDaysOnly)

@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Tests
 {
@@ -23,12 +24,46 @@ namespace Chalkable.Tests
         public static void ExecuteQuery(SqlConnection connection, string sql)
         {
             connection.Open();
-            SqlCommand command = new SqlCommand();
+            var command = new SqlCommand();
             command.Connection = connection;
             command.CommandText = sql;
             command.CommandType = CommandType.Text;
             command.ExecuteNonQuery();
             connection.Close();
+        }
+
+        //private static void ExecuteQuery(SqlConnection connection, string sql, Func<SqlCommand> action)
+        //{
+            
+        //}
+
+        protected static void DropDbIfExists(string connectionString, string dbName)
+        {
+            if (ExistsDb(connectionString, dbName))
+                ExecuteQuery(connectionString, string.Format("drop database [{0}]", dbName));
+        }
+
+        protected static bool ExistsDb(string connectionString, string dbName)
+        {
+            var sql = string.Format("select count(*) as DbCount from sys.databases where name = '{0}'", dbName);
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                bool exists = false;
+                connection.Open();
+                var command = new SqlCommand
+                    {
+                        Connection = connection,
+                        CommandText = sql,
+                        CommandType = CommandType.Text
+                    };
+                using (var reader = command.ExecuteReader())
+                {
+                   exists = reader.Read() && SqlTools.ReadInt32(reader, "DbCount") > 0;
+                }
+                connection.Close();
+                return exists;
+            }
         }
 
         protected void ExecuteFile(string connectionString, string file)

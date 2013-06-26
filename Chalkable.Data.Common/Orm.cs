@@ -207,7 +207,7 @@ namespace Chalkable.Data.Common
         public static DbQuery CountSelect(DbQuery query, string resultName)
         {
             var b = new StringBuilder();
-            b.AppendFormat("Select Count(*) as {1} from ({0})", query.Sql, resultName);
+            b.AppendFormat("Select Count(*) as {1} from ({0}) x", query.Sql, resultName);
             query.Sql = b.ToString();
             return query;
         }

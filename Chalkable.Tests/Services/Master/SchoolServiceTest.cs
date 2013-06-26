@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace Chalkable.Tests.Services.Master
 {
-    public class SchoolServiceTest : ServiceTestBase
+    public class SchoolServiceTest : MasterServiceTestBase
     {
         [Test]
         public void CreateSchoolTest()
@@ -29,7 +29,7 @@ namespace Chalkable.Tests.Services.Master
                             Salutation = "Mr"
                         }
                 };
-            School school = null;
+            Data.Master.Model.School school = null;
             for (int i = 0; i <= 300;i++ )
             {
                 Debug.WriteLine("Time: " + i * 10);
