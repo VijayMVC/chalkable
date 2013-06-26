@@ -1,0 +1,4 @@
+/* line 7, ../assets/sass/ie.scss */
+BODY .ext-el-mask {
+  filter: alpha(opacity=30);
+}
