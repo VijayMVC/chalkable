@@ -101,7 +101,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             var schoolSl = ServiceLocator.SchoolServiceLocator(school.Id);
             foreach (var principal in principals)
             {
-                schoolSl.PersonService.Add(principal.Login, principal.Password, principal.FirstName, principal.LastName, CoreRoles.ADMIN_GRADE_ROLE.Name, principal.Gender, principal.Salutation, principal.BirthDate);
+                schoolSl.PersonService.Add(principal.Login, principal.Password, principal.FirstName, principal.LastName, CoreRoles.ADMIN_GRADE_ROLE.Name, principal.Gender, principal.Salutation, principal.BirthDate, null);
             }
             return school;
         }

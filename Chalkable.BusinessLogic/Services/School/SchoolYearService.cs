@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -67,7 +63,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public SchoolYear Edit(Guid id, string name, string description, DateTime startDate, DateTime endDate)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if(BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {

@@ -8,6 +8,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IGradeLevelService
     {
         IList<GradeLevel> GetGradeLevels();
+        void AddGradeLevel(string name);
         IList<GradeLevel> CreateDefault();
     }
     public class GradeLevelService : SchoolServiceBase, IGradeLevelService
@@ -25,6 +26,14 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
+        public void AddGradeLevel(string name)
+        {
+            using (var uow = Update())
+            {
+                new GradeLevelDataAccess(uow).Insert(new GradeLevel{Id = Guid.NewGuid(), Name = name});
+                uow.Commit();
+            }
+        }
 
         public IList<GradeLevel> CreateDefault()
         {
@@ -34,7 +43,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var max = 12;
                 for (int i = 1; i < max; i++)
                 {
-                    gradeLevels.Add(new GradeLevel{ Id = Guid.NewGuid(), Name = i.ToString()});
+                    gradeLevels.Add(new GradeLevel { Id = Guid.NewGuid(), Name = i.ToString() });
                 }
                 new GradeLevelDataAccess(uow).Insert(gradeLevels);
                 uow.Commit();

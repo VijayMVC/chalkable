@@ -14,6 +14,6 @@ namespace Chalkable.Data.School.Model
         public string Size { get; set; }
         public int Capacity { get; set; }
         public string PhoneNumber { get; set; }
-        public int SisId { get; set; }
+        public int? SisId { get; set; }
     }
 }

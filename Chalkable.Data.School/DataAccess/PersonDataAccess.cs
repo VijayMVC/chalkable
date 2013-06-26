@@ -75,6 +75,11 @@ namespace Chalkable.Data.School.DataAccess
             }
             return result;
         }
+
+        public void AddStudent(Guid id, Guid gradeLevelId)
+        {
+            SimpleInsert(new StudentInfo{GradeLevelRef = gradeLevelId, Id = id});
+        }
     }
 
     public class PersonQuery

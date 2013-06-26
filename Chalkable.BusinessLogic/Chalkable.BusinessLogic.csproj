@@ -49,6 +49,7 @@
     <Compile Include="Security\AnnouncementSecurity.cs" />
     <Compile Include="Security\BaseSecurity.cs" />
     <Compile Include="Security\PrivateMessageSecurity.cs" />
+    <Compile Include="Services\Master\ChalkableDepartmentService.cs" />
     <Compile Include="Services\Master\PreferenceService.cs" />
     <Compile Include="Services\Master\SchoolService.cs" />
     <Compile Include="Services\Master\MasterServiceBase.cs" />

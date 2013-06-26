@@ -89,7 +89,7 @@ namespace Chalkable.Tests.Services.School
             AssertException<Exception>(() => SchoolTestContext.AdminGradeSl.MarkingPeriodService.Delete(mp.Id));
             adminSl.CalendarDateService.ClearCalendarDates(mp.Id);
 
-            var course = adminSl.CourseInfoService.Add("testCourse", "testCourse");
+            var course = adminSl.CourseService.Add("testCourse", "testCourse");
             var gradeLevels = adminSl.GradeLevelService.CreateDefault();
             var cl = adminSl.ClassService.Add(sy.Id, course.Id, "testClass", "testClass",
                                SchoolTestContext.FirstTeacher.UserRef, gradeLevels[0].Id, new List<Guid> {mp.Id});

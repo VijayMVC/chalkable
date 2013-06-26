@@ -22,7 +22,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public static string DigitsOnly(string phone)
+        private static string DigitsOnly(string phone)
         {
             var res = "";
             for (int i = 0; i < phone.Length; i++)

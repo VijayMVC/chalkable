@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
-using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
-using Chalkable.Data.Common;
-using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Tests.Services.School
@@ -100,7 +95,7 @@ namespace Chalkable.Tests.Services.School
             foreach (var userInfo in userInfos)
             {
                 sysSchoolSl.PersonService.Add(userInfo.Login, userInfo.Password, userInfo.FirstName, userInfo.LastName,
-                                              userInfo.Role.Name, userInfo.Gender, userInfo.Salutation, userInfo.BirthDate);
+                                              userInfo.Role.Name, userInfo.Gender, userInfo.Salutation, userInfo.BirthDate, null);
             }
         }
 

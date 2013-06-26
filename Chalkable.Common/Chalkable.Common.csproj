@@ -57,7 +57,6 @@
     <Compile Include="Exceptions\InvalidSchoolStatusException.cs" />
     <Compile Include="Exceptions\NoMarkingPeriodException.cs" />
     <Compile Include="Exceptions\UnassignedUserException.cs" />
-    <Compile Include="Exceptions\UnknownRoleExceptioin.cs" />
     <Compile Include="Exceptions\UnknownRoleException.cs" />
     <Compile Include="PaginatedList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

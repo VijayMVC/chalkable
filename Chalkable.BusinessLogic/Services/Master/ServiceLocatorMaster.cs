@@ -11,6 +11,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         ISchoolService SchoolService { get; }
         IBackgroundTaskService BackgroundTaskService { get; }
         IPreferenceService PreferenceService { get; }
+        IChalkableDepartmentService ChalkableDepartmentService { get; }
     }
 
     public class ServiceLocatorMaster : ServiceLocator, IServiceLocatorMaster
@@ -19,6 +20,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         private ISchoolService schoolService;
         private IBackgroundTaskService backgroundTaskService;
         private IPreferenceService preferenceService;
+        private IChalkableDepartmentService chalkableDepartmentService;
 
         public ServiceLocatorMaster(UserContext context) : base(context)
         {
@@ -26,12 +28,14 @@ namespace Chalkable.BusinessLogic.Services.Master
             schoolService = new SchoolService(this);
             backgroundTaskService = new BackgroundTaskService(this);
             preferenceService = new PreferenceService(this);
+            chalkableDepartmentService = new ChalkableDepartmentService(this);
         }
 
         public IUserService UserService { get { return userService; } }
         public ISchoolService SchoolService { get { return schoolService; } }
         public IBackgroundTaskService BackgroundTaskService { get { return backgroundTaskService; } }
         public IPreferenceService PreferenceService { get { return preferenceService; } }
+        public IChalkableDepartmentService ChalkableDepartmentService { get { return chalkableDepartmentService; } }
 
         public IServiceLocatorSchool SchoolServiceLocator(Guid schoolId)
         {

@@ -12,7 +12,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IPeriodService
     {
-        Period Add(Guid markingPeriodId, int startTime, int endTime, Guid sectionId);
+        Period Add(Guid markingPeriodId, int startTime, int endTime, Guid sectionId, int order, int? sisId = null, int? sisId2 = null);
         void Delete(Guid id);
         Period Edit(Guid id, int startTime, int endTime);
         IList<Period> GetPeriods(Guid? markingPeriodId, Guid? sectionId);
@@ -41,13 +41,15 @@ namespace Chalkable.BusinessLogic.Services.School
             return false;
         }
      
-        public Period Add(Guid markingPeriodId, int startTime, int endTime, Guid sectionId)
+        public Period Add(Guid markingPeriodId, int startTime, int endTime, Guid sectionId, int order, int? sisId = null, int? sisId2 = null)
         {
             if (startTime >= endTime)
                 throw new ChalkableException(ChlkResources.ERR_PERIOD_INVALID_TIME);
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
-
+            if (!Context.SchoolId.HasValue)
+                throw new UnassignedUserException();
+            
             using (var uow = Update())
             {
                 var da = new PeriodDataAccess(uow);
@@ -64,7 +66,10 @@ namespace Chalkable.BusinessLogic.Services.School
                         EndTime = endTime,
                         StartTime = startTime,
                         MarkingPeriodRef = markingPeriodId,
-                        SectionRef = sectionId
+                        SectionRef = sectionId,
+                        Order = order, 
+                        SisId = sisId,
+                        SisId2 = sisId2
                     };
                 da.Insert(period);
                 uow.Commit();
@@ -144,7 +149,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 if (!BaseSecurity.IsAdminEditor(Context))
                     throw new ChalkableSecurityException();
-
+                if (!Context.SchoolId.HasValue)
+                    throw new UnassignedUserException();
                 IStateMachine machine = new SchoolStateMachine(Context.SchoolId.Value, ServiceLocator.ServiceLocatorMaster);
                 if (!machine.CanApply(StateActionEnum.SectionsAdd))
                     throw new InvalidSchoolStatusException();

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.BusinessLogic.Services.Master;
+﻿using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School.Notifications;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -18,7 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IMarkingPeriodService MarkingPeriodService { get; }
         IClassService ClassService { get; }
         ISchoolYearService SchoolYearService { get; }
-        ICourseService CourseInfoService { get; }
+        ICourseService CourseService { get; }
         IAnnouncementQnAService AnnouncementQnAService { get; }
         IAnnouncementService AnnouncementService { get; }
         IAnnouncementReminderService AnnouncementReminderService { get; }
@@ -42,7 +37,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IMarkingPeriodService markingPeriodService;
         private IClassService classService;
         private ISchoolYearService schoolYearService;
-        private ICourseService courseInfoService;
+        private ICourseService courseService;
         private IAnnouncementQnAService announcementQnAService;
         private IAnnouncementReminderService announcementReminderService;
         private IAnnouncementService announcementService;
@@ -67,7 +62,7 @@ namespace Chalkable.BusinessLogic.Services.School
             markingPeriodService = new MarkingPeriodService(this);
             classService = new ClassService(this);
             schoolYearService = new SchoolYearService(this);
-            courseInfoService = new CourseService(this);
+            courseService = new CourseService(this);
             announcementQnAService = new AnnouncementQnAService(this);
             announcementReminderService = new AnnouncementReminderService(this);
             announcementService = new AnnouncementService(this);
@@ -109,9 +104,9 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             get { return schoolYearService; }
         }
-        public ICourseService CourseInfoService
+        public ICourseService CourseService
         {
-            get { return courseInfoService; }
+            get { return courseService; }
         }
         public IAnnouncementQnAService AnnouncementQnAService
         {
