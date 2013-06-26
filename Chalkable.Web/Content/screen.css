@@ -1,5 +1,5 @@
 /*#4985a6;*/
-/* line 36, ../assets/sass/screen.scss */
+/* line 37, ../assets/sass/screen.scss */
 h1, h2, h3, h4, h5, h6, strong {
   color: #2f424b;
 }
@@ -51,40 +51,108 @@ h1, h2, h3, h4, h5, h6, strong {
   src: url(fonts/HelveticaNeue-CondensedBold.ttf);
 }
 
-/* line 103, ../assets/sass/screen.scss */
+/* line 104, ../assets/sass/screen.scss */
 .clear {
   clear: both;
 }
 
-/* line 105, ../assets/sass/screen.scss */
+/* line 106, ../assets/sass/screen.scss */
 .left {
   float: left;
 }
 
-/* line 108, ../assets/sass/screen.scss */
+/* line 109, ../assets/sass/screen.scss */
 .right {
   float: right;
 }
 
-/* line 112, ../assets/sass/screen.scss */
+/* line 113, ../assets/sass/screen.scss */
 a, a:visited, a:link {
   color: #155c97;
   outline: none !important;
 }
 
-/* line 117, ../assets/sass/screen.scss */
+/* line 118, ../assets/sass/screen.scss */
 a:active, a:hover {
   color: #1b77c4;
   outline: none !important;
 }
 
-/* line 122, ../assets/sass/screen.scss */
+/* line 123, ../assets/sass/screen.scss */
 HTML {
   background: url(images/common/page-bg.gif);
   height: 100%;
 }
 
-/* line 127, ../assets/sass/screen.scss */
+/* line 129, ../assets/sass/screen.scss */
+#chlk-overlay {
+  display: block;
+  background-color: #000;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=20);
+  opacity: 0.2;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+/* line 139, ../assets/sass/screen.scss */
+#chlk-overlay.x-hidden {
+  display: none;
+}
+
+/* line 145, ../assets/sass/screen.scss */
+#chlk-dialogs {
+  min-width: 800px;
+  min-height: 700px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -12px;
+  bottom: -12px;
+}
+/* line 154, ../assets/sass/screen.scss */
+#chlk-dialogs.x-hidden {
+  display: none;
+}
+/* line 158, ../assets/sass/screen.scss */
+#chlk-dialogs .dialog {
+  position: absolute;
+  visibility: visible;
+  z-index: 9003;
+}
+/* line 163, ../assets/sass/screen.scss */
+#chlk-dialogs .dialog .x-window-header {
+  color: #5d6d75;
+  font-size: 18px;
+  margin-left: 25px;
+  padding: 5px 0 4px 0;
+  font: bold 24px Arial;
+}
+/* line 171, ../assets/sass/screen.scss */
+#chlk-dialogs .dialog .x-window-body {
+  padding: 5px 15px 0px 0px;
+  text-align: center;
+}
+/* line 176, ../assets/sass/screen.scss */
+#chlk-dialogs .dialog .x-window-body .x-fieldset-header-text {
+  font: bold 11px tahoma, arial, helvetica, sans-serif;
+  color: #15428b;
+  margin-left: 20px;
+  text-align: left;
+}
+/* line 184, ../assets/sass/screen.scss */
+#chlk-dialogs .dialog.gray {
+  left: 183px;
+  top: 75px;
+  min-width: 414px;
+  min-height: 500px;
+  background: #e7e7e7;
+  border: 1px solid #adadad;
+  border-radius: 15px;
+}
+
+/* line 203, ../assets/sass/screen.scss */
 BODY {
   background: url(images/common/body-bg.gif) 300px 0 repeat-y;
   color: #51595d;
@@ -94,40 +162,40 @@ BODY {
   position: relative;
   margin: 0;
 }
-/* line 138, ../assets/sass/screen.scss */
+/* line 214, ../assets/sass/screen.scss */
 BODY.demo > DIV.application-preview-window {
   bottom: 93px !important;
 }
-/* line 143, ../assets/sass/screen.scss */
+/* line 219, ../assets/sass/screen.scss */
 BODY #logout-block {
   position: absolute;
   right: 0;
   z-index: 100000;
 }
-/* line 148, ../assets/sass/screen.scss */
+/* line 224, ../assets/sass/screen.scss */
 BODY #logout-block .logout-area {
   cursor: pointer;
 }
-/* line 152, ../assets/sass/screen.scss */
+/* line 228, ../assets/sass/screen.scss */
 BODY #logout-block > DIV, BODY #logout-block > A {
   margin-right: 1px;
   padding-left: 9px;
   padding-right: 13px;
 }
-/* line 158, ../assets/sass/screen.scss */
+/* line 234, ../assets/sass/screen.scss */
 BODY #logout-block > SPAN {
   background: url(images/common/logout-arrow.png) center 10px no-repeat, rgba(255, 255, 255, 0.6);
   width: 19px;
 }
-/* line 162, ../assets/sass/screen.scss */
+/* line 238, ../assets/sass/screen.scss */
 BODY #logout-block > SPAN:hover {
   background: url(images/common/logout-arrow.png) center 10px no-repeat, rgba(255, 255, 255, 0.75);
 }
-/* line 166, ../assets/sass/screen.scss */
+/* line 242, ../assets/sass/screen.scss */
 BODY #logout-block > SPAN:active {
   background: url(images/common/logout-arrow.png) center 10px no-repeat, rgba(255, 255, 255, 0.9);
 }
-/* line 171, ../assets/sass/screen.scss */
+/* line 247, ../assets/sass/screen.scss */
 BODY #logout-block > * {
   padding-top: 5px;
   background: rgba(255, 255, 255, 0.6);
@@ -138,12 +206,12 @@ BODY #logout-block > * {
   color: #1c5166;
   text-decoration: none;
 }
-/* line 182, ../assets/sass/screen.scss */
+/* line 258, ../assets/sass/screen.scss */
 BODY #logout-block > DIV, BODY #logout-block > SPAN {
   display: inline-block;
   vertical-align: top;
 }
-/* line 187, ../assets/sass/screen.scss */
+/* line 263, ../assets/sass/screen.scss */
 BODY #logout-block > SPAN, BODY #logout-block > A {
   display: inline-block;
   -webkit-transition-property: all;
@@ -155,7 +223,7 @@ BODY #logout-block > SPAN, BODY #logout-block > A {
   -o-transition-duration: 0.2s;
   transition-duration: 0.2s;
 }
-/* line 193, ../assets/sass/screen.scss */
+/* line 269, ../assets/sass/screen.scss */
 BODY #logout-block > A.logout {
   margin-top: 1px;
   opacity: 0;
@@ -163,15 +231,15 @@ BODY #logout-block > A.logout {
   visibility: hidden;
   text-transform: capitalize;
 }
-/* line 200, ../assets/sass/screen.scss */
+/* line 276, ../assets/sass/screen.scss */
 BODY #logout-block > A.logout:hover {
   background: rgba(255, 255, 255, 0.75);
 }
-/* line 204, ../assets/sass/screen.scss */
+/* line 280, ../assets/sass/screen.scss */
 BODY #logout-block > A.logout:active {
   background: rgba(255, 255, 255, 0.9);
 }
-/* line 210, ../assets/sass/screen.scss */
+/* line 286, ../assets/sass/screen.scss */
 BODY #page-header {
   text-align: right;
   color: #333;
@@ -195,7 +263,7 @@ BODY #page-header {
   top: 0;
   z-index: 5;
 }
-/* line 231, ../assets/sass/screen.scss */
+/* line 307, ../assets/sass/screen.scss */
 BODY DIV.page {
   background: url(images/common/sidebar-bg.gif) 0 0 repeat-y;
   height: 100%;
@@ -203,60 +271,62 @@ BODY DIV.page {
   text-align: left;
   width: 100%;
 }
-/* line 241, ../assets/sass/screen.scss */
+/* line 317, ../assets/sass/screen.scss */
 BODY DIV.page.demo #content, BODY DIV.page.demo #sidebar {
   margin-bottom: 90px;
 }
-/* line 246, ../assets/sass/screen.scss */
+/* line 322, ../assets/sass/screen.scss */
 BODY DIV.page #content {
   padding-left: 315px;
   padding-top: 11px;
 }
-/* line 251, ../assets/sass/screen.scss */
+/* line 327, ../assets/sass/screen.scss */
 BODY DIV.page #content .new-item #main-top {
   background: url(images/common/paper-bg-top.gif) 1px 0 no-repeat;
 }
-/* line 255, ../assets/sass/screen.scss */
+/* line 331, ../assets/sass/screen.scss */
 BODY DIV.page #content .new-item #main-wrapper {
   background: url(images/common/paper-bg-new.gif) 0 0 repeat-y;
 }
-/* line 259, ../assets/sass/screen.scss */
+/* line 335, ../assets/sass/screen.scss */
 BODY DIV.page #content .new-item #footer {
   background: url(images/common/paper-bg-bottom.gif) 0 0 no-repeat;
 }
-/* line 265, ../assets/sass/screen.scss */
+/* line 341, ../assets/sass/screen.scss */
 BODY DIV.page #content .attendance #main-top {
   background: url(images/attendance/paper-top-bg.png) 0 0 no-repeat;
 }
-/* line 269, ../assets/sass/screen.scss */
+/* line 345, ../assets/sass/screen.scss */
 BODY DIV.page #content .attendance #main-wrapper {
   background: url(images/attendance/paper-bg.png) 0 0 repeat-y;
 }
-/* line 273, ../assets/sass/screen.scss */
+/* line 349, ../assets/sass/screen.scss */
 BODY DIV.page #content .attendance #footer {
   background: url(images/attendance/paper-bottom-bg.png) 0 0 no-repeat;
 }
-/* line 278, ../assets/sass/screen.scss */
+/* line 354, ../assets/sass/screen.scss */
 BODY DIV.page #content > DIV {
   text-align: left;
   width: 802px;
 }
-/* line 282, ../assets/sass/screen.scss */
+/* line 358, ../assets/sass/screen.scss */
 BODY DIV.page #content > DIV #main-top {
   height: 11px;
   background: url(images/common/paper-top-bg.png) 0 0 no-repeat;
 }
-/* line 287, ../assets/sass/screen.scss */
+/* line 363, ../assets/sass/screen.scss */
 BODY DIV.page #content > DIV #main-wrapper {
   background: url(images/common/paper-bg.gif) 0 0 repeat-y;
+  position: relative;
 }
-/* line 290, ../assets/sass/screen.scss */
+/* line 367, ../assets/sass/screen.scss */
 BODY DIV.page #content > DIV #main-wrapper #main {
   background: url(images/common/paper-pin.png) 0 0 repeat-y;
   min-height: 700px;
   padding: 32px 74px 32px 61px;
+  position: relative;
 }
-/* line 297, ../assets/sass/screen.scss */
+/* line 375, ../assets/sass/screen.scss */
 BODY DIV.page #content > DIV #footer {
   -moz-border-radius-bottomleft: 10px;
   -webkit-border-bottom-left-radius: 10px;
@@ -291,7 +361,7 @@ BODY DIV.page #sidebar #sidebar-controls .wrapper A .title, BODY DIV.page #sideb
   text-align: center;
   bottom: 5px;
   color: #5d4d39;
-  text-shadow: 1px -1px 0 #eeeeee;
+  text-shadow: 1px -1px 0 #eee;
 }
 /* line 46, ../assets/sass/partials/sidebar/_controls.scss */
 BODY DIV.page #sidebar #sidebar-controls .wrapper .fullwidth-button.add-new {
@@ -1108,7 +1178,7 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link:hover, D
 /* line 66, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar .container .action-link {
   text-decoration: none;
-  font: normal 11px/34px arial, tahoma, verdana, helvetica;
+  font: normal 11px/34px arial,tahoma,verdana,helvetica;
   color: #333;
   height: 34px;
   font-style: italic;

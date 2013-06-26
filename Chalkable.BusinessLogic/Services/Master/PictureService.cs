@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 
 namespace Chalkable.BusinessLogic.Services.Master
@@ -30,6 +31,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             if(!BaseSecurity.HasChalkableRole(Context))
                 throw new ChalkableSecurityException();
+
+            content = ImageUtils.Scale(content, height, width);
             ServiceLocator.StorageBlobService.AddBlob(PICTURE_CONTEINER_NAME, PictureName(id, height, width), content);
         }
 
@@ -40,4 +43,10 @@ namespace Chalkable.BusinessLogic.Services.Master
             ServiceLocator.StorageBlobService.DeleteBlob(PICTURE_CONTEINER_NAME, PictureName(id, height, width));
         }
     }
+
+    //public class PictureSizeInfo
+    //{
+    //    public int Height { get; set; }
+    //    public int Width { get; set; }
+    //}
 }
