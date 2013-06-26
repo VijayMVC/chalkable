@@ -13,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IPreferenceService PreferenceService { get; }
         IChalkableDepartmentService ChalkableDepartmentService { get; }
         IPictureService PictureService { get; }
+        IAvatarService AvatarService { get; }
     }
 
     public class ServiceLocatorMaster : ServiceLocator, IServiceLocatorMaster
@@ -23,6 +24,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         private IPreferenceService preferenceService;
         private IChalkableDepartmentService chalkableDepartmentService;
         private IPictureService pictureService;
+        private IAvatarService avatarService;
 
         public ServiceLocatorMaster(UserContext context) : base(context)
         {
@@ -40,6 +42,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IPreferenceService PreferenceService { get { return preferenceService; } }
         public IChalkableDepartmentService ChalkableDepartmentService { get { return chalkableDepartmentService; } }
         public IPictureService PictureService { get { return pictureService; } }
+        public IAvatarService AvatarService { get { return avatarService; } }
+
         public IServiceLocatorSchool SchoolServiceLocator(Guid schoolId)
         {
             var school = SchoolService.GetById(schoolId);

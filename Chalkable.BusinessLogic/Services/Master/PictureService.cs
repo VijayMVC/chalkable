@@ -43,10 +43,4 @@ namespace Chalkable.BusinessLogic.Services.Master
             ServiceLocator.StorageBlobService.DeleteBlob(PICTURE_CONTEINER_NAME, PictureName(id, height, width));
         }
     }
-
-    //public class PictureSizeInfo
-    //{
-    //    public int Height { get; set; }
-    //    public int Width { get; set; }
-    //}
 }
