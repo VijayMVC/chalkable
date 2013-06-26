@@ -26,6 +26,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IScheduleSectionService ScheduleSectionService { get; }
         IClassPeriodService ClassPeriodService { get; }
         INotificationService NotificationService { get; }
+        IAttendanceService AttendanceService { get; }
+        IAttendanceReasonService AttendanceReasonService { get; }
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
     {
@@ -49,6 +51,8 @@ namespace Chalkable.BusinessLogic.Services.School
         private IScheduleSectionService scheduleSectionService;
         private IClassPeriodService classPeriodService;
         private INotificationService notificationService;
+        private IAttendanceService attendanceService;
+        private IAttendanceReasonService attendanceReasonService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -73,6 +77,8 @@ namespace Chalkable.BusinessLogic.Services.School
             scheduleSectionService = new ScheduleSectionService(this);
             classPeriodService = new ClassPeriodService(this);
             notificationService = new NotificationService(this);
+            attendanceReasonService = new AttendanceReasonService(this);
+            attendanceService = new AttendanceService(this);
         }
 
         public IPersonService PersonService
@@ -163,6 +169,16 @@ namespace Chalkable.BusinessLogic.Services.School
         public INotificationService NotificationService
         {
             get { return notificationService; }
+        }
+
+        public IAttendanceService AttendanceService
+        {
+            get { return attendanceService; }
+        }
+
+        public IAttendanceReasonService AttendanceReasonService
+        {
+            get { return attendanceReasonService; }
         }
     }
 }

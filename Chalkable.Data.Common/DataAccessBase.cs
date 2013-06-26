@@ -90,7 +90,11 @@ namespace Chalkable.Data.Common
         }
         protected T ReadOne<T>(DbQuery query, bool complexResultSet = false) where T : new()
         {
-            return Read(query, reader => reader.Read<T>(complexResultSet));
+            return Read(query, reader =>
+                {
+                    reader.Read();
+                    return reader.Read<T>(complexResultSet);
+                });
         }
         protected T ReadOneOrNull<T>(DbQuery query, bool complexResultSet = false) where T : new()
         {
@@ -207,7 +211,7 @@ namespace Chalkable.Data.Common
 
         public void Delete(Guid id)
         {
-            SimpleDelete(id);
+            SimpleDelete<TEntity>(id);
         }
     }
 }

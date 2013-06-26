@@ -49,6 +49,7 @@
     <Compile Include="Security\AnnouncementSecurity.cs" />
     <Compile Include="Security\BaseSecurity.cs" />
     <Compile Include="Security\PrivateMessageSecurity.cs" />
+    <Compile Include="Services\Master\AvatarService.cs" />
     <Compile Include="Services\Master\ChalkableDepartmentService.cs" />
     <Compile Include="Services\Master\PictureService.cs" />
     <Compile Include="Services\Master\PreferenceService.cs" />
@@ -62,6 +63,8 @@
     <Compile Include="Services\School\AnnouncementQnAService.cs" />
     <Compile Include="Services\School\AnnouncementReminderService.cs" />
     <Compile Include="Services\School\AnnouncementService.cs" />
+    <Compile Include="Services\School\AttendanceReasonService.cs" />
+    <Compile Include="Services\School\AttendanceService.cs" />
     <Compile Include="Services\School\CalendarDateService.cs" />
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />

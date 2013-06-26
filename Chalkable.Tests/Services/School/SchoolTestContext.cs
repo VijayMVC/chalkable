@@ -54,10 +54,11 @@ namespace Chalkable.Tests.Services.School
                     CreateUserInfo(res.FirstParentName, CoreRoles.PARENT_ROLE),
                     CreateUserInfo(res.SecondParentName, CoreRoles.PARENT_ROLE)
                 };
-            CreateUsers(sysSchoolSl, userInfos);
+            var gradeLevels =  sysSchoolSl.GradeLevelService.CreateDefault();
+            CreateUsers(sysSchoolSl, userInfos, gradeLevels[0].Id);
             res.AdminGradeSl = ServiceLocatorFactory.CreateSchoolLocator(res.AdminGrade);
-            res.AdminEditSl = ServiceLocatorFactory.CreateSchoolLocator(res.AdminGrade);
-            res.AdminViewSl = ServiceLocatorFactory.CreateSchoolLocator(res.AdminGrade);
+            res.AdminEditSl = ServiceLocatorFactory.CreateSchoolLocator(res.AdminEdit);
+            res.AdminViewSl = ServiceLocatorFactory.CreateSchoolLocator(res.AdminView);
             res.FirstTeacherSl = ServiceLocatorFactory.CreateSchoolLocator(res.FirstTeacher);
             res.FirstStudentSl = ServiceLocatorFactory.CreateSchoolLocator(res.FirstStudent);
             res.FirstParentSl = ServiceLocatorFactory.CreateSchoolLocator(res.FirstParent);
@@ -86,16 +87,16 @@ namespace Chalkable.Tests.Services.School
                     LastName = name,
                     Gender = DEFAULT_GENDER,
                     Password = DEFAULT_PASSWORD,
-                    Role = role
+                    Role = role,
                 };
         }
 
-        private static void CreateUsers(IServiceLocatorSchool sysSchoolSl, IList<UserIInfoTest> userInfos)
+        private static void CreateUsers(IServiceLocatorSchool sysSchoolSl, IList<UserIInfoTest> userInfos, Guid? gradeLevelId)
         {
             foreach (var userInfo in userInfos)
             {
                 sysSchoolSl.PersonService.Add(userInfo.Login, userInfo.Password, userInfo.FirstName, userInfo.LastName,
-                                              userInfo.Role.Name, userInfo.Gender, userInfo.Salutation, userInfo.BirthDate, null);
+                                              userInfo.Role.Name, userInfo.Gender, userInfo.Salutation, userInfo.BirthDate, gradeLevelId);
             }
         }
 
