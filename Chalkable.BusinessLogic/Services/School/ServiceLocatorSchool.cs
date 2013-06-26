@@ -3,7 +3,7 @@ using Chalkable.BusinessLogic.Services.School.Notifications;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
-    public interface IServiceLocatorSchool
+    public interface IServiceLocatorSchool : IServiceLocator
     {
         IServiceLocatorMaster ServiceLocatorMaster { get; }
         UserContext Context { get; }
@@ -18,7 +18,6 @@ namespace Chalkable.BusinessLogic.Services.School
         IAnnouncementService AnnouncementService { get; }
         IAnnouncementReminderService AnnouncementReminderService { get; }
         IAnnouncementAttachmentService AnnouncementAttachmentService { get; }
-        IStorageMonitorService StorageMonitorService { get; }
         IPhoneService PhoneService { get; }
         IPrivateMessageService PrivateMessageService { get; }
         IRoomService RoomService { get; }
@@ -42,7 +41,6 @@ namespace Chalkable.BusinessLogic.Services.School
         private IAnnouncementReminderService announcementReminderService;
         private IAnnouncementService announcementService;
         private IAnnouncementAttachmentService announcementAttachmentService;
-        private IStorageMonitorService storageMonitorService;
         private IPhoneService phoneService;
         private IPrivateMessageService privateMessageService;
         private IRoomService roomService;
@@ -67,7 +65,6 @@ namespace Chalkable.BusinessLogic.Services.School
             announcementReminderService = new AnnouncementReminderService(this);
             announcementService = new AnnouncementService(this);
             announcementAttachmentService = new AnnouncementAttachmentService(this);
-            storageMonitorService = new StorageMonitorService(this);
             phoneService = new PhoneService(this);
             privateMessageService = new PrivateMessageService(this);
             roomService = new RoomService(this);
@@ -125,12 +122,6 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             get { return announcementAttachmentService; }
         }
-
-        public IStorageMonitorService StorageMonitorService
-        {
-            get { return storageMonitorService; }
-        }
-
         public IPhoneService PhoneService
         {
             get { return phoneService; }

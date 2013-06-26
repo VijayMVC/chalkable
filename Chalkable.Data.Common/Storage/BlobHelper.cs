@@ -2,67 +2,27 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security;
 using System.Text;
 using System.Threading.Tasks;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-
-using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
-namespace Chalkable.BusinessLogic.Services.School
+namespace Chalkable.Data.Common.Storage
 {
-public interface IStorageMonitorService
+    public class BlobHelper : BaseStorageHelper
     {
-        IList<CloudBlobContainer> GetBlobContainers();
-        IList<ICloudBlob> GetBlobs(string containeraddress);
-        void AddBlob(string containerAddress, string key, byte[] content);
-        byte[] GetBlobContent(string containerAddress, string key);
-        void DeleteBlob(Uri blobAddress);
-        void DeleteBlob(string containderName, string key);
-    }
-
-
-    public class StorageMonitorService : SchoolServiceBase, IStorageMonitorService
-    {
-        private const string ConnectionStringName = "Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString";
-        private CloudStorageAccount storageAccount;
-        private CloudBlobClient blobClient;
-
-
-        public StorageMonitorService(IServiceLocatorSchool serviceLocator)
-            : base(serviceLocator)
-        {
-        }
-
+        private CloudBlobClient blobClient;       
         private CloudBlobClient GetBlobClient()
         {
             return blobClient ?? (blobClient = GetStorageAccount().CreateCloudBlobClient());
         }
-
-        private CloudStorageAccount GetStorageAccount()
-        {
-            if (storageAccount == null)
-            {
-                string connectionString = RoleEnvironment.GetConfigurationSettingValue(ConnectionStringName);
-                storageAccount = CloudStorageAccount.Parse(connectionString);
-            }
-            return storageAccount;
-        }
-
         private ICloudBlob ConvertToCloudBlob(IListBlobItem blob)
         {
-
             var cloudBlob = GetBlobClient().GetBlobReferenceFromServer(blob.Uri);
-            if (cloudBlob.Exists())
-            {
-                return cloudBlob;
-            }
-            return null;
+            return cloudBlob.Exists() ? cloudBlob : null;
         }
 
         public IList<CloudBlobContainer> GetBlobContainers()
@@ -106,8 +66,6 @@ public interface IStorageMonitorService
 
         public void DeleteBlob(Uri blobAddress)
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException(ChlkResources.ERR_BLOB_INVALID_RIGHTS);
             var client = GetBlobClient();
             var blob = client.GetBlobReferenceFromServer(blobAddress);
             if (!blob.Exists())
@@ -162,8 +120,5 @@ public interface IStorageMonitorService
         {
             return containerAddress + "_blob_" + key;
         }
-
-
- 
     }
 }

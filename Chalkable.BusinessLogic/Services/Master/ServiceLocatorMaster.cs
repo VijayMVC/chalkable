@@ -3,7 +3,7 @@ using Chalkable.BusinessLogic.Services.School;
 
 namespace Chalkable.BusinessLogic.Services.Master
 {
-    public interface IServiceLocatorMaster
+    public interface IServiceLocatorMaster : IServiceLocator
     {
         IServiceLocatorSchool SchoolServiceLocator(Guid schoolId);
         UserContext Context { get; }

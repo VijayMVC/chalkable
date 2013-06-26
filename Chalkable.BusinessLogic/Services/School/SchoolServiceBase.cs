@@ -7,7 +7,6 @@ using Chalkable.Data.Common;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
-
     public class SchoolServiceBase
     {
         protected IServiceLocatorSchool ServiceLocator { get; private set; }

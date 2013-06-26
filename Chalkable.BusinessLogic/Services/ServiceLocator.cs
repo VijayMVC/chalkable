@@ -7,13 +7,25 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BusinessLogic.Services
 {
-    public class ServiceLocator
+    public interface IServiceLocator
+    {
+        IStorageBlobService StorageBlobService { get; }
+    }
+
+    public class ServiceLocator : IServiceLocator
     {
         public UserContext Context { get; private set; }
 
+        private IStorageBlobService storageBlobService;
         public ServiceLocator(UserContext context)
         {
             Context = context;
+            storageBlobService = new StorageBlobService();
+        }
+
+        public IStorageBlobService StorageBlobService
+        {
+            get { return storageBlobService; }
         }
     }
 

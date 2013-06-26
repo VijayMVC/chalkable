@@ -54,7 +54,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     PersonRef = periodId,
                     RoominfoRef = roomId
                 };
-                da.Create(res);
+                da.Insert(res);
                 uow.Commit();
                 return res;
             }
