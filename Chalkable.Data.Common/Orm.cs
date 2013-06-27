@@ -46,7 +46,7 @@ namespace Chalkable.Data.Common
             return Fields(t);
         }
 
-        private const string COMPLEX_RESULT_SET_FORMAT = " {0}.{1} as {0}_{1}";
+        private const string COMPLEX_RESULT_SET_FORMAT = " [{0}].[{1}] as {0}_{1}";
         public static IList<string> FullFieldsNames(Type t)
         {
             var fields = Fields(t);
@@ -57,9 +57,11 @@ namespace Chalkable.Data.Common
         public static string ComplexResultSetQuery(IList<Type> types)
         {
             var res = new StringBuilder();
-            foreach (var type in types)
+            for (int i = 0; i < types.Count; i++)
             {
-                res.Append(FullFieldsNames(type).JoinString(","));
+                res.Append(FullFieldsNames(types[i]).JoinString(","));
+                if (i != types.Count - 1)
+                    res.Append(",");
             }
             return res.ToString();
         }

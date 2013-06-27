@@ -55,7 +55,7 @@ namespace Chalkable.Data.School.DataAccess
         private IList<Period> GetComplexPeriods(Dictionary<string, object> conds)
         {
             var sql = @"select {0} from Period 
-                        join ScheduleSectioin on ScheduleSection.Id = Period.SectionRef";
+                        join ScheduleSection on ScheduleSection.Id = Period.SectionRef";
             var b = new StringBuilder();
             var types = new List<Type> { typeof(Period), typeof(ScheduleSection) };
             b.AppendFormat(sql, Orm.ComplexResultSetQuery(types));

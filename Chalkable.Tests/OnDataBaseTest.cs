@@ -59,7 +59,10 @@ namespace Chalkable.Tests
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1023 - create procedure GetClasses.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1024 - create reports , appinstalls tables.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1025 - alter procedure getClasses.sql"));
-    
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1026 - alter procedure getPersons.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1027 - alter ClassPeriod table.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1028 - create  Attendances procedures.sql"));
+        
         }
 
         protected void CreateMasterDb()

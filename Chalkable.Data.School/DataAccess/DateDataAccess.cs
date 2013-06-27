@@ -17,7 +17,7 @@ namespace Chalkable.Data.School.DataAccess
         public void Delete(DateQuery query)
         {
             var b = new StringBuilder();
-            b.Append("delete from Date ");
+            b.Append("delete from [Date] ");
             var  q = BuildConditionQuery(b, query);
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
         }
@@ -57,6 +57,12 @@ namespace Chalkable.Data.School.DataAccess
                 builder.AppendFormat(" {0} DateTime <= @toDate ", where);
                 where = "and";
             }
+            if (query.SectionRef.HasValue)
+            {
+                conds.Add("@sectionId", query.SectionRef);
+                builder.AppendFormat(" {0} ScheduleSectionRef = @sectionId", where);
+                where = "and";
+            }
             if (query.SchoolDaysOnly)
             {
                 builder.AppendFormat(" {0} IsSchoolDay = 1", where);
@@ -84,14 +90,14 @@ namespace Chalkable.Data.School.DataAccess
         private Date GetDate(DateQuery query, Func<DbQuery, bool, Date> acion)
         {
             var b = new StringBuilder();
-            b.Append("select * from Date");
+            b.Append("select * from [Date]");
             var q = BuildConditionQuery(b, query);
             return acion(q, false);
         }
         public IList<Date> GetDates(DateQuery query)
         {
             var b = new StringBuilder();
-            b.Append("select * from Date");
+            b.Append("select * from [Date]");
             var q = BuildConditionQuery(b, query);
             b.AppendFormat(" order by DateTime desc OFFSET 0 ROWS FETCH NEXT {0} ROWS ONLY", query.Count);
             q.Sql = string.Format("select * from ({0})x order by x.DateTime", b);
@@ -102,7 +108,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             var b = new StringBuilder();
             var dbQuery = BuildConditionQuery(b, query);
-            dbQuery.Sql = "select * from Date " + dbQuery.Sql;
+            dbQuery.Sql = "select * from [Date] " + dbQuery.Sql;
             return Exists(dbQuery);
         }
     }
@@ -116,6 +122,7 @@ namespace Chalkable.Data.School.DataAccess
         public DateTime? ToDate { get; set; }
         public int Count { get; set; }
         public bool SchoolDaysOnly { get; set; }
+        public Guid? SectionRef { get; set; }
 
         public DateQuery()
         {

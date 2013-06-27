@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using Chalkable.Common;
@@ -68,13 +69,26 @@ namespace Chalkable.Data.School.DataAccess
                 result.Persons = new List<Person>();
                 while (reader.Read())
                 {
-                    var p = reader.Read<Person>();
-                    if (p.RoleRef == CoreRoles.STUDENT_ROLE.Id)
-                        p.StudentInfo = reader.Read<StudentInfo>();    
-                    result.Persons.Add(p);
+                    result.Persons.Add(ReadPersonData(reader));
                 }
             }
             return result;
+        }
+
+        public static Person ReadPersonData(SqlDataReader reader)
+        {
+            if (reader != null)
+            {
+                var res = reader.Read<Person>();
+                if (res.RoleRef == CoreRoles.STUDENT_ROLE.Id)
+                {
+                    res.StudentInfo = reader.Read<StudentInfo>();
+                    res.StudentInfo.GradeLevel = reader.Read<GradeLevel>(true);
+                    res.StudentInfo.GradeLevelRef = res.StudentInfo.GradeLevel.Id;
+                }
+                return res;
+            }
+            return null;
         }
 
         public void AddStudent(Guid id, Guid gradeLevelId)

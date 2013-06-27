@@ -134,7 +134,7 @@ namespace Chalkable.Data.School.DataAccess
             }
             if (query.ClassIds != null && query.ClassIds.Count > 0)
             {
-                builder.AppendFormat(" {0} ClassPeriod.ClassRef in ({1})", where, query.ClassIds.Select(x => x.ToString()).JoinString(","));
+                builder.AppendFormat(" {0} ClassPeriod.ClassRef in ({1})", where, query.ClassIds.Select(x => "'" + x.ToString() + "'").JoinString(","));
             }
             return new DbQuery {Sql = builder.ToString(), Parameters = conds};
         }

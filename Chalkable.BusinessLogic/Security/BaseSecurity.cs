@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
+using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Security
 {
@@ -30,6 +31,11 @@ namespace Chalkable.BusinessLogic.Security
         public static bool IsAdminOrTeacher(UserContext context)
         {
             return IsAdminViewer(context) || context.Role == CoreRoles.TEACHER_ROLE;
+        }
+
+        public static bool IsAdminEditorOrClassTeacher(Class c, UserContext context)
+        {
+            return IsAdminEditor(context) || (context.Role == CoreRoles.TEACHER_ROLE && context.UserId == c.TeacherRef);
         }
 
         public static bool HasChalkableRole(UserContext context)

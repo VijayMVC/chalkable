@@ -104,7 +104,7 @@ namespace Chalkable.Tests.Services.School
 
         public Person GetPerson(SchoolUser schoolUser)
         {
-            return sysSchoolSl.PersonService.GetPerson(schoolUser.UserRef);
+            return sysSchoolSl.PersonService.GetPerson(schoolUser.User.Id);
         }
 
         public string AdminGradeName

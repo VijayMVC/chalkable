@@ -102,7 +102,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Person GetPerson(Guid id)
         {
-            return GetPersons(new PersonQuery {Count = 1, Start = 0}).First();
+            return GetPersons(new PersonQuery
+                {
+                    PersonId = id,
+                    Count = 1, 
+                    Start = 0
+                }).First();
         }
     }
 }

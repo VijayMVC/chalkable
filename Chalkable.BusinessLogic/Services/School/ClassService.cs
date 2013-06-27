@@ -140,7 +140,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var classPersonDa = new ClassPersonDataAccess(uow);
                 var classPeriodDa = new ClassPeriodDataAccess(uow);
-                if(!classPeriodDa.IsStudentAlreadyAssignedToClassPeriod(personId, classId))
+                if(classPeriodDa.IsStudentAlreadyAssignedToClassPeriod(personId, classId))
                     throw new ChalkableException(ChlkResources.ERR_STUDENT_BAD_CLASS_PERIOD);
 
                 if (!classPersonDa.Exists(new ClassPersonQuery {ClassId = classId, PersonId = personId}))
