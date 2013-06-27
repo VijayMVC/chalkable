@@ -5,6 +5,7 @@ NAMESPACE('chlk.activities', function () {
 
     /** @class chlk.activities.AddSchoolDialog */
     CLASS(
+        [ria.mvc.ActivityGroup('AddSchool')],
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [chlk.activities.BindTemplate(chlk.templates.AddSchool.Dialog)],
         'AddSchoolDialog', EXTENDS(chlk.activities.TemplateDialog), [
