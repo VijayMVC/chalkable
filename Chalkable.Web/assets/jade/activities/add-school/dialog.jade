@@ -1,7 +1,41 @@
 .dialog.add-school.gray
+    -console.log(self._model)
     .x-window-header
         span Add/Edit School
     .x-window-body
         .general-info
             span.x-fieldset-header-text General Information
-            +ActionForm('sysadmin', 'schools')
+            +ActionForm('sysadmin', 'addSchool')
+                .x-form-field
+                    label Title:
+                    input(type="text",name="name", value=self.name)
+                .x-form-field
+                    label LocalID:
+                    input(type="text",name="localid", value=self.localid)
+                .x-form-field
+                    label NCES ID:
+                    input(type="text",name="ncesid", value=self.ncesid)
+                .x-form-field
+                    label Type:
+                    input(type="text",name="schooltype", value=self.schooltype)
+                .x-form-field
+                    label URL:
+                    input(type="text",name="schoolurl", value=self.schoolurl)
+                .x-form-field
+                    label State/Province ID:
+                    input
+                .x-form-field
+                    label SChool TimeZone:
+                    input(type="text",name="timezoneid", value=self.timezoneid)
+                .x-form-field
+                    label Send EmailNotifications:
+                    input(type="checkbox", name="sendemailnotifications", value=self.sendemailnotifications).checkbox-last
+                span.x-fieldset-header-text Principal Information
+                .x-form-field
+                    label Contact Title:
+                    input
+                .x-form-field
+                    label Contact Name:
+                    input
+                +Button(type="submit").special-button.blue-button.sumbit-btn Submit
+                +Button.special-button.red-button Cancel
