@@ -28,12 +28,12 @@ NAMESPACE('chlk.controllers', function (){
 
             if (form_){
                 model.setName(form_.name);
-                model.setLocalid(parseInt(form_.localid, 10));
-                model.setNcesid(parseInt(form_.ncesid, 10));
-                model.setSchooltype(form_.schooltype);
-                model.setSchoolurl(form_.schoolurl);
-                model.setSendemailnotifications(!!form_.sendemailnotifications);
-                model.setTimezoneid(form_.timezoneid);
+                model.setLocalId(parseInt(form_.localid, 10));
+                model.setNcesId(parseInt(form_.ncesid, 10));
+                model.setSchoolType(form_.schooltype);
+                model.setSchoolUrl(form_.schoolurl);
+                model.setSendEmailNotifications(form_.sendemailnotifications != "false");
+                model.setTimezoneId(form_.timezoneid);
             }
             return this.ShadeView(chlk.activities.AddSchoolDialog, ria.async.DeferredData(model));
         },

@@ -14,17 +14,16 @@ NAMESPACE('chlk.templates.AddSchool', function () {
             [ria.templates.ModelBind],
             String, 'name',
             [ria.templates.ModelBind],
-            Number, 'localid',
+            Number, 'localId',
             [ria.templates.ModelBind],
-            Number, 'ncesid',
+            Number, 'ncesId',
             [ria.templates.ModelBind],
-            String, 'schooltype',
+            String, 'schoolType',
             [ria.templates.ModelBind],
-            String, 'schoolurl',
+            String, 'schoolUrl',
             [ria.templates.ModelBind],
-            String, 'timezoneid',
+            String, 'timezoneId',
             [ria.templates.ModelBind],
-            Boolean, 'sendemailnotifications',
-            Boolean, 'renderLink'
+            Boolean, 'sendEmailNotifications'
         ])
 });

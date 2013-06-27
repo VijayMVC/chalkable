@@ -5,11 +5,11 @@ NAMESPACE('chlk.models', function () {
         'School', [
             Number, 'id',
             String, 'name',
-            Number, 'localid',
-            Number, 'ncesid',
-            String, 'schooltype',
-            String, 'schoolurl',
-            Boolean,'sendemailnotifications',
-            String, 'timezoneid'
+            Number, 'localId',
+            Number, 'ncesId',
+            String, 'schoolType',
+            String, 'schoolUrl',
+            Boolean,'sendEmailNotifications',
+            String, 'timezoneId'
         ]);
 });
