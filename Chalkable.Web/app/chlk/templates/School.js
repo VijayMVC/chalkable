@@ -24,11 +24,6 @@ NAMESPACE('chlk.templates', function () {
             [ria.templates.ModelBind],
             String, 'timezoneId',
             [ria.templates.ModelBind],
-            Boolean, 'sendEmailNotifications',
-            [ria.templates.ModelBind],
-            String, 'contactTitle',
-            [ria.templates.ModelBind],
-            String, 'contactName'
-
+            Boolean, 'sendEmailNotifications'
         ])
 });

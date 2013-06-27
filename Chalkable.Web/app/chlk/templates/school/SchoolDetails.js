@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.school', function () {
         [ria.templates.ModelBind(chlk.models.school.SchoolDetails)],
         'SchoolDetails', EXTENDS(chlk.templates.School), [
             [ria.templates.ModelBind],
-            Number, 'statusnumber',
+            Number, 'statusNumber',
             [ria.templates.ModelBind],
             String, 'status',
             [ria.templates.ModelBind],
