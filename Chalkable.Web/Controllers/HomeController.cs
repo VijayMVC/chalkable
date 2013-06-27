@@ -1,8 +1,11 @@
 ﻿using System;
-using System.Web.Helpers;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
-using System.Web.Security;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
+using Chalkable.Data.Common.Enums;
+using Chalkable.Data.Master.Model;
 using Chalkable.Web.Authentication;
 
 namespace Chalkable.Web.Controllers
@@ -45,6 +48,29 @@ namespace Chalkable.Web.Controllers
         {
             ServiceLocatorFactory.CreateMasterSysAdmin().UserService.CreateSysAdmin(userName, password);
             return Json(new { Success = true, UserName = userName }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult RunSchoolImport(int sisSchoolId, int sisSchoolYearId, string name, string dataBaseName, string dataBaseUrl, string sisUser, string sisPwd)
+        {
+            var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
+            var district = sl.SchoolService.GetDistricts().First();
+
+            var school = sl.SchoolService.Create(district.Id, name, new List<UserInfo> ());
+            school.ImportSystemType = ImportSystemTypeEnum.Sti;
+            sl.SchoolService.Update(school);
+            var sync = new SisSync
+                {
+                    Id = school.Id,
+                    SisDatabaseName = dataBaseName,
+                    SisDatabaseUrl = dataBaseUrl,
+                    SisDatabaseUserName = sisUser,
+                    SisDatabasePassword = sisPwd,
+                    SisSchoolId = sisSchoolId
+                };
+            sl.SchoolService.SetSyncData(sync);
+            var data = new SisImportTaskData(school.Id, sisSchoolId, new List<int> { sisSchoolYearId });
+            sl.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.SisDataImport, DateTime.UtcNow, school.Id, data.ToString());
+            return Json(true);
         }
 
     }

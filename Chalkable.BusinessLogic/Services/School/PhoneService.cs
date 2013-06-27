@@ -49,6 +49,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var phone = new Phone
                     {
                         Id = Guid.NewGuid(),
+                        Value = value,
                         DigitOnlyValue = DigitsOnly(value),
                         PersonRef = personId,
                         IsPrimary = isPrimary,

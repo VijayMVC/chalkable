@@ -64,8 +64,10 @@ namespace Chalkable.BusinessLogic.Logic
             this.serviceLocatorMaster = serviceLocatorMaster;
         }
 
+        //TODO: in order to change import policy need to double check this logic
         public bool CanApply(StateActionEnum action)
         {
+            return true;
             var school = serviceLocatorMaster.SchoolService.GetById(schoolId);
             return stateMapper.ContainsKey(action) &&  stateMapper[action].Any(x=>school.Status >= x.Key);
         }

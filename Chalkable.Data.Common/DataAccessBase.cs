@@ -23,7 +23,7 @@ namespace Chalkable.Data.Common
             }
         }
 
-        protected DbDataReader ExecuteReaderParametrized(string sql, Dictionary<string, object> parameters)
+        protected DbDataReader ExecuteReaderParametrized(string sql, IDictionary<string, object> parameters)
         {
             using (SqlCommand command = unitOfWork.GetTextCommandWithParams(sql, parameters))
             {
@@ -57,7 +57,7 @@ namespace Chalkable.Data.Common
             var q = Orm.SimpleUpdate(obj);
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
         }
-        protected void SimpleUpdate<T>(Dictionary<string, object> updateParams, Dictionary<string, object> conditions)
+        protected void SimpleUpdate<T>(IDictionary<string, object> updateParams, IDictionary<string, object> conditions)
         {
             var q = Orm.SimpleUpdate<T>(updateParams, conditions);
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);

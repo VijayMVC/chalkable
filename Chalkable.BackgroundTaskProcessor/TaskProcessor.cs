@@ -14,6 +14,7 @@ namespace Chalkable.BackgroundTaskProcessor
         public TaskProcessor()
         {
             handlers.Add(BackgroundTaskTypeEnum.CreateEmptySchool, new CreateEmptySchoolTaskHandler());
+            handlers.Add(BackgroundTaskTypeEnum.SisDataImport, new SisImportDataTaskHandler());
         }
 
         public void Process()

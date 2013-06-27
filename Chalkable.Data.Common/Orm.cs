@@ -108,15 +108,15 @@ namespace Chalkable.Data.Common
              return SimpleUpdate(t, fields.Select(x => x.ToLower()).ToList(), updateParams, conds);
          }
 
-         public static DbQuery SimpleUpdate<T>(Dictionary<string, object> updateParams, Dictionary<string, object> conditions)
+         public static DbQuery SimpleUpdate<T>(IDictionary<string, object> updateParams, IDictionary<string, object> conditions)
          {
              var t = typeof(T);
              var fields = Fields(t).Select(x => x.ToLower()).ToList();
              return SimpleUpdate(t, fields, updateParams, conditions);
          }
 
-         private static DbQuery SimpleUpdate(Type t, IList<string> fields, Dictionary<string, object> updateParams,
-                                             Dictionary<string, object> conditions)
+         private static DbQuery SimpleUpdate(Type t, IList<string> fields, IDictionary<string, object> updateParams,
+                                             IDictionary<string, object> conditions)
          {
             var res = new DbQuery {Parameters = new Dictionary<string, object>()};
             var b = new StringBuilder();
@@ -164,7 +164,7 @@ namespace Chalkable.Data.Common
             return res;
         }
 
-        public static StringBuilder BuildSqlWhere(StringBuilder builder, Type t, Dictionary<string, object> conds)
+        public static StringBuilder BuildSqlWhere(StringBuilder builder, Type t, IDictionary<string, object> conds)
         {
             if (conds != null && conds.Count > 0)
             {

@@ -69,7 +69,8 @@ namespace Chalkable.Data.School.DataAccess
                 while (reader.Read())
                 {
                     var p = reader.Read<Person>();
-                    p.StudentInfo = reader.Read<StudentInfo>();    
+                    if (p.RoleRef == CoreRoles.STUDENT_ROLE.Id)
+                        p.StudentInfo = reader.Read<StudentInfo>();    
                     result.Persons.Add(p);
                 }
             }

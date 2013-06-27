@@ -1,4 +1,3 @@
-using System;
 using Chalkable.BusinessLogic.Logic;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
@@ -20,9 +19,9 @@ namespace Chalkable.BackgroundTaskProcessor
             var type = sl.SchoolService.GetById(data.SchoolId).ImportSystemType;
             var schoolId = data.SchoolId;
             var stateMachine = new SchoolStateMachine(schoolId, sl);
+            //TODO: school schould be empty
             if (!stateMachine.CanApply(StateActionEnum.SisImportAction))
                 throw new InvalidSchoolStatusException(ChlkResources.ERR_CANT_IMPORT_SCHOOL_WITH_CURRENT_STATUS);
-            //TODO: school schould be empty
             var importService = SisImportProvider.CreateImportService(type, schoolId, data.SisSchoolId, data.SchoolYearIds, log);
             importService.ImportPeople(null);
             importService.ImportSchedule(null);

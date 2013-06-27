@@ -17,6 +17,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         IList<Data.Master.Model.School> GetSchools(bool empty);
         SisSync GetSyncData(Guid schoolId);
         void SetSyncData(SisSync sisSync);
+        IList<District> GetDistricts();
+        void Update(Data.Master.Model.School school);
     }
 
     public class SchoolService : MasterServiceBase, ISchoolService
@@ -93,6 +95,23 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
+        public IList<District> GetDistricts()
+        {
+            using (var uow = Read())
+            {
+                return new DistrictDataAccess(uow).GetAll();
+            }
+        }
+
+        public void Update(Data.Master.Model.School school)
+        {
+            using (var uow = Update())
+            {
+                new SchoolDataAccess(uow).Update(school);
+                uow.Commit();
+            }
+        }
+
         public Data.Master.Model.School Create(Guid districtId, string name, IList<UserInfo> principals)
         {
             Data.Master.Model.School school = GetEmpty();
@@ -103,6 +122,8 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 schoolSl.PersonService.Add(principal.Login, principal.Password, principal.FirstName, principal.LastName, CoreRoles.ADMIN_GRADE_ROLE.Name, principal.Gender, principal.Salutation, principal.BirthDate, null);
             }
+            school.IsEmpty = false;
+            Update(school);
             return school;
         }
 

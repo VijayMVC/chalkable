@@ -65,6 +65,10 @@
       <Project>{C6A26439-411D-4D8C-9BCE-1A34E7EE604F}</Project>
       <Name>Chalkable.SisConnector</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Chalkable.StiConnector\Chalkable.StiConnector.csproj">
+      <Project>{3D16203E-D19D-41E1-9918-2A9448427BFD}</Project>
+      <Name>Chalkable.StiConnector</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
