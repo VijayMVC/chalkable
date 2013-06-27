@@ -22,7 +22,7 @@ namespace Chalkable.BusinessLogic.Services.School
         ClassComplex DeleteClassFromMarkingPeriod(Guid classId, Guid markingPeriodId);
 
         IList<ClassComplex> GetClasses(Guid? schoolYearId, Guid? markingPeriodId, Guid? personId, int start = 0, int count = int.MaxValue);
-
+        ClassPerson GetClassPerson(Guid classId, Guid personId);
         void Delete(Guid id);
     }
 
@@ -238,6 +238,20 @@ namespace Chalkable.BusinessLogic.Services.School
                             Start = start,
                             Count = count
                         }, Context.UserId).Classes;
+            }
+        }
+
+
+        public ClassPerson GetClassPerson(Guid classId, Guid personId)
+        {
+            using (var uow = Read())
+            {
+                return new ClassPersonDataAccess(uow)
+                    .GetClassPerson(new ClassPersonQuery
+                        {
+                            ClassId = classId,
+                            PersonId = personId
+                        });
             }
         }
     }

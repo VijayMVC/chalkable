@@ -57,7 +57,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public bool IsOverlaped(DateTime startDate, DateTime endDate, Guid? currentMarkingPeriodId)
         {
-            var sqlCommand = "select * from SchoolYear where StartDate <= @endDate and EndDate >= @startDate";
+            var sqlCommand = "select * from MarkingPeriod where StartDate <= @endDate and EndDate >= @startDate";
             var conds = new Dictionary<string, object>
                 {
                     {"startDate", startDate},

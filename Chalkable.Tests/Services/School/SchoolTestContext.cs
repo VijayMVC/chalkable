@@ -6,6 +6,7 @@ using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.Model;
 
 namespace Chalkable.Tests.Services.School
 {
@@ -77,6 +78,7 @@ namespace Chalkable.Tests.Services.School
             var user = locator.ServiceLocatorMaster.UserService.GetByLogin(GetUserLogin(name));
             return user.SchoolUsers.First(x => x.Role == role.Id);
         }
+        
 
         private static UserIInfoTest CreateUserInfo(string name, CoreRole role)
         {
@@ -98,6 +100,11 @@ namespace Chalkable.Tests.Services.School
                 sysSchoolSl.PersonService.Add(userInfo.Login, userInfo.Password, userInfo.FirstName, userInfo.LastName,
                                               userInfo.Role.Name, userInfo.Gender, userInfo.Salutation, userInfo.BirthDate, gradeLevelId);
             }
+        }
+
+        public Person GetPerson(SchoolUser schoolUser)
+        {
+            return sysSchoolSl.PersonService.GetPerson(schoolUser.UserRef);
         }
 
         public string AdminGradeName

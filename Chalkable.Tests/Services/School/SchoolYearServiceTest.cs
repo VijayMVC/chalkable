@@ -13,7 +13,7 @@ namespace Chalkable.Tests.Services.School
         private const string SCHOOL_YEAR_NAME = "testYear";
         
         [Test]
-        public void AddGet()
+        public void TestAddGet()
         {
             var nowTime = DateTime.UtcNow.Date; 
             AssertForDeny(sl => sl.SchoolYearService.Add(SCHOOL_YEAR_NAME, SCHOOL_YEAR_NAME, nowTime, nowTime.AddYears(1)), SchoolTestContext
@@ -47,7 +47,7 @@ namespace Chalkable.Tests.Services.School
 
         }
         [Test]
-        public void Edit()
+        public void TestEdit()
         {
             var nowTime = DateTime.UtcNow.Date;
             var syService = SchoolTestContext.AdminGradeSl.SchoolYearService;
@@ -68,7 +68,7 @@ namespace Chalkable.Tests.Services.School
             Assert.AreEqual(sy.EndDate, newEndDate);
         }
         [Test]
-        public void Delete()
+        public void TestDelete()
         {
             var sy = CreateNextSchoolYear(SchoolTestContext);
             AssertForDeny(sl=>sl.SchoolYearService.Delete(sy.Id), SchoolTestContext, SchoolContextRoles.FirstTeacher

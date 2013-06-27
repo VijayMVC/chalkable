@@ -12,7 +12,7 @@ namespace Chalkable.Data.School.Model
         public string Description { get; set; }
         public string RoomNumber { get; set; }
         public string Size { get; set; }
-        public int Capacity { get; set; }
+        public int? Capacity { get; set; }
         public string PhoneNumber { get; set; }
         public int? SisId { get; set; }
     }

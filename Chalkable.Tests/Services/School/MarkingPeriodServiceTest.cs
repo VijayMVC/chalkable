@@ -17,7 +17,7 @@ namespace Chalkable.Tests.Services.School
         private const int DEFAULT_WEEK_DAYS = 64;
         
         [Test]
-        public void Add()
+        public void TestAddGet()
         {
             var sy = SchoolYearServiceTest.CreateNextSchoolYear(SchoolTestContext);
             DateTime startDate = sy.StartDate.AddDays(1), endDate = startDate.AddMonths(2); 
@@ -51,7 +51,7 @@ namespace Chalkable.Tests.Services.School
 
         }
         [Test]
-        public void Edit()
+        public void TestEdit()
         {
             var sy = SchoolYearServiceTest.CreateNextSchoolYear(SchoolTestContext);
             var mp1 = CreateNextMp(SchoolTestContext, sy.Id);
@@ -77,7 +77,7 @@ namespace Chalkable.Tests.Services.School
 
         }
         [Test]
-        public void Delete()
+        public void TestDelete()
         {
             var sy = SchoolYearServiceTest.CreateNextSchoolYear(SchoolTestContext);
             var mp = CreateNextMp(SchoolTestContext, sy.Id, true);

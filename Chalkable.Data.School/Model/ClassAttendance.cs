@@ -10,13 +10,23 @@ namespace Chalkable.Data.School.Model
     {
         public Guid Id { get; set; }
         public Guid ClassPersonRef { get; set; }
-        public Guid ClassPeriod { get; set; }
+        public Guid ClassPeriodRef { get; set; }
         public Guid AttendanceReasonRef { get; set; }
         public string Description { get; set; }
         public AttendanceTypeEnum Type { get; set; }
         public DateTime Date { get; set; }
         public DateTime LastModified { get; set; }
         public int? SisId { get; set; }
+    }
+
+
+    public class ClassAttendanceComplex : ClassAttendance
+    {
+        public Person Student { get; set; }
+        public ClassPerson ClassPerson { get; set; }
+        public ClassPeriod ClassPeriod { get; set; }
+        public Class Class { get; set; }
+        
     }
 
     [Flags]
