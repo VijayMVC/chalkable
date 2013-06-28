@@ -32,6 +32,8 @@ namespace Chalkable.Tests.Services.School
                 AssertException<Exception>(() => action(context.SecondStudentSl));
             if ((forRoles & SchoolContextRoles.SecondParent) == SchoolContextRoles.SecondParent)
                 AssertException<Exception>(() => action(context.SecondParentSl));
+            if((forRoles & SchoolContextRoles.Checkin) == SchoolContextRoles.Checkin)
+                AssertException<Exception>(() => action(context.CheckinSl));
         }
 
 

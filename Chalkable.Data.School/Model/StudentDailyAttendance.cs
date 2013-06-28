@@ -10,7 +10,9 @@ namespace Chalkable.Data.School.Model
     {
         public Guid Id { get; set; }
         public Guid PersonRef { get; set; }
+        public const string PERSON_REF_FIELD_NAME = "PersonRef";
         public DateTime Date { get; set; }
+        public const string DATE_FIELD_NAME = "date";
         public int? Arrival { get; set; }
         public int? TimeIn { get; set; }
         public int? TimeOut { get; set; }

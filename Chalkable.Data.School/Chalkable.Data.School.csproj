@@ -48,6 +48,7 @@
     <Compile Include="DataAccess\AnnouncementTypeDataAccess.cs" />
     <Compile Include="DataAccess\AttendanceReasonDataAccess.cs" />
     <Compile Include="DataAccess\ClassAttendanceDataAccess.cs" />
+    <Compile Include="DataAccess\StudentDailyAttendanceDataAccess.cs" />
     <Compile Include="DataAccess\DateDataAccess.cs" />
     <Compile Include="DataAccess\ClassDataAccess.cs" />
     <Compile Include="DataAccess\ClassPeriodDataAccess.cs" />

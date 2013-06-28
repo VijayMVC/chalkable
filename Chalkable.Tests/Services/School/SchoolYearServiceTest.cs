@@ -15,7 +15,7 @@ namespace Chalkable.Tests.Services.School
         [Test]
         public void TestAddGet()
         {
-            var nowTime = DateTime.UtcNow.Date; 
+            var nowTime = SchoolTestContext.AdminGradeSl.Context.NowSchoolTime; 
             AssertForDeny(sl => sl.SchoolYearService.Add(SCHOOL_YEAR_NAME, SCHOOL_YEAR_NAME, nowTime, nowTime.AddYears(1)), SchoolTestContext
                 , SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent | SchoolContextRoles.FirstParent);
 
@@ -77,11 +77,11 @@ namespace Chalkable.Tests.Services.School
             Assert.AreEqual(SchoolTestContext.AdminGradeSl.SchoolYearService.GetSchoolYears().Count, 0);
         }
 
-        public static SchoolYear CreateNextSchoolYear(SchoolTestContext context)
+        public static SchoolYear CreateNextSchoolYear(SchoolTestContext context, DateTime? date = null)
         {
             var syService = context.AdminGradeSl.SchoolYearService;
             var schoolYears = syService.GetSortedYears();
-            var startDate = DateTime.UtcNow.Date;
+            var startDate = date ?? context.AdminGradeSl.Context.NowSchoolTime;
             if (schoolYears.Count > 0)
             {
                 var lastSy = schoolYears[schoolYears.Count - 1];

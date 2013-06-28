@@ -19,6 +19,7 @@ namespace Chalkable.Tests.Services.School
         public const string STUDENT_USER = "Student";
         public const string PARENT_USER = "Parent";
         public const string DEVELOPER_USER = "Devloper";
+        public const string CHECKIN_USER = "Checkin";
 
         private const string PREFIX1 = "first_";
         private const string PREFIX2 = "second_";
@@ -53,19 +54,20 @@ namespace Chalkable.Tests.Services.School
                     CreateUserInfo(res.FirstStudentName, CoreRoles.STUDENT_ROLE),
                     CreateUserInfo(res.SecondStudentName, CoreRoles.STUDENT_ROLE),
                     CreateUserInfo(res.FirstParentName, CoreRoles.PARENT_ROLE),
-                    CreateUserInfo(res.SecondParentName, CoreRoles.PARENT_ROLE)
+                    CreateUserInfo(res.SecondParentName, CoreRoles.PARENT_ROLE),
+                    CreateUserInfo(res.CheckinName, CoreRoles.CHECKIN_ROLE)
                 };
             var gradeLevels =  sysSchoolSl.GradeLevelService.CreateDefault();
             CreateUsers(sysSchoolSl, userInfos, gradeLevels[0].Id);
-            res.AdminGradeSl = ServiceLocatorFactory.CreateSchoolLocator(res.AdminGrade);
-            res.AdminEditSl = ServiceLocatorFactory.CreateSchoolLocator(res.AdminEdit);
-            res.AdminViewSl = ServiceLocatorFactory.CreateSchoolLocator(res.AdminView);
-            res.FirstTeacherSl = ServiceLocatorFactory.CreateSchoolLocator(res.FirstTeacher);
-            res.FirstStudentSl = ServiceLocatorFactory.CreateSchoolLocator(res.FirstStudent);
-            res.FirstParentSl = ServiceLocatorFactory.CreateSchoolLocator(res.FirstParent);
-            res.SecondTeacherSl = ServiceLocatorFactory.CreateSchoolLocator(res.SecondTeahcer);
-            res.SecondStudentSl = ServiceLocatorFactory.CreateSchoolLocator(res.SecondStudent);
-            res.SecondParentSl = ServiceLocatorFactory.CreateSchoolLocator(res.SecondParent);
+            res.AdminGradeSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.AdminGrade));
+            res.AdminEditSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.AdminEdit));
+            res.AdminViewSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.AdminView));
+            res.FirstTeacherSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.FirstTeacher));
+            res.FirstStudentSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.FirstStudent));
+            res.FirstParentSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.FirstParent));
+            res.SecondTeacherSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.SecondTeahcer));
+            res.SecondStudentSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.SecondStudent));
+            res.SecondParentSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.SecondParent));
             return res;
         }
 
@@ -78,7 +80,16 @@ namespace Chalkable.Tests.Services.School
             var user = locator.ServiceLocatorMaster.UserService.GetByLogin(GetUserLogin(name));
             return user.SchoolUsers.First(x => x.Role == role.Id);
         }
-        
+        private static Person GetPerson(IServiceLocatorSchool locator, string name, CoreRole role)
+        {
+            var schoolUser = GetSchoolUser(locator, name, role);
+            return locator.PersonService.GetPerson(schoolUser.User.Id);
+        }
+
+        public SchoolUser GetSchoolUser(Person person)
+        {
+            return GetSchoolUser(sysSchoolSl, person.FirstName, CoreRoles.GetById(person.RoleRef));
+        }
 
         private static UserIInfoTest CreateUserInfo(string name, CoreRole role)
         {
@@ -101,12 +112,6 @@ namespace Chalkable.Tests.Services.School
                                               userInfo.Role.Name, userInfo.Gender, userInfo.Salutation, userInfo.BirthDate, gradeLevelId);
             }
         }
-
-        public Person GetPerson(SchoolUser schoolUser)
-        {
-            return sysSchoolSl.PersonService.GetPerson(schoolUser.User.Id);
-        }
-
         public string AdminGradeName
         {
             get { return SCHOOL_ADMIN_GRADE_USER; }
@@ -143,6 +148,10 @@ namespace Chalkable.Tests.Services.School
         {
             get { return PREFIX2 + PARENT_USER; }
         }
+        public string CheckinName
+        {
+            get { return CHECKIN_USER; }
+        }
 
         public IServiceLocatorSchool AdminGradeSl { get; private set; }
 
@@ -162,44 +171,50 @@ namespace Chalkable.Tests.Services.School
 
         public IServiceLocatorSchool SecondParentSl { get; private set; }
 
-        public SchoolUser AdminGrade
+        public IServiceLocatorSchool CheckinSl { get; private set; }
+
+        public Person AdminGrade
         {
-            get { return GetSchoolUser(sysSchoolSl, AdminGradeName, CoreRoles.ADMIN_GRADE_ROLE); }
+            get { return GetPerson(sysSchoolSl, AdminGradeName, CoreRoles.ADMIN_GRADE_ROLE); }
         }
 
-        public SchoolUser AdminEdit
+        public Person AdminEdit
         {
-            get { return GetSchoolUser(sysSchoolSl, AdminEditName, CoreRoles.ADMIN_EDIT_ROLE); }
+            get { return GetPerson(sysSchoolSl, AdminEditName, CoreRoles.ADMIN_EDIT_ROLE); }
         }
-        public SchoolUser AdminView
+        public Person AdminView
         {
-            get { return GetSchoolUser(sysSchoolSl, AdminViewName, CoreRoles.ADMIN_VIEW_ROLE); }
+            get { return GetPerson(sysSchoolSl, AdminViewName, CoreRoles.ADMIN_VIEW_ROLE); }
         }
-        public SchoolUser FirstTeacher
+        public Person FirstTeacher
         {
-            get { return GetSchoolUser(sysSchoolSl, FirstTeacherName, CoreRoles.TEACHER_ROLE); }
+            get { return GetPerson(sysSchoolSl, FirstTeacherName, CoreRoles.TEACHER_ROLE); }
         }
-        public SchoolUser SecondTeahcer
+        public Person SecondTeahcer
         {
-            get { return GetSchoolUser(sysSchoolSl, SecondTeacherName, CoreRoles.TEACHER_ROLE); }
+            get { return GetPerson(sysSchoolSl, SecondTeacherName, CoreRoles.TEACHER_ROLE); }
         }
-        public SchoolUser FirstStudent
+        public Person FirstStudent
         {
-            get { return GetSchoolUser(sysSchoolSl, FirstStudentName, CoreRoles.STUDENT_ROLE); }
+            get { return GetPerson(sysSchoolSl, FirstStudentName, CoreRoles.STUDENT_ROLE); }
         }
-        public SchoolUser SecondStudent
+        public Person SecondStudent
         {
-            get { return GetSchoolUser(sysSchoolSl, SecondStudentName, CoreRoles.STUDENT_ROLE); }
+            get { return GetPerson(sysSchoolSl, SecondStudentName, CoreRoles.STUDENT_ROLE); }
         }
-        public SchoolUser FirstParent
+        public Person FirstParent
         {
-            get { return GetSchoolUser(sysSchoolSl, FirstParentName, CoreRoles.PARENT_ROLE); }
+            get { return GetPerson(sysSchoolSl, FirstParentName, CoreRoles.PARENT_ROLE); }
         }
-        public SchoolUser SecondParent
+        public Person SecondParent
         {
-            get { return GetSchoolUser(sysSchoolSl, SecondParentName, CoreRoles.PARENT_ROLE); }
+            get { return GetPerson(sysSchoolSl, SecondParentName, CoreRoles.PARENT_ROLE); }
         }
 
+        public Person Checkin
+        {
+            get { return GetPerson(sysSchoolSl, CheckinName, CoreRoles.CHECKIN_ROLE); }
+        }
     }
 
 
@@ -215,5 +230,6 @@ namespace Chalkable.Tests.Services.School
         SecondTeacher = 64,
         SecondStudent = 128,
         SecondParent = 256,
+        Checkin = 512
     }
 }

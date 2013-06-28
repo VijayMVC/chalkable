@@ -16,10 +16,10 @@ namespace Chalkable.BusinessLogic.Services.School
         ClassAttendance SetClassAttendance(Guid classPersonId, Guid classPeriodId, DateTime date, AttendanceTypeEnum type, Guid? attendanceReasonId = null, int? sisId = null);
         IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, AttendanceTypeEnum type, Guid? attendanceReasonId = null, int? sisId = null);
   
-        StudentDailyAttendance SetDailyAttendance(DateTime date, Guid personId, string attendanceNote, AttendanceTypeEnum type, int? timeIn, int? timeOut);
+        StudentDailyAttendance SetDailyAttendance(DateTime date, Guid personId,  int? timeIn, int? timeOut);
         StudentDailyAttendance GetDailyAttendance(DateTime date, Guid personId);
         IList<StudentDailyAttendance> GetDailyAttendances(DateTime date);
-        IList<ClassAttendanceComplex> GetClassAttendanceComplex(ClassAttendanceQuery attendanceQuery, IList<Guid> gradeLevelIds);
+        IList<ClassAttendanceComplex> GetClassAttendanceComplex(ClassAttendanceQuery attendanceQuery, IList<Guid> gradeLevelIds = null);
 
         IList<ClassAttendanceComplex> GetClassAttendanceComplex(Guid? schoolYearId, Guid? markingPeriodId, Guid? classId, Guid? personId, AttendanceTypeEnum? type, DateTime date);
         ClassAttendanceComplex SwipeCard(Guid personId, DateTime dateTime, Guid classPeriodId);
@@ -92,14 +92,67 @@ namespace Chalkable.BusinessLogic.Services.School
             }      
         }
 
-        public StudentDailyAttendance SetDailyAttendance(DateTime date, Guid personId, string attendanceNote, AttendanceTypeEnum type, int? timeIn, int? timeOut)
+        public StudentDailyAttendance SetDailyAttendance(DateTime date, Guid personId,  int? timeIn, int? timeOut)
         {
-            throw new NotImplementedException();
+            if(!AttendanceSecurity.CanSetDailyAttendance(Context))
+                throw new ChalkableSecurityException();
+
+            using (var uow = Update())
+            {
+                var da = new StudentDailyAttendanceDataAccess(uow);
+                var res = da.SetStudentDailyAttendance(personId, date, timeIn, timeOut);
+                uow.Commit();
+                return res;
+            }
         }
 
         public StudentDailyAttendance GetDailyAttendance(DateTime date, Guid personId)
         {
-            throw new NotImplementedException();
+            if (!(BaseSecurity.IsAdminViewer(Context) || Context.UserId == personId))
+                throw new ChalkableSecurityException();
+               
+            using (var uow = Read())
+            {
+                var dailyAttDa = new StudentDailyAttendanceDataAccess(uow);
+                var res = dailyAttDa.GetDailyAttendanceOrNull(new StudentDailyAttendanceQuery
+                    {
+                        Date = date,
+                        PersonRef = personId
+                    });
+                if (res == null || res.Arrival == null)
+                {
+                    var firstPresentOrLate = GetClassAttendanceComplex(new ClassAttendanceQuery
+                        {
+                            StudentId = personId,
+                            FromDate = date,
+                            ToDate = date,
+                            Type = AttendanceTypeEnum.Late | AttendanceTypeEnum.Present
+                        }).OrderBy(x=>x.ClassPeriod.Period.StartTime).FirstOrDefault();
+
+                    if (firstPresentOrLate != null)
+                    {
+                        var generalPeriod = firstPresentOrLate.ClassPeriod.Period;
+                        var lastModified = (int)(firstPresentOrLate.LastModified - firstPresentOrLate.LastModified.Date).TotalMinutes;
+                        var arrivaleTime = generalPeriod.StartTime;
+                        if (firstPresentOrLate.Type == AttendanceTypeEnum.Late &&
+                            generalPeriod.StartTime <= lastModified && lastModified <= generalPeriod.EndTime)
+                        {
+                            arrivaleTime = lastModified;
+                        }
+                        if (res == null)
+                        {
+                            res = new StudentDailyAttendance
+                            {
+                                TimeIn = arrivaleTime,
+                                PersonRef = personId,
+                                Date = date,
+                            };
+                        }
+                        res.Arrival = arrivaleTime;
+                    }
+                }
+                return res;
+            }
         }
 
         public IList<StudentDailyAttendance> GetDailyAttendances(DateTime date)
@@ -107,7 +160,7 @@ namespace Chalkable.BusinessLogic.Services.School
             throw new NotImplementedException();
         }
 
-        public IList<ClassAttendanceComplex> GetClassAttendanceComplex(ClassAttendanceQuery attendanceQuery, IList<Guid> gradeLevelIds)
+        public IList<ClassAttendanceComplex> GetClassAttendanceComplex(ClassAttendanceQuery attendanceQuery, IList<Guid> gradeLevelIds = null)
         {
             using (var uow = Read())
             {
