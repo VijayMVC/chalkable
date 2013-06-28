@@ -78,6 +78,13 @@ namespace Chalkable.Data.Common
             return reader.GetGuid(reader.GetOrdinal(field));
         }
 
+        public static object ReadGuidNull(DbDataReader reader, string field)
+        {
+            if (reader.IsDBNull(reader.GetOrdinal(field)))
+                return null;
+            return ReadGuid(reader, field);
+        }
+
         public static decimal? ReadDecimalNull(DbDataReader reader, string field)
         {
             if (reader.IsDBNull(reader.GetOrdinal(field)))
@@ -110,6 +117,8 @@ namespace Chalkable.Data.Common
                 return null;
             if (type == typeof(Guid))
                 return ReadGuid(reader, field);
+            if (type == typeof (Guid?))
+                return ReadGuidNull(reader, field);
             if (type == typeof (int))
                 return ReadInt32(reader, field);
             if (type == typeof(int?))
@@ -148,6 +157,7 @@ namespace Chalkable.Data.Common
             
             return null;
         }
+
 
         public static object Read(this DbDataReader reader, Type t, bool fullFieldNames = false)
         {

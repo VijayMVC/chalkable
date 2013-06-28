@@ -15,3 +15,4 @@ Chalkable.Web/Content/partials/**
 Chalkable.Web/Content/index.css
 Chalkable.Web/Content/screen-index.css
 Chalkable.Web/Content/screen.css
+Chalkable.Web/assets/sass/*.css

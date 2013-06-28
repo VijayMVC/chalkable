@@ -23,7 +23,7 @@ namespace Chalkable.Data.Common
             }
         }
 
-        protected DbDataReader ExecuteReaderParametrized(string sql, Dictionary<string, object> parameters)
+        protected DbDataReader ExecuteReaderParametrized(string sql, IDictionary<string, object> parameters)
         {
             using (SqlCommand command = unitOfWork.GetTextCommandWithParams(sql, parameters))
             {
@@ -57,7 +57,7 @@ namespace Chalkable.Data.Common
             var q = Orm.SimpleUpdate(obj);
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
         }
-        protected void SimpleUpdate<T>(Dictionary<string, object> updateParams, Dictionary<string, object> conditions)
+        protected void SimpleUpdate<T>(IDictionary<string, object> updateParams, IDictionary<string, object> conditions)
         {
             var q = Orm.SimpleUpdate<T>(updateParams, conditions);
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
@@ -164,12 +164,14 @@ namespace Chalkable.Data.Common
         protected bool Exists<T>(Dictionary<string, object> conditions) where T : new()
         {
             var resName = "AllCount";
-            return Exists(Orm.CountSelect<T>(conditions, resName));   
+            var q = Orm.CountSelect<T>(conditions, resName);
+            return Read(q, reader => reader.Read() && SqlTools.ReadInt32(reader, resName) > 0);
         }
 
         protected bool Exists(DbQuery query, string resName = "AllCount")
         {
-            return Read(query, reader => reader.Read() && SqlTools.ReadInt32(reader, resName) > 0);
+            var q = Orm.CountSelect(query, resName);
+            return Read(q, reader => reader.Read() && SqlTools.ReadInt32(reader, resName) > 0);
         }
 
         public TEntity GetById(Guid id)

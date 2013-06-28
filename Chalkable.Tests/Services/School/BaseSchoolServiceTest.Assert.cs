@@ -32,13 +32,15 @@ namespace Chalkable.Tests.Services.School
                 AssertException<Exception>(() => action(context.SecondStudentSl));
             if ((forRoles & SchoolContextRoles.SecondParent) == SchoolContextRoles.SecondParent)
                 AssertException<Exception>(() => action(context.SecondParentSl));
+            if((forRoles & SchoolContextRoles.Checkin) == SchoolContextRoles.Checkin)
+                AssertException<Exception>(() => action(context.CheckinSl));
         }
 
 
         public static void AssertAreEqual<T>(T obj1, T obj2) where T : new()
         {
             var type = typeof (T);
-            var fields = type.GetProperties();
+            var fields = type.GetProperties().Where(x=>!x.PropertyType.IsClass);
             foreach (var propertyInfo in fields)
             {
                 Assert.AreEqual(propertyInfo.GetValue(obj1), propertyInfo.GetValue(obj2));

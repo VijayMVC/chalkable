@@ -14,10 +14,10 @@ namespace Chalkable.Tests.Services.School
     {
 
         private const string MP_NAME = "TestMarkingPeriod";
-        private const int DEFAULT_WEEK_DAYS = 64;
+        private const int DEFAULT_WEEK_DAYS = 127;
         
         [Test]
-        public void Add()
+        public void TestAddGet()
         {
             var sy = SchoolYearServiceTest.CreateNextSchoolYear(SchoolTestContext);
             DateTime startDate = sy.StartDate.AddDays(1), endDate = startDate.AddMonths(2); 
@@ -51,7 +51,7 @@ namespace Chalkable.Tests.Services.School
 
         }
         [Test]
-        public void Edit()
+        public void TestEdit()
         {
             var sy = SchoolYearServiceTest.CreateNextSchoolYear(SchoolTestContext);
             var mp1 = CreateNextMp(SchoolTestContext, sy.Id);
@@ -77,7 +77,7 @@ namespace Chalkable.Tests.Services.School
 
         }
         [Test]
-        public void Delete()
+        public void TestDelete()
         {
             var sy = SchoolYearServiceTest.CreateNextSchoolYear(SchoolTestContext);
             var mp = CreateNextMp(SchoolTestContext, sy.Id, true);
@@ -92,7 +92,7 @@ namespace Chalkable.Tests.Services.School
             var course = adminSl.CourseService.Add("testCourse", "testCourse");
             var gradeLevels = adminSl.GradeLevelService.CreateDefault();
             var cl = adminSl.ClassService.Add(sy.Id, course.Id, "testClass", "testClass",
-                               SchoolTestContext.FirstTeacher.UserRef, gradeLevels[0].Id, new List<Guid> {mp.Id});
+                               SchoolTestContext.FirstTeacher.Id, gradeLevels[0].Id, new List<Guid> {mp.Id});
 
             AssertException<Exception>(() => SchoolTestContext.AdminGradeSl.MarkingPeriodService.Delete(mp.Id));
             adminSl.ClassService.DeleteClassFromMarkingPeriod(cl.Id, mp.Id);
@@ -100,7 +100,8 @@ namespace Chalkable.Tests.Services.School
             Assert.AreEqual(0, SchoolTestContext.AdminGradeSl.MarkingPeriodService.GetMarkingPeriods(sy.Id).Count);
         }
 
-        public static MarkingPeriod CreateNextMp(SchoolTestContext context, Guid? schoolYearId = null, bool generatePeriods = false, int mpInterval = 30)
+        public static MarkingPeriod CreateNextMp(SchoolTestContext context, Guid? schoolYearId = null, bool generatePeriods = false, int mpInterval = 30
+            , int weekDays = DEFAULT_WEEK_DAYS)
         {
             var adminSl = context.AdminGradeSl;
             //var sysAdminSl = ServiceLocatorFactory.CreateMasterSysAdmin();
@@ -119,7 +120,7 @@ namespace Chalkable.Tests.Services.School
 
             var count = mps.Count;
             var newMpName = MP_NAME + "_" + count + 1;
-            return adminSl.MarkingPeriodService.Add(sy.Id, startDate, startDate.AddDays(mpInterval), newMpName, newMpName, DEFAULT_WEEK_DAYS, generatePeriods);
+            return adminSl.MarkingPeriodService.Add(sy.Id, startDate, startDate.AddDays(mpInterval), newMpName, newMpName, weekDays, generatePeriods);
         }
     }
 }

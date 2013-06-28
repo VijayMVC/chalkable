@@ -53,10 +53,14 @@
     <Compile Include="Services\Master\MasterServiceTestBase.cs" />
     <Compile Include="Services\Master\SchoolServiceTest.cs" />
     <Compile Include="Services\Master\UserServiceTest.cs" />
+    <Compile Include="Services\School\AddressServiceTest.cs" />
     <Compile Include="Services\School\AttendanceReasonServiceTest.cs" />
+    <Compile Include="Services\School\AttendanceServiceTest.cs" />
     <Compile Include="Services\School\BaseSchoolServiceTest.Assert.cs" />
     <Compile Include="Services\School\BaseSchoolServiceTest.cs" />
     <Compile Include="Services\School\MarkingPeriodServiceTest.cs" />
+    <Compile Include="Services\School\PhoneServiceTest.cs" />
+    <Compile Include="Services\School\RoomServiceTest.cs" />
     <Compile Include="Services\School\SchoolTestContext.cs" />
     <Compile Include="Services\School\SchoolYearServiceTest.cs" />
     <Compile Include="Services\ServiceTestBase.cs" />

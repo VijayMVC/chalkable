@@ -16,10 +16,10 @@
                 each item in self.items
                     .row
                         .td= item.getName()
-                        .td= item.getLocalid()
-                        .td= item.getNcesid()
-                        .td= item.getSchooltype()
-                        .td= item.getSchoolurl()
+                        .td= item.getLocalId()
+                        .td= item.getNcesId()
+                        .td= item.getSchoolType()
+                        .td= item.getSchoolUrl()
                         .td.action-links
                             +ActionLink('schools', 'details', item.getId()).profile
                             +ActionLink('sysadmin', 'index').remove

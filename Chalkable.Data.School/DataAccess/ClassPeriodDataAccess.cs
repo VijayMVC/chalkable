@@ -92,7 +92,7 @@ namespace Chalkable.Data.School.DataAccess
             }
             if (query.MarkingPeriodId.HasValue)
             {
-                conds.Add("markingPeriodId", query.Id);
+                conds.Add("markingPeriodId", query.MarkingPeriodId);
                 builder.AppendFormat(" {0} Period.MarkingPeriodRef = @markingPeriodId", where);
                 where = " and ";    
             }
@@ -120,21 +120,21 @@ namespace Chalkable.Data.School.DataAccess
                 builder.AppendFormat(" {0} ClassPeriod.ClassRef in (select ClassRef from ClassPerson where PersonRef = @studentId)", where);
                 where = " and ";
             }
-            if (query.StudentId.HasValue)
+            if (query.TeacherId.HasValue)
             {
-                conds.Add("studentId", query.StudentId);
-                builder.AppendFormat(" {0} ClassPeriod.ClassRef in (select Id from Class where TeacherRef = @studentId)", where);
+                conds.Add("teacherId", query.TeacherId);
+                builder.AppendFormat(" {0} ClassPeriod.ClassRef in (select Id from Class where TeacherRef = @teacherId)", where);
                 where = " and ";
             }
             if (query.Time.HasValue)
             {
                 conds.Add("time", query.Time);
-                builder.AppendFormat(" {0} Period.StartTime <= @time and Period.EndTime >= time", where);
+                builder.AppendFormat(" {0} Period.StartTime <= @time and Period.EndTime >= @time", where);
                 where = " and ";
             }
             if (query.ClassIds != null && query.ClassIds.Count > 0)
             {
-                builder.AppendFormat(" {0} ClassPeriod.ClassRef in ({1})", where, query.ClassIds.Select(x => x.ToString()).JoinString(","));
+                builder.AppendFormat(" {0} ClassPeriod.ClassRef in ({1})", where, query.ClassIds.Select(x => "'" + x.ToString() + "'").JoinString(","));
             }
             return new DbQuery {Sql = builder.ToString(), Parameters = conds};
         }

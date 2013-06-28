@@ -49,6 +49,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var phone = new Phone
                     {
                         Id = Guid.NewGuid(),
+                        Value = value,
                         DigitOnlyValue = DigitsOnly(value),
                         PersonRef = personId,
                         IsPrimary = isPrimary,
@@ -69,6 +70,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (!(BaseSecurity.IsAdminEditor(Context) || Context.UserId == phone.PersonRef))
                     throw new ChalkableSecurityException();
                 phone.DigitOnlyValue = DigitsOnly(value);
+                phone.Value = value;
                 phone.IsPrimary = isPrimary;
                 phone.Type = type;
                 da.Update(phone);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -14,6 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Person Add(string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, Guid? gradeLevelId);
         void Delete(string id);
         IList<Person> GetPersons();
+        Person GetPerson(Guid id);
     }
 
     public class PersonService : SchoolServiceBase, IPersonService
@@ -79,19 +81,33 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!BaseSecurity.IsAdminOrTeacher(Context))
                 throw new ChalkableSecurityException();
 
+            return GetPersons(new PersonQuery 
+                {
+                    Count = int.MaxValue,
+                    Start = 0
+                });
+        }
+
+        private IList<Person> GetPersons(PersonQuery query)
+        {
             using (var uow = Read())
             {
                 var da = new PersonDataAccess(uow);
-                var query = new PersonQuery
-                    {
-                        CallerId = Context.UserId,
-                        Count = int.MaxValue, 
-                        Start = 0,
-                        CallerRoleId = Context.Role.Id
-                    };
+                query.CallerId = Context.UserId;
+                query.CallerRoleId = Context.Role.Id;
                 var res = da.GetPersons(query);
                 return res.Persons;
             }
+        } 
+
+        public Person GetPerson(Guid id)
+        {
+            return GetPersons(new PersonQuery
+                {
+                    PersonId = id,
+                    Count = 1, 
+                    Start = 0
+                }).First();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<Person> GetUsersByPhone(string phone)
         {
-            var sql = @"select Person.* from Phone 
+            var sql = @"select p.* from Phone 
                       join Person p on p.Id = Phone.PersonRef
                       where Phone.DigitOnlyValue = @phone";
             var conds = new Dictionary<string, object> {{"phone", phone}};

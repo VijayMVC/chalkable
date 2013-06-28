@@ -24,7 +24,7 @@ namespace Chalkable.StiConnector.Services
         private const string NO_ROOM_NUMBER = "No Room";
         private const string SIS_DATA_BASE_CONNECTION_ERROR_FMT = "Invalid sis database connection data {0}, {1}, {2}, {3}";
         private const string CONNECTION_STRING_FMT =
-            "metadata=res://#1#Model.StiEntities.csdl|res://#1#Model.StiEntities.ssdl|res://#1#Model.StiEntities.msl;provider=System.Data.SqlClient;provider connection string=\"data source={0};initial catalog={1};persist security info=True;user id={2};password={3};MultipleActiveResultSets=True;App=EntityFramework\"";
+            "metadata=res://*/Model.StiEntities.csdl|res://*/Model.StiEntities.ssdl|res://*/Model.StiEntities.msl;provider=System.Data.SqlClient;provider connection string=\"data source={0};initial catalog={1};persist security info=True;user id={2};password={3};MultipleActiveResultSets=True;App=EntityFramework\"";
         
         public ImportService(Guid schoolId, int sisSchoolId, IList<int> schoolYearIds, BackgroundTaskService.BackgroundTaskLog log) : base(schoolId, sisSchoolId, schoolYearIds, log)
         {
@@ -515,7 +515,12 @@ namespace Chalkable.StiConnector.Services
             var days = stiEntities.CalendarDays.Where(x => x.AcadSessionID == sessionId).ToList();
 
             var markingPeriods = schoolServiceLocator.MarkingPeriodService.GetMarkingPeriods(schoolYearId);
-            var scheduleSections = schoolServiceLocator.ScheduleSectionService.GetSections(markingPeriods.Select(x => x.Id).ToList());
+            var scheduleSections = new List<ScheduleSection>();
+            var mpIds = markingPeriods.Select(x => x.Id).ToList();
+            foreach (var id in mpIds)
+            {
+                scheduleSections.AddRange(schoolServiceLocator.ScheduleSectionService.GetSections(id));
+            }
             var added = new HashSet<DateTime>();
             foreach (var day in days)
             {

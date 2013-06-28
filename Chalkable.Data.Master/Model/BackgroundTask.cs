@@ -64,7 +64,8 @@ namespace Chalkable.Data.Master.Model
 
     public enum BackgroundTaskTypeEnum
     {
-        CreateEmptySchool = 0
+        CreateEmptySchool = 0,
+        SisDataImport = 1
     }
 
     public enum BackgroundTaskStateEnum

@@ -78,23 +78,27 @@ NAMESPACE('chlk.controls', function () {
             ret == null ? "" : ret;
     }
 
+    function isArray( obj ) {
+        return toString.call(obj) === "[object Array]";
+    }
+
     function serializeForm(form) {
         var elements = form.elements || [];
 
         return ria.__API.clone(elements)
             .filter(function(_) {
-                var type = this.type;
+                var type = _.type;
                 // Use .is(":disabled") so that fieldset[disabled] works
-                return this.name && !ria.dom.Dom(this).is( ":disabled" ) &&
-                    rsubmittable.test( this.nodeName ) && !rsubmitterTypes.test( type ) &&
-                    ( this.checked || !manipulation_rcheckableType.test( type ) );
+                return _.name && !ria.dom.Dom(_).is( ":disabled" ) &&
+                    rsubmittable.test( _.nodeName ) && !rsubmitterTypes.test( type ) &&
+                    ( _.checked || !manipulation_rcheckableType.test( type ) );
             })
             .map(function(elem) {
                 var val = valueOfElement(elem);
 
                 return val == null ?
                     null :
-                    jQuery.isArray( val ) ?
+                    isArray( val ) ?
                         val.map(function(val){
                             return { name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
                         }) :

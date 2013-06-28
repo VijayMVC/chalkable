@@ -33,13 +33,15 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new DateDataAccess(uow);
-                var res = da.GetDate(new DateQuery {FromDate = date, ToDate = date});
+                var res = da.GetDateOrNull(new DateQuery {FromDate = date, ToDate = date});
                 if (res == null)
                 {
                     var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date);
+                    var dates = new List<Date>();
                     if (mp == null)
                     {
-                        res = new Date { DateTime = date };
+                        res = new Date { Id = Guid.NewGuid(), DateTime = date };
+                        dates.Add(res);
                     }
                     else
                     {
@@ -55,11 +57,11 @@ namespace Chalkable.BusinessLogic.Services.School
                         var startDate = mp.StartDate.Date;
                         var endDate = mp.EndDate.Date;
 
-                        var dates = new List<Date>();
                         for (DateTime dt = startDate; dt <= endDate; dt = dt.AddDays(1))
                         {
                             var d = new Date
                             {
+                                Id = Guid.NewGuid(),
                                 MarkingPeriodRef = mp.Id,
                                 IsSchoolDay = false,
                                 DateTime = dt
@@ -74,7 +76,7 @@ namespace Chalkable.BusinessLogic.Services.School
                             if (d.DateTime == date) res = d;
                         }
                     }
-                    da.Insert(res);
+                    da.Insert(dates);
                 }
                 uow.Commit();
                 return res;

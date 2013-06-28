@@ -51,8 +51,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     Id = Guid.NewGuid(),
                     ClassRef = classId,
-                    PersonRef = periodId,
-                    RoominfoRef = roomId
+                    PeriodRef = periodId,
+                    RoomRef = roomId
                 };
                 da.Insert(res);
                 uow.Commit();
@@ -62,7 +62,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(Guid id)
         {
-            if(BaseSecurity.IsAdminEditor(Context))
+            if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
@@ -121,7 +121,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var teacherId = person.RoleRef == CoreRoles.TEACHER_ROLE.Id ? person.Id : default(Guid?);
                 var studentId = person.RoleRef == CoreRoles.STUDENT_ROLE.Id ? person.Id : default(Guid?);
                 var time = (int)(dateTime - dateTime.Date).TotalMinutes;
-                return GetClassPeriods(dateTime, null, null, studentId, teacherId, time).FirstOrDefault();    
+                return GetClassPeriods(dateTime.Date, null, null, studentId, teacherId, time).FirstOrDefault();    
             }
         }
 
@@ -153,7 +153,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ClassPeriod> GetClassPeriods(DateTime date, Guid? classId, Guid? roomId, Guid? studentId, Guid? teacherId, int? time = null)
         {
-            var d = ServiceLocator.CalendarDateService.GetCalendarDateByDate(date);
+            var d = ServiceLocator.CalendarDateService.GetCalendarDateByDate(date.Date);
             if (d == null || !d.ScheduleSectionRef.HasValue || !d.MarkingPeriodRef.HasValue)
                 return new List<ClassPeriod>();
 

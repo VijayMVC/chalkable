@@ -5,7 +5,7 @@ NAMESPACE('chlk.models.school', function () {
     /** @class chlk.models.school.SchoolDetails*/
     CLASS(
         'SchoolDetails', EXTENDS(chlk.models.School), [
-            Number, 'statusnumber',
+            Number, 'statusNumber',
             String, 'status',
             ArrayOf(Number), 'buttons',
             ArrayOf(String), 'emails'

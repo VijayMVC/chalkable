@@ -98,13 +98,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 var sy = new SchoolYearDataAccess(uow).GetById(schoolYearId);
                 var mp = AddMarkingPeriod(da, sy, startDate, endDate, name, description, weekDays);
                 da.Insert(mp);
+                uow.Commit();
                 machine.Apply(StateActionEnum.MarkingPeriodsAdd);
                 if (generatePeriods)
                 {
                     var names = new[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
                     ServiceLocator.ScheduleSectionService.GenerateScheduleSectionsWithDefaultPeriods(mp.Id, names);
                 }
-                uow.Commit();
                 return mp;
             }
         }

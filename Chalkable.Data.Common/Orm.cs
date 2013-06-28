@@ -46,7 +46,7 @@ namespace Chalkable.Data.Common
             return Fields(t);
         }
 
-        private const string COMPLEX_RESULT_SET_FORMAT = " {0}.{1} as {0}_{1}";
+        private const string COMPLEX_RESULT_SET_FORMAT = " [{0}].[{1}] as {0}_{1}";
         public static IList<string> FullFieldsNames(Type t)
         {
             var fields = Fields(t);
@@ -57,9 +57,11 @@ namespace Chalkable.Data.Common
         public static string ComplexResultSetQuery(IList<Type> types)
         {
             var res = new StringBuilder();
-            foreach (var type in types)
+            for (int i = 0; i < types.Count; i++)
             {
-                res.Append(FullFieldsNames(type).JoinString(","));
+                res.Append(FullFieldsNames(types[i]).JoinString(","));
+                if (i != types.Count - 1)
+                    res.Append(",");
             }
             return res.ToString();
         }
@@ -108,15 +110,15 @@ namespace Chalkable.Data.Common
              return SimpleUpdate(t, fields.Select(x => x.ToLower()).ToList(), updateParams, conds);
          }
 
-         public static DbQuery SimpleUpdate<T>(Dictionary<string, object> updateParams, Dictionary<string, object> conditions)
+         public static DbQuery SimpleUpdate<T>(IDictionary<string, object> updateParams, IDictionary<string, object> conditions)
          {
              var t = typeof(T);
              var fields = Fields(t).Select(x => x.ToLower()).ToList();
              return SimpleUpdate(t, fields, updateParams, conditions);
          }
 
-         private static DbQuery SimpleUpdate(Type t, IList<string> fields, Dictionary<string, object> updateParams,
-                                             Dictionary<string, object> conditions)
+         private static DbQuery SimpleUpdate(Type t, IList<string> fields, IDictionary<string, object> updateParams,
+                                             IDictionary<string, object> conditions)
          {
             var res = new DbQuery {Parameters = new Dictionary<string, object>()};
             var b = new StringBuilder();
@@ -164,7 +166,7 @@ namespace Chalkable.Data.Common
             return res;
         }
 
-        public static StringBuilder BuildSqlWhere(StringBuilder builder, Type t, Dictionary<string, object> conds)
+        public static StringBuilder BuildSqlWhere(StringBuilder builder, Type t, IDictionary<string, object> conds)
         {
             if (conds != null && conds.Count > 0)
             {

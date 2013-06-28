@@ -1,0 +1,8 @@
+mixin GlanceBox(controller, action, value)
+    +ActionLink(controller, action).glance-box.hover-action-box
+        div
+            .value(class="#{value >= 100 && value < 1000? 'large' :  value >= 1000 ? 'small' : '' }") #{value}
+            p.glance-title Title
+            .details
+                div Item 1
+

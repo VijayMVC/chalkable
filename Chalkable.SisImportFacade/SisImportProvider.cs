@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Data.Common.Enums;
 using Chalkable.SisConnector.Services;
+using Chalkable.StiConnector.Services;
 
 namespace Chalkable.SisImportFacade
 {
@@ -14,9 +15,9 @@ namespace Chalkable.SisImportFacade
         static SisImportProvider()
         {
             /*creators.Add(ImportSystemTypeEnum.InfiniteCampus, (schoolId, sisSchoolId, sisSchoolYears, loggingService) => 
-                new InfiniteCampusConnector.Services.ImportService(schoolId, sisSchoolId, sisSchoolYears, loggingService));
+                new InfiniteCampusConnector.Services.ImportService(schoolId, sisSchoolId, sisSchoolYears, loggingService));*/
             creators.Add(ImportSystemTypeEnum.Sti, (schoolId, sisSchoolId, sisSchoolYears, loggingService) => 
-                new StiConnector.Services.ImportService(schoolId, sisSchoolId, sisSchoolYears, loggingService));*/
+                new ImportService(schoolId, sisSchoolId, sisSchoolYears, loggingService));
         }
 
         public static SisImportService CreateImportService(ImportSystemTypeEnum systemType, Guid schoolId, int sisSchoolId, IList<int> schoolYearIds, BackgroundTaskService.BackgroundTaskLog log)
