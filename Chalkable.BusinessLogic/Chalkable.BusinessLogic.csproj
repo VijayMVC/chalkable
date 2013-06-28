@@ -46,6 +46,7 @@
     <Compile Include="Model\RecipientInfo.cs" />
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\AddressSecurity.cs" />
     <Compile Include="Security\AnnouncementSecurity.cs" />
     <Compile Include="Security\AttendanceSecurity.cs" />
     <Compile Include="Security\BaseSecurity.cs" />

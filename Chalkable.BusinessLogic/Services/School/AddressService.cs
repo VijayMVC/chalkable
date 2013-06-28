@@ -22,7 +22,6 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        //TODO: security
         public Address Add(Guid personId, string value, string note, AddressType type)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
@@ -46,12 +45,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Address Edit(Guid id, string value, string note, AddressType type)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
-                throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new AddressDataAccess(uow);
                 var address = da.GetById(id);
+                if (!AddressSecurity.CanModify(address, Context))
+                    throw new ChalkableSecurityException();
                 address.Value = value;
                 address.Note = note;
                 address.Type = type;
@@ -63,11 +62,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(Guid id)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
-                throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new AddressDataAccess(uow);
+                var address = da.GetById(id);
+                if (!AddressSecurity.CanModify(address, Context))
+                    throw new ChalkableSecurityException();
                 da.Delete(id);
                 uow.Commit();
             }
