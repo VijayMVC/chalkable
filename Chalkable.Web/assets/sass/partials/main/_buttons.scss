@@ -105,7 +105,6 @@
       }
     }
   }
-
   &.red-button{
     background-image: url(images/buttons/xbutton-red-left.png);
     > SPAN {
@@ -126,6 +125,106 @@
       opacity: 0.8;
     }
   }
-
-
 }
+.special-button2{
+  min-height: 33px;
+  padding-left:9px;
+  width: auto;
+  display: inline-block;
+  background-repeat: no-repeat;
+  > SPAN {
+    min-height: 33px;
+    padding-right: 9px;
+    display: block;
+    background-repeat: no-repeat;
+    > SPAN {
+      min-height: 33px;
+      display:block;
+      background-repeat: repeat-x;
+      > BUTTON {
+        height: 30px;
+        color: white;
+        border: 0 none;
+        background-color: transparent;
+        padding-left: 3px;
+        padding-right: 3px;
+        cursor: pointer;
+        margin: 0;
+        overflow: visible;
+        width: auto;
+        font: {
+          size: 18px;
+          family: Arial;
+        }
+      }
+    }
+  }
+
+  &:hover{
+    &:not(.disabled){
+      background-position: -0px -42px;
+      >SPAN {
+        background-position: right -42px;
+        >SPAN{
+          background-position: -0px -42px;
+        }
+      }
+    }
+  }
+
+  &.blue{
+    background-image: url(images/buttons/xbutton-blue2-left.png);
+    > SPAN {
+      background: url(images/buttons/xbutton-blue2-right.png) right 0 no-repeat;
+      > SPAN {
+        background-image: url(images/buttons/xbutton-blue2-center.png);
+      }
+    }
+  }
+  &.grey{
+    background-image: url(images/buttons/xbutton-grey2-left.png);
+    > SPAN {
+      background: url(images/buttons/xbutton-grey2-right.png) right 0 no-repeat ;
+      > SPAN {
+        background-image: url(images/buttons/xbutton-grey2-center.png);
+      }
+    }
+  }
+  &.red {
+    background-image: url(images/buttons/xbutton-red2-left.png);
+    > SPAN {
+      background: url(images/buttons/xbutton-red2-right.png) right 0 no-repeat;
+      > SPAN {
+        background-image: url(images/buttons/xbutton-red2-center.png);
+      }
+    }
+  }
+  &.green {
+    background-image: url(images/buttons/xbutton-green2-left.png);
+    > SPAN {
+      background: url(images/buttons/xbutton-green2-right.png) right 0 no-repeat;
+      > SPAN {
+        background-image: url(images/buttons/xbutton-green2-center.png);
+      }
+    }
+  }
+}
+
+
+.blue-gradient-btn{
+    color: white;
+    text-align: center;
+    padding: 7px 28px 9px;
+    font: normal 12px Arial;
+    text-shadow: 0 -1px 0 #305263;
+    @include background(linear-gradient(top, #568da7, #2f667d));
+    border: 1px solid #29596e;
+    @include border-radius(4px);
+    @include box-shadow(inset 0 1px 0 #9abbcb);
+    cursor: pointer;
+
+    &:hover{
+      @include background(linear-gradient(top, #467d97, #1f566d));
+    }
+}
+
