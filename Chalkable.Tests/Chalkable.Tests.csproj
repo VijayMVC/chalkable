@@ -58,6 +58,7 @@
     <Compile Include="Services\School\BaseSchoolServiceTest.Assert.cs" />
     <Compile Include="Services\School\BaseSchoolServiceTest.cs" />
     <Compile Include="Services\School\MarkingPeriodServiceTest.cs" />
+    <Compile Include="Services\School\PhoneServiceTest.cs" />
     <Compile Include="Services\School\SchoolTestContext.cs" />
     <Compile Include="Services\School\SchoolYearServiceTest.cs" />
     <Compile Include="Services\ServiceTestBase.cs" />

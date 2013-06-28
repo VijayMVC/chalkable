@@ -70,6 +70,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (!(BaseSecurity.IsAdminEditor(Context) || Context.UserId == phone.PersonRef))
                     throw new ChalkableSecurityException();
                 phone.DigitOnlyValue = DigitsOnly(value);
+                phone.Value = value;
                 phone.IsPrimary = isPrimary;
                 phone.Type = type;
                 da.Update(phone);
