@@ -1,0 +1,24 @@
+.school-details
+    -school=self.getSchoolInfo()
+    -users=self.getUsers()
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('schools', 'details', school.getId()) Now
+                +ActionLink('schools', 'details', school.getId()) Schedule
+                +ActionLink('schools', 'people', school.getId()).pressed People
+                +ActionLink('schools', 'details', school.getId()) Data
+                +ActionLink('schools', 'details', school.getId()) SIS
+    .content
+        .left
+            .big-img-container
+        .right
+            h1= school.getName()
+            .status #{school.getStatusnumber()}. #{school.getStatus()}
+                +Button() My Button
+        .clear
+        +Grid(users, {
+            selectedIndex:0
+        }).people-list
+
+

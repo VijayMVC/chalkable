@@ -1,0 +1,12 @@
+mixin Grid(data, configs)
+    -self.onStart(data,configs)
+    .chlk-grid(attributes)
+        input.grid-focus
+        each item, i in data
+            .row(class=(i == self.getCurrentIndex() ? 'selected' : ''), index=i)
+                +ActionLink('schools', 'details', 1).left
+                    img.avatar.avatar47(src="https://dev.chalkable.com/PersonPicture/Read?pictureId=0&width=47&height=47&gender=F")
+                p.left= item.getFullname()
+                .right
+                    +Button().message-button Message
+                .clear

@@ -1,0 +1,81 @@
+BODY {
+  DIV.page{
+    #content {
+      #main {
+        >SPAN.demo{
+          background: url(images/register/demo-bg.png) 0 0 no-repeat;
+          position: relative;
+          top: 365px;
+          left: 350px;
+          height: 0;
+          width: 0;
+          opacity: 0;
+          display: block;
+
+          .buttons-container{
+            height: 39px;
+            width: 258px;
+            position: absolute;
+            top: 316px;
+            left: 245px;
+            display: none;
+
+            a
+            {
+              float: right;
+              height: 39px;
+            }
+
+            a.Student
+            {
+              width: 85px;
+              background: url(images/common/demo-buttons-sprite.png) 0 0 no-repeat;
+
+              &:hover
+              {
+                background-position: -258px 0;
+              }
+
+              &:active
+              {
+                background-position: -516px 0;
+              }
+            }
+
+            a.Teacher
+            {
+              width: 88px;
+              background: url(images/common/demo-buttons-sprite.png) -85px 0 no-repeat;
+
+              &:hover
+              {
+                background-position: -343px 0;
+              }
+
+              &:active
+              {
+                background-position: -601px 0;
+              }
+            }
+
+            a.Admin
+            {
+              width: 85px;
+              background: url(images/common/demo-buttons-sprite.png) -173px 0 no-repeat;
+
+              &:hover
+              {
+                background-position: -431px 0;
+              }
+
+              &:active
+              {
+                background-position: -689px 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

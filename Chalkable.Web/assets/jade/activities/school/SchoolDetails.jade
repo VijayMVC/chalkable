@@ -1,0 +1,18 @@
+.school-details
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('schools', 'details', self.getId()).pressed Now
+                +ActionLink('schools', 'details', self.getId()) Schedule
+                +ActionLink('schools', 'people', self.getId()) People
+                +ActionLink('schools', 'details', self.getId()) Data
+                +ActionLink('schools', 'details', self.getId()) SIS
+    .content
+        .left
+            .big-img-container
+        .right
+            h1= self.getName()
+            .status #{self.getStatusnumber()}. #{self.getStatus()}
+                +Button() My Button
+        .clear
+

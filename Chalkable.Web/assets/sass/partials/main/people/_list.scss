@@ -1,0 +1,11 @@
+.people-list{
+  .message-button{
+    display: none;
+  }
+
+  .row.selected{
+    .message-button{
+      display: inline-block;
+    }
+  }
+}
