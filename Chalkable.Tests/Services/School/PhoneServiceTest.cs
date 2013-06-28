@@ -11,7 +11,7 @@ namespace Chalkable.Tests.Services.School
     public class PhoneServiceTest : BaseSchoolServiceTest
     {
         [Test]
-        public void TestPhone()
+        public void AddEditDeletePhoneTest()
         {
             var phoneNumber = "huna+3809363236";
             var digitValue = "+3809363236";

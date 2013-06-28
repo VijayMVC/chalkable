@@ -14,6 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteRoom(Guid id);
         PaginatedList<Room> GetRooms(int start = 0, int count = int.MaxValue);
         Room WhereIsPerson(Guid personId, DateTime dateTime);
+        Room GetRoomById(Guid id);
     }
 
     //TODO: needs tests 
@@ -55,6 +56,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new RoomDataAccess(uow);
                 var room = da.GetById(id);
+                room.RoomNumber = roomNumber;
                 room.Description = description;
                 room.Capacity = capacity;
                 room.Size = size;
@@ -67,7 +69,18 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void DeleteRoom(Guid id)
         {
-            throw new NotImplementedException();
+            if(!BaseSecurity.IsAdminEditor(Context))
+                throw new ChalkableSecurityException();
+           
+            using (var uow = Update())
+            {
+                var cpDa = new ClassPeriodDataAccess(uow);
+                if (cpDa.Exists(new ClassPeriodQuery{RoomId = id}))
+                    throw new ChalkableException(ChlkResources.ERR_ROOM_CANT_DELETE_ROOM_TYPE_ASSIGNED_TO_CLASSPERIOD);
+                
+                new RoomDataAccess(uow).Delete(id);
+                uow.Commit();
+            }
         }
 
         public PaginatedList<Room> GetRooms(int start = 0, int count = Int32.MaxValue)
@@ -80,8 +93,16 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Room WhereIsPerson(Guid personId, DateTime dateTime)
         {
-            throw new NotImplementedException();
+            var classPeriod = ServiceLocator.ClassPeriodService.GetClassPeriodForSchoolPersonByDate(personId, dateTime);
+            return classPeriod != null ? GetRoomById(classPeriod.RoomRef) : null;
         }
 
+        public Room GetRoomById(Guid id)
+        {
+            using (var uow = Read())
+            {
+                return new RoomDataAccess(uow).GetById(id);
+            }
+        }
     }
 }

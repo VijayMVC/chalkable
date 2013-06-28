@@ -11,7 +11,7 @@ namespace Chalkable.Tests.Services.School
     public class AddressServiceTest : BaseSchoolServiceTest
     {
         [Test]
-        public void TestAddress()
+        public void AddDeleteAddressTest()
         {
             var addressValue = "USA New York";
             //security check
