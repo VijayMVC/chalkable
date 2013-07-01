@@ -14,8 +14,8 @@
             .big-img-container
         .right
             h1= school.getName()
-            .status #{school.getStatusnumber()}. #{school.getStatus()}
-                +Button() My Button
+            .status #{school.getStatusNumber()}. #{school.getStatus()}
+                +Button().special-button2.blue My Button
         .clear
         +Grid(users, {
             selectedIndex:0
