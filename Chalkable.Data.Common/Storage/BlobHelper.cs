@@ -37,10 +37,13 @@ namespace Chalkable.Data.Common.Storage
             return res;
         }
 
-        public IList<ICloudBlob> GetBlobs(string containeraddress)
+        public IList<ICloudBlob> GetBlobs(string containeraddress, string blobKeyPrefix)
         {
-            CloudBlobContainer container = GetBlobClient().GetContainerReference(containeraddress);
-            var blobsItems = container.ListBlobs().ToList();
+            var container = GetBlobClient().GetContainerReference(containeraddress);
+            string prefix = null;
+            if(!string.IsNullOrEmpty(blobKeyPrefix))
+                prefix = containeraddress + "/" + BuildBlobAddress(containeraddress, blobKeyPrefix);
+            var blobsItems = container.ListBlobs(prefix).ToList();
             IList<ICloudBlob> blobs = new List<ICloudBlob>();
             foreach (var listBlobItem in blobsItems)
             {

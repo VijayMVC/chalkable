@@ -58,7 +58,7 @@ namespace Chalkable.Tests.Services.School
             SchoolTestContext.AdminGradeSl.ScheduleSectionService.GenerateDefaultSections(mp.Id);
             var cDate = SchoolTestContext.AdminGradeSl.CalendarDateService.GetCalendarDateByDate(nowDate.Date);
             var currentPeriod = SchoolTestContext.AdminGradeSl.PeriodService.Add(mp.Id, nowTime - 10, nowTime + 30, cDate.ScheduleSectionRef.Value, 0);
-            var course = SchoolTestContext.AdminGradeSl.CourseService.Add("test", "test");
+            var course = SchoolTestContext.AdminGradeSl.CourseService.Add("test", "test", null);
             var cl = SchoolTestContext.AdminGradeSl.ClassService.Add(sy.Id, course.Id, "test", "test", SchoolTestContext.FirstTeacher.Id,
                                       SchoolTestContext.FirstStudent.StudentInfo.GradeLevelRef, new List<Guid> {mp.Id});
             var clPeriod = SchoolTestContext.AdminGradeSl.ClassPeriodService.Add(currentPeriod.Id, cl.Id, r1.Id);

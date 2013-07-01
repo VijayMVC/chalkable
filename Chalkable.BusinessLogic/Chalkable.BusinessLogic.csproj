@@ -35,6 +35,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,9 +52,11 @@
     <Compile Include="Security\AttendanceSecurity.cs" />
     <Compile Include="Security\BaseSecurity.cs" />
     <Compile Include="Security\PrivateMessageSecurity.cs" />
-    <Compile Include="Services\Master\AvatarService.cs" />
     <Compile Include="Services\Master\ChalkableDepartmentService.cs" />
-    <Compile Include="Services\Master\PictureService.cs" />
+    <Compile Include="Services\Master\PictureServices\CourseIconService.cs" />
+    <Compile Include="Services\Master\PictureServices\DepartmentIconService.cs" />
+    <Compile Include="Services\Master\PictureServices\PersonPictureService.cs" />
+    <Compile Include="Services\Master\PictureServices\PictureService.cs" />
     <Compile Include="Services\Master\PreferenceService.cs" />
     <Compile Include="Services\Master\SchoolService.cs" />
     <Compile Include="Services\Master\MasterServiceBase.cs" />

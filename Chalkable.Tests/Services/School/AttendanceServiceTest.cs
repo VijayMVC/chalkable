@@ -17,7 +17,7 @@ namespace Chalkable.Tests.Services.School
 
             SchoolTestContext.AdminGradeSl.CalendarDateService.GetCalendarDateByDate(mp.StartDate);
             var student = SchoolTestContext.FirstStudent;
-            var course = SchoolTestContext.AdminGradeSl.CourseService.Add("testCourse", "testCourse");
+            var course = SchoolTestContext.AdminGradeSl.CourseService.Add("testCourse", "testCourse", null);
             var c = SchoolTestContext.AdminGradeSl.ClassService.Add(sy.Id, course.Id, "testClass", "testClass", SchoolTestContext.FirstTeacher.Id,
                                                                     student.StudentInfo.GradeLevelRef, new List<Guid> { mp.Id });
 
@@ -97,7 +97,7 @@ namespace Chalkable.Tests.Services.School
             var currentPeriod = SchoolTestContext.AdminGradeSl.PeriodService.Add(mp.Id, currentTime - 10, currentTime + 30, toDayDate.ScheduleSectionRef.Value, 0);
 
             var student = SchoolTestContext.FirstStudent;
-            var course = SchoolTestContext.AdminGradeSl.CourseService.Add("testCourse", "testCourse");
+            var course = SchoolTestContext.AdminGradeSl.CourseService.Add("testCourse", "testCourse", null);
             var c = SchoolTestContext.AdminGradeSl.ClassService.Add(sy.Id, course.Id, "testClass", "testClass", SchoolTestContext.FirstTeacher.Id,
                                                                     student.StudentInfo.GradeLevelRef, new List<Guid> { mp.Id });
             SchoolTestContext.AdminGradeSl.ClassService.AddStudent(c.Id, student.Id);
