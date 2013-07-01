@@ -18,6 +18,11 @@ NAMESPACE('chlk.services', function () {
             [[Number]],
             ria.async.Future, function getDetails(schoolId) {
                 return this.get('/app/data/schoolDetails.json', chlk.models.school.SchoolDetails);
+            },
+
+            [[Number]],
+            ria.async.Future, function getPeopleSummary(schoolId) {
+                return this.get('/app/data/peopleSummary.json', chlk.models.school.SchoolPeopleSummary);
             }
         ])
 });

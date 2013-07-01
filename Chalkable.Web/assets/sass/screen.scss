@@ -109,6 +109,9 @@ h1,h2,h3,h4,h5,h6,strong {
 .right{
   float: right;
 }
+.i-b{
+  display: inline-block;
+}
 
 a, a:visited, a:link {
   color: $link-color;

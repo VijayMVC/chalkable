@@ -11,14 +11,15 @@ NAMESPACE('chlk.controls', function () {
             },
 
             [[Array, Object]],
-            VOID, function onStart(data,configs_) {
+            VOID, function prepareData(data,configs_) {
                 configs_ && configs_.selectedIndex !== undefined && this.setCurrentIndex(configs_.selectedIndex);
                 this.setCount(data.length);
-                setTimeout(function(){
-                    this.getCurrentIndex() !== undefined && this.focusGrid();
-                    var grid = new ria.dom.Dom('.chlk-grid');
-                    this.setGrid(grid);
-                }.bind(this), 1);
+                this.context.getDefaultView()
+                    .onActivityRefreshed(function (activity, model) {
+                        this.getCurrentIndex() !== undefined && this.focusGrid();
+                        var grid = new ria.dom.Dom('.chlk-grid');
+                        this.setGrid(grid);
+                    }.bind(this));
             },
 
             Number, 'currentIndex',
@@ -58,8 +59,11 @@ NAMESPACE('chlk.controls', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function onFocusGrid(node, event) {
                 var target = new ria.dom.Dom(event.target);
-                if(target.is(':not(input, textarea)'))
+                if(target.is(':not(input, textarea)')){
+                    var Y = window.scrollY;
                     this.focusGrid(node);
+                    window.scrollTo(0, Y);
+                }
             },
 
             [[ria.dom.Dom]],

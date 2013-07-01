@@ -1,0 +1,61 @@
+$color: #957633;
+
+BODY {
+  DIV.page{
+    #content {
+      DIV#content-wrapper.profile{
+        h1, h2{
+          font-family: Pacifico;
+          font-weight: normal;
+          color: $color;
+        }
+
+        h2{
+          font-size: 24px;
+          background: url(images/profile/header-line.png) 0 36px no-repeat;
+        }
+
+        h1{
+          font-size: 48px;
+          margin-bottom: -11px;
+          white-space: nowrap;
+        }
+
+        .line{
+          background: url(images/profile/header-line.png) 0 28px no-repeat !important;
+          //margin-left: 16px;
+          height: 36px;
+        }
+
+        .school-small-img-container{
+          @include border-radius(6px);
+          overflow: hidden;
+          border: 2px solid #888;
+          @include box-shadow(0 2px 2px #777);
+          display: inline-block;
+          background: white;
+
+          IMG{
+            margin: 5px;
+            float: left;
+            width: 64px;
+            height: 64px;
+          }
+        }
+
+        .school-people{
+          h1{
+            font-size: 42px;
+            margin: 19px 10px 0;
+          }
+
+          .people-tb{
+            select{
+              width: 150px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

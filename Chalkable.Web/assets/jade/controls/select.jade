@@ -1,0 +1,5 @@
+mixin Select(data)
+    -self.processAttrs(attributes);
+    select(attributes)
+        each item in data
+            option(value=item.getId())= item.getName()

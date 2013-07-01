@@ -1,5 +1,5 @@
 mixin Grid(data, configs)
-    -self.onStart(data,configs)
+    -self.prepareData(data,configs)
     .chlk-grid(attributes)
         input.grid-focus
         each item, i in data

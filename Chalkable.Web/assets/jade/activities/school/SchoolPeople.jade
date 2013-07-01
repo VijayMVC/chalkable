@@ -1,6 +1,8 @@
-.school-details
+.school-people
     -school=self.getSchoolInfo()
     -users=self.getUsers()
+    -roles=self.getRoles()
+    -gradeLevels=self.getGradeLevels()
     .action-bar.not-transparent.buttons
         .container.panel-bg
             .left
@@ -10,15 +12,26 @@
                 +ActionLink('schools', 'details', school.getId()) Data
                 +ActionLink('schools', 'details', school.getId()) SIS
     .content
-        .left
+        .school-small-img-container.i-b
             +PhotoContainer('https://dev.chalkable.com/PersonPicture/Read?pictureId=132310&width=256&height=256&gender=m')
-        .right
-            h1= school.getName()
-            .status #{school.getStatusNumber()}. #{school.getStatus()}
-                +Button().special-button2.blue My Button
-        .clear
-        +Grid(users, {
-            selectedIndex:0
-        }).people-list
+        h1.i-b= school.getName()
+        .line
+        h2 People
+        .action-bar.not-transparent.people-tb
+            .container.panel-bg
+                .right
+                    +Select(roles)#roles-select
+                    +Select(gradeLevels)#grade-levels-select
+        .people-list-container.not-transparent
+            .top.panel-bg
+                span 127 Students
+            .action-bar.buttons.filter
+                .container.panel-bg
+                    .left
+                        +ActionLink('schools', 'people', school.getId()) First name
+                        +ActionLink('schools', 'people', school.getId()).pressed Last name
+            +Grid(users, {
+                selectedIndex:0
+            }).people-list
 
 

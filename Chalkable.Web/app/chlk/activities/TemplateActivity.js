@@ -49,6 +49,8 @@ NAMESPACE('chlk.activities', function () {
                 });
             },
             OVERRIDE, VOID, function onRender_(model){
+                BASE(model);
+
                 var tpls = this.tpls.filter(function (_) {
                     if (ria.__API.isClassConstructor(_.model)) {
                         return model instanceof _.model;
@@ -76,8 +78,11 @@ NAMESPACE('chlk.activities', function () {
 
             OVERRIDE, VOID, function onStop_() {
                 this.dom.empty();
+                BASE();
             },
 
-            OVERRIDE, VOID, function onRefresh_(model) {}
+            OVERRIDE, VOID, function onRefresh_(model) {
+                BASE(model);
+            }
         ]);
 });
