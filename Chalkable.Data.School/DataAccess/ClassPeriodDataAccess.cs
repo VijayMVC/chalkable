@@ -21,6 +21,16 @@ namespace Chalkable.Data.School.DataAccess
             return Exists(BuildGetClassPeriodsQuery(query));
         }
 
+        public bool Exists(IList<Guid> markingPeriodIds)
+        {
+            var sql = @"select cd.Id from ClassPeriod cd 
+                        join Period p on p.Id = cd.PeriodRef
+                        where p.MarkingPeriodRef in ({0})";
+            var mpIds = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
+            sql = string.Format(sql, mpIds);
+            return Exists(new DbQuery{Parameters = new Dictionary<string, object>(), Sql = sql});
+        }
+
         public bool IsClassStudentsAssignedToPeriod(Guid periodId, Guid classId)
         {
             var sql = @"select * from ClassPerson

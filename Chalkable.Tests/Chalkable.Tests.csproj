@@ -67,6 +67,7 @@
     <Compile Include="Services\School\MarkingPeriodServiceTest.cs" />
     <Compile Include="Services\School\PhoneServiceTest.cs" />
     <Compile Include="Services\School\RoomServiceTest.cs" />
+    <Compile Include="Services\School\ScheduleSectionServiceTest.cs" />
     <Compile Include="Services\School\SchoolTestContext.cs" />
     <Compile Include="Services\School\SchoolYearServiceTest.cs" />
     <Compile Include="Services\TestBlobStorageService.cs" />

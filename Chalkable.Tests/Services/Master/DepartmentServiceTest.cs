@@ -13,7 +13,7 @@ namespace Chalkable.Tests.Services.Master
         public void AddDeleteDepartmentTest()
         {
 
-            //TODO: security check 
+            //TODO: security test 
 
             var icon1 = PictureServiceTest.LoadImage(DefaulImage1Path);
             var department = SysAdminMasterLocator.ChalkableDepartmentService.Add("department1", "department1KeyWord", icon1);

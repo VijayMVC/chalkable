@@ -23,13 +23,14 @@ namespace Chalkable.Data.School.DataAccess
             {
                 foreach (var scheduleSection in scheduleSections)
                 {
-                    b.AppendFormat(@" update from ScheduleSection  set Number = @{0}, Name = @{1}, MarkingPeriodRef = @{2}
+                    b.AppendFormat(@" update ScheduleSection  set Number = @{0}, Name = @{1}, MarkingPeriodRef = @{2}
                                   where Id = @{3} ", "number_" + index, "name_" + index, "markingPeriodId_" + index, "Id_" + index);
-
+                    
                     parameters.Add("name_" + index, scheduleSection.Name);
                     parameters.Add("number_" + index, scheduleSection.Number);
                     parameters.Add("Id_" + index, scheduleSection.Id);
                     parameters.Add("markingPeriodId_" + index, scheduleSection.MarkingPeriodRef);
+                    index++;
                 }
                 ExecuteNonQueryParametrized(b.ToString(), parameters);
             }

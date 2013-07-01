@@ -64,9 +64,12 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 if (!BaseSecurity.IsAdminEditor(Context))
                     throw new ChalkableSecurityException();
-               
-                return CanGetSection(markingPeriodIds);
-                //&& !Entities.ClassGeneralPeriods.Any(x => markingPeriodIds.Contains(x.GeneralPeriod.MarkingPeriodRef));
+
+                using (var uow = Read())
+                {
+                    var cpDa = new ClassPeriodDataAccess(uow);
+                    return CanGetSection(markingPeriodIds) && !cpDa.Exists(markingPeriodIds);
+                }
             }
             return false;
         }
@@ -109,8 +112,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new UnassignedUserException();
             using (var uow = Update())
             {
-                IStateMachine machine = new SchoolStateMachine(Context.SchoolId.Value,
-                                                               ServiceLocator.ServiceLocatorMaster);
+                IStateMachine machine = new SchoolStateMachine(Context.SchoolId.Value, ServiceLocator.ServiceLocatorMaster);
                 if (!machine.CanApply(StateActionEnum.SectionsAdd))
                     throw new InvalidSchoolStatusException(ChlkResources.ERR_SCHEDULE_SECTION_INVALID_STATUS);
 
@@ -123,23 +125,27 @@ namespace Chalkable.BusinessLogic.Services.School
                         SisId = sisId
                     };
                 var da = new ScheduleSectionDataAccess(uow);
-
-                var sections = da.GetSections(markingPeriodId, number, null);
+                var sections = da.GetSections(markingPeriodId, null, null);
                 foreach (var scheduleSection in sections)
                 {
-                    scheduleSection.Number++;
+                    if (scheduleSection.Number >= number)
+                    {
+                        scheduleSection.Number++;
+                    }
                 }
-                da.Update(sections);
                 da.Insert(ss);
+                sections.Add(ss);
+                sections = AdjustNumbering(sections);
+                da.Update(sections);
                 machine.Apply(StateActionEnum.SectionsAdd);
                 uow.Commit();
-                return ss;
+                return GetSectionById(ss.Id);
             }
         }
 
         public ScheduleSection Edit(Guid id, int number, string name)
         {
-            if(BaseSecurity.IsAdminEditor(Context))
+            if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
@@ -151,19 +157,21 @@ namespace Chalkable.BusinessLogic.Services.School
                 var mx = Math.Max(old, number);
                 var d = Math.Sign(old - number);
 
-                IList<ScheduleSection> sections = da.GetSections(section.MarkingPeriodRef, mn, mx).Where(x=>x.Id != section.Id).ToList();
+                IList<ScheduleSection> sections = da.GetSections(section.MarkingPeriodRef, null, null).Where(x => x.Id != section.Id).ToList();
                 foreach (var scheduleSection in sections)
                 {
-                    scheduleSection.Number += d;
+                    if (scheduleSection.Number >= mn && scheduleSection.Number <= mx)
+                    {
+                        scheduleSection.Number += d;   
+                    }
                 }
                 section.Name = name;
                 section.Number = number;
                 sections.Add(section);
                 sections = AdjustNumbering(sections);
-                
                 da.Update(sections);
                 uow.Commit();
-                return section;
+                return GetSectionById(section.Id);
             }
         }
 
@@ -192,7 +200,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableException(ChlkResources.ERR_SCHEDULE_SECTION_CANT_DELETE);
                 
                 da.Delete(ss);
-                AdjustNumbering(da.GetSections(ss.MarkingPeriodRef, ss.Number, null));
+                var sections = AdjustNumbering(da.GetSections(ss.MarkingPeriodRef, null, null));
+                da.Update(sections);
                 uow.Commit();
             }
         }
