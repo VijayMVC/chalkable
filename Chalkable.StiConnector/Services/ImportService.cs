@@ -298,7 +298,7 @@ namespace Chalkable.StiConnector.Services
                     }
                 }
 
-                schoolServiceLocator.CourseService.Add(course.ShortName, course.FullName,
+                schoolServiceLocator.CourseService.Add(course.ShortName, course.FullName, null,
                                                            closestDep != null ? closestDep.Second : (Guid?) null,
                                                            course.CourseID);
             }

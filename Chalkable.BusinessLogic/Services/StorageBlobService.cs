@@ -11,7 +11,7 @@ namespace Chalkable.BusinessLogic.Services
     public interface IStorageBlobService
     {
         IList<CloudBlobContainer> GetBlobContainers();
-        IList<ICloudBlob> GetBlobs(string containeraddress);
+        IList<ICloudBlob> GetBlobs(string containeraddress, string keyPrefix = null);
         void AddBlob(string containerAddress, string key, byte[] content);
         byte[] GetBlobContent(string containerAddress, string key);
         void DeleteBlob(Uri blobAddress);
@@ -30,9 +30,9 @@ namespace Chalkable.BusinessLogic.Services
             return  helper.GetBlobContainers();
         }
 
-        public IList<ICloudBlob> GetBlobs(string containeraddress)
+        public IList<ICloudBlob> GetBlobs(string containeraddress, string keyPrefix = null)
         {
-            return helper.GetBlobs(containeraddress);
+            return helper.GetBlobs(containeraddress, keyPrefix);
         }
 
         public void AddBlob(string containerAddress, string key, byte[] content)

@@ -10,8 +10,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
     public interface ICourseService
     {
-        Course Add(string code, string title, Guid? chalkableDepartmentId = null, int? sisId = null);
-        Course Edit(Guid courseInfoId, string code, string title, Guid? chalkableDepartmentId = null);
+        Course Add(string code, string title, byte[] icon, Guid? chalkableDepartmentId = null, int? sisId = null);
+        Course Edit(Guid courseInfoId, string code, string title, byte[] icon, Guid? chalkableDepartmentId = null);
         void Delete(Guid id);
         PaginatedList<Course> GetCourses(int start = 0, int count = int.MaxValue);
         Course GetCourseById(Guid id);
@@ -23,43 +23,57 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        //TODO: needs test
-        public Course Add(string code, string title, Guid? chalkableDepartmentId = null, int? sisId = null)
+        private bool DepartmentExists(Guid? chalkableDepartmentId)
+        {
+            var departmentService = ServiceLocator.ServiceLocatorMaster.ChalkableDepartmentService;
+            return !chalkableDepartmentId.HasValue || 
+                departmentService.GetChalkableDepartmentById(chalkableDepartmentId.Value) != null;
+        }
+        private Course Edit(Course course, string code, string title, byte[] icon, Guid? chalkableDepartmentId = null)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
 
-            using (var uow = Update())
+            if (!DepartmentExists(chalkableDepartmentId))
+                throw new ChalkableException("There are no department with such id");
+
+            course.Title = title;
+            course.Code = code;
+            course.ChalkableDepartmentRef = chalkableDepartmentId;
+            var masterLocator = ServiceLocator.ServiceLocatorMaster;
+            if (icon == null && chalkableDepartmentId.HasValue)
             {
-                var da = new CourseDataAccess(uow);
-                var courseInfo = new Course
-                    {
-                        Id = Guid.NewGuid(),
-                        Code = code,
-                        Title = title,
-                        ChalkableDepartmentRef = chalkableDepartmentId
-                    };
-                da.Insert(courseInfo);
-                uow.Commit();
-                return courseInfo;
+                var department = masterLocator.ChalkableDepartmentService.GetChalkableDepartmentById(chalkableDepartmentId.Value);
+                icon = masterLocator.DepartmentIconService.GetPicture(department.Id, null, null);
             }
+            masterLocator.CourseIconService.UploadPicture(course.Id, icon);
+            return course;
         }
 
-        public Course Edit(Guid courseInfoId, string code, string title, Guid? chalkableDepartmentId = null)
+
+        //TODO: needs test
+        public Course Add(string code, string title, byte[] icon, Guid? chalkableDepartmentId = null, int? sisId = null)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
-                throw new ChalkableSecurityException();
-        
+            using (var uow = Update())
+            {                
+                var da = new CourseDataAccess(uow);
+                var res = new Course {Id = Guid.NewGuid()};
+                res = Edit(res, code, title, icon, chalkableDepartmentId);
+                da.Insert(res);
+                uow.Commit();
+                return res;
+            }
+        }
+        public Course Edit(Guid courseId, string code, string title, byte[] icon, Guid? chalkableDepartmentId = null)
+        {
             using (var uow = Update())
             {
                 var da = new CourseDataAccess(uow);
-                var courseInfo = da.GetById(courseInfoId);
-                courseInfo.Title = title;
-                courseInfo.Code = code;
-                courseInfo.ChalkableDepartmentRef = chalkableDepartmentId;
-                da.Update(courseInfo);
+                var course = da.GetById(courseId);
+                course =  Edit(course, code, title, icon, chalkableDepartmentId);
+                da.Update(course);
                 uow.Commit();
-                return courseInfo;
+                return course;
             } 
         }
 
@@ -71,6 +85,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new CourseDataAccess(uow);
                 da.Delete(id);
+                ServiceLocator.ServiceLocatorMaster.CourseIconService.DeletePicture(id);
                 uow.Commit();
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.BusinessLogic.Services.School;
 
 namespace Chalkable.BusinessLogic.Services.Master
@@ -12,8 +13,9 @@ namespace Chalkable.BusinessLogic.Services.Master
         IBackgroundTaskService BackgroundTaskService { get; }
         IPreferenceService PreferenceService { get; }
         IChalkableDepartmentService ChalkableDepartmentService { get; }
-        IPictureService PictureService { get; }
-        IAvatarService AvatarService { get; }
+        IPictureService PersonPictureService { get; }
+        IPictureService CourseIconService { get; }
+        IPictureService DepartmentIconService { get; }
     }
 
     public class ServiceLocatorMaster : ServiceLocator, IServiceLocatorMaster
@@ -23,9 +25,10 @@ namespace Chalkable.BusinessLogic.Services.Master
         private IBackgroundTaskService backgroundTaskService;
         private IPreferenceService preferenceService;
         private IChalkableDepartmentService chalkableDepartmentService;
-        private IPictureService pictureService;
-        private IAvatarService avatarService;
-
+        private IPictureService personPictureService;
+        private IPictureService courseIconService;
+        private IPictureService departmentIconService;
+        
         public ServiceLocatorMaster(UserContext context) : base(context)
         {
             userService = new UserService(this);
@@ -33,7 +36,9 @@ namespace Chalkable.BusinessLogic.Services.Master
             backgroundTaskService = new BackgroundTaskService(this);
             preferenceService = new PreferenceService(this);
             chalkableDepartmentService = new ChalkableDepartmentService(this);
-            pictureService = new PictureService(this);
+            personPictureService = new PersonPictureService(this);
+            courseIconService = new CourseIconService(this);
+            departmentIconService = new DepartmentService(this);
         }
 
         public IUserService UserService { get { return userService; } }
@@ -41,8 +46,9 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IBackgroundTaskService BackgroundTaskService { get { return backgroundTaskService; } }
         public IPreferenceService PreferenceService { get { return preferenceService; } }
         public IChalkableDepartmentService ChalkableDepartmentService { get { return chalkableDepartmentService; } }
-        public IPictureService PictureService { get { return pictureService; } }
-        public IAvatarService AvatarService { get { return avatarService; } }
+        public IPictureService PersonPictureService { get { return personPictureService; } }
+        public IPictureService CourseIconService { get { return courseIconService; } }
+        public IPictureService DepartmentIconService { get { return departmentIconService; } }
 
         public IServiceLocatorSchool SchoolServiceLocator(Guid schoolId)
         {
