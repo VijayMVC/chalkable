@@ -24,5 +24,15 @@ namespace Chalkable.Tests.Services
             }
             Assert.IsTrue(wasException);
         }
+
+        protected static void AssertAreEqual<T>(T obj1, T obj2) where T : new()
+        {
+            var type = typeof(T);
+            var fields = type.GetProperties().Where(x => !x.PropertyType.IsClass);
+            foreach (var propertyInfo in fields)
+            {
+                Assert.AreEqual(propertyInfo.GetValue(obj1), propertyInfo.GetValue(obj2));
+            }
+        }
     }
 }

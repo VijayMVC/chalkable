@@ -20,5 +20,12 @@ namespace Chalkable.Tests.Services.Master
             imageContent = stream.GetBuffer();
             stream.Close();
         }
+        public static byte[] LoadImage(string path)
+        {
+            Image image;
+            byte[] content;
+            LoadImage(path, out image, out content);
+            return content;
+        }
     }
 }
