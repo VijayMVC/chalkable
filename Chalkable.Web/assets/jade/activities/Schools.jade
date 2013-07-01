@@ -1,0 +1,27 @@
+.schools
+    .action-bar.not-transparent
+        .container.panel-bg
+            +ActionLink('sysadmin', 'addSchool').chlk-add.opacity-button Add School
+    .grid.not-transparent
+        .container
+            .head.panel-bg
+                .th School Name
+                .th Local ID
+                .th NCES ID
+                .th School Type
+                .th URL
+                .th
+
+            .body
+                each item in self.items
+                    .row
+                        .td= item.getName()
+                        .td= item.getLocalId()
+                        .td= item.getNcesId()
+                        .td= item.getSchoolType()
+                        .td= item.getSchoolUrl()
+                        .td.action-links
+                            +ActionLink('schools', 'details', item.getId()).profile
+                            +ActionLink('sysadmin', 'index').remove
+        +Paginator('sysadmin', 'schools', self)
+

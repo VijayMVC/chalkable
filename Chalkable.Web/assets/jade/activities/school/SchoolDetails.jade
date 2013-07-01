@@ -1,0 +1,18 @@
+.school-details
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('schools', 'details', self.getId()).pressed Now
+                +ActionLink('schools', 'details', self.getId()) Schedule
+                +ActionLink('schools', 'people', self.getId()) People
+                +ActionLink('schools', 'details', self.getId()) Data
+                +ActionLink('schools', 'details', self.getId()) SIS
+    .content
+        .left
+            +PhotoContainer('https://dev.chalkable.com/PersonPicture/Read?pictureId=132310&width=256&height=256&gender=m')
+        .right
+            h1= self.getName()
+            .status #{self.getStatusNumber()}. #{self.getStatus()}
+                +Button().special-button2.blue My Button
+        .clear
+

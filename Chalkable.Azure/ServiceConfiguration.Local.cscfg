@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="Chalkable.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2012-10.1.8">
+  <Role name="Chalkable.Web">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://127.0.0.1" />
+    </ConfigurationSettings>
+  </Role>
+  <Role name="Chalkable.BackgroundTaskProcessor">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://127.0.0.1" />
+    </ConfigurationSettings>
+  </Role>
+  <Role name="Chalkable.BackgroundTaskProducer">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://127.0.0.1" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>
