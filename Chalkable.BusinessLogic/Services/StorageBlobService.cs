@@ -10,11 +10,11 @@ namespace Chalkable.BusinessLogic.Services
 {
     public interface IStorageBlobService
     {
-        IList<CloudBlobContainer> GetBlobContainers();
-        IList<ICloudBlob> GetBlobs(string containeraddress, string keyPrefix = null);
+        //IList<CloudBlobContainer> GetBlobContainers();
+        //IList<ICloudBlob> GetBlobs(string containeraddress, string keyPrefix = null);
         void AddBlob(string containerAddress, string key, byte[] content);
         byte[] GetBlobContent(string containerAddress, string key);
-        void DeleteBlob(Uri blobAddress);
+        //void DeleteBlob(Uri blobAddress);
         void DeleteBlob(string containderName, string key);
     }
     public class StorageBlobService :  IStorageBlobService
@@ -25,15 +25,15 @@ namespace Chalkable.BusinessLogic.Services
             helper = new BlobHelper();
         }
 
-        public IList<CloudBlobContainer> GetBlobContainers()
-        {
-            return  helper.GetBlobContainers();
-        }
+        //public IList<CloudBlobContainer> GetBlobContainers()
+        //{
+        //    return  helper.GetBlobContainers();
+        //}
 
-        public IList<ICloudBlob> GetBlobs(string containeraddress, string keyPrefix = null)
-        {
-            return helper.GetBlobs(containeraddress, keyPrefix);
-        }
+        //public IList<ICloudBlob> GetBlobs(string containeraddress, string keyPrefix = null)
+        //{
+        //    return helper.GetBlobs(containeraddress, keyPrefix);
+        //}
 
         public void AddBlob(string containerAddress, string key, byte[] content)
         {
@@ -45,10 +45,10 @@ namespace Chalkable.BusinessLogic.Services
             return helper.GetBlobContent(containerAddress, key);
         }
 
-        public void DeleteBlob(Uri blobAddress)
-        {
-            helper.DeleteBlob(blobAddress);
-        }
+        //public void DeleteBlob(Uri blobAddress)
+        //{
+        //    helper.DeleteBlob(blobAddress);
+        //}
 
         public void DeleteBlob(string containderName, string key)
         {

@@ -89,6 +89,8 @@ namespace Chalkable.Tests
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1004 - create preference table.sql"));
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1005 - added import system type to school table.sql"));
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1006 - added TimZone to school.sql"));
+            ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1007 - added SisSync table.sql"));
+            ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1008 - added ChalkableDepartment table.sql"));
 
             RunCreateSchoolScripts(chalkableSchoolTemplateConnection);
         }

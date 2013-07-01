@@ -38,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             chalkableDepartmentService = new ChalkableDepartmentService(this);
             personPictureService = new PersonPictureService(this);
             courseIconService = new CourseIconService(this);
-            departmentIconService = new DepartmentService(this);
+            departmentIconService = new DepartmentIconService(this);
         }
 
         public IUserService UserService { get { return userService; } }

@@ -8,9 +8,9 @@ using Chalkable.Common.Exceptions;
 
 namespace Chalkable.BusinessLogic.Services.Master.PictureServices
 {
-    public class DepartmentService : PictureService
+    public class DepartmentIconService : PictureService
     {
-        public DepartmentService(IServiceLocatorMaster serviceLocator)
+        public DepartmentIconService(IServiceLocatorMaster serviceLocator)
             : base(serviceLocator)
         {
         }

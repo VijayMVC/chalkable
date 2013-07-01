@@ -42,13 +42,8 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
                 throw new ChalkableSecurityException();
             if (height.HasValue && width.HasValue)
                 content = ImageUtils.Scale(content, height.Value, width.Value);
-            else
-            {
-                var pictureSize = new PictureSize(content);
-                height = pictureSize.Height;
-                width = pictureSize.Width;
-            }
-            ServiceLocator.StorageBlobService.AddBlob(PICTURE_CONTEINER_NAME, PictureName(id, height.Value, width.Value), content);
+
+            ServiceLocator.StorageBlobService.AddBlob(PICTURE_CONTEINER_NAME, PictureName(id, height, width), content);
         }
         public void DeletePicture(Guid id, int? height, int? width)
         {
@@ -61,22 +56,10 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
             return ServiceLocator.StorageBlobService.GetBlobContent(PICTURE_CONTEINER_NAME, PictureName(id, height, width));
         }
 
-
         protected class PictureSize
         {
             public int Height { get; set; }
             public int Width { get; set; }
-
-            public PictureSize(){}
-            public PictureSize(byte[] content)
-            {
-                using (var ms = new MemoryStream(content))
-                {
-                    var image = Image.FromStream(ms);
-                    Height = image.Height;
-                    Width = image.Width;
-                }
-            }
         }
         public virtual void UploadPicture(Guid id, byte[] content)
         {

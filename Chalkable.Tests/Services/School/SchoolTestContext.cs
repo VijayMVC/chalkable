@@ -7,6 +7,7 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Tests.Services.Master;
 
 namespace Chalkable.Tests.Services.School
 {
@@ -59,16 +60,23 @@ namespace Chalkable.Tests.Services.School
                 };
             var gradeLevels =  sysSchoolSl.GradeLevelService.CreateDefault();
             CreateUsers(sysSchoolSl, userInfos, gradeLevels[0].Id);
-            res.AdminGradeSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.AdminGrade));
-            res.AdminEditSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.AdminEdit));
-            res.AdminViewSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.AdminView));
-            res.FirstTeacherSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.FirstTeacher));
-            res.FirstStudentSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.FirstStudent));
-            res.FirstParentSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.FirstParent));
-            res.SecondTeacherSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.SecondTeahcer));
-            res.SecondStudentSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.SecondStudent));
-            res.SecondParentSl = ServiceLocatorFactory.CreateSchoolLocator(res.GetSchoolUser(res.SecondParent));
+            res.AdminGradeSl = res.CreateLocatorByPerson(res.AdminGrade);
+            res.AdminEditSl = res.CreateLocatorByPerson(res.AdminEdit);
+            res.AdminViewSl = res.CreateLocatorByPerson(res.AdminView);
+            res.FirstTeacherSl = res.CreateLocatorByPerson(res.FirstTeacher);
+            res.FirstStudentSl = res.CreateLocatorByPerson(res.FirstStudent);
+            res.FirstParentSl = res.CreateLocatorByPerson(res.FirstParent);
+            res.SecondTeacherSl = res.CreateLocatorByPerson(res.SecondTeahcer);
+            res.SecondStudentSl = res.CreateLocatorByPerson(res.SecondStudent);
+            res.SecondParentSl = res.CreateLocatorByPerson(res.SecondParent);
             return res;
+        }
+
+        private IServiceLocatorSchool CreateLocatorByPerson(Person person)
+        {
+            var locator = ServiceLocatorFactory.CreateSchoolLocator(GetSchoolUser(person));
+            var masterLocator = new BaseMasterServiceLocatorTest(locator.Context);
+            return new BaseSchoolServiceLocatorTest(masterLocator);
         }
 
         private static string GetUserLogin(string name)

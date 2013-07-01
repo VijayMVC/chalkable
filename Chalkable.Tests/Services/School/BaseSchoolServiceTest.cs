@@ -5,10 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services;
+using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
+using Chalkable.Tests.Services.Master;
 using NUnit.Framework;
 
 namespace Chalkable.Tests.Services.School
@@ -53,8 +56,19 @@ namespace Chalkable.Tests.Services.School
         public SchoolTestContext SchoolTestContext
         {
             get { return schoolTestContext; }
+            private set { schoolTestContext = value; }
         }
 
+        private IServiceLocatorSchool sysAdminSchoolLocator;
+        public IServiceLocatorSchool SysAdminSchoolLocator
+        {
+            get { return sysAdminSchoolLocator; }
+            private set { sysAdminSchoolLocator = value; }
+        }
+        public IServiceLocatorMaster SysAdminMasterLocator
+        {
+            get { return SysAdminSchoolLocator.ServiceLocatorMaster; }
+        }
 
         [TearDown]
         public void TearDown()
@@ -77,7 +91,7 @@ namespace Chalkable.Tests.Services.School
                 Status = SchoolStatus.PayingCustomer,
                 TimeZone = "UTC"
             };
-            var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
+            var sysLocator =ServiceLocatorFactory.CreateMasterSysAdmin();
             using (var uow = new UnitOfWork(chalkableMasterConnection, true))
             {
                 var da = new SchoolDataAccess(uow);
@@ -88,7 +102,8 @@ namespace Chalkable.Tests.Services.School
                 RunCreateSchoolScripts(schoolDbConnectionString);
             }
             var schoolSl = sysLocator.SchoolServiceLocator(school.Id);
-            schoolTestContext = SchoolTestContext.CreateSchoolContext(schoolSl);
+            SysAdminSchoolLocator = new BaseSchoolServiceLocatorTest(new BaseMasterServiceLocatorTest(schoolSl.Context));
+            SchoolTestContext = SchoolTestContext.CreateSchoolContext(schoolSl);
         }
 
     }

@@ -20,12 +20,13 @@ namespace Chalkable.BusinessLogic.Services
         public ServiceLocator(UserContext context)
         {
             Context = context;
-            storageBlobService = new StorageBlobService();
+            StorageBlobService = new StorageBlobService();
         }
 
         public IStorageBlobService StorageBlobService
         {
             get { return storageBlobService; }
+            protected set { storageBlobService = value; }
         }
     }
 
