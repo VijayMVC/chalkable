@@ -14,8 +14,7 @@ namespace Chalkable.Data.School.DataAccess
         public ClassAttendanceDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-
-
+        
         private const string SET_CLASS_ATTENDANCE_PROC = "spSetClassAttendance";
         private const string CLASS_PERIOD_ID_PARAM = "classPeriodId";
         private const string DATA_PARAM = "date";
@@ -58,7 +57,6 @@ namespace Chalkable.Data.School.DataAccess
                return reader.ReadList<ClassAttendance>();
             }
         }
-
         public IList<ClassAttendanceComplex> GetAttendance(ClassAttendanceQuery query)
         {
             var parameters = new Dictionary<string, object>
@@ -93,6 +91,20 @@ namespace Chalkable.Data.School.DataAccess
                 return res;
             }
         } 
+
+        public bool Exists(Guid markingPeriodId, DateTime fromDate)
+        {
+            var sql = @"select ca.Id from ClassAttendance ca
+                        join ClassPeriod cp on cp.Id = ca.ClassPeriodRef
+                        join Period p on p.Id = cp.PeriodRef
+                        where p.MarkingPeriodRef = @markingPeriodId and ca.Date >= @fromDate";
+            var conds = new Dictionary<string, object>
+                {
+                    {"markingPeriodId", markingPeriodId},
+                    {"fromDate", fromDate},
+                };
+            return Exists(new DbQuery {Sql = sql, Parameters = conds});
+        }
     }
 
     public class ClassAttendanceQuery

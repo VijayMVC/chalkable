@@ -63,6 +63,7 @@
     <Compile Include="Services\School\BaseSchoolServiceLocatorTest.cs" />
     <Compile Include="Services\School\BaseSchoolServiceTest.Assert.cs" />
     <Compile Include="Services\School\BaseSchoolServiceTest.cs" />
+    <Compile Include="Services\School\CalendarDateServiceTest.cs" />
     <Compile Include="Services\School\ClassPeriodServiceTest.cs" />
     <Compile Include="Services\School\CourseServiceTest.cs" />
     <Compile Include="Services\School\MarkingPeriodServiceTest.cs" />

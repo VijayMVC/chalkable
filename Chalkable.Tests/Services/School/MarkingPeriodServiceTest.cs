@@ -122,5 +122,18 @@ namespace Chalkable.Tests.Services.School
             var newMpName = MP_NAME + "_" + count + 1;
             return adminSl.MarkingPeriodService.Add(sy.Id, startDate, startDate.AddDays(mpInterval), newMpName, newMpName, weekDays, generatePeriods);
         }
+
+        public static MarkingPeriod CreateSchoolYearWithMp(SchoolTestContext context, DateTime? date, bool buildSections = false, bool generatePeriods = false
+            , int mpInterval = 30, int weekDays = DEFAULT_WEEK_DAYS)
+        {
+            var sy = SchoolYearServiceTest.CreateNextSchoolYear(context, date);
+            var mp = CreateNextMp(context, sy.Id, generatePeriods, mpInterval, weekDays);
+            if (buildSections)
+            {
+                var sections = new List<string> { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+                context.AdminGradeSl.ScheduleSectionService.ReBuildSections(sections, new List<Guid>() {mp.Id});
+            }
+            return mp;
+        }
     }
 }

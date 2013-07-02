@@ -67,7 +67,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                new ClassPeriodDataAccess(uow).Delete(id);
+                new ClassPeriodDataAccess(uow).FullDelete(id);
                 uow.Commit();
             }
         }

@@ -16,6 +16,19 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
+        public void FullDelete(Guid id)
+        {
+            var b = new StringBuilder();
+            var conds = new Dictionary<string, object> {{"ClassPeriodRef", id}};
+            var deleteAttQ = Orm.SimpleDelete<ClassAttendance>(conds);
+            b.Append(deleteAttQ.Sql).Append(" ");
+            b.Append(Orm.SimpleDelete<ClassDiscipline>(conds).Sql).Append(" ");
+            conds.Add("Id", id);
+            var classPeriodQ = Orm.SimpleDelete<ClassPeriod>(new Dictionary<string, object> {{"Id", id}});
+            b.Append(classPeriodQ.Sql);
+            ExecuteNonQueryParametrized(b.ToString(), conds);
+        }
+
         public bool Exists(ClassPeriodQuery query)
         {
             return Exists(BuildGetClassPeriodsQuery(query));

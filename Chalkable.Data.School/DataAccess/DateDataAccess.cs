@@ -29,7 +29,7 @@ namespace Chalkable.Data.School.DataAccess
 
             if (query.Id.HasValue)
             {
-                conds.Add("@d", query.Id);
+                conds.Add("@id", query.Id);
                 builder.AppendFormat(" {0} Id = @id", where);
                 where = " and ";
             }
