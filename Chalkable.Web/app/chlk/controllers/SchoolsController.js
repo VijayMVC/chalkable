@@ -1,6 +1,7 @@
 REQUIRE('chlk.services.SchoolService');
 REQUIRE('chlk.services.AdminService');
 REQUIRE('chlk.services.AccountService');
+REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.activities.school.SchoolDetailsPage');
 REQUIRE('chlk.activities.school.SchoolPeoplePage');
@@ -21,6 +22,9 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.AccountService, 'accountService',
 
+        [ria.mvc.Inject],
+        chlk.services.GradeLevelService, 'gradeLevelService',
+
         [[Number]],
         function detailsAction(id) {
             var result = this.schoolService
@@ -31,6 +35,8 @@ NAMESPACE('chlk.controllers', function (){
 
         [[Number]],
         function peopleAction(id) {
+            var newGradeLevels = this.gradeLevelService.getGradeLevels().slice();
+
             var result = ria.async.wait([
                 this.schoolService.getPeopleSummary(id),
                 this.adminService.getUsers(id,0),
@@ -40,7 +46,6 @@ NAMESPACE('chlk.controllers', function (){
                 var model = new chlk.models.school.SchoolPeople();
                 model.setSchoolInfo(result[0]);
                 model.setUsers(result[1].getItems());
-                var newGradeLevels = gradeLevels.slice();
                 var roles = result[2];
                 newGradeLevels.unshift(serializer.deserialize({name: 'All Grades', id: null}, chlk.models.NameId));
                 roles.unshift(serializer.deserialize({name: 'All Roles', id: null}, chlk.models.NameId));

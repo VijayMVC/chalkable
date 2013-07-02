@@ -4,6 +4,7 @@ REQUIRE('ria.dom.ready');
 
 REQUIRE('chlk.controllers.SysAdminController');
 REQUIRE('chlk.controllers.SchoolsController');
+
 REQUIRE('chlk.controls.ActionLinkControl');
 REQUIRE('chlk.controls.GridControl');
 REQUIRE('chlk.controls.PaginatorControl');
@@ -14,6 +15,8 @@ REQUIRE('chlk.controls.GlanceBoxControl');
 REQUIRE('chlk.controls.SelectControl');
 REQUIRE('chlk.controls.AvatarControl');
 REQUIRE('chlk.controls.PhotoContainerControl');
+
+//REQUIRE('~/app/chlk/shared.js');
 
 NAMESPACE('chlk', function (){
 
@@ -28,21 +31,6 @@ NAMESPACE('chlk', function (){
                 return dispatcher;
             },
             OVERRIDE, ria.async.Future, function onStart_() {
-                var serializer = new ria.serialize.JsonSerializer();
-                window.gradeLevels = serializer.deserialize([
-                    {name: '1st', id: 1},
-                    {name: '2st', id: 2},
-                    {name: '3st', id: 3},
-                    {name: '4st', id: 4},
-                    {name: '5st', id: 5},
-                    {name: '6st', id: 6},
-                    {name: '7st', id: 7},
-                    {name: '8st', id: 8},
-                    {name: '9st', id: 9},
-                    {name: '10st', id: 10},
-                    {name: '11st', id: 11},
-                    {name: '12st', id: 12}
-                ], ArrayOf(chlk.models.NameId));
 
                 return BASE()
                     .then(function (data) {
