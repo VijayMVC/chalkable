@@ -24,18 +24,27 @@ NAMESPACE('chlk.controllers', function (){
         },
         VOID, function addSchoolAction(form_) {
 
-            var model = new chlk.models.School;
 
-            if (form_){
-                model.setName(form_.name);
-                model.setLocalId(parseInt(form_.localid, 10));
-                model.setNcesId(parseInt(form_.ncesid, 10));
-                model.setSchoolType(form_.schooltype);
-                model.setSchoolUrl(form_.schoolurl);
-                model.setSendEmailNotifications(form_.sendemailnotifications != "false");
-                model.setTimezoneId(form_.timezoneid);
-            }
-            return this.ShadeView(chlk.activities.AddSchoolDialog, ria.async.DeferredData(model));
+
+            var result = ria.async.wait([
+                this.schoolService.getTimezones()
+            ]).
+            then(function(data){
+                var model = new chlk.models.School;
+                if (form_){
+                    model.setName(form_.name);
+                    model.setLocalId(parseInt(form_.localid, 10));
+                    model.setNcesId(parseInt(form_.ncesid, 10));
+                    model.setSchoolType(form_.schooltype);
+                    model.setSchoolUrl(form_.schoolurl);
+                    model.setSendEmailNotifications(form_.sendemailnotifications != "false");
+                    model.setTimezoneId(form_.timezoneId);
+                }
+                model.setTimezones(data[0].getItems());
+                return model;
+            });
+
+            return this.ShadeView(chlk.activities.AddSchoolDialog, result);
         },
         VOID, function appsAction() {},
         VOID, function settingsAction() {},

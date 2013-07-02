@@ -3,6 +3,7 @@ REQUIRE('ria.async.Future');
 
 REQUIRE('chlk.models.School');
 REQUIRE('chlk.models.school.SchoolDetails');
+REQUIRE('chlk.models.school.Timezone');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -23,6 +24,10 @@ NAMESPACE('chlk.services', function () {
             [[Number]],
             ria.async.Future, function getPeopleSummary(schoolId) {
                 return this.get('/app/data/peopleSummary.json', chlk.models.school.SchoolPeopleSummary);
+            },
+
+            ria.async.Future, function getTimezones() {
+                return this.getPaginatedList('/app/data/timezones.json', chlk.models.school.Timezone, 0);
             }
         ])
 });

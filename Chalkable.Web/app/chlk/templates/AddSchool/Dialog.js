@@ -24,6 +24,8 @@ NAMESPACE('chlk.templates.AddSchool', function () {
             [ria.templates.ModelBind],
             String, 'timezoneId',
             [ria.templates.ModelBind],
-            Boolean, 'sendEmailNotifications'
+            Boolean, 'sendEmailNotifications',
+            [ria.templates.ModelBind],
+            ArrayOf(chlk.models.school.Timezone), 'timezones'
         ])
 });

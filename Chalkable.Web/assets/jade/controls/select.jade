@@ -1,5 +1,11 @@
-mixin Select(data)
+mixin Select(name)
+    -attributes.name = name
     -self.processAttrs(attributes);
     select(attributes)
-        each item in data
-            option(value=item.getId())= item.getName()
+        block
+
+mixin Option(value, displayName, selected)
+    -attributes.value = value
+    -attributes.selected = selected
+        -console.log(attributes)
+        option(attributes)=displayName

@@ -20,8 +20,12 @@
         .action-bar.not-transparent.people-tb
             .container.panel-bg
                 .right
-                    +Select(roles)#roles-select
-                    +Select(gradeLevels)#grade-levels-select
+                    +Select('roleId')#roles-select
+                        each item in roles
+                            +Option(item.getId(), item.getName())
+                    +Select('gradeLevelId')#grade-levels-select
+                        each item in roles
+                            +Option(item.getId(), item.getName())
         .people-list-container.not-transparent
             .top.panel-bg
                 span 127 Students

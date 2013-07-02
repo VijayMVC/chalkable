@@ -1,3 +1,5 @@
+REQUIRE('chlk.models.school.Timezone');
+
 NAMESPACE('chlk.models', function () {
     "use strict";
     /** @class chlk.models.School*/
@@ -10,6 +12,8 @@ NAMESPACE('chlk.models', function () {
             String, 'schoolType',
             String, 'schoolUrl',
             Boolean,'sendEmailNotifications',
-            String, 'timezoneId'
+            [ria.serialize.SerializeProperty('timezoneid')],
+            String, 'timezoneId',
+            ArrayOf(chlk.models.school.Timezone), 'timezones'
         ]);
 });

@@ -24,8 +24,10 @@
                     label State/Province ID:
                     input
                 .x-form-field
-                    label SChool TimeZone:
-                    input(type="text",name="timezoneid", value=self.timezoneId)
+                    label School TimeZone:
+                    +Select('timezoneId')#timezoneId
+                        each item in self.getTimezones()
+                            +Option(item.getId(), item.getDisplayName(), item.getId() == self.timezoneId ? 'selected' : '')
                 .x-form-field
                     label Send EmailNotifications:
                     +Checkbox("sendemailnotifications", self.sendEmailNotifications).checkbox-last
@@ -38,9 +40,3 @@
                     input
                 +Button(type="submit").special-button.blue-button.submit-btn Submit
                 +Button.special-button.red-button Cancel
-
-    +GlanceBox('controller', 'action', {
-        title:'Test',
-        value:100,
-        items:[{title:'a', value: 100},{title: 'b', value: 2000}, {title: 'c', value: 3000}]
-    })
