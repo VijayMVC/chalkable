@@ -1,0 +1,106 @@
+﻿@using System.Configuration
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"  itemscope itemtype="Education">
+<head>
+    <title>@ViewBag.Title</title>
+    @ChlkHelpers.RenderPageMetadata()
+    <meta itemprop="image" content="@Url.Content("~/favicon.ico")">
+    <link rel="icon" href="@Url.Content("~/favicon.ico")" />
+    <!--Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css' />
+    <!-- Whole Site CSS -->
+    <link href="@Url.StaticContent("/Content/screen.css")" rel="stylesheet" media="screen, projection" type="text/css" />
+    <link href="@Url.StaticContent("/app/jquery/choosen/chosen.min.css")" rel="stylesheet" type="text/css" />
+    <!-- Page specific CSS -->
+    @RenderSection("Styles", false)
+    @ChlkHelpers.GoogleAnalytics()
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/chlk-messages.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-2.0.2.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/choosen/chosen.jquery.min.js")"></script>
+    @if (IsSectionDefined("Scripts"))
+    {
+        if (Chalkable.Web.Tools.CompilerHelper.IsDebug)
+        {
+        <script type="text/javascript">
+            var _ = window.location.href.toString().match(/http?s:\/\/[^\/]+/);
+            var WEB_SITE_ROOT = _ + '@Url.Content("~/")';
+        </script>      
+         
+        }
+        else
+        {
+        <script type="text/javascript">var WEB_SITE_ROOT = window.location.href.toString().match(/http?s:\/\/[^\/]+/) + '@Url.Content("~/")';</script>
+        }
+        @RenderSection("Scripts", false)
+    }
+    else
+    {
+        <script src="@Url.Content("~/app/ria/_bootstrap.js")" type="text/javascript">
+            ria.__CFG = {
+                "prettyStackTraces": true,
+                "checkedMode": true,
+                "enablePipelineMethodCall": true,
+                "AssertWithExceptions": false,
+                "stackTraceJs": "lib/stacktrace.js",
+
+                "#require": {
+                    "plugins": ["~/assets/jade.js"],
+                    "appCodeDir": "~/app/",
+                    "siteRoot": "http://localhost:11603",
+                    "appRoot": "@Url.Content("~")",
+                    "libs": {
+                    }
+                },
+
+                "#mvc": @RenderSection("MVCSettings", false)
+            }
+        </script>
+    }
+</head>
+<body>
+    <div id="fb-root"></div>
+    <input type="hidden" value=" ServerTime :  @ViewData["CurrentServerDateTime"]"/>
+    <input type="hidden" value=" ServerDbTime:  @ViewData["CurrentServerDBDateTime"]"/>
+
+    <div id="page-header">
+        Revision: @Chalkable.Web.Tools.CompilerHelper.Version
+    </div>
+   
+
+
+
+    <div class="page 
+    @if ((ViewData.ContainsKey("Prefix") && !string.IsNullOrEmpty("Prefix")) || (ViewData.ContainsKey("DeveloperId") && !string.IsNullOrEmpty("DeveloperId")))
+    {
+        @:demo
+    }
+    ">
+        <div id="sidebar">
+            @if (IsSectionDefined("Sidebar"))
+            {
+              @RenderSection("Sidebar", false)  
+            }
+        </div>
+        <div id="content">
+            <div class="ribbon"></div>
+            <div id="content-wrapper">
+                <div id="main-top">
+                </div>
+                <div id="main-wrapper">
+                    <div id="main">
+                        @RenderBody()
+                    </div>
+                    <div id = "chlk-dialogs" class = "x-hidden"></div>
+                </div>
+                <div id="footer">&copy; <script>var dt = new Date();document.write(dt.getFullYear());</script> Chalkable</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id = "chlk-overlay" class ="x-hidden"></div>
+</body>
+</html>
