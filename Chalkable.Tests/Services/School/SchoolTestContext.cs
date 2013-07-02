@@ -29,7 +29,7 @@ namespace Chalkable.Tests.Services.School
         private const string DEFAULT_PASSWORD = "tester";
         private const string DEFAULT_GENDER = "M";
 
-        private class UserIInfoTest : UserInfo
+        private class UserInfoTest : UserInfo
         {
             public CoreRole Role { get; set; }
         }
@@ -45,7 +45,7 @@ namespace Chalkable.Tests.Services.School
         {
             var res = new SchoolTestContext(sysSchoolSl);
 
-            var userInfos = new List<UserIInfoTest>
+            var userInfos = new List<UserInfoTest>
                 {
                     CreateUserInfo(res.AdminGradeName, CoreRoles.ADMIN_GRADE_ROLE),
                     CreateUserInfo(res.AdminViewName, CoreRoles.ADMIN_VIEW_ROLE),
@@ -93,15 +93,14 @@ namespace Chalkable.Tests.Services.School
             var schoolUser = GetSchoolUser(locator, name, role);
             return locator.PersonService.GetPerson(schoolUser.User.Id);
         }
-
-        public SchoolUser GetSchoolUser(Person person)
+        private SchoolUser GetSchoolUser(Person person)
         {
             return GetSchoolUser(sysSchoolSl, person.FirstName, CoreRoles.GetById(person.RoleRef));
         }
 
-        private static UserIInfoTest CreateUserInfo(string name, CoreRole role)
+        private static UserInfoTest CreateUserInfo(string name, CoreRole role)
         {
-            return new UserIInfoTest
+            return new UserInfoTest
                 {
                     Login = GetUserLogin(name),
                     FirstName = name,
@@ -111,8 +110,7 @@ namespace Chalkable.Tests.Services.School
                     Role = role,
                 };
         }
-
-        private static void CreateUsers(IServiceLocatorSchool sysSchoolSl, IList<UserIInfoTest> userInfos, Guid? gradeLevelId)
+        private static void CreateUsers(IServiceLocatorSchool sysSchoolSl, IList<UserInfoTest> userInfos, Guid? gradeLevelId)
         {
             foreach (var userInfo in userInfos)
             {
@@ -120,6 +118,7 @@ namespace Chalkable.Tests.Services.School
                                               userInfo.Role.Name, userInfo.Gender, userInfo.Salutation, userInfo.BirthDate, gradeLevelId);
             }
         }
+       
         public string AdminGradeName
         {
             get { return SCHOOL_ADMIN_GRADE_USER; }
@@ -162,30 +161,20 @@ namespace Chalkable.Tests.Services.School
         }
 
         public IServiceLocatorSchool AdminGradeSl { get; private set; }
-
         public IServiceLocatorSchool AdminEditSl { get; private set; }
-
         public IServiceLocatorSchool AdminViewSl { get; private set; }
-
         public IServiceLocatorSchool FirstTeacherSl { get; private set; }
-
         public IServiceLocatorSchool FirstStudentSl { get; private set; }
-
         public IServiceLocatorSchool SecondTeacherSl { get; private set; }
-
         public IServiceLocatorSchool SecondStudentSl { get; private set; }
-
         public IServiceLocatorSchool FirstParentSl { get; private set; }
-
         public IServiceLocatorSchool SecondParentSl { get; private set; }
-
         public IServiceLocatorSchool CheckinSl { get; private set; }
 
         public Person AdminGrade
         {
             get { return GetPerson(sysSchoolSl, AdminGradeName, CoreRoles.ADMIN_GRADE_ROLE); }
         }
-
         public Person AdminEdit
         {
             get { return GetPerson(sysSchoolSl, AdminEditName, CoreRoles.ADMIN_EDIT_ROLE); }
@@ -218,10 +207,22 @@ namespace Chalkable.Tests.Services.School
         {
             get { return GetPerson(sysSchoolSl, SecondParentName, CoreRoles.PARENT_ROLE); }
         }
-
         public Person Checkin
         {
             get { return GetPerson(sysSchoolSl, CheckinName, CoreRoles.CHECKIN_ROLE); }
+        }
+
+        public DateTime NowTime
+        {
+            get { return AdminGradeSl.Context.NowSchoolTime; }
+        }
+        public DateTime NowDate
+        {
+            get { return NowTime.Date; }
+        }
+        public int NowMinutes
+        {
+            get { return (int) (NowTime - NowDate).TotalMinutes; }
         }
     }
 

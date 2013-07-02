@@ -12,12 +12,11 @@ namespace Chalkable.Tests.Services.School
         [Test]
         public void AddDeletePeriodTest()
         {
-            var nowDate = SchoolTestContext.AdminGradeSl.Context.NowSchoolTime.Date;
-            var sy = SchoolYearServiceTest.CreateNextSchoolYear(SchoolTestContext, nowDate.AddDays(-7));
+            var sy = SchoolYearServiceTest.CreateNextSchoolYear(SchoolTestContext, SchoolTestContext.NowDate.AddDays(-7));
             var mp = MarkingPeriodServiceTest.CreateNextMp(SchoolTestContext, sy.Id);
             SchoolTestContext.AdminGradeSl.ScheduleSectionService.GenerateDefaultSections(mp.Id);
 
-            var cDate = SchoolTestContext.AdminGradeSl.CalendarDateService.GetCalendarDateByDate(nowDate);
+            var cDate = SchoolTestContext.AdminGradeSl.CalendarDateService.GetCalendarDateByDate(SchoolTestContext.NowDate);
             AssertForDeny(sl => sl.PeriodService.Add(mp.Id, 450, 500, cDate.ScheduleSectionRef.Value, 1), SchoolTestContext
                 , SchoolContextRoles.AdminViewer | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent 
                 | SchoolContextRoles.FirstParent | SchoolContextRoles.Checkin);
@@ -65,8 +64,7 @@ namespace Chalkable.Tests.Services.School
         [Test]
         public void ReGeneratePeriodsTest()
         {
-            var nowDate = SchoolTestContext.AdminGradeSl.Context.NowSchoolTime.Date;
-            var sy = SchoolYearServiceTest.CreateNextSchoolYear(SchoolTestContext, nowDate.AddDays(-7));
+            var sy = SchoolYearServiceTest.CreateNextSchoolYear(SchoolTestContext, SchoolTestContext.NowDate.AddDays(-7));
             var mp1 = MarkingPeriodServiceTest.CreateNextMp(SchoolTestContext, sy.Id);
             var mp2 = MarkingPeriodServiceTest.CreateNextMp(SchoolTestContext, sy.Id);
             SchoolTestContext.AdminGradeSl.ScheduleSectionService.GenerateDefaultSections(mp1.Id);
@@ -92,7 +90,7 @@ namespace Chalkable.Tests.Services.School
             var room = SchoolTestContext.AdminGradeSl.RoomService.AddRoom("001", "room1", "10X10", null, "333-444");
             var c = SchoolTestContext.AdminGradeSl.ClassService.Add(sy.Id, course.Id, "class1", "class1",
                                SchoolTestContext.FirstTeacher.Id, SchoolTestContext.FirstStudent.StudentInfo.GradeLevelRef, mpIds);
-            var cDate = SchoolTestContext.AdminGradeSl.CalendarDateService.GetCalendarDateByDate(nowDate);
+            var cDate = SchoolTestContext.AdminGradeSl.CalendarDateService.GetCalendarDateByDate(SchoolTestContext.NowDate);
             var period = pService.Add(mp1.Id, startTime, startTime + pLength, cDate.ScheduleSectionRef.Value, 1);
             var cPeriod = SchoolTestContext.AdminGradeSl.ClassPeriodService.Add(period.Id, c.Id, room.Id);
 
