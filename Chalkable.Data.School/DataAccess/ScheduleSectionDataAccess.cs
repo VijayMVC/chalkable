@@ -61,8 +61,8 @@ namespace Chalkable.Data.School.DataAccess
         {
             var parameters = new Dictionary<string, object>
                 {
-                    {MARKING_PERIODS_IDS_PARAM, markingPeriodIds},
-                    {SECTION_NAMES_PARAM, sectionNames}
+                    {MARKING_PERIODS_IDS_PARAM, markingPeriodIds.Select(x=>x.ToString()).JoinString(",")},
+                    {SECTION_NAMES_PARAM, sectionNames.JoinString(",")}
                 };
             ExecuteStoredProcedureReader(REBUILD_SECTION_PROC, parameters).Dispose();
         }

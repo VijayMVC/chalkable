@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.School
         ScheduleSection Edit(Guid id, int number, string name);
         void Delete(Guid id);
          
-        bool ReBuildSections(List<string> sections, List<Guid> markingPeriodIds);
+        void ReBuildSections(List<string> sections, List<Guid> markingPeriodIds);
         void GenerateDefaultSections(Guid markingPeriodId);
         void GenerateScheduleSectionsWithDefaultPeriods(Guid markingPeriodId, string[] names);
     }
@@ -45,7 +45,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ScheduleSection> GetSections(List<Guid> markingPeriodIds)
         {
-            if(CanGetSection(markingPeriodIds))
+            if(!CanGetSection(markingPeriodIds))
                 throw new ChalkableException(ChlkResources.ERR_SCHEDULE_SECTION_SECTIONS_NOT_EQUIVALENT);
             return GetSections(markingPeriodIds[0]);
         }
@@ -206,7 +206,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public bool ReBuildSections(List<string> sections, List<Guid> markingPeriodIds)
+        public void ReBuildSections(List<string> sections, List<Guid> markingPeriodIds)
         {
             if(!CanDeleteSections(markingPeriodIds))
                 throw new ChalkableException(ChlkResources.ERR_SCHEDULE_SECTION_CANT_DELETE);
@@ -226,10 +226,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
 
             }
-            return true;
         }
 
-        
         
         public void GenerateDefaultSections(Guid markingPeriodId)
         {

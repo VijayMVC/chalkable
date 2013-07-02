@@ -52,11 +52,55 @@ namespace Chalkable.Tests.Services.School
                 , SchoolTestContext.FirstStudent.StudentInfo.GradeLevelRef, new List<Guid> {mp.Id});
             var cPeriod = SchoolTestContext.AdminGradeSl.ClassPeriodService.Add(period.Id, c.Id, room.Id);
 
+            Assert.IsFalse(SchoolTestContext.AdminGradeSl.ScheduleSectionService.CanDeleteSections(new List<Guid> {mp.Id}));
             AssertException<Exception>(()=> SchoolTestContext.AdminGradeSl.ScheduleSectionService.Delete(ss2.Id));
             SchoolTestContext.AdminGradeSl.ClassPeriodService.Delete(cPeriod.Id);
             SchoolTestContext.AdminGradeSl.ScheduleSectionService.Delete(ss2.Id);
             Assert.AreEqual(SchoolTestContext.AdminGradeSl.ScheduleSectionService.GetSections(mp.Id).Count, 3);
             Assert.AreEqual(SchoolTestContext.AdminGradeSl.ScheduleSectionService.GetSectionById(ss3.Id).Number, 2);
+        }
+
+        [Test]
+        public void ReBuildGetSectionsTest()
+        {
+            var nowTime = SchoolTestContext.AdminGradeSl.Context.NowSchoolTime;
+            var sy = SchoolYearServiceTest.CreateNextSchoolYear(SchoolTestContext, nowTime.AddDays(-7));
+            var mp1 = MarkingPeriodServiceTest.CreateNextMp(SchoolTestContext, sy.Id);
+            var mp2 = MarkingPeriodServiceTest.CreateNextMp(SchoolTestContext, sy.Id);
+            var mpIds = new List<Guid> {mp1.Id, mp2.Id};
+            var sectionsNames1 = new List<string> { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+            AssertForDeny(sl => sl.ScheduleSectionService.ReBuildSections(sectionsNames1, mpIds), SchoolTestContext
+                    , SchoolContextRoles.AdminViewer | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent
+                    | SchoolContextRoles.FirstParent | SchoolContextRoles.Checkin);
+
+            SchoolTestContext.AdminGradeSl.ScheduleSectionService.ReBuildSections(sectionsNames1, new List<Guid> {mp1.Id});
+            Assert.IsFalse(SchoolTestContext.AdminGradeSl.ScheduleSectionService.CanGetSection(mpIds));
+            Assert.IsTrue(SchoolTestContext.AdminGradeSl.ScheduleSectionService.CanGetSection(new List<Guid> {mp1.Id}));
+            AssertException<Exception>(() => SchoolTestContext.AdminGradeSl.ScheduleSectionService.GetSections(mpIds));
+            Assert.IsFalse(SchoolTestContext.AdminGradeSl.ScheduleSectionService.CanDeleteSections(mpIds));
+            Assert.IsTrue(SchoolTestContext.AdminGradeSl.ScheduleSectionService.CanDeleteSections(new List<Guid>{mp1.Id}));
+            AssertException<Exception>(() => SchoolTestContext.AdminGradeSl.ScheduleSectionService.ReBuildSections(sectionsNames1, mpIds));
+            
+            var sections = SchoolTestContext.AdminGradeSl.ScheduleSectionService.GetSections(new List<Guid> {mp1.Id});
+            Assert.AreEqual(sections.Count, sectionsNames1.Count);
+            for (int i = 0; i < sections.Count; i++)
+            {
+                Assert.AreEqual(sections[i].Name, sectionsNames1[i]);
+            }
+            foreach (var scheduleSection in sections)
+            {
+                SchoolTestContext.AdminGradeSl.ScheduleSectionService.Delete(scheduleSection.Id);
+            }
+            var sectionsNames2 = new List<string> {"A", "B", "C"};
+            SchoolTestContext.AdminGradeSl.ScheduleSectionService.ReBuildSections(sectionsNames2, mpIds);
+            Assert.IsTrue(SchoolTestContext.AdminGradeSl.ScheduleSectionService.CanGetSection(mpIds));
+            Assert.IsTrue(SchoolTestContext.AdminGradeSl.ScheduleSectionService.CanDeleteSections(mpIds));
+            sections = SchoolTestContext.AdminGradeSl.ScheduleSectionService.GetSections(mpIds);
+            Assert.AreEqual(sections.Count, sectionsNames2.Count);
+            for (int i = 0; i < sections.Count; i++)
+            {
+                Assert.AreEqual(sections[i].Name, sectionsNames2[i]);
+            }
         }
     }
 }
