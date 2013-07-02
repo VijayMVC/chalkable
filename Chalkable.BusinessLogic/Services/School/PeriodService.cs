@@ -173,6 +173,7 @@ namespace Chalkable.BusinessLogic.Services.School
                                     var periodEndTime = periodStartTime + length;
                                     var period = new Period
                                     {
+                                        Id = Guid.NewGuid(),
                                         SectionRef = scheduleSection.Id,
                                         StartTime = periodStartTime.Value,
                                         EndTime = periodEndTime.Value,

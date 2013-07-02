@@ -17,7 +17,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Delete(IList<Guid> markingPeriodIds)
         {
-            var mpIds = markingPeriodIds.Select(x => x.ToString()).JoinString(",");
+            var mpIds = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
             var sql = string.Format("delete from Period where MarkingPeriodRef in ({0})", mpIds);
             ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
         }
@@ -63,7 +63,14 @@ namespace Chalkable.Data.School.DataAccess
             b.Append(" order by Period.StartTime, ScheduleSection.Number");
             using (var reader = ExecuteReaderParametrized(b.ToString(), conds))
             {
-                return reader.ReadList<Period>(true);
+                var res = new List<Period>();
+                while (reader.Read())
+                {
+                    var period = reader.Read<Period>(true);
+                    period.Section = reader.Read<ScheduleSection>(true);
+                    res.Add(period);
+                }
+                return res;
             }
         }
     }
