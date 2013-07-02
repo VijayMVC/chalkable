@@ -62,6 +62,28 @@ namespace Chalkable.Data.Master.Model
 
     }
 
+    public class DatabaseBackupTaskData
+    {
+        public long Time { get; set; }
+        public bool BackupMaster { get; set; }
+        private const string FORMAT = "{0},{1}";
+        public override string ToString()
+        {
+            return string.Format(FORMAT, Time, BackupMaster);
+        }
+        public DatabaseBackupTaskData(long time, bool backupMaster)
+        {
+            Time = time;
+            BackupMaster = backupMaster;
+        }
+        public DatabaseBackupTaskData(string str)
+        {
+            var sl = str.Split(',');
+            Time = long.Parse(sl[0]);
+            BackupMaster = bool.Parse(sl[1]);
+        }
+    }
+
     public enum BackgroundTaskTypeEnum
     {
         CreateEmptySchool = 0,

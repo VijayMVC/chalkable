@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
 using Chalkable.BusinessLogic.Services;
@@ -17,7 +18,29 @@ namespace Chalkable.BackgroundTaskProcessor
         public bool Handle(BackgroundTask task, BackgroundTaskService.BackgroundTaskLog log)
         {
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var time = long.Parse(task.Data);
+            var data = task.GetData<DatabaseBackupTaskData>();
+
+            if (data.BackupMaster)
+            {
+                var c = new SqlConnection(sl.Context.MasterConnectionString);
+                var t = new BackupTask
+                    {
+                        Database = c.Database,
+                        Server = c.DataSource,
+                        Time = data.Time,
+                        Success = false,
+                        Completed = false
+                    };
+                RunBackup(new List<BackupTask> { t });
+                if (!t.Success)
+                {
+                    log.LogError("Db backup error: Master Database");
+                    if (t.ErrorMessage != null)
+                        log.LogError(t.ErrorMessage);
+                    return false;
+                }
+            }
+
             var schools = sl.SchoolService.GetSchools(false);
             var allTasks = new List<BackupTask>();
             var threadTasks = new List<BackupTask>();
@@ -30,7 +53,7 @@ namespace Chalkable.BackgroundTaskProcessor
                         Database = school.Id.ToString(),
                         Server = school.ServerUrl,
                         Success = false,
-                        Time = time
+                        Time = data.Time
                     };
                 allTasks.Add(t);
                 threadTasks.Add(t);
@@ -58,7 +81,7 @@ namespace Chalkable.BackgroundTaskProcessor
             {
                 if (!allTasks[i].Success)
                 {
-                    log.LogError("Db backup error: ");
+                    log.LogError(string.Format("Db backup error: {0} - {1}", allTasks[i].Server, allTasks[i].Database));
                     if (allTasks[i].ErrorMessage != null)
                         log.LogError(allTasks[i].ErrorMessage);
                     res = false;
