@@ -48,7 +48,7 @@ NAMESPACE('chlk.controllers', function (){
                 this.schoolService.getTimezones()
             ]).
             then(function(data){
-                var model = new chlk.models.School;
+                var model = new chlk.models.school.School;
                 if (form_){
                     model.setName(form_.name);
                     model.setLocalId(parseInt(form_.localid, 10));
@@ -94,8 +94,8 @@ NAMESPACE('chlk.controllers', function (){
                 model.setSchoolInfo(result[0]);
                 model.setUsers(result[1].getItems());
                 var roles = result[2];
-                newGradeLevels.unshift(serializer.deserialize({name: 'All Grades', id: null}, chlk.models.NameId));
-                roles.unshift(serializer.deserialize({name: 'All Roles', id: null}, chlk.models.NameId));
+                newGradeLevels.unshift(serializer.deserialize({name: 'All Grades', id: null}, chlk.models.common.NameId));
+                roles.unshift(serializer.deserialize({name: 'All Roles', id: null}, chlk.models.common.NameId));
                 model.setGradeLevels(newGradeLevels);
                 model.setRoles(roles);
                 return model;

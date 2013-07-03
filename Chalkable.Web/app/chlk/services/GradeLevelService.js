@@ -1,6 +1,6 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
-REQUIRE('chlk.models.NameId');
+REQUIRE('chlk.models.common.NameId');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -23,7 +23,7 @@ NAMESPACE('chlk.services', function () {
                      {name: '10st', id: 10},
                      {name: '11st', id: 11},
                      {name: '12st', id: 12}
-                 ], ArrayOf(chlk.models.NameId));
+                 ], ArrayOf(chlk.models.common.NameId));
             },
         ])
 });

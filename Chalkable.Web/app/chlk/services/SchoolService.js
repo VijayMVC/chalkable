@@ -1,7 +1,7 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 
-REQUIRE('chlk.models.School');
+REQUIRE('chlk.models.school.School');
 REQUIRE('chlk.models.school.SchoolDetails');
 REQUIRE('chlk.models.school.Timezone');
 REQUIRE('chlk.models.school.SchoolSisInfo');
@@ -14,7 +14,7 @@ NAMESPACE('chlk.services', function () {
         'SchoolService', EXTENDS(chlk.services.BaseService), [
             [[Number]],
             ria.async.Future, function getSchools(pageIndex_) {
-                return this.getPaginatedList('/app/data/schools.json', chlk.models.School, pageIndex_);
+                return this.getPaginatedList('/app/data/schools.json', chlk.models.school.School, pageIndex_);
             },
 
             [[Number]],

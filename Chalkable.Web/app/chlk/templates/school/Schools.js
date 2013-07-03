@@ -1,5 +1,5 @@
 REQUIRE('chlk.templates.JadeTemplate');
-REQUIRE('chlk.models.School');
+REQUIRE('chlk.models.school.School');
 REQUIRE('chlk.templates.school.School');
 
 NAMESPACE('chlk.templates.school', function () {
@@ -10,7 +10,7 @@ NAMESPACE('chlk.templates.school', function () {
         [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
         'Schools', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelBind],
-            ArrayOf(chlk.models.School), 'items',
+            ArrayOf(chlk.models.school.School), 'items',
             [ria.templates.ModelBind],
             Number, 'pageindex',
             [ria.templates.ModelBind],

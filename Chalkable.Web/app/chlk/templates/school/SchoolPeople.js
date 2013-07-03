@@ -12,9 +12,9 @@ NAMESPACE('chlk.templates.school', function () {
             [ria.templates.ModelBind],
             ArrayOf(chlk.models.people.User), 'users',
             [ria.templates.ModelBind],
-            ArrayOf(chlk.models.NameId), 'roles',
+            ArrayOf(chlk.models.common.NameId), 'roles',
             [ria.templates.ModelBind],
-            ArrayOf(chlk.models.NameId), 'gradeLevels',
+            ArrayOf(chlk.models.common.NameId), 'gradeLevels',
             [ria.templates.ModelBind],
             chlk.models.school.SchoolPeopleSummary, 'schoolInfo'
         ])

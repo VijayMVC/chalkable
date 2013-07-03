@@ -1,12 +1,12 @@
 REQUIRE('chlk.templates.JadeTemplate');
 
-REQUIRE('chlk.models.School');
+REQUIRE('chlk.models.school.School');
 
 NAMESPACE('chlk.templates.school', function () {
 
     /** @class chlk.templates.School*/
     CLASS(
-        [ria.templates.ModelBind(chlk.models.School)],
+        [ria.templates.ModelBind(chlk.models.school.School)],
         'School', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelBind],
             Number, 'id',

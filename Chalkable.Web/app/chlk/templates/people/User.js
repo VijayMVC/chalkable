@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates', function () {
     /** @class chlk.templates.School*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/school/SchoolPeople.jade')],
-        [ria.templates.ModelBind(chlk.models.School)],
+        [ria.templates.ModelBind(chlk.models.school.School)],
         'School', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelBind],
             Boolean, 'active',

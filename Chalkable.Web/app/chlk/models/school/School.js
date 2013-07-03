@@ -1,6 +1,6 @@
 REQUIRE('chlk.models.school.Timezone');
 
-NAMESPACE('chlk.models', function () {
+NAMESPACE('chlk.models.school', function () {
     "use strict";
     /** @class chlk.models.School*/
     CLASS(

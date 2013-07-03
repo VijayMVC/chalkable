@@ -1,10 +1,10 @@
-REQUIRE('chlk.models.School');
+REQUIRE('chlk.models.school.School');
 
 NAMESPACE('chlk.models.school', function () {
     "use strict";
     /** @class chlk.models.school.SchoolDetails*/
     CLASS(
-        'SchoolDetails', EXTENDS(chlk.models.School), [
+        'SchoolDetails', EXTENDS(chlk.models.school.School), [
             Number, 'statusNumber',
             String, 'status',
             ArrayOf(Number), 'buttons',

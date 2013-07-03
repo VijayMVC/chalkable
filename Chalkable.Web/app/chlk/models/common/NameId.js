@@ -1,6 +1,6 @@
-NAMESPACE('chlk.models', function () {
+NAMESPACE('chlk.models.common', function () {
     "use strict";
-    /** @class chlk.models.NameId*/
+    /** @class chlk.models.common.NameId*/
     CLASS(
         'NameId', [
             Number, 'id',
