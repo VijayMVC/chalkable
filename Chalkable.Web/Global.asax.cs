@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using Chalkable.Web.Authentication;
+using Chalkable.Web.Models;
+using Chalkable.Web.Models.Binders;
 
 namespace Chalkable.Web
 {
@@ -22,6 +24,8 @@ namespace Chalkable.Web
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            ModelBinders.Binders.Add(typeof(StringList), new StringConstructedObjectBinder<StringList>());
 
         }
         

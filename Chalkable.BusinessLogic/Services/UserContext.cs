@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Enums;
 
 namespace Chalkable.BusinessLogic.Services
 {
@@ -22,6 +24,9 @@ namespace Chalkable.BusinessLogic.Services
         {
             get { return DateTime.UtcNow.ConvertFromUtc(SchoolTimeZoneId ?? "UTC"); }
         }
+
+        public bool IsOAuthUser { get; set; }
+        public IList<AppPermissionType> AppPermissions { get; set; }
 
         public UserContext(Guid id, Guid? schoolId, string login, string schoolName, string schoolTimeZoneId, string schoolServerUrl, CoreRole role)
         {

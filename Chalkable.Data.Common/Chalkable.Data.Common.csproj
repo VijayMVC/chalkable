@@ -69,6 +69,7 @@
     <Compile Include="Backup\BackupHelper.cs" />
     <Compile Include="DataAccessBase.cs" />
     <Compile Include="DataEntittyAttr.cs" />
+    <Compile Include="Enums\ApplicationPermissionType.cs" />
     <Compile Include="Enums\ImportSystemType.cs" />
     <Compile Include="Orm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

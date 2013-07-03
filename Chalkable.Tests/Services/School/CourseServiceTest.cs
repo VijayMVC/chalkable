@@ -23,7 +23,7 @@ namespace Chalkable.Tests.Services.School
             Image icon;
             byte[] iconContent;
             PictureServiceTest.LoadImage(DefaulImage1Path, out icon, out iconContent);
-            var department = SysAdminMasterLocator.ChalkableDepartmentService.Add("department1", "department1", iconContent);
+            var department = SysAdminMasterLocator.ChalkableDepartmentService.Add("department1", new List<string>{"dep1"}, iconContent);
             var course1 = SchoolTestContext.AdminGradeSl.CourseService.Add("001", "first course", null, department.Id);
             var adminMasterSl = SchoolTestContext.AdminGradeSl.ServiceLocatorMaster;
             Assert.AreEqual(course1.Code, "001");

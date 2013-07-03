@@ -63,8 +63,13 @@ namespace Chalkable.BusinessLogic.Services
            var role = CoreRoles.GetById(schoolUser.Role);
            var context = new UserContext(schoolUser.UserRef, schoolUser.SchoolRef, user.Login, school.Name,
                                           school.TimeZone, school.ServerUrl, role);
-           var serviceLocatorMaster = new ServiceLocatorMaster(context);
-           return new ServiceLocatorSchool(serviceLocatorMaster);
+           return CreateSchoolLocator(context);
+        }
+
+        public static IServiceLocatorSchool CreateSchoolLocator(UserContext context)
+        {
+            var masterLocator = new ServiceLocatorMaster(context);
+            return new ServiceLocatorSchool(masterLocator);
         }
     }
 }

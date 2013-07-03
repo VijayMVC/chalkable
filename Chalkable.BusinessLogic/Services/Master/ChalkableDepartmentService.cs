@@ -11,8 +11,8 @@ namespace Chalkable.BusinessLogic.Services.Master
 {
     public interface IChalkableDepartmentService
     {
-        ChalkableDepartment Add(string name, string keyWord, byte[] icon);
-        ChalkableDepartment Edit(Guid id, string name, string keyWord, byte[] icon);
+        ChalkableDepartment Add(string name, IList<string> keywords, byte[] icon);
+        ChalkableDepartment Edit(Guid id, string name, IList<string> keywords, byte[] icon);
         void Delete(Guid id);
 
         IList<ChalkableDepartment> GetChalkableDepartments();
@@ -26,7 +26,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        public ChalkableDepartment Add(string name, string keyWord, byte[] icon)
+        public ChalkableDepartment Add(string name, IList<string> keywords, byte[] icon)
         {
             if(!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
@@ -36,7 +36,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var res = new ChalkableDepartment
                     {
                         Id = Guid.NewGuid(),
-                        Keywords = keyWord,
+                        Keywords = keywords.JoinString(","),
                         Name = name
                     };
                 new ChalkableDepartmentDataAccess(uow).Insert(res);
@@ -46,7 +46,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public ChalkableDepartment Edit(Guid id, string name, string keyWord, byte[] icon)
+        public ChalkableDepartment Edit(Guid id, string name, IList<string> keywords, byte[] icon)
         {
             if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
@@ -55,7 +55,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new ChalkableDepartmentDataAccess(uow);
                 var res = da.GetById(id);
-                res.Keywords = keyWord;
+                res.Keywords = keywords.JoinString(",");
                 res.Name = name;
                 da.Update(res);
                 ServiceLocator.DepartmentIconService.UploadPicture(id, icon);

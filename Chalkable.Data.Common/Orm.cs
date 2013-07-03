@@ -180,9 +180,9 @@ namespace Chalkable.Data.Common
                         builder.Append(" and ");
                     }
                     if (cond.Value != null)
-                        builder.AppendFormat("[{0}].{1} =@{1}", t.Name, cond.Key);
+                        builder.AppendFormat("[{0}].[{1}] =@{1}", t.Name, cond.Key);
                     else
-                        builder.AppendFormat("[{0}].{1} is null", t.Name, cond.Key);
+                        builder.AppendFormat("[{0}].[{1}] is null", t.Name, cond.Key);
                 }
                 builder.Append(")");
             }
