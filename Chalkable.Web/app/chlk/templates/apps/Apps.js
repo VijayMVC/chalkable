@@ -1,16 +1,15 @@
 REQUIRE('chlk.templates.JadeTemplate');
-REQUIRE('chlk.models.school.School');
-REQUIRE('chlk.templates.school.School');
+REQUIRE('chlk.models.apps.Application');
 
-NAMESPACE('chlk.templates.school', function () {
+NAMESPACE('chlk.templates.apps', function () {
 
     /** @class chlk.templates.Schools*/
     CLASS(
-        [ria.templates.TemplateBind('~/assets/jade/activities/school/Schools.jade')],
+        [ria.templates.TemplateBind('~/assets/jade/activities/apps/Apps.jade')],
         [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
-        'Schools', EXTENDS(chlk.templates.JadeTemplate), [
+        'Apps', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelBind],
-            ArrayOf(chlk.models.school.School), 'items',
+            ArrayOf(chlk.models.apps.Application), 'items',
             [ria.templates.ModelBind],
             Number, 'pageindex',
             [ria.templates.ModelBind],

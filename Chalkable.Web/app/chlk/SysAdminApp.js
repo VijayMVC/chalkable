@@ -3,6 +3,7 @@ REQUIRE('ria.dom.Dom');
 REQUIRE('ria.dom.ready');
 
 REQUIRE('chlk.controllers.SchoolsController');
+REQUIRE('chlk.controllers.AppsController');
 
 REQUIRE('chlk.controls.ActionLinkControl');
 REQUIRE('chlk.controls.GridControl');
