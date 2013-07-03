@@ -112,6 +112,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             return new Preference
                           {
+                              Id = Guid.NewGuid(),
                               Category = preferenceInfo.Category,
                               Type = preferenceInfo.Type,
                               Value = preferenceInfo.Value,
