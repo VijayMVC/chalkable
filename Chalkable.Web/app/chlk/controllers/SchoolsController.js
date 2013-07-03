@@ -1,11 +1,17 @@
+REQUIRE('chlk.controllers.BaseController');
+
 REQUIRE('chlk.services.SchoolService');
 REQUIRE('chlk.services.AdminService');
 REQUIRE('chlk.services.AccountService');
 REQUIRE('chlk.services.GradeLevelService');
-REQUIRE('chlk.controllers.BaseController');
+
+REQUIRE('chlk.models.school.SchoolPeople');
+
 REQUIRE('chlk.activities.school.SchoolDetailsPage');
 REQUIRE('chlk.activities.school.SchoolPeoplePage');
-REQUIRE('chlk.models.school.SchoolPeople');
+REQUIRE('chlk.activities.school.SchoolSisPage');
+REQUIRE('chlk.activities.school.SchoolsListPage');
+REQUIRE('chlk.activities.school.AddSchoolDialog');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -25,12 +31,53 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.GradeLevelService, 'gradeLevelService',
 
+
+
+        [chlk.controllers.SidebarButton('schools')],
+        [[Number]],
+        function listAction(pageIndex_) {
+            var result = this.schoolService
+                .getSchools(pageIndex_ | 0)
+                .attach(this.validateResponse_());
+            /* Put activity in stack and render when result is ready */
+            return this.PushView(chlk.activities.school.SchoolsListPage, result);
+        },
+
+        VOID, function addSchoolAction(form_) {
+            var result = ria.async.wait([
+                this.schoolService.getTimezones()
+            ]).
+            then(function(data){
+                var model = new chlk.models.School;
+                if (form_){
+                    model.setName(form_.name);
+                    model.setLocalId(parseInt(form_.localid, 10));
+                    model.setNcesId(parseInt(form_.ncesid, 10));
+                    model.setSchoolType(form_.schooltype);
+                    model.setSchoolUrl(form_.schoolurl);
+                    model.setSendEmailNotifications(form_.sendemailnotifications != "false");
+                    model.setTimezoneId(form_.timezoneId);
+                }
+                model.setTimezones(data[0].getItems());
+                return model;
+            });
+
+            return this.ShadeView(chlk.activities.school.AddSchoolDialog, result);
+        },
+
         [[Number]],
         function detailsAction(id) {
             var result = this.schoolService
                 .getDetails(id)
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.school.SchoolDetailsPage, result);
+        },
+        [[Number]],
+        function sisInfoAction(id) {
+            var result = this.schoolService
+                .getSisInfo(id)
+                .attach(this.validateResponse_());
+            return this.PushView(chlk.activities.school.SchoolSisPage, result);
         },
 
         [[Number]],

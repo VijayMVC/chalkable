@@ -1,4 +1,5 @@
-REQUIRE('chlk.models.School');
+REQUIRE('chlk.templates.School');
+REQUIRE('chlk.models.school.SchoolDetails');
 
 NAMESPACE('chlk.templates.school', function () {
 

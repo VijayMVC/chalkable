@@ -1,16 +1,14 @@
-REQUIRE('chlk.activities.TemplateActivity');
+REQUIRE('chlk.activities.lib.TemplateActivity');
 
-NAMESPACE('chlk.activities', function () {
-
-    /** @class chlk.activities.BindTemplate */
+NAMESPACE('chlk.activities.lib', function () {
 
     var UNDER_OVERLAY_CLASS = 'under-overlay';
     var HIDDEN_CLASS = 'x-hidden';
 
-    /** @class chlk.activities.TemplateDialog*/
+    /** @class chlk.activities.lib.TemplateDialog*/
     CLASS(
         [ria.mvc.DomAppendTo('body')],
-        'TemplateDialog', EXTENDS(chlk.activities.TemplateActivity), [
+        'TemplateDialog', EXTENDS(chlk.activities.lib.TemplateActivity), [
             function $() {
                 BASE();
                 this._overlay = new ria.dom.Dom('#chlk-overlay');

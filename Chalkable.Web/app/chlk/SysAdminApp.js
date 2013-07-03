@@ -2,7 +2,6 @@ REQUIRE('ria.mvc.Application');
 REQUIRE('ria.dom.Dom');
 REQUIRE('ria.dom.ready');
 
-REQUIRE('chlk.controllers.SysAdminController');
 REQUIRE('chlk.controllers.SchoolsController');
 
 REQUIRE('chlk.controls.ActionLinkControl');
@@ -26,8 +25,8 @@ NAMESPACE('chlk', function (){
             OVERRIDE, ria.mvc.Dispatcher, function initDispatcher_() {
                 var dispatcher = BASE();
 
-                dispatcher.setDefaultControllerId('sysadmin');
-                dispatcher.setDefaultControllerAction('schools');
+                dispatcher.setDefaultControllerId('schools');
+                dispatcher.setDefaultControllerAction('list');
                 return dispatcher;
             },
             OVERRIDE, ria.async.Future, function onStart_() {

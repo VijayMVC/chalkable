@@ -1,15 +1,15 @@
-REQUIRE('chlk.activities.TemplateActivity');
+REQUIRE('chlk.activities.lib.TemplateActivity');
 
-NAMESPACE('chlk.activities', function () {
+NAMESPACE('chlk.activities.lib', function () {
 
-    /** @class chlk.activities.PageClass */
+    /** @class chlk.activities.lib.PageClass */
     ANNOTATION(
         [[String]],
         function PageClass(clazz) {});
 
-    /** @class chlk.activities.TemplatePage*/
+    /** @class chlk.activities.lib.TemplatePage*/
     CLASS(
-        'TemplatePage', EXTENDS(chlk.activities.TemplateActivity), [
+        'TemplatePage', EXTENDS(chlk.activities.lib.TemplateActivity), [
             function $() {
                 BASE();
                 this._wrapper = new ria.dom.Dom('#content-wrapper');
@@ -18,8 +18,8 @@ NAMESPACE('chlk.activities', function () {
             OVERRIDE, VOID, function bind_() {
                 BASE();
                 var ref = ria.reflection.ReflectionFactory(this.getClass());
-                if (ref.isAnnotatedWith(chlk.activities.PageClass)){
-                    this._pageClass = ref.findAnnotation(chlk.activities.PageClass)[0].clazz;
+                if (ref.isAnnotatedWith(chlk.activities.lib.PageClass)){
+                    this._pageClass = ref.findAnnotation(chlk.activities.lib.PageClass)[0].clazz;
                 }else{
                     this._pageClass = null;
                 }

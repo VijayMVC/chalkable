@@ -4,6 +4,7 @@ REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.School');
 REQUIRE('chlk.models.school.SchoolDetails');
 REQUIRE('chlk.models.school.Timezone');
+REQUIRE('chlk.models.school.SchoolSisInfo');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -19,6 +20,11 @@ NAMESPACE('chlk.services', function () {
             [[Number]],
             ria.async.Future, function getDetails(schoolId) {
                 return this.get('/app/data/schoolDetails.json', chlk.models.school.SchoolDetails);
+            },
+
+            [[Number]],
+            ria.async.Future, function getSisInfo(schoolId) {
+                return this.get('/app/data/schoolSisInfo.json', chlk.models.school.SchoolSisInfo);
             },
 
             [[Number]],

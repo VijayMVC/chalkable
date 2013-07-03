@@ -1,7 +1,7 @@
 .schools
     .action-bar.not-transparent
         .container.panel-bg
-            +ActionLink('sysadmin', 'addSchool').chlk-add.opacity-button Add School
+            +ActionLink('schools', 'addSchool').chlk-add.opacity-button Add School
     .grid.not-transparent
         .container
             .head.panel-bg
@@ -22,6 +22,6 @@
                         .td= item.getSchoolUrl()
                         .td.action-links
                             +ActionLink('schools', 'details', item.getId()).profile
-                            +ActionLink('sysadmin', 'index').remove
-        +Paginator('sysadmin', 'schools', self)
+                            +ActionLink('schools', 'delete').remove
+        +Paginator('schools', 'list', self)
 
