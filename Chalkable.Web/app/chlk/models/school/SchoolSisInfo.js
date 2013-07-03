@@ -7,6 +7,10 @@ NAMESPACE('chlk.models.school', function () {
             Number, 'disciplineSyncFreq',
             Number, 'personSyncFreq',
             Number, 'scheduleSyncFreq',
-            Number, 'id'
+            Number, 'id',
+            String, 'sisUrl',
+            String, 'sisUserName',
+            String, 'sisPassword',
+            String, 'sisName'
         ]);
 });

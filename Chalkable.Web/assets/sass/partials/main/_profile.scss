@@ -55,6 +55,30 @@ BODY {
             }
           }
         }
+
+
+        .school-sis{
+          .sis-user-info{
+            .x-form-field{
+              LABEL{
+                width: 90px;
+                display: inline-block;
+              }
+            }
+          }
+          .sis-sync-info{
+            margin-top: 20px;
+            .x-form-field{
+              height: 60px;
+              LABEL{
+                width: 140px;
+                display: inline-block;
+              }
+
+            }
+
+          }
+        }
       }
     }
   }

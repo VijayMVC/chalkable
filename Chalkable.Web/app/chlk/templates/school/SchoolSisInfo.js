@@ -16,6 +16,14 @@ NAMESPACE('chlk.templates.school', function () {
             [ria.templates.ModelBind],
             Number, 'scheduleSyncFreq',
             [ria.templates.ModelBind],
-            Number, 'id'
+            Number, 'id',
+            [ria.templates.ModelBind],
+            String, 'sisUrl',
+            [ria.templates.ModelBind],
+            String, 'sisUserName',
+            [ria.templates.ModelBind],
+            String, 'sisPassword',
+            [ria.templates.ModelBind],
+            String, 'sisName'
         ])
 });
