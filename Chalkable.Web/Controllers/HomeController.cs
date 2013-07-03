@@ -77,8 +77,16 @@ namespace Chalkable.Web.Controllers
         public ActionResult Backup()
         {
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var data = new DatabaseBackupTaskData(DateTime.UtcNow.Ticks, true);
+            var data = new DatabaseBackupRestoreTaskData(DateTime.UtcNow.Ticks, true);
             sl.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.BackupDatabases, DateTime.UtcNow, null, data.ToString());
+            return Json(true);
+        }
+
+        public ActionResult Restore(long time)
+        {
+            var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
+            var data = new DatabaseBackupRestoreTaskData(time, true);
+            sl.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.RestoreDatabases, DateTime.UtcNow, null, data.ToString());
             return Json(true);
         }
     }

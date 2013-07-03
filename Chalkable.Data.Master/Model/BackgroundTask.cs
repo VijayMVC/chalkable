@@ -62,7 +62,7 @@ namespace Chalkable.Data.Master.Model
 
     }
 
-    public class DatabaseBackupTaskData
+    public class DatabaseBackupRestoreTaskData
     {
         public long Time { get; set; }
         public bool BackupMaster { get; set; }
@@ -71,12 +71,12 @@ namespace Chalkable.Data.Master.Model
         {
             return string.Format(FORMAT, Time, BackupMaster);
         }
-        public DatabaseBackupTaskData(long time, bool backupMaster)
+        public DatabaseBackupRestoreTaskData(long time, bool backupMaster)
         {
             Time = time;
             BackupMaster = backupMaster;
         }
-        public DatabaseBackupTaskData(string str)
+        public DatabaseBackupRestoreTaskData(string str)
         {
             var sl = str.Split(',');
             Time = long.Parse(sl[0]);
