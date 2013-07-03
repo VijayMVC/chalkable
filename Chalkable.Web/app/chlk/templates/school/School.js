@@ -2,7 +2,7 @@ REQUIRE('chlk.templates.JadeTemplate');
 
 REQUIRE('chlk.models.School');
 
-NAMESPACE('chlk.templates', function () {
+NAMESPACE('chlk.templates.school', function () {
 
     /** @class chlk.templates.School*/
     CLASS(

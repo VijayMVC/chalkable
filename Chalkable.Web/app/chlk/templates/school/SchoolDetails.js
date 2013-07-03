@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.School');
+REQUIRE('chlk.templates.school.School');
 REQUIRE('chlk.models.school.SchoolDetails');
 
 NAMESPACE('chlk.templates.school', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.school', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/school/SchoolDetails.jade')],
         [ria.templates.ModelBind(chlk.models.school.SchoolDetails)],
-        'SchoolDetails', EXTENDS(chlk.templates.School), [
+        'SchoolDetails', EXTENDS(chlk.templates.school.School), [
             [ria.templates.ModelBind],
             Number, 'statusNumber',
             [ria.templates.ModelBind],
