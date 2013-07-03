@@ -65,6 +65,8 @@ namespace Chalkable.Tests
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1029 - create procedure  SetDailyAttendance.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1030 - alter procedure ReBuildSections.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1031 - fixed view announcement.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1032 - added unique keys.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1033 - fixed GetClasses procedure.sql"));
         
         }
 

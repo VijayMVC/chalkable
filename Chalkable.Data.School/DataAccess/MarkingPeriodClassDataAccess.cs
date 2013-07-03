@@ -19,7 +19,7 @@ namespace Chalkable.Data.School.DataAccess
             var b = new StringBuilder();
             foreach (var markingPeriodClass in markingPeriodClasses)
             {
-                b.AppendFormat("delete from MarkingPeriodClass where Id = {0} ", markingPeriodClass.Id);
+                b.AppendFormat("delete from MarkingPeriodClass where Id = '{0}' ", markingPeriodClass.Id);
             }
             ExecuteNonQueryParametrized(b.ToString(), new Dictionary<string, object>());
         }

@@ -60,32 +60,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        private MarkingPeriodClass CreateMarkingPeriodClass(Class cClass, Guid markingPeriodId, UnitOfWork unitOfWork)
-        {
-            var markingPeriodDa = new MarkingPeriodDataAccess(unitOfWork);
-            var markingPeriod = markingPeriodDa.GetById(markingPeriodId);
-            if(markingPeriod.SchoolYearRef.ToString() != cClass.SchoolYearRef.ToString())
-                throw new ChalkableException(ChlkResources.ERR_CLASS_YEAR_DIFFERS_FROM_MP_YEAR);
-            var mpClassDa = new MarkingPeriodClassDataAccess(unitOfWork);
-            if (!mpClassDa.Exists(new MarkingPeriodClassQuery{ClassId = cClass.Id, MarkingPeriodId = markingPeriodId}))
-            {
-                return new MarkingPeriodClass
-                    {
-                        Id = Guid.NewGuid(),
-                        ClassRef = cClass.Id,
-                        MarkingPeriodRef = markingPeriod.Id
-                    };
-            }
-            return null;
-        }
-
-        private void CreateMarkingPeriodClasses(Class cClass, IEnumerable<Guid> markingPeriodIds, UnitOfWork unitOfWork)
-        {
-            var mpClassDa = new MarkingPeriodClassDataAccess(unitOfWork);
-            var mpClasses = markingPeriodIds.Select(mpId => CreateMarkingPeriodClass(cClass, mpId, unitOfWork)).ToList();
-            mpClassDa.Insert(mpClasses);
-        }
-
         public void Delete(Guid id)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
@@ -96,8 +70,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new ClassDataAccess(uow);
                 var mpcDa = new MarkingPeriodClassDataAccess(uow);
                 var classPersonDa = new ClassPersonDataAccess(uow);
-                mpcDa.Delete(new MarkingPeriodClassQuery {Id = id});
-                classPersonDa.Delete(new ClassPersonQuery{Id = id});
+                mpcDa.Delete(new MarkingPeriodClassQuery {ClassId = id});
+                classPersonDa.Delete(new ClassPersonQuery{ClassId = id});
                 da.Delete(id);
                 uow.Commit();
             }
@@ -140,6 +114,10 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var classPersonDa = new ClassPersonDataAccess(uow);
                 var classPeriodDa = new ClassPeriodDataAccess(uow);
+                var person = new PersonDataAccess(uow).GetById(personId);
+                if(CoreRoles.GetById(person.RoleRef) != CoreRoles.STUDENT_ROLE)
+                    throw new ChalkableException("Only student can be added to class");
+
                 if(classPeriodDa.IsStudentAlreadyAssignedToClassPeriod(personId, classId))
                     throw new ChalkableException(ChlkResources.ERR_STUDENT_BAD_CLASS_PERIOD);
 
@@ -171,13 +149,43 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public ClassComplex GetClassById(Guid id)
         {
-            using (var uow = Read())
-            {
-                return new ClassDataAccess(uow)
-                            .GetClassesComplex(new ClassQuery {ClassId = id}, Context.UserId)
-                            .Classes.First();
-            }
+            return GetClasses(new ClassQuery {ClassId = id, Count = 1}).First();
         }
+
+        private void CreateMarkingPeriodClasses(Class cClass, IEnumerable<Guid> markingPeriodIds, UnitOfWork unitOfWork)
+        {
+            var mpClassDa = new MarkingPeriodClassDataAccess(unitOfWork);
+            var mpClasses = new List<MarkingPeriodClass>();
+            foreach (var markingPeriodId in markingPeriodIds)
+            {
+                var mpClass = CreateMarkingPeriodClass(cClass, markingPeriodId, unitOfWork);
+                if (mpClass != null)
+                {
+                    mpClasses.Add(mpClass);         
+                }
+            } 
+            mpClassDa.Insert(mpClasses);
+        }
+
+        private MarkingPeriodClass CreateMarkingPeriodClass(Class cClass, Guid markingPeriodId, UnitOfWork unitOfWork)
+        {
+            var markingPeriodDa = new MarkingPeriodDataAccess(unitOfWork);
+            var markingPeriod = markingPeriodDa.GetById(markingPeriodId);
+            if (markingPeriod.SchoolYearRef != cClass.SchoolYearRef)
+                throw new ChalkableException(ChlkResources.ERR_CLASS_YEAR_DIFFERS_FROM_MP_YEAR);
+            var mpClassDa = new MarkingPeriodClassDataAccess(unitOfWork);
+            if (!mpClassDa.Exists(new MarkingPeriodClassQuery { ClassId = cClass.Id, MarkingPeriodId = markingPeriodId }))
+            {
+                return new MarkingPeriodClass
+                {
+                    Id = Guid.NewGuid(),
+                    ClassRef = cClass.Id,
+                    MarkingPeriodRef = markingPeriod.Id
+                };
+            }
+            return null;
+        }
+
         
         public ClassComplex AddMarkingPeriod(Guid classId, Guid markingPeriodId)
         {
@@ -186,25 +194,11 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId);
                 var cDa = new ClassDataAccess(uow);
-                var mpcDa = new MarkingPeriodClassDataAccess(uow); 
                 var c = cDa.GetById(classId);
-                if (mp.SchoolYearRef != c.SchoolYearRef)
-                    throw new ChalkableException(ChlkResources.ERR_CLASS_YEAR_DIFFERS_FROM_MP_YEAR);
-
-                if (!mpcDa.Exists(new MarkingPeriodClassQuery{ClassId = classId, MarkingPeriodId = markingPeriodId}))
-                {
-                    mpcDa.Insert(new MarkingPeriodClass
-                        {
-                            Id = Guid.NewGuid(),
-                            ClassRef = classId,
-                            MarkingPeriodRef = markingPeriodId
-                        });
-                }
+                CreateMarkingPeriodClasses(c, new List<Guid> {markingPeriodId}, uow);
                 uow.Commit();
             }
-            
             return GetClassById(classId);
         }
 
@@ -227,19 +221,25 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public IList<ClassComplex> GetClasses(Guid? schoolYearId, Guid? markingPeriodId, Guid? personId, int start = 0, int count = int.MaxValue)
         {
+            return GetClasses(new ClassQuery
+                {
+                    SchoolYearId = schoolYearId,
+                    MarkingPeriodId = markingPeriodId,
+                    PersonId = personId,
+                    Start = start,
+                    Count = count
+                });
+        }
+
+        private IList<ClassComplex> GetClasses(ClassQuery query)
+        {
             using (var uow = Read())
             {
+                query.CallerId = Context.UserId;
                 return new ClassDataAccess(uow)
-                    .GetClassesComplex(new ClassQuery
-                        {
-                            SchoolYearId = schoolYearId,
-                            MarkingPeriodId = markingPeriodId,
-                            PersonId = personId,
-                            Start = start,
-                            Count = count
-                        }, Context.UserId).Classes;
+                    .GetClassesComplex(query).Classes;
             }
-        }
+        } 
 
 
         public ClassPerson GetClassPerson(Guid classId, Guid personId)

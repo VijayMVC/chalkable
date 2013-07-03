@@ -65,6 +65,7 @@
     <Compile Include="Services\School\BaseSchoolServiceTest.cs" />
     <Compile Include="Services\School\CalendarDateServiceTest.cs" />
     <Compile Include="Services\School\ClassPeriodServiceTest.cs" />
+    <Compile Include="Services\School\ClassServiceTest.cs" />
     <Compile Include="Services\School\CourseServiceTest.cs" />
     <Compile Include="Services\School\MarkingPeriodServiceTest.cs" />
     <Compile Include="Services\School\PeriodServiceTest.cs" />

@@ -21,7 +21,7 @@ namespace Chalkable.Data.School.DataAccess
         private const string START_PARAM = "start";
         private const string COUNT_PARAM = "count";
 
-        public ClassQueryResult GetClassesComplex(ClassQuery query, Guid callerId)
+        public ClassQueryResult GetClassesComplex(ClassQuery query)
         {
             var parameters = new Dictionary<string, object>
                 {
@@ -29,7 +29,7 @@ namespace Chalkable.Data.School.DataAccess
                     {MARKING_PERIOD_ID_PARAM, query.MarkingPeriodId},
                     {PERSON_ID_PARAM, query.PersonId},
                     {CLASS_ID_PARAM, query.ClassId},
-                    {CALLER_ID_PARAM, callerId},
+                    {CALLER_ID_PARAM, query.CallerId},
                     {START_PARAM, query.Start},
                     {COUNT_PARAM, query.Count}
                 };
@@ -50,6 +50,7 @@ namespace Chalkable.Data.School.DataAccess
 
     public class ClassQuery
     {
+        public Guid CallerId { get; set; }
         public Guid? SchoolYearId { get; set; }
         public Guid? MarkingPeriodId { get; set; }
         public Guid? ClassId { get; set; }
