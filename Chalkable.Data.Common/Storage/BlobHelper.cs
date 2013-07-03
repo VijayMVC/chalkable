@@ -57,7 +57,6 @@ namespace Chalkable.Data.Common.Storage
         }
 
 
-        //TODO: needs test
         public void AddBlob(string containerAddress, string key, byte[] content)
         {
             var blobCl = GetBlobClient();
@@ -95,8 +94,6 @@ namespace Chalkable.Data.Common.Storage
         }
 
 
-
-        //TODO: needs test
         public byte[] GetBlobContent(string containerAddress, string key)
         {
             var blobCl = GetBlobClient();

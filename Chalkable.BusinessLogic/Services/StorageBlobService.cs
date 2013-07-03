@@ -19,10 +19,8 @@ namespace Chalkable.BusinessLogic.Services
     }
     public class StorageBlobService :  IStorageBlobService
     {
-        private BlobHelper helper;
         public StorageBlobService()
         {
-            helper = new BlobHelper();
         }
 
         //public IList<CloudBlobContainer> GetBlobContainers()
@@ -37,12 +35,12 @@ namespace Chalkable.BusinessLogic.Services
 
         public void AddBlob(string containerAddress, string key, byte[] content)
         {
-            helper.AddBlob(containerAddress, key, content);
+            new BlobHelper().AddBlob(containerAddress, key, content);
         }
 
         public byte[] GetBlobContent(string containerAddress, string key)
         {
-            return helper.GetBlobContent(containerAddress, key);
+            return new BlobHelper().GetBlobContent(containerAddress, key);
         }
 
         //public void DeleteBlob(Uri blobAddress)
@@ -52,7 +50,7 @@ namespace Chalkable.BusinessLogic.Services
 
         public void DeleteBlob(string containderName, string key)
         {
-            helper.DeleteBlob(containderName, key);
+            new BlobHelper().DeleteBlob(containderName, key);
         }
     }
 }
