@@ -131,6 +131,8 @@
     <Compile Include="Controllers\ChalkableDepartmentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PreferenceController.cs" />
+    <Compile Include="Controllers\SchoolController.cs" />
+    <Compile Include="Controllers\StorageMonitorController.cs" />
     <Compile Include="Extensions\StaticContentExtenstion.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -138,8 +140,12 @@
     <Compile Include="HtmlExtensions.cs" />
     <Compile Include="Models\Binders\DateTimeBinder.cs" />
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
+    <Compile Include="Models\PersonViewData.cs" />
     <Compile Include="Models\PreferenceVeiwData.cs" />
     <Compile Include="Models\Binders\StringConstructedObjectBinder.cs" />
+    <Compile Include="Models\SchoolPeapleViewData.cs" />
+    <Compile Include="Models\SchoolViewData.cs" />
+    <Compile Include="Models\StorageMonitorViewData.cs" />
     <Compile Include="Models\StringList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\CompilerHelper.cs" />
@@ -186,6 +192,10 @@
     <ProjectReference Include="..\Chalkable.Data.Master\Chalkable.Data.Master.csproj">
       <Project>{C9ACB7A6-1755-424A-B0BB-3B0C5B13EC15}</Project>
       <Name>Chalkable.Data.Master</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.School\Chalkable.Data.School.csproj">
+      <Project>{c5753c2a-f2bc-4f96-846b-548fc67191b2}</Project>
+      <Name>Chalkable.Data.School</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

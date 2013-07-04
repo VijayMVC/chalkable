@@ -39,5 +39,21 @@ namespace Chalkable.Tests.Services
             if (blobs.ContainsKey(blobAddress))
                 blobs.Remove(blobAddress);
         }
+
+
+        public Chalkable.Common.PaginatedList<BusinessLogic.Model.BlobContainerInfo> GetBlobContainers(int start = 0, int count = int.MaxValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Chalkable.Common.PaginatedList<BusinessLogic.Model.BlobInfo> GetBlobs(string containeraddress, string keyPrefix = null, int start = 0, int count = int.MaxValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteBlob(string blobAddress)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

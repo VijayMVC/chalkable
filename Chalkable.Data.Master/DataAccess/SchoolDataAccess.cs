@@ -63,9 +63,15 @@ namespace Chalkable.Data.Master.DataAccess
             return res;
         }
 
+        public PaginatedList<School> GetSchools(int start, int count)
+        {
+            return PaginatedSelect<School>(new Dictionary<string, object>(), "Id", start, count);
+        }
+
         public IList<School> GetSchools(bool empty)
         {
-            return SelectMany<School>(new Dictionary<string, object> { { School.IS_EMPTY_FIELD, empty } });
+            var conds = new Dictionary<string, object> { { School.IS_EMPTY_FIELD, empty } };
+            return SelectMany<School>(conds);
         }
 
         public SisSync GetSyncData(Guid schoolId)

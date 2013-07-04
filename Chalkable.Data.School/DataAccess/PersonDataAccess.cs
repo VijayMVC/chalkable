@@ -107,8 +107,7 @@ namespace Chalkable.Data.School.DataAccess
         public Guid? PersonId { get; set; }
         public Guid? CallerId { get; set; }
         public int CallerRoleId { get; set; }
-        public Guid? SchoolId { get; set; }
-
+        
         public string StartFrom { get; set; }
         public string Filter { get; set; }
         public IEnumerable<int> GradeLevelIds { get; set; }
