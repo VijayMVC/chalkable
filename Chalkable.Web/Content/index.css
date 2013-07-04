@@ -7,7 +7,7 @@ Version: 1.2
 Author: Gilbert Pellegrom
 Author URI: http://dev7studios.com
 */
-/* line 11, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 11, ../assets/sass/partials/index/_default.scss */
 #imaccontainer {
   background-image: url(images/index/iMac.png);
   background-repeat: no-repeat;
@@ -17,7 +17,7 @@ Author URI: http://dev7studios.com
   margin: 40px 0 0 -50px;
 }
 
-/* line 20, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 20, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivoSlider {
   position: relative;
   top: 46px;
@@ -30,7 +30,7 @@ Author URI: http://dev7studios.com
   z-index: 1;
 }
 
-/* line 31, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 31, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivoSlider img {
   position: absolute;
   top: 0px;
@@ -38,19 +38,19 @@ Author URI: http://dev7studios.com
   display: none;
 }
 
-/* line 37, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 37, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivoSlider a {
   border: 0;
   display: block;
 }
 
-/* line 42, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 42, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-controlNav {
   text-align: center;
   padding: 20px 0;
 }
 
-/* line 46, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 46, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-controlNav a {
   display: inline-block;
   width: 22px;
@@ -61,12 +61,12 @@ Author URI: http://dev7studios.com
   margin: 0 2px;
 }
 
-/* line 55, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 55, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-controlNav a.active {
   background-position: 0 -22px;
 }
 
-/* line 59, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 59, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-directionNav a {
   display: block;
   width: 30px;
@@ -76,39 +76,39 @@ Author URI: http://dev7studios.com
   border: 0;
 }
 
-/* line 67, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 67, ../assets/sass/partials/index/_default.scss */
 .theme-default a.nivo-nextNav {
   background-position: -30px 0;
   right: 15px;
 }
 
-/* line 71, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 71, ../assets/sass/partials/index/_default.scss */
 .theme-default a.nivo-prevNav {
   left: 15px;
 }
 
-/* line 75, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 75, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-caption {
   font-family: Helvetica, Arial, sans-serif;
 }
 
-/* line 78, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 78, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-caption a {
   color: #fff;
   border-bottom: 1px dotted #fff;
 }
 
-/* line 82, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 82, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-caption a:hover {
   color: #fff;
 }
 
-/* line 86, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 86, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-controlNav.nivo-thumbs-enabled {
   width: 100%;
 }
 
-/* line 89, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 89, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-controlNav.nivo-thumbs-enabled a {
   width: auto;
   height: auto;
@@ -116,7 +116,7 @@ Author URI: http://dev7studios.com
   margin-bottom: 5px;
 }
 
-/* line 95, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 95, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-controlNav.nivo-thumbs-enabled img {
   display: block;
   width: 120px;
@@ -132,7 +132,7 @@ Version: 1.2
 Author: Gilbert Pellegrom
 Author URI: http://dev7studios.com
 */
-/* line 11, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 11, ../assets/sass/partials/index/_default.scss */
 #imaccontainer {
   background-image: url(images/index/iMac.png);
   background-repeat: no-repeat;
@@ -142,7 +142,7 @@ Author URI: http://dev7studios.com
   margin: 40px 0 0 -50px;
 }
 
-/* line 20, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 20, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivoSlider {
   position: relative;
   top: 46px;
@@ -155,7 +155,7 @@ Author URI: http://dev7studios.com
   z-index: 1;
 }
 
-/* line 31, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 31, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivoSlider img {
   position: absolute;
   top: 0px;
@@ -163,19 +163,19 @@ Author URI: http://dev7studios.com
   display: none;
 }
 
-/* line 37, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 37, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivoSlider a {
   border: 0;
   display: block;
 }
 
-/* line 42, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 42, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-controlNav {
   text-align: center;
   padding: 20px 0;
 }
 
-/* line 46, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 46, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-controlNav a {
   display: inline-block;
   width: 22px;
@@ -186,12 +186,12 @@ Author URI: http://dev7studios.com
   margin: 0 2px;
 }
 
-/* line 55, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 55, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-controlNav a.active {
   background-position: 0 -22px;
 }
 
-/* line 59, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 59, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-directionNav a {
   display: block;
   width: 30px;
@@ -201,39 +201,39 @@ Author URI: http://dev7studios.com
   border: 0;
 }
 
-/* line 67, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 67, ../assets/sass/partials/index/_default.scss */
 .theme-default a.nivo-nextNav {
   background-position: -30px 0;
   right: 15px;
 }
 
-/* line 71, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 71, ../assets/sass/partials/index/_default.scss */
 .theme-default a.nivo-prevNav {
   left: 15px;
 }
 
-/* line 75, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 75, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-caption {
   font-family: Helvetica, Arial, sans-serif;
 }
 
-/* line 78, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 78, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-caption a {
   color: #fff;
   border-bottom: 1px dotted #fff;
 }
 
-/* line 82, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 82, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-caption a:hover {
   color: #fff;
 }
 
-/* line 86, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 86, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-controlNav.nivo-thumbs-enabled {
   width: 100%;
 }
 
-/* line 89, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 89, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-controlNav.nivo-thumbs-enabled a {
   width: auto;
   height: auto;
@@ -241,7 +241,7 @@ Author URI: http://dev7studios.com
   margin-bottom: 5px;
 }
 
-/* line 95, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_default.scss */
+/* line 95, ../assets/sass/partials/index/_default.scss */
 .theme-default .nivo-controlNav.nivo-thumbs-enabled img {
   display: block;
   width: 120px;
@@ -249,7 +249,7 @@ Author URI: http://dev7studios.com
 }
 
 /* CSS Document */
-/* line 7, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 7, ../assets/sass/partials/index/_form.scss */
 body {
   background-image: url(images/index/BG.gif);
   font: normal 13px/16px Arial, Helvetica, sans-serif;
@@ -257,27 +257,27 @@ body {
   margin: 0 auto;
 }
 
-/* line 13, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 13, ../assets/sass/partials/index/_form.scss */
 :focus {
   outline: none;
 }
 
-/* line 14, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 14, ../assets/sass/partials/index/_form.scss */
 .clear {
   clear: both;
 }
 
-/* line 16, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 16, ../assets/sass/partials/index/_form.scss */
 #faq .faq_content {
   margin-top: 70px !important;
 }
 
-/* line 20, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 20, ../assets/sass/partials/index/_form.scss */
 #form {
   margin: 100px 0 50px 100px;
 }
 
-/* line 23, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 23, ../assets/sass/partials/index/_form.scss */
 .button_bar {
   height: 34px;
   width: 261px;
@@ -285,18 +285,18 @@ body {
   margin: 0 0 -30px 246px;
   cursor: pointer;
 }
-/* line 31, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 31, ../assets/sass/partials/index/_form.scss */
 .button_bar.sis-types {
   width: 349px;
   margin: 0 0 -30px 200px;
 }
-/* line 36, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 36, ../assets/sass/partials/index/_form.scss */
 .button_bar > div > a {
   display: block;
   height: 100%;
 }
 
-/* line 41, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 41, ../assets/sass/partials/index/_form.scss */
 #dropdown {
   position: relative;
   top: -60px;
@@ -306,7 +306,7 @@ body {
   height: 32px !important;
   width: 131px;
 }
-/* line 51, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 51, ../assets/sass/partials/index/_form.scss */
 #dropdown.new-combo input {
   width: 110px;
   height: 28px !important;
@@ -315,26 +315,27 @@ body {
   background: -webkit-linear-gradient(top, #ffffff, #dadada) !important;
   background: -moz-linear-gradient(top, #ffffff, #dadada) !important;
   background: -o-linear-gradient(top, #ffffff, #dadada) !important;
+  background: -ms-linear-gradient(top, #ffffff, #dadada) !important;
   background: linear-gradient(top, #ffffff, #dadada) !important;
 }
-/* line 58, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 58, ../assets/sass/partials/index/_form.scss */
 #dropdown.new-combo img.x-form-trigger {
   background-position: 0 -1px !important;
   height: 36px !important;
   background-size: auto 33px !important;
 }
 
-/* line 65, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 65, ../assets/sass/partials/index/_form.scss */
 #form .signupformclass {
   margin-top: -220px;
 }
 
-/* line 68, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 68, ../assets/sass/partials/index/_form.scss */
 #form.developers {
   margin: 100px 0 -80px 280px;
 }
 
-/* line 72, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 72, ../assets/sass/partials/index/_form.scss */
 select#dropper.more {
   width: 120px;
   height: 25px;
@@ -342,7 +343,7 @@ select#dropper.more {
   margin-top: 5px;
 }
 
-/* line 78, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 78, ../assets/sass/partials/index/_form.scss */
 .button_admin {
   background: url(images/index/admin_button_bar.png) 0px 0px no-repeat;
   display: block;
@@ -351,7 +352,7 @@ select#dropper.more {
   cursor: pointer;
 }
 
-/* line 85, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 85, ../assets/sass/partials/index/_form.scss */
 .button_admin_up {
   background: url(images/index/admin_up.png) 0px 0px no-repeat;
   display: block;
@@ -360,12 +361,12 @@ select#dropper.more {
   cursor: pointer;
 }
 
-/* line 92, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 92, ../assets/sass/partials/index/_form.scss */
 .button_admin_up:hover {
   background: url(images/index/admin_button_bar.png) 0px 0px no-repeat;
 }
 
-/* line 95, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 95, ../assets/sass/partials/index/_form.scss */
 .button_teacher {
   background: url(images/index/admin_button_bar.png) 0px -34px no-repeat;
   display: block;
@@ -376,12 +377,12 @@ select#dropper.more {
   margin-top: -34px;
 }
 
-/* line 104, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 104, ../assets/sass/partials/index/_form.scss */
 .button_teacher:hover {
   background-position: 0px -169px;
 }
 
-/* line 107, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 107, ../assets/sass/partials/index/_form.scss */
 .button_teacher_active {
   display: block;
   height: 34px;
@@ -392,7 +393,7 @@ select#dropper.more {
   background: url(images/index/admin_button_bar.png) 0px -169px no-repeat;
 }
 
-/* line 116, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 116, ../assets/sass/partials/index/_form.scss */
 .button_student {
   background: url(images/index/admin_button_bar.png) 0px -68px no-repeat;
   display: block;
@@ -403,12 +404,12 @@ select#dropper.more {
   margin-top: -34px;
 }
 
-/* line 125, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 125, ../assets/sass/partials/index/_form.scss */
 .button_student:hover {
   background-position: 0px -203px;
 }
 
-/* line 128, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 128, ../assets/sass/partials/index/_form.scss */
 .button_student_active {
   display: block;
   height: 34px;
@@ -419,7 +420,7 @@ select#dropper.more {
   background: url(images/index/admin_button_bar.png) 0px -203px no-repeat;
 }
 
-/* line 138, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 138, ../assets/sass/partials/index/_form.scss */
 .button_parent {
   background: url(images/index/admin_button_bar.png) 0px -102px no-repeat;
   display: block;
@@ -430,12 +431,12 @@ select#dropper.more {
   margin-top: -34px;
 }
 
-/* line 147, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 147, ../assets/sass/partials/index/_form.scss */
 .button_parent:hover {
   background-position: 0px -237px;
 }
 
-/* line 150, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 150, ../assets/sass/partials/index/_form.scss */
 .button_ps {
   background: url(images/index/sis_sprite.png) 0px 0px;
   background-repeat: no-repeat;
@@ -443,12 +444,12 @@ select#dropper.more {
   height: 34px;
 }
 
-/* line 156, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 156, ../assets/sass/partials/index/_form.scss */
 .button_ps:hover, .button_ps.active-type {
   background-position: 0px -102px;
 }
 
-/* line 160, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 160, ../assets/sass/partials/index/_form.scss */
 .button_ic {
   background: url(images/index/sis_sprite.png) 0px -34px;
   background-repeat: no-repeat;
@@ -458,12 +459,12 @@ select#dropper.more {
   height: 34px;
 }
 
-/* line 168, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 168, ../assets/sass/partials/index/_form.scss */
 .button_ic:hover, .button_ic.active-type {
   background-position: 0px -136px;
 }
 
-/* line 171, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 171, ../assets/sass/partials/index/_form.scss */
 .button_esd {
   background: url(images/index/sis_sprite.png) 0px -68px;
   background-repeat: no-repeat;
@@ -473,24 +474,24 @@ select#dropper.more {
   height: 34px;
 }
 
-/* line 179, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 179, ../assets/sass/partials/index/_form.scss */
 .button_esd:hover, .button_esd.active-type {
   background-position: 0px -170px;
 }
 
-/* line 183, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 183, ../assets/sass/partials/index/_form.scss */
 ul#form li {
   height: 90px;
 }
 
-/* line 190, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 190, ../assets/sass/partials/index/_form.scss */
 label {
   color: #564d40 !important;
   text-shadow: 1px 1px 0 #ffffff;
   font: bolder 28px "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !important;
 }
 
-/* line 195, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 195, ../assets/sass/partials/index/_form.scss */
 label.stay {
   text-align: left;
   color: #7e684e;
@@ -505,12 +506,12 @@ label.stay {
   font-weight: 500;
 }
 
-/* line 208, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 208, ../assets/sass/partials/index/_form.scss */
 input[type=checkbox] {
   visibility: hidden;
 }
 
-/* line 212, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 212, ../assets/sass/partials/index/_form.scss */
 .slideThree {
   width: 80px;
   height: 26px;
@@ -524,7 +525,7 @@ input[type=checkbox] {
   background: url(images/index/textfield_brown.png);
 }
 
-/* line 225, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 225, ../assets/sass/partials/index/_form.scss */
 .slideThree:after {
   content: 'No';
   font: bold 12px/26px Arial, sans-serif;
@@ -536,7 +537,7 @@ input[type=checkbox] {
   text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.15);
 }
 
-/* line 236, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 236, ../assets/sass/partials/index/_form.scss */
 .slideThree:before {
   content: 'Yes';
   font: 12px/26px Arial, sans-serif;
@@ -547,7 +548,7 @@ input[type=checkbox] {
   font-weight: bold;
 }
 
-/* line 246, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 246, ../assets/sass/partials/index/_form.scss */
 .slideThree label {
   display: block;
   width: 32px;
@@ -586,12 +587,12 @@ input[type=checkbox] {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ab8554', endColorstr='#6b5034',GradientType=0 );
 }
 
-/* line 280, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 280, ../assets/sass/partials/index/_form.scss */
 .slideThree input[type=checkbox]:checked + label {
   left: 43px;
 }
 
-/* line 284, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 284, ../assets/sass/partials/index/_form.scss */
 .instruct {
   text-align: left;
   color: #7e684e;
@@ -609,23 +610,23 @@ input[type=checkbox] {
   background-position: .6em 0.9em;
 }
 
-/* line 300, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 300, ../assets/sass/partials/index/_form.scss */
 .instruct.index {
   background-position: 2em 0.9em;
 }
 
-/* line 303, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 303, ../assets/sass/partials/index/_form.scss */
 p.instructpw {
   margin-top: -20px;
 }
 
-/* line 306, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 306, ../assets/sass/partials/index/_form.scss */
 .instruct.sisurl {
   top: -64px;
   background-position: 0.5em 1.6em;
 }
 
-/* line 311, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 311, ../assets/sass/partials/index/_form.scss */
 p.instruct.terms {
   position: relative;
   left: -60px;
@@ -633,7 +634,7 @@ p.instruct.terms {
   background: none;
 }
 
-/* line 317, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 317, ../assets/sass/partials/index/_form.scss */
 p.instruct.terms a {
   text-shadow: 1px 1px 0 #ffffff;
   font: 20px Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -641,7 +642,7 @@ p.instruct.terms a {
   color: #7e684e;
 }
 
-/* line 323, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 323, ../assets/sass/partials/index/_form.scss */
 p.instruct.secure {
   position: relative;
   left: -60px;
@@ -651,24 +652,24 @@ p.instruct.secure {
   margin-bottom: 220px;
 }
 
-/* line 331, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 331, ../assets/sass/partials/index/_form.scss */
 .instruct.message {
   position: relative;
   top: -224px;
   background: none;
 }
 
-/* line 336, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 336, ../assets/sass/partials/index/_form.scss */
 li.principal {
   margin-top: 180px;
 }
 
-/* line 339, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 339, ../assets/sass/partials/index/_form.scss */
 li.button_container.dev {
   margin-top: -30px;
 }
 
-/* line 342, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 342, ../assets/sass/partials/index/_form.scss */
 input, select {
   width: 380px;
   height: 34px !important;
@@ -681,18 +682,18 @@ input, select {
   border: 1px solid rgba(119, 92, 1, 0.32);
 }
 
-/* line 355, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 355, ../assets/sass/partials/index/_form.scss */
 li > DIV > input {
   width: 348px !important;
   padding-right: 31px;
 }
 
-/* line 362, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 362, ../assets/sass/partials/index/_form.scss */
 input[type="password"] {
   font-size: 35px;
 }
 
-/* line 365, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 365, ../assets/sass/partials/index/_form.scss */
 textarea.fieldtext.message {
   height: 191px;
   width: 380px;
@@ -708,28 +709,28 @@ textarea.fieldtext.message {
   overflow: auto;
 }
 
-/* line 379, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 379, ../assets/sass/partials/index/_form.scss */
 input::-webkit-input-placeholder {
   color: rgba(93, 93, 93, 0.66);
   font-size: 22px;
   font-style: italic;
 }
 
-/* line 384, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 384, ../assets/sass/partials/index/_form.scss */
 input:-moz-placeholder {
   color: rgba(93, 93, 93, 0.49);
   font-size: 22px;
   font-style: italic;
 }
 
-/* line 389, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 389, ../assets/sass/partials/index/_form.scss */
 li.signin_button_container {
   position: relative;
   top: -130px;
   left: 33px;
 }
 
-/* line 394, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 394, ../assets/sass/partials/index/_form.scss */
 .signupbutton {
   display: block;
   cursor: pointer;
@@ -740,7 +741,7 @@ li.signin_button_container {
   text-indent: -9999px;
 }
 
-/* line 403, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 403, ../assets/sass/partials/index/_form.scss */
 .signupbutton:hover {
   display: block;
   cursor: pointer;
@@ -751,17 +752,17 @@ li.signin_button_container {
   text-indent: -9999px;
 }
 
-/* line 412, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 412, ../assets/sass/partials/index/_form.scss */
 .signupbutton a {
   font-size: 40px;
 }
 
-/* line 416, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 416, ../assets/sass/partials/index/_form.scss */
 .signinformclass {
   margin-top: 200px;
 }
 
-/* line 420, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 420, ../assets/sass/partials/index/_form.scss */
 .sign_in_button {
   display: block;
   cursor: pointer;
@@ -772,7 +773,7 @@ li.signin_button_container {
   text-indent: -9999px;
 }
 
-/* line 429, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 429, ../assets/sass/partials/index/_form.scss */
 .sign_in_button:hover {
   display: block;
   cursor: pointer;
@@ -783,18 +784,18 @@ li.signin_button_container {
   text-indent: -9999px;
 }
 
-/* line 438, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 438, ../assets/sass/partials/index/_form.scss */
 .sign_in_button a {
   font-size: 40px;
 }
 
-/* line 441, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 441, ../assets/sass/partials/index/_form.scss */
 .signinformlabel {
   float: left;
   margin-left: 30px;
 }
 
-/* line 445, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 445, ../assets/sass/partials/index/_form.scss */
 .donebutton {
   display: block;
   cursor: pointer;
@@ -805,7 +806,7 @@ li.signin_button_container {
   text-indent: -9999px;
 }
 
-/* line 454, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 454, ../assets/sass/partials/index/_form.scss */
 .donebutton:hover {
   display: block;
   cursor: pointer;
@@ -816,7 +817,7 @@ li.signin_button_container {
   text-indent: -9999px;
 }
 
-/* line 463, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_form.scss */
+/* line 463, ../assets/sass/partials/index/_form.scss */
 .signupbutton a {
   font-size: 40px;
 }
@@ -830,7 +831,7 @@ li.signin_button_container {
  * http://www.opensource.org/licenses/mit-license.php
  */
 /* The Nivo Slider styles */
-/* line 11, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_nivo-slider.scss */
+/* line 11, ../assets/sass/partials/index/_nivo-slider.scss */
 .nivoSlider {
   margin: 50px 0 -450px 0;
   width: 468px;
@@ -839,14 +840,14 @@ li.signin_button_container {
   z-index: 1;
 }
 
-/* line 22, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_nivo-slider.scss */
+/* line 22, ../assets/sass/partials/index/_nivo-slider.scss */
 .nivoSlider img {
   position: relative;
   top: 0px;
   left: 0px;
 }
 
-/* line 27, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_nivo-slider.scss */
+/* line 27, ../assets/sass/partials/index/_nivo-slider.scss */
 .nivo-main-image {
   display: block !important;
   position: relative !important;
@@ -854,7 +855,7 @@ li.signin_button_container {
 }
 
 /* If an image is wrapped in a link */
-/* line 34, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_nivo-slider.scss */
+/* line 34, ../assets/sass/partials/index/_nivo-slider.scss */
 .nivoSlider a.nivo-imageLink {
   position: absolute;
   top: 0px;
@@ -869,7 +870,7 @@ li.signin_button_container {
 }
 
 /* The slices and boxes in the Slider */
-/* line 47, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_nivo-slider.scss */
+/* line 47, ../assets/sass/partials/index/_nivo-slider.scss */
 .nivo-slice {
   display: block;
   position: absolute;
@@ -878,7 +879,7 @@ li.signin_button_container {
   top: 0;
 }
 
-/* line 54, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_nivo-slider.scss */
+/* line 54, ../assets/sass/partials/index/_nivo-slider.scss */
 .nivo-box {
   display: block;
   position: absolute;
@@ -886,13 +887,13 @@ li.signin_button_container {
   overflow: hidden;
 }
 
-/* line 60, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_nivo-slider.scss */
+/* line 60, ../assets/sass/partials/index/_nivo-slider.scss */
 .nivo-box img {
   display: block;
 }
 
 /* Caption styles */
-/* line 63, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_nivo-slider.scss */
+/* line 63, ../assets/sass/partials/index/_nivo-slider.scss */
 .nivo-caption {
   position: absolute;
   left: 0px;
@@ -915,24 +916,24 @@ li.signin_button_container {
   /* Opera/IE 8+ */
 }
 
-/* line 81, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_nivo-slider.scss */
+/* line 81, ../assets/sass/partials/index/_nivo-slider.scss */
 .nivo-caption p {
   padding: 5px;
   margin: 0;
 }
 
-/* line 85, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_nivo-slider.scss */
+/* line 85, ../assets/sass/partials/index/_nivo-slider.scss */
 .nivo-caption a {
   display: inline !important;
 }
 
-/* line 88, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_nivo-slider.scss */
+/* line 88, ../assets/sass/partials/index/_nivo-slider.scss */
 .nivo-html-caption {
   display: none;
 }
 
 /* Direction nav styles (e.g. Next & Prev) */
-/* line 92, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_nivo-slider.scss */
+/* line 92, ../assets/sass/partials/index/_nivo-slider.scss */
 .nivo-directionNav a {
   position: absolute;
   top: 45%;
@@ -940,29 +941,29 @@ li.signin_button_container {
   cursor: pointer;
 }
 
-/* line 98, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_nivo-slider.scss */
+/* line 98, ../assets/sass/partials/index/_nivo-slider.scss */
 .nivo-prevNav {
   left: 0px;
 }
 
-/* line 101, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_nivo-slider.scss */
+/* line 101, ../assets/sass/partials/index/_nivo-slider.scss */
 .nivo-nextNav {
   right: 0px;
 }
 
 /* Control nav styles (e.g. 1,2,3...) */
-/* line 105, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_nivo-slider.scss */
+/* line 105, ../assets/sass/partials/index/_nivo-slider.scss */
 .nivo-controlNav {
   text-align: center;
   padding: 15px 0;
 }
 
-/* line 109, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_nivo-slider.scss */
+/* line 109, ../assets/sass/partials/index/_nivo-slider.scss */
 .nivo-controlNav a {
   cursor: pointer;
 }
 
-/* line 112, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_nivo-slider.scss */
+/* line 112, ../assets/sass/partials/index/_nivo-slider.scss */
 .nivo-controlNav a.active {
   font-weight: bold;
 }
@@ -971,7 +972,7 @@ li.signin_button_container {
    v2.0 | 20110126
    License: none (public domain)
 */
-/* line 18, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_reset.scss */
+/* line 18, ../assets/sass/partials/index/_reset.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -994,41 +995,41 @@ time, mark, audio, video {
 }
 
 /* HTML5 display-role reset for older browsers */
-/* line 28, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_reset.scss */
+/* line 28, ../assets/sass/partials/index/_reset.scss */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
   display: block;
 }
 
-/* line 31, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_reset.scss */
+/* line 31, ../assets/sass/partials/index/_reset.scss */
 body {
   line-height: 1;
 }
 
-/* line 34, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_reset.scss */
+/* line 34, ../assets/sass/partials/index/_reset.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 37, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_reset.scss */
+/* line 37, ../assets/sass/partials/index/_reset.scss */
 blockquote, q {
   quotes: none;
 }
 
-/* line 41, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_reset.scss */
+/* line 41, ../assets/sass/partials/index/_reset.scss */
 blockquote:before, blockquote:after,
 q:before, q:after {
   content: '';
   content: none;
 }
 
-/* line 45, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_reset.scss */
+/* line 45, ../assets/sass/partials/index/_reset.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 49, d:/Work/Chalkable-v1/Chalkable.Web/assets/sass/partials/index/_reset.scss */
+/* line 49, ../assets/sass/partials/index/_reset.scss */
 button {
   border: none;
 }

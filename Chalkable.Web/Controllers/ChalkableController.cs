@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Common;
+using Chalkable.Common.Web;
 using Chalkable.Web.ActionResults;
 using Chalkable.Web.Authentication;
 
@@ -18,9 +20,13 @@ namespace Chalkable.Web.Controllers
     {
         public new ActionResult Json(object data, int serializationDepth = 10)
         {
-            return new ChalkableJsonResult(false){Data = data, SerializationDepth = serializationDepth};
+            var response = (data is IPaginatedList) ? new ChalkableJsonPaginatedResponse((IPaginatedList)data) 
+                                                        : new ChalkableJsonResponce(data);
+            return new ChalkableJsonResult(false) { Data = response, SerializationDepth = serializationDepth };
         }
 
+        
+        
         public IServiceLocatorMaster MasterLocator { get; protected set; }
         public IServiceLocatorSchool SchoolLocator { get; protected set; }
         protected override void Initialize(System.Web.Routing.RequestContext requestContext)
@@ -57,13 +63,13 @@ namespace Chalkable.Web.Controllers
             MasterLocator = SchoolLocator.ServiceLocatorMaster;
         }
 
-
+        
+        
         public RedirectToRouteResult Redirect<T>(Expression<Action<T>> action) where T : Controller
         {
             var routeValues = HtmlExtensions.ParseExpression(action);
             return RedirectToRoute(routeValues);
         }
-
         protected bool GetFileFromRequest(out byte[] bin, out string name)
         {
             if (Request.Files.Count == 1 && !string.IsNullOrEmpty(Request.Files[0].FileName))
