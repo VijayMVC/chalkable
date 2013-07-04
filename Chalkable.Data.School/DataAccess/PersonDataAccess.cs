@@ -53,7 +53,7 @@ namespace Chalkable.Data.School.DataAccess
 
             string glIds = null;
             if (query.GradeLevelIds != null)
-                glIds = query.GradeLevelIds.Select(x => x.ToString(CultureInfo.InvariantCulture)).JoinString(",");
+                glIds = query.GradeLevelIds.Select(x => x.ToString()).JoinString(",");
             parameters.Add("@gradeLevelIds", glIds);
 
             parameters.Add("@sortType", (int)query.SortType);
@@ -75,11 +75,34 @@ namespace Chalkable.Data.School.DataAccess
             return result;
         }
 
-        public static Person ReadPersonData(SqlDataReader reader)
+        public PersonDetails GetPersonDetails(Guid personId, Guid callerId, int callerRoleId)
+        {
+            var parameters = new Dictionary<string, object>
+                {
+                    {"personId", personId},
+                    {"callerId", callerId},
+                    {"callerRoleId", callerRoleId}
+                };
+            using (var reader = ExecuteStoredProcedureReader("spGetPersonDetails", parameters))
+            {
+                if (reader.Read())
+                {
+                    var res = ReadPersonData(reader);
+                    reader.NextResult();
+                    res.Addresses = reader.ReadList<Address>();
+                    reader.NextResult();
+                    res.Phones = reader.ReadList<Phone>();
+                    return res;
+                }
+                return null;
+            }
+        }
+
+        public static PersonDetails ReadPersonData(SqlDataReader reader)
         {
             if (reader != null)
             {
-                var res = reader.Read<Person>();
+                var res = reader.Read<PersonDetails>();
                 if (res.RoleRef == CoreRoles.STUDENT_ROLE.Id)
                 {
                     res.StudentInfo = reader.Read<StudentInfo>();
@@ -90,6 +113,8 @@ namespace Chalkable.Data.School.DataAccess
             }
             return null;
         }
+
+        
 
         public void AddStudent(Guid id, Guid gradeLevelId)
         {
@@ -110,7 +135,7 @@ namespace Chalkable.Data.School.DataAccess
         
         public string StartFrom { get; set; }
         public string Filter { get; set; }
-        public IEnumerable<int> GradeLevelIds { get; set; }
+        public IEnumerable<Guid> GradeLevelIds { get; set; }
         public SortTypeEnum SortType { get; set; }
 
         
