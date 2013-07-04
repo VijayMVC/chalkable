@@ -4,10 +4,10 @@ REQUIRE('ria.reflection.ReflectionFactory');
 
 NAMESPACE('chlk.activities.lib', function () {
 
-    /** @class chlk.activities.BindTemplate */
+    /** @class chlk.activities.lib.BindTemplate */
     ANNOTATION(function BindTemplate(template) {});
 
-    /** @class chlk.activities.TemplateActivity*/
+    /** @class chlk.activities.lib.TemplateActivity*/
     CLASS(
         [ria.mvc.DomAppendTo('body')],
         'TemplateActivity', EXTENDS(ria.mvc.DomActivity), [

@@ -1,8 +1,8 @@
-REQUIRE('chlk.activities.TemplateActivity');
+REQUIRE('chlk.activities.lib.TemplateActivity');
 
-NAMESPACE('chlk.activities', function () {
+NAMESPACE('chlk.activities.lib', function () {
 
-    /** @class chlk.activities.BindTemplate */
+    /** @class chlk.activities.lib.TemplatePopup */
 
     var HIDDEN_CLASS = 'x-hidden';
     var positionClasses = {
@@ -12,20 +12,20 @@ NAMESPACE('chlk.activities', function () {
         bottom: 'popup-bottom'
     };
 
-    /** @class chlk.activities.IsHorizontalAxis */
+    /** @class chlk.activities.lib.IsHorizontalAxis */
     ANNOTATION(
         [[Boolean]],
         function IsHorizontalAxis(isHorizontal) {});
 
-    /** @class chlk.activities.isTopLeftPosition */
+    /** @class chlk.activities.lib.isTopLeftPosition */
     ANNOTATION(
         [[Boolean]],
         function isTopLeftPosition(isTopLeft) {});
 
-    /** @class chlk.activities.TemplatePopup*/
+    /** @class chlk.activities.lib.TemplatePopup*/
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-pop-up-container')],
-        'TemplatePopup', EXTENDS(chlk.activities.TemplateActivity), [
+        'TemplatePopup', EXTENDS(chlk.activities.lib.TemplateActivity), [
             function $() {
                 BASE();
                 this._body = new ria.dom.Dom('body');
@@ -46,12 +46,12 @@ NAMESPACE('chlk.activities', function () {
             OVERRIDE, VOID, function bind_() {
                 BASE();
                 var ref = ria.reflection.ReflectionFactory(this.getClass());
-                if (ref.isAnnotatedWith(chlk.activities.IsHorizontalAxis)){
-                    this._isHorizontal = ref.findAnnotation(chlk.activities.IsHorizontalAxis)[0].isHorizontal;
+                if (ref.isAnnotatedWith(chlk.activities.lib.IsHorizontalAxis)){
+                    this._isHorizontal = ref.findAnnotation(chlk.activities.lib.IsHorizontalAxis)[0].isHorizontal;
                 }else{
-                    throw new ria.mvc.MvcException('There is no chlk.activities.IsHorizontalAxis annotation for Popup activity');
+                    throw new ria.mvc.MvcException('There is no chlk.activities.lib.IsHorizontalAxis annotation for Popup activity');
                 }
-                this._isTopLeft = ref.isAnnotatedWith(chlk.activities.isTopLeftPosition) ? ref.findAnnotation(chlk.activities.isTopLeftPosition)[0].isTopLeft : true;
+                this._isTopLeft = ref.isAnnotatedWith(chlk.activities.lib.isTopLeftPosition) ? ref.findAnnotation(chlk.activities.lib.isTopLeftPosition)[0].isTopLeft : true;
             },
 
             OVERRIDE, VOID, function onResume_() {
