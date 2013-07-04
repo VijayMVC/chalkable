@@ -26,7 +26,7 @@ namespace Chalkable.Web.Controllers
             if (context != null)
             {
                 ChalkableAuthentication.SignIn(context, remember);
-                return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+                return Json(new { Success = true, data = new {Role = context.Role.LoweredName} }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { Success = false, UserName = userName }, JsonRequestBehavior.AllowGet);
         }

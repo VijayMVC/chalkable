@@ -59,14 +59,13 @@ $(document).ready(function () {
               dataType: "json",
               data: form.serialize(),
               success:function (response) {
-                if (response.data !== true) {
+                if (response.Success !== true) {
                     unSuccessLogIn();
                     var text = response.data && response.data.errormessage || '';
                     if(text != '') $('div.the-password').validationEngine('showPrompt',text, 'red','topRight', false);
                 } else {
                     form.off('submit.logon');
-                    console.info(response);
-                    //form.submit();
+                    window.location.href = WEB_SITE_ROOT + 'Home/' + response.data.Role;
                 }
             } .bind(this)
          };

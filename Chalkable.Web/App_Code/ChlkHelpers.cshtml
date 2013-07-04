@@ -40,6 +40,8 @@
     {
         <script type="text/javascript">
             var _ = window.location.href.toString().match(/http?s:\/\/[^\/]+/);
+
+            if (_ == null) _ = '';
             var WEB_SITE_ROOT = _ + '@Url.Content("~/")';
         </script>
     }

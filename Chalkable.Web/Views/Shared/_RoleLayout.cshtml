@@ -22,18 +22,6 @@
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/choosen/chosen.jquery.min.js")"></script>
     @if (IsSectionDefined("Scripts"))
     {
-        if (Chalkable.Web.Tools.CompilerHelper.IsDebug)
-        {
-        <script type="text/javascript">
-            var _ = window.location.href.toString().match(/http?s:\/\/[^\/]+/);
-            var WEB_SITE_ROOT = _ + '@Url.Content("~/")';
-        </script>      
-         
-        }
-        else
-        {
-        <script type="text/javascript">var WEB_SITE_ROOT = window.location.href.toString().match(/http?s:\/\/[^\/]+/) + '@Url.Content("~/")';</script>
-        }
         @RenderSection("Scripts", false)
     }
     else

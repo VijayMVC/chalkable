@@ -23,7 +23,7 @@ namespace Chalkable.Common
 
     public class CoreRoles
     {
-        public static CoreRole SUPER_ADMIN_ROLE = new CoreRole(1, "System Admin", "system admin");
+        public static CoreRole SUPER_ADMIN_ROLE = new CoreRole(1, "SysAdmin", "system admin");
         public static CoreRole TEACHER_ROLE = new CoreRole(2, "Teacher", "Teacher");
         public static CoreRole STUDENT_ROLE = new CoreRole(3, "Student", "Student");
         public static CoreRole PARENT_ROLE = new CoreRole(4, "Parent", "Parent");
