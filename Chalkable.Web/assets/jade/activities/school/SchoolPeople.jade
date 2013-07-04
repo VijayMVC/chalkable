@@ -3,6 +3,7 @@
     -users=self.getUsers()
     -roles=self.getRoles()
     -gradeLevels=self.getGradeLevels()
+    -window.school = school
     .action-bar.not-transparent.buttons
         .container.panel-bg
             .left
@@ -10,11 +11,16 @@
                 +ActionLink('schools', 'details', school.getId()) Schedule
                 +ActionLink('schools', 'people', school.getId()).pressed People
                 +ActionLink('schools', 'details', school.getId()) SIS
-    .content
+    .content.profile-page-margin
         .i-b
             +PhotoContainer('https://dev.chalkable.com/PersonPicture/Read?pictureId=132310&width=256&height=256&gender=m')
-        h1.i-b= school.getName()
+        h1.i-b.v-t= school.getName()
         .line
+        .center.glance-container
+            +GlanceBox(null, null, {value: school.getTeachersCount(), title: 'Teachers'})
+            +GlanceBox(null, null, {value: school.getStaffCount(), title: 'Staff'})
+            +GlanceBox(null, null, {value: school.getStudentsCount(), title: 'Sudents'})
+            +GlanceBox(null, null, {value: school.getInvitesCount(), title: 'Invites'})
         h2 People
         .action-bar.not-transparent.people-tb
             .container.panel-bg

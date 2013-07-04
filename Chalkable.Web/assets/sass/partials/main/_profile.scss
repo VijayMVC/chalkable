@@ -4,20 +4,31 @@ BODY {
   DIV.page{
     #content {
       DIV#content-wrapper.profile{
-        h1, h2{
+        h1, h2, .status{
           font-family: Pacifico;
           font-weight: normal;
           color: $color;
         }
 
-        h2{
+        .status{
+          #show-buttons-popup{
+            margin-left: 10px;
+            font-size: 10px;
+            display: inline-block;
+          }
+        }
+
+        h2, .status{
           font-size: 24px;
+        }
+
+        h2{
           background: url(images/profile/header-line.png) 0 36px no-repeat;
         }
 
         h1{
           font-size: 48px;
-          margin-bottom: -11px;
+          margin: 0 0 -11px;
           white-space: nowrap;
         }
 
@@ -25,6 +36,10 @@ BODY {
           background: url(images/profile/header-line.png) 0 28px no-repeat !important;
           //margin-left: 16px;
           height: 36px;
+        }
+
+        .profile-page-margin{
+          margin: 31px -17px 0 -15px;
         }
 
         .school-small-img-container{
@@ -50,13 +65,18 @@ BODY {
           }
 
           .people-tb{
-            select{
-              width: 150px;
+            .right{
+              .chzn-container{
+                margin: 4px;
+              }
+
+              select{
+                width: 150px;
+              }
             }
           }
         }
-
-
+        
         .school-sis{
           .sis-user-info{
             .x-form-field{
@@ -79,6 +99,30 @@ BODY {
 
           }
         }
+
+        .school-details{
+          .school-info{
+            margin-left: 34px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.action-buttons-popup{
+  .buttons{
+    width: 381px;
+
+    .chlk-button{
+      margin-bottom: 5px;
+
+      &:nth-child(2n-1){
+        margin-right: 5px;
+      }
+
+      BUTTON{
+        width: 170px;
       }
     }
   }

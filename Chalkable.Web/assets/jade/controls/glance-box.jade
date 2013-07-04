@@ -1,11 +1,15 @@
 mixin GlanceBox(controller, action, data)
-    +ActionLink(controller, action).glance-box.hover-action-box
-        div
-            .value(class=self.getValueClass(data.value)) #{data.value}
-            p.glance-title #{data.title}
-            .details
-               -each item, i in data.items
-                div #{self.getShortText(item.value, item.title)}
+    if controller
+        +ActionLink(controller, action).glance-box.hover-action-box
+    else
+        span(class="glance-box" + (data.items ? " hover-action-box" : ""))
+            div
+                .value(class=self.getValueClass(data.value)) #{data.value}
+                p.glance-title #{data.title}
+                if data.items
+                    .details
+                       -each item, i in data.items
+                        div #{self.getShortText(item.value, item.title)}
 
 
 

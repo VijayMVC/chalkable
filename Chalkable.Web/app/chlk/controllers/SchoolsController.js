@@ -9,6 +9,9 @@ REQUIRE('chlk.models.school.SchoolPeople');
 
 REQUIRE('chlk.activities.school.SchoolDetailsPage');
 REQUIRE('chlk.activities.school.SchoolPeoplePage');
+REQUIRE('chlk.activities.school.ActionButtonsPopup');
+REQUIRE('chlk.models.school.SchoolPeople');
+REQUIRE('chlk.controls.ActionLinkControl');
 REQUIRE('chlk.activities.school.SchoolSisPage');
 REQUIRE('chlk.activities.school.SchoolsListPage');
 REQUIRE('chlk.activities.school.AddSchoolDialog');
@@ -101,6 +104,25 @@ NAMESPACE('chlk.controllers', function (){
                 return model;
             });
             return this.PushView(chlk.activities.school.SchoolPeoplePage, result);
+        },
+
+        VOID, function actionButtonsAction(id) {
+            var result = ria.async.wait([
+                this.schoolService.getDetails(id)
+            ]).then(function(result){
+                var model = new chlk.models.school.ActionButtons();
+                model.setTarget(chlk.controls.getActionLinkControlLastNode());
+                model.setButtons(result[0].getButtons());
+                model.setEmails(result[0].getEmails());
+                return model;
+            });
+
+            return this.ShadeView(chlk.activities.school.ActionButtonsPopup, result);
+        },
+
+        [[Number, String]],
+        function actionLinkAction(index, email){
+
         }
     ])
 });

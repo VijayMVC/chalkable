@@ -5,6 +5,7 @@ NAMESPACE('chlk.models.school', function () {
     /** @class chlk.models.school.SchoolDetails*/
     CLASS(
         'SchoolDetails', EXTENDS(chlk.models.school.School), [
+            [ria.serialize.SerializeProperty('statusnumber')],
             Number, 'statusNumber',
             String, 'status',
             ArrayOf(Number), 'buttons',

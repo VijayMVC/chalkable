@@ -2,6 +2,10 @@ REQUIRE('chlk.controls.Base');
 
 NAMESPACE('chlk.controls', function () {
 
+    var lastClickedNode = null;
+
+    chlk.controls.getActionLinkControlLastNode = function () { return lastClickedNode; };
+
     /** @class chlk.controls.ActionLinkControl */
     CLASS(
         'ActionLinkControl', EXTENDS(chlk.controls.Base), [
@@ -23,6 +27,8 @@ NAMESPACE('chlk.controls', function () {
             [ria.mvc.DomEventBind('click', 'A[data-link]:not(.disabled)')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function onActionLinkClick(node, event) {
+                lastClickedNode = node;
+
                 var link = node.getData('link');
                 var args = this.parseLink_(link);
                 var controller = args.shift(),
