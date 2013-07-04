@@ -26,3 +26,6 @@ function HtmlEncode(s)
     return s;
 }
 
+function getActionButtons(){
+    return [Msg.Password_reset, Msg.New_SIS_info_CSV, Msg.School_setup, Msg.Invite_users];
+}

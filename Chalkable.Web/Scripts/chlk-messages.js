@@ -291,6 +291,7 @@ var Msg = {
     Import_Types: 'Import Types',
     Info_this_app_uses: 'Info this app uses:',
     Install_App: 'Install App',
+    Invite_users: 'Invite users',
     IsInternal: 'IsInternal',
     Item_Ready_to_be_Graded: 'Item Ready to be Graded',
     Just_me: 'Just me',
@@ -315,6 +316,7 @@ var Msg = {
     My_Apps: 'My Apps',
     Needs_improvement: 'Needs improvement',
     New_Item: 'New Item',
+    New_SIS_info_CSV: "New SIS info / CSV",
     No_applications: 'No applications to display',
     No_class_scheduled: function(date){
         return String.format('No class scheduled on {0}', date);
@@ -329,6 +331,7 @@ var Msg = {
     Notification_paginator_text: 'Days {0} - {1} of {2}',
     Not_Graded: 'Not Graded',
     Number_of_students: 'Number of students',
+    Password_reset: 'Password reset',
     Press_enter: 'Press enter',
     Recent_Downloads: 'Recent Downloads',
     Recently_Graded_Items: 'Recently Graded Items',
@@ -339,6 +342,7 @@ var Msg = {
     School_cost: 'School cost',
     School_flat_rate: 'School flat rate',
     School_flat_rate_check: 'Is there a flat rate for whole school purchases?',
+    School_setup: 'School setup',
     See_more_items: 'See more items',
     Select_icon_to_upload: 'Select icon to upload...',
     Select_file: 'Select a file',

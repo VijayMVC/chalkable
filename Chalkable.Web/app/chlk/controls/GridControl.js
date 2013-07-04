@@ -12,7 +12,9 @@ NAMESPACE('chlk.controls', function () {
 
             [[Array, Object]],
             VOID, function prepareData(data,configs_) {
-                configs_ && configs_.selectedIndex !== undefined && this.setCurrentIndex(configs_.selectedIndex);
+                if(configs_){
+                    configs_.selectedIndex !== undefined && this.setCurrentIndex(configs_.selectedIndex);
+                }
                 this.setCount(data.length);
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {

@@ -212,6 +212,18 @@ NAMESPACE('ria.dom', function () {
                 return this;
             },
 
+            [[SELF]],
+            Boolean, function areEquals(el){
+                var val1 = this.valueOf(), val2 = el.valueOf(), len = val1.length;
+                if(len != val2.valueOf().length)
+                    return false;
+                for(var i = 0; i < len; i++){
+                    if(val1[i] != val2[i])
+                        return false;
+                }
+                return true;
+            },
+
             // reference https://github.com/julienw/dollardom
 
             [[String]],
@@ -257,6 +269,9 @@ NAMESPACE('ria.dom', function () {
 
             Number, function height() {
                 return this.dom_[0] ? this.dom_[0].getBoundingClientRect().height : null;
+            },
+            Number, function width() {
+                return this.dom_[0] ? this.dom_[0].getBoundingClientRect().width : null;
             },
             [[String]],
             SELF, function next(selector_) {},
@@ -357,7 +372,13 @@ NAMESPACE('ria.dom', function () {
             [[String]],
             Object, function getCss(property) {},
             [[String, Object]],
-            VOID, function setCss(property, value) {},
+            SELF, function setCss(property, value) {
+                for(var i=0; i < this.dom_.length; i++){
+                    this.dom_[i].style[property] = value + 'px';
+                }
+
+                return this;
+            },
             [[Object]],
             SELF, function updateCss(props) {},
 

@@ -1,5 +1,11 @@
 @import "compass/css3/border-radius";
 
+.glance-container{
+  .glance-box:not(:first-child){
+    margin-left: 17px;
+  }
+}
+
 .glance-box {
   text-decoration: none;
   >DIV{

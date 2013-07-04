@@ -109,13 +109,22 @@ h1,h2,h3,h4,h5,h6,strong {
 .right{
   float: right;
 }
+.center{
+  text-align: center;
+}
 .i-b{
   display: inline-block;
+}
+.v-t{
+  vertical-align: top;
 }
 
 a, a:visited, a:link {
   color: $link-color;
   outline: none !important;
+}
+.x-hidden{
+  display: none;
 }
 
 a:active, a:hover {
