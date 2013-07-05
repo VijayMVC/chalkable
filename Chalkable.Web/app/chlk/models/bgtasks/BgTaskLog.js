@@ -1,3 +1,4 @@
+REQUIRE('chlk.models.common.ChlkDate');
 NAMESPACE('chlk.models.bgtasks', function () {
 
     "use strict";
@@ -8,7 +9,7 @@ NAMESPACE('chlk.models.bgtasks', function () {
             //make enum
             [ria.serialize.SerializeProperty('logtype')],
             Number, 'logType',
-            String, 'message'
-            //Date, 'added',
+            String, 'message',
+            chlk.models.common.ChlkDate, 'added'
         ]);
 });

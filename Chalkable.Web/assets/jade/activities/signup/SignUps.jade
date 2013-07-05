@@ -19,14 +19,14 @@
                     .row
                         .td= item.getUserType()
                         .td= item.getName()
-                        .td Email
-                        .td Password
-                        .td IP Address
-                        .td TimeStamp
-                        .td School Name
-                        .td SIS URL
-                        .td Username
-                        .td Password
-                        .td TimeZone
+                        .td= item.getEmail()
+                        .td= item.getPassword()
+                        .td= item.getIpAddress()
+                        .td= item.getTimeStamp().toString('d/m/y')
+                        .td//= item.getSchoolName()
+                        .td= item.getSisUrl()
+                        .td= item.getSisUserName()
+                        .td= item.getSisPassword()
+                        .td= item.getTimezone()
         +Paginator('signup', 'list', self)
 

@@ -10,6 +10,6 @@
                     .row
                         .td= item.getId()
                         .td= item.getMessage()
-                        .td Added
+                        .td= item.getAdded().toString('d/m/y')
         +Paginator('backgroundtask', 'logs', self)
 

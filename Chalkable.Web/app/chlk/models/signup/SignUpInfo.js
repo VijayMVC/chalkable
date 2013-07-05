@@ -1,3 +1,4 @@
+REQUIRE('chlk.models.common.ChlkDate');
 NAMESPACE('chlk.models.signup', function () {
     "use strict";
     /** @class chlk.models.signup.SignUpInfo*/
@@ -11,6 +12,8 @@ NAMESPACE('chlk.models.signup', function () {
             String, 'email',
             String, 'password',
             String, 'name',
+            [ria.serialize.SerializeProperty('schoolname')],
+            String, 'schoolName',
             [ria.serialize.SerializeProperty('ipaddress')],
             String, 'ipAddress',
             [ria.serialize.SerializeProperty('sisurl')],
@@ -23,20 +26,9 @@ NAMESPACE('chlk.models.signup', function () {
             String, 'systemType',
             [ria.serialize.SerializeProperty('candelete')],
             String, 'canDelete',
-            //date timestamp
-            [ria.serialize.SerializeProperty('schoolname')],
-            String, 'schoolName',
-            [ria.serialize.SerializeProperty('localid')],
-            Number, 'localId',
-            [ria.serialize.SerializeProperty('ncesid')],
-            Number, 'ncesId',
-            [ria.serialize.SerializeProperty('schooltype')],
-            String, 'schoolType',
-            [ria.serialize.SerializeProperty('schoolurl')],
-            String, 'schoolUrl',
-            [ria.serialize.SerializeProperty('sendemailnotofications')],
-            Boolean,'sendEmailNotifications',
+            [ria.serialize.SerializeProperty('timestamp')],
+            chlk.models.common.ChlkDate, 'timeStamp',
             [ria.serialize.SerializeProperty('timezone')],
-            String, 'timezoneId',
+            String, 'timezone'
         ]);
 });

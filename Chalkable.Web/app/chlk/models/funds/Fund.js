@@ -1,3 +1,4 @@
+REQUIRE('chlk.models.common.ChlkDate');
 NAMESPACE('chlk.models.funds', function () {
     "use strict";
     /** @class chlk.models.funds.Fund*/
@@ -8,7 +9,7 @@ NAMESPACE('chlk.models.funds', function () {
             [ria.serialize.SerializeProperty('schoolid')],
             Number, 'schoolId',
             [ria.serialize.SerializeProperty('schoolname')],
-            Number, 'schoolName',
+            String, 'schoolName',
             [ria.serialize.SerializeProperty('ponumber')],
             Number, 'poNumber',
             Number, 'amount',
@@ -18,7 +19,7 @@ NAMESPACE('chlk.models.funds', function () {
             String, 'name',
             String, 'terms',
             [ria.serialize.SerializeProperty('displayname')],
-            String, 'displayName'
-            //date created
+            String, 'displayName',
+            chlk.models.common.ChlkDate, 'created'
         ]);
 });

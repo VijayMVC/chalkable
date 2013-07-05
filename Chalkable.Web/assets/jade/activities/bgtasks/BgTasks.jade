@@ -13,9 +13,9 @@
                 each item in self.items
                     .row
                         .td= item.getId()
-                        .td created
-                        .td scheduled
-                        .td completed
+                        .td=item.getCreated().toString('d/m/y')
+                        .td=item.getScheduled().toString('d/m/y')
+                        .td=item.getCompleted().toString('d/m/y')
                         .td= item.getTaskState().toString()
                         .td= item.getTaskType()
                         .td.action-links
