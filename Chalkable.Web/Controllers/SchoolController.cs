@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.Common;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.PersonViewDatas;
@@ -33,8 +34,6 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("System Admin")]
         public ActionResult People(Guid schoolId, int? roolId, Guid? gradeLevelId, int? start, int? count)
         {
-            start = start ?? 0;
-            count = count ?? 10;
             var school = MasterLocator.SchoolService.GetById(schoolId);
             if(SchoolLocator.Context.SchoolId != schoolId)
                  SchoolLocator = MasterLocator.SchoolServiceLocator(school.Id);
@@ -45,16 +44,21 @@ namespace Chalkable.Web.Controllers
             var adminsCount = countsPerRole[CoreRoles.ADMIN_GRADE_ROLE.Id] 
                               + countsPerRole[CoreRoles.ADMIN_EDIT_ROLE.Id]
                               + countsPerRole[CoreRoles.ADMIN_VIEW_ROLE.Id];
-            if(roolId.HasValue)
-               persons = persons.Where(x => x.RoleRef == roolId).ToList();
-            if (gradeLevelId.HasValue)
-                persons = persons.Where(x => x.StudentInfo != null && x.StudentInfo.GradeLevelRef == gradeLevelId).ToList();
-            int totalCount = persons.Count;
-            persons = persons.Skip(start.Value).Take(count.Value).ToList();
             var sisData = MasterLocator.SchoolService.GetSyncData(schoolId);
             var resView = SchoolPeapleViewData.Create(school, sisData, studentsCount, teachersCount, adminsCount);
-            resView.Persons =  new PaginatedList<PersonViewData>(PersonViewData.Create(persons), start.Value/count.Value, count.Value, totalCount);
             return Json(resView);
+        }
+
+        [AuthorizationFilter("System Admin")]
+        public ActionResult GetPersons(Guid schoolId, int? roolId, GuidList gradeLevelIds, int? start, int? count, int? sortType)
+        {
+            if (SchoolLocator.Context.SchoolId != schoolId)
+                SchoolLocator = MasterLocator.SchoolServiceLocator(schoolId);
+            var sortTypeEnum = (SortTypeEnum?)sortType ?? SortTypeEnum.ByLastName;
+            start = start ?? 0;
+            count = count ?? 10;
+            var res = SchoolLocator.PersonService.GetPersons(roolId, gradeLevelIds, null, sortTypeEnum, start.Value, count.Value);
+            return Json(res.Transform(PersonViewData.Create));
         }
     }
 }

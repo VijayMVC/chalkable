@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using Chalkable.Common;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 

@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
+using Chalkable.Common;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.Binders;
@@ -26,6 +27,9 @@ namespace Chalkable.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
             ModelBinders.Binders.Add(typeof(StringList), new StringConstructedObjectBinder<StringList>());
+            ModelBinders.Binders.Add(typeof(IntList), new StringConstructedObjectBinder<IntList>());
+            ModelBinders.Binders.Add(typeof(GuidList), new StringConstructedObjectBinder<GuidList>());
+            ModelBinders.Binders.Add(typeof(DateTime), new DateTimeBinder());
 
         }
         
