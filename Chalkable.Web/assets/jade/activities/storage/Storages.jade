@@ -1,0 +1,16 @@
+.schools
+    .grid.not-transparent
+        .container
+            .head.panel-bg
+                .th Name
+                .th Uri
+                .th
+            .body
+                each item in self.items
+                    .row
+                        .td= item.getName()
+                        .td= item.getUri()
+                        .td.action-links
+                            +ActionLink('storage', 'details', item.getName()).profile
+        +Paginator('storage', 'list', self)
+
