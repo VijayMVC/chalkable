@@ -1,0 +1,23 @@
+.settings
+    .row
+        .item
+            +ActionLink('a', 'b') Change password
+        .item
+            if self.isPreferencesVisible()
+                +ActionLink('a', 'b') Preferences
+        .item
+            if self.isAppCategoriesVisible()
+                +ActionLink('a', 'b') Application categories
+    .row
+        .item
+            if self.isDepartmentsVisible()
+                +ActionLink('a', 'b') Departments
+        .item
+            if self.isStorageMonitorVisible()
+                +ActionLink('a', 'b') Storage monitor
+        .item
+            if self.isBackgroundTaskMonitorVisible()
+                +ActionLink('backgroundtask', 'list') Background task monitor
+
+
+

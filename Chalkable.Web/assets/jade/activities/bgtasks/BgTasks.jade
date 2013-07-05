@@ -1,0 +1,25 @@
+.bg-tasks
+    .grid.not-transparent
+        .container
+            .head.panel-bg
+                .th Id
+                .th Created
+                .th Scheduled
+                .th Completed
+                .th Task State
+                .th Task Type
+                .th
+            .body
+                each item in self.items
+                    .row
+                        .td= item.getId()
+                        .td created
+                        .td scheduled
+                        .td completed
+                        .td= item.getTaskState().toString()
+                        .td= item.getTaskType()
+                        .td.action-links
+                            +ActionLink('backgroundtask', 'details', item.getId()).profile
+                            +ActionLink('backgroundtask', 'delete').remove
+        +Paginator('backgroundtask', 'list', self)
+
