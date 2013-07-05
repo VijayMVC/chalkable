@@ -10,16 +10,6 @@ namespace Chalkable.Data.School.Model
         Draft = 0,
         Created = 1
     }
-
-
-    public enum GradingStyleEnum
-    {
-        Numeric100 = 0,
-        Abcf = 1,
-        Complete = 2,
-        Check = 3
-    }
-
     public class Announcement
     {
         public Guid Id { get; set; }

@@ -48,6 +48,7 @@
     <Compile Include="DataAccess\AnnouncementTypeDataAccess.cs" />
     <Compile Include="DataAccess\AttendanceReasonDataAccess.cs" />
     <Compile Include="DataAccess\ClassAttendanceDataAccess.cs" />
+    <Compile Include="DataAccess\GradingStyleDataAccess.cs" />
     <Compile Include="DataAccess\StudentDailyAttendanceDataAccess.cs" />
     <Compile Include="DataAccess\DateDataAccess.cs" />
     <Compile Include="DataAccess\ClassDataAccess.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Model\FinalGrade.cs" />
     <Compile Include="Model\FinalGradeAnnouncementType.cs" />
     <Compile Include="Model\GradeLevel.cs" />
+    <Compile Include="Model\GradingStyle.cs" />
     <Compile Include="Model\MarkingPeriod.cs" />
     <Compile Include="Model\MarkingPeriodClass.cs" />
     <Compile Include="Model\Notification.cs" />
