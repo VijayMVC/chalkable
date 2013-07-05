@@ -144,6 +144,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HtmlExtensions.cs" />
+    <Compile Include="Logic\PersonLogic.cs" />
     <Compile Include="Models\AddressViewData.cs" />
     <Compile Include="Models\BackgroundTaskLogViewData.cs" />
     <Compile Include="Models\BackgroundTaskViewData.cs" />

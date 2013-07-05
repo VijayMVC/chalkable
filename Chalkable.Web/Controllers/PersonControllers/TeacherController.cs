@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Web.Mvc;
+using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Logic;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Controllers.PersonControllers
@@ -26,6 +28,12 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(res);
         }
 
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult GetTeachers(string filter, int? start, int? count, Guid? classId, int? sortType)
+        {
+            var role = CoreRoles.TEACHER_ROLE.Name;
+            return Json(PersonLogic.GetPersons(SchoolLocator, start, count, sortType, filter, role, classId));
+        }
 
     }
 }

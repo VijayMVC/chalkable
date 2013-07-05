@@ -15,7 +15,8 @@ namespace Chalkable.BusinessLogic.Services.School
         Person Add(string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, Guid? gradeLevelId);
         void Delete(string id);
         IList<Person> GetPersons();
-        PaginatedList<Person> GetPersons(int? roleId, IList<Guid> gradeLevelId, string filter, SortTypeEnum sortType = SortTypeEnum.ByLastName, int start = 0, int count = int.MaxValue); 
+        PaginatedList<Person> GetPaginatedPersons(PersonQuery query); 
+        //PaginatedList<Person> GetPersons(int? roleId, Guid? classId, IList<Guid> gradeLevelId, string filter, SortTypeEnum sortType = SortTypeEnum.ByLastName, int start = 0, int count = int.MaxValue); 
         Person GetPerson(Guid id);
         PersonDetails GetPersonDetails(Guid id);
     }
@@ -90,6 +91,12 @@ namespace Chalkable.BusinessLogic.Services.School
                 }).Persons;
         }
 
+        public PaginatedList<Person> GetPaginatedPersons(PersonQuery query)
+        {
+            var res = GetPersons(query);
+            return new PaginatedList<Person>(res.Persons, query.Start / query.Count, query.Count, res.SourceCount);
+        }
+
         private PersonQueryResult GetPersons(PersonQuery query)
         {
             using (var uow = Read())
@@ -113,19 +120,19 @@ namespace Chalkable.BusinessLogic.Services.School
                 }).Persons.First();
         }
 
-        public PaginatedList<Person> GetPersons(int? roleId, IList<Guid> gradeLevelId, string filter, SortTypeEnum sortType = SortTypeEnum.ByLastName, int start = 0, int count = int.MaxValue)
-        {
-            var res = GetPersons(new PersonQuery
-                {
-                    RoleId = roleId,
-                    GradeLevelIds = gradeLevelId,
-                    Filter = filter,
-                    SortType = sortType,
-                    Start = start,
-                    Count = count
-                });
-            return new PaginatedList<Person>(res.Persons, start / count, count, res.SourceCount);
-        }
+        //public PaginatedList<Person> GetPersons(int? roleId, Guid? classId, IList<Guid> gradeLevelId, string filter, SortTypeEnum sortType = SortTypeEnum.ByLastName, int start = 0, int count = int.MaxValue)
+        //{
+        //   return GetPaginatedPersons(new PersonQuery
+        //        {
+        //            RoleId = roleId,
+        //            ClassId = classId,
+        //            GradeLevelIds = gradeLevelId,
+        //            Filter = filter,
+        //            SortType = sortType,
+        //            Start = start,
+        //            Count = count
+        //        });
+        //}
 
         public PersonDetails GetPersonDetails(Guid id)
         {

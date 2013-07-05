@@ -6,12 +6,14 @@ using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.PersonViewDatas;
 
 
 namespace Chalkable.Web.Controllers
 {
+    [RequireHttps, TraceControllerFilter]
     public class SchoolController : ChalkableController
     {
         [AuthorizationFilter("System Admin")]
@@ -50,15 +52,18 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("System Admin")]
-        public ActionResult GetPersons(Guid schoolId, int? roolId, GuidList gradeLevelIds, int? start, int? count, int? sortType)
+        public ActionResult GetPersons(Guid schoolId, string roleName, GuidList gradeLevelIds, int? start, int? count, int? sortType)
         {
             if (SchoolLocator.Context.SchoolId != schoolId)
                 SchoolLocator = MasterLocator.SchoolServiceLocator(schoolId);
-            var sortTypeEnum = (SortTypeEnum?)sortType ?? SortTypeEnum.ByLastName;
-            start = start ?? 0;
-            count = count ?? 10;
-            var res = SchoolLocator.PersonService.GetPersons(roolId, gradeLevelIds, null, sortTypeEnum, start.Value, count.Value);
-            return Json(res.Transform(PersonViewData.Create));
+            return Json(PersonLogic.GetPersons(SchoolLocator, start, count, sortType, null, roleName, null, gradeLevelIds));
+        }
+
+        [AuthorizationFilter("System Admin")]
+        public ActionResult SisSyncInfo(Guid schoolId)
+        {
+            var syncInfo = MasterLocator.SchoolService.GetSyncData(schoolId);
+            return Json(SisSyncViewData.Create(syncInfo));
         }
     }
 }
