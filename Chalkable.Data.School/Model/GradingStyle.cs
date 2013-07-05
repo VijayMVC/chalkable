@@ -21,4 +21,35 @@ namespace Chalkable.Data.School.Model
         Complete = 2,
         Check = 3
     }
+
+
+    public enum AbcfGradingStyle
+    {
+        AP = 12,
+        A = 11,
+        AM = 10,
+        BP = 9,
+        B = 8,
+        BM = 7,
+        CP = 6,
+        C = 5,
+        CM = 4,
+        DP = 3,
+        D = 2,
+        DM = 1,
+        F = 0
+    }
+
+    public enum CompleteIncompleteGradingStyle
+    {
+        Incomplete = 0,
+        Complete = 1
+    }
+
+    public enum CheckGradingStyle
+    {
+        CheckMinus = 0,
+        Check = 1,
+        CheckPlus = 2
+    }
 }

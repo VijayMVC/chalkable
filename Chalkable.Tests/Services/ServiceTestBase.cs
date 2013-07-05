@@ -34,5 +34,32 @@ namespace Chalkable.Tests.Services
                 Assert.AreEqual(propertyInfo.GetValue(obj1), propertyInfo.GetValue(obj2));
             }
         }
+
+        protected static void AssertAreEqual<T>(IList<T> expected, IList<T> actual) where T : new()
+        {
+            if (expected == null && actual == null)
+                return;
+            if (expected == null)
+                throw new Exception("Expected list is null but actual isn't");
+            if (actual == null)
+                throw new Exception("Actual list is null but expected isn't");
+            if (expected.Count != actual.Count)
+                throw new Exception(string.Format("Different size of lists. expected {0} actual {1}", expected.Count, actual.Count));
+            
+            var type = typeof (T);
+            var isObject = type.IsClass || type.IsInterface;
+            for (int i = 0; i < expected.Count; i++)
+            {
+                if (isObject)
+                {
+                    AssertAreEqual(expected[i], actual[i]);
+                }
+                else
+                {
+                    Assert.AreEqual(expected[i], actual[i]); 
+                }
+            }
+        }
+
     }
 }

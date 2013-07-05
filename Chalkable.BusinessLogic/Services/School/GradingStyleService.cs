@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void SetMapper(IGradingStyleMapper mapper)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsAdminGrader(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
@@ -67,6 +67,7 @@ namespace Chalkable.BusinessLogic.Services.School
             for (int i = 0; i < values.Count; i++)
                 res.Add(new GradingStyle()
                 {
+                    Id = Guid.NewGuid(),
                     GradingStyleValue = style,
                     MaxValue = values[i],
                     StyledValue = i
