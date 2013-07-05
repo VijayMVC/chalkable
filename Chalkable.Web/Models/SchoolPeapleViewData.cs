@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
+using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models
 {
@@ -21,7 +22,7 @@ namespace Chalkable.Web.Models
         {
             StudentsCount = studentsCount;
             TeachersCount = teachersCount;
-            StaffsCount = StaffsCount;
+            StaffsCount = saffsCount;
             Persons = persons;
         }
 

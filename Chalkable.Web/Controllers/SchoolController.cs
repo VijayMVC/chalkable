@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
+using Chalkable.Web.Models.PersonViewDatas;
 
 
 namespace Chalkable.Web.Controllers

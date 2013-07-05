@@ -87,15 +87,20 @@ namespace Chalkable.Data.School.DataAccess
             {
                 if (reader.Read())
                 {
-                    var res = ReadPersonData(reader);
-                    reader.NextResult();
-                    res.Addresses = reader.ReadList<Address>();
-                    reader.NextResult();
-                    res.Phones = reader.ReadList<Phone>();
-                    return res;
+                    return ReadPersonDetailsData(reader);
                 }
                 return null;
             }
+        }
+
+        public static PersonDetails ReadPersonDetailsData(SqlDataReader reader)
+        {
+            var res = ReadPersonData(reader);
+            reader.NextResult();
+            res.Addresses = reader.ReadList<Address>();
+            reader.NextResult();
+            res.Phones = reader.ReadList<Phone>();
+            return res;
         }
 
         public static PersonDetails ReadPersonData(SqlDataReader reader)
@@ -114,12 +119,11 @@ namespace Chalkable.Data.School.DataAccess
             return null;
         }
 
-        
-
         public void AddStudent(Guid id, Guid gradeLevelId)
         {
             SimpleInsert(new StudentInfo{GradeLevelRef = gradeLevelId, Id = id});
         }
+
     }
 
     public class PersonQuery

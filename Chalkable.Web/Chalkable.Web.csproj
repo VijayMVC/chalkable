@@ -132,21 +132,36 @@
     <Compile Include="ActionResults\ChalkableJsonResult.cs" />
     <Compile Include="Controllers\ChalkableDepartmentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PersonControllers\AdminController.cs" />
+    <Compile Include="Controllers\PersonControllers\StudentController.cs" />
+    <Compile Include="Controllers\PersonControllers\TeacherController.cs" />
     <Compile Include="Controllers\PreferenceController.cs" />
     <Compile Include="Controllers\SchoolController.cs" />
     <Compile Include="Controllers\StorageMonitorController.cs" />
+    <Compile Include="Controllers\PersonControllers\PersonController.cs" />
     <Compile Include="Extensions\StaticContentExtenstion.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HtmlExtensions.cs" />
+    <Compile Include="Models\AddressViewData.cs" />
     <Compile Include="Models\BackgroundTaskLogViewData.cs" />
     <Compile Include="Models\BackgroundTaskViewData.cs" />
     <Compile Include="Models\Binders\DateTimeBinder.cs" />
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
-    <Compile Include="Models\PersonViewData.cs" />
+    <Compile Include="Models\IdNameViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\ParentViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\PersonInfoViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\PersonViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\PersonSummaryViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\ShortPersonViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentInfoViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\TeacherInfoViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\TeacherSummaryViewData.cs" />
+    <Compile Include="Models\PhoneViewData.cs" />
     <Compile Include="Models\PreferenceVeiwData.cs" />
     <Compile Include="Models\Binders\StringConstructedObjectBinder.cs" />
+    <Compile Include="Models\RoleViewData.cs" />
     <Compile Include="Models\SchoolPeapleViewData.cs" />
     <Compile Include="Models\SchoolViewData.cs" />
     <Compile Include="Models\StorageMonitorViewData.cs" />

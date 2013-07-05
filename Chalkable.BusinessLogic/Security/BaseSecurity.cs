@@ -44,5 +44,10 @@ namespace Chalkable.BusinessLogic.Security
                    || context.Role == CoreRoles.PARENT_ROLE || context.Role == CoreRoles.DEVELOPER_ROLE
                    || context.Role == CoreRoles.CHECKIN_ROLE;
         }
+
+        public static bool IsAdminEditorOrCurrentPerson(Guid personId, UserContext context)
+        {
+            return IsAdminEditor(context) || context.UserId == personId;
+        }
     }
 }

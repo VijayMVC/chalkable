@@ -12,4 +12,10 @@ namespace Chalkable.Data.School.Model
         public Guid ParentRef { get; set; }
         public Guid StudentRef { get; set; }
     }
+
+    public class StudentParentDetails : StudentParent
+    {
+        public PersonDetails Parent { get; set; }
+        public PersonDetails Student { get; set; }
+    }
 }
