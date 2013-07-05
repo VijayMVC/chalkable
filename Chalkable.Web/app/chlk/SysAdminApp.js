@@ -6,6 +6,7 @@ REQUIRE('chlk.controllers.SchoolsController');
 REQUIRE('chlk.controllers.AppsController');
 REQUIRE('chlk.controllers.SettingsController');
 REQUIRE('chlk.controllers.BackgroundTaskController');
+REQUIRE('chlk.controllers.SignUpController');
 
 REQUIRE('chlk.controls.ActionLinkControl');
 REQUIRE('chlk.controls.GridControl');

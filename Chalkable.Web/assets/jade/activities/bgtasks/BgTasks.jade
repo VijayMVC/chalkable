@@ -15,7 +15,7 @@
                         .td created
                         .td scheduled
                         .td completed
-                        .td= item.getTaskState()
+                        .td= item.getTaskState().toString()
                         .td= item.getTaskType()
                         .td.action-links
                             +ActionLink('backgroundtask', 'details', item.getId()).profile

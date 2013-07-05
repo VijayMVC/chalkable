@@ -123,6 +123,11 @@ NAMESPACE('chlk.controllers', function (){
         [[Number, String]],
         function actionLinkAction(index, email){
 
+        },
+
+        [[Number]],
+        VOID, function deleteAction(id){
+
         }
     ])
 });

@@ -22,6 +22,6 @@
                         .td= item.getSchoolUrl()
                         .td.action-links
                             +ActionLink('schools', 'details', item.getId()).profile
-                            +ActionLink('schools', 'delete').remove
+                            +ActionLink('schools', 'delete', item.getId()).remove
         +Paginator('schools', 'list', self)
 

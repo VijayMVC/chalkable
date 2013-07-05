@@ -1,0 +1,32 @@
+.signups
+    .grid.not-transparent
+        .container
+            .head.panel-bg
+                .th User Type
+                .th Name
+                .th Email
+                .th Password
+                .th IP Address
+                .th TimeStamp
+                .th School Name
+                .th SIS URL
+                .th Username
+                .th Password
+                .th TimeZone
+
+            .body
+                each item in self.items
+                    .row
+                        .td= item.getUserType()
+                        .td= item.getName()
+                        .td Email
+                        .td Password
+                        .td IP Address
+                        .td TimeStamp
+                        .td School Name
+                        .td SIS URL
+                        .td Username
+                        .td Password
+                        .td TimeZone
+        +Paginator('signup', 'list', self)
+

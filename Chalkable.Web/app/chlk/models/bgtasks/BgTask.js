@@ -1,4 +1,8 @@
+REQUIRE('chlk.models.bgtasks.BgTaskState');
+REQUIRE('chlk.models.bgtasks.BgTaskType');
+
 NAMESPACE('chlk.models.bgtasks', function () {
+
     "use strict";
     /** @class chlk.models.bgtasks,BgTask*/
     CLASS(
@@ -8,8 +12,8 @@ NAMESPACE('chlk.models.bgtasks', function () {
             //Date, 'scheduled',
             //Date, 'completed',
             [ria.serialize.SerializeProperty('taskstate')],
-            Number, 'taskState',
+            chlk.models.bgtasks.BgTaskState, 'taskState',
             [ria.serialize.SerializeProperty('tasktype')],
-            Number, 'taskType'
+            chlk.models.bgtasks.BgTaskType, 'taskType'
         ]);
 });
