@@ -131,6 +131,7 @@
     <Compile Include="Controllers\ChalkableController.cs" />
     <Compile Include="ActionResults\ChalkableJsonResult.cs" />
     <Compile Include="Controllers\ChalkableDepartmentController.cs" />
+    <Compile Include="Controllers\GradingStyleController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PersonControllers\AdminController.cs" />
     <Compile Include="Controllers\PersonControllers\StudentController.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Models\BackgroundTaskViewData.cs" />
     <Compile Include="Models\Binders\DateTimeBinder.cs" />
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
+    <Compile Include="Models\GradingStyleVeiwData.cs" />
     <Compile Include="Models\IdNameViewData.cs" />
     <Compile Include="Models\PersonViewDatas\ParentViewData.cs" />
     <Compile Include="Models\PersonViewDatas\PersonInfoViewData.cs" />
