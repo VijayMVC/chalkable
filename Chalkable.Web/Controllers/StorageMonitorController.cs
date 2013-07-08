@@ -11,7 +11,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class StorageMonitorController : ChalkableController
     {
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult ListBlobContainers(int? start, int? count)
         {
             start = start ?? 0;
@@ -19,7 +19,7 @@ namespace Chalkable.Web.Controllers
             var res = MasterLocator.StorageBlobService.GetBlobContainers(start.Value, count.Value);
             return Json(res.Transform(ContainerViewData.Create));
         }
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult ListBlobs(string containeraddress, int? start, int? count)
         {
             start = start ?? 0;
@@ -28,7 +28,7 @@ namespace Chalkable.Web.Controllers
             return Json(res.Transform(BlobViewData.Create));
         }
 
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult Delete(string blobAddress)
         {
             MasterLocator.StorageBlobService.DeleteBlob(blobAddress);

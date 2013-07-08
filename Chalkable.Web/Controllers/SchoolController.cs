@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Chalkable.Common;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
-using Chalkable.Web.Models.PersonViewDatas;
 
 
 namespace Chalkable.Web.Controllers
@@ -16,7 +12,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class SchoolController : ChalkableController
     {
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult List(int? start, int? count, bool? demoOnly)
         {
             count = count ?? 10;
@@ -25,7 +21,7 @@ namespace Chalkable.Web.Controllers
             return Json(schools.Transform(SchoolViewData.Create));
         }
 
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult Summary(Guid schoolId)
         {
             var school = MasterLocator.SchoolService.GetById(schoolId);
@@ -33,7 +29,7 @@ namespace Chalkable.Web.Controllers
             return Json(SchoolInfoViewData.Create(school, sisData));
         }
 
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult People(Guid schoolId, int? roolId, Guid? gradeLevelId, int? start, int? count)
         {
             var school = MasterLocator.SchoolService.GetById(schoolId);
@@ -51,7 +47,7 @@ namespace Chalkable.Web.Controllers
             return Json(resView);
         }
 
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult GetPersons(Guid schoolId, string roleName, GuidList gradeLevelIds, int? start, int? count, int? sortType)
         {
             if (SchoolLocator.Context.SchoolId != schoolId)
@@ -59,7 +55,7 @@ namespace Chalkable.Web.Controllers
             return Json(PersonLogic.GetPersons(SchoolLocator, start, count, sortType, null, roleName, null, gradeLevelIds));
         }
 
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult SisSyncInfo(Guid schoolId)
         {
             var syncInfo = MasterLocator.SchoolService.GetSyncData(schoolId);
