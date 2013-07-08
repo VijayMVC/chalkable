@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.storage.Storage');
-NAMESPACE('chlk.models.storage', function () {
+NAMESPACE('chlk.models.Storage', function () {
     "use strict";
     /** @class chlk.models.storage.StorageList*/
     CLASS(

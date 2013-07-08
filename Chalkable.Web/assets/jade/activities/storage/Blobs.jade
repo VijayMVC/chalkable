@@ -4,13 +4,15 @@
             .head.panel-bg
                 .th Name
                 .th Uri
+                .th Size
                 .th
             .body
                 each item in self.items
                     .row
                         .td= item.getName()
                         .td= item.getUri()
+                        .td= item.getSize()
                         .td.action-links
-                            +ActionLink('storage', 'blobs', item.getName()).profile
-        +Paginator('storage', 'list', self)
+                            +ActionLink('storage', 'delete', item.getName()).remove
+        +Paginator('storage', 'blobs', self)
 

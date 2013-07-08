@@ -1,9 +1,10 @@
 NAMESPACE('chlk.models.storage', function () {
     "use strict";
-    /** @class chlk.models.storage.Storage*/
+    /** @class chlk.models.storage.Blob*/
     CLASS(
-        'Storage', [
+        'Blob', [
            String, 'name',
-           String, 'uri'
+           String, 'uri',
+           Number, 'size'
         ]);
 });
