@@ -4,6 +4,7 @@ REQUIRE('ria.dom.ready');
 
 REQUIRE('chlk.controllers.SchoolsController');
 REQUIRE('chlk.controllers.AppsController');
+REQUIRE('chlk.controllers.AppCategoriesController');
 REQUIRE('chlk.controllers.SettingsController');
 REQUIRE('chlk.controllers.BackgroundTaskController');
 REQUIRE('chlk.controllers.SignUpController');

@@ -1,0 +1,20 @@
+.app-categories
+    .action-bar.not-transparent
+        .container.panel-bg
+            +ActionLink('appcategories', 'addCategory').chlk-add.opacity-button Add Category
+    .grid.not-transparent
+        .container
+            .head.panel-bg
+                .th Name
+                .th Description
+                .th
+            .body
+                each item in self.items
+                    .row
+                        .td= item.getName()
+                        .td= item.getDescription()
+                        .td.action-links
+                            +ActionLink('appcategories', 'details', item.getId()).profile
+                            +ActionLink('appcategories', 'delete', item.getId()).remove
+        +Paginator('appcategories', 'list', self)
+
