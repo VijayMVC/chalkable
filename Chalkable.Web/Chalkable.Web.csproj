@@ -132,6 +132,7 @@
     <Compile Include="ActionResults\ChalkableJsonResult.cs" />
     <Compile Include="Controllers\ChalkableDepartmentController.cs" />
     <Compile Include="Controllers\DbMaintenanceController.cs" />
+    <Compile Include="Controllers\PeriodController.cs" />
     <Compile Include="Controllers\GradingStyleController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MarkingPeriodController.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="Models\BackgroundTaskViewData.cs" />
     <Compile Include="Models\Binders\DateTimeBinder.cs" />
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
+    <Compile Include="Models\PeriodViewData.cs" />
     <Compile Include="Models\GradingStyleVeiwData.cs" />
     <Compile Include="Models\IdNameViewData.cs" />
     <Compile Include="Models\MarkingPeriodViewData.cs" />
@@ -169,6 +171,7 @@
     <Compile Include="Models\PreferenceVeiwData.cs" />
     <Compile Include="Models\Binders\StringConstructedObjectBinder.cs" />
     <Compile Include="Models\RoleViewData.cs" />
+    <Compile Include="Models\ScheduleSectionViewData.cs" />
     <Compile Include="Models\SchoolInfoViewData.cs" />
     <Compile Include="Models\SchoolPeapleViewData.cs" />
     <Compile Include="Models\SchoolViewData.cs" />

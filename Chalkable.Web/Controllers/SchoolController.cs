@@ -24,6 +24,8 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin")]
         public ActionResult Summary(Guid schoolId)
         {
+            if (SchoolLocator.Context.SchoolId != schoolId)
+                SchoolLocator = MasterLocator.SchoolServiceLocator(schoolId);
             var school = MasterLocator.SchoolService.GetById(schoolId);
             var sisData = MasterLocator.SchoolService.GetSyncData(school.Id);
             return Json(SchoolInfoViewData.Create(school, sisData));
