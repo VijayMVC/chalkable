@@ -2,6 +2,7 @@ REQUIRE('chlk.controllers.BaseController');
 
 REQUIRE('chlk.services.AppCategoryService');
 REQUIRE('chlk.activities.apps.AppCategoryListPage');
+REQUIRE('chlk.activities.apps.AddCategoryDialog');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -22,7 +23,12 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.apps.AppCategoryListPage, result);
         },
         function addCategoryAction(form_){
-
+            var model = new chlk.models.apps.AppCategory;
+            if (form_){
+                model.setName(form_.name);
+                model.setDescription(form_.description);
+            }
+            return this.ShadeView(chlk.activities.apps.AddCategoryDialog, ria.async.DeferredData(model));
         },
         [[Number]],
         function deleteAction(id) {
