@@ -134,11 +134,13 @@
     <Compile Include="Controllers\DbMaintenanceController.cs" />
     <Compile Include="Controllers\GradingStyleController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MarkingPeriodController.cs" />
     <Compile Include="Controllers\PersonControllers\AdminController.cs" />
     <Compile Include="Controllers\PersonControllers\StudentController.cs" />
     <Compile Include="Controllers\PersonControllers\TeacherController.cs" />
     <Compile Include="Controllers\PreferenceController.cs" />
     <Compile Include="Controllers\SchoolController.cs" />
+    <Compile Include="Controllers\SchoolYearController.cs" />
     <Compile Include="Controllers\StorageMonitorController.cs" />
     <Compile Include="Controllers\PersonControllers\PersonController.cs" />
     <Compile Include="Extensions\StaticContentExtenstion.cs" />
@@ -154,6 +156,7 @@
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
     <Compile Include="Models\GradingStyleVeiwData.cs" />
     <Compile Include="Models\IdNameViewData.cs" />
+    <Compile Include="Models\MarkingPeriodViewData.cs" />
     <Compile Include="Models\PersonViewDatas\ParentViewData.cs" />
     <Compile Include="Models\PersonViewDatas\PersonInfoViewData.cs" />
     <Compile Include="Models\PersonViewDatas\PersonViewData.cs" />
@@ -169,6 +172,7 @@
     <Compile Include="Models\SchoolInfoViewData.cs" />
     <Compile Include="Models\SchoolPeapleViewData.cs" />
     <Compile Include="Models\SchoolViewData.cs" />
+    <Compile Include="Models\SchoolYearViewData.cs" />
     <Compile Include="Models\SisSyncViewData.cs" />
     <Compile Include="Models\StorageMonitorViewData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
