@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 
 namespace Chalkable.Data.Common
 {
@@ -105,47 +106,93 @@ namespace Chalkable.Data.Common
          {
              var t = typeof(T);
              var fields = Fields(t);
-             var updateParams = fields.ToDictionary(field => field, field => t.GetProperty(field).GetValue(obj));
-             var conds = new Dictionary<string, object> {{"id", t.GetProperty("Id").GetValue(obj)}};
-             return SimpleUpdate(t, fields.Select(x => x.ToLower()).ToList(), updateParams, conds);
+             return SimpleUpdate(t, fields, obj);
+         }
+
+         public static DbQuery SimpleUpdate<T>(IList<T> objs)
+         {
+             var b = new StringBuilder();
+             var t = typeof(T);
+             var fields = Fields(t);
+             var res = new DbQuery {Parameters = new Dictionary<string, object>()};
+             for (int i = 0; i < objs.Count; i++)
+             {
+                 var q = SimpleUpdate(t, fields, objs[i], i);
+                 b.Append(q.Sql).Append(" ");
+                 foreach (var parameter in q.Parameters)
+                 {
+                     if (!res.Parameters.ContainsKey(parameter.Key))
+                         res.Parameters.Add(parameter);
+                 }
+             }
+             res.Sql = b.ToString();
+             return res;
+         }
+
+         private static DbQuery SimpleUpdate<T>(Type t, IList<string> fields, T obj, int index = 0)
+         {
+             var updateParams = new Dictionary<string, object>();
+             foreach (var field in fields)
+             {
+                 var value = t.GetProperty(field).GetValue(obj);
+                 if(value != null)
+                     updateParams.Add(field, value);
+             }
+             var conds = new Dictionary<string, object> { { "id", t.GetProperty("Id").GetValue(obj) } };
+             return SimpleUpdate(t, updateParams, conds, index);
          }
 
          public static DbQuery SimpleUpdate<T>(IDictionary<string, object> updateParams, IDictionary<string, object> conditions)
          {
              var t = typeof(T);
-             var fields = Fields(t).Select(x => x.ToLower()).ToList();
-             return SimpleUpdate(t, fields, updateParams, conditions);
+             //var fields = Fields(t).Select(x => x.ToLower()).ToList();
+             return SimpleUpdate(t,  updateParams, conditions);
          }
 
-         private static DbQuery SimpleUpdate(Type t, IList<string> fields, IDictionary<string, object> updateParams,
-                                             IDictionary<string, object> conditions)
+         private static DbQuery SimpleUpdate(Type t, IDictionary<string, object> updateParams,
+                                             IDictionary<string, object> conditions, int index = 0)
          {
-            var res = new DbQuery {Parameters = new Dictionary<string, object>()};
-            var b = new StringBuilder();
-            b.Append("Update [").Append(t.Name).Append("] set");
-            var setParams = new Dictionary<string, string>();
-            var setParamsPrefix = "set_param_";
+            var setParamsPrefix = "set_param_" + index + "_";
+            var setParamMapper = new Dictionary<string, string>();
+            var setParams = new Dictionary<string, object>();
             foreach (var updateParam in updateParams)
             {
-                if (!fields.Contains(updateParam.Key))
-                {
-                    var setParamName = setParamsPrefix + updateParam.Key;
-                    if (!res.Parameters.ContainsKey(setParamName))
-                        res.Parameters.Add(setParamName, updateParam.Value);
-                    if (!setParams.ContainsKey(updateParam.Key))
-                        setParams.Add(updateParam.Key, setParamName);       
-                }
+                var setParamsKey = setParamsPrefix + updateParam.Key;
+                setParamMapper.Add(setParamsKey, updateParam.Key);
+                setParams.Add(setParamsKey, updateParam.Value);
             }
-            b.Append(setParams.Select(x=> "["  + x.Key + "]=@" + x.Value).JoinString(","));
-            b = BuildSqlWhere(b, t, conditions);
+            var conds = new Dictionary<string, object>();
+            var condsMapper = new Dictionary<string, string>();
             foreach (var condition in conditions)
             {
-                if(!res.Parameters.ContainsKey(condition.Key))
-                    res.Parameters.Add(condition);
+                var condsKey = condition.Key + "_" + index;
+                condsMapper.Add(condsKey, condition.Key);
+                conds.Add(condsKey, condition.Value);
             }
+            return SimpleUpdate(t, setParams, setParamMapper, conds, condsMapper);
+         }
+
+        private static DbQuery SimpleUpdate(Type t, IDictionary<string, object> updateParams, IDictionary<string, string> updateParamsMapper,
+                                            IDictionary<string, object> conditions, IDictionary<string, string> condsMapper)
+        {
+            var res = new DbQuery { Parameters = new Dictionary<string, object>() };
+            var b = new StringBuilder();
+            b.Append("Update [").Append(t.Name).Append("] set");
+            b.Append(updateParams.Select(x => "[" + updateParamsMapper[x.Key] + "]=@" + x.Key).JoinString(","));
+            foreach (var condition in conditions)
+            {
+               res.Parameters.Add(condition);
+            }
+            foreach (var updateParam in updateParams)
+            {
+                if(!res.Parameters.ContainsKey(updateParam.Key))
+                    res.Parameters.Add(updateParam);
+            }
+
+            b = BuildSqlWhere(b, t, conditions, condsMapper);
             res.Sql = b.ToString();
             return res;
-         }
+        }
 
 
         public static DbQuery SimpleDelete<T>(T obj)
@@ -166,7 +213,13 @@ namespace Chalkable.Data.Common
             return res;
         }
 
+
         public static StringBuilder BuildSqlWhere(StringBuilder builder, Type t, IDictionary<string, object> conds)
+        {
+            return BuildSqlWhere(builder, t, conds, conds.Keys.ToDictionary(x => x, x => x));
+        }
+        public static StringBuilder BuildSqlWhere(StringBuilder builder, Type t, IDictionary<string, object> conds
+            , IDictionary<string, string> condsMapping)
         {
             if (conds != null && conds.Count > 0)
             {
@@ -174,13 +227,16 @@ namespace Chalkable.Data.Common
                 bool first = true;
                 foreach (var cond in conds)
                 {
+                    if(!condsMapping.ContainsKey(cond.Key))
+                        throw new ChalkableException("Incorrect conditions mapping");
+
                     if (first) first = false;
                     else
                     {
                         builder.Append(" and ");
                     }
                     if (cond.Value != null)
-                        builder.AppendFormat("[{0}].[{1}] =@{1}", t.Name, cond.Key);
+                        builder.AppendFormat("[{0}].[{1}] =@{2}", t.Name, condsMapping[cond.Key], cond.Key);
                     else
                         builder.AppendFormat("[{0}].[{1}] is null", t.Name, cond.Key);
                 }

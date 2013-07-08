@@ -14,27 +14,27 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public void Update(IList<ScheduleSection> scheduleSections)
-        {
-            var b = new StringBuilder();
-            var parameters = new Dictionary<string, object>();
-            var index = 0;
-            if (scheduleSections != null && scheduleSections.Count > 0)
-            {
-                foreach (var scheduleSection in scheduleSections)
-                {
-                    b.AppendFormat(@" update ScheduleSection  set Number = @{0}, Name = @{1}, MarkingPeriodRef = @{2}
-                                  where Id = @{3} ", "number_" + index, "name_" + index, "markingPeriodId_" + index, "Id_" + index);
+//        public void Update(IList<ScheduleSection> scheduleSections)
+//        {
+//            var b = new StringBuilder();
+//            var parameters = new Dictionary<string, object>();
+//            var index = 0;
+//            if (scheduleSections != null && scheduleSections.Count > 0)
+//            {
+//                foreach (var scheduleSection in scheduleSections)
+//                {
+//                    b.AppendFormat(@" update ScheduleSection  set Number = @{0}, Name = @{1}, MarkingPeriodRef = @{2}
+//                                  where Id = @{3} ", "number_" + index, "name_" + index, "markingPeriodId_" + index, "Id_" + index);
                     
-                    parameters.Add("name_" + index, scheduleSection.Name);
-                    parameters.Add("number_" + index, scheduleSection.Number);
-                    parameters.Add("Id_" + index, scheduleSection.Id);
-                    parameters.Add("markingPeriodId_" + index, scheduleSection.MarkingPeriodRef);
-                    index++;
-                }
-                ExecuteNonQueryParametrized(b.ToString(), parameters);
-            }
-        }
+//                    parameters.Add("name_" + index, scheduleSection.Name);
+//                    parameters.Add("number_" + index, scheduleSection.Number);
+//                    parameters.Add("Id_" + index, scheduleSection.Id);
+//                    parameters.Add("markingPeriodId_" + index, scheduleSection.MarkingPeriodRef);
+//                    index++;
+//                }
+//                ExecuteNonQueryParametrized(b.ToString(), parameters);
+//            }
+//        }
         
        
         public void Delete(ScheduleSection scheduleSection)

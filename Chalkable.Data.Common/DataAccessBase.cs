@@ -57,6 +57,15 @@ namespace Chalkable.Data.Common
             var q = Orm.SimpleUpdate(obj);
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
         }
+        protected void SimpleUpdate<T>(IList<T> objs)
+        {
+            if (objs.Count > 0)
+            {
+                var q = Orm.SimpleUpdate(objs);
+                ExecuteNonQueryParametrized(q.Sql, q.Parameters);   
+            }
+        }
+
         protected void SimpleUpdate<T>(IDictionary<string, object> updateParams, IDictionary<string, object> conditions)
         {
             var q = Orm.SimpleUpdate<T>(updateParams, conditions);
@@ -210,7 +219,10 @@ namespace Chalkable.Data.Common
         {
             SimpleUpdate(entity);
         }
-
+        public void Update(IList<TEntity> entities)
+        {
+            SimpleUpdate(entities);
+        }
         public void Delete(Guid id)
         {
             SimpleDelete<TEntity>(id);

@@ -2,13 +2,13 @@
 
 namespace Chalkable.Data.School.Model
 {
-    public enum StateEnum
+
+    public enum StudentAnnouncementStateEnum
     {
         Auto = 0,
         None = 1,
         Manual = 2
     }
-
     public class StudentAnnouncement
     {
         public Guid Id { get; set; }
@@ -18,9 +18,11 @@ namespace Chalkable.Data.School.Model
         public int? GradeValue { get; set; }
         public string Comment { get; set; }
         public string ExtraCredit { get; set; }
-        public bool Droppped { get; set; }
-        public StateEnum State { get; set; }
+        public bool Dropped { get; set; }
+        public StudentAnnouncementStateEnum State { get; set; }
         public Guid? ApplicationRef { get; set; }
+
+
     }
 
     public class StudentAnnouncementDetails : StudentAnnouncement
