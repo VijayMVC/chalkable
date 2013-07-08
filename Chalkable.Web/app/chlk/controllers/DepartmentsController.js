@@ -1,6 +1,7 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.DepartmentsService');
 REQUIRE('chlk.activities.departments.DepartmentsListPage');
+REQUIRE('chlk.activities.departments.AddDepartmentDialog');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -28,7 +29,12 @@ NAMESPACE('chlk.controllers', function (){
 
             },
             function addDepartmentAction(form_){
-
+                var model = new chlk.models.departments.Department;
+                if (form_){
+                    model.setName(form_.name);
+                    model.setKeywords(form_.keywords.split(','));
+                }
+                return this.ShadeView(chlk.activities.departments.AddDepartmentDialog, ria.async.DeferredData(model));
             }
 
         ])
