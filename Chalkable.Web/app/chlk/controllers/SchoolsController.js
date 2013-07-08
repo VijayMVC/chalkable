@@ -120,9 +120,10 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.school.ActionButtonsPopup, result);
         },
 
-        [[Number, String]],
-        function actionLinkAction(index, email){
-
+        [[Object]],
+        function actionLinkAction(form_){
+            if(confirm(form_.index + ' ' + form_.email))
+                this.context.getDefaultView().getCurrent().close();
         }
     ])
 });

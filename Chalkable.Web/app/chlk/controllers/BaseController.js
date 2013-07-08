@@ -19,22 +19,20 @@ NAMESPACE('chlk.controllers', function (){
            [[Function, ria.async.Future]],
            VOID, function PushView(activityClass, data) {
                var instance = new activityClass;
-
-               data.then(function (data) {
-                   instance.refresh(data);
-               });
+               instance.refreshD(data);
 
                this.getView().push(instance);
            },
            VOID, function ShadeView(activityClass, data) {
                var instance = new activityClass;
-
-               data.then(function (data) {
-                   instance.refresh(data);
-               });
+               instance.refreshD(data);
 
                this.getView().shade(instance);
            },
+           VOID, function UpdateView(activityClass, data, msg_) {
+
+           },
+
 
            ria.async.Future, function validateResponse_() {
                var head

@@ -440,6 +440,10 @@ BODY {
   }
 }
 
+.chzn-container{
+  width: auto !important;
+}
+
 @import "partials/_sidebar";
 @import "partials/_demo";
 @import "partials/_controls";
