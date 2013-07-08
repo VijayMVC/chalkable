@@ -47,9 +47,10 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 sa.ExtraCredit = extraCredits;
                 sa.Comment = comment;
+                sa.State = StudentAnnouncementStateEnum.Manual;
 
                 var mapper = ServiceLocator.GradingStyleService.GetMapper();
-                sa.GradeValue = gradingStyle.HasValue ? mapper.MapBack((GradingStyleEnum)gradingStyle, value)
+                sa.GradeValue = gradingStyle.HasValue ? mapper.MapBack(gradingStyle.Value, value)
                                                       : mapper.MapBack(ann.GradingStyle, value);
                 sa.Dropped = dropped;
                 ann.Dropped = dropped && !ann.StudentAnnouncements.Any(x => !x.Dropped && x.Id != studentAnnouncementId);

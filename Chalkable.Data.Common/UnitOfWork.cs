@@ -78,11 +78,15 @@ namespace Chalkable.Data.Common
             {
                 foreach (var pair in parameters)
                 {
+                    SqlParameter parameter;
+                   if (pair.Value != null)
+                        parameter = new SqlParameter(CompleteToParam(pair.Key), pair.Value);
+                   else
+                        parameter = new SqlParameter(CompleteToParam(pair.Key), DBNull.Value);
 
-                    if (pair.Value != null)
-                        command.Parameters.Add(new SqlParameter(CompleteToParam(pair.Key), pair.Value));
-                    else
-                        command.Parameters.Add(new SqlParameter(CompleteToParam(pair.Key), DBNull.Value));
+                   if(pair.Value is DateTime)
+                       parameter.DbType = DbType.DateTime2;
+                   command.Parameters.Add(parameter);
                 }
             }
         }

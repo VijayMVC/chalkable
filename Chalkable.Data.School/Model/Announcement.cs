@@ -21,7 +21,7 @@ namespace Chalkable.Data.School.Model
         public AnnouncementState State { get; set; }
         public GradingStyleEnum GradingStyle { get; set; }
         public string Subject { get; set; }
-        public Guid MarkingPeriodClassRef { get; set; }
+        public Guid? MarkingPeriodClassRef { get; set; }
         public int Order { get; set; }
         public bool Dropped { get; set; }
     }
@@ -33,12 +33,12 @@ namespace Chalkable.Data.School.Model
         public string PersonName { get; set; }
         public string Gender { get; set; }
 
-        public Guid ClassId { get; set; }
+        public Guid? ClassId { get; set; }
         public string ClassName { get; set; }
-        public Guid GradeLevelId { get; set; }
-        public Guid CourseId { get; set; }
+        public Guid? GradeLevelId { get; set; }
+        public Guid? CourseId { get; set; }
 
-        public Guid MarkingPeriodId { get; set; }
+        public Guid? MarkingPeriodId { get; set; }
 
         public int QnACount { get; set; }
         public int StudentsCount { get; set; }
@@ -51,7 +51,7 @@ namespace Chalkable.Data.School.Model
 
         public bool IsOwner { get; set; }
         public Guid? RecipientDataPersonId { get; set; }
-        public bool Starred { get; set; }
+        public bool? Starred { get; set; }
         
         public bool IsDraft
         {

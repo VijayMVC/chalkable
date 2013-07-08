@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 using Chalkable.Common;
@@ -44,22 +45,20 @@ namespace Chalkable.Data.School.DataAccess
         {
             var announcement = reader.ReadOrNull<AnnouncementDetails>();
             reader.NextResult();
-            announcement.AnnouncementQnAs = reader.ReadList<AnnouncementQnAComplex>();
+            announcement.AnnouncementQnAs = AnnouncementQnADataAccess.ReadAnnouncementQnAComplexes(reader);
             reader.NextResult();
             announcement.StudentAnnouncements = new List<StudentAnnouncementDetails>();
             while (reader.Read())
             {
-                var studenAnn = reader.Read<StudentAnnouncementDetails>();
-                studenAnn.Person = reader.Read<Person>();
-                studenAnn.Person.StudentInfo = reader.Read<StudentInfo>();
-                announcement.StudentAnnouncements.Add(studenAnn);
+                announcement.StudentAnnouncements.Add(StudentAnnouncementDataAccess.ReadStudentAnnouncement(reader));
             }
             reader.NextResult();
             announcement.AnnouncementAttachments = reader.ReadList<AnnouncementAttachment>();
             reader.NextResult();
             announcement.AnnouncementReminders = reader.ReadList<AnnouncementReminder>();
             reader.NextResult();
-            announcement.Owner = reader.ReadOrNull<Person>();
+            if(reader.Read())
+                announcement.Owner = PersonDataAccess.ReadPersonData(reader);
             announcement.AnnouncementApplications = new List<AnnouncementApplication>();
             return announcement;
         }
@@ -150,7 +149,7 @@ namespace Chalkable.Data.School.DataAccess
             var parameters = new Dictionary<string, object>
                 {
                     {SCHOOL_YEAR_ID_PARAM, schoolYearId},
-                    {ANNOUNCEMENT_TYPE_ID_PARAM, announcementTypeId},
+                    {"annType", announcementTypeId},
                     {OWNER_ID_PARAM, ownerId},
                     {CLASS_ID_PARAM, recipientId}
                 };

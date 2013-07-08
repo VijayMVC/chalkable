@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Data.School.Model;
 using NUnit.Framework;
 
 namespace Chalkable.Tests.Services.School
@@ -151,6 +153,47 @@ namespace Chalkable.Tests.Services.School
             Assert.AreEqual(c.MarkingPeriodClass.Count, 1);
             Assert.AreEqual(cService.GetClasses(mp1.SchoolYearRef, mp2.Id, null).Count, 0);
 
+        }
+
+
+
+        public static ClassComplex CreateClass(SchoolTestContext schoolContext, Person teacher, Person student1
+        , Person student2, string name = "math", SchoolYear schoolYear = null)
+        {
+            MarkingPeriod mp;
+            var serviceLocator = schoolContext.AdminGradeSl;
+            if (schoolYear == null)
+            {
+                var date = schoolContext.NowDate.AddDays(-7);
+                mp = MarkingPeriodServiceTest.CreateSchoolYearWithMp(schoolContext, date);
+            }
+            else
+            {
+                mp = serviceLocator.MarkingPeriodService.GetLastMarkingPeriod(schoolYear.EndDate);
+                if (mp == null)
+                {
+                    var year = serviceLocator.SchoolYearService.GetSchoolYears(0, 10).Last();
+                    var dateStart = year.StartDate;
+                    var dateEnd = year.EndDate;
+                    mp = MarkingPeriodServiceTest.CreateNextMp(schoolContext, year.Id);
+                }
+            }
+            
+            var math = serviceLocator.CourseService.Add(name + " course", name + " course", null);
+
+            GradeLevel gradeLevel;
+            if (student1 != null || student2 != null)
+                gradeLevel = student1 != null ? student1.StudentInfo.GradeLevel : student2.StudentInfo.GradeLevel;
+            else gradeLevel = schoolContext.FirstStudent.StudentInfo.GradeLevel;
+
+            var mathClass = serviceLocator.ClassService.Add(mp.SchoolYearRef, math.Id, name, name, teacher.Id, 
+                gradeLevel.Id, new List<Guid> { mp.Id });
+            if (student1 != null)
+                mathClass = serviceLocator.ClassService.AddStudent(mathClass.Id, student1.Id);
+            if (student2 != null)
+                mathClass = serviceLocator.ClassService.AddStudent(mathClass.Id, student2.Id);
+
+            return mathClass;
         }
     }
 }
