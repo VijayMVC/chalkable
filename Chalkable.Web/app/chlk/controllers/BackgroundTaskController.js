@@ -29,6 +29,10 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_());
                 /* Put activity in stack and render when result is ready */
                 return this.PushView(chlk.activities.bgtasks.BgTaskLogListPage, result);
+            },
+            [[Number]],
+            function deleteAction(id){
+
             }
         ])
 });

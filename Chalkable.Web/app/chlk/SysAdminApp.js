@@ -9,6 +9,7 @@ REQUIRE('chlk.controllers.BackgroundTaskController');
 REQUIRE('chlk.controllers.SignUpController');
 REQUIRE('chlk.controllers.StorageController');
 REQUIRE('chlk.controllers.FundsController');
+REQUIRE('chlk.controllers.DepartmentsController');
 
 REQUIRE('chlk.controls.ActionLinkControl');
 REQUIRE('chlk.controls.GridControl');

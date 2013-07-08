@@ -20,6 +20,6 @@
                         .td= item.getTaskType()
                         .td.action-links
                             +ActionLink('backgroundtask', 'logs', item.getId()).profile
-                            +ActionLink('backgroundtask', 'delete').remove
+                            +ActionLink('backgroundtask', 'delete', item.getId()).remove
         +Paginator('backgroundtask', 'list', self)
 
