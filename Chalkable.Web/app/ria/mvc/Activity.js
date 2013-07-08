@@ -1,5 +1,8 @@
 REQUIRE('ria.mvc.IActivity');
 
+REQUIRE('ria.async.Future');
+REQUIRE('ria.async.Observable');
+
 NAMESPACE('ria.mvc', function () {
     "use strict";
 
@@ -21,8 +24,8 @@ NAMESPACE('ria.mvc', function () {
                 this._started = false;
                 this._paused = false;
                 this._stopped = false;
-                this._onClose = [];
-                this._onRefresh = [];
+                this._onClose = new ria.async.Observable();
+                this._onRefresh = new ria.async.Observable();
             },
 
             /**
@@ -77,11 +80,44 @@ NAMESPACE('ria.mvc', function () {
                 return this._inited && !this._stopped;
             },
 
+            ria.async.Future, function getModelEvents_(msg_) {
+                var me = this;
+                return new ria.async.Future()
+                    .progress(function(progress) { me.onModelProgress(progress, msg_); })
+                    .complete(function () { me.onModelComplete_(msg_); })
+                    .catchError(function (error) {
+                        me.onModelError(progress, msg_);
+                        this.RETHROW(error);
+                    })
+                    .next(function (data) { me.onModelReady_(model, msg_); })
+            }
+
+            [[ria.async.Future]],
+            ria.async.Future, function refreshD(future) {
+                var me = this;
+                return future
+                    .attach(this.getModelEvents_())
+                    .next(function (data) { me.onRender_(model); return data; })
+                    .next(function (data) { me.onRefresh_(model); return data; })
+            },
+
+            [[ria.async.Future, String]],
+            ria.async.Future, function partialRefreshD(future, msg_) {
+                var msg = msg_ || "";
+                var me = this;
+                return future
+                    .attach(this.getModelEvents_(msg))
+                    .next(function (data) { me.onPartialRender_(model, msg); return data; })
+                    .next(function (data) { me.onPartialRefresh_(model, msg); return data; })
+            },
+
+            /** @deprecated */
             [[Object]],
             VOID, function refresh(model) {
                 this.onModelReady_(model);
                 this.onRender_(model);
-                defer(this.onRefresh_, [model], this);
+                ria.async.DeferredData(model)
+                    .next(this.onRefresh_)
             },
 
             ABSTRACT, VOID, function onCreate_() {},
@@ -90,12 +126,26 @@ NAMESPACE('ria.mvc', function () {
             VOID, function onResume_() {},
             VOID, function onPause_() {},
             VOID, function onStop_() {},
-            [[Object]],
-            VOID, function onModelReady_(data) {},
+            [[String]],
+            VOID, function onModelWait_(msg_) {},
+            [[Object, String]],
+            VOID, function onModelProgress_(data, msg_) {},
+            [[Object, String]],
+            VOID, function onModelError_(data, msg_) {},
+            [[Object, String]],
+            VOID, function onModelReady_(data, msg_) {},
+            [[String]],
+            VOID, function onModelComplete_(msg_) {},
             [[Object]],
             VOID, function onRender_(data) {},
+            [[Object, String]],
+            VOID, function onPartialRender_(data, msg_) {},
             [[Object]],
             VOID, function onRefresh_(data) {
+                this._onRefresh.nofity([this, data]);
+            },
+            [[Object]],
+            VOID, function onPartialRefresh_(data) {
                 var me = this;
                 this._onRefresh.forEach(function (_) { _(me, data); });
             },
@@ -105,8 +155,7 @@ NAMESPACE('ria.mvc', function () {
             },
 
             VOID, function close() {
-                var me = this;
-                this._onClose.forEach(function (_) { _(me); });
+                this._onClose.nofity([this]);
             },
 
             /**
@@ -114,7 +163,7 @@ NAMESPACE('ria.mvc', function () {
              */
             [[ria.mvc.ActivityClosedEvent]],
             VOID, function addCloseCallback(callback) {
-                this._onClose.unshift(callback);
+                this._onClose.on(callback);
             },
 
             /**
@@ -122,7 +171,7 @@ NAMESPACE('ria.mvc', function () {
              */
             [[ria.mvc.ActivityRefreshedEvent]],
             VOID, function addRefreshCallback(callback) {
-                this._onRefresh.unshift(callback);
+                this._onRefresh.on(callback);
             }
         ]);
 });

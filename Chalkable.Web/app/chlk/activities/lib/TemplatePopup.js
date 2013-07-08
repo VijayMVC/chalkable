@@ -60,7 +60,7 @@ NAMESPACE('chlk.activities.lib', function () {
             },
 
             [[Object]],
-            OVERRIDE, VOID, function onRender_(model) {
+            OVERRIDE, VOID, function onRefresh_(model) {
                 BASE(model);
                 var target = model.getTarget();
                 var offset = target.offset();
