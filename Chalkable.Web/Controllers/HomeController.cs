@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
@@ -71,22 +70,6 @@ namespace Chalkable.Web.Controllers
             sl.SchoolService.SetSyncData(sync);
             var data = new SisImportTaskData(school.Id, sisSchoolId, new List<int> { sisSchoolYearId });
             sl.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.SisDataImport, DateTime.UtcNow, school.Id, data.ToString());
-            return Json(true);
-        }
-
-        public ActionResult Backup()
-        {
-            var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var data = new DatabaseBackupRestoreTaskData(DateTime.UtcNow.Ticks, true);
-            sl.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.BackupDatabases, DateTime.UtcNow, null, data.ToString());
-            return Json(true);
-        }
-
-        public ActionResult Restore(long time)
-        {
-            var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var data = new DatabaseBackupRestoreTaskData(time, true);
-            sl.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.RestoreDatabases, DateTime.UtcNow, null, data.ToString());
             return Json(true);
         }
     }

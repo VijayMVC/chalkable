@@ -131,6 +131,7 @@
     <Compile Include="Controllers\ChalkableController.cs" />
     <Compile Include="ActionResults\ChalkableJsonResult.cs" />
     <Compile Include="Controllers\ChalkableDepartmentController.cs" />
+    <Compile Include="Controllers\DbMaintenanceController.cs" />
     <Compile Include="Controllers\GradingStyleController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PersonControllers\AdminController.cs" />
