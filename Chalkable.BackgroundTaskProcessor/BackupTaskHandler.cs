@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Threading;
+using Chalkable.BackgroundTaskProcessor.Parallel;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
@@ -14,8 +13,6 @@ namespace Chalkable.BackgroundTaskProcessor
 {
     public class BackupTaskHandler : ITaskHandler
     {
-        private const int TIMEOUT = 10000;
-        private const int SCHOOLS_PER_THREAD = 20;
         private bool backup;
         private string actionName;
         public BackupTaskHandler(bool backup)
@@ -32,18 +29,18 @@ namespace Chalkable.BackgroundTaskProcessor
             if (data.BackupMaster)
             {
                 var c = new SqlConnection(sl.Context.MasterConnectionString);
-                var t = new BackupRestoreTask
+                var t = new AllSchoolRunner<long>.Task
                     {
                         Database = c.Database,
                         Server = c.DataSource,
-                        Time = data.Time,
+                        Data = data.Time,
                         Success = false,
                         Completed = false
                     };
                 if (backup)
-                    RunBackup(new List<BackupRestoreTask> {t});
+                    AllSchoolRunner<long>.Run(new List<AllSchoolRunner<long>.Task> { t }, x=>BackupHelper.DoExport(x.Data, x.Server, x.Database), CheckStatus);
                 else
-                    RunRestore(new List<BackupRestoreTask> { t });
+                    AllSchoolRunner<long>.Run(new List<AllSchoolRunner<long>.Task> { t }, Restore, CheckStatus);
                 if (!t.Success)
                 {
                     log.LogError(string.Format("Db {0} error: Master Database", actionName));
@@ -54,138 +51,42 @@ namespace Chalkable.BackgroundTaskProcessor
             }
 
             var schools = sl.SchoolService.GetSchools(false);
-            var allTasks = new List<BackupRestoreTask>();
-            var threadTasks = new List<BackupRestoreTask>();
-            var threads = new List<Thread>();
-            foreach (var school in schools)
-            {
-                var t = new BackupRestoreTask
-                    {
-                        Completed = false,
-                        Database = school.Id.ToString(),
-                        Server = school.ServerUrl,
-                        Success = false,
-                        Time = data.Time
-                    };
-                allTasks.Add(t);
-                threadTasks.Add(t);
-                if (threadTasks.Count == SCHOOLS_PER_THREAD)
-                {
-                    var thread = backup ? new Thread(RunBackup) : new Thread(RunRestore);
-                    threads.Add(thread);
-                    thread.Start(threadTasks);
-                    threadTasks = new List<BackupRestoreTask>();
-                }
-            }
-            if (threadTasks.Count > 0)
-            {
-                var thread = backup ? new Thread(RunBackup) : new Thread(RunRestore);
-                threads.Add(thread);
-                thread.Start(threadTasks);
-            }
-
-
-            for (int i = 0; i < threads.Count; i++)
-                threads[i].Join();
-
-            bool res = true;
-            for (int i = 0; i < allTasks.Count; i++)
-            {
-                if (!allTasks[i].Success)
-                {
-                    log.LogError(string.Format("Db {0} error: {1} - {2}", actionName, allTasks[i].Server, allTasks[i].Database));
-                    if (allTasks[i].ErrorMessage != null)
-                        log.LogError(allTasks[i].ErrorMessage);
-                    res = false;
-                }
-            }
+            var runer = new AllSchoolRunner<long>();
+            bool res;
+            if (backup)
+                res = runer.Run(schools, data.Time, log, t=>BackupHelper.DoExport(t.Data, t.Server, t.Database), CheckStatus);
+            else
+                res = runer.Run(schools, data.Time, log, Restore, CheckStatus);
             return res;
         }
 
-        private class BackupRestoreTask
+        private static string Restore(AllSchoolRunner<long>.Task task)
         {
-            public long Time { get; set; }
-            public string Server { get; set; }
-            public string Database { get; set; }
-            public string ErrorMessage { get; set; }
-            public bool Success { get; set; }
-            public bool Completed { get; set; }
-            public string TrackingGuid { get; set; }
-        }
-
-        private static void RunBackup(object o)
-        {
-            var tasks = (IList<BackupRestoreTask>) o;
-            Run(tasks, (task)=>BackupHelper.DoExport(task.Time, task.Server, task.Database));
-        }
-
-        private static void RunRestore(object o)
-        {
-            var tasks = (IList<BackupRestoreTask>)o;
-            Run(tasks, delegate(BackupRestoreTask task)
-                {
-                    string connectionString = string.Format(Settings.SchoolConnectionStringTemplate, task.Server,
+            string connectionString = string.Format(Settings.SchoolConnectionStringTemplate, task.Server,
                                                             "master", Settings.Configuration.SchoolDbUser,
                                                             Settings.Configuration.SchoolDbPassword);
-                    using (var uow = new UnitOfWork(connectionString, false))
-                    {
-                        var cmd = uow.GetTextCommandWithParams(string.Format("drop database [{0}]", task.Database),
-                                                     new Dictionary<string, object>());
-                        cmd.ExecuteNonQuery();
-                    }
-                    return BackupHelper.DoImport(task.Time, task.Server, task.Database);
-                });
+            using (var uow = new UnitOfWork(connectionString, false))
+            {
+                var cmd = uow.GetTextCommandWithParams(string.Format("drop database [{0}]", task.Database),
+                                                new Dictionary<string, object>());
+                cmd.ExecuteNonQuery();
+            }
+            return BackupHelper.DoImport(task.Data, task.Server, task.Database);
         }
 
-        private static void Run(IList<BackupRestoreTask> tasks, Func<BackupRestoreTask, string> f)
+        private static AllSchoolRunner<long>.TaskStatusEnum CheckStatus(AllSchoolRunner<long>.Task task)
         {
-            
-            for (int i = 0; i < tasks.Count; i++)
+            var statuses = BackupHelper.CheckRequestStatus(task.TrackingGuid, task.Server);
+            if (statuses.Any(x => x.Status == "Failed"))
             {
-                tasks[i].Success = false;
-                tasks[i].Completed = false;
-                tasks[i].ErrorMessage = "Task wasn't started";
+                task.ErrorMessage = statuses.First(x => x.Status == "Failed").ErrorMessage;
+                return AllSchoolRunner<long>.TaskStatusEnum.Failed;
             }
-            for (int i = 0; i < tasks.Count; i++)
+            if (statuses.Any(x => x.Status == "Completed"))
             {
-                try
-                {
-                    tasks[i].TrackingGuid = f(tasks[i]);
-                }
-                catch (Exception ex)
-                {
-                    tasks[i].Success = false;
-                    tasks[i].ErrorMessage = ex.Message + "\n" + ex.StackTrace;
-                    return;
-                }
+                return AllSchoolRunner<long>.TaskStatusEnum.Completed;
             }
-
-            bool all = false;
-            while (!all)
-            {
-                all = true;
-                for (int i = 0; i < tasks.Count; i++)
-                    if (!tasks[i].Completed)
-                    {
-                        var statuses = BackupHelper.CheckRequestStatus(tasks[i].TrackingGuid, tasks[i].Server);
-                        if (statuses.Any(x => x.Status == "Failed"))
-                        {
-                            tasks[i].Completed = true;
-                            tasks[i].Success = false;
-                            tasks[i].ErrorMessage = statuses.First(x => x.Status == "Failed").ErrorMessage;
-                            continue;
-                        }
-                        if (statuses.Any(x => x.Status == "Completed"))
-                        {
-                            tasks[i].Completed = true;
-                            tasks[i].Success = true;
-                            continue;
-                        }
-                        all = false;
-                    }
-                Thread.Sleep(TIMEOUT);
-            }
-
+            return AllSchoolRunner<long>.TaskStatusEnum.Running;
         }
     }
 }

@@ -17,6 +17,7 @@ namespace Chalkable.BackgroundTaskProcessor
             handlers.Add(BackgroundTaskTypeEnum.SisDataImport, new SisImportDataTaskHandler());
             handlers.Add(BackgroundTaskTypeEnum.BackupDatabases, new BackupTaskHandler(true));
             handlers.Add(BackgroundTaskTypeEnum.RestoreDatabases, new BackupTaskHandler(false));
+            handlers.Add(BackgroundTaskTypeEnum.DatabaseUpdate, new DatabaseUpdateTaskHandler());
         }
 
         public void Process()

@@ -49,6 +49,7 @@
     <Compile Include="DataAccess\UserDataAccess.cs" />
     <Compile Include="Model\BackgroundTask.cs" />
     <Compile Include="Model\ChalkableDepartment.cs" />
+    <Compile Include="Model\DatabaseUpdateTaskData.cs" />
     <Compile Include="Model\District.cs" />
     <Compile Include="Model\ImportSystemType.cs" />
     <Compile Include="Model\Preference.cs" />
