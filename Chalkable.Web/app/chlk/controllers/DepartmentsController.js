@@ -26,6 +26,9 @@ NAMESPACE('chlk.controllers', function (){
             [[Number]],
             function deleteAction(id){
 
+            },
+            function addDepartmentAction(form_){
+
             }
 
         ])
