@@ -10,7 +10,7 @@ namespace Chalkable.Web.Controllers
     public class ChalkableDepartmentController : ChalkableController
     {
         private const string contentType = "text/html";
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult Create(string name, StringList keywords)
         {
             byte[] icon;
@@ -25,7 +25,7 @@ namespace Chalkable.Web.Controllers
             return actionResult;
         }
 
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult Update(Guid id, string name, StringList keywords)
         {
             byte[] icon;
@@ -42,7 +42,7 @@ namespace Chalkable.Web.Controllers
             return actionResult;
         }
 
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult Delete(Guid id)
         {
             MasterLocator.ChalkableDepartmentService.Delete(id);

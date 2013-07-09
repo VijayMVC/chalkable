@@ -39,7 +39,7 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
         
-        public StudentAnnouncementDetails ReadStudentAnnouncement(SqlDataReader reader)
+        public  static  StudentAnnouncementDetails ReadStudentAnnouncement(SqlDataReader reader)
         {
             var res = reader.Read<StudentAnnouncementDetails>(true);
             res.Person = PersonDataAccess.ReadPersonData(reader);

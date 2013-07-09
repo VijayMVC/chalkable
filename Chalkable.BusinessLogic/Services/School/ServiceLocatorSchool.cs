@@ -30,6 +30,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IAttendanceReasonService AttendanceReasonService { get; }
         IStudentParentService StudentParentService { get; }
         IGradingStyleService GradingStyleService { get; }
+        IStudentAnnouncementService StudentAnnouncementService { get; }
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
     {
@@ -57,6 +58,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IAttendanceReasonService attendanceReasonService;
         private IStudentParentService studentParentService;
         private IGradingStyleService gradingStyleService;
+        private IStudentAnnouncementService studentAnnouncementService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -85,6 +87,7 @@ namespace Chalkable.BusinessLogic.Services.School
             attendanceService = new AttendanceService(this);
             studentParentService = new StudentParentService(this);
             gradingStyleService = new GradingStyleService(this);
+            studentAnnouncementService = new StudentAnnouncementService(this);
         }
 
         public IPersonService PersonService
@@ -195,6 +198,11 @@ namespace Chalkable.BusinessLogic.Services.School
         public IGradingStyleService GradingStyleService
         {
             get { return gradingStyleService; }
+        }
+
+        public IStudentAnnouncementService StudentAnnouncementService
+        {
+            get { return studentAnnouncementService; }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
@@ -58,6 +59,36 @@ namespace Chalkable.Data.School.DataAccess
                     };
             }
         } 
+
+        public static AnnouncementQnAComplex ReadAnnouncementQnAComplex(SqlDataReader reader)
+        {
+            var annQnA = reader.Read<AnnouncementQnAComplex>();
+            annQnA.Asker = new Person
+            {
+                Id = SqlTools.ReadGuid(reader, "AskerId"),
+                FirstName = SqlTools.ReadStringNull(reader, "AskerFirstName"),
+                LastName = SqlTools.ReadStringNull(reader, "AskerLastName"),
+                Gender = SqlTools.ReadStringNull(reader, "AskerGender")
+            };
+            annQnA.Answerer = new Person
+            {
+                Id = SqlTools.ReadGuid(reader, "AnswererId"),
+                FirstName = SqlTools.ReadStringNull(reader, "AnswererFirstName"),
+                LastName = SqlTools.ReadStringNull(reader, "AnswererLastName"),
+                Gender = SqlTools.ReadStringNull(reader, "AnswererGender")
+            };
+            return annQnA;
+        }
+
+        public static IList<AnnouncementQnAComplex> ReadAnnouncementQnAComplexes(SqlDataReader reader)
+        {
+            var res = new List<AnnouncementQnAComplex>();
+            while (reader.Read())
+            {
+                res.Add(ReadAnnouncementQnAComplex(reader));
+            }
+            return res;
+        }
 
     }
 

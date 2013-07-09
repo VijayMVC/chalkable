@@ -10,7 +10,7 @@ namespace Chalkable.Web.Controllers
     [TraceControllerFilter]
     public class PreferenceController : ChalkableController
     {
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult List(PreferenceCategoryEnum? category)
         {
             var preferences = MasterLocator.PreferenceService.List(category);
@@ -24,7 +24,7 @@ namespace Chalkable.Web.Controllers
                res = PreferenceVeiwData.Create(preferences);
             return Json(res);
         }
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult Get(string key)
         {
             var preference = PreferenceService.Get(key);
@@ -41,7 +41,7 @@ namespace Chalkable.Web.Controllers
             return Json(null);
         }
         [ValidateInput(false)]
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult Set(string key, string value, bool ispublic)
         {
             MasterLocator.PreferenceService.Set(key, value, ispublic);
