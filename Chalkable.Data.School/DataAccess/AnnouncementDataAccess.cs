@@ -44,26 +44,30 @@ namespace Chalkable.Data.School.DataAccess
         private AnnouncementDetails BuildGetDetailsResult(SqlDataReader reader)
         {
             var announcement = reader.ReadOrNull<AnnouncementDetails>();
-            reader.NextResult();
-            announcement.AnnouncementQnAs = AnnouncementQnADataAccess.ReadAnnouncementQnAComplexes(reader);
-            reader.NextResult();
-            announcement.StudentAnnouncements = new List<StudentAnnouncementDetails>();
-            while (reader.Read())
+            if (announcement != null)
             {
-                announcement.StudentAnnouncements.Add(StudentAnnouncementDataAccess.ReadStudentAnnouncement(reader));
+                reader.NextResult();
+                announcement.AnnouncementQnAs = AnnouncementQnADataAccess.ReadAnnouncementQnAComplexes(reader);
+                reader.NextResult();
+                announcement.StudentAnnouncements = new List<StudentAnnouncementDetails>();
+                while (reader.Read())
+                {
+                    announcement.StudentAnnouncements.Add(StudentAnnouncementDataAccess.ReadStudentAnnouncement(reader));
+                }
+                reader.NextResult();
+                announcement.AnnouncementAttachments = reader.ReadList<AnnouncementAttachment>();
+                reader.NextResult();
+                announcement.AnnouncementReminders = reader.ReadList<AnnouncementReminder>();
+                reader.NextResult();
+                if (reader.Read())
+                    announcement.Owner = PersonDataAccess.ReadPersonData(reader);
+                announcement.AnnouncementApplications = new List<AnnouncementApplication>();
             }
-            reader.NextResult();
-            announcement.AnnouncementAttachments = reader.ReadList<AnnouncementAttachment>();
-            reader.NextResult();
-            announcement.AnnouncementReminders = reader.ReadList<AnnouncementReminder>();
-            reader.NextResult();
-            if(reader.Read())
-                announcement.Owner = PersonDataAccess.ReadPersonData(reader);
-            announcement.AnnouncementApplications = new List<AnnouncementApplication>();
             return announcement;
         }
         private AnnouncementQueryResult GetAnnouncementsComplex(string procedureName, Dictionary<string, object> parameters, AnnouncementsQuery query)
         {
+            parameters.Add(ID_PARAM, query.Id);
             parameters.Add(ROLE_ID_PARAM, query.RoleId);
             parameters.Add(PERSON_ID_PARAM, query.PersonId);
             parameters.Add(MARKING_PERIOD_ID_PARAM, query.MarkingPeriodId);
@@ -77,7 +81,7 @@ namespace Chalkable.Data.School.DataAccess
             parameters.Add("staredOnly", query.StarredOnly);
             using (var reader = ExecuteStoredProcedureReader(procedureName, parameters))
             {
-                var res = new AnnouncementQueryResult { Query = query };
+                var res = new AnnouncementQueryResult { Query = query};
                 bool first = true;
                 while (reader.Read())
                 {
@@ -122,7 +126,7 @@ namespace Chalkable.Data.School.DataAccess
                     {ANNOUNCEMENT_TYPE_ID_PARAM, announcementTypeId},
                     {STATE_PARAM, state}
                 };
-            ExecuteStoredProcedureReader(DELETE_PROCEDURE, parameters);
+            ExecuteStoredProcedureReader(DELETE_PROCEDURE, parameters).Dispose();
         }
         
         public AnnouncementQueryResult GetStudentAnnouncements(AnnouncementsQuery query)
@@ -258,6 +262,12 @@ namespace Chalkable.Data.School.DataAccess
         public List<AnnouncementComplex> Announcements { get; set; }
         public int SourceCount { get; set; }
         public AnnouncementsQuery Query { get; set; }
+
+        public AnnouncementQueryResult()
+        {
+            Announcements = new List<AnnouncementComplex>();
+            SourceCount = 0;
+        }
     }
 
 }

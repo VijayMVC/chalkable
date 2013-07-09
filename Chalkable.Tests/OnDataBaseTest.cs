@@ -72,8 +72,8 @@ namespace Chalkable.Tests
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1036 - create gradingStyle table.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1037 - alter spGetStudentAnnouncementForAnnouncement.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1038 - fix in spGetAnnouncementDetails.sql"));
-            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1039 - fix in spGetAnnouncementQnA.sql"));  
-
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1039 - fix in spGetAnnouncementQnA.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1040 - fix in spDeleteAnnouncement.sql"));  
         }
 
         protected void CreateMasterDb()

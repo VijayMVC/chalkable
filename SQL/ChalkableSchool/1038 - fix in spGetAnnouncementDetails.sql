@@ -1,4 +1,4 @@
-alter procedure [dbo].[spGetAnnouncementDetails] @id uniqueIdentifier, @callerId uniqueIdentifier
+ALTER procedure [dbo].[spGetAnnouncementDetails] @id uniqueIdentifier, @callerId uniqueIdentifier
 as
 
 declare @callerRole int
@@ -72,21 +72,21 @@ declare @classId uniqueidentifier
 declare @annTypeId int
 select @ownerId = PersonRef , @classId = ClassId, @annTypeId = AnnouncementTypeRef from @announcementTb
 
-declare @isGradeble bit = 0, @isGradebleType bit = 0
+declare @isGradable bit = 0, @isGradableType bit = 0
 if(@annTypeId = 2 or @annTypeId = 3 or @annTypeId = 4 or @annTypeId = 5
 or @annTypeId =6 or @annTypeId =7 or @annTypeId =8 or @annTypeId =9 or @annTypeId = 10)
-set @isGradebleType = 1
+set @isGradableType = 1
 
-if(@ownerId = @callerId and @isGradebleType = 1)
-set @isGradeble = 1
+if(@ownerId = @callerId and @isGradableType = 1)
+set @isGradable = 1
 
 declare @markingPeriodClassId uniqueidentifier  = (select MarkingPeriodClassRef from @announcementTb)
 declare @wasSubmittedToAdmin bit = 0;
 if(@markingPeriodClassId is not null and exists(select * from FinalGrade where MarkingPeriodClassRef = @markingPeriodClassId and [Status] = 1))
 set @wasSubmittedToAdmin = 1
 
-select *, @isGradeble as IsGradeble,
-@isGradebleType as IsGradebleType,
+select *, @isGradable as IsGradable,
+@isGradableType as IsGradableType,
 @wasSubmittedToAdmin as WasSubmittedToAdmin
 from @announcementTb
 
@@ -128,9 +128,13 @@ or (PersonRef is not null and @callerId = PersonRef))
 --join Application a on a.Id = aa.ApplicationRef
 --where aa.AnnouncementRef = @announcementId and (@annExists = 1)
 --	 and aa.Active = 1
-exec spGetPersons  @ownerId, @callerId, null, 0, 1, null,null,null,null,null,null,null, 1,@callerRole 
+exec spGetPersons  @ownerId, @callerId, null, 0, 1, null,null,null,null,null,null,null, 1,@callerRole
 end
+
 GO
+
+
+
 
 ALTER Procedure [dbo].[spGetStudentAnnouncementsForAnnouncement]
 	@announcementId uniqueidentifier, @personId uniqueidentifier
