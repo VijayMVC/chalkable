@@ -46,24 +46,15 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.school.SchoolsListPage, result);
         },
 
-        VOID, function addSchoolAction(form_) {
-            var result = ria.async.wait([
-                this.schoolService.getTimezones()
-            ]).
-            then(function(data){
-                var model = new chlk.models.school.School;
-                if (form_){
-                    model.setName(form_.name);
-                    model.setLocalId(parseInt(form_.localid, 10));
-                    model.setNcesId(parseInt(form_.ncesid, 10));
-                    model.setSchoolType(form_.schooltype);
-                    model.setSchoolUrl(form_.schoolurl);
-                    model.setSendEmailNotifications(form_.sendemailnotifications != "false");
-                    model.setTimezoneId(form_.timezoneId);
-                }
-                model.setTimezones(data[0].getItems());
-                return model;
-            });
+        [[chlk.models.school.School]],
+        VOID, function addSchoolAction(model_) {
+            var result = this.schoolService
+                .getTimezones()
+                .then(function(data){
+                    var model = model_ || new chlk.models.school.School;
+                    model.setTimezones(data.getItems());
+                    return model;
+                });
 
             return this.ShadeView(chlk.activities.school.AddSchoolDialog, result);
         },

@@ -10,16 +10,16 @@
                     input(type="text",name="name", value=self.name)
                 .x-form-field
                     label LocalID:
-                    input(type="text",name="localid", value=self.localId)
+                    input(type="text",name="localId", value=self.localId)
                 .x-form-field
                     label NCES ID:
-                    input(type="text",name="ncesid", value=self.ncesId)
+                    input(type="text",name="ncesId", value=self.ncesId)
                 .x-form-field
                     label Type:
-                    input(type="text",name="schooltype", value=self.schoolType)
+                    input(type="text",name="schoolType", value=self.schoolType)
                 .x-form-field
                     label URL:
-                    input(type="text",name="schoolurl", value=self.schoolUrl)
+                    input(type="text",name="schoolUrl", value=self.schoolUrl)
                 .x-form-field
                     label State/Province ID:
                     input
@@ -30,7 +30,7 @@
                             +Option(item.getId(), item.getDisplayName(), item.getId() == self.timezoneId ? 'selected' : '')
                 .x-form-field
                     label Send EmailNotifications:
-                    +Checkbox("sendemailnotifications", self.sendEmailNotifications).checkbox-last
+                    +Checkbox("sendEmailNotifications", self.sendEmailNotifications).checkbox-last
                 span.x-fieldset-header-text Principal Information
                 .x-form-field
                     label Contact Title:

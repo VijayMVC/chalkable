@@ -63,5 +63,11 @@ namespace Chalkable.Web.Controllers
             var syncInfo = MasterLocator.SchoolService.GetSyncData(schoolId);
             return Json(SisSyncViewData.Create(syncInfo));
         }
+
+        public ActionResult ListTimeZones()
+        {
+            var tzCollection = DateTimeTools.GetAll();
+            return Json(tzCollection);
+        }
     }
 }

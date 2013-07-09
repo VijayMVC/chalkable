@@ -14,7 +14,7 @@ NAMESPACE('chlk.services', function () {
         'SchoolService', EXTENDS(chlk.services.BaseService), [
             [[Number]],
             ria.async.Future, function getSchools(pageIndex_) {
-                return this.getPaginatedList('/School/List.json', chlk.models.school.School, pageIndex_);
+                return this.getPaginatedList('School/List.json', chlk.models.school.School, pageIndex_);
             },
 
             [[Number]],
@@ -33,7 +33,7 @@ NAMESPACE('chlk.services', function () {
             },
 
             ria.async.Future, function getTimezones() {
-                return this.getPaginatedList('/app/data/timezones.json', chlk.models.school.Timezone, 0);
+                return this.getPaginatedList('School/ListTimezones.json', chlk.models.school.Timezone, 0);
             }
         ])
 });
