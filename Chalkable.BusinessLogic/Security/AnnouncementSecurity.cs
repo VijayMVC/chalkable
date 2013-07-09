@@ -47,6 +47,7 @@ namespace Chalkable.BusinessLogic.Security
         {
             return CanModifyAnnouncement(announcementDetails, context) ||
                    announcementDetails.StudentAnnouncements.Any(x => x.Person.Id == context.UserId);
+            
         }
     }
 }

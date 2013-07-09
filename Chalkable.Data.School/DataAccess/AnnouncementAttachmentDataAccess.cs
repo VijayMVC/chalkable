@@ -29,7 +29,7 @@ namespace Chalkable.Data.School.DataAccess
         public PaginatedList<AnnouncementAttachment> GetPaginatedList(Guid announcementId, Guid callerId, int roleId, int start, int count, bool needsAllAttachments = true)
         {
             var conds = new Dictionary<string, object> {{"announcementRef", announcementId}};
-            var query = BuildGetAttachmentQuery(conds, callerId, roleId);
+            var query = BuildGetAttachmentQuery(conds, callerId, roleId, needsAllAttachments);
             if (query == null)
             {
                 return new PaginatedList<AnnouncementAttachment>(new List<AnnouncementAttachment>(), start, count);
@@ -56,15 +56,18 @@ namespace Chalkable.Data.School.DataAccess
 
             var sql = @"select {0}
                         from AnnouncementAttachment 
-                        join Announcement on Announcement.Id = AnnouncementAttachment.AnnouncementRef";
+                        join Announcement on Announcement.Id = AnnouncementAttachment.AnnouncementRef ";
             var b = new StringBuilder();
             b.AppendFormat(sql, "AnnouncementAttachment.*");
             b = Orm.BuildSqlWhere(b, typeof (AnnouncementAttachment), conds);
 
+            if (conds.Count == 0)
+                b.Append(" where ");
             if (!needsAllAttachments)
                 b.Append(" and AnnouncementAttachment.PersonRef = @callerId");
 
             conds.Add("@callerId", callerId);
+            conds.Add("@roleId", roleId);
             if (CoreRoles.SUPER_ADMIN_ROLE.Id == roleId)
             {
                 return new DbQuery { Parameters = conds, Sql = b.ToString() };
@@ -79,7 +82,7 @@ namespace Chalkable.Data.School.DataAccess
             {
                 b.Append(@" and (Announcement.PersonRef = @callerId or AnnouncementAttachment.PersonRef = Announcement.PersonRef 
                                     or (Announcement.Id in (select AnnouncementRef from AnnouncementRecipient 
-                                                           where RoleRef = @roleId || PersonRef = @callerId || All = 1) 
+                                                           where RoleRef = @roleId or PersonRef = @callerId or ToAll = 1) 
                                          and AnnouncementAttachment.PersonRef = Announcement.PersonRef)
                                  )");
                 return new DbQuery { Parameters = conds, Sql = b.ToString() };

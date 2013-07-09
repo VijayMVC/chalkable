@@ -37,21 +37,21 @@ namespace Chalkable.Data.School.DataAccess
             var types = new List<Type> { annRType, typeof(Announcement) };
             var sql = string.Format(@"select {0} 
                                       from AnnouncementReminder 
-                                      join Announcement a on a.Id = AnnouncementReminder.AnnouncementRef "
+                                      join Announcement  on Announcement.Id = AnnouncementReminder.AnnouncementRef "
                                       , Orm.ComplexResultSetQuery(types));
             var b = new StringBuilder();
             b.Append(sql);
             b = Orm.BuildSqlWhere(b, annRType, conditions);
             b.Append(@" and ((Announcement.PersonRef = @personId and AnnouncementReminder.PersonRef is null)
-                             or (AnnouncementReminder.PersonRef is not null and AnnouncementReminder.PersonRef = @personId)");
+                             or (AnnouncementReminder.PersonRef is not null and AnnouncementReminder.PersonRef = @personId))");
             conditions.Add("@personId", personId);
             using (var reader = ExecuteReaderParametrized(b.ToString(), conditions))
             {
                 var res = new List<AnnouncementReminder>();
                 while (reader.Read())
                 {
-                    var reminder = reader.Read<AnnouncementReminder>();
-                    reminder.Announcement = reader.Read<Announcement>();
+                    var reminder = reader.Read<AnnouncementReminder>(true);
+                    reminder.Announcement = reader.Read<Announcement>(true);
                     res.Add(reminder);
                 }
                 return res;

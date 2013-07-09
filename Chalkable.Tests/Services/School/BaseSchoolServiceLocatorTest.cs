@@ -13,7 +13,7 @@ namespace Chalkable.Tests.Services.School
     {
         public BaseSchoolServiceLocatorTest(IServiceLocatorMaster serviceLocatorMaster) : base(serviceLocatorMaster)
         {
-            StorageBlobService = new StorageBlobService();
+            StorageBlobService = new TestBlobStorageService();
         }
     }
 }

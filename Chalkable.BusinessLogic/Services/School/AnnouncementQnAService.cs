@@ -39,8 +39,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new AnnouncementQnADataAccess(uow);
                 var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
-                if(!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
-                    throw new ChalkableSecurityException();
+                
                 var annQnA = new AnnouncementQnA
                     {
                         Id = Guid.NewGuid(),
@@ -77,24 +76,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public AnnouncementQnA EditAnswer(Guid announcementQnAId, string question)
-        {
-            using (var uow = Update())
-            {
-                var da = new AnnouncementQnADataAccess(uow);
-                var annQnA = GetAnnouncmentQnA(announcementQnAId);
-                if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
-                    throw new ChalkableSecurityException();
-
-                annQnA.Question = question;
-                annQnA.QuestionTime = Context.NowSchoolTime;
-                da.Update(annQnA);
-                uow.Commit();
-                return annQnA;
-            }
-        }
-
-        public AnnouncementQnA EditQuestion(Guid announcementQnAId, string answer)
+        public AnnouncementQnA EditAnswer(Guid announcementQnAId, string answer)
         {
             using (var uow = Update())
             {
@@ -105,6 +87,24 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 annQnA.Answer = answer;
                 annQnA.AnsweredTime = Context.NowSchoolTime;
+                da.Update(annQnA);
+                uow.Commit();
+                return annQnA;
+            }
+        }
+
+        public AnnouncementQnA EditQuestion(Guid announcementQnAId, string question)
+        {
+            using (var uow = Update())
+            {
+                var da = new AnnouncementQnADataAccess(uow);
+                var annQnA = GetAnnouncmentQnA(announcementQnAId);
+                if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
+                    throw new ChalkableSecurityException();
+
+                
+                annQnA.Question = question;
+                annQnA.QuestionTime = Context.NowSchoolTime;
                 da.Update(annQnA);
                 uow.Commit();
                 return annQnA;

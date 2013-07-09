@@ -190,7 +190,7 @@ namespace Chalkable.Data.School.DataAccess
             if (CoreRoles.TEACHER_ROLE.Id == roleId)
             {
                 b.Append(@" where Announcement.PersonRef = @callerId 
-                            or (AnnouncementTypeRef == @adminType and Announcement.Id in (select ar.AnnouncementRef from AnnouncementRecipient ar 
+                            or (AnnouncementTypeRef = @adminType and Announcement.Id in (select ar.AnnouncementRef from AnnouncementRecipient ar 
                                                                                           where ar.ToAll = 1 or ar.PersonRef = @callerId or ar.RoleRef = @roleId))");
                 conds.Add("callerId", callerId);
                 conds.Add("adminType", (int)SystemAnnouncementType.Admin);
@@ -199,15 +199,17 @@ namespace Chalkable.Data.School.DataAccess
             }
             if (CoreRoles.STUDENT_ROLE.Id == roleId)
             {
-                b.Append(@" where ((Announcement.MarkingPeriodClassRef in (select mpc.Id from MarkingPeriodClass mpc
-                                                                         join ClassPerson cp on cp.ClassRef = mpc.ClassRef
-                                                                         where cp.PersonRef = @callerId)) 
-                            or (AnnouncementTypeRef == @adminType 
-                                     and Announcement.Id in (select ar.AnnouncementRef from AnnouncementRecipient ar 
-                                                             where ar.ToAll = 1 or ar.PersonRef = @callerId or ar.RoleRef = @roleId
-                                                                   or ar.GradeLevelRef in (select GradeLevelRef from StudentInfo where Id = @callerId)
-                                                            )
-                                ))");
+                b.Append(@" where (
+                                        (Announcement.MarkingPeriodClassRef in (select mpc.Id from MarkingPeriodClass mpc
+                                                                               join ClassPerson cp on cp.ClassRef = mpc.ClassRef
+                                                                               where cp.PersonRef = @callerId)
+                                        ) or (AnnouncementTypeRef = @adminType 
+                                                 and Announcement.Id in (select ar.AnnouncementRef from AnnouncementRecipient ar 
+                                                                         where ar.ToAll = 1 or ar.PersonRef = @callerId or ar.RoleRef = @roleId
+                                                                               or ar.GradeLevelRef in (select GradeLevelRef from StudentInfo where Id = @callerId)
+                                                                        )
+                                             )
+                                 )");
 
                 conds.Add("callerId", callerId);
                 conds.Add("adminType", (int)SystemAnnouncementType.Admin);

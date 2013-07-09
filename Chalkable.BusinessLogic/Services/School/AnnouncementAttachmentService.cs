@@ -13,7 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         Announcement AddAttachment(Guid announcementId, byte[] content, string name, string uuid);
         void DeleteAttachment(Guid announcementAttachmentId);
-        PaginatedList<AnnouncementAttachment> GetAttachments(Guid announcementId, int start, int count, bool needsAllAttachments = true);
+        PaginatedList<AnnouncementAttachment> GetAttachments(Guid announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true);
         AnnouncementAttachment GetAttachmentById(Guid announcementAttachmentId);
     }
 
@@ -80,7 +80,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public PaginatedList<AnnouncementAttachment> GetAttachments(Guid announcementId, int start, int count, bool needsAllAttachments = true)
+        public PaginatedList<AnnouncementAttachment> GetAttachments(Guid announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true)
         {
             using (var uow = Read())
             {

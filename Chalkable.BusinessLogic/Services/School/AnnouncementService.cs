@@ -360,6 +360,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var announcementRecipient = new AnnouncementRecipient
             {
+                Id = Guid.NewGuid(),
                 AnnouncementRef = announcementId,
                 ToAll = recipientInfo.ToAll,
                 RoleRef = recipientInfo.ToAll ? null : recipientInfo.RoleId,

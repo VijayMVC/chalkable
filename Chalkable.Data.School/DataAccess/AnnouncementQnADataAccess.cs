@@ -32,26 +32,7 @@ namespace Chalkable.Data.School.DataAccess
                 };
             using (var reader = ExecuteStoredProcedureReader(GET_ANNOUNCEMENT_QNA_PROCEDURE, parameter))
             {
-                var res = new List<AnnouncementQnAComplex>();
-                while (reader.Read())
-                {
-                    var annQnA = reader.Read<AnnouncementQnAComplex>();
-                    annQnA.Asker = new Person
-                        {
-                            Id = SqlTools.ReadGuid(reader, "AskerId"),
-                            FirstName = SqlTools.ReadStringNull(reader, "AskerFirstName"),
-                            LastName = SqlTools.ReadStringNull(reader, "AskerLastName"),
-                            Gender = SqlTools.ReadStringNull(reader, "AskerGender")
-                        };
-                    annQnA.Answerer = new Person
-                        {
-                            Id = SqlTools.ReadGuid(reader, "AnswererId"),
-                            FirstName = SqlTools.ReadStringNull(reader, "AnswererFirstName"),
-                            LastName = SqlTools.ReadStringNull(reader, "AnswererLastName"),
-                            Gender = SqlTools.ReadStringNull(reader, "AnswererGender")
-                        };
-                    res.Add(annQnA);
-                }
+                var res = ReadAnnouncementQnAComplexes(reader);
                 return new AnnouncementQnAQueryResult 
                     {
                         AnnouncementQnAs = res,
@@ -77,6 +58,7 @@ namespace Chalkable.Data.School.DataAccess
                 LastName = SqlTools.ReadStringNull(reader, "AnswererLastName"),
                 Gender = SqlTools.ReadStringNull(reader, "AnswererGender")
             };
+            annQnA.PersonRef = annQnA.Asker.Id;
             return annQnA;
         }
 
