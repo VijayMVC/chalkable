@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C5753C2A-F2BC-4F96-846B-548FC67191B2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Chalkable.Data.School</RootNamespace>
+    <AssemblyName>Chalkable.Data.School</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataAccess\AddressDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementAttachmentDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementQnADataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementRecipientDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementReminderDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementTypeDataAccess.cs" />
+    <Compile Include="DataAccess\AttendanceReasonDataAccess.cs" />
+    <Compile Include="DataAccess\ClassAttendanceDataAccess.cs" />
+    <Compile Include="DataAccess\GradingStyleDataAccess.cs" />
+    <Compile Include="DataAccess\StudentDailyAttendanceDataAccess.cs" />
+    <Compile Include="DataAccess\DateDataAccess.cs" />
+    <Compile Include="DataAccess\ClassDataAccess.cs" />
+    <Compile Include="DataAccess\ClassPeriodDataAccess.cs" />
+    <Compile Include="DataAccess\ClassPersonDataAccess.cs" />
+    <Compile Include="DataAccess\CourseDataAccess.cs" />
+    <Compile Include="DataAccess\GradeLevelDataAccess.cs" />
+    <Compile Include="DataAccess\MarkingPeriodClassDataAccess.cs" />
+    <Compile Include="DataAccess\MarkingPeriodDataAccess.cs" />
+    <Compile Include="DataAccess\PeriodDataAccess.cs" />
+    <Compile Include="DataAccess\PersonDataAccess.cs" />
+    <Compile Include="DataAccess\PhoneDataAccess.cs" />
+    <Compile Include="DataAccess\PrivateMessageDataAccess.cs" />
+    <Compile Include="DataAccess\RoomDataAccess.cs" />
+    <Compile Include="DataAccess\ScheduleSectionDataAccess.cs" />
+    <Compile Include="DataAccess\SchoolYearDataAccess.cs" />
+    <Compile Include="DataAccess\StudentAnnouncementDataAccess.cs" />
+    <Compile Include="DataAccess\StudentParentDataAccess.cs" />
+    <Compile Include="Model\Address.cs" />
+    <Compile Include="Model\Announcement.cs" />
+    <Compile Include="Model\AnnouncementApplication.cs" />
+    <Compile Include="Model\AnnouncementAttachment.cs" />
+    <Compile Include="Model\AnnouncementQnA.cs" />
+    <Compile Include="Model\AnnouncementRecipient.cs" />
+    <Compile Include="Model\AnnouncementRecipientData.cs" />
+    <Compile Include="Model\AnnouncementReminder.cs" />
+    <Compile Include="Model\AnnouncementType.cs" />
+    <Compile Include="Model\ApplicationInstall\ApplicationInstall.cs" />
+    <Compile Include="Model\ApplicationInstall\ApplicationInstallAction.cs" />
+    <Compile Include="Model\ApplicationInstall\ApplicationInstallActionClasses.cs" />
+    <Compile Include="Model\ApplicationInstall\ApplicationInstallActionDepartment.cs" />
+    <Compile Include="Model\ApplicationInstall\ApplicationInstallActionGradeLevel.cs" />
+    <Compile Include="Model\ApplicationInstall\ApplicationInstallActionRole.cs" />
+    <Compile Include="Model\AttendanceReason.cs" />
+    <Compile Include="Model\Class.cs" />
+    <Compile Include="Model\ClassAttendance.cs" />
+    <Compile Include="Model\ClassDiscipline.cs" />
+    <Compile Include="Model\ClassDisciplineType.cs" />
+    <Compile Include="Model\ClassPeriod.cs" />
+    <Compile Include="Model\ClassPerson.cs" />
+    <Compile Include="Model\Course.cs" />
+    <Compile Include="Model\Date.cs" />
+    <Compile Include="Model\DisciplineType.cs" />
+    <Compile Include="Model\FinalGrade.cs" />
+    <Compile Include="Model\FinalGradeAnnouncementType.cs" />
+    <Compile Include="Model\GradeLevel.cs" />
+    <Compile Include="Model\GradingStyle.cs" />
+    <Compile Include="Model\MarkingPeriod.cs" />
+    <Compile Include="Model\MarkingPeriodClass.cs" />
+    <Compile Include="Model\Notification.cs" />
+    <Compile Include="Model\Period.cs" />
+    <Compile Include="Model\Person.cs" />
+    <Compile Include="Model\Phone.cs" />
+    <Compile Include="Model\PrivateMessage.cs" />
+    <Compile Include="Model\ReportDownload.cs" />
+    <Compile Include="Model\ReportMailDelivery.cs" />
+    <Compile Include="Model\Room.cs" />
+    <Compile Include="Model\ScheduleSection.cs" />
+    <Compile Include="Model\SchoolYear.cs" />
+    <Compile Include="Model\StudentAnnouncement.cs" />
+    <Compile Include="Model\StudentDailyAttendance.cs" />
+    <Compile Include="Model\StudentFinalGrade.cs" />
+    <Compile Include="Model\StudentInfo.cs" />
+    <Compile Include="Model\StudentParent.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
+      <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
+      <Name>Chalkable.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.Common\Chalkable.Data.Common.csproj">
+      <Project>{ceb50b03-b84b-4194-9bee-f1a2ebd17686}</Project>
+      <Name>Chalkable.Data.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

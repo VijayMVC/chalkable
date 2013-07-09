@@ -1,0 +1,12 @@
+.action-buttons-popup
+    .buttons
+        each button,i in getActionButtons()
+            -index = i+1
+            -clazz = (self.getButtons()[0] == index) ? "blue " : ((self.getButtons().indexOf(index) == -1) ? "grey disabled " : "green ")
+            +Button()(class="special-button2 " + clazz)= button
+    .emails
+        +Select('adminEmail')#admin-emails
+            each email in self.getEmails()
+                +Option(email, email)
+
+
