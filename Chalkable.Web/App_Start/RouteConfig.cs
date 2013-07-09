@@ -19,11 +19,11 @@ namespace Chalkable.Web
                 defaults: new { controller = "Home", action = "LogOn", format = "json" } // Parameter defaults
             );
 
-            routes.MapRoute(
+            /*routes.MapRoute(
                 name: "Default2",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );
+            );*/
         }
     }
 }

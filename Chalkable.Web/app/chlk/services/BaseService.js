@@ -21,9 +21,21 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.BaseService*/
     CLASS(
         'BaseService', [
+
+
+            String, function getServiceRoot(){
+                return ria.__CFG["#require"].serviceRoot;
+            },
+
+            [[String]],
+            String, function resolveUri(uri){
+                return this.getServiceRoot() + uri;
+            },
+
             [[String, Object]],
             ria.async.Future, function get(uri, clazz) {
-                return new ria.ajax.JsonGetTask(uri)
+
+                return new ria.ajax.JsonGetTask(this.resolveUri(uri))
                     .run()
                     .then(function (data) {
                         if(!data.success)
@@ -35,7 +47,7 @@ NAMESPACE('chlk.services', function () {
 
             [[String, Object, Number]],
             ria.async.Future, function getPaginatedList(uri, clazz, pageIndex) {
-                return new ria.ajax.JsonGetTask(uri)
+                return new ria.ajax.JsonGetTask(this.resolveUri(uri))
                     .run()
                     .then(function (data) {
                         var model = new chlk.models.common.PaginatedList(clazz);
