@@ -13,17 +13,16 @@ namespace Chalkable.Web
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute(
-                name: "Default", // Route name
-                url: "{controller}/{action}.{format}", // URL with parameters
-                defaults: new { controller = "Home", action = "LogOn", format = "json" } // Parameter defaults
+            routes.MapRoute("Default", // Route name
+                            "{controller}/{action}.{format}", // URL with parameters
+                new { controller = "Home", action = "Index", format = "aspx" } // Parameter defaults
             );
 
-            /*routes.MapRoute(
-                name: "Default2",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );*/
+            routes.MapRoute(
+              "Default2", // Route name
+              "{controller}/{action}", // URL with parameters
+              new { controller = "Home", action = "Index" } // Parameter defaults
+            );
         }
     }
 }
