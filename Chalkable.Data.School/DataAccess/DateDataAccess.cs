@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
@@ -110,6 +111,14 @@ namespace Chalkable.Data.School.DataAccess
             var dbQuery = BuildConditionQuery(b, query);
             dbQuery.Sql = "select * from [Date] " + dbQuery.Sql;
             return Exists(dbQuery);
+        }
+
+        public bool Exists(IList<Guid> markingPeriodIds)
+        {
+            var sql = @"select * from [Date] where MarkingPeriodRef in ({0})";
+            var mpIdsString = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
+            sql = string.Format(sql, mpIdsString);
+            return Exists(new DbQuery {Parameters = new Dictionary<string, object>(), Sql = sql});
         }
     }
 

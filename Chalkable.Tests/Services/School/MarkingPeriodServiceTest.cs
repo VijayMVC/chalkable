@@ -74,6 +74,7 @@ namespace Chalkable.Tests.Services.School
             Assert.AreEqual(mp1.Name, newMp1Name);
             Assert.AreEqual(mp1.Description, newMp1Name);
             Assert.AreEqual(mp1.SchoolYearRef, sy2.Id);
+            AssertAreEqual(mp1, mpService.GetMarkingPeriodById(mp1.Id));
 
         }
         [Test]
@@ -89,10 +90,8 @@ namespace Chalkable.Tests.Services.School
             AssertException<Exception>(() => SchoolTestContext.AdminGradeSl.MarkingPeriodService.Delete(mp.Id));
             adminSl.CalendarDateService.ClearCalendarDates(mp.Id);
 
-            var course = adminSl.CourseService.Add("testCourse", "testCourse", null);
-            var gradeLevels = adminSl.GradeLevelService.CreateDefault();
-            var cl = adminSl.ClassService.Add(sy.Id, course.Id, "testClass", "testClass",
-                               SchoolTestContext.FirstTeacher.Id, gradeLevels[0].Id, new List<Guid> {mp.Id});
+            var cl =  ClassServiceTest.CreateClass(SchoolTestContext, SchoolTestContext.FirstTeacher, 
+                SchoolTestContext.FirstStudent, null, "math", sy);
 
             AssertException<Exception>(() => SchoolTestContext.AdminGradeSl.MarkingPeriodService.Delete(mp.Id));
             adminSl.ClassService.DeleteClassFromMarkingPeriod(cl.Id, mp.Id);

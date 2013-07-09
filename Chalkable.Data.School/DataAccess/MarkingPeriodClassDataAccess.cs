@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
@@ -46,6 +48,17 @@ namespace Chalkable.Data.School.DataAccess
         {
             return Exists<MarkingPeriodClass>(BuildConditions(query));
         }
+        public bool Exists(IList<Guid> markingPeriodIds)
+        {
+            var sql = @"select * from MarkingPeriodClass where MarkingPeriodRef in ({0})";
+            var mpIdsString = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
+            return Exists(new DbQuery
+                    {
+                        Parameters = new Dictionary<string, object>(),
+                        Sql = string.Format(sql, mpIdsString)
+                    });
+        }
+
         private Dictionary<string, object> BuildConditions(MarkingPeriodClassQuery query)
         {
             var res = new Dictionary<string, object>();

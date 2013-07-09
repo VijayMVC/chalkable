@@ -14,7 +14,7 @@ NAMESPACE('chlk.services', function () {
         'SchoolService', EXTENDS(chlk.services.BaseService), [
             [[Number]],
             ria.async.Future, function getSchools(pageIndex_) {
-                return this.getPaginatedList('/app/data/schools.json', chlk.models.school.School, pageIndex_);
+                return this.getPaginatedList('/School/List.json', chlk.models.school.School, pageIndex_);
             },
 
             [[Number]],

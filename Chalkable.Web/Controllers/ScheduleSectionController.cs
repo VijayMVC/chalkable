@@ -26,7 +26,11 @@ namespace Chalkable.Web.Controllers
         //{
         //    var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodIds[0]);
         //    var canGetSectoions = SchoolLocator.ScheduleSectionService.CanGetSection(markingPeriodIds);
-        //    var sections = canGetSectoions ? SchoolLocator.ScheduleSectionService.GetSections(markingPeriodIds) : new List<ScheduleSection>();
+        //    IList<ScheduleSection> sections = new List<ScheduleSection>();
+        //    if (canGetSectoions)
+        //    {
+        //        sections = SchoolLocator.ScheduleSectionService.GetSections(markingPeriodIds);
+        //    }
         //    var canchange = canGetSectoions && SchoolLocator.ScheduleSectionService.CanDeleteSections(markingPeriodIds);
         //    return Json(SectionsForMPsViewData.Create(sections, markingPeriod, canGetSectoions, canchange));
         //}

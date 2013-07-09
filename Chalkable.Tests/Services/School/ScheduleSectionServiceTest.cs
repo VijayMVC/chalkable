@@ -96,6 +96,7 @@ namespace Chalkable.Tests.Services.School
             Assert.IsTrue(SchoolTestContext.AdminGradeSl.ScheduleSectionService.CanGetSection(mpIds));
             Assert.IsTrue(SchoolTestContext.AdminGradeSl.ScheduleSectionService.CanDeleteSections(mpIds));
             sections = SchoolTestContext.AdminGradeSl.ScheduleSectionService.GetSections(mpIds);
+            sections = sections.Where(x => x.MarkingPeriodRef == mp1.Id).ToList();
             Assert.AreEqual(sections.Count, sectionsNames2.Count);
             for (int i = 0; i < sections.Count; i++)
             {

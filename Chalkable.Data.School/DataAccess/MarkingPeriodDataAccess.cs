@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -12,13 +13,26 @@ namespace Chalkable.Data.School.DataAccess
         public MarkingPeriodDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
+
+        public void DeleteMarkingPeriods(IList<Guid> markingPeriodIds)
+        {
+            var b = new StringBuilder();
+            var mpidsString = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
+            b.Append(@"delete from ClassPeriod where PeriodRef in (select Id from Period where MarkingPeriodRef in ({0})) ");
+            b.Append(@"delete from Period where MarkingPeriodRef in ({0}) ");
+            b.Append(@"delete from ScheduleSection where MarkingPeriodRef in ({0}) ");
+            b.Append(@"delete from MarkingPeriod where Id in ({0}) ");
+            var conds = new Dictionary<string, object> ();
+            var sql = string.Format(b.ToString(), mpidsString);
+            ExecuteNonQueryParametrized(sql, conds);
+        }
         
         public void ChangeWeekDays(IList<Guid> markingPeriodIds, int weekDays)
         {
             var b = new StringBuilder();
             foreach (var markingPeriodId in markingPeriodIds)
             {
-                b.AppendFormat(" update MarkingPeriod set WeekDays = @weekDays where Id ={0} ", markingPeriodId);
+                b.AppendFormat(" update MarkingPeriod set WeekDays = @weekDays where Id = '{0}' ", markingPeriodId);
             }
             var conds = new Dictionary<string, object> {{"weekDays", weekDays}};
             ExecuteNonQueryParametrized(b.ToString(), conds);

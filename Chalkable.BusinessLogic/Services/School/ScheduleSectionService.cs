@@ -16,13 +16,12 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ScheduleSection> GetSections(List<Guid> markingPeriodIds);
         ScheduleSection GetSectionById(Guid id);
 
-        bool CanDeleteSections(List<Guid> markingPeriodIds);
+        bool CanDeleteSections(IList<Guid> markingPeriodIds);
         bool CanGetSection(IList<Guid> markingPeriodIds);
 
         ScheduleSection Add(int number, string name, Guid markingPeriodId, int? sisId = null);
         ScheduleSection Edit(Guid id, int number, string name);
         void Delete(Guid id);
-         
         void ReBuildSections(List<string> sections, List<Guid> markingPeriodIds);
         void GenerateDefaultSections(Guid markingPeriodId);
         void GenerateScheduleSectionsWithDefaultPeriods(Guid markingPeriodId, string[] names);
@@ -47,7 +46,10 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if(!CanGetSection(markingPeriodIds))
                 throw new ChalkableException(ChlkResources.ERR_SCHEDULE_SECTION_SECTIONS_NOT_EQUIVALENT);
-            return GetSections(markingPeriodIds[0]);
+            using (var uow = Read())
+            {
+                return new ScheduleSectionDataAccess(uow).GetSections(markingPeriodIds);
+            }
         }
 
         public ScheduleSection GetSectionById(Guid id)
@@ -57,8 +59,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 return new ScheduleSectionDataAccess(uow).GetById(id);
             }
         }
-        //TODO: check  classPeriods exsisting
-        public bool CanDeleteSections(List<Guid> markingPeriodIds)
+        public bool CanDeleteSections(IList<Guid> markingPeriodIds)
         {
             if (markingPeriodIds != null && markingPeriodIds.Count > 0)
             {
@@ -189,13 +190,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(Guid id)
         {
+            if (!BaseSecurity.IsAdminEditor(Context))
+                throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new ScheduleSectionDataAccess(uow);
                 var ss = da.GetById(id);
-                if (!BaseSecurity.IsAdminEditor(Context))
-                    throw new ChalkableSecurityException();
-
                 if (!CanDeleteSections(new List<Guid> { ss.MarkingPeriodRef }))
                     throw new ChalkableException(ChlkResources.ERR_SCHEDULE_SECTION_CANT_DELETE);
                 
@@ -253,5 +253,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     ServiceLocator.PeriodService.Add(markingPeriod.Id, start, start + 45, section.Id, i+1);
             }
         }
+
+
     }
 }

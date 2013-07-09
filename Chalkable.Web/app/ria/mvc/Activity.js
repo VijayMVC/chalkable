@@ -1,5 +1,7 @@
 REQUIRE('ria.mvc.IActivity');
 
+REQUIRE('ria.async.Observable');
+
 NAMESPACE('ria.mvc', function () {
     "use strict";
 
@@ -21,8 +23,8 @@ NAMESPACE('ria.mvc', function () {
                 this._started = false;
                 this._paused = false;
                 this._stopped = false;
-                this._onClose = [];
-                this._onRefresh = [];
+                this._onClose = new ria.async.Observable();
+                this._onRefresh = new ria.async.Observable();
             },
 
             /**
@@ -77,11 +79,44 @@ NAMESPACE('ria.mvc', function () {
                 return this._inited && !this._stopped;
             },
 
+            ria.async.Future, function getModelEvents_(msg_) {
+                var me = this;
+                return new ria.async.Future()
+                    .handleProgress(function(progress) { me.onModelProgress(progress, msg_); })
+                    .complete(function () { me.onModelComplete_(msg_); })
+                    .catchError(function (error) {
+                        me.onModelError(progress, msg_);
+                        this.RETHROW(error);
+                    })
+                    .then(function (model) { me.onModelReady_(model, msg_); return model })
+            },
+
+            [[ria.async.Future]],
+            ria.async.Future, function refreshD(future) {
+                var me = this;
+                return future
+                    .attach(this.getModelEvents_())
+                    .then(function (model) { me.onRender_(model); return model; })
+                    .then(function (model) { me.onRefresh_(model); return model; })
+            },
+
+            [[ria.async.Future, String]],
+            ria.async.Future, function partialRefreshD(future, msg_) {
+                var msg = msg_ || "";
+                var me = this;
+                return future
+                    .attach(this.getModelEvents_(msg))
+                    .then(function (model) { me.onPartialRender_(model, msg); return model; })
+                    .then(function (model) { me.onPartialRefresh_(model, msg); return model; })
+            },
+
+            /** @deprecated */
             [[Object]],
             VOID, function refresh(model) {
                 this.onModelReady_(model);
                 this.onRender_(model);
-                defer(this.onRefresh_, [model], this);
+                ria.async.DeferredData(model)
+                    .next(this.onRefresh_)
             },
 
             ABSTRACT, VOID, function onCreate_() {},
@@ -90,14 +125,27 @@ NAMESPACE('ria.mvc', function () {
             VOID, function onResume_() {},
             VOID, function onPause_() {},
             VOID, function onStop_() {},
-            [[Object]],
-            VOID, function onModelReady_(data) {},
+            [[String]],
+            VOID, function onModelWait_(msg_) {},
+            [[Object, String]],
+            VOID, function onModelProgress_(data, msg_) {},
+            [[Object, String]],
+            VOID, function onModelError_(data, msg_) {},
+            [[Object, String]],
+            VOID, function onModelReady_(data, msg_) {},
+            [[String]],
+            VOID, function onModelComplete_(msg_) {},
             [[Object]],
             VOID, function onRender_(data) {},
+            [[Object, String]],
+            VOID, function onPartialRender_(data, msg_) {},
             [[Object]],
             VOID, function onRefresh_(data) {
-                var me = this;
-                this._onRefresh.forEach(function (_) { _(me, data); });
+                this._onRefresh.notifyAndClear([this, data]);
+            },
+            [[Object, String]],
+            VOID, function onPartialRefresh_(data, msg_) {
+                this._onRefresh.notifyAndClear([this, data, msg_]);
             },
 
             VOID, function onDispose_() {
@@ -105,8 +153,7 @@ NAMESPACE('ria.mvc', function () {
             },
 
             VOID, function close() {
-                var me = this;
-                this._onClose.forEach(function (_) { _(me); });
+                this._onClose.notifyAndClear([this]);
             },
 
             /**
@@ -114,7 +161,7 @@ NAMESPACE('ria.mvc', function () {
              */
             [[ria.mvc.ActivityClosedEvent]],
             VOID, function addCloseCallback(callback) {
-                this._onClose.unshift(callback);
+                this._onClose.on(callback);
             },
 
             /**
@@ -122,7 +169,7 @@ NAMESPACE('ria.mvc', function () {
              */
             [[ria.mvc.ActivityRefreshedEvent]],
             VOID, function addRefreshCallback(callback) {
-                this._onRefresh.unshift(callback);
+                this._onRefresh.on(callback);
             }
         ]);
 });

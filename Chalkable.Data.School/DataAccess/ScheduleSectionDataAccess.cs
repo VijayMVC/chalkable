@@ -36,7 +36,6 @@ namespace Chalkable.Data.School.DataAccess
 //            }
 //        }
         
-       
         public void Delete(ScheduleSection scheduleSection)
         {
             var b = new StringBuilder();
