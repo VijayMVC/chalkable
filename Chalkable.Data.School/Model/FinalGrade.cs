@@ -9,7 +9,6 @@ namespace Chalkable.Data.School.Model
     public class FinalGrade
     {
         public Guid Id { get; set; }
-        public Guid MarkingPeriodClass { get; set; }
         public FinalGradeStatus Status { get; set; }
         public int ParticipationPercent { get; set; }
         public int Discipline { get; set; }

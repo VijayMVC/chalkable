@@ -74,7 +74,10 @@ namespace Chalkable.Tests
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1038 - fix in spGetAnnouncementDetails.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1039 - fix in spGetAnnouncementQnA.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1040 - fix in spDeleteAnnouncement.sql"));
-            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1041 - fix in spUpdateAnnouncementRecipientData.sql"));        
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1041 - fix in spUpdateAnnouncementRecipientData.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1042 - removed MarkingPeriodClassRef from FinalGrade.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1043 - fix in spGetClasses.sql"));        
+       
         }
 
         protected void CreateMasterDb()

@@ -35,7 +35,8 @@ namespace Chalkable.Data.School.DataAccess
                 };
             using (var reader = ExecuteStoredProcedureReader(GET_CLASSES_PROC, parameters))
             {
-
+                var sourceCount = reader.Read() ? SqlTools.ReadInt32(reader, "SourceCount") : 0;
+                reader.NextResult();
                 var classes = reader.ReadList<ClassComplex>(true);
                 reader.NextResult();
                 var markingPeriodClasses = reader.ReadList<MarkingPeriodClass>();
@@ -43,7 +44,7 @@ namespace Chalkable.Data.School.DataAccess
                 {
                     classComplex.MarkingPeriodClass = markingPeriodClasses.Where(x => x.ClassRef == classComplex.Id).ToList();
                 }
-                return new ClassQueryResult {Classes = classes, Query = query};
+                return new ClassQueryResult { Classes = classes, Query = query, SourceCount = sourceCount };
             }
         }
     }
@@ -68,6 +69,7 @@ namespace Chalkable.Data.School.DataAccess
     public class ClassQueryResult
     {
         public ClassQuery Query { get; set; }
-        public IList<ClassComplex> Classes { get; set; } 
+        public IList<ClassComplex> Classes { get; set; }
+        public int SourceCount { get; set; }
     }
 }
