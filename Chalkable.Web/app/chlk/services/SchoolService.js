@@ -23,21 +23,21 @@ NAMESPACE('chlk.services', function () {
             [[Number]],
             ria.async.Future, function getDetails(schoolId) {
                 return this.get('/app/data/schoolDetails.json', chlk.models.school.SchoolDetails, {
-                    start: pageIndex_
+                    schoolId: schoolId
                 });
             },
 
             [[Number]],
             ria.async.Future, function getSisInfo(schoolId) {
                 return this.get('/app/data/schoolSisInfo.json', chlk.models.school.SchoolSisInfo, {
-                    start: pageIndex_
+                    schoolId: schoolId
                 });
             },
 
             [[Number]],
             ria.async.Future, function getPeopleSummary(schoolId) {
                 return this.get('/app/data/peopleSummary.json', chlk.models.school.SchoolPeopleSummary, {
-                    start: pageIndex_
+                    schoolId: schoolId
                 });
             },
 
