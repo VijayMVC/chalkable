@@ -5,20 +5,19 @@ using System.Web;
 
 namespace Chalkable.Web.Models
 {
-    public class GradingStyleVeiwData
+    public class GradingStyleViewData
     {
         public IList<int> GradingAbcf { get; set; }
         public IList<int> GradingComplete { get; set; }
         public IList<int> GradingCheck { get; set; }
  
-        private GradingStyleVeiwData()
+        private GradingStyleViewData()
         {
-      
         }
 
-        public static  GradingStyleVeiwData Create(IList<int> gradingAbcf, IList<int> gradingComlete, IList<int> gradingCheck)
+        public static  GradingStyleViewData Create(IList<int> gradingAbcf, IList<int> gradingComlete, IList<int> gradingCheck)
         {
-            var res = new GradingStyleVeiwData()
+            var res = new GradingStyleViewData()
                           {
                               GradingAbcf = gradingAbcf,
                               GradingCheck = gradingCheck,

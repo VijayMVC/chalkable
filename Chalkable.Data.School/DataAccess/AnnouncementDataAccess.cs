@@ -230,6 +230,19 @@ namespace Chalkable.Data.School.DataAccess
                 return reader.ReadOrNull<Announcement>();
             }
         }
+
+        public Announcement GetLastDraft(Guid personId)
+        {
+            var conds = new Dictionary<string, object>
+                {
+                    {"PersonRef", personId},
+                    {STATE_PARAM, AnnouncementState.Draft}
+                };
+            var sql = @"select top 1 * from Announcement 
+                      where PersonRef = @PersonRef and State = @state
+                      order by Created desc";
+           return  ReadOneOrNull<Announcement>(new DbQuery {Sql = sql, Parameters = conds});
+        }
     }
 
     public class AnnouncementsQuery

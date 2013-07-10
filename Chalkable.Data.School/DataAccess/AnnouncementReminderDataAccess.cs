@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
@@ -17,7 +18,7 @@ namespace Chalkable.Data.School.DataAccess
             SimpleDelete(announcementReminder);
         }
         
-         public void DeleteByAnnouncementId(Guid announcementId)
+        public void DeleteByAnnouncementId(Guid announcementId)
         {
             var conds = new Dictionary<string, object> {{"announcementRef", announcementId}};
             SimpleDelete<AnnouncementReminder>(conds);
@@ -27,7 +28,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             var conds = new Dictionary<string, object> {{"id", id}};
             var res = GetReminders(conds, personId);
-            return res[0];
+            return res.First();
         }
 
         private IList<AnnouncementReminder> GetReminders(Dictionary<string, object> conditions, Guid personId)
@@ -43,7 +44,7 @@ namespace Chalkable.Data.School.DataAccess
             b.Append(sql);
             b = Orm.BuildSqlWhere(b, annRType, conditions);
             b.Append(@" and ((Announcement.PersonRef = @personId and AnnouncementReminder.PersonRef is null)
-                             or (AnnouncementReminder.PersonRef is not null and AnnouncementReminder.PersonRef = @personId))");
+                             or (AnnouncementReminder.PersonRef = @personId))");
             conditions.Add("@personId", personId);
             using (var reader = ExecuteReaderParametrized(b.ToString(), conditions))
             {

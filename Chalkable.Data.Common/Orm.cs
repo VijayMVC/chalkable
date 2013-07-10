@@ -135,7 +135,7 @@ namespace Chalkable.Data.Common
              foreach (var field in fields)
              {
                  var value = t.GetProperty(field).GetValue(obj);
-                 if(value != null)
+                 //if(value != null)
                      updateParams.Add(field, value);
              }
              var conds = new Dictionary<string, object> { { "id", t.GetProperty("Id").GetValue(obj) } };

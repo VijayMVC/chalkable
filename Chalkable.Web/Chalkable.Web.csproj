@@ -157,7 +157,7 @@
     <Compile Include="Models\Binders\DateTimeBinder.cs" />
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
     <Compile Include="Models\PeriodViewData.cs" />
-    <Compile Include="Models\GradingStyleVeiwData.cs" />
+    <Compile Include="Models\GradingStyleViewData.cs" />
     <Compile Include="Models\IdNameViewData.cs" />
     <Compile Include="Models\MarkingPeriodViewData.cs" />
     <Compile Include="Models\PersonViewDatas\ParentViewData.cs" />

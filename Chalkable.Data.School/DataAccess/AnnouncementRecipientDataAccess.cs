@@ -16,5 +16,12 @@ namespace Chalkable.Data.School.DataAccess
             var conds = new Dictionary<string, object> { { AnnouncementRecipient.ANNOUNCEMENT_REF_FIELD, announcementId } };
             return SelectMany<AnnouncementRecipient>(conds);
         }
+
+        public void DeleteByAnnouncementId(Guid announcementId)
+        {
+            var conds = new Dictionary<string, object> {{AnnouncementRecipient.ANNOUNCEMENT_REF_FIELD, announcementId}};
+            SimpleDelete<AnnouncementRecipient>(conds);
+        }
+
     }
 }

@@ -44,6 +44,7 @@
     <Compile Include="DataAccess\AnnouncementDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementQnADataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementRecipientDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementRecipientDataDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementReminderDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementTypeDataAccess.cs" />
     <Compile Include="DataAccess\AttendanceReasonDataAccess.cs" />

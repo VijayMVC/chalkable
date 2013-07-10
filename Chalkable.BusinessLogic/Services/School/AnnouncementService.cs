@@ -20,8 +20,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteAnnouncements(Guid schoolpersonid, AnnouncementState state = AnnouncementState.Draft);
 
         Announcement EditAnnouncement(Announcement announcement, Guid? markingPeriodId = null, Guid? classId = null, IList<RecipientInfo> recipients = null);
-        void SubmitAnnouncement(Guid announcementId, Guid recipientId, Guid markingPeriodId, bool isFirst);
-        void SubmitForAdmin(Guid announcementId, bool isFirst);
+        void SubmitAnnouncement(Guid announcementId, Guid recipientId, Guid markingPeriodId);
+        void SubmitForAdmin(Guid announcementId);
 
         Announcement GetAnnouncementById(Guid id);
 
@@ -29,6 +29,7 @@ namespace Chalkable.BusinessLogic.Services.School
         PaginatedList<AnnouncementComplex> GetAnnouncements(bool starredOnly, int start, int count, Guid? classId, Guid? markingPeriodId = null, bool ownerOnly = false);
         List<AnnouncementComplex> GetAnnouncementsFeedPage(bool starredOnly, int start, int count, ref int sourceCount, Guid? classId, Guid? markingPeriodId = null, bool ownedOnly = false);
 
+        Announcement GetLastDraft();
 
         void UpdateAnnouncementGradingStyle(Guid announcementId, GradingStyleEnum gradingStyle);
         Announcement DropUnDropAnnouncement(Guid announcementId, bool drop);
@@ -38,9 +39,13 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<AnnouncementRecipient> GetAnnouncementRecipients(Guid announcementId);
         int GetNewAnnouncementItemOrder(AnnouncementDetails announcement);
 
+        Announcement Star(Guid id, bool starred);
+
         IList<AnnouncementType> GetAnnouncementTypes();
         AnnouncementType GetAnnouncementTypeById(int id);
         AnnouncementType GetAnnouncementTypeBySystemType(SystemAnnouncementType type);
+
+
     }
 
     public class AnnouncementService : SchoolServiceBase, IAnnouncementService
@@ -70,6 +75,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new AnnouncementDataAccess(uow);
                 query.RoleId = Context.Role.Id;
                 query.PersonId = Context.UserId;
+                query.Now = Context.NowSchoolTime.Date;
                 return  getAnnouncementByRole[Context.Role.Name].Invoke(da, query);
             }
         }
@@ -145,7 +151,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new AnnouncementDataAccess(uow);
                 var announcement = da.GetById(announcementId);
-                if(!AnnouncementSecurity.CanModifyAnnouncement(announcement,Context))
+                if (!AnnouncementSecurity.CanDeleteAnnouncement(announcement, Context))
                     throw new ChalkableSecurityException();
                 da.Delete(announcementId, null, null, null, null);
                 uow.Commit();
@@ -164,7 +170,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void DeleteAnnouncements(Guid schoolpersonid, AnnouncementState state = AnnouncementState.Draft)
         {
-            if(Context.UserId != schoolpersonid)
+            if(Context.UserId != schoolpersonid && !BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
@@ -245,14 +251,14 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new AnnouncementDataAccess(uow);
                 var res = da.GetById(announcement.Id);
-                if (!AnnouncementSecurity.CanModifyAnnouncement(announcement, Context) || !AnnouncementSecurity.CanModifyAnnouncement(res, Context))
+                if (!AnnouncementSecurity.CanModifyAnnouncement(res, Context))
                     throw new ChalkableSecurityException();
 
-                var created = res.Created;
-                var gradingStyle = res.GradingStyle;
-                res = announcement; 
-                res.GradingStyle = gradingStyle;
-                res.Created = created;
+                res.Content = announcement.Content;
+                res.Subject = announcement.Subject;
+                res.AnnouncementTypeRef = announcement.AnnouncementTypeRef;
+                res.Expires = announcement.Expires;
+
                 res = SetMarkingPeriodToAnnouncement(res, classId, markingPeriodId);
                 res = PreperingReminderData(uow, res);
                 res = ReCreateRecipients(uow, res, recipients);
@@ -264,15 +270,15 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         private Announcement Submit(AnnouncementDataAccess dataAccess, UnitOfWork unitOfWork, Guid announcementId, 
-            Guid? classId, Guid? markingPeriodId, bool isFirst)
+            Guid? classId, Guid? markingPeriodId)
         {
 
             var res = dataAccess.GetById(announcementId);
             if (!AnnouncementSecurity.CanModifyAnnouncement(res, Context))
                 throw new ChalkableSecurityException();
-            var dateNow = Context.NowSchoolTime;
+            var dateNow = Context.NowSchoolTime.Date;
             SetMarkingPeriodToAnnouncement(res, classId, markingPeriodId);
-            if (isFirst)
+            if (res.State == AnnouncementState.Draft)
             {
                 res.State = AnnouncementState.Created;
                 res.Created = dateNow;
@@ -291,23 +297,23 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public void SubmitAnnouncement(Guid announcementId, Guid recipientId, Guid markingPeriodId, bool isFirst)
+        public void SubmitAnnouncement(Guid announcementId, Guid recipientId, Guid markingPeriodId)
         {
             using (var uow = Update())
             {
                 var da = new AnnouncementDataAccess(uow);
                 var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId);
-                var res = Submit(da, uow, announcementId, recipientId, mp.Id, isFirst);
+                var res = Submit(da, uow, announcementId, recipientId, mp.Id);
                 da.ReorderAnnouncements(mp.SchoolYearRef, res.AnnouncementTypeRef, res.PersonRef, recipientId);
                 uow.Commit();
             }
         }
-        public void SubmitForAdmin(Guid announcementId, bool isFirst)
+        public void SubmitForAdmin(Guid announcementId)
         {
             using (var uow = Update())
             {
                 var da = new AnnouncementDataAccess(uow);
-                Submit(da, uow, announcementId, null, null, isFirst);
+                Submit(da, uow, announcementId, null, null);
                 uow.Commit();
             }
         }
@@ -319,13 +325,12 @@ namespace Chalkable.BusinessLogic.Services.School
             var da = new AnnouncementReminderDataAccess(unitOfWork);
             if (expires.Date >= Context.NowSchoolTime.Date)
             {
-                //TODO: thing about this ... to many calls to db 
                 var annReminders = da.GetList(announcement.Id, Context.UserId);
                 foreach (var reminder in annReminders)
                 {
-                    reminder.RemindDate = reminder.Before.HasValue ? expires.AddDays(-reminder.Before.Value) : dateNow;
-                    da.Update(reminder);
+                    reminder.RemindDate = reminder.Before.HasValue ? expires.AddDays(-reminder.Before.Value) : dateNow.Date;
                 }
+                da.Update(annReminders);
             }
             else da.DeleteByAnnouncementId(announcement.Id);
             return announcement;
@@ -346,7 +351,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (recipientInfos != null && BaseSecurity.IsAdminViewer(Context))
             {
                 var da = new AnnouncementRecipientDataAccess(unitOfWork);
-                da.Delete(announcement.Id);
+                da.DeleteByAnnouncementId(announcement.Id);
                 var annRecipients = new List<AnnouncementRecipient>();
                 foreach (var recipientInfo in recipientInfos)
                 {
@@ -423,6 +428,28 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
             }
             return order;
+        }
+
+
+        public Announcement Star(Guid id, bool starred)
+        {
+            var ann = GetAnnouncementById(id);
+            using (var uow = Update())
+            {
+                new AnnouncementRecipientDataDataAccess(uow).Update(id, Context.UserId, starred, null);
+                uow.Commit();
+                return ann;
+            }
+        }
+
+
+        public Announcement GetLastDraft()
+        {
+            using (var uow = Read())
+            {
+                var da = new AnnouncementDataAccess(uow);
+                return da.GetLastDraft(Context.UserId);
+            }
         }
     }
 }

@@ -83,7 +83,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 reminder.Before = before;
                 var annExpires = reminder.Announcement.Expires;
-                var nowLocalTime = Context.NowSchoolTime;
+                var nowLocalTime = Context.NowSchoolTime.Date;
                 reminder.RemindDate = before.HasValue && annExpires >= nowLocalTime ? annExpires.AddDays(-before.Value) : nowLocalTime;
                 da.Update(reminder);
                 uow.Commit();

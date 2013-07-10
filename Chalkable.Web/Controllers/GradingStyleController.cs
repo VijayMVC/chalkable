@@ -22,7 +22,7 @@ namespace Chalkable.Web.Controllers
             var gradingCompeleList = gradingStyleMapper.GetValuesByStyle(GradingStyleEnum.Complete);
             var gradingCheckList = gradingStyleMapper.GetValuesByStyle(GradingStyleEnum.Check);
             
-            return Json(GradingStyleVeiwData.Create(gradingAbcfList, gradingCompeleList, gradingCheckList));
+            return Json(GradingStyleViewData.Create(gradingAbcfList, gradingCompeleList, gradingCheckList));
         }
 
         [AuthorizationFilter("AdminGrade")]
@@ -42,7 +42,7 @@ namespace Chalkable.Web.Controllers
             var gradingStyleMapper = GradingStyleMapper.Create(gradingStyleDictionary);
             SchoolLocator.GradingStyleService.SetMapper(gradingStyleMapper);
             var mapper = SchoolLocator.GradingStyleService.GetMapper();
-            return Json(GradingStyleVeiwData.Create(mapper.GetValuesByStyle(GradingStyleEnum.Abcf), 
+            return Json(GradingStyleViewData.Create(mapper.GetValuesByStyle(GradingStyleEnum.Abcf), 
                                   mapper.GetValuesByStyle(GradingStyleEnum.Complete), mapper.GetValuesByStyle(GradingStyleEnum.Check)));
         }
 

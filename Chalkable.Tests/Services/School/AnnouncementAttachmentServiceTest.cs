@@ -19,7 +19,7 @@ namespace Chalkable.Tests.Services.School
             var annType = SchoolTestContext.FirstTeacherSl.AnnouncementService.GetAnnouncementTypeBySystemType(SystemAnnouncementType.HW);
             var ann = SchoolTestContext.FirstTeacherSl.AnnouncementService.CreateAnnouncement(annType.Id, c.Id);
             var mp1Id = c.MarkingPeriodClass[0].MarkingPeriodRef;
-            SchoolTestContext.FirstTeacherSl.AnnouncementService.SubmitAnnouncement(ann.Id, c.Id, mp1Id, true);
+            SchoolTestContext.FirstTeacherSl.AnnouncementService.SubmitAnnouncement(ann.Id, c.Id, mp1Id);
 
             var attContent = new byte[] {1, 3, 5};
             var uuid1 = Guid.NewGuid().ToString();
@@ -64,7 +64,7 @@ namespace Chalkable.Tests.Services.School
                     RecipientInfo.Create(false, CoreRoles.STUDENT_ROLE.Id, c.GradeLevelRef, null),
                 };
             SchoolTestContext.AdminGradeSl.AnnouncementService.EditAnnouncement(ann2, null, null, adminAnnRecipients);
-            SchoolTestContext.AdminGradeSl.AnnouncementService.SubmitForAdmin(ann2.Id, true);
+            SchoolTestContext.AdminGradeSl.AnnouncementService.SubmitForAdmin(ann2.Id);
             var uuid4 = Guid.NewGuid().ToString();
             AssertForDeny(sl => sl.AnnouncementAttachmentService.AddAttachment(ann2.Id, attContent, "adminAtt", uuid4), SchoolTestContext,
                 SchoolContextRoles.FirstStudent | SchoolContextRoles.FirstTeacher

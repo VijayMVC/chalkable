@@ -15,7 +15,7 @@ namespace Chalkable.Tests.Services.School
 
             var announcement = context.FirstTeacherSl.AnnouncementService.CreateAnnouncement(type.Id);
             var mpId = mathClass.MarkingPeriodClass[0].MarkingPeriodRef;
-            context.FirstTeacherSl.AnnouncementService.SubmitAnnouncement(announcement.Id, mathClass.Id, mpId, true);
+            context.FirstTeacherSl.AnnouncementService.SubmitAnnouncement(announcement.Id, mathClass.Id, mpId);
 
             announcement = context.FirstTeacherSl.AnnouncementService.GetAnnouncementDetails(announcement.Id);
             var stAnns = announcement.StudentAnnouncements;

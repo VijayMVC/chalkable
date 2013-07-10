@@ -21,7 +21,7 @@ namespace Chalkable.Tests.Services.School
             var annType = SchoolTestContext.FirstStudentSl.AnnouncementService.GetAnnouncementTypeBySystemType(SystemAnnouncementType.HW);
             var announcement = SchoolTestContext.FirstTeacherSl.AnnouncementService.CreateAnnouncement(annType.Id, c.Id);
             var currentMpId = c.MarkingPeriodClass[0].MarkingPeriodRef;  
-            SchoolTestContext.FirstTeacherSl.AnnouncementService.SubmitAnnouncement(announcement.Id, c.Id, currentMpId, true);
+            SchoolTestContext.FirstTeacherSl.AnnouncementService.SubmitAnnouncement(announcement.Id, c.Id, currentMpId);
             announcement = SchoolTestContext.FirstTeacherSl.AnnouncementService.GetAnnouncementDetails(announcement.Id);
 
             AssertForDeny(sl => sl.AnnouncementQnAService.AskQuestion(announcement.Id, "question"), SchoolTestContext
