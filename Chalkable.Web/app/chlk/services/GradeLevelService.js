@@ -24,6 +24,6 @@ NAMESPACE('chlk.services', function () {
                      {name: '11st', id: 11},
                      {name: '12st', id: 12}
                  ], ArrayOf(chlk.models.common.NameId));
-            },
+            }
         ])
 });

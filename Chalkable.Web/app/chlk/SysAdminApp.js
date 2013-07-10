@@ -3,6 +3,7 @@ REQUIRE('ria.dom.Dom');
 REQUIRE('ria.dom.ready');
 
 REQUIRE('chlk.controllers.SchoolsController');
+REQUIRE('chlk.controllers.DistrictController');
 REQUIRE('chlk.controllers.AppsController');
 REQUIRE('chlk.controllers.AppCategoriesController');
 REQUIRE('chlk.controllers.SettingsController');
@@ -33,7 +34,7 @@ NAMESPACE('chlk', function (){
             OVERRIDE, ria.mvc.Dispatcher, function initDispatcher_() {
                 var dispatcher = BASE();
 
-                dispatcher.setDefaultControllerId('schools');
+                dispatcher.setDefaultControllerId('district');
                 dispatcher.setDefaultControllerAction('list');
                 return dispatcher;
             },

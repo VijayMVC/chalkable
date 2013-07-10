@@ -12,16 +12,16 @@ NAMESPACE('chlk.templates', function () {
             [ria.templates.ModelBind],
             ArrayOf(Object), 'items',
             [ria.templates.ModelBind],
-            Number, 'pageindex',
+            Number, 'pageIndex',
             [ria.templates.ModelBind],
-            Number, 'pagesize',
+            Number, 'pageSize',
             [ria.templates.ModelBind],
-            Number, 'totalcount',
+            Number, 'totalCount',
             [ria.templates.ModelBind],
-            Number, 'totalpages',
+            Number, 'totalPages',
             [ria.templates.ModelBind],
-            Boolean, 'hasnextpage',
+            Boolean, 'hasNextPage',
             [ria.templates.ModelBind],
-            Boolean, 'haspreviouspage'
+            Boolean, 'hasPreviousPage'
         ])
 });

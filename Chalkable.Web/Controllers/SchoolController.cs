@@ -12,8 +12,9 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class SchoolController : ChalkableController
     {
+        //TODO: add
         [AuthorizationFilter("SysAdmin")]
-        public ActionResult List(int? start, int? count, bool? demoOnly)
+        public ActionResult List(int? districtId, int? start, int? count, bool? demoOnly)
         {
             count = count ?? 10;
             start = start ?? 0;

@@ -12,17 +12,15 @@ NAMESPACE('chlk.models.common', function () {
             READONLY, Function, 'itemClass',
 
             ArrayOf(Object), 'items',
-
-            Number, 'pageindex',
-            Number, 'pagesize',
-            Number, 'totalcount',
-            Number, 'totalpages',
-            Boolean, 'hasnextpage',
-            Boolean, 'haspreviouspage',
+            Number, 'pageIndex',
+            Number, 'pageSize',
+            Number, 'totalCount',
+            Number, 'totalPages',
+            Boolean, 'hasNextPage',
+            Boolean, 'hasPreviousPage',
 
             VOID, function setItems(values) {
                 VALIDATE_ARG('value', [ArrayOf(this.itemClass)], values);
-
                 this.items = values;
             }
         ])

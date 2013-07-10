@@ -13,6 +13,10 @@ NAMESPACE('chlk.controllers', function (){
         });
     }
 
+    var PRESSED_CLS = 'pressed';
+    var ACTION_SUFFIX = 'Action';
+    var SIDEBAR_CONTROLS_ID = '#sidebar-controls';
+
     /** @class chlk.controllers.BaseController */
    ABSTRACT, CLASS(
        'BaseController', EXTENDS(ria.mvc.Controller), [
@@ -46,13 +50,13 @@ NAMESPACE('chlk.controllers', function (){
            [[ria.mvc.State]],
            OVERRIDE, VOID, function callAction_(state) {
               BASE(state);
-               new ria.dom.Dom('#sidebar-controls .pressed').removeClass('pressed');
-               var action = toCamelCase(state.getAction()) + 'Action';
+               new ria.dom.Dom(SIDEBAR_CONTROLS_ID + ' .' + PRESSED_CLS).removeClass(PRESSED_CLS);
+               var action = toCamelCase(state.getAction()) + ACTION_SUFFIX;
                var ref = ria.reflection.ReflectionFactory(this.getClass());
-               var method = ref.getMethodReflector(action);
-               if (method.isAnnotatedWith(chlk.controllers.SidebarButton)){
-                   var buttonCls = method.findAnnotation(chlk.controllers.SidebarButton)[0].clazz;
-                   new ria.dom.Dom('#sidebar-controls .' + buttonCls).addClass('pressed');
+               var methodReflector = ref.getMethodReflector(action);
+               if (methodReflector.isAnnotatedWith(chlk.controllers.SidebarButton)){
+                   var buttonCls = methodReflector.findAnnotation(chlk.controllers.SidebarButton)[0].clazz;
+                   new ria.dom.Dom(SIDEBAR_CONTROLS_ID + ' .' + buttonCls).addClass(PRESSED_CLS);
                }
            }
 

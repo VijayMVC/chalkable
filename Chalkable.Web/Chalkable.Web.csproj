@@ -157,7 +157,7 @@
     <Compile Include="Models\Binders\DateTimeBinder.cs" />
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
     <Compile Include="Models\PeriodViewData.cs" />
-    <Compile Include="Models\GradingStyleViewData.cs" />
+    <Compile Include="Models\GradingStyleVeiwData.cs" />
     <Compile Include="Models\IdNameViewData.cs" />
     <Compile Include="Models\MarkingPeriodViewData.cs" />
     <Compile Include="Models\PersonViewDatas\ParentViewData.cs" />
@@ -261,13 +261,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>58949</DevelopmentServerPort>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>11603</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/chalkable2</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost/chalkable2</IISAppRootUrl>
+          <IISUrl>https://localhost/chalkable</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

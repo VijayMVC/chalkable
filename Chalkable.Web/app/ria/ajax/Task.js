@@ -63,7 +63,7 @@ NAMESPACE('ria.ajax', function () {
             [[Object]],
             SELF, function params(obj) {
                 var p = this._params;
-                for(var key in obj) if (obj.hasOwnProperty(key)) {
+                for(var key in obj) if (obj.hasOwnProperty(key) && (obj[key] != undefined) && (obj[key] != null)) {
                     p[key] = obj[key];
                 }
                 return this;
@@ -84,13 +84,13 @@ NAMESPACE('ria.ajax', function () {
             FINAL, String, function getParamsAsQueryString_() {
                 var p = this._params, r = [];
                 for(var key in p) if (p.hasOwnProperty(key)) {
-                    r.push([key, p[key].map(encodeURIComponent).join('=')]);
+                    r.push([key, p[key]].map(encodeURIComponent).join('='));
                 }
                 return r.join('&');
             },
 
             VOID, function updateProgress_(oEvent) {
-                this._completer.progress(event);
+                this._completer.progress(oEvent);
             },
 
             VOID, function transferComplete_(evt) {

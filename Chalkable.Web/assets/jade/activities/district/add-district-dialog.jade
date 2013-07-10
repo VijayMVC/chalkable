@@ -1,0 +1,24 @@
+.dialog.add-district.gray
+    .x-window-header
+        span Add District
+    .x-window-body
+        .general-info
+            +ActionForm('district', 'addDistrict')
+                input(type="hidden",name="name", value=self.id)
+                .x-form-field
+                    label Name:
+                    input(type="text",name="name", value=self.name)
+                .x-form-field
+                    label DB Name:
+                    input(type="text",name="dbName", value=self.dbName)
+                .x-form-field
+                    label SIS URL:
+                    input(type="text",name="sisUrl", value=self.sisUrl)
+                .x-form-field
+                    label SIS Username:
+                    input(type="text",name="sisUserName", value=self.sisUserName)
+                .x-form-field
+                    label SIS System Type:
+                    input(type="text",name="sisSystemType", value=self.sisSystemType)
+                +Button(type="submit").special-button.blue-button.submit-btn Submit
+                +Button.special-button.red-button Cancel

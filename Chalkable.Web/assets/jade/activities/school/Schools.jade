@@ -1,7 +1,4 @@
 .schools
-    .action-bar.not-transparent
-        .container.panel-bg
-            +ActionLink('schools', 'addSchool').chlk-add.opacity-button Add School
     .grid.not-transparent
         .container
             .head.panel-bg
@@ -21,7 +18,7 @@
                         .td= item.getSchoolType()
                         .td= item.getSchoolUrl()
                         .td.action-links
-                            +ActionLink('schools', 'details', item.getId()).profile
+                            +ActionLink('schools', 'import', item.getId()).view
                             +ActionLink('schools', 'delete', item.getId()).remove
         +Paginator('schools', 'list', self)
 

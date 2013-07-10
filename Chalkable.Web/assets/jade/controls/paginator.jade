@@ -9,7 +9,7 @@ mixin Paginator(controller, action, data)
                     label(for='current_page') Page
                     input(name='current_page', value=pd.nextPageIndex).page-value
                     span
-                        | of #{data.totalpages}
+                        | of #{data.totalPages}
                     input(type="submit")
                     input(type="hidden",name="controller",value=controller).controller-name
                     input(type="hidden",name="action",value=action).action-name

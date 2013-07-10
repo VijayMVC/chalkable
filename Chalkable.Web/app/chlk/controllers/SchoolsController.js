@@ -37,17 +37,17 @@ NAMESPACE('chlk.controllers', function (){
 
 
         [chlk.controllers.SidebarButton('schools')],
-        [[Number]],
-        function listAction(pageIndex_) {
+        [[Number, Number]],
+        function listAction(districtId, pageIndex_) {
             var result = this.schoolService
-                .getSchools(pageIndex_ | 0)
+                .getSchools(districtId, pageIndex_ | 0)
                 .attach(this.validateResponse_());
             /* Put activity in stack and render when result is ready */
             return this.PushView(chlk.activities.school.SchoolsListPage, result);
         },
 
         [[chlk.models.school.School]],
-        VOID, function addSchoolAction(model_) {
+        VOID, function importAction(model_) {
             var result = this.schoolService
                 .getTimezones()
                 .then(function(data){

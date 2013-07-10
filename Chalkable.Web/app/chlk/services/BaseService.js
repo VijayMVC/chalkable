@@ -32,10 +32,11 @@ NAMESPACE('chlk.services', function () {
                 return this.getServiceRoot() + uri;
             },
 
-            [[String, Object]],
-            ria.async.Future, function get(uri, clazz) {
+            [[String, Object, Object]],
+            ria.async.Future, function get(uri, clazz, gParams) {
 
                 return new ria.ajax.JsonGetTask(this.resolveUri(uri))
+                    .params(gParams)
                     .run()
                     .then(function (data) {
                         if(!data.success)
@@ -45,19 +46,20 @@ NAMESPACE('chlk.services', function () {
                     });
             },
 
-            [[String, Object, Number]],
-            ria.async.Future, function getPaginatedList(uri, clazz, pageIndex) {
+            [[String, Object, Object]],
+            ria.async.Future, function getPaginatedList(uri, clazz, gParams) {
                 return new ria.ajax.JsonGetTask(this.resolveUri(uri))
+                    .params(gParams)
                     .run()
                     .then(function (data) {
                         var model = new chlk.models.common.PaginatedList(clazz);
                         model.setItems(Serializer.deserialize(data.data, ArrayOf(clazz)));
-                        model.setPageindex(Number(data.pageindex));
-                        model.setPagesize(Number(data.pagesize));
-                        model.setTotalcount(Number(data.totalcount));
-                        model.setTotalpages(Number(data.totalpages));
-                        model.setHasnextpage(Boolean(data.hasnextpage));
-                        model.setHaspreviouspage(Boolean(data.haspreviouspage));
+                        model.setPageIndex(Number(data.pageindex));
+                        model.setPageSize(Number(data.pagesize));
+                        model.setTotalCount(Number(data.totalcount));
+                        model.setTotalPages(Number(data.totalpages));
+                        model.setHasNextPage(Boolean(data.hasnextpage));
+                        model.setHasPreviousPage(Boolean(data.haspreviousPage));
 
                         return model;
                     });

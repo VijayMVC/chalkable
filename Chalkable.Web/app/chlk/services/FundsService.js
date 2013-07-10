@@ -10,7 +10,9 @@ NAMESPACE('chlk.services', function () {
         'FundsService', EXTENDS(chlk.services.BaseService), [
             [[Number]],
             ria.async.Future, function getFunds(pageIndex_) {
-                return this.getPaginatedList('/app/data/funds.json', chlk.models.funds.Fund, pageIndex_);
+                return this.getPaginatedList('/app/data/funds.json', chlk.models.funds.Fund, {
+                    start: pageIndex_
+                });
             }
         ])
 });

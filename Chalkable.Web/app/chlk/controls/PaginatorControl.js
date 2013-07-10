@@ -17,11 +17,13 @@ NAMESPACE('chlk.controls', function () {
             Boolean, function onPrevPageClick(node, event) {
                 try{
                     var state = this.context.getState();
-                    state.setController(node.find('.controller-name').getAttr('value'));
-                    state.setAction(node.find('.action-name').getAttr('value'));
-                    state.setParams([node.find('.page-value').getAttr('value')]);
+                    var controller = node.find('.controller-name').getAttr('value');
+                    var action = node.find('.action-name').getAttr('value');
+                    var params = [node.find('.page-value').getAttr('value')];
+                    state.setController(controller);
+                    state.setAction(action);
+                    state.setParams(params);
                     state.setPublic(false);
-
                     this.context.stateUpdated();
                 }catch(e){
                     console.info(e.getMessage());
@@ -31,16 +33,16 @@ NAMESPACE('chlk.controls', function () {
             },
 
             Object, function preparePaginationData(data) {
-                var start = data.pageindex*data.pagesize + 1;
+                var start = data.pageIndex * data.pageSize + 1;
                 return {
-                    hasPreviousPage: data.haspreviouspage,
-                    hasNextPage: data.hasnextpage,
-                    lastPageIndex: data.totalpages - 1,
-                    prevPageIndex: data.pageindex - 1,
-                    nextPageIndex: data.pageindex + 1,
-                    totalCount: data.totalcount,
+                    hasPreviousPage: data.hasPreviousPage,
+                    hasNextPage: data.hasNextPage,
+                    lastPageIndex: data.totalPages - 1,
+                    prevPageIndex: data.pageIndex - 1,
+                    nextPageIndex: data.pageIndex + 1,
+                    totalCount: data.totalCount,
                     start: start,
-                    end: start + data.pagesize - 1,
+                    end: start + data.pageSize - 1,
                     pageSize: 10
                 }
             }
