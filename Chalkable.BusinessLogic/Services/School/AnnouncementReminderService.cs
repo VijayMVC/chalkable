@@ -13,7 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IAnnouncementReminderService
     {
         IList<AnnouncementReminder> GetReminders(Guid announcementId);
-        Announcement AddReminder(Guid announcementId, int? before);
+        AnnouncementReminder AddReminder(Guid announcementId, int? before);
         Announcement DeleteReminder(Guid reminderId);
         AnnouncementReminder EditReminder(Guid reminderId, int? before);// Append Method
         void ProcessReminders(int? count);
@@ -38,22 +38,29 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public Announcement AddReminder(Guid announcementId, int? before)
+        public AnnouncementReminder AddReminder(Guid announcementId, int? before)
         {
             using (var uow = Update())
             {
                 var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId); // security here 
                 var da = new AnnouncementReminderDataAccess(uow);
+                var nowDate = Context.NowSchoolTime.Date;
+                var remiderDateTime = before.HasValue && ann.Expires >= nowDate
+                                     ? ann.Expires.AddDays(-before.Value) : nowDate;
+
                 var reminder = new AnnouncementReminder
                     {
                         Id = Guid.NewGuid(),
                         AnnouncementRef = ann.Id,
-                        PersonRef = Context.UserId,
                         Before = before,
+                        RemindDate = remiderDateTime,
+                        Announcement = ann
                     };
+                if (ann.PersonRef != Context.UserId)
+                    reminder.PersonRef = Context.UserId;
                 da.Insert(reminder);
                 uow.Commit();
-                return ann;
+                return reminder;
             }
         }
 

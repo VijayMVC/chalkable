@@ -60,6 +60,7 @@
     <Compile Include="Services\School\AddressServiceTest.cs" />
     <Compile Include="Services\School\AnnouncementAttachmentServiceTest.cs" />
     <Compile Include="Services\School\AnnouncementQnServiceTest.cs" />
+    <Compile Include="Services\School\AnnouncementReminderServiceTest.cs" />
     <Compile Include="Services\School\AnnouncementServiceTest.cs" />
     <Compile Include="Services\School\AttendanceReasonServiceTest.cs" />
     <Compile Include="Services\School\AttendanceServiceTest.cs" />

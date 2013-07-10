@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Services;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using NUnit.Framework;
@@ -228,6 +230,19 @@ namespace Chalkable.Tests.Services.School
         public void StarringAnnouncementTest()
         {
             //TODO: implement
+        }
+
+        public static AnnouncementDetails CreateDefaulTeacherAnnouncement(IServiceLocatorSchool locator, Guid classId
+            , Guid mpId, DateTime? expiredDate = null, SystemAnnouncementType systemType = SystemAnnouncementType.Standard)
+        {
+            var annType = locator.AnnouncementService.GetAnnouncementTypeBySystemType(systemType);
+            var res = locator.AnnouncementService.CreateAnnouncement(annType.Id, classId);
+            res.Expires = expiredDate ?? locator.Context.NowSchoolTime.Date.AddDays(3);
+            res.Subject = "subject1";
+            res.Content = "content1";
+            locator.AnnouncementService.EditAnnouncement(res);
+            locator.AnnouncementService.SubmitAnnouncement(res.Id, classId, mpId);
+            return locator.AnnouncementService.GetAnnouncementDetails(res.Id);
         }
     }
 }
