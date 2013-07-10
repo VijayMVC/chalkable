@@ -158,6 +158,7 @@
     <Compile Include="Models\BackgroundTaskViewData.cs" />
     <Compile Include="Models\Binders\DateTimeBinder.cs" />
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
+    <Compile Include="Models\ClassInfoViewData.cs" />
     <Compile Include="Models\ClassViewData.cs" />
     <Compile Include="Models\CourseViewData.cs" />
     <Compile Include="Models\GradingStyleViewData.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="Models\PreferenceVeiwData.cs" />
     <Compile Include="Models\Binders\StringConstructedObjectBinder.cs" />
     <Compile Include="Models\RoleViewData.cs" />
+    <Compile Include="Models\RoomViewData.cs" />
     <Compile Include="Models\ScheduleSectionViewData.cs" />
     <Compile Include="Models\SchoolInfoViewData.cs" />
     <Compile Include="Models\SchoolPeapleViewData.cs" />

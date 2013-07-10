@@ -17,20 +17,22 @@ namespace Chalkable.Web.Models
         public ShortPersonViewData Teacher { get; set; }
         public IList<Guid> MarkingPeriodsId { get; set; }
         
+
+        protected ClassViewData(ClassComplex classComplex)
+        {
+            Id = classComplex.Id;
+            Name = classComplex.Name;
+            Description = classComplex.Description;
+            Course = CourseViewData.Create(classComplex.Course);
+            GradeLevel = IdNameViewData.Create(classComplex.GradeLevelRef, classComplex.GradeLevel.Name);
+            Teacher = ShortPersonViewData.Create(classComplex.Teacher);
+            MarkingPeriodsId = classComplex.MarkingPeriodClass.Select(x => x.MarkingPeriodRef).ToList();
+            Teacher.DisplayName = classComplex.Teacher.ShortSalutationName;
+        }
+
         public static ClassViewData Create(ClassComplex classComplex)
         {
-            var res = new ClassViewData
-                {
-                    Id = classComplex.Id,
-                    Name = classComplex.Name,
-                    Description = classComplex.Description,
-                    Course = CourseViewData.Create(classComplex.Course),
-                    GradeLevel = IdNameViewData.Create(classComplex.GradeLevelRef, classComplex.GradeLevel.Name),
-                    Teacher = ShortPersonViewData.Create(classComplex.Teacher),
-                    MarkingPeriodsId = classComplex.MarkingPeriodClass.Select(x=>x.MarkingPeriodRef).ToList()
-                };
-            res.Teacher.DisplayName = classComplex.Teacher.ShortSalutationName;
-            return res;
+           return new ClassViewData(classComplex);
         }
         public static IList<ClassViewData> Create(IList<ClassComplex> classComplexs)
         {
