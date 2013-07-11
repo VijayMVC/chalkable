@@ -41,13 +41,7 @@ NAMESPACE('chlk', function (){
             OVERRIDE, ria.async.Future, function onStart_() {
 
                 return BASE()
-                    .then(function (data) {
-                        new ria.dom.Dom()
-                            .fromHTML(ASSET('~/assets/jade/SysAdmin.jade')())
-                            .appendTo('#main');
-
-                        return data;
-                    }).then(function(data){
+                    .then(function(data){
                         new ria.dom.Dom()
                             .fromHTML(ASSET('~/assets/jade/sidebars/SysAdminSidebar.jade')())
                             .appendTo("#sidebar");
