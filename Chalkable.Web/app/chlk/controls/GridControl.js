@@ -16,8 +16,8 @@ NAMESPACE('chlk.controls', function () {
                     configs_.selectedIndex !== undefined && this.setCurrentIndex(configs_.selectedIndex);
                 }
                 this.setCount(data.length);
-                this.context.getDefaultView()
-                    .onActivityRefreshed(function (activity, model) {
+                this.context.getDefaultView().getCurrent()
+                    .addRefreshCallback(function (activity, model) {
                         this.getCurrentIndex() !== undefined && this.focusGrid();
                         var grid = new ria.dom.Dom('.chlk-grid');
                         this.setGrid(grid);
@@ -50,7 +50,7 @@ NAMESPACE('chlk.controls', function () {
                         currentIndex++;
                     }
                     parent
-                        .find('.row:eq(' + currentIndex + ')')
+                        .find('.row[index="' + currentIndex + '"]')
                         .addClass('selected');
                     this.setCurrentIndex(currentIndex);
                     this.scrollToElement();
@@ -70,7 +70,7 @@ NAMESPACE('chlk.controls', function () {
 
             [[ria.dom.Dom]],
             VOID, function focusGrid(node_) {
-                node_ = node_ || new ria.dom.Dom('.chlk-grid');
+                node_ = node_ && node_.valueOf()[0] ? node_ : new ria.dom.Dom('.chlk-grid');
                 node_.find('.grid-focus').valueOf()[0].focus();
             },
 

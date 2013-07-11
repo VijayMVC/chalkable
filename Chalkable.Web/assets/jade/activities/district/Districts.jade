@@ -22,7 +22,7 @@
                         .td= item.getSisPassword()
                         .td= item.getSisSystemType()
                         .td.action-links
-                            +ActionLink('district', 'details', item.getId()).profile
-                            +ActionLink('district', 'delete', item.getId()).remove
+                            +ActionLink('schools', 'list', item.getId(), 0).profile
+                            +ActionLink('district', 'delete', item.getId(), 0).remove
         +Paginator('district', 'list', self)
 

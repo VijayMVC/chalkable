@@ -8,7 +8,7 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'AccountService', EXTENDS(chlk.services.BaseService), [
             ria.async.Future, function getRoles() {
-                return this.get('/app/data/roles.json', ArrayOf(chlk.models.common.NameId), {});
+                return this.get('app/data/roles.json', ArrayOf(chlk.models.common.NameId), {});
             }
         ])
 });

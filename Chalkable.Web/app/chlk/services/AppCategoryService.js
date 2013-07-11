@@ -11,7 +11,7 @@ NAMESPACE('chlk.services', function () {
         'AppCategoryService', EXTENDS(chlk.services.BaseService), [
             [[Number]],
             ria.async.Future, function getCategories(pageIndex_) {
-                return this.getPaginatedList('/app/data/appcategories.json', chlk.models.apps.AppCategory, {
+                return this.getPaginatedList('app/data/appcategories.json', chlk.models.apps.AppCategory, {
                     start: pageIndex_
                 });
             }

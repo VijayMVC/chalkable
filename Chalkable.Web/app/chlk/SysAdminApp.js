@@ -1,5 +1,5 @@
 REQUIRE('ria.mvc.Application');
-REQUIRE('ria.dom.Dom');
+REQUIRE('ria.dom.jQueryDom');
 REQUIRE('ria.dom.ready');
 
 REQUIRE('chlk.controllers.SchoolsController');

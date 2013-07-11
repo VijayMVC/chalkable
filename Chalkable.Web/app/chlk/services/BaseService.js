@@ -24,7 +24,7 @@ NAMESPACE('chlk.services', function () {
 
 
             String, function getServiceRoot(){
-                return ria.__CFG["#require"].serviceRoot;
+                return ria.__CFG["#require"].siteRoot + '/';
             },
 
             [[String]],
@@ -59,7 +59,7 @@ NAMESPACE('chlk.services', function () {
                         model.setTotalCount(Number(data.totalcount));
                         model.setTotalPages(Number(data.totalpages));
                         model.setHasNextPage(Boolean(data.hasnextpage));
-                        model.setHasPreviousPage(Boolean(data.haspreviousPage));
+                        model.setHasPreviousPage(Boolean(data.haspreviouspage));
 
                         return model;
                     });

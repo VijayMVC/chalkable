@@ -13,6 +13,7 @@
     <!-- Whole Site CSS -->
     <link href="@Url.StaticContent("/Content/screen.css")" rel="stylesheet" media="screen, projection" type="text/css" />
     <link href="@Url.StaticContent("/app/jquery/choosen/chosen.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.StaticContent("/app/jquery/datepicker/jquery-ui-1.10.3.custom.css")" rel="stylesheet" type="text/css" />
     <!-- Page specific CSS -->
     @RenderSection("Styles", false)
     @ChlkHelpers.GoogleAnalytics()
@@ -20,6 +21,7 @@
     <script type="text/javascript" src="@Url.StaticContent("/Scripts/chlk-messages.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-2.0.2.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/choosen/chosen.jquery.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/datepicker/jquery-ui-1.10.3.custom.min.js")"></script>
     @if (IsSectionDefined("Scripts"))
     {
         @RenderSection("Scripts", false)
@@ -37,7 +39,6 @@
                 "#require": {
                     "plugins": ["~/assets/jade.js"],
                     "appCodeDir": "~/app/",
-                    "serviceRoot": "@Url.Content("~")",
                     "appRoot": "@Url.Content("~")",
                     "libs": {
                     }

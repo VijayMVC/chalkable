@@ -23,6 +23,7 @@ NAMESPACE('chlk.templates.school', function () {
             [ria.templates.ModelBind],
             String, 'timezoneId',
             [ria.templates.ModelBind],
-            Boolean, 'sendEmailNotifications'
+            Boolean, 'sendEmailNotifications',
+            Number, 'districtId'
         ])
 });

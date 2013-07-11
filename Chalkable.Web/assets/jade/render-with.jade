@@ -9,7 +9,7 @@ mixin RenderWith(data, tplClass)
             -tpl.assign(item)
             -tpl.renderBuffer()
     else
-        -tpl.assign(item)
+        -tpl.assign(data)
         -tpl.renderBuffer()
 
     -buf.push(tpl.flushBuffer())

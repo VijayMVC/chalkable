@@ -19,6 +19,7 @@ NAMESPACE('chlk.models.school', function () {
             Boolean,'sendEmailNotifications',
             [ria.serialize.SerializeProperty('timezoneid')],
             String, 'timezoneId',
-            ArrayOf(chlk.models.school.Timezone), 'timezones'
+            ArrayOf(chlk.models.school.Timezone), 'timezones',
+            Number, 'districtId'
         ]);
 });

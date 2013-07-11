@@ -29,11 +29,6 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[Number]],
-        function detailsAction(id) {
-            return this.redirect_('schools', 'list', [id, 1]);
-        },
-
-        [[Number]],
         function deleteAction(id) {
         }
     ])

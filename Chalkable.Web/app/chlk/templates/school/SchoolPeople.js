@@ -16,6 +16,8 @@ NAMESPACE('chlk.templates.school', function () {
             [ria.templates.ModelBind],
             ArrayOf(chlk.models.common.NameId), 'gradeLevels',
             [ria.templates.ModelBind],
-            chlk.models.school.SchoolPeopleSummary, 'schoolInfo'
+            chlk.models.school.SchoolPeopleSummary, 'schoolInfo',
+            [ria.templates.ModelBind],
+            Number, 'selectedIndex'
         ])
 });

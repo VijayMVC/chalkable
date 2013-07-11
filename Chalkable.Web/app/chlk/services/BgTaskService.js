@@ -11,13 +11,13 @@ NAMESPACE('chlk.services', function () {
         'BgTaskService', EXTENDS(chlk.services.BaseService), [
             [[Number]],
             ria.async.Future, function getTasks(pageIndex_) {
-                return this.getPaginatedList('/app/data/bgtasks.json', chlk.models.bgtasks.BgTask, {
+                return this.getPaginatedList('app/data/bgtasks.json', chlk.models.bgtasks.BgTask, {
                     start: pageIndex_
                 });
             },
             [[Number]],
             ria.async.Future, function getLogs(pageIndex_) {
-                return this.getPaginatedList('/app/data/bgtasklogs.json', chlk.models.bgtasks.BgTaskLog, {
+                return this.getPaginatedList('app/data/bgtasklogs.json', chlk.models.bgtasks.BgTaskLog, {
                     start: pageIndex_
                 });
             }

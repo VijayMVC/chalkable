@@ -11,7 +11,7 @@ NAMESPACE('chlk.services', function () {
         'SignUpService', EXTENDS(chlk.services.BaseService), [
             [[Number]],
             ria.async.Future, function getSignUps(pageIndex_) {
-                return this.getPaginatedList('/app/data/signups.json', chlk.models.signup.SignUpInfo, {
+                return this.getPaginatedList('app/data/signups.json', chlk.models.signup.SignUpInfo, {
                     start: pageIndex_
                 });
             }

@@ -17,13 +17,21 @@ NAMESPACE('chlk.controls', function () {
             Boolean, function onPrevPageClick(node, event) {
                 try{
                     var state = this.context.getState();
-                    var controller = node.find('.controller-name').getAttr('value');
+                    var configs = this.getConfigs();
                     var action = node.find('.action-name').getAttr('value');
-                    var params = [node.find('.page-value').getAttr('value')];
-                    state.setController(controller);
-                    state.setAction(action);
+                    state.setAction(node.find('.action-name').getValue());
+                    var pageNode = node.find('.page-value');
+                    var value = (parseInt(pageNode.getValue(), 10) - 1) * configs.pageSize;
+                    if(value > configs.lastPageStart)
+                        value = configs.lastPageStart;
+                    if(value < 0)
+                        value = 0;
+                    pageNode.setValue(1 + value / configs.pageSize);
+                    var params = this.getLinkParams().slice();
+                    params.push(value);
                     state.setParams(params);
                     state.setPublic(false);
+
                     this.context.stateUpdated();
                 }catch(e){
                     console.info(e.getMessage());
@@ -32,19 +40,28 @@ NAMESPACE('chlk.controls', function () {
                 return false;
             },
 
-            Object, function preparePaginationData(data) {
-                var start = data.pageIndex * data.pageSize + 1;
-                return {
+            Object, 'configs',
+
+            Object, 'linkParams',
+
+            [[Object, Array]],
+            Object, function preparePaginationData(data, params_) {
+                var start = data.pageIndex*data.pageSize;
+                this.setLinkParams(params_);
+                var res = {
                     hasPreviousPage: data.hasPreviousPage,
                     hasNextPage: data.hasNextPage,
-                    lastPageIndex: data.totalPages - 1,
-                    prevPageIndex: data.pageIndex - 1,
-                    nextPageIndex: data.pageIndex + 1,
+                    lastPageStart: (data.totalPages - 1) * data.pageSize,
+                    prevPageStart: start - data.pageSize,
+                    nextPageStart: start + data.pageSize,
+                    pageIndex: data.pageIndex + 1,
                     totalCount: data.totalCount,
-                    start: start,
-                    end: start + data.pageSize - 1,
-                    pageSize: 10
-                }
+                    startText: start + 1,
+                    end: start + data.pageSize,
+                    pageSize: data.pageSize
+                };
+                this.setConfigs(res);
+                return res;
             }
         ]);
 });

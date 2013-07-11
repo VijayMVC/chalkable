@@ -35,6 +35,14 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.GradeLevelService, 'gradeLevelService',
 
 
+        [chlk.controllers.SidebarButton('schools')],
+        [[Number, Number]],
+        function updateListAction(districtId_, start_) {
+            var result = this.schoolService
+                .getSchools(districtId_, start_ || 0)
+                .attach(this.validateResponse_());
+            return this.UpdateView(chlk.activities.school.SchoolsListPage, result);
+        },
 
         [chlk.controllers.SidebarButton('schools')],
         [[Number, Number]],
@@ -53,10 +61,9 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(data){
                     var model = model_ || new chlk.models.school.School;
                     model.setTimezones(data.getItems());
-                    return model;
-                });
-
-            return this.ShadeView(chlk.activities.school.AddSchoolDialog, result);
+                })
+                .attach(this.validateResponse_());
+            return this.UpdateView(chlk.activities.school.SchoolsListPage, result);
         },
 
         [[Number]],
@@ -92,11 +99,13 @@ NAMESPACE('chlk.controllers', function (){
                 roles.unshift(serializer.deserialize({name: 'All Roles', id: null}, chlk.models.common.NameId));
                 model.setGradeLevels(newGradeLevels);
                 model.setRoles(roles);
+                model.setSelectedIndex(0);
                 return model;
             });
             return this.PushView(chlk.activities.school.SchoolPeoplePage, result);
         },
 
+        [[Number]],
         VOID, function actionButtonsAction(id) {
             var result = ria.async.wait([
                 this.schoolService.getDetails(id)
@@ -111,9 +120,10 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.school.ActionButtonsPopup, result);
         },
 
-        [[Number, String]],
-        function actionLinkAction(index, email){
-
+        [[Object]],
+        function actionLinkAction(form_){
+            if(confirm(form_.index + ' ' + form_.email))
+                this.context.getDefaultView().getCurrent().close();
         },
 
         [[Number]],

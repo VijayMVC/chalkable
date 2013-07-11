@@ -131,8 +131,6 @@
     <Compile Include="Controllers\ChalkableController.cs" />
     <Compile Include="ActionResults\ChalkableJsonResult.cs" />
     <Compile Include="Controllers\ChalkableDepartmentController.cs" />
-    <Compile Include="Controllers\ClassController.cs" />
-    <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\DbMaintenanceController.cs" />
     <Compile Include="Controllers\PeriodController.cs" />
     <Compile Include="Controllers\GradingStyleController.cs" />
@@ -158,10 +156,8 @@
     <Compile Include="Models\BackgroundTaskViewData.cs" />
     <Compile Include="Models\Binders\DateTimeBinder.cs" />
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
-    <Compile Include="Models\ClassViewData.cs" />
-    <Compile Include="Models\CourseViewData.cs" />
     <Compile Include="Models\PeriodViewData.cs" />
-    <Compile Include="Models\GradingStyleViewData.cs" />
+    <Compile Include="Models\GradingStyleVeiwData.cs" />
     <Compile Include="Models\IdNameViewData.cs" />
     <Compile Include="Models\MarkingPeriodViewData.cs" />
     <Compile Include="Models\PersonViewDatas\ParentViewData.cs" />
@@ -201,7 +197,9 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

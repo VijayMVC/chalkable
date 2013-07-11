@@ -1,6 +1,7 @@
 .paginator-container{
   font: normal 11px arial,tahoma, helvetica, sans-serif;
   margin-top: 3px;
+  height: 33px;
 
   .left-container{
     float: left;
@@ -24,9 +25,9 @@
     .info-container{
       display: inline-block;
       background: url(images/common/notification-total-of.png) 0 0 no-repeat;
-      width: 103px;
+      width: 107px;
       height: 33px;
-      padding: 0 9px;
+      padding: 0 7px;
 
       INPUT{
         width: 30px;

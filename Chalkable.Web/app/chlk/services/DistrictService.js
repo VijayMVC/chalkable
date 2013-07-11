@@ -10,7 +10,7 @@ NAMESPACE('chlk.services', function () {
         'DistrictService', EXTENDS(chlk.services.BaseService), [
             [[Object]],
             ria.async.Future, function getDistricts(districtId, pageIndex_) {
-                return this.getPaginatedList('data/districts.json', chlk.models.district.District, {
+                return this.getPaginatedList('app/data/districts.json', chlk.models.district.District, {
                     start: pageIndex_,
                     districtId: districtId
                 });
