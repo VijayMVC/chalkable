@@ -21,9 +21,9 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.BaseService*/
     CLASS(
         'BaseService', [
-            [[String, Object]],
-            ria.async.Future, function get(uri, clazz) {
-                return new ria.ajax.JsonGetTask(uri)
+            [[String, Object, Object]],
+            ria.async.Future, function get(uri, clazz, params_) {
+                return new ria.ajax.JsonGetTask(this.getUrl(uri, params_))
                     .run()
                     .then(function (data) {
                         if(!data.success)
@@ -33,9 +33,23 @@ NAMESPACE('chlk.services', function () {
                     });
             },
 
-            [[String, Object, Number]],
-            ria.async.Future, function getPaginatedList(uri, clazz, pageIndex) {
-                return new ria.ajax.JsonGetTask(uri)
+            [[String, Object]],
+            String, function getUrl(uri, params_){
+                if(!params_)
+                    return uri;
+                if(uri[uri.length - 1] != '?')
+                    uri+='?'
+                var arr=[];
+                for(var param in params_){
+                    if(params_.hasOwnProperty(param))
+                        arr.push(param + '=' + params_[param])
+                }
+                return uri + arr.join('&');
+            },
+
+            [[String, Object, Object]],
+            ria.async.Future, function getPaginatedList(uri, clazz, params_) {
+                return new ria.ajax.JsonGetTask(this.getUrl(uri, params_))
                     .run()
                     .then(function (data) {
                         var model = new chlk.models.common.PaginatedList(clazz);

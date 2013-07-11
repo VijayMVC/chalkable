@@ -17,7 +17,9 @@ NAMESPACE('ria.dom', function () {
 
     var global = ('undefined' !== typeof window ? window.document : null),
         docElem = global.documentElement,
-        __find = function (s, n) { return n.querySelectorAll(s); },
+        __find = function (s, n) {
+            return n.querySelectorAll(s);
+        },
         __is = docElem ? (docElem.webkitMatchesSelector || docElem.mozMatchesSelector
             || docElem.oMatchesSelector || docElem.msMatchesSelector) : function () { return false };
 
@@ -355,6 +357,9 @@ NAMESPACE('ria.dom', function () {
                 var node = this._dom[0];
                 return node ? node.getAttribute(name) : null;
             },
+            Object, function getValue() {
+                return this._dom.value;
+            },
             [[Object]],
             SELF, function setAllAttrs(obj) {},
             [[String, Object]],
@@ -363,6 +368,12 @@ NAMESPACE('ria.dom', function () {
                 node ? node.setAttribute(name, value) : null;
                 return this;
             },
+            [[Object]],
+            SELF, function setValue(value) {
+                this._dom.value = value;
+                return this;
+            },
+
 
             /* data attributes */
 

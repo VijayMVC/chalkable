@@ -12,9 +12,9 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.SchoolService */
     CLASS(
         'SchoolService', EXTENDS(chlk.services.BaseService), [
-            [[Number]],
-            ria.async.Future, function getSchools(pageIndex_) {
-                return this.getPaginatedList('/app/data/schools.json', chlk.models.school.School, pageIndex_);
+            [[Object]],
+            ria.async.Future, function getSchools(params_) {
+                return this.getPaginatedList(params_ && params_.start ? '/app/data/schools2.json' : '/app/data/schools.json', chlk.models.school.School, params_);
             },
 
             [[Number]],

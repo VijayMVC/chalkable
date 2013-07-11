@@ -16,7 +16,7 @@ NAMESPACE('chlk.controllers', function (){
     /** @class chlk.controllers.BaseController */
    ABSTRACT, CLASS(
        'BaseController', EXTENDS(ria.mvc.Controller), [
-           [[Function, ria.async.Future]],
+           /*[[Function, ria.async.Future]],
            VOID, function PushView(activityClass, data) {
                var instance = new activityClass;
                instance.refreshD(data);
@@ -31,7 +31,7 @@ NAMESPACE('chlk.controllers', function (){
            },
            VOID, function UpdateView(activityClass, data, msg_) {
 
-           },
+           },*/
 
 
            ria.async.Future, function validateResponse_() {

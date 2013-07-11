@@ -4,6 +4,7 @@
     -roles=self.getRoles()
     -gradeLevels=self.getGradeLevels()
     -window.school = school
+    -selectedIndex = self.getSelectedIndex();
     .action-bar.not-transparent.buttons
         .container.panel-bg
             .left
@@ -40,7 +41,15 @@
                         +ActionLink('schools', 'people', school.getId()) First name
                         +ActionLink('schools', 'people', school.getId()).pressed Last name
             +Grid(users, {
-                selectedIndex:0
+                selectedIndex:selectedIndex
             }).people-list
+                each item, i in users
+                    .row(class=(i == selectedIndex ? 'selected' : ''), index=i)
+                        +ActionLink('schools', 'details', 1).left
+                            img.avatar.avatar47(src="https://dev.chalkable.com/PersonPicture/Read?pictureId=0&width=47&height=47&gender=F")
+                        p.left= item.getFullname()
+                        .right
+                            +Button().message-button.blue-gradient-btn Message
+                        .clear
 
 

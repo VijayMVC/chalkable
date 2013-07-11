@@ -1,10 +1,14 @@
 REQUIRE('ria.mvc.IContext');
 REQUIRE('ria.async.Future');
 
+REQUIRE('ria.serialize.JsonSerializer');
+
 REQUIRE('ria.reflection.ReflectionFactory');
 
 NAMESPACE('ria.mvc', function () {
     "use strict";
+
+    var jsonSerializer = new ria.serialize.JsonSerializer;
 
     /** @class ria.mvc.ControllerUri */
     ANNOTATION(
@@ -95,28 +99,50 @@ NAMESPACE('ria.mvc', function () {
                 var ref = ria.reflection.ReflectionFactory(this.getClass()),
                     action = toCamelCase(state.getAction()) + 'Action',
                     all = ref.getMethodsReflector(),
-                    params = state.getParams(),
-                    c = params.length;
+                    params = state.getParams();
 
                 var method = ref.getMethodReflector(action);
                 if (!method)
                     throw new ria.mvc.MvcException('Controller ' + ref.getName() + ' has no method ' + action
                         + ' for action ' + state.getAction());
 
-                var min = method.getRequiredArguments().length;
-                if (min > c)
-                    throw new ria.mvc.MvcException('Method ' + method.getName() + ' requires at least ' + min + ' arguments.');
-
-                var max = method.getArguments().length;
-                if (max < c)
-                    throw new ria.mvc.MvcException('Method ' + method.getName() + ' requires at most ' + max + ' arguments.');
-
-                // TODO: check roles
+                this.validateActionCall_(method, params);
 
                 try {
-                    method.invokeOn(this, params);
+                    method.invokeOn(this, this.deserializeParams_(params, method));
                 } catch (e) {
                     throw new ria.mvc.MvcException("Exception in action " + method.getName(), e);
+                }
+            },
+
+            [[ria.reflection.ReflectionMethod, Array]],
+            VOID, function validateActionCall_(actionRef, params) {
+                var c = params.length;
+
+                var min = actionRef.getRequiredArguments().length;
+                if (min > c)
+                    throw new ria.mvc.MvcException('Method ' + actionRef.getName() + ' requires at least ' + min + ' arguments.');
+
+                var max = actionRef.getArguments().length;
+                if (max < c)
+                    throw new ria.mvc.MvcException('Method ' + actionRef.getName() + ' requires at most ' + max + ' arguments.');
+            },
+
+            [[Array, ria.reflection.ReflectionMethod]],
+            Array, function deserializeParams_(params, actionRef) {
+                var types = actionRef.getArgumentsTypes(),
+                    names = actionRef.getArguments();
+
+                try {
+                    return params.map(function (_, index) {
+                        try {
+                            return jsonSerializer.deserialize(_, types[index]);
+                        } catch (e) {
+                            throw new ria.mvc.MvcException('Error deserializing action param ' + names[index], e);
+                        }
+                    });
+                } catch (e) {
+                    throw new ria.mvc.MvcException('Error deserializing action params', e);
                 }
             },
 
@@ -138,6 +164,29 @@ NAMESPACE('ria.mvc', function () {
                     return ;
 
                 this.postDispatchAction_();
+            },
+
+            [[String, String, Array]],
+            function Redirect(controller, action, arg_) {},
+
+            [[String, String, Array]],
+            function Forward(controller, action, arg_) {},
+
+            [[Function, ria.async.Future]],
+            function PushView(clazz, data) {
+                var instance = new clazz();
+                this.view.pushD(instance, data);
+            },
+
+            [[Function, ria.async.Future]],
+            function ShadeView(clazz, data) {
+                var instance = new clazz();
+                this.view.shadeD(instance, data);
+            },
+
+            [[Function, ria.async.Future, String]],
+            function UpdateView(clazz, data, msg_) {
+                this.view.updateD(clazz, data, msg_ || '');
             }
         ]);
 });

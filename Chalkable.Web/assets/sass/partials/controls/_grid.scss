@@ -52,7 +52,25 @@ BODY {
 .grid{
   font-size: 12px;
   color: #565656;
-  overflow-x: scroll;
+  position: relative;
+
+  .loader{
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: url(../content/images/loaders/circular-grey.gif) center center no-repeat, rgba(0,0,0,0.3);
+    z-index: 999;
+    @include border-radius(5px);
+  }
+
+  &.loading{
+    .loader{
+      display: block;
+    }
+  }
 
   .container{
     display: table;

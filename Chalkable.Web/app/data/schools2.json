@@ -1,14 +1,14 @@
 {
-    "hasnextpage": true,
-    "haspreviouspage": false,
-    "pageindex": 0,
+    "hasnextpage": false,
+    "haspreviouspage": true,
+    "pageindex": 1,
     "pagesize": 10,
     "totalcount": 20,
     "totalpages": 2,
     "data": [
     {
         "id": 96,
-        "name": "Demo School",
+        "name": "Demo School2",
         "localid": null,
         "ncesid": null,
         "schooltype": null,
@@ -18,7 +18,7 @@
     },
     {
         "id": 194,
-        "name": "Test Academy",
+        "name": "Test Academy2",
         "localid": null,
         "ncesid": null,
         "schooltype": null,
@@ -28,7 +28,7 @@
     },
     {
         "id": 229,
-        "name": "Chalkable School",
+        "name": "Chalkable School2",
         "localid": null,
         "ncesid": null,
         "schooltype": null,
@@ -38,7 +38,7 @@
     },
     {
         "id": 244,
-        "name": "TestSchool",
+        "name": "TestSchool2",
         "localid": null,
         "ncesid": null,
         "schooltype": null,
@@ -48,7 +48,7 @@
     },
     {
         "id": 245,
-        "name": "TestSchool",
+        "name": "TestSchool2",
         "localid": null,
         "ncesid": null,
         "schooltype": null,
@@ -58,7 +58,7 @@
     },
     {
         "id": 246,
-        "name": "TestSchool",
+        "name": "TestSchool2",
         "localid": null,
         "ncesid": null,
         "schooltype": null,
@@ -68,7 +68,7 @@
     },
         {
             "id": 247,
-            "name": "testschool",
+            "name": "testschool2",
             "localid": null,
             "ncesid": null,
             "schooltype": null,
@@ -78,7 +78,7 @@
         },
         {
             "id": 433,
-            "name": "tester",
+            "name": "tester2",
             "localid": null,
             "ncesid": null,
             "schooltype": null,
@@ -88,7 +88,7 @@
         },
         {
             "id": 435,
-            "name": "tester",
+            "name": "tester2",
             "localid": null,
             "ncesid": null,
             "schooltype": null,
@@ -98,7 +98,7 @@
         },
         {
             "id": 436,
-            "name": "tester",
+            "name": "tester2",
             "localid": null,
             "ncesid": null,
             "schooltype": null,

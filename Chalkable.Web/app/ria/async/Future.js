@@ -103,7 +103,7 @@ NAMESPACE('ria.async', function () {
             VOID, function updateProgress_(data) {
                 ria.__API.defer(this, function () {
                     try {
-                        this.onProgress && this.onProgress();
+                        this.onProgress && this.onProgress(data);
                     } finally {
                         this.doCallNext_('updateProgress_', data);
                     }
@@ -179,9 +179,9 @@ NAMESPACE('ria.async', function () {
     /* this is hack */
     /** @class ria.async.DeferredData*/
     /** @class ria.async.DeferredAction*/
-    ria.async.DeferredAction = ria.async.DeferredData = function (data_) {
+    ria.async.DeferredAction = ria.async.DeferredData = function (data_, delay_) {
         var future = new ria.async.Future;
-        ria.__API.defer(null, (future.__PROTECTED || future).complete_, [data_ || null]);
+        ria.__API.defer(null, (future.__PROTECTED || future).complete_, [data_ || null], delay_|0);
         return future;
     };
 });

@@ -37,13 +37,24 @@ NAMESPACE('chlk.controllers', function (){
 
 
         [chlk.controllers.SidebarButton('schools')],
-        [[Number]],
-        function listAction(pageIndex_) {
+        function listAction() {
             var result = this.schoolService
-                .getSchools(pageIndex_ | 0)
+                .getSchools()
                 .attach(this.validateResponse_());
             /* Put activity in stack and render when result is ready */
             return this.PushView(chlk.activities.school.SchoolsListPage, result);
+        },
+
+        [chlk.controllers.SidebarButton('schools')],
+        [[Number]],
+        function updateListAction(start) {
+            var result = this.schoolService
+                .getSchools({
+                    start: start,
+                    count: 10
+                })
+                .attach(this.validateResponse_());
+            return this.UpdateView(chlk.activities.school.SchoolsListPage, result);
         },
 
         VOID, function addSchoolAction(form_) {
@@ -101,11 +112,13 @@ NAMESPACE('chlk.controllers', function (){
                 roles.unshift(serializer.deserialize({name: 'All Roles', id: null}, chlk.models.common.NameId));
                 model.setGradeLevels(newGradeLevels);
                 model.setRoles(roles);
+                model.setSelectedIndex(0);
                 return model;
             });
             return this.PushView(chlk.activities.school.SchoolPeoplePage, result);
         },
 
+        [[Number]],
         VOID, function actionButtonsAction(id) {
             var result = ria.async.wait([
                 this.schoolService.getDetails(id)
@@ -124,6 +137,7 @@ NAMESPACE('chlk.controllers', function (){
         function actionLinkAction(form_){
             if(confirm(form_.index + ' ' + form_.email))
                 this.context.getDefaultView().getCurrent().close();
+        },
 
         [[Number]],
         VOID, function deleteAction(id){

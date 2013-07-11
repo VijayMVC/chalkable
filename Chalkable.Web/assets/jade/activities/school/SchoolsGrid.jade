@@ -1,0 +1,24 @@
+.loader
+.container
+    .head.panel-bg
+        .th School Name
+        .th Local ID
+        .th NCES ID
+        .th School Type
+        .th URL
+        .th
+
+    .body
+        -console.info(self)
+        each item in self.items
+            .row
+                .td= item.getName()
+                .td= item.getLocalId()
+                .td= item.getNcesId()
+                .td= item.getSchoolType()
+                .td= item.getSchoolUrl()
+                .td.action-links
+                    +ActionLink('schools', 'details', item.getId()).profile
+                    +ActionLink('schools', 'delete', item.getId()).remove
++Paginator('schools', 'updateList', self)
+

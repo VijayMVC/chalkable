@@ -17,9 +17,17 @@ NAMESPACE('chlk.controls', function () {
             Boolean, function onPrevPageClick(node, event) {
                 try{
                     var state = this.context.getState();
+                    var configs = this.getConfigs();
                     state.setController(node.find('.controller-name').getAttr('value'));
-                    state.setAction(node.find('.action-name').getAttr('value'));
-                    state.setParams([node.find('.page-value').getAttr('value')]);
+                    state.setAction(node.find('.action-name').getValue());
+                    var pageNode = node.find('.page-value');
+                    var value = (parseInt(pageNode.getValue(), 10) - 1) * configs.pageSize;
+                    if(value > configs.lastPageStart)
+                        value = configs.lastPageStart;
+                    if(value < 0)
+                        value = 0;
+                    pageNode.setValue(1 + value / configs.pageSize);
+                    state.setParams([value]);
                     state.setPublic(false);
 
                     this.context.stateUpdated();
@@ -30,19 +38,24 @@ NAMESPACE('chlk.controls', function () {
                 return false;
             },
 
+            Object, 'configs',
+
             Object, function preparePaginationData(data) {
-                var start = data.pageindex*data.pagesize + 1;
-                return {
+                var start = data.pageindex*data.pagesize;
+                var res = {
                     hasPreviousPage: data.haspreviouspage,
                     hasNextPage: data.hasnextpage,
-                    lastPageIndex: data.totalpages - 1,
-                    prevPageIndex: data.pageindex - 1,
-                    nextPageIndex: data.pageindex + 1,
+                    lastPageStart: (data.totalpages - 1) * data.pagesize,
+                    prevPageStart: start - data.pagesize,
+                    nextPageStart: start + data.pagesize,
+                    pageIndex: data.pageindex + 1,
                     totalCount: data.totalcount,
-                    start: start,
-                    end: start + data.pagesize - 1,
-                    pageSize: 10
-                }
+                    startText: start + 1,
+                    end: start + data.pagesize,
+                    pageSize: data.pagesize
+                };
+                this.setConfigs(res);
+                return res;
             }
         ]);
 });
