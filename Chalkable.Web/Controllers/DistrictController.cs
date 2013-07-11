@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Models;
 
 namespace Chalkable.Web.Controllers
 {
@@ -13,9 +10,10 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin")]
         public ActionResult List(int? start, int? count)
         {
-            count = count ?? 10;
             start = start ?? 0;
-            return Json(new {success = true});
+            count = count ?? 10;
+            var districts = MasterLocator.DistrictService.GetDistricts(start.Value, count.Value);
+            return Json(districts.Transform(DistrictViewData.Create));
         }
 
     }

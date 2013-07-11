@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chalkable.Common;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
@@ -9,7 +10,7 @@ namespace Chalkable.BusinessLogic.Services.Master
     {
         District GetById(Guid id);
         District Create(string name);
-        IList<District> GetDistricts();
+        PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue);
         void Update(District district);
     }
 
@@ -32,11 +33,11 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public IList<District> GetDistricts()
+        public PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue)
         {
             using (var uow = Read())
             {
-                return new DistrictDataAccess(uow).GetAll();
+                return new DistrictDataAccess(uow).GetPage(start, count);
             }
         }
 

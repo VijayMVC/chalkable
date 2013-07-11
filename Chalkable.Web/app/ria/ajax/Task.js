@@ -98,7 +98,7 @@ NAMESPACE('ria.ajax', function () {
             },
 
             VOID, function transferFailed_(evt) {
-                this._completer.completeError(evt);
+                this._completer.completeError(Error(evt));
             },
 
             VOID, function transferCanceled_(evt) {
