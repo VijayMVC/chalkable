@@ -10,6 +10,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         UserContext Context { get; }
         IUserService UserService { get; }
         ISchoolService SchoolService { get; }
+        IDistrictService DistrictService { get; }
         IBackgroundTaskService BackgroundTaskService { get; }
         IPreferenceService PreferenceService { get; }
         IChalkableDepartmentService ChalkableDepartmentService { get; }
@@ -22,6 +23,7 @@ namespace Chalkable.BusinessLogic.Services.Master
     {
         private IUserService userService;
         private ISchoolService schoolService;
+        private IDistrictService districtService;
         private IBackgroundTaskService backgroundTaskService;
         private IPreferenceService preferenceService;
         private IChalkableDepartmentService chalkableDepartmentService;
@@ -39,10 +41,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             personPictureService = new PersonPictureService(this);
             courseIconService = new CourseIconService(this);
             departmentIconService = new DepartmentIconService(this);
+            districtService = new DistrictService(this);
         }
 
         public IUserService UserService { get { return userService; } }
         public ISchoolService SchoolService { get { return schoolService; } }
+        public IDistrictService DistrictService { get { return districtService; } }
         public IBackgroundTaskService BackgroundTaskService { get { return backgroundTaskService; } }
         public IPreferenceService PreferenceService { get { return preferenceService; } }
         public IChalkableDepartmentService ChalkableDepartmentService { get { return chalkableDepartmentService; } }

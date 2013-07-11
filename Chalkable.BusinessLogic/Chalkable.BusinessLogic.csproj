@@ -55,6 +55,7 @@
     <Compile Include="Security\AttendanceSecurity.cs" />
     <Compile Include="Security\BaseSecurity.cs" />
     <Compile Include="Security\PrivateMessageSecurity.cs" />
+    <Compile Include="Services\Master\DistrictService.cs" />
     <Compile Include="Services\Master\ChalkableDepartmentService.cs" />
     <Compile Include="Services\Master\PictureServices\CourseIconService.cs" />
     <Compile Include="Services\Master\PictureServices\DepartmentIconService.cs" />
