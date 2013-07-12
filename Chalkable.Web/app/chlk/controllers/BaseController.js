@@ -54,7 +54,7 @@ NAMESPACE('chlk.controllers', function (){
                        return data;
                    })
                    .catchException(chlk.services.DataException, function (error) {
-                       this.BREAK(); // failed with exception, stop further processing
+                       ria.async.BREAK; // failed with exception, stop further processing
 
                        console.error(error.toString());
                        // todo: scoping !?
@@ -69,7 +69,7 @@ NAMESPACE('chlk.controllers', function (){
               BASE(state);
                new ria.dom.Dom(SIDEBAR_CONTROLS_ID + ' .' + PRESSED_CLS).removeClass(PRESSED_CLS);
                var action = toCamelCase(state.getAction()) + ACTION_SUFFIX;
-               var ref = ria.reflection.ReflectionFactory(this.getClass());
+               var ref = ria.reflection.ReflectionClass(this.getClass());
                var methodReflector = ref.getMethodReflector(action);
                if (methodReflector.isAnnotatedWith(chlk.controllers.SidebarButton)){
                    var buttonCls = methodReflector.findAnnotation(chlk.controllers.SidebarButton)[0].clazz;

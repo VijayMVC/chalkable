@@ -1,6 +1,6 @@
 REQUIRE('ria.mvc.DomActivity');
 REQUIRE('ria.dom.Dom');
-REQUIRE('ria.reflection.ReflectionFactory');
+REQUIRE('ria.reflection.ReflectionClass');
 
 NAMESPACE('chlk.activities.lib', function () {
 
@@ -22,7 +22,7 @@ NAMESPACE('chlk.activities.lib', function () {
             },
 
             VOID, function bind_() {
-                var ref = ria.reflection.ReflectionFactory(this.getClass());
+                var ref = ria.reflection.ReflectionClass(this.getClass());
                 if (!ref.isAnnotatedWith(chlk.activities.lib.BindTemplate))
                     throw new ria.mvc.MvcException(ref.getName() + " should be annotated with " + ria.__API.getIdentifierOfType(chlk.activities.lib.BindTemplate));
 
@@ -36,7 +36,7 @@ NAMESPACE('chlk.activities.lib', function () {
                         throw new ria.mvc.MvcException(ref.getName() + " is annotated with " + ria.__API.getIdentifierOfType(chlk.activities.lib.BindTemplate)
                             + ', but some templates classes appears to be not loaded: [' + binds.map(function (_) { return _ ? ria.__API.getIdentifierOfType(_) : _ }) + ']');
 
-                    var tplRef = ria.reflection.ReflectionFactory(tpl);
+                    var tplRef = ria.reflection.ReflectionClass(tpl);
                     var model = tplRef.findAnnotation(ria.templates.ModelBind)[0];
                     if (model == null)
                         throw new ria.mvc.MvcException(tplRef.getName() + " is not annotated with " +  ria.__API.getIdentifierOfType(ria.templates.ModelBind));

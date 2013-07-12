@@ -17,7 +17,7 @@ NAMESPACE('chlk.activities.lib', function () {
 
             OVERRIDE, VOID, function bind_() {
                 BASE();
-                var ref = ria.reflection.ReflectionFactory(this.getClass());
+                var ref = ria.reflection.ReflectionClass(this.getClass());
                 if (ref.isAnnotatedWith(chlk.activities.lib.PageClass)){
                     this._pageClass = ref.findAnnotation(chlk.activities.lib.PageClass)[0].clazz;
                 }else{
