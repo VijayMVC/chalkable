@@ -1,4 +1,5 @@
 ﻿using System;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
@@ -10,5 +11,8 @@ namespace Chalkable.Data.School.Model
         public int PercentValue { get; set; }
         public GradingStyleEnum GradingStyle { get; set; }
         public bool DropLowest { get; set; }
+
+        [DataEntityAttr]
+        public AnnouncementType AnnouncementType { get; set; }
     }
 }

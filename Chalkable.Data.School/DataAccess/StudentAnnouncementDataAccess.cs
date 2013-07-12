@@ -65,6 +65,7 @@ namespace Chalkable.Data.School.DataAccess
     public class StudentAnnouncementQuery
     {
         public Guid? AnnouncementId { get; set; }
+        public Guid? MarkingPeriodClassId { get; set; }
         public StudentAnnouncementStateEnum? State { get; set; }     
     }
 }

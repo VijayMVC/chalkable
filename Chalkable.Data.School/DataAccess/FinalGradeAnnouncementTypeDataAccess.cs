@@ -25,17 +25,32 @@ namespace Chalkable.Data.School.DataAccess
                 res.Add("AnnouncementTypeRef", query.AnnouncementTypeId);
             return res;
         }
+        private DbQuery BuildSelectQuery(Dictionary<string, object> conds)
+        {
+            var sql = @"select {0} from FinalGradeAnnouncementType 
+                        join AnnouncementType on AnnouncementType.Id = FinalGradeAnnouncementType.AnnouncementTypeRef";
+            var b = new StringBuilder();
+            var types = new List<Type> {typeof (FinalGradeAnnouncementType), typeof (AnnouncementType)};
+            b.AppendFormat(sql, Orm.ComplexResultSetQuery(types));
+            b = Orm.BuildSqlWhere(b, types[0], conds);
+            return new DbQuery {Parameters = conds, Sql = b.ToString()};
+        }
+        private DbQuery BuildSelectQuery(FinalGradeAnnouncementTypeQuery query)
+        {
+            return BuildSelectQuery(BuildConditions(query));
+        }
+
         public IList<FinalGradeAnnouncementType> GetList(FinalGradeAnnouncementTypeQuery query)
         {
-            return SelectMany<FinalGradeAnnouncementType>(BuildConditions(query));
+            return ReadMany<FinalGradeAnnouncementType>(BuildSelectQuery(query), true);
         }
         public FinalGradeAnnouncementType GetOne(FinalGradeAnnouncementTypeQuery query)
         {
-            return SelectOne<FinalGradeAnnouncementType>(BuildConditions(query));
+            return ReadOne<FinalGradeAnnouncementType>(BuildSelectQuery(query), true);
         }
         public FinalGradeAnnouncementType GetOneOrNull(FinalGradeAnnouncementTypeQuery query)
         {
-            return SelectOneOrNull<FinalGradeAnnouncementType>(BuildConditions(query));
+            return ReadOneOrNull<FinalGradeAnnouncementType>(BuildSelectQuery(query), true);
         }
     }
 
