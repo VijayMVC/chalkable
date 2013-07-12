@@ -1,0 +1,28 @@
+.funds
+    .grid.not-transparent
+        .container
+            .head.panel-bg
+                .th School
+                .th PO#
+                .th Created By
+                .th Created On
+                .th Amount
+                .th Terms
+                .th
+                .th
+            .body
+                each item in self.items
+                    .row
+                        .td= item.getSchoolName()
+                        .td= item.getPoNumber()
+                        .td= item.getDisplayName()
+                        .td= item.getCreated().toString('d/m/y')
+                        .td= item.getAmount()
+                        .td= item.getTerms()
+                        .td
+                        .td.action-links
+                            +ActionLink('funds', 'accept', item.getId()).profile
+                            +ActionLink('funds', 'reject', item.getId()).remove
+                            +ActionLink('funds', 'export', item.getId())
+        +Paginator('funds', 'list', self)
+

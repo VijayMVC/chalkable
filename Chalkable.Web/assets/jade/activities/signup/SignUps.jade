@@ -1,0 +1,32 @@
+.signups
+    .grid.not-transparent
+        .container
+            .head.panel-bg
+                .th User Type
+                .th Name
+                .th Email
+                .th Password
+                .th IP Address
+                .th TimeStamp
+                .th School Name
+                .th SIS URL
+                .th Username
+                .th Password
+                .th TimeZone
+
+            .body
+                each item in self.items
+                    .row
+                        .td= item.getUserType()
+                        .td= item.getName()
+                        .td= item.getEmail()
+                        .td= item.getPassword()
+                        .td= item.getIpAddress()
+                        .td= item.getTimeStamp().toString('d/m/y')
+                        .td//= item.getSchoolName()
+                        .td= item.getSisUrl()
+                        .td= item.getSisUserName()
+                        .td= item.getSisPassword()
+                        .td= item.getTimezone()
+        +Paginator('signup', 'list', self)
+
