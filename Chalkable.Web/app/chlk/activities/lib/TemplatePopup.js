@@ -45,7 +45,7 @@ NAMESPACE('chlk.activities.lib', function () {
 
             OVERRIDE, VOID, function bind_() {
                 BASE();
-                var ref = ria.reflection.ReflectionFactory(this.getClass());
+                var ref = ria.reflection.ReflectionClass(this.getClass());
                 if (ref.isAnnotatedWith(chlk.activities.lib.IsHorizontalAxis)){
                     this._isHorizontal = ref.findAnnotation(chlk.activities.lib.IsHorizontalAxis)[0].isHorizontal;
                 }else{

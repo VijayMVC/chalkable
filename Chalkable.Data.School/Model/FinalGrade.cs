@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
@@ -14,8 +12,37 @@ namespace Chalkable.Data.School.Model
         public int Discipline { get; set; }
         public bool DropLowestDiscipline { get; set; }
         public int Attendance { get; set; }
-        public bool DropLowestAttendacne { get; set; }
+        public bool DropLowestAttendance { get; set; }
         public GradingStyleEnum GradingStyle { get; set; }
+
+    }
+
+    public class VwFinalGrade : FinalGrade
+    {
+        [DataEntityAttr]
+        public MarkingPeriodClass MarkingPeriodClass { get; set; }
+        [DataEntityAttr]
+        public ClassComplex Class { get; set; }
+    }
+
+    public class FinalGradeDetails : VwFinalGrade
+    {
+        public IList<FinalGradeAnnouncementType> FinalGradeAnnouncementTypes { get; set; }
+
+        
+        private IList<StudentFinalGradeDetails> studentFinalGrades;
+        public IList<StudentFinalGradeDetails> StudentFinalGrades
+        {
+            get { return studentFinalGrades; }
+            set
+            {
+                studentFinalGrades = value;
+                foreach (var studentFinalGrade in studentFinalGrades)
+                {
+                    studentFinalGrade.FinalGrade = this;
+                }
+            }
+        } 
     }
 
     public enum FinalGradeStatus

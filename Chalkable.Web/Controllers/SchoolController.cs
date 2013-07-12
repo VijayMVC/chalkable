@@ -46,7 +46,7 @@ namespace Chalkable.Web.Controllers
                               + countsPerRole[CoreRoles.ADMIN_EDIT_ROLE.Id]
                               + countsPerRole[CoreRoles.ADMIN_VIEW_ROLE.Id];
             var sisData = MasterLocator.SchoolService.GetSyncData(schoolId);
-            var resView = SchoolPeapleViewData.Create(school, sisData, studentsCount, teachersCount, adminsCount);
+            var resView = SchoolPeopleViewData.Create(school, sisData, studentsCount, teachersCount, adminsCount);
             return Json(resView);
         }
 

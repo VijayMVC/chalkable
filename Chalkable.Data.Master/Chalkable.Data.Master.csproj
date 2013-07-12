@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\ApplicationDataAccess.cs" />
     <Compile Include="DataAccess\BackgroundTaskDataAccess.cs" />
     <Compile Include="DataAccess\ChalkableDepartmentDataAccess.cs" />
     <Compile Include="DataAccess\DistrictDataAccess.cs" />
@@ -47,6 +48,7 @@
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
     <Compile Include="DataAccess\SchoolUserDataAccess.cs" />
     <Compile Include="DataAccess\UserDataAccess.cs" />
+    <Compile Include="Model\Application.cs" />
     <Compile Include="Model\BackgroundTask.cs" />
     <Compile Include="Model\ChalkableDepartment.cs" />
     <Compile Include="Model\DatabaseUpdateTaskData.cs" />

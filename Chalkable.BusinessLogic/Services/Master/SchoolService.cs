@@ -13,12 +13,10 @@ namespace Chalkable.BusinessLogic.Services.Master
         Data.Master.Model.School GetById(Guid id);
         Data.Master.Model.School Create(Guid districtId, string name, IList<UserInfo> principals);
         void CreateEmpty();
-        District CreateDistrict(string name);
         PaginatedList<Data.Master.Model.School> GetSchools(int start = 0, int count = int.MaxValue);
         IList<Data.Master.Model.School> GetSchools(bool empty);
         SisSync GetSyncData(Guid schoolId);
         void SetSyncData(SisSync sisSync);
-        IList<District> GetDistricts();
         void Update(Data.Master.Model.School school);
     }
 
@@ -103,14 +101,6 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var da = new SchoolDataAccess(uow);
                 da.SetSyncData(sisSync);
                 uow.Commit();
-            }
-        }
-
-        public IList<District> GetDistricts()
-        {
-            using (var uow = Read())
-            {
-                return new DistrictDataAccess(uow).GetAll();
             }
         }
 

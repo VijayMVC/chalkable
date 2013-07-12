@@ -4,7 +4,7 @@ using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models
 {
-    public class SchoolPeapleViewData : SchoolInfoViewData
+    public class SchoolPeopleViewData : SchoolInfoViewData
     {
         public int StudentsCount { get; set; }
         public int TeachersCount { get; set; }
@@ -13,17 +13,17 @@ namespace Chalkable.Web.Models
 
         public PaginatedList<PersonViewData> Persons { get; set; }
 
-        protected SchoolPeapleViewData(School school, SisSync sisData, int studentsCount, int teachersCount, int saffsCount) 
+        protected SchoolPeopleViewData(School school, SisSync sisData, int studentsCount, int teachersCount, int staffsCount) 
             : base(school, sisData)
         {
             StudentsCount = studentsCount;
             TeachersCount = teachersCount;
-            StaffsCount = saffsCount;
+            StaffsCount = staffsCount;
         }
 
-        public static SchoolPeapleViewData Create(School school, SisSync sisData, int studentsCount, int teachersCount, int staffsCount)
+        public static SchoolPeopleViewData Create(School school, SisSync sisData, int studentsCount, int teachersCount, int staffsCount)
         {
-            return new SchoolPeapleViewData(school, sisData, studentsCount, teachersCount, staffsCount);
+            return new SchoolPeopleViewData(school, sisData, studentsCount, teachersCount, staffsCount);
         }
     }
 }

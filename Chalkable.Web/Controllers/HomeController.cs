@@ -53,7 +53,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult RunSchoolImport(int sisSchoolId, int sisSchoolYearId, string name, string dataBaseName, string dataBaseUrl, string sisUser, string sisPwd)
         {
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var district = sl.SchoolService.GetDistricts().First();
+            var district = sl.DistrictService.GetDistricts().First();
 
             var school = sl.SchoolService.Create(district.Id, name, new List<UserInfo> ());
             school.ImportSystemType = ImportSystemTypeEnum.Sti;

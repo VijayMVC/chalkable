@@ -183,22 +183,22 @@ namespace Chalkable.Data.Common
             return Read(q, reader => reader.Read() && SqlTools.ReadInt32(reader, resName) > 0);
         }
 
-        public TEntity GetById(Guid id)
+        public virtual TEntity GetById(Guid id)
         {
             return SelectOne<TEntity>(new Dictionary<string, object> {{"Id", id}});
         }
 
-        public TEntity GetByIdOrNull(Guid id)
+        public virtual TEntity GetByIdOrNull(Guid id)
         {
             return SelectOneOrNull<TEntity>(new Dictionary<string, object> { { "Id", id } });
         }
 
-        public IList<TEntity> GetAll()
+        public virtual IList<TEntity> GetAll()
         {
             return SelectMany<TEntity>();
         }
 
-        public PaginatedList<TEntity> GetPage(int start, int count, string orderBy = null)
+        public virtual PaginatedList<TEntity> GetPage(int start, int count, string orderBy = null)
         {
             if (string.IsNullOrEmpty(orderBy))
                 orderBy = "Id";

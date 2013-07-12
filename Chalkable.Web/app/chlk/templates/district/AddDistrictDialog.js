@@ -22,6 +22,6 @@ NAMESPACE('chlk.templates.district', function () {
             [ria.templates.ModelBind],
             String, 'sisPassword',
             [ria.templates.ModelBind],
-            String, 'sisSystemType'
+            Number, 'sisSystemType'
         ])
 });

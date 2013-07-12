@@ -55,6 +55,7 @@
     <Compile Include="Security\AttendanceSecurity.cs" />
     <Compile Include="Security\BaseSecurity.cs" />
     <Compile Include="Security\PrivateMessageSecurity.cs" />
+    <Compile Include="Services\Master\DistrictService.cs" />
     <Compile Include="Services\Master\ChalkableDepartmentService.cs" />
     <Compile Include="Services\Master\PictureServices\CourseIconService.cs" />
     <Compile Include="Services\Master\PictureServices\DepartmentIconService.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
     <Compile Include="Services\School\CourseService.cs" />
+    <Compile Include="Services\School\FinalGradeService.cs" />
     <Compile Include="Services\School\GradeLevelService.cs" />
     <Compile Include="Services\School\GradingStyleService.cs" />
     <Compile Include="Services\School\MarkingPeriodService.cs" />

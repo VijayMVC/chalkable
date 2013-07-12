@@ -39,9 +39,13 @@ namespace Chalkable.Data.School.DataAccess
             var sql = @"select cd.Id from ClassPeriod cd 
                         join Period p on p.Id = cd.PeriodRef
                         where p.MarkingPeriodRef in ({0})";
-            var mpIds = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
-            sql = string.Format(sql, mpIds);
-            return Exists(new DbQuery{Parameters = new Dictionary<string, object>(), Sql = sql});
+            var mpDic = new Dictionary<string, object>();
+            for (var i = 0; i < markingPeriodIds.Count; i++)
+            {
+                mpDic.Add("markingPeriodId_" + i, markingPeriodIds[i]);
+            }
+            sql = string.Format(sql, mpDic.Keys.JoinString(","));
+            return Exists(new DbQuery{Parameters = mpDic, Sql = sql});
         }
 
         public bool IsClassStudentsAssignedToPeriod(Guid periodId, Guid classId)

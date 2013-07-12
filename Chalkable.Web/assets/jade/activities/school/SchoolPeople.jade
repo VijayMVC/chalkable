@@ -40,7 +40,7 @@
                     .left
                         +ActionLink('schools', 'people', school.getId()) First name
                         +ActionLink('schools', 'people', school.getId()).pressed Last name
-            +Grid(users)(
+            +ListView(users)(
                 selectedIndex = selectedIndex).people-list
                 each item, i in users
                     .row(class=(i == selectedIndex ? 'selected' : ''), index=i)
