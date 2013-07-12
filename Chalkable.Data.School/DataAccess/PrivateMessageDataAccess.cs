@@ -22,7 +22,7 @@ namespace Chalkable.Data.School.DataAccess
                 field1 = "ToPersonRef";
                 field2 = "DeletedByRecipient";
             }
-
+            var conds = new Dictionary<string, object> { { "read", read }, { "personId", personId } };
             var b = new StringBuilder();
             b.AppendFormat(@"select PrivateMessage.* from PrivateMessage 
                            join Person on Person.Id = PrivateMessage.{0}
@@ -39,11 +39,12 @@ namespace Chalkable.Data.School.DataAccess
             }
             if (string.IsNullOrEmpty(keyword))
             {
-                b.AppendFormat(@" and (PrivateMessage.Subject like '%{0}%' or PrivateMessage.Body like '%{0}%'
-                                        or lower(Person.FirstName) like '%{0}%' or lower(Person.LastName) like '%{0}%')", keyword);
+                keyword = "%" + keyword + "%";
+                b.AppendFormat(@" and (PrivateMessage.Subject like {0} or PrivateMessage.Body like {0}
+                                        or lower(Person.FirstName) like {0} or lower(Person.LastName) like {0})", keyword);
+                conds.Add("keyword", keyword);
             }
 
-            var conds = new Dictionary<string, object> {{"read", read}, {"personId", personId}};
             return new DbQuery {Parameters = conds, Sql = b.ToString()};
         }
 
