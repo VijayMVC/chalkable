@@ -15,7 +15,7 @@ namespace Chalkable.Tests.Services.Master
         {
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
             sl.SchoolService.CreateEmpty();
-            var distr = sl.DistrictService.Create("some distr");
+            var distr = sl.DistrictService.Create("some distr", "someDb", "someurl", "sisUser", "sisPass", 0);
             var principals = new List<UserInfo>
                 {
                     new UserInfo

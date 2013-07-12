@@ -11,7 +11,6 @@ namespace Chalkable.Web.Models
         public string Name { get; set; }
         public string DbName { get; set; }
         
-        public string SchoolType { get; set; }
         public int SisSystemType { get; set; }
         public string SisUrl { get; set; }
         public string SisUserName { get; set; }
@@ -21,6 +20,10 @@ namespace Chalkable.Web.Models
         {
             Id = district.Id;
             Name = district.Name;
+            DbName = district.DbName;
+            SisSystemType = district.SisSystemType;
+            SisUrl = district.SisUrl;
+            SisUserName = district.SisUserName;
         }
 
         public static DistrictViewData Create(District school)

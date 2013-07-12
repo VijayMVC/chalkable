@@ -19,10 +19,11 @@
                         .td= item.getDbName()
                         .td= item.getSisUrl()
                         .td= item.getSisUserName()
-                        .td= item.getSisPassword()
+                        .td *
                         .td= item.getSisSystemType()
                         .td.action-links
                             +ActionLink('schools', 'list', item.getId(), 0).profile
-                            +ActionLink('district', 'delete', item.getId(), 0).remove
-        +Paginator('district', 'list', self)
+                            +ActionLink('district', 'update', item.getId()).view
+                            +ActionLink('district', 'delete', item.getId()).remove
+        +Paginator('district', 'page', self)
 

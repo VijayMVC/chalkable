@@ -182,7 +182,7 @@
     <Compile Include="Models\RoomViewData.cs" />
     <Compile Include="Models\ScheduleSectionViewData.cs" />
     <Compile Include="Models\SchoolInfoViewData.cs" />
-    <Compile Include="Models\SchoolPeapleViewData.cs" />
+    <Compile Include="Models\SchoolPeopleViewData.cs" />
     <Compile Include="Models\SchoolViewData.cs" />
     <Compile Include="Models\SchoolYearViewData.cs" />
     <Compile Include="Models\SisSyncViewData.cs" />

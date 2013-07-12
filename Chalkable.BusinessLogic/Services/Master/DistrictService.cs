@@ -1,6 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
@@ -9,7 +11,8 @@ namespace Chalkable.BusinessLogic.Services.Master
     public interface IDistrictService
     {
         District GetById(Guid id);
-        District Create(string name);
+        void Delete(Guid id);
+        District Create(string name, string dbName, string sisUrl, string sisUserName, string sisPassword, ImportSystemTypeEnum sisSystemType);
         PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue);
         void Update(District district);
     }
@@ -21,12 +24,21 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
         }
 
-        public District Create(string name)
+        public District Create(string name, string dbName, string sisUrl, string sisUserName, string sisPassword, ImportSystemTypeEnum sisSystemType)
         {
             using (var uow = Update())
             {
                 var da = new DistrictDataAccess(uow);
-                var res = new District { Id = new Guid(), Name = name };
+                var res = new District
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = name,
+                        DbName = dbName,
+                        SisUrl = sisUrl,
+                        SisUserName = sisUserName,
+                        SisPassword = sisPassword,
+                        SisSystemType = (int)sisSystemType
+                    };
                 da.Insert(res);
                 uow.Commit();
                 return res;
@@ -43,6 +55,8 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public void Update(District district)
         {
+            if(!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 new DistrictDataAccess(uow).Update(district);
@@ -50,8 +64,20 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
+        public void Delete(Guid id)
+        {
+            if(!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new DistrictDataAccess(uow).Delete(id);
+                uow.Commit();
+            }
+        }
+
         public District GetById(Guid id)
         {
+            //TODO: check 
             using (var uow = Read())
             {
                 var da = new DistrictDataAccess(uow);

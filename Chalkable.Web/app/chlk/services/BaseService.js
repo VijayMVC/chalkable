@@ -1,6 +1,7 @@
 REQUIRE('ria.serialize.JsonSerializer');
 
 REQUIRE('ria.ajax.JsonGetTask');
+REQUIRE('ria.ajax.JsonPostTask');
 
 REQUIRE('chlk.models.common.PaginatedList');
 
@@ -24,7 +25,7 @@ NAMESPACE('chlk.services', function () {
 
 
             String, function getServiceRoot(){
-                return ria.__CFG["#require"].siteRoot + '/';
+                return ria.__CFG["#require"].appRoot + '/';
             },
 
             [[String]],
@@ -33,9 +34,27 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[String, Object, Object]],
-            ria.async.Future, function get(uri, clazz, gParams) {
+            ria.async.Future, function get(uri, clazz_, gParams_) {
 
                 return new ria.ajax.JsonGetTask(this.resolveUri(uri))
+                    .params(gParams_ || {})
+                    .run()
+                    .then(function (data) {
+                        if(!data.success)
+                            throw chlk.services.DataException('Server error', Error(data.message));
+
+                        if (!clazz_)
+                            return data.data || null;
+
+                        return Serializer.deserialize(data.data, clazz_);
+                    });
+            },
+
+
+            [[String, Object, Object]],
+            ria.async.Future, function post(uri, clazz, gParams) {
+
+                return new ria.ajax.JsonPostTask(this.resolveUri(uri))
                     .params(gParams)
                     .run()
                     .then(function (data) {
