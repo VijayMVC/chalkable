@@ -26,6 +26,26 @@ NAMESPACE('chlk.services', function () {
                     sisSystemType: sisSystemType
                 });
             },
+
+            [[chlk.models.district.DistrictId, String, String, String, String, String, Number]],
+            ria.async.Future, function updateDistrict(id, name, dbName, sisUrl, sisUserName, sisPassword, sisSystemType) {
+                return this.post('District/Update.json', chlk.models.district.District, {
+                    id: id.valueOf(),
+                    name: name,
+                    dbName: dbName,
+                    sisUrl: sisUrl,
+                    sisUserName: sisUserName,
+                    sisPassword: sisPassword,
+                    sisSystemType: sisSystemType
+                });
+            },
+
+            [[chlk.models.district.DistrictId, String, String, String, String, String, Number]],
+            ria.async.Future, function saveDistrict(id_, name, dbName, sisUrl, sisUserName, sisPassword, sisSystemType) {
+                if (id_) return this.updateDistrict(id_, name, dbName, sisUrl, sisUserName, sisPassword, sisSystemType);
+                return this.addDistrict(name, dbName, sisUrl, sisUserName, sisPassword, sisSystemType);
+            },
+
             [[chlk.models.district.DistrictId]],
             ria.async.Future, function removeDistrict(id) {
                 return this.post('District/Delete.json', chlk.models.district.District, {
@@ -34,7 +54,7 @@ NAMESPACE('chlk.services', function () {
             },
             [[chlk.models.district.DistrictId]],
             ria.async.Future, function getDistrict(id) {
-                return this.post('District/GetById.json', chlk.models.district.District, {
+                return this.post('District/Info.json', chlk.models.district.District, {
                     id: id.valueOf()
                 });
             }

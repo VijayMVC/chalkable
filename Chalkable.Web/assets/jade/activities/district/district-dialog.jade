@@ -3,9 +3,8 @@
         span Add District
     .x-window-body
         .general-info
-            +ActionForm('district', 'addDistrict')
-                -console.log(self)
-                input(type="hidden",name="name", value=self.id)
+            +ActionForm('district', 'save')
+                input(type="hidden",name="id", value=self.id)
                 .x-form-field
                     label Name:
                     input(type="text",name="name", value=self.name)

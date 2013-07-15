@@ -51,5 +51,11 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
+        public ActionResult Info(Guid id)
+        {
+            var result = MasterLocator.DistrictService.GetById(id);
+            return Json(DistrictViewData.Create(result));
+        }
+
     }
 }

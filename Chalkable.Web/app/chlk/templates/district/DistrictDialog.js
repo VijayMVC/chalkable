@@ -4,13 +4,13 @@ REQUIRE('chlk.models.district.District');
 
 NAMESPACE('chlk.templates.district', function () {
 
-    /** @class chlk.templates.district.AddDistrictDialog*/
+    /** @class chlk.templates.district.DistrictDialog*/
     CLASS(
-        [ria.templates.TemplateBind('~/assets/jade/activities/district/add-district-dialog.jade')],
+        [ria.templates.TemplateBind('~/assets/jade/activities/district/district-dialog.jade')],
         [ria.templates.ModelBind(chlk.models.district.District)],
-        'AddDistrictDialog', EXTENDS(chlk.templates.JadeTemplate), [
+        'DistrictDialog', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            Number, 'id',
+            chlk.models.district.DistrictId, 'id',
             [ria.templates.ModelPropertyBind],
             String, 'name',
             [ria.templates.ModelPropertyBind],

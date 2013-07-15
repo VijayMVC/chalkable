@@ -77,7 +77,8 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public District GetById(Guid id)
         {
-            //TODO: check 
+            if (!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException(); 
             using (var uow = Read())
             {
                 var da = new DistrictDataAccess(uow);
