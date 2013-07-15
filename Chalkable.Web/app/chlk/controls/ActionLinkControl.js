@@ -16,7 +16,8 @@ NAMESPACE('chlk.controls', function () {
 
             [[Array]],
             String, function getLink(values) {
-                Array.isArray(values[2]) && !values[2].length && values.splice(2,1);
+                if(!values[2] || Array.isArray(values[2]) && !values[2].length)
+                    values.splice(2,1);
                 return encodeURIComponent(values.map(function(_) { return Array.isArray(_) ? _.join(',') : JSON.stringify(_.valueOf ? _.valueOf() : _) }).join(','));
             },
 
