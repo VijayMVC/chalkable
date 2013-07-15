@@ -13,7 +13,7 @@ namespace Chalkable.Data.Common
         {
             this.unitOfWork = unitOfWork;
         }
-
+        
         protected SqlDataReader ExecuteStoredProcedureReader(string name, IDictionary<string, object> parameters)
         {
             using (var command = unitOfWork.GetStoredProcedureCommandWithParams(name, parameters))

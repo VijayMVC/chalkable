@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -43,7 +44,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var max = 12;
                 for (int i = 1; i < max; i++)
                 {
-                    gradeLevels.Add(new GradeLevel { Id = Guid.NewGuid(), Name = i.ToString() });
+                    gradeLevels.Add(new GradeLevel { Id = Guid.NewGuid(), Name = i.ToString(CultureInfo.InvariantCulture) });
                 }
                 new GradeLevelDataAccess(uow).Insert(gradeLevels);
                 uow.Commit();

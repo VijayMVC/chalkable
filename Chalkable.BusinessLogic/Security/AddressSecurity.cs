@@ -8,7 +8,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Security
 {
-    public  class AddressSecurity
+    public class AddressSecurity
     {
         public static bool CanModify(Address address, UserContext context)
         {

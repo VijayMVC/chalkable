@@ -55,7 +55,6 @@
     <Compile Include="Security\ApplicationSecurity.cs" />
     <Compile Include="Security\AttendanceSecurity.cs" />
     <Compile Include="Security\BaseSecurity.cs" />
-    <Compile Include="Security\NotificationSecurity.cs" />
     <Compile Include="Security\PrivateMessageSecurity.cs" />
     <Compile Include="Services\Master\ApplicationService.cs" />
     <Compile Include="Services\Master\DistrictService.cs" />

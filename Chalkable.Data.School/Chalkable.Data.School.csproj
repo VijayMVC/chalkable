@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\AddressDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementApplicationDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementAttachmentDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementQnADataAccess.cs" />
@@ -47,6 +48,7 @@
     <Compile Include="DataAccess\AnnouncementRecipientDataDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementReminderDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementTypeDataAccess.cs" />
+    <Compile Include="DataAccess\ApplicationInstallDataAccess.cs" />
     <Compile Include="DataAccess\AttendanceReasonDataAccess.cs" />
     <Compile Include="DataAccess\ClassAttendanceDataAccess.cs" />
     <Compile Include="DataAccess\FinalGradeAnnouncementTypeDataAccess.cs" />
