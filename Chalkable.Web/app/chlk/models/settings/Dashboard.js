@@ -7,7 +7,7 @@ NAMESPACE('chlk.models.settings', function () {
             Boolean, 'storageMonitorVisible',
             Boolean, 'preferencesVisible',
             Boolean, 'appCategoriesVisible',
-            Boolean, 'backgroundTaskMonitorVisible'
-
+            Boolean, 'backgroundTaskMonitorVisible',
+            Boolean, 'dbMaintenanceVisible'
         ]);
 });

@@ -1,0 +1,32 @@
+.db-maintenance
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('dbmaintenance', 'listBackups').pressed Backups
+                +ActionLink('dbmaintenance', 'updateDb') Update
+    .grid.not-transparent
+        .container
+            .head.panel-bg
+                .th Name
+                .th Uri
+                .th Size
+                .th
+            .body
+                each item in self.items
+                    .row
+                        .td= item.getName()
+                        .td= item.getUri()
+                        .td= item.getSize()
+                        .td.action-links
+                            +ActionLink('dbmaintenance', 'restore', item.getSize()).plugin
+        +Paginator('dbmaintenance', 'listBackups', self)
+            .tab-content(index=1)
+                +ActionForm('schools', 'addSchool')
+                    .x-form-field
+                        label Master Update
+                        textarea#masterSql
+                    .x-form-field
+                        label School Update
+                        textarea#schoolSql
+                    +Button(type="submit").special-button.blue-button.submit-btn RUN
+

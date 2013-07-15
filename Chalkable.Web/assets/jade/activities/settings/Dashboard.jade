@@ -18,6 +18,9 @@
         .item
             if self.isBackgroundTaskMonitorVisible()
                 +ActionLink('backgroundtask', 'list') Background task monitor
+        .item
+            if self.isDbMaintenanceVisible()
+                +ActionLink('dbmaintenance', 'listBackups') Db Maintenance
 
 
 
