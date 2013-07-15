@@ -133,6 +133,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         UserRef = Context.UserId
                     };
                 new ApplicationRatingDataAccess(uow).Insert(res);
+                uow.Commit();
                 return res;
             }
         }
