@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.storage', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/storage/Storages.jade')],
         [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
         'Storages', EXTENDS(chlk.templates.PaginatedList), [
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.storage.Storage), 'items'
         ])
 });

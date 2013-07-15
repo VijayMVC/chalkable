@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.departments', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/departments/Departments.jade')],
         [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
         'Departments', EXTENDS(chlk.templates.PaginatedList), [
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.departments.Department), 'items'
         ])
 });

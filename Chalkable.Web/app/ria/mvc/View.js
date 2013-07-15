@@ -119,11 +119,11 @@ NAMESPACE('ria.mvc', function () {
                 return pop;
             },
 
-            [[Function, ria.async.Future, String]],
+            [[ImplementerOf(ria.mvc.IActivity), ria.async.Future, String]],
             VOID, function updateD(activityClass, data, msg_) {
                 this._stack.forEach(function (_) {
                     if (_ instanceof activityClass)
-                        _.partialRefreshD(data);
+                        _.partialRefreshD(data, msg_);
                 })
             },
 

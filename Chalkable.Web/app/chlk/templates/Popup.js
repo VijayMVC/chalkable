@@ -8,9 +8,9 @@ NAMESPACE('chlk.templates', function () {
     CLASS(
         [ria.templates.ModelBind(chlk.models.Popup)],
         'Popup', EXTENDS(chlk.templates.JadeTemplate), [
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             ria.dom.Dom, 'target',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             ria.dom.Dom, 'container'
         ])
 });

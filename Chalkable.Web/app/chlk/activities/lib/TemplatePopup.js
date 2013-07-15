@@ -1,4 +1,4 @@
-REQUIRE('chlk.activities.lib.TemplateActivity');
+REQUIRE('ria.mvc.TemplateActivity');
 
 NAMESPACE('chlk.activities.lib', function () {
 
@@ -25,7 +25,7 @@ NAMESPACE('chlk.activities.lib', function () {
     /** @class chlk.activities.lib.TemplatePopup*/
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-pop-up-container')],
-        'TemplatePopup', EXTENDS(chlk.activities.lib.TemplateActivity), [
+        'TemplatePopup', EXTENDS(ria.mvc.TemplateActivity), [
             function $() {
                 BASE();
                 this._body = new ria.dom.Dom('body');
@@ -43,9 +43,8 @@ NAMESPACE('chlk.activities.lib', function () {
 
             String, 'currentClass',
 
-            OVERRIDE, VOID, function bind_() {
-                BASE();
-                var ref = ria.reflection.ReflectionClass(this.getClass());
+            OVERRIDE, VOID, function processAnnotations_(ref) {
+                BASE(ref);
                 if (ref.isAnnotatedWith(chlk.activities.lib.IsHorizontalAxis)){
                     this._isHorizontal = ref.findAnnotation(chlk.activities.lib.IsHorizontalAxis)[0].isHorizontal;
                 }else{

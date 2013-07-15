@@ -6,9 +6,9 @@ NAMESPACE('chlk.templates.school', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/school/SchoolSchedule.jade')],
         'SchoolSchedule', EXTENDS(chlk.templates.JadeTemplate), [
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             chlk.models.schoolYear.Year, 'year',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Number, 'sections'
         ])
 });

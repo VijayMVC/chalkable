@@ -9,11 +9,11 @@ NAMESPACE('chlk.templates.apps', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/apps/add-app-category-dialog.jade')],
         [ria.templates.ModelBind(chlk.models.apps.AppCategory)],
         'AddCategoryDialog', EXTENDS(chlk.templates.JadeTemplate), [
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Number, 'id',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             String, 'name',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             String, 'description'
         ])
 });

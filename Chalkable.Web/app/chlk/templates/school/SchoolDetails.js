@@ -8,13 +8,13 @@ NAMESPACE('chlk.templates.school', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/school/SchoolDetails.jade')],
         [ria.templates.ModelBind(chlk.models.school.SchoolDetails)],
         'SchoolDetails', EXTENDS(chlk.templates.school.School), [
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Number, 'statusNumber',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             String, 'status',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             ArrayOf(Number), 'buttons',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             ArrayOf(String), 'emails'
         ])
 });

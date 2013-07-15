@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.district', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/district/Districts.jade')],
         [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
         'Districts', EXTENDS(chlk.templates.PaginatedList), [
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.district.District), 'items'
         ])
 });

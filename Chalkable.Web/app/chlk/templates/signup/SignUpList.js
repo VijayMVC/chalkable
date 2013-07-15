@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.signup', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/signup/SignUps.jade')],
         [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
         'SignUpList', EXTENDS(chlk.templates.PaginatedList), [
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.signup.SignUpInfo), 'items'
         ])
 });

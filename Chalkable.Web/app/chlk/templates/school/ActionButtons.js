@@ -8,9 +8,9 @@ NAMESPACE('chlk.templates.school', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/school/ActionButtons.jade')],
         [ria.templates.ModelBind(chlk.models.school.ActionButtons)],
         'ActionButtons', EXTENDS(chlk.templates.Popup), [
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             ArrayOf(Number), 'buttons',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             ArrayOf(String), 'emails'
         ])
 });

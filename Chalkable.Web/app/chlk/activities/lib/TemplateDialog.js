@@ -1,4 +1,4 @@
-REQUIRE('chlk.activities.lib.TemplateActivity');
+REQUIRE('ria.mvc.TemplateActivity');
 
 NAMESPACE('chlk.activities.lib', function () {
 
@@ -8,7 +8,7 @@ NAMESPACE('chlk.activities.lib', function () {
     /** @class chlk.activities.lib.TemplateDialog*/
     CLASS(
         [ria.mvc.DomAppendTo('body')],
-        'TemplateDialog', EXTENDS(chlk.activities.lib.TemplateActivity), [
+        'TemplateDialog', EXTENDS(ria.mvc.TemplateActivity), [
             function $() {
                 BASE();
                 this._overlay = new ria.dom.Dom('#chlk-overlay');

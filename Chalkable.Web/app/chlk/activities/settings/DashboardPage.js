@@ -1,4 +1,4 @@
-REQUIRE('chlk.activities.lib.TemplateActivity');
+REQUIRE('ria.mvc.TemplateActivity');
 REQUIRE('chlk.templates.settings.Dashboard');
 
 NAMESPACE('chlk.activities.settings', function () {
@@ -6,6 +6,6 @@ NAMESPACE('chlk.activities.settings', function () {
     /** @class chlk.activities.settings.DashboardPage */
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
-        [chlk.activities.lib.BindTemplate(chlk.templates.settings.Dashboard)],
-        'DashboardPage', EXTENDS(chlk.activities.lib.TemplateActivity), [ ]);
+        [ria.mvc.TemplateBind(chlk.templates.settings.Dashboard)],
+        'DashboardPage', EXTENDS(ria.mvc.TemplateActivity), [ ]);
 });

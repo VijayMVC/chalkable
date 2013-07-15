@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.school', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/school/Schools.jade')],
         [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
         'Schools', EXTENDS(chlk.templates.PaginatedList), [
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.school.School), 'items'
         ])
 });

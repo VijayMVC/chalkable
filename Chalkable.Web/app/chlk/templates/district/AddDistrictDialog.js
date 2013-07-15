@@ -9,19 +9,19 @@ NAMESPACE('chlk.templates.district', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/district/add-district-dialog.jade')],
         [ria.templates.ModelBind(chlk.models.district.District)],
         'AddDistrictDialog', EXTENDS(chlk.templates.JadeTemplate), [
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Number, 'id',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             String, 'name',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             String, 'sisUrl',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             String, 'dbName',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             String, 'sisUserName',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             String, 'sisPassword',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Number, 'sisSystemType'
         ])
 });

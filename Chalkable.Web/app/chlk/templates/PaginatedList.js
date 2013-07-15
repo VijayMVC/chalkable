@@ -9,19 +9,19 @@ NAMESPACE('chlk.templates', function () {
         [ria.templates.TemplateBind('~/assets/jade/controls/paginator.jade')],
         [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
         'PaginatedList', EXTENDS(chlk.templates.JadeTemplate), [
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             ArrayOf(Object), 'items',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Number, 'pageIndex',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Number, 'pageSize',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Number, 'totalCount',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Number, 'totalPages',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Boolean, 'hasNextPage',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Boolean, 'hasPreviousPage'
         ])
 });

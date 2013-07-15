@@ -1,4 +1,4 @@
-REQUIRE('chlk.activities.lib.TemplateActivity');
+REQUIRE('ria.mvc.TemplateActivity');
 REQUIRE('chlk.templates.signup.SignUpList');
 
 NAMESPACE('chlk.activities.signup', function () {
@@ -6,6 +6,6 @@ NAMESPACE('chlk.activities.signup', function () {
     /** @class chlk.activities.signup.SignUpListPage*/
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
-        [chlk.activities.lib.BindTemplate(chlk.templates.signup.SignUpList)],
-        'SignUpListPage', EXTENDS(chlk.activities.lib.TemplateActivity), [ ]);
+        [ria.mvc.TemplateBind(chlk.templates.signup.SignUpList)],
+        'SignUpListPage', EXTENDS(ria.mvc.TemplateActivity), [ ]);
 });

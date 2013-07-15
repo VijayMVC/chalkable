@@ -1,4 +1,4 @@
-REQUIRE('chlk.activities.lib.TemplateActivity');
+REQUIRE('ria.mvc.TemplateActivity');
 REQUIRE('chlk.templates.storage.Blobs');
 
 NAMESPACE('chlk.activities.storage', function () {
@@ -6,6 +6,6 @@ NAMESPACE('chlk.activities.storage', function () {
     /** @class chlk.activities.storage.StorageBlobsPage*/
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
-        [chlk.activities.lib.BindTemplate(chlk.templates.storage.Blobs)],
-        'StorageBlobsPage', EXTENDS(chlk.activities.lib.TemplateActivity), [ ]);
+        [ria.mvc.TemplateBind(chlk.templates.storage.Blobs)],
+        'StorageBlobsPage', EXTENDS(ria.mvc.TemplateActivity), [ ]);
 });

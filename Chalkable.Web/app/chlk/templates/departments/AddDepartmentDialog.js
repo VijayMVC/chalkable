@@ -9,11 +9,11 @@ NAMESPACE('chlk.templates.departments', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/departments/add-department-dialog.jade')],
         [ria.templates.ModelBind(chlk.models.departments.Department)],
         'AddDepartmentDialog', EXTENDS(chlk.templates.JadeTemplate), [
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Number, 'id',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             String, 'name',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             ArrayOf(String), 'keywords'
         ])
 });

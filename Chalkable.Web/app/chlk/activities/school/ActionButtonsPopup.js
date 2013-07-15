@@ -8,7 +8,7 @@ NAMESPACE('chlk.activities.school', function () {
         [ria.mvc.DomAppendTo('#chlk-pop-up-container')],
         [chlk.activities.lib.IsHorizontalAxis(false)],
         [chlk.activities.lib.isTopLeftPosition(false)],
-        [chlk.activities.lib.BindTemplate(chlk.templates.school.ActionButtons)],
+        [ria.mvc.TemplateBind(chlk.templates.school.ActionButtons)],
         'ActionButtonsPopup', EXTENDS(chlk.activities.lib.TemplatePopup), [
             [ria.mvc.DomEventBind('click', '.action-link-button:not(.disabled)')],
             [[ria.dom.Dom, ria.dom.Event]],

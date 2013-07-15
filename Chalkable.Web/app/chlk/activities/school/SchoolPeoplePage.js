@@ -7,6 +7,6 @@ NAMESPACE('chlk.activities.school', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [chlk.activities.lib.PageClass('profile')],
-        [chlk.activities.lib.BindTemplate(chlk.templates.school.SchoolPeople)],
+        [ria.mvc.TemplateBind(chlk.templates.school.SchoolPeople)],
         'SchoolPeoplePage', EXTENDS(chlk.activities.lib.TemplatePage), [ ]);
 });

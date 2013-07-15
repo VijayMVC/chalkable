@@ -9,15 +9,15 @@ NAMESPACE('chlk.templates.school', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/school/SchoolPeople.jade')],
         [ria.templates.ModelBind(chlk.models.school.SchoolPeople)],
         'SchoolPeople', EXTENDS(chlk.templates.JadeTemplate), [
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.people.User), 'users',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.common.NameId), 'roles',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.common.NameId), 'gradeLevels',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             chlk.models.school.SchoolPeopleSummary, 'schoolInfo',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Number, 'selectedIndex'
         ])
 });

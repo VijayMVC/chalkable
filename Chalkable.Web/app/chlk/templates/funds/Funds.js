@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.funds', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/funds/funds.jade')],
         [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
         'Funds', EXTENDS(chlk.templates.PaginatedList), [
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.funds.Fund), 'items'
         ])
 });

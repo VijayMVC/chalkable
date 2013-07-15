@@ -8,15 +8,15 @@ NAMESPACE('chlk.templates.settings', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/settings/Dashboard.jade')],
         [ria.templates.ModelBind(chlk.models.settings.Dashboard)],
         'Dashboard', EXTENDS(chlk.templates.JadeTemplate), [
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Boolean, 'departmentsVisible',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Boolean, 'appCategoriesVisible',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Boolean, 'storageMonitorVisible',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Boolean, 'preferencesVisible',
-            [ria.templates.ModelBind],
+            [ria.templates.ModelPropertyBind],
             Boolean, 'backgroundTaskMonitorVisible'
         ])
 });

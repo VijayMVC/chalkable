@@ -6,6 +6,6 @@ NAMESPACE('chlk.activities.departments', function () {
      CLASS(
         [ria.mvc.ActivityGroup('AddDepartment')],
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
-        [chlk.activities.lib.BindTemplate(chlk.templates.departments.AddDepartmentDialog)],
+        [ria.mvc.TemplateBind(chlk.templates.departments.AddDepartmentDialog)],
         'AddDepartmentDialog', EXTENDS(chlk.activities.lib.TemplateDialog), []);
  });
