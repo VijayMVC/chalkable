@@ -15,6 +15,14 @@ NAMESPACE('ria.mvc', function () {
         });
     }
 
+    var MODEL_WAIT_CLASS = 'activity-model-wait';
+
+    function camel2dashed(_) {
+        return _.replace(/[a-z][A-Z]/g, function(str, offset) {
+           return str[0] + '-' + str[1].toLowerCase();
+        });
+    }
+
     /** @class ria.mvc.DomAppendTo */
     ANNOTATION(
         [[String]],
@@ -28,6 +36,7 @@ NAMESPACE('ria.mvc', function () {
             function $() {
                 BASE();
 
+                this._actitivyClass = null;
                 this._actitivyClass = null;
                 this._domAppendTo = null;
                 this._domEvents = [];
