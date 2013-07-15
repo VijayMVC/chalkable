@@ -123,3 +123,13 @@ BODY {
     }
   }
 }
+
+.activity-model-wait, .loadind{
+  .loader{
+    display: block;
+
+    .loader{
+      display: none;
+    }
+  }
+}

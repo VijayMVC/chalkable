@@ -1,6 +1,5 @@
 REQUIRE('ria.mvc.TemplateActivity');
 REQUIRE('chlk.templates.school.Schools');
-REQUIRE('chlk.templates.school.SchoolsGrid');
 
 NAMESPACE('chlk.activities.school', function () {
 
@@ -12,16 +11,9 @@ NAMESPACE('chlk.activities.school', function () {
             [[Object, String]],
             OVERRIDE, VOID, function onPartialRender_(model, msg_) {
                 BASE(model, msg_);
-                this.dom.find('.grid').removeClass('loading');
-                var tpl = new chlk.templates.school.SchoolsGrid();
+                var tpl = new chlk.templates.school.Schools();
                 tpl.assign(model);
-                tpl.renderTo(this.dom.find('.grid').empty());
-            },
-
-            [[String]],
-            OVERRIDE, VOID, function onModelWait_(msg_) {
-                BASE(msg_);
-                this.dom.find('.grid').addClass('loading');
+                tpl.renderTo(this.dom.empty());
             }
         ]);
 });

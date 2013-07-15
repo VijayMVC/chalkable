@@ -1,15 +1,13 @@
 .bg-tasks
-    .grid.not-transparent
-        .container
-            .head.panel-bg
-                .th Type
-                .th Message
-                .th Added
-            .body
-                each item in self.items
-                    .row
-                        .td= item.getId()
-                        .td= item.getMessage()
-                        .td= item.getAdded().toString('d/m/y')
-        +Paginator('backgroundtask', 'logs', self)
+    +Grid('backgroundtask', 'logs', self).not-transparent
+        +GridHead()
+            .th Type
+            .th Message
+            .th Added
+        +GridBody()
+            each item in self.items
+                +GridRow()
+                    .td= item.getId()
+                    .td= item.getMessage()
+                    .td= item.getAdded().toString('d/m/y')
 
