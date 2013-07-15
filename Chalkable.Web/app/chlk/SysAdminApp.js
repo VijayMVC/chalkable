@@ -12,9 +12,11 @@ REQUIRE('chlk.controllers.SignUpController');
 REQUIRE('chlk.controllers.StorageController');
 REQUIRE('chlk.controllers.FundsController');
 REQUIRE('chlk.controllers.DepartmentsController');
+REQUIRE('chlk.controllers.DbMaintenanceController');
 
 REQUIRE('chlk.controls.ActionLinkControl');
 REQUIRE('chlk.controls.ListViewControl');
+REQUIRE('chlk.controls.GridControl');
 REQUIRE('chlk.controls.PaginatorControl');
 REQUIRE('chlk.controls.ActionFormControl');
 REQUIRE('chlk.controls.ButtonControl');

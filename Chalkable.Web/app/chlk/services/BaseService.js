@@ -25,7 +25,7 @@ NAMESPACE('chlk.services', function () {
 
 
             String, function getServiceRoot(){
-                return ria.__CFG["#require"].appRoot + '/';
+                return ria.__CFG["#require"].siteRoot + '/chalkable2/';
             },
 
             [[String]],

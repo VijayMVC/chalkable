@@ -1,5 +1,5 @@
-mixin ListView(data, configs)
-    -self.prepareData(data,configs)
+mixin ListView(data)
+    -self.prepareData(data, attributes)
     .chlk-grid(attributes)
         input.grid-focus
         block

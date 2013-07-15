@@ -4,6 +4,7 @@
 
 @import "partials/main/_buttons";
 @import "partials/main/_profile";
+@import "partials/main/_storage";
 @import "partials/main/people/_list";
 
 BODY {
@@ -119,6 +120,16 @@ BODY {
     #pop-up-triangle{
       left: -13px;
       @include transform(rotate(270deg));
+    }
+  }
+}
+
+.activity-model-wait, .loadind{
+  .loader{
+    display: block;
+
+    .loader{
+      display: none;
     }
   }
 }

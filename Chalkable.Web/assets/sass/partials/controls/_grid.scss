@@ -66,12 +66,6 @@ BODY {
     @include border-radius(5px);
   }
 
-  &.loading{
-    .loader{
-      display: block;
-    }
-  }
-
   .container{
     display: table;
     width:100%;
@@ -135,6 +129,10 @@ BODY {
 
               &.persons{
                 background: url(images/controls/grid/user.png) 0 0 no-repeat;
+              }
+
+              &.plugin{
+                background: url(images/controls/grid/plugin.gif) 0 0 no-repeat;
               }
             }
           }

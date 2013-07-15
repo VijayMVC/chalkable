@@ -2,7 +2,7 @@ REQUIRE('chlk.controls.Base');
 
 NAMESPACE('chlk.controls', function () {
 
-    /** @class app.controls.Grid */
+    /** @class app.controls.ListView */
     CLASS(
         'ListViewControl', EXTENDS(chlk.controls.Base), [
             OVERRIDE, VOID, function onCreate_() {

@@ -17,6 +17,8 @@ NAMESPACE('chlk.templates.settings', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'preferencesVisible',
             [ria.templates.ModelPropertyBind],
-            Boolean, 'backgroundTaskMonitorVisible'
+            Boolean, 'backgroundTaskMonitorVisible',
+            [ria.templates.ModelBind],
+            Boolean, 'dbMaintenanceVisible'
         ])
 });

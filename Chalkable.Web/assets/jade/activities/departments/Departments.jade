@@ -2,19 +2,17 @@
     .action-bar.not-transparent
         .container.panel-bg
             +ActionLink('departments', 'addDepartment').chlk-add.opacity-button Add Department
-    .grid.not-transparent
-        .container
-            .head.panel-bg
-                .th Name
-                .th keywords
-                .th
-            .body
-                each item in self.items
-                    .row
-                        .td= item.getName()
-                        .td= item.getKeywords().join(',')
-                        .td.action-links
-                            +ActionLink('departments', 'details', item.getId()).profile
-                            +ActionLink('departments', 'delete', item.getId()).remove
-        +Paginator('departments', 'list', self)
+    +Grid('departments', 'list', self).not-transparent
+        +GridHead()
+            .th Name
+            .th keywords
+            .th
+        +GridBody()
+            each item in self.items
+                +GridRow()
+                    .td= item.getName()
+                    .td= item.getKeywords().join(',')
+                    .td.action-links
+                        +ActionLink('departments', 'details', item.getId()).profile
+                        +ActionLink('departments', 'delete', item.getId()).remove
 
