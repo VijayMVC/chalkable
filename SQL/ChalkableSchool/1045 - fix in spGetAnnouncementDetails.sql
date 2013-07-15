@@ -16,11 +16,11 @@ declare @announcementTb table
 	GradingStyle int not null,
 	Dropped bit not null,
 	AnnouncementTypeRef int not null,
-	AnnouncementTypeName nvarchar(255),
 	PersonRef uniqueidentifier not null,
 	MarkingPeriodClassRef uniqueidentifier,
 	PersonName nvarchar(255),
 	PersonGender nvarchar(10),
+	AnnouncementTypeName nvarchar(255),
 	ClassName nvarchar(255),
 	GradeLevelId uniqueidentifier,
 	CourseId uniqueidentifier,
@@ -35,7 +35,7 @@ declare @announcementTb table
 	[Avg] int,
 	ApplicationCount int,
 	IsOwner bit,
-	RecipientDataPersonId uniqueidentifier,
+	RecipientDataSchoolPersonId int,
 	Starred bit,
 	RowNumber bigint,
 
@@ -81,12 +81,11 @@ begin
 
 	declare @markingPeriodClassId uniqueidentifier  = (select MarkingPeriodClassRef from @announcementTb)
 	declare @wasSubmittedToAdmin bit = 0;
-	if(@markingPeriodClassId is not null and exists(select * from FinalGrade where Id = @markingPeriodClassId and [Status] = 1))
-		set @wasSubmittedToAdmin = 1
+	declare @finalGradeStatus int =  (select [Status] from FinalGrade where Id = @markingPeriodClassId)
 	
 	select *, @isGradeble as IsGradeble,
 			  @isGradebleType as IsGradebleType,
-			  @wasSubmittedToAdmin as WasSubmittedToAdmin
+			  @finalGradeStatus as FinalGradeStatus
 	from @announcementTb
 
 	--TODO: announcementQnA stored procedure
@@ -130,6 +129,11 @@ begin
 	exec spGetPersons @ownerId, @callerId, null, 0, 1, null,null,null,null,null,null,null, 1, @callerRole
 end
 
+
 GO
+
+
+
+
 
 

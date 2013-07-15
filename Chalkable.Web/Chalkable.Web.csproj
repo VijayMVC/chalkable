@@ -127,7 +127,11 @@
     <Compile Include="Authentication\ChalkableAuthentication.cs" />
     <Compile Include="Authentication\ChalkableIdentity.cs" />
     <Compile Include="Authentication\ChalkablePrincipal.cs" />
+    <Compile Include="Controllers\AnnouncementController.cs" />
+    <Compile Include="Controllers\AnnouncementQnAController.cs" />
+    <Compile Include="Controllers\AnnouncementReminderController.cs" />
     <Compile Include="Controllers\BackgroundTaskController.cs" />
+    <Compile Include="Controllers\BaseAnnouncementController.cs" />
     <Compile Include="Controllers\ChalkableController.cs" />
     <Compile Include="ActionResults\ChalkableJsonResult.cs" />
     <Compile Include="Controllers\ChalkableDepartmentController.cs" />
@@ -153,8 +157,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HtmlExtensions.cs" />
+    <Compile Include="Logic\AttachmentLogic.cs" />
     <Compile Include="Logic\PersonLogic.cs" />
+    <Compile Include="Logic\StudentAnnouncementLogic.cs" />
     <Compile Include="Models\AddressViewData.cs" />
+    <Compile Include="Models\AnnouncementAttachmentViewData.cs" />
+    <Compile Include="Models\AnnouncementQnAViewData.cs" />
+    <Compile Include="Models\AnnouncementReminderViewData.cs" />
+    <Compile Include="Models\AnnouncementViewData.cs" />
     <Compile Include="Models\BackgroundTaskLogViewData.cs" />
     <Compile Include="Models\BackgroundTaskViewData.cs" />
     <Compile Include="Models\Binders\DateTimeBinder.cs" />
@@ -162,6 +172,7 @@
     <Compile Include="Models\ClassInfoViewData.cs" />
     <Compile Include="Models\ClassViewData.cs" />
     <Compile Include="Models\CourseViewData.cs" />
+    <Compile Include="Models\CreateAnnouncementViewData.cs" />
     <Compile Include="Models\DistrictViewData.cs" />
     <Compile Include="Models\GradingStyleViewData.cs" />
     <Compile Include="Models\PeriodViewData.cs" />
@@ -187,6 +198,7 @@
     <Compile Include="Models\SchoolYearViewData.cs" />
     <Compile Include="Models\SisSyncViewData.cs" />
     <Compile Include="Models\StorageMonitorViewData.cs" />
+    <Compile Include="Models\StudentAnnouncementViewData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\CompilerHelper.cs" />
   </ItemGroup>

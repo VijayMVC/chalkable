@@ -69,6 +69,7 @@
     <Compile Include="Web\ChalkableJsonResponce.cs" />
     <Compile Include="Web\JavaScriptString.cs" />
     <Compile Include="Web\MagicJSONSerializer.cs" />
+    <Compile Include="Web\MimeHelper.cs" />
     <Compile Include="Web\SensitiveData.cs" />
   </ItemGroup>
   <ItemGroup />

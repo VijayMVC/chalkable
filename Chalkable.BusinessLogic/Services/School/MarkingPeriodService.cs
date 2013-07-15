@@ -18,6 +18,7 @@ namespace Chalkable.BusinessLogic.Services.School
         MarkingPeriod GetMarkingPeriodById(Guid id);
         MarkingPeriod GetLastMarkingPeriod(DateTime tillDate);
         MarkingPeriodClass GetMarkingPeriodClass(Guid classId, Guid markingPeriodId);
+        MarkingPeriodClass GetMarkingPeriodClass(Guid markingPeriodClassId);
         IList<MarkingPeriod> GetMarkingPeriods(Guid? schoolYearId);
         MarkingPeriod GetMarkingPeriodByDate(DateTime date, bool useLastExisting = false);
         bool ChangeWeekDays(IList<Guid> markingPeriodIds, int weekDays);
@@ -257,6 +258,15 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             machine.Apply(StateActionEnum.MarkingPeriodsAdd);
             return true;
+        }
+
+
+        public MarkingPeriodClass GetMarkingPeriodClass(Guid markingPeriodClassId)
+        {
+            using (var uow = Read())
+            {
+                return new MarkingPeriodClassDataAccess(uow).GetById(markingPeriodClassId);
+            }
         }
     }
 }

@@ -29,6 +29,7 @@ namespace Chalkable.Web.Models
             MarkingPeriodsId = classComplex.MarkingPeriodClasses.Select(x => x.MarkingPeriodRef).ToList();
             Teacher.DisplayName = classComplex.Teacher.ShortSalutationName;
         }
+        private ClassViewData() {}
 
         public static ClassViewData Create(ClassComplex classComplex)
         {
@@ -38,5 +39,10 @@ namespace Chalkable.Web.Models
         {
             return classComplexs.Select(Create).ToList();
         } 
+
+        public static ClassViewData Create(Guid id, string name)
+        {
+            return  new ClassViewData{Id = id, Name = name};
+        }
     }
 }

@@ -28,6 +28,14 @@ namespace Chalkable.Data.School.DataAccess
             }
             var conds = new Dictionary<string, object> { { "read", read }, { "personId", personId } };
             var b = new StringBuilder();
+            //var type = typeof (PrivateMessage);
+            //var modelNames = new Dictionary<Type, string>()
+            //    {
+            //        {type, type.Name},
+            //        {typeof (Person), "Sender"},
+            //        {typeof (Person), "Recipient"}
+            //    };
+            //var complextResultSet = Orm.ComplexResultSetQuery(modelNames);
             b.AppendFormat(@"select PrivateMessage.* from PrivateMessage 
                            join Person on Person.Id = PrivateMessage.{0}
                            where PrivateMessage.{0} = @personId and PrivateMessage.{1} = 0", field1, field2);
