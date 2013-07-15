@@ -1,0 +1,13 @@
+.storages
+    +Grid('storage', 'list', self).not-transparent
+        +GridHead()
+            .th Name
+            .th Uri
+            .th
+        +GridBody()
+            each item in self.items
+                +GridRow()
+                    .td= item.getName()
+                    .td= item.getUri()
+                    .td.action-links
+                        +ActionLink('storage', 'blobs', item.getName()).profile
