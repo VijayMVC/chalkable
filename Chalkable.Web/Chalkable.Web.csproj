@@ -173,7 +173,7 @@
     <Compile Include="Models\BackgroundTaskLogViewData.cs" />
     <Compile Include="Models\BackgroundTaskViewData.cs" />
     <Compile Include="Models\Binders\DateTimeBinder.cs" />
-    <Compile Include="Models\CategoryVeiwData.cs" />
+    <Compile Include="Models\CategoryViewData.cs" />
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassInfoViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassViewData.cs" />

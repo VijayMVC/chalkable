@@ -28,6 +28,9 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(res);
         }
 
+
+
+
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult GetTeachers(string filter, int? start, int? count, Guid? classId, int? sortType)
         {

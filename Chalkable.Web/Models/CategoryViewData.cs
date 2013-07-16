@@ -5,24 +5,24 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Web.Models
 {
-    public class CategoryVeiwData
+    public class CategoryViewData
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 
-        private CategoryVeiwData() { }
+        private CategoryViewData() { }
 
-        public static CategoryVeiwData Create(Category category)
+        public static CategoryViewData Create(Category category)
         {
-           return new CategoryVeiwData
+           return new CategoryViewData
             {
                 Id = category.Id,
                 Name = category.Name,
                 Description = category.Description
             };
         }
-        public static IList<CategoryVeiwData> Create(IList<Category> categories)
+        public static IList<CategoryViewData> Create(IList<Category> categories)
         {
             return categories.Select(Create).ToList();
         }
