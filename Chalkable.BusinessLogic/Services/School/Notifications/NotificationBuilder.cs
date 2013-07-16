@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using GCObjectRenderer;
 
@@ -74,7 +76,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             , Guid? applicationId = null, MarkingPeriod markingPeriod = null, PrivateMessage privateMessage = null, Person asker = null, object other = null, string baseUrl = null)
         {
             var parameters = new List<string> {GetBaseUrlByRole(recipient, baseUrl)};
-            var notification = new Notification
+            var notification = new NotificationDetails
             {
                 PersonRef = recipient.Id,
                 Shown = false,
@@ -98,7 +100,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             }
             if (privateMessage != null)
             {
-                //notification.PrivateMessage = privateMessage;
+                notification.PrivateMessage = privateMessage;
                 notification.PrivateMessageRef = privateMessage.Id;
             }
             if (asker != null)
@@ -121,9 +123,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         private string GetBaseUrlByRole(Person person, string baseUrl)
         {
-            //if (string.IsNullOrEmpty(baseUrl))
-            //    baseUrl = PreferenceService.Get(Preference.APPLICATION_URL).Value;
-          
+            if (string.IsNullOrEmpty(baseUrl))
+                baseUrl = PreferenceService.Get(Preference.APPLICATION_URL).Value;
             var url = UrlTools.UrlCombine(baseUrl , "/Home/") + "{0}";
             if (person.RoleRef == CoreRoles.SUPER_ADMIN_ROLE.Id)
                 return string.Format(url, ROLE_SYSADMIN);
@@ -155,43 +156,55 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         //TODO: implement builders 
 
-        //public Notification BuildAnnouncementNewAttachmentNotification(Announcement announcement, Person recipient, string baseUrl = null)
-        //{
-        //    return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION,
-        //                                         NotificationType.Announcement, recipient, announcement);
-        //}
-        //public Notification BuildAnnouncementNewAttachmentNotificationToPerson(Announcement announcement, Person fromschoolPerson, string baseUrl = null)
-        //{
-        //    return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON,
-        //                                         NotificationType.Announcement, announcement.SchoolPerson, announcement, null, null, null, null, fromschoolPerson);
-        //}
+        public Notification BuildAnnouncementNewAttachmentNotification(Announcement announcement, Person recipient, string baseUrl = null)
+        {
+            return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION,
+                                                 NotificationType.Announcement, recipient, announcement);
+        }
+        public Notification BuildAnnouncementNewAttachmentNotificationToPerson(AnnouncementDetails announcement, Person fromschoolPerson, string baseUrl = null)
+        {
+            return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON,
+                                                 NotificationType.Announcement, announcement.Owner, announcement, null, null, null, null, fromschoolPerson);
+        }
 
-        //public Notification BuildAnnouncementReminderNotification(Announcement announcement, SchoolPerson recipient, string baseUrl = null)
-        //{
-        //    return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_REMINDER_NOTIFICATION,
-        //                                         NotificationType.Announcement, recipient, announcement);
-        //}
+        public Notification BuildAnnouncementReminderNotification(Announcement announcement, Person recipient, string baseUrl = null)
+        {
+            return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_REMINDER_NOTIFICATION,
+                                                 NotificationType.Announcement, recipient, announcement);
+        }
 
-        //public Notification BuildAnnouncementQnToAuthorNotifiaction(AnnouncementQnA announcementQnA, SchoolPerson recipient, string baseUrl = null)
-        //{
-        //    return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR,
-        //                                         NotificationType.Question, recipient, announcementQnA.Announcement, null, null, null, null,
-        //                                         announcementQnA.SchoolPerson, new { PersonQuestion = StringTools.BuildShortText(announcementQnA.Question, 35)});
-        //}
+        public Notification BuildAnnouncementQnToAuthorNotifiaction(AnnouncementQnAComplex announcementQnA, AnnouncementComplex announcement, Person recipient, string baseUrl = null)
+        {
+            return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR,
+                                                 NotificationType.Question, recipient, announcement, null, null, null, null,
+                                                 announcementQnA.Asker, new
+                                                     {
+                                                         AnnouncementTypeName = announcement.AnnouncementTypeName,
+                                                         PersonQuestion = StringTools.BuildShortText(announcementQnA.Question, 35)
+                                                     });
+        }
 
-        //public Notification BuildAnnouncementAnswerToPersonNotifiaction(AnnouncementQnA announcementQnA, SchoolPerson fromSchoolPerson, string baseUrl = null)
-        //{
+        public Notification BuildAnnouncementAnswerToPersonNotifiaction(AnnouncementQnAComplex announcementQnA, AnnouncementComplex announcement, Person fromSchoolPerson, string baseUrl = null)
+        {
 
-        //    return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NOTIFICATION_ANSWER_TO_PERSON,
-        //                                         NotificationType.Announcement, announcementQnA.SchoolPerson, announcementQnA.Announcement, null, null, null,
-        //                                         null, fromSchoolPerson, new { PersonQuestion = StringTools.BuildShortText(announcementQnA.Question, 40) });
-        //}
+            return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NOTIFICATION_ANSWER_TO_PERSON,
+                                                 NotificationType.Announcement, announcementQnA.Asker, announcement, null, null, null,
+                                                 null, fromSchoolPerson, new
+                                                     {
+                                                         AnnouncementTypeName = announcement.AnnouncementTypeName,
+                                                         PersonQuestion = StringTools.BuildShortText(announcementQnA.Question, 40)
+                                                     });
+        }
 
-        //public Notification BuildAnnouncementSetGradeToPersonNotifiaction(Announcement announcement, SchoolPerson recipient, string baseUrl = null)
-        //{
-        //    return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON,
-        //                                         NotificationType.Announcement, recipient, announcement);  
-        //}
+        public Notification BuildAnnouncementSetGradeToPersonNotifiaction(AnnouncementDetails announcement, Person recipient, string baseUrl = null)
+        {
+            return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON,
+                                                 NotificationType.Announcement, recipient, announcement, null, null, null, null, null, 
+                                                 new {
+                                                         AnnouncementOwner = announcement.Owner, 
+                                                         AnnouncementTypeName = announcement.AnnouncementTypeName
+                                                     });
+        }
 
         //public Notification BuildApplicationNotification(Application application, SchoolPerson recipient, SchoolPerson fromSchoolPerson, string fromPersonName, string baseUrl = null)
         //{
@@ -206,70 +219,72 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         //                                         fromSchoolPerson, otherModel, baseUrl);
         //}
 
-        //public Notification BuildPrivateMessageNotification(PrivateMessage privateMessage, string baseUrl = null)
-        //{
-        //    var otherModel = new
-        //            {
-        //                NeedsUrlLink =  privateMessage.SchoolPerson.HasRole(CoreRoles.TEACHER_ROLE.Name) 
-        //                                || privateMessage.SchoolPerson.HasRole(CoreRoles.STUDENT_ROLE.Name),
-        //                ShortedMessage = StringTools.BuildShortText(privateMessage.Body, 30),
-        //                MessageSubject = privateMessage.Subject
-        //            };
-        //    return BuildNotificationFromTemplate(NotificationTemplateProvider.PRIVATE_MESSAGE_NOTIFICATION,
-        //                                            NotificationType.Message, privateMessage.SchoolPerson1, null, null, null,
-        //                                            null, privateMessage, privateMessage.SchoolPerson, otherModel);
-        //}
+        public Notification BuildPrivateMessageNotification(PrivateMessageDetails privateMessage, Person fromPerson, Person toPerson, string baseUrl = null)
+        {
+            var fromPersonRole = CoreRoles.GetById(fromPerson.RoleRef);
+            var otherModel = new
+                    {
+                        NeedsUrlLink = fromPersonRole == CoreRoles.TEACHER_ROLE
+                                        || fromPersonRole == CoreRoles.STUDENT_ROLE,
+                        ShortedMessage = StringTools.BuildShortText(privateMessage.Body, 30),
+                        MessageSubject = privateMessage.Subject
+                    };
+            return BuildNotificationFromTemplate(NotificationTemplateProvider.PRIVATE_MESSAGE_NOTIFICATION,
+                                                    NotificationType.Message, toPerson, null, null, null,
+                                                    null, privateMessage, fromPerson, otherModel);
+        }
 
-        //public Notification BuildEndMarkingPeriodNotification(MarkingPeriod markingPeriod, Person recipient, int endDays, bool nextMarkingPeriodExist, bool nextMpNotAssignedToClass, string baseUrl = null)
-        //{
-        //    var otherModel = new
-        //            {
-        //                EndDays = endDays,
-        //                NextMarkingPeriodNotExist = nextMarkingPeriodExist,
-        //                NotAssignedToClass = nextMpNotAssignedToClass
-        //            };
-        //    return BuildNotificationFromTemplate(NotificationTemplateProvider.END_MARKINGPERIOD_NOTIFICATION_TO_ADMIN,
-        //               NotificationType.MarkingPeriodEnding, recipient, null, null, null, markingPeriod, null, null, otherModel);
-        //}
+        public Notification BuildEndMarkingPeriodNotification(MarkingPeriod markingPeriod, Person recipient, int endDays, 
+            bool nextMarkingPeriodExist, bool nextMpNotAssignedToClass, string baseUrl = null)
+        {
+            var otherModel = new
+                    {
+                        EndDays = endDays,
+                        NextMarkingPeriodNotExist = nextMarkingPeriodExist,
+                        NotAssignedToClass = nextMpNotAssignedToClass
+                    };
+            return BuildNotificationFromTemplate(NotificationTemplateProvider.END_MARKINGPERIOD_NOTIFICATION_TO_ADMIN,
+                       NotificationType.MarkingPeriodEnding, recipient, null, null, null, markingPeriod, null, null, otherModel);
+        }
 
-        //public Notification BuildAttendanceNotificationToAdmin(Person recipient, IList<Person> schoolPersons, string baseUrl = null)
-        //{
-        //    var otherModel = new {SchoolPersonsCount = schoolPersons.Count, SchoolPersons = schoolPersons};
-        //    return BuildNotificationFromTemplate(NotificationTemplateProvider.ATTENDANCE_NOTIFICATION_TO_ADMIN,
-        //                                         NotificationType.Attendance, recipient, null, null, null, null, null, null, otherModel);
-        //}
+        public Notification BuildAttendanceNotificationToAdmin(Person recipient, IList<Person> persons, string baseUrl = null)
+        {
+            var otherModel = new { PersonsCount = persons.Count, Persons = persons };
+            return BuildNotificationFromTemplate(NotificationTemplateProvider.ATTENDANCE_NOTIFICATION_TO_ADMIN,
+                                                 NotificationType.Attendance, recipient, null, null, null, null, null, null, otherModel);
+        }
 
-        //public Notification BuildAttendanceNotificationToStudent(Person recipient, ClassAttendance classAttendance, string baseUrl = null)
-        //{
-        //    var otherModel = new
-        //            {
-        //                AttendanceType = classAttendance.TypeTyped,
-        //                ClassName = classAttendance.ClassName,
-        //                Date = classAttendance.Date.ToString(dataFormat),
-        //                Period = classAttendance.ClassGeneralPeriod.GeneralPeriod.Order
-        //            };
-        //    return BuildNotificationFromTemplate(NotificationTemplateProvider.ATTENDANCE_NOTIFICATION_TO_STUDENT,
-        //                                         NotificationType.Attendance, recipient, null, null, null, null, null, null, otherModel);
-        //}
+        public Notification BuildAttendanceNotificationToStudent(Person recipient, ClassAttendanceComplex classAttendance, string baseUrl = null)
+        {
+            var otherModel = new
+                    {
+                        AttendanceType = classAttendance.Type,
+                        ClassName = classAttendance.Class.Name,
+                        Date = classAttendance.Date.ToString(dataFormat),
+                        Period = classAttendance.ClassPeriod.Period.Order
+                    };
+            return BuildNotificationFromTemplate(NotificationTemplateProvider.ATTENDANCE_NOTIFICATION_TO_STUDENT,
+                                                 NotificationType.Attendance, recipient, null, null, null, null, null, null, otherModel);
+        }
 
-        //public Notification BuildAttendanceNotificationToTeacher(Person recipient, ClassPeriod classGeneralPeriod, string className, DateTime dateTime, string baseUrl = null)
-        //{
-        //    var otherModel = new
-        //    {
-        //        ClassName = className,
-        //        Date = dateTime.ToString(dataFormat)
-        //    };
-        //    return BuildNotificationFromTemplate(NotificationTemplateProvider.ATTENDANCE_NOTIFICATION_TO_TEACHER,
-        //                                         NotificationType.NoTakeAttendance, recipient, null, classGeneralPeriod, null, null, null, null, otherModel);
-        //}
+        public Notification BuildAttendanceNotificationToTeacher(Person recipient, ClassPeriod classPeriod, string className, DateTime dateTime, string baseUrl = null)
+        {
+            var otherModel = new
+            {
+                ClassName = className,
+                Date = dateTime.ToString(dataFormat)
+            };
+            return BuildNotificationFromTemplate(NotificationTemplateProvider.ATTENDANCE_NOTIFICATION_TO_TEACHER,
+                                                 NotificationType.NoTakeAttendance, recipient, null, classPeriod, null, null, null, null, otherModel);
+        }
 
 
 
-        //public Notification BuildAppBudgetBalanceNotification(Person recipient, double budgetBalance, string baseUrl = null)
-        //{
-        //    var otherModel = new {BudgetBalance = budgetBalance};
-        //    return BuildNotificationFromTemplate(NotificationTemplateProvider.APP_BUDGET_BALANCE_NOTIFICATION,
-        //                                         NotificationType.AppBudgetBallance, recipient, null, null, null, null, null, null, otherModel);
-        //}
+        public Notification BuildAppBudgetBalanceNotification(Person recipient, double budgetBalance, string baseUrl = null)
+        {
+            var otherModel = new { BudgetBalance = budgetBalance };
+            return BuildNotificationFromTemplate(NotificationTemplateProvider.APP_BUDGET_BALANCE_NOTIFICATION,
+                                                 NotificationType.AppBudgetBallance, recipient, null, null, null, null, null, null, otherModel);
+        }
     }
 }

@@ -48,24 +48,39 @@ namespace Chalkable.Data.Common
         }
 
         private const string COMPLEX_RESULT_SET_FORMAT = " [{0}].[{1}] as {0}_{1}";
+        
+        
+
         public static IList<string> FullFieldsNames(Type t)
         {
+            return FullFieldsNames(t, t.Name);
+        }
+ 
+        public static IList<string> FullFieldsNames(Type t, string prefix)
+        {
             var fields = Fields(t);
-            var objName = t.Name;
-            return fields.Select(x => string.Format(COMPLEX_RESULT_SET_FORMAT, objName, x)).ToList();
+            return fields.Select(x => string.Format(COMPLEX_RESULT_SET_FORMAT, prefix, x)).ToList();
         } 
 
         public static string ComplexResultSetQuery(IList<Type> types)
         {
+            return ComplexResultSetQuery(types.ToDictionary(x => x, x => x.Name));
+        }
+        
+        public static string ComplexResultSetQuery(IDictionary<Type, string> modelsNames)
+        {
             var res = new StringBuilder();
-            for (int i = 0; i < types.Count; i++)
+            var index = 0;
+            foreach (var modelName in modelsNames)
             {
-                res.Append(FullFieldsNames(types[i]).JoinString(","));
-                if (i != types.Count - 1)
+                res.Append(FullFieldsNames(modelName.Key, modelName.Value).JoinString(","));
+                if (index != modelsNames.Keys.Count - 1)
                     res.Append(",");
+                index++;
             }
             return res.ToString();
         }
+
 
         //TODO: insert from select 
 

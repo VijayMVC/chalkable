@@ -9,6 +9,9 @@ namespace Chalkable.Data.School.Model
 {
     public class AnnouncementAttachment
     {
+        public const int DOCUMENT_DEFAULT_WIDTH = 110;
+        public const int DOCUMENT_DEFAULT_HEIGHT = 170;
+
         public Guid Id { get; set; }
         public string Name { get; set; }
         public Guid PersonRef { get; set; }

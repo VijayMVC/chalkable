@@ -87,6 +87,8 @@ CREATE TABLE [ApplicationPermission]
 
 GO
 
+Alter Table Developer
+	Add SchoolRef uniqueidentifier not null Constraint FK_Developer_School Foreign Key References School(Id)
 
-
+GO
 

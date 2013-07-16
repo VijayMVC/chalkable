@@ -53,6 +53,20 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
+        public MarkingPeriod GetNextInYear(Guid markingPeriodId)
+        {
+            var sql = @"declare @schoolYearId uniqueidentifier, @startDate datetime2
+                        select @schoolYearId = SchoolYearRef, @startDate = StartDate
+                        from MarkingPeriod where Id = @markingPeriodId
+                            
+                        select top 1 * from MarkingPeriod 
+                        where SchoolYearRef = @schoolYearId and StartDate > @startDate 
+                        order by StartDate";
+
+            var conds = new Dictionary<string, object>{{"markingPeriodId", markingPeriodId}};
+            return ReadOne<MarkingPeriod>(new DbQuery {Parameters = conds, Sql = sql});
+        }
+
         public IList<MarkingPeriod> GetMarkingPeriods(Guid? schoolYearId)
         {
             var conds = new Dictionary<string, object>();

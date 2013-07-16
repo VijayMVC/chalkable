@@ -56,7 +56,6 @@ namespace Chalkable.Tests.Services.School
             CheckFinalGradeAnnTypesEquality(finalGrade1, finalGrade2, equalityAction);
         }
 
-        //TODO: testing calculating grade by announcement
         [Test]
         public void GetBuildFinalGradesTest()
         {

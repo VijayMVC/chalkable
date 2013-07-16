@@ -18,9 +18,10 @@ namespace Chalkable.BusinessLogic.Services.School
   
         StudentDailyAttendance SetDailyAttendance(DateTime date, Guid personId,  int? timeIn, int? timeOut);
         StudentDailyAttendance GetDailyAttendance(DateTime date, Guid personId);
-        IList<StudentDailyAttendance> GetDailyAttendances(DateTime date);
+        IList<StudentDailyAttendance> GetDailyAttendances(DateTime date); 
         IList<ClassAttendanceComplex> GetClassAttendanceComplex(ClassAttendanceQuery attendanceQuery, IList<Guid> gradeLevelIds = null);
 
+        ClassAttendanceComplex GetClassAttendanceComplexById(Guid classAttendanceId);
         IList<ClassAttendanceComplex> GetClassAttendanceComplex(Guid? schoolYearId, Guid? markingPeriodId, Guid? classId, Guid? personId, AttendanceTypeEnum? type, DateTime date);
         ClassAttendanceComplex SwipeCard(Guid personId, DateTime dateTime, Guid classPeriodId);
        
@@ -188,6 +189,15 @@ namespace Chalkable.BusinessLogic.Services.School
         public ClassAttendanceComplex SwipeCard(Guid personId, DateTime dateTime, Guid classPeriodId)
         {
             throw new NotImplementedException();
+        }
+
+        //TODO: needs test
+        public ClassAttendanceComplex GetClassAttendanceComplexById(Guid classAttendanceId)
+        {
+           return GetClassAttendanceComplex(new ClassAttendanceQuery
+                {
+                    Id = classAttendanceId,
+                }).First();
         }
     }
 }

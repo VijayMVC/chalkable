@@ -44,7 +44,7 @@ namespace Chalkable.Data.School.Model
         public int StudentsCount { get; set; }
         public int AttachmentsCount { get; set; }
         public int OwnerAttachmentsCount { get; set; }
-        public int StudentsCountWidthAttachments { get; set; }
+        public int StudentsCountWithAttachments { get; set; }
         public int GradingsStudentsCount { get; set; }
         public int? Avg { get; set; }
         public int ApplicationCount { get; set; }
@@ -63,7 +63,12 @@ namespace Chalkable.Data.School.Model
     {
         public bool IsGradable { get; set; }
         public bool IsGradableType { get; set; }
-        public bool WasSubmittedToAdmin { get; set; }
+        public FinalGradeStatus? FinalGradeStatus { get; set; }
+        
+        public bool WasSubmittedToAdmin
+        {
+            get { return FinalGradeStatus.HasValue && FinalGradeStatus.Value == Model.FinalGradeStatus.Submit; }
+        }
 
         public IList<StudentAnnouncementDetails> StudentAnnouncements { get; set; }
         public IList<AnnouncementApplication> AnnouncementApplications { get; set; }

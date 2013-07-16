@@ -29,6 +29,7 @@ namespace Chalkable.Web
             ModelBinders.Binders.Add(typeof(StringList), new StringConstructedObjectBinder<StringList>());
             ModelBinders.Binders.Add(typeof(IntList), new StringConstructedObjectBinder<IntList>());
             ModelBinders.Binders.Add(typeof(GuidList), new StringConstructedObjectBinder<GuidList>());
+            ModelBinders.Binders.Add(typeof(ListOfStringList), new StringConstructedObjectBinder<ListOfStringList>());
             ModelBinders.Binders.Add(typeof(DateTime), new DateTimeBinder());
 
         }

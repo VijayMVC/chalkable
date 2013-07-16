@@ -11,7 +11,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IPrivateMessageService
     {
         PrivateMessage SendMessage(Guid toPersonId, string subject, string body);
-        PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword);
+        PaginatedList<PrivateMessageDetails> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword);
         PrivateMessage MarkAsRead(Guid id, bool read);
         void Delete(Guid id);
     }
@@ -52,7 +52,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword)
+        public PaginatedList<PrivateMessageDetails> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword)
         {
             using (var uow = Read())
             {

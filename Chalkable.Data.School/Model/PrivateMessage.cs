@@ -18,4 +18,10 @@ namespace Chalkable.Data.School.Model
         public bool DeletedBySender { get; set; }
         public bool DeletedByRecipient { get; set; }
     }
+
+    public class PrivateMessageDetails : PrivateMessage
+    {
+        public Person Sender { get; set; }
+        public Person Recipient { get; set; }
+    }
 }

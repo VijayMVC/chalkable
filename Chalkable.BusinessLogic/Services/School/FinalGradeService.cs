@@ -15,6 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IFinalGradeService
     {
         IList<FinalGradeAnnouncementType> GetFinalGradeAnnouncementTypes(Guid finalGradeId);
+        IList<FinalGradeAnnouncementType> GetFinalGradeAnnouncementTypes(Guid markingPeriodId, Guid classId);
         StudentFinalGrade SetStudentFinalGrade(Guid studentFinalGradeId, int? gradeByAttendance, int? gradeByDiscipline, int? gradeByParticipation, int? teacherGrade, int? adminGrade, string comment);
         
         FinalGradeDetails ReBuildFinalGrade(Guid finalGradeId);
@@ -45,6 +46,14 @@ namespace Chalkable.BusinessLogic.Services.School
                 var fgAtda = new FinalGradeAnnouncementTypeDataAccess(uow);
                 return fgAtda.GetList(new FinalGradeAnnouncementTypeQuery {FinalGradeId = finalGradeId});
             }
+        }
+
+        //TODO: needsTest 
+        //TODO: rewrite this
+        public IList<FinalGradeAnnouncementType> GetFinalGradeAnnouncementTypes(Guid markingPeriodId, Guid classId)
+        {
+            var markingPeriodClass = ServiceLocator.MarkingPeriodService.GetMarkingPeriodClass(markingPeriodId, classId);
+            return GetFinalGradeAnnouncementTypes(markingPeriodClass.Id);
         }
 
         public StudentFinalGrade SetStudentFinalGrade(Guid studentFinalGradeId, int? gradeByAttendance, int? gradeByDiscipline,
@@ -248,6 +257,7 @@ namespace Chalkable.BusinessLogic.Services.School
             finalGrade.StudentFinalGrades = stFinalGrades;
             return finalGrade;
         }
-       
+
+
     }
 }

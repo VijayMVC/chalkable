@@ -22,18 +22,16 @@ namespace Chalkable.Data.School.Model
         public Guid? QuestionPersonRef { get; set; }
         public Guid? MarkingPeriodRef { get; set; }
         public Guid? ClassPeriodRef { get; set; }
+    }
 
-        [NotDbFieldAttr]
+
+    public class NotificationDetails : Notification
+    {
         public Person Person { get; set; }
-        [NotDbFieldAttr]
         public Announcement Announcement { get; set; }
-        [NotDbFieldAttr]
         public PrivateMessage PrivateMessage { get; set; }
-        [NotDbFieldAttr]
         public Person QuestionPerson { get; set; }
-        [NotDbFieldAttr]
         public MarkingPeriod MarkingPeriod { get; set; }
-        [NotDbFieldAttr]
         public ClassPeriod ClassPeriod { get; set; }
     }
 

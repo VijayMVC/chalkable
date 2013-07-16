@@ -13,8 +13,12 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
+
         private DbQuery BuildGetMessagesQuery(IList<int> roles, string keyword, bool? read, Guid personId, bool isIncome)
         {
+
+            //TODO: return PrivateMessage with sender and recipient data 
+
             var field1 = "FromPersonRef";
             var field2 = "DeletedBySender";
             if (isIncome)
@@ -24,6 +28,14 @@ namespace Chalkable.Data.School.DataAccess
             }
             var conds = new Dictionary<string, object> { { "read", read }, { "personId", personId } };
             var b = new StringBuilder();
+            //var type = typeof (PrivateMessage);
+            //var modelNames = new Dictionary<Type, string>()
+            //    {
+            //        {type, type.Name},
+            //        {typeof (Person), "Sender"},
+            //        {typeof (Person), "Recipient"}
+            //    };
+            //var complextResultSet = Orm.ComplexResultSetQuery(modelNames);
             b.AppendFormat(@"select PrivateMessage.* from PrivateMessage 
                            join Person on Person.Id = PrivateMessage.{0}
                            where PrivateMessage.{0} = @personId and PrivateMessage.{1} = 0", field1, field2);
@@ -48,18 +60,26 @@ namespace Chalkable.Data.School.DataAccess
             return new DbQuery {Parameters = conds, Sql = b.ToString()};
         }
 
-        public PaginatedList<PrivateMessage> GetIncomeMessages(IList<int> roles, string keyword, bool? read,
+        public PrivateMessageDetails GetDetailsById(Guid id, Guid callerId)
+        {
+            var sql = @"select * from PrivateMessage where PrivateMessage.Id = @Id 
+                        and (FromPersonRef = @callerId or ToPersonRef = @callerId)";
+            var conds = new Dictionary<string, object> {{"Id", id}, {"callerId", callerId}};
+            return  ReadOne<PrivateMessageDetails>(new DbQuery {Sql = sql, Parameters = conds});
+        }
+
+        public PaginatedList<PrivateMessageDetails> GetIncomeMessages(IList<int> roles, string keyword, bool? read,
                                                                Guid personId, int start, int count)
         {
             var query = BuildGetMessagesQuery(roles, keyword, read, personId, true);
-            return PaginatedSelect<PrivateMessage>(query, "Id", start, count,  Orm.OrderType.Desc);
+            return PaginatedSelect<PrivateMessageDetails>(query, "Id", start, count, Orm.OrderType.Desc);
         }
 
-        public PaginatedList<PrivateMessage> GetOutComeMessage(IList<int> roles, string keyword, Guid personId,
+        public PaginatedList<PrivateMessageDetails> GetOutComeMessage(IList<int> roles, string keyword, Guid personId,
                                                                int start, int count)
         {
             var query = BuildGetMessagesQuery(roles, keyword, null, personId, false);
-            return PaginatedSelect<PrivateMessage>(query, "Id", start, count, Orm.OrderType.Desc);
+            return PaginatedSelect<PrivateMessageDetails>(query, "Id", start, count, Orm.OrderType.Desc);
         } 
 
     }

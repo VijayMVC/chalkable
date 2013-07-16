@@ -7,33 +7,33 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         private static Dictionary<string, string> templates = new Dictionary<string, string>();
 
         public const string ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION = "ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION";
-        private const string ANNOUNCEMENT_ATTACHMENT_NOTIFICATION_TEMPLATE = "New attachment is added to announcement <a href='@0#announcement/view/^.Notification.Announcement.Id'>^.Notification.Announcement.Title</a>";
+        private const string ANNOUNCEMENT_ATTACHMENT_NOTIFICATION_TEMPLATE = "New attachment is added to announcement <a href='@0#announcement/view/^.Notification.AnnouncementRef'>^.Notification.Announcement.Title</a>";
 
         public const string ANNOUNCEMENT_REMINDER_NOTIFICATION = "ANNOUNCEMENT_REMINDER_NOTIFICATION";
-        private const string ANNOUNCEMENT_REMINDER_NOTIFICATION_TEMPLATE = "Reminder about announcement: announcement <a href='@0#announcement/view/^.Notification.Announcement.Id'>^.Notification.Announcement.Title</a>";
+        private const string ANNOUNCEMENT_REMINDER_NOTIFICATION_TEMPLATE = "Reminder about announcement: announcement <a href='@0#announcement/view/^.Notification.AnnouncementRef'>^.Notification.Announcement.Title</a>";
 
         public const string ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR = "ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR";
-        private const string ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR_TEMPLATE = "Student <a href='@0#students/details/^.Notification.SchoolPerson.Id'>^.Notification.SchoolPerson.DisplayName</a> " +
-                                                                                    "asked question about announcement <a href='@0#announcement/view/^.Notification.Announcement.Id'>" +
-                                                                                   "^.Notification.Announcement.Title ^.Notification.Announcement.AnnouncementType.Name</a> ^.Other.PersonQuestion";
+        private const string ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR_TEMPLATE = "Student <a href='@0#students/details/^.Notification.PersonRef'>^.Notification.Person.ShortSalutationName</a> " +
+                                                                                    "asked question about announcement <a href='@0#announcement/view/^.Notification.AnnouncementRef'>" +
+                                                                                   "^.Notification.Announcement.Title ^.Other.AnnouncementTypeName</a> ^.Other.PersonQuestion";
 
         public const string ANNOUNCEMENT_NOTIFICATION_ANSWER_TO_PERSON = "ANNOUNCEMENT_NOTIFICATION_ANSWER_TO_PERSON";
-        private const string ANNOUNCEMENT_NOTIFICATION_ASWER_TO_PERSON_TEMPLATE = "<a href='@0#teachers/details/^.Notification.SchoolPerson.Id'>^.Notification.SchoolPerson.SalutationName" +
-                                                                            " ^.Notification.SchoolPerson.LastName</a> answered a question about <a href='@0#announcement/view/^.Notification.Announcement.Id'>" +
-                                                                            "^.Notification.Announcement.Title ^.Notification.Announcement.AnnouncementType.Name</a> ^.Other.PersonQuestion"; 
+        private const string ANNOUNCEMENT_NOTIFICATION_ASWER_TO_PERSON_TEMPLATE = "<a href='@0#teachers/details/^.Notification.PersonRef'>^.Notification.Person.SalutationName" +
+                                                                            " ^.Notification.Person.LastName</a> answered a question about <a href='@0#announcement/view/^.Notification.AnnouncementRef'>" +
+                                                                            "^.Notification.Announcement.Title ^.Other.AnnouncementTypeName</a> ^.Other.PersonQuestion"; 
 
         public const string ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON = "ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON";
-        private const string ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON_TEMPLATE = "Student <a href='@0#students/details/^.Notification.SchoolPerson.Id'>^.Notification.SchoolPerson.DisplayName</a> added  new attachment";
+        private const string ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON_TEMPLATE = "Student <a href='@0#students/details/^.Notification.PersonRef'>^.Notification.Person.ShortSalutationName</a> added  new attachment";
 
         public const string ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON = "ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON";
-        private const string ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON_TEMPLATE = "<a> ^.Notification.Announcement.SchoolPerson.SalutationName </a> graded or commented your <a href='@0#announcement/view/^.Notification.Announcement.Id'> ^.Notification.Announcement.Title</a> ^.Notification.Announcement.AnnouncementType.Name";
+        private const string ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON_TEMPLATE = "<a> ^.Other.AnnouncementOwner.ShortSalutationName </a> graded or commented your <a href='@0#announcement/view/^.Notification.AnnouncementRef'> ^.Notification.Announcement.Title</a> ^.Other.AnnouncementTypeName";
 
         public const string APPLICATION_NOTIFICATION = "APPLICATION_NOTIFICATION";
         private const string APPLICATION_NOTIFICATION_TEMPLATE = "Application <a href='@0#applications/install/^.Notification.ApplicationRef'>^.Other.ApplicationName</a> was added to My Apps for you by " +
                                                                  "<a ^[^.Other.NeedsUrlLink=true]{href='@0#@1/details/^.Notification.QuestionSchoolPersonRef'}>^.Other.FromPersonName</a>";
 
         public const string PRIVATE_MESSAGE_NOTIFICATION = "PRIVATE_MESSAGE_NOTIFICATION";
-        private const string PRIVATE_MESSAGE_NOTIFICATION_TEMPLATE = " <a ^[^.Other.NeedsUrlLink=true]{href='@0#@1/details/^.Notification.SchoolPerson.Id'}>^.Notification.SchoolPerson.DisplayName</a>" +
+        private const string PRIVATE_MESSAGE_NOTIFICATION_TEMPLATE = " <a ^[^.Other.NeedsUrlLink=true]{href='@0#@1/details/^.Notification.PersonRef'}>^.Notification.Person.ShortSalutationName</a>" +
                                                                      " wrote : ^.Other.MessageSubject - ^.Other.ShortedMessage";
 
         public const string END_MARKINGPERIOD_NOTIFICATION_TO_ADMIN = "END_MARKINGPERIOD_NOTIFICATION_TO_ADMIN";
@@ -41,8 +41,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                                                 "^.Other[^.NotAssignedToClass=true]{ Next Marking not assigned to any class.}";
 
         public const string ATTENDANCE_NOTIFICATION_TO_ADMIN = "ATTENDANCE_NOTIFICATION_TO_ADMIN";
-        private const string ATTENDANCE_NOTIFICATION_TO_ADMIN_TEMPLATE = "^.Other.SchoolPersonsCount students have been  absent more than 2 days:\n " +
-                                                                         "^.Other.SchoolPersons[]{<a href='@0#students/details/^.Id'>^.DisplayName</a> \n}";
+        private const string ATTENDANCE_NOTIFICATION_TO_ADMIN_TEMPLATE = "^.Other.PersonsCount students have been  absent more than 2 days:\n " +
+                                                                         "^.Other.Persons[]{<a href='@0#students/details/^.Id'>^.FullName</a> \n}";
 
         public const string ATTENDANCE_NOTIFICATION_TO_STUDENT = "ATTENDANCE_NOTIFICATION_TO_STUDENT";
         private const string ATTENDANCE_NOTIFICATION_TO_STUDENT_TEMPLATE = "You were marked ^.Other.AttendanceType for ^.Other.ClassName on ^.Other.Date period ^.Other.Period ";
