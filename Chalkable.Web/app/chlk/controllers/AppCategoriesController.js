@@ -2,7 +2,7 @@ REQUIRE('chlk.controllers.BaseController');
 
 REQUIRE('chlk.services.AppCategoryService');
 REQUIRE('chlk.activities.apps.AppCategoryListPage');
-REQUIRE('chlk.activities.apps.AddCategoryDialog');
+REQUIRE('chlk.activities.apps.CategoryDialog');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -14,28 +14,67 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.AppCategoryService, 'appCategoryService',
 
         [chlk.controllers.SidebarButton('settings')],
+
+
         [[Number]],
         function listAction(pageIndex_) {
             var result = this.appCategoryService
-                .getCategories(pageIndex_ | 0)
+                .getCategories(pageIndex_|0)
                 .attach(this.validateResponse_());
-            /* Put activity in stack and render when result is ready */
             return this.PushView(chlk.activities.apps.AppCategoryListPage, result);
         },
-        function addCategoryAction(form_){
-            var model = new chlk.models.apps.AppCategory;
-            if (form_){
-                model.setName(form_.name);
-                model.setDescription(form_.description);
-            }
-            return this.ShadeView(chlk.activities.apps.AddCategoryDialog, ria.async.DeferredData(model));
-        },
-        [[Number]],
-        function deleteAction(id) {
-        },
-        [[Number]],
-        function detailsAction(id) {
-        }
 
+        [[Number]],
+        function pageAction(pageIndex) {
+            var result = this.appCategoryService
+                .getCategories(pageIndex)
+                .attach(this.validateResponse_());
+            return this.UpdateView(chlk.activities.apps.AppCategoryListPage, result);
+        },
+
+
+        [[chlk.models.apps.AppCategoryId]],
+        function updateAction(id) {
+            var result = this.appCategoryService
+                .getCategory(id)
+                .attach(this.validateResponse_());
+            return this.ShadeView(chlk.activities.apps.CategoryDialog, result);
+        },
+
+
+        function addAction() {
+            var result = new ria.async.DeferredData(new chlk.models.apps.AppCategory);
+            return this.ShadeView(chlk.activities.apps.CategoryDialog, result);
+        },
+
+        [[chlk.models.apps.AppCategory]],
+        function saveAction(model){
+            var result = this.appCategoryService
+                .saveCategory(
+                    model.getId(),
+                    model.getName(),
+                    model.getDescription()
+                )
+                .attach(this.validateResponse_())
+                .then(function (data) {
+                    this.view.getCurrent().close();
+                    return this.appCategoryService.getCategories(0);
+                }.bind(this));
+
+            return this.UpdateView(chlk.activities.apps.AppCategoryListPage, result);
+        },
+
+
+
+        [[chlk.models.apps.AppCategoryId]],
+        function deleteAction(id) {
+            var result= this.appCategoryService
+                .removeCategory(id)
+                .attach(this.validateResponse_())
+                .then(function (data) {
+                    return this.appCategoryService.getCategories(0)
+                },this);
+            return this.UpdateView(chlk.activities.apps.AppCategoryListPage, result);
+        }
     ])
 });

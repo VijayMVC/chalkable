@@ -1,16 +1,15 @@
-.dialog.add-department.gray
+.dialog.add-app-category.gray
     .x-window-header
-        span Department
+        span Category
     .x-window-body
-            +ActionForm('departments', 'addDepartment')
-                .x-form-field
-                    label File:
-                    input(type="text",name="iconfile")
+            +ActionForm('appcategories', 'save')
+                input(type="hidden",name="id", value=self.id)
                 .x-form-field
                     label Name:
                     input(type="text",name="name", value=self.name)
                 .x-form-field
-                    label Keywords:
-                    input(type="text",name="keywords", value=self.keywords)
+                    label Description:
+                    input(type="text",name="description", value=self.description)
+                .x-form-field
                 +Button(type="submit").special-button.blue-button.submit-btn Submit
                 +Button.special-button.red-button Cancel

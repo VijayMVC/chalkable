@@ -14,9 +14,9 @@ namespace Chalkable.Web.Controllers
             return Json(res.Transform(ContainerViewData.Create));
         }
         [AuthorizationFilter("SysAdmin")]
-        public ActionResult ListBlobs(string containeraddress, int? start, int? count)
+        public ActionResult ListBlobs(string containerAddress, int? start, int? count)
         {
-            var res = MasterLocator.StorageBlobService.GetBlobs(containeraddress, null, start ?? 0, count ?? 10);
+            var res = MasterLocator.StorageBlobService.GetBlobs(containerAddress, null, start ?? 0, count ?? 10);
             return Json(res.Transform(BlobViewData.Create));
         }
 

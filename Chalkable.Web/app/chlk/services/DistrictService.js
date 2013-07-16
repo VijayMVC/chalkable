@@ -42,7 +42,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.district.DistrictId, String, String, String, String, String, Number]],
             ria.async.Future, function saveDistrict(id_, name, dbName, sisUrl, sisUserName, sisPassword, sisSystemType) {
-                if (id_) return this.updateDistrict(id_, name, dbName, sisUrl, sisUserName, sisPassword, sisSystemType);
+                if (id_ && id_.valueOf()) return this.updateDistrict(id_, name, dbName, sisUrl, sisUserName, sisPassword, sisSystemType);
                 return this.addDistrict(name, dbName, sisUrl, sisUserName, sisPassword, sisSystemType);
             },
 

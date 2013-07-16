@@ -1,8 +1,8 @@
 .departments
     .action-bar.not-transparent
         .container.panel-bg
-            +ActionLink('departments', 'addDepartment').chlk-add.opacity-button Add Department
-    +Grid('departments', 'list', self).not-transparent
+            +ActionLink('departments', 'add').chlk-add.opacity-button Add Department
+    +Grid('departments', 'page', self).not-transparent
         +GridHead()
             .th Name
             .th keywords
@@ -13,6 +13,6 @@
                     .td= item.getName()
                     .td= item.getKeywords().join(',')
                     .td.action-links
-                        +ActionLink('departments', 'details', item.getId()).profile
+                        +ActionLink('departments', 'update', item.getId()).profile
                         +ActionLink('departments', 'delete', item.getId()).remove
 
