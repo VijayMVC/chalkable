@@ -59,8 +59,6 @@ namespace Chalkable.Web.Controllers
         private const string HEADER_CONTENT_DISPOSITION =
             "Content-Disposition: form-data; name=\"{0}\"; filename=\"{1}\"\r\nContent-Type: {2}\r\n\r\n";
         
-
-
         private static DocumentUploadResponse HttpUploadFile(string url, string file, string paramName, string contentType, NameValueCollection nvc, byte[] bytes)
         {
             string boundary = "----" + DateTime.UtcNow.Ticks.ToString("x");
@@ -112,8 +110,7 @@ namespace Chalkable.Web.Controllers
             }
             return null;
         }
-
-
+        
         [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult AddAttachment(Guid announcementId)
         {
@@ -138,12 +135,7 @@ namespace Chalkable.Web.Controllers
             }
             var announcement = SchoolLocator.AnnouncementAttachmentService.AddAttachment(announcementId, bin, name, uuid);
             AnnouncementViewData res = PrepareFullAnnouncementViewData(announcement.Id);
-            var actionResult = Json(res, 6);
-            if (actionResult is JsonResult)
-            {
-                (actionResult as JsonResult).ContentType = HTML_CONTENT_TYPE;
-            }
-            return actionResult;
+            return Json(res, HTML_CONTENT_TYPE, 6);
         }
 
         [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]

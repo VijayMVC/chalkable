@@ -17,12 +17,7 @@ namespace Chalkable.Web.Controllers
             string filename;
             GetFileFromRequest(out icon, out filename);
             var res = MasterLocator.ChalkableDepartmentService.Add(name, keywords, icon);
-            var actionResult = Json(ChalkableDepartmentViewData.Create(res));
-            if (actionResult is JsonResult)
-            {
-                (actionResult as JsonResult).ContentType = contentType;
-            }
-            return actionResult;
+            return Json(ChalkableDepartmentViewData.Create(res), contentType);
         }
 
         [AuthorizationFilter("SysAdmin")]
@@ -34,12 +29,7 @@ namespace Chalkable.Web.Controllers
             if (icon == null)
                 icon = MasterLocator.DepartmentIconService.GetPicture(id, null, null);
             var res = MasterLocator.ChalkableDepartmentService.Edit(id, name, keywords, icon);
-            var actionResult = Json(ChalkableDepartmentViewData.Create(res));
-            if (actionResult is JsonResult)
-            {
-                (actionResult as JsonResult).ContentType = contentType;
-            }
-            return actionResult;
+            return Json(ChalkableDepartmentViewData.Create(res), contentType);
         }
 
         [AuthorizationFilter("SysAdmin")]
@@ -53,6 +43,14 @@ namespace Chalkable.Web.Controllers
         {
             var res = MasterLocator.ChalkableDepartmentService.GetChalkableDepartments();
             return Json(ChalkableDepartmentViewData.Create(res));
-        }       
+        }
+        
+        [Authorize]
+        public ActionResult GetInfo(Guid chalkableDepartmentId)
+        {
+            var res = MasterLocator.ChalkableDepartmentService.GetChalkableDepartmentById(chalkableDepartmentId);
+            return Json(ChalkableDepartmentViewData.Create(res));
+        }
+
     }
 }
