@@ -30,7 +30,7 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.district.DistrictId, String, String, String, String, String, Number]],
             ria.async.Future, function updateDistrict(id, name, dbName, sisUrl, sisUserName, sisPassword, sisSystemType) {
                 return this.post('District/Update.json', chlk.models.district.District, {
-                    id: id.valueOf(),
+                    districtId: id.valueOf(),
                     name: name,
                     dbName: dbName,
                     sisUrl: sisUrl,
@@ -49,13 +49,13 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.district.DistrictId]],
             ria.async.Future, function removeDistrict(id) {
                 return this.post('District/Delete.json', chlk.models.district.District, {
-                    id: id.valueOf()
+                    districtId: id.valueOf()
                 });
             },
             [[chlk.models.district.DistrictId]],
             ria.async.Future, function getDistrict(id) {
                 return this.post('District/Info.json', chlk.models.district.District, {
-                    id: id.valueOf()
+                    districtId: id.valueOf()
                 });
             }
         ])

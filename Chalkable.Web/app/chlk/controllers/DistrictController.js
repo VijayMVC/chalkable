@@ -45,7 +45,6 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.district.DistrictDialog, result);
         },
 
-
         [[chlk.models.district.District]],
         function saveAction(model){
             var result = this.districtService

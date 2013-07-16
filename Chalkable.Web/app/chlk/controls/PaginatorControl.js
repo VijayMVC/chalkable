@@ -31,7 +31,6 @@ NAMESPACE('chlk.controls', function () {
                     params.push(value);
                     state.setParams(params);
                     state.setPublic(false);
-
                     this.context.stateUpdated();
                 }catch(e){
                     console.info(e.getMessage());
@@ -46,19 +45,20 @@ NAMESPACE('chlk.controls', function () {
 
             [[Object, Array]],
             Object, function preparePaginationData(data, params_) {
-                var start = data.pageIndex*data.pageSize;
+                var start = data.getPageIndex() *data.getPageSize();
                 this.setLinkParams(params_);
                 var res = {
-                    hasPreviousPage: data.hasPreviousPage,
-                    hasNextPage: data.hasNextPage,
-                    lastPageStart: (data.totalPages - 1) * data.pageSize,
-                    prevPageStart: start - data.pageSize,
-                    nextPageStart: start + data.pageSize,
-                    pageIndex: data.pageIndex + 1,
-                    totalCount: data.totalCount,
+                    hasPreviousPage: data.isHasPreviousPage(),
+                    hasNextPage: data.isHasNextPage(),
+                    lastPageStart: (data.getTotalPages() - 1) * data.getPageSize(),
+                    prevPageStart: start - data.getPageSize(),
+                    nextPageStart: start + data.getPageSize(),
+                    pageIndex: data.getPageIndex() + 1,
+                    totalCount: data.getTotalCount(),
+                    totalPages: data.getTotalPages(),
                     startText: start + 1,
-                    end: start + data.pageSize,
-                    pageSize: data.pageSize
+                    end: start + data.getPageSize(),
+                    pageSize: data.getPageSize()
                 };
                 this.setConfigs(res);
                 return res;
