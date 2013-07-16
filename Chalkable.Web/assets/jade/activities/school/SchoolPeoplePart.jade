@@ -1,0 +1,20 @@
+-users=self.getUsers()
+.top.panel-bg
+    span #{users.totalcount} Persons
+.action-bar.buttons.filter
+    .container.panel-bg
+        .left
+            +ActionLink('schools', 'updatePeopleAction', [school.getId(), false])(class=self.isByLastName()?"":"pressed") First name
+            +ActionLink('schools', 'updatePeopleAction', [school.getId(), true])(class=self.isByLastName()?"pressed":"") Last name
++ListView(users)(
+    selectedIndex = selectedIndex).people-list
+    each item, i in users.getItems()
+        .row(class=(i == selectedIndex ? 'selected' : ''), index=i)
+            +ActionLink('schools', 'details', 1).left
+                img.avatar.avatar47(src="https://dev.chalkable.com/PersonPicture/Read?pictureId=0&width=47&height=47&gender=F")
+            p.left= item.getFullname()
+            .right
+                +Button().message-button.blue-gradient-btn Message
+            .clear
+
+

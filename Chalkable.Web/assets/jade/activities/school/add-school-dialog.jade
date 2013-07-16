@@ -1,0 +1,42 @@
+.dialog.add-school.gray
+    .x-window-header
+        span Add/Edit School
+    .x-window-body
+        .general-info
+            span.x-fieldset-header-text General Information
+            +ActionForm('schools', 'addSchool')
+                .x-form-field
+                    label Title:
+                    input(type="text",name="name", value=self.name)
+                .x-form-field
+                    label LocalID:
+                    input(type="text",name="localId", value=self.localId)
+                .x-form-field
+                    label NCES ID:
+                    input(type="text",name="ncesId", value=self.ncesId)
+                .x-form-field
+                    label Type:
+                    input(type="text",name="schoolType", value=self.schoolType)
+                .x-form-field
+                    label URL:
+                    input(type="text",name="schoolUrl", value=self.schoolUrl)
+                .x-form-field
+                    label State/Province ID:
+                    input
+                .x-form-field
+                    label School TimeZone:
+                    +Select('timezoneId')#timezoneId
+                        each item in self.getTimezones()
+                            +Option(item.getId(), item.getDisplayName(), item.getId() == self.timezoneId ? 'selected' : '')
+                .x-form-field
+                    label Send EmailNotifications:
+                    +Checkbox("sendEmailNotifications", self.sendEmailNotifications).checkbox-last
+                span.x-fieldset-header-text Principal Information
+                .x-form-field
+                    label Contact Title:
+                    input
+                .x-form-field
+                    label Contact Name:
+                    input
+                +Button(type="submit").special-button.blue-button.submit-btn Submit
+                +Button.special-button.red-button Cancel

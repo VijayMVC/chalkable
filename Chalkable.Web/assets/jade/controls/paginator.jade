@@ -1,0 +1,22 @@
+mixin Paginator(controller, action, data, params)
+    params = params || [];
+    pd = self.preparePaginationData(data, params)
+    .paginator-container
+        .left-container
+            +ActionLink(controller, action, params, 0)(class =  'first-page' + (pd.hasPreviousPage ? '' : ' disabled'))
+            +ActionLink(controller, action, params, pd.prevPageStart)(class =  'prev-page' + (pd.hasPreviousPage ? '' : ' disabled'))
+            .info-container
+                form
+                    label(for='current_page') Page
+                    input(name='current_page', value=pd.pageIndex).page-value
+                    span
+                        | of #{data.totalPages}
+                    input(type="submit")
+                    input(type="hidden",name="controller",value=controller).controller-name
+                    input(type="hidden",name="action",value=action).action-name
+            +ActionLink(controller, action, params, pd.nextPageStart)(class =  'next-page' + (pd.hasNextPage ? '' : ' disabled'))
+            +ActionLink(controller, action, params, pd.lastPageStart)(class =  'last-page' + (pd.hasNextPage ? '' : ' disabled'))
+        .right-container
+            SPAN
+                |Displaying #{pd.startText} - #{pd.end} of #{pd.totalCount}
+        .clear
