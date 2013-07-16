@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.BusinessLogic.Mapping;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Logic;
+using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models
@@ -109,7 +109,6 @@ namespace Chalkable.Web.Models
             return res;
         }
     }
-
 
     public class AnnouncementGradeViewData : AnnouncementViewData
     {

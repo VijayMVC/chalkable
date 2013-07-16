@@ -25,6 +25,16 @@ namespace Chalkable.Web.Controllers
             return new ChalkableJsonResult(false) { Data = response, SerializationDepth = serializationDepth };
         }
 
+        public ActionResult Json(object data, string contentType, int serializationDepth = 10)
+        {
+            var res = Json(data, serializationDepth);
+            if (res is JsonResult)
+            {
+                (res as JsonResult).ContentType = contentType;
+            }
+            return res;
+        }
+
         
         
         public IServiceLocatorMaster MasterLocator { get; protected set; }
@@ -64,7 +74,6 @@ namespace Chalkable.Web.Controllers
         }
 
         
-        
         public RedirectToRouteResult Redirect<T>(Expression<Action<T>> action) where T : Controller
         {
             var routeValues = HtmlExtensions.ParseExpression(action);
@@ -84,5 +93,7 @@ namespace Chalkable.Web.Controllers
             name = null;
             return false;
         }
+
+
     }
 }

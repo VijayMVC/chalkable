@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using Chalkable.Common;
+﻿using System.Web.Mvc;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 
@@ -14,17 +10,13 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin")]
         public ActionResult ListBlobContainers(int? start, int? count)
         {
-            start = start ?? 0;
-            count = count ?? 10;
-            var res = MasterLocator.StorageBlobService.GetBlobContainers(start.Value, count.Value);
+            var res = MasterLocator.StorageBlobService.GetBlobContainers(start ?? 0, count ?? 10);
             return Json(res.Transform(ContainerViewData.Create));
         }
         [AuthorizationFilter("SysAdmin")]
         public ActionResult ListBlobs(string containeraddress, int? start, int? count)
         {
-            start = start ?? 0;
-            count = count ?? 10;
-            var res = MasterLocator.StorageBlobService.GetBlobs(containeraddress, null, start.Value, count.Value);
+            var res = MasterLocator.StorageBlobService.GetBlobs(containeraddress, null, start ?? 0, count ?? 10);
             return Json(res.Transform(BlobViewData.Create));
         }
 
