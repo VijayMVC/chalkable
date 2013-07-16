@@ -28,7 +28,15 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(res);
         }
 
-
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult UpdateInfo(Guid personId, IntList addressIndexes, IntList phoneIndexes, string email, string gender,
+            DateTime? birthdayDate, string localId, string salutation, string firstName, string lastName)
+        {
+            var teacher = UpdateTeacherOrAdmin(personId, email, firstName, lastName, gender, birthdayDate
+                                              , salutation, addressIndexes, phoneIndexes);           
+            //MixPanelService.ChangedEmail(SchoolLocator.Context., email);
+            return Json(GetInfo(teacher.Id, TeacherInfoViewData.Create));
+        }
 
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
@@ -37,6 +45,5 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var role = CoreRoles.TEACHER_ROLE.Name;
             return Json(PersonLogic.GetPersons(SchoolLocator, start, count, sortType, filter, role, classId));
         }
-
     }
 }

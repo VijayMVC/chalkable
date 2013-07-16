@@ -8,7 +8,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IServiceLocatorMaster ServiceLocatorMaster { get; }
         UserContext Context { get; }
         IPersonService PersonService { get; }
-        IAddressSerivce AddressSerivce { get; }
+        IAddressService AddressService { get; }
         IGradeLevelService GradeLevelService { get; }
         IMarkingPeriodService MarkingPeriodService { get; }
         IClassService ClassService { get; }
@@ -38,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         private IServiceLocatorMaster serviceLocatorMaster;
         private IPersonService personService;
-        private IAddressSerivce addressSerivce;
+        private IAddressService addressSerivce;
         private IGradeLevelService gradeLevelService;
         private IMarkingPeriodService markingPeriodService;
         private IClassService classService;
@@ -100,7 +100,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             get { return personService; }
         }
-        public IAddressSerivce AddressSerivce
+        public IAddressService AddressService
         {
             get { return addressSerivce; }
         }

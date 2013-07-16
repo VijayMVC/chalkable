@@ -73,6 +73,7 @@
     <Compile Include="DataAccess\SchoolYearDataAccess.cs" />
     <Compile Include="DataAccess\StudentAnnouncementDataAccess.cs" />
     <Compile Include="DataAccess\StudentFinalGradeDataAccess.cs" />
+    <Compile Include="DataAccess\StudentInfoDataAccess.cs" />
     <Compile Include="DataAccess\StudentParentDataAccess.cs" />
     <Compile Include="Model\Address.cs" />
     <Compile Include="Model\Announcement.cs" />
