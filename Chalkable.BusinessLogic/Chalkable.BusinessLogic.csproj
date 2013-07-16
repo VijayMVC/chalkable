@@ -86,6 +86,7 @@
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
     <Compile Include="Services\School\CourseService.cs" />
+    <Compile Include="Services\School\DisciplineTypeService.cs" />
     <Compile Include="Services\School\FinalGradeService.cs" />
     <Compile Include="Services\School\GradeLevelService.cs" />
     <Compile Include="Services\School\GradingStyleService.cs" />
