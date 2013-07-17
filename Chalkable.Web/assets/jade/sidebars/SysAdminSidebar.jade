@@ -1,0 +1,14 @@
++ActionLink('district', 'list')#home-logo
+#sidebar-controls
+    .search-wrapper
+        #search-bar
+    .wrapper
+        .buttons-row
+            +ActionLink('district', 'list').one-third-button.people(title="View Districts") Districts
+            +ActionLink('apps', 'list').one-third-button.apps(title="View Applications") Apps
+            +ActionLink('settings', 'dashboard').one-third-button.settings(title="View System Types") Settings
+        .buttons-row
+
+            +ActionLink('funds', 'list').one-third-button.statistic(title="View Purchase Order") Purchase Order
+            +ActionLink('signup', 'list').one-third-button.settings(title="View Signups") Signups
+#invite-button-container
