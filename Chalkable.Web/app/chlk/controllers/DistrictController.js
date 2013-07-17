@@ -14,6 +14,11 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.DistrictService, 'districtService',
 
         [chlk.controllers.SidebarButton('districts')],
+
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
         [[Number]],
         function listAction(pageIndex_) {
             var result = this.districtService
@@ -23,6 +28,15 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[Number]],
+        function listSysAdminAction(pageIndex_) {
+            var result = this.districtService
+                .getDistricts(pageIndex_|0)
+                .attach(this.validateResponse_());
+            return this.PushView(chlk.activities.district.DistrictListPage, result);
+        },
+
+
+            [[Number]],
         function pageAction(pageIndex) {
             var result = this.districtService
                 .getDistricts(pageIndex)

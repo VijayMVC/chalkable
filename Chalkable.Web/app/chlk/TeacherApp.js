@@ -1,17 +1,14 @@
-REQUIRE('ria.mvc.Application');
-REQUIRE('ria.dom.jQueryDom');
-REQUIRE('ria.dom.ready');
+REQUIRE('chlk.BaseApp');
 
 REQUIRE('chlk.controllers.FeedController');
 
 
-REQUIRE('chlk.controls.ActionLinkControl');
 
 NAMESPACE('chlk', function (){
 
     /** @class chlk.TeacherApp */
     CLASS(
-        'TeacherApp', EXTENDS(ria.mvc.Application), [
+        'TeacherApp', EXTENDS(chlk.BaseApp), [
             OVERRIDE, ria.mvc.Dispatcher, function initDispatcher_() {
                 var dispatcher = BASE();
 
@@ -19,6 +16,13 @@ NAMESPACE('chlk', function (){
                 dispatcher.setDefaultControllerAction('list');
                 return dispatcher;
             },
+
+            OVERRIDE, ria.mvc.ISession, function initSession_() {
+                var session = BASE();
+                session.set('role', new chlk.models.common.Role(chlk.models.common.RoleEnum.TEACHER, 'Teacher'));
+                return session;
+            },
+
             OVERRIDE, ria.async.Future, function onStart_() {
                 return BASE()
                     .then(function(data){
