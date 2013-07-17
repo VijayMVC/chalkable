@@ -158,21 +158,24 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         //TODO: implement builders 
 
-        public Notification BuildAnnouncementNewAttachmentNotification(Announcement announcement, Person recipient, string baseUrl = null)
+        public Notification BuildAnnouncementNewAttachmentNotification(AnnouncementComplex announcement, Person recipient, string baseUrl = null)
         {
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION,
-                                                 NotificationType.Announcement, recipient, announcement);
+                                                 NotificationType.Announcement, recipient, announcement, null, null, null,
+                                                 null, null, new { AnnouncementTitle = announcement.Title});
         }
         public Notification BuildAnnouncementNewAttachmentNotificationToPerson(AnnouncementDetails announcement, Person fromschoolPerson, string baseUrl = null)
         {
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON,
-                                                 NotificationType.Announcement, announcement.Owner, announcement, null, null, null, null, fromschoolPerson);
+                                                 NotificationType.Announcement, announcement.Owner, announcement, null, null, null, 
+                                                 null, fromschoolPerson, new { AnnouncementTitle = announcement.Title});
         }
 
-        public Notification BuildAnnouncementReminderNotification(Announcement announcement, Person recipient, string baseUrl = null)
+        public Notification BuildAnnouncementReminderNotification(AnnouncementComplex announcement, Person recipient, string baseUrl = null)
         {
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_REMINDER_NOTIFICATION,
-                                                 NotificationType.Announcement, recipient, announcement);
+                                                 NotificationType.Announcement, recipient, announcement, null, null, null,
+                                                 null, null, new { AnnouncementTitle = announcement.Title });
         }
 
         public Notification BuildAnnouncementQnToAuthorNotifiaction(AnnouncementQnAComplex announcementQnA, AnnouncementComplex announcement, Person recipient, string baseUrl = null)
@@ -182,7 +185,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                  announcementQnA.Asker, new
                                                      {
                                                          AnnouncementTypeName = announcement.AnnouncementTypeName,
-                                                         PersonQuestion = StringTools.BuildShortText(announcementQnA.Question, 35)
+                                                         PersonQuestion = StringTools.BuildShortText(announcementQnA.Question, 35),
+                                                         AnnouncementTitle = announcement.Title
                                                      });
         }
 
@@ -194,6 +198,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                  null, fromSchoolPerson, new
                                                      {
                                                          AnnouncementTypeName = announcement.AnnouncementTypeName,
+                                                         AnnouncementTitle = announcement.Title,
                                                          PersonQuestion = StringTools.BuildShortText(announcementQnA.Question, 40)
                                                      });
         }
@@ -204,7 +209,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                  NotificationType.Announcement, recipient, announcement, null, null, null, null, null, 
                                                  new {
                                                          AnnouncementOwner = announcement.Owner, 
-                                                         AnnouncementTypeName = announcement.AnnouncementTypeName
+                                                         AnnouncementTypeName = announcement.AnnouncementTypeName,
+                                                         AnnouncementTitle = announcement.Title
                                                      });
         }
 

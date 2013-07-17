@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Chalkable.Data.School.Model;
 using NUnit.Framework;
 
@@ -27,6 +28,12 @@ namespace Chalkable.Tests.Services.School
             var gradingStyle = GradingStyleEnum.Numeric100;
             var gradeValue = context.AdminGradeSl.GradingStyleService.GetMapper().MapBack(gradingStyle, 20);
             var sa = context.FirstTeacherSl.StudentAnnouncementService.SetGrade(sa1.Id, 20, "testCredits", "test", false, gradingStyle);
+
+            //check notification
+            Assert.AreEqual(1, SchoolTestContext.FirstStudentSl.NotificationService.GetUnshownNotifications().Count);
+            Assert.AreEqual(sa.AnnouncementRef, SchoolTestContext.FirstStudentSl.NotificationService.GetUnshownNotifications().First().AnnouncementRef);
+           
+
             Assert.AreEqual(sa.Id, sa1.Id);
             Assert.AreEqual(sa.GradeValue, gradeValue);
             Assert.AreEqual(sa.ExtraCredit, "testCredits");
