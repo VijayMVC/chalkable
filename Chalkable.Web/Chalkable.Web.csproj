@@ -144,6 +144,7 @@
     <Compile Include="Controllers\DisciplineTypeController.cs" />
     <Compile Include="Controllers\DistrictController.cs" />
     <Compile Include="Controllers\FeedController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PeriodController.cs" />
     <Compile Include="Controllers\GradingStyleController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -184,6 +185,8 @@
     <Compile Include="Models\DistrictViewData.cs" />
     <Compile Include="Models\FeedViewData.cs" />
     <Compile Include="Models\GradingStyleViewData.cs" />
+    <Compile Include="Models\NotificationsByDateViewData.cs" />
+    <Compile Include="Models\NotificationViewData.cs" />
     <Compile Include="Models\PeriodViewData.cs" />
     <Compile Include="Models\IdNameViewData.cs" />
     <Compile Include="Models\MarkingPeriodViewData.cs" />

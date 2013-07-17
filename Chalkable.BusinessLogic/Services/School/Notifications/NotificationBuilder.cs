@@ -100,7 +100,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             }
             if (privateMessage != null)
             {
-                notification.PrivateMessage = privateMessage;
+                //notification.PrivateMessage = privateMessage;
                 notification.PrivateMessageRef = privateMessage.Id;
             }
             if (asker != null)
