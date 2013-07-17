@@ -153,6 +153,7 @@
     <Compile Include="Controllers\PersonControllers\StudentController.cs" />
     <Compile Include="Controllers\PersonControllers\TeacherController.cs" />
     <Compile Include="Controllers\PreferenceController.cs" />
+    <Compile Include="Controllers\PrivateMessageController.cs" />
     <Compile Include="Controllers\ScheduleSectionController.cs" />
     <Compile Include="Controllers\SchoolController.cs" />
     <Compile Include="Controllers\SchoolYearController.cs" />
@@ -201,6 +202,7 @@
     <Compile Include="Models\PhoneViewData.cs" />
     <Compile Include="Models\PreferenceVeiwData.cs" />
     <Compile Include="Models\Binders\StringConstructedObjectBinder.cs" />
+    <Compile Include="Models\PrivateMessageViewData.cs" />
     <Compile Include="Models\RoleViewData.cs" />
     <Compile Include="Models\RoomViewData.cs" />
     <Compile Include="Models\ScheduleSectionViewData.cs" />
