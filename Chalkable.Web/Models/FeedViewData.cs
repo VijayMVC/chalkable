@@ -9,7 +9,7 @@ namespace Chalkable.Web.Models
     public class FeedViewData
     {
         public string FType { get; set; }
-        public object Valve { get; set; }
+        public object Value { get; set; }
 
         private const string ANNOUNCEMENT = "Announcement";
         
@@ -18,7 +18,7 @@ namespace Chalkable.Web.Models
             var res = new FeedViewData
             {
                 FType = ANNOUNCEMENT,
-                Valve = AnnouncementViewData.Create(announcement),
+                Value = AnnouncementViewData.Create(announcement),
             };
             return res;
         }

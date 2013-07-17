@@ -116,7 +116,7 @@ NAMESPACE('ria.mvc', function () {
             VOID, function callAction_(state) {
                 var params = state.getParams();
                 var method = this.resolveRoleAction_(state);
-                    this.validateActionCall_(method, params);
+                this.validateActionCall_(method, params);
 
                 try {
                     method.invokeOn(this, this.deserializeParams_(params, method));

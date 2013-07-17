@@ -64,15 +64,19 @@ NAMESPACE('chlk.controllers', function (){
 
                if (!method){
                    method = BASE(state);
-                   var roles = method.findAnnotation(chlk.controllers.AccessForRoles)[0].roles;
-                   var filteredRoles = roles.filter(function (r) {
-                       return r == role.getRoleId();
-                   });
+                   var accessForAnnotation = method.findAnnotation(chlk.controllers.AccessForRoles)[0];
+                   if (accessForAnnotation){
 
-                   if (filteredRoles.length != 1){
-                       throw new ria.mvc.MvcException('Controller ' + ref.getName() + ' has no method ' + method.getName()
-                           + ' available for role ' + role.getRoleName());
+                       var filteredRoles = accessForAnnotation.roles.filter(function (r) {
+                           return r == role.getRoleId();
+                       });
+
+                       if (filteredRoles.length != 1){
+                           throw new ria.mvc.MvcException('Controller ' + ref.getName() + ' has no method ' + method.getName()
+                               + ' available for role ' + role.getRoleName());
+                       }
                    }
+
                }
                return method;
            },
