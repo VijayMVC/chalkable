@@ -94,6 +94,14 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
+        public IList<PrivateMessage> GetNotDeleted(Guid callerId)
+        {
+            var sql = @"select * from PrivateMessage where (FromPersonRef = @callerId or ToPersonRef = @callerId)
+                       and DeletedBySender = 0 and DeletedByRecipient = 0";
+            var conds = new Dictionary<string, object> {{"callerId", callerId}};
+            return ReadMany<PrivateMessage>(new DbQuery {Sql = sql, Parameters = conds});
+        } 
+
         public PaginatedList<PrivateMessageDetails> GetIncomeMessages(IList<int> roles, string keyword, bool? read,
                                                                Guid personId, int start, int count)
         {
