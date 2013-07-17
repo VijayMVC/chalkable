@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Logic\SchoolStateMachine.cs" />
     <Compile Include="Mapping\GradingStyleMapper.cs" />
+    <Compile Include="Model\AnnouncementInfo.cs" />
     <Compile Include="Model\AttachmentContentInfo.cs" />
     <Compile Include="Model\BlobContainerInfo.cs" />
     <Compile Include="Model\BlobInfo.cs" />

@@ -63,7 +63,7 @@ namespace Chalkable.Tests.Services.School
                     RecipientInfo.Create(false, CoreRoles.TEACHER_ROLE.Id, null, null),
                     RecipientInfo.Create(false, CoreRoles.STUDENT_ROLE.Id, c.GradeLevelRef, null),
                 };
-            SchoolTestContext.AdminGradeSl.AnnouncementService.EditAnnouncement(ann2, null, null, adminAnnRecipients);
+            SchoolTestContext.AdminGradeSl.AnnouncementService.EditAnnouncement(AnnouncementInfo.Create(ann2), null, null, adminAnnRecipients);
             SchoolTestContext.AdminGradeSl.AnnouncementService.SubmitForAdmin(ann2.Id);
             var uuid4 = Guid.NewGuid().ToString();
             AssertForDeny(sl => sl.AnnouncementAttachmentService.AddAttachment(ann2.Id, attContent, "adminAtt", uuid4), SchoolTestContext,

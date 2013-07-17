@@ -19,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteAnnouncements(Guid classId, int announcementType, AnnouncementState state);
         void DeleteAnnouncements(Guid schoolpersonid, AnnouncementState state = AnnouncementState.Draft);
 
-        Announcement EditAnnouncement(Announcement announcement, Guid? markingPeriodId = null, Guid? classId = null, IList<RecipientInfo> recipients = null);
+        Announcement EditAnnouncement(AnnouncementInfo announcement, Guid? markingPeriodId = null, Guid? classId = null, IList<RecipientInfo> recipients = null);
         void SubmitAnnouncement(Guid announcementId, Guid recipientId, Guid markingPeriodId);
         void SubmitForAdmin(Guid announcementId);
 
@@ -203,19 +203,20 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             throw new NotImplementedException();
         }
-        public Announcement EditAnnouncement(Announcement announcement, Guid? markingPeriodId = null, Guid? classId = null, IList<RecipientInfo> recipients = null)
+        public Announcement EditAnnouncement(AnnouncementInfo announcement, Guid? markingPeriodId = null, Guid? classId = null, IList<RecipientInfo> recipients = null)
         {
             using (var uow = Update())
             {
                 var da = new AnnouncementDataAccess(uow);
-                var res = da.GetById(announcement.Id);
+                var res = da.GetById(announcement.AnnouncementId);
                 if (!AnnouncementSecurity.CanModifyAnnouncement(res, Context))
                     throw new ChalkableSecurityException();
 
                 res.Content = announcement.Content;
                 res.Subject = announcement.Subject;
-                res.AnnouncementTypeRef = announcement.AnnouncementTypeRef;
-                res.Expires = announcement.Expires;
+                res.AnnouncementTypeRef = announcement.AnnouncementTypeId;
+                if(announcement.ExpiresDate.HasValue)
+                   res.Expires = announcement.ExpiresDate.Value;
 
                 res = SetMarkingPeriodToAnnouncement(res, classId, markingPeriodId);
                 res = PreperingReminderData(uow, res);
