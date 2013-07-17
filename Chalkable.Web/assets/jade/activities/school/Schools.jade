@@ -1,0 +1,21 @@
+.schools
+    +Grid('schools', 'updateList', self, [self.items.length && self.items[0].getDistrictId() ? self.items[0].getDistrictId() : 0]).not-transparent
+        +GridHead()
+            .th School Name
+            .th Local ID
+            .th NCES ID
+            .th School Type
+            .th URL
+            .th
+        +GridBody()
+            each item in self.items
+                +GridRow()
+                    .td= item.getName()
+                    .td= item.getLocalId()
+                    .td= item.getNcesId()
+                    .td= item.getSchoolType()
+                    .td= item.getSchoolUrl()
+                    .td.action-links
+                        +ActionLink('schools', 'details', item.getId()).profile
+                        +ActionLink('schools', 'delete', item.getId()).remove
+
