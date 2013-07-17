@@ -7,14 +7,5 @@ NAMESPACE('chlk.activities.district', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.district.Districts)],
-        'DistrictListPage', EXTENDS(ria.mvc.TemplateActivity), [
-            [[Object, String]],
-            OVERRIDE, VOID, function onPartialRender_(model, msg_) {
-                BASE(model, msg_);
-
-                var tpl = new chlk.templates.district.Districts();
-                tpl.assign(model);
-                tpl.renderTo(this.dom.empty());
-            }
-        ]);
+        'DistrictListPage', EXTENDS(ria.mvc.TemplateActivity), []);
 });

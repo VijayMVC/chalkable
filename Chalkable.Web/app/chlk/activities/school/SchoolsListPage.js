@@ -7,13 +7,5 @@ NAMESPACE('chlk.activities.school', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.school.Schools)],
-        'SchoolsListPage', EXTENDS(ria.mvc.TemplateActivity), [
-            [[Object, String]],
-            OVERRIDE, VOID, function onPartialRender_(model, msg_) {
-                BASE(model, msg_);
-                var tpl = new chlk.templates.school.Schools();
-                tpl.assign(model);
-                tpl.renderTo(this.dom.empty());
-            }
-        ]);
+        'SchoolsListPage', EXTENDS(ria.mvc.TemplateActivity), []);
 });

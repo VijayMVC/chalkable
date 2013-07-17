@@ -11,7 +11,6 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class CourseController : ChalkableController
     {
-
         public ActionResult List(int? start, int? count)
         {
             var res = SchoolLocator.CourseService.GetCourses(start ?? 0, count ?? 10);

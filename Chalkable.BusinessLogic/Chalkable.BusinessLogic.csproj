@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="Logic\SchoolStateMachine.cs" />
     <Compile Include="Mapping\GradingStyleMapper.cs" />
+    <Compile Include="Model\AnnouncementInfo.cs" />
+    <Compile Include="Model\AttachmentContentInfo.cs" />
     <Compile Include="Model\BlobContainerInfo.cs" />
     <Compile Include="Model\BlobInfo.cs" />
     <Compile Include="Model\RecipientInfo.cs" />
@@ -57,7 +59,9 @@
     <Compile Include="Security\BaseSecurity.cs" />
     <Compile Include="Security\NotificationSecurity.cs" />
     <Compile Include="Security\PrivateMessageSecurity.cs" />
+    <Compile Include="Security\UserSecurity.cs" />
     <Compile Include="Services\Master\ApplicationService.cs" />
+    <Compile Include="Services\Master\CategoryService.cs" />
     <Compile Include="Services\Master\DistrictService.cs" />
     <Compile Include="Services\Master\ChalkableDepartmentService.cs" />
     <Compile Include="Services\Master\PictureServices\CourseIconService.cs" />
@@ -83,6 +87,7 @@
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
     <Compile Include="Services\School\CourseService.cs" />
+    <Compile Include="Services\School\DisciplineTypeService.cs" />
     <Compile Include="Services\School\FinalGradeService.cs" />
     <Compile Include="Services\School\GradeLevelService.cs" />
     <Compile Include="Services\School\GradingStyleService.cs" />

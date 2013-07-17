@@ -461,7 +461,7 @@ namespace Chalkable.StiConnector.Services
                 var addr = person.Address ?? person.Address1;
                 if (addr != null)
                 {
-                    schoolServiceLocator.AddressSerivce.Add(pr.Id, addr.AddressLine1 + "," + addr.City + "," + addr.PostalCode + "," + addr.State, null, AddressType.Home);
+                    schoolServiceLocator.AddressService.Add(pr.Id, addr.AddressLine1 + "," + addr.City + "," + addr.PostalCode + "," + addr.State, null, AddressType.Home);
                 }
                 else
                     Log.LogWarning(string.Format(ChlkResources.ERR_STI_NO_ADDRESS_FOR_PERSON, person.PersonID));

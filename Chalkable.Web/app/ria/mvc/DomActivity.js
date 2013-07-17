@@ -44,7 +44,7 @@ NAMESPACE('ria.mvc', function () {
 
             [[ria.reflection.ReflectionClass]],
             VOID, function processAnnotations_(ref) {
-                this._actitivyClass = camel2dashed(ref.getShortName());
+                this._activityClass = camel2dashed(ref.getShortName());
 
                 if (!ref.isAnnotatedWith(ria.mvc.DomAppendTo))
                     throw new ria.mvc.MvcException('ria.mvc.DomActivity expects annotation ria.mvc.DomAppendTo');

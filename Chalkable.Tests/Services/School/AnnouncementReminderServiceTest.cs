@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.BusinessLogic.Model;
 using NUnit.Framework;
 
 namespace Chalkable.Tests.Services.School
@@ -42,7 +43,7 @@ namespace Chalkable.Tests.Services.School
             Assert.AreEqual(SchoolTestContext.FirstStudentSl.AnnouncementService.GetAnnouncementDetails(ann.Id).AnnouncementReminders.Count, 1);
 
             ann.Expires = SchoolTestContext.NowDate.AddDays(-1);
-            SchoolTestContext.FirstTeacherSl.AnnouncementService.EditAnnouncement(ann);
+            SchoolTestContext.FirstTeacherSl.AnnouncementService.EditAnnouncement(AnnouncementInfo.Create(ann));
             reminder = reminderService.AddReminder(ann.Id, 2);
             Assert.AreEqual(reminder.RemindDate, SchoolTestContext.NowDate);
         }

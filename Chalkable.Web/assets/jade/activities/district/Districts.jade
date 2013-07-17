@@ -21,7 +21,7 @@
                     .td *
                     .td= item.getSisSystemType()
                     .td.action-links
-                        +ActionLink('schools', 'list', item.getId(), 0).profile
+                        +ActionLink('schools', 'list', item.getId()).profile
                         +ActionLink('district', 'update', item.getId()).view
                         +ActionLink('district', 'delete', item.getId()).remove
 

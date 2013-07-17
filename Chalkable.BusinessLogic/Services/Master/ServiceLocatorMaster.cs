@@ -18,6 +18,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IPictureService CourseIconService { get; }
         IPictureService DepartmentIconService { get; }
         IApplicationService ApplicationService { get; }
+        ICategoryService CategoryService { get; }
     }
 
     public class ServiceLocatorMaster : ServiceLocator, IServiceLocatorMaster
@@ -32,7 +33,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         private IPictureService courseIconService;
         private IPictureService departmentIconService;
         private IApplicationService applicationService;
-        
+        private ICategoryService categoryService;
+
         public ServiceLocatorMaster(UserContext context) : base(context)
         {
             userService = new UserService(this);
@@ -45,6 +47,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             departmentIconService = new DepartmentIconService(this);
             districtService = new DistrictService(this);
             applicationService = new ApplicationService(this);
+            categoryService = new CategoryService(this);
         }
 
         public IUserService UserService { get { return userService; } }
@@ -57,6 +60,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IPictureService CourseIconService { get { return courseIconService; } }
         public IPictureService DepartmentIconService { get { return departmentIconService; } }
         public IApplicationService ApplicationService { get { return applicationService; } }
+        public ICategoryService CategoryService { get { return categoryService; } }
 
         public IServiceLocatorSchool SchoolServiceLocator(Guid schoolId)
         {

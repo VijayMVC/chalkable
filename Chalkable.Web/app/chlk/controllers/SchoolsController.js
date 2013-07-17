@@ -6,6 +6,7 @@ REQUIRE('chlk.services.AccountService');
 REQUIRE('chlk.services.GradeLevelService');
 
 REQUIRE('chlk.models.school.SchoolPeople');
+REQUIRE('chlk.models.district.District');
 
 REQUIRE('chlk.activities.school.SchoolDetailsPage');
 REQUIRE('chlk.activities.school.SchoolPeoplePage');
@@ -14,7 +15,7 @@ REQUIRE('chlk.models.school.SchoolPeople');
 REQUIRE('chlk.controls.ActionLinkControl');
 REQUIRE('chlk.activities.school.SchoolSisPage');
 REQUIRE('chlk.activities.school.SchoolsListPage');
-REQUIRE('chlk.activities.school.AddSchoolDialog');
+REQUIRE('chlk.activities.school.ImportSchoolDialog');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -36,34 +37,54 @@ NAMESPACE('chlk.controllers', function (){
 
 
         [chlk.controllers.SidebarButton('schools')],
-        [[Number, Number]],
-        function updateListAction(districtId_, start_) {
+        [[chlk.models.district.DistrictId, Number]],
+        function pageAction(districtId_, start_) {
             var result = this.schoolService
                 .getSchools(districtId_, start_ || 0)
-                .attach(this.validateResponse_());
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    var districtId = null;
+                    var items = data.getItems();
+                    if (items && items.length > 0){
+                        districtId = items[0].getDistrictId();
+                    }
+                    var schoolListViewData = new chlk.models.school.SchoolListViewData();
+                    schoolListViewData.setDistrictId(districtId);
+                    schoolListViewData.setItems(data);
+
+                    return new ria.async.DeferredData(schoolListViewData);
+                });
             return this.UpdateView(chlk.activities.school.SchoolsListPage, result);
         },
 
         [chlk.controllers.SidebarButton('schools')],
-        [[Number, Number]],
+        [[chlk.models.district.DistrictId, Number]],
         function listAction(districtId, pageIndex_) {
             var result = this.schoolService
-                .getSchools(districtId, pageIndex_ | 0)
-                .attach(this.validateResponse_());
+                .getSchools(districtId, pageIndex_ | 0,  false, false)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    var districtId = null;
+                    var items = data.getItems();
+                    if (items && items.length > 0){
+                        districtId = items[0].getDistrictId();
+                    }
+                    var schoolListViewData = new chlk.models.school.SchoolListViewData();
+                    schoolListViewData.setDistrictId(districtId);
+                    schoolListViewData.setItems(data);
+
+                    return new ria.async.DeferredData(schoolListViewData);
+                });
             /* Put activity in stack and render when result is ready */
             return this.PushView(chlk.activities.school.SchoolsListPage, result);
         },
 
-        [[chlk.models.school.School]],
-        VOID, function importAction(model_) {
+        [[chlk.models.district.DistrictId]],
+        VOID, function importAction(districtId) {
             var result = this.schoolService
-                .getTimezones()
-                .then(function(data){
-                    var model = model_ || new chlk.models.school.School;
-                    model.setTimezones(data.getItems());
-                })
+                .getSchools(districtId)
                 .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.school.SchoolsListPage, result);
+                return this.ShadeView(chlk.activities.school.ImportSchoolDialog, result);
         },
 
         [[Number]],

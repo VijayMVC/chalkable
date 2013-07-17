@@ -5,6 +5,7 @@ REQUIRE('chlk.models.school.School');
 REQUIRE('chlk.models.school.SchoolDetails');
 REQUIRE('chlk.models.school.Timezone');
 REQUIRE('chlk.models.school.SchoolSisInfo');
+REQUIRE('chlk.models.district.District');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -12,11 +13,13 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.SchoolService */
     CLASS(
         'SchoolService', EXTENDS(chlk.services.BaseService), [
-            [[Number, Number]],
-            ria.async.Future, function getSchools(districtId, start_) {
+            [[chlk.models.district.DistrictId, Number, Boolean, Boolean]],
+            ria.async.Future, function getSchools(districtId, start_, demoOnly_, unimportedOnly_) {
                 return this.getPaginatedList(start_ > 0 ? 'data/schools2.json' : 'data/schools.json', chlk.models.school.School, {
                     start: start_,
-                    districtId: districtId
+                    districtId: districtId.valueOf(),
+                    demoOnly: demoOnly_,
+                    unimportedOnly: unimportedOnly_
                 });
             },
 

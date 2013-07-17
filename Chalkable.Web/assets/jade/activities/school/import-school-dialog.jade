@@ -1,0 +1,7 @@
+.dialog.add-school.gray
+    .x-window-header
+        span Import schools
+    .x-window-body
+        .list-container
+            each item in self.items
+                +Checkbox(item.getName(), item.getId())=item.getName()

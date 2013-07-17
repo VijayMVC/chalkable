@@ -1,5 +1,8 @@
 .schools
-    +Grid('schools', 'updateList', self, [self.items.length && self.items[0].getDistrictId() ? self.items[0].getDistrictId() : 0]).not-transparent
+    .action-bar.not-transparent
+        .container.panel-bg
+            +ActionLink('schools', 'import', self.getDistrictId().valueOf()).chlk-add.opacity-button Import schools
+    +Grid('schools', 'page', self.items, [self.getDistrictId().valueOf()]).not-transparent
         +GridHead()
             .th School Name
             .th Local ID
@@ -8,7 +11,7 @@
             .th URL
             .th
         +GridBody()
-            each item in self.items
+            each item in self.items.getItems()
                 +GridRow()
                     .td= item.getName()
                     .td= item.getLocalId()

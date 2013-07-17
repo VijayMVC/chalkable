@@ -1,4 +1,5 @@
 REQUIRE('chlk.models.school.Timezone');
+REQUIRE('chlk.models.district.District');
 
 NAMESPACE('chlk.models.school', function () {
     "use strict";
@@ -20,6 +21,7 @@ NAMESPACE('chlk.models.school', function () {
             [ria.serialize.SerializeProperty('timezoneid')],
             String, 'timezoneId',
             ArrayOf(chlk.models.school.Timezone), 'timezones',
-            Number, 'districtId'
+            [ria.serialize.SerializeProperty('districtid')],
+            chlk.models.district.DistrictId, 'districtId'
         ]);
 });

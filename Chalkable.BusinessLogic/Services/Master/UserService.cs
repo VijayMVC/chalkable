@@ -18,6 +18,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         User CreateSysAdmin(string login, string password);
         User CreateSchoolUser(string login, string password, Guid schoolId, string role);
         void ChangePassword(string login, string newPassword);
+        void ChangeUserLogin(Guid id, string login);
         IList<User> GetUsers();
     }
 
@@ -148,10 +149,23 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public User CreateSchoolUser(string login, string password, Guid schoolId, string role)
         {
-            if(!(BaseSecurity.IsSysAdmin(Context) || (BaseSecurity.IsAdminEditor(Context) && Context.SchoolId == schoolId)))
+            if(!UserSecurity.CanCreate(Context, schoolId))
                 throw new ChalkableSecurityException();
 
             return CreateUser(login, password, schoolId, role, false, false);
+        }
+
+        public void ChangeUserLogin(Guid id, string login)
+        {
+            var user = GetById(id);
+            if(!UserSecurity.CanModify(Context, user))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                user.Login = login;
+                new UserDataAccess(uow).Update(user);
+                uow.Commit();
+            }
         }
     }
 }

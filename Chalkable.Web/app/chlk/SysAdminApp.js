@@ -1,6 +1,4 @@
-REQUIRE('ria.mvc.Application');
-REQUIRE('ria.dom.jQueryDom');
-REQUIRE('ria.dom.ready');
+REQUIRE('chlk.BaseApp');
 
 REQUIRE('chlk.controllers.SchoolsController');
 REQUIRE('chlk.controllers.DistrictController');
@@ -14,25 +12,11 @@ REQUIRE('chlk.controllers.FundsController');
 REQUIRE('chlk.controllers.DepartmentsController');
 REQUIRE('chlk.controllers.DbMaintenanceController');
 
-REQUIRE('chlk.controls.ActionLinkControl');
-REQUIRE('chlk.controls.ListViewControl');
-REQUIRE('chlk.controls.GridControl');
-REQUIRE('chlk.controls.PaginatorControl');
-REQUIRE('chlk.controls.ActionFormControl');
-REQUIRE('chlk.controls.ButtonControl');
-REQUIRE('chlk.controls.CheckboxControl');
-REQUIRE('chlk.controls.GlanceBoxControl');
-REQUIRE('chlk.controls.SelectControl');
-REQUIRE('chlk.controls.AvatarControl');
-REQUIRE('chlk.controls.PhotoContainerControl');
-
-//REQUIRE('~/app/chlk/shared.js');
-
 NAMESPACE('chlk', function (){
 
     /** @class chlk.SysAdminApp */
     CLASS(
-        'SysAdminApp', EXTENDS(ria.mvc.Application), [
+        'SysAdminApp', EXTENDS(chlk.BaseApp), [
             OVERRIDE, ria.mvc.Dispatcher, function initDispatcher_() {
                 var dispatcher = BASE();
 
@@ -40,6 +24,13 @@ NAMESPACE('chlk', function (){
                 dispatcher.setDefaultControllerAction('list');
                 return dispatcher;
             },
+
+            OVERRIDE, ria.mvc.ISession, function initSession_() {
+                var session = BASE();
+                session.set('role', new chlk.models.common.Role(chlk.models.common.RoleEnum.SYSADMIN, 'SysAdmin'));
+                return session;
+            },
+
             OVERRIDE, ria.async.Future, function onStart_() {
 
                 return BASE()

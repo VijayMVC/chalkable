@@ -21,7 +21,28 @@ namespace Chalkable.Data.School.Model
 
     public class PrivateMessageDetails : PrivateMessage
     {
-        public Person Sender { get; set; }
-        public Person Recipient { get; set; }
+        private Person sender;
+        private Person recipient;
+
+        public Person Sender
+        {
+            get { return sender; }
+            set
+            {
+                sender = value;
+                if (value.Id == Guid.Empty && FromPersonRef != Guid.Empty)
+                    value.Id = FromPersonRef;
+            }
+        }
+        public Person Recipient
+        {
+            get { return recipient; }
+            set
+            {
+                recipient = value;
+                if (value.Id == Guid.Empty && ToPersonRef != Guid.Empty)
+                    value.Id = ToPersonRef;
+            }
+        }
     }
 }
