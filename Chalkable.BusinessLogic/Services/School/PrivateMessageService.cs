@@ -22,7 +22,6 @@ namespace Chalkable.BusinessLogic.Services.School
         Outcome
     }
 
-    //todo: notification sending
     //todo: needs tests
 
     public class PrivateMessageService : SchoolServiceBase, IPrivateMessageService
@@ -47,7 +46,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     };
                 da.Insert(message);
                 uow.Commit();
-                //todo : notification sending 
+                ServiceLocator.NotificationService.AddPrivateMessageNotification(message.Id);
                 return message;
             }
         }

@@ -78,7 +78,7 @@ namespace Chalkable.Data.Master.DataAccess
                 ps.Add("categoryId", categoryId);
             }
             orderBy = orderBy ?? Application.ID_FIELD;
-            var q = Orm.PaginationSelect<Application>(new DbQuery { Sql = sql.ToString(), Parameters = ps }, orderBy,
+            var q = Orm.PaginationSelect(new DbQuery { Sql = sql.ToString(), Parameters = ps }, orderBy,
                                                   Orm.OrderType.Desc, 0, int.MaxValue);
 
 

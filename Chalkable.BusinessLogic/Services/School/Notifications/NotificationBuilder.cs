@@ -79,6 +79,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             var notification = new NotificationDetails
             {
                 PersonRef = recipient.Id,
+                Person = recipient,
                 Shown = false,
                 Type = type,
                 Created = serviceLocator.Context.NowSchoolTime
