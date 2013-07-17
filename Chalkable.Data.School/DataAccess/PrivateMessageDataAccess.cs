@@ -47,9 +47,9 @@ namespace Chalkable.Data.School.DataAccess
             if (string.IsNullOrEmpty(keyword))
             {
                 keyword = "%" + keyword + "%";
-                b.AppendFormat(@" and (PrivateMessage_Subject like {0} or PrivateMessage_Body like {0}
-                                        or lower(PrivateMessage_{1}FirstName) like {0} or lower(PrivateMessage_{1}LastName) like {0})"
-                                        , keyword, prefix);
+                b.AppendFormat(@" and (PrivateMessage_Subject like @keyword or PrivateMessage_Body like @keyword
+                                        or lower(PrivateMessage_{0}FirstName) like @keyword or lower(PrivateMessage_{0}LastName) like @keyword)"
+                                        , prefix);
                 conds.Add("keyword", keyword);
             }
             return new DbQuery {Parameters = conds, Sql = b.ToString()};
@@ -90,14 +90,16 @@ namespace Chalkable.Data.School.DataAccess
             var conds = new Dictionary<string, object> {{"Id", id}, {"callerId", callerId}};
             using (var reader = ExecuteReaderParametrized(sql, conds))
             {
+                reader.Read();
                 return ReadPrivateMessageDetails(reader);
             }
         }
 
         public IList<PrivateMessage> GetNotDeleted(Guid callerId)
         {
-            var sql = @"select * from PrivateMessage where (FromPersonRef = @callerId or ToPersonRef = @callerId)
-                       and DeletedBySender = 0 and DeletedByRecipient = 0";
+            var sql = @"select * from PrivateMessage 
+                        where (FromPersonRef = @callerId and DeletedBySender = 0) 
+                               or (ToPersonRef = @callerId and DeletedByRecipient = 0)";
             var conds = new Dictionary<string, object> {{"callerId", callerId}};
             return ReadMany<PrivateMessage>(new DbQuery {Sql = sql, Parameters = conds});
         } 
@@ -117,7 +119,7 @@ namespace Chalkable.Data.School.DataAccess
 
         private PaginatedList<PrivateMessageDetails> ReadPaginatedPrivateMessage(DbQuery query, int start, int count)
         {
-            var orderBy = Orm.FullFieldName(typeof(PrivateMessage), "Id");
+            var orderBy = "PrivateMessage_Id";
             query = Orm.PaginationSelect(query, orderBy, Orm.OrderType.Desc, start, count);
             return ReadPaginatedResult(query, start, count, ReadListPrivateMessageDetails);
         }

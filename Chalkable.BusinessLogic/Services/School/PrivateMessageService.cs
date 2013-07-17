@@ -76,13 +76,15 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new PrivateMessageDataAccess(uow);
-                var messages = da.GetNotDeleted(Context.UserId);
+                var messages = da.GetNotDeleted(Context.UserId).Where(x=>ids.Contains(x.Id)).ToList();
+                if(messages.Count == 0)
+                    throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_MARK_INVALID_RIGHTS);
+
                 foreach (var message in messages)
                 {
                     if (!PrivateMessageSecurity.CanMarkMessage(message, Context))
                         throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_MARK_INVALID_RIGHTS);
                     message.Read = read;
-                    messages.Add(message);
                 }
                 da.Update(messages);
                 uow.Commit();
@@ -94,7 +96,10 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new PrivateMessageDataAccess(uow);
-                var messages = da.GetNotDeleted(Context.UserId);
+                var messages = da.GetNotDeleted(Context.UserId).Where(x => ids.Contains(x.Id)).ToList();
+                if (messages.Count == 0)
+                    throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_DELETE_INVALID_RIGHTS);
+
                 foreach (var message in messages)
                 {
                     if (!PrivateMessageSecurity.CanDeleteMessage(message, Context))

@@ -78,6 +78,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             var parameters = new List<string> {GetBaseUrlByRole(recipient, baseUrl)};
             var notification = new NotificationDetails
             {
+                Id = Guid.NewGuid(),
                 PersonRef = recipient.Id,
                 Person = recipient,
                 Shown = false,
