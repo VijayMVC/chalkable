@@ -13,6 +13,7 @@ namespace Chalkable.Data.School.Model
         public NotificationType Type { get; set; }
         public string Message { get; set; }
         public bool Shown { get; set; }
+        public const string CREATED_FIELD = "Created";
         public DateTime Created { get; set; }
         public bool WasSend { get; set; }
         public Guid PersonRef { get; set; }

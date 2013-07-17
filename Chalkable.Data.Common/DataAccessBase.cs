@@ -151,11 +151,12 @@ namespace Chalkable.Data.Common
         protected PaginatedList<T> PaginatedSelect<T>(DbQuery innerSelect, string orderByColumn, int start, int count,
                                                       Orm.OrderType orderType = Orm.OrderType.Asc) where T : new()
         {
-            var q = Orm.PaginationSelect<T>(innerSelect, orderByColumn,orderType, start, count);
+            var q = Orm.PaginationSelect(innerSelect, orderByColumn,orderType, start, count);
             return ReadPaginatedResult<T>(q, start, count);
-        } 
+        }
 
-        private PaginatedList<T> ReadPaginatedResult<T>(DbQuery dbQuery,int start, int count) where T : new()
+        protected PaginatedList<T> ReadPaginatedResult<T>(DbQuery dbQuery, int start, int count,
+                                                          Func<DbDataReader, IList<T>> readAction) where T : new()
         {
             using (var reader = ExecuteReaderParametrized(dbQuery.Sql, dbQuery.Parameters as Dictionary<string, object>))
             {
@@ -163,11 +164,16 @@ namespace Chalkable.Data.Common
                 {
                     var allCount = SqlTools.ReadInt32(reader, "AllCount");
                     reader.NextResult();
-                    var res = reader.ReadList<T>();
+                    var res = readAction(reader);
                     return new PaginatedList<T>(res, start / count, count, allCount);
                 }
                 return new PaginatedList<T>(new List<T>(), start / count, count, 0);
             }
+        }
+
+        protected PaginatedList<T> ReadPaginatedResult<T>(DbQuery dbQuery, int start, int count) where T : new()
+        {
+            return ReadPaginatedResult(dbQuery, start, count, x => x.ReadList<T>());
         }
         
         protected bool Exists<T>(Dictionary<string, object> conditions) where T : new()
