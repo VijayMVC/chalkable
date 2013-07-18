@@ -13,10 +13,10 @@ NAMESPACE('chlk.controllers', function (){
 
         [[Number]],
         function listAction(pageIndex_) {
-            var result = this.feedService
+            /*var result = this.feedService
                 .getAnnouncements(pageIndex_ | 0)
                 .attach(this.validateResponse_());
-            return this.PushView(chlk.activities.feed.FeedListPage, result);
+            return this.PushView(chlk.activities.feed.FeedListPage, result);*/
         }
 
     ])

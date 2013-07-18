@@ -1,5 +1,6 @@
 REQUIRE('chlk.BaseApp');
 
+REQUIRE('chlk.controllers.AnnouncementController');
 REQUIRE('chlk.controllers.FeedController');
 
 

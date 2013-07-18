@@ -1,5 +1,5 @@
 REQUIRE('chlk.templates.PaginatedList');
-REQUIRE('chlk.models.feed.Announcement');
+REQUIRE('chlk.models.announcement.Announcement');
 
 NAMESPACE('chlk.templates.feed', function () {
 
@@ -9,6 +9,6 @@ NAMESPACE('chlk.templates.feed', function () {
         [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
         'Feed', EXTENDS(chlk.templates.PaginatedList), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.feed.Announcement), 'items'
+            ArrayOf(chlk.models.announcement.Announcement), 'items'
         ])
 });
