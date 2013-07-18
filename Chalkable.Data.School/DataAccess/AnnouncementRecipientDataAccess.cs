@@ -22,6 +22,6 @@ namespace Chalkable.Data.School.DataAccess
             var conds = new Dictionary<string, object> {{AnnouncementRecipient.ANNOUNCEMENT_REF_FIELD, announcementId}};
             SimpleDelete<AnnouncementRecipient>(conds);
         }
-
+ 
     }
 }

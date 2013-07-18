@@ -18,7 +18,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         void AddAnnouncementNewAttachmentNotification(Guid announcementId);
         void AddAnnouncementNewAttachmentNotificationToPerson(Guid announcementId, Guid fromPersonId);
-        void AddAnnouncementReminderNotification(AnnouncementReminder announcementReminder);
+        void AddAnnouncementReminderNotification(AnnouncementReminder announcementReminder, AnnouncementComplex announcement);
         void AddAnnouncementNotificationQnToAuthor(AnnouncementQnAComplex announcementQnA, AnnouncementComplex announcement);
         void AddAnnouncementNotificationAnswerToPerson(AnnouncementQnAComplex announcementQnA, AnnouncementComplex announcement);
         void AddAnnouncementSetGradeNotificationToPerson(Guid announcement, Guid recipient);
@@ -93,10 +93,14 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         public void AddAnnouncementNewAttachmentNotification(Guid announcementId)
         {
-            var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
-            //var persons = ServiceLocator.AnnouncementService.
-            //builder.BuildAnnouncementNewAttachmentNotification(announcementId)
-            throw new NotImplementedException();
+            var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
+            var persons = ServiceLocator.AnnouncementService.GetAnnouncementRecipientPersons(announcementId);
+            var notifications = new List<Notification>();
+            foreach (var person in persons)
+            {
+                notifications.Add(builder.BuildAnnouncementNewAttachmentNotification(ann, person));
+            }
+            AddNotifications(notifications);
         }
 
         public void AddAnnouncementNewAttachmentNotificationToPerson(Guid announcementId, Guid fromPersonId)
@@ -107,24 +111,20 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             AddNotification(notification);
         }
 
-        public void AddAnnouncementReminderNotification(AnnouncementReminder announcementReminder)
+        public void AddAnnouncementReminderNotification(AnnouncementReminder announcementReminder, AnnouncementComplex announcement)
         {
-
-            //var announcement = announcementReminder.Announcement;
-            //if (!NotificationSecurity.CanCreateAnnouncementNotification(announcement, Context))
-            //    throw new SecurityException();
-            //var recipients = ServiceLocator.AnnouncementService.GetAnnouncementRecipientPersons(announcement.Id);
-            //foreach (var schoolPerson in recipients)
-            //{
-            //    if (!announcementReminder.SchoolPersonRef.HasValue || schoolPerson.Id == announcementReminder.SchoolPersonRef)
-            //    {
-            //        var notification = builder.BuildAnnouncementReminderNotification(announcement, schoolPerson);
-            //        Entities.Notifications.AddObject(notification);
-            //    }
-            //}
-            //Entities.SaveChanges();
-
-            throw new NotImplementedException();
+            if (!NotificationSecurity.CanCreateAnnouncementNotification(announcement, Context))
+                throw new ChalkableSecurityException();
+            var recipients = ServiceLocator.AnnouncementService.GetAnnouncementRecipientPersons(announcement.Id);
+            var notifications = new List<Notification>(); 
+            foreach (var schoolPerson in recipients)
+            {
+                if (!announcementReminder.PersonRef.HasValue || schoolPerson.Id == announcementReminder.PersonRef)
+                {
+                    notifications.Add(builder.BuildAnnouncementReminderNotification(announcement, schoolPerson));
+                }
+            }
+            AddNotifications(notifications);
         }
 
         public void AddAnnouncementNotificationQnToAuthor(AnnouncementQnAComplex announcementQnA, AnnouncementComplex announcement)
@@ -149,9 +149,13 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         private void AddNotification(Notification notification)
         {
+            AddNotifications(new List<Notification>{notification});
+        }
+        private void AddNotifications(IList<Notification> notifications)
+        {
             using (var uow = Update())
             {
-                new NotificationDataAccess(uow).Insert(notification);
+                new NotificationDataAccess(uow).Insert(notifications);
                 uow.Commit();
             }
         }

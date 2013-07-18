@@ -76,7 +76,7 @@ namespace Chalkable.Web.Models
             Id = announcement.Id;
             Order = announcement.Order;
             State = (int)announcement.State;
-            Title = announcement.ClassName;
+            Title = announcement.Title;
             RecipientId = announcement.ClassId;
             Content = announcement.Content;
             Subject = announcement.Subject;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -21,6 +22,7 @@ namespace Chalkable.Data.School.DataAccess
         private const string GET_STUDENT_ANNOUNCEMENTS = "spGetStudentAnnouncements";
         private const string GET_TEACHER_ANNOUNCEMENTS = "spGetTeacherAnnouncements";
         private const string GET_ADMIN_ANNOUNCEMENTS = "spGetAdminAnnouncements";
+        private const string GET_ANNOUNCEMENT_RECIPIENT_PERSON = "spGetAnnouncementRecipientPersons";
         private const string DELETE_PROCEDURE = "spDeleteAnnouncement";
         private const string REORDER_PROCEDURE = "spReorderAnnouncements";
 
@@ -49,18 +51,13 @@ namespace Chalkable.Data.School.DataAccess
                 reader.NextResult();
                 announcement.AnnouncementQnAs = AnnouncementQnADataAccess.ReadAnnouncementQnAComplexes(reader);
                 reader.NextResult();
-                announcement.StudentAnnouncements = new List<StudentAnnouncementDetails>();
-                while (reader.Read())
-                {
-                    announcement.StudentAnnouncements.Add(StudentAnnouncementDataAccess.ReadStudentAnnouncement(reader));
-                }
+                announcement.StudentAnnouncements = StudentAnnouncementDataAccess.ReadListStudentAnnouncement(reader);
                 reader.NextResult();
                 announcement.AnnouncementAttachments = reader.ReadList<AnnouncementAttachment>();
                 reader.NextResult();
                 announcement.AnnouncementReminders = reader.ReadList<AnnouncementReminder>();
                 reader.NextResult();
-                if (reader.Read())
-                    announcement.Owner = PersonDataAccess.ReadPersonData(reader);
+                announcement.Owner = PersonDataAccess.ReadPersonQueryResult(reader).Persons.FirstOrDefault();
                 announcement.AnnouncementApplications = new List<AnnouncementApplication>();
             }
             return announcement;
@@ -174,6 +171,23 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
         
+        public IList<Person> GetAnnouncementRecipientPersons(Guid announcementId, Guid callerId)
+        {
+            var parameters = new Dictionary<string, object>
+                {
+                    {CALLER_ID_PARAM, callerId},
+                    {"announcementId", announcementId}
+                };
+            using (var reader = ExecuteStoredProcedureReader(GET_ANNOUNCEMENT_RECIPIENT_PERSON, parameters))
+            {
+                var res = new List<Person>();
+                while (reader.Read())
+                {
+                    res.Add(PersonDataAccess.ReadPersonData(reader));
+                }
+                return res;
+            }
+        } 
         
         
         private bool IsAdmin(int roleId)
