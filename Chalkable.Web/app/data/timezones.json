@@ -1,0 +1,2048 @@
+{
+    "hasnextpage": false,
+    "haspreviouspage": false,
+    "pageindex": 0,
+    "totalpages": 1,
+    "data": [
+    {
+        "id": "Dateline Standard Time",
+        "displayname": "(UTC-12:00) International Date Line West",
+        "standardname": "Dateline Standard Time",
+        "daylightname": "Dateline Daylight Time",
+        "baseutcoffset": {
+            "hours": -12,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -432000000000,
+            "days": 0,
+            "totaldays": -0.5,
+            "totalhours": -12,
+            "totalmilliseconds": -43200000,
+            "totalminutes": -720,
+            "totalseconds": -43200
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "UTC-11",
+        "displayname": "(UTC-11:00) Coordinated Universal Time-11",
+        "standardname": "UTC-11",
+        "daylightname": "UTC-11",
+        "baseutcoffset": {
+            "hours": -11,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -396000000000,
+            "days": 0,
+            "totaldays": -0.45833333333333331,
+            "totalhours": -11,
+            "totalmilliseconds": -39600000,
+            "totalminutes": -660,
+            "totalseconds": -39600
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Hawaiian Standard Time",
+        "displayname": "(UTC-10:00) Hawaii",
+        "standardname": "Hawaiian Standard Time",
+        "daylightname": "Hawaiian Daylight Time",
+        "baseutcoffset": {
+            "hours": -10,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -360000000000,
+            "days": 0,
+            "totaldays": -0.41666666666666663,
+            "totalhours": -10,
+            "totalmilliseconds": -36000000,
+            "totalminutes": -600,
+            "totalseconds": -36000
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Alaskan Standard Time",
+        "displayname": "(UTC-09:00) Alaska",
+        "standardname": "Alaskan Standard Time",
+        "daylightname": "Alaskan Daylight Time",
+        "baseutcoffset": {
+            "hours": -9,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -324000000000,
+            "days": 0,
+            "totaldays": -0.375,
+            "totalhours": -9,
+            "totalmilliseconds": -32400000,
+            "totalminutes": -540,
+            "totalseconds": -32400
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Pacific Standard Time (Mexico)",
+        "displayname": "(UTC-08:00) Baja California",
+        "standardname": "Pacific Standard Time (Mexico)",
+        "daylightname": "Pacific Daylight Time (Mexico)",
+        "baseutcoffset": {
+            "hours": -8,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -288000000000,
+            "days": 0,
+            "totaldays": -0.33333333333333331,
+            "totalhours": -8,
+            "totalmilliseconds": -28800000,
+            "totalminutes": -480,
+            "totalseconds": -28800
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Pacific Standard Time",
+        "displayname": "(UTC-08:00) Pacific Time (US & Canada)",
+        "standardname": "Pacific Standard Time",
+        "daylightname": "Pacific Daylight Time",
+        "baseutcoffset": {
+            "hours": -8,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -288000000000,
+            "days": 0,
+            "totaldays": -0.33333333333333331,
+            "totalhours": -8,
+            "totalmilliseconds": -28800000,
+            "totalminutes": -480,
+            "totalseconds": -28800
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "US Mountain Standard Time",
+        "displayname": "(UTC-07:00) Arizona",
+        "standardname": "US Mountain Standard Time",
+        "daylightname": "US Mountain Daylight Time",
+        "baseutcoffset": {
+            "hours": -7,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -252000000000,
+            "days": 0,
+            "totaldays": -0.29166666666666663,
+            "totalhours": -7,
+            "totalmilliseconds": -25200000,
+            "totalminutes": -420,
+            "totalseconds": -25200
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Mountain Standard Time (Mexico)",
+        "displayname": "(UTC-07:00) Chihuahua, La Paz, Mazatlan",
+        "standardname": "Mountain Standard Time (Mexico)",
+        "daylightname": "Mountain Daylight Time (Mexico)",
+        "baseutcoffset": {
+            "hours": -7,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -252000000000,
+            "days": 0,
+            "totaldays": -0.29166666666666663,
+            "totalhours": -7,
+            "totalmilliseconds": -25200000,
+            "totalminutes": -420,
+            "totalseconds": -25200
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Mountain Standard Time",
+        "displayname": "(UTC-07:00) Mountain Time (US & Canada)",
+        "standardname": "Mountain Standard Time",
+        "daylightname": "Mountain Daylight Time",
+        "baseutcoffset": {
+            "hours": -7,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -252000000000,
+            "days": 0,
+            "totaldays": -0.29166666666666663,
+            "totalhours": -7,
+            "totalmilliseconds": -25200000,
+            "totalminutes": -420,
+            "totalseconds": -25200
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Central America Standard Time",
+        "displayname": "(UTC-06:00) Central America",
+        "standardname": "Central America Standard Time",
+        "daylightname": "Central America Daylight Time",
+        "baseutcoffset": {
+            "hours": -6,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -216000000000,
+            "days": 0,
+            "totaldays": -0.25,
+            "totalhours": -6,
+            "totalmilliseconds": -21600000,
+            "totalminutes": -360,
+            "totalseconds": -21600
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Central Standard Time",
+        "displayname": "(UTC-06:00) Central Time (US & Canada)",
+        "standardname": "Central Standard Time",
+        "daylightname": "Central Daylight Time",
+        "baseutcoffset": {
+            "hours": -6,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -216000000000,
+            "days": 0,
+            "totaldays": -0.25,
+            "totalhours": -6,
+            "totalmilliseconds": -21600000,
+            "totalminutes": -360,
+            "totalseconds": -21600
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Central Standard Time (Mexico)",
+        "displayname": "(UTC-06:00) Guadalajara, Mexico City, Monterrey",
+        "standardname": "Central Standard Time (Mexico)",
+        "daylightname": "Central Daylight Time (Mexico)",
+        "baseutcoffset": {
+            "hours": -6,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -216000000000,
+            "days": 0,
+            "totaldays": -0.25,
+            "totalhours": -6,
+            "totalmilliseconds": -21600000,
+            "totalminutes": -360,
+            "totalseconds": -21600
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Canada Central Standard Time",
+        "displayname": "(UTC-06:00) Saskatchewan",
+        "standardname": "Canada Central Standard Time",
+        "daylightname": "Canada Central Daylight Time",
+        "baseutcoffset": {
+            "hours": -6,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -216000000000,
+            "days": 0,
+            "totaldays": -0.25,
+            "totalhours": -6,
+            "totalmilliseconds": -21600000,
+            "totalminutes": -360,
+            "totalseconds": -21600
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "SA Pacific Standard Time",
+        "displayname": "(UTC-05:00) Bogota, Lima, Quito",
+        "standardname": "SA Pacific Standard Time",
+        "daylightname": "SA Pacific Daylight Time",
+        "baseutcoffset": {
+            "hours": -5,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -180000000000,
+            "days": 0,
+            "totaldays": -0.20833333333333331,
+            "totalhours": -5,
+            "totalmilliseconds": -18000000,
+            "totalminutes": -300,
+            "totalseconds": -18000
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Eastern Standard Time",
+        "displayname": "(UTC-05:00) Eastern Time (US & Canada)",
+        "standardname": "Eastern Standard Time",
+        "daylightname": "Eastern Daylight Time",
+        "baseutcoffset": {
+            "hours": -5,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -180000000000,
+            "days": 0,
+            "totaldays": -0.20833333333333331,
+            "totalhours": -5,
+            "totalmilliseconds": -18000000,
+            "totalminutes": -300,
+            "totalseconds": -18000
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "US Eastern Standard Time",
+        "displayname": "(UTC-05:00) Indiana (East)",
+        "standardname": "US Eastern Standard Time",
+        "daylightname": "US Eastern Daylight Time",
+        "baseutcoffset": {
+            "hours": -5,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -180000000000,
+            "days": 0,
+            "totaldays": -0.20833333333333331,
+            "totalhours": -5,
+            "totalmilliseconds": -18000000,
+            "totalminutes": -300,
+            "totalseconds": -18000
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Venezuela Standard Time",
+        "displayname": "(UTC-04:30) Caracas",
+        "standardname": "Venezuela Standard Time",
+        "daylightname": "Venezuela Daylight Time",
+        "baseutcoffset": {
+            "hours": -4,
+            "minutes": -30,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -162000000000,
+            "days": 0,
+            "totaldays": -0.1875,
+            "totalhours": -4.5,
+            "totalmilliseconds": -16200000,
+            "totalminutes": -270,
+            "totalseconds": -16200
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Paraguay Standard Time",
+        "displayname": "(UTC-04:00) Asuncion",
+        "standardname": "Paraguay Standard Time",
+        "daylightname": "Paraguay Daylight Time",
+        "baseutcoffset": {
+            "hours": -4,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -144000000000,
+            "days": 0,
+            "totaldays": -0.16666666666666666,
+            "totalhours": -4,
+            "totalmilliseconds": -14400000,
+            "totalminutes": -240,
+            "totalseconds": -14400
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Atlantic Standard Time",
+        "displayname": "(UTC-04:00) Atlantic Time (Canada)",
+        "standardname": "Atlantic Standard Time",
+        "daylightname": "Atlantic Daylight Time",
+        "baseutcoffset": {
+            "hours": -4,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -144000000000,
+            "days": 0,
+            "totaldays": -0.16666666666666666,
+            "totalhours": -4,
+            "totalmilliseconds": -14400000,
+            "totalminutes": -240,
+            "totalseconds": -14400
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Central Brazilian Standard Time",
+        "displayname": "(UTC-04:00) Cuiaba",
+        "standardname": "Central Brazilian Standard Time",
+        "daylightname": "Central Brazilian Daylight Time",
+        "baseutcoffset": {
+            "hours": -4,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -144000000000,
+            "days": 0,
+            "totaldays": -0.16666666666666666,
+            "totalhours": -4,
+            "totalmilliseconds": -14400000,
+            "totalminutes": -240,
+            "totalseconds": -14400
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "SA Western Standard Time",
+        "displayname": "(UTC-04:00) Georgetown, La Paz, Manaus, San Juan",
+        "standardname": "SA Western Standard Time",
+        "daylightname": "SA Western Daylight Time",
+        "baseutcoffset": {
+            "hours": -4,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -144000000000,
+            "days": 0,
+            "totaldays": -0.16666666666666666,
+            "totalhours": -4,
+            "totalmilliseconds": -14400000,
+            "totalminutes": -240,
+            "totalseconds": -14400
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Pacific SA Standard Time",
+        "displayname": "(UTC-04:00) Santiago",
+        "standardname": "Pacific SA Standard Time",
+        "daylightname": "Pacific SA Daylight Time",
+        "baseutcoffset": {
+            "hours": -4,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -144000000000,
+            "days": 0,
+            "totaldays": -0.16666666666666666,
+            "totalhours": -4,
+            "totalmilliseconds": -14400000,
+            "totalminutes": -240,
+            "totalseconds": -14400
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Newfoundland Standard Time",
+        "displayname": "(UTC-03:30) Newfoundland",
+        "standardname": "Newfoundland Standard Time",
+        "daylightname": "Newfoundland Daylight Time",
+        "baseutcoffset": {
+            "hours": -3,
+            "minutes": -30,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -126000000000,
+            "days": 0,
+            "totaldays": -0.14583333333333331,
+            "totalhours": -3.5,
+            "totalmilliseconds": -12600000,
+            "totalminutes": -210,
+            "totalseconds": -12600
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "E. South America Standard Time",
+        "displayname": "(UTC-03:00) Brasilia",
+        "standardname": "E. South America Standard Time",
+        "daylightname": "E. South America Daylight Time",
+        "baseutcoffset": {
+            "hours": -3,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -108000000000,
+            "days": 0,
+            "totaldays": -0.125,
+            "totalhours": -3,
+            "totalmilliseconds": -10800000,
+            "totalminutes": -180,
+            "totalseconds": -10800
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Argentina Standard Time",
+        "displayname": "(UTC-03:00) Buenos Aires",
+        "standardname": "Argentina Standard Time",
+        "daylightname": "Argentina Daylight Time",
+        "baseutcoffset": {
+            "hours": -3,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -108000000000,
+            "days": 0,
+            "totaldays": -0.125,
+            "totalhours": -3,
+            "totalmilliseconds": -10800000,
+            "totalminutes": -180,
+            "totalseconds": -10800
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "SA Eastern Standard Time",
+        "displayname": "(UTC-03:00) Cayenne, Fortaleza",
+        "standardname": "SA Eastern Standard Time",
+        "daylightname": "SA Eastern Daylight Time",
+        "baseutcoffset": {
+            "hours": -3,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -108000000000,
+            "days": 0,
+            "totaldays": -0.125,
+            "totalhours": -3,
+            "totalmilliseconds": -10800000,
+            "totalminutes": -180,
+            "totalseconds": -10800
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Greenland Standard Time",
+        "displayname": "(UTC-03:00) Greenland",
+        "standardname": "Greenland Standard Time",
+        "daylightname": "Greenland Daylight Time",
+        "baseutcoffset": {
+            "hours": -3,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -108000000000,
+            "days": 0,
+            "totaldays": -0.125,
+            "totalhours": -3,
+            "totalmilliseconds": -10800000,
+            "totalminutes": -180,
+            "totalseconds": -10800
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Montevideo Standard Time",
+        "displayname": "(UTC-03:00) Montevideo",
+        "standardname": "Montevideo Standard Time",
+        "daylightname": "Montevideo Daylight Time",
+        "baseutcoffset": {
+            "hours": -3,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -108000000000,
+            "days": 0,
+            "totaldays": -0.125,
+            "totalhours": -3,
+            "totalmilliseconds": -10800000,
+            "totalminutes": -180,
+            "totalseconds": -10800
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Bahia Standard Time",
+        "displayname": "(UTC-03:00) Salvador",
+        "standardname": "Bahia Standard Time",
+        "daylightname": "Bahia Daylight Time",
+        "baseutcoffset": {
+            "hours": -3,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -108000000000,
+            "days": 0,
+            "totaldays": -0.125,
+            "totalhours": -3,
+            "totalmilliseconds": -10800000,
+            "totalminutes": -180,
+            "totalseconds": -10800
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "UTC-02",
+        "displayname": "(UTC-02:00) Coordinated Universal Time-02",
+        "standardname": "UTC-02",
+        "daylightname": "UTC-02",
+        "baseutcoffset": {
+            "hours": -2,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -72000000000,
+            "days": 0,
+            "totaldays": -0.083333333333333329,
+            "totalhours": -2,
+            "totalmilliseconds": -7200000,
+            "totalminutes": -120,
+            "totalseconds": -7200
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Mid-Atlantic Standard Time",
+        "displayname": "(UTC-02:00) Mid-Atlantic",
+        "standardname": "Mid-Atlantic Standard Time",
+        "daylightname": "Mid-Atlantic Daylight Time",
+        "baseutcoffset": {
+            "hours": -2,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -72000000000,
+            "days": 0,
+            "totaldays": -0.083333333333333329,
+            "totalhours": -2,
+            "totalmilliseconds": -7200000,
+            "totalminutes": -120,
+            "totalseconds": -7200
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Azores Standard Time",
+        "displayname": "(UTC-01:00) Azores",
+        "standardname": "Azores Standard Time",
+        "daylightname": "Azores Daylight Time",
+        "baseutcoffset": {
+            "hours": -1,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -36000000000,
+            "days": 0,
+            "totaldays": -0.041666666666666664,
+            "totalhours": -1,
+            "totalmilliseconds": -3600000,
+            "totalminutes": -60,
+            "totalseconds": -3600
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Cape Verde Standard Time",
+        "displayname": "(UTC-01:00) Cape Verde Is.",
+        "standardname": "Cape Verde Standard Time",
+        "daylightname": "Cape Verde Daylight Time",
+        "baseutcoffset": {
+            "hours": -1,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": -36000000000,
+            "days": 0,
+            "totaldays": -0.041666666666666664,
+            "totalhours": -1,
+            "totalmilliseconds": -3600000,
+            "totalminutes": -60,
+            "totalseconds": -3600
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Morocco Standard Time",
+        "displayname": "(UTC) Casablanca",
+        "standardname": "Morocco Standard Time",
+        "daylightname": "Morocco Daylight Time",
+        "baseutcoffset": {
+            "hours": 0,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 0,
+            "days": 0,
+            "totaldays": 0,
+            "totalhours": 0,
+            "totalmilliseconds": 0,
+            "totalminutes": 0,
+            "totalseconds": 0
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "UTC",
+        "displayname": "(UTC) Coordinated Universal Time",
+        "standardname": "Coordinated Universal Time",
+        "daylightname": "Coordinated Universal Time",
+        "baseutcoffset": {
+            "hours": 0,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 0,
+            "days": 0,
+            "totaldays": 0,
+            "totalhours": 0,
+            "totalmilliseconds": 0,
+            "totalminutes": 0,
+            "totalseconds": 0
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "GMT Standard Time",
+        "displayname": "(UTC) Dublin, Edinburgh, Lisbon, London",
+        "standardname": "GMT Standard Time",
+        "daylightname": "GMT Daylight Time",
+        "baseutcoffset": {
+            "hours": 0,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 0,
+            "days": 0,
+            "totaldays": 0,
+            "totalhours": 0,
+            "totalmilliseconds": 0,
+            "totalminutes": 0,
+            "totalseconds": 0
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Greenwich Standard Time",
+        "displayname": "(UTC) Monrovia, Reykjavik",
+        "standardname": "Greenwich Standard Time",
+        "daylightname": "Greenwich Daylight Time",
+        "baseutcoffset": {
+            "hours": 0,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 0,
+            "days": 0,
+            "totaldays": 0,
+            "totalhours": 0,
+            "totalmilliseconds": 0,
+            "totalminutes": 0,
+            "totalseconds": 0
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "W. Europe Standard Time",
+        "displayname": "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna",
+        "standardname": "W. Europe Standard Time",
+        "daylightname": "W. Europe Daylight Time",
+        "baseutcoffset": {
+            "hours": 1,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 36000000000,
+            "days": 0,
+            "totaldays": 0.041666666666666664,
+            "totalhours": 1,
+            "totalmilliseconds": 3600000,
+            "totalminutes": 60,
+            "totalseconds": 3600
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Central Europe Standard Time",
+        "displayname": "(UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague",
+        "standardname": "Central Europe Standard Time",
+        "daylightname": "Central Europe Daylight Time",
+        "baseutcoffset": {
+            "hours": 1,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 36000000000,
+            "days": 0,
+            "totaldays": 0.041666666666666664,
+            "totalhours": 1,
+            "totalmilliseconds": 3600000,
+            "totalminutes": 60,
+            "totalseconds": 3600
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Romance Standard Time",
+        "displayname": "(UTC+01:00) Brussels, Copenhagen, Madrid, Paris",
+        "standardname": "Romance Standard Time",
+        "daylightname": "Romance Daylight Time",
+        "baseutcoffset": {
+            "hours": 1,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 36000000000,
+            "days": 0,
+            "totaldays": 0.041666666666666664,
+            "totalhours": 1,
+            "totalmilliseconds": 3600000,
+            "totalminutes": 60,
+            "totalseconds": 3600
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Central European Standard Time",
+        "displayname": "(UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb",
+        "standardname": "Central European Standard Time",
+        "daylightname": "Central European Daylight Time",
+        "baseutcoffset": {
+            "hours": 1,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 36000000000,
+            "days": 0,
+            "totaldays": 0.041666666666666664,
+            "totalhours": 1,
+            "totalmilliseconds": 3600000,
+            "totalminutes": 60,
+            "totalseconds": 3600
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Libya Standard Time",
+        "displayname": "(UTC+01:00) Tripoli",
+        "standardname": "Libya Standard Time",
+        "daylightname": "Libya Daylight Time",
+        "baseutcoffset": {
+            "hours": 1,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 36000000000,
+            "days": 0,
+            "totaldays": 0.041666666666666664,
+            "totalhours": 1,
+            "totalmilliseconds": 3600000,
+            "totalminutes": 60,
+            "totalseconds": 3600
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "W. Central Africa Standard Time",
+        "displayname": "(UTC+01:00) West Central Africa",
+        "standardname": "W. Central Africa Standard Time",
+        "daylightname": "W. Central Africa Daylight Time",
+        "baseutcoffset": {
+            "hours": 1,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 36000000000,
+            "days": 0,
+            "totaldays": 0.041666666666666664,
+            "totalhours": 1,
+            "totalmilliseconds": 3600000,
+            "totalminutes": 60,
+            "totalseconds": 3600
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Namibia Standard Time",
+        "displayname": "(UTC+01:00) Windhoek",
+        "standardname": "Namibia Standard Time",
+        "daylightname": "Namibia Daylight Time",
+        "baseutcoffset": {
+            "hours": 1,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 36000000000,
+            "days": 0,
+            "totaldays": 0.041666666666666664,
+            "totalhours": 1,
+            "totalmilliseconds": 3600000,
+            "totalminutes": 60,
+            "totalseconds": 3600
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "GTB Standard Time",
+        "displayname": "(UTC+02:00) Athens, Bucharest",
+        "standardname": "GTB Standard Time",
+        "daylightname": "GTB Daylight Time",
+        "baseutcoffset": {
+            "hours": 2,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 72000000000,
+            "days": 0,
+            "totaldays": 0.083333333333333329,
+            "totalhours": 2,
+            "totalmilliseconds": 7200000,
+            "totalminutes": 120,
+            "totalseconds": 7200
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Middle East Standard Time",
+        "displayname": "(UTC+02:00) Beirut",
+        "standardname": "Middle East Standard Time",
+        "daylightname": "Middle East Daylight Time",
+        "baseutcoffset": {
+            "hours": 2,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 72000000000,
+            "days": 0,
+            "totaldays": 0.083333333333333329,
+            "totalhours": 2,
+            "totalmilliseconds": 7200000,
+            "totalminutes": 120,
+            "totalseconds": 7200
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Egypt Standard Time",
+        "displayname": "(UTC+02:00) Cairo",
+        "standardname": "Egypt Standard Time",
+        "daylightname": "Egypt Daylight Time",
+        "baseutcoffset": {
+            "hours": 2,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 72000000000,
+            "days": 0,
+            "totaldays": 0.083333333333333329,
+            "totalhours": 2,
+            "totalmilliseconds": 7200000,
+            "totalminutes": 120,
+            "totalseconds": 7200
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Syria Standard Time",
+        "displayname": "(UTC+02:00) Damascus",
+        "standardname": "Syria Standard Time",
+        "daylightname": "Syria Daylight Time",
+        "baseutcoffset": {
+            "hours": 2,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 72000000000,
+            "days": 0,
+            "totaldays": 0.083333333333333329,
+            "totalhours": 2,
+            "totalmilliseconds": 7200000,
+            "totalminutes": 120,
+            "totalseconds": 7200
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "E. Europe Standard Time",
+        "displayname": "(UTC+02:00) E. Europe",
+        "standardname": "E. Europe Standard Time",
+        "daylightname": "E. Europe Daylight Time",
+        "baseutcoffset": {
+            "hours": 2,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 72000000000,
+            "days": 0,
+            "totaldays": 0.083333333333333329,
+            "totalhours": 2,
+            "totalmilliseconds": 7200000,
+            "totalminutes": 120,
+            "totalseconds": 7200
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "South Africa Standard Time",
+        "displayname": "(UTC+02:00) Harare, Pretoria",
+        "standardname": "South Africa Standard Time",
+        "daylightname": "South Africa Daylight Time",
+        "baseutcoffset": {
+            "hours": 2,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 72000000000,
+            "days": 0,
+            "totaldays": 0.083333333333333329,
+            "totalhours": 2,
+            "totalmilliseconds": 7200000,
+            "totalminutes": 120,
+            "totalseconds": 7200
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "FLE Standard Time",
+        "displayname": "(UTC+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius",
+        "standardname": "FLE Standard Time",
+        "daylightname": "FLE Daylight Time",
+        "baseutcoffset": {
+            "hours": 2,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 72000000000,
+            "days": 0,
+            "totaldays": 0.083333333333333329,
+            "totalhours": 2,
+            "totalmilliseconds": 7200000,
+            "totalminutes": 120,
+            "totalseconds": 7200
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Turkey Standard Time",
+        "displayname": "(UTC+02:00) Istanbul",
+        "standardname": "Turkey Standard Time",
+        "daylightname": "Turkey Daylight Time",
+        "baseutcoffset": {
+            "hours": 2,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 72000000000,
+            "days": 0,
+            "totaldays": 0.083333333333333329,
+            "totalhours": 2,
+            "totalmilliseconds": 7200000,
+            "totalminutes": 120,
+            "totalseconds": 7200
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Israel Standard Time",
+        "displayname": "(UTC+02:00) Jerusalem",
+        "standardname": "Jerusalem Standard Time",
+        "daylightname": "Jerusalem Daylight Time",
+        "baseutcoffset": {
+            "hours": 2,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 72000000000,
+            "days": 0,
+            "totaldays": 0.083333333333333329,
+            "totalhours": 2,
+            "totalmilliseconds": 7200000,
+            "totalminutes": 120,
+            "totalseconds": 7200
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Jordan Standard Time",
+        "displayname": "(UTC+03:00) Amman",
+        "standardname": "Jordan Standard Time",
+        "daylightname": "Jordan Daylight Time",
+        "baseutcoffset": {
+            "hours": 3,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 108000000000,
+            "days": 0,
+            "totaldays": 0.125,
+            "totalhours": 3,
+            "totalmilliseconds": 10800000,
+            "totalminutes": 180,
+            "totalseconds": 10800
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Arabic Standard Time",
+        "displayname": "(UTC+03:00) Baghdad",
+        "standardname": "Arabic Standard Time",
+        "daylightname": "Arabic Daylight Time",
+        "baseutcoffset": {
+            "hours": 3,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 108000000000,
+            "days": 0,
+            "totaldays": 0.125,
+            "totalhours": 3,
+            "totalmilliseconds": 10800000,
+            "totalminutes": 180,
+            "totalseconds": 10800
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Kaliningrad Standard Time",
+        "displayname": "(UTC+03:00) Kaliningrad, Minsk",
+        "standardname": "Kaliningrad Standard Time",
+        "daylightname": "Kaliningrad Daylight Time",
+        "baseutcoffset": {
+            "hours": 3,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 108000000000,
+            "days": 0,
+            "totaldays": 0.125,
+            "totalhours": 3,
+            "totalmilliseconds": 10800000,
+            "totalminutes": 180,
+            "totalseconds": 10800
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Arab Standard Time",
+        "displayname": "(UTC+03:00) Kuwait, Riyadh",
+        "standardname": "Arab Standard Time",
+        "daylightname": "Arab Daylight Time",
+        "baseutcoffset": {
+            "hours": 3,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 108000000000,
+            "days": 0,
+            "totaldays": 0.125,
+            "totalhours": 3,
+            "totalmilliseconds": 10800000,
+            "totalminutes": 180,
+            "totalseconds": 10800
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "E. Africa Standard Time",
+        "displayname": "(UTC+03:00) Nairobi",
+        "standardname": "E. Africa Standard Time",
+        "daylightname": "E. Africa Daylight Time",
+        "baseutcoffset": {
+            "hours": 3,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 108000000000,
+            "days": 0,
+            "totaldays": 0.125,
+            "totalhours": 3,
+            "totalmilliseconds": 10800000,
+            "totalminutes": 180,
+            "totalseconds": 10800
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Iran Standard Time",
+        "displayname": "(UTC+03:30) Tehran",
+        "standardname": "Iran Standard Time",
+        "daylightname": "Iran Daylight Time",
+        "baseutcoffset": {
+            "hours": 3,
+            "minutes": 30,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 126000000000,
+            "days": 0,
+            "totaldays": 0.14583333333333331,
+            "totalhours": 3.5,
+            "totalmilliseconds": 12600000,
+            "totalminutes": 210,
+            "totalseconds": 12600
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Arabian Standard Time",
+        "displayname": "(UTC+04:00) Abu Dhabi, Muscat",
+        "standardname": "Arabian Standard Time",
+        "daylightname": "Arabian Daylight Time",
+        "baseutcoffset": {
+            "hours": 4,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 144000000000,
+            "days": 0,
+            "totaldays": 0.16666666666666666,
+            "totalhours": 4,
+            "totalmilliseconds": 14400000,
+            "totalminutes": 240,
+            "totalseconds": 14400
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Azerbaijan Standard Time",
+        "displayname": "(UTC+04:00) Baku",
+        "standardname": "Azerbaijan Standard Time",
+        "daylightname": "Azerbaijan Daylight Time",
+        "baseutcoffset": {
+            "hours": 4,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 144000000000,
+            "days": 0,
+            "totaldays": 0.16666666666666666,
+            "totalhours": 4,
+            "totalmilliseconds": 14400000,
+            "totalminutes": 240,
+            "totalseconds": 14400
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Russian Standard Time",
+        "displayname": "(UTC+04:00) Moscow, St. Petersburg, Volgograd",
+        "standardname": "Russian Standard Time",
+        "daylightname": "Russian Daylight Time",
+        "baseutcoffset": {
+            "hours": 4,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 144000000000,
+            "days": 0,
+            "totaldays": 0.16666666666666666,
+            "totalhours": 4,
+            "totalmilliseconds": 14400000,
+            "totalminutes": 240,
+            "totalseconds": 14400
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Mauritius Standard Time",
+        "displayname": "(UTC+04:00) Port Louis",
+        "standardname": "Mauritius Standard Time",
+        "daylightname": "Mauritius Daylight Time",
+        "baseutcoffset": {
+            "hours": 4,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 144000000000,
+            "days": 0,
+            "totaldays": 0.16666666666666666,
+            "totalhours": 4,
+            "totalmilliseconds": 14400000,
+            "totalminutes": 240,
+            "totalseconds": 14400
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Georgian Standard Time",
+        "displayname": "(UTC+04:00) Tbilisi",
+        "standardname": "Georgian Standard Time",
+        "daylightname": "Georgian Daylight Time",
+        "baseutcoffset": {
+            "hours": 4,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 144000000000,
+            "days": 0,
+            "totaldays": 0.16666666666666666,
+            "totalhours": 4,
+            "totalmilliseconds": 14400000,
+            "totalminutes": 240,
+            "totalseconds": 14400
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Caucasus Standard Time",
+        "displayname": "(UTC+04:00) Yerevan",
+        "standardname": "Caucasus Standard Time",
+        "daylightname": "Caucasus Daylight Time",
+        "baseutcoffset": {
+            "hours": 4,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 144000000000,
+            "days": 0,
+            "totaldays": 0.16666666666666666,
+            "totalhours": 4,
+            "totalmilliseconds": 14400000,
+            "totalminutes": 240,
+            "totalseconds": 14400
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Afghanistan Standard Time",
+        "displayname": "(UTC+04:30) Kabul",
+        "standardname": "Afghanistan Standard Time",
+        "daylightname": "Afghanistan Daylight Time",
+        "baseutcoffset": {
+            "hours": 4,
+            "minutes": 30,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 162000000000,
+            "days": 0,
+            "totaldays": 0.1875,
+            "totalhours": 4.5,
+            "totalmilliseconds": 16200000,
+            "totalminutes": 270,
+            "totalseconds": 16200
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Pakistan Standard Time",
+        "displayname": "(UTC+05:00) Islamabad, Karachi",
+        "standardname": "Pakistan Standard Time",
+        "daylightname": "Pakistan Daylight Time",
+        "baseutcoffset": {
+            "hours": 5,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 180000000000,
+            "days": 0,
+            "totaldays": 0.20833333333333331,
+            "totalhours": 5,
+            "totalmilliseconds": 18000000,
+            "totalminutes": 300,
+            "totalseconds": 18000
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "West Asia Standard Time",
+        "displayname": "(UTC+05:00) Tashkent",
+        "standardname": "West Asia Standard Time",
+        "daylightname": "West Asia Daylight Time",
+        "baseutcoffset": {
+            "hours": 5,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 180000000000,
+            "days": 0,
+            "totaldays": 0.20833333333333331,
+            "totalhours": 5,
+            "totalmilliseconds": 18000000,
+            "totalminutes": 300,
+            "totalseconds": 18000
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "India Standard Time",
+        "displayname": "(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi",
+        "standardname": "India Standard Time",
+        "daylightname": "India Daylight Time",
+        "baseutcoffset": {
+            "hours": 5,
+            "minutes": 30,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 198000000000,
+            "days": 0,
+            "totaldays": 0.22916666666666666,
+            "totalhours": 5.5,
+            "totalmilliseconds": 19800000,
+            "totalminutes": 330,
+            "totalseconds": 19800
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Sri Lanka Standard Time",
+        "displayname": "(UTC+05:30) Sri Jayawardenepura",
+        "standardname": "Sri Lanka Standard Time",
+        "daylightname": "Sri Lanka Daylight Time",
+        "baseutcoffset": {
+            "hours": 5,
+            "minutes": 30,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 198000000000,
+            "days": 0,
+            "totaldays": 0.22916666666666666,
+            "totalhours": 5.5,
+            "totalmilliseconds": 19800000,
+            "totalminutes": 330,
+            "totalseconds": 19800
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Nepal Standard Time",
+        "displayname": "(UTC+05:45) Kathmandu",
+        "standardname": "Nepal Standard Time",
+        "daylightname": "Nepal Daylight Time",
+        "baseutcoffset": {
+            "hours": 5,
+            "minutes": 45,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 207000000000,
+            "days": 0,
+            "totaldays": 0.23958333333333331,
+            "totalhours": 5.75,
+            "totalmilliseconds": 20700000,
+            "totalminutes": 345,
+            "totalseconds": 20700
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Central Asia Standard Time",
+        "displayname": "(UTC+06:00) Astana",
+        "standardname": "Central Asia Standard Time",
+        "daylightname": "Central Asia Daylight Time",
+        "baseutcoffset": {
+            "hours": 6,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 216000000000,
+            "days": 0,
+            "totaldays": 0.25,
+            "totalhours": 6,
+            "totalmilliseconds": 21600000,
+            "totalminutes": 360,
+            "totalseconds": 21600
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Bangladesh Standard Time",
+        "displayname": "(UTC+06:00) Dhaka",
+        "standardname": "Bangladesh Standard Time",
+        "daylightname": "Bangladesh Daylight Time",
+        "baseutcoffset": {
+            "hours": 6,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 216000000000,
+            "days": 0,
+            "totaldays": 0.25,
+            "totalhours": 6,
+            "totalmilliseconds": 21600000,
+            "totalminutes": 360,
+            "totalseconds": 21600
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Ekaterinburg Standard Time",
+        "displayname": "(UTC+06:00) Ekaterinburg",
+        "standardname": "Ekaterinburg Standard Time",
+        "daylightname": "Ekaterinburg Daylight Time",
+        "baseutcoffset": {
+            "hours": 6,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 216000000000,
+            "days": 0,
+            "totaldays": 0.25,
+            "totalhours": 6,
+            "totalmilliseconds": 21600000,
+            "totalminutes": 360,
+            "totalseconds": 21600
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Myanmar Standard Time",
+        "displayname": "(UTC+06:30) Yangon (Rangoon)",
+        "standardname": "Myanmar Standard Time",
+        "daylightname": "Myanmar Daylight Time",
+        "baseutcoffset": {
+            "hours": 6,
+            "minutes": 30,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 234000000000,
+            "days": 0,
+            "totaldays": 0.27083333333333331,
+            "totalhours": 6.5,
+            "totalmilliseconds": 23400000,
+            "totalminutes": 390,
+            "totalseconds": 23400
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "SE Asia Standard Time",
+        "displayname": "(UTC+07:00) Bangkok, Hanoi, Jakarta",
+        "standardname": "SE Asia Standard Time",
+        "daylightname": "SE Asia Daylight Time",
+        "baseutcoffset": {
+            "hours": 7,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 252000000000,
+            "days": 0,
+            "totaldays": 0.29166666666666663,
+            "totalhours": 7,
+            "totalmilliseconds": 25200000,
+            "totalminutes": 420,
+            "totalseconds": 25200
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "N. Central Asia Standard Time",
+        "displayname": "(UTC+07:00) Novosibirsk",
+        "standardname": "N. Central Asia Standard Time",
+        "daylightname": "N. Central Asia Daylight Time",
+        "baseutcoffset": {
+            "hours": 7,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 252000000000,
+            "days": 0,
+            "totaldays": 0.29166666666666663,
+            "totalhours": 7,
+            "totalmilliseconds": 25200000,
+            "totalminutes": 420,
+            "totalseconds": 25200
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "China Standard Time",
+        "displayname": "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi",
+        "standardname": "China Standard Time",
+        "daylightname": "China Daylight Time",
+        "baseutcoffset": {
+            "hours": 8,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 288000000000,
+            "days": 0,
+            "totaldays": 0.33333333333333331,
+            "totalhours": 8,
+            "totalmilliseconds": 28800000,
+            "totalminutes": 480,
+            "totalseconds": 28800
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "North Asia Standard Time",
+        "displayname": "(UTC+08:00) Krasnoyarsk",
+        "standardname": "North Asia Standard Time",
+        "daylightname": "North Asia Daylight Time",
+        "baseutcoffset": {
+            "hours": 8,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 288000000000,
+            "days": 0,
+            "totaldays": 0.33333333333333331,
+            "totalhours": 8,
+            "totalmilliseconds": 28800000,
+            "totalminutes": 480,
+            "totalseconds": 28800
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Singapore Standard Time",
+        "displayname": "(UTC+08:00) Kuala Lumpur, Singapore",
+        "standardname": "Malay Peninsula Standard Time",
+        "daylightname": "Malay Peninsula Daylight Time",
+        "baseutcoffset": {
+            "hours": 8,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 288000000000,
+            "days": 0,
+            "totaldays": 0.33333333333333331,
+            "totalhours": 8,
+            "totalmilliseconds": 28800000,
+            "totalminutes": 480,
+            "totalseconds": 28800
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "W. Australia Standard Time",
+        "displayname": "(UTC+08:00) Perth",
+        "standardname": "W. Australia Standard Time",
+        "daylightname": "W. Australia Daylight Time",
+        "baseutcoffset": {
+            "hours": 8,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 288000000000,
+            "days": 0,
+            "totaldays": 0.33333333333333331,
+            "totalhours": 8,
+            "totalmilliseconds": 28800000,
+            "totalminutes": 480,
+            "totalseconds": 28800
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Taipei Standard Time",
+        "displayname": "(UTC+08:00) Taipei",
+        "standardname": "Taipei Standard Time",
+        "daylightname": "Taipei Daylight Time",
+        "baseutcoffset": {
+            "hours": 8,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 288000000000,
+            "days": 0,
+            "totaldays": 0.33333333333333331,
+            "totalhours": 8,
+            "totalmilliseconds": 28800000,
+            "totalminutes": 480,
+            "totalseconds": 28800
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Ulaanbaatar Standard Time",
+        "displayname": "(UTC+08:00) Ulaanbaatar",
+        "standardname": "Ulaanbaatar Standard Time",
+        "daylightname": "Ulaanbaatar Daylight Time",
+        "baseutcoffset": {
+            "hours": 8,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 288000000000,
+            "days": 0,
+            "totaldays": 0.33333333333333331,
+            "totalhours": 8,
+            "totalmilliseconds": 28800000,
+            "totalminutes": 480,
+            "totalseconds": 28800
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "North Asia East Standard Time",
+        "displayname": "(UTC+09:00) Irkutsk",
+        "standardname": "North Asia East Standard Time",
+        "daylightname": "North Asia East Daylight Time",
+        "baseutcoffset": {
+            "hours": 9,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 324000000000,
+            "days": 0,
+            "totaldays": 0.375,
+            "totalhours": 9,
+            "totalmilliseconds": 32400000,
+            "totalminutes": 540,
+            "totalseconds": 32400
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Tokyo Standard Time",
+        "displayname": "(UTC+09:00) Osaka, Sapporo, Tokyo",
+        "standardname": "Tokyo Standard Time",
+        "daylightname": "Tokyo Daylight Time",
+        "baseutcoffset": {
+            "hours": 9,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 324000000000,
+            "days": 0,
+            "totaldays": 0.375,
+            "totalhours": 9,
+            "totalmilliseconds": 32400000,
+            "totalminutes": 540,
+            "totalseconds": 32400
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Korea Standard Time",
+        "displayname": "(UTC+09:00) Seoul",
+        "standardname": "Korea Standard Time",
+        "daylightname": "Korea Daylight Time",
+        "baseutcoffset": {
+            "hours": 9,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 324000000000,
+            "days": 0,
+            "totaldays": 0.375,
+            "totalhours": 9,
+            "totalmilliseconds": 32400000,
+            "totalminutes": 540,
+            "totalseconds": 32400
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Cen. Australia Standard Time",
+        "displayname": "(UTC+09:30) Adelaide",
+        "standardname": "Cen. Australia Standard Time",
+        "daylightname": "Cen. Australia Daylight Time",
+        "baseutcoffset": {
+            "hours": 9,
+            "minutes": 30,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 342000000000,
+            "days": 0,
+            "totaldays": 0.39583333333333331,
+            "totalhours": 9.5,
+            "totalmilliseconds": 34200000,
+            "totalminutes": 570,
+            "totalseconds": 34200
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "AUS Central Standard Time",
+        "displayname": "(UTC+09:30) Darwin",
+        "standardname": "AUS Central Standard Time",
+        "daylightname": "AUS Central Daylight Time",
+        "baseutcoffset": {
+            "hours": 9,
+            "minutes": 30,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 342000000000,
+            "days": 0,
+            "totaldays": 0.39583333333333331,
+            "totalhours": 9.5,
+            "totalmilliseconds": 34200000,
+            "totalminutes": 570,
+            "totalseconds": 34200
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "E. Australia Standard Time",
+        "displayname": "(UTC+10:00) Brisbane",
+        "standardname": "E. Australia Standard Time",
+        "daylightname": "E. Australia Daylight Time",
+        "baseutcoffset": {
+            "hours": 10,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 360000000000,
+            "days": 0,
+            "totaldays": 0.41666666666666663,
+            "totalhours": 10,
+            "totalmilliseconds": 36000000,
+            "totalminutes": 600,
+            "totalseconds": 36000
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "AUS Eastern Standard Time",
+        "displayname": "(UTC+10:00) Canberra, Melbourne, Sydney",
+        "standardname": "AUS Eastern Standard Time",
+        "daylightname": "AUS Eastern Daylight Time",
+        "baseutcoffset": {
+            "hours": 10,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 360000000000,
+            "days": 0,
+            "totaldays": 0.41666666666666663,
+            "totalhours": 10,
+            "totalmilliseconds": 36000000,
+            "totalminutes": 600,
+            "totalseconds": 36000
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "West Pacific Standard Time",
+        "displayname": "(UTC+10:00) Guam, Port Moresby",
+        "standardname": "West Pacific Standard Time",
+        "daylightname": "West Pacific Daylight Time",
+        "baseutcoffset": {
+            "hours": 10,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 360000000000,
+            "days": 0,
+            "totaldays": 0.41666666666666663,
+            "totalhours": 10,
+            "totalmilliseconds": 36000000,
+            "totalminutes": 600,
+            "totalseconds": 36000
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Tasmania Standard Time",
+        "displayname": "(UTC+10:00) Hobart",
+        "standardname": "Tasmania Standard Time",
+        "daylightname": "Tasmania Daylight Time",
+        "baseutcoffset": {
+            "hours": 10,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 360000000000,
+            "days": 0,
+            "totaldays": 0.41666666666666663,
+            "totalhours": 10,
+            "totalmilliseconds": 36000000,
+            "totalminutes": 600,
+            "totalseconds": 36000
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Yakutsk Standard Time",
+        "displayname": "(UTC+10:00) Yakutsk",
+        "standardname": "Yakutsk Standard Time",
+        "daylightname": "Yakutsk Daylight Time",
+        "baseutcoffset": {
+            "hours": 10,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 360000000000,
+            "days": 0,
+            "totaldays": 0.41666666666666663,
+            "totalhours": 10,
+            "totalmilliseconds": 36000000,
+            "totalminutes": 600,
+            "totalseconds": 36000
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Central Pacific Standard Time",
+        "displayname": "(UTC+11:00) Solomon Is., New Caledonia",
+        "standardname": "Central Pacific Standard Time",
+        "daylightname": "Central Pacific Daylight Time",
+        "baseutcoffset": {
+            "hours": 11,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 396000000000,
+            "days": 0,
+            "totaldays": 0.45833333333333331,
+            "totalhours": 11,
+            "totalmilliseconds": 39600000,
+            "totalminutes": 660,
+            "totalseconds": 39600
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Vladivostok Standard Time",
+        "displayname": "(UTC+11:00) Vladivostok",
+        "standardname": "Vladivostok Standard Time",
+        "daylightname": "Vladivostok Daylight Time",
+        "baseutcoffset": {
+            "hours": 11,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 396000000000,
+            "days": 0,
+            "totaldays": 0.45833333333333331,
+            "totalhours": 11,
+            "totalmilliseconds": 39600000,
+            "totalminutes": 660,
+            "totalseconds": 39600
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "New Zealand Standard Time",
+        "displayname": "(UTC+12:00) Auckland, Wellington",
+        "standardname": "New Zealand Standard Time",
+        "daylightname": "New Zealand Daylight Time",
+        "baseutcoffset": {
+            "hours": 12,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 432000000000,
+            "days": 0,
+            "totaldays": 0.5,
+            "totalhours": 12,
+            "totalmilliseconds": 43200000,
+            "totalminutes": 720,
+            "totalseconds": 43200
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "UTC+12",
+        "displayname": "(UTC+12:00) Coordinated Universal Time+12",
+        "standardname": "UTC+12",
+        "daylightname": "UTC+12",
+        "baseutcoffset": {
+            "hours": 12,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 432000000000,
+            "days": 0,
+            "totaldays": 0.5,
+            "totalhours": 12,
+            "totalmilliseconds": 43200000,
+            "totalminutes": 720,
+            "totalseconds": 43200
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Fiji Standard Time",
+        "displayname": "(UTC+12:00) Fiji",
+        "standardname": "Fiji Standard Time",
+        "daylightname": "Fiji Daylight Time",
+        "baseutcoffset": {
+            "hours": 12,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 432000000000,
+            "days": 0,
+            "totaldays": 0.5,
+            "totalhours": 12,
+            "totalmilliseconds": 43200000,
+            "totalminutes": 720,
+            "totalseconds": 43200
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Magadan Standard Time",
+        "displayname": "(UTC+12:00) Magadan",
+        "standardname": "Magadan Standard Time",
+        "daylightname": "Magadan Daylight Time",
+        "baseutcoffset": {
+            "hours": 12,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 432000000000,
+            "days": 0,
+            "totaldays": 0.5,
+            "totalhours": 12,
+            "totalmilliseconds": 43200000,
+            "totalminutes": 720,
+            "totalseconds": 43200
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Kamchatka Standard Time",
+        "displayname": "(UTC+12:00) Petropavlovsk-Kamchatsky - Old",
+        "standardname": "Kamchatka Standard Time",
+        "daylightname": "Kamchatka Daylight Time",
+        "baseutcoffset": {
+            "hours": 12,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 432000000000,
+            "days": 0,
+            "totaldays": 0.5,
+            "totalhours": 12,
+            "totalmilliseconds": 43200000,
+            "totalminutes": 720,
+            "totalseconds": 43200
+        },
+        "supportsdaylightsavingtime": true
+    },
+    {
+        "id": "Tonga Standard Time",
+        "displayname": "(UTC+13:00) Nuku\u0027alofa",
+        "standardname": "Tonga Standard Time",
+        "daylightname": "Tonga Daylight Time",
+        "baseutcoffset": {
+            "hours": 13,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 468000000000,
+            "days": 0,
+            "totaldays": 0.54166666666666663,
+            "totalhours": 13,
+            "totalmilliseconds": 46800000,
+            "totalminutes": 780,
+            "totalseconds": 46800
+        },
+        "supportsdaylightsavingtime": false
+    },
+    {
+        "id": "Samoa Standard Time",
+        "displayname": "(UTC+13:00) Samoa",
+        "standardname": "Samoa Standard Time",
+        "daylightname": "Samoa Daylight Time",
+        "baseutcoffset": {
+            "hours": 13,
+            "minutes": 0,
+            "seconds": 0,
+            "milliseconds": 0,
+            "ticks": 468000000000,
+            "days": 0,
+            "totaldays": 0.54166666666666663,
+            "totalhours": 13,
+            "totalmilliseconds": 46800000,
+            "totalminutes": 780,
+            "totalseconds": 46800
+        },
+        "supportsdaylightsavingtime": true
+    }
+   ]
+}

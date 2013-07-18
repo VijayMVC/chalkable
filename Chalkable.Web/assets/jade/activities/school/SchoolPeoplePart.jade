@@ -1,0 +1,22 @@
+-users=self.getUsers()
+-selectedIndex = self.getSelectedIndex();
+.top.panel-bg
+    span #{users.getTotalCount()} Persons
+.action-bar.buttons.filter
+    .container.panel-bg
+        .left
+            A(class=self.isByLastName()?"":"pressed", data-value="false").action-button First name
+            A(class=self.isByLastName()?"pressed":"", data-value="true").action-button Last name
+            input(type="hidden", name="byLastName", value=self.isByLastName()))
++ListView(users)(
+    selectedIndex = selectedIndex).people-list
+    each item, i in users.getItems()
+        .row(class=(i == selectedIndex ? 'selected' : ''), index=i)
+            +ActionLink('schools', 'details', 1).left.image-container.white.shadow
+                img.avatar.avatar47(src="https://dev.chalkable.com/PersonPicture/Read?pictureId=0&width=47&height=47&gender=F")
+            p.left= item.getFullname()
+            .right
+                +Button().message-button.blue-gradient-btn Message
+            .clear
+
+
