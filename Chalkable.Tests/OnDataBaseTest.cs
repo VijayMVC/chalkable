@@ -79,8 +79,9 @@ namespace Chalkable.Tests
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1043 - fix in spGetClasses.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1044 - create spGetFinalGrades.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1045 - fix in spGetAnnouncementDetails.sql"));
-            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1046 - create function fnGetStudentGradeAvgForClass.sql"));          
-       
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1046 - create function fnGetStudentGradeAvgForClass.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1047 - create view vwPrivateMessage.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1048 - create procedure spGetAnnouncementRecipientPersons.sql"));             
         }
 
         protected void CreateMasterDb()

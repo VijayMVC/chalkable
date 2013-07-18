@@ -113,7 +113,7 @@ namespace Chalkable.Data.School.DataAccess
         public PaginatedList<NotificationDetails> GetPaginatedNotificationsDetails(NotificationQuery query)
         {
             var innerQuery = BuildGetNotificationDetailsDbQuery(query);
-            var orderBy = Orm.FullFieldName(typeof (Notification), Notification.CREATED_FIELD);
+            var orderBy = "Notification_" + Notification.CREATED_FIELD;
             var q = Orm.PaginationSelect(innerQuery, orderBy, Orm.OrderType.Asc, query.Start, query.Count);
             return ReadPaginatedResult(q, query.Start, query.Count, ReadListNotifcationDetails);
         }

@@ -78,6 +78,7 @@
     <Compile Include="Services\School\MarkingPeriodServiceTest.cs" />
     <Compile Include="Services\School\PeriodServiceTest.cs" />
     <Compile Include="Services\School\PhoneServiceTest.cs" />
+    <Compile Include="Services\School\PrivateMessageServiceTest.cs" />
     <Compile Include="Services\School\RoomServiceTest.cs" />
     <Compile Include="Services\School\ScheduleSectionServiceTest.cs" />
     <Compile Include="Services\School\SchoolTestContext.cs" />

@@ -184,7 +184,6 @@
     <Compile Include="Models\CreateAnnouncementViewData.cs" />
     <Compile Include="Models\DisciplineTypeViewData.cs" />
     <Compile Include="Models\DistrictViewData.cs" />
-    <Compile Include="Models\FeedViewData.cs" />
     <Compile Include="Models\GradingStyleViewData.cs" />
     <Compile Include="Models\NotificationsByDateViewData.cs" />
     <Compile Include="Models\NotificationViewData.cs" />

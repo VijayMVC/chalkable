@@ -50,19 +50,19 @@ namespace Chalkable.BusinessLogic.Services.School
                     });
 
                 ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, id.ToString(), content);
-                //TODO: notification sending
-                //if (ann.State != AnnouncementState.Draft)
-                //{
-                //  1sssaa  if (Context.UserId == ann.PersonRef)
-                //    {
-                //        ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotification(announcementId);
-                //    }
-                //    else
-                //    {
-                //        ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToPerson(announcementId, Context.UserId);
-                //    }
-                //}
                 uow.Commit();
+                if (ann.State != AnnouncementState.Draft)
+                {
+                    if (Context.UserId == ann.PersonRef)
+                    {
+                        ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotification(announcementId);
+                    }
+                    else
+                    {
+                        ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToPerson(announcementId, Context.UserId);
+                    }
+                }
+
             }
             return ann;
         }

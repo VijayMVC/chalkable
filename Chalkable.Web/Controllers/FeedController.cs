@@ -20,7 +20,7 @@ namespace Chalkable.Web.Controllers
 
             var list = SchoolLocator.AnnouncementService.GetAnnouncements(starredOnly ?? false, start ?? 0, count ?? 10, 
                 classId, null, BaseSecurity.IsAdminViewer(SchoolLocator.Context));
-            return Json(list.Transform(FeedViewData.Create));
+            return Json(list.Transform(x => AnnouncementViewData.Create(x)));
         }
     }
 }

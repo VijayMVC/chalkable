@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void SubmitForAdmin(Guid announcementId);
 
         Announcement GetAnnouncementById(Guid id);
-
+        
         PaginatedList<AnnouncementComplex> GetAnnouncements(int start, int count, bool onlyOwners = false);
         PaginatedList<AnnouncementComplex> GetAnnouncements(bool starredOnly, int start, int count, Guid? classId, Guid? markingPeriodId = null, bool ownerOnly = false);
         List<AnnouncementComplex> GetAnnouncementsFeedPage(bool starredOnly, int start, int count, ref int sourceCount, Guid? classId, Guid? markingPeriodId = null, bool ownedOnly = false);
@@ -37,6 +37,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         IList<AnnouncementRecipient> GetAnnouncementRecipients(Guid announcementId);
+        IList<Person> GetAnnouncementRecipientPersons(Guid announcementId); 
         int GetNewAnnouncementItemOrder(AnnouncementDetails announcement);
 
         Announcement Star(Guid id, bool starred);
@@ -408,6 +409,18 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new AnnouncementDataAccess(uow);
                 return da.GetLastDraft(Context.UserId);
+            }
+        }
+
+
+        public IList<Person> GetAnnouncementRecipientPersons(Guid announcementId)
+        {
+            var ann = GetAnnouncementById(announcementId);
+            if (ann.State == AnnouncementState.Draft)
+                throw new ChalkableException(ChlkResources.ERR_NO_RECIPIENTS_IN_DRAFT_STATE);
+            using (var uow = Read())
+            {
+                return new AnnouncementDataAccess(uow).GetAnnouncementRecipientPersons(announcementId, Context.UserId);
             }
         }
     }

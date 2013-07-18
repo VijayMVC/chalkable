@@ -7,26 +7,26 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         private static Dictionary<string, string> templates = new Dictionary<string, string>();
 
         public const string ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION = "ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION";
-        private const string ANNOUNCEMENT_ATTACHMENT_NOTIFICATION_TEMPLATE = "New attachment is added to announcement <a href='@0#announcement/view/^.Notification.AnnouncementRef'>^.Notification.Announcement.Title</a>";
+        private const string ANNOUNCEMENT_ATTACHMENT_NOTIFICATION_TEMPLATE = "New attachment is added to announcement <a href='@0#announcement/view/^.Notification.AnnouncementRef'>^.Other.AnnouncementTitle</a>";
 
         public const string ANNOUNCEMENT_REMINDER_NOTIFICATION = "ANNOUNCEMENT_REMINDER_NOTIFICATION";
-        private const string ANNOUNCEMENT_REMINDER_NOTIFICATION_TEMPLATE = "Reminder about announcement: announcement <a href='@0#announcement/view/^.Notification.AnnouncementRef'>^.Notification.Announcement.Title</a>";
+        private const string ANNOUNCEMENT_REMINDER_NOTIFICATION_TEMPLATE = "Reminder about announcement: announcement <a href='@0#announcement/view/^.Notification.AnnouncementRef'>^.Other.AnnouncementTitle</a>";
 
         public const string ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR = "ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR";
         private const string ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR_TEMPLATE = "Student <a href='@0#students/details/^.Notification.PersonRef'>^.Notification.Person.ShortSalutationName</a> " +
                                                                                     "asked question about announcement <a href='@0#announcement/view/^.Notification.AnnouncementRef'>" +
-                                                                                   "^.Notification.Announcement.Title ^.Other.AnnouncementTypeName</a> ^.Other.PersonQuestion";
+                                                                                   "^.Other.AnnouncementTitle ^.Other.AnnouncementTypeName</a> ^.Other.PersonQuestion";
 
         public const string ANNOUNCEMENT_NOTIFICATION_ANSWER_TO_PERSON = "ANNOUNCEMENT_NOTIFICATION_ANSWER_TO_PERSON";
         private const string ANNOUNCEMENT_NOTIFICATION_ASWER_TO_PERSON_TEMPLATE = "<a href='@0#teachers/details/^.Notification.PersonRef'>^.Notification.Person.SalutationName" +
                                                                             " ^.Notification.Person.LastName</a> answered a question about <a href='@0#announcement/view/^.Notification.AnnouncementRef'>" +
-                                                                            "^.Notification.Announcement.Title ^.Other.AnnouncementTypeName</a> ^.Other.PersonQuestion"; 
+                                                                            "^.Other.AnnouncementTitle ^.Other.AnnouncementTypeName</a> ^.Other.PersonQuestion"; 
 
         public const string ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON = "ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON";
         private const string ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON_TEMPLATE = "Student <a href='@0#students/details/^.Notification.PersonRef'>^.Notification.Person.ShortSalutationName</a> added  new attachment";
 
         public const string ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON = "ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON";
-        private const string ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON_TEMPLATE = "<a> ^.Other.AnnouncementOwner.ShortSalutationName </a> graded or commented your <a href='@0#announcement/view/^.Notification.AnnouncementRef'> ^.Notification.Announcement.Title</a> ^.Other.AnnouncementTypeName";
+        private const string ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON_TEMPLATE = "<a> ^.Other.AnnouncementOwner.ShortSalutationName </a> graded or commented your <a href='@0#announcement/view/^.Notification.AnnouncementRef'> ^.Other.AnnouncementTitle</a> ^.Other.AnnouncementTypeName";
 
         public const string APPLICATION_NOTIFICATION = "APPLICATION_NOTIFICATION";
         private const string APPLICATION_NOTIFICATION_TEMPLATE = "Application <a href='@0#applications/install/^.Notification.ApplicationRef'>^.Other.ApplicationName</a> was added to My Apps for you by " +

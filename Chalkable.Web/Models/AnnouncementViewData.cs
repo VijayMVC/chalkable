@@ -76,7 +76,7 @@ namespace Chalkable.Web.Models
             Id = announcement.Id;
             Order = announcement.Order;
             State = (int)announcement.State;
-            Title = announcement.ClassName;
+            Title = announcement.Title;
             RecipientId = announcement.ClassId;
             Content = announcement.Content;
             Subject = announcement.Subject;
@@ -102,6 +102,7 @@ namespace Chalkable.Web.Models
             //ApplicationName = announcement.ApplicationName;
             Dropped = announcement.Dropped;
         }
+
 
         public static AnnouncementViewData Create(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded = null, bool isGradable = false)
         {

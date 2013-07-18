@@ -30,7 +30,6 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        //TODO : notification sending 
         //TODO : needs testing 
         public StudentAnnouncement SetGrade(Guid studentAnnouncementId, int? value, string extraCredits, string comment, bool dropped,
                                             GradingStyleEnum? gradingStyle = null)
@@ -58,6 +57,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 saDa.Update(sa);
                 annDa.Update(ann);
                 uow.Commit();
+                var recipientId =  ann.StudentAnnouncements.First(x=>x.Id == sa.Id).Person.Id;
+                ServiceLocator.NotificationService.AddAnnouncementSetGradeNotificationToPerson(sa.AnnouncementRef, recipientId);
                 return sa;
             }
         }
