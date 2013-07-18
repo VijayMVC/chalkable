@@ -1,0 +1,21 @@
+.db-maintenance
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('dbmaintenance', 'listBackups').pressed Backups
+                +ActionLink('dbmaintenance', 'updateDb') Update
+    +Grid('dbmaintenance', 'listBackups', self).not-transparent
+        +GridHead()
+            .th Name
+            .th Uri
+            .th Size
+            .th
+        +GridBody()
+            each item in self.items
+                +GridRow()
+                    .td= item.getName()
+                    .td= item.getUri()
+                    .td= item.getSize()
+                    .td.action-links
+                        +ActionLink('dbmaintenance', 'restore', item.getSize()).plugin
+
