@@ -55,7 +55,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'dropped',
 
             [ria.serialize.SerializeProperty('expiresdate')],
-            chlk.model.common.ChlkDate, 'expiresDate',
+            chlk.models.common.ChlkDate, 'expiresDate',
 
             Boolean, 'gradable',
             Number, 'grade',
@@ -114,7 +114,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'studentsCount',
 
             [ria.serialize.SerializeProperty('studentscountwithattachments')],
-            Number, 'studentsWithAttachmentsCount'
+            Number, 'studentsWithAttachmentsCount',
 
             [ria.serialize.SerializeProperty('studentscountwithoutattachments')],
             Number, 'studentsWithoutAttachmentsCount',

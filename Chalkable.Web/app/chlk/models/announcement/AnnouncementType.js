@@ -7,10 +7,12 @@ NAMESPACE('chlk.models.announcement', function () {
     /** @class chlk.models.announcement.AnnouncementType*/
     CLASS(
         'AnnouncementType', [
-            Boolean, 'cancreate',
+            [ria.serialize.SerializeProperty('cancreate')],
+            Boolean, 'canCreate',
             String, 'description',
             chlk.models.announcement.AnnouncementTypeId, 'id',
-            Boolean, 'issystem',
+            [ria.serialize.SerializeProperty('issystem')],
+            Boolean, 'isSystem',
             String, 'name'
         ]);
 });
