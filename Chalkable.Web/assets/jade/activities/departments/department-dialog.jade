@@ -1,0 +1,17 @@
+.dialog.add-department.gray
+    .x-window-header
+        span Department
+    .x-window-body
+            +ActionForm('departments', 'save')
+                input(type="hidden",name="id", value=self.id)
+                .x-form-field
+                    label File:
+                    input(type="text",name="iconfile")
+                .x-form-field
+                    label Name:
+                    input(type="text",name="name", value=self.name)
+                .x-form-field
+                    label Keywords:
+                    input(type="text",name="keywords", value=self.keywords)
+                +Button(type="submit").special-button.blue-button.submit-btn Submit
+                +Button.special-button.red-button Cancel
