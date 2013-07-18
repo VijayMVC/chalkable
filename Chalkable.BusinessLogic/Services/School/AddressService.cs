@@ -7,7 +7,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
-    public interface IAddressSerivce
+    public interface IAddressService
     {
         Address Add(Guid personId, string value, string note, AddressType type);
         Address Edit(Guid id, string value, string note, AddressType type);
@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<Address> GetAddress();
 
     }
-    public class AddressService : SchoolServiceBase, IAddressSerivce
+    public class AddressService : SchoolServiceBase, IAddressService
     {
         public AddressService(IServiceLocatorSchool serviceLocator)
             : base(serviceLocator)

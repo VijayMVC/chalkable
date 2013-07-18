@@ -16,7 +16,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void Delete(Guid id);
         MarkingPeriod Edit(Guid id, Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays);
         MarkingPeriod GetMarkingPeriodById(Guid id);
-        MarkingPeriod GetLastMarkingPeriod(DateTime tillDate);
+        MarkingPeriod GetLastMarkingPeriod(DateTime? tillDate = null);
+        MarkingPeriod GetNextMarkingPeriodInYear(Guid markingPeriodId);
         MarkingPeriodClass GetMarkingPeriodClass(Guid classId, Guid markingPeriodId);
         MarkingPeriodClass GetMarkingPeriodClass(Guid markingPeriodClassId);
         IList<MarkingPeriod> GetMarkingPeriods(Guid? schoolYearId);
@@ -41,12 +42,12 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public MarkingPeriod GetLastMarkingPeriod(DateTime tillDate)
+        public MarkingPeriod GetLastMarkingPeriod(DateTime? tillDate = null)
         {
             using (var uow = Read())
             {
                 var da = new MarkingPeriodDataAccess(uow);
-                return  da.GetLast(tillDate);
+                return  da.GetLast(tillDate ?? Context.NowSchoolTime);
             }
         }
 
@@ -266,6 +267,15 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 return new MarkingPeriodClassDataAccess(uow).GetById(markingPeriodClassId);
+            }
+        }
+    
+
+        public MarkingPeriod GetNextMarkingPeriodInYear(Guid markingPeriodId)
+        {
+            using (var uow = Read())
+            {
+               return new MarkingPeriodDataAccess(uow).GetNextInYear(markingPeriodId);
             }
         }
     }

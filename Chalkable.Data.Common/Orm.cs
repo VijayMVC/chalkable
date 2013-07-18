@@ -49,18 +49,23 @@ namespace Chalkable.Data.Common
 
         private const string COMPLEX_RESULT_SET_FORMAT = " [{0}].[{1}] as {0}_{1}";
         
-        
-
         public static IList<string> FullFieldsNames(Type t)
         {
             return FullFieldsNames(t, t.Name);
         }
- 
         public static IList<string> FullFieldsNames(Type t, string prefix)
         {
             var fields = Fields(t);
-            return fields.Select(x => string.Format(COMPLEX_RESULT_SET_FORMAT, prefix, x)).ToList();
-        } 
+            return fields.Select(x => FullFieldName(t, prefix, x)).ToList();
+        }
+        public static string FullFieldName(Type t, string field)
+        {
+            return FullFieldName(t, t.Name, field);
+        }
+        public static string FullFieldName(Type t, string prefix, string field)
+        {
+            return string.Format(COMPLEX_RESULT_SET_FORMAT, prefix, field);
+        }
 
         public static string ComplexResultSetQuery(IList<Type> types)
         {
@@ -287,10 +292,10 @@ namespace Chalkable.Data.Common
 
         public static DbQuery PaginationSelect<T>(Dictionary<string, object> conds, string orderColumn, OrderType orderType, int start, int count)
         {
-            return PaginationSelect<T>(SimpleSelect<T>(conds), orderColumn, orderType, start, count);
+            return PaginationSelect(SimpleSelect<T>(conds), orderColumn, orderType, start, count);
         }
 
-        public static DbQuery PaginationSelect<T>(DbQuery innerSelect, string orderColumn, OrderType orderType, int start, int count)
+        public static DbQuery PaginationSelect(DbQuery innerSelect, string orderColumn, OrderType orderType, int start, int count)
         {
             var b = new StringBuilder();
             b.AppendFormat("select count(*) as AllCount from ({0}) x;", innerSelect.Sql);

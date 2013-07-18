@@ -73,12 +73,14 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         }
 
         private Notification BuildNotificationFromTemplate(string templateName, NotificationType type, Person recipient, Announcement announcement = null, ClassPeriod classGeneralPeriod = null
-            , Guid? applicationId = null, MarkingPeriod markingPeriod = null, PrivateMessage privateMessage = null, Person asker = null, object other = null, string baseUrl = null)
+            , Guid? applicationId = null, MarkingPeriod markingPeriod = null, PrivateMessageDetails privateMessage = null, Person asker = null, object other = null, string baseUrl = null)
         {
             var parameters = new List<string> {GetBaseUrlByRole(recipient, baseUrl)};
             var notification = new NotificationDetails
             {
+                Id = Guid.NewGuid(),
                 PersonRef = recipient.Id,
+                Person = recipient,
                 Shown = false,
                 Type = type,
                 Created = serviceLocator.Context.NowSchoolTime
@@ -156,53 +158,59 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         //TODO: implement builders 
 
-        public Notification BuildAnnouncementNewAttachmentNotification(Announcement announcement, Person recipient, string baseUrl = null)
+        public Notification BuildAnnouncementNewAttachmentNotification(AnnouncementComplex announcement, Person recipient)
         {
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION,
-                                                 NotificationType.Announcement, recipient, announcement);
+                                                 NotificationType.Announcement, recipient, announcement, null, null, null,
+                                                 null, null, new { AnnouncementTitle = announcement.Title});
         }
-        public Notification BuildAnnouncementNewAttachmentNotificationToPerson(AnnouncementDetails announcement, Person fromschoolPerson, string baseUrl = null)
+        public Notification BuildAnnouncementNewAttachmentNotificationToPerson(AnnouncementDetails announcement, Person fromschoolPerson)
         {
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON,
-                                                 NotificationType.Announcement, announcement.Owner, announcement, null, null, null, null, fromschoolPerson);
+                                                 NotificationType.Announcement, announcement.Owner, announcement, null, null, null, 
+                                                 null, fromschoolPerson, new { AnnouncementTitle = announcement.Title});
         }
 
-        public Notification BuildAnnouncementReminderNotification(Announcement announcement, Person recipient, string baseUrl = null)
+        public Notification BuildAnnouncementReminderNotification(AnnouncementComplex announcement, Person recipient)
         {
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_REMINDER_NOTIFICATION,
-                                                 NotificationType.Announcement, recipient, announcement);
+                                                 NotificationType.Announcement, recipient, announcement, null, null, null,
+                                                 null, null, new { AnnouncementTitle = announcement.Title });
         }
 
-        public Notification BuildAnnouncementQnToAuthorNotifiaction(AnnouncementQnAComplex announcementQnA, AnnouncementComplex announcement, Person recipient, string baseUrl = null)
+        public Notification BuildAnnouncementQnToAuthorNotifiaction(AnnouncementQnAComplex announcementQnA, AnnouncementComplex announcement)
         {
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR,
-                                                 NotificationType.Question, recipient, announcement, null, null, null, null,
+                                                 NotificationType.Question, announcementQnA.Answerer, announcement, null, null, null, null,
                                                  announcementQnA.Asker, new
                                                      {
                                                          AnnouncementTypeName = announcement.AnnouncementTypeName,
-                                                         PersonQuestion = StringTools.BuildShortText(announcementQnA.Question, 35)
+                                                         PersonQuestion = StringTools.BuildShortText(announcementQnA.Question, 35),
+                                                         AnnouncementTitle = announcement.Title
                                                      });
         }
 
-        public Notification BuildAnnouncementAnswerToPersonNotifiaction(AnnouncementQnAComplex announcementQnA, AnnouncementComplex announcement, Person fromSchoolPerson, string baseUrl = null)
+        public Notification BuildAnnouncementAnswerToPersonNotifiaction(AnnouncementQnAComplex announcementQnA, AnnouncementComplex announcement)
         {
 
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NOTIFICATION_ANSWER_TO_PERSON,
                                                  NotificationType.Announcement, announcementQnA.Asker, announcement, null, null, null,
-                                                 null, fromSchoolPerson, new
+                                                 null, announcementQnA.Answerer, new
                                                      {
                                                          AnnouncementTypeName = announcement.AnnouncementTypeName,
+                                                         AnnouncementTitle = announcement.Title,
                                                          PersonQuestion = StringTools.BuildShortText(announcementQnA.Question, 40)
                                                      });
         }
 
-        public Notification BuildAnnouncementSetGradeToPersonNotifiaction(AnnouncementDetails announcement, Person recipient, string baseUrl = null)
+        public Notification BuildAnnouncementSetGradeToPersonNotifiaction(AnnouncementDetails announcement, Person recipient)
         {
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON,
                                                  NotificationType.Announcement, recipient, announcement, null, null, null, null, null, 
                                                  new {
                                                          AnnouncementOwner = announcement.Owner, 
-                                                         AnnouncementTypeName = announcement.AnnouncementTypeName
+                                                         AnnouncementTypeName = announcement.AnnouncementTypeName,
+                                                         AnnouncementTitle = announcement.Title
                                                      });
         }
 
@@ -219,7 +227,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         //                                         fromSchoolPerson, otherModel, baseUrl);
         //}
 
-        public Notification BuildPrivateMessageNotification(PrivateMessageDetails privateMessage, Person fromPerson, Person toPerson, string baseUrl = null)
+        public Notification BuildPrivateMessageNotification(PrivateMessageDetails privateMessage, Person fromPerson, Person toPerson)
         {
             var fromPersonRole = CoreRoles.GetById(fromPerson.RoleRef);
             var otherModel = new
@@ -235,7 +243,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         }
 
         public Notification BuildEndMarkingPeriodNotification(MarkingPeriod markingPeriod, Person recipient, int endDays, 
-            bool nextMarkingPeriodExist, bool nextMpNotAssignedToClass, string baseUrl = null)
+            bool nextMarkingPeriodExist, bool nextMpNotAssignedToClass)
         {
             var otherModel = new
                     {
@@ -247,14 +255,14 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                        NotificationType.MarkingPeriodEnding, recipient, null, null, null, markingPeriod, null, null, otherModel);
         }
 
-        public Notification BuildAttendanceNotificationToAdmin(Person recipient, IList<Person> persons, string baseUrl = null)
+        public Notification BuildAttendanceNotificationToAdmin(Person recipient, IList<Person> persons)
         {
             var otherModel = new { PersonsCount = persons.Count, Persons = persons };
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ATTENDANCE_NOTIFICATION_TO_ADMIN,
                                                  NotificationType.Attendance, recipient, null, null, null, null, null, null, otherModel);
         }
 
-        public Notification BuildAttendanceNotificationToStudent(Person recipient, ClassAttendanceComplex classAttendance, string baseUrl = null)
+        public Notification BuildAttendanceNotificationToStudent(Person recipient, ClassAttendanceComplex classAttendance)
         {
             var otherModel = new
                     {
@@ -267,7 +275,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                  NotificationType.Attendance, recipient, null, null, null, null, null, null, otherModel);
         }
 
-        public Notification BuildAttendanceNotificationToTeacher(Person recipient, ClassPeriod classPeriod, string className, DateTime dateTime, string baseUrl = null)
+        public Notification BuildAttendanceNotificationToTeacher(Person recipient, ClassPeriod classPeriod, string className, DateTime dateTime)
         {
             var otherModel = new
             {
@@ -280,7 +288,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
 
 
-        public Notification BuildAppBudgetBalanceNotification(Person recipient, double budgetBalance, string baseUrl = null)
+        public Notification BuildAppBudgetBalanceNotification(Person recipient, double budgetBalance)
         {
             var otherModel = new { BudgetBalance = budgetBalance };
             return BuildNotificationFromTemplate(NotificationTemplateProvider.APP_BUDGET_BALANCE_NOTIFICATION,

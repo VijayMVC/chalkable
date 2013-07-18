@@ -4,16 +4,16 @@ REQUIRE('chlk.models.departments.Department');
 
 NAMESPACE('chlk.templates.departments', function () {
 
-    /** @class chlk.templates.departments.AddDepartmentDialog*/
+    /** @class chlk.templates.departments.DepartmentDialog*/
     CLASS(
-        [ria.templates.TemplateBind('~/assets/jade/activities/departments/add-department-dialog.jade')],
+        [ria.templates.TemplateBind('~/assets/jade/activities/departments/department-dialog.jade')],
         [ria.templates.ModelBind(chlk.models.departments.Department)],
-        'AddDepartmentDialog', EXTENDS(chlk.templates.JadeTemplate), [
+        'DepartmentDialog', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            Number, 'id',
+            chlk.models.departments.DepartmentId, 'id',
             [ria.templates.ModelPropertyBind],
             String, 'name',
             [ria.templates.ModelPropertyBind],
-            ArrayOf(String), 'keywords'
+            String, 'keywords'
         ])
 });

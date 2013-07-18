@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.BusinessLogic.Mapping;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Logic;
+using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models
@@ -76,7 +76,7 @@ namespace Chalkable.Web.Models
             Id = announcement.Id;
             Order = announcement.Order;
             State = (int)announcement.State;
-            Title = announcement.ClassName;
+            Title = announcement.Title;
             RecipientId = announcement.ClassId;
             Content = announcement.Content;
             Subject = announcement.Subject;
@@ -103,13 +103,13 @@ namespace Chalkable.Web.Models
             Dropped = announcement.Dropped;
         }
 
+
         public static AnnouncementViewData Create(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded = null, bool isGradable = false)
         {
             var res = new AnnouncementViewData(announcement, wasAnnouncementTypeGraded, isGradable);
             return res;
         }
     }
-
 
     public class AnnouncementGradeViewData : AnnouncementViewData
     {

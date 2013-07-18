@@ -72,12 +72,14 @@
     <Compile Include="Services\School\ClassPeriodServiceTest.cs" />
     <Compile Include="Services\School\ClassServiceTest.cs" />
     <Compile Include="Services\School\CourseServiceTest.cs" />
+    <Compile Include="Services\School\DisciplineTypeServiceTest.cs" />
     <Compile Include="Services\School\FinalGradeServiceTest.cs" />
     <Compile Include="Services\School\GradingStyleMappingTest.cs" />
     <Compile Include="Services\School\GradingStyleServiceTest.cs" />
     <Compile Include="Services\School\MarkingPeriodServiceTest.cs" />
     <Compile Include="Services\School\PeriodServiceTest.cs" />
     <Compile Include="Services\School\PhoneServiceTest.cs" />
+    <Compile Include="Services\School\PrivateMessageServiceTest.cs" />
     <Compile Include="Services\School\RoomServiceTest.cs" />
     <Compile Include="Services\School\ScheduleSectionServiceTest.cs" />
     <Compile Include="Services\School\SchoolTestContext.cs" />

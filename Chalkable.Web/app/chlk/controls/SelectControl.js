@@ -14,7 +14,22 @@ NAMESPACE('chlk.controls', function () {
             VOID, function processAttrs(attributes) {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
-                        jQuery('#' + attributes.id).chosen({disable_search_threshold: 100});
+                        var that = this;
+                        jQuery('#' + attributes.id).chosen({disable_search_threshold: 100}).change(function(){
+                            var node = jQuery(this);
+                            var controller = node.data('controller');
+                            if(controller){
+                                var action = node.data('action');
+                                var params = node.data('params') || [];
+                                params.unshift(node.val());
+                                var state = that.context.getState();
+                                state.setController(controller);
+                                state.setAction(action);
+                                state.setParams(params);
+                                state.setPublic(false);
+                                that.context.stateUpdated();
+                            }
+                        });
                     }.bind(this));
             }
         ]);

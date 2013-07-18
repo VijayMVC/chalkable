@@ -40,7 +40,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new AnnouncementQnADataAccess(uow);
                 var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
                 
-                var annQnA = new AnnouncementQnA
+                var annQnA = new AnnouncementQnAComplex
                     {
                         Id = Guid.NewGuid(),
                         AnnouncementRef = announcementId,
@@ -50,8 +50,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         State = AnnouncementQnAState.Asked
                     };
                 da.Insert(annQnA);
-                //TODO : send asked ann notification to teacher
                 uow.Commit();
+                ServiceLocator.NotificationService.AddAnnouncementNotificationQnToAuthor(annQnA.Id, ann.Id);
                 return annQnA;
             }
         }
@@ -70,8 +70,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 annQnA.Answer = answer;
                 annQnA.AnsweredTime = Context.NowSchoolTime;
                 da.Update(annQnA);
-                //TODO : send answer ann notification to student
                 uow.Commit();
+                ServiceLocator.NotificationService.AddAnnouncementNotificationAnswerToPerson(annQnA.Id, annQnA.AnnouncementRef);
                 return annQnA;
             }
         }

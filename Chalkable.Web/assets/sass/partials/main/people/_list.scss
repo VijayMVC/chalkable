@@ -26,4 +26,15 @@
       margin-top: 12px;
     }
   }
+
+  .image-container{
+    margin: 8px;
+  }
+
+  P{
+    font-size: 20px;
+    width: 438px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 }

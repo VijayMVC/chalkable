@@ -16,8 +16,10 @@ namespace Chalkable.Data.Master.DataAccess
         private void LoadApplicationData(Application app)
         {
             app.Developer = SelectOne<Developer>(new Dictionary<string, object> { { "Id", app.DeveloperRef } });
-            app.Pictures = SelectMany<ApplicationPicture>(new Dictionary<string, object> { { ApplicationPicture.APPLICATION_REF_FIELD, app.DeveloperRef } });
-            app.Permissions = SelectMany<ApplicationPermission>(new Dictionary<string, object> { { ApplicationPermission.APPLICATION_REF_FIELD, app.DeveloperRef } });
+            app.Pictures = SelectMany<ApplicationPicture>(new Dictionary<string, object> { { ApplicationPicture.APPLICATION_REF_FIELD, app.Id } });
+            app.Permissions = SelectMany<ApplicationPermission>(new Dictionary<string, object> { { ApplicationPermission.APPLICATION_REF_FIELD, app.Id } });
+            app.Categories = SelectMany<ApplicationCategory>(new Dictionary<string, object> { {ApplicationCategory.APPLICATION_REF_FIELD, app.Id} });
+            app.GradeLevels = SelectMany<ApplicationGradeLevel>(new Dictionary<string, object> { { ApplicationGradeLevel.APPLICATION_REF_FIELD, app.Id } });
         }
 
         public Application GetApplicationById(Guid id)
@@ -78,7 +80,7 @@ namespace Chalkable.Data.Master.DataAccess
                 ps.Add("categoryId", categoryId);
             }
             orderBy = orderBy ?? Application.ID_FIELD;
-            var q = Orm.PaginationSelect<Application>(new DbQuery { Sql = sql.ToString(), Parameters = ps }, orderBy,
+            var q = Orm.PaginationSelect(new DbQuery { Sql = sql.ToString(), Parameters = ps }, orderBy,
                                                   Orm.OrderType.Desc, 0, int.MaxValue);
 
 

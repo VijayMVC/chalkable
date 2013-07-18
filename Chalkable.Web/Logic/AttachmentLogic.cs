@@ -25,6 +25,12 @@ namespace Chalkable.Web.Logic
                 DocHeigth = AnnouncementAttachment.DOCUMENT_DEFAULT_HEIGHT
             }).ToList();
         }
+
+        public static AnnouncementAttachmentInfo PrepareAttachmentInfo(AnnouncementAttachment announcementAttachment)
+        {
+            var res = PrepareAttachmentsInfo(new List<AnnouncementAttachment> {announcementAttachment});
+            return res.First();
+        }
     }
 
 

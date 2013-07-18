@@ -37,7 +37,6 @@ NAMESPACE('ria.mvc', function () {
                 BASE();
 
                 this._actitivyClass = null;
-                this._actitivyClass = null;
                 this._domAppendTo = null;
                 this._domEvents = [];
                 this.processAnnotations_(new ria.reflection.ReflectionClass(this.getClass()));
@@ -45,7 +44,7 @@ NAMESPACE('ria.mvc', function () {
 
             [[ria.reflection.ReflectionClass]],
             VOID, function processAnnotations_(ref) {
-                this._actitivyClass = camel2dashed(ref.getShortName());
+                this._activityClass = camel2dashed(ref.getShortName());
 
                 if (!ref.isAnnotatedWith(ria.mvc.DomAppendTo))
                     throw new ria.mvc.MvcException('ria.mvc.DomActivity expects annotation ria.mvc.DomAppendTo');
@@ -72,7 +71,7 @@ NAMESPACE('ria.mvc', function () {
             OVERRIDE, VOID, function onCreate_() {
                 BASE();
 
-                var dom = this.dom = this.onDomCreate_().appendTo(this._domAppendTo).addClass(this._actitivyClass);
+                var dom = this.dom = this.onDomCreate_().addClass(this._actitivyClass);
 
                 var instance = this;
                 this._domEvents.forEach(function (_) {
@@ -80,6 +79,16 @@ NAMESPACE('ria.mvc', function () {
                         return _.methodRef.invokeOn(instance, ria.__API.clone(arguments));
                     });
                 })
+            },
+
+            OVERRIDE, VOID, function onStart_() {
+                BASE();
+                this.dom.appendTo(this._domAppendTo);
+            },
+
+            OVERRIDE, VOID, function onStop_(){
+                BASE();
+                this._domAppendTo.remove(this.dom.empty());
             },
 
             [[String]],

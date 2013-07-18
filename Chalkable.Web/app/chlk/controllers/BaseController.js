@@ -7,11 +7,18 @@ NAMESPACE('chlk.controllers', function (){
         [[String]],
         function SidebarButton(clazz) {});
 
+
+    ANNOTATION(
+        [[ArrayOf(chlk.models.common.RoleEnum)]],
+        function AccessForRoles(roles){});
+
     function toCamelCase(str) {
         return str.replace(/(\-[a-z])/g, function($1){
             return $1.substring(1).toUpperCase();
         });
     }
+
+
 
     var PRESSED_CLS = 'pressed';
     var ACTION_SUFFIX = 'Action';
@@ -20,23 +27,6 @@ NAMESPACE('chlk.controllers', function (){
     /** @class chlk.controllers.BaseController */
    ABSTRACT, CLASS(
        'BaseController', EXTENDS(ria.mvc.Controller), [
-           /*[[Function, ria.async.Future]],
-           VOID, function PushView(activityClass, data) {
-               var instance = new activityClass;
-               instance.refreshD(data);
-
-               this.getView().push(instance);
-           },
-           VOID, function ShadeView(activityClass, data) {
-               var instance = new activityClass;
-               instance.refreshD(data);
-
-               this.getView().shade(instance);
-           },
-           VOID, function UpdateView(activityClass, data, msg_) {
-
-           },*/
-
 
            ria.async.Future, function validateResponse_() {
                var head
@@ -62,6 +52,33 @@ NAMESPACE('chlk.controllers', function (){
                    });
 
                return head;
+           },
+
+
+           OVERRIDE, ria.reflection.ReflectionMethod, function resolveRoleAction_(state){
+               var ref = new ria.reflection.ReflectionClass(this.getClass());
+
+               var role = this.getContext().getSession().get('role');
+               var roleAction = toCamelCase(state.getAction()) + role.getRoleName() + 'Action';
+               var method = ref.getMethodReflector(roleAction);
+
+               if (!method){
+                   method = BASE(state);
+                   var accessForAnnotation = method.findAnnotation(chlk.controllers.AccessForRoles)[0];
+                   if (accessForAnnotation){
+
+                       var filteredRoles = accessForAnnotation.roles.filter(function (r) {
+                           return r == role.getRoleId();
+                       });
+
+                       if (filteredRoles.length != 1){
+                           throw new ria.mvc.MvcException('Controller ' + ref.getName() + ' has no method ' + method.getName()
+                               + ' available for role ' + role.getRoleName());
+                       }
+                   }
+
+               }
+               return method;
            },
 
            [[ria.mvc.State]],

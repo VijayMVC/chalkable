@@ -43,6 +43,7 @@
     <Compile Include="DataAccess\ApplicationDataAccess.cs" />
     <Compile Include="DataAccess\ApplicationRatingDataAccess.cs" />
     <Compile Include="DataAccess\BackgroundTaskDataAccess.cs" />
+    <Compile Include="DataAccess\CategoryDataAccess.cs" />
     <Compile Include="DataAccess\ChalkableDepartmentDataAccess.cs" />
     <Compile Include="DataAccess\DistrictDataAccess.cs" />
     <Compile Include="DataAccess\PreferenceDataAccess.cs" />

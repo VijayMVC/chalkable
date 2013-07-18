@@ -8,7 +8,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IServiceLocatorMaster ServiceLocatorMaster { get; }
         UserContext Context { get; }
         IPersonService PersonService { get; }
-        IAddressSerivce AddressSerivce { get; }
+        IAddressService AddressService { get; }
         IGradeLevelService GradeLevelService { get; }
         IMarkingPeriodService MarkingPeriodService { get; }
         IClassService ClassService { get; }
@@ -33,12 +33,13 @@ namespace Chalkable.BusinessLogic.Services.School
         IStudentAnnouncementService StudentAnnouncementService { get; }
         IAnnouncementTypeService AnnouncementTypeService { get; }
         IFinalGradeService FinalGradeService { get; }
+        IDisciplineTypeService DisciplineTypeService { get; }
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
     {
         private IServiceLocatorMaster serviceLocatorMaster;
         private IPersonService personService;
-        private IAddressSerivce addressSerivce;
+        private IAddressService addressSerivce;
         private IGradeLevelService gradeLevelService;
         private IMarkingPeriodService markingPeriodService;
         private IClassService classService;
@@ -63,6 +64,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IStudentAnnouncementService studentAnnouncementService;
         private IAnnouncementTypeService announcementTypeService;
         private IFinalGradeService finalGradeService;
+        private IDisciplineTypeService disciplineTypeService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -94,13 +96,14 @@ namespace Chalkable.BusinessLogic.Services.School
             studentAnnouncementService = new StudentAnnouncementService(this);
             announcementTypeService = new AnnouncementTypeService(this);
             finalGradeService = new FinalGradeService(this);
+            disciplineTypeService = new DisciplineTypeService(this);
         }
 
         public IPersonService PersonService
         {
             get { return personService; }
         }
-        public IAddressSerivce AddressSerivce
+        public IAddressService AddressService
         {
             get { return addressSerivce; }
         }
@@ -138,7 +141,6 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             get { return announcementReminderService; }
         }
-
         public IAnnouncementAttachmentService AnnouncementAttachmentService
         {
             get { return announcementAttachmentService; }
@@ -155,70 +157,61 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             get { return roomService; }
         }
-
         public IPeriodService PeriodService
         {
             get { return periodService; }
         }
-
         public IServiceLocatorMaster ServiceLocatorMaster
         {
             get { return serviceLocatorMaster; }
         }
-        
         public ICalendarDateService CalendarDateService
         {
             get { return calendarDateService; }
         }
-
         public IScheduleSectionService ScheduleSectionService
         {
             get { return scheduleSectionService; }
         }
-
         public IClassPeriodService ClassPeriodService
         {
             get { return classPeriodService; }
         }
-
         public INotificationService NotificationService
         {
             get { return notificationService; }
         }
-
         public IAttendanceService AttendanceService
         {
             get { return attendanceService; }
         }
-
         public IAttendanceReasonService AttendanceReasonService
         {
             get { return attendanceReasonService; }
         }
-
         public IStudentParentService StudentParentService
         {
             get { return studentParentService; }
         }
-
         public IGradingStyleService GradingStyleService
         {
             get { return gradingStyleService; }
         }
-
         public IStudentAnnouncementService StudentAnnouncementService
         {
             get { return studentAnnouncementService; }
         }
-
         public IAnnouncementTypeService AnnouncementTypeService
         {
             get { return announcementTypeService; }
         }
-
         public IFinalGradeService FinalGradeService
         {
             get { return finalGradeService; }
+        }
+        public IDisciplineTypeService DisciplineTypeService
+        {
+            get { return disciplineTypeService; }
         }
     }
 }

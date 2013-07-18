@@ -14,7 +14,9 @@
         "schooltype": null,
         "schoolurl": null,
         "timezoneid": "US Eastern Standard Time",
-        "sendemailnotifications": false
+        "sendemailnotifications": false,
+        "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
+
     },
     {
         "id": 194,
@@ -24,7 +26,8 @@
         "schooltype": null,
         "schoolurl": null,
         "timezoneid": "US Eastern Standard Time",
-        "sendemailnotifications": false
+        "sendemailnotifications": false,
+        "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
     },
     {
         "id": 229,
@@ -34,7 +37,8 @@
         "schooltype": null,
         "schoolurl": null,
         "timezoneid": "US Eastern Standard Time",
-        "sendemailnotifications": false
+        "sendemailnotifications": false,
+        "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
     },
     {
         "id": 244,
@@ -44,7 +48,8 @@
         "schooltype": null,
         "schoolurl": null,
         "timezoneid": "US Eastern Standard Time",
-        "sendemailnotifications": false
+        "sendemailnotifications": false,
+        "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
     },
     {
         "id": 245,
@@ -54,7 +59,8 @@
         "schooltype": null,
         "schoolurl": null,
         "timezoneid": "US Eastern Standard Time",
-        "sendemailnotifications": false
+        "sendemailnotifications": false,
+        "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
     },
     {
         "id": 246,
@@ -64,7 +70,8 @@
         "schooltype": null,
         "schoolurl": null,
         "timezoneid": "US Eastern Standard Time",
-        "sendemailnotifications": false
+        "sendemailnotifications": false,
+        "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
     },
         {
             "id": 247,
@@ -74,7 +81,8 @@
             "schooltype": null,
             "schoolurl": null,
             "timezoneid": "US Eastern Standard Time",
-            "sendemailnotifications": false
+            "sendemailnotifications": false,
+            "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
         },
         {
             "id": 433,
@@ -84,7 +92,8 @@
             "schooltype": null,
             "schoolurl": null,
             "timezoneid": "US Eastern Standard Time",
-            "sendemailnotifications": false
+            "sendemailnotifications": false,
+            "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
         },
         {
             "id": 435,
@@ -94,7 +103,8 @@
             "schooltype": null,
             "schoolurl": null,
             "timezoneid": "US Eastern Standard Time",
-            "sendemailnotifications": false
+            "sendemailnotifications": false,
+            "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
         },
         {
             "id": 436,
@@ -104,7 +114,8 @@
             "schooltype": null,
             "schoolurl": null,
             "timezoneid": "US Eastern Standard Time",
-            "sendemailnotifications": false
+            "sendemailnotifications": false,
+            "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
         }
     ]
 }

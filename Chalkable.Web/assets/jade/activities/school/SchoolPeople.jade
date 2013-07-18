@@ -1,10 +1,7 @@
 .school-people
     -school=self.getSchoolInfo()
-    -users=self.getUsers()
     -roles=self.getRoles()
     -gradeLevels=self.getGradeLevels()
-    -window.school = school
-    -selectedIndex = self.getSelectedIndex();
     .action-bar.not-transparent.buttons
         .container.panel-bg
             .left
@@ -23,32 +20,18 @@
             +GlanceBox(null, null, {value: school.getStudentsCount(), title: 'Sudents'})
             +GlanceBox(null, null, {value: school.getInvitesCount(), title: 'Invites'})
         h2 People
-        .action-bar.not-transparent.people-tb
-            .container.panel-bg
-                .right
-                    +Select('roleId')#roles-select
-                        each item in roles
-                            +Option(item.getId(), item.getName())
-                    +Select('gradeLevelId')#grade-levels-select
-                        each item in roles
-                            +Option(item.getId(), item.getName())
-        .people-list-container.not-transparent
-            .top.panel-bg
-                span 127 Students
-            .action-bar.buttons.filter
-                .container.panel-bg
-                    .left
-                        +ActionLink('schools', 'people', school.getId()) First name
-                        +ActionLink('schools', 'people', school.getId()).pressed Last name
-            +ListView(users)(
-                selectedIndex = selectedIndex).people-list
-                each item, i in users
-                    .row(class=(i == selectedIndex ? 'selected' : ''), index=i)
-                        +ActionLink('schools', 'details', 1).left
-                            img.avatar.avatar47(src="https://dev.chalkable.com/PersonPicture/Read?pictureId=0&width=47&height=47&gender=F")
-                        p.left= item.getFullname()
+        +ActionForm('schools', 'setPeopleFilter')#people-form
+            +Button(type="submit").x-hidden
+            .loader-container
+                .loader
+                .action-bar.not-transparent.people-tb
+                    .container.panel-bg
                         .right
-                            +Button().message-button.blue-gradient-btn Message
-                        .clear
-
-
+                            +Select('roleId')#roleId
+                                each item in roles
+                                    +Option(item.getId(), item.getName())
+                            +Select('gradeLevelId')#gradeLevelId
+                                each item in gradeLevels
+                                    +Option(item.getId(), item.getName())
+                .people-list-container.not-transparent
+                    +RenderWith(self.getUsersPart(), chlk.templates.school.SchoolPeoplePart)

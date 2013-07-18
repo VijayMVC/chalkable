@@ -58,10 +58,22 @@ NAMESPACE('ria.dom', function () {
             // TODO: need a good way of implementing off()
 
             OVERRIDE, SELF, function on(event, selector, handler_) {
-                var old_dom = this._dom;
-                this._dom = this.valueOf();
-                BASE(event, selector, handler_);
-                this._dom = old_dom;
+                if(event == 'change' || event == 'select' || event == 'focus' || event == 'blur'){
+                    VALIDATE_ARGS(['event', 'selector', 'handler_'], [String, [String, ria.dom.DomEventHandler], ria.dom.DomEventHandler], arguments);
+                    if(!handler_){
+                        handler_ = selector;
+                        selector = undefined;
+                    }
+
+                    this._dom.on(event, selector, function (event) {
+                        return handler_(new ria.dom.Dom(this), event);
+                    });
+                }else{
+                    var old_dom = this._dom;
+                    this._dom = this.valueOf();
+                    BASE(event, selector, handler_);
+                    this._dom = old_dom;
+                }
                 return this;
             },
 
@@ -117,6 +129,12 @@ NAMESPACE('ria.dom', function () {
 
             OVERRIDE, SELF, function empty() {
                 this._dom.empty();
+                return this;
+            },
+
+            [[SELF]],
+            OVERRIDE, SELF, function remove(node) {
+                node._dom.remove();
                 return this;
             },
 
@@ -189,7 +207,7 @@ NAMESPACE('ria.dom', function () {
             OVERRIDE, Object, function getAllData() {},
             [[String]],
             OVERRIDE, Object, function getData(name) {
-                return this._dom.data(name) || null;
+                return this._dom.data(name) === undefined ? null : this._dom.data(name);
             },
             [[Object]],
             OVERRIDE, SELF, function setAllData(obj) {},
@@ -254,7 +272,13 @@ NAMESPACE('ria.dom', function () {
 
             OVERRIDE, ArrayOf(Node), function valueOf() {
                 return ria.__API.clone(this._dom);
-            }
+            }/*,
+
+            [[String]],
+            OVERRIDE, SELF, function triggerEvent(event) {
+                this._dom[event]();
+                return this;
+            }*/
         ]);
 
     ria.dom.setDomImpl(ria.dom.jQueryDom);

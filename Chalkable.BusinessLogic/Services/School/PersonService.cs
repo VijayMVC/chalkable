@@ -13,6 +13,11 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IPersonService
     {
         Person Add(string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, Guid? gradeLevelId);
+        Person Edit(Guid personId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate);
+
+        Person EditStudent(Guid studentId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate
+            ,bool iep, DateTime enrollmentDate, string previousSchool, string previousSchoolPhone, string previousSchoolNote, Guid? gradeLevelId);
+
         void Delete(string id);
         IList<Person> GetPersons();
         PaginatedList<Person> GetPaginatedPersons(PersonQuery query); 
@@ -140,6 +145,54 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 return new PersonDataAccess(uow).GetPersonDetails(id, Context.UserId, Context.Role.Id);
             }
+        }
+
+        public Person Edit(Guid personId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate)
+        {
+            using (var uow = Update())
+            {
+                var res = Edit(new PersonDataAccess(uow), personId, email, firstName, lastName, gender, salutation, birthDate);
+                uow.Commit();
+                return res;
+            }
+        }
+
+        public Person EditStudent(Guid studentId, string email, string firstName, string lastName, string gender, string salutation, 
+            DateTime? birthDate, bool iep, DateTime enrollmentDate, string previousSchool, string previousSchoolPhone, 
+            string previousSchoolNote, Guid? gradeLevelId)
+        {
+            if(!(BaseSecurity.IsAdminOrTeacher(Context) || Context.UserId == studentId))
+                throw new ChalkableSecurityException();
+            
+            using (var uow = Update())
+            {
+                var student = Edit(new PersonDataAccess(uow), studentId, email, firstName, lastName, gender, salutation, birthDate);
+                student.StudentInfo.IEP = iep;
+                student.StudentInfo.EnrollmentDate = enrollmentDate;
+                student.StudentInfo.PreviousSchool = previousSchool;
+                student.StudentInfo.PreviousSchoolNote = previousSchoolNote;
+                student.StudentInfo.PreviousSchoolPhone = previousSchoolPhone;
+                if (gradeLevelId.HasValue)
+                    student.StudentInfo.GradeLevelRef = gradeLevelId.Value;
+
+                new StudentInfoDataAccess(uow).Update(student.StudentInfo);
+                uow.Commit();
+                return student;
+            }
+        }
+
+        private Person Edit(PersonDataAccess dataAccess, Guid personId, string email, string firstName
+                    , string lastName, string gender, string salutation, DateTime? birthDate)
+        {
+            ServiceLocator.ServiceLocatorMaster.UserService.ChangeUserLogin(personId, email);
+            var res = GetPerson(personId);
+            res.FirstName = firstName;
+            res.LastName = lastName;
+            res.Gender = gender;
+            res.Salutation = salutation;
+            res.BirthDate = birthDate;
+            dataAccess.Update(res);
+            return res;
         }
     }
 }

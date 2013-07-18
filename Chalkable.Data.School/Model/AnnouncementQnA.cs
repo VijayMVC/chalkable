@@ -25,7 +25,17 @@ namespace Chalkable.Data.School.Model
 
     public class AnnouncementQnAComplex : AnnouncementQnA
     {
-        public Person Asker { get; set; }
+        private Person asker;
+        public Person Asker
+        {
+            get { return asker; }
+            set
+            {
+                asker = value;
+                if (PersonRef == Guid.Empty && asker != null)
+                    PersonRef = asker.Id;
+            }
+        }
         public Person Answerer { get; set; }
         public bool IsOwner { get; set; }        
     }

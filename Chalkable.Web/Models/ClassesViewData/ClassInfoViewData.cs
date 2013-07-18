@@ -1,7 +1,7 @@
 ﻿using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 
-namespace Chalkable.Web.Models
+namespace Chalkable.Web.Models.ClassesViewData
 {
     public class ClassInfoViewData : ClassViewData
     {

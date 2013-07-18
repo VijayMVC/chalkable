@@ -71,11 +71,11 @@ namespace Chalkable.Tests.Services.School
             annDetails.Content = "content";
             
             var mp1Id = c.MarkingPeriodClasses[0].MarkingPeriodRef;
-            AssertForDeny(sl=>sl.AnnouncementService.EditAnnouncement(annDetails, mp1Id, c.Id), SchoolTestContext, 
+            AssertForDeny(sl=>sl.AnnouncementService.EditAnnouncement(AnnouncementInfo.Create(annDetails), mp1Id, c.Id), SchoolTestContext, 
                 SchoolContextRoles.SecondTeacher | SchoolContextRoles.FirstStudent | SchoolContextRoles.FirstParent | SchoolContextRoles.Checkin);
 
             SchoolTestContext.FirstTeacherSl.AnnouncementReminderService.AddReminder(annDetails.Id, 1);
-            var ann = annService.EditAnnouncement(annDetails, mp1Id, c.Id);
+            var ann = annService.EditAnnouncement(AnnouncementInfo.Create(annDetails), mp1Id, c.Id);
             
             Assert.AreEqual(ann.Created, oldCreatedDate);
             Assert.AreEqual(ann.GradingStyle, oldGradingStyle);
@@ -89,11 +89,11 @@ namespace Chalkable.Tests.Services.School
             var reminder = annDetails.AnnouncementReminders[0];
             Assert.AreEqual(reminder.RemindDate, annDetails.Expires.AddDays(-reminder.Before.Value));
             SchoolTestContext.FirstTeacherSl.AnnouncementReminderService.EditReminder(reminder.Id, null);
-            ann = annService.EditAnnouncement(annDetails, mp1Id, c.Id);
+            ann = annService.EditAnnouncement(AnnouncementInfo.Create(annDetails), mp1Id, c.Id);
             annDetails = annService.GetAnnouncementDetails(ann.Id);
             Assert.AreEqual(annDetails.AnnouncementReminders[0].RemindDate, SchoolTestContext.NowDate);
             ann.Expires = SchoolTestContext.NowDate.AddDays(-1);
-            ann = annService.EditAnnouncement(ann, mp1Id, c.Id);
+            ann = annService.EditAnnouncement(AnnouncementInfo.Create(ann), mp1Id, c.Id);
             Assert.AreEqual(annService.GetAnnouncementDetails(ann.Id).AnnouncementReminders.Count, 0);
             Assert.AreEqual(SchoolTestContext.FirstTeacherSl.AnnouncementReminderService.GetReminders(ann.Id).Count, 0);
             
@@ -107,7 +107,7 @@ namespace Chalkable.Tests.Services.School
             var annTypeHw = SchoolTestContext.FirstTeacherSl.AnnouncementTypeService.GetAnnouncementTypeBySystemType(SystemAnnouncementType.HW);
             var annDetails = annService.CreateAnnouncement(annTypeHw.Id);
             annDetails.Expires = SchoolTestContext.NowDate.AddDays(7);
-            annService.EditAnnouncement(annDetails);
+            annService.EditAnnouncement(AnnouncementInfo.Create(annDetails));
             var mp1Id = c.MarkingPeriodClasses[0].MarkingPeriodRef;
             AssertForDeny(sl => sl.AnnouncementService.SubmitAnnouncement(annDetails.Id, c.Id, mp1Id), SchoolTestContext,
                 SchoolContextRoles.FirstParent | SchoolContextRoles.SecondTeacher | SchoolContextRoles.FirstStudent | SchoolContextRoles.Checkin); 
@@ -145,7 +145,7 @@ namespace Chalkable.Tests.Services.School
                     RecipientInfo.Create(false, null, null, SchoolTestContext.FirstStudent.Id),
                     RecipientInfo.Create(false, CoreRoles.TEACHER_ROLE.Id, null, null)
                 };
-            annService.EditAnnouncement(annDetails, null, null, recipientInfo);
+            annService.EditAnnouncement(AnnouncementInfo.Create(annDetails), null, null, recipientInfo);
             
             AssertForDeny(sl=>sl.AnnouncementService.SubmitForAdmin(annDetails.Id), SchoolTestContext
                 , SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent | SchoolContextRoles.FirstParent
@@ -161,10 +161,10 @@ namespace Chalkable.Tests.Services.School
 
             Assert.AreEqual(2, SchoolTestContext.AdminGradeSl.AnnouncementService.GetAnnouncementRecipients(annDetails.Id).Count);
             recipientInfo.Add(RecipientInfo.Create(false, CoreRoles.STUDENT_ROLE.Id, null, null));
-            annService.EditAnnouncement(annDetails, null, null, recipientInfo);
+            annService.EditAnnouncement(AnnouncementInfo.Create(annDetails), null, null, recipientInfo);
             Assert.AreEqual(1, SchoolTestContext.SecondStudentSl.AnnouncementService.GetAnnouncements(false, 0, 10, null).Count);
             recipientInfo.Add(RecipientInfo.Create(true, null, null, null));
-            annService.EditAnnouncement(annDetails, null, null, recipientInfo);
+            annService.EditAnnouncement(AnnouncementInfo.Create(annDetails), null, null, recipientInfo);
             Assert.AreEqual(1, SchoolTestContext.SecondStudentSl.AnnouncementService.GetAnnouncements(false, 0, 10, null).Count);           
 
         }
@@ -240,7 +240,7 @@ namespace Chalkable.Tests.Services.School
             res.Expires = expiredDate ?? locator.Context.NowSchoolTime.Date.AddDays(3);
             res.Subject = "subject1";
             res.Content = "content1";
-            locator.AnnouncementService.EditAnnouncement(res);
+            locator.AnnouncementService.EditAnnouncement(AnnouncementInfo.Create(res));
             locator.AnnouncementService.SubmitAnnouncement(res.Id, classId, mpId);
             return locator.AnnouncementService.GetAnnouncementDetails(res.Id);
         }

@@ -8,7 +8,7 @@ DIV#content-wrapper{
     .action-bar{
       &.buttons{
         .container{
-          .action-link{
+          .action-link, .action-button{
             &:hover, &.pressed{
               color: #957633;
               @include background(linear-gradient(top, #f3eedf, #e1d3a6));
@@ -23,13 +23,14 @@ DIV#content-wrapper{
 .action-bar{
   &.buttons{
     .container{
-      .action-link{
+      .action-link, .action-button{
         padding: 0 10px;
         border-left: 1px solid white;
         border-right: 1px solid #d0d0d0;
         color: #828282;
         font-size: 12px;
         font-style: normal;
+        cursor: pointer;
 
         &:hover, &.pressed{
           color: #2f7790;
@@ -40,7 +41,7 @@ DIV#content-wrapper{
       >.left{
         border-right: 1px solid white;
 
-        >.action-link:first-child{
+        >.action-link:first-child, >.action-button:first-child{
           border-left: none;
           @include border-radius(5px 0 0 5px);
         }
@@ -49,7 +50,7 @@ DIV#content-wrapper{
       >.right{
         border-left: 1px solid #d0d0d0;
 
-        >.action-link:last-child{
+        >.action-link:last-child, >.action-button:last-child{
           border-right: none;
           @include border-radius(0 5px 5px 0);
         }
@@ -68,7 +69,7 @@ DIV#content-wrapper{
     border-bottom: 1px solid $border-color;
     border-top: 1px solid white;
 
-    .action-link{
+    .action-link, .action-button{
       text-decoration: none;
       font: normal 11px/34px arial,tahoma,verdana,helvetica;
       color: #333;

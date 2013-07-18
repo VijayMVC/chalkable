@@ -42,6 +42,12 @@ namespace Chalkable.Web.Controllers
             return View();
         }
 
+        public ActionResult Teacher()
+        {
+            return View();
+        }
+
+
 
         //TODO: test only. don't forget to remove :)
         public ActionResult Create(string userName, string password)

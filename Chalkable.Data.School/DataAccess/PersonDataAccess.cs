@@ -56,24 +56,14 @@ namespace Chalkable.Data.School.DataAccess
             if (query.GradeLevelIds != null)
                 glIds = query.GradeLevelIds.Select(x => x.ToString()).JoinString(",");
             parameters.Add("@gradeLevelIds", glIds);
-
             parameters.Add("@sortType", (int)query.SortType);
             
-
-            var result = new PersonQueryResult();
-            result.Query = query;
             using (var reader = ExecuteStoredProcedureReader("spGetPersons", parameters))
             {
-                reader.Read();
-                result.SourceCount = SqlTools.ReadInt32(reader, "AllCount");
-                reader.NextResult();
-                result.Persons = new List<Person>();
-                while (reader.Read())
-                {
-                    result.Persons.Add(ReadPersonData(reader));
-                }
+                var result = ReadPersonQueryResult(reader);
+                result.Query = query;
+                return result;
             }
-            return result;
         }
 
         public PersonDetails GetPersonDetails(Guid personId, Guid callerId, int callerRoleId)
@@ -92,6 +82,21 @@ namespace Chalkable.Data.School.DataAccess
                 }
                 return null;
             }
+        }
+
+
+        public static PersonQueryResult ReadPersonQueryResult(DbDataReader reader)
+        {
+            var res = new PersonQueryResult();
+            reader.Read();
+            res.SourceCount = SqlTools.ReadInt32(reader, "AllCount");
+            reader.NextResult();
+            res.Persons = new List<Person>();
+            while (reader.Read())
+            {
+                res.Persons.Add(ReadPersonData(reader));
+            }
+            return res;
         }
 
         public static PersonDetails ReadPersonDetailsData(SqlDataReader reader)

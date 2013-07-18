@@ -30,6 +30,13 @@ namespace Chalkable.Tests.Services.School
             c = SchoolTestContext.AdminGradeSl.ClassService.AddStudent(c.Id, SchoolTestContext.SecondStudent.Id);
 
             SchoolTestContext.FirstTeacherSl.AnnouncementAttachmentService.AddAttachment(ann.Id, attContent, "test1", uuid1);
+            //check notification
+            Assert.AreEqual(1, SchoolTestContext.FirstStudentSl.NotificationService.GetUnshownNotifications().Count);
+            Assert.AreEqual(ann.Id, SchoolTestContext.FirstStudentSl.NotificationService.GetUnshownNotifications().First().AnnouncementRef);
+            Assert.AreEqual(1, SchoolTestContext.SecondStudentSl.NotificationService.GetUnshownNotifications().Count);
+            Assert.AreEqual(ann.Id, SchoolTestContext.SecondStudentSl.NotificationService.GetUnshownNotifications().First().AnnouncementRef);
+            
+            
             var attachments =  SchoolTestContext.FirstTeacherSl.AnnouncementAttachmentService.GetAttachments(ann.Id);
             Assert.AreEqual(attachments.Count, 1);
             Assert.AreEqual(attachments[0].AnnouncementRef, ann.Id);
@@ -43,12 +50,18 @@ namespace Chalkable.Tests.Services.School
             
             var uuid2 = Guid.NewGuid().ToString();
             SchoolTestContext.FirstStudentSl.AnnouncementAttachmentService.AddAttachment(ann.Id, attContent, "test2", uuid2);
+            //check notification
+            Assert.AreEqual(1, SchoolTestContext.FirstTeacherSl.NotificationService.GetUnshownNotifications().Count);
+            Assert.AreEqual(ann.Id, SchoolTestContext.FirstTeacherSl.NotificationService.GetUnshownNotifications().First().AnnouncementRef);
+            
+
             var uuid3 = Guid.NewGuid().ToString();
             SchoolTestContext.SecondStudentSl.AnnouncementAttachmentService.AddAttachment(ann.Id, attContent, "test3", uuid3);
             Assert.AreEqual(SchoolTestContext.FirstStudentSl.AnnouncementAttachmentService.GetAttachments(ann.Id).Count, 2);
             Assert.AreEqual(SchoolTestContext.FirstTeacherSl.AnnouncementAttachmentService.GetAttachments(ann.Id).Count, 3);
-           
- 
+            //check notification
+            Assert.AreEqual(2, SchoolTestContext.FirstTeacherSl.NotificationService.GetUnshownNotifications().Count);
+            
             attachments = SchoolTestContext.FirstStudentSl.AnnouncementAttachmentService.GetAttachments(ann.Id, 0, int.MaxValue, false);
             Assert.AreEqual(attachments.Count, 1);
             Assert.AreEqual(SchoolTestContext.FirstTeacherSl.AnnouncementAttachmentService.GetAttachments(ann.Id, 0, int.MaxValue, false).Count, 1);
@@ -63,7 +76,8 @@ namespace Chalkable.Tests.Services.School
                     RecipientInfo.Create(false, CoreRoles.TEACHER_ROLE.Id, null, null),
                     RecipientInfo.Create(false, CoreRoles.STUDENT_ROLE.Id, c.GradeLevelRef, null),
                 };
-            SchoolTestContext.AdminGradeSl.AnnouncementService.EditAnnouncement(ann2, null, null, adminAnnRecipients);
+            ann2.Subject = "test";
+            SchoolTestContext.AdminGradeSl.AnnouncementService.EditAnnouncement(AnnouncementInfo.Create(ann2), null, null, adminAnnRecipients);
             SchoolTestContext.AdminGradeSl.AnnouncementService.SubmitForAdmin(ann2.Id);
             var uuid4 = Guid.NewGuid().ToString();
             AssertForDeny(sl => sl.AnnouncementAttachmentService.AddAttachment(ann2.Id, attContent, "adminAtt", uuid4), SchoolTestContext,
@@ -71,9 +85,12 @@ namespace Chalkable.Tests.Services.School
                 | SchoolContextRoles.FirstParent | SchoolContextRoles.SecondStudent
                 | SchoolContextRoles.SecondTeacher | SchoolContextRoles.Checkin);
             SchoolTestContext.AdminGradeSl.AnnouncementAttachmentService.AddAttachment(ann2.Id, attContent, "adminAtt", uuid4);
-
-
-
+            //check notification
+            Assert.AreEqual(3, SchoolTestContext.FirstTeacherSl.NotificationService.GetUnshownNotifications().Count);
+            Assert.AreEqual(2, SchoolTestContext.FirstStudentSl.NotificationService.GetUnshownNotifications().Count);
+            Assert.AreEqual(2, SchoolTestContext.SecondStudentSl.NotificationService.GetUnshownNotifications().Count);
+            
+            
             Assert.AreEqual(SchoolTestContext.AdminGradeSl.AnnouncementAttachmentService.GetAttachments(ann2.Id).Count, 1);
             Assert.AreEqual(SchoolTestContext.FirstTeacherSl.AnnouncementAttachmentService.GetAttachments(ann2.Id).Count, 1);
             Assert.AreEqual(SchoolTestContext.FirstTeacherSl.AnnouncementAttachmentService.GetAttachments(ann2.Id, 0, int.MaxValue, false).Count, 0);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
@@ -30,16 +31,21 @@ namespace Chalkable.Data.School.DataAccess
                 };
             using (var reader = ExecuteStoredProcedureReader("spGetStudentAnnouncementsForAnnouncement", parameters))
             {
-                var res = new List<StudentAnnouncementDetails>();
-                while (reader.Read())
-                {
-                    res.Add(ReadStudentAnnouncement(reader));
-                }
-                return res;
+                return ReadListStudentAnnouncement(reader);
             }
         }
         
-        public  static  StudentAnnouncementDetails ReadStudentAnnouncement(SqlDataReader reader)
+
+        public static IList<StudentAnnouncementDetails> ReadListStudentAnnouncement(DbDataReader reader)
+        {
+            var res = new List<StudentAnnouncementDetails>();
+            while (reader.Read())
+            {
+                res.Add(ReadStudentAnnouncement(reader));
+            }
+            return res;
+        }
+        public  static  StudentAnnouncementDetails ReadStudentAnnouncement(DbDataReader reader)
         {
             var res = reader.Read<StudentAnnouncementDetails>(true);
             res.Person = PersonDataAccess.ReadPersonData(reader);

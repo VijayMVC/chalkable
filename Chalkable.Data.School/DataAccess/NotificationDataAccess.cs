@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,14 +32,90 @@ namespace Chalkable.Data.School.DataAccess
             return SelectMany<Notification>(conds);
         }
 
+        private DbQuery BuildGetNotificationDetailsDbQuery(NotificationQuery query)
+        {
+            var conds = BuildConditions(query);
+            //TODO: think how to rewrtite this
+            var sql = @"select {0}, 
+                               vwPrivateMessage.*,
+                               toPerson.FirstName as ToPerson_FirstName,
+                               toPerson.LastName as ToPerson_LastName,
+                               toPerson.Gender as ToPerson_Gender,
+                               toPerson.Salutation as ToPerson_Salutation,
+                               toPerson.RoleRef as ToPerson_RoleRef,
+                               quetionPerson.FirstName as QuetionPerson_FirstName,
+                               quetionPerson.LastName as QuetionPerson_LastName,
+                               quetionPerson.Gender as QuetionPerson_Gender,
+                               quetionPerson.Salutation as QuetionPerson_Salutation,
+                               quetionPerson.RoleRef as QuetionPerson_RoleRef
+                        from [Notification]
+                        left join Announcement on Announcement.Id  = [Notification].AnnouncementRef
+                        left join AnnouncementType on AnnouncementType.Id = Announcement.AnnouncementTypeRef
+                        left join MarkingPeriod on MarkingPeriod.Id = [Notification].MarkingPeriodRef
+                        left join ClassPeriod on ClassPeriod.Id = [Notification].ClassPeriodRef
+                        left join vwPrivateMessage on vwPrivateMessage.PrivateMessage_Id = [Notification].PrivateMessageRef
+                        join Person toPerson on toPerson.Id = [Notification].PersonRef
+                        left join Person quetionPerson on quetionPerson.Id = [Notification].QuestionPersonRef";
+
+            var b = new StringBuilder();
+            var tables = new List<Type>
+                {
+                    typeof (Notification),
+                    typeof (Announcement),
+                    typeof (AnnouncementType),
+                    typeof (MarkingPeriod),
+                    typeof (ClassPeriod)
+                };
+            b.AppendFormat(sql, Orm.ComplexResultSetQuery(tables));
+            b = Orm.BuildSqlWhere(b, tables[0], conds);
+            return new DbQuery {Parameters = conds, Sql = b.ToString()};
+        }
+
+        private IList<NotificationDetails> ReadListNotifcationDetails(DbDataReader reader)
+        {
+            var res = new List<NotificationDetails>();
+            while (reader.Read())
+            {
+                res.Add(ReadNotificationDetails(reader));
+            }
+            return res;
+        }
+        private NotificationDetails ReadNotificationDetails(DbDataReader reader)
+        {
+            var res = reader.Read<NotificationDetails>(true);
+            res.PrivateMessage = PrivateMessageDataAccess.ReadPrivateMessageDetails(reader);
+            res.Person = ReadNotificationPerson(reader, "ToPerson");
+            res.QuestionPerson = ReadNotificationPerson(reader, "QuetionPerson");
+            return res;
+        }
+        private Person ReadNotificationPerson(DbDataReader reader, string prefix)
+        {
+            var template = prefix + "_{0}";
+            return new Person
+                {
+                    FirstName = SqlTools.ReadStringNull(reader, string.Format(template, Person.FIRST_NAME_FIELD)),
+                    LastName = SqlTools.ReadStringNull(reader, string.Format(template, Person.LAST_NAME_FIELD)),
+                    RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD)),
+                    Gender = SqlTools.ReadStringNull(reader, string.Format(template, Person.GENDER_FIELD)),
+                    Salutation = SqlTools.ReadStringNull(reader, string.Format(template, Person.SALUTATION_FIELD)),
+                };
+        }
+
         public IList<NotificationDetails> GetNotificationsDetails(NotificationQuery query)
         {
-            throw new NotImplementedException();
+            var q = BuildGetNotificationDetailsDbQuery(query);
+            using (var reader = ExecuteReaderParametrized(q.Sql, q.Parameters))
+            {
+                return ReadListNotifcationDetails(reader);
+            }
         }
 
         public PaginatedList<NotificationDetails> GetPaginatedNotificationsDetails(NotificationQuery query)
         {
-            throw new NotImplementedException();
+            var innerQuery = BuildGetNotificationDetailsDbQuery(query);
+            var orderBy = "Notification_" + Notification.CREATED_FIELD;
+            var q = Orm.PaginationSelect(innerQuery, orderBy, Orm.OrderType.Asc, query.Start, query.Count);
+            return ReadPaginatedResult(q, query.Start, query.Count, ReadListNotifcationDetails);
         }
     }
 

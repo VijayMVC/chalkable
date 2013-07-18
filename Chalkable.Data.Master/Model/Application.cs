@@ -37,6 +37,7 @@ namespace Chalkable.Data.Master.Model
         public bool HasTeacherMyApps { get; set; }
         public const string HAS_ADMIN_MY_APPS_FIELD = "HasAdminMyApps";
         public bool HasAdminMyApps { get; set; }
+        public bool HasParentMyApps { get; set; }
         public const string IS_INTERNAL_FIELD = "IsInternal";
         public bool IsInternal { get; set; }
         public decimal? PricePerClass { get; set; }
@@ -49,7 +50,10 @@ namespace Chalkable.Data.Master.Model
         public Developer Developer { get; set; }
         [NotDbFieldAttr]
         public IList<ApplicationPermission> Permissions { get; set; }
-
+        [NotDbFieldAttr]
+        public IList<ApplicationCategory> Categories { get; set; }
+        [NotDbFieldAttr]
+        public IList<ApplicationGradeLevel> GradeLevels { get; set; }
         public const string AVG_FIELD = "Avg";
     }
 
@@ -99,6 +103,7 @@ namespace Chalkable.Data.Master.Model
     public class ApplicationCategory
     {
         public Guid Id { get; set; }
+        public const string APPLICATION_REF_FIELD = "ApplicationRef";
         public Guid ApplicationRef { get; set; }
         public Guid CategoryRef { get; set; }
     }
@@ -109,5 +114,13 @@ namespace Chalkable.Data.Master.Model
         public const string APPLICATION_REF_FIELD = "ApplicationRef";
         public Guid ApplicationRef { get; set; }
         public AppPermissionType Permission { get; set; }
+    }
+
+    public class ApplicationGradeLevel
+    {
+        public Guid Id { get; set; }
+        public const string APPLICATION_REF_FIELD = "ApplicationRef";
+        public Guid ApplicationRef { get; set; }
+        public int GradeLevel { get; set; }
     }
 }

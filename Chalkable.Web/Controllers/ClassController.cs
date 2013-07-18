@@ -5,7 +5,7 @@ using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
-using Chalkable.Web.Models;
+using Chalkable.Web.Models.ClassesViewData;
 
 namespace Chalkable.Web.Controllers
 {

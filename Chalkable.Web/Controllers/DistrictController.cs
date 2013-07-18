@@ -28,19 +28,19 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin")]
-        public ActionResult Delete(Guid id)
+        public ActionResult Delete(Guid districtId)
         {
-            MasterLocator.DistrictService.Delete(id);
+            MasterLocator.DistrictService.Delete(districtId);
             return Json(true);
         }
 
         [AuthorizationFilter("SysAdmin")]
-        public ActionResult Update(Guid id, string name, string dbName, string sisUrl, string sisUserName, string sisPassword, int sisSystemType)
+        public ActionResult Update(Guid districtId, string name, string dbName, string sisUrl, string sisUserName, string sisPassword, int sisSystemType)
         {
             MasterLocator.DistrictService.Update(
                 new District
                 {
-                    Id = id,
+                    Id = districtId,
                     Name = name,
                     DbName = dbName,
                     SisUrl = sisUrl,
@@ -51,9 +51,9 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
-        public ActionResult Info(Guid id)
+        public ActionResult Info(Guid districtId)
         {
-            var result = MasterLocator.DistrictService.GetById(id);
+            var result = MasterLocator.DistrictService.GetById(districtId);
             return Json(DistrictViewData.Create(result));
         }
 

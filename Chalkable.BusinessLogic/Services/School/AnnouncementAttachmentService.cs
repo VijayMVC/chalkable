@@ -1,4 +1,5 @@
 ﻿using System;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic;
 using Chalkable.Common;
@@ -15,6 +16,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteAttachment(Guid announcementAttachmentId);
         PaginatedList<AnnouncementAttachment> GetAttachments(Guid announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true);
         AnnouncementAttachment GetAttachmentById(Guid announcementAttachmentId);
+        AttachmentContentInfo GetAttachmentContent(Guid announcementAttachmentId);
     }
 
     public class AnnouncementAttachmentService : SchoolServiceBase, IAnnouncementAttachmentService
@@ -48,19 +50,19 @@ namespace Chalkable.BusinessLogic.Services.School
                     });
 
                 ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, id.ToString(), content);
-                //TODO: notification sending
-                //if (ann.State != AnnouncementState.Draft)
-                //{
-                //    if (Context.UserId == ann.PersonRef)
-                //    {
-                //        ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotification(announcementId);
-                //    }
-                //    else
-                //    {
-                //        ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToPerson(announcementId, Context.UserId);
-                //    }
-                //}
                 uow.Commit();
+                if (ann.State != AnnouncementState.Draft)
+                {
+                    if (Context.UserId == ann.PersonRef)
+                    {
+                        ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotification(announcementId);
+                    }
+                    else
+                    {
+                        ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToPerson(announcementId, Context.UserId);
+                    }
+                }
+
             }
             return ann;
         }
@@ -96,6 +98,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new AnnouncementAttachmentDataAccess(uow);
                 return da.GetById(announcementAttachmentId, Context.UserId, Context.Role.Id);
             }
+        }
+        
+        public AttachmentContentInfo GetAttachmentContent(Guid announcementAttachmentId)
+        {
+            var att = GetAttachmentById(announcementAttachmentId);
+            var content =  ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS, announcementAttachmentId.ToString());
+            return AttachmentContentInfo.Create(att, content);
         }
     }
 }

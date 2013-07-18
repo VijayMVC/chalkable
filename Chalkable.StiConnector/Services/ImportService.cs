@@ -388,8 +388,10 @@ namespace Chalkable.StiConnector.Services
             var existing = schoolServiceLocator.GradeLevelService.GetGradeLevels();
             var sisGradeLevels = stiEntities.GradeLevels.ToList();
             foreach (var gradeLevel in sisGradeLevels)
-                if (!existing.Any(x=>x.Name == gradeLevel.Name))
-                    schoolServiceLocator.GradeLevelService.AddGradeLevel(gradeLevel.Name);
+                if (!existing.Any(x => x.Name == gradeLevel.Name))
+                {
+                    schoolServiceLocator.GradeLevelService.AddGradeLevel(gradeLevel.Name, gradeLevel.Sequence);
+                }
         }
 
 
@@ -461,7 +463,7 @@ namespace Chalkable.StiConnector.Services
                 var addr = person.Address ?? person.Address1;
                 if (addr != null)
                 {
-                    schoolServiceLocator.AddressSerivce.Add(pr.Id, addr.AddressLine1 + "," + addr.City + "," + addr.PostalCode + "," + addr.State, null, AddressType.Home);
+                    schoolServiceLocator.AddressService.Add(pr.Id, addr.AddressLine1 + "," + addr.City + "," + addr.PostalCode + "," + addr.State, null, AddressType.Home);
                 }
                 else
                     Log.LogWarning(string.Format(ChlkResources.ERR_STI_NO_ADDRESS_FOR_PERSON, person.PersonID));

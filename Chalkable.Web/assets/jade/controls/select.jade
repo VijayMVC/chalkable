@@ -1,6 +1,9 @@
-mixin Select(name)
+mixin Select(name, controller, action, params)
     -attributes.name = name
     -self.processAttrs(attributes);
+    -attributes['data-controller'] = controller
+    -attributes['data-action'] = action
+    -attributes['data-params'] = params
     select(attributes)
         block
 

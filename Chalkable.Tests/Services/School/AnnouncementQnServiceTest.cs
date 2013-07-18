@@ -29,6 +29,11 @@ namespace Chalkable.Tests.Services.School
                           | SchoolContextRoles.SecondTeacher | SchoolContextRoles.Checkin);
 
             var annQuestion = SchoolTestContext.FirstStudentSl.AnnouncementQnAService.AskQuestion(announcement.Id, "question");
+            //check notification
+            Assert.AreEqual(1, SchoolTestContext.FirstTeacherSl.NotificationService.GetUnshownNotifications().Count);
+            Assert.AreEqual(announcement.Id, SchoolTestContext.FirstTeacherSl.NotificationService.GetUnshownNotifications().First().AnnouncementRef);
+            
+
             Assert.AreEqual(annQuestion.PersonRef, SchoolTestContext.FirstStudent.Id);
             Assert.AreEqual(annQuestion.Question, "question");
             Assert.AreEqual(annQuestion.State, AnnouncementQnAState.Asked);
@@ -41,6 +46,10 @@ namespace Chalkable.Tests.Services.School
                           | SchoolContextRoles.SecondTeacher | SchoolContextRoles.Checkin);
 
             annQuestion = SchoolTestContext.FirstTeacherSl.AnnouncementQnAService.Answer(annQuestion.Id, "question", "answer");
+            //check notification
+            Assert.AreEqual(1, SchoolTestContext.FirstStudentSl.NotificationService.GetUnshownNotifications().Count);
+            Assert.AreEqual(announcement.Id, SchoolTestContext.FirstStudentSl.NotificationService.GetUnshownNotifications().First().AnnouncementRef);
+            
             Assert.AreEqual(annQuestion.Answer, "answer");
             Assert.AreEqual(annQuestion.State, AnnouncementQnAState.Answered);
             Assert.AreEqual(annQuestion.AnsweredTime.Date, SchoolTestContext.NowDate);

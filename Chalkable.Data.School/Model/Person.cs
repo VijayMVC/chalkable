@@ -13,6 +13,13 @@ namespace Chalkable.Data.School.Model
         private const string MR = "Mr. ";
         private const string MS = "Ms. ";
 
+        public const string ID_FIELD = "Id";
+        public const string FIRST_NAME_FIELD = "FirstName";
+        public const string LAST_NAME_FIELD = "LastName";
+        public const string GENDER_FIELD = "Gender";
+        public const string ROLE_REF_FIELD = "RoleRef";
+        public const string SALUTATION_FIELD = "Salutation";
+
         public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

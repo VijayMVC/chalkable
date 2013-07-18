@@ -10,12 +10,12 @@ NAMESPACE('chlk.controls', function () {
                 ASSET('~/assets/jade/controls/list-view.jade')(this);
             },
 
-            [[Array, Object]],
+            [[Object, Object]],
             VOID, function prepareData(data,configs_) {
                 if(configs_){
                     configs_.selectedIndex !== undefined && this.setCurrentIndex(configs_.selectedIndex);
                 }
-                this.setCount(data.length);
+                this.setCount(data.length || data.getItems().length);
                 this.context.getDefaultView().getCurrent()
                     .addRefreshCallback(function (activity, model) {
                         this.getCurrentIndex() !== undefined && this.focusGrid();

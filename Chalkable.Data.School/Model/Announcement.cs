@@ -57,6 +57,18 @@ namespace Chalkable.Data.School.Model
         {
             get { return State == AnnouncementState.Draft; }
         }
+
+        public string Title
+        {
+            get
+            {
+                if (AnnouncementTypeRef == (int)SystemAnnouncementType.Admin)
+                {
+                    return Subject;
+                }
+                return !string.IsNullOrEmpty(ClassName) ? ClassName : "All";
+            }
+        }
     }
 
     public class AnnouncementDetails : AnnouncementComplex

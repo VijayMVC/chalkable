@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
@@ -39,30 +40,9 @@ namespace Chalkable.Data.School.DataAccess
                         Query = query
                     };
             }
-        } 
-
-        public static AnnouncementQnAComplex ReadAnnouncementQnAComplex(SqlDataReader reader)
-        {
-            var annQnA = reader.Read<AnnouncementQnAComplex>();
-            annQnA.Asker = new Person
-            {
-                Id = SqlTools.ReadGuid(reader, "AskerId"),
-                FirstName = SqlTools.ReadStringNull(reader, "AskerFirstName"),
-                LastName = SqlTools.ReadStringNull(reader, "AskerLastName"),
-                Gender = SqlTools.ReadStringNull(reader, "AskerGender")
-            };
-            annQnA.Answerer = new Person
-            {
-                Id = SqlTools.ReadGuid(reader, "AnswererId"),
-                FirstName = SqlTools.ReadStringNull(reader, "AnswererFirstName"),
-                LastName = SqlTools.ReadStringNull(reader, "AnswererLastName"),
-                Gender = SqlTools.ReadStringNull(reader, "AnswererGender")
-            };
-            annQnA.PersonRef = annQnA.Asker.Id;
-            return annQnA;
         }
 
-        public static IList<AnnouncementQnAComplex> ReadAnnouncementQnAComplexes(SqlDataReader reader)
+        public static IList<AnnouncementQnAComplex> ReadAnnouncementQnAComplexes(DbDataReader reader)
         {
             var res = new List<AnnouncementQnAComplex>();
             while (reader.Read())
@@ -71,7 +51,25 @@ namespace Chalkable.Data.School.DataAccess
             }
             return res;
         }
-
+        public static AnnouncementQnAComplex ReadAnnouncementQnAComplex(DbDataReader reader)
+        {
+            var annQnA = reader.Read<AnnouncementQnAComplex>();
+            annQnA.Asker = ReadAnnouncementQnAPerson(reader, "Asker");
+            annQnA.Answerer = ReadAnnouncementQnAPerson(reader, "Answerer");
+            return annQnA;
+        }
+        private static Person ReadAnnouncementQnAPerson(DbDataReader reader, string prefix)
+        {
+            var template = prefix + "{0}";
+            return new Person
+                {
+                    Id = SqlTools.ReadGuid(reader, string.Format(template, Person.ID_FIELD)),
+                    FirstName = SqlTools.ReadStringNull(reader, string.Format(template, Person.FIRST_NAME_FIELD)),
+                    LastName = SqlTools.ReadStringNull(reader, string.Format(template, Person.LAST_NAME_FIELD)),
+                    Gender = SqlTools.ReadStringNull(reader, string.Format(template, Person.GENDER_FIELD)),
+                    RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD))
+                };
+        } 
     }
 
     public class AnnouncementQnAQuery
