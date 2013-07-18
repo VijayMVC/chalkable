@@ -85,7 +85,7 @@ namespace Chalkable.Tests.Services.School
             var mpStartDate = SchoolTestContext.NowTime.AddDays(-5).Date;
             var mp = MarkingPeriodServiceTest.CreateSchoolYearWithMp(SchoolTestContext, mpStartDate, false, false, mpInterval, 62);
             var section = SchoolTestContext.AdminGradeSl.ScheduleSectionService.Add(1, "1", mp.Id);
-            var date = mpStartDate;
+            var date = mpStartDate.AddDays(1);
             var dateService = SchoolTestContext.AdminGradeSl.CalendarDateService;
             while (date.DayOfWeek != DayOfWeek.Saturday && date.DayOfWeek != DayOfWeek.Sunday)
             {

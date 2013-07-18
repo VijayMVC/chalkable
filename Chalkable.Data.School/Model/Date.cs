@@ -15,4 +15,9 @@ namespace Chalkable.Data.School.Model
         public bool IsSchoolDay { get; set; }
         public int? SisId { get; set; }
     }
+
+    public class DateDetails : Date
+    {
+        public ScheduleSection ScheduleSection { get; set; }
+    }
 }

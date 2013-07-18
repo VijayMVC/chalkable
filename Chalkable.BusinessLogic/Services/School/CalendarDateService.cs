@@ -14,7 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Date GetById(Guid id);
         DateTime GetDbDateTime();
         IList<Date> GetDays(Guid markingPeriodId, bool schoolDaysOnly, DateTime? fromDate = null, DateTime? tillDate = null);
-        IList<Date> GetLastDays(Guid schoolYearId, bool schoolDaysOnly, DateTime? fromDate, DateTime? tillDate, int count = int.MaxValue);
+        IList<DateDetails> GetLastDays(Guid schoolYearId, bool schoolDaysOnly, DateTime? fromDate, DateTime? tillDate, int count = int.MaxValue);
         void ClearCalendarDates(Guid markingPeriodId);
         bool CanAssignDate(Guid id, Guid sectionId);
         void AssignDate(Guid id, Guid sectionId);
@@ -119,7 +119,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Date> GetLastDays(Guid schoolYearId, bool schoolDaysOnly, DateTime? fromDate, DateTime? tillDate, int count = Int32.MaxValue)
+        public IList<DateDetails> GetLastDays(Guid schoolYearId, bool schoolDaysOnly, DateTime? fromDate, DateTime? tillDate, int count = Int32.MaxValue)
         {
             using (var uow = Read())
             {
@@ -134,7 +134,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
 
                 var da = new DateDataAccess(uow);
-                return da.GetDates(new DateQuery
+                return da.GetDatesDetails(new DateQuery
                     {
                         SchoolYearId = schoolYearId,
                         FromDate = fromDate,

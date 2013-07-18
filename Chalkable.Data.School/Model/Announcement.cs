@@ -69,12 +69,32 @@ namespace Chalkable.Data.School.Model
                 return !string.IsNullOrEmpty(ClassName) ? ClassName : "All";
             }
         }
+
+        public bool Gradable
+        {
+            get { return GradableType && IsOwner; }
+        }
+        public bool GradableType  
+        {
+            get
+            {
+               var systemType = new AnnouncementType {Id = AnnouncementTypeRef, Name = AnnouncementTypeName}.SystemType;
+               return (systemType == SystemAnnouncementType.Essay
+                    || systemType == SystemAnnouncementType.Final
+                    || systemType == SystemAnnouncementType.Test
+                    || systemType == SystemAnnouncementType.Quiz
+                    || systemType == SystemAnnouncementType.Project
+                    || systemType == SystemAnnouncementType.HW
+                    || systemType == SystemAnnouncementType.TermPaper
+                    || systemType == SystemAnnouncementType.BookReport
+                    || systemType == SystemAnnouncementType.Midterm);
+            }
+        }
+      
     }
 
     public class AnnouncementDetails : AnnouncementComplex
     {
-        public bool IsGradable { get; set; }
-        public bool IsGradableType { get; set; }
         public FinalGradeStatus? FinalGradeStatus { get; set; }
         
         public bool WasSubmittedToAdmin

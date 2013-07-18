@@ -42,7 +42,7 @@ namespace Chalkable.Data.School.DataAccess
             var mpDic = new Dictionary<string, object>();
             for (var i = 0; i < markingPeriodIds.Count; i++)
             {
-                mpDic.Add("markingPeriodId_" + i, markingPeriodIds[i]);
+                mpDic.Add("@markingPeriodId_" + i, markingPeriodIds[i]);
             }
             sql = string.Format(sql, mpDic.Keys.JoinString(","));
             return Exists(new DbQuery{Parameters = mpDic, Sql = sql});

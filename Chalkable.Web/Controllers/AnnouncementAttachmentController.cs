@@ -16,6 +16,7 @@ using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
+using Chalkable.Web.Models.AnnouncementsViewData;
 
 namespace Chalkable.Web.Controllers
 {

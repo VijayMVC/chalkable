@@ -26,47 +26,40 @@ namespace Chalkable.Data.School.DataAccess
         private DbQuery BuildConditionQuery(StringBuilder builder, DateQuery query)
         {
             var conds = new Dictionary<string, object>();
-            var where = "where";
-
+            builder.Append(" where 1 = 1 ");
             if (query.Id.HasValue)
             {
                 conds.Add("@id", query.Id);
-                builder.AppendFormat(" {0} Id = @id", where);
-                where = " and ";
+                builder.AppendFormat(" and [Date].Id = @id");
             }
             if (query.MarkingPeriodId.HasValue)
             {
                 conds.Add("@markingPeriodId", query.MarkingPeriodId);
-                builder.AppendFormat(" {0} markingPeriodRef =@markingPeriodId ", where);
-                where = "and";
+                builder.AppendFormat(" and [Date].markingPeriodRef =@markingPeriodId ");
             }
             if (query.SchoolYearId.HasValue)
             {
                 conds.Add("@schoolYearId", query.SchoolYearId);
-                builder.AppendFormat(" {0} MarkingPeriodRef in (select Id from MarkingPeriod where SchoolYearRef = @schoolYearId)", where);
-                where = "and";
+                builder.AppendFormat(" and [Date].MarkingPeriodRef in (select Id from MarkingPeriod where SchoolYearRef = @schoolYearId)");
             }
             if (query.FromDate.HasValue)
             {
                 conds.Add("@fromDate", query.FromDate);
-                builder.AppendFormat(" {0} DateTime >= @fromDate", where);
-                where = "and";
+                builder.AppendFormat(" and [Date].DateTime >= @fromDate");
             }
             if (query.ToDate.HasValue)
             {
                 conds.Add("@toDate", query.ToDate);
-                builder.AppendFormat(" {0} DateTime <= @toDate ", where);
-                where = "and";
+                builder.AppendFormat(" and [Date].DateTime <= @toDate ");
             }
             if (query.SectionRef.HasValue)
             {
                 conds.Add("@sectionId", query.SectionRef);
-                builder.AppendFormat(" {0} ScheduleSectionRef = @sectionId", where);
-                where = "and";
+                builder.AppendFormat(" and [Date].ScheduleSectionRef = @sectionId");
             }
             if (query.SchoolDaysOnly)
             {
-                builder.AppendFormat(" {0} IsSchoolDay = 1", where);
+                builder.AppendFormat(" and [Date].IsSchoolDay = 1 ");
             }
             return new DbQuery {Sql = builder.ToString(), Parameters = conds};
         }
@@ -103,6 +96,34 @@ namespace Chalkable.Data.School.DataAccess
             b.AppendFormat(" order by DateTime desc OFFSET 0 ROWS FETCH NEXT {0} ROWS ONLY", query.Count);
             q.Sql = string.Format("select * from ({0})x order by x.DateTime", b);
             return ReadMany<Date>(q);
+        }
+
+        public IList<DateDetails> GetDatesDetails(DateQuery query)
+        {
+            var b = new StringBuilder();
+            b.AppendFormat(@"select [Date].*, {0} from [Date] 
+                             left join ScheduleSection on ScheduleSection.Id = [Date].ScheduleSectionRef"
+                           , Orm.ComplexResultSetQuery(new List<Type> {typeof (ScheduleSection)}));
+            var q = BuildConditionQuery(b, query);
+            b.AppendFormat(" order by DateTime desc OFFSET 0 ROWS FETCH NEXT {0} ROWS ONLY", query.Count);
+            q.Sql = string.Format("select * from ({0})x order by x.DateTime", b);
+            return ReadDetailsDate(q);
+        } 
+
+        private IList<DateDetails> ReadDetailsDate(DbQuery query)
+        {
+            using (var reader = ExecuteReaderParametrized(query.Sql, query.Parameters))
+            {
+                var res = new List<DateDetails>();
+                while (reader.Read())
+                {
+                    var date = reader.Read<DateDetails>();
+                    if(date.ScheduleSectionRef.HasValue)
+                        date.ScheduleSection = reader.Read<ScheduleSection>(true);
+                    res.Add(date);
+                }
+                return res;
+            }
         }
  
         public bool Exists(DateQuery query)
