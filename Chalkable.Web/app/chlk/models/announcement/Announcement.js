@@ -6,9 +6,6 @@ NAMESPACE('chlk.models.announcement', function () {
     /** @class chlk.models.announcement.AnnouncementId*/
     IDENTIFIER('AnnouncementId');
 
-    /** @class chlk.models.announcement.AnnouncementTypeId*/
-    IDENTIFIER('AnnouncementTypeId');
-
     /** @class chlk.models.announcement.AnnouncementRecipientId*/
     IDENTIFIER('AnnouncementRecipientId');
 
@@ -25,46 +22,109 @@ NAMESPACE('chlk.models.announcement', function () {
     CLASS(
         'Announcement', [
             chlk.models.announcement.AnnouncementId, 'id',
-            chlk.models.announcement.AnnouncementTypeId, 'announcementtypeid',
-            String, 'announcementtypename',
-            String, 'applicationname',
-            Number, 'applicationscount',
-            Number, 'attachmentscount',
-            Number, 'attachmentsummary',
+            chlk.models.common.ChlkDate, 'created',
+
+            [ria.serialize.SerializeProperty('announcementtypeid')],
+            Number, 'announcementTypeId', // make enum
+
+            [ria.serialize.SerializeProperty('announcementtypename')],
+            String, 'announcementTypeName',
+
+            [ria.serialize.SerializeProperty('applicationname')],
+            String, 'applicationName',
+
+            [ria.serialize.SerializeProperty('applicationscount')],
+            Number, 'applicationsCount',
+
+            [ria.serialize.SerializeProperty('attachmentscount')],
+            Number, 'attachmentsCount',
+
+            [ria.serialize.SerializeProperty('attachmentsummary')],
+            Number, 'attachmentsSummary',
+
             Number, 'avg',
-            Number, 'avgnumeric',
+
+            [ria.serialize.SerializeProperty('avgnumeric')],
+            Number ,'avgNumeric',
+
             Object, 'class',
             String, 'comment',
             String, 'content',
             Date, 'created',
             Number, 'dropped',
-            String, 'expiresdate',
+
+            [ria.serialize.SerializeProperty('expiresdate')],
+            chlk.model.common.ChlkDate, 'expiresDate',
+
             Boolean, 'gradable',
             Number, 'grade',
-            Number, 'gradesummary',
-            Number, 'gradingstudentscount',
-            Number, 'gradingstyle',
-            Boolean, 'isowner',
-            Number, 'nongradingstudentscount',
+
+            [ria.serialize.SerializeProperty('gradesummary')],
+            Number, 'gradesSummary',
+
+            [ria.serialize.SerializeProperty('gradingstudentscount')],
+            Number, 'gradingStudentsCount',
+
+            [ria.serialize.SerializeProperty('gradingstyle')],
+            Number, 'gradingStyle',
+
+            [ria.serialize.SerializeProperty('isowner')],
+            Boolean, 'isOwner',
+
+            [ria.serialize.SerializeProperty('nongradingstudentscount')],
+            Number, 'nonGradingStudentsCount',
+
             Number, 'order',
-            Number, 'ownerattachmentscount',
-            Number, 'qnacount',
-            chlk.models.announcement.AnnouncementRecipientId, 'recipientid',
-            String, 'schoolpersongender',
-            String, 'schoolpersonname',
-            chlk.models.announcement.SchoolPersonId, 'schoolpersonref',
-            Number, 'shortcontent',
-            Boolean, 'showgradingicon',
+
+            [ria.serialize.SerializeProperty('ownerattachmentscount')],
+            Number, 'ownerAttachmentsCount',
+
+            [ria.serialize.SerializeProperty('qnacount')],
+            Number, 'qnaCount',
+
+            [ria.serialize.SerializeProperty('recipientid')],
+            chlk.models.announcement.AnnouncementRecipientId, 'recipientId',
+
+            [ria.serialize.SerializeProperty('schoolpersongender')],
+            String, 'schoolPersonGender',
+
+            [ria.serialize.SerializeProperty('schoolpersonname')],
+            String, 'schoolPersonName',
+
+            [ria.serialize.SerializeProperty('schoolpersonref')],
+            chlk.models.announcement.SchoolPersonId, 'schoolPersonRef',
+
+            [ria.serialize.SerializeProperty('shortcontent')],
+            String, 'shortContent',
+
+            [ria.serialize.SerializeProperty('showgradingicon')],
+            Boolean, 'showGradingIcon',
+
             Boolean, 'starred',
             Number, 'state',
-            Number, 'statetyped',
+
+            [ria.serialize.SerializeProperty('statetyped')],
+            Number, 'stateTyped',
+
+            [ria.serialize.SerializeProperty('studentannouncementid')],
             chlk.models.announcement.StudentAnnouncementId, 'studentannouncementid',
-            Number, 'studentscount',
-            Number, 'studentscountwithattachments',
-            Number, 'studentscountwithoutattachments',
+
+            [ria.serialize.SerializeProperty('studentscount')],
+            Number, 'studentsCount',
+
+            [ria.serialize.SerializeProperty('studentscountwithattachments')],
+            Number, 'studentsWithAttachmentsCount'
+
+            [ria.serialize.SerializeProperty('studentscountwithoutattachments')],
+            Number, 'studentsWithoutAttachmentsCount',
+
             String, 'subject',
-            Number, 'systemtype',
+            [ria.serialize.SerializeProperty('systemtype')],
+
+            Number, 'systemType',
             String, 'title',
-            Boolean, 'wasannouncementtypegraded'
+
+            [ria.serialize.SerializeProperty('wasannouncementtypegraded')],
+            Boolean, 'wasAnnouncementTypeGraded'
         ]);
 });

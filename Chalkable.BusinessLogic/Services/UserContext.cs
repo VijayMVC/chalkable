@@ -84,7 +84,7 @@ namespace Chalkable.BusinessLogic.Services
             {
                 schoolName = sl[3]; 
                 schoolServerUrl = sl[5];
-                schoolTimeZone = sl[7];
+                schoolTimeZone = sl[6];
             }
             var role = CoreRoles.GetById(int.Parse(sl[4]));
             var res = new UserContext(userId, schoolId, sl[2], schoolName, schoolTimeZone, schoolServerUrl, role);
