@@ -36,6 +36,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,6 +62,7 @@
     <Compile Include="Security\NotificationSecurity.cs" />
     <Compile Include="Security\PrivateMessageSecurity.cs" />
     <Compile Include="Security\UserSecurity.cs" />
+    <Compile Include="Services\Master\AccessControlService.cs" />
     <Compile Include="Services\Master\ApplicationService.cs" />
     <Compile Include="Services\Master\ApplicationUploadService.cs" />
     <Compile Include="Services\Master\CategoryService.cs" />
@@ -132,6 +134,10 @@
     <ProjectReference Include="..\GCObjectRenderer\GCObjectRenderer.csproj">
       <Project>{ccd7266b-94bb-45ef-bc49-0f608da006f3}</Project>
       <Name>GCObjectRenderer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.csproj">
+      <Project>{3051F268-B03F-42AE-A06C-1D8DD751BDBF}</Project>
+      <Name>WindowsAzure.Acs.Oauth2</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

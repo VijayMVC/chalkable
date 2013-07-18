@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Data.Master.DataAccess
@@ -88,6 +89,47 @@ namespace Chalkable.Data.Master.DataAccess
             {
                 return reader.ReadList<Application>();
             }
+        }
+
+        /*
+         
+            app.Permissions = 
+            app.GradeLevels = 
+         */
+
+        public IList<ApplicationCategory> UpdateCategories(Guid id, IList<Guid> categories)
+        {
+            SimpleDelete<ApplicationCategory>(new Dictionary<string, object>{{ApplicationCategory.APPLICATION_REF_FIELD, id}});
+            foreach (var category in categories)
+            {
+                SimpleInsert(new ApplicationCategory {ApplicationRef = id, CategoryRef = category});
+            }
+            return SelectMany<ApplicationCategory>(new Dictionary<string, object> { { ApplicationCategory.APPLICATION_REF_FIELD, id } });
+        }
+
+        public IList<ApplicationPicture> UpdatePictures(Guid id, IList<Guid> picturesId)
+        {
+            SimpleDelete<ApplicationPicture>(new Dictionary<string, object> { { ApplicationCategory.APPLICATION_REF_FIELD, id } });
+            foreach (var picture in picturesId)
+            {
+                SimpleInsert(new ApplicationPicture{ApplicationRef = id, Id = picture});
+            }
+            return SelectMany<ApplicationPicture>(new Dictionary<string, object> { { ApplicationPicture.APPLICATION_REF_FIELD, id } });
+        }
+
+        public IList<ApplicationGradeLevel> UpdateGradeLevels(Guid id, IList<int> gradeLevels)
+        {
+            SimpleDelete<ApplicationGradeLevel>(new Dictionary<string, object> { { ApplicationGradeLevel.APPLICATION_REF_FIELD, id } });
+            foreach (var gradeLevel in gradeLevels)
+            {
+                SimpleInsert(new ApplicationGradeLevel { ApplicationRef = id, GradeLevel = gradeLevel, Id = Guid.NewGuid()});
+            }
+            return SelectMany<ApplicationGradeLevel>(new Dictionary<string, object> { { ApplicationGradeLevel.APPLICATION_REF_FIELD, id } });
+        }
+
+        public IList<ApplicationPermission> UpdatePermissions(Guid id, IList<AppPermissionType> permissionIds)
+        {
+            return SelectMany<ApplicationPermission>(new Dictionary<string, object> { { ApplicationPermission.APPLICATION_REF_FIELD, id } });
         }
     }
 }

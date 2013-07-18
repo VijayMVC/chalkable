@@ -14,7 +14,7 @@ namespace Chalkable.BusinessLogic.Model
         public IList<Guid> Categories { get; set; }
         public IList<Guid> PicturesId { get; set; }
         public IList<int> GradeLevels { get; set; }
-        public Guid? DeveloperId { get; set; }
+        public Guid DeveloperId { get; set; }
 
         public static BaseApplicationInfo Create(ShortApplicationInfo shortApplicationInfo, Guid developerId,
             IList<Guid> picturesId = null, ApplicationPricesInfo applicationPricesInfo = null,

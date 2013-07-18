@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.SisConnector", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.StiConnector", "Chalkable.StiConnector\Chalkable.StiConnector.csproj", "{3D16203E-D19D-41E1-9918-2A9448427BFD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsAzure.Acs.Oauth2", "WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.csproj", "{3051F268-B03F-42AE-A06C-1D8DD751BDBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,12 @@ Global
 		{3D16203E-D19D-41E1-9918-2A9448427BFD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3D16203E-D19D-41E1-9918-2A9448427BFD}.Staging|Any CPU.ActiveCfg = STAGING|Any CPU
 		{3D16203E-D19D-41E1-9918-2A9448427BFD}.Staging|Any CPU.Build.0 = STAGING|Any CPU
+		{3051F268-B03F-42AE-A06C-1D8DD751BDBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3051F268-B03F-42AE-A06C-1D8DD751BDBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3051F268-B03F-42AE-A06C-1D8DD751BDBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3051F268-B03F-42AE-A06C-1D8DD751BDBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3051F268-B03F-42AE-A06C-1D8DD751BDBF}.Staging|Any CPU.ActiveCfg = Staging|Any CPU
+		{3051F268-B03F-42AE-A06C-1D8DD751BDBF}.Staging|Any CPU.Build.0 = Staging|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
