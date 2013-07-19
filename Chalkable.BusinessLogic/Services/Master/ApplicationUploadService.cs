@@ -226,12 +226,36 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public bool UnList(Guid applicationId)
         {
-            throw new System.NotImplementedException();
+            Application application;
+            using (var uow = Read())
+            {
+                var da = new ApplicationDataAccess(uow);
+                application = da.GetApplicationById(applicationId);
+            }
+            if (!ApplicationSecurity.CanEditApplication(Context, application))
+                throw new ChalkableSecurityException(ChlkResources.ERR_APP_INVALID_RIGHTS);
+            if (application.State == ApplicationStateEnum.Live)
+            {
+                DeleteApplication(application.Id);
+                return true;
+            }
+            return false;
         }
 
         public bool Exists(Guid? currentApplicationId, string name, string url)
         {
-            throw new System.NotImplementedException();
+            using (var uow = Read())
+            {
+                var da = new ApplicationDataAccess(uow);
+                return da.AppExists(currentApplicationId, name, url);
+            }
+            /*
+             return Entities.Applications.Any(x => (x.Name == name || (!string.IsNullOrEmpty(url) && x.Url == url))
+                                                  && (!currentApplicationId.HasValue || (x.Id != currentApplicationId 
+                                                   && (!x.OriginalRef.HasValue || x.OriginalRef != currentApplicationId)
+                                                   && (x.Application1.Count == 0 || x.Application1.All(y => y.Id != currentApplicationId))))
+                                            );
+             */
         }
 
         public bool DeleteApplication(Guid id)

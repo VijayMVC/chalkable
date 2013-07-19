@@ -131,5 +131,21 @@ namespace Chalkable.Data.Master.DataAccess
         {
             return SelectMany<ApplicationPermission>(new Dictionary<string, object> { { ApplicationPermission.APPLICATION_REF_FIELD, id } });
         }
+
+        public bool AppExists(Guid? currentApplicationId, string name, string url)
+        {
+            var sql = new StringBuilder();
+            sql.Append("Select count(*) as [Count] from Application a where ");
+            sql.Append("(").Append(string.Format("[{0}] = @{0} or ([{1}] = @{1} and [{1}] is not null)", Application.NAME_FIELD, Application.URL_FIELD)).Append(")");
+            sql.Append(" and (").Append(string.Format("[{0}] is null or [{0}] <> @{0}", Application.ORIGINAL_REF_FIELD)).Append(")");
+            sql.Append(string.Format(" and not exists (select * from Application where [{0}] = a.[{1}] and [{1}] = @{1})", Application.ORIGINAL_REF_FIELD, Application.ID_FIELD));
+            var ps = new Dictionary<string, object> {
+                                                        {Application.ID_FIELD, currentApplicationId},
+                                                        {Application.NAME_FIELD, name},
+                                                        {Application.URL_FIELD, url},
+                                                        {Application.ORIGINAL_REF_FIELD, currentApplicationId},
+                                                    };
+            return Exists(new DbQuery() {Parameters = ps, Sql = sql.ToString()});
+        }
     }
 }
