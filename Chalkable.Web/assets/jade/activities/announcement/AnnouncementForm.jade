@@ -1,0 +1,23 @@
+.announcement-form
+    -topData=self.getTopData();
+    -topItems=topData.getTopItems();
+    -classId=topData.getSelectedItemId()
+    -typeId=self.getSelectedTypeId()
+    +LeftRightToolbar(topItems, chlk.templates.class.TopBar)(
+        selectedItemId=topData.getSelectedItemId(),
+        controller='announcement',
+        action='add'
+    ).classes-bar
+    if classId
+        .action-bar.not-transparent.buttons
+            .container.panel-bg
+                each item in self.getClassInfo().getTypesByClass()
+                    +ActionLink('announcement', 'add', classId, item.getId())(class = typeId==item.getId() ? 'pressed' : '')= item.getDescription()
+        if typeId
+            div Вас вітає Announcement Form
+        else
+            .choose-type
+    else
+        .choose-class
+
+

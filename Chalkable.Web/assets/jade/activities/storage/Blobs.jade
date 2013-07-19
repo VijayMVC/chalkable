@@ -1,0 +1,16 @@
+.blobs
+    +Grid('storage', 'blobs', self).not-transparent
+        +GridHead()
+            .th Name
+            .th Uri
+            .th Size
+            .th
+        +GridBody()
+            each item in self.items
+                +GridRow()
+                    .td= item.getName()
+                    .td= item.getUri()
+                    .td= item.getSize()
+                    .td.action-links
+                        +ActionLink('storage', 'delete', item.getName()).remove
+
