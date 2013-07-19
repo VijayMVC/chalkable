@@ -98,70 +98,80 @@ namespace Chalkable.Data.School.DataAccess
             return ReadMany<ClassPeriod>(res, true);
         } 
 
+//        public IList<ClassPeriodDetails> GetClassPeriodsDetails(ClassPeriodQuery query)
+//        {
+//            var b = new StringBuilder();
+//            var types = new List<Type> { typeof(ClassPeriod), typeof(Period), typeof(Room)};
+//            b.AppendFormat(@"select {0} from ClassPeriod 
+//                             join Period on Period.Id = ClassPeriod.PeriodRef
+//                             join Room on Room.Id = ClassPeriod.RoomRef"
+//                           , Orm.ComplexResultSetQuery(types));
+//            return ReadMany<ClassPeriodDetails>(BuildGetClassPeriodsConditions(b, query),true);
+//        }
+
         public DbQuery BuildGetClassPeriodsQuery(ClassPeriodQuery query)
         {
             var b = new StringBuilder();
             var types = new List<Type> {typeof (ClassPeriod), typeof (Period)};
             b.AppendFormat(@"select {0} from ClassPeriod 
-                             join Period on Period.Id = ClassPeriod.PeriodRef "
+                             join Period on Period.Id = ClassPeriod.PeriodRef"
                            , Orm.ComplexResultSetQuery(types));
             return BuildGetClassPeriodsConditions(b, query);
         }
         private DbQuery BuildGetClassPeriodsConditions(StringBuilder builder, ClassPeriodQuery query)
         {
             var conds = new Dictionary<string, object>();
-            string where = " where ";
+            builder.Append(" where 1=1 ");
             if (query.Id.HasValue)
             {
                 conds.Add("Id", query.Id);
-                builder.AppendFormat(" {0} ClassPeriod.Id = @id", where);
-                where = " and ";
+                builder.AppendFormat(" and ClassPeriod.Id = @id");
             }
             if (query.MarkingPeriodId.HasValue)
             {
                 conds.Add("markingPeriodId", query.MarkingPeriodId);
-                builder.AppendFormat(" {0} Period.MarkingPeriodRef = @markingPeriodId", where);
-                where = " and ";    
+                builder.AppendFormat(" and Period.MarkingPeriodRef = @markingPeriodId");
             }
             if (query.PeriodId.HasValue)
             {
                 conds.Add("periodId", query.PeriodId);
-                builder.AppendFormat(" {0} ClassPeriod.PeriodRef = @periodId", where);
-                where = " and ";
+                builder.AppendFormat(" and ClassPeriod.PeriodRef = @periodId");
             }
             if (query.RoomId.HasValue)
             {
                 conds.Add("roomId", query.RoomId);
-                builder.AppendFormat(" {0} ClassPeriod.RoomRef = @roomId", where);
-                where = " and ";
+                builder.AppendFormat(" and ClassPeriod.RoomRef = @roomId");
             }
             if (query.SectionId.HasValue)
             {
                 conds.Add("sectionId", query.SectionId);
-                builder.AppendFormat(" {0} Period.SectionRef = @sectionId", where);
-                where = " and ";
+                builder.AppendFormat(" and Period.SectionRef = @sectionId");
             }
             if (query.StudentId.HasValue)
             {
                 conds.Add("studentId", query.StudentId);
-                builder.AppendFormat(" {0} ClassPeriod.ClassRef in (select ClassRef from ClassPerson where PersonRef = @studentId)", where);
-                where = " and ";
+                builder.AppendFormat(" and ClassPeriod.ClassRef in (select ClassRef from ClassPerson where PersonRef = @studentId)");
             }
             if (query.TeacherId.HasValue)
             {
                 conds.Add("teacherId", query.TeacherId);
-                builder.AppendFormat(" {0} ClassPeriod.ClassRef in (select Id from Class where TeacherRef = @teacherId)", where);
-                where = " and ";
+                builder.AppendFormat(" and ClassPeriod.ClassRef in (select Id from Class where TeacherRef = @teacherId)");
             }
             if (query.Time.HasValue)
             {
                 conds.Add("time", query.Time);
-                builder.AppendFormat(" {0} Period.StartTime <= @time and Period.EndTime >= @time", where);
-                where = " and ";
+                builder.AppendFormat(" and Period.StartTime <= @time and Period.EndTime >= @time");
             }
             if (query.ClassIds != null && query.ClassIds.Count > 0)
             {
-                builder.AppendFormat(" {0} ClassPeriod.ClassRef in ({1})", where, query.ClassIds.Select(x => "'" + x.ToString() + "'").JoinString(","));
+                var classIdsParams = new List<string>();
+                for (int i = 0; i < query.ClassIds.Count; i++)
+                {
+                    var classIdParam = "@classId_" + i;
+                    classIdsParams.Add(classIdParam);
+                    conds.Add(classIdParam, query.ClassIds[i]);
+                }
+                builder.AppendFormat(" and ClassPeriod.ClassRef in ({0})",  classIdsParams.JoinString(","));
             }
             return new DbQuery {Sql = builder.ToString(), Parameters = conds};
         }

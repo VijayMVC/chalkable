@@ -18,4 +18,10 @@ namespace Chalkable.Data.School.Model
         [DataEntityAttr]
         public Period Period { get; set; }
     }
+
+    public class ClassPeriodDetails : ClassPeriod
+    {
+        [DataEntityAttr]
+        public Room Room { get; set; }
+    }
 }

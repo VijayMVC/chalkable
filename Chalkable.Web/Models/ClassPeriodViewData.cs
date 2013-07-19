@@ -7,26 +7,46 @@ using Chalkable.Web.Models.ClassesViewData;
 
 namespace Chalkable.Web.Models
 {
-    public class ClassPeriodViewData
+    public class ClassPeriodShortViewData
     {
         public Guid Id { get; set; }
         public PeriodViewData Period { get; set; }
         public Guid RoomId { get; set; }
         public string RoomNumber { get; set; }
+        public Guid ClassId { get; set; }
+
+        protected ClassPeriodShortViewData(ClassPeriod classPeriod, Room room)
+        {
+            Id = classPeriod.Id;
+            Period = PeriodViewData.Create(classPeriod.Period);
+            RoomId = classPeriod.RoomRef;
+            ClassId = classPeriod.ClassRef;
+            if (room != null)
+                RoomNumber = room.RoomNumber;
+        }
+        public static ClassPeriodShortViewData Create(ClassPeriod classPeriod, Room room)
+        {
+            return new ClassPeriodShortViewData(classPeriod, room);
+        }
+    }
+
+    public class ClassPeriodViewData : ClassPeriodShortViewData
+    {
         public ClassViewData Class { get; set; }
         public int StudentsCount { get; set; }
 
+        protected ClassPeriodViewData(ClassPeriod classPeriod, Room room, ClassComplex classComplex)
+            : base(classPeriod, room)
+        {
+            if (classComplex != null)
+            {
+                Class = ClassViewData.Create(classComplex);
+                StudentsCount = classComplex.StudentsCount;
+            }
+        }
         public static ClassPeriodViewData Create(ClassPeriod classPeriod, ClassComplex classComplex, Room room)
         {
-            return new ClassPeriodViewData
-                {
-                    Id = classPeriod.Id,
-                    Period = PeriodViewData.Create(classPeriod.Period),
-                    Class = ClassViewData.Create(classComplex),
-                    StudentsCount = classComplex.StudentsCount,
-                    RoomId = classPeriod.RoomRef,
-                    RoomNumber = room.RoomNumber
-                };
+            return new ClassPeriodViewData(classPeriod, room, classComplex);
         }
     }
 }

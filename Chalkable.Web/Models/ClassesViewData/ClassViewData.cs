@@ -12,7 +12,7 @@ namespace Chalkable.Web.Models.ClassesViewData
         public string Name { get; set; }
         public string Description { get; set; }
         public CourseViewData Course { get; set; }
-        public IdNameViewData GradeLevel { get; set; }
+        public GradeLevelViewData GradeLevel { get; set; }
         public ShortPersonViewData Teacher { get; set; }
         public IList<Guid> MarkingPeriodsId { get; set; }
         
@@ -23,7 +23,7 @@ namespace Chalkable.Web.Models.ClassesViewData
             Name = classComplex.Name;
             Description = classComplex.Description;
             Course = CourseViewData.Create(classComplex.Course);
-            GradeLevel = IdNameViewData.Create(classComplex.GradeLevelRef, classComplex.GradeLevel.Name);
+            GradeLevel =  GradeLevelViewData.Create(classComplex.GradeLevel);
             Teacher = ShortPersonViewData.Create(classComplex.Teacher);
             MarkingPeriodsId = classComplex.MarkingPeriodClasses.Select(x => x.MarkingPeriodRef).ToList();
             Teacher.DisplayName = classComplex.Teacher.ShortSalutationName;

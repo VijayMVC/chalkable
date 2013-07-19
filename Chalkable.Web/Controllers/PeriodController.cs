@@ -15,13 +15,13 @@ namespace Chalkable.Web.Controllers
         public ActionResult List(Guid markingPeriodId, Guid? sectionId)
         {
             var res = SchoolLocator.PeriodService.GetPeriods(markingPeriodId, sectionId);
-            return Json(PeriodViewData.Create(res));
+            return Json(PeriodDetailedViewData.Create(res));
         }
         [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit")]
         public ActionResult Create(Guid markingPeriodId, int startTime, int endTime, Guid sectionId)
         {
             var generalPeriod = SchoolLocator.PeriodService.Add(markingPeriodId, startTime, endTime, sectionId, 0);
-            var res = PeriodViewData.Create(generalPeriod);
+            var res = PeriodDetailedViewData.Create(generalPeriod);
             return Json(res, 3);
         }
 
@@ -43,7 +43,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult ReGeneratePeriods(GuidList markingPeriodIds, int startTime, int periodlength, int timeBetweenPeriods, int? periodCount)
         {
             var res = SchoolLocator.PeriodService.ReGeneratePeriods(markingPeriodIds, startTime, periodlength, timeBetweenPeriods, periodCount);
-            return Json(res.Select(PeriodViewData.Create));
+            return Json(res.Select(PeriodDetailedViewData.Create));
         }
     }
 }
