@@ -6,6 +6,7 @@ using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
+using Chalkable.Web.Models.AnnouncementsViewData;
 
 namespace Chalkable.Web.Controllers
 {
@@ -35,7 +36,7 @@ namespace Chalkable.Web.Controllers
                 if (SchoolLocator.Context.Role == CoreRoles.STUDENT_ROLE)
                     annViewData.Dropped = stAnnouncements.Count > 0 && stAnnouncements[0].Dropped;
 
-                if (stAnnouncements.Count > 0 && annDetails.IsGradableType)
+                if (stAnnouncements.Count > 0 && annDetails.GradableType)
                     annViewData.StudentAnnouncements = StudentAnnouncementLogic.ItemGradesList(SchoolLocator, annDetails, attInfo);
             }
             return annViewData;

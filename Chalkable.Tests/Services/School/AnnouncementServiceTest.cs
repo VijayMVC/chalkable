@@ -36,7 +36,7 @@ namespace Chalkable.Tests.Services.School
             Assert.IsTrue(ann.IsDraft);
             Assert.AreEqual(ann.AnnouncementTypeRef, annTypeHw.Id);
             Assert.AreEqual(ann.AnnouncementTypeName, annTypeHw.Name);
-            Assert.IsTrue(ann.IsGradableType);
+            Assert.IsTrue(ann.GradableType);
             Assert.AreEqual(ann.MarkingPeriodClassRef, null);
             Assert.AreEqual(ann.IsOwner, true);
             Assert.AreEqual(ann.Dropped, false);

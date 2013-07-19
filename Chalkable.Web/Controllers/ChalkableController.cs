@@ -10,6 +10,7 @@ using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
 using Chalkable.Web.ActionResults;
 using Chalkable.Web.Authentication;
@@ -95,5 +96,12 @@ namespace Chalkable.Web.Controllers
         }
 
 
+        protected Guid GetCurrentSchoolYearId()
+        {
+            var currentYear = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
+            if (currentYear != null)
+                return currentYear.Id;
+            throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
+        }
     }
 }

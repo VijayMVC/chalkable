@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
         
         PaginatedList<AnnouncementComplex> GetAnnouncements(int start, int count, bool onlyOwners = false);
         PaginatedList<AnnouncementComplex> GetAnnouncements(bool starredOnly, int start, int count, Guid? classId, Guid? markingPeriodId = null, bool ownerOnly = false);
-        List<AnnouncementComplex> GetAnnouncementsFeedPage(bool starredOnly, int start, int count, ref int sourceCount, Guid? classId, Guid? markingPeriodId = null, bool ownedOnly = false);
+        IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, IList<Guid> gradeLevelsIds = null, Guid? classId = null);
 
         Announcement GetLastDraft();
 
@@ -96,24 +96,17 @@ namespace Chalkable.BusinessLogic.Services.School
             var res = GetAnnouncements(q);
             return new PaginatedList<AnnouncementComplex>(res.Announcements, start / count, count);
         }
-        public List<AnnouncementComplex> GetAnnouncementsFeedPage(bool starredOnly, int start, int count, ref int sourceCount, Guid? classId,
-                                             Guid? markingPeriodId = null, bool ownedOnly = false)
+
+        public IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, IList<Guid> gradeLevelsIds = null, Guid? classId = null)
         {
             var q = new AnnouncementsQuery
-            {
-                StarredOnly = starredOnly,
-                Start = start,
-                Count = count,
-                ClassId = classId,
-                MarkingPeriodId = markingPeriodId,
-                OwnedOnly = ownedOnly,
-            };
-            if (Context.Role == CoreRoles.STUDENT_ROLE && !starredOnly)
-                q.ToDate = Context.NowSchoolTime.AddDays(16).Date;
-
-            var res = GetAnnouncements(q);
-            sourceCount = res.SourceCount;
-            return res.Announcements;
+                {
+                    FromDate = fromDate,
+                    ToDate = toDate,
+                    GradeLevelIds = gradeLevelsIds,
+                    ClassId = classId
+                };
+            return GetAnnouncements(q).Announcements; 
         }
 
 
@@ -423,5 +416,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 return new AnnouncementDataAccess(uow).GetAnnouncementRecipientPersons(announcementId, Context.UserId);
             }
         }
+
+
     }
 }

@@ -7,6 +7,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
     {
         public Guid RoomId { get; set; }
         public string RoomName { get; set; }
+        public string RoolNumber { get; set; }
         //public IList<PrivateNoteViewData> Notes { get; set; }
         private const string NO_CLASS_SCHEDULED = "No Class Scheduled";
 
@@ -16,8 +17,13 @@ namespace Chalkable.Web.Models.PersonViewDatas
         }
         private void PrepareRoomInfo(Room room)
         {
-            RoomId = room != null ? room.Id : Guid.Empty;
-            RoomName = room != null ? room.Description : NO_CLASS_SCHEDULED;
+            RoomName = NO_CLASS_SCHEDULED;  
+            if (room != null)
+            {
+                RoomId = room.Id;
+                RoolNumber = room.RoomNumber;
+                RoomName = room.Description;
+            }
         }
     }
 }
