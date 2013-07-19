@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
@@ -249,23 +250,52 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var da = new ApplicationDataAccess(uow);
                 return da.AppExists(currentApplicationId, name, url);
             }
-            /*
-             return Entities.Applications.Any(x => (x.Name == name || (!string.IsNullOrEmpty(url) && x.Url == url))
-                                                  && (!currentApplicationId.HasValue || (x.Id != currentApplicationId 
-                                                   && (!x.OriginalRef.HasValue || x.OriginalRef != currentApplicationId)
-                                                   && (x.Application1.Count == 0 || x.Application1.All(y => y.Id != currentApplicationId))))
-                                            );
-             */
         }
 
         public bool DeleteApplication(Guid id)
         {
-            throw new System.NotImplementedException();
+            Application application;
+            IList<Application> draftApps;
+            using (var uow = Update())
+            {
+                var da = new ApplicationDataAccess(uow);
+                application = da.GetApplicationById(id);
+                draftApps = da.GetAll(new Dictionary<string, object> {{Application.ORIGINAL_REF_FIELD, id}});
+            
+                if (!ApplicationSecurity.CanEditApplication(Context, application))
+                    throw new ChalkableSecurityException(ChlkResources.ERR_APP_INVALID_RIGHTS);
+
+                if (application.OriginalRef.HasValue)
+                {
+                    da.Delete(application.OriginalRef.Value);
+                }
+                else
+                {
+                    foreach (var draftApp in draftApps)
+                    {
+                        draftApp.OriginalRef = null;
+                        da.Update(draftApp);
+                    }
+                }
+                da.Delete(id);
+                uow.Commit();
+            }
+            return true;
+            //TODO: need to remove notifications and installations
         }
 
         public void ChangeApplicationType(Guid applicationId, bool isInternal)
         {
-            throw new System.NotImplementedException();
+            if (!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                var da = new ApplicationDataAccess(uow);
+                var application = da.GetApplicationById(applicationId);
+                application.IsInternal = isInternal;
+                da.Update(application);
+                uow.Commit();
+            }
         }
     }
 }

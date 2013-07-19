@@ -229,7 +229,7 @@ namespace Chalkable.Data.Common
         {
             SimpleUpdate(entities);
         }
-        public void Delete(Guid id)
+        public virtual void Delete(Guid id)
         {
             SimpleDelete<TEntity>(id);
         }

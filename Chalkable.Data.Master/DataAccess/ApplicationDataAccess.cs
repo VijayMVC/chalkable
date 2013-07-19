@@ -91,12 +91,6 @@ namespace Chalkable.Data.Master.DataAccess
             }
         }
 
-        /*
-         
-            app.Permissions = 
-            app.GradeLevels = 
-         */
-
         public IList<ApplicationCategory> UpdateCategories(Guid id, IList<Guid> categories)
         {
             SimpleDelete<ApplicationCategory>(new Dictionary<string, object>{{ApplicationCategory.APPLICATION_REF_FIELD, id}});
@@ -145,7 +139,17 @@ namespace Chalkable.Data.Master.DataAccess
                                                         {Application.URL_FIELD, url},
                                                         {Application.ORIGINAL_REF_FIELD, currentApplicationId},
                                                     };
-            return Exists(new DbQuery() {Parameters = ps, Sql = sql.ToString()});
+            return Exists(new DbQuery {Parameters = ps, Sql = sql.ToString()});
+        }
+
+        public override void Delete(Guid id)
+        {
+            SimpleDelete<ApplicationPermission>(new Dictionary<string, object>{{ApplicationPermission.APPLICATION_REF_FIELD, id}});
+            SimpleDelete<ApplicationCategory>(new Dictionary<string, object> { { ApplicationCategory.APPLICATION_REF_FIELD, id } });
+            SimpleDelete<ApplicationPicture>(new Dictionary<string, object> { { ApplicationPicture.APPLICATION_REF_FIELD, id } });
+            SimpleDelete<ApplicationRating>(new Dictionary<string, object> { { ApplicationRating.APPLICATION_REF_FIELD, id } });
+            SimpleDelete<ApplicationGradeLevel>(new Dictionary<string, object> { { ApplicationGradeLevel.APPLICATION_REF_FIELD, id } });
+            base.Delete(id);
         }
     }
 }
