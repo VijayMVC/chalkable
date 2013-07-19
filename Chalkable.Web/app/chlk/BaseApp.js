@@ -13,6 +13,7 @@ REQUIRE('chlk.controls.GlanceBoxControl');
 REQUIRE('chlk.controls.SelectControl');
 REQUIRE('chlk.controls.AvatarControl');
 REQUIRE('chlk.controls.PhotoContainerControl');
+REQUIRE('chlk.controls.LeftRightToolbarControl');
 
 REQUIRE('chlk.models.common.Role');
 

@@ -1,0 +1,15 @@
+mixin LeftRightToolbar(data, tplClass)
+    -configs=self.prepareData(data, attributes)
+    .lr-toolbar(attributes)
+        .A(class=configs.disablePrevButton ? configs.disabledClass : "").prev-button.arrow
+        .first-container
+            .second-container
+                each item in data
+                    -configs.pressAfterClick && item.setPressed(configs.selectedItemId == item.getId());
+                    +RenderWith(item, tplClass)
+        .A(class=configs.disableNextButton ? configs.disabledClass : "").next-button.arrow
+        if(configs.needDots)
+            .paginator
+                each dot,i in configs.dots
+                    A(index=i, class=dot ? "current" : "")
+

@@ -9,8 +9,15 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'ClassService', EXTENDS(chlk.services.BaseService), [
 
+            ArrayOf(chlk.models.class.ClassForTopBar), 'classesToFilter',
+
             Array, function getClassesForTopBar() {
-                 return new ria.serialize.JsonSerializer().deserialize(window.classesAdvancedData, ArrayOf(chlk.models.class.ClassForTopBar));
+                var res = this.getClassesToFilter();
+                if(res)
+                    return res;
+                res = new ria.serialize.JsonSerializer().deserialize(window.classesToFilter, ArrayOf(chlk.models.class.ClassForTopBar));
+                this.setClassesToFilter(res);
+                return res;
             }
         ])
 });
