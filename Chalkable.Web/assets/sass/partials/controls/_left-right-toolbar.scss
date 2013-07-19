@@ -98,8 +98,6 @@
 
               IMG{
                 margin-top: -45px;
-                width: 45px;
-                height: 80px;
               }
             }
 
@@ -120,6 +118,12 @@
             top: 11px;
             width: 45px;
             overflow: hidden;
+
+            IMG{
+              margin-top: -45px;
+              width: 45px;
+              height: 80px;
+            }
           }
 
           .text-container{
