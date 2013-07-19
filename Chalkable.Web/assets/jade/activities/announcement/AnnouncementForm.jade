@@ -1,0 +1,9 @@
+.announcement-form
+    -topData=self.getTopData();
+    -topItems=topData.getTopItems();
+    +LeftRightToolbar(topItems, chlk.templates.class.TopBar)(
+        selecteItemId=topData.getSelectedItemId(),
+        controller='announcement',
+        action='add'
+    ).classes-bar
+
