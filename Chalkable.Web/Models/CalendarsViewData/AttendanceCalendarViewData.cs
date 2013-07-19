@@ -113,17 +113,18 @@ namespace Chalkable.Web.Models.CalendarsViewData
 
     }
 
-    public class AttendanceForClassCalendarItemViewData : BaseAttendanceMonthCalendarViewData<AttendanceCalendarItemViewData>
+    public class AttendanceForClassCalendarViewData : BaseAttendanceMonthCalendarViewData<AttendanceCalendarItemViewData>
     {
         public Guid ClassId { get; set; }
-        protected AttendanceForClassCalendarItemViewData(DateTime date, bool isCurrentMonth) : base(date, isCurrentMonth)
+        protected AttendanceForClassCalendarViewData(DateTime date, bool isCurrentMonth)
+            : base(date, isCurrentMonth)
         {
         }
 
-        public static AttendanceForClassCalendarItemViewData Create(DateTime date, bool isCurrentMonth, Guid classId, IList<ClassAttendanceComplex> attendances)
+        public static AttendanceForClassCalendarViewData Create(DateTime date, bool isCurrentMonth, Guid classId, IList<ClassAttendanceComplex> attendances)
         {
-            var groupedAtt = attendances.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.Count());
-            return new AttendanceForClassCalendarItemViewData(date, isCurrentMonth)
+            var groupedAtt = attendances.Where(x=>x.Date == date).GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.Count());
+            return new AttendanceForClassCalendarViewData(date, isCurrentMonth)
                 {
                     ClassId = classId,
                     Attendances = AttendanceCalendarItemViewData.Create(groupedAtt)

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -11,9 +9,9 @@ using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.CalendarsViewData;
 
-namespace Chalkable.Web.Controllers
+namespace Chalkable.Web.Controllers.CalendarControllers
 {
-     [RequireHttps, TraceControllerFilter]
+    [RequireHttps, TraceControllerFilter]
     public class AnnouncementCalendarController : CalendarController
     {
          [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_LIST, true, CallType.Get, new[] { AppPermissionType.Announcement })]
@@ -29,7 +27,8 @@ namespace Chalkable.Web.Controllers
                  announcements = announcements.Where(x => !x.ClassId.HasValue).ToList();
              var schoolYearId = GetCurrentSchoolYearId();
              var days = SchoolLocator.CalendarDateService.GetLastDays(schoolYearId, true, start, end);
-             return Json(PrepareMonthCalendar(start, end, date.Value, (time, b) => AnnouncementMonthCalendarViewData.Create(time, b, announcements, days)));
+             return Json(PrepareMonthCalendar(start, end, date.Value, (dateTime, isCurrentMonth) => 
+                 AnnouncementMonthCalendarViewData.Create(dateTime, isCurrentMonth, announcements, days)));
          }
     }
 }

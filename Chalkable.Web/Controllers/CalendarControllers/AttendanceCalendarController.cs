@@ -15,37 +15,31 @@ namespace Chalkable.Web.Controllers.CalendarControllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult MonthForClass(Guid classId, DateTime? date)
         {
-            DateTime start, end;
-            MonthCalendar(ref date, out start, out end);
-            var attQuery = new ClassAttendanceQuery
-                {
-                    ClassId = classId,
-                    SchoolYearId = GetCurrentSchoolYearId(),
-                    Type = AttendanceTypeEnum.Absent | AttendanceTypeEnum.Excused | AttendanceTypeEnum.Late,
-                    FromDate = start,
-                    ToDate = end
-                };
-            var attendance = SchoolLocator.AttendanceService.GetClassAttendanceComplex(attQuery);
-            var res = PrepareMonthCalendar(start, end, date.Value
-                , (time, b) => AttendanceForClassCalendarItemViewData.Create(time, b, classId, attendance));
-            return Json(res, 6);
+            var type = AttendanceTypeEnum.Absent | AttendanceTypeEnum.Excused | AttendanceTypeEnum.Late;
+            var attQuery = new ClassAttendanceQuery {ClassId = classId, Type = type};
+            return AttendancesForMonth(date, attQuery, (dateTime, isCurrentMonth, atts) =>
+               AttendanceForClassCalendarViewData.Create(dateTime, isCurrentMonth, classId, atts));
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult MonthForPerson(Guid personId, DateTime? date)
         {
+            var attQuery = new ClassAttendanceQuery { StudentId = personId};
+            return AttendancesForMonth(date, attQuery, (dateTime, isCurrentMonth, atts) =>
+                AttendanceForStudentCalendarViewData.Create(dateTime, isCurrentMonth, personId, atts));
+        }
+
+
+        private ActionResult AttendancesForMonth(DateTime? date, ClassAttendanceQuery query,
+                Func<DateTime, bool, IList<ClassAttendanceComplex>, MonthCalendarViewData> createAction)
+        {
             DateTime start, end;
             MonthCalendar(ref date, out start, out end);
-            var attQuery = new ClassAttendanceQuery
-            {
-                SchoolYearId = GetCurrentSchoolYearId(),
-                FromDate = start,
-                ToDate = end,
-                StudentId = personId
-            };
-            var attendances = SchoolLocator.AttendanceService.GetClassAttendanceComplex(attQuery);
-            var res = PrepareMonthCalendar(start, end, date.Value
-                , (time, b) => AttendanceForStudentCalendarViewData.Create(time, b, personId, attendances));
+            query.FromDate = start;
+            query.ToDate = end;
+            query.SchoolYearId = GetCurrentSchoolYearId();
+            var attendances = SchoolLocator.AttendanceService.GetClassAttendanceComplex(query);
+            var res = PrepareMonthCalendar(start, end, date.Value, (time, b) => createAction(time, b, attendances));
             return Json(res, 6);
         }
     }

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.CalendarsViewData;
 
-namespace Chalkable.Web.Controllers
+namespace Chalkable.Web.Controllers.CalendarControllers
 {
     public class CalendarController : ChalkableController
     {
