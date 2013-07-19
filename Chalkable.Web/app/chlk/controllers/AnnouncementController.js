@@ -24,7 +24,14 @@ NAMESPACE('chlk.controllers', function (){
             var classes = this.classService.getClassesForTopBar();
             var topModel = new chlk.models.class.ClassesForTopBar();
             topModel.setTopItems(classes);
-            classId_ && topModel.setSelectedItemId(classId_);
+            if(classId_){
+                topModel.setSelectedItemId(classId_);
+                var classInfo = this.classService.getClassAnnouncementInfo(classId_);
+                model.setClassInfo(classInfo);
+            }
+            if(announcementTypeId_){
+                model.setSelectedTypeId(announcementTypeId_);
+            }
             model.setTopData(topModel);
             announcementTypeId_ && model.setAnnouncementTypeId(announcementTypeId_);
             var result = new ria.async.DeferredData(model);

@@ -1,4 +1,3 @@
-REQUIRE('chlk.models.announcement.AnnouncementType');
 REQUIRE('chlk.models.class.ClassForTopBar');
 
 NAMESPACE('chlk.models.class', function () {

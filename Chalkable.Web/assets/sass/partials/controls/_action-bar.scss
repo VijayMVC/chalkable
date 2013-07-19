@@ -68,6 +68,8 @@ DIV#content-wrapper{
     height: 34px;
     border-bottom: 1px solid $border-color;
     border-top: 1px solid white;
+    white-space: nowrap;
+    overflow: hidden;
 
     .action-link, .action-button{
       text-decoration: none;
