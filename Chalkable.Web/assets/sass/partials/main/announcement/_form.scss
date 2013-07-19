@@ -1,0 +1,23 @@
+.announcement-form{
+
+}
+
+.choose-class{
+  top: 152px;
+  width: 210px;
+  height: 40px;
+  background: url(images/announcement/choose-class.png);
+}
+
+.choose-type{
+  top: 202px;
+  width: 205px;
+  height: 45px;
+  background: url(images/announcement/choose-type.png);
+}
+
+.choose-type, .choose-class{
+  position: absolute;
+  left: 271px;
+  display: block;
+}

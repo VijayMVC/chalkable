@@ -5,7 +5,7 @@ mixin LeftRightToolbar(data, tplClass)
         .first-container
             .second-container
                 each item in data
-                    -configs.pressAfterClick && item.setPressed(configs.selectedItemId == item.getId());
+                    -configs.pressAfterClick && item.setPressed(configs.selectedItemId == item.getId().valueOf());
                     +RenderWith(item, tplClass)
         .A(class=configs.disableNextButton ? configs.disabledClass : "").next-button.arrow
         if(configs.needDots)

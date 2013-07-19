@@ -1,4 +1,4 @@
-REQUIRE('ria.mvc.TemplateActivity');
+REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.announcement.AnnouncementForm');
 REQUIRE('chlk.templates.class.TopBar');
 
@@ -8,5 +8,6 @@ NAMESPACE('chlk.activities.announcement', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AnnouncementForm)],
-        'AnnouncementFormPage', EXTENDS(ria.mvc.TemplateActivity), [ ]);
+        [chlk.activities.lib.PageClass('new-item')],
+        'AnnouncementFormPage', EXTENDS(chlk.activities.lib.TemplatePage), [ ]);
 });

@@ -12,7 +12,6 @@ NAMESPACE('chlk.models.class', function () {
             [ria.serialize.SerializeProperty('classid')],
             chlk.models.class.ClassId, 'classId',
             ArrayOf(Number), 'mask',
-            [ria.serialize.SerializeProperty('typesbyclass')],
             ArrayOf(chlk.models.announcement.AnnouncementType), 'typesByClass'
         ]);
 });

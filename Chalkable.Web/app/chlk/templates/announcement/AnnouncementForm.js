@@ -14,6 +14,10 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             Number, 'announcementTypeId',
             [ria.templates.ModelPropertyBind],
-            chlk.models.class.ClassesForTopBar, 'topData'
+            chlk.models.class.ClassesForTopBar, 'topData',
+            [ria.templates.ModelPropertyBind],
+            chlk.models.class.ClassForWeekMask, 'classInfo',
+            [ria.templates.ModelPropertyBind],
+            Number, 'selectedTypeId'
         ])
 });

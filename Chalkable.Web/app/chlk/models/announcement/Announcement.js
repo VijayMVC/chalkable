@@ -1,4 +1,3 @@
-REQUIRE('chlk.models.announcement.AnnouncementType');
 REQUIRE('chlk.models.common.ChlkDate');
 
 NAMESPACE('chlk.models.announcement', function () {

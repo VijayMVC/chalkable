@@ -7,6 +7,8 @@ NAMESPACE('chlk.models.announcement', function () {
     /** @class chlk.models.announcement.AnnouncementForm*/
     CLASS(
         'AnnouncementForm', EXTENDS(chlk.models.announcement.Announcement), [
-            chlk.models.class.ClassesForTopBar, 'topData'
+            chlk.models.class.ClassesForTopBar, 'topData',
+            chlk.models.class.ClassForWeekMask, 'classInfo',
+            Number, 'selectedTypeId'
         ]);
 });
