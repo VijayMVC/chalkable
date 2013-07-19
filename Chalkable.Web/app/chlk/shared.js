@@ -29,3 +29,9 @@ function HtmlEncode(s)
 function getActionButtons(){
     return [Msg.Password_reset, Msg.New_SIS_info_CSV, Msg.School_setup, Msg.Invite_users];
 }
+
+Object.extend = function(destination, source) {
+  for (var property in source)
+    destination[property] = source[property];
+  return destination;
+};

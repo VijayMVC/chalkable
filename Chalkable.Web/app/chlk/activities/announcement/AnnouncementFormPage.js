@@ -1,5 +1,6 @@
 REQUIRE('ria.mvc.TemplateActivity');
 REQUIRE('chlk.templates.announcement.AnnouncementForm');
+REQUIRE('chlk.templates.class.TopBar');
 
 NAMESPACE('chlk.activities.announcement', function () {
 

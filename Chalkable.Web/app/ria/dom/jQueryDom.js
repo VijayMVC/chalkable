@@ -144,7 +144,7 @@ NAMESPACE('ria.dom', function () {
             OVERRIDE, SELF, function descendants(selector__) {},
             [[String]],
             OVERRIDE, SELF, function parent(selector_) {
-                return new ria.dom.Dom(this._dom.parent(selector_));
+                return new ria.dom.Dom(this._dom.parents(selector_));
             },
             [[String]],
             OVERRIDE, SELF, function next(selector_) {},
@@ -200,6 +200,13 @@ NAMESPACE('ria.dom', function () {
             OVERRIDE, SELF, function setValue(value) {
                 this._dom.val(value);
                 return this;
+            },
+
+            OVERRIDE, Number, function height() {
+                return this._dom[0] ? this._dom[0].getBoundingClientRect().height : null;
+            },
+            OVERRIDE, Number, function width() {
+                return this._dom[0] ? this._dom[0].getBoundingClientRect().width : null;
             },
 
             /* data attributes */
