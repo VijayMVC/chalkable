@@ -74,6 +74,21 @@ namespace Chalkable.Data.Master.Model
         public Guid SchoolRef { get; set; }
         [DataEntityAttr]
         public User User { get; set; }
+
+        [NotDbFieldAttr]
+        public string DisplayName
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(Name) ? Name : Email;
+            }
+        }
+        [NotDbFieldAttr]
+        public string Email
+        {
+            get { return User.Login; }            
+        }
+
     }
 
     public class ApplicationRating

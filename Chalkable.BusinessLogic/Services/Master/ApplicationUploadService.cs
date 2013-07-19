@@ -164,7 +164,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 throw new ChalkableException(ChlkResources.ERR_APP_DEV_INFO_MISSING);
 
             application = EditApplication(application, appInfo, true, ApplicationStateEnum.SubmitForApprove);
-            //ServiceLocator.EmailService.SendApplicationEmailToSysadmin(application); TODO: need mail service
+            ServiceLocator.EmailService.SendApplicationEmailToSysadmin(application); 
             return application;    
         }
 
@@ -190,7 +190,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                     da.Update(application);
                     uow.Commit();
                 }
-                //ServiceLocator.EmailService.SendApplicationEmailToDeveloper(application); //TODO: need mail service. think about this
+                ServiceLocator.EmailService.SendApplicationEmailToDeveloper(application);
                 return true;
             }
             return false;

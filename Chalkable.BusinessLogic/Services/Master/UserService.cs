@@ -20,6 +20,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void ChangePassword(string login, string newPassword);
         void ChangeUserLogin(Guid id, string login);
         IList<User> GetUsers();
+        User GetSysAdmin();
     }
 
     public class UserService : MasterServiceBase, IUserService
@@ -165,6 +166,15 @@ namespace Chalkable.BusinessLogic.Services.Master
                 user.Login = login;
                 new UserDataAccess(uow).Update(user);
                 uow.Commit();
+            }
+        }
+
+
+        public User GetSysAdmin()
+        {
+            using (var uow = Read())
+            {
+                return new UserDataAccess(uow).GetSysAdmin();
             }
         }
     }

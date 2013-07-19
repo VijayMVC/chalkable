@@ -78,6 +78,12 @@ namespace Chalkable.Data.Master.DataAccess
             }
         }
 
+        public User GetSysAdmin()
+        {
+            var conds = new Dictionary<string, object> {{"IsSysAdmin", true}};
+            return GetUser(conds);
+        }
+
         public User GetUser(string login, string password, Guid? id)
         {
             var conds = new Dictionary<string, object>();

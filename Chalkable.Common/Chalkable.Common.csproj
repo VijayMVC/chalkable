@@ -67,6 +67,7 @@
     <Compile Include="StringTools.cs" />
     <Compile Include="UrlTools.cs" />
     <Compile Include="Web\ChalkableJsonResponce.cs" />
+    <Compile Include="Web\EmailTools.cs" />
     <Compile Include="Web\JavaScriptString.cs" />
     <Compile Include="Web\MagicJSONSerializer.cs" />
     <Compile Include="Web\MimeHelper.cs" />

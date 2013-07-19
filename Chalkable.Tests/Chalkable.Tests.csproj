@@ -54,6 +54,7 @@
     <Compile Include="Services\Master\BackgrounTaskServiceTest.cs" />
     <Compile Include="Services\Master\BaseMasterServiceLocatorTest.cs" />
     <Compile Include="Services\Master\DepartmentServiceTest.cs" />
+    <Compile Include="Services\Master\EmailTestService.cs" />
     <Compile Include="Services\Master\MasterServiceTestBase.cs" />
     <Compile Include="Services\Master\PictureServiceTest.cs" />
     <Compile Include="Services\Master\SchoolServiceTest.cs" />

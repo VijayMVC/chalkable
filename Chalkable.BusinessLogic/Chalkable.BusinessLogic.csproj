@@ -51,6 +51,7 @@
     <Compile Include="Model\AttachmentContentInfo.cs" />
     <Compile Include="Model\BlobContainerInfo.cs" />
     <Compile Include="Model\BlobInfo.cs" />
+    <Compile Include="Model\EmailInfo.cs" />
     <Compile Include="Model\RecipientInfo.cs" />
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="Services\Master\CategoryService.cs" />
     <Compile Include="Services\Master\DistrictService.cs" />
     <Compile Include="Services\Master\ChalkableDepartmentService.cs" />
+    <Compile Include="Services\Master\EmailService.cs" />
     <Compile Include="Services\Master\PictureServices\CourseIconService.cs" />
     <Compile Include="Services\Master\PictureServices\DepartmentIconService.cs" />
     <Compile Include="Services\Master\PictureServices\PersonPictureService.cs" />
