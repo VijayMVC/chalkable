@@ -20,7 +20,10 @@ namespace Chalkable.Data.School.DataAccess
         private const string PERSON_ID_PARAM = "personId";
         private const string START_PARAM = "start";
         private const string COUNT_PARAM = "count";
-
+        private const string FILTER1_PARAM = "filter1";
+        private const string FILTER2_PARAM = "filter2";
+        private const string FILTER3_PARAM = "filter3";
+        
         public ClassQueryResult GetClassesComplex(ClassQuery query)
         {
             var parameters = new Dictionary<string, object>
@@ -33,6 +36,25 @@ namespace Chalkable.Data.School.DataAccess
                     {START_PARAM, query.Start},
                     {COUNT_PARAM, query.Count}
                 };
+
+            string filter1 = null;
+            string filter2 = null;
+            string filter3 = null;
+            if (!string.IsNullOrEmpty(query.Filter))
+            {
+                string[] sl = query.Filter.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                if (sl.Length > 0)
+                    filter1 = string.Format(FILTER_FORMAT, sl[0]);
+                if (sl.Length > 1)
+                    filter2 = string.Format(FILTER_FORMAT, sl[1]);
+                if (sl.Length > 2)
+                    filter3 = string.Format(FILTER_FORMAT, sl[2]);
+            }
+            parameters.Add(FILTER1_PARAM, filter1);
+            parameters.Add(FILTER2_PARAM, filter2);
+            parameters.Add(FILTER3_PARAM, filter3);
+
+
             using (var reader = ExecuteStoredProcedureReader(GET_CLASSES_PROC, parameters))
             {
                 var sourceCount = reader.Read() ? SqlTools.ReadInt32(reader, "SourceCount") : 0;
@@ -56,8 +78,11 @@ namespace Chalkable.Data.School.DataAccess
         public Guid? MarkingPeriodId { get; set; }
         public Guid? ClassId { get; set; }
         public Guid? PersonId { get; set; }
+        public string Filter { get; set; }
+        
         public int Start { get; set; }
         public int Count { get; set; }
+
 
         public ClassQuery()
         {

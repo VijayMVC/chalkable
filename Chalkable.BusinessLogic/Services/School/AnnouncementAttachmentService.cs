@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic;
@@ -15,6 +16,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Announcement AddAttachment(Guid announcementId, byte[] content, string name, string uuid);
         void DeleteAttachment(Guid announcementAttachmentId);
         PaginatedList<AnnouncementAttachment> GetAttachments(Guid announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true);
+        IList<AnnouncementAttachment> GetAttachments(string filter);
         AnnouncementAttachment GetAttachmentById(Guid announcementAttachmentId);
         AttachmentContentInfo GetAttachmentContent(Guid announcementAttachmentId);
     }
@@ -105,6 +107,13 @@ namespace Chalkable.BusinessLogic.Services.School
             var att = GetAttachmentById(announcementAttachmentId);
             var content =  ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS, announcementAttachmentId.ToString());
             return AttachmentContentInfo.Create(att, content);
+        }
+        public IList<AnnouncementAttachment> GetAttachments(string filter)
+        {
+            using (var uow = Read())
+            {
+                return new AnnouncementAttachmentDataAccess(uow).GetList(Context.UserId, Context.Role.Id, filter);
+            }
         }
     }
 }

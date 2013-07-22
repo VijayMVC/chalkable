@@ -8,6 +8,8 @@ namespace Chalkable.Data.Common
 {
     public class DataAccessBase<TEntity> where TEntity : new()
     {
+        protected const string FILTER_FORMAT = "%{0}%";
+        
         private UnitOfWork unitOfWork;
         public DataAccessBase(UnitOfWork unitOfWork)
         {

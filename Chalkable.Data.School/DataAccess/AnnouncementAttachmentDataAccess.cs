@@ -10,6 +10,8 @@ namespace Chalkable.Data.School.DataAccess
 {
     public class AnnouncementAttachmentDataAccess : DataAccessBase<AnnouncementAttachment>
     {
+
+
         public AnnouncementAttachmentDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
@@ -20,10 +22,10 @@ namespace Chalkable.Data.School.DataAccess
             return GetAnnouncementAttachments(conds, callerId, roleId).First();
         }
 
-        public IList<AnnouncementAttachment> GetList(Guid callerId, int roleId)
+        public IList<AnnouncementAttachment> GetList(Guid callerId, int roleId, string filter = null)
         {
             var conds = new Dictionary<string, object> ();
-            return GetAnnouncementAttachments(conds, callerId, roleId);
+            return GetAnnouncementAttachments(conds, callerId, roleId, filter);
         }
 
         public PaginatedList<AnnouncementAttachment> GetPaginatedList(Guid announcementId, Guid callerId, int roleId, int start, int count, bool needsAllAttachments = true)
@@ -38,20 +40,13 @@ namespace Chalkable.Data.School.DataAccess
         }
 
         //private const string CALLER_ID = "@callerId"
-        private IList<AnnouncementAttachment> GetAnnouncementAttachments(Dictionary<string, object> conds, Guid callerId, int roleId)
+        private IList<AnnouncementAttachment> GetAnnouncementAttachments(Dictionary<string, object> conds, Guid callerId, int roleId, string filter = null)
         {
-            var query = BuildGetAttachmentQuery(conds, callerId, roleId);
-            if (query == null)
-            {
-                return new List<AnnouncementAttachment>();
-            }
-            using (var reader = ExecuteReaderParametrized(query.Sql, query.Parameters as Dictionary<string,object>))
-            {
-                return reader.ReadList<AnnouncementAttachment>();
-            }
+            var query = BuildGetAttachmentQuery(conds, callerId, roleId, true, filter);
+            return query == null ? new List<AnnouncementAttachment>() : ReadMany<AnnouncementAttachment>(query);
         }
 
-        private DbQuery BuildGetAttachmentQuery(Dictionary<string, object> conds,  Guid callerId, int roleId, bool needsAllAttachments = true)
+        private DbQuery BuildGetAttachmentQuery(Dictionary<string, object> conds,  Guid callerId, int roleId, bool needsAllAttachments = true, string filter = null)
         {
 
             var sql = @"select {0}
@@ -65,6 +60,28 @@ namespace Chalkable.Data.School.DataAccess
                 b.Append(" where ");
             if (!needsAllAttachments)
                 b.Append(" and AnnouncementAttachment.PersonRef = @callerId");
+            
+            if (!string.IsNullOrEmpty(filter))
+            {
+                string[] sl = filter.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                var filters = new List<string>();
+                if (sl.Length > 0)
+                {
+                    filters.Add("@filter1");
+                    conds.Add("@filter1", string.Format(FILTER_FORMAT, sl[0]));
+                }
+                if (sl.Length > 1)
+                {
+                    filters.Add("@filter3");
+                    conds.Add("@filter2", string.Format(FILTER_FORMAT, sl[1]));
+                }
+                if (sl.Length > 2)
+                {
+                    filters.Add("@filter2");
+                    conds.Add("@filter3", string.Format(FILTER_FORMAT, sl[2]));
+                }
+                b.AppendFormat(" and (LOWER(Name) like {0})", filters.JoinString(" or LOWER(Name) like "));
+            }
 
             conds.Add("@callerId", callerId);
             conds.Add("@roleId", roleId);

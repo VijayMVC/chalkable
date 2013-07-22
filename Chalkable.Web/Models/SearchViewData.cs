@@ -1,0 +1,221 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using Chalkable.Common;
+using Chalkable.Common.Exceptions;
+using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.Model;
+
+namespace Chalkable.Web.Models
+{
+    public class SearchViewData
+    {
+        public Guid Id { get; set; }
+        public string Description { get; set; }
+        public int SearchType { get; set; }
+
+
+        public static IList<SearchViewData> Create(IDictionary<SearchTypeEnum, Object> searchResult)
+        {
+            IDictionary<SearchTypeEnum, BaseSearchResultBuilder> mapper = new Dictionary<SearchTypeEnum, BaseSearchResultBuilder>();
+            var res = new List<SearchViewData>();
+            PreperingBuilderMapper(mapper);
+            foreach (var searchValue in searchResult)
+            {
+                res.AddRange(mapper[searchValue.Key].Build(searchValue.Value));
+            }
+            return res;
+        }
+
+        private static void PreperingBuilderMapper(IDictionary<SearchTypeEnum, BaseSearchResultBuilder> mapper)
+        {
+            mapper.Add(SearchTypeEnum.Persons, new SearchPersonBuilder(SearchTypeEnum.Persons));
+            mapper.Add(SearchTypeEnum.Applications, new SearchApplicationBuilder(SearchTypeEnum.Applications));
+            mapper.Add(SearchTypeEnum.Announcements, new SearchAnnouncementBuilder(SearchTypeEnum.Announcements));
+            mapper.Add(SearchTypeEnum.Attachments, new SearchAttachmentBuilder(SearchTypeEnum.Attachments));
+            mapper.Add(SearchTypeEnum.Classes, new SearchClassBuilder(SearchTypeEnum.Classes));
+
+        }
+    }
+
+
+    public class PersonSearchViewData : SearchViewData
+    {
+        public string Role { get; set; }
+        public string Gender { get; set; }
+        
+        public static SearchViewData Create(Person person)
+        {
+            return new PersonSearchViewData
+            {
+                Description = person.FullName,
+                Id = person.Id,
+                Role = CoreRoles.GetById(person.RoleRef).LoweredName,
+                Gender = person.Gender,
+                SearchType = (int)SearchTypeEnum.Persons,
+            };
+        }
+    }
+    public class ApplicationSearchViewData : SearchViewData
+    {
+        public Guid? SmallPictureId { get; set; }
+        public Guid? BigPictureId { get; set; }
+
+        public static SearchViewData Create(Application application)
+        {
+            return new ApplicationSearchViewData
+            {
+                Id = application.Id,
+                Description = application.Name,
+                SmallPictureId = application.SmallPictureRef,
+                BigPictureId = application.BigPictureRef,
+                SearchType = (int)SearchTypeEnum.Applications
+            };
+        }
+    }
+    public class AnnouncementSearchViewData : SearchViewData
+    {
+        public int? AnnouncementType { get; set; }
+        public static SearchViewData Create(AnnouncementComplex announcement)
+        {
+            return new AnnouncementSearchViewData
+            {
+                Id = announcement.Id,
+                Description = string.Format("{0} {1} {2}", announcement.Title, announcement.AnnouncementTypeName, announcement.Order),
+                AnnouncementType = announcement.AnnouncementTypeRef,
+                SearchType = (int)SearchTypeEnum.Announcements
+            };
+        }
+    }
+    public class AttachmentSearchViewData : SearchViewData
+    {
+        public Guid AnnouncementId { get; set; }
+        public static SearchViewData Create(AnnouncementAttachment attachment)
+        {
+            return new AttachmentSearchViewData
+            {
+                Id = attachment.Id,
+                Description = attachment.Name,
+                AnnouncementId = attachment.AnnouncementRef,
+                SearchType = (int)SearchTypeEnum.Attachments
+            };
+        }
+    }
+
+    public class ClassSearchViewData : SearchViewData
+    {
+        public Guid CourseId { get; set; }
+        public static SearchViewData Create(Class cClass)
+        {
+            return new ClassSearchViewData
+            {
+                Id = cClass.Id,
+                Description = cClass.Name,
+                CourseId = cClass.CourseRef,
+                SearchType = (int)SearchTypeEnum.Classes
+            };
+        }
+    }
+
+
+    public abstract class BaseSearchResultBuilder
+    {
+        protected int searchType;
+        public BaseSearchResultBuilder(SearchTypeEnum searchTypeEnum)
+        {
+            searchType = (int)searchTypeEnum;
+        }
+
+        public abstract IList<SearchViewData> Build(Object searchRes);
+    }
+    public class SearchPersonBuilder : BaseSearchResultBuilder
+    {
+        public SearchPersonBuilder(SearchTypeEnum searchTypeEnum)
+            : base(searchTypeEnum)
+        {
+        }
+
+        public override IList<SearchViewData> Build(Object searchRes)
+        {
+            var schoolPersons = searchRes as IList<Person>;
+            if (schoolPersons == null || (SearchTypeEnum)searchType != SearchTypeEnum.Persons)
+                throw new ChalkableException("Invalid search View Builder for such search type");
+
+            return schoolPersons.Select(PersonSearchViewData.Create).ToList();
+        }
+    }
+    public class SearchApplicationBuilder : BaseSearchResultBuilder
+    {
+        public SearchApplicationBuilder(SearchTypeEnum searchTypeEnum)
+            : base(searchTypeEnum)
+        {
+        }
+
+        public override IList<SearchViewData> Build(Object searchRes)
+        {
+            var applications = searchRes as IList<Application>;
+            if (applications == null || (SearchTypeEnum)searchType != SearchTypeEnum.Applications)
+                throw new ChalkableException(ChlkResources.ERR_INVALID_SEARCH_VIEW_BUILDER);
+
+            return applications.Select(ApplicationSearchViewData.Create).ToList();
+        }
+    }
+    public class SearchAnnouncementBuilder : BaseSearchResultBuilder
+    {
+        public SearchAnnouncementBuilder(SearchTypeEnum searchTypeEnum)
+            : base(searchTypeEnum)
+        {
+        }
+
+        public override IList<SearchViewData> Build(Object searchRes)
+        {
+            var announcements = searchRes as IList<AnnouncementComplex>;
+            if (announcements == null || (SearchTypeEnum)searchType != SearchTypeEnum.Announcements)
+                throw new ChalkableException(ChlkResources.ERR_INVALID_SEARCH_VIEW_BUILDER);
+
+            return announcements.Select(AnnouncementSearchViewData.Create).ToList();
+        }
+    }
+    public class SearchAttachmentBuilder : BaseSearchResultBuilder
+    {
+        public SearchAttachmentBuilder(SearchTypeEnum searchTypeEnum)
+            : base(searchTypeEnum)
+        {
+        }
+
+        public override IList<SearchViewData> Build(Object searchRes)
+        {
+            var attachment = searchRes as IList<AnnouncementAttachment>;
+            if (attachment == null || (SearchTypeEnum)searchType != SearchTypeEnum.Attachments)
+                throw new ChalkableException(ChlkResources.ERR_INVALID_SEARCH_VIEW_BUILDER);
+
+            return attachment.Select(AttachmentSearchViewData.Create).ToList();
+        }
+    }
+    public class SearchClassBuilder : BaseSearchResultBuilder
+    {
+        public SearchClassBuilder(SearchTypeEnum searchTypeEnum)
+            : base(searchTypeEnum)
+        {
+        }
+
+        public override IList<SearchViewData> Build(object searchRes)
+        {
+            var classes = searchRes as IList<Class>;
+            if (classes == null || (SearchTypeEnum)searchType != SearchTypeEnum.Classes)
+                throw new ChalkableException(ChlkResources.ERR_INVALID_SEARCH_VIEW_BUILDER);
+            return classes.Select(ClassSearchViewData.Create).ToList();
+        }
+    }
+
+
+    public enum SearchTypeEnum
+    {
+        Persons = 0,
+        Applications = 1,
+        Announcements = 2,
+        Attachments = 3,
+        Classes = 4
+    }
+}

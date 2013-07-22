@@ -22,6 +22,7 @@ namespace Chalkable.BusinessLogic.Services.School
         ClassComplex DeleteClassFromMarkingPeriod(Guid classId, Guid markingPeriodId);
 
         IList<ClassComplex> GetClasses(Guid? schoolYearId, Guid? markingPeriodId, Guid? personId, int start = 0, int count = int.MaxValue);
+        IList<ClassComplex> GetClasses(string filter);
         PaginatedList<ClassComplex> GetClasses(Guid? schoolYearId, int start = 0, int count = int.MaxValue);
         ClassPerson GetClassPerson(Guid classId, Guid personId);
         void Delete(Guid id);
@@ -269,6 +270,11 @@ namespace Chalkable.BusinessLogic.Services.School
                     Count = count
                 });
             return new PaginatedList<ClassComplex>(res.Classes, start / count, count, res.SourceCount);
+        }
+
+        public IList<ClassComplex> GetClasses(string filter)
+        {
+            return GetClasses(new ClassQuery {Filter = filter});
         }
     }
 }
