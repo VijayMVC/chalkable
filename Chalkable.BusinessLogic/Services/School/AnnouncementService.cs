@@ -416,7 +416,5 @@ namespace Chalkable.BusinessLogic.Services.School
                 return new AnnouncementDataAccess(uow).GetAnnouncementRecipientPersons(announcementId, Context.UserId);
             }
         }
-
-
     }
 }

@@ -1260,11 +1260,10 @@ button.toplogin .closer:active {
   background: #f9f9f9;
   color: #444;
   text-shadow: none;
-  -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
-  -o-border-radius: 4px;
+  -moz-border-radius: 4px;
   -ms-border-radius: 4px;
-  -khtml-border-radius: 4px;
+  -o-border-radius: 4px;
   border-radius: 4px;
 }
 
@@ -1274,9 +1273,8 @@ button.toplogin .closer:active {
 }
 /* line 332, ../assets/sass/screen-index.scss */
 .fancybox-opened .fancybox-skin {
-  -moz-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-  -o-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 

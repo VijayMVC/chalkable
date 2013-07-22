@@ -39,7 +39,7 @@ namespace Chalkable.Data.Common.Storage
         {
             var t = GetTable();
             var rangeQuery = new TableQuery<T>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, key)).Take(start + count);
-            var res = t.ExecuteQuery(rangeQuery).Skip(count).ToList();
+            var res = t.ExecuteQuery(rangeQuery).Skip(start).ToList();
             return new PaginatedList<T>(res, start / count, count);
         }
 

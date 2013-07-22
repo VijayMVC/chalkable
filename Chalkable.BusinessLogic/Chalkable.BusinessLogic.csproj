@@ -87,6 +87,7 @@
     <Compile Include="Services\School\AnnouncementService.cs" />
     <Compile Include="Services\School\AnnouncementTypeService.cs" />
     <Compile Include="Services\School\ApplicationSchoolService.cs" />
+    <Compile Include="Services\School\AppMarketService.cs" />
     <Compile Include="Services\School\AttendanceReasonService.cs" />
     <Compile Include="Services\School\AttendanceService.cs" />
     <Compile Include="Services\School\CalendarDateService.cs" />

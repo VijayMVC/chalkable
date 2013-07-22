@@ -315,7 +315,6 @@ body {
   background: -webkit-linear-gradient(top, #ffffff, #dadada) !important;
   background: -moz-linear-gradient(top, #ffffff, #dadada) !important;
   background: -o-linear-gradient(top, #ffffff, #dadada) !important;
-  background: -ms-linear-gradient(top, #ffffff, #dadada) !important;
   background: linear-gradient(top, #ffffff, #dadada) !important;
 }
 /* line 58, ../assets/sass/partials/index/_form.scss */
