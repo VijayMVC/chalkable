@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Linq;
 using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -42,54 +44,77 @@ namespace Chalkable.Data.Master.DataAccess
             return res;
         }
 
-        public IList<Application> GetApplications(Guid userId, int role, string orderBy = null, bool includeInternal = false, Guid? categoryId = null)
+
+        private DbQuery BuildGetApplicationsQuery(Guid userId, int role, bool includeInternal, Guid? categoryId, bool isDeveloperSchool)
         {
             var sql = new StringBuilder();
-            sql.Append("select Application.*, (select avg(rating) from ApplicationRating where ApplicationRef = Application.Id) as Avg from Application where 1 = 1");
+            sql.Append(@"select Application.*, (select avg(rating) from ApplicationRating where ApplicationRef = Application.Id) as Avg from Application where 1 = 1");
             var ps = new Dictionary<string, object>();
 
             if (role == CoreRoles.SUPER_ADMIN_ROLE.Id)
             {
                 //TODO: do nothing
             }
-            else 
+            else
             {
+                var sqlOperator = role == CoreRoles.DEVELOPER_ROLE.Id || isDeveloperSchool ? " <> " : " == ";
+                sql.Append(string.Format(" and [{0}] {1} @{0}", Application.STATE_FIELD, sqlOperator));
+                ps.Add(Application.STATE_FIELD, (int)ApplicationStateEnum.Live);
+                
                 if (role == CoreRoles.DEVELOPER_ROLE.Id)
                 {
                     sql.Append(string.Format(" and [{0}] = @{0}", Application.DEVELOPER_REF_FIELD));
                     ps.Add(Application.DEVELOPER_REF_FIELD, userId);
-                    sql.Append(string.Format(" and [{0}] <> @{0}", Application.STATE_FIELD));
                 }
-                else
-                    sql.Append(string.Format(" and [{0}] == @{0}", Application.STATE_FIELD));
-                ps.Add(Application.STATE_FIELD, (int)ApplicationStateEnum.Live);
 
                 if (!includeInternal)
                 {
                     sql.Append(string.Format(" and [{0}] <> 1", Application.IS_INTERNAL_FIELD));
                 }
-
                 if (role == CoreRoles.TEACHER_ROLE.Id)
                     sql.Append(string.Format(" and ([{0}] = 1 or [{1}] = 1 or [{2}] = 1)", Application.HAS_STUDENT_MY_APPS_FIELD, Application.HAS_TEACHER_MY_APPS_FIELD, Application.CAN_ATTACH_FIELD));
                 if (role == CoreRoles.STUDENT_ROLE.Id)
                     sql.Append(string.Format(" and [{0}] = 1", Application.HAS_STUDENT_MY_APPS_FIELD));
-                    
+    
             }
             if (categoryId.HasValue)
             {
                 sql.Append(string.Format(" and exists (select * from ApplicationCategory where ApplicationRef = Application.Id and CategoryRef = @{0})", "categoryId"));
                 ps.Add("categoryId", categoryId);
             }
-            orderBy = orderBy ?? Application.ID_FIELD;
-            var q = Orm.PaginationSelect(new DbQuery { Sql = sql.ToString(), Parameters = ps }, orderBy,
-                                                  Orm.OrderType.Desc, 0, int.MaxValue);
+            return new DbQuery {Sql = sql.ToString(), Parameters = ps};
 
-
-            using (var reader = ExecuteReaderParametrized(q.Sql, q.Parameters))
-            {
-                return reader.ReadList<Application>();
-            }
         }
+
+        private IList<Application> PreparePicturesData(IList<Application> applications)
+        {
+            var appIdParams = new List<string>();
+            var conds = new Dictionary<string, object>();
+            for (int i = 0; i < applications.Count; i++)
+            {
+                var appIdParam = "@applicationId_" + i;
+                conds.Add(appIdParam, applications[i].Id);
+                appIdParams.Add(appIdParam);
+            }
+            var sql = "select * from ApplicationPicture where ApplicationRef in ({0})";
+            sql = string.Format(sql, appIdParams.JoinString(","));
+            var pictures = ReadMany<ApplicationPicture>(new DbQuery {Sql = sql, Parameters = conds});
+            foreach (var app in applications)
+            {
+                app.Pictures = pictures.Where(x => x.ApplicationRef == app.Id).ToList();
+            }
+            return applications;
+        }
+        public PaginatedList<Application> GetPaginatedApplications(Guid userId, int role, bool isDeveloperSchool = false, string orderBy = null, bool includeInternal = false
+            , Guid? categoryId = null, int start = 0, int count = int.MaxValue)
+        {
+            var q = BuildGetApplicationsQuery(userId, role, includeInternal, categoryId, isDeveloperSchool);
+            if(string.IsNullOrEmpty(orderBy))
+               orderBy = Application.ID_FIELD;
+            q = Orm.PaginationSelect(q, orderBy, Orm.OrderType.Desc, start, count);
+            var paginatedApps = PaginatedSelect<Application>(q, orderBy, start, count);
+            return PreparePicturesData(paginatedApps) as PaginatedList<Application>;
+        }  
 
         public IList<ApplicationCategory> UpdateCategories(Guid id, IList<Guid> categories)
         {

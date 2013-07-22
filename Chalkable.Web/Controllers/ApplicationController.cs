@@ -17,6 +17,12 @@ namespace Chalkable.Web.Controllers
 
     public class ApplicationController : ChalkableController
     {
+        public ActionResult List(int? start, int? count)
+        {
+            var applications = MasterLocator.ApplicationService.GetApplications(start ?? 0, count ?? DEFAULT_PAGE_SIZE);
+            return Json(BaseApplicationViewData.Create(applications));
+        }
+
         [AuthorizationFilter("SysAdmin, Developer")]
         public ActionResult Create(Guid developerId, string name)
         {
@@ -69,6 +75,14 @@ namespace Chalkable.Web.Controllers
 
             return PrepareAppInfo(app);
         }
+
+        [AuthorizationFilter("SysAdmin, Developer")]
+        public ActionResult GetInfo(Guid applicationId)
+        {
+            var res = MasterLocator.ApplicationService.GetApplicationById(applicationId);
+            return PrepareAppInfo(res);
+        }
+
 
         [AuthorizationFilter("SysAdmin, Developer")]
         public ActionResult Delete(Guid applicationId)
@@ -128,7 +142,7 @@ namespace Chalkable.Web.Controllers
 
 
         private const string contentType = "text/html";
-        private ActionResult PrepareAppInfo(Application application)
+        private ActionResult PrepareAppInfo(Application application, bool needsliveApp = false)
         {
             var roles = new List<CoreRole>
                 {
@@ -139,7 +153,12 @@ namespace Chalkable.Web.Controllers
                     CoreRoles.STUDENT_ROLE,
                 };
             var categories = MasterLocator.CategoryService.ListCategories();
-            var res = BaseApplicationViewData.Create(application, roles, categories);
+            var res = ApplicationViewData.Create(application, roles, categories);
+            if (needsliveApp && application.OriginalRef.HasValue)
+            {
+                var liveApp = MasterLocator.ApplicationService.GetApplicationById(application.Id);
+                res.LiveApplication = ApplicationViewData.Create(liveApp, roles, categories);
+            }
             return Json(res, contentType);
         }
     }

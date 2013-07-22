@@ -13,7 +13,7 @@ namespace Chalkable.Web.Controllers
     {
         public ActionResult List(int? start, int? count)
         {
-            var res = SchoolLocator.CourseService.GetCourses(start ?? 0, count ?? 10);
+            var res = SchoolLocator.CourseService.GetCourses(start ?? 0, count ?? DEFAULT_PAGE_SIZE);
             return Json(res.Transform(CourseViewData.Create));
         }
     }

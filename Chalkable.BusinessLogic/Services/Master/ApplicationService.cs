@@ -13,7 +13,7 @@ namespace Chalkable.BusinessLogic.Services.Master
     {
         IList<AppPermissionType> GetPermisions(Guid applicationId);
         IList<AppPermissionType> GetPermisions(string applicationUrl);
-        IList<Application> GetApplications();
+        PaginatedList<Application> GetApplications(int start, int count);
         IList<Application> GetNewestApplications();
         IList<Application> GetHigestRatedApplications();
         IList<Application> GetPopularApplications();
@@ -38,7 +38,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             using (var uow = Read())
             {
-                var app = new ApplicationDataAccess(uow).GetApplicationById(applicationId);
+                var app = new ApplicationDataAccess(uow).
+                    GetApplicationById(applicationId);
                 return app.Permissions.Select(x => x.Permission).ToList();
             }
         }
@@ -52,31 +53,19 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public IList<Application> GetApplications()
+        public PaginatedList<Application> GetApplications(int start, int count)
         {
-            using (var uow = Read())
-            {
-                var apps = new ApplicationDataAccess(uow).GetApplications(Context.UserId, Context.Role.Id);
-                return apps;
-            }
+            return GetApplications(null, false, null, start, count);
         }
 
         public IList<Application> GetNewestApplications()
         {
-            using (var uow = Read())
-            {
-                var apps = new ApplicationDataAccess(uow).GetApplications(Context.UserId, Context.Role.Id, Application.CREATE_DATE_TIME_FIELD);
-                return apps;
-            }
+            return GetApplications(Application.CREATE_DATE_TIME_FIELD);
         }
 
         public IList<Application> GetHigestRatedApplications()
         {
-            using (var uow = Read())
-            {
-                var apps = new ApplicationDataAccess(uow).GetApplications(Context.UserId, Context.Role.Id, Application.AVG_FIELD);
-                return apps;
-            }
+            return GetApplications(Application.AVG_FIELD);
         }
 
         public IList<Application> GetPopularApplications()
@@ -94,20 +83,24 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public IList<Application> GetApplicationsByCategory(Guid categoryId)
         {
-            using (var uow = Read())
-            {
-                var apps = new ApplicationDataAccess(uow).GetApplications(Context.UserId, Context.Role.Id, Application.NAME_FIELD, false, categoryId);
-                return apps;
-            }
+            return GetApplications(Application.NAME_FIELD, false, categoryId);
         }
-        
-        public Application GetApplicationById(Guid id, bool includeInstallPermission = true)
+
+        private PaginatedList<Application> GetApplications(string orderByField = null, bool includeInternal = false,
+                                                           Guid? categoryId = null, int start = 0, int count = int.MaxValue)
         {
             using (var uow = Read())
             {
-                var apps = new ApplicationDataAccess(uow).GetApplications(Context.UserId, Context.Role.Id, Application.CREATE_DATE_TIME_FIELD, includeInstallPermission);
-                return apps.FirstOrDefault(x=>x.Id == id);
+                var apps = new ApplicationDataAccess(uow).GetPaginatedApplications(Context.UserId, Context.Role.Id, Context.IsDeveloperSchool
+                    , orderByField, includeInternal, categoryId, start, count);
+                return apps;
             }
+        }
+ 
+        
+        public Application GetApplicationById(Guid id, bool includeInstallPermission = true)
+        {
+            return GetApplications(Application.CREATE_DATE_TIME_FIELD, includeInstallPermission).FirstOrDefault();
         }
 
         //TODO: security

@@ -19,6 +19,9 @@ namespace Chalkable.Web.Controllers
 {
     public class ChalkableController : Controller
     {
+
+        protected const int DEFAULT_PAGE_SIZE = 10;
+
         public new ActionResult Json(object data, int serializationDepth = 10)
         {
             var response = (data is IPaginatedList) ? new ChalkableJsonPaginatedResponse((IPaginatedList)data) 

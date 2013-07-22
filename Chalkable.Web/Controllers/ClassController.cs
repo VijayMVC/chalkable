@@ -15,7 +15,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_CLASS_LIST, true, CallType.Post, new[] { AppPermissionType.Class })]
         public ActionResult List(Guid? schoolYearId, int? start, int? count)
         {
-            var res = SchoolLocator.ClassService.GetClasses(schoolYearId, start ?? 0, count ?? 10);
+            var res = SchoolLocator.ClassService.GetClasses(schoolYearId, start ?? 0, count ?? DEFAULT_PAGE_SIZE);
             return Json(res.Transform(ClassViewData.Create));
         }
 

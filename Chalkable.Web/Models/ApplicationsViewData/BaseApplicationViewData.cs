@@ -32,16 +32,9 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public bool CanAttach { get; set; }
         public bool ShowInGradeView { get; set; }
         public bool IsInternal { get; set; }
-        public IList<ApplicationPersmissionsViewData> Permissions { get; set; }
-        //public ApplicationRatingViewData ApplicationRating { get; set; }
         public ApplicationPriceViewData ApplicationPrice { get; set; }
-        public IList<CategoryViewData> Categories { get; set; }
-        public IList<GradeLevelViewData> GradelLevels { get; set; }
-        public IList<RoleVieawData> CanLaunchRoles { get; set; }
         public IList<Guid> Picturesid { get; set; }
-        public DeveloperViewData Developer { get; set; }
-        public BaseApplicationViewData LiveApplication { get; set; }
-
+       
 
         protected BaseApplicationViewData(Application application)
         {
@@ -51,15 +44,11 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             Url = application.Url;
             State = (int)application.State;
             DeveloperId = application.DeveloperRef;
-            Developer = DeveloperViewData.Create(application.Developer);
             Description = application.Description;
             ShortDescription = StringTools.BuildShortText(application.ShortDescription, SHORT_LENGHT);
             SmallPictureId = application.SmallPictureRef;
             BigPictureId = application.BigPictureRef;
-            Permissions = ApplicationPersmissionsViewData.Create(application.Permissions);
-            Picturesid = application.Pictures.Select(x => x.Id).ToList();
             ApplicationPrice = ApplicationPriceViewData.Create(application);
-
             HasAdminMyApps = application.HasAdminMyApps;
             HasStudentMyApps = application.HasStudentMyApps;
             HasTeacherMyApps = application.HasTeacherMyApps;
@@ -68,17 +57,43 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             ShowInGradeView = application.ShowInGradeView;
             LiveAppId = application.OriginalRef;
             IsInternal = application.IsInternal;
+            Picturesid = application.Pictures.Select(x => x.Id).ToList();
+    
         }
 
-        public static BaseApplicationViewData Create(Application application, IList<CoreRole> roles,  IList<Category> categories)
+        public static IList<BaseApplicationViewData> Create(IList<Application> applications)
         {
-            var res = new BaseApplicationViewData(application);
+            return applications.Select(x=>new BaseApplicationViewData(x)).ToList();
+
+        }
+    }
+
+
+    public class ApplicationViewData : BaseApplicationViewData
+    {
+        public IList<ApplicationPersmissionsViewData> Permissions { get; set; }
+        //public ApplicationRatingViewData ApplicationRating { get; set; }
+        public IList<CategoryViewData> Categories { get; set; }
+        public IList<GradeLevelViewData> GradelLevels { get; set; }
+        public IList<RoleVieawData> CanLaunchRoles { get; set; }
+        public DeveloperViewData Developer { get; set; }
+        public BaseApplicationViewData LiveApplication { get; set; }
+
+        protected ApplicationViewData(Application application): base(application)
+        {
+            Developer = DeveloperViewData.Create(application.Developer);
+            Permissions = ApplicationPersmissionsViewData.Create(application.Permissions);
+        }
+
+        public static ApplicationViewData Create(Application application, IList<CoreRole> roles, IList<Category> categories)
+        {
+            var res = new ApplicationViewData(application);
             categories = categories.Where(x => application.Categories.Any(y => y.CategoryRef == x.Id)).ToList();
             res.Categories = CategoryViewData.Create(categories);
             return res;
         }
 
-        public static IList<BaseApplicationViewData> Create(IList<Application> applications, IList<CoreRole> roles, IList<Category> categories)
+        public static IList<ApplicationViewData> Create(IList<Application> applications, IList<CoreRole> roles, IList<Category> categories)
         {
             return applications.Select(x => Create(x, roles, categories)).ToList();
         } 
