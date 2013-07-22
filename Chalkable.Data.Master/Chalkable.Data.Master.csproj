@@ -45,6 +45,7 @@
     <Compile Include="DataAccess\BackgroundTaskDataAccess.cs" />
     <Compile Include="DataAccess\CategoryDataAccess.cs" />
     <Compile Include="DataAccess\ChalkableDepartmentDataAccess.cs" />
+    <Compile Include="DataAccess\DeveloperDataAccess.cs" />
     <Compile Include="DataAccess\DistrictDataAccess.cs" />
     <Compile Include="DataAccess\PreferenceDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />

@@ -19,7 +19,7 @@ namespace Chalkable.Web.Controllers
     {
         public ActionResult List(int? start, int? count)
         {
-            var applications = MasterLocator.ApplicationService.GetApplications(start ?? 0, count ?? DEFAULT_PAGE_SIZE);
+            var applications = MasterLocator.ApplicationService.GetApplications(start ?? 0, count ?? DEFAULT_PAGE_SIZE, false);
             return Json(BaseApplicationViewData.Create(applications));
         }
 

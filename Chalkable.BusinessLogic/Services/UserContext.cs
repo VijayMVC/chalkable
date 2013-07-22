@@ -15,7 +15,6 @@ namespace Chalkable.BusinessLogic.Services
         
         public Guid UserId { get; private set; }
         public Guid? SchoolId { get; private set; }
-        public bool IsDeveloperSchool { get; private set; }
         public string Login { get; private set; }
         public string SchoolName { get; private set; }
         public CoreRole Role { get; private set; }
@@ -69,7 +68,7 @@ namespace Chalkable.BusinessLogic.Services
                     SchoolName ?? string.Empty,
                     Role.Id.ToString(CultureInfo.InvariantCulture),
                     SchoolServerUrl ?? string.Empty,
-                    SchoolTimeZoneId ?? string.Empty
+                    SchoolTimeZoneId ?? string.Empty,
                 };
             return parameters.JoinString(DELIMITER.ToString(CultureInfo.InvariantCulture));
         }

@@ -13,13 +13,13 @@ namespace Chalkable.BusinessLogic.Services.Master
     {
         IList<AppPermissionType> GetPermisions(Guid applicationId);
         IList<AppPermissionType> GetPermisions(string applicationUrl);
-        PaginatedList<Application> GetApplications(int start, int count);
+        PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null);
         IList<Application> GetNewestApplications();
         IList<Application> GetHigestRatedApplications();
         IList<Application> GetPopularApplications();
         IList<Application> GetFreeApplications();
         IList<Application> GetApplicationsByCategory(Guid categoryId);
-        Application GetApplicationById(Guid id, bool includeInstallPermission = true);
+        Application GetApplicationById(Guid id);
         Application GetApplicationByUrl(string url);
         ApplicationRating WriteReveiw(Guid applicationId, int rating, string review);
         IList<ApplicationRating> GetRatings(Guid applicationId);
@@ -53,19 +53,20 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public PaginatedList<Application> GetApplications(int start, int count)
+        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null)
         {
-            return GetApplications(null, false, null, start, count);
+            var query = new ApplicationQuery {Start = start, Count = count, Live = live};
+            return GetApplications(query);
         }
 
         public IList<Application> GetNewestApplications()
         {
-            return GetApplications(Application.CREATE_DATE_TIME_FIELD);
+            return GetApplications(new ApplicationQuery { OrderBy = Application.CREATE_DATE_TIME_FIELD });
         }
 
         public IList<Application> GetHigestRatedApplications()
         {
-            return GetApplications(Application.AVG_FIELD);
+            return GetApplications(new ApplicationQuery { OrderBy = Application.AVG_FIELD });
         }
 
         public IList<Application> GetPopularApplications()
@@ -83,24 +84,34 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public IList<Application> GetApplicationsByCategory(Guid categoryId)
         {
-            return GetApplications(Application.NAME_FIELD, false, categoryId);
+            var query = new ApplicationQuery {CategoryId = categoryId, OrderBy = Application.NAME_FIELD};
+            return GetApplications(query);
         }
 
-        private PaginatedList<Application> GetApplications(string orderByField = null, bool includeInternal = false,
-                                                           Guid? categoryId = null, int start = 0, int count = int.MaxValue)
+
+        private PaginatedList<Application> GetApplications(ApplicationQuery query)
         {
             using (var uow = Read())
             {
-                var apps = new ApplicationDataAccess(uow).GetPaginatedApplications(Context.UserId, Context.Role.Id, Context.IsDeveloperSchool
-                    , orderByField, includeInternal, categoryId, start, count);
-                return apps;
+                query.UserId = Context.UserId;
+                query.Role = Context.Role.Id;
+                return new ApplicationDataAccess(uow).GetPaginatedApplications(query);
             }
         }
  
         
-        public Application GetApplicationById(Guid id, bool includeInstallPermission = true)
+        public Application GetApplicationById(Guid id)
         {
-            return GetApplications(Application.CREATE_DATE_TIME_FIELD, includeInstallPermission).FirstOrDefault();
+            using (var uow = Read())
+            {
+                return new ApplicationDataAccess(uow)
+                    .GetApplication(new ApplicationQuery
+                        {
+                            Id = id,
+                            UserId = Context.UserId,
+                            Role = Context.Role.Id
+                        });
+            }
         }
 
         //TODO: security
