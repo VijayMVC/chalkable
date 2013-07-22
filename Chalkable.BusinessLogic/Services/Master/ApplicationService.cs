@@ -18,11 +18,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode filterMode = AppFilterMode.All
             , AppSortingMode sortingMode = AppSortingMode.Newest, int start = 0, int count = int.MaxValue);
 
-        IList<Application> GetNewestApplications();
-        IList<Application> GetHigestRatedApplications();
-        IList<Application> GetPopularApplications();
-        IList<Application> GetFreeApplications();
-        IList<Application> GetApplicationsByCategory(Guid categoryId);
         Application GetApplicationById(Guid id);
         Application GetApplicationByUrl(string url);
         ApplicationRating WriteReveiw(Guid applicationId, int rating, string review);
@@ -62,36 +57,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             var query = new ApplicationQuery {Start = start, Count = count, Live = live};
             return GetApplications(query);
         }
-
-        public IList<Application> GetNewestApplications()
-        {
-            return GetApplications(new ApplicationQuery { OrderBy = Application.CREATE_DATE_TIME_FIELD });
-        }
-
-        public IList<Application> GetHigestRatedApplications()
-        {
-            return GetApplications(new ApplicationQuery { OrderBy = Application.AVG_FIELD });
-        }
-
-        public IList<Application> GetPopularApplications()
-        {
-            //TODO: need to count installs on master
-            throw new NotImplementedException();
-        }
-
-        public IList<Application> GetFreeApplications()
-        {
-            var res = GetApplications();
-            return res.Where(x => x.Price == 0 && (!x.PricePerClass.HasValue || x.PricePerClass == 0)
-                && (!x.PricePerSchool.HasValue || x.PricePerSchool == 0)).ToList();
-        }
-
-        public IList<Application> GetApplicationsByCategory(Guid categoryId)
-        {
-            var query = new ApplicationQuery {CategoryIds = new List<Guid>{categoryId}, OrderBy = Application.NAME_FIELD};
-            return GetApplications(query);
-        }
-
 
         private PaginatedList<Application> GetApplications(ApplicationQuery query)
         {
