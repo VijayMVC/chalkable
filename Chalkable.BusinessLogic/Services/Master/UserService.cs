@@ -21,6 +21,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void ChangeUserLogin(Guid id, string login);
         IList<User> GetUsers();
         User GetSysAdmin();
+        Developer GetDeveloper(Guid schoolId);
     }
 
     public class UserService : MasterServiceBase, IUserService
@@ -74,8 +75,16 @@ namespace Chalkable.BusinessLogic.Services.Master
                     else
                         throw new Exception("User's role can not be defined");
                 }
-                
-                var res = new UserContext(user.Id, schoolId, user.Login, schoolName, schoolTimeZone, schoolServerUrl, role);
+                Guid? developerId = null;
+                if (schoolId.HasValue)
+                {
+                    var developer = new DeveloperDataAccess(uow).GetDeveloper(schoolId.Value);
+                    if (developer != null)
+                        developerId = developer.Id;
+                }
+
+
+                var res = new UserContext(user.Id, schoolId, user.Login, schoolName, schoolTimeZone, schoolServerUrl, role, developerId);
                 return res;
             }
         }
@@ -175,6 +184,14 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 return new UserDataAccess(uow).GetSysAdmin();
+            }
+        }
+
+        public Developer GetDeveloper(Guid schoolId)
+        {
+            using (var uow = Read())
+            {
+                return new DeveloperDataAccess(uow).GetDeveloper(schoolId);
             }
         }
     }
