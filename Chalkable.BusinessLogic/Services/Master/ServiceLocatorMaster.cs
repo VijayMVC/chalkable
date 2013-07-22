@@ -81,7 +81,9 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IServiceLocatorSchool SchoolServiceLocator(Guid schoolId)
         {
             var school = SchoolService.GetById(schoolId);
-            Context.SwitchSchool(schoolId, school.Name, school.TimeZone, school.ServerUrl);
+            var developer = UserService.GetDeveloper(schoolId);
+            var developerId = developer != null ? developer.Id : (Guid?) null;
+            Context.SwitchSchool(schoolId, school.Name, school.TimeZone, school.ServerUrl, developerId);
             var serviceLocator = new ServiceLocatorSchool(this);
             return serviceLocator;
         }

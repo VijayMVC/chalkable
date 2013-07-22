@@ -20,6 +20,8 @@ namespace Chalkable.BusinessLogic.Services
         public CoreRole Role { get; private set; }
         public string SchoolServerUrl { get; private set; }
         public string SchoolTimeZoneId { get; private set; }
+        public Guid? DeveloperId { get; set; }
+
         public DateTime NowSchoolTime
         {
             get { return DateTime.UtcNow.ConvertFromUtc(SchoolTimeZoneId ?? "UTC"); }
@@ -28,7 +30,7 @@ namespace Chalkable.BusinessLogic.Services
         public bool IsOAuthUser { get; set; }
         public IList<AppPermissionType> AppPermissions { get; set; }
 
-        public UserContext(Guid id, Guid? schoolId, string login, string schoolName, string schoolTimeZoneId, string schoolServerUrl, CoreRole role)
+        public UserContext(Guid id, Guid? schoolId, string login, string schoolName, string schoolTimeZoneId, string schoolServerUrl, CoreRole role, Guid? developerId)
         {
             SchoolServerUrl = schoolServerUrl;
             SchoolName = schoolName;
@@ -38,15 +40,14 @@ namespace Chalkable.BusinessLogic.Services
             Role = role;
 
             SchoolTimeZoneId = schoolTimeZoneId;
-
-            //TODO: IsDeveloperSchool
+            DeveloperId = developerId;
 
             if (schoolId.HasValue)
                 SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, SchoolServerUrl, schoolId);
             MasterConnectionString = Settings.MasterConnectionString;
         }
 
-        public void SwitchSchool(Guid schoolId, string schoolName, string schoolTimeZoneId, string schoolServerUrl)
+        public void SwitchSchool(Guid schoolId, string schoolName, string schoolTimeZoneId, string schoolServerUrl, Guid? developerId)
         {
             if (Role != CoreRoles.SUPER_ADMIN_ROLE)
                 throw new ChalkableSecurityException("Only sys admin is able to switch between schools");
@@ -54,6 +55,7 @@ namespace Chalkable.BusinessLogic.Services
             SchoolName = schoolName;
             SchoolId = schoolId;
             SchoolTimeZoneId = schoolTimeZoneId;
+            DeveloperId = developerId;
             SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, SchoolServerUrl, schoolId);   
         }
 
@@ -69,6 +71,7 @@ namespace Chalkable.BusinessLogic.Services
                     Role.Id.ToString(CultureInfo.InvariantCulture),
                     SchoolServerUrl ?? string.Empty,
                     SchoolTimeZoneId ?? string.Empty,
+                    DeveloperId.HasValue ? DeveloperId.ToString() : string.Empty
                 };
             return parameters.JoinString(DELIMITER.ToString(CultureInfo.InvariantCulture));
         }
@@ -81,14 +84,17 @@ namespace Chalkable.BusinessLogic.Services
             string schoolName = null;
             string schoolTimeZone = null;
             string schoolServerUrl = null;
+            var developerId = (Guid?) null;
             if (schoolId.HasValue)
             {
                 schoolName = sl[3]; 
                 schoolServerUrl = sl[5];
                 schoolTimeZone = sl[6];
+                if (!string.IsNullOrEmpty(sl[6]))
+                    developerId = Guid.Parse(sl[6]);
             }
             var role = CoreRoles.GetById(int.Parse(sl[4]));
-            var res = new UserContext(userId, schoolId, sl[2], schoolName, schoolTimeZone, schoolServerUrl, role);
+            var res = new UserContext(userId, schoolId, sl[2], schoolName, schoolTimeZone, schoolServerUrl, role, developerId);
             return res;
         }
     }
