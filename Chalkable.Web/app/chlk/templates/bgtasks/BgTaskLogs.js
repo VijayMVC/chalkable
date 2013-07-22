@@ -1,14 +1,16 @@
-REQUIRE('chlk.templates.PaginatedList');
-REQUIRE('chlk.models.bgtasks.BgTaskLog');
+REQUIRE('chlk.models.bgtasks.BgTask');
+REQUIRE('chlk.models.bgtasks.BgTasksLogListViewData');
 
 NAMESPACE('chlk.templates.bgtasks', function () {
 
     /** @class chlk.templates.bgtasks.BgTaskLogs*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/bgtasks/BgTaskLogs.jade')],
-        [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
-        'BgTaskLogs', EXTENDS(chlk.templates.PaginatedList), [
+        [ria.templates.ModelBind(chlk.models.bgtasks.BgTasksLogListViewData)],
+        'BgTaskLogs', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.bgtasks.BgTaskLog), 'items'
+            chlk.models.common.PaginatedList, 'items',
+            [ria.templates.ModelPropertyBind],
+            chlk.models.bgtasks.BgTaskId, 'bgTaskId'
         ])
 });

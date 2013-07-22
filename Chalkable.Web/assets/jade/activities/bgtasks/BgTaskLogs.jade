@@ -1,11 +1,11 @@
 .bg-tasks
-    +Grid('backgroundtask', 'logsPage', self).not-transparent
+    +Grid('backgroundtask', 'logsPage', self.items, [self.bgTaskId]).not-transparent
         +GridHead()
             .th Type
             .th Message
             .th Added
         +GridBody()
-            each item in self.items
+            each item in self.items.getItems()
                 +GridRow()
                     .td= item.getId().valueOf()
                     .td= item.getMessage()

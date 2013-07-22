@@ -54,6 +54,10 @@ BODY {
   color: #565656;
   position: relative;
 
+  .scroller{
+    overflow-x: auto;
+  }
+
   .container{
     display: table;
     width:100%;

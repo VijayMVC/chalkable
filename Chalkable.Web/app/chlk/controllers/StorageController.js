@@ -58,24 +58,6 @@ NAMESPACE('chlk.controllers', function (){
                         return new ria.async.DeferredData(blobsListViewData);
                 });
                 return this.UpdateView(chlk.activities.storage.StorageBlobsPage, result);
-            },
-
-
-            [[String]],
-            function deleteBlobAction(blobAddress) {
-                var result = this.storageService
-                    .deleteBlob(blobAddress)
-                    .attach(this.validateResponse_())
-                    .then(function (data) {
-                        return this.storageService.getBlobs(uri, pageIndex_ | 0)
-                    },this)
-                    .then(function(data){
-                        var blobsListViewData = new chlk.models.storage.BlobsListViewData();
-                        blobsListViewData.setItems(data);
-                        blobsListViewData.setContainerAddress(uri);
-                        return new ria.async.DeferredData(blobsListViewData);
-                    });
-                return this.UpdateView(chlk.activities.storage.StorageBlobsPage, result);
             }
         ])
 });
