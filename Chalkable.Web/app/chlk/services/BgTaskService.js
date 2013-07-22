@@ -6,18 +6,19 @@ REQUIRE('chlk.models.bgtasks.BgTaskLog');
 NAMESPACE('chlk.services', function () {
     "use strict";
 
-    /** @class chlk.services.GradeLevelService*/
+    /** @class chlk.services.BgTaskService*/
     CLASS(
         'BgTaskService', EXTENDS(chlk.services.BaseService), [
             [[Number]],
             ria.async.Future, function getTasks(pageIndex_) {
-                return this.getPaginatedList('app/data/bgtasks.json', chlk.models.bgtasks.BgTask, {
+                return this.getPaginatedList('BackgroundTask/GetTasks.json', chlk.models.bgtasks.BgTask, {
                     start: pageIndex_
                 });
             },
-            [[Number]],
-            ria.async.Future, function getLogs(pageIndex_) {
-                return this.getPaginatedList('app/data/bgtasklogs.json', chlk.models.bgtasks.BgTaskLog, {
+            [[chlk.models.bgtasks.BgTaskId, Number]],
+            ria.async.Future, function getLogs(id, pageIndex_) {
+                return this.getPaginatedList('BackgroundTask/GetTaskLogs.json', chlk.models.bgtasks.BgTaskLog, {
+                    taskId: id.valueOf(),
                     start: pageIndex_
                 });
             }

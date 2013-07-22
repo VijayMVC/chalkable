@@ -1,4 +1,3 @@
-REQUIRE('chlk.templates.PaginatedList');
 REQUIRE('chlk.models.storage.Blob');
 
 NAMESPACE('chlk.templates.storage', function () {
@@ -6,9 +5,11 @@ NAMESPACE('chlk.templates.storage', function () {
     /** @class chlk.templates.storage.Blobs*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/storage/Blobs.jade')],
-        [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
-        'Blobs', EXTENDS(chlk.templates.PaginatedList), [
+        [ria.templates.ModelBind(chlk.models.storage.BlobsListViewData)],
+        'Blobs', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.storage.Blob), 'items'
+            chlk.models.common.PaginatedList, 'items',
+            [ria.templates.ModelPropertyBind],
+            String, 'containerAddress'
         ])
 });

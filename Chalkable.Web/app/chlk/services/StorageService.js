@@ -18,9 +18,18 @@ NAMESPACE('chlk.services', function () {
             [[String, Number]],
             ria.async.Future, function getBlobs(uri, pageIndex_) {
                 return this.getPaginatedList('StorageMonitor/ListBlobs.json', chlk.models.storage.Blob, {
-                    uri: uri,
+                    containeraddress: uri,
                     start: pageIndex_
                 });
+            },
+
+
+            ria.async.Future, function deleteBlob(uri){
+                return this.getPaginatedList('StorageMonitor/Delete.json', chlk.models.storage.Blob, {
+                    blobAddress: uri
+                });
             }
+
+
         ])
 });

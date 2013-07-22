@@ -8,11 +8,13 @@ NAMESPACE('chlk.models.common', function () {
 
             Date, 'date',
             String, function toString(format){
-                return this.getDate().toString(format);
+                var dateVal = this.getDate() || new Date();
+                return dateVal.toString(format);
             },
 
             VOID, function deserialize(raw) {
-                this.setDate(new Date(raw));
+                var date = raw ? new Date(raw) : new Date();
+                this.setDate(date);
             }
         ]);
 });

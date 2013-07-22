@@ -1,7 +1,10 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.StorageService');
+REQUIRE('chlk.models.storage.BlobsListViewData');
+
 REQUIRE('chlk.activities.storage.StorageListPage');
 REQUIRE('chlk.activities.storage.StorageBlobsPage');
+
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -18,19 +21,61 @@ NAMESPACE('chlk.controllers', function (){
                 var result = this.storageService
                     .getStorages(pageIndex_ | 0)
                     .attach(this.validateResponse_());
-                /* Put activity in stack and render when result is ready */
                 return this.PushView(chlk.activities.storage.StorageListPage, result);
             },
+
+            [[Number]],
+            function pageAction(pageIndex_) {
+                var result = this.storageService
+                    .getStorages(pageIndex_ | 0)
+                    .attach(this.validateResponse_());
+                return this.UpdateView(chlk.activities.storage.StorageListPage, result);
+            },
+
             [[String, Number]],
             function blobsAction(uri, pageIndex_) {
                 var result = this.storageService
                     .getBlobs(uri, pageIndex_ | 0)
-                    .attach(this.validateResponse_());
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        var blobsListViewData = new chlk.models.storage.BlobsListViewData();
+                        blobsListViewData.setItems(data);
+                        blobsListViewData.setContainerAddress(uri);
+                        return new ria.async.DeferredData(blobsListViewData);
+                });
                 return this.PushView(chlk.activities.storage.StorageBlobsPage, result);
             },
-            [[String]],
-            function deleteAction(uri) {
 
+            [[String, Number]],
+            function blobsPageAction(uri, pageIndex_) {
+                var result = this.storageService
+                    .getBlobs(uri, pageIndex_ | 0)
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        var blobsListViewData = new chlk.models.storage.BlobsListViewData();
+                        blobsListViewData.setItems(data);
+                        blobsListViewData.setContainerAddress(uri);
+                        return new ria.async.DeferredData(blobsListViewData);
+                });
+                return this.UpdateView(chlk.activities.storage.StorageBlobsPage, result);
+            },
+
+
+            [[String]],
+            function deleteBlobAction(blobAddress) {
+                var result = this.storageService
+                    .deleteBlob(blobAddress)
+                    .attach(this.validateResponse_())
+                    .then(function (data) {
+                        return this.storageService.getBlobs(uri, pageIndex_ | 0)
+                    },this)
+                    .then(function(data){
+                        var blobsListViewData = new chlk.models.storage.BlobsListViewData();
+                        blobsListViewData.setItems(data);
+                        blobsListViewData.setContainerAddress(uri);
+                        return new ria.async.DeferredData(blobsListViewData);
+                    });
+                return this.UpdateView(chlk.activities.storage.StorageBlobsPage, result);
             }
         ])
 });

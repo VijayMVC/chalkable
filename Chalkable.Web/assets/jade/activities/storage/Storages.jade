@@ -1,5 +1,5 @@
 .storages
-    +Grid('storage', 'list', self).not-transparent
+    +Grid('storage', 'page', self).not-transparent
         +GridHead()
             .th Name
             .th Uri
@@ -10,4 +10,4 @@
                     .td= item.getName()
                     .td= item.getUri()
                     .td.action-links
-                        +ActionLink('storage', 'blobs', item.getName()).profile
+                        +ActionLink('storage', 'blobs', item.getUri()).profile
