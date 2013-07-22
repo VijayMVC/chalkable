@@ -82,8 +82,6 @@ namespace Chalkable.BusinessLogic.Services.Master
                     if (developer != null)
                         developerId = developer.Id;
                 }
-
-
                 var res = new UserContext(user.Id, schoolId, user.Login, schoolName, schoolTimeZone, schoolServerUrl, role, developerId);
                 return res;
             }

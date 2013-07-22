@@ -19,6 +19,7 @@ namespace Chalkable.Data.Master.Model
         public string SecretKey { get; set; }
         public string ShortDescription { get; set; }
         public string AdditionalInfo { get; set; }
+        public const string PRICE_FIELD = "Price";
         public decimal Price { get; set; }
         public string VideoUrl { get; set; }
         public Guid? SmallPictureRef { get; set; }

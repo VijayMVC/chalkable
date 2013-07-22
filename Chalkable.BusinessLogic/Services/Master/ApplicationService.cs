@@ -14,6 +14,10 @@ namespace Chalkable.BusinessLogic.Services.Master
         IList<AppPermissionType> GetPermisions(Guid applicationId);
         IList<AppPermissionType> GetPermisions(string applicationUrl);
         PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null);
+
+        PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode filterMode = AppFilterMode.All
+            , AppSortingMode sortingMode = AppSortingMode.Newest, int start = 0, int count = int.MaxValue);
+
         IList<Application> GetNewestApplications();
         IList<Application> GetHigestRatedApplications();
         IList<Application> GetPopularApplications();
@@ -84,7 +88,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public IList<Application> GetApplicationsByCategory(Guid categoryId)
         {
-            var query = new ApplicationQuery {CategoryId = categoryId, OrderBy = Application.NAME_FIELD};
+            var query = new ApplicationQuery {CategoryIds = new List<Guid>{categoryId}, OrderBy = Application.NAME_FIELD};
             return GetApplications(query);
         }
 
@@ -165,5 +169,45 @@ namespace Chalkable.BusinessLogic.Services.Master
                 return application.HasTeacherMyApps;
             return Context.Role.Id == CoreRoles.STUDENT_ROLE.Id && application.HasStudentMyApps;
         }
+
+
+        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode filterMode = AppFilterMode.All, AppSortingMode sortingMode = AppSortingMode.Newest, int start = 0, int count = int.MaxValue)
+        {
+            var query = new ApplicationQuery
+                {
+                    CategoryIds = categoriesIds,
+                    GradeLevels = gradeLevels,
+                    Filter = filterWords,
+                    Start = start,
+                    Count = count
+                };
+            if (filterMode != AppFilterMode.All)
+                query.Free = filterMode == AppFilterMode.Free;
+            switch (sortingMode)
+            {
+                case AppSortingMode.Newest:
+                    query.OrderBy = Application.CREATE_DATE_TIME_FIELD;
+                    break;
+                case AppSortingMode.HighestRated:
+                    query.OrderBy = Application.AVG_FIELD;
+                    break;
+            }
+            return GetApplications(query);
+        }
     }
+
+    public  enum AppSortingMode
+    {
+        Popular = 1,
+        Newest = 2,
+        HighestRated = 3
+    }
+
+    public  enum AppFilterMode
+    {
+        All = 1,
+        Paid = 2,
+        Free = 3,
+    }
+
 }

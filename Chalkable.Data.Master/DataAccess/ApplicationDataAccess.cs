@@ -66,8 +66,6 @@ namespace Chalkable.Data.Master.DataAccess
             }
             else
             {
-                
-
                 if (query.Role == CoreRoles.DEVELOPER_ROLE.Id)
                 {
                     sql.Append(string.Format(" and [{0}] = @{0}", Application.DEVELOPER_REF_FIELD));
@@ -101,16 +99,63 @@ namespace Chalkable.Data.Master.DataAccess
             }
             if (query.Live.HasValue)
             {
-                var sqlOperator = query.Live.Value ? " == " : " <> ";
+                var sqlOperator = query.Live.Value ? " = " : " <> ";
                 sql.Append(string.Format(" and [{0}] {1} @{0}", Application.STATE_FIELD, sqlOperator));
                 ps.Add(Application.STATE_FIELD, (int)ApplicationStateEnum.Live);
             }
 
-            if (query.CategoryId.HasValue)
+            if (query.Free.HasValue)
             {
-                sql.Append(string.Format(" and exists (select * from ApplicationCategory where ApplicationRef = Application.Id and CategoryRef = @{0})", "categoryId"));
-                ps.Add("categoryId", query.CategoryId);
+                sql.AppendFormat(" and [{0}] {1} 0", Application.PRICE_FIELD, query.Free.Value ? "=" : ">");
             }
+            
+            if (query.GradeLevels != null && query.GradeLevels.Count > 0)
+            {
+                sql.AppendFormat(" and exists(select * from ApplicationGradeLevel where ApplicationRef = Application.Id and GradeLevel in ({0}))"
+                    , query.GradeLevels.Select(x => x.ToString()).JoinString(","));
+            }
+            if (query.CategoryIds != null && query.CategoryIds.Count > 0)
+            {
+                var categoriesParam = new List<string>();
+                for (int i = 0; i < query.CategoryIds.Count; i++)
+                {
+                    var categoryParam = "@categoryId_" + i;
+                    categoriesParam.Add(categoryParam);
+                    ps.Add(categoryParam, query.CategoryIds[i]);
+                }
+                sql.AppendFormat(" and exists (select * from ApplicationCategory where ApplicationRef = Application.Id and CategoryRef in ({0}))"
+                    , categoriesParam.JoinString(","));
+
+            }
+            if (!string.IsNullOrEmpty(query.Filter))
+            {
+                var keyWords = query.Filter.Split(new [] {' ', '.', ','}, StringSplitOptions.RemoveEmptyEntries);
+                var keyWordsParams = new List<string>();
+                for (int i = 0; i < keyWords.Length; i++)
+                {
+                    if (!string.IsNullOrEmpty(keyWords[i]))
+                    {
+                        var keyWordParam = "@keyWord_" + i;
+                        ps.Add(keyWordParam, "@%" + keyWords[i] + "%");
+                        keyWordsParams.Add(" like " + keyWordParam);
+                    }
+                }
+                if (keyWordsParams.Count > 0)
+                {
+                    sql.Append(" and (");
+                    sql.AppendFormat(" LOWER(Name) {0} ", keyWordsParams.JoinString(" or LOWER(Name) "));
+                    sql.AppendFormat(" or LOWER(Description) {0} ", keyWordsParams.JoinString(" or LOWER(Description) "));
+                    sql.AppendFormat(@" or exists(select ac.Id from ApplicationCategory ac
+                                                  join Category c on Category c.Id = ac.CategoryRef
+                                                  where ApplicationRef = Application.Id and (LOWER(c.Name) {0})
+                                                 )", keyWords.JoinString(" or LOWER(c.Name) "));
+                    sql.Append(" or exists(select * from Developer where Id = Application.DeveloperRef and (");
+                    sql.AppendFormat(" LOWER(Name) {0}", keyWordsParams.JoinString(" or LOWER(Name) "));
+                    sql.AppendFormat(" or LOWER(WebSite) {0} ", keyWordsParams.JoinString(" or LOWER(WebSite)"));
+                    sql.Append(")))");
+                }
+            }
+
             return new DbQuery {Sql = sql.ToString(), Parameters = ps};
 
         }
@@ -216,7 +261,8 @@ namespace Chalkable.Data.Master.DataAccess
         public Guid UserId { get; set; }
         public int Role { get; set; }
         public bool IncludeInternal { get; set; }
-        public Guid? CategoryId { get; set; }
+        public IList<Guid> CategoryIds { get; set; }
+        public IList<int> GradeLevels { get; set; }
         public Guid? DeveloperId { get; set; }
         public string OrderBy { get; set; }
 
@@ -224,7 +270,10 @@ namespace Chalkable.Data.Master.DataAccess
         public int Count { get; set; }
 
         public bool? Live { get; set; }
-        
+        public bool? Free { get; set; }
+
+        public string Filter { get; set; } 
+
         public ApplicationQuery()
         {
             Start = 0;
@@ -232,6 +281,7 @@ namespace Chalkable.Data.Master.DataAccess
             OrderBy = Application.ID_FIELD;
             IncludeInternal = false;
             Live = null;
+            Free = null;
         }
 
     }
