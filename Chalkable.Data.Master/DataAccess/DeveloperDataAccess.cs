@@ -18,9 +18,9 @@ namespace Chalkable.Data.Master.DataAccess
         {
             var resulSet = Orm.ComplexResultSetQuery(new List<Type> {typeof (Developer), typeof (User)});
             var sql = @"select {0} 
-                        from Developer
-                        join User on User.Id = Developer.UserRef
-                        where SchoolRef =@schoolId";
+                        from [Developer]
+                        join [User] on [User].Id = [Developer].[Id]
+                        where [SchoolRef] =@schoolId";
             sql = string.Format(sql, resulSet);
             var conds = new Dictionary<string, object> {{"schoolId", schoolId}};
             return ReadOneOrNull<Developer>(new DbQuery {Sql = sql, Parameters = conds}, true);
