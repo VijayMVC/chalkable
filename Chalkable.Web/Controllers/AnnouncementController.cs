@@ -185,5 +185,12 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.AnnouncementService.DeleteAnnouncements(SchoolLocator.Context.UserId);
             return Json(true, 5);
         }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        public ActionResult ListLast(Guid personId, Guid classId, int announcementTypeId)
+        {
+            var res = SchoolLocator.AnnouncementService.GetLastFieldValues(personId, classId, announcementTypeId);
+            return Json(res.GroupBy(x => x).Select(x => x.Key));
+        }
     }
 }

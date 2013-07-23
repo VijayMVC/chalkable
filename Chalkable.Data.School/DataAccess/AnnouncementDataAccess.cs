@@ -197,6 +197,7 @@ namespace Chalkable.Data.School.DataAccess
                    || CoreRoles.ADMIN_GRADE_ROLE.Id == roleId
                    || CoreRoles.ADMIN_VIEW_ROLE.Id == roleId;
         }
+
         public Announcement GetAnnouncement(Guid id, int roleId, Guid callerId)
         {
             var b = new StringBuilder();
@@ -256,6 +257,35 @@ namespace Chalkable.Data.School.DataAccess
                       where PersonRef = @PersonRef and State = @state
                       order by Created desc";
            return  ReadOneOrNull<Announcement>(new DbQuery {Sql = sql, Parameters = conds});
+        }
+
+        public IList<string> GetLastFieldValues(Guid personId, Guid classId, int announcementType, int count)
+        {
+            var conds = new Dictionary<string, object>
+                {
+                    {"personId", personId},
+                    {"classId", classId},
+                    {"announcementTypeId", announcementType},
+                    {"count", count}
+                };
+            var sql = @"select Announcement.Content as Content from Announcement
+                        join MarkingPeriodClass on MarkingPeriodClass.Id = Announcement.MarkingPeriodClassRef 
+                        where Announcement.PersonRef = @personId 
+                              and Announcement.AnnouncementTypeRef = @announcementTypeId
+                              and MarkingPeriodClass.ClassRef = @classId
+                              and Announcement.Content is not null and and Announcement.Content <> ''
+                        order by Announcement.Id desc
+                        OFFSET 0 ROWS FETCH NEXT @count ROWS ONLY";
+            using (var reader = ExecuteReaderParametrized(sql, conds))
+            {
+                var res = new List<string>();
+                while (reader.Read())
+                {
+                    res.Add(SqlTools.ReadStringNull(reader, "Content"));
+                }
+                return res;
+            }
+
         }
     }
 
