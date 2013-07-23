@@ -13,7 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Date GetCalendarDateByDate(DateTime date);
         Date GetById(Guid id);
         DateTime GetDbDateTime();
-        IList<Date> GetDays(Guid markingPeriodId, bool schoolDaysOnly, DateTime? fromDate = null, DateTime? tillDate = null);
+        IList<Date> GetDays(Guid markingPeriodId, bool schoolDaysOnly, DateTime? fromDate = null, DateTime? tillDate = null, int count = Int32.MaxValue);
         IList<DateDetails> GetLastDays(Guid schoolYearId, bool schoolDaysOnly, DateTime? fromDate, DateTime? tillDate, int count = int.MaxValue);
         void ClearCalendarDates(Guid markingPeriodId);
         bool CanAssignDate(Guid id, Guid sectionId);
@@ -100,7 +100,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Date> GetDays(Guid markingPeriodId, bool schoolDaysOnly, DateTime? fromDate = null, DateTime? tillDate = null)
+        public IList<Date> GetDays(Guid markingPeriodId, bool schoolDaysOnly, DateTime? fromDate = null, DateTime? tillDate = null, int count = Int32.MaxValue)
         {
             var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId);
             GetCalendarDateByDate(mp.EndDate);
@@ -113,7 +113,8 @@ namespace Chalkable.BusinessLogic.Services.School
                             MarkingPeriodId = markingPeriodId,
                             SchoolDaysOnly = schoolDaysOnly,
                             FromDate = fromDate,
-                            ToDate = tillDate
+                            ToDate = tillDate,
+                            Count = count
                         });
 
             }

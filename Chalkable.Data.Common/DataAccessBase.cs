@@ -190,6 +190,12 @@ namespace Chalkable.Data.Common
             var q = Orm.CountSelect(query, resName);
             return Read(q, reader => reader.Read() && SqlTools.ReadInt32(reader, resName) > 0);
         }
+        protected int Count(DbQuery query)
+        {
+            var resName = "AllCount";
+            var q = Orm.CountSelect(query, resName);
+            return Read(q, reader => reader.Read() ? SqlTools.ReadInt32(reader, resName) : 0);
+        }
 
         public virtual TEntity GetById(Guid id)
         {

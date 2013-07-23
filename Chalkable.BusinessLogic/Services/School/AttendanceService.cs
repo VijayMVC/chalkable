@@ -24,8 +24,9 @@ namespace Chalkable.BusinessLogic.Services.School
         ClassAttendanceComplex GetClassAttendanceComplexById(Guid classAttendanceId);
         IList<ClassAttendanceComplex> GetClassAttendanceComplex(Guid? schoolYearId, Guid? markingPeriodId, Guid? classId, Guid? personId, AttendanceTypeEnum? type, DateTime date);
         ClassAttendanceComplex SwipeCard(Guid personId, DateTime dateTime, Guid classPeriodId);
-       
-   
+
+
+        int PossibleAttendanceCount(Guid markingPeriodId, Guid classId, DateTime? tillDate);
     }
 
     public class AttendanceService : SchoolServiceBase, IAttendanceService
@@ -198,6 +199,15 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     Id = classAttendanceId,
                 }).First();
+        }
+
+        //TODO: needs security ... needs test
+        public int PossibleAttendanceCount(Guid markingPeriodId, Guid classId, DateTime? tillDate)
+        {
+            using (var uow = Read())
+            {
+                return new ClassAttendanceDataAccess(uow).PossibleAttendanceCount(markingPeriodId, classId, tillDate);
+            }
         }
     }
 }

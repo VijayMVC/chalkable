@@ -28,7 +28,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         {
             return new PersonViewData(person);
         }
-        public static IList<PersonViewData> Create(IList<Person> person)
+        public static new IList<PersonViewData> Create(IList<Person> person)
         {
             return person.Select(Create).ToList();
         }

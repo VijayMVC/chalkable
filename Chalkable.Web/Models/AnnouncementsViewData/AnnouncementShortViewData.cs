@@ -36,7 +36,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         {
             return new AnnouncementShortViewData(announcement);
         }
-        public IList<AnnouncementShortViewData> Create(IList<AnnouncementComplex> announcements)
+        public static IList<AnnouncementShortViewData> Create(IList<AnnouncementComplex> announcements)
         {
             return announcements.Select(Create).ToList();
         } 

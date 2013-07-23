@@ -28,5 +28,10 @@ namespace Chalkable.Web.Models.PersonViewDatas
         {
             return new ShortPersonViewData(person);
         }
+        public static IList<ShortPersonViewData> Create(IList<Person> persons)
+        {
+            return persons.Select(Create).ToList();
+        }
+
     }
 }

@@ -197,6 +197,8 @@
     <Compile Include="Models\CategoryViewData.cs" />
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassInfoViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassSummaryViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassTitlesViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassViewData.cs" />
     <Compile Include="Models\ClassPeriodViewData.cs" />
     <Compile Include="Models\CourseViewData.cs" />
@@ -234,6 +236,7 @@
     <Compile Include="Models\SisSyncViewData.cs" />
     <Compile Include="Models\StorageMonitorViewData.cs" />
     <Compile Include="Models\StudentAnnouncementViewData.cs" />
+    <Compile Include="Models\HoverBoxesViewData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\CompilerHelper.cs" />
   </ItemGroup>

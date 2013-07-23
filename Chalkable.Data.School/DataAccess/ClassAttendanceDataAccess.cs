@@ -105,6 +105,28 @@ namespace Chalkable.Data.School.DataAccess
                 };
             return Exists(new DbQuery {Sql = sql, Parameters = conds});
         }
+
+        public int PossibleAttendanceCount(Guid markingPeriodId, Guid classId, DateTime? tillDate)
+        {
+            var b = new StringBuilder();
+            b.Append(@" select count(*) from ClassPeriod 
+                        join Period on Period.Id = ClassPeiod.PeriodRef
+                        join [Date] on [Date].MarkingPeriodRef = Period.MarkingPeriodRef and [Date].ScheduleSectionRef = Period.SectionRef
+                        join ClassPerson on ClassPerson.ClassRef = ClassPeriod.ClassRef
+                        where ClassPeriod.ClassRef = @classId and Period.MarkingPeriodRef = @markingPeriodId and [Date].IsSchoolDay = 1 ");
+
+            var conds = new Dictionary<string, object>()
+                {
+                    {"classId", classId},
+                    {"markingPeriodId", markingPeriodId}
+                };
+            if (tillDate.HasValue)
+            {
+                conds.Add("tillDate", tillDate.Value);
+                b.Append(" and  [Date].[DateTime] <= @tillDate");
+            }
+            return Count(new DbQuery {Parameters = conds, Sql = b.ToString()});
+        }
     }
 
     public class ClassAttendanceQuery
