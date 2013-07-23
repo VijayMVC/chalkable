@@ -1,104 +1,254 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
+using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.ApplicationInstall;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAppMarketService
     {
-        IList<Application> List(string keyword);
-        IList<Application> ListInstalled(int schoolPersonId, bool owner);
-        IList<ApplicationInstall> ListInstalledAppInstalls(int schoolPersonId);
-        IList<ApplicationInstall> ListInstalledForClass(int classId);
-        IList<Application> ListInstalledAppsForClass(int classId);
-        IList<ApplicationInstall> ListInstalledByAppId(int applicationId, int schoolInfoId);
-        ApplicationInstallAction Install(int applicationId, int schoolInfoId, int? schoolPersonId, IList<int> roleIds, IList<int> classIds, IList<int> departmentIds, IList<int> gradeLevelIds, int schoolYearId, DateTime dateTime);
-        IList<ApplicationInstall> GetInstallations(int applicationId, int schoolPersonId, bool owners = true);
-        ApplicationInstall GetInstallationForPerson(int applicationId, int schoolPersonId);
-        ApplicationInstall GetInstallationById(int applicationInstallId);
-        bool IsPersonForInstall(int applicationId);
-        void Uninstall(int applicationInstallationId);
-        bool CanInstall(int applicationId, int? schoolPersonId, IList<int> roleIds, IList<int> classIds, IList<int> gradelevelIds, IList<int> departmentIds);
+        IList<Application> ListInstalled(Guid personId, bool owner);
+        IList<ApplicationInstall> ListInstalledAppInstalls(Guid personId);
+        IList<ApplicationInstall> ListInstalledForClass(Guid classId);
+        IList<Application> ListInstalledAppsForClass(Guid classId);
+        IList<ApplicationInstall> ListInstalledByAppId(Guid applicationId);
+        ApplicationInstallAction Install(Guid applicationId, Guid? personId, IList<int> roleIds, IList<Guid> classIds, IList<Guid> departmentIds, IList<Guid> gradeLevelIds, Guid schoolYearId, DateTime dateTime);
+        IList<ApplicationInstall> GetInstallations(Guid applicationId, Guid schoolPersonId, bool owners = true);
+        ApplicationInstall GetInstallationForPerson(Guid applicationId, Guid schoolPersonId);
+        ApplicationInstall GetInstallationById(Guid applicationInstallId);
+        bool IsPersonForInstall(Guid applicationId);
+        void Uninstall(Guid applicationInstallationId);
+        bool CanInstall(Guid applicationId, Guid? schoolPersonId, IList<int> roleIds, IList<Guid> classIds, IList<Guid> gradelevelIds, IList<Guid> departmentIds);
 
-        /*IList<PersonsForApplicationInstallComplex> GetPersonsForApplicationInstall(int applicationId, int? schoolPersonId, IList<int> roleIds, IList<int> classIds, IList<int> departmentIds, IList<int> gradeLevelIds);
-        IList<PersonsForApplicationInstallCountComplex> GetPersonsForApplicationInstallCount(int applicationId, int? schoolPersonId, IList<int> roleIds, IList<int> classIds, IList<int> departmentIds, IList<int> gradeLevelIds);
-        IList<StudentCountToAppInstallByClassComplex> GetStudentCountToAppInstallByClass(int schoolYearId, int applicationId);
+        IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, Guid? personId, IList<int> roleIds, IList<Guid> classIds, IList<Guid> departmentIds, IList<Guid> gradeLevelIds);
+        /*IList<StudentCountToAppInstallByClassComplex> GetStudentCountToAppInstallByClass(int schoolYearId, int applicationId);
         ApplicationTotalPriceInfo GetApplicationTotalPrice(int applicationId, int? schoolPerson, IList<int> roleIds, IList<int> classIds, IList<int> gradelevelIds, IList<int> departmentIds);*/
 
     }
 
     public class AppMarketService : SchoolServiceBase, IAppMarketService
     {
+        private const string APP_INSTALLED_FOR_FMT = "{0} was installed for : \n";
+        private const string APP_CLASS_FMT = "Class {0} \n";
+        private const string APP_GRADE_LEVEL_FMT = "Grade Level {0} \n";
+        private const string APP_DEPARTMENT_FMT = "Department {0} \n";
+        private const string APP_ROLE_FMT = "Role {0} \n";
+
         public AppMarketService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
         }
 
-        public IList<Application> List(string keyword)
+        public IList<Application> ListInstalled(Guid personId, bool owner)
+        {
+            var installed = ListInstalledAppInstalls(personId);
+            var all = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplications();
+            return all.Where(x => installed.Any(y => y.ApplicationRef == x.Id)).ToList();
+        }
+
+        public IList<ApplicationInstall> ListInstalledAppInstalls(Guid personId)
+        {
+            using (var uow = Read())
+            {
+                var da = new ApplicationInstallDataAccess(uow);
+                return da.GetInstalled(personId);
+            }
+        }
+
+        public IList<ApplicationInstall> ListInstalledForClass(Guid classId)
+        {
+            var clazz = ServiceLocator.ClassService.GetClassById(classId);
+            if (!BaseSecurity.IsAdminViewerOrClassTeacher(clazz, Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Read())
+            {
+                var da = new ApplicationInstallDataAccess(uow);
+                return da.GetInstalledForClass(clazz);
+            }
+        }
+
+        public IList<Application> ListInstalledAppsForClass(Guid classId)
+        {
+            var installed = ListInstalledForClass(classId);
+            var all = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplications();
+            return all.Where(x => installed.Any(y => y.ApplicationRef == x.Id)).ToList();
+        }
+
+        public IList<ApplicationInstall> ListInstalledByAppId(Guid applicationId)
+        {
+            var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+            using (var uow = Read())
+            {
+                var da = new ApplicationInstallDataAccess(uow);
+                return da.GetInstalledByAppId(applicationId, sy.Id);
+            }
+        }
+
+        public ApplicationInstallAction Install(Guid applicationId, Guid? personId, IList<int> roleIds, IList<Guid> classIds,
+                                                IList<Guid> departmentIds, IList<Guid> gradeLevelIds, Guid schoolYearId, DateTime dateTime)
+        {
+            if (!CanInstall(applicationId, personId, roleIds, classIds, gradeLevelIds, departmentIds))
+                throw new ChalkableException(ChlkResources.ERR_APP_NOT_ENOUGH_MONEY);
+
+            var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
+            using (var uow = Update())
+            {
+                var da = new ApplicationInstallDataAccess(uow);
+                var persons = da.GetPersonsForApplicationInstall(applicationId, Context.UserId, personId, roleIds, departmentIds, gradeLevelIds, classIds, Context.Role.Id
+                                                   , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach);
+                var spIds = persons.Select(x => x.SchoolPersonId).Distinct().ToList();
+                var schoolYear = ServiceLocator.SchoolYearService.GetSchoolYearById(schoolYearId);
+                var res = RegistarationInstallationAction(uow, app, personId, roleIds, classIds, departmentIds, gradeLevelIds);
+                foreach (var spId in spIds)
+                {
+                    da.Insert(new ApplicationInstall
+                            {
+                                ApplicationRef = app.Id,
+                                PersonRef = spId,
+                                OwnerRef = Context.UserId,
+                                Active = true,
+                                SchoolYearRef = schoolYear.Id,
+                                InstallDate = dateTime,
+                                AppInstallActionRef = res.Id
+                            });
+                }
+                uow.Commit();
+                return res;
+            }
+        }
+
+        private ApplicationInstallAction RegistarationInstallationAction(UnitOfWork uow, Application app, Guid? schoolPersonId, IList<int> roleids, IList<Guid> classids, IList<Guid> departmentids, IList<Guid> gradelevelids)
+        {
+            var res = new ApplicationInstallAction
+            {
+                ApplicatioinRef = app.Id,
+                PersonRef = schoolPersonId,
+                Description = string.Empty,
+                Id = Guid.NewGuid(),
+                OwnerRef = Context.UserId
+            };
+            var ada = new ApplicationInstallActionDataAccess(uow);
+            ada.Insert(res);
+
+            var descriptionBuilder = new StringBuilder();
+            descriptionBuilder.AppendFormat(APP_INSTALLED_FOR_FMT, app.Name);
+            if (Context.Role.Id == CoreRoles.TEACHER_ROLE.Id && classids != null)
+            {
+                var teacherClasses = new ClassDataAccess(uow).GetAll(new Dictionary<string, object> { { Class.TEACHER_REF_FIELD, schoolPersonId } });
+                teacherClasses = teacherClasses.Where(x => classids.Contains(x.Id)).ToList();
+                var da = new ApplicationInstallActionClassesDataAccess(uow);
+                foreach (var teacherClass in teacherClasses)
+                {
+                    descriptionBuilder.AppendFormat(APP_CLASS_FMT, teacherClass.Name);
+                    da.Insert(new ApplicationInstallActionClasses
+                    {
+                        AppInstallActionRef = res.Id,
+                        ClassRef = teacherClass.Id
+                    });
+                }
+            }
+
+            if (BaseSecurity.IsAdminViewer(Context))
+            {
+                if (gradelevelids != null)
+                {
+                    var gradeLevels = new GradeLevelDataAccess(uow).GetAll()
+                        .Where(x => app.GradeLevels.Any(y => y.GradeLevel == x.Number))
+                        .Where(x => gradelevelids.Contains(x.Id));
+                    var da = new ApplicationInstallActionGradeLevelDataAccess(uow);
+                    foreach (var gradeLevel in gradeLevels)
+                    {
+                        descriptionBuilder.AppendFormat(APP_GRADE_LEVEL_FMT, gradeLevel.Name);
+                        da.Insert(new ApplicationInstallActionGradeLevel
+                        {
+                            AppInstallActionRef = res.Id,
+                            GradeLevelRef = gradeLevel.Id
+                        });
+                    }
+                }
+                if (departmentids != null)
+                {
+                    var departments = new CourseDataAccess(uow).GetAll().Where(x => departmentids.Contains(x.Id)).ToList();
+                    var da = new ApplicationInstallActionDepartmentDataAccess(uow);
+                    foreach (var department in departments)
+                    {
+                        descriptionBuilder.AppendFormat(APP_DEPARTMENT_FMT, department.Title);
+                        da.Insert(new ApplicationInstallActionDepartment
+                        {
+                            AppInstallActionRef = res.Id,
+                            DepartmentRef = department.Id,
+                        });
+                    }
+                }
+                if (roleids != null)
+                {
+                    var roles = roleids.Select(CoreRoles.GetById).ToList();
+                    var da = new ApplicationInstallActionRoleDataAccess(uow);
+                    foreach (var role in roles)
+                    {
+                        descriptionBuilder.AppendFormat(APP_ROLE_FMT, role.Name);
+                        da.Insert(new ApplicationInstallActionRole
+                        {
+                            AppInstallActionRef = res.Id,
+                            RoleId = role.Id
+                        });
+                    }
+                }
+            }
+
+            res.Description = descriptionBuilder.ToString();
+            ada.Update(res);
+            return res;
+        }
+
+        public IList<ApplicationInstall> GetInstallations(Guid applicationId, Guid schoolPersonId, bool owners = true)
         {
             throw new NotImplementedException();
         }
 
-        public IList<Application> ListInstalled(int schoolPersonId, bool owner)
+        public ApplicationInstall GetInstallationForPerson(Guid applicationId, Guid schoolPersonId)
         {
             throw new NotImplementedException();
         }
 
-        public IList<ApplicationInstall> ListInstalledAppInstalls(int schoolPersonId)
+        public ApplicationInstall GetInstallationById(Guid applicationInstallId)
         {
             throw new NotImplementedException();
         }
 
-        public IList<ApplicationInstall> ListInstalledForClass(int classId)
+        public bool IsPersonForInstall(Guid applicationId)
         {
             throw new NotImplementedException();
         }
 
-        public IList<Application> ListInstalledAppsForClass(int classId)
+        public void Uninstall(Guid applicationInstallationId)
         {
             throw new NotImplementedException();
         }
 
-        public IList<ApplicationInstall> ListInstalledByAppId(int applicationId, int schoolInfoId)
+        public bool CanInstall(Guid applicationId, Guid? schoolPersonId, IList<int> roleIds, IList<Guid> classIds, IList<Guid> gradelevelIds,
+                               IList<Guid> departmentIds)
         {
             throw new NotImplementedException();
         }
-
-        public ApplicationInstallAction Install(int applicationId, int schoolInfoId, int? schoolPersonId, IList<int> roleIds, IList<int> classIds,
-                                                IList<int> departmentIds, IList<int> gradeLevelIds, int schoolYearId, DateTime dateTime)
+        
+        public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, Guid? personId, IList<int> roleIds, IList<Guid> classIds,
+                                                          IList<Guid> departmentIds, IList<Guid> gradeLevelIds)
         {
-            throw new NotImplementedException();
-        }
-
-        public IList<ApplicationInstall> GetInstallations(int applicationId, int schoolPersonId, bool owners = true)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ApplicationInstall GetInstallationForPerson(int applicationId, int schoolPersonId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ApplicationInstall GetInstallationById(int applicationInstallId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsPersonForInstall(int applicationId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Uninstall(int applicationInstallationId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool CanInstall(int applicationId, int? schoolPersonId, IList<int> roleIds, IList<int> classIds, IList<int> gradelevelIds,
-                               IList<int> departmentIds)
-        {
-            throw new NotImplementedException();
+            var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
+            using (var uow = Read())
+            {
+                var da = new ApplicationInstallDataAccess(uow);
+                return da.GetPersonsForApplicationInstallCount(applicationId, Context.UserId, personId, roleIds, departmentIds, gradeLevelIds, classIds, Context.Role.Id
+                                                   , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach);
+            }
         }
     }
 }

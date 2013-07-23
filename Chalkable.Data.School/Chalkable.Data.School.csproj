@@ -110,6 +110,7 @@
     <Compile Include="Model\Notification.cs" />
     <Compile Include="Model\Period.cs" />
     <Compile Include="Model\Person.cs" />
+    <Compile Include="Model\PersonsForApplicationInstall.cs" />
     <Compile Include="Model\Phone.cs" />
     <Compile Include="Model\PrivateMessage.cs" />
     <Compile Include="Model\ReportDownload.cs" />

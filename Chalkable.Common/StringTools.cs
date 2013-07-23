@@ -59,6 +59,13 @@ namespace Chalkable.Common
             return s.Select(x => x.ToString()).JoinString(separator);
         }
 
+        public static string JoinString(this IEnumerable<Guid> s, string separator = " ")
+        {
+            if (s == null)
+                return null;
+            return s.Select(x => x.ToString()).JoinString(separator);
+        }
+
         public static string JoinString(this IEnumerable<string> s, string separator = " ")
         {
             var res = new StringBuilder();

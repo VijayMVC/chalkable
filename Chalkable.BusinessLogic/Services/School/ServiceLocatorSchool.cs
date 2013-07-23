@@ -34,6 +34,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IAnnouncementTypeService AnnouncementTypeService { get; }
         IFinalGradeService FinalGradeService { get; }
         IDisciplineTypeService DisciplineTypeService { get; }
+        IApplicationSchoolService ApplicationSchoolService { get; }
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
     {
@@ -65,6 +66,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IAnnouncementTypeService announcementTypeService;
         private IFinalGradeService finalGradeService;
         private IDisciplineTypeService disciplineTypeService;
+        private IApplicationSchoolService applicationSchoolService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -97,6 +99,7 @@ namespace Chalkable.BusinessLogic.Services.School
             announcementTypeService = new AnnouncementTypeService(this);
             finalGradeService = new FinalGradeService(this);
             disciplineTypeService = new DisciplineTypeService(this);
+            applicationSchoolService = new ApplicationSchoolService(this);
         }
 
         public IPersonService PersonService
@@ -212,6 +215,11 @@ namespace Chalkable.BusinessLogic.Services.School
         public IDisciplineTypeService DisciplineTypeService
         {
             get { return disciplineTypeService; }
+        }
+
+        public IApplicationSchoolService ApplicationSchoolService
+        {
+            get { return applicationSchoolService; }
         }
     }
 }

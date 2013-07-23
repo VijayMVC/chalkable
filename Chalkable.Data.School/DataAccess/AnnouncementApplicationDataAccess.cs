@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.ApplicationInstall;
 
 namespace Chalkable.Data.School.DataAccess
 {
