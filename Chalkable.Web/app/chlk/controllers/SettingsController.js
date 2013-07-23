@@ -21,7 +21,6 @@ NAMESPACE('chlk.controllers', function (){
                 dashboard.setAppCategoriesVisible(true);
                 dashboard.setDepartmentsVisible(true);
                 dashboard.setDbMaintenanceVisible(true);
-
                 return this.PushView(chlk.activities.settings.DashboardPage, ria.async.DeferredData(dashboard));
             },
 
@@ -35,11 +34,6 @@ NAMESPACE('chlk.controllers', function (){
                 dashboard.setAppCategoriesVisible(false);
                 dashboard.setDepartmentsVisible(false);
                 dashboard.setDbMaintenanceVisible(false);
-
-                console.log(this.getCurrentRole());
-
-                console.log(this.userInRole(chlk.models.common.RoleEnum.TEACHER));
-
                 return this.PushView(chlk.activities.settings.DashboardPage, ria.async.DeferredData(dashboard));
             }
 

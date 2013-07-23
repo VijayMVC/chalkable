@@ -33,7 +33,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.departments.DepartmentId, String, String]],
             ria.async.Future, function saveDepartment(id_, name, keywords) {
-                if (id_) return this.updateDepartment(id_, name, keywords);
+                if (id_ && id_.valueOf()) return this.updateDepartment(id_, name, keywords);
                 return this.addDepartment(name, keywords);
             },
 

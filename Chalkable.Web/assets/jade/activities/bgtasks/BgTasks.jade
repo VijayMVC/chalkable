@@ -15,8 +15,8 @@
                     .td//=item.getCreated().toString('d/m/y')
                     .td=item.getScheduled().toString('d/m/y')
                     .td//=item.getCompleted().toString('d/m/y')
-                    .td= item.getTaskState().valueOf()
-                    .td= item.getTaskType().valueOf()
+                    .td= item.getTaskState().toString()
+                    .td= item.getTaskType().toString()
                     .td.action-links
                         +ActionLink('backgroundtask', 'logs', item.getId()).profile
                         +ActionLink('backgroundtask', 'delete', item.getId()).remove

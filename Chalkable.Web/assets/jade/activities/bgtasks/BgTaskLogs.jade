@@ -1,5 +1,5 @@
 .bg-tasks
-    +Grid('backgroundtask', 'logsPage', self.items, [self.bgTaskId]).not-transparent
+    +Grid('backgroundtask', 'logsPage', self.items, [self.bgTaskId.valueOf()]).not-transparent
         +GridHead()
             .th Type
             .th Message

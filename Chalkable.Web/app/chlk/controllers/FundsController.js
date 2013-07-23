@@ -17,7 +17,6 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.fundsService
                 .getFunds(pageIndex_ | 0)
                 .attach(this.validateResponse_());
-            /* Put activity in stack and render when result is ready */
             return this.PushView(chlk.activities.funds.FundsListPage, result);
         },
         [[Number]],

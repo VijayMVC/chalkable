@@ -31,9 +31,9 @@ NAMESPACE('chlk.controllers', function (){
             }
             if(announcementTypeId_){
                 model.setSelectedTypeId(announcementTypeId_);
+                model.setAnnouncementTypeId(announcementTypeId_)
             }
             model.setTopData(topModel);
-            announcementTypeId_ && model.setAnnouncementTypeId(announcementTypeId_);
             var result = new ria.async.DeferredData(model);
             return this.PushView(chlk.activities.announcement.AnnouncementFormPage, result);
         }

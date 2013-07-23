@@ -15,8 +15,6 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('districts')],
 
-
-
         [[Number]],
         function listAction(pageIndex_) {
             var result = this.districtService
@@ -77,8 +75,6 @@ NAMESPACE('chlk.controllers', function (){
 
             return this.UpdateView(chlk.activities.district.DistrictListPage, result);
         },
-
-
 
         [[chlk.models.district.DistrictId]],
         function deleteAction(id) {

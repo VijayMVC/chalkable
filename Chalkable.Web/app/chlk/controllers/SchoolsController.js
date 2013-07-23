@@ -48,11 +48,7 @@ NAMESPACE('chlk.controllers', function (){
                     if (items && items.length > 0){
                         districtId = items[0].getDistrictId();
                     }
-                    var schoolListViewData = new chlk.models.school.SchoolListViewData();
-                    schoolListViewData.setDistrictId(districtId);
-                    schoolListViewData.setItems(data);
-
-                    return new ria.async.DeferredData(schoolListViewData);
+                    return new ria.async.DeferredData(new chlk.models.school.SchoolListViewData(districtId, data));
                 });
             return this.UpdateView(chlk.activities.school.SchoolsListPage, result);
         },
@@ -69,13 +65,8 @@ NAMESPACE('chlk.controllers', function (){
                     if (items && items.length > 0){
                         districtId = items[0].getDistrictId();
                     }
-                    var schoolListViewData = new chlk.models.school.SchoolListViewData();
-                    schoolListViewData.setDistrictId(districtId);
-                    schoolListViewData.setItems(data);
-
-                    return new ria.async.DeferredData(schoolListViewData);
+                    return new ria.async.DeferredData(new chlk.models.school.SchoolListViewData(districtId, data));
                 });
-            /* Put activity in stack and render when result is ready */
             return this.PushView(chlk.activities.school.SchoolsListPage, result);
         },
 
