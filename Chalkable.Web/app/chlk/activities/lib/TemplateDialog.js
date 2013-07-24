@@ -37,6 +37,14 @@ NAMESPACE('chlk.activities.lib', function () {
                     .addClass(HIDDEN_CLASS)
                     .off('click', this._clickMeHandler);
                 BASE();
+            },
+
+
+            [ria.mvc.DomEventBind('click', '.close')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            Boolean, function onCloseBtnClick(node, event) {
+                this.close();
+                event.preventDefault();
             }
         ]);
 });

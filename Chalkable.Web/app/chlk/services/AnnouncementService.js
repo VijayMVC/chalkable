@@ -10,7 +10,7 @@ NAMESPACE('chlk.services', function () {
         'AnnouncementService', EXTENDS(chlk.services.BaseService), [
             [[Number]],
             ria.async.Future, function getAnnouncements(pageIndex_) {
-                return this.getPaginatedList('app/data/Feed.json', chlk.models.announcement.Announcement, {
+                return this.getPaginatedList('Feed/List.json', chlk.models.announcement.Announcement, {
                     start: pageIndex_|0
                 });
             },

@@ -105,6 +105,38 @@ BODY {
             margin-left: 34px;
           }
         }
+
+        .settings{
+          .header{
+            text-align: left !important;
+            font: bold 16px Arial;
+            color: #532f18;
+            text-shadow: 0px 1px 0px rgba(255,255,255,0.5);
+            text-transform: uppercase;
+          }
+          .general{
+            .block{
+              padding: 10px;
+              height: 123px;
+              width: 178px;
+              float:left;
+              margin-left: 8px;
+
+
+              .fields{
+                margin-top: 10px;
+
+                .field{
+                  label{
+                    line-height: 30px;
+                  }
+                }
+              }
+            }
+            margin-left: 18px;
+
+          }
+        }
       }
     }
   }

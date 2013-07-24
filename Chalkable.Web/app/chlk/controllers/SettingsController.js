@@ -1,5 +1,6 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.activities.settings.DashboardPage');
+REQUIRE('chlk.activities.settings.TeacherPage');
 REQUIRE('chlk.models.settings.Dashboard');
 
 NAMESPACE('chlk.controllers', function (){
@@ -27,14 +28,9 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('settings')],
 
             function dashboardTeacherAction() {
-                var dashboard = new chlk.models.settings.Dashboard();
-                dashboard.setBackgroundTaskMonitorVisible(false);
-                dashboard.setStorageMonitorVisible(false);
-                dashboard.setPreferencesVisible(false);
-                dashboard.setAppCategoriesVisible(false);
-                dashboard.setDepartmentsVisible(false);
-                dashboard.setDbMaintenanceVisible(false);
-                return this.PushView(chlk.activities.settings.DashboardPage, ria.async.DeferredData(dashboard));
+
+                var teacherSettings = new chlk.models.settings.TeacherSettings();
+                return this.PushView(chlk.activities.settings.TeacherPage, ria.async.DeferredData(teacherSettings));
             }
 
         ])
