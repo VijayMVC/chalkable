@@ -70,14 +70,22 @@ namespace Chalkable.Web.Controllers
                     ClassId = classId,
                     Type = AttendanceTypeEnum.Absent | AttendanceTypeEnum.Excused | AttendanceTypeEnum.Present | AttendanceTypeEnum.Late
                 });
-
+            var disciplineTypes = SchoolLocator.DisciplineTypeService.GetDisciplineTypes(0, int.MaxValue);
+            var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineComplex(new ClassDisciplineQuery
+            {
+                SchoolYearId = mp.SchoolYearRef,
+                ClassId = classId,
+                MarkingPeriodId = mp.Id,
+            });
+            
             var dates = SchoolLocator.CalendarDateService.GetLastDays(mp.Id, true, currentDateTime.Date, null, 9).Select(x => x.DateTime).ToList();
             IList<AnnouncementComplex> anns = new List<AnnouncementComplex>();
             if (dates.Count > 0)
                 anns = SchoolLocator.AnnouncementService.GetAnnouncements(currentDateTime.Date, dates.Last().Date, false, null, classId);
             var annsByDate = AnnouncementByDateViewData.Create(dates, anns);
 
-            return Json(ClassSummaryViewData.Create(c, curentRoom, students, annsByDate, classAttendances, possibleAbsents));
+            return Json(ClassSummaryViewData.Create(c, curentRoom, students, annsByDate, classAttendances, possibleAbsents
+                , disciplines, disciplineTypes));
         }
 
     }

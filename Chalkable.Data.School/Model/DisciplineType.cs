@@ -11,5 +11,6 @@ namespace Chalkable.Data.School.Model
         public Guid Id { get; set; }
         public string Name { get; set; }
         public int Score { get; set; }
+        public const string SCORE_FIELD = "Score";
     }
 }

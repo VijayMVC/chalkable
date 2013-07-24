@@ -91,6 +91,7 @@
     <Compile Include="Services\School\AttendanceReasonService.cs" />
     <Compile Include="Services\School\AttendanceService.cs" />
     <Compile Include="Services\School\CalendarDateService.cs" />
+    <Compile Include="Services\School\DisciplineService.cs" />
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
     <Compile Include="Services\School\CourseService.cs" />

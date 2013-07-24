@@ -35,6 +35,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IFinalGradeService FinalGradeService { get; }
         IDisciplineTypeService DisciplineTypeService { get; }
         IApplicationSchoolService ApplicationSchoolService { get; }
+        IDisciplineService DisciplineService { get; }
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
     {
@@ -67,6 +68,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IFinalGradeService finalGradeService;
         private IDisciplineTypeService disciplineTypeService;
         private IApplicationSchoolService applicationSchoolService;
+        private IDisciplineService disciplineService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -100,126 +102,38 @@ namespace Chalkable.BusinessLogic.Services.School
             finalGradeService = new FinalGradeService(this);
             disciplineTypeService = new DisciplineTypeService(this);
             applicationSchoolService = new ApplicationSchoolService(this);
+            disciplineService = new DisciplineService(this);
         }
 
-        public IPersonService PersonService
-        {
-            get { return personService; }
-        }
-        public IAddressService AddressService
-        {
-            get { return addressSerivce; }
-        }
-        public IGradeLevelService GradeLevelService
-        {
-            get { return gradeLevelService; }
-        }
-
-        public IMarkingPeriodService MarkingPeriodService 
-        {
-            get { return markingPeriodService; }
-        }
-
-        public IClassService ClassService
-        {
-            get { return classService; }
-        }
-        public ISchoolYearService SchoolYearService
-        {
-            get { return schoolYearService; }
-        }
-        public ICourseService CourseService
-        {
-            get { return courseService; }
-        }
-        public IAnnouncementQnAService AnnouncementQnAService
-        {
-            get { return announcementQnAService; }
-        }
-        public IAnnouncementService AnnouncementService
-        {
-            get { return announcementService; }
-        }
-        public IAnnouncementReminderService AnnouncementReminderService
-        {
-            get { return announcementReminderService; }
-        }
-        public IAnnouncementAttachmentService AnnouncementAttachmentService
-        {
-            get { return announcementAttachmentService; }
-        }
-        public IPhoneService PhoneService
-        {
-            get { return phoneService; }
-        }
-        public IPrivateMessageService PrivateMessageService
-        {
-            get { return privateMessageService; }
-        }
-        public IRoomService RoomService
-        {
-            get { return roomService; }
-        }
-        public IPeriodService PeriodService
-        {
-            get { return periodService; }
-        }
-        public IServiceLocatorMaster ServiceLocatorMaster
-        {
-            get { return serviceLocatorMaster; }
-        }
-        public ICalendarDateService CalendarDateService
-        {
-            get { return calendarDateService; }
-        }
-        public IScheduleSectionService ScheduleSectionService
-        {
-            get { return scheduleSectionService; }
-        }
-        public IClassPeriodService ClassPeriodService
-        {
-            get { return classPeriodService; }
-        }
-        public INotificationService NotificationService
-        {
-            get { return notificationService; }
-        }
-        public IAttendanceService AttendanceService
-        {
-            get { return attendanceService; }
-        }
-        public IAttendanceReasonService AttendanceReasonService
-        {
-            get { return attendanceReasonService; }
-        }
-        public IStudentParentService StudentParentService
-        {
-            get { return studentParentService; }
-        }
-        public IGradingStyleService GradingStyleService
-        {
-            get { return gradingStyleService; }
-        }
-        public IStudentAnnouncementService StudentAnnouncementService
-        {
-            get { return studentAnnouncementService; }
-        }
-        public IAnnouncementTypeService AnnouncementTypeService
-        {
-            get { return announcementTypeService; }
-        }
-        public IFinalGradeService FinalGradeService
-        {
-            get { return finalGradeService; }
-        }
-        public IDisciplineTypeService DisciplineTypeService
-        {
-            get { return disciplineTypeService; }
-        }
-
-        public IApplicationSchoolService ApplicationSchoolService
-        {
-            get { return applicationSchoolService; }
-        }
+        public IPersonService PersonService { get { return personService; } }
+        public IAddressService AddressService { get { return addressSerivce; } }
+        public IGradeLevelService GradeLevelService{ get { return gradeLevelService; } }
+        public IMarkingPeriodService MarkingPeriodService { get { return markingPeriodService; } }
+        public IClassService ClassService { get { return classService; } }
+        public ISchoolYearService SchoolYearService { get { return schoolYearService; } }
+        public ICourseService CourseService { get { return courseService; } }
+        public IAnnouncementQnAService AnnouncementQnAService{ get { return announcementQnAService; } }
+        public IAnnouncementService AnnouncementService { get { return announcementService; } }
+        public IAnnouncementReminderService AnnouncementReminderService { get { return announcementReminderService; } }
+        public IAnnouncementAttachmentService AnnouncementAttachmentService { get { return announcementAttachmentService; } }
+        public IPhoneService PhoneService { get { return phoneService; } }
+        public IPrivateMessageService PrivateMessageService { get { return privateMessageService; } }
+        public IRoomService RoomService { get { return roomService; } }
+        public IPeriodService PeriodService { get { return periodService; } }
+        public IServiceLocatorMaster ServiceLocatorMaster { get { return serviceLocatorMaster; } }
+        public ICalendarDateService CalendarDateService { get { return calendarDateService; } }
+        public IScheduleSectionService ScheduleSectionService { get { return scheduleSectionService; } }
+        public IClassPeriodService ClassPeriodService { get { return classPeriodService; } }
+        public INotificationService NotificationService { get { return notificationService; } }
+        public IAttendanceService AttendanceService { get { return attendanceService; } }
+        public IAttendanceReasonService AttendanceReasonService { get { return attendanceReasonService; } }
+        public IStudentParentService StudentParentService { get { return studentParentService; } }
+        public IGradingStyleService GradingStyleService { get { return gradingStyleService; } }
+        public IStudentAnnouncementService StudentAnnouncementService { get { return studentAnnouncementService; } }
+        public IAnnouncementTypeService AnnouncementTypeService { get { return announcementTypeService; } }
+        public IFinalGradeService FinalGradeService { get { return finalGradeService; } }
+        public IDisciplineTypeService DisciplineTypeService { get { return disciplineTypeService; } }
+        public IApplicationSchoolService ApplicationSchoolService { get { return applicationSchoolService; } }
+        public IDisciplineService DisciplineService { get { return disciplineService; } }
     }
 }

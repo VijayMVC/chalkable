@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.ClassesViewData
@@ -26,15 +25,15 @@ namespace Chalkable.Web.Models.ClassesViewData
         //    res.Hover = ClassAverageForMpHoverViewData.Create(avgByMp, previosMps);
         //    return res;
         //}
-        //public static ClassHoverBoxesViewData<ClassDisciplineHoveViewData> Create(IList<ClassDisciplineComplex> disciplineList)
-        //{
-        //    var res = new ClassHoverBoxesViewData<ClassDisciplineHoveViewData>();
-        //    var disciplineTypeIds = disciplineList.OrderBy(x => x.DisciplineScore).GroupBy(x => x.DisciplineId)
-        //                                          .Select(x => x.Key).Take(MAX_HOVER_LIST_NUMBER).ToList();
-        //    res.Hover = ClassDisciplineHoveViewData.Create(disciplineTypeIds, disciplineList);
-        //    res.Tile = disciplineList.Count;
-        //    return res;
-        //}
+
+        public static ClassHoverBoxViewData<ClassDisciplineHoveViewData> Create(IList<DisciplineType> disciplineTypes, IList<ClassDisciplineDetails> disciplineList)
+        {
+            var res = new ClassHoverBoxViewData<ClassDisciplineHoveViewData>();
+            res.Titel = disciplineList.Sum(x => x.DisciplineTypes.Count).ToString();
+            disciplineTypes = disciplineTypes.Take(MAX_HOVER_LIST_NUMBER).ToList();
+            res.Hover = ClassDisciplineHoveViewData.Create(disciplineTypes, disciplineList);
+            return res;
+        }
 
     }
 
@@ -78,25 +77,23 @@ namespace Chalkable.Web.Models.ClassesViewData
                 };
         }
     }
+    public class ClassDisciplineHoveViewData
+    {
+        public string DisciplineName { get; set; }
+        public int Count { get; set; }
 
-    //public class ClassDisciplineHoveViewData
-    //{
-    //    public string DisciplineName { get; set; }
-    //    public int Count { get; set; }
-
-    //    public static IList<ClassDisciplineHoveViewData> Create(IList<int> disciplineTypeIds, IList<ClassDisciplineComplex> disciplines)
-    //    {
-    //        var res = new List<ClassDisciplineHoveViewData>();
-    //        foreach (var disciplineTypeId in disciplineTypeIds)
-    //        {
-    //            var currentTypeDisc = disciplines.Where(x => x.DisciplineId == disciplineTypeId).ToList();
-    //            res.Add(new ClassDisciplineHoveViewData
-    //            {
-    //                DisciplineName = currentTypeDisc.Count > 0 ? currentTypeDisc[0].DisciplineName : "",
-    //                Count = currentTypeDisc.Count
-    //            });
-    //        }
-    //        return res;
-    //    }
-    //}
+        public static IList<ClassDisciplineHoveViewData> Create(IList<DisciplineType> disciplineTypes, IList<ClassDisciplineDetails> disciplines)
+        {
+            var res = new List<ClassDisciplineHoveViewData>();
+            foreach (var disciplineType in disciplineTypes)
+            {
+                res.Add(new ClassDisciplineHoveViewData
+                {
+                    DisciplineName = disciplineType.Name,
+                    Count = disciplines.Sum(x=>x.DisciplineTypes.Count(y=>y.DisciplineTypeRef == disciplineType.Id))
+                });
+            }
+            return res;
+        }
+    }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.CalendarsViewData;
 using Chalkable.Web.Models.PersonViewDatas;
@@ -17,7 +16,7 @@ namespace Chalkable.Web.Models.ClassesViewData
         public int ClassSize { get; set; }
 
         public ClassHoverBoxViewData<ClassAttendanceHoverViewData> ClassAttendanceBox { get; set; }
-        //public ClassTitelsViewData<ClassDisciplineHoveViewData> ClassDisciplineListTile { get; set; }
+        public ClassHoverBoxViewData<ClassDisciplineHoveViewData> ClassDisciplineBox { get; set; }
         public ClassHoverBoxViewData<ClassAverageForMpHoverViewData> ClassAverageBox { get; set; }
 
         public IList<AnnouncementByDateViewData> AnnouncementsByDate { get; set; } 
@@ -38,11 +37,13 @@ namespace Chalkable.Web.Models.ClassesViewData
         }
 
         public static ClassSummaryViewData Create(ClassComplex c, Room currentRoom, IList<Person> students,
-             IList<AnnouncementByDateViewData> announcementByDates, IList<ClassAttendanceComplex> attendances, int posibleAbsent)
+             IList<AnnouncementByDateViewData> announcementByDates, IList<ClassAttendanceComplex> attendances
+            , int posibleAbsent, IList<ClassDisciplineDetails> disciplines, IList<DisciplineType> disciplineTypes)
         {
             var res = Create(c, currentRoom, students);
             res.AnnouncementsByDate = announcementByDates;
             res.ClassAttendanceBox = ClassHoverBoxViewData<ClassAttendanceHoverViewData>.Create(attendances, posibleAbsent);
+            res.ClassDisciplineBox = ClassHoverBoxViewData<ClassDisciplineHoveViewData>.Create(disciplineTypes, disciplines);
             return res;
         }
 

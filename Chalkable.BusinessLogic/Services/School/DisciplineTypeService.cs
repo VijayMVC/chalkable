@@ -72,7 +72,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new DisciplineTypeDataAccess(uow).GetPage(start, count);
+                return new DisciplineTypeDataAccess(uow).GetPage(start, count, DisciplineType.SCORE_FIELD);
             }
         }
 
