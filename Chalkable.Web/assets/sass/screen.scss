@@ -124,7 +124,7 @@ a, a:visited, a:link {
   outline: none !important;
 }
 .x-hidden{
-  display: none;
+  display: none !important;
 }
 
 a:active, a:hover {
@@ -468,12 +468,12 @@ BODY {
     width: 100%;
 
     &.demo{
-      #content, #sidebar{
+      >DIV#content, >DIV#sidebar{
         margin-bottom: 90px;
       }
     }
 
-    #content {
+    >DIV#content {
       padding-left: $sidebar-width + $margin;
       padding-top: 11px;
 

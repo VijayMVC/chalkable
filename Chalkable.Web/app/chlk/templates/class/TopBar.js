@@ -15,6 +15,8 @@ NAMESPACE('chlk.templates.class', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.class.CourseId, 'courseInfoId',
             [ria.templates.ModelPropertyBind],
-            Boolean, 'pressed'
+            Boolean, 'pressed',
+            [ria.templates.ModelPropertyBind],
+            Number, 'index'
         ])
 });

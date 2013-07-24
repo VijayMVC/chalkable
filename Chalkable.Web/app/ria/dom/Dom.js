@@ -48,6 +48,20 @@ NAMESPACE('ria.dom', function () {
         [[Object, ria.dom.Event]],
         Boolean, function DomEventHandler(node, event) {});
 
+    /** @class ria.dom.Keys */
+    ENUM(
+        'Keys', {
+            LEFT: 37,
+            UP: 38,
+            RIGHT: 39,
+            DOWN: 40,
+            ENTER: 13,
+            BACKSPACE: 8,
+            DELETE: 46,
+            ESC: 27,
+            SPACE: 32
+        });
+
     var GID = new Date().getTime();
     /**
      * @class ria.dom.NewGID
@@ -324,6 +338,9 @@ NAMESPACE('ria.dom', function () {
                 return this._dom.some(function (el) {
                     return nodes.some(function (_) { return el.contains(_); });
                 });
+            },
+            Boolean, function exists() {
+                return !!this._dom[0];
             },
 
             Object, function getValue() {

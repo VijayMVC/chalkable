@@ -48,7 +48,7 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.districtService
                 .getDistrict(id)
                 .attach(this.validateResponse_());
-            return this.ShadeView(chlk.activities.district.DistrictDialog, result);
+            return this.ShadeView(chlk.activities.district.DistrictDialog, result).;
         },
 
 

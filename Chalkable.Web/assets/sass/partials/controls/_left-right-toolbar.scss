@@ -35,6 +35,10 @@
     .first-container{
       margin-left: 17px;
       width: 633px;
+
+      .class-button{
+        cursor: pointer;
+      }
     }
   }
 
@@ -74,9 +78,9 @@
       @include transition-duration("0.5s");
 
       .item{
-        height: 76px;
+        height: 82px;
         display: inline-block;
-        width: 67px;
+        width: 73px;
 
         &.class-button{
           background-position: center top;
@@ -84,11 +88,12 @@
           text-decoration: none;
           position: relative;
           border: 3px solid #C9C9C9;
-          background-color: #C9C9C9;
           border-radius: 7px;
           margin: 3px;
           text-align: center;
           background: url(images/common/classesbar-controls.png) center top no-repeat;
+          background-color: #C9C9C9;
+          vertical-align: top;
 
           &.pressed, &:active{
             background-position: center bottom;
@@ -129,7 +134,7 @@
           .text-container{
             text-align: center;
             display: inline-block;
-            padding-top: 46px;
+            padding-top: 35px;
             font-size: 12px;
             line-height: 14px;
             font-weight: bold;

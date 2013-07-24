@@ -1,4 +1,4 @@
-REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.models.people.User');
 
 NAMESPACE('chlk.models.class', function () {
     "use strict";
@@ -9,10 +9,10 @@ NAMESPACE('chlk.models.class', function () {
     /** @class chlk.models.class.CourseId*/
     IDENTIFIER('CourseId');
 
-    /** @class chlk.models.class.CourseId*/
+    /** @class chlk.models.class.MarkingPeriodId*/
     IDENTIFIER('MarkingPeriodId');
 
-    /** @class chlk.models.class.CourseId*/
+    /** @class chlk.models.class.StaffCourseId*/
     IDENTIFIER('StaffCourseId');
 
     /** @class chlk.models.class.ClassForTopBar*/
@@ -43,11 +43,13 @@ NAMESPACE('chlk.models.class', function () {
             chlk.models.class.StaffCourseId, 'staffCourseId',
 
             [ria.serialize.SerializeProperty('teacherid')],
-            chlk.models.announcement.SchoolPersonId, 'teacherId',
+            chlk.models.people.SchoolPersonId, 'teacherId',
 
             [ria.serialize.SerializeProperty('teachername')],
             String, 'teacherName',
 
-            Boolean, 'pressed'
+            Boolean, 'pressed',
+
+            Number, 'index'
         ]);
 });
