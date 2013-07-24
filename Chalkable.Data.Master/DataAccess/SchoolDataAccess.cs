@@ -63,9 +63,12 @@ namespace Chalkable.Data.Master.DataAccess
             return res;
         }
 
-        public PaginatedList<School> GetSchools(int start, int count)
+        public PaginatedList<School> GetSchools(Guid? districtId, int start, int count)
         {
-            return PaginatedSelect<School>(new Dictionary<string, object>(), "Id", start, count);
+            var conds = new Dictionary<string, object>();
+            if(districtId.HasValue)
+                conds.Add(School.DISTRICT_REF_FIELD, districtId);
+            return PaginatedSelect<School>(conds, School.ID_FIELD, start, count);
         }
 
         public IList<School> GetSchools(bool empty)
