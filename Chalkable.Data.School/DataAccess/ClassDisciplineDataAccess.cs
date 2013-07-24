@@ -66,6 +66,18 @@ namespace Chalkable.Data.School.DataAccess
                 return res;
             }
         } 
+
+
+        public ClassDiscipline GetClassDiscipline(Guid classPeriodId, Guid classPersonId, DateTime date)
+        {
+            var conds = new Dictionary<string, object>
+                {
+                    {ClassDiscipline.CLASS_PERIOD_REF_FIELD, classPeriodId},
+                    {ClassDiscipline.CLASS_PERSON_REF_FIELD, classPersonId},
+                    {ClassDiscipline.DATE_FIELD, date},
+                };
+           return SelectOneOrNull<ClassDiscipline>(conds);
+        }
     }
 
     public class ClassDisciplineQuery

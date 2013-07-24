@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -10,7 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IDisciplineService
     {
-
+        ClassDiscipline SetClassDiscipline(Guid classPersonId, Guid classPeriodId, DateTime date, ISet<Guid> disciplineTypes, string description);
         IList<ClassDisciplineDetails> GetClassDisciplineDetails(ClassDisciplineQuery query, IList<Guid> gradeLevelIds = null);
         IList<ClassDisciplineDetails> GetClassDisciplineDetails(Guid schoolYearId, Guid personId, DateTime start, DateTime end, bool needsAllData = false);
     }
@@ -45,6 +48,53 @@ namespace Chalkable.BusinessLogic.Services.School
                     ToDate = end,
                     NeedAllData = needsAllData
                 });
+        }
+
+        public ClassDiscipline SetClassDiscipline(Guid classPersonId, Guid classPeriodId, DateTime date, ISet<Guid> disciplineTypes, string description)
+        {
+            using (var uow = Update())
+            {
+                var cPeriodDa = new ClassPeriodDataAccess(uow);
+                var cPeriod = cPeriodDa.GetClassPeriods(new ClassPeriodQuery { Id = classPeriodId }).First();
+                var c = new ClassDataAccess(uow).GetById(cPeriod.ClassRef);
+                if (!BaseSecurity.IsAdminEditorOrClassTeacher(c, Context))
+                    throw new ChalkableSecurityException();
+                
+                var dateDa = new DateDataAccess(uow);
+                if (!dateDa.Exists(new DateQuery { ToDate = date, FromDate = date, SectionRef = cPeriod.Period.SectionRef }))
+                    throw new ChalkableException(ChlkResources.ERR_CLASS_IS_NOT_SCHEDULED_FOR_DAY);
+
+                var disciplineDa = new ClassDisciplineDataAccess(uow);
+                var discipline = disciplineDa.GetClassDiscipline(classPeriodId, classPersonId, date);
+                bool insertDiscipline = false;
+                if (discipline == null)
+                {
+                    discipline = new ClassDiscipline { Id = Guid.NewGuid() };
+                    insertDiscipline = true;
+                }
+                discipline.ClassPeriodRef = classPeriodId;
+                discipline.ClassPersonRef = classPersonId;
+                discipline.Date = date;
+                discipline.Description = description;
+
+                if(insertDiscipline) disciplineDa.Insert(discipline);
+                else disciplineDa.Update(discipline);
+
+                var cDisciplineTypes = new List<ClassDisciplineType>();
+                foreach (var disciplineType in disciplineTypes)
+                {
+                    cDisciplineTypes.Add(new ClassDisciplineType 
+                                {
+                                    Id = Guid.NewGuid(),
+                                    ClassDisciplineRef = discipline.Id,
+                                    DisciplineTypeRef = disciplineType
+                                });
+                }
+                new ClassDisciplineTypeDataAccess(uow).Insert(cDisciplineTypes);
+
+                uow.Commit();
+                return discipline;
+            }
         }
     }
 }

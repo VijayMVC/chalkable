@@ -10,8 +10,11 @@ namespace Chalkable.Data.School.Model
     public class ClassDiscipline
     {
         public Guid Id { get; set; }
+        public const string CLASS_PERSON_REF_FIELD = "ClassPersonRef";
         public Guid ClassPersonRef { get; set; }
+        public const string CLASS_PERIOD_REF_FIELD = "ClassPeriodRef";
         public Guid ClassPeriodRef { get; set; }
+        public const string DATE_FIELD = "Date";
         public DateTime Date { get; set; }
         public string Description { get; set; }
     }

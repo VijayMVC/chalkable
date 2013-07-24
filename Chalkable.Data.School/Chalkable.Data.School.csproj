@@ -52,6 +52,7 @@
     <Compile Include="DataAccess\AttendanceReasonDataAccess.cs" />
     <Compile Include="DataAccess\ClassAttendanceDataAccess.cs" />
     <Compile Include="DataAccess\ClassDisciplineDataAccess.cs" />
+    <Compile Include="DataAccess\ClassDisciplineTypeDataAccess.cs" />
     <Compile Include="DataAccess\DisciplineTypeDataAccess.cs" />
     <Compile Include="DataAccess\FinalGradeAnnouncementTypeDataAccess.cs" />
     <Compile Include="DataAccess\FinalGradeDataAccess.cs" />
