@@ -184,7 +184,7 @@ NAMESPACE('ria.dom', function () {
             OVERRIDE, Object, function getAllAttrs() {},
             [[String]],
             OVERRIDE, Object, function getAttr(name) {
-                return this._dom.attr(name);
+                return this._dom.attr(name) || null;
             },
             OVERRIDE, Object, function getValue() {
                 return this._dom.val();
@@ -219,7 +219,10 @@ NAMESPACE('ria.dom', function () {
             [[Object]],
             OVERRIDE, SELF, function setAllData(obj) {},
             [[String, Object]],
-            OVERRIDE, SELF, function setData(name, value) {},
+            OVERRIDE, SELF, function setData(name, value) {
+                this._dom.data(name, value);
+                return this;
+            },
 
             /* classes */
 

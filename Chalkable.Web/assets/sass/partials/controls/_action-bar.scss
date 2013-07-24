@@ -31,6 +31,9 @@ DIV#content-wrapper{
         font-size: 12px;
         font-style: normal;
         cursor: pointer;
+        background: transparent;
+        margin: 0;
+        border-width: 0 1px 0 1px;
 
         &:hover, &.pressed{
           color: #2f7790;

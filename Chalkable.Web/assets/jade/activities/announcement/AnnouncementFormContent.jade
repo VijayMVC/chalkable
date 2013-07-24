@@ -1,0 +1,27 @@
+-typesEnum = chlk.models.announcement.AnnouncementTypeEnum;
+-isAnnouncement = self.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf();
+input(type='hidden', name='id', value=self.getId())
+input(type='hidden', name='announcementtypeid', value=self.getAnnouncementTypeId())
+input(type='hidden', name='statetyped', value=self.getStateTyped())
+input(type='hidden', name='systemtype', value=self.getSystemType())
+input(type='hidden', name='schoolpersonref', value=self.getSchoolPersonRef())
+input(type='hidden', name='gradingstyle', value=self.getGradingStyle())
+//input(type='hidden', name='created', value=self.getCreated())
+input(type='hidden', name='state', value=self.getState())
+//input(type='hidden', name='recipientId', value=self.getRecipientId())
+input(type='hidden', name='classId', value=self.getRecipientId())
+input(type='hidden', name='announcementtypename', value=self.getAnnouncementTypeName())
+div.left-block
+    if isAnnouncement
+        TEXTAREA(id="subject",name="subject",placeholder="Subject")=self.getSubject()
+    TEXTAREA(id="content",name="content",placeholder=isAnnouncement ? "Message" : "Assignment")=self.getContent()
+    .drop-down-container
+    input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden')
+div.right-block
++Button()(
+    type="submit",
+    name="submitType",
+    value="submit"
+).special-button.blue-button.submit-btn Submit
+
+

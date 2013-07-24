@@ -1,5 +1,9 @@
 NAMESPACE('chlk.models.people', function () {
     "use strict";
+
+    /** @class chlk.models.people.SchoolPersonId*/
+    IDENTIFIER('SchoolPersonId');
+
     /** @class chlk.models.people.User*/
     CLASS(
         'User', [

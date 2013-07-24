@@ -1,5 +1,52 @@
 .announcement-form{
+  TEXTAREA{
+    padding: 4px 4px 8px;
+    width: 370px;
+    font-size: 14px;
 
+    &#subject{
+      height: 17px !important;
+    }
+
+    &#content{
+      height: 133px !important;
+    }
+  }
+
+  .new-item-dropdown{
+    position: absolute;
+    background: white;
+    width: 240px;
+    z-index: 999;
+    border-left: 1px solid #a9a9a9;
+    border-right: 1px solid #a9a9a9;
+    border-bottom: 1px solid #a9a9a9;
+    font-size: 14px;
+    font-family: "Arial Narrow", Arial;
+    color: #000;
+
+    >DIV{
+      height: 20px;
+      padding:0 4px;
+      overflow: hidden;
+      word-wrap: break-word;
+    }
+
+    H1{
+      background: #e1e2e2;
+      margin: 0;
+      color: #888;
+      padding: 3px;
+      color: #8b8b8b;
+      height: 20px;
+      font-size: 16px;
+      font-weight: normal;
+    }
+
+    .current{
+      background: #eedd68;
+    }
+  }
 }
 
 .choose-class{

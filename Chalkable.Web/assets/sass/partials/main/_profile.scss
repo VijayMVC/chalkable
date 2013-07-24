@@ -2,7 +2,7 @@ $color: #957633;
 
 BODY {
   DIV.page{
-    #content {
+    >DIV#content {
       DIV#content-wrapper.profile{
         h1, h2, .status{
           font-family: Pacifico;

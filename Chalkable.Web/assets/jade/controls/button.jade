@@ -1,6 +1,9 @@
 mixin Button()
+    -value=attributes.value;
+    -type=attributes.type;
+    -name=attributes.name;
     span.chlk-button(attributes)
         span
             span
-                button
+                button(type=type, name=name, value=value)
                     block

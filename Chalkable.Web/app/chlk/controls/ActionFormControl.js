@@ -114,17 +114,14 @@ NAMESPACE('chlk.controls', function () {
                 ASSET('~/assets/jade/controls/action-form.jade')(this);
             },
 
-            /*function $() {
-                jQuery('BODY')
-                .on('submit', 'FORM', this.submit.asJQueryEventHandler())
-                .on('click', 'FORM input[type=submit]', function(e) {
-                    var $target = jQuery(e.target),
-                        $form = $target.closest('FORM');
+            [ria.mvc.DomEventBind('click', 'FORM [type=submit]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            Boolean, function submitClicked_($target, event) {
+                var $form = $target.parent('FORM');
 
-                    $form.attr('data-submit-name', $target.attr('name'));
-                    $form.attr('data-submit-value', $target.val());
-                });
-            },*/
+                $form.setData('submit-name', $target.getAttr('name'));
+                $form.setData('submit-value', $target.getValue());
+            },
 
             [ria.mvc.DomEventBind('submit', 'FORM')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -157,8 +154,8 @@ NAMESPACE('chlk.controls', function () {
                             params[name] = value;
                         }
 
-                        $target.setAttr('data-submit-name', null);
-                        $target.setAttr('data-submit-value', null);
+                        $target.setData('submit-name', null);
+                        $target.setData('submit-value', null);
 
                         state.setParams([params]);
 

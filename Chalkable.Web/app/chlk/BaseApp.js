@@ -19,6 +19,13 @@ REQUIRE('chlk.models.common.Role');
 
 NAMESPACE('chlk', function (){
 
+    new ria.dom.Dom().on('click', '.action-bar .action-button:not(.pressed), .action-bar .action-link:not(.pressed)', function(node, event){
+        node.parent('.action-bar')
+            .find('.pressed')
+            .removeClass('pressed');
+        node.addClass('pressed');
+    });
+
     /** @class chlk.BaseApp */
     CLASS(
         'BaseApp', EXTENDS(ria.mvc.Application), [
