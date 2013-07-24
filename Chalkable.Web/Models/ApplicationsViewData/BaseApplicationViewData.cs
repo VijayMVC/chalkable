@@ -75,7 +75,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         //public ApplicationRatingViewData ApplicationRating { get; set; }
         public IList<CategoryViewData> Categories { get; set; }
         public IList<GradeLevelViewData> GradelLevels { get; set; }
-        public IList<RoleVieawData> CanLaunchRoles { get; set; }
+        public IList<RoleViewData> CanLaunchRoles { get; set; }
         public DeveloperViewData Developer { get; set; }
         public BaseApplicationViewData LiveApplication { get; set; }
 

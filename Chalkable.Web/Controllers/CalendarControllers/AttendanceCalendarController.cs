@@ -10,6 +10,7 @@ using Chalkable.Web.Models.CalendarsViewData;
 
 namespace Chalkable.Web.Controllers.CalendarControllers
 {
+    [RequireHttps, TraceControllerFilter]
     public class AttendanceCalendarController : CalendarController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]

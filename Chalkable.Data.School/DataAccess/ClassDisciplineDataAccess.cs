@@ -37,8 +37,8 @@ namespace Chalkable.Data.School.DataAccess
                     {TEACHER_ID_PARAM, query.TeacherId},
                     {MARKING_PERIOD_ID_PARAM, query.MarkingPeriodId},
                     {CLASS_ID_PARAM, query.ClassId},
-                    {FROM_DATE_PARAM, query.From},
-                    {TO_DATE_PARAM, query.To},
+                    {FROM_DATE_PARAM, query.FromDate},
+                    {TO_DATE_PARAM, query.ToDate},
                     {FROM_TIME_PARAM, query.StartTime},
                     {TO_TIME_PARAM, query.EndTime},
                     {TYPE_PARAM, query.Type},
@@ -75,8 +75,8 @@ namespace Chalkable.Data.School.DataAccess
         public Guid? ClassId { get; set; }
         public Guid? TeacherId { get; set; }
         public Guid? Type { get; set; }
-        public DateTime? From { get; set; }
-        public DateTime? To { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
         public int? StartTime { get; set; }
         public int? EndTime { get; set; }
         public Guid? SchoolYearId { get; set; }

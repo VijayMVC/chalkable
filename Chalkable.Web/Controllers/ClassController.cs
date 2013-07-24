@@ -71,7 +71,7 @@ namespace Chalkable.Web.Controllers
                     Type = AttendanceTypeEnum.Absent | AttendanceTypeEnum.Excused | AttendanceTypeEnum.Present | AttendanceTypeEnum.Late
                 });
             var disciplineTypes = SchoolLocator.DisciplineTypeService.GetDisciplineTypes(0, int.MaxValue);
-            var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineComplex(new ClassDisciplineQuery
+            var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineDetails(new ClassDisciplineQuery
             {
                 SchoolYearId = mp.SchoolYearRef,
                 ClassId = classId,

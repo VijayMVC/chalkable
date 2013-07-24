@@ -138,6 +138,7 @@
     <Compile Include="Controllers\BaseAnnouncementController.cs" />
     <Compile Include="Controllers\CalendarControllers\AttendanceCalendarController.cs" />
     <Compile Include="Controllers\CalendarControllers\CalendarController.cs" />
+    <Compile Include="Controllers\CalendarControllers\DisciplineCalendarController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\ChalkableController.cs" />
     <Compile Include="ActionResults\ChalkableJsonResult.cs" />
@@ -193,6 +194,7 @@
     <Compile Include="Models\CalendarsViewData\AnnouncementCalendarWeekViewData.cs" />
     <Compile Include="Models\CalendarsViewData\AnnouncementMonthCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\AttendanceCalendarViewData.cs" />
+    <Compile Include="Models\CalendarsViewData\DisciplineCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\MonthCalendarViewData.cs" />
     <Compile Include="Models\CategoryViewData.cs" />
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
@@ -205,6 +207,7 @@
     <Compile Include="Models\CreateAnnouncementViewData.cs" />
     <Compile Include="Models\DeveloperViewData.cs" />
     <Compile Include="Models\DisciplineTypeViewData.cs" />
+    <Compile Include="Models\DisciplineView.cs" />
     <Compile Include="Models\DistrictViewData.cs" />
     <Compile Include="Models\GradingStyleViewData.cs" />
     <Compile Include="Models\NotificationsByDateViewData.cs" />
@@ -224,7 +227,6 @@
     <Compile Include="Models\PreferenceVeiwData.cs" />
     <Compile Include="Models\Binders\StringConstructedObjectBinder.cs" />
     <Compile Include="Models\PrivateMessageViewData.cs" />
-    <Compile Include="Models\RoleVieawData.cs" />
     <Compile Include="Models\RoleViewData.cs" />
     <Compile Include="Models\RoomViewData.cs" />
     <Compile Include="Models\ScheduleSectionViewData.cs" />

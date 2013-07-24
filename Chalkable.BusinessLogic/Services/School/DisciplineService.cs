@@ -10,8 +10,9 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IDisciplineService
     {
-        IList<ClassDisciplineDetails> GetClassDisciplineComplex(ClassDisciplineQuery query, IList<Guid> gradeLevelIds = null);
-       
+
+        IList<ClassDisciplineDetails> GetClassDisciplineDetails(ClassDisciplineQuery query, IList<Guid> gradeLevelIds = null);
+        IList<ClassDisciplineDetails> GetClassDisciplineDetails(Guid schoolYearId, Guid personId, DateTime start, DateTime end, bool needsAllData = false);
     }
 
     public class DisciplineService : SchoolServiceBase, IDisciplineService
@@ -20,8 +21,10 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        //TODO: needs test
-        public IList<ClassDisciplineDetails> GetClassDisciplineComplex(ClassDisciplineQuery query, IList<Guid> gradeLevelIds = null)
+
+
+        //TODO: needs test... security
+        public IList<ClassDisciplineDetails> GetClassDisciplineDetails(ClassDisciplineQuery query, IList<Guid> gradeLevelIds = null)
         {
             using (var uow = Read())
             {
@@ -30,6 +33,18 @@ namespace Chalkable.BusinessLogic.Services.School
                     res = res.Where(x => gradeLevelIds.Contains(x.Class.GradeLevelRef)).ToList();
                 return res;
             }
+        }
+
+        public IList<ClassDisciplineDetails> GetClassDisciplineDetails(Guid schoolYearId, Guid personId, DateTime start, DateTime end, bool needsAllData = false)
+        {
+            return GetClassDisciplineDetails(new ClassDisciplineQuery
+                {
+                    SchoolYearId = schoolYearId,
+                    PersonId = personId,
+                    FromDate = start,
+                    ToDate = end,
+                    NeedAllData = needsAllData
+                });
         }
     }
 }
