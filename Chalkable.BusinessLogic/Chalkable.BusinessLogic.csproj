@@ -48,6 +48,7 @@
     <Compile Include="Mapping\GradingStyleMapper.cs" />
     <Compile Include="Model\AnnouncementInfo.cs" />
     <Compile Include="Model\ApplicationInfo.cs" />
+    <Compile Include="Model\ApplicationTotalPriceInfo.cs" />
     <Compile Include="Model\AttachmentContentInfo.cs" />
     <Compile Include="Model\BlobContainerInfo.cs" />
     <Compile Include="Model\BlobInfo.cs" />

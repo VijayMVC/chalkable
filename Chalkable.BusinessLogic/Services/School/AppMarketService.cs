@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -21,16 +22,18 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<Application> ListInstalledAppsForClass(Guid classId);
         IList<ApplicationInstall> ListInstalledByAppId(Guid applicationId);
         ApplicationInstallAction Install(Guid applicationId, Guid? personId, IList<int> roleIds, IList<Guid> classIds, IList<Guid> departmentIds, IList<Guid> gradeLevelIds, Guid schoolYearId, DateTime dateTime);
-        IList<ApplicationInstall> GetInstallations(Guid applicationId, Guid schoolPersonId, bool owners = true);
-        ApplicationInstall GetInstallationForPerson(Guid applicationId, Guid schoolPersonId);
+        IList<ApplicationInstall> GetInstallations(Guid applicationId, Guid personId, bool owners = true);
+        ApplicationInstall GetInstallationForPerson(Guid applicationId, Guid personId);
         ApplicationInstall GetInstallationById(Guid applicationInstallId);
         bool IsPersonForInstall(Guid applicationId);
         void Uninstall(Guid applicationInstallationId);
         bool CanInstall(Guid applicationId, Guid? schoolPersonId, IList<int> roleIds, IList<Guid> classIds, IList<Guid> gradelevelIds, IList<Guid> departmentIds);
 
         IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, Guid? personId, IList<int> roleIds, IList<Guid> classIds, IList<Guid> departmentIds, IList<Guid> gradeLevelIds);
-        /*IList<StudentCountToAppInstallByClassComplex> GetStudentCountToAppInstallByClass(int schoolYearId, int applicationId);
-        ApplicationTotalPriceInfo GetApplicationTotalPrice(int applicationId, int? schoolPerson, IList<int> roleIds, IList<int> classIds, IList<int> gradelevelIds, IList<int> departmentIds);*/
+        IList<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(Guid applicationId, Guid schoolYearId);
+        
+
+        ApplicationTotalPriceInfo GetApplicationTotalPrice(Guid applicationId, Guid? schoolPerson, IList<int> roleids, IList<Guid> classids, IList<Guid> gradelevelids, IList<Guid> departmentids);
 
     }
 
@@ -208,37 +211,136 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
-        public IList<ApplicationInstall> GetInstallations(Guid applicationId, Guid schoolPersonId, bool owners = true)
+        public IList<ApplicationInstall> GetInstallations(Guid applicationId, Guid personId, bool owners = true)
         {
-            throw new NotImplementedException();
+            if (!(BaseSecurity.IsAdminViewer(Context) || Context.UserId != personId))
+                throw new ChalkableSecurityException();
+            using (var uow = Read())
+            {
+                var da = new ApplicationInstallDataAccess(uow);
+                var ps = new Dictionary<string, object>
+                    {
+                        {ApplicationInstall.APPLICATION_REF_FIELD, applicationId},
+                        {ApplicationInstall.ACTIVE_FIELD, true}
+                    };
+                if (owners)
+                    ps.Add(ApplicationInstall.OWNER_REF_FIELD, personId);
+                else
+                    ps.Add(ApplicationInstall.PERSON_REF_FIELD, personId);
+                return da.GetAll(ps);
+            }
         }
 
-        public ApplicationInstall GetInstallationForPerson(Guid applicationId, Guid schoolPersonId)
+        public ApplicationInstall GetInstallationForPerson(Guid applicationId, Guid personId)
         {
-            throw new NotImplementedException();
+            //TODO: security
+            using (var uow = Read())
+            {
+                var da = new ApplicationInstallDataAccess(uow);
+                var ps = new Dictionary<string, object>
+                    {
+                        {ApplicationInstall.APPLICATION_REF_FIELD, applicationId},
+                        {ApplicationInstall.PERSON_REF_FIELD, personId},
+                        {ApplicationInstall.ACTIVE_FIELD, true}
+                    };
+                return da.GetAll(ps).FirstOrDefault();
+            }
         }
 
         public ApplicationInstall GetInstallationById(Guid applicationInstallId)
         {
-            throw new NotImplementedException();
+            using (var uow = Read())
+            {
+                var da = new ApplicationInstallDataAccess(uow);
+                return da.GetById(applicationInstallId);
+            }
         }
 
         public bool IsPersonForInstall(Guid applicationId)
         {
-            throw new NotImplementedException();
+            var r = GetPersonsForApplicationInstallCount(applicationId, null, null, null, null, null).ToList();
+            return r.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count > 0;
         }
 
         public void Uninstall(Guid applicationInstallationId)
         {
-            throw new NotImplementedException();
+            using (var uow = Update())
+            {
+                var da = new ApplicationInstallDataAccess(uow);
+                var appInst = da.GetById(applicationInstallationId);
+                if (!ApplicationSecurity.CanUninstall(Context, appInst))
+                    throw new ChalkableSecurityException();
+                appInst.Active = false;
+                da.Update(appInst);
+                uow.Commit();
+            }
         }
 
-        public bool CanInstall(Guid applicationId, Guid? schoolPersonId, IList<int> roleIds, IList<Guid> classIds, IList<Guid> gradelevelIds,
-                               IList<Guid> departmentIds)
+        public bool CanInstall(Guid applicationId, Guid? schoolPersonId, IList<int> roleIds, IList<Guid> classIds, IList<Guid> gradelevelIds, IList<Guid> departmentIds)
         {
-            throw new NotImplementedException();
+            if (!Context.SchoolId.HasValue)
+                throw new UnassignedUserException();
+            var priceData = GetApplicationTotalPrice(applicationId, schoolPersonId, roleIds, classIds, gradelevelIds, departmentIds);
+            var cnt = priceData.ApplicationInstallCountInfo.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count.Value;
+            var bugetBalance = Decimal.MaxValue;//TODO: ServiceLocator.FundService.GetSchoolPersonBalance(Context.SchoolPersonId);
+            return (bugetBalance - priceData.TotalPrice >= 0 || priceData.TotalPrice == 0) && cnt > 0;
         }
-        
+
+        public IList<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(Guid applicationId, Guid schoolYearId)
+        {
+            if (!BaseSecurity.IsAdminOrTeacher(Context))
+                throw new ChalkableSecurityException();
+            var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
+            var res = new List<StudentCountToAppInstallByClass>();
+            if (app.HasStudentMyApps || app.CanAttach)
+            {
+                using (var uow = Read())
+                {
+                    var da = new ApplicationInstallDataAccess(uow);
+                    res.AddRange(da.GetStudentCountToAppInstallByClass(applicationId, schoolYearId, Context.UserId, Context.Role.Id));
+                }
+            }
+            return res;
+        }
+
+        public ApplicationTotalPriceInfo GetApplicationTotalPrice(Guid applicationId, Guid? schoolPerson, IList<int> roleids, IList<Guid> classids, IList<Guid> gradelevelids, IList<Guid> departmentids)
+        {
+            var isForAll = !(schoolPerson.HasValue || (roleids != null && roleids.Count > 0) || (classids != null && classids.Count > 0) ||
+                                   (gradelevelids != null && gradelevelids.Count > 0) || (departmentids != null && departmentids.Count > 0));
+            var r = GetPersonsForApplicationInstallCount(applicationId, schoolPerson, roleids, classids, departmentids, gradelevelids).ToList();
+            var totalPrice = GetApplicationTotalPrice(applicationId, r, isForAll);
+            return ApplicationTotalPriceInfo.Create(totalPrice, r);
+        }
+
+        private decimal GetApplicationTotalPrice(Guid applicationId, IEnumerable<PersonsForApplicationInstallCount> applicationInstallCount, bool isForAll)
+        {
+            var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
+            decimal totalPrice = 0;
+            if (app.Price != 0)
+            {
+                var totalCount = applicationInstallCount.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count.Value;
+                if (BaseSecurity.IsAdminViewer(Context))
+                {
+                    totalPrice = app.Price * totalCount;
+                    return totalPrice > app.PricePerSchool && isForAll && app.PricePerSchool.HasValue ? app.PricePerSchool.Value : totalPrice;
+                }
+                if (Context.Role.Id == CoreRoles.TEACHER_ROLE.Id)
+                {
+                    var countPerClassComplex = applicationInstallCount.Where(x => x.Type == PersonsFroAppInstallTypeEnum.Class).ToList();
+                    var totalInClassCount = countPerClassComplex.Sum(x => x.Count);
+                    foreach (var countComplex in countPerClassComplex)
+                    {
+                        decimal price = countComplex.Count.Value * app.Price;
+                        totalPrice += app.PricePerClass.HasValue && price > app.PricePerClass.Value ? app.PricePerClass.Value : price;
+                    }
+                    totalPrice += app.Price * (totalCount - totalInClassCount.Value);
+                    return totalPrice;
+                }
+                return totalCount * app.Price;
+            }
+            return totalPrice;
+        }
+
         public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, Guid? personId, IList<int> roleIds, IList<Guid> classIds,
                                                           IList<Guid> departmentIds, IList<Guid> gradeLevelIds)
         {

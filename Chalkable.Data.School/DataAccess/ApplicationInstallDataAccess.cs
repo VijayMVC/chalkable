@@ -101,6 +101,21 @@ namespace Chalkable.Data.School.DataAccess
                 return reader.ReadList<PersonsForApplicationInstallCount>();
             }
         }
+
+        public IList<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(Guid applicationId, Guid schoolYearId, Guid personId, int roleId)
+        {
+            IDictionary<string, object> ps = new Dictionary<string, object>
+                {
+                    {"applicationId", applicationId},
+                    {"schoolYearId", schoolYearId},
+                    {"personId", personId},
+                    {"roleId", roleId}
+                };
+            using (var reader = ExecuteStoredProcedureReader("spGetStudentCountToAppInstallByClass", ps))
+            {
+                return reader.ReadList<StudentCountToAppInstallByClass>();
+            }
+        }
     }
 
     public class ApplicationInstallActionDataAccess : DataAccessBase<ApplicationInstallAction>
