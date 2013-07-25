@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Text;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
@@ -66,7 +68,11 @@ namespace Chalkable.Data.School.DataAccess
 
             return res;
         } 
+
     }
+
+
+
 
     public class StudentAnnouncementQuery
     {

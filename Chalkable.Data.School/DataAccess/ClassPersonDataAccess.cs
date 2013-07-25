@@ -20,11 +20,11 @@ namespace Chalkable.Data.School.DataAccess
         {
             var conds = new Dictionary<string, object>();
             if(query.Id.HasValue)
-                conds.Add("Id", query.Id);
+                conds.Add(ClassPerson.ID_FIELD, query.Id);
             if(query.ClassId.HasValue)
-                conds.Add("ClassRef",query.ClassId);
+                conds.Add(ClassPerson.CLASS_REF_FIELD, query.ClassId);
             if(query.PersonId.HasValue)
-                conds.Add("PersonRef", query.PersonId);
+                conds.Add(ClassPerson.PERSON_REF_FIELD, query.PersonId);
             return conds;
         }
 

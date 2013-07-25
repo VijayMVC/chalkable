@@ -99,6 +99,7 @@
     <Compile Include="Services\School\DisciplineTypeService.cs" />
     <Compile Include="Services\School\FinalGradeService.cs" />
     <Compile Include="Services\School\GradeLevelService.cs" />
+    <Compile Include="Services\School\GradingStatisticService.cs" />
     <Compile Include="Services\School\GradingStyleService.cs" />
     <Compile Include="Services\School\MarkingPeriodService.cs" />
     <Compile Include="Services\School\Notifications\NotificationBuilder.cs" />
