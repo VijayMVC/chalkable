@@ -236,45 +236,56 @@ namespace Chalkable.Data.Common
 
         public static StringBuilder BuildSqlWhere(StringBuilder builder, Type t, IDictionary<string, object> conds)
         {
-            return BuildSqlWhere(builder, t, conds, conds.Keys.ToDictionary(x => x, x => x));
+            return BuildSqlWhere(builder, t.Name, conds);
         }
-        public static StringBuilder BuildSqlWhere(StringBuilder builder, Type t, IDictionary<string, object> conds
-            , IDictionary<string, string> condsMapping)
+        public static StringBuilder BuildSqlWhere(StringBuilder builder, string tableName, IDictionary<string, object> conds)
         {
-            if (conds != null && conds.Count > 0)
-            {
-                builder.Append(" where (");
-                bool first = true;
-                foreach (var cond in conds)
-                {
-                    if(!condsMapping.ContainsKey(cond.Key))
-                        throw new ChalkableException("Incorrect conditions mapping");
-
-                    if (first) first = false;
-                    else
-                    {
-                        builder.Append(" and ");
-                    }
-                    if (cond.Value != null)
-                        builder.AppendFormat("[{0}].[{1}] =@{2}", t.Name, condsMapping[cond.Key], cond.Key);
-                    else
-                        builder.AppendFormat("[{0}].[{1}] is null", t.Name, cond.Key);
-                }
-                builder.Append(")");
-            }
-            return builder;
+            return BuildSqlWhere(builder, tableName, conds, conds.Keys.ToDictionary(x => x, x => x));
         }
+        public static StringBuilder BuildSqlWhere(StringBuilder builder, Type t, IDictionary<string, object> conds, IDictionary<string, string> condsMapping)
+        {
+            return BuildSqlWhere(builder, t.Name, conds, condsMapping);
+        }
+        public static StringBuilder BuildSqlWhere(StringBuilder builder, string tableName, IDictionary<string, object> conds
+                                                   , IDictionary<string, string> condsMapping)
+        {
+             if (conds != null && conds.Count > 0)
+             {
+                 builder.Append(" where (");
+                 bool first = true;
+                 foreach (var cond in conds)
+                 {
+                     if (!condsMapping.ContainsKey(cond.Key))
+                         throw new ChalkableException("Incorrect conditions mapping");
+
+                     if (first) first = false;
+                     else
+                     {
+                         builder.Append(" and ");
+                     }
+                     if (cond.Value != null)
+                         builder.AppendFormat("[{0}].[{1}] =@{2}", tableName, condsMapping[cond.Key], cond.Key);
+                     else
+                         builder.AppendFormat("[{0}].[{1}] is null", tableName, cond.Key);
+                 }
+                 builder.Append(")");
+             }
+             return builder;
+         }
 
         
         public static DbQuery SimpleSelect<T>(Dictionary<string, object> conds)
         {
-            var res = new DbQuery {Parameters = conds};
+            return SimpleSelect(typeof (T).Name, conds);
+        }
+        public static DbQuery SimpleSelect(string tableName, Dictionary<string, object> conds)
+        {
+            var res = new DbQuery { Parameters = conds };
             var b = new StringBuilder();
-            var t = typeof (T);
-            b.AppendFormat("Select * from [{0}] ", t.Name);
-            b = BuildSqlWhere(b, t, conds);
+            b.AppendFormat("Select * from [{0}] ", tableName);
+            b = BuildSqlWhere(b, tableName, conds);
             res.Sql = b.ToString();
-            return res;
+            return res;   
         }
 
         public static DbQuery CountSelect<T>(Dictionary<string, object> conds, string resultName)

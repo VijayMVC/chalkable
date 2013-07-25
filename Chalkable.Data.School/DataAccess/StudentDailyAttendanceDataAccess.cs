@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace Chalkable.Data.School.DataAccess
         private const string PERSON_ID_PARAM = "personId";
         private const string TIME_IN_PARAM = "timeIn";
         private const string TIME_OUT_PARAM = "timeOut";
-        
+
 
         public StudentDailyAttendance SetStudentDailyAttendance(Guid personId, DateTime date, int? timeIn, int? timeOut)
         {
@@ -33,22 +34,27 @@ namespace Chalkable.Data.School.DataAccess
             using (var reader = ExecuteStoredProcedureReader(SET_DAILY_ATTENDANCE_PROC, parameter))
             {
                 reader.Read();
-                return reader.Read<StudentDailyAttendance>();
+                return reader.Read<StudentDailyAttendanceDetails>();
             }
+        }
+
+        private Dictionary<string, object> BuildConditions(StudentDailyAttendanceQuery query)
+        {
+            var conds = new Dictionary<string, object>();
+            if (query.Date.HasValue)
+                conds.Add(StudentDailyAttendance.DATE_FIELD_NAME, query.Date);
+            if (query.PersonRef.HasValue)
+                conds.Add(StudentDailyAttendance.PERSON_REF_FIELD_NAME, query.PersonRef);
+            return conds;
         }
 
         public IList<StudentDailyAttendance> GetDailyAttendances(StudentDailyAttendanceQuery query)
         {
-            var conds = new Dictionary<string, object>();
-            if(query.Date.HasValue)
-                conds.Add(StudentDailyAttendance.DATE_FIELD_NAME, query.Date);
-            if(query.PersonRef.HasValue)
-                conds.Add(StudentDailyAttendance.PERSON_REF_FIELD_NAME, query.PersonRef);
-            return SelectMany<StudentDailyAttendance>(conds);
+            return SelectMany<StudentDailyAttendance>(BuildConditions(query));
         } 
         public StudentDailyAttendance GetDailyAttendanceOrNull(StudentDailyAttendanceQuery query)
         {
-            return GetDailyAttendances(query).FirstOrDefault();
+            return SelectOneOrNull<StudentDailyAttendance>(BuildConditions(query));
         } 
     }
 

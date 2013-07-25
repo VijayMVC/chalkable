@@ -244,6 +244,7 @@
     <Compile Include="Models\StorageMonitorViewData.cs" />
     <Compile Include="Models\StudentAnnouncementViewData.cs" />
     <Compile Include="Models\HoverBoxesViewData.cs" />
+    <Compile Include="Models\StudentAttendanceViewData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\CompilerHelper.cs" />
   </ItemGroup>

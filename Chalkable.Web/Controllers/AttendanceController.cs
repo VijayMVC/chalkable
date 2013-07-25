@@ -80,16 +80,50 @@ namespace Chalkable.Web.Controllers
         }
 
 
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher, Checkin")]
+        public ActionResult SetDailyAttendance(Guid personId, DateTime? date, int? timeIn, int? timeOut)
+        {
+            var dateTime = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
+            var cDate = SchoolLocator.CalendarDateService.GetCalendarDateByDate(dateTime);
+            if (!(cDate.IsSchoolDay && cDate.ScheduleSectionRef.HasValue))
+                throw new ChalkableException("Today is not school day");
+            var studentDailyAttendance = SchoolLocator.AttendanceService.SetDailyAttendance(dateTime, personId, timeIn ?? NowTimeInMinutes, timeOut);
+            var person = SchoolLocator.PersonService.GetPerson(personId);
+            return Json(DailyAttendanceViewData.Create(studentDailyAttendance, person));
+        }
 
-        //[AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
-        //public ActionResult SetDailyAttendance(Guid personId, DateTime? date, int? timeIn, int? timeOut)
-        //{
-        //    var dateTime = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
-        //    var cDate = SchoolLocator.CalendarDateService.GetCalendarDateByDate(dateTime);
-        //    if(!(cDate.IsSchoolDay && cDate.ScheduleSectionRef.HasValue))
-        //        throw new ChalkableException("Today is not school day");
-        //    var studentDailyAttendance = SchoolLocator.AttendanceService.SetDailyAttendance(dateTime, personId, timeIn ?? NowTimeInMinutes, timeOut);
-        //    return Json(DailyAttendanceViewData.Create(studentDailyAttendance));
-        //}
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher, Checkin")]
+        public ActionResult SwipeCard(Guid personId, Guid classPeriodId)
+        {
+            var now = SchoolLocator.Context.NowSchoolTime;
+            var cDate = SchoolLocator.CalendarDateService.GetCalendarDateByDate(now.Date);
+            if (!(cDate.IsSchoolDay && cDate.ScheduleSectionRef.HasValue))
+                throw new ChalkableException("Today is not school day");
+
+            var att = SchoolLocator.AttendanceService.SwipeCard(personId, now, classPeriodId);
+            var dailyAttendace = SchoolLocator.AttendanceService.GetDailyAttendance(now.Date, personId);
+            return Json(DailyAttendanceViewData.Create(dailyAttendace, att.Student));
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult GetAttendanceForStudent(DateTime? datetime, Guid studentId)
+        {
+            if (!SchoolLocator.Context.SchoolId.HasValue)
+                throw new UnassignedUserException();
+            var date = (datetime ?? SchoolLocator.Context.NowSchoolTime).Date;
+            var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(date);
+            var query = new ClassAttendanceQuery
+                {
+                    MarkingPeriodId = markingPeriod.Id,
+                    FromDate = date,
+                    ToDate = date,
+                    StudentId = studentId,
+                    NeedAllData = true
+                };
+            var attendances = SchoolLocator.AttendanceService.GetClassAttendanceComplex(query);
+            var dailAttendance = SchoolLocator.AttendanceService.GetDailyAttendance(date, studentId);
+            var student = attendances.Count > 0 ? attendances.First().Student : SchoolLocator.PersonService.GetPerson(studentId);
+            return Json(StudentAttendanceViewData.Create(student, attendances, dailAttendance));
+        }
     }
 }
