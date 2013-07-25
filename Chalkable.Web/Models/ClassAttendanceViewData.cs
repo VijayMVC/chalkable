@@ -23,7 +23,7 @@ namespace Chalkable.Web.Models
         public Guid ClassId { get; set; }
         public string ClassName { get; set; }
 
-        public static ClassAttendanceViewData Create(ClassAttendanceComplex attendance, AttendanceReason reason)
+        public static ClassAttendanceViewData Create(ClassAttendanceDetails attendance, AttendanceReason reason)
         {
             var res = new ClassAttendanceViewData
                 {
@@ -42,7 +42,7 @@ namespace Chalkable.Web.Models
             return res;
         }
 
-        public static IList<ClassAttendanceViewData> Create(IList<ClassAttendanceComplex> attendances, IList<AttendanceReason> attendanceReasones = null)
+        public static IList<ClassAttendanceViewData> Create(IList<ClassAttendanceDetails> attendances, IList<AttendanceReason> attendanceReasones = null)
         {
             var res = new List<ClassAttendanceViewData>();
             foreach (var attendance in attendances)

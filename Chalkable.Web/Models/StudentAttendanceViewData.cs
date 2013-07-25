@@ -13,7 +13,7 @@ namespace Chalkable.Web.Models
         public IList<ClassAttendanceViewData> Attendances { get; set; }
         public ShortDailyAttendanceViewData DailyAttendance { get; set; }
 
-        public static StudentAttendanceViewData Create(Person student, IList<ClassAttendanceComplex> attendances, 
+        public static StudentAttendanceViewData Create(Person student, IList<ClassAttendanceDetails> attendances, 
             StudentDailyAttendance dailyAttendance)
         {
             return new StudentAttendanceViewData

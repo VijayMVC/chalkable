@@ -21,13 +21,36 @@ namespace Chalkable.Data.School.Model
     }
 
 
-    public class ClassAttendanceComplex : ClassAttendance
+    public class ClassAttendanceDetails : ClassAttendance
     {
         public Person Student { get; set; }
+
+        private ClassPerson person;
         [DataEntityAttr]
-        public ClassPerson ClassPerson { get; set; }
+        public ClassPerson ClassPerson
+        {
+            get { return person; }
+            set
+            {
+                person = value;
+                if (value != null && value.Id != Guid.Empty)
+                    ClassPersonRef = value.Id;
+            }
+        }
+
+        private ClassPeriod period;
         [DataEntityAttr]
-        public ClassPeriod ClassPeriod { get; set; }
+        public ClassPeriod ClassPeriod
+        {
+            get { return period; }
+            set
+            {
+                period = value;
+                if (value != null && value.Id != Guid.Empty)
+                    ClassPeriodRef = value.Id;
+            }
+        }
+        
         [DataEntityAttr]
         public Class Class { get; set; }
         

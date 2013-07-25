@@ -7,7 +7,7 @@ namespace Chalkable.Web.Models.ClassesViewData
 {
     public class ClassHoverBoxViewData<T> : HoverBoxesViewData<T>
     {
-        public static ClassHoverBoxViewData<ClassAttendanceHoverViewData> Create(IList<ClassAttendanceComplex> attendances, int possibleAbsents)
+        public static ClassHoverBoxViewData<ClassAttendanceHoverViewData> Create(IList<ClassAttendanceDetails> attendances, int possibleAbsents)
         {
            return new ClassHoverBoxViewData<ClassAttendanceHoverViewData>
                 {
@@ -66,7 +66,7 @@ namespace Chalkable.Web.Models.ClassesViewData
             Total = total;
             Summary = summary;
         }
-        public static IList<ClassAttendanceHoverViewData> Create(IList<ClassAttendanceComplex> attendances)
+        public static IList<ClassAttendanceHoverViewData> Create(IList<ClassAttendanceDetails> attendances)
         {
             return new List<ClassAttendanceHoverViewData>
                 {

@@ -37,7 +37,7 @@ namespace Chalkable.Web.Models.ClassesViewData
         }
 
         public static ClassSummaryViewData Create(ClassComplex c, Room currentRoom, IList<Person> students,
-             IList<AnnouncementByDateViewData> announcementByDates, IList<ClassAttendanceComplex> attendances
+             IList<AnnouncementByDateViewData> announcementByDates, IList<ClassAttendanceDetails> attendances
             , int posibleAbsent, IList<ClassDisciplineDetails> disciplines, IList<DisciplineType> disciplineTypes)
         {
             var res = Create(c, currentRoom, students);

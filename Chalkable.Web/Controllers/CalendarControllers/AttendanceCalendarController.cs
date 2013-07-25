@@ -32,7 +32,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
 
 
         private ActionResult AttendancesForMonth(DateTime? date, ClassAttendanceQuery query,
-                Func<DateTime, bool, IList<ClassAttendanceComplex>, MonthCalendarViewData> createAction)
+                Func<DateTime, bool, IList<ClassAttendanceDetails>, MonthCalendarViewData> createAction)
         {
             DateTime start, end;
             MonthCalendar(ref date, out start, out end);

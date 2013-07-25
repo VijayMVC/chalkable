@@ -262,7 +262,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                  NotificationType.Attendance, recipient, null, null, null, null, null, null, otherModel);
         }
 
-        public Notification BuildAttendanceNotificationToStudent(Person recipient, ClassAttendanceComplex classAttendance)
+        public Notification BuildAttendanceNotificationToStudent(Person recipient, ClassAttendanceDetails classAttendance)
         {
             var otherModel = new
                     {
