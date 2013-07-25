@@ -129,6 +129,8 @@
     <Compile Include="Authentication\ChalkablePrincipal.cs" />
     <Compile Include="Controllers\AnnouncementAttachmentController.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
+    <Compile Include="Controllers\AttendanceController.cs" />
+    <Compile Include="Controllers\AttendanceReasonController.cs" />
     <Compile Include="Controllers\CalendarControllers\AnnouncementCalendarController.cs" />
     <Compile Include="Controllers\AnnouncementController.cs" />
     <Compile Include="Controllers\AnnouncementQnAController.cs" />
@@ -186,6 +188,7 @@
     <Compile Include="Models\ApplicationsViewData\ApplicationPersmissionsViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationPriceViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationRatingViewData.cs" />
+    <Compile Include="Models\AttendanceReasonViewData.cs" />
     <Compile Include="Models\BackgroundTaskLogViewData.cs" />
     <Compile Include="Models\BackgroundTaskViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\BaseApplicationViewData.cs" />
@@ -198,6 +201,7 @@
     <Compile Include="Models\CalendarsViewData\MonthCalendarViewData.cs" />
     <Compile Include="Models\CategoryViewData.cs" />
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
+    <Compile Include="Models\ClassAttendanceViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassInfoViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassSummaryViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassTitlesViewData.cs" />
@@ -205,6 +209,7 @@
     <Compile Include="Models\ClassPeriodViewData.cs" />
     <Compile Include="Models\CourseViewData.cs" />
     <Compile Include="Models\CreateAnnouncementViewData.cs" />
+    <Compile Include="Models\DailyAttendanceViewData.cs" />
     <Compile Include="Models\DeveloperViewData.cs" />
     <Compile Include="Models\DisciplineTypeViewData.cs" />
     <Compile Include="Models\DisciplineView.cs" />

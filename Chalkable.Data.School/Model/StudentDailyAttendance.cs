@@ -17,4 +17,9 @@ namespace Chalkable.Data.School.Model
         public int? TimeIn { get; set; }
         public int? TimeOut { get; set; }
     }
+
+    public class StudentDailyAttendanceDetails : StudentDailyAttendance
+    {
+        public Person Person { get; set; }
+    }
 }
