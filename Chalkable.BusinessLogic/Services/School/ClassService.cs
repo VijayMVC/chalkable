@@ -12,18 +12,18 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IClassService
     {
-        ClassComplex Add(Guid schoolYearId, Guid courseInfoId, string name, string description, Guid teacherId, Guid gradeLevelId, List<Guid> markingPeriodsId);
-        ClassComplex Edit(Guid classId, Guid courseInfoId, string name, string description, Guid teacherId, Guid gradeLevelId, List<Guid> markingPeriodsId);
-        ClassComplex AddStudent(Guid classId, Guid personId);
-        ClassComplex DeleteStudent(Guid classId, Guid personId);
-        ClassComplex GetClassById(Guid id);
+        ClassDetails Add(Guid schoolYearId, Guid courseInfoId, string name, string description, Guid teacherId, Guid gradeLevelId, List<Guid> markingPeriodsId);
+        ClassDetails Edit(Guid classId, Guid courseInfoId, string name, string description, Guid teacherId, Guid gradeLevelId, List<Guid> markingPeriodsId);
+        ClassDetails AddStudent(Guid classId, Guid personId);
+        ClassDetails DeleteStudent(Guid classId, Guid personId);
+        ClassDetails GetClassById(Guid id);
 
-        ClassComplex AddMarkingPeriod(Guid classId, Guid markingPeriodId);
-        ClassComplex DeleteClassFromMarkingPeriod(Guid classId, Guid markingPeriodId);
+        ClassDetails AddMarkingPeriod(Guid classId, Guid markingPeriodId);
+        ClassDetails DeleteClassFromMarkingPeriod(Guid classId, Guid markingPeriodId);
 
-        IList<ClassComplex> GetClasses(Guid? schoolYearId, Guid? markingPeriodId, Guid? personId, int start = 0, int count = int.MaxValue);
-        IList<ClassComplex> GetClasses(string filter);
-        PaginatedList<ClassComplex> GetClasses(Guid? schoolYearId, int start = 0, int count = int.MaxValue);
+        IList<ClassDetails> GetClasses(Guid? schoolYearId, Guid? markingPeriodId, Guid? personId, int start = 0, int count = int.MaxValue);
+        IList<ClassDetails> GetClasses(string filter);
+        PaginatedList<ClassDetails> GetClasses(Guid? schoolYearId, int start = 0, int count = int.MaxValue);
         ClassPerson GetClassPerson(Guid classId, Guid personId);
         void Delete(Guid id);
     }
@@ -36,7 +36,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         //TODO: needs test
-        public ClassComplex Add(Guid schoolYearId, Guid courseInfoId, string name, string description, Guid teacherId,
+        public ClassDetails Add(Guid schoolYearId, Guid courseInfoId, string name, string description, Guid teacherId,
                          Guid gradeLevelId, List<Guid> markingPeriodsId)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
@@ -79,7 +79,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public ClassComplex Edit(Guid classId, Guid courseInfoId, string name, string description, Guid teacherId, Guid gradeLevelId, List<Guid> markingPeriodsId)
+        public ClassDetails Edit(Guid classId, Guid courseInfoId, string name, string description, Guid teacherId, Guid gradeLevelId, List<Guid> markingPeriodsId)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -107,7 +107,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return GetClassById(classId);
         }
 
-        public ClassComplex AddStudent(Guid classId, Guid personId)
+        public ClassDetails AddStudent(Guid classId, Guid personId)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -137,7 +137,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return GetClassById(classId);
         }
 
-        public ClassComplex DeleteStudent(Guid classId, Guid personId)
+        public ClassDetails DeleteStudent(Guid classId, Guid personId)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -149,7 +149,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return GetClassById(classId);
         }
 
-        public ClassComplex GetClassById(Guid id)
+        public ClassDetails GetClassById(Guid id)
         {
             return GetClasses(new ClassQuery {ClassId = id, Count = 1}).First();
         }
@@ -189,7 +189,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
         
-        public ClassComplex AddMarkingPeriod(Guid classId, Guid markingPeriodId)
+        public ClassDetails AddMarkingPeriod(Guid classId, Guid markingPeriodId)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -204,7 +204,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return GetClassById(classId);
         }
 
-        public ClassComplex DeleteClassFromMarkingPeriod(Guid classId, Guid markingPeriodId)
+        public ClassDetails DeleteClassFromMarkingPeriod(Guid classId, Guid markingPeriodId)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -221,7 +221,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return GetClassById(classId);
         }
         
-        public IList<ClassComplex> GetClasses(Guid? schoolYearId, Guid? markingPeriodId, Guid? personId, int start = 0, int count = int.MaxValue)
+        public IList<ClassDetails> GetClasses(Guid? schoolYearId, Guid? markingPeriodId, Guid? personId, int start = 0, int count = int.MaxValue)
         {
             return GetClasses(new ClassQuery
                 {
@@ -233,7 +233,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 });
         }
 
-        private IList<ClassComplex> GetClasses(ClassQuery query)
+        private IList<ClassDetails> GetClasses(ClassQuery query)
         {
             return GetClassesQueryResult(query).Classes;
         } 
@@ -261,7 +261,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public PaginatedList<ClassComplex> GetClasses(Guid? schoolYearId, int start = 0, int count = int.MaxValue)
+        public PaginatedList<ClassDetails> GetClasses(Guid? schoolYearId, int start = 0, int count = int.MaxValue)
         {
             var res = GetClassesQueryResult(new ClassQuery
                 {
@@ -269,10 +269,10 @@ namespace Chalkable.BusinessLogic.Services.School
                     Start = start,
                     Count = count
                 });
-            return new PaginatedList<ClassComplex>(res.Classes, start / count, count, res.SourceCount);
+            return new PaginatedList<ClassDetails>(res.Classes, start / count, count, res.SourceCount);
         }
 
-        public IList<ClassComplex> GetClasses(string filter)
+        public IList<ClassDetails> GetClasses(string filter)
         {
             return GetClasses(new ClassQuery {Filter = filter});
         }

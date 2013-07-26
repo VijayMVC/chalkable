@@ -57,7 +57,7 @@ namespace Chalkable.Data.School.DataAccess
                return reader.ReadList<ClassAttendance>();
             }
         }
-        public IList<ClassAttendanceComplex> GetAttendance(ClassAttendanceQuery query)
+        public IList<ClassAttendanceDetails> GetAttendance(ClassAttendanceQuery query)
         {
             var parameters = new Dictionary<string, object>
                 {
@@ -76,10 +76,10 @@ namespace Chalkable.Data.School.DataAccess
                 };
             using (var reader = ExecuteStoredProcedureReader(GET_CLASS_ATTENDANCE_PROC, parameters))
             {
-                var res = new List<ClassAttendanceComplex>();
+                var res = new List<ClassAttendanceDetails>();
                 while (reader.Read())
                 {
-                    var attendance = reader.Read<ClassAttendanceComplex>(true);
+                    var attendance = reader.Read<ClassAttendanceDetails>(true);
                     attendance.Student = PersonDataAccess.ReadPersonData(reader);
                     attendance.Class.Id = attendance.ClassPerson.ClassRef;
                     attendance.ClassPeriodRef = attendance.ClassPeriod.Id;

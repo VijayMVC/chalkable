@@ -14,11 +14,11 @@ namespace Chalkable.Web.Controllers
     {
         //TODO: add
         [AuthorizationFilter("SysAdmin")]
-        public ActionResult List(int? districtId, int? start, int? count, bool? demoOnly, bool? unimportedOnly)
+        public ActionResult List(Guid? districtId, int? start, int? count, bool? demoOnly, bool? unimportedOnly)
         {
             count = count ?? 10;
             start = start ?? 0;
-            var schools = MasterLocator.SchoolService.GetSchools(start.Value, count.Value);
+            var schools = MasterLocator.SchoolService.GetSchools(districtId, start.Value, count.Value);
             return Json(schools.Transform(SchoolViewData.Create));
         }
 

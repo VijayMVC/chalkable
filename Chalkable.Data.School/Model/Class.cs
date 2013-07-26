@@ -9,9 +9,11 @@ namespace Chalkable.Data.School.Model
 {
     public class Class
     {
+        public const string ID_FIELD = "Id"; 
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public const string SCHOOL_YEAR_REF = "SchoolYearRef";
         public Guid SchoolYearRef { get; set; }
         public Guid CourseRef { get; set; }
         public const string TEACHER_REF_FIELD = "TeacherRef";
@@ -20,7 +22,7 @@ namespace Chalkable.Data.School.Model
         public int? SisId { get; set; }
     }
 
-    public class ClassComplex : Class
+    public class ClassDetails : Class
     {
         [DataEntityAttr]
         public Person Teacher { get; set; }

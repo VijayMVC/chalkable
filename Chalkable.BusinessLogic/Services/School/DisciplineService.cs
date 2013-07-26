@@ -16,6 +16,8 @@ namespace Chalkable.BusinessLogic.Services.School
         ClassDiscipline SetClassDiscipline(Guid classPersonId, Guid classPeriodId, DateTime date, ISet<Guid> disciplineTypes, string description);
         IList<ClassDisciplineDetails> GetClassDisciplineDetails(ClassDisciplineQuery query, IList<Guid> gradeLevelIds = null);
         IList<ClassDisciplineDetails> GetClassDisciplineDetails(Guid schoolYearId, Guid personId, DateTime start, DateTime end, bool needsAllData = false);
+        IList<ClassDisciplineDetails> GetClassDisciplineDetails(Guid schoolYearId, DateTime date);
+        
     }
 
     public class DisciplineService : SchoolServiceBase, IDisciplineService
@@ -95,6 +97,15 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
                 return discipline;
             }
+        }
+        public IList<ClassDisciplineDetails> GetClassDisciplineDetails(Guid schoolYearId, DateTime date)
+        {
+            return GetClassDisciplineDetails(new ClassDisciplineQuery
+                {
+                    SchoolYearId = schoolYearId,
+                    FromDate = date,
+                    ToDate = date
+                });
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Chalkable.Data.School.Model
 
     public class VwFinalGrade : FinalGrade
     {
-        private ClassComplex _class;
+        private ClassDetails _class;
         private MarkingPeriodClass markingPeriodClass;
         
         public override Guid Id
@@ -52,7 +52,7 @@ namespace Chalkable.Data.School.Model
             }
         }
         [DataEntityAttr]
-        public ClassComplex Class
+        public ClassDetails Class
         {
             get { return _class; }
             set

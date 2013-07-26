@@ -106,5 +106,15 @@ namespace Chalkable.Web.Controllers
                 return currentYear.Id;
             throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
         }
+
+        protected int NowTimeInMinutes
+        {
+            get
+            {
+                var now = MasterLocator.Context.NowSchoolTime;
+                return (int)(now - now.Date).TotalMinutes;
+            }
+        }
+
     }
 }

@@ -96,9 +96,7 @@ NAMESPACE('chlk.controllers', function (){
 
                var state = this.context.getState();
                new ria.dom.Dom(SIDEBAR_CONTROLS_ID + ' .' + PRESSED_CLS).removeClass(PRESSED_CLS);
-               var action = toCamelCase(state.getAction()) + ACTION_SUFFIX;
-               var ref = ria.reflection.ReflectionClass(this.getClass());
-               var methodReflector = ref.getMethodReflector(action);
+               var methodReflector = this.resolveRoleAction_(state);
                if (methodReflector.isAnnotatedWith(chlk.controllers.SidebarButton)){
                    var buttonCls = methodReflector.findAnnotation(chlk.controllers.SidebarButton)[0].clazz;
                    new ria.dom.Dom(SIDEBAR_CONTROLS_ID + ' .' + buttonCls).addClass(PRESSED_CLS);

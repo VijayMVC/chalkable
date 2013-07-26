@@ -36,6 +36,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IDisciplineTypeService DisciplineTypeService { get; }
         IApplicationSchoolService ApplicationSchoolService { get; }
         IDisciplineService DisciplineService { get; }
+        IGradingStatisticService GradingStatisticService { get; }
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
     {
@@ -69,6 +70,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IDisciplineTypeService disciplineTypeService;
         private IApplicationSchoolService applicationSchoolService;
         private IDisciplineService disciplineService;
+        private IGradingStatisticService gradingStatisticService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -103,6 +105,7 @@ namespace Chalkable.BusinessLogic.Services.School
             disciplineTypeService = new DisciplineTypeService(this);
             applicationSchoolService = new ApplicationSchoolService(this);
             disciplineService = new DisciplineService(this);
+            gradingStatisticService = new GradingStatisticService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -135,5 +138,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public IDisciplineTypeService DisciplineTypeService { get { return disciplineTypeService; } }
         public IApplicationSchoolService ApplicationSchoolService { get { return applicationSchoolService; } }
         public IDisciplineService DisciplineService { get { return disciplineService; } }
+        public IGradingStatisticService GradingStatisticService { get { return gradingStatisticService; } }
     }
 }

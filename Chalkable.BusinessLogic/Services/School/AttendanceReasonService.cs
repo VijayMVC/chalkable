@@ -22,7 +22,6 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-
         public AttendanceReason Add(AttendanceTypeEnum type, string code, string description)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
