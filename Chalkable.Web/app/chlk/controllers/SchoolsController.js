@@ -16,6 +16,8 @@ REQUIRE('chlk.controls.ActionLinkControl');
 REQUIRE('chlk.activities.school.SchoolSisPage');
 REQUIRE('chlk.activities.school.SchoolsListPage');
 REQUIRE('chlk.activities.school.ImportSchoolDialog');
+REQUIRE('chlk.models.id.DistrictId');
+REQUIRE('chlk.models.id.SchoolId');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -37,7 +39,7 @@ NAMESPACE('chlk.controllers', function (){
 
 
         [chlk.controllers.SidebarButton('schools')],
-        [[chlk.models.district.DistrictId, Number]],
+        [[chlk.models.id.DistrictId, Number]],
         function pageAction(districtId_, start_) {
             var result = this.schoolService
                 .getSchools(districtId_, start_ || 0)
@@ -54,7 +56,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('schools')],
-        [[chlk.models.district.DistrictId, Number]],
+        [[chlk.models.id.DistrictId, Number]],
         function listAction(districtId, pageIndex_) {
             var result = this.schoolService
                 .getSchools(districtId, pageIndex_ | 0,  false, false)
@@ -70,7 +72,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.school.SchoolsListPage, result);
         },
 
-        [[chlk.models.district.DistrictId]],
+        [[chlk.models.id.DistrictId]],
         VOID, function importAction(districtId) {
             var result = this.schoolService
                 .getSchools(districtId)
@@ -78,14 +80,14 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.school.ImportSchoolDialog, result);
         },
 
-        [[Number]],
+        [[chlk.models.id.SchoolId]],
         function detailsAction(id) {
             var result = this.schoolService
                 .getDetails(id)
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.school.SchoolDetailsPage, result);
         },
-        [[Number]],
+        [[chlk.models.id.SchoolId]],
         function sisInfoAction(id) {
             var result = this.schoolService
                 .getSisInfo(id)
@@ -93,7 +95,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.school.SchoolSisPage, result);
         },
 
-        [[Number]],
+        [[chlk.models.id.SchoolId]],
         function peopleAction(id) {
             var newGradeLevels = this.gradeLevelService.getGradeLevels().slice();
 
@@ -179,7 +181,7 @@ NAMESPACE('chlk.controllers', function (){
                 this.context.getDefaultView().getCurrent().close();
         },
 
-        [[Number]],
+        [[chlk.models.id.DistrictId]],
         VOID, function deleteAction(id){
 
         }

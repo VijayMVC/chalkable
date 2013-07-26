@@ -1,5 +1,7 @@
 REQUIRE('chlk.templates.JadeTemplate');
 REQUIRE('chlk.models.class.ClassForTopBar');
+REQUIRE('chlk.models.id.ClassId');
+REQUIRE('chlk.models.id.CourseId');
 
 NAMESPACE('chlk.templates.class', function () {
 
@@ -9,11 +11,11 @@ NAMESPACE('chlk.templates.class', function () {
         [ria.templates.ModelBind(chlk.models.class.ClassForTopBar)],
         'TopBar', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.class.ClassId, 'id',
+            chlk.models.id.ClassId, 'id',
             [ria.templates.ModelPropertyBind],
             String, 'name',
             [ria.templates.ModelPropertyBind],
-            chlk.models.class.CourseId, 'courseInfoId',
+            chlk.models.id.CourseId, 'courseInfoId',
             [ria.templates.ModelPropertyBind],
             Boolean, 'pressed',
             [ria.templates.ModelPropertyBind],

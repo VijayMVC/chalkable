@@ -1,5 +1,10 @@
 REQUIRE('chlk.templates.JadeTemplate');
 REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.models.id.AnnouncementId');
+REQUIRE('chlk.models.id.ClassId');
+REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.id.StudentAnnouncementId');
+REQUIRE('chlk.models.id.MarkingPeriodId');
 
 NAMESPACE('chlk.templates.announcement', function () {
 
@@ -10,7 +15,7 @@ NAMESPACE('chlk.templates.announcement', function () {
         'Announcement', EXTENDS(chlk.templates.JadeTemplate), [
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.announcement.AnnouncementId, 'id',
+            chlk.models.id.AnnouncementId, 'id',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'created',
@@ -55,7 +60,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'content',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.class.ClassId, 'classId',
+            chlk.models.id.ClassId, 'classId',
 
             [ria.templates.ModelPropertyBind],
             Number, 'dropped',
@@ -94,7 +99,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             Number, 'qnaCount',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.class.ClassId, 'recipientId',
+            chlk.models.id.ClassId, 'recipientId',
 
             [ria.templates.ModelPropertyBind],
             String, 'schoolPersonGender',
@@ -103,7 +108,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'schoolPersonName',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.people.SchoolPersonId, 'schoolPersonRef',
+            chlk.models.id.SchoolPersonId, 'schoolPersonRef',
 
             [ria.templates.ModelPropertyBind],
             String, 'shortContent',
@@ -121,7 +126,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             Number, 'stateTyped',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.announcement.StudentAnnouncementId, 'studentannouncementid',
+            chlk.models.id.StudentAnnouncementId, 'studentannouncementid',
 
             [ria.templates.ModelPropertyBind],
             Number, 'studentsCount',

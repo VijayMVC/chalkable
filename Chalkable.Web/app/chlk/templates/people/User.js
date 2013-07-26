@@ -1,6 +1,8 @@
 REQUIRE('chlk.templates.JadeTemplate');
 
 REQUIRE('chlk.models.people.User');
+REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.id.SchoolId');
 
 NAMESPACE('chlk.templates', function () {
 
@@ -24,7 +26,7 @@ NAMESPACE('chlk.templates', function () {
             [ria.templates.ModelBind],
             String, 'grade',
             [ria.templates.ModelBind],
-            Number, 'id',
+            chlk.models.id.SchoolPersonId, 'id',
             [ria.templates.ModelBind],
             String, 'lastName',
             [ria.templates.ModelBind],
@@ -34,6 +36,6 @@ NAMESPACE('chlk.templates', function () {
             [ria.templates.ModelBind],
             String, 'roleName',
             [ria.templates.ModelBind],
-            Number, 'schoolId'
+            chlk.models.id.SchoolId, 'schoolId'
         ])
 });

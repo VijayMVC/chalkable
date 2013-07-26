@@ -5,15 +5,10 @@ REQUIRE('chlk.models.common.ChlkDate');
 NAMESPACE('chlk.models.bgtasks', function () {
 
     "use strict";
-
-    /** @class chlk.models.bgtasks.BgTaskId*/
-    IDENTIFIER('BgTaskId');
-
-
     /** @class chlk.models.bgtasks.BgTask*/
     CLASS(
         'BgTask', [
-            chlk.models.bgtasks.BgTaskId, 'id',
+            chlk.models.id.BgTaskId, 'id',
             chlk.models.common.ChlkDate, 'created',
             chlk.models.common.ChlkDate, 'scheduled',
             chlk.models.common.ChlkDate, 'completed',

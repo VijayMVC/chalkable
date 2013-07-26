@@ -6,6 +6,9 @@ REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.LastMessages');
 REQUIRE('chlk.models.attachment.Attachment');
+REQUIRE('chlk.models.id.ClassId');
+REQUIRE('chlk.models.id.AnnouncementId');
+REQUIRE('chlk.models.id.AttachmentId');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -20,7 +23,7 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.ClassService, 'classService',
 
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.class.ClassId, Number]],
+        [[chlk.models.id.ClassId, Number]],
         function addAction(classId_, announcementTypeId_) {
             var result = this.announcementService
                 .addAnnouncement(classId_, announcementTypeId_)
@@ -52,7 +55,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.announcement.AnnouncementFormPage, result);
         },
 
-        [[chlk.models.announcement.AnnouncementId, Object]],
+        [[chlk.models.id.AnnouncementId, Object]],
         function uploadAttachmentAction(announcementId, files) {
             var result = this.announcementService
                 .uploadAttachment(announcementId, files)
@@ -65,7 +68,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result);
         },
 
-        [[chlk.models.attachment.AttachmentId]],
+        [[chlk.models.id.AttachmentId]],
         function deleteAttachmentAction(attachmentId) {
             var result = this.announcementService
                 .deleteAttachment(attachmentId)

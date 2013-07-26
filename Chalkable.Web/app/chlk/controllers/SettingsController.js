@@ -25,8 +25,12 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.settings.DashboardPage, ria.async.DeferredData(dashboard));
             },
 
-            [chlk.controllers.SidebarButton('settings')],
 
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.TEACHER
+            ])],
+            [chlk.controllers.SidebarButton('settings')],
             function dashboardTeacherAction() {
 
                 var teacherSettings = new chlk.models.settings.TeacherSettings();

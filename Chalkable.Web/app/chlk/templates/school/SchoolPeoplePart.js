@@ -1,5 +1,6 @@
 REQUIRE('chlk.templates.school.SchoolPeople');
 REQUIRE('chlk.models.school.SchoolPeoplePart');
+REQUIRE('chlk.models.id.SchoolId');
 
 NAMESPACE('chlk.templates.school', function () {
 
@@ -15,6 +16,6 @@ NAMESPACE('chlk.templates.school', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'byLastName',
             [ria.templates.ModelPropertyBind],
-            Number, 'schoolId'
+            chlk.models.id.SchoolId, 'schoolId'
         ])
 });

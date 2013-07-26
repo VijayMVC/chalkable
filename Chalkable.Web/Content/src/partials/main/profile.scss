@@ -702,46 +702,6 @@ BODY {
                  top: 250px; 
                }
 
-              .chalkable-calendar-view.profile-calendar
-              {
-                .header
-                {
-                  width : 661px;
-                  .day-names{
-                    width: 659px;
-                  }
-                  .items{
-                    width: 659px;
-                  }
-                  .current-month
-                  {
-                    color: #957633;
-                    text-shadow: 1px 1px 1px #dfcea9;
-                  }
-                  background: url(images/calendar/toolbar-bg-yellow.png) 0 0 no-repeat;
-
-                  .prev-month
-                    {
-                    background: url(images/calendar/prev-month-yellow.png) 0 0 no-repeat;
-                    width: 17px;
-                    height: 17px;
-                  }
-
-                  .next-month
-                    {
-                    background: url(images/calendar/next-month-yellow.png) 0 0 no-repeat;
-                    width: 17px;
-                    height: 17px;
-                  }
-                  .calendar-day-container,.calendar-month-container,.calendar-week-container{
-                    display: none !important;
-                  }
-                  .calendar-today{
-
-                  }
-                }
-              }
-
               > DIV {
 
 

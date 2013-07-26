@@ -7,10 +7,10 @@ NAMESPACE('chlk.models.bgtasks', function () {
     CLASS(
         'BgTasksLogListViewData', [
             chlk.models.common.PaginatedList, 'items',
-            chlk.models.bgtasks.BgTaskId, 'bgTaskId',
+            chlk.models.id.BgTaskId, 'bgTaskId',
 
 
-            [[chlk.models.bgtasks.BgTaskId, chlk.models.common.PaginatedList]],
+            [[chlk.models.id.BgTaskId, chlk.models.common.PaginatedList]],
             function $(bgTaskId, items){
                 this.setBgTaskId(bgTaskId);
                 this.setItems(items);

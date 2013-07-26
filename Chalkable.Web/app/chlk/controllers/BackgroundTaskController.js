@@ -4,6 +4,7 @@ REQUIRE('chlk.models.bgtasks.BgTasksLogListViewData');
 REQUIRE('chlk.services.BgTaskService');
 REQUIRE('chlk.activities.bgtasks.BgTasksListPage');
 REQUIRE('chlk.activities.bgtasks.BgTaskLogListPage');
+REQUIRE('chlk.models.id.BgTaskId');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -33,7 +34,7 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.SidebarButton('settings')],
-            [[chlk.models.bgtasks.BgTaskId]],
+            [[chlk.models.id.BgTaskId]],
             function logsAction(id) {
                 var result = this.bgTaskService
                     .getLogs(id)
@@ -45,7 +46,7 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.SidebarButton('settings')],
-            [[chlk.models.bgtasks.BgTaskId, Number]],
+            [[chlk.models.id.BgTaskId, Number]],
             function logsPageAction(id, pageIndex_) {
                 var result = this.bgTaskService
                     .getLogs(id)
@@ -57,7 +58,7 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.SidebarButton('settings')],
-            [[Number]],
+            [[chlk.models.id.BgTaskId]],
             function deleteAction(id){
 
             }

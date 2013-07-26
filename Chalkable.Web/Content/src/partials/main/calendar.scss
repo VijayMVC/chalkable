@@ -361,7 +361,7 @@ BODY {
 					  }
                     }
 
-                    DIV.calendar-week {
+                    .calendar-week {
                       background: url(images/calendar/days-button.png) -30px 0 no-repeat;
                       cursor: pointer;
                       width: 29px;
@@ -380,7 +380,7 @@ BODY {
 					  }
                     }
 
-                    DIV.calendar-month {
+                    .calendar-month {
                       background: url(images/calendar/days-button.png) -59px 0 no-repeat;
                       cursor: pointer;
                       width: 31px;
@@ -399,7 +399,7 @@ BODY {
 					  }
                     }
 
-                    DIV.calendar-day, DIV.calendar-week, DIV.calendar-month{
+                    .calendar-day, .calendar-week, .calendar-month{
 						position: relative;
 						height: 27px;
 						&:hover{

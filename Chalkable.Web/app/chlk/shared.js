@@ -35,3 +35,20 @@ Object.extend = function(destination, source) {
     destination[property] = source[property];
   return destination;
 };
+
+
+/*var logonShowed = false;
+
+jQuery('.logout-area').click(function(){
+    var elem = jQuery(this).parent().find('a');
+    if(!logonShowed){
+        jQuery(elem).css("visibility", "visible");
+        elem.animate({opacity: 1}, 200);
+    }else{
+        elem.animate({opacity: 0}, 200, function(){
+            jQuery(elem).css("visibility", "hidden");
+        });
+
+    }
+    logonShowed = !logonShowed;
+});*/

@@ -1,12 +1,11 @@
+REQUIRE('chlk.models.id.DistrictId');
 NAMESPACE('chlk.models.district', function () {
     "use strict";
-    /** @class chlk.models.district.DistrictId*/
-    IDENTIFIER('DistrictId');
 
     /** @class chlk.models.district.District*/
     CLASS(
         'District', [
-            chlk.models.district.DistrictId, 'id',
+            chlk.models.id.DistrictId, 'id',
             String, 'name',
             [ria.serialize.SerializeProperty('sisurl')],
             String, 'sisUrl',

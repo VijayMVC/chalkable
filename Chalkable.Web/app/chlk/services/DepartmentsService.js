@@ -1,6 +1,7 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.departments.Department');
+REQUIRE('chlk.models.id.DepartmentId');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -22,7 +23,7 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.departments.DepartmentId, String, String]],
+            [[chlk.models.id.DepartmentId, String, String]],
             ria.async.Future, function updateDepartment(id, name, keywords) {
                 return this.post('ChalkableDepartment/Update.json', chlk.models.departments.Department, {
                     chalkableDepartmentId: id.valueOf(),
@@ -31,19 +32,19 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.departments.DepartmentId, String, String]],
+            [[chlk.models.id.DepartmentId, String, String]],
             ria.async.Future, function saveDepartment(id_, name, keywords) {
                 if (id_ && id_.valueOf()) return this.updateDepartment(id_, name, keywords);
                 return this.addDepartment(name, keywords);
             },
 
-            [[chlk.models.departments.DepartmentId]],
+            [[chlk.models.id.DepartmentId]],
             ria.async.Future, function removeDepartment(id) {
                 return this.post('ChalkableDepartment/Delete.json', chlk.models.departments.Department, {
                     chalkableDepartmentId: id.valueOf()
                 });
             },
-            [[chlk.models.departments.DepartmentId]],
+            [[chlk.models.id.DepartmentId]],
             ria.async.Future, function getDepartment(id) {
                 return this.post('ChalkableDepartment/Info.json', chlk.models.departments.Department, {
                     chalkableDepartmentId: id.valueOf()

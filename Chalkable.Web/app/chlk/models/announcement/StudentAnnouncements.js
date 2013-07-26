@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.class.ClassForTopBar');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
+REQUIRE('chlk.models.id.CourseId');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
@@ -20,7 +21,7 @@ NAMESPACE('chlk.models.announcement', function () {
             String, 'className',
 
             [ria.serialize.SerializeProperty('courseid')],
-            chlk.models.class.CourseId, 'courseId',
+            chlk.models.id.CourseId, 'courseId',
 
             [ria.serialize.SerializeProperty('gradedstudentcount')],
             Number, 'gradedStudentCount',

@@ -1,6 +1,7 @@
 REQUIRE('chlk.templates.JadeTemplate');
 
 REQUIRE('chlk.models.departments.Department');
+REQUIRE('chlk.models.id.DepartmentId');
 
 NAMESPACE('chlk.templates.departments', function () {
 
@@ -10,7 +11,7 @@ NAMESPACE('chlk.templates.departments', function () {
         [ria.templates.ModelBind(chlk.models.departments.Department)],
         'DepartmentDialog', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.departments.DepartmentId, 'id',
+            chlk.models.id.DepartmentId, 'id',
             [ria.templates.ModelPropertyBind],
             String, 'name',
             [ria.templates.ModelPropertyBind],

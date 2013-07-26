@@ -1,6 +1,8 @@
 REQUIRE('chlk.templates.JadeTemplate');
 
 REQUIRE('chlk.models.school.School');
+REQUIRE('chlk.models.id.SchoolId');
+REQUIRE('chlk.models.id.DistrictId');
 
 NAMESPACE('chlk.templates.school', function () {
 
@@ -9,7 +11,7 @@ NAMESPACE('chlk.templates.school', function () {
         [ria.templates.ModelBind(chlk.models.school.School)],
         'School', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            Number, 'id',
+            chlk.models.id.SchoolId, 'id',
             [ria.templates.ModelPropertyBind],
             String, 'name',
             [ria.templates.ModelPropertyBind],
@@ -25,6 +27,6 @@ NAMESPACE('chlk.templates.school', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'sendEmailNotifications',
             [ria.templates.ModelPropertyBind],
-            Number, 'districtId'
+            chlk.models.id.DistrictId, 'districtId'
         ])
 });
