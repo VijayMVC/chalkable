@@ -1,0 +1,7 @@
+mixin ActionForm(controller, action)
+    -attributes['data-controller'] = escape(controller);
+    -attributes['data-action'] = escape(action);
+    -attributes.action = attributes.action || 'javascript:';
+    -self.prepareData(attributes);
+    form(attributes)
+        block
