@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.bgtasks.BgTask');
 REQUIRE('chlk.models.bgtasks.BgTasksLogListViewData');
+REQUIRE('chlk.models.id.BgTaskId');
 
 NAMESPACE('chlk.templates.bgtasks', function () {
 
@@ -11,6 +12,6 @@ NAMESPACE('chlk.templates.bgtasks', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.common.PaginatedList, 'items',
             [ria.templates.ModelPropertyBind],
-            chlk.models.bgtasks.BgTaskId, 'bgTaskId'
+            chlk.models.id.BgTaskId, 'bgTaskId'
         ])
 });

@@ -2,6 +2,7 @@ REQUIRE('chlk.BaseApp');
 
 REQUIRE('chlk.controllers.SchoolsController');
 REQUIRE('chlk.controllers.DistrictController');
+REQUIRE('chlk.controllers.AccountController');
 REQUIRE('chlk.controllers.AppsController');
 REQUIRE('chlk.controllers.AppCategoriesController');
 REQUIRE('chlk.controllers.SettingsController');

@@ -1,10 +1,11 @@
 REQUIRE('chlk.models.common.ChlkDate');
+REQUIRE('chlk.models.id.SchoolId');
 NAMESPACE('chlk.models.signup', function () {
     "use strict";
     /** @class chlk.models.signup.SignUpInfo*/
     CLASS(
         'SignUpInfo', [
-            Number, 'id',
+            chlk.models.id.SchoolId, 'id',
             [ria.serialize.SerializeProperty('schoolid')],
             Number, 'schoolId',
             [ria.serialize.SerializeProperty('usertype')],

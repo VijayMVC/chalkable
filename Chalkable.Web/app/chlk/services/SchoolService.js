@@ -6,6 +6,9 @@ REQUIRE('chlk.models.school.SchoolDetails');
 REQUIRE('chlk.models.school.Timezone');
 REQUIRE('chlk.models.school.SchoolSisInfo');
 REQUIRE('chlk.models.district.District');
+REQUIRE('chlk.models.id.SchoolId');
+
+
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -15,7 +18,7 @@ NAMESPACE('chlk.services', function () {
         'SchoolService', EXTENDS(chlk.services.BaseService), [
             [[chlk.models.district.DistrictId, Number, Boolean, Boolean]],
             ria.async.Future, function getSchools(districtId, start_, demoOnly_, unimportedOnly_) {
-                return this.getPaginatedList(start_ > 0 ? 'data/schools2.json' : 'data/schools.json', chlk.models.school.School, {
+                return this.getPaginatedList('School/List.json', chlk.models.school.School, {
                     start: start_,
                     districtId: districtId.valueOf(),
                     demoOnly: demoOnly_,
@@ -23,24 +26,24 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[Number]],
+            [[chlk.models.id.SchoolId]],
             ria.async.Future, function getDetails(schoolId) {
                 return this.get('data/schoolDetails.json', chlk.models.school.SchoolDetails, {
-                    schoolId: schoolId
+                    schoolId: schoolId.valueOf()
                 });
             },
 
-            [[Number]],
+            [[chlk.models.id.SchoolId]],
             ria.async.Future, function getSisInfo(schoolId) {
                 return this.get('data/schoolSisInfo.json', chlk.models.school.SchoolSisInfo, {
-                    schoolId: schoolId
+                    schoolId: schoolId.valueOf()
                 });
             },
 
-            [[Number]],
+            [[chlk.models.id.SchoolId]],
             ria.async.Future, function getPeopleSummary(schoolId) {
                 return this.get('data/peopleSummary.json', chlk.models.school.SchoolPeopleSummary, {
-                    schoolId: schoolId
+                    schoolId: schoolId.valueOf()
                 });
             },
 

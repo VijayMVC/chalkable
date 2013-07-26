@@ -4,17 +4,20 @@ REQUIRE('chlk.models.class.ClassForTopBar');
 REQUIRE('chlk.models.attachment.Attachment');
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.announcement.StudentAnnouncements');
+REQUIRE('chlk.models.id.AnnouncementId');
+REQUIRE('chlk.models.id.ClassId');
+REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.id.StudentAnnouncementId');
+REQUIRE('chlk.models.id.MarkingPeriodId');
+
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
 
-    /** @class chlk.models.announcement.AnnouncementId*/
-    IDENTIFIER('AnnouncementId');
-
     /** @class chlk.models.announcement.Announcement*/
     CLASS(
         'Announcement', [
-            chlk.models.announcement.AnnouncementId, 'id',
+            chlk.models.id.AnnouncementId, 'id',
 
             [ria.serialize.SerializeProperty('announcementattachments')],
             ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
@@ -56,7 +59,7 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('expiresdate')],
             chlk.models.common.ChlkDate, 'expiresDate',
 
-            chlk.models.class.ClassId, 'classId',
+            chlk.models.id.ClassId, 'classId',
 
             Boolean, 'gradable',
             Number, 'grade',
@@ -88,7 +91,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'qnaCount',
 
             [ria.serialize.SerializeProperty('recipientid')],
-            chlk.models.class.ClassId, 'recipientId',
+            chlk.models.id.ClassId, 'recipientId',
 
             [ria.serialize.SerializeProperty('schoolpersongender')],
             String, 'schoolPersonGender',
@@ -97,7 +100,7 @@ NAMESPACE('chlk.models.announcement', function () {
             String, 'schoolPersonName',
 
             [ria.serialize.SerializeProperty('schoolpersonref')],
-            chlk.models.people.SchoolPersonId, 'schoolPersonRef',
+            chlk.models.id.SchoolPersonId, 'schoolPersonRef',
 
             [ria.serialize.SerializeProperty('shortcontent')],
             String, 'shortContent',
@@ -112,7 +115,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'stateTyped',
 
             [ria.serialize.SerializeProperty('studentannouncementid')],
-            chlk.models.announcement.StudentAnnouncementId, 'studentAnnouncementId',
+            chlk.models.id.StudentAnnouncementId, 'studentAnnouncementId',
 
             [ria.serialize.SerializeProperty('studentannouncements')],
             chlk.models.announcement.StudentAnnouncements, 'studentAnnouncements',
@@ -139,7 +142,7 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('wassubmittedtoadmin')],
             Boolean, 'wasSubmittedToAdmin',
 
-            chlk.models.class.MarkingPeriodId, 'markingPeriodId',
+            chlk.models.id.MarkingPeriodId, 'markingPeriodId',
 
             String, 'submitType'
         ]);

@@ -1,13 +1,11 @@
+REQUIRE('chlk.models.id.AttachmentId');
 NAMESPACE('chlk.models.attachment', function () {
     "use strict";
-
-    /** @class chlk.models.attachment.AttachmentId*/
-    IDENTIFIER('AttachmentId');
 
     /** @class chlk.models.attachment.Attachment*/
     CLASS(
         'Attachment', [
-            chlk.models.attachment.AttachmentId, 'id',
+            chlk.models.id.AttachmentId, 'id',
 
             [ria.serialize.SerializeProperty('isowner')],
             Boolean, 'isOwner',

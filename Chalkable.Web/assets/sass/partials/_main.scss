@@ -5,10 +5,13 @@
 @import "partials/main/_buttons";
 @import "partials/main/_images";
 @import "partials/main/_profile";
+
 @import "partials/main/_storage";
 @import "partials/main/people/_list";
 @import "partials/main/feed/_list";
 @import "partials/main/announcement/_form";
+@import "partials/main/calendar/_calendar";
+@import "partials/main/calendar/_announcement";
 
 BODY {
   DIV.page{

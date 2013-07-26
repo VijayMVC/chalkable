@@ -3,6 +3,7 @@ REQUIRE('chlk.services.DistrictService');
 REQUIRE('chlk.models.district.District');
 REQUIRE('chlk.activities.district.DistrictListPage');
 REQUIRE('chlk.activities.district.DistrictDialog');
+REQUIRE('chlk.models.id.DistrictId');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -41,12 +42,12 @@ NAMESPACE('chlk.controllers', function (){
         },
 
 
-        [[chlk.models.district.DistrictId]],
+        [[chlk.models.id.DistrictId]],
         function updateAction(id) {
             var result = this.districtService
                 .getDistrict(id)
                 .attach(this.validateResponse_());
-            return this.ShadeView(chlk.activities.district.DistrictDialog, result).;
+            return this.ShadeView(chlk.activities.district.DistrictDialog, result);
         },
 
 
@@ -76,7 +77,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.district.DistrictListPage, result);
         },
 
-        [[chlk.models.district.DistrictId]],
+        [[chlk.models.id.DistrictId]],
         function deleteAction(id) {
             var result= this.districtService
                 .removeDistrict(id)

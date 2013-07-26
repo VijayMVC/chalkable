@@ -1,6 +1,7 @@
 REQUIRE('chlk.templates.JadeTemplate');
 
 REQUIRE('chlk.models.district.District');
+REQUIRE('chlk.models.id.DistrictId');
 
 NAMESPACE('chlk.templates.district', function () {
 
@@ -10,7 +11,7 @@ NAMESPACE('chlk.templates.district', function () {
         [ria.templates.ModelBind(chlk.models.district.District)],
         'DistrictDialog', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.district.DistrictId, 'id',
+            chlk.models.id.DistrictId, 'id',
             [ria.templates.ModelPropertyBind],
             String, 'name',
             [ria.templates.ModelPropertyBind],

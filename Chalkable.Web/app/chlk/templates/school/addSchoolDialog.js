@@ -1,6 +1,7 @@
 REQUIRE('chlk.templates.JadeTemplate');
 
 REQUIRE('chlk.models.school.School');
+REQUIRE('chlk.models.id.SchoolId');
 
 NAMESPACE('chlk.templates.school', function () {
 
@@ -10,7 +11,7 @@ NAMESPACE('chlk.templates.school', function () {
         [ria.templates.ModelBind(chlk.models.school.School)],
         'AddSchoolDialog', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            Number, 'id',
+            chlk.models.id.SchoolId, 'id',
             [ria.templates.ModelPropertyBind],
             String, 'name',
             [ria.templates.ModelPropertyBind],

@@ -1,3 +1,4 @@
+REQYURE('chlk.models.id.SchoolSisInfoId');
 NAMESPACE('chlk.models.school', function () {
     "use strict";
     /** @class chlk.models.school.SchoolSisInfo*/
@@ -7,7 +8,7 @@ NAMESPACE('chlk.models.school', function () {
             Number, 'disciplineSyncFreq',
             Number, 'personSyncFreq',
             Number, 'scheduleSyncFreq',
-            Number, 'id',
+            chlk.models.id.SchoolSisInfoId, 'id',
             String, 'sisUrl',
             String, 'sisUserName',
             String, 'sisPassword',

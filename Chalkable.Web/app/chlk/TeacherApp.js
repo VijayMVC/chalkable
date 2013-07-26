@@ -2,6 +2,8 @@ REQUIRE('chlk.BaseApp');
 
 REQUIRE('chlk.controllers.AnnouncementController');
 REQUIRE('chlk.controllers.FeedController');
+REQUIRE('chlk.controllers.AccountController');
+REQUIRE('chlk.controllers.CalendarController');
 REQUIRE('chlk.controllers.SettingsController');
 
 
@@ -14,8 +16,8 @@ NAMESPACE('chlk', function (){
             OVERRIDE, ria.mvc.Dispatcher, function initDispatcher_() {
                 var dispatcher = BASE();
 
-                dispatcher.setDefaultControllerId('feed');
-                dispatcher.setDefaultControllerAction('list');
+                dispatcher.setDefaultControllerId('calendar');
+                dispatcher.setDefaultControllerAction('month');
                 return dispatcher;
             },
 
