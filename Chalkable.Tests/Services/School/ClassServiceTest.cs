@@ -157,7 +157,7 @@ namespace Chalkable.Tests.Services.School
 
 
 
-        public static ClassComplex CreateClass(SchoolTestContext schoolContext, Person teacher, Person student1
+        public static ClassDetails CreateClass(SchoolTestContext schoolContext, Person teacher, Person student1
         , Person student2, string name = "math", Guid? schoolYearId = null)
         {
             MarkingPeriod mp;

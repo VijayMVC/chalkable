@@ -17,7 +17,7 @@ namespace Chalkable.Web.Models.ClassesViewData
         public IList<Guid> MarkingPeriodsId { get; set; }
         
 
-        protected ClassViewData(ClassComplex classComplex)
+        protected ClassViewData(ClassDetails classComplex)
         {
             Id = classComplex.Id;
             Name = classComplex.Name;
@@ -30,11 +30,11 @@ namespace Chalkable.Web.Models.ClassesViewData
         }
         private ClassViewData() {}
 
-        public static ClassViewData Create(ClassComplex classComplex)
+        public static ClassViewData Create(ClassDetails classComplex)
         {
            return new ClassViewData(classComplex);
         }
-        public static IList<ClassViewData> Create(IList<ClassComplex> classComplexs)
+        public static IList<ClassViewData> Create(IList<ClassDetails> classComplexs)
         {
             return classComplexs.Select(Create).ToList();
         } 

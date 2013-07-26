@@ -22,7 +22,7 @@ namespace Chalkable.Data.School.Model
         public int? SisId { get; set; }
     }
 
-    public class ClassComplex : Class
+    public class ClassDetails : Class
     {
         [DataEntityAttr]
         public Person Teacher { get; set; }

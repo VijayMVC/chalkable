@@ -8,7 +8,7 @@ namespace Chalkable.Web.Models.ClassesViewData
         public RoomViewData Room { get; set; }
         public ChalkableDepartmentViewData Department { get; set; }
 
-        protected ClassInfoViewData(ClassComplex cClass, Room room, ChalkableDepartment department)
+        protected ClassInfoViewData(ClassDetails cClass, Room room, ChalkableDepartment department)
             : base(cClass)
         {
             if (room != null) 
@@ -16,7 +16,7 @@ namespace Chalkable.Web.Models.ClassesViewData
             if (department != null) 
                 Department = ChalkableDepartmentViewData.Create(department);
         }
-        public static ClassInfoViewData Create(ClassComplex cClass, Room roomInfo, ChalkableDepartment department)
+        public static ClassInfoViewData Create(ClassDetails cClass, Room roomInfo, ChalkableDepartment department)
         {
             return new ClassInfoViewData(cClass, roomInfo, department);
         }

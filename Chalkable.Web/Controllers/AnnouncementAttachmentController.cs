@@ -140,9 +140,9 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult DownloadAttachment(Guid id, bool? needsDownload, int? width, int? height)
+        public ActionResult DownloadAttachment(Guid announcementAttachmentId, bool? needsDownload, int? width, int? height)
         {
-            var attContentInfo = SchoolLocator.AnnouncementAttachmentService.GetAttachmentContent(id);
+            var attContentInfo = SchoolLocator.AnnouncementAttachmentService.GetAttachmentContent(announcementAttachmentId);
             var attName = attContentInfo.Attachment.Name;
             var content = attContentInfo.Content;
             var contentTypeName = MimeHelper.GetContentTypeByName(attName);

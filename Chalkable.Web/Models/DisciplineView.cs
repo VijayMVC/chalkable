@@ -21,7 +21,7 @@ namespace Chalkable.Web.Models
         public string Summary { get; set; }
         public bool Editable { get; set; }
 
-        protected DisciplineView(ClassDisciplineDetails discipline, IList<ClassComplex> classes, bool canEdit)
+        protected DisciplineView(ClassDisciplineDetails discipline, IList<ClassDetails> classes, bool canEdit)
         {
             StudentId = discipline.Student.Id;
             Period = PeriodViewData.Create(discipline.ClassPeriod.Period);
@@ -33,7 +33,7 @@ namespace Chalkable.Web.Models
             Editable = canEdit || (classes != null && classes.Any(t => t.Name == ClassName));
         }
 
-        public static IList<DisciplineView> Create(IList<ClassDisciplineDetails> disciplines, IList<ClassComplex> classes,
+        public static IList<DisciplineView> Create(IList<ClassDisciplineDetails> disciplines, IList<ClassDetails> classes,
                                             bool canEdit = false)
         {
             return disciplines.Select(x => new DisciplineView(x, classes, canEdit)).ToList();

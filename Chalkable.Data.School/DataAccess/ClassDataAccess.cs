@@ -59,7 +59,7 @@ namespace Chalkable.Data.School.DataAccess
             {
                 var sourceCount = reader.Read() ? SqlTools.ReadInt32(reader, "SourceCount") : 0;
                 reader.NextResult();
-                var classes = reader.ReadList<ClassComplex>(true);
+                var classes = reader.ReadList<ClassDetails>(true);
                 reader.NextResult();
                 var markingPeriodClasses = reader.ReadList<MarkingPeriodClass>();
                 foreach (var classComplex in classes)
@@ -94,7 +94,7 @@ namespace Chalkable.Data.School.DataAccess
     public class ClassQueryResult
     {
         public ClassQuery Query { get; set; }
-        public IList<ClassComplex> Classes { get; set; }
+        public IList<ClassDetails> Classes { get; set; }
         public int SourceCount { get; set; }
     }
 }

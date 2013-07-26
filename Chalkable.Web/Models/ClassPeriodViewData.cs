@@ -35,7 +35,7 @@ namespace Chalkable.Web.Models
         public ClassViewData Class { get; set; }
         public int StudentsCount { get; set; }
 
-        protected ClassPeriodViewData(ClassPeriod classPeriod, Room room, ClassComplex classComplex)
+        protected ClassPeriodViewData(ClassPeriod classPeriod, Room room, ClassDetails classComplex)
             : base(classPeriod, room)
         {
             if (classComplex != null)
@@ -44,7 +44,7 @@ namespace Chalkable.Web.Models
                 StudentsCount = classComplex.StudentsCount;
             }
         }
-        public static ClassPeriodViewData Create(ClassPeriod classPeriod, ClassComplex classComplex, Room room)
+        public static ClassPeriodViewData Create(ClassPeriod classPeriod, ClassDetails classComplex, Room room)
         {
             return new ClassPeriodViewData(classPeriod, room, classComplex);
         }

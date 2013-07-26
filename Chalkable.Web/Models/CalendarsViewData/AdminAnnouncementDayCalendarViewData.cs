@@ -15,7 +15,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
         public int Day { get; set; }
 
         public static AdminDayCalendarViewData Create(IList<Period> periods, IList<GradeLevel> gradeLevels, IList<ClassPeriod> classPeriods
-           , IList<ClassComplex> classes, IList<Room> rooms, DateTime date)
+           , IList<ClassDetails> classes, IList<Room> rooms, DateTime date)
         {
             IList<CalendarDayClassPeriodsViewData> cdClassperiods = new List<CalendarDayClassPeriodsViewData>();
             foreach (var gradeLevel in gradeLevels)
@@ -45,7 +45,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
         public IList<ClassPeriodViewData> ClassPeriods { get; set; }
 
         public static CalendarDayClassPeriodsViewData Create(IList<ClassPeriod> classPeriods, Period period,
-           GradeLevel gradeLevel , IList<ClassComplex> classes, IList<Room> rooms, DateTime date)
+           GradeLevel gradeLevel , IList<ClassDetails> classes, IList<Room> rooms, DateTime date)
         {
             var res = new CalendarDayClassPeriodsViewData
             {

@@ -7,20 +7,21 @@ using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
-    public class StudentGradeAvgPerMPC
+    public class StudentGradeAvg
     {
         [DataEntityAttr]
         public Person Student { get; set; }
-        [DataEntityAttr]
-        public MarkingPeriodClass MarkingPeriodClass { get; set; }
         public int? Avg { get; set; }
     }
 
-    public class StudentGradeAvgPerClass
+    public class StudentGradeAvgPerMPC : StudentGradeAvg
     {
         [DataEntityAttr]
-        public Person Student { get; set; }
+        public MarkingPeriodClass MarkingPeriodClass { get; set; }
+    }
+
+    public class StudentGradeAvgPerClass : StudentGradeAvg
+    {
         public Guid ClassRef { get; set; }
-        public int? Avg { get; set; }
     }
 }

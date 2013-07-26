@@ -21,14 +21,14 @@ namespace Chalkable.Web.Models.ClassesViewData
 
         public IList<AnnouncementByDateViewData> AnnouncementsByDate { get; set; } 
 
-        protected ClassSummaryViewData(ClassComplex c, Room currentRoom) : base(c)
+        protected ClassSummaryViewData(ClassDetails c, Room currentRoom) : base(c)
         {
             if (currentRoom != null)
                 Room = RoomViewData.Create(currentRoom);
 
         }
 
-        public static ClassSummaryViewData Create(ClassComplex c, Room currentRoom, IList<Person> students)
+        public static ClassSummaryViewData Create(ClassDetails c, Room currentRoom, IList<Person> students)
         {
             var res = new ClassSummaryViewData(c, currentRoom) {ClassSize = students.Count};
             students = students.OrderBy(x => x.LastName).ThenBy(x => x.FirstName).Take(STUDENT_COUNT).ToList();
@@ -36,7 +36,7 @@ namespace Chalkable.Web.Models.ClassesViewData
             return res;
         }
 
-        public static ClassSummaryViewData Create(ClassComplex c, Room currentRoom, IList<Person> students,
+        public static ClassSummaryViewData Create(ClassDetails c, Room currentRoom, IList<Person> students,
              IList<AnnouncementByDateViewData> announcementByDates, IList<ClassAttendanceDetails> attendances
             , int posibleAbsent, IList<ClassDisciplineDetails> disciplines, IList<DisciplineType> disciplineTypes)
         {
