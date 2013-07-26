@@ -72,7 +72,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-
+        //TODO: check application existing  
         public StudentAnnouncement SetAutoGrade(Guid studentAnnouncementId, int value, Guid applicationId)
         {
             using (var uow = Update())
