@@ -1,9 +1,11 @@
+REQUIRE('chlk.models.id.SchoolYearId');
+
 NAMESPACE('chlk.models.schoolYear', function () {
     "use strict";
     /** @class chlk.models.schoolYear.Year*/
     CLASS(
         'Year', [
-            Number, 'id',
+            chlk.models.id.SchoolYearId, 'id',
             String, 'description',
             [ria.serialize.SerializeProperty('startdate')],
             String, 'startDate',

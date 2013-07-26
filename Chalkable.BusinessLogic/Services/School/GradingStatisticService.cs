@@ -9,6 +9,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         IList<StudentGradeAvgPerMPC> GetStudentGradePerMPC(Guid teacherId, IList<Guid> markingPeriodIds);
         IList<StudentGradeAvgPerClass> GetStudentGradePerClass(Guid teacherId, Guid schoolYearId);
+        IList<MarkingPeriodClassGradeAvg> GetClassGradeAvgPerMP(Guid classId, Guid schoolYearId, List<Guid> markingPeriodIds, Guid? teacherId);
     }
     public class GradingStatisticService : SchoolServiceBase, IGradingStatisticService
     {
@@ -47,6 +48,22 @@ namespace Chalkable.BusinessLogic.Services.School
                         SchoolYearId = schoolYearId
                     });
                 return new GradingStatisticDataAccess(uow).CalcStudentGradeAvgPerClass(query);
+            }
+        }
+
+
+        public IList<MarkingPeriodClassGradeAvg> GetClassGradeAvgPerMP(Guid classId, Guid schoolYearId, List<Guid> markingPeriodIds, Guid? teacherId)
+        {
+            using (var uow = Read())
+            {
+                var query = QueryFiltering(new GradingStatisticQuery
+                    {
+                        ClassId = classId,
+                        SchoolYearId = schoolYearId,
+                        MarkingPeriodIds = markingPeriodIds,
+                        TeacherId = teacherId
+                    });
+                return new GradingStatisticDataAccess(uow).CalcClassGradingPerMp(query);
             }
         }
     }

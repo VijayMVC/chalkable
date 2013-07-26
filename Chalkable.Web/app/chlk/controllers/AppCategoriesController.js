@@ -3,6 +3,7 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.AppCategoryService');
 REQUIRE('chlk.activities.apps.AppCategoryListPage');
 REQUIRE('chlk.activities.apps.CategoryDialog');
+REQUIRE('chlk.models.id.AppCategoryId');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -33,7 +34,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
 
-        [[chlk.models.apps.AppCategoryId]],
+        [[chlk.models.id.AppCategoryId]],
         function updateAction(id) {
             var result = this.appCategoryService
                 .getCategory(id)
@@ -66,7 +67,7 @@ NAMESPACE('chlk.controllers', function (){
 
 
 
-        [[chlk.models.apps.AppCategoryId]],
+        [[chlk.models.id.AppCategoryId]],
         function deleteAction(id) {
             var result= this.appCategoryService
                 .removeCategory(id)

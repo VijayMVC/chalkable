@@ -1,17 +1,16 @@
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.attachment.Attachment');
+REQUIRE('chlk.models.id.AnnouncementId');
+REQUIRE('chlk.models.id.StudentAnnouncementId');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
-
-    /** @class chlk.models.announcement.StudentAnnouncementId*/
-    IDENTIFIER('StudentAnnouncementId');
 
     /** @class chlk.models.announcement.StudentAnnouncement*/
     CLASS(
         'StudentAnnouncement', [
             [ria.serialize.SerializeProperty('announcementid')],
-            chlk.models.announcement.AnnouncementId, 'announcementId',
+            chlk.models.id.AnnouncementId, 'announcementId',
 
             ArrayOf(chlk.models.attachment.Attachment), 'attachments',
 
@@ -22,7 +21,7 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('gradevalue')],
             Number, 'gradeValue',
 
-            chlk.models.announcement.StudentAnnouncementId, 'id',
+            chlk.models.id.StudentAnnouncementId, 'id',
 
             Number, 'state',
 

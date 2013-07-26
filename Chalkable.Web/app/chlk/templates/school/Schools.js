@@ -1,6 +1,7 @@
 REQUIRE('chlk.models.school.SchoolListViewData');
 REQUIRE('chlk.models.school.School');
 REQUIRE('chlk.models.district.District');
+REQUIRE('chlk.models.id.DistrictId');
 
 NAMESPACE('chlk.templates.school', function () {
 
@@ -12,6 +13,6 @@ NAMESPACE('chlk.templates.school', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.common.PaginatedList, 'items',
             [ria.templates.ModelPropertyBind],
-            chlk.models.district.DistrictId, 'districtId'
+            chlk.models.id.DistrictId, 'districtId'
         ])
 });

@@ -2,6 +2,7 @@ REQUIRE('chlk.controllers.BaseController');
 
 REQUIRE('chlk.services.ApplicationService');
 REQUIRE('chlk.activities.apps.AppsListPage');
+REQUIRE('chlk.models.id.AppId');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -13,17 +14,17 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.ApplicationService, 'appsService',
 
         [chlk.controllers.SidebarButton('apps')],
-        [[Number]],
+        [[chlk.models.id.AppId]],
         function listAction(pageIndex_) {
             var result = this.appsService
                 .getApps(pageIndex_ | 0)
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.apps.AppsListPage, result);
         },
-        [[Number]],
+        [[chlk.models.id.AppId]],
         function deleteAction(id) {
         },
-        [[Number]],
+        [[chlk.models.id.AppId]],
         function detailsAction(id) {
         }
 

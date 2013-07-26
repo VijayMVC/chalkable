@@ -20,14 +20,14 @@ namespace Chalkable.Web.Controllers.CalendarControllers
     public class AnnouncementCalendarController : CalendarController
     {
          [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_LIST, true, CallType.Get, new[] { AppPermissionType.Announcement })]
-         public ActionResult List(DateTime? date, Guid? classId, GuidList gradelevelids)
+        public ActionResult List(DateTime? date, Guid? classId, GuidList gradeLevelIds)
          {
              if (!SchoolLocator.Context.SchoolId.HasValue)
                  throw new UnassignedUserException();
              DateTime start, end;
              MonthCalendar(ref date, out start, out end);
              var isAdmin = BaseSecurity.IsAdminViewer(SchoolLocator.Context);
-             var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, gradelevelids, !isAdmin ? classId : null);
+             var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, gradeLevelIds, !isAdmin ? classId : null);
              if (isAdmin)
                  announcements = announcements.Where(x => !x.ClassId.HasValue).ToList();
              var schoolYearId = GetCurrentSchoolYearId();
@@ -58,13 +58,13 @@ namespace Chalkable.Web.Controllers.CalendarControllers
 
          //TODO: rewrite this method 
          [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_ANNOUNCEMENT_WEEK, true, CallType.Get, new[] { AppPermissionType.Announcement })]
-         public ActionResult Week(DateTime? date, Guid? classId, GuidList gradelevelids)
+         public ActionResult Week(DateTime? date, Guid? classId, GuidList gradeLevelIds)
          {
              DateTime start, end;
              Guid? teacherId, studentId;
              WeekCalendar(ref date, out start, out end);
              PreperingUsersIdsForCalendar(SchoolLocator, null, out teacherId, out studentId);
-             var anns = SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, gradelevelids, classId);
+             var anns = SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, gradeLevelIds, classId);
              var rooms = SchoolLocator.RoomService.GetRooms();
              IList<ClassPeriod> classPeriods = new List<ClassPeriod>();
              IList<Period> periods = new List<Period>();

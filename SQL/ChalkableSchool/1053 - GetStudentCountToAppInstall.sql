@@ -20,7 +20,7 @@ where
 	@emptyResult = 0
 	and Class.SchoolYearRef = @schoolYearId
 	and (
-		@roleId = 8 or @roleId = 7 or @roleId = 5 or @roleId = 2 and StaffCourse.SchoolPersonRef = @schoolPersonId
+		@roleId = 8 or @roleId = 7 or @roleId = 5 or @roleId = 2 and StaffCourse.SchoolPersonRef = @personId
 		)
 	and x.Id is null
 group by 

@@ -15,16 +15,17 @@ namespace Chalkable.Web.Models.ClassesViewData
                     Hover = ClassAttendanceHoverViewData.Create(attendances)
                 };
         }
-        //public static ClassHoverBoxesViewData<ClassAverageForMpHoverViewData> Create(IList<PocoClassGradingStats> classGradingStats, IList<MarkingPeriod> previosMps)
-        //{
-        //    var res = new ClassHoverBoxesViewData<ClassAverageForMpHoverViewData>
-        //        {
-        //            Titel = classGradingStats.First(x => x.MarkingPeriodId == previosMps[0].Id).ClassAvg
-        //        };
-        //    var avgByMp = classGradingStats.GroupBy(x => x.MarkingPeriodId).ToDictionary(x => x.Key, x => x.First().ClassAvg);
-        //    res.Hover = ClassAverageForMpHoverViewData.Create(avgByMp, previosMps);
-        //    return res;
-        //}
+        public static ClassHoverBoxViewData<ClassAverageForMpHoverViewData> Create(IList<MarkingPeriodClassGradeAvg> classGradingStats)
+        {
+            classGradingStats = classGradingStats.OrderByDescending(x => x.MarkingPeriod.StartDate).ToList();
+            var res = new ClassHoverBoxViewData<ClassAverageForMpHoverViewData>
+                {
+                    Titel = classGradingStats.First().Avg.ToString()
+                };
+            classGradingStats.RemoveAt(0);
+            res.Hover = ClassAverageForMpHoverViewData.Create(classGradingStats);
+            return res;
+        }
 
         public static ClassHoverBoxViewData<ClassDisciplineHoveViewData> Create(IList<DisciplineType> disciplineTypes, IList<ClassDisciplineDetails> disciplineList)
         {
@@ -42,13 +43,13 @@ namespace Chalkable.Web.Models.ClassesViewData
         public Guid MarkingPeriodId { get; set; }
         public string MarkingPeriodName { get; set; }
         public int? Avg { get; set; }
-        public static IList<ClassAverageForMpHoverViewData> Create(IDictionary<Guid, int?> avgByMp, IList<MarkingPeriod> previosMps)
+        public static IList<ClassAverageForMpHoverViewData> Create(IList<MarkingPeriodClassGradeAvg> classGradingStats)
         {
-            var res = previosMps.Select(x => new ClassAverageForMpHoverViewData
+            var res = classGradingStats.Select(x => new ClassAverageForMpHoverViewData
             {
-                MarkingPeriodId = x.Id,
-                MarkingPeriodName = x.Name,
-                Avg = avgByMp.ContainsKey(x.Id) ? avgByMp[x.Id] : default(int?)
+                MarkingPeriodId = x.MarkingPeriod.Id,
+                MarkingPeriodName = x.MarkingPeriod.Name,
+                Avg = x.Avg
             });
             return res.ToList();
         }

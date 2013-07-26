@@ -83,9 +83,10 @@ namespace Chalkable.Web.Controllers
             if (dates.Count > 0)
                 anns = SchoolLocator.AnnouncementService.GetAnnouncements(currentDateTime.Date, dates.Last().Date, false, null, classId);
             var annsByDate = AnnouncementByDateViewData.Create(dates, anns);
-
+            var gradePerMps = SchoolLocator.GradingStatisticService.GetClassGradeAvgPerMP(classId, mp.SchoolYearRef, null, null);
+            gradePerMps = gradePerMps.Where(x => x.MarkingPeriod.StartDate <= mp.StartDate).ToList();
             return Json(ClassSummaryViewData.Create(c, curentRoom, students, annsByDate, classAttendances, possibleAbsents
-                , disciplines, disciplineTypes));
+                , disciplines, disciplineTypes, gradePerMps));
         }
 
     }

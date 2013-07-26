@@ -113,7 +113,13 @@ namespace Chalkable.Tests
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1006 - added TimZone to school.sql"));
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1007 - added SisSync table.sql"));
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1008 - added ChalkableDepartment table.sql"));
-
+            ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1009 - application related tables.sql"));
+            ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1010 - added sis related columns to district table.sql"));
+            ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1011 - add HasParentMyApps column to application table.sql"));
+            ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1012 - add application grade level table.sql"));
+            ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1013 - added ConfirmationKey column to User table.sql"));
+            ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1014 - added uq_developer_schoolRef key to Developer.sql"));
+            
             RunCreateSchoolScripts(chalkableSchoolTemplateConnection);
         }
     }

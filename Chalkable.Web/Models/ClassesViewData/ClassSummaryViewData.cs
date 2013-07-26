@@ -38,12 +38,14 @@ namespace Chalkable.Web.Models.ClassesViewData
 
         public static ClassSummaryViewData Create(ClassDetails c, Room currentRoom, IList<Person> students,
              IList<AnnouncementByDateViewData> announcementByDates, IList<ClassAttendanceDetails> attendances
-            , int posibleAbsent, IList<ClassDisciplineDetails> disciplines, IList<DisciplineType> disciplineTypes)
+            , int posibleAbsent, IList<ClassDisciplineDetails> disciplines, IList<DisciplineType> disciplineTypes
+            , IList<MarkingPeriodClassGradeAvg> classGradeStatsPerMp)
         {
             var res = Create(c, currentRoom, students);
             res.AnnouncementsByDate = announcementByDates;
             res.ClassAttendanceBox = ClassHoverBoxViewData<ClassAttendanceHoverViewData>.Create(attendances, posibleAbsent);
             res.ClassDisciplineBox = ClassHoverBoxViewData<ClassDisciplineHoveViewData>.Create(disciplineTypes, disciplines);
+            res.ClassAverageBox = ClassHoverBoxViewData<ClassAverageForMpHoverViewData>.Create(classGradeStatsPerMp);
             return res;
         }
 

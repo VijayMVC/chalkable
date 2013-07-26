@@ -45,7 +45,9 @@ where
 		  or @roleId = 5 or  @roleId = 7 or  @roleId = 8 or @roleId = 1
 		  or (@roleId = 3 and  exists(select * from ClassPerson where ClassRef = Class_Id and PersonRef = @personId)) 
 		) 
-	and (Class_Name like @filter1 or Class_Name like @filter2 or Class_Name like @filter3)
+	and (@filter1 is null or  Class_Name like @filter1 or 
+		 @filter2 is null or Class_Name like @filter2 or 
+		 @filter3 is null or Class_Name like @filter3)
 
 
 insert into @class
@@ -66,7 +68,9 @@ where
 		  or (@roleId = 3 and  exists(select * from ClassPerson where ClassRef = Class_Id and PersonRef = @personId))
 		  
 		)
-	and (Class_Name like @filter1 or Class_Name like @filter2 or Class_Name like @filter3)
+	and (@filter1 is null or  Class_Name like @filter1 or 
+		 @filter2 is null or Class_Name like @filter2 or 
+		 @filter3 is null or Class_Name like @filter3)
 order by vwClass.Class_Id
 OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
 

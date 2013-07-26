@@ -16,35 +16,66 @@ namespace Chalkable.Data.School.DataAccess
         }
 
 
-        private DbQuery BuilGradeStatisticQuery(StringBuilder sql, GradingStatisticQuery query)
+        private DbQuery BuildGradeStatisicDbQuery(StringBuilder sql, GradingStatisticQuery query)
         {
             var conds = new Dictionary<string, object>();
             if (query.ClassId.HasValue)
             {
                 conds.Add(ClassPerson.CLASS_REF_FIELD, query.ClassId);
-                sql.AppendFormat(" and [ClassPerson].[{0}] =@{0}", ClassPerson.CLASS_REF_FIELD);
+                sql.AppendFormat(" and [Class].[{0}] = @{0}", Class.ID_FIELD);
             }
             if (query.TeacherId.HasValue)
             {
                 conds.Add(Class.TEACHER_REF_FIELD, query.TeacherId);
-                sql.AppendFormat(" and exists(select * from Class where [{0}] = [ClassPerson].[{1}] and [{2}] = @{2})"
-                    , Class.ID_FIELD, ClassPerson.CLASS_REF_FIELD, Class.TEACHER_REF_FIELD);
+                sql.AppendFormat(" and [Class].[{0}] = @{0}", Class.TEACHER_REF_FIELD);
             }
-            if (query.Role == CoreRoles.STUDENT_ROLE.Id)
+            if (query.SchoolYearId.HasValue)
             {
-                conds.Add(Person.ID_FIELD, query.CallerId);
-                sql.AppendFormat(" and [Person].[{0}] = @{0}", Person.ID_FIELD);
+                conds.Add(Class.SCHOOL_YEAR_REF, query.SchoolYearId);
+                sql.AppendFormat(" and [Class].[{0}] = @{0}", Class.SCHOOL_YEAR_REF);
             }
             if (query.MarkingPeriodIds != null && query.MarkingPeriodIds.Count > 0)
             {
                 var mpidsStr = query.MarkingPeriodIds.Select(x => "'" + x.ToString() + "'").ToString();
                 sql.AppendFormat(" and [MarkingPeriodClass].[{0}] in ({1})", MarkingPeriodClass.MARKING_PERIOD_REF_FIELD, mpidsStr);
             }
-            if (query.SchoolYearId.HasValue)
+            return new DbQuery { Sql = sql.ToString(), Parameters = conds };
+        }
+
+        private DbQuery BuilStudentGradeStatisticQuery(StringBuilder sql, GradingStatisticQuery query)
+        {
+            var dbQuery = BuildGradeStatisicDbQuery(sql, query);
+            sql.Append(dbQuery.Sql);
+            var conds = dbQuery.Parameters;
+            if (query.StudentId.HasValue)
             {
-                conds.Add(Class.SCHOOL_YEAR_REF, query.SchoolYearId);
-                sql.AppendFormat(" and exists(select * from Class where [{0}] = [ClassPerson].[{1}] and [{2}] = @{2})"
-                                 , Class.ID_FIELD, ClassPerson.CLASS_REF_FIELD, Class.SCHOOL_YEAR_REF);
+                conds.Add("@studentId", query.StudentId);
+                sql.AppendFormat(" and [Person].[{0}] = @studentId", Person.ID_FIELD);
+            }
+            if (query.Role == CoreRoles.STUDENT_ROLE.Id)
+            {
+                conds.Add(Person.ID_FIELD, query.CallerId);
+                sql.AppendFormat(" and [Person].[{0}] = @{0}", Person.ID_FIELD);
+            }
+            return new DbQuery { Sql = sql.ToString(), Parameters = conds };
+        }
+        private DbQuery BuildClassGradeStatisticQuery(StringBuilder sql, GradingStatisticQuery query)
+        {
+            var dbQuery = BuildGradeStatisicDbQuery(sql, query);
+            sql.Append(dbQuery.Sql);
+            var conds = dbQuery.Parameters;
+            var personExistsingQueryTmp = string.Format("and exists(select * from [ClassPerson] where [{1}] = [Class].[{2}] [{0}] =@"
+                              , ClassPerson.PERSON_REF_FIELD, ClassPerson.CLASS_REF_FIELD, Class.ID_FIELD);
+            personExistsingQueryTmp += "{3})";
+            if (query.StudentId.HasValue)
+            {
+                conds.Add("@studentId", query.StudentId);
+                sql.AppendFormat(personExistsingQueryTmp, "@studentId");
+            }
+            if (query.Role == CoreRoles.STUDENT_ROLE.Id)
+            {
+                conds.Add(Person.ID_FIELD, query.CallerId);
+                sql.AppendFormat(personExistsingQueryTmp, Person.ID_FIELD);
             }
             return new DbQuery { Sql = sql.ToString(), Parameters = conds };
         }
@@ -56,10 +87,11 @@ namespace Chalkable.Data.School.DataAccess
             sql.AppendFormat(@"select {0}, dbo.fnCalcStudentGradeAvgForFinalGrade(Person.Id, MarkingPeriodClass.Id) as [Avg] 
                              from Person 
                              join ClassPerson on ClassPerson.PersonRef = Person.Id
-                             join MarkingPeriodClass on MarkingPeriodClass.ClassRef = ClassPerson.ClassRef"
+                             join Class on Class.Id = ClassPerson.ClassRef
+                             join MarkingPeriodClass on MarkingPeriodClass.ClassRef = Class.Id"
                              , Orm.ComplexResultSetQuery(types));
             sql.Append(" where 1=1 and ");
-            return BuilGradeStatisticQuery(sql, query);
+            return BuilStudentGradeStatisticQuery(sql, query);
         }
 
         //TODO: add method to Orm for function building
@@ -91,6 +123,22 @@ namespace Chalkable.Data.School.DataAccess
 
             return ReadMany<StudentGradeAvgPerClass>(new DbQuery {Sql = sql, Parameters = innerQuery.Parameters}, true);
         }
+
+        public IList<MarkingPeriodClassGradeAvg> CalcClassGradingPerMp(GradingStatisticQuery query)
+        {
+            var types = new List<Type> {typeof (Class), typeof(MarkingPeriod)};
+            var sql = new StringBuilder();
+            sql.AppendFormat(@"select {0}, dbo.fnCalcClassGradeAvgPerMP(MarkingPeriodClass.Id) as [Avg] 
+                               from Class 
+                               join MarkingPeriodClass on MarkingPeriodClass.ClassRef = Class.Id
+                               join MarkingPeriod on MarkingPeriod.Id = MarkingPeriodClass.MarkingPeriodRef"
+                , Orm.ComplexResultSetQuery(types));
+            sql.Append(" where 1=1 ");
+            var dbQuery = BuildClassGradeStatisticQuery(sql, query);
+            return ReadMany<MarkingPeriodClassGradeAvg>(dbQuery, true);
+        }
+
+
     }
 
     public class GradingStatisticQuery
@@ -98,6 +146,7 @@ namespace Chalkable.Data.School.DataAccess
         public IList<Guid> MarkingPeriodIds { get; set; }
         public Guid? SchoolYearId { get; set; }
         public Guid? TeacherId { get; set; }
+        public Guid? StudentId { get; set; }
         public Guid? ClassId { get; set; }
         public Guid CallerId { get; set; }
         public int Role { get; set; }

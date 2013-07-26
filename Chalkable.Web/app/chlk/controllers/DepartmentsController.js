@@ -3,6 +3,7 @@ REQUIRE('chlk.services.DepartmentsService');
 REQUIRE('chlk.activities.departments.DepartmentsListPage');
 REQUIRE('chlk.activities.departments.DepartmentDialog');
 REQUIRE('chlk.models.departments.Department');
+REQUIRE('chlk.models.id.DepartmentId');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -32,7 +33,7 @@ NAMESPACE('chlk.controllers', function (){
             },
 
 
-            [[chlk.models.departments.DepartmentId]],
+            [[chlk.models.id.DepartmentId]],
             function updateAction(id) {
                 var result = this.departmentService
                     .getDepartment(id)
@@ -63,7 +64,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(chlk.activities.departments.DepartmentsListPage, result);
             },
 
-            [[chlk.models.departments.DepartmentId]],
+            [[chlk.models.id.DepartmentId]],
             function deleteAction(id) {
                 var result= this.departmentService
                     .removeDepartment(id)

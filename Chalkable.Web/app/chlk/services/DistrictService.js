@@ -1,6 +1,7 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.district.District');
+REQUIRE('chlk.models.id.DistrictId');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -27,7 +28,7 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.district.DistrictId, String, String, String, String, String, Number]],
+            [[chlk.models.id.DistrictId, String, String, String, String, String, Number]],
             ria.async.Future, function updateDistrict(id, name, dbName, sisUrl, sisUserName, sisPassword, sisSystemType) {
                 return this.post('District/Update.json', chlk.models.district.District, {
                     districtId: id.valueOf(),
@@ -40,19 +41,19 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.district.DistrictId, String, String, String, String, String, Number]],
+            [[chlk.models.id.DistrictId, String, String, String, String, String, Number]],
             ria.async.Future, function saveDistrict(id_, name, dbName, sisUrl, sisUserName, sisPassword, sisSystemType) {
                 if (id_ && id_.valueOf()) return this.updateDistrict(id_, name, dbName, sisUrl, sisUserName, sisPassword, sisSystemType);
                 return this.addDistrict(name, dbName, sisUrl, sisUserName, sisPassword, sisSystemType);
             },
 
-            [[chlk.models.district.DistrictId]],
+            [[chlk.models.id.DistrictId]],
             ria.async.Future, function removeDistrict(id) {
                 return this.post('District/Delete.json', chlk.models.district.District, {
                     districtId: id.valueOf()
                 });
             },
-            [[chlk.models.district.DistrictId]],
+            [[chlk.models.id.DistrictId]],
             ria.async.Future, function getDistrict(id) {
                 return this.post('District/Info.json', chlk.models.district.District, {
                     districtId: id.valueOf()

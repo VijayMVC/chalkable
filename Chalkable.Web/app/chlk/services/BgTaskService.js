@@ -2,6 +2,10 @@ REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.bgtasks.BgTask');
 REQUIRE('chlk.models.bgtasks.BgTaskLog');
+REQUIRE('chlk.models.id.BgTaskId');
+
+
+
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -15,7 +19,7 @@ NAMESPACE('chlk.services', function () {
                     start: pageIndex_
                 });
             },
-            [[chlk.models.bgtasks.BgTaskId, Number]],
+            [[chlk.models.id.BgTaskId, Number]],
             ria.async.Future, function getLogs(id, pageIndex_) {
                 return this.getPaginatedList('BackgroundTask/GetTaskLogs.json', chlk.models.bgtasks.BgTaskLog, {
                     taskId: id.valueOf(),

@@ -1,4 +1,5 @@
 REQUIRE('chlk.models.school.SchoolSisInfo');
+REQUIRE('chlk.models.id.SchoolSisInfoId');
 
 NAMESPACE('chlk.templates.school', function () {
 
@@ -16,7 +17,7 @@ NAMESPACE('chlk.templates.school', function () {
             [ria.templates.ModelPropertyBind],
             Number, 'scheduleSyncFreq',
             [ria.templates.ModelPropertyBind],
-            Number, 'id',
+            chlk.models.id.SchoolSisInfoId, 'id',
             [ria.templates.ModelPropertyBind],
             String, 'sisUrl',
             [ria.templates.ModelPropertyBind],

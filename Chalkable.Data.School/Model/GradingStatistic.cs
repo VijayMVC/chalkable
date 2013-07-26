@@ -24,4 +24,13 @@ namespace Chalkable.Data.School.Model
     {
         public Guid ClassRef { get; set; }
     }
+
+    public class MarkingPeriodClassGradeAvg
+    {
+        [DataEntityAttr]
+        public Class Class { get; set; }
+        [DataEntityAttr]
+        public MarkingPeriod MarkingPeriod { get; set; }
+        public int? Avg { get; set; }
+    }
 }
