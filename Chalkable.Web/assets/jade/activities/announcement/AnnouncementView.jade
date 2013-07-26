@@ -1,0 +1,22 @@
+.announcement-view.not-transparent
+    -isNotStudent = true
+    .feed-item
+        if isNotStudent
+            .grades
+        .bullet
+            +ActionLink('announcement', 'star', item.getId()).star
+            .item-type
+                .attachment
+                    .icon.blue.icon.announcements-type-#{self.getAnnouncementTypeId()}
+                    .icon.black
+                    h2.animated-header=item.getSubject()
+                    p.animated=item.getShortContent()
+                    .animated=item.getExpiresDate().toString()
+                    .attachment-icon
+                    .apps-icon
+    .action-bar.buttons
+        .container
+            .left
+                +ActionLink('feed', 'view').back-button
+            .right
+                +ActionLink('announcement', 'edit').edit-button
