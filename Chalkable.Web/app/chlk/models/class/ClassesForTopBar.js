@@ -10,6 +10,7 @@ NAMESPACE('chlk.models.class', function () {
     CLASS(
         'ClassesForTopBar', [
             ArrayOf(chlk.models.class.ClassForTopBar), 'topItems',
-            chlk.models.class.ClassId, 'selectedItemId'
+            chlk.models.class.ClassId, 'selectedItemId',
+            Boolean, 'disabled'
         ]);
 });

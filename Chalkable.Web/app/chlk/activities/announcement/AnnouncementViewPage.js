@@ -1,18 +1,13 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
-REQUIRE('chlk.templates.announcement.AnnouncementForm');
-REQUIRE('chlk.templates.announcement.Announcement');
-REQUIRE('chlk.templates.announcement.LastMessages');
+REQUIRE('chlk.templates.announcement.AnnouncementView');
 REQUIRE('chlk.templates.class.TopBar');
 
 NAMESPACE('chlk.activities.announcement', function () {
 
-    var handler;
-
-    /** @class chlk.activities.announcement.AnnouncementFormPage*/
+    /** @class chlk.activities.announcement.AnnouncementViewPage*/
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AnnouncementView)],
-
-        'AnnouncementFormView', EXTENDS(chlk.activities.lib.TemplatePage), []
+        'AnnouncementViewPage', EXTENDS(chlk.activities.lib.TemplatePage), []
     );
 });

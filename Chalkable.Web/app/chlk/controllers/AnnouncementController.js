@@ -54,7 +54,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.announcement.AnnouncementId]],
+        [[chlk.models.id.AnnouncementId]],
         function editAction(announcementId) {
             var result = this.announcementService
                 .updateAnnouncement(announcementId)
@@ -84,7 +84,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.announcement.AnnouncementId]],
+        [[chlk.models.id.AnnouncementId]],
         function viewAction(announcementId) {
             var result = this.announcementService
                 .readAnnouncement(announcementId)

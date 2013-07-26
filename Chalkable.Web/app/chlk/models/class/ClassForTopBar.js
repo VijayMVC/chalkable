@@ -20,6 +20,8 @@ NAMESPACE('chlk.models.class', function () {
 
             String, 'description',
 
+            Boolean, 'disabled',
+
             [ria.serialize.SerializeProperty('gradelevelid')],
             Number, 'gradeLevelId',
 
