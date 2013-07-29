@@ -16,7 +16,7 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.SchoolService */
     CLASS(
         'SchoolService', EXTENDS(chlk.services.BaseService), [
-            [[chlk.models.district.DistrictId, Number, Boolean, Boolean]],
+            [[chlk.models.id.DistrictId, Number, Boolean, Boolean]],
             ria.async.Future, function getSchools(districtId, start_, demoOnly_, unimportedOnly_) {
                 return this.getPaginatedList('School/List.json', chlk.models.school.School, {
                     start: start_,

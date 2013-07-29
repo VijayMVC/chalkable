@@ -1,4 +1,5 @@
 REQUIRE('chlk.models.common.ChlkDate');
+REQUIRE('chlk.models.id.BgTaskLogId');
 NAMESPACE('chlk.models.bgtasks', function () {
     "use strict";
     /** @class chlk.models.bgtasks.BgTaskLog*/

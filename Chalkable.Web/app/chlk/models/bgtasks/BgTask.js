@@ -1,6 +1,7 @@
 REQUIRE('chlk.models.bgtasks.BgTaskState');
 REQUIRE('chlk.models.bgtasks.BgTaskType');
 REQUIRE('chlk.models.common.ChlkDate');
+REQUIRE('chlk.models.id.BgTaskId');
 
 NAMESPACE('chlk.models.bgtasks', function () {
 

@@ -1,4 +1,4 @@
-REQYURE('chlk.models.id.SchoolSisInfoId');
+REQUIRE('chlk.models.id.SchoolSisInfoId');
 NAMESPACE('chlk.models.school', function () {
     "use strict";
     /** @class chlk.models.school.SchoolSisInfo*/
