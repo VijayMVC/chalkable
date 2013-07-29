@@ -46,7 +46,7 @@ namespace Chalkable.Web.Controllers
                     SisUrl = sisUrl,
                     SisUserName = sisUserName,
                     SisPassword =  sisPassword,
-                    SisSystemType = sisSystemType
+                    SisSystemType = (ImportSystemTypeEnum)sisSystemType
                 });
             return Json(true);
         }

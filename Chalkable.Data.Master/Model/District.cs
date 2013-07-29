@@ -1,4 +1,5 @@
 ﻿using System;
+using Chalkable.Data.Common.Enums;
 
 namespace Chalkable.Data.Master.Model
 {
@@ -7,7 +8,7 @@ namespace Chalkable.Data.Master.Model
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string DbName { get; set; }
-        public int SisSystemType { get; set; }
+        public ImportSystemTypeEnum SisSystemType { get; set; }
         public string SisUrl { get; set; }
         public string SisUserName { get; set; }
         public string SisPassword { get; set; }
