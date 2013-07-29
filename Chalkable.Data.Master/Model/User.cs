@@ -38,6 +38,7 @@ namespace Chalkable.Data.Master.Model
         public Guid Id { get; set; }
         public Guid UserRef { get; set; }
         public Guid SchoolRef { get; set; }
+        public const string ROLE_FIELD = "Role";
         public int Role { get; set; }
         [DataEntityAttr]
         public User User { get; set; }

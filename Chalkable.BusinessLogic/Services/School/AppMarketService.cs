@@ -282,7 +282,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new UnassignedUserException();
             var priceData = GetApplicationTotalPrice(applicationId, schoolPersonId, roleIds, classIds, gradelevelIds, departmentIds);
             var cnt = priceData.ApplicationInstallCountInfo.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count.Value;
-            var bugetBalance = Decimal.MaxValue;//TODO: ServiceLocator.FundService.GetSchoolPersonBalance(Context.SchoolPersonId);
+            var bugetBalance = ServiceLocator.ServiceLocatorMaster.FundService.GetUserBalance(Context.UserId);
             return (bugetBalance - priceData.TotalPrice >= 0 || priceData.TotalPrice == 0) && cnt > 0;
         }
 
