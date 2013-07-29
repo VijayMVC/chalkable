@@ -71,8 +71,10 @@
     <Compile Include="Services\Master\DistrictService.cs" />
     <Compile Include="Services\Master\ChalkableDepartmentService.cs" />
     <Compile Include="Services\Master\EmailService.cs" />
+    <Compile Include="Services\Master\FundService.cs" />
     <Compile Include="Services\Master\PictureServices\CourseIconService.cs" />
     <Compile Include="Services\Master\PictureServices\DepartmentIconService.cs" />
+    <Compile Include="Services\Master\PictureServices\FundRequestPictureService.cs" />
     <Compile Include="Services\Master\PictureServices\PersonPictureService.cs" />
     <Compile Include="Services\Master\PictureServices\PictureService.cs" />
     <Compile Include="Services\Master\PreferenceService.cs" />

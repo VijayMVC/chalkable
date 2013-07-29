@@ -47,6 +47,7 @@
     <Compile Include="DataAccess\ChalkableDepartmentDataAccess.cs" />
     <Compile Include="DataAccess\DeveloperDataAccess.cs" />
     <Compile Include="DataAccess\DistrictDataAccess.cs" />
+    <Compile Include="DataAccess\FundDataAccess.cs" />
     <Compile Include="DataAccess\PreferenceDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
     <Compile Include="DataAccess\SchoolUserDataAccess.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Model\ChalkableDepartment.cs" />
     <Compile Include="Model\DatabaseUpdateTaskData.cs" />
     <Compile Include="Model\District.cs" />
+    <Compile Include="Model\Fund.cs" />
     <Compile Include="Model\ImportSystemType.cs" />
     <Compile Include="Model\Preference.cs" />
     <Compile Include="Model\SisSync.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
+using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Security
@@ -49,6 +50,11 @@ namespace Chalkable.BusinessLogic.Security
         public static bool IsAdminEditorOrCurrentPerson(Guid personId, UserContext context)
         {
             return IsAdminEditor(context) || context.UserId == personId;
+        }
+
+        public static bool IsAdminTeacherOrExactStudent(User user, UserContext context)
+        {
+            return IsAdminOrTeacher(context) || user.Id == context.UserId;
         }
     }
 }
