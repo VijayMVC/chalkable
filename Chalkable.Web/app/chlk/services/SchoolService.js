@@ -25,6 +25,12 @@ NAMESPACE('chlk.services', function () {
                     unimportedOnly: unimportedOnly_
                 });
             },
+            [[chlk.models.id.DistrictId]],
+            ria.async.Future, function getSchoolsForImport(districtId) {
+                return this.getPaginatedList('School/GetSchoolsForImport.json', chlk.models.school.School, {
+                    districtId: districtId.valueOf()
+                });
+            },
 
             [[chlk.models.id.SchoolId]],
             ria.async.Future, function getDetails(schoolId) {

@@ -65,7 +65,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.DistrictId]],
         VOID, function importAction(districtId) {
             var result = this.schoolService
-                .getSchools(districtId)
+                .getSchoolsForImport(districtId)
                 .attach(this.validateResponse_());
                 return this.ShadeView(chlk.activities.school.ImportSchoolDialog, result);
         },
