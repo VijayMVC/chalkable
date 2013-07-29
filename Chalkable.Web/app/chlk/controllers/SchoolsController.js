@@ -45,11 +45,6 @@ NAMESPACE('chlk.controllers', function (){
                 .getSchools(districtId_, start_ || 0)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    var districtId = null;
-                    var items = data.getItems();
-                    if (items && items.length > 0){
-                        districtId = items[0].getDistrictId();
-                    }
                     return new ria.async.DeferredData(new chlk.models.school.SchoolListViewData(districtId, data));
                 });
             return this.UpdateView(chlk.activities.school.SchoolsListPage, result);
@@ -62,11 +57,6 @@ NAMESPACE('chlk.controllers', function (){
                 .getSchools(districtId, pageIndex_ | 0,  false, false)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    var districtId = null;
-                    var items = data.getItems();
-                    if (items && items.length > 0){
-                        districtId = items[0].getDistrictId();
-                    }
                     return new ria.async.DeferredData(new chlk.models.school.SchoolListViewData(districtId, data));
                 });
             return this.PushView(chlk.activities.school.SchoolsListPage, result);
