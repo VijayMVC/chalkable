@@ -1,0 +1,40 @@
+.people-list-container{
+  padding-bottom: 5px;
+
+  .top{
+    height: 61px;
+    @include border-radius(5px 5px 0 0);
+
+    span{
+      color: #5d5d5d;
+      text-shadow: 1px 1px 0 white;
+      font: bold 12px Arial;
+      margin: 21px 45px;
+      float: right;
+    }
+  }
+}
+
+.people-list{
+  .message-button{
+    display: none;
+  }
+
+  .row.selected{
+    .message-button{
+      display: inline-block;
+      margin-top: 12px;
+    }
+  }
+
+  .image-container{
+    margin: 8px;
+  }
+
+  P{
+    font-size: 20px;
+    width: 438px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
