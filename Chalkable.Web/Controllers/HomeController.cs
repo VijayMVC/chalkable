@@ -67,10 +67,6 @@ namespace Chalkable.Web.Controllers
             var sync = new SisSync
                 {
                     Id = school.Id,
-                    SisDatabaseName = dataBaseName,
-                    SisDatabaseUrl = dataBaseUrl,
-                    SisDatabaseUserName = sisUser,
-                    SisDatabasePassword = sisPwd,
                     SisSchoolId = sisSchoolId
                 };
             sl.SchoolService.SetSyncData(sync);

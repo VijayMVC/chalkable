@@ -14,9 +14,5 @@ namespace Chalkable.Data.Master.Model
         public DateTime? LastScheduleSync { get; set; }
         public int? ScheduleSyncFrequency { get; set; }
         public int? SisSchoolId { get; set; }
-        public string SisDatabaseUrl { get; set; }
-        public string SisDatabaseName { get; set; }
-        public string SisDatabaseUserName { get; set; }
-        public string SisDatabasePassword { get; set; }
     }
 }

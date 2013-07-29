@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
+using Chalkable.SisConnector.PublicModel;
 using Chalkable.SisImportFacade;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
@@ -76,7 +77,14 @@ namespace Chalkable.Web.Controllers
         {
             var distr = MasterLocator.DistrictService.GetById(districtId);
             var existing = MasterLocator.SchoolService.GetSchools(districtId);
-            var importService = SisImportProvider.CreateImportService(distr.SisSystemType, Guid.Empty, 0, null, null);
+            var connectionInfo = new SisConnectionInfo
+                {
+                    DbName = distr.DbName,
+                    SisPassword = distr.SisPassword,
+                    SisUrl = distr.SisUrl,
+                    SisUserName = distr.SisUserName
+                };
+            var importService = SisImportProvider.CreateImportService(distr.SisSystemType, Guid.Empty, 0, null, connectionInfo, null);
             var res = importService.GetSchools();
             res = res.Where(x => !existing.Any(y => y.Name == x.Name)).ToList();
             return Json(res);

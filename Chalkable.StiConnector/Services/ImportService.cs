@@ -18,24 +18,21 @@ namespace Chalkable.StiConnector.Services
 {
     public class ImportService : SisImportService
     {
-        private IServiceLocatorSchool schoolServiceLocator;
-        private IServiceLocatorMaster serviceLocatorMaster;
         private StiEntities stiEntities;
         private const string NO_ROOM_NUMBER = "No Room";
         private const string SIS_DATA_BASE_CONNECTION_ERROR_FMT = "Invalid sis database connection data {0}, {1}, {2}, {3}";
         private const string CONNECTION_STRING_FMT =
             "metadata=res://*/Model.StiEntities.csdl|res://*/Model.StiEntities.ssdl|res://*/Model.StiEntities.msl;provider=System.Data.SqlClient;provider connection string=\"data source={0};initial catalog={1};persist security info=True;user id={2};password={3};MultipleActiveResultSets=True;App=EntityFramework\"";
-        
-        public ImportService(Guid schoolId, int sisSchoolId, IList<int> schoolYearIds, BackgroundTaskService.BackgroundTaskLog log) : base(schoolId, sisSchoolId, schoolYearIds, log)
-        {
-            serviceLocatorMaster = ServiceLocatorFactory.CreateMasterSysAdmin();
-            schoolServiceLocator = serviceLocatorMaster.SchoolServiceLocator(schoolId);
-            var sisSync = serviceLocatorMaster.SchoolService.GetSyncData(schoolId);
 
-            string dbUrl = sisSync.SisDatabaseUrl,
-                    dbName = sisSync.SisDatabaseName,
-                    userName = sisSync.SisDatabaseUserName,
-                    pwd = sisSync.SisDatabasePassword;
+        public ImportService(Guid schoolId, int sisSchoolId, IList<int> schoolYearIds, SisConnectionInfo connectionInfo, BackgroundTaskService.BackgroundTaskLog log)
+            : base(schoolId, sisSchoolId, schoolYearIds, connectionInfo, log)
+        {
+            var sisSync = ServiceLocatorMaster.SchoolService.GetSyncData(schoolId);
+
+            string dbUrl = connectionInfo.SisUrl,
+                    dbName = connectionInfo.DbName,
+                    userName = connectionInfo.SisUserName,
+                    pwd = connectionInfo.SisPassword;
             if (dbUrl == null || dbName == null || userName == null || pwd == null)
                 throw new Exception(string.Format(SIS_DATA_BASE_CONNECTION_ERROR_FMT, dbUrl, dbName, userName, pwd));
             var connectionString = string.Format(CONNECTION_STRING_FMT, dbUrl, dbName, userName, pwd);
@@ -238,8 +235,8 @@ namespace Chalkable.StiConnector.Services
 
         private void ImportClassSchoolPersons(IList<int> sessionIds)
         {
-            var persons = schoolServiceLocator.PersonService.GetPersons();
-            var classes = schoolServiceLocator.ClassService.GetClasses(null, null, null);
+            var persons = ServiceLocatorSchool.PersonService.GetPersons();
+            var classes = ServiceLocatorSchool.ClassService.GetClasses(null, null, null);
             var studentSchedules = stiEntities.StudentSchedules.Where(x => x.Course1.AcadSessionID.HasValue && sessionIds.Contains(x.Course1.AcadSessionID.Value)).ToList();
             int counter = 0, success = 0;
             var added = new HashSet<Pair<Guid, Guid>>();
@@ -264,7 +261,7 @@ namespace Chalkable.StiConnector.Services
                 if (!added.Contains(p))
                 {
                     added.Add(p);
-                    schoolServiceLocator.ClassService.AddStudent(clazz.Id, person.Id);
+                    ServiceLocatorSchool.ClassService.AddStudent(clazz.Id, person.Id);
                 }
                 success++;
             }
@@ -272,7 +269,7 @@ namespace Chalkable.StiConnector.Services
 
         private void ImportCourses(int stiSchoolId)
         {
-            var departments = serviceLocatorMaster.ChalkableDepartmentService.GetChalkableDepartments();
+            var departments = ServiceLocatorMaster.ChalkableDepartmentService.GetChalkableDepartments();
             var sep = new[] { ',' };
             var departmenPairs = new List<Pair<string, Guid>>();
 
@@ -298,7 +295,7 @@ namespace Chalkable.StiConnector.Services
                     }
                 }
 
-                schoolServiceLocator.CourseService.Add(course.ShortName, course.FullName, null,
+                ServiceLocatorSchool.CourseService.Add(course.ShortName, course.FullName, null,
                                                            closestDep != null ? closestDep.Second : (Guid?) null,
                                                            course.CourseID);
             }
@@ -306,15 +303,15 @@ namespace Chalkable.StiConnector.Services
 
         private void ImportClasses()
         {
-            var markingPeriods = schoolServiceLocator.MarkingPeriodService.GetMarkingPeriods(null).Where(x=>x.SisId.HasValue).ToList();
+            var markingPeriods = ServiceLocatorSchool.MarkingPeriodService.GetMarkingPeriods(null).Where(x => x.SisId.HasValue).ToList();
             var termIds = markingPeriods.Select(x => x.SisId).ToList();
             var stiCourses = stiEntities.Courses.Where(x => x.SectionTerms.Any(y => termIds.Contains(y.TermID)) && x.Active).ToList();
-            var noRoom = schoolServiceLocator.RoomService.GetRooms().First(x => x.RoomNumber == NO_ROOM_NUMBER);
+            var noRoom = ServiceLocatorSchool.RoomService.GetRooms().First(x => x.RoomNumber == NO_ROOM_NUMBER);
             int counter = 0;
-            var courses = schoolServiceLocator.CourseService.GetCourses().Where(x => x.SisId.HasValue).ToDictionary(x => x.SisId.Value, x => x);
-            var schoolYears = schoolServiceLocator.SchoolYearService.GetSchoolYears().Where(x => x.SisId.HasValue).ToDictionary(x => x.SisId.Value, x => x);
-            var teachers = schoolServiceLocator.PersonService.GetPersons().Where(x => x.SisId.HasValue && x.RoleRef == CoreRoles.TEACHER_ROLE.Id).ToDictionary(x => x.SisId.Value, x => x);
-            var gradeLevels = schoolServiceLocator.GradeLevelService.GetGradeLevels();
+            var courses = ServiceLocatorSchool.CourseService.GetCourses().Where(x => x.SisId.HasValue).ToDictionary(x => x.SisId.Value, x => x);
+            var schoolYears = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().Where(x => x.SisId.HasValue).ToDictionary(x => x.SisId.Value, x => x);
+            var teachers = ServiceLocatorSchool.PersonService.GetPersons().Where(x => x.SisId.HasValue && x.RoleRef == CoreRoles.TEACHER_ROLE.Id).ToDictionary(x => x.SisId.Value, x => x);
+            var gradeLevels = ServiceLocatorSchool.GradeLevelService.GetGradeLevels();
 
             foreach (var stiCourse in stiCourses)
             {
@@ -355,7 +352,7 @@ namespace Chalkable.StiConnector.Services
                     mps.Add(mp.Id);
                 }
 
-                var c = schoolServiceLocator.ClassService.Add(schoolYear.Id, course.Id, stiCourse.FullName, stiCourse.FullName, teacher.Id
+                var c = ServiceLocatorSchool.ClassService.Add(schoolYear.Id, course.Id, stiCourse.FullName, stiCourse.FullName, teacher.Id
                     , gradeLevels.First(x => x.Name == glName).Id, mps);
                 
                 
@@ -364,16 +361,16 @@ namespace Chalkable.StiConnector.Services
                 var scheduledSections = stiCourse.ScheduledSections.ToList();
                 foreach (var scheduledSection in scheduledSections)
                 {
-                    var generalPeriods = schoolServiceLocator.PeriodService.GetPeriods(null, null).Where(x => x.SisId2 == scheduledSection.TimeSlotID
+                    var generalPeriods = ServiceLocatorSchool.PeriodService.GetPeriods(null, null).Where(x => x.SisId2 == scheduledSection.TimeSlotID
                         && x.Section.SisId == scheduledSection.DayTypeID && mps.Contains(x.MarkingPeriodRef)).ToList();
                     foreach (var generalPeriod in generalPeriods)
                     {
                         Room room;
                         if (stiCourse.RoomID.HasValue)
-                            room = schoolServiceLocator.RoomService.GetRooms().First(x => x.SisId == stiCourse.RoomID.Value);
+                            room = ServiceLocatorSchool.RoomService.GetRooms().First(x => x.SisId == stiCourse.RoomID.Value);
                         else
                             room = noRoom;
-                        schoolServiceLocator.ClassPeriodService.Add(generalPeriod.Id, c.Id, room.Id);
+                        ServiceLocatorSchool.ClassPeriodService.Add(generalPeriod.Id, c.Id, room.Id);
                     }
                     
                 }
@@ -385,12 +382,12 @@ namespace Chalkable.StiConnector.Services
 
         private void ImportGradeLevels()
         {
-            var existing = schoolServiceLocator.GradeLevelService.GetGradeLevels();
+            var existing = ServiceLocatorSchool.GradeLevelService.GetGradeLevels();
             var sisGradeLevels = stiEntities.GradeLevels.ToList();
             foreach (var gradeLevel in sisGradeLevels)
                 if (!existing.Any(x => x.Name == gradeLevel.Name))
                 {
-                    schoolServiceLocator.GradeLevelService.AddGradeLevel(gradeLevel.Name, gradeLevel.Sequence);
+                    ServiceLocatorSchool.GradeLevelService.AddGradeLevel(gradeLevel.Name, gradeLevel.Sequence);
                 }
         }
 
@@ -411,7 +408,7 @@ namespace Chalkable.StiConnector.Services
                     stiEntities.StaffSchools.Any(y=>y.SchoolID == SisSchoolId && y.StaffID == x.PersonID)
                     ||stiEntities.StudentSchools.Any(y=>y.SchoolID == SisSchoolId && y.StudentID == x.PersonID)
                     );
-            var gradeLevels = schoolServiceLocator.GradeLevelService.GetGradeLevels();
+            var gradeLevels = ServiceLocatorSchool.GradeLevelService.GetGradeLevels();
 
             foreach (var person in persons)
             {
@@ -440,11 +437,11 @@ namespace Chalkable.StiConnector.Services
                     {
                         Log.LogWarning(string.Format(ChlkResources.ERR_STI_NO_GRADE_LEVEL_FOR_STUDENT, person.PersonID));
                     }
-                    pr = schoolServiceLocator.PersonService.Add(email, defUserPass, person.FirstName, person.LastName, roleId, person.Gender.Code, null, person.DateOfBirth
+                    pr = ServiceLocatorSchool.PersonService.Add(email, defUserPass, person.FirstName, person.LastName, roleId, person.Gender.Code, null, person.DateOfBirth
                         ,gradeLevels.First(x=>x.Name == gl.GradeLevel.Name).Id);
                 }
                 else
-                    pr = schoolServiceLocator.PersonService.Add(email, defUserPass, person.FirstName, person.LastName, roleId, person.Gender.Code, null, person.DateOfBirth, null);
+                    pr = ServiceLocatorSchool.PersonService.Add(email, defUserPass, person.FirstName, person.LastName, roleId, person.Gender.Code, null, person.DateOfBirth, null);
                 
                 foreach (var personTelephone in person.PersonTelephones)
                 {
@@ -455,7 +452,7 @@ namespace Chalkable.StiConnector.Services
                         type = PhoneType.Mobile;
                     if (!string.IsNullOrEmpty(personTelephone.FormattedTelephoneNumber))
                     {
-                        schoolServiceLocator.PhoneService.Add(pr.Id, personTelephone.FormattedTelephoneNumber, type, personTelephone.IsPrimary);
+                        ServiceLocatorSchool.PhoneService.Add(pr.Id, personTelephone.FormattedTelephoneNumber, type, personTelephone.IsPrimary);
                     }
                     
                 }
@@ -463,7 +460,7 @@ namespace Chalkable.StiConnector.Services
                 var addr = person.Address ?? person.Address1;
                 if (addr != null)
                 {
-                    schoolServiceLocator.AddressService.Add(pr.Id, addr.AddressLine1 + "," + addr.City + "," + addr.PostalCode + "," + addr.State, null, AddressType.Home);
+                    ServiceLocatorSchool.AddressService.Add(pr.Id, addr.AddressLine1 + "," + addr.City + "," + addr.PostalCode + "," + addr.State, null, AddressType.Home);
                 }
                 else
                     Log.LogWarning(string.Format(ChlkResources.ERR_STI_NO_ADDRESS_FOR_PERSON, person.PersonID));
@@ -502,7 +499,7 @@ namespace Chalkable.StiConnector.Services
                     Log.LogWarning(string.Format(ChlkResources.ERR_SCHEDULE_IMPORT_END_DATE_IS_NULL, sessionId));
                     continue;
                 }
-                var schoolYear = schoolServiceLocator.SchoolYearService.Add(calendar.AcadYear.ToString(CultureInfo.InvariantCulture),
+                var schoolYear = ServiceLocatorSchool.SchoolYearService.Add(calendar.AcadYear.ToString(CultureInfo.InvariantCulture),
                                                            calendar.Name, calendar.StartDate.Value, calendar.EndDate.Value);
                 
                 Log.LogInfo(string.Format(ChlkResources.MARKING_PERIODS_FOR_SCHOOL_YEAR_IMPORT_START, schoolYear.Id));
@@ -516,12 +513,12 @@ namespace Chalkable.StiConnector.Services
         {
             var days = stiEntities.CalendarDays.Where(x => x.AcadSessionID == sessionId).ToList();
 
-            var markingPeriods = schoolServiceLocator.MarkingPeriodService.GetMarkingPeriods(schoolYearId);
+            var markingPeriods = ServiceLocatorSchool.MarkingPeriodService.GetMarkingPeriods(schoolYearId);
             var scheduleSections = new List<ScheduleSection>();
             var mpIds = markingPeriods.Select(x => x.Id).ToList();
             foreach (var id in mpIds)
             {
-                scheduleSections.AddRange(schoolServiceLocator.ScheduleSectionService.GetSections(id));
+                scheduleSections.AddRange(ServiceLocatorSchool.ScheduleSectionService.GetSections(id));
             }
             var added = new HashSet<DateTime>();
             foreach (var day in days)
@@ -539,7 +536,7 @@ namespace Chalkable.StiConnector.Services
                     if (ss != null)
                         ssId = ss.Id;
                 }
-                schoolServiceLocator.CalendarDateService.Add(day.Date, day.InSchool, mpId, ssId, day.BellScheduleID);//TODO: need 2 sis id
+                ServiceLocatorSchool.CalendarDateService.Add(day.Date, day.InSchool, mpId, ssId, day.BellScheduleID);//TODO: need 2 sis id
             }
             Log.LogInfo(string.Format(ChlkResources.DAYS_FOR_SCHOOL_YEAR_IMPORTED, schoolYearId));
         }
@@ -559,7 +556,7 @@ namespace Chalkable.StiConnector.Services
                     Log.LogWarning(string.Format(ChlkResources.ERR_SCHEDULE_IMPORT_TERM_HAS_END_DATE_NULL, term.TermID));
                     continue;
                 }
-                var markingPeriod = schoolServiceLocator.MarkingPeriodService.Add(schoolYearId, term.StartDate.Value,
+                var markingPeriod = ServiceLocatorSchool.MarkingPeriodService.Add(schoolYearId, term.StartDate.Value,
                                                                                                term.EndDate.Value, term.Name, term.Description, 62);
 
                 Log.LogInfo(string.Format(ChlkResources.IMPORT_SCHEDULE_SECTION_START, markingPeriod.Id));
@@ -573,9 +570,9 @@ namespace Chalkable.StiConnector.Services
             var rooms = stiEntities.Rooms.Where(x => x.SchoolID == icSchoolId).ToList();
             foreach (var room in rooms)
             {
-                schoolServiceLocator.RoomService.AddRoom(room.RoomNumber ?? UNKNOWN_ROOM_NUMBER, room.Description, null, room.StudentCapacity??0, null, room.RoomID);
+                ServiceLocatorSchool.RoomService.AddRoom(room.RoomNumber ?? UNKNOWN_ROOM_NUMBER, room.Description, null, room.StudentCapacity ?? 0, null, room.RoomID);
             }
-            schoolServiceLocator.RoomService.AddRoom(NO_ROOM_NUMBER, NO_ROOM_NUMBER, null, 0, null);
+            ServiceLocatorSchool.RoomService.AddRoom(NO_ROOM_NUMBER, NO_ROOM_NUMBER, null, 0, null);
         }
 
         private void ImportScheduleSections(Guid markingPeriodId, int sessionId)
@@ -583,7 +580,7 @@ namespace Chalkable.StiConnector.Services
             var dayTypes = stiEntities.DayTypes.Where(x => x.AcadSessionID == sessionId).ToList();
             foreach (var dayType in dayTypes)
             {
-                ScheduleSection scheduleSection = schoolServiceLocator.ScheduleSectionService.Add(dayType.Sequence, dayType.Name, markingPeriodId, dayType.DayTypeID);
+                ScheduleSection scheduleSection = ServiceLocatorSchool.ScheduleSectionService.Add(dayType.Sequence, dayType.Name, markingPeriodId, dayType.DayTypeID);
                 Log.LogInfo(string.Format(ChlkResources.IMPORT_GENERAL_PERIODS_FOR_SCHEDULE_SECTION_START, scheduleSection.Id));
                 ImportGeneralperiods(scheduleSection.Id, dayType.DayTypeID, dayType.AcadSessionID);
             }
@@ -599,7 +596,7 @@ namespace Chalkable.StiConnector.Services
                 return;
             }
             var scheduledTimeSlots = stiEntities.ScheduledTimeSlots.Where(x => x.BellScheduleID == bs.BellScheduleID).ToList();
-            var scheduleSection = schoolServiceLocator.ScheduleSectionService.GetSectionById(scheduleSectionId);
+            var scheduleSection = ServiceLocatorSchool.ScheduleSectionService.GetSectionById(scheduleSectionId);
             foreach (var scheduledTimeSlot in scheduledTimeSlots)
             {
                 var sisId = bs.BellScheduleID;
@@ -614,7 +611,7 @@ namespace Chalkable.StiConnector.Services
                     Log.LogWarning(string.Format(ChlkResources.ERR_STI_SCHEDULE_TIME_SLOT_END_TIME_NULL, sisId, sisId2));
                     continue;
                 }
-                schoolServiceLocator.PeriodService.Add(scheduleSection.MarkingPeriodRef,scheduledTimeSlot.StartTime.Value,
+                ServiceLocatorSchool.PeriodService.Add(scheduleSection.MarkingPeriodRef, scheduledTimeSlot.StartTime.Value,
                                                        scheduledTimeSlot.EndTime.Value, scheduleSectionId , scheduledTimeSlot.TimeSlot.Sequence, sisId, sisId2);
             }
         }
