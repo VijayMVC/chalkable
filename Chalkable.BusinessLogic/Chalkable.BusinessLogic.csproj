@@ -68,6 +68,7 @@
     <Compile Include="Services\Master\ApplicationService.cs" />
     <Compile Include="Services\Master\ApplicationUploadService.cs" />
     <Compile Include="Services\Master\CategoryService.cs" />
+    <Compile Include="Services\Master\DeveloperService.cs" />
     <Compile Include="Services\Master\DistrictService.cs" />
     <Compile Include="Services\Master\ChalkableDepartmentService.cs" />
     <Compile Include="Services\Master\EmailService.cs" />

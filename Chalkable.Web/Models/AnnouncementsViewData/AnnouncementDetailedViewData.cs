@@ -26,8 +26,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             if (announcementDetails.AnnouncementQnAs != null)
                 AnnouncementQnAs = AnnouncementQnAViewData.Create(announcementDetails.AnnouncementQnAs);
 
-            AnnouncementReminders = AnnouncementReminderViewData.Create(announcementDetails.AnnouncementReminders, currentSchoolPersonId, Owner.Id);
             Owner = ShortPersonViewData.Create(announcementDetails.Owner);
+            AnnouncementReminders = AnnouncementReminderViewData.Create(announcementDetails.AnnouncementReminders, currentSchoolPersonId, Owner.Id);
             WasSubmittedToAdmin = announcementDetails.WasSubmittedToAdmin;
 
             if (announcementDetails.AnnouncementApplications == null) return;

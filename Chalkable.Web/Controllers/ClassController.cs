@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
@@ -87,6 +88,46 @@ namespace Chalkable.Web.Controllers
             gradePerMps = gradePerMps.Where(x => x.MarkingPeriod.StartDate <= mp.StartDate).ToList();
             return Json(ClassSummaryViewData.Create(c, curentRoom, students, annsByDate, classAttendances, possibleAbsents
                 , disciplines, disciplineTypes, gradePerMps));
+        }
+
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult ClassGrading(Guid classId)
+        {
+            var classData = SchoolLocator.ClassService.GetClassById(classId);
+            var canCreateItem = SchoolLocator.Context.UserId == classData.TeacherRef;
+            var gradingPerMp = ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), null, null, canCreateItem);
+            return Json(ClassGradingViewData.Create(classData, gradingPerMp), 8);
+        }
+
+        public static List<int> BuildClassUsageMask(IServiceLocatorSchool locator, Guid classId, Guid markingPeriodId, string timeZoneId)
+        {
+            var res = new List<int>();
+            /**
+                 * NON = 0
+                 * ONE_OF = 1
+                 * ALL = 2
+                 */
+            DateTime now = DateTime.UtcNow.ConvertFromUtc(timeZoneId);
+            IList<DateTime> dates = new List<DateTime>();
+            for (int i = 0; i < 30; i++)
+            {
+                dates.Add(now.Date);
+                now = now.AddDays(1);
+            }
+            var days = locator.CalendarDateService.GetDays(markingPeriodId, true);
+            var classPeriods = locator.ClassPeriodService.GetClassPeriods(markingPeriodId, classId, null, null, null);
+            for (int i = 0; i < dates.Count; i++)
+            {
+                bool exists = false;
+                var d = days.FirstOrDefault(x => x.ScheduleSectionRef.HasValue && x.DateTime == dates[i]);
+                if (d != null)
+                {
+                    exists = classPeriods.Any(x => x.Period.SectionRef == d.ScheduleSectionRef && x.ClassRef == classId);
+                }
+                res.Add(exists ? 2 : 0);
+            }
+            return res;
         }
 
     }

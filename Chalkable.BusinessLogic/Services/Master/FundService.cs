@@ -85,34 +85,24 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Update())
             {
                 var da = new FundDataAccess(uow);
+                var fs = new List<Fund>();
                 for (int i = 0; i < amountByPerson.Count; i++)
                 {
                     var diff = amountByPerson[i].Second - currentAmounts[amountByPerson[i].First];
-                    Fund f;
-                    if (diff > 0)
-                        f = new Fund
+                    Fund f = new Fund
                         {
-                            Amount = diff,
+                            Id = Guid.NewGuid(),
                             FromSchoolRef = schoolId,
                             SchoolRef = schoolId,
                             ToUserRef = amountByPerson[i].First,
                             IsPrivate = false,
                             FundRequestRef = fundRequestId,
-                            Description = description
+                            Description = description,
+                            Amount = Math.Abs(diff)
                         };
-                    else
-                        f = new Fund
-                        {
-                            Amount = -diff,
-                            ToSchoolRef = schoolId,
-                            SchoolRef = schoolId,
-                            FromUserRef = amountByPerson[i].First,
-                            IsPrivate = false,
-                            FundRequestRef = fundRequestId,
-                            Description = description
-                        };
-                    da.Insert(f);
+                    fs.Add(f);
                 }
+                da.Insert(fs);
                 uow.Commit();
             }
         }
@@ -135,6 +125,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 throw new ChalkableException(ChlkResources.ERR_FUND_CANT_DETERMINE_SCHOOL);
             var fund = new Fund
             {
+                Id = Guid.NewGuid(),
                 Amount = amount,
                 PerformedDateTime = performedDateTime,
                 Description = description,
@@ -211,22 +202,25 @@ namespace Chalkable.BusinessLogic.Services.Master
                     var da = new FundRequestRoleDistributionDataAccess(uow);
                     new FundRequestDataAccess(uow).Insert(fr);
                     decimal reserveAmount = amount;
+                    var rds = new List<FundRequestRoleDistribution>();
                     foreach (var pair in roleDist)
                     {
                         if (pair.Second != 0)
                         {
                             var rd = new FundRequestRoleDistribution
                             {
+                                Id = Guid.NewGuid(),
                                 Amount = pair.Second,
                                 RoleRef = pair.First,
                                 FundRequestRef = fr.Id
                             };
-                            da.Insert(rd);
+                            rds.Add(rd);
                             if (rd.Amount < 0)
                                 throw new ChalkableException(ChlkResources.ERR_FUND_INVALID_ROLE_DISTRIBUTION_AMOUNT);
                             reserveAmount -= rd.Amount;
                         }
                     }
+                    if(rds.Count > 0) da.Insert(rds);      
                     if (reserveAmount < 0)
                         throw new ChalkableException(ChlkResources.ERR_FUND_ROLE_DISTRIBUTION_TOO_HIGH);
                     uow.Commit();
@@ -267,7 +261,6 @@ namespace Chalkable.BusinessLogic.Services.Master
                 if (roleId == CoreRoles.ADMIN_EDIT_ROLE.Id || roleId == CoreRoles.ADMIN_GRADE_ROLE.Id || roleId == CoreRoles.ADMIN_VIEW_ROLE.Id)
                 {
                     sps = sps.Where(x => x.RoleRef == CoreRoles.ADMIN_EDIT_ROLE.Id || x.RoleRef == CoreRoles.ADMIN_VIEW_ROLE.Id || x.RoleRef == CoreRoles.ADMIN_GRADE_ROLE.Id).ToList();
-                    
                 }
                 else
                     sps = sps.Where(x => x.RoleRef == roleId).ToList();
@@ -284,11 +277,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var schoolSl = ServiceLocator.SchoolServiceLocator(Context.SchoolId.Value);
                 var students = schoolSl.PersonService.GetPaginatedPersons(new PersonQuery
                     {
-                        CallerId = Context.UserId,
-                        CallerRoleId = Context.Role.Id,
                         ClassId = classId,
-                        Start = 0,
-                        Count = int.MaxValue,
                         RoleId = CoreRoles.STUDENT_ROLE.Id
                     });
                 if (students.Count == 0)
@@ -387,11 +376,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var schoolSl = ServiceLocator.SchoolServiceLocator(Context.SchoolId.Value);
                 var students = schoolSl.PersonService.GetPaginatedPersons(new PersonQuery
                 {
-                    CallerId = Context.UserId,
-                    CallerRoleId = Context.Role.Id,
                     ClassId = classId,
-                    Start = 0,
-                    Count = int.MaxValue,
                     RoleId = CoreRoles.STUDENT_ROLE.Id
                 });
                 decimal res = 0;

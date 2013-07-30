@@ -39,6 +39,14 @@ namespace Chalkable.Web.Controllers
             return res;
         }
 
+
+        protected void PrepareJsonData(object data, string name, int maxDepth = 4)
+        {
+            var jsonResponse = new ChalkableJsonResponce(data);
+            var serializer = new MagicJsonSerializer(false) { MaxDepth = maxDepth };
+            var res = serializer.Serialize(jsonResponse);
+            ViewData[name] = res;
+        }
         
         
         public IServiceLocatorMaster MasterLocator { get; protected set; }
@@ -115,6 +123,7 @@ namespace Chalkable.Web.Controllers
                 return (int)(now - now.Date).TotalMinutes;
             }
         }
+
 
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
@@ -24,6 +25,15 @@ namespace Chalkable.Web.Controllers
             gradingStats = gradingStats.Where(x => x.Avg.HasValue).ToList();
             var classes = SchoolLocator.ClassService.GetClasses(null, null, teacherId);
             return Json(GradingTeacherClassSummaryViewData.Create(gradingStats, classes), 6);
+        }
+
+        [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
+        public ActionResult ClassSummary(Guid classId)
+        {
+            if (!SchoolLocator.Context.SchoolId.HasValue)
+                throw new UnassignedUserException();
+            var teacherId = SchoolLocator.Context.UserId;
+            return Json(ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), teacherId), 7);
         }
 
 

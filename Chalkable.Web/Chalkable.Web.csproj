@@ -160,6 +160,7 @@
     <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\DbMaintenanceController.cs" />
+    <Compile Include="Controllers\DeveloperController.cs" />
     <Compile Include="Controllers\DisciplineController.cs" />
     <Compile Include="Controllers\DisciplineTypeController.cs" />
     <Compile Include="Controllers\DistrictController.cs" />
@@ -187,6 +188,9 @@
     </Compile>
     <Compile Include="HtmlExtensions.cs" />
     <Compile Include="Logic\AttachmentLogic.cs" />
+    <Compile Include="Logic\ChalkableApiExplorerLogic.cs" />
+    <Compile Include="Logic\ClassLogic.cs" />
+    <Compile Include="Logic\GradingStyleLogic.cs" />
     <Compile Include="Logic\PersonLogic.cs" />
     <Compile Include="Logic\StudentAnnouncementLogic.cs" />
     <Compile Include="Models\AddressViewData.cs" />
@@ -214,8 +218,15 @@
     <Compile Include="Models\CalendarsViewData\DisciplineCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\MonthCalendarViewData.cs" />
     <Compile Include="Models\CategoryViewData.cs" />
+    <Compile Include="Models\ChalkableApiExplorerViewData\ApiExplorerControllerViewData.cs" />
+    <Compile Include="Models\ChalkableApiExplorerViewData\ApiExplorerDropdownItemViewData.cs" />
+    <Compile Include="Models\ChalkableApiExplorerViewData\ApiExplorerMethodViewData.cs" />
+    <Compile Include="Models\ChalkableApiExplorerViewData\ApiExplorerViewData.cs" />
+    <Compile Include="Models\ChalkableApiExplorerViewData\ParamViewData.cs" />
+    <Compile Include="Models\ChalkableApiItemDescription.cs" />
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
     <Compile Include="Models\ClassAttendanceViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassGradingViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassInfoViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassSummaryViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassTitlesViewData.cs" />
@@ -224,10 +235,12 @@
     <Compile Include="Models\CourseViewData.cs" />
     <Compile Include="Models\CreateAnnouncementViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
+    <Compile Include="Models\DeveloperInfoViewData.cs" />
     <Compile Include="Models\DeveloperViewData.cs" />
     <Compile Include="Models\DisciplineTypeViewData.cs" />
     <Compile Include="Models\DisciplineView.cs" />
     <Compile Include="Models\DistrictViewData.cs" />
+    <Compile Include="Models\GradingClassSummaryViewData.cs" />
     <Compile Include="Models\GradingStyleViewData.cs" />
     <Compile Include="Models\GradingTeacherSummaryViewData.cs" />
     <Compile Include="Models\NotificationsByDateViewData.cs" />
@@ -338,6 +351,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Teacher.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Developer\DeveloperDocs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Developer.cshtml" />

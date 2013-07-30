@@ -51,7 +51,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-
         public IList<MarkingPeriodClassGradeAvg> GetClassGradeAvgPerMP(Guid classId, Guid schoolYearId, List<Guid> markingPeriodIds, Guid? teacherId)
         {
             using (var uow = Read())

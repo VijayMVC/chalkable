@@ -21,7 +21,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void ChangeUserLogin(Guid id, string login);
         IList<User> GetUsers();
         User GetSysAdmin();
-        Developer GetDeveloper(Guid schoolId);
+
     }
 
     public class UserService : MasterServiceBase, IUserService
@@ -185,12 +185,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public Developer GetDeveloper(Guid schoolId)
-        {
-            using (var uow = Read())
-            {
-                return new DeveloperDataAccess(uow).GetDeveloper(schoolId);
-            }
-        }
+       
     }
 }
