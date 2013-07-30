@@ -24,6 +24,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IAccessControlService AccessControlService { get; }
         IEmailService EmailService { get; }
         IFundService FundService { get; }
+        IDeveloperService DeveloperService { get; }
     }
 
     public class ServiceLocatorMaster : ServiceLocator, IServiceLocatorMaster
@@ -44,6 +45,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         private IApplicationUploadService applicationUploadService;
         private IEmailService emailService;
         private IFundService fundService;
+        private IDeveloperService developerService;
 
         public ServiceLocatorMaster(UserContext context) : base(context)
         {
@@ -63,6 +65,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             emailService = new EmailService(this);
             fundService = new FundService(this);
             fundRequestPictureService = new FundRequestPictureService(this);
+            developerService = new DeveloperService(this);
         }
 
         public IUserService UserService { get { return userService; } }
@@ -85,12 +88,13 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
         public IFundService FundService { get { return fundService; } }
+        public IDeveloperService DeveloperService { get { return developerService; } }
         public IPictureService FundRequestPictureService { get { return fundRequestPictureService; } }
 
         public IServiceLocatorSchool SchoolServiceLocator(Guid schoolId)
         {
             var school = SchoolService.GetById(schoolId);
-            var developer = UserService.GetDeveloper(schoolId);
+            var developer = DeveloperService.GetDeveloperBySchool(schoolId);
             var developerId = developer != null ? developer.Id : (Guid?) null;
             Context.SwitchSchool(schoolId, school.Name, school.TimeZone, school.ServerUrl, developerId);
             var serviceLocator = new ServiceLocatorSchool(this);

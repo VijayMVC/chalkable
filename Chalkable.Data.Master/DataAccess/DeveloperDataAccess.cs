@@ -16,14 +16,30 @@ namespace Chalkable.Data.Master.DataAccess
 
         public Developer GetDeveloper(Guid schoolId)
         {
-            var resulSet = Orm.ComplexResultSetQuery(new List<Type> {typeof (Developer), typeof (User)});
-            var sql = @"select {0} 
+            var conds = new Dictionary<string, object> {{Developer.SCHOOL_REF_FIELD, schoolId}};
+            return ReadOneOrNull<Developer>(BuildGetDeveloperQuery(conds), true);
+        }
+        public override Developer GetById(Guid id)
+        {
+            var conds = new Dictionary<string, object> {{Developer.ID_FIELD, id}};
+            return ReadOne<Developer>(BuildGetDeveloperQuery(conds), true);
+        }
+        public override Developer GetByIdOrNull(Guid id)
+        {
+            var conds = new Dictionary<string, object> { { Developer.ID_FIELD, id } };
+            return ReadOne<Developer>(BuildGetDeveloperQuery(conds), true);
+        }
+
+        public DbQuery BuildGetDeveloperQuery(IDictionary<string, object> conds)
+        {
+            var developertype = typeof (Developer);
+            var resulSet = Orm.ComplexResultSetQuery(new List<Type> { developertype, typeof(User) });
+            var sql = new StringBuilder();
+            sql.AppendFormat(@"select {0} 
                         from [Developer]
-                        join [User] on [User].Id = [Developer].[Id]
-                        where [SchoolRef] =@schoolId";
-            sql = string.Format(sql, resulSet);
-            var conds = new Dictionary<string, object> {{"schoolId", schoolId}};
-            return ReadOneOrNull<Developer>(new DbQuery {Sql = sql, Parameters = conds}, true);
+                        join [User] on [User].Id = [Developer].[Id] ", resulSet);
+            sql = Orm.BuildSqlWhere(sql, developertype, conds);
+            return new DbQuery {Sql = sql.ToString(), Parameters = conds};
         }
     }
 }

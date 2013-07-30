@@ -235,6 +235,7 @@
     <Compile Include="Models\CourseViewData.cs" />
     <Compile Include="Models\CreateAnnouncementViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
+    <Compile Include="Models\DeveloperInfoViewData.cs" />
     <Compile Include="Models\DeveloperViewData.cs" />
     <Compile Include="Models\DisciplineTypeViewData.cs" />
     <Compile Include="Models\DisciplineView.cs" />
@@ -350,6 +351,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Teacher.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Developer\DeveloperDocs.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

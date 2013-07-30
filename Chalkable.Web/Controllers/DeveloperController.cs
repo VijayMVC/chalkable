@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
+using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
+using Chalkable.Web.Models;
 using Chalkable.Web.Models.ChalkableApiExplorerViewData;
 
 namespace Chalkable.Web.Controllers
@@ -45,6 +48,48 @@ namespace Chalkable.Web.Controllers
 
             }
             return Json(result, 8);
+        }
+
+        public ActionResult GetRequiredMethodCallsFor(string query, bool isMethod, string role)
+        {
+            var list = ApiPathfinder.GetRequiredMethodCallsFor(query, isMethod, role);
+            return Json(list);
+        }
+        public ActionResult MethodParamList(string query, string role)
+        {
+            var list = ApiPathfinder.GetParamsListByQuery(query, role);
+            return Json(list);
+        }
+
+        public ActionResult DeveloperDocs()
+        {
+            return View();
+        }
+
+        [AuthorizationFilter("SysAdmin, Developer")]
+        public ActionResult DeveloperInfo(Guid developerId)
+        {
+            var developer = MasterLocator.DeveloperService.GetDeveloperById(developerId);
+            return Json(DeveloperInfoViewData.Create(developer));
+        }
+
+
+        [AuthorizationFilter("System admin, Developer")]
+        public ActionResult UpdateInfo(Guid developerId, string name, string websiteLink, string email)
+        {
+
+            var res = MasterLocator.DeveloperService.EditDeveloper(developerId, name, websiteLink, email);
+            
+            //TODO: mix panel 
+            //MixPanelService.ChangedEmail(ServiceLocator.Context.UserName, email);
+            //if (ServiceLocator.Context.RoleNameLowered == CoreRoles.DEVELOPER_ROLE.LoweredName)
+            //{
+            //    var timeZoneId = ServiceLocator.Context.TimeZoneId;
+            //    var ip = RequestHelpers.GetClientIpAddress(Request);
+            //    MixPanelService.IdentifyDeveloper(developer.Email, developer.DisplayName,
+            //        string.IsNullOrEmpty(timeZoneId) ? DateTime.UtcNow : DateTime.UtcNow.ConvertFromUtc(timeZoneId), timeZoneId, ip);
+            //}
+            return Json(DeveloperInfoViewData.Create(res));
         }
     }
 }
