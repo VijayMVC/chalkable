@@ -19,6 +19,8 @@ namespace Chalkable.Web.Models
         public Guid? CourseId { get; set; }
         public int GradedStudentCount { get; set; }
         public int Status { get; set; }
+        public GradingStyleViewData GradingStyleMapper { get; set; }
+
         private StudentAnnouncementsViewData() { }
 
         public static StudentAnnouncementsViewData Create(IList<StudentAnnouncementDetails> items, IList<AnnouncementAttachmentInfo> attachments,
