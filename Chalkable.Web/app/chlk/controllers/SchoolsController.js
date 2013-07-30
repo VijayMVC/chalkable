@@ -18,6 +18,7 @@ REQUIRE('chlk.activities.school.SchoolsListPage');
 REQUIRE('chlk.activities.school.ImportSchoolDialog');
 REQUIRE('chlk.models.id.DistrictId');
 REQUIRE('chlk.models.id.SchoolId');
+REQUIRE('chlk.models.import.ImportTaskData');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -45,11 +46,6 @@ NAMESPACE('chlk.controllers', function (){
                 .getSchools(districtId_, start_ || 0)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    var districtId = null;
-                    var items = data.getItems();
-                    if (items && items.length > 0){
-                        districtId = items[0].getDistrictId();
-                    }
                     return new ria.async.DeferredData(new chlk.models.school.SchoolListViewData(districtId, data));
                 });
             return this.UpdateView(chlk.activities.school.SchoolsListPage, result);
@@ -62,11 +58,6 @@ NAMESPACE('chlk.controllers', function (){
                 .getSchools(districtId, pageIndex_ | 0,  false, false)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    var districtId = null;
-                    var items = data.getItems();
-                    if (items && items.length > 0){
-                        districtId = items[0].getDistrictId();
-                    }
                     return new ria.async.DeferredData(new chlk.models.school.SchoolListViewData(districtId, data));
                 });
             return this.PushView(chlk.activities.school.SchoolsListPage, result);
@@ -75,10 +66,30 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.DistrictId]],
         VOID, function importAction(districtId) {
             var result = this.schoolService
-                .getSchools(districtId)
-                .attach(this.validateResponse_());
+                .getSchoolsForImport(districtId)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    var schools = data.getItems();
+                    return new ria.async.DeferredData(new chlk.models.import.SchoolImportViewData(districtId, schools));
+                });
                 return this.ShadeView(chlk.activities.school.ImportSchoolDialog, result);
         },
+
+        [[chlk.models.import.ImportTaskData]],
+        VOID, function importSchoolsAction(model) {
+            var result = this.schoolService
+                .runSchoolImport(
+                    model.getDistrictId(),
+                    model.getSisSchoolId(),
+                    model.getSisSchoolYearId()
+                )
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    if (data)
+                        alert('Task was scheduled');
+                });
+        },
+
 
         [[chlk.models.id.SchoolId]],
         function detailsAction(id) {

@@ -14,14 +14,14 @@ namespace Chalkable.Web.Controllers
         public ActionResult List(PreferenceCategoryEnum? category)
         {
             var preferences = MasterLocator.PreferenceService.List(category);
-            return Json(PreferenceVeiwData.Create(preferences));
+            return Json(PreferenceViewData.Create(preferences));
         }
         public ActionResult ListPublic()
         {
             var preferences = MasterLocator.PreferenceService.ListPublic();
-            IList<PreferenceVeiwData> res = new List<PreferenceVeiwData>();
+            IList<PreferenceViewData> res = new List<PreferenceViewData>();
             if(preferences.Count > 0)
-               res = PreferenceVeiwData.Create(preferences);
+                res = PreferenceViewData.Create(preferences);
             return Json(res);
         }
         [AuthorizationFilter("SysAdmin")]
@@ -29,7 +29,7 @@ namespace Chalkable.Web.Controllers
         {
             var preference = PreferenceService.Get(key);
             if(preference != null)
-                return Json(PreferenceVeiwData.Create(preference));
+                return Json(PreferenceViewData.Create(preference));
             return Json(null);
         }
         [Authorize]
@@ -37,7 +37,7 @@ namespace Chalkable.Web.Controllers
         {
             var preference = PreferenceService.GetPublic(key);
             if(preference != null)
-                return Json(PreferenceVeiwData.Create(preference));
+                return Json(PreferenceViewData.Create(preference));
             return Json(null);
         }
         [ValidateInput(false)]
@@ -46,7 +46,7 @@ namespace Chalkable.Web.Controllers
         {
             MasterLocator.PreferenceService.Set(key, value, ispublic);
             var preferences = MasterLocator.PreferenceService.List();
-            return Json(PreferenceVeiwData.Create(preferences));
+            return Json(PreferenceViewData.Create(preferences));
         }
 
      }

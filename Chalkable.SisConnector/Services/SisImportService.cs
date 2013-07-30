@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.SisConnector.PublicModel;
 using SchoolInfo = Chalkable.SisConnector.PublicModel.SchoolInfo;
 
 namespace Chalkable.SisConnector.Services
@@ -15,12 +16,17 @@ namespace Chalkable.SisConnector.Services
         protected int SisSchoolId { get; private set; }
         protected BackgroundTaskService.BackgroundTaskLog Log { get; private set; }
         protected IList<int> SisSchoolYearIds { get; private set; }
+        protected SisConnectionInfo ConnectionInfo { get; private set; }
 
-        protected SisImportService(Guid schoolId, int sisSchoolId, IList<int> schoolYearIds, BackgroundTaskService.BackgroundTaskLog log)
+        protected SisImportService(Guid schoolId, int sisSchoolId, IList<int> schoolYearIds, SisConnectionInfo connectionInfo, BackgroundTaskService.BackgroundTaskLog log)
         {
             ServiceLocatorMaster = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var school = ServiceLocatorMaster.SchoolService.GetById(schoolId);
-            ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(school.Id);
+            ConnectionInfo = connectionInfo;
+            if (schoolId != Guid.Empty)
+            {
+                var school = ServiceLocatorMaster.SchoolService.GetById(schoolId);
+                ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(school.Id);    
+            }
             SchoolId = schoolId;
             SisSchoolId = sisSchoolId;
             Log = log;

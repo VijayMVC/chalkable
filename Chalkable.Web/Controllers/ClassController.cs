@@ -89,5 +89,15 @@ namespace Chalkable.Web.Controllers
                 , disciplines, disciplineTypes, gradePerMps));
         }
 
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult ClassGrading(Guid classId)
+        {
+            var classData = SchoolLocator.ClassService.GetClassById(classId);
+            var canCreateItem = SchoolLocator.Context.UserId == classData.TeacherRef;
+            var gradingPerMp = ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), null, null, canCreateItem);
+            return Json(ClassGradingViewData.Create(classData, gradingPerMp), 8);
+        }
+
     }
 }

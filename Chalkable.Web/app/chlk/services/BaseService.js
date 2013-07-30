@@ -84,6 +84,37 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[String, Object, Object]],
+            ria.async.Future, function postArray(uri, clazz, gParams) {
+
+                return new ria.ajax.JsonPostTask(this.resolveUri(uri))
+                    .params(gParams)
+                    .run()
+                    .then(function (data) {
+
+                        if(!data.success)
+                            throw chlk.services.DataException('Server error', Error(data.message));
+
+                        return Serializer.deserialize(data.data, ArrayOf(clazz));
+                    });
+            },
+
+            [[String, Object, Object]],
+            ria.async.Future, function getArray(uri, clazz, gParams) {
+
+                return new ria.ajax.JsonGetTask(this.resolveUri(uri))
+                    .params(gParams)
+                    .run()
+                    .then(function (data) {
+
+                        if(!data.success)
+                            throw chlk.services.DataException('Server error', Error(data.message));
+
+                        return Serializer.deserialize(data.data, ArrayOf(clazz));
+                    });
+            },
+
+
+            [[String, Object, Object]],
             ria.async.Future, function getPaginatedList(uri, clazz, gParams) {
                 return new ria.ajax.JsonGetTask(this.resolveUri(uri))
                     .params(gParams)

@@ -40,6 +40,7 @@ BODY {
     cursor: pointer;
     position: relative;
 
+
     &.selected{
       @include background(linear-gradient(top, #eaeaea, #c7c7c7));
       color: #276284;
@@ -47,6 +48,9 @@ BODY {
       @include box-shadow(0 0px 7px 1px #999);
     }
   }
+
+
+
 }
 
 .grid{
@@ -88,8 +92,16 @@ BODY {
 
     .body{
       display: table-row-group;
+
+
+
       .row{
         display: table-row;
+
+
+
+
+
 
         &:nth-child(even){
           background-color: #fafafa;

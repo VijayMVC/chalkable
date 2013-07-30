@@ -52,6 +52,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublicModel\SchoolInfo.cs" />
     <Compile Include="PublicModel\SchoolYearInfo.cs" />
+    <Compile Include="PublicModel\SisConnection.cs" />
     <Compile Include="Services\SisExportService.cs" />
     <Compile Include="Services\SisImportService.cs" />
   </ItemGroup>

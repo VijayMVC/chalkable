@@ -8,6 +8,8 @@ using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Enums;
+using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
@@ -110,6 +112,16 @@ namespace Chalkable.Web.Controllers
             if(!announcementInfo.ExpiresDate.HasValue)
                 announcementInfo.ExpiresDate =  SchoolLocator.Context.NowSchoolTime;
             return SchoolLocator.AnnouncementService.EditAnnouncement(announcementInfo, markingPeriodId, classId, recipientInfos);
+        }
+
+        [RequireRequestValue("announcementId")]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_READ, true, CallType.Get, new[] { AppPermissionType.Announcement })]
+        public ActionResult Read(Guid announcementId)
+        {
+            var res = PrepareFullAnnouncementViewData(announcementId, true, true);
+            //if (res.SystemType != SystemAnnouncementType.Admin)
+            //    MixPanelService.OpenedAnnouncement(SchoolLocator.Context., res.AnnouncementTypeName, res.Title, res.SchoolPersonName);
+            return Json(res, 7);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]

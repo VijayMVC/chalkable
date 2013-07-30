@@ -2,6 +2,7 @@
     .action-bar.not-transparent
         .container.panel-bg
             -districtId = self.getDistrictId() ? self.getDistrictId().valueOf() : null
+
             +ActionLink('schools', 'import', districtId).chlk-add.opacity-button Import schools
     +Grid('schools', 'page', self.items, [districtId]).not-transparent
         +GridHead()

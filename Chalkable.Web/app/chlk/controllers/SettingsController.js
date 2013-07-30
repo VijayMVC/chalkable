@@ -1,7 +1,10 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.activities.settings.DashboardPage');
 REQUIRE('chlk.activities.settings.TeacherPage');
+REQUIRE('chlk.activities.settings.PreferencesPage');
 REQUIRE('chlk.models.settings.Dashboard');
+REQUIRE('chlk.models.settings.Preference');
+REQUIRE('chlk.services.SettingsService');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -9,12 +12,15 @@ NAMESPACE('chlk.controllers', function (){
     CLASS(
         'SettingsController', EXTENDS(chlk.controllers.BaseController), [
 
+            [ria.mvc.Inject],
+            chlk.services.SettingsService, 'settingsService',
+
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.SYSADMIN
             ])],
+
             [chlk.controllers.SidebarButton('settings')],
             function dashboardAction() {
-                //if it's sysadmin check
                 var dashboard = new chlk.models.settings.Dashboard();
                 dashboard.setBackgroundTaskMonitorVisible(true);
                 dashboard.setStorageMonitorVisible(true);
@@ -25,7 +31,28 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.settings.DashboardPage, ria.async.DeferredData(dashboard));
             },
 
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.SYSADMIN
+            ])],
+            [chlk.controllers.SidebarButton('settings')],
+            function preferencesAction() {
+                 var result = this.settingsService.getPreferences();
+                 return this.PushView(chlk.activities.settings.PreferencesPage, result);
+            },
 
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.SYSADMIN
+            ])],
+            [chlk.controllers.SidebarButton('settings')],
+            [[chlk.models.settings.Preference]],
+            function setPreferenceAction(model) {
+                var result = this.settingsService.setPreference(
+                    model.getKey(),
+                    model.getValue(),
+                    model.isPublicPreference()
+                );
+                return this.UpdateView(chlk.activities.settings.PreferencesPage, result);
+            },
 
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.TEACHER

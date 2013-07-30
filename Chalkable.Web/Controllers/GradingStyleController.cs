@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Mapping;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
 
 namespace Chalkable.Web.Controllers
@@ -16,14 +18,9 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GRADING_STYLE_LIST, true, CallType.Get, new[] { AppPermissionType.Grade })]
         public ActionResult List()
         {
-            var gradingStyleMapper = SchoolLocator.GradingStyleService.GetMapper();
-
-            var gradingAbcfList = gradingStyleMapper.GetValuesByStyle(GradingStyleEnum.Abcf);
-            var gradingCompeleList = gradingStyleMapper.GetValuesByStyle(GradingStyleEnum.Complete);
-            var gradingCheckList = gradingStyleMapper.GetValuesByStyle(GradingStyleEnum.Check);
-            
-            return Json(GradingStyleViewData.Create(gradingAbcfList, gradingCompeleList, gradingCheckList));
+            return Json(GradingStyleLogic.GetGradingStyleMapper(SchoolLocator));
         }
+
 
         [AuthorizationFilter("AdminGrade")]
         public ActionResult Update(IntList gradingAbcf, IntList gradingCompele, IntList gradingCheck)

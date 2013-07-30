@@ -26,8 +26,13 @@ NAMESPACE('ria.serialize', function () {
 
             if (clazz === Array && (Array.isArray(raw) || raw == null))
                 return raw || [];
+            if(clazz === Boolean){
+                if(raw === 'false')
+                    raw = false;
+                return clazz(raw || '');
+            }
 
-            if (clazz === Number || clazz === Boolean || clazz === String)
+            if (clazz === Number || clazz === String)
                 return clazz(raw || '');
 
             if (ria.__API.isIdentifier(clazz))

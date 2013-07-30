@@ -187,6 +187,8 @@
     </Compile>
     <Compile Include="HtmlExtensions.cs" />
     <Compile Include="Logic\AttachmentLogic.cs" />
+    <Compile Include="Logic\ClassLogic.cs" />
+    <Compile Include="Logic\GradingStyleLogic.cs" />
     <Compile Include="Logic\PersonLogic.cs" />
     <Compile Include="Logic\StudentAnnouncementLogic.cs" />
     <Compile Include="Models\AddressViewData.cs" />
@@ -216,6 +218,7 @@
     <Compile Include="Models\CategoryViewData.cs" />
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
     <Compile Include="Models\ClassAttendanceViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassGradingViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassInfoViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassSummaryViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassTitlesViewData.cs" />
@@ -228,6 +231,7 @@
     <Compile Include="Models\DisciplineTypeViewData.cs" />
     <Compile Include="Models\DisciplineView.cs" />
     <Compile Include="Models\DistrictViewData.cs" />
+    <Compile Include="Models\GradingClassSummaryViewData.cs" />
     <Compile Include="Models\GradingStyleViewData.cs" />
     <Compile Include="Models\GradingTeacherSummaryViewData.cs" />
     <Compile Include="Models\NotificationsByDateViewData.cs" />
@@ -244,7 +248,7 @@
     <Compile Include="Models\PersonViewDatas\TeacherInfoViewData.cs" />
     <Compile Include="Models\PersonViewDatas\TeacherSummaryViewData.cs" />
     <Compile Include="Models\PhoneViewData.cs" />
-    <Compile Include="Models\PreferenceVeiwData.cs" />
+    <Compile Include="Models\PreferenceViewData.cs" />
     <Compile Include="Models\Binders\StringConstructedObjectBinder.cs" />
     <Compile Include="Models\PrivateMessageViewData.cs" />
     <Compile Include="Models\RoleViewData.cs" />
@@ -310,6 +314,14 @@
       <Project>{c5753c2a-f2bc-4f96-846b-548fc67191b2}</Project>
       <Name>Chalkable.Data.School</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Chalkable.SisConnector\Chalkable.SisConnector.csproj">
+      <Project>{C6A26439-411D-4D8C-9BCE-1A34E7EE604F}</Project>
+      <Name>Chalkable.SisConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.SisImportFacade\Chalkable.SisImportFacade.csproj">
+      <Project>{BD404053-D827-4695-9F57-5003A337428C}</Project>
+      <Name>Chalkable.SisImportFacade</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -349,7 +361,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>11603</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost/chalkable2/</IISUrl>
+          <IISUrl>https://localhost/chalkable/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

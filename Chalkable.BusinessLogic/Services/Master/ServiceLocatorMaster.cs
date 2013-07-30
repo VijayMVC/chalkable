@@ -17,11 +17,13 @@ namespace Chalkable.BusinessLogic.Services.Master
         IPictureService PersonPictureService { get; }
         IPictureService CourseIconService { get; }
         IPictureService DepartmentIconService { get; }
+        IPictureService FundRequestPictureService { get; }
         IApplicationService ApplicationService { get; }
         ICategoryService CategoryService { get; }
         IApplicationUploadService ApplicationUploadService { get; }
         IAccessControlService AccessControlService { get; }
         IEmailService EmailService { get; }
+        IFundService FundService { get; }
     }
 
     public class ServiceLocatorMaster : ServiceLocator, IServiceLocatorMaster
@@ -35,11 +37,13 @@ namespace Chalkable.BusinessLogic.Services.Master
         private IPictureService personPictureService;
         private IPictureService courseIconService;
         private IPictureService departmentIconService;
+        private IPictureService fundRequestPictureService;
         private IApplicationService applicationService;
         private ICategoryService categoryService;
         private IAccessControlService accessControlService;
         private IApplicationUploadService applicationUploadService;
         private IEmailService emailService;
+        private IFundService fundService;
 
         public ServiceLocatorMaster(UserContext context) : base(context)
         {
@@ -57,6 +61,8 @@ namespace Chalkable.BusinessLogic.Services.Master
             accessControlService = new AccessControlService(this);
             applicationUploadService = new ApplicationUploadService(this);
             emailService = new EmailService(this);
+            fundService = new FundService(this);
+            fundRequestPictureService = new FundRequestPictureService(this);
         }
 
         public IUserService UserService { get { return userService; } }
@@ -77,6 +83,9 @@ namespace Chalkable.BusinessLogic.Services.Master
             get { return emailService; } 
             protected set { emailService = value; }
         }
+
+        public IFundService FundService { get { return fundService; } }
+        public IPictureService FundRequestPictureService { get { return fundRequestPictureService; } }
 
         public IServiceLocatorSchool SchoolServiceLocator(Guid schoolId)
         {

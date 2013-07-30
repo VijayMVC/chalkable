@@ -37,7 +37,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         SisUrl = sisUrl,
                         SisUserName = sisUserName,
                         SisPassword = sisPassword,
-                        SisSystemType = (int)sisSystemType
+                        SisSystemType = sisSystemType
                     };
                 da.Insert(res);
                 uow.Commit();
