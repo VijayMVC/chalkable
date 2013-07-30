@@ -1,0 +1,48 @@
+-typesEnum = chlk.models.announcement.AnnouncementTypeEnum;
+-isAnnouncement = self.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf();
+-classId = self.getRecipientId() || self.getClassId();
+input(type='hidden', name='id', value=self.getId())
+input(type='hidden', name='announcementtypeid', value=self.getAnnouncementTypeId())
+input(type='hidden', name='statetyped', value=self.getStateTyped())
+input(type='hidden', name='systemtype', value=self.getSystemType())
+input(type='hidden', name='schoolpersonref', value=self.getSchoolPersonRef())
+input(type='hidden', name='gradingstyle', value=self.getGradingStyle())
+input(type='hidden', name='attachments', value=self.getAttachments())
+//input(type='hidden', name='created', value=self.getCreated())
+input(type='hidden', name='state', value=self.getState())
+//input(type='hidden', name='recipientId', value=self.getRecipientId())
+input(type='hidden', name='classId', value=classId)
+input(type='hidden', name='announcementtypename', value=self.getAnnouncementTypeName())
+.left-block
+    if isAnnouncement
+        TEXTAREA(id="subject",name="subject",placeholder="Subject")=self.getSubject()
+    TEXTAREA(id="content",name="content",placeholder=isAnnouncement ? "Message" : "Assignment")=self.getContent()
+    .drop-down-container
+    input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
+    input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
+.right-block
+    +DatePicker('expiresdate', self.getExpiresDate())(
+        data-options={
+            showOtherMonths: true,
+            selectOtherMonths: true
+        },
+        class="validate[required]"
+    )#due-date
+.attachments-and-applications
+    #attach-file-area.announcement-item.attach-file-area
+        button#add-application.simple-gray-button Attach App
+        button.simple-gray-button.file Attach File
+            +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
+    each attachment in self.getAnnouncementAttachments()
+        div(data-id=attachment.getId(), data-url="viewurl").announcement-item.attachment
+            +ActionLink('announcement', 'deleteAttachment', attachment.getId()).close-btn
+            img(src=attachment.getThumbnailUrl())
+            .title
+                div=attachment.getName()
++Button()(
+    type="submit",
+    name="submitType",
+    value="submit"
+).special-button.blue-button.submit-btn Submit
+
+

@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"  itemscope itemtype="Education">
+<head>
+    <title>@ViewBag.Title</title>
+    @ChlkHelpers.RenderPageMetadata()
+    <meta itemprop="image" content="@Url.Content("~/favicon.ico")">
+    <link rel="icon" href="@Url.Content("~/favicon.ico")" />
+    <!--Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css' />
+    <!-- Whole Site CSS -->
+    <link href="@Url.StaticContent("/Content/screen.css")" rel="stylesheet" media="screen, projection" type="text/css" />
+    <link href="@Url.StaticContent("/app/jquery/choosen/chosen.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.StaticContent("/app/jquery/datepicker/jquery-ui-1.10.3.custom.css")" rel="stylesheet" type="text/css" />
+    <!-- Page specific CSS -->
+    @RenderSection("Styles", false)
+    @ChlkHelpers.GoogleAnalytics()
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/chlk-messages.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-2.0.2.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/choosen/chosen.jquery.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/datepicker/jquery-ui-1.10.3.custom.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/languages/jquery.validationEngine-en.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.validationEngine.js")"></script>
+    @if (IsSectionDefined("Scripts"))
+    {
+        @RenderSection("Scripts", false)
+    }
+    else
+    {
+        <script src="@Url.Content("~/app/ria/_bootstrap.js")" type="text/javascript">
+            ria.__CFG = {
+                "prettyStackTraces": true,
+                "checkedMode": true,
+                "enablePipelineMethodCall": true,
+                "AssertWithExceptions": false,
+                "stackTraceJs": "lib/stacktrace.js",
+
+                "#require": {
+                    "plugins": ["~/assets/jade.js"],
+                    "appCodeDir": "~/app/",
+                    "appRoot": "@Url.Content("~")",
+                    "libs": {
+                    }
+                },
+
+                "#mvc": @RenderSection("MVCSettings", false)
+            }
+        </script>
+    }
+</head>
+<body>
+    <div id="fb-root"></div>
+    <input type="hidden" value=" ServerTime :  @ViewData["CurrentServerDateTime"]"/>
+    <input type="hidden" value=" ServerDbTime:  @ViewData["CurrentServerDBDateTime"]"/>
+
+    <div id="page-header">
+        Revision: @Chalkable.Web.Tools.CompilerHelper.Version
+    </div>
+   
+
+
+
+    <div class="page 
+    @if ((ViewData.ContainsKey("Prefix") && !string.IsNullOrEmpty("Prefix")) || (ViewData.ContainsKey("DeveloperId") && !string.IsNullOrEmpty("DeveloperId")))
+    {
+        @:demo
+    }
+    ">
+        <div id="sidebar">
+            @if (IsSectionDefined("Sidebar"))
+            {
+              @RenderSection("Sidebar", false)  
+            }
+        </div>
+        <div id="content">
+            <div class="ribbon"></div>
+            <div id="content-wrapper">
+                <div id="main-top">
+                </div>
+                <div id="main-wrapper">
+                    <div id="main">
+                        @RenderBody()
+                    </div>
+                    <div id = "chlk-dialogs" class = "x-hidden"></div>
+                </div>
+                <div id="footer">&copy; <script>var dt = new Date();document.write(dt.getFullYear());</script> Chalkable</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id = "chlk-overlay" class ="x-hidden"></div>
+    <div id="chlk-pop-up-container" class="x-hidden"><div id="pop-up-triangle"></div></div>
+</body>
+<script type="">
+    var classesAdvancedData = JSON.parse('[{"classid":1,"mask":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"typesbyclass":[{"id":10,"issystem":true,"cancreate":true,"name":"Term paper","description":"Term paper"},{"id":1,"issystem":true,"cancreate":true,"name":"Announcement","description":"Announcement"}]},{"classid":132,"mask":[2,0,0,0,0,2,2,2,2,0,0,2,0,0,2,2,0,0,2,2,2,0,0,0,0,2,2,2,2,2],"typesbyclass":[{"id":2,"issystem":true,"cancreate":true,"name":"HW","description":"Homework"},{"id":3,"issystem":true,"cancreate":true,"name":"Essay","description":"Essay"},{"id":4,"issystem":true,"cancreate":true,"name":"Quiz","description":"Quiz"},{"id":5,"issystem":true,"cancreate":true,"name":"Test","description":"Test"},{"id":6,"issystem":true,"cancreate":true,"name":"Project","description":"Project"},{"id":8,"issystem":true,"cancreate":true,"name":"Midterm","description":"Midterm"},{"id":10,"issystem":true,"cancreate":true,"name":"Term paper","description":"Term paper"},{"id":1,"issystem":true,"cancreate":true,"name":"Announcement","description":"Announcement"}]},{"classid":133,"mask":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"typesbyclass":[{"id":2,"issystem":true,"cancreate":true,"name":"HW","description":"Homework"},{"id":3,"issystem":true,"cancreate":true,"name":"Essay","description":"Essay"},{"id":4,"issystem":true,"cancreate":true,"name":"Quiz","description":"Quiz"},{"id":5,"issystem":true,"cancreate":true,"name":"Test","description":"Test"},{"id":6,"issystem":true,"cancreate":true,"name":"Project","description":"Project"},{"id":7,"issystem":true,"cancreate":true,"name":"Final","description":"Final"},{"id":8,"issystem":true,"cancreate":true,"name":"Midterm","description":"Midterm"},{"id":9,"issystem":true,"cancreate":true,"name":"Book report","description":"Book report"},{"id":10,"issystem":true,"cancreate":true,"name":"Term paper","description":"Term paper"},{"id":1,"issystem":true,"cancreate":true,"name":"Announcement","description":"Announcement"}]},{"classid":226,"mask":[2,0,0,0,0,2,2,2,2,0,0,2,0,0,2,2,0,0,2,2,2,0,0,0,0,2,2,2,2,2],"typesbyclass":[{"id":2,"issystem":true,"cancreate":true,"name":"HW","description":"Homework"},{"id":3,"issystem":true,"cancreate":true,"name":"Essay","description":"Essay"},{"id":4,"issystem":true,"cancreate":true,"name":"Quiz","description":"Quiz"},{"id":5,"issystem":true,"cancreate":true,"name":"Test","description":"Test"},{"id":6,"issystem":true,"cancreate":true,"name":"Project","description":"Project"},{"id":7,"issystem":true,"cancreate":true,"name":"Final","description":"Final"},{"id":8,"issystem":true,"cancreate":true,"name":"Midterm","description":"Midterm"},{"id":9,"issystem":true,"cancreate":true,"name":"Book report","description":"Book report"},{"id":10,"issystem":true,"cancreate":true,"name":"Term paper","description":"Term paper"},{"id":1,"issystem":true,"cancreate":true,"name":"Announcement","description":"Announcement"}]},{"classid":266,"mask":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"typesbyclass":[{"id":2,"issystem":true,"cancreate":true,"name":"HW","description":"Homework"},{"id":3,"issystem":true,"cancreate":true,"name":"Essay","description":"Essay"},{"id":4,"issystem":true,"cancreate":true,"name":"Quiz","description":"Quiz"},{"id":5,"issystem":true,"cancreate":true,"name":"Test","description":"Test"},{"id":6,"issystem":true,"cancreate":true,"name":"Project","description":"Project"},{"id":7,"issystem":true,"cancreate":true,"name":"Final","description":"Final"},{"id":8,"issystem":true,"cancreate":true,"name":"Midterm","description":"Midterm"},{"id":9,"issystem":true,"cancreate":true,"name":"Book report","description":"Book report"},{"id":10,"issystem":true,"cancreate":true,"name":"Term paper","description":"Term paper"},{"id":1,"issystem":true,"cancreate":true,"name":"Announcement","description":"Announcement"}]},{"classid":325,"mask":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"typesbyclass":[{"id":2,"issystem":true,"cancreate":true,"name":"HW","description":"Homework"},{"id":3,"issystem":true,"cancreate":true,"name":"Essay","description":"Essay"},{"id":4,"issystem":true,"cancreate":true,"name":"Quiz","description":"Quiz"},{"id":5,"issystem":true,"cancreate":true,"name":"Test","description":"Test"},{"id":6,"issystem":true,"cancreate":true,"name":"Project","description":"Project"},{"id":7,"issystem":true,"cancreate":true,"name":"Final","description":"Final"},{"id":8,"issystem":true,"cancreate":true,"name":"Midterm","description":"Midterm"},{"id":9,"issystem":true,"cancreate":true,"name":"Book report","description":"Book report"},{"id":10,"issystem":true,"cancreate":true,"name":"Term paper","description":"Term paper"},{"id":1,"issystem":true,"cancreate":true,"name":"Announcement","description":"Announcement"}]},{"classid":328,"mask":[2,0,0,0,0,2,2,2,2,0,0,2,0,0,2,2,0,0,2,2,2,0,0,0,0,2,2,2,2,2],"typesbyclass":[{"id":2,"issystem":true,"cancreate":true,"name":"HW","description":"Homework"},{"id":3,"issystem":true,"cancreate":true,"name":"Essay","description":"Essay"},{"id":4,"issystem":true,"cancreate":true,"name":"Quiz","description":"Quiz"},{"id":5,"issystem":true,"cancreate":true,"name":"Test","description":"Test"},{"id":6,"issystem":true,"cancreate":true,"name":"Project","description":"Project"},{"id":7,"issystem":true,"cancreate":true,"name":"Final","description":"Final"},{"id":8,"issystem":true,"cancreate":true,"name":"Midterm","description":"Midterm"},{"id":9,"issystem":true,"cancreate":true,"name":"Book report","description":"Book report"},{"id":10,"issystem":true,"cancreate":true,"name":"Term paper","description":"Term paper"},{"id":1,"issystem":true,"cancreate":true,"name":"Announcement","description":"Announcement"}]},{"classid":344,"mask":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"typesbyclass":[{"id":2,"issystem":true,"cancreate":true,"name":"HW","description":"Homework"},{"id":3,"issystem":true,"cancreate":true,"name":"Essay","description":"Essay"},{"id":4,"issystem":true,"cancreate":true,"name":"Quiz","description":"Quiz"},{"id":5,"issystem":true,"cancreate":true,"name":"Test","description":"Test"},{"id":6,"issystem":true,"cancreate":true,"name":"Project","description":"Project"},{"id":7,"issystem":true,"cancreate":true,"name":"Final","description":"Final"},{"id":8,"issystem":true,"cancreate":true,"name":"Midterm","description":"Midterm"},{"id":9,"issystem":true,"cancreate":true,"name":"Book report","description":"Book report"},{"id":10,"issystem":true,"cancreate":true,"name":"Term paper","description":"Term paper"},{"id":1,"issystem":true,"cancreate":true,"name":"Announcement","description":"Announcement"}]},{"classid":419,"mask":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"typesbyclass":[{"id":2,"issystem":true,"cancreate":true,"name":"HW","description":"Homework"},{"id":3,"issystem":true,"cancreate":true,"name":"Essay","description":"Essay"},{"id":4,"issystem":true,"cancreate":true,"name":"Quiz","description":"Quiz"},{"id":5,"issystem":true,"cancreate":true,"name":"Test","description":"Test"},{"id":6,"issystem":true,"cancreate":true,"name":"Project","description":"Project"},{"id":7,"issystem":true,"cancreate":true,"name":"Final","description":"Final"},{"id":8,"issystem":true,"cancreate":true,"name":"Midterm","description":"Midterm"},{"id":9,"issystem":true,"cancreate":true,"name":"Book report","description":"Book report"},{"id":10,"issystem":true,"cancreate":true,"name":"Term paper","description":"Term paper"},{"id":1,"issystem":true,"cancreate":true,"name":"Announcement","description":"Announcement"}]},{"classid":434,"mask":[0,0,0,0,0,2,2,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,2,2,0,0,0],"typesbyclass":[{"id":2,"issystem":true,"cancreate":true,"name":"HW","description":"Homework"},{"id":3,"issystem":true,"cancreate":true,"name":"Essay","description":"Essay"},{"id":4,"issystem":true,"cancreate":true,"name":"Quiz","description":"Quiz"},{"id":5,"issystem":true,"cancreate":true,"name":"Test","description":"Test"},{"id":6,"issystem":true,"cancreate":true,"name":"Project","description":"Project"},{"id":7,"issystem":true,"cancreate":true,"name":"Final","description":"Final"},{"id":8,"issystem":true,"cancreate":true,"name":"Midterm","description":"Midterm"},{"id":9,"issystem":true,"cancreate":true,"name":"Book report","description":"Book report"},{"id":10,"issystem":true,"cancreate":true,"name":"Term paper","description":"Term paper"},{"id":1,"issystem":true,"cancreate":true,"name":"Announcement","description":"Announcement"}]},{"classid":475,"mask":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"typesbyclass":[{"id":2,"issystem":true,"cancreate":true,"name":"HW","description":"Homework"},{"id":3,"issystem":true,"cancreate":true,"name":"Essay","description":"Essay"},{"id":4,"issystem":true,"cancreate":true,"name":"Quiz","description":"Quiz"},{"id":5,"issystem":true,"cancreate":true,"name":"Test","description":"Test"},{"id":6,"issystem":true,"cancreate":true,"name":"Project","description":"Project"},{"id":7,"issystem":true,"cancreate":true,"name":"Final","description":"Final"},{"id":8,"issystem":true,"cancreate":true,"name":"Midterm","description":"Midterm"},{"id":9,"issystem":true,"cancreate":true,"name":"Book report","description":"Book report"},{"id":10,"issystem":true,"cancreate":true,"name":"Term paper","description":"Term paper"},{"id":1,"issystem":true,"cancreate":true,"name":"Announcement","description":"Announcement"}]},{"classid":504,"mask":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"typesbyclass":[{"id":2,"issystem":true,"cancreate":true,"name":"HW","description":"Homework"},{"id":3,"issystem":true,"cancreate":true,"name":"Essay","description":"Essay"},{"id":4,"issystem":true,"cancreate":true,"name":"Quiz","description":"Quiz"},{"id":5,"issystem":true,"cancreate":true,"name":"Test","description":"Test"},{"id":6,"issystem":true,"cancreate":true,"name":"Project","description":"Project"},{"id":7,"issystem":true,"cancreate":true,"name":"Final","description":"Final"},{"id":8,"issystem":true,"cancreate":true,"name":"Midterm","description":"Midterm"},{"id":9,"issystem":true,"cancreate":true,"name":"Book report","description":"Book report"},{"id":10,"issystem":true,"cancreate":true,"name":"Term paper","description":"Term paper"},{"id":1,"issystem":true,"cancreate":true,"name":"Announcement","description":"Announcement"}]}]');
+    var classesInfo = {};
+    classesAdvancedData && classesAdvancedData.forEach(function(el) {
+        classesInfo[el.classid] = {
+            mask: el.mask,
+            typesByClass: el.typesbyclass
+        };
+    });
+    var classesToFilter = JSON.parse('[{"id":1,"name":"Algebra 9H","description":null,"coursetitle":"Algebra 9H","courseinfoid":30,"staffcourseid":62823,"gradelevelid":1,"gradelevelname":"1st","markingperiodsid":[1],"teacherid":49,"teachername":"Ms. Harari"},{"id":132,"name":"Eng 10 H","description":"D","coursetitle":"Eng 10 H","courseinfoid":10,"staffcourseid":304,"gradelevelid":11,"gradelevelname":"11th","markingperiodsid":[1],"teacherid":49,"teachername":"Ms. Harari"},{"id":133,"name":"English 10","description":"D","coursetitle":"English 10","courseinfoid":6,"staffcourseid":110,"gradelevelid":11,"gradelevelname":"11th","markingperiodsid":[1],"teacherid":49,"teachername":"Ms. Harari"},{"id":226,"name":"Eng 10 H","description":"E","coursetitle":"Eng 10 H","courseinfoid":10,"staffcourseid":304,"gradelevelid":11,"gradelevelname":"11th","markingperiodsid":[1],"teacherid":49,"teachername":"Ms. Harari"},{"id":266,"name":"English 10","description":"E1345F2","coursetitle":"English 10","courseinfoid":6,"staffcourseid":110,"gradelevelid":11,"gradelevelname":"11th","markingperiodsid":[1],"teacherid":49,"teachername":"Ms. Harari"},{"id":325,"name":"English 10","description":"F","coursetitle":"English 10","courseinfoid":6,"staffcourseid":110,"gradelevelid":11,"gradelevelname":"11th","markingperiodsid":[1],"teacherid":49,"teachername":"Ms. Harari"},{"id":328,"name":"English 9H","description":"F","coursetitle":"English 9H","courseinfoid":21,"staffcourseid":180,"gradelevelid":11,"gradelevelname":"11th","markingperiodsid":[1],"teacherid":49,"teachername":"Ms. Harari"},{"id":344,"name":"English 9","description":"F1345G2","coursetitle":"English 9","courseinfoid":5,"staffcourseid":13,"gradelevelid":11,"gradelevelname":"11th","markingperiodsid":[1],"teacherid":49,"teachername":"Ms. Harari"},{"id":419,"name":"English 9","description":"H","coursetitle":"English 9","courseinfoid":5,"staffcourseid":13,"gradelevelid":11,"gradelevelname":"11th","markingperiodsid":[1],"teacherid":49,"teachername":"Ms. Harari"},{"id":434,"name":"English 9H","description":"H12","coursetitle":"English 9H","courseinfoid":21,"staffcourseid":180,"gradelevelid":11,"gradelevelname":"11th","markingperiodsid":[1],"teacherid":49,"teachername":"Ms. Harari"},{"id":475,"name":"English 9","description":"I","coursetitle":"English 9","courseinfoid":5,"staffcourseid":13,"gradelevelid":11,"gradelevelname":"11th","markingperiodsid":[1],"teacherid":49,"teachername":"Ms. Harari"},{"id":504,"name":"English 9","description":"I1234","coursetitle":"English 9","courseinfoid":5,"staffcourseid":13,"gradelevelid":11,"gradelevelname":"11th","markingperiodsid":[1],"teacherid":49,"teachername":"Ms. Harari"}]');
+</script>
+</html>

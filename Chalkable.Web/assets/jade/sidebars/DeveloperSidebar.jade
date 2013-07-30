@@ -1,0 +1,15 @@
++ActionLink('feed', 'list')#home-logo
+#sidebar-controls
+    .search-wrapper
+    .wrapper
+        .buttons-row
+            +ActionLink('calendar', 'month').one-third-button.apps-info(title="App info") App Info
+            +ActionLink('messages', 'list').one-third-button.api(title="API") API Explorer
+            +ActionLink('people', 'list').one-third-button.docs(title="Docs") Docs
+        .buttons-row
+            +ActionLink('district', 'list').one-third-button.statistic(title="View Grades") Grades
+            +ActionLink('apps', 'list').one-third-button.apps(title="View Apps") Apps
+            +ActionLink('settings', 'dashboard').one-third-button.settings(title="View Settings") Settings
+        .buttons-row
+            +ActionLink('attendance', 'list').one-third-button.statistic(title="View Attendance") Attendance
+            +ActionLink('discipline', 'list').one-third-button.discipline(title="View Discipline") Discipline
