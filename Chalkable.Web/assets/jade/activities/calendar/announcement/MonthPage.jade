@@ -1,0 +1,44 @@
+.chlk-calendar
+    .header
+        .header-container
+            .buttons-container
+                .buttons
+                    .calendar-today-container
+                        +ActionLink('calendar', 'today').calendar-today
+                    .prev-month-container
+                        +ActionLink('calendar', 'prev').prev-month
+                    .current-month-container
+                        label.current-month Test
+                    .next-month-container
+                        +ActionLink('calendar', 'next').next-month
+                    .calendar-day-container
+                        span.tooltip
+                        +ActionLink('calendar', 'day').calendar-day
+                    .calendar-week-container
+                        span.tooltip
+                        +ActionLink('calendar', 'week').calendar-week
+                    .calendar-month-container
+                        span.tooltip
+                        +ActionLink('calendar', 'month').calendar-month
+    .day-names
+        div
+           p Sunday
+        div
+            p Monday
+        div
+            p Tuesday
+        div
+            p Wednesday
+        div
+            p Thursday
+        div
+            p Friday
+        div
+            p Saturday
+    .items
+        each item in self._model.getDays()
+            div.gradient-cnt.item
+                div
+                    h2.number=item.getDay()
+                    .space
+                    .day-items

@@ -1,0 +1,26 @@
+.settings
+    .row
+        .item
+            +ActionLink('account', 'resetPassword') Change password
+        .item
+            if self.isPreferencesVisible()
+                +ActionLink('settings', 'preferences') Preferences
+        .item
+            if self.isAppCategoriesVisible()
+                +ActionLink('appcategories', 'list') Application categories
+    .row
+        .item
+            if self.isDepartmentsVisible()
+                +ActionLink('departments', 'list') Departments
+        .item
+            if self.isStorageMonitorVisible()
+                +ActionLink('storage', 'list') Storage monitor
+        .item
+            if self.isBackgroundTaskMonitorVisible()
+                +ActionLink('backgroundtask', 'list') Background task monitor
+        .item
+            if self.isDbMaintenanceVisible()
+                +ActionLink('dbmaintenance', 'listBackups') Db Maintenance
+
+
+

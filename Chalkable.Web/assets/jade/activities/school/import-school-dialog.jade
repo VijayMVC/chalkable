@@ -1,0 +1,46 @@
+.dialog.add-school.gray
+    .x-window-header
+        span Import schools
+    .x-window-body
+        .container.panel-bg
+            +Grid.not-transparent
+                +GridHead()
+                    .th
+                    .th sis school id
+                    .th sis school Year id
+                    .th Name
+                    .th email
+                    .th phone
+                    .th principal Email
+                    .th principal Name
+                    .th principal Title
+                    .th address
+                    .th city
+                +GridBody()
+                    each item in self.schools
+                        +ActionForm('schools', 'importSchools').row
+                            input(type="hidden", name="sisSchoolId", value=item.getSisSchoolId())
+                            input(type="hidden", name="districtId", value=self.getDistrictId().valueOf())
+                            .td
+                                +Checkbox("schoolid", item.getSisSchoolId())
+                            .td=item.getSisSchoolId()
+                            .td
+                                +Select('sisSchoolYearId')
+                                    each el in item.getSchoolYears()
+                                        +Option(el.getCalendarId(), el.getName())
+                            .td= item.getName()
+                            .td= item.getEmail()
+                            .td= item.getPhone()
+                            .td= item.getPrincipalEmail()
+                            .td= item.getPrincipalTitle()
+                            .td= item.getPrincipalName()
+                            .td= item.getAddress()
+                            .td= item.getCity()
+                            .td
+                                +Button Import
+
+
+
+
+
+
