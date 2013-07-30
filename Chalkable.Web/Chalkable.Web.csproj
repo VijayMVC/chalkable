@@ -187,6 +187,8 @@
     </Compile>
     <Compile Include="HtmlExtensions.cs" />
     <Compile Include="Logic\AttachmentLogic.cs" />
+    <Compile Include="Logic\ClassLogic.cs" />
+    <Compile Include="Logic\GradingStyleLogic.cs" />
     <Compile Include="Logic\PersonLogic.cs" />
     <Compile Include="Logic\StudentAnnouncementLogic.cs" />
     <Compile Include="Models\AddressViewData.cs" />
@@ -216,6 +218,7 @@
     <Compile Include="Models\CategoryViewData.cs" />
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
     <Compile Include="Models\ClassAttendanceViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassGradingViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassInfoViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassSummaryViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassTitlesViewData.cs" />
@@ -228,6 +231,7 @@
     <Compile Include="Models\DisciplineTypeViewData.cs" />
     <Compile Include="Models\DisciplineView.cs" />
     <Compile Include="Models\DistrictViewData.cs" />
+    <Compile Include="Models\GradingClassSummaryViewData.cs" />
     <Compile Include="Models\GradingStyleViewData.cs" />
     <Compile Include="Models\GradingTeacherSummaryViewData.cs" />
     <Compile Include="Models\NotificationsByDateViewData.cs" />

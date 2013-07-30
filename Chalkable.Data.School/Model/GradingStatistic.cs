@@ -25,12 +25,32 @@ namespace Chalkable.Data.School.Model
         public Guid ClassRef { get; set; }
     }
 
-    public class MarkingPeriodClassGradeAvg
+    public class MarkingPeriodClassGradeAvg : MarkingPeriodClass
     {
+        private Class _class;
         [DataEntityAttr]
-        public Class Class { get; set; }
+        public Class Class
+        {
+            get { return _class; }
+            set
+            {
+                _class = value;
+                if (value != null && value.Id != Guid.Empty)
+                    ClassRef = value.Id;
+            }
+        }
+        private MarkingPeriod markingPeriod;
         [DataEntityAttr]
-        public MarkingPeriod MarkingPeriod { get; set; }
+        public MarkingPeriod MarkingPeriod
+        {
+            get { return markingPeriod; }
+            set
+            {
+                markingPeriod = value;
+                if (value != null && value.Id != Guid.Empty)
+                    MarkingPeriodRef = value.Id;
+            }
+        }
         public int? Avg { get; set; }
     }
 }

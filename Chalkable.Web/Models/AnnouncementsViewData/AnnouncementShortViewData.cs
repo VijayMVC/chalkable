@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Mapping;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
@@ -40,5 +41,25 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         {
             return announcements.Select(Create).ToList();
         } 
+    }
+
+
+    public class AnnouncementShortGradeViewData : AnnouncementShortViewData
+    {
+        public int? Avg { get; set; }
+        public int? MappedAvg { get; set; }
+        public int GradedStudentCount { get; set; }
+
+        protected AnnouncementShortGradeViewData(AnnouncementComplex announcement, IGradingStyleMapper mapper)
+            : base(announcement)
+        {
+            Avg = announcement.Avg;
+            MappedAvg = mapper.Map(announcement.GradingStyle, announcement.Avg);
+            GradedStudentCount = announcement.GradingsStudentsCount;
+        }
+        public static IList<AnnouncementShortGradeViewData> Create(IList<AnnouncementComplex> announcements, IGradingStyleMapper mapper)
+        {
+            return announcements.Select(x => new AnnouncementShortGradeViewData(x, mapper)).ToList();
+        }
     }
 }
