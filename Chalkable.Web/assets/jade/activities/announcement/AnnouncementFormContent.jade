@@ -1,6 +1,7 @@
 -typesEnum = chlk.models.announcement.AnnouncementTypeEnum;
 -isAnnouncement = self.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf();
 -classId = self.getRecipientId() || self.getClassId();
+-attachments = self.getAnnouncementAttachments() || [];
 input(type='hidden', name='id', value=self.getId())
 input(type='hidden', name='announcementtypeid', value=self.getAnnouncementTypeId())
 input(type='hidden', name='statetyped', value=self.getStateTyped())
@@ -33,16 +34,26 @@ input(type='hidden', name='announcementtypename', value=self.getAnnouncementType
         button#add-application.simple-gray-button Attach App
         button.simple-gray-button.file Attach File
             +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
-    each attachment in self.getAnnouncementAttachments()
+    each attachment in attachments
         div(data-id=attachment.getId(), data-url="viewurl").announcement-item.attachment
             +ActionLink('announcement', 'deleteAttachment', attachment.getId()).close-btn
             img(src=attachment.getThumbnailUrl())
             .title
                 div=attachment.getName()
-+Button()(
-    type="submit",
-    name="submitType",
-    value="submit"
-).special-button.blue-button.submit-btn Submit
+.bottom-block
+    +Button()(
+        type="submit",
+        name="submitType",
+        value="submit"
+    ).special-button.blue-button.submit-btn=(self.getState() ? "Save" : "Submit")
+    if self.getState()
+        +ActionLink('announcement', 'delete', self.getId())
+            +Button()(
+                type="submit",
+                name="submitType",
+                value="submit"
+            ).special-button.red-button.submit-btn Delete
+    else
+        +ActionLink('announcement', 'discard', self.getId()).grey-link Discard
 
 

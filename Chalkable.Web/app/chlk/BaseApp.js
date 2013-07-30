@@ -21,11 +21,27 @@ REQUIRE('chlk.models.common.Role');
 
 NAMESPACE('chlk', function (){
 
+    var logonShowed = false;
+
     new ria.dom.Dom().on('click', '.action-bar .action-button:not(.pressed), .action-bar .action-link:not(.pressed)', function(node, event){
         node.parent('.action-bar')
             .find('.pressed')
             .removeClass('pressed');
         node.addClass('pressed');
+    });
+
+    new ria.dom.Dom('.logout-area').on('click', function(node, event){
+        var elem = node.parent().find('a');
+        if(!logonShowed){
+            elem.setCss("visibility", "visible")
+                .setCss("opacity", 1);
+        }else{
+            elem.setCss("opacity", 0);
+            setTimeout(function(){
+                elem.setCss("visibility", "hidden");
+            }, 200);
+        }
+        logonShowed = !logonShowed;
     });
 
     /** @class chlk.BaseApp */

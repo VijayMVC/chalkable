@@ -9,6 +9,7 @@ REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.StudentAnnouncementId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
+REQUIRE('chlk.models.announcement.Reminder');
 
 
 NAMESPACE('chlk.models.announcement', function () {
@@ -27,6 +28,9 @@ NAMESPACE('chlk.models.announcement', function () {
 
             [ria.serialize.SerializeProperty('announcementattachments')],
             ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
+
+            [ria.serialize.SerializeProperty('announcementreminders')],
+            ArrayOf(chlk.models.announcement.Reminder), 'announcementReminders',
 
             [ria.serialize.SerializeProperty('announcementtypeid')],
             Number, 'announcementTypeId', // make enum
@@ -50,6 +54,9 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('attachmentsummary')],
             Number, 'attachmentsSummary',
 
+            [ria.serialize.SerializeProperty('autogradeapps')],
+            ArrayOf(String), 'autoGradeApps',
+
             Number, 'avg',
 
             [ria.serialize.SerializeProperty('avgnumeric')],
@@ -64,6 +71,10 @@ NAMESPACE('chlk.models.announcement', function () {
 
             [ria.serialize.SerializeProperty('expiresdate')],
             chlk.models.common.ChlkDate, 'expiresDate',
+
+            String, 'expiresDateColor',
+
+            String, 'expiresDateText',
 
             chlk.models.id.ClassId, 'classId',
 

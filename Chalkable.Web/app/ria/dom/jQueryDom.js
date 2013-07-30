@@ -140,7 +140,7 @@ NAMESPACE('ria.dom', function () {
             OVERRIDE, SELF, function descendants(selector__) {},
             [[String]],
             OVERRIDE, SELF, function parent(selector_) {
-                return new ria.dom.Dom(this._dom.parents(selector_));
+                return selector_ ? new ria.dom.Dom(this._dom.parents(selector_)) : new ria.dom.Dom(this._dom.parent());
             },
             [[String]],
             OVERRIDE, SELF, function next(selector_) {},

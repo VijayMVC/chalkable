@@ -1,4 +1,5 @@
 REQUIRE('chlk.models.class.ClassForTopBar');
+REQUIRE('chlk.models.id.ClassId');
 
 NAMESPACE('chlk.models.class', function () {
     "use strict";
@@ -10,7 +11,7 @@ NAMESPACE('chlk.models.class', function () {
     CLASS(
         'ClassesForTopBar', [
             ArrayOf(chlk.models.class.ClassForTopBar), 'topItems',
-            chlk.models.class.ClassId, 'selectedItemId',
+            chlk.models.id.ClassId, 'selectedItemId',
             Boolean, 'disabled'
         ]);
 });

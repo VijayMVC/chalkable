@@ -22,7 +22,7 @@ NAMESPACE('chlk.services', function () {
         'AnnouncementService', EXTENDS(chlk.services.BaseService), [
             [[Number]],
             ria.async.Future, function getAnnouncements(pageIndex_) {
-                return this.getPaginatedList('chalkable2/app/data/feed.json', chlk.models.announcement.Announcement, {
+                return this.getPaginatedList('Feed/List.json', chlk.models.announcement.Announcement, {
                     start: pageIndex_|0
                 });
             },
@@ -36,14 +36,14 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AttachmentId, Object]],
             ria.async.Future, function deleteAttachment(attachmentId) {
-                return this.get('AnnouncementAttachment/DeleteAttachment', chlk.models.announcement.Announcement, {
+                return this.get('AnnouncementAttachment/DeleteAttachment.json', chlk.models.announcement.Announcement, {
                     announcementAttachmentId: attachmentId.valueOf()
                 });
             },
 
             [[chlk.models.id.ClassId, Number]],
             ria.async.Future, function addAnnouncement(classId_, announcementTypeId_) {
-                return this.get('chalkable2/app/data/Create.json', chlk.models.announcement.AnnouncementForm, {
+                return this.get('Announcement/Create.json', chlk.models.announcement.AnnouncementForm, {
                     classId: classId_ ? classId_.valueOf() : null,
                     announcementTypeRef: announcementTypeId_
                 });
@@ -81,7 +81,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId, Number, chlk.models.id.SchoolPersonId]],
             ria.async.Future, function listLast(classId, announcementTypeId, schoolPersonId) {
-                return this.get('chalkable2/app/data/listlast.json', ArrayOf(String), {
+                return this.get('Announcement/ListLast.json', ArrayOf(String), {
                     classId: classId.valueOf(),
                     announcementTypeRef: announcementTypeId,
                     schoolPersonId: schoolPersonId.valueOf()
@@ -90,30 +90,38 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
             ria.async.Future, function listForMonth(classId_, date_) {
-                return this.get('app/data/calendarMonth.json', ArrayOf(chlk.models.calendar.announcement.Day), {
+                return this.get('chalkable2/app/data/calendarMonth.json', ArrayOf(chlk.models.calendar.announcement.Day), {
                     //classId: classId_.valueOf(),
                     //date: date_.getDate()
                 });
             },
 
 
-            [[chlk.models.id.AnnouncementId, String]],
-            ria.async.Future, function updateAnnouncement(id, name) {
-                return this.post('chalkable2/app/data/edit.json', chlk.models.announcement.Announcement, {
+            [[chlk.models.id.AnnouncementId]],
+            ria.async.Future, function editAnnouncement(id) {
+                return this.get('chalkable2/app/data/edit.json', chlk.models.announcement.AnnouncementForm, {
                     announcementId: id.valueOf()
                 });
             },
 
             [[chlk.models.id.AnnouncementId]],
-            ria.async.Future, function removeAnnouncement(id) {
+            ria.async.Future, function deleteAnnouncement(id) {
                 return this.post('Announcement/Delete.json', chlk.models.announcement.Announcement, {
                     announcementId: id.valueOf()
                 });
             },
+
+            [[chlk.models.id.SchoolPersonId]],
+            ria.async.Future, function deleteDrafts(id) {
+                return this.post('Announcement/DeleteDrafts.json', chlk.models.announcement.Announcement, {
+                    schoolPersonId: id.valueOf()
+                });
+            },
+
             [[chlk.models.id.AnnouncementId]],
             ria.async.Future, function getAnnouncement(id) {
-                return this.post('Announcement/Info.json', chlk.models.announcement.Announcement, {
-                    announcementId: id.valueOf()
+                return this.get('chalkable2/app/data/annInfo.json', chlk.models.announcement.Announcement, {
+                    id: id.valueOf()
                 });
             }
         ])

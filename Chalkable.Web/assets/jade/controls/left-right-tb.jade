@@ -5,8 +5,8 @@ mixin LeftRightToolbar(data, tplClass)
         .first-container
             .second-container
                 each item,i in data
-                    -configs.pressAfterClick && item.setPressed(configs.selectedItemId == item.getId().valueOf());
-                    -configs.disabled && item.setDisabled(true);
+                    -item.setPressed && item.setPressed(configs.selectedItemId == item.getId().valueOf());
+                    -item.setDisabled && item.setDisabled(!configs.pressAfterClick);
                     -item.setIndex && item.setIndex(i);
                     +RenderWith(item, tplClass)
         .A(class=configs.disableNextButton ? configs.disabledClass : "").next-button.arrow

@@ -39,11 +39,13 @@ namespace Chalkable.Web.Controllers
         
         public ActionResult SysAdmin()
         {
+            ViewData["FullName"] = ControllerContext.HttpContext.User.Identity.Name;
             return View();
         }
 
         public ActionResult Teacher()
         {
+            ViewData["FullName"] = ControllerContext.HttpContext.User.Identity.Name;
             return View();
         }
 

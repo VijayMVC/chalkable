@@ -69,6 +69,12 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.common.ChlkDate, 'expiresDate',
 
             [ria.templates.ModelPropertyBind],
+            String, 'expiresDateColor',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'expiresDateText',
+
+            [ria.templates.ModelPropertyBind],
             Boolean, 'gradable',
 
             [ria.templates.ModelPropertyBind],
@@ -126,7 +132,10 @@ NAMESPACE('chlk.templates.announcement', function () {
             Number, 'stateTyped',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.StudentAnnouncementId, 'studentannouncementid',
+            chlk.models.id.StudentAnnouncementId, 'studentAnnouncementId',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.StudentAnnouncements, 'studentAnnouncements',
 
             [ria.templates.ModelPropertyBind],
             Number, 'studentsCount',
