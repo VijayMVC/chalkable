@@ -44,21 +44,21 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.SchoolId]],
             ria.async.Future, function getDetails(schoolId) {
-                return this.get('data/schoolDetails.json', chlk.models.school.SchoolDetails, {
+                return this.get('chalkable2/data/schoolDetails.json', chlk.models.school.SchoolDetails, {
                     schoolId: schoolId.valueOf()
                 });
             },
 
             [[chlk.models.id.SchoolId]],
             ria.async.Future, function getSisInfo(schoolId) {
-                return this.get('data/schoolSisInfo.json', chlk.models.school.SchoolSisInfo, {
+                return this.get('chalkable2/data/schoolSisInfo.json', chlk.models.school.SchoolSisInfo, {
                     schoolId: schoolId.valueOf()
                 });
             },
 
             [[chlk.models.id.SchoolId]],
             ria.async.Future, function getPeopleSummary(schoolId) {
-                return this.get('data/peopleSummary.json', chlk.models.school.SchoolPeopleSummary, {
+                return this.get('chalkable2/data/peopleSummary.json', chlk.models.school.SchoolPeopleSummary, {
                     schoolId: schoolId.valueOf()
                 });
             },

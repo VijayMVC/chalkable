@@ -19,6 +19,8 @@ NAMESPACE('chlk.templates.class', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'pressed',
             [ria.templates.ModelPropertyBind],
+            Boolean, 'disabled',
+            [ria.templates.ModelPropertyBind],
             Number, 'index'
         ])
 });

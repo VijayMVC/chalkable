@@ -16,8 +16,8 @@ NAMESPACE('chlk', function (){
             OVERRIDE, ria.mvc.Dispatcher, function initDispatcher_() {
                 var dispatcher = BASE();
 
-                dispatcher.setDefaultControllerId('calendar');
-                dispatcher.setDefaultControllerAction('month');
+                dispatcher.setDefaultControllerId('feed');
+                dispatcher.setDefaultControllerAction('list');
                 return dispatcher;
             },
 

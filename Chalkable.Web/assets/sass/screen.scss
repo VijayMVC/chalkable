@@ -101,6 +101,11 @@ h1,h2,h3,h4,h5,h6,strong {
   src: url(fonts/HelveticaNeue-CondensedBold.ttf);
 }
 
+html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, p, blockquote, th, td {
+  margin: 0;
+  padding: 0;
+}
+
 .clear{clear:both;}
 
 .left{
@@ -130,6 +135,13 @@ a, a:visited, a:link {
 a:active, a:hover {
   color: lighten($link-color, 10%);
   outline: none !important;
+}
+
+a.grey-link, .grey-link{
+  font: normal 13px "Helvetica Neue";
+  font-style: italic;
+  text-decoration: underline;
+  color: #797979;
 }
 
 HTML {

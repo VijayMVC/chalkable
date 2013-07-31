@@ -17,7 +17,7 @@ NAMESPACE('chlk.controls', function () {
                 attrs.id = attrs.id || ria.dom.NewGID();
                 attrs.name = name;
                 if (typeof value !== 'undefined')
-                    attrs.value = value.toString('/');
+                    attrs.value = value.format('mm/dd/yy');
 
                 var options = attrs['data-options'];
                 this.queueReanimation_(attrs.id, options);

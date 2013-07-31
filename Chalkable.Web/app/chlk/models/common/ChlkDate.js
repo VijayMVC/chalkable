@@ -1,5 +1,18 @@
 REQUIRE('ria.serialize.IDeserializable');
 
+function getDate(str,a,b){
+    if(typeof str == "string" && str.length == 10 ){
+        return new Date(str.replace(/-/g, '/'));
+    }
+    else{
+        return str ? ( a !== undefined && b !== undefined ? new Date(str,a,b) : new Date(str))  : (new Date());
+    }
+}
+
+function formatDate(date, format){
+    return $.datepicker.formatDate(format, date || getDate());
+}
+
 NAMESPACE('chlk.models.common', function () {
     "use strict";
     /** @class chlk.models.common.ChlkDate*/
@@ -9,21 +22,17 @@ NAMESPACE('chlk.models.common', function () {
             Date, 'date',
 
             [[String]],
-            String, function toString(joinBy_){
-                var dateVal = this.getDate() || new Date();
-                return this.toChalkableDate(dateVal, joinBy_);
+            String, function toString(format_){
+                return this.format(format_ || 'mm-dd-yy');
             },
 
-            [[Date, String]],
-            String, function toChalkableDate(date, joinBy_) {
-                var m = date.getMonth() + 1;
-                var d = date.getDate();
-                var joinBy = joinBy_ || '-';
-                return [date.getFullYear(), (m < 10 ? ('0' + m) : m), (d < 10 ? ('0' + d) : d)].join(joinBy);
+            [[String]],
+            String, function format(format){
+                return $.datepicker.formatDate(format, this.getDate() || getDate());
             },
 
             VOID, function deserialize(raw) {
-                var date = raw ? new Date(raw.replace(/-/g, '/')) : new Date();
+                var date = raw ? getDate(raw) : getDate();
                 this.setDate(date);
             }
         ]);
