@@ -228,6 +228,7 @@ namespace Chalkable.Web.Controllers
         private void PrepareClassesAdvancedData(IEnumerable<ClassDetails> classDetailses, MarkingPeriod mp, bool getAllAnnouncementTypes)
         {
             var classesAdvancedData = new List<object>();
+            classDetailses = classDetailses.Where(x => x.MarkingPeriodClasses.Any(y => y.MarkingPeriodRef == mp.Id));
             foreach (var classDetails in classDetailses)
             {
                 Guid classId = classDetails.Id;
