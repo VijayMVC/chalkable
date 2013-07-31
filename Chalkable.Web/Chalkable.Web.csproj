@@ -200,6 +200,7 @@
     <Compile Include="Models\AnnouncementsViewData\AnnouncementDetailedViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementGradeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementPeriodViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\AnnouncementsClassPeriodViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementShortViewData.cs" />
     <Compile Include="Models\AnnouncementTypeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementViewData.cs" />
@@ -212,8 +213,9 @@
     <Compile Include="Models\BackgroundTaskViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\BaseApplicationViewData.cs" />
     <Compile Include="Models\Binders\DateTimeBinder.cs" />
-    <Compile Include="Models\CalendarsViewData\AdminAnnouncementDayCalendarViewData.cs" />
+    <Compile Include="Models\CalendarsViewData\AdminDayCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\AnnouncementCalendarWeekViewData.cs" />
+    <Compile Include="Models\CalendarsViewData\AnnouncementDayCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\AnnouncementMonthCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\AttendanceCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\DisciplineCalendarViewData.cs" />
@@ -230,6 +232,7 @@
     <Compile Include="Models\ClassesViewData\ClassAppsViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassGradingViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassInfoViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassScheduleViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassSummaryViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassTitlesViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassViewData.cs" />

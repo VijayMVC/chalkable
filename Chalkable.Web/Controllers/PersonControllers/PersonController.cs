@@ -52,6 +52,14 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var res = PersonAppsViewData.Create(person, reserve, balance, instaledApps, appsInstalls);
             return Json(res, 5);
         }
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult Schedule(Guid personId)
+        {
+            var person = SchoolLocator.PersonService.GetPerson(personId);
+            var schoolYearId = GetCurrentSchoolYearId();
+            var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, null, personId);
+            return Json(PersonScheduleViewData.Create(person, classes));
+        } 
 
 
         private const string addressIdFmt = "address-{0}-id";

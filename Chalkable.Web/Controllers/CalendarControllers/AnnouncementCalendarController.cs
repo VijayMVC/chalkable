@@ -9,6 +9,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -89,6 +90,57 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              }
              return Json(res, 6);
          }
+
+         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_ANNOUNCEMENT_DAY, true, CallType.Get, new[] { AppPermissionType.Schedule })]
+         public ActionResult Day(DateTime? date, Guid? schoolPersonId)
+         {
+             DateTime start, end;
+             WeekCalendar(ref date, out start, out end);
+             return Json(BuildDayAnnCalendar(SchoolLocator, date, null, schoolPersonId, GetCurrentSchoolYearId()));
+         }
+
+         public static IList<AnnouncementDayCalendarViewData> BuildDayAnnCalendar(IServiceLocatorSchool locator, DateTime? date, 
+             Guid? classId, Guid? personId, Guid schoolYearId)
+         {
+
+             DateTime start, end;
+             WeekCalendar(ref date, out start, out end, locator.Context);
+             var res = new List<AnnouncementDayCalendarViewData>();
+             Guid? teacherId, studentId;
+             PreperingUsersIdsForCalendar(locator, personId, out teacherId, out studentId);
+
+             IList<ClassDetails> classes = new List<ClassDetails>();
+             if (classId.HasValue)
+                 classes.Add(locator.ClassService.GetClassById(classId.Value));
+             else
+                 classes = locator.ClassService.GetClasses(null, null, teacherId ?? studentId);
+
+             var rooms = locator.RoomService.GetRooms();
+             IList<AnnouncementComplex> announcements = locator.AnnouncementService.GetAnnouncements(start, end, false, null, classId);
+             IList<ClassPeriod> classPeriods = new List<ClassPeriod>();
+             IList<Period> periods = new List<Period>();
+             Guid? prevMpId = null;
+             var days = locator.CalendarDateService.GetLastDays(schoolYearId, false, start, end);
+             foreach (var d in days)
+             {
+                 if (d.MarkingPeriodRef.HasValue && d.ScheduleSectionRef.HasValue)
+                 {
+                     if (d.MarkingPeriodRef != prevMpId)
+                     {
+                         classPeriods = locator.ClassPeriodService.GetClassPeriods(d.MarkingPeriodRef.Value, classId, null, null, null, studentId, teacherId);
+                         periods = locator.PeriodService.GetPeriods(d.MarkingPeriodRef.Value, null);
+                         prevMpId = d.MarkingPeriodRef;
+                     }
+                     var currentDayAnns = announcements.Where(x => x.Expires.Date == d.DateTime).ToList();
+                     var currentDayPeriods = periods.Where(x => x.SectionRef == d.ScheduleSectionRef).ToList();
+                     var currentDayClassPeriods = classPeriods.Where(x => currentDayPeriods.Any(y => y.Id == x.PeriodRef)).ToList();
+                     res.Add(AnnouncementDayCalendarViewData.Create(currentDayPeriods, d.DateTime, currentDayClassPeriods, classes, currentDayAnns, rooms));
+                 }
+                 else res.Add(AnnouncementDayCalendarViewData.Create(null, d.DateTime, null, null, null, null));
+             }
+             return res;
+         } 
+
 
          private static void PreperingUsersIdsForCalendar(IServiceLocatorSchool locator, Guid? personId, out Guid? teacherId, out Guid? studentId)
          {

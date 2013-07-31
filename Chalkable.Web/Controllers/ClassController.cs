@@ -12,6 +12,7 @@ using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Controllers.CalendarControllers;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.CalendarsViewData;
 using Chalkable.Web.Models.ClassesViewData;
@@ -92,7 +93,6 @@ namespace Chalkable.Web.Controllers
                 , disciplines, disciplineTypes, gradePerMps));
         }
 
-
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult ClassGrading(Guid classId)
         {
@@ -100,6 +100,14 @@ namespace Chalkable.Web.Controllers
             var canCreateItem = SchoolLocator.Context.UserId == classData.TeacherRef;
             var gradingPerMp = ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), null, null, canCreateItem);
             return Json(ClassGradingViewData.Create(classData, gradingPerMp), 8);
+        }
+
+        [AuthorizationFilter("System Admin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult ClassSchedule(Guid classId, DateTime? day)
+        {
+            var clazz = SchoolLocator.ClassService.GetClassById(classId);
+            var schedule = AnnouncementCalendarController.BuildDayAnnCalendar(SchoolLocator, day, classId, null, GetCurrentSchoolYearId());
+            return Json(ClassScheduleViewData.Create(clazz, schedule), 7);
         }
 
         [AuthorizationFilter("System Admin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
