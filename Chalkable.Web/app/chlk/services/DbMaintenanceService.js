@@ -20,7 +20,7 @@ NAMESPACE('chlk.services', function () {
 
             [[String, String]],
             ria.async.Future, function databaseUpdate(masterSql, schoolSql) {
-                return this.get('chalkable2/app/data/blobs.json', chlk.models.Success, {
+                return this.get('DbMaintenance/DatabaseUpdate.json', chlk.models.Success, {
                     masterSql: masterSql,
                     schoolSql: schoolSql
                 });

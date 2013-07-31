@@ -4,13 +4,13 @@
             .left
                 +ActionLink('dbmaintenance', 'listBackups') Backups
                 +ActionLink('dbmaintenance', 'updateDb').pressed Update
-    +ActionForm('schools', 'addSchool').db-update-form
+    +ActionForm('dbmaintenance', 'runSql').db-update-form
         .x-form-field
             label Master Update
-            textarea#masterSql
+            textarea(name="masterSql")
         .x-form-field
             label School Update
-            textarea#schoolSql
+            textarea(name="schoolSql")
         +Button(type="submit").special-button.blue-button.submit-btn RUN
 
 

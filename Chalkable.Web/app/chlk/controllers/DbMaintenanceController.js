@@ -24,6 +24,11 @@ NAMESPACE('chlk.controllers', function (){
             function updateDbAction(model_){
                 model_ = model_ || new chlk.models.storage.DatabaseUpdate;
                 return this.PushView(chlk.activities.storage.DatabaseUpdatePage, new ria.async.DeferredData(model_));
+            },
+
+            [[chlk.models.storage.DatabaseUpdate]],
+            function runSqlAction(model){
+                this.dbMaintenanceService.databaseUpdate(model.getMasterSql(), model.getSchoolSql());
             }
 
         ])
