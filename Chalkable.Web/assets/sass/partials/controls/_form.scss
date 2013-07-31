@@ -1,0 +1,26 @@
+@import "compass/css3/border-radius";
+@import "compass/css3/images";
+
+.formError{
+  font-size: 14px;
+  background: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  color: white;
+  word-wrap: break-word;
+  border: 1px solid black;
+  padding: 9px 12px 14px 14px;
+  font-weight: bold;
+  margin: 0 0 0 55px !important;
+
+  .formErrorArrow{
+    position: absolute;
+    left: -11px;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 10px solid rgba(0, 0, 0, 0.7);
+    top: 11px;
+    white-space: nowrap;
+  }
+}

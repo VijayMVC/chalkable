@@ -1,0 +1,26 @@
+.feed-container
+    -isNotStudent = true;
+    -console.info(self.items);
+    .action-bar.not-transparent
+        .container.panel-bg
+            .feed-notifications Notifications
+    +Grid('feed', 'page', self).not-transparent
+        +GridBody()
+            each item in self.items
+                .feed-item
+                    if isNotStudent
+                        .grades
+                    .bullet
+                        +ActionLink('announcement', 'star', item.getId()).star
+                        .item-type
+                            .tooltip-announcement.ann-type
+                                .tooltip-content
+                                    Tooltip
+                            .attachment
+                                .icon.blue.icon.announcements-type-7
+                                .icon.black
+                                h2.animated-header=item.getSubject()
+                                p.animated=item.getShortContent()
+                                .animated=item.getExpiresDate().toString('d/m/y')
+                                .attachment-icon
+                                .apps-icon
