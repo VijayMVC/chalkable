@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
@@ -98,6 +100,26 @@ namespace Chalkable.Web.Controllers
             var canCreateItem = SchoolLocator.Context.UserId == classData.TeacherRef;
             var gradingPerMp = ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), null, null, canCreateItem);
             return Json(ClassGradingViewData.Create(classData, gradingPerMp), 8);
+        }
+
+        [AuthorizationFilter("System Admin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult ClassApps(Guid classId)
+        {
+            var c = SchoolLocator.ClassService.GetClassById(classId);
+            if (!BaseSecurity.IsAdminViewerOrClassTeacher(c, Context))
+                return Json(ClassViewData.Create(c));
+            decimal balance = MasterLocator.FundService.GetClassBalance(classId);
+            var appInstallactions = SchoolLocator.AppMarketService.ListInstalledForClass(classId);
+            var applications = MasterLocator.ApplicationService.GetApplications(0, int.MaxValue, true);
+            decimal? reserve = null;
+            if (BaseSecurity.IsAdminViewer(Context))
+            {
+                if (!Context.SchoolId.HasValue)
+                    throw new UnassignedUserException();
+                reserve = MasterLocator.FundService.GetSchoolReserve(Context.SchoolId.Value);
+            }
+            //TODO: is not implemented for sysadmin.  do we need that?
+            return Json(ClassAppsViewData.Create(c, reserve, balance, appInstallactions, applications), 5);
         }
 
         public static List<int> BuildClassUsageMask(IServiceLocatorSchool locator, Guid classId, Guid markingPeriodId, string timeZoneId)

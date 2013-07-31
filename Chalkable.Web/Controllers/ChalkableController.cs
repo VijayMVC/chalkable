@@ -51,7 +51,7 @@ namespace Chalkable.Web.Controllers
         
         public IServiceLocatorMaster MasterLocator { get; protected set; }
         public IServiceLocatorSchool SchoolLocator { get; protected set; }
-        protected UserContext UserContex
+        protected UserContext Context
         {
             get
             {

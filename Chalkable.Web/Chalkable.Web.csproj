@@ -206,6 +206,7 @@
     <Compile Include="Models\ApplicationsViewData\ApplicationPersmissionsViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationPriceViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationRatingViewData.cs" />
+    <Compile Include="Models\ApplicationsViewData\InstalledApplicationViewData.cs" />
     <Compile Include="Models\AttendanceReasonViewData.cs" />
     <Compile Include="Models\BackgroundTaskLogViewData.cs" />
     <Compile Include="Models\BackgroundTaskViewData.cs" />
@@ -226,6 +227,7 @@
     <Compile Include="Models\ChalkableApiItemDescription.cs" />
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
     <Compile Include="Models\ClassAttendanceViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassAppsViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassGradingViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassInfoViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassSummaryViewData.cs" />
