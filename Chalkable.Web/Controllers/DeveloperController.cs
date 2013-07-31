@@ -70,7 +70,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult DeveloperInfo(Guid developerId)
         {
             var developer = MasterLocator.DeveloperService.GetDeveloperById(developerId);
-            return Json(DeveloperInfoViewData.Create(developer));
+            return Json(DeveloperViewData.Create(developer));
         }
 
 
@@ -87,7 +87,7 @@ namespace Chalkable.Web.Controllers
             //    MixPanelService.IdentifyDeveloper(developer.Email, developer.DisplayName,
             //        string.IsNullOrEmpty(timeZoneId) ? DateTime.UtcNow : DateTime.UtcNow.ConvertFromUtc(timeZoneId), timeZoneId, ip);
             //}
-            return Json(DeveloperInfoViewData.Create(res));
+            return Json(DeveloperViewData.Create(res));
         }
     }
 }

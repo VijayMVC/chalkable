@@ -14,6 +14,7 @@ using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Models;
+using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 using Chalkable.Web.Tools;
@@ -46,14 +47,46 @@ namespace Chalkable.Web.Controllers
             ChalkableAuthentication.SignOut();
             return Json(new { Success = true, UserName = userName }, JsonRequestBehavior.AllowGet);
         }
-        
+
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult SysAdmin()
         {
             return View();
         }
 
-        public ActionResult Developer()
+        private const string DEV_APP_INFO_URL = "applications/devAppInfo/";
+        private const string APPLICATION_NAME = "ApplicationName";
+        private const string APPLICATION = "Application";
+
+        [AuthorizationFilter("Developer")]
+        public ActionResult Developer(string prefDemoSchool, bool needsTour, Guid? currentApplicationId)
         {
+            var schoolId = MasterLocator.Context.SchoolId;
+            var timeZoneId = "";
+
+            if (string.IsNullOrEmpty(prefDemoSchool) && schoolId.HasValue)
+            {
+                var school = MasterLocator.SchoolService.GetById(schoolId.Value);
+                //prefDemoSchool = school.DemoPrefix;
+                timeZoneId = school.TimeZone;
+            }
+            var developer = MasterLocator.DeveloperService.GetDeveloperById(MasterLocator.Context.UserId);
+            PrepareJsonData(DeveloperViewData.Create(developer), CURRENT_PERSON_DATA);
+            var applications = MasterLocator.ApplicationService.GetApplications();
+            if (needsTour || applications.Count == 0)
+            {
+                ViewData[REDIRECT_URL_KEY] = DEV_APP_INFO_URL;
+            }
+            PrepareCommonViewData(prefDemoSchool);
+            if (applications.Count > 0)
+            {
+                var app = currentApplicationId.HasValue ? applications.First(x => x.Id == currentApplicationId)
+                                                        : applications.Last(x => x.State != ApplicationStateEnum.Live);
+                app = MasterLocator.ApplicationService.GetApplicationById(app.Id);
+                var res = ApplicationController.PrepareAppInfo(MasterLocator, app, true, true);
+                PrepareJsonData(res, APPLICATION, 6);
+            }
+            //TODO: mix panel
             return View();
         }
 
@@ -61,13 +94,9 @@ namespace Chalkable.Web.Controllers
         public ActionResult Teacher()
         {
             var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
-            PrepareCommonViewData(mp);
             PrepareTeacherJsonData(mp, false);
             return View();
         }
-
-        
-
 
         private const string CLASSES_DATA = "Classes";
         private const string CLASSES_ADV_DATA = "ClassesAdvancedData";
@@ -89,9 +118,8 @@ namespace Chalkable.Web.Controllers
         private const string CROCODOC_API_URL = "CrocodocApiUrl";
 
         private const string UNSHOWN_NOTIFICATIONS_COUNT = "UnshownNotificationsCount";
-
-
-
+        
+        private const string PREFIX = "PrefixDemoSchool";
         private const string VERSION = "Version";
         private const string CONFIRM_REDIRECT_URL_FORMAT = "setup/hello/{0}";
         private const string CURR_SCHOOL_YEAR_ID = "CurrentSchoolYearId";
@@ -104,22 +132,18 @@ namespace Chalkable.Web.Controllers
         private const string SCHEDULE_URL = "schools/schedule/{0}";
         private const string ATTENDANCE_CLASS_LIST_URL = "attendances/class-list/{0}";
 
-        private void PrepareCommonViewData(MarkingPeriod markingPeriod = null)
+        private void PrepareCommonViewData(string prefixDemoSchool = null, MarkingPeriod markingPeriod = null)
         {
-            var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.UserId);
-            PrepareJsonData(PersonViewData.Create(person), CURRENT_PERSON_DATA);
-            
             //TODO: render data for demo school 
-            //if (!string.IsNullOrEmpty(prefDemoSchool))
-            //{
-            //    ViewData[STUDENT_ROLE] = CoreRoles.STUDENT_ROLE.Name;
-            //    ViewData[TEACHER_ROLE] = CoreRoles.TEACHER_ROLE.Name;
-            //    ViewData[ADMIN_GRADE_ROLE] = CoreRoles.ADMIN_GRADE_ROLE.Name;
-            //    ViewData[ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
-            //    ViewData[ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
-            //    //ViewData[PREFIX] = prefDemoSchool;
-
-            //}
+            if (!string.IsNullOrEmpty(prefixDemoSchool))
+            {
+                ViewData[STUDENT_ROLE] = CoreRoles.STUDENT_ROLE.Name;
+                ViewData[TEACHER_ROLE] = CoreRoles.TEACHER_ROLE.Name;
+                ViewData[ADMIN_GRADE_ROLE] = CoreRoles.ADMIN_GRADE_ROLE.Name;
+                ViewData[ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
+                ViewData[ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
+                ViewData[PREFIX] = prefixDemoSchool;
+            }
             //if (schoolId != null)
             //{
             //    var currentSchool = ServiceLocator.SchoolService.GetById(schoolId.Value);
@@ -153,6 +177,10 @@ namespace Chalkable.Web.Controllers
         
         private void PrepareTeacherJsonData(MarkingPeriod mp, bool getAllAnnouncementTypes)
         {
+            var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.UserId);
+            var personView = PersonViewData.Create(person);
+            personView.DisplayName = person.ShortSalutationName;
+            PrepareJsonData(personView, CURRENT_PERSON_DATA);
             var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, SchoolLocator.Context.UserId);
             var now = SchoolLocator.Context.NowSchoolTime;
             if (classes.Count > 0)
@@ -191,6 +219,7 @@ namespace Chalkable.Web.Controllers
             var executionResult = classes.Select(ClassViewData.Create).ToList();
             PrepareJsonData(executionResult, CLASSES_DATA);
             PrepareClassesAdvancedData(classes, mp, getAllAnnouncementTypes);
+            PrepareCommonViewData(null, mp);
             PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ATTENDANCE_REASONS_DATA);
         }
 

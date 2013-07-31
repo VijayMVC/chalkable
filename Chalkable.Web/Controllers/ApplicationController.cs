@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
@@ -142,7 +143,14 @@ namespace Chalkable.Web.Controllers
 
 
         private const string contentType = "text/html";
+
+
         private ActionResult PrepareAppInfo(Application application, bool needsliveApp = false)
+        {
+            return Json(PrepareAppInfo(MasterLocator, application, needsliveApp), contentType);
+        }
+        public static ApplicationViewData PrepareAppInfo(IServiceLocatorMaster locator, Application application, 
+            bool needsliveApp = false, bool needsSecretKey = false)
         {
             var roles = new List<CoreRole>
                 {
@@ -152,14 +160,17 @@ namespace Chalkable.Web.Controllers
                     CoreRoles.TEACHER_ROLE,
                     CoreRoles.STUDENT_ROLE,
                 };
-            var categories = MasterLocator.CategoryService.ListCategories();
-            var res = ApplicationViewData.Create(application, roles, categories);
+            bool cangetSecretKey = false;
+            if (needsSecretKey)
+                cangetSecretKey = locator.ApplicationService.CanGetSecretKey(new List<Application> {application});
+            var categories = locator.CategoryService.ListCategories();
+            var res = ApplicationViewData.Create(application, roles, categories, cangetSecretKey);
             if (needsliveApp && application.OriginalRef.HasValue)
             {
-                var liveApp = MasterLocator.ApplicationService.GetApplicationById(application.Id);
-                res.LiveApplication = ApplicationViewData.Create(liveApp, roles, categories);
+                var liveApp = locator.ApplicationService.GetApplicationById(application.Id);
+                res.LiveApplication = ApplicationViewData.Create(liveApp, roles, categories, cangetSecretKey);
             }
-            return Json(res, contentType);
+            return res;
         }
     }
 }

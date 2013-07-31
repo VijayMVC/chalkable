@@ -58,13 +58,11 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             LiveAppId = application.OriginalRef;
             IsInternal = application.IsInternal;
             Picturesid = application.Pictures.Select(x => x.Id).ToList();
-    
         }
 
         public static IList<BaseApplicationViewData> Create(IList<Application> applications)
         {
             return applications.Select(x=>new BaseApplicationViewData(x)).ToList();
-
         }
     }
 
@@ -79,15 +77,17 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public DeveloperViewData Developer { get; set; }
         public BaseApplicationViewData LiveApplication { get; set; }
 
-        protected ApplicationViewData(Application application): base(application)
+        protected ApplicationViewData(Application application, bool canGetSecretKey): base(application)
         {
             Developer = DeveloperViewData.Create(application.Developer);
             Permissions = ApplicationPersmissionsViewData.Create(application.Permissions);
+            if (canGetSecretKey)
+                SecretKey = application.SecretKey;
         }
 
-        public static ApplicationViewData Create(Application application, IList<CoreRole> roles, IList<Category> categories)
+        public static ApplicationViewData Create(Application application, IList<CoreRole> roles, IList<Category> categories, bool canGetSecretKey = false)
         {
-            var res = new ApplicationViewData(application);
+            var res = new ApplicationViewData(application, canGetSecretKey);
             categories = categories.Where(x => application.Categories.Any(y => y.CategoryRef == x.Id)).ToList();
             res.Categories = CategoryViewData.Create(categories);
             return res;

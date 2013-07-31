@@ -235,7 +235,6 @@
     <Compile Include="Models\CourseViewData.cs" />
     <Compile Include="Models\CreateAnnouncementViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
-    <Compile Include="Models\DeveloperInfoViewData.cs" />
     <Compile Include="Models\DeveloperViewData.cs" />
     <Compile Include="Models\DisciplineTypeViewData.cs" />
     <Compile Include="Models\DisciplineView.cs" />
