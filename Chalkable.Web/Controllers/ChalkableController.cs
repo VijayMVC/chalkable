@@ -90,10 +90,14 @@ namespace Chalkable.Web.Controllers
             {
                 context = chalkablePrincipal.Context;
             }
+            InitServiceLocators(context);
+        }
+
+        private void InitServiceLocators(UserContext context)
+        {
             SchoolLocator = ServiceLocatorFactory.CreateSchoolLocator(context);
             MasterLocator = SchoolLocator.ServiceLocatorMaster;
         }
-
         
         public RedirectToRouteResult Redirect<T>(Expression<Action<T>> action) where T : Controller
         {
@@ -133,6 +137,18 @@ namespace Chalkable.Web.Controllers
             }
         }
 
+        protected ActionResult Confirm(string key, Func<UserContext, ActionResult> redirectAction)
+        {
+            var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
+            var userContext = serviceLocator.UserService.Login(key);
+            if (userContext != null)
+            {
+                ChalkableAuthentication.SignIn(userContext, false);
+                InitServiceLocators(userContext);
+                return redirectAction(userContext);
+            }
+            return Redirect<HomeController>(c => c.Index());
+        }
 
     }
 }

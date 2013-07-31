@@ -14,7 +14,6 @@ using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Models;
-using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 using Chalkable.Web.Tools;
@@ -46,6 +45,23 @@ namespace Chalkable.Web.Controllers
             var userName = ControllerContext.HttpContext.User.Identity.Name;
             ChalkableAuthentication.SignOut();
             return Json(new { Success = true, UserName = userName }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult Confirm(string key)
+        {
+            return Confirm(key, AfterConfirmAction);
+        }
+        private ActionResult AfterConfirmAction(UserContext context)
+        {
+            //TODO: create default Announcement for teacher
+            SchoolLocator.PersonService.ActivatePerson(context.UserId);
+            //TODO: mix panel 
+            if(context.Role == CoreRoles.SUPER_ADMIN_ROLE)
+                return Redirect<HomeController>(x => x.SysAdmin());
+            if (context.Role == CoreRoles.TEACHER_ROLE)
+                return Redirect<HomeController>(x => x.Teacher());
+            return Redirect<HomeController>(c => c.Index());
         }
 
         [AuthorizationFilter("SysAdmin")]
@@ -87,6 +103,7 @@ namespace Chalkable.Web.Controllers
             return View();
         }
 
+        
         private const string CLASSES_DATA = "Classes";
         private const string CLASSES_ADV_DATA = "ClassesAdvancedData";
         private const string CURRENT_PERSON_DATA = "CurrentPerson";

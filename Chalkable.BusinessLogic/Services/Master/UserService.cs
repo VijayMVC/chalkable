@@ -50,10 +50,18 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
         public UserContext Login(string confirmationKey)
         {
-            using (var uow = Read())
+            using (var uow = Update())
             {
-                var user = new UserDataAccess(uow).GetUser(confirmationKey);
-                return Login(user, uow);
+                var da = new UserDataAccess(uow);
+                var user = da.GetUser(confirmationKey);
+                var res = Login(user, uow);
+                if (res != null)
+                {
+                    user.ConfirmationKey = null;
+                    da.Update(user);
+                }
+                uow.Commit();
+                return res;
             }
         }
 

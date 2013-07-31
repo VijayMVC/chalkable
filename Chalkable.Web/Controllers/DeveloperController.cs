@@ -94,14 +94,13 @@ namespace Chalkable.Web.Controllers
 
         public ActionResult Confirm(string key, Guid applicationId)
         {
-            var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var userContext = serviceLocator.UserService.Login(key);
-            if (userContext != null && userContext.Role == CoreRoles.DEVELOPER_ROLE)
-            {
-                ChalkableAuthentication.SignIn(userContext, false);
-                return Redirect<HomeController>(c => c.Developer(null, false, applicationId));
-            }
-            return Redirect<HomeController>(c => c.Index());
+            return Confirm(key, (context) => RedirectAction(context, applicationId));
+        }
+        private ActionResult RedirectAction(UserContext userContext, Guid applicationId)
+        {
+            if (userContext.Role == CoreRoles.DEVELOPER_ROLE)
+                return Redirect<HomeController>(x => x.Developer(null, false, applicationId));
+            return Redirect<HomeController>(x => x.Index());
         }
     }
 }

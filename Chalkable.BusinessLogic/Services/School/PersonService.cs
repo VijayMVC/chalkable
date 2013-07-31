@@ -24,6 +24,7 @@ namespace Chalkable.BusinessLogic.Services.School
         //PaginatedList<Person> GetPersons(int? roleId, Guid? classId, IList<Guid> gradeLevelId, string filter, SortTypeEnum sortType = SortTypeEnum.ByLastName, int start = 0, int count = int.MaxValue); 
         Person GetPerson(Guid id);
         PersonDetails GetPersonDetails(Guid id);
+        void ActivatePerson(Guid id);
     }
 
     public class PersonService : SchoolServiceBase, IPersonService
@@ -193,6 +194,23 @@ namespace Chalkable.BusinessLogic.Services.School
             res.BirthDate = birthDate;
             dataAccess.Update(res);
             return res;
+        }
+
+
+        public void ActivatePerson(Guid id)
+        {
+            if(BaseSecurity.IsAdminEditorOrCurrentPerson(id, Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                var da = new PersonDataAccess(uow);
+                var person = GetPerson(id);
+                //TODO: change school status 
+                person.Active = true;
+                person.FirstLoginDate = Context.NowSchoolTime;
+                da.Update(person);
+                uow.Commit();
+            }
         }
     }
 }
