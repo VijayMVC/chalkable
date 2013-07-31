@@ -13,6 +13,7 @@ REQUIRE('chlk.controllers.FundsController');
 REQUIRE('chlk.controllers.DepartmentsController');
 REQUIRE('chlk.controllers.DbMaintenanceController');
 
+
 NAMESPACE('chlk', function (){
 
     /** @class chlk.SysAdminApp */

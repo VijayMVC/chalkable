@@ -1,8 +1,8 @@
 BUTTON(
     classId=self.getId(),
     index=self.getIndex(),
-    class=self.isPressed() ? "pressed" : "",
-    type="submit",
+    class=self.isPressed() ? "pressed " : "",
+    type=self.isDisabled() ? "button" : "submit",
     name="submitType",
     value="save"
 ).item.class-button.validate-skip

@@ -1,4 +1,5 @@
 REQUIRE('chlk.models.class.ClassForTopBar');
+REQUIRE('chlk.models.gradingStyles.Mapping');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
 REQUIRE('chlk.models.id.CourseId');
 
@@ -29,6 +30,8 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('gradingstyle')],
             Number, 'gradingStyle',
 
-            ArrayOf(chlk.models.announcement.StudentAnnouncement), 'items'
+            ArrayOf(chlk.models.announcement.StudentAnnouncement), 'items',
+
+            chlk.models.gradingStyles.Mapping, 'mapping'
         ]);
 });

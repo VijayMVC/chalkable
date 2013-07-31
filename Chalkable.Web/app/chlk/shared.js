@@ -36,6 +36,107 @@ Object.extend = function(destination, source) {
   return destination;
 };
 
+function getNoNull(value){
+    return (value != null) ? value : '';
+}
+
+var GradingStyler = {
+
+    gradeLettersReverse: ['A+', 'A', 'A-','B+', 'B', 'B-','C+', 'C', 'C-','D+', 'D', 'D-','F' ],
+
+    getGradeLettersMap: function(){
+        if (!this.gradeLettersMap){
+            this.gradeLettersMap = {
+                'GradingAbcf': this.gradeLettersReverse.slice().reverse(),
+                'GradingCheck': ['C-', 'C', 'C+'],
+                'GradingComplete': ['Incomplete', 'Complete']
+            };
+        }
+        return this.gradeLettersMap;
+    },
+    getGradesOptions: function(mappings, gradingStyle){
+        var gradesOptions = '<option>';
+
+        var letters = this.getGradeLettersByGradingStyle(gradingStyle);
+
+        var mapping = mappings['get' + this.getGradingStyle(gradingStyle)];
+
+        for(var i = letters.length; i--;){
+            if(mapping[i] != -1){
+                gradesOptions = gradesOptions + '<option value="' + i + '">' + letters[i];
+            }
+        }
+        return gradesOptions;
+    },
+
+    getGradeValues: function(){
+        return [this.gradeLettersReverse, this.getGradeLettersMap()['complete'], this.getGradeLettersMap()['gradingcomplete']];
+    },
+
+    getLetterByGrade: function(grade, gradingMappings, gradingStyle){
+        if (grade == null || grade == undefined) return ' ';
+        if (gradingStyle == 0){
+            return getNoNull(grade);
+        } else {
+            var mapping = gradingMappings['get' + this.getGradingStyle(gradingStyle)]();
+            var gradeId = this.getGradeValueId(grade, mapping);
+            var letters = this.getGradeLettersByGradingStyle(gradingStyle);
+
+            return letters[gradeId];
+        }
+
+    },
+    getGradeLettersByGradingStyle: function(gradingStyle){
+        return this.getGradeLettersMap()[this.getGradingStyle(gradingStyle)];
+    },
+
+    getGradingStyle: function(gradingStyle){
+        var GradingStyleIds =
+        ['Numeric100', 'Abcf', 'Complete', 'Check'];
+
+        if (gradingStyle > 0 && gradingStyle < 4){
+            return 'Grading' + GradingStyleIds[gradingStyle];
+        }
+        return 'GradingAbcf';
+    },
+
+    getGradeValueId: function(value, mapping){
+        var res = -1;
+        for(var i = 0; i < mapping.length; i++){
+            if(value <= mapping[i]){
+                res = i;
+                break;
+            }
+        }
+        return res;
+    },
+
+    getGradeValue: function(value, gradingMappings, gradingStyle){
+        var mapping = gradingMappings['get' + this.getGradingStyle(gradingStyle)];
+        var res = -1;
+        for(var i = 0; i < mapping.length; i++){
+            if(value <= mapping[i]){
+                res = mapping[i];
+                break;
+            }
+        }
+        return res;
+    },
+
+    getGradeNumberValue: function (value, gradingMappings, gradingStyle){
+        var mapping = gradingMappings['get' + this.getGradingStyle(gradingStyle)];
+        return mapping[this.getGradeValueId(value, mapping)];
+    },
+
+    getFromMapped: function(gradingStyle, value){
+        if(gradingStyle){
+            return this.getGradeLettersByGradingStyle(gradingStyle)[value];
+        }else{
+            return value;
+        }
+    }
+};
+
 
 /*var logonShowed = false;
 

@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.bgtasks.BgTaskLog');
 REQUIRE('chlk.models.bgtasks.BgTask');
+REQUIRE('chlk.models.id.BgTaskId');
 
 NAMESPACE('chlk.models.bgtasks', function () {
     "use strict";

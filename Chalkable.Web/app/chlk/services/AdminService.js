@@ -12,7 +12,7 @@ NAMESPACE('chlk.services', function () {
         'AdminService', EXTENDS(chlk.services.BaseService), [
             [[chlk.models.id.SchoolId, Number, Number, Boolean, Number]],
             ria.async.Future, function getUsers(schoolId, roleId, gradeLevelId, byLastName, start) {
-                return this.getPaginatedList('app/data/people.json', chlk.models.people.User, {
+                return this.getPaginatedList('chalkable2/app/data/people.json', chlk.models.people.User, {
                     schoolId: schoolId.valueOf(),
                     start: start,
                     roleId: roleId,

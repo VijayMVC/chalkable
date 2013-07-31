@@ -171,7 +171,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.school.SchoolPeoplePage, result);
         },
 
-        [[Number]],
+        [[chlk.models.id.SchoolId]],
         VOID, function actionButtonsAction(id) {
             var result = ria.async.wait([
                 this.schoolService.getDetails(id)
