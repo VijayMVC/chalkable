@@ -67,6 +67,16 @@ namespace Chalkable.Data.Master.Model
         Live = 5,
     }
 
+    public enum AppMode
+    {
+        MyView,
+        View,
+        Edit,
+        GradingView,
+    }
+
+
+
     public class Developer
     {
         public const string ID_FIELD = "Id";
