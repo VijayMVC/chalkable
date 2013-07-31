@@ -23,12 +23,13 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('settings')],
             function dashboardAction() {
                 var dashboard = new chlk.models.settings.Dashboard();
+                dashboard.setDbMaintenanceVisible(true);
                 dashboard.setBackgroundTaskMonitorVisible(true);
                 dashboard.setStorageMonitorVisible(true);
                 dashboard.setPreferencesVisible(true);
                 dashboard.setAppCategoriesVisible(true);
                 dashboard.setDepartmentsVisible(true);
-                dashboard.setDbMaintenanceVisible(true);
+
                 return this.PushView(chlk.activities.settings.DashboardPage, ria.async.DeferredData(dashboard));
             },
 
