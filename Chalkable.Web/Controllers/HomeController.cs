@@ -54,22 +54,11 @@ namespace Chalkable.Web.Controllers
             return View();
         }
 
-        private const string DEV_APP_INFO_URL = "applications/devAppInfo/";
-        private const string APPLICATION_NAME = "ApplicationName";
-        private const string APPLICATION = "Application";
 
         [AuthorizationFilter("Developer")]
         public ActionResult Developer(string prefDemoSchool, bool needsTour, Guid? currentApplicationId)
         {
-            var schoolId = MasterLocator.Context.SchoolId;
-            var timeZoneId = "";
-
-            if (string.IsNullOrEmpty(prefDemoSchool) && schoolId.HasValue)
-            {
-                var school = MasterLocator.SchoolService.GetById(schoolId.Value);
-                //prefDemoSchool = school.DemoPrefix;
-                timeZoneId = school.TimeZone;
-            }
+            //TODO: get prefix from demo school
             var developer = MasterLocator.DeveloperService.GetDeveloperById(MasterLocator.Context.UserId);
             PrepareJsonData(DeveloperViewData.Create(developer), CURRENT_PERSON_DATA);
             var applications = MasterLocator.ApplicationService.GetApplications();
@@ -105,6 +94,8 @@ namespace Chalkable.Web.Controllers
         private const string NEXT_MARKING_PERIOD_DATA = "NextMarkingPeriod";
         private const string ATTENDANCE_REASONS_DATA = "AttendanceReasons";
 
+        private const string APPLICATION = "Application";
+
         private const string STUDENT_ROLE = "StudentRole";
         private const string TEACHER_ROLE = "TeacherRole";
         private const string ADMIN_GRADE_ROLE = "AdminGradeRole";
@@ -131,6 +122,8 @@ namespace Chalkable.Web.Controllers
         private const string SCHOOL_STATUS = "SchoolStatus";
         private const string SCHEDULE_URL = "schools/schedule/{0}";
         private const string ATTENDANCE_CLASS_LIST_URL = "attendances/class-list/{0}";
+        private const string DEV_APP_INFO_URL = "applications/devAppInfo/";
+
 
         private void PrepareCommonViewData(string prefixDemoSchool = null, MarkingPeriod markingPeriod = null)
         {

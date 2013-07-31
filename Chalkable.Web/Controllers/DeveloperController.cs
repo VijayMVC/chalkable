@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Authentication;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.ChalkableApiExplorerViewData;
@@ -88,6 +90,18 @@ namespace Chalkable.Web.Controllers
             //        string.IsNullOrEmpty(timeZoneId) ? DateTime.UtcNow : DateTime.UtcNow.ConvertFromUtc(timeZoneId), timeZoneId, ip);
             //}
             return Json(DeveloperViewData.Create(res));
+        }
+
+        public ActionResult Confirm(string key, Guid applicationId)
+        {
+            var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
+            var userContext = serviceLocator.UserService.Login(key);
+            if (userContext != null && userContext.Role == CoreRoles.DEVELOPER_ROLE)
+            {
+                ChalkableAuthentication.SignIn(userContext, false);
+                return Redirect<HomeController>(c => c.Developer(null, false, applicationId));
+            }
+            return Redirect<HomeController>(c => c.Index());
         }
     }
 }

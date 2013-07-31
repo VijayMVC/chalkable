@@ -51,6 +51,15 @@ namespace Chalkable.Web.Controllers
         
         public IServiceLocatorMaster MasterLocator { get; protected set; }
         public IServiceLocatorSchool SchoolLocator { get; protected set; }
+        protected UserContext UserContex
+        {
+            get
+            {
+                if (SchoolLocator != null)
+                    return SchoolLocator.Context;
+                return MasterLocator.Context;
+            }
+        }
         protected override void Initialize(System.Web.Routing.RequestContext requestContext)
         {
             base.Initialize(requestContext);

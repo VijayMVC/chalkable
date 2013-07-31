@@ -14,6 +14,7 @@ namespace Chalkable.Data.Master.Model
         public IList<SchoolUser> SchoolUsers { get; set; }
         public bool IsSysAdmin { get; set;}
         public bool IsDeveloper { get; set; }
+        public const string CONFIRMATION_KEY_FIELD = "ConfirmationKey";
         public string ConfirmationKey { get; set; }
     }
 

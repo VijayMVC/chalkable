@@ -5,6 +5,7 @@ using System.Text;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
@@ -13,6 +14,7 @@ namespace Chalkable.BusinessLogic.Services.Master
     public interface IUserService
     {
         UserContext Login(string login, string password);
+        UserContext Login(string confirmationKey);
         User GetByLogin(string login);
         User GetById(Guid id);
         User CreateSysAdmin(string login, string password);
@@ -42,49 +44,61 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             using (var uow = Read())
             {
-                var da = new UserDataAccess(uow);
-                var user = da.GetUser(login, PasswordMd5(password), null);
-                if (user == null)
-                    return null;
-                Guid? schoolId = null;
-                string schoolName = null;
-                string schoolServerUrl = null;
-                string schoolTimeZone = null;
-                CoreRole role;
-                
-                if (user.SchoolUsers != null && user.SchoolUsers.Count > 0)
+                var user = new UserDataAccess(uow).GetUser(login, PasswordMd5(password), null);
+                return Login(user, uow);
+            }
+        }
+        public UserContext Login(string confirmationKey)
+        {
+            using (var uow = Read())
+            {
+                var user = new UserDataAccess(uow).GetUser(confirmationKey);
+                return Login(user, uow);
+            }
+        }
+
+
+        private UserContext Login(User user, UnitOfWork uow)
+        {
+            if (user == null) return null;
+            Guid? schoolId = null;
+            string schoolName = null;
+            string schoolServerUrl = null;
+            string schoolTimeZone = null;
+            CoreRole role;
+
+            if (user.SchoolUsers != null && user.SchoolUsers.Count > 0)
+            {
+                if (user.SchoolUsers.Count == 1)
                 {
-                    if (user.SchoolUsers.Count == 1)
-                    {
-                        var su = user.SchoolUsers[0];
-                        schoolId = su.SchoolRef;
-                        schoolName = su.School.Name;
-                        schoolServerUrl = su.School.ServerUrl;
-                        schoolTimeZone = su.School.TimeZone;
-                        role = CoreRoles.GetById(su.Role);
-                    }
-                    else
-                        throw new NotSupportedException("multiple school users are not supported yet");
+                    var su = user.SchoolUsers[0];
+                    schoolId = su.SchoolRef;
+                    schoolName = su.School.Name;
+                    schoolServerUrl = su.School.ServerUrl;
+                    schoolTimeZone = su.School.TimeZone;
+                    role = CoreRoles.GetById(su.Role);
                 }
                 else
-                {
-                    if (user.IsSysAdmin)
-                        role = CoreRoles.SUPER_ADMIN_ROLE;
-                    else if (user.IsDeveloper)
-                        role = CoreRoles.DEVELOPER_ROLE;
-                    else
-                        throw new Exception("User's role can not be defined");
-                }
-                Guid? developerId = null;
-                if (schoolId.HasValue)
-                {
-                    var developer = new DeveloperDataAccess(uow).GetDeveloper(schoolId.Value);
-                    if (developer != null)
-                        developerId = developer.Id;
-                }
-                var res = new UserContext(user.Id, schoolId, user.Login, schoolName, schoolTimeZone, schoolServerUrl, role, developerId);
-                return res;
+                    throw new NotSupportedException("multiple school users are not supported yet");
             }
+            else
+            {
+                if (user.IsSysAdmin)
+                    role = CoreRoles.SUPER_ADMIN_ROLE;
+                else if (user.IsDeveloper)
+                    role = CoreRoles.DEVELOPER_ROLE;
+                else
+                    throw new Exception("User's role can not be defined");
+            }
+            Guid? developerId = null;
+            if (schoolId.HasValue)
+            {
+                var developer = new DeveloperDataAccess(uow).GetDeveloper(schoolId.Value);
+                if (developer != null)
+                    developerId = developer.Id;
+            }
+            var res = new UserContext(user.Id, schoolId, user.Login, schoolName, schoolTimeZone, schoolServerUrl, role, developerId);
+            return res;
         }
 
         public User GetByLogin(string login)
