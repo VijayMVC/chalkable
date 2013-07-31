@@ -55,6 +55,7 @@
       <HintPath>..\packages\WindowsAzure.Storage.1.7.0.0\lib\net35-full\Microsoft.WindowsAzure.StorageClient.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Services.Client" />
     <Reference Include="System.Spatial, Version=5.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -68,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Producers\CreateDemoSchoolTaskProducer.cs" />
     <Compile Include="Producers\EmptySchoolTaskProducer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Producers\TaskProducer.cs" />
@@ -81,6 +83,10 @@
     <ProjectReference Include="..\Chalkable.BusinessLogic\Chalkable.BusinessLogic.csproj">
       <Project>{B008FBC2-8AFB-48FF-BA85-97845DDF02D2}</Project>
       <Name>Chalkable.BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
+      <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
+      <Name>Chalkable.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Chalkable.Data.Master\Chalkable.Data.Master.csproj">
       <Project>{C9ACB7A6-1755-424A-B0BB-3B0C5B13EC15}</Project>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Chalkable.Common;
@@ -40,5 +41,32 @@ namespace Chalkable.Tests.DataAccess
 
             Debug.WriteLine("Duration: " + (DateTime.Now.Ticks - start) / 10000);
         }
+
+        private class SomeClass
+        {
+            public static readonly string ID_FIELD = F<SomeClass, int>(num => num.Id);
+            public int Id { get; set; }
+            public static readonly string NAME_FIELD = F<SomeClass, string>(num => num.Name);
+            public string Name { get; set; }
+        }
+
+        [Test]
+        public void ExpressionTreeTest()
+        {
+            Debug.WriteLine(DateTime.Now.Ticks);
+            for (int i = 0; i < 10000; i++)
+            {
+                var s = F<SomeClass, int>(num => num.Id);
+            }
+            Debug.WriteLine(DateTime.Now.Ticks);
+        }
+
+        private static string F<T1, T2>(Expression<Func<T1, T2>> f)
+        {
+            var body = (MemberExpression)f.Body;
+            return body.Member.Name;
+        }
     }
+
+ 
 }

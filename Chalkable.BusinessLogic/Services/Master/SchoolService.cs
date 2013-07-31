@@ -14,10 +14,11 @@ namespace Chalkable.BusinessLogic.Services.Master
         Data.Master.Model.School Create(Guid districtId, string name, IList<UserInfo> principals);
         void CreateEmpty();
         PaginatedList<Data.Master.Model.School> GetSchools(Guid? districtId, int start = 0, int count = int.MaxValue);
-        IList<Data.Master.Model.School> GetSchools(bool empty);
+        IList<Data.Master.Model.School> GetSchools(bool empty, bool demo);
         SisSync GetSyncData(Guid schoolId);
         void SetSyncData(SisSync sisSync);
         void Update(Data.Master.Model.School school);
+        void CreateDemo();
     }
 
     public class SchoolService : MasterServiceBase, ISchoolService
@@ -76,12 +77,12 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        public IList<Data.Master.Model.School> GetSchools(bool empty)
+        public IList<Data.Master.Model.School> GetSchools(bool empty, bool demo)
         {
             using (var uow = Read())
             {
                 var da = new SchoolDataAccess(uow);
-                return da.GetSchools(empty);
+                return da.GetSchools(empty, demo);
             }
         }
 
@@ -111,6 +112,11 @@ namespace Chalkable.BusinessLogic.Services.Master
                 new SchoolDataAccess(uow).Update(school);
                 uow.Commit();
             }
+        }
+
+        public void CreateDemo()
+        {
+            throw new NotImplementedException();
         }
 
         public Data.Master.Model.School Create(Guid districtId, string name, IList<UserInfo> principals)

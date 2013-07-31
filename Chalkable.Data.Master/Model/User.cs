@@ -32,6 +32,8 @@ namespace Chalkable.Data.Master.Model
         public SchoolStatus Status { get; set; }
         public ImportSystemTypeEnum ImportSystemType { get; set; }
         public string TimeZone { get; set; }
+        public string DemoPrefix { get; set; }
+        public DateTime? LastUseDemo { get; set; }
     }
 
     public class SchoolUser

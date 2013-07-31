@@ -12,7 +12,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
     public interface IPersonService
     {
-        Person Add(string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, Guid? gradeLevelId);
+        Person Add(string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, Guid? gradeLevelId, int? sisId = null);
         Person Edit(Guid personId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate);
 
         Person EditStudent(Guid studentId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate
@@ -35,7 +35,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         //TODO: needs tests
-        public Person Add(string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, Guid? gradeLevelId)
+        public Person Add(string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, Guid? gradeLevelId, int? sisId = null)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -57,7 +57,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         LastName = lastName,
                         Gender = gender,
                         Salutation = salutation,
-                        RoleRef = roleId
+                        RoleRef = roleId,
+                        SisId = sisId
                     };
                 da.Insert(person);
                 if (role == CoreRoles.STUDENT_ROLE.Name)

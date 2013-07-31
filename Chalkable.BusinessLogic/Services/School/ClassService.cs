@@ -243,6 +243,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 query.CallerId = Context.UserId;
+                query.CallerRoleId = Context.Role.Id;
                 return new ClassDataAccess(uow)
                     .GetClassesComplex(query);
             }

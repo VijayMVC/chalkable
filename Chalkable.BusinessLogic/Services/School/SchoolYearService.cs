@@ -10,7 +10,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface ISchoolYearService
     {
-        SchoolYear Add(string name,string description, DateTime startDate, DateTime endDate);
+        SchoolYear Add(string name,string description, DateTime startDate, DateTime endDate, int? sisId = null);
         SchoolYear Edit(Guid id, string name, string description, DateTime startDate, DateTime endDate);
         SchoolYear GetSchoolYearById(Guid id);
         PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue);
@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         //TODO: needs test 
-        public SchoolYear Add(string name, string description, DateTime startDate, DateTime endDate)
+        public SchoolYear Add(string name, string description, DateTime startDate, DateTime endDate, int? sisId = null)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -46,7 +46,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         Description = description,
                         Name = name,
                         StartDate = startDate,
-                        EndDate = endDate
+                        EndDate = endDate,
+                        SisId = sisId
                     };
                 
                 da.Insert(schoolYear);

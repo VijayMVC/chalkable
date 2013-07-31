@@ -59,6 +59,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new CourseDataAccess(uow);
                 var res = new Course {Id = Guid.NewGuid()};
                 res = Edit(res, code, title, icon, chalkableDepartmentId);
+                res.SisId = sisId;
                 da.Insert(res);
                 uow.Commit();
                 return res;

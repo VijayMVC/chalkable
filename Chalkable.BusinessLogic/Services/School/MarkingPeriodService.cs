@@ -12,7 +12,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IMarkingPeriodService
     {
-        MarkingPeriod Add(Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays, bool generatePeriods = false);
+        MarkingPeriod Add(Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays, bool generatePeriods = false, int? sisId = null);
         void Delete(Guid id);
         MarkingPeriod Edit(Guid id, Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays);
         MarkingPeriod GetMarkingPeriodById(Guid id);
@@ -86,7 +86,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return null;
         }
 
-        public MarkingPeriod Add(Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays, bool generatePeriods = false)
+        public MarkingPeriod Add(Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays, bool generatePeriods = false, int? sisId = null)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -101,6 +101,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new MarkingPeriodDataAccess(uow);
                 var sy = new SchoolYearDataAccess(uow).GetById(schoolYearId);
                 var mp = AddMarkingPeriod(da, sy, startDate, endDate, name, description, weekDays);
+                mp.SisId = sisId;
                 da.Insert(mp);
                 uow.Commit();
                 machine.Apply(StateActionEnum.MarkingPeriodsAdd);

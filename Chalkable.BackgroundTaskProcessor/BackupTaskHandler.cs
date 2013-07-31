@@ -50,7 +50,7 @@ namespace Chalkable.BackgroundTaskProcessor
                 }
             }
 
-            var schools = sl.SchoolService.GetSchools(false);
+            var schools = sl.SchoolService.GetSchools(false, false);
             var runer = new AllSchoolRunner<long>();
             bool res;
             if (backup)

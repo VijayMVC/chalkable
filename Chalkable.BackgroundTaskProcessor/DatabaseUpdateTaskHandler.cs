@@ -50,7 +50,7 @@ namespace Chalkable.BackgroundTaskProcessor
             {
                 var data = task.GetData<DatabaseUpdateTaskData>();
                 var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
-                var schools = sl.SchoolService.GetSchools(false);
+                var schools = sl.SchoolService.GetSchools(false, false);
                 foreach (var updateSql in data.Sqls)
                 {
                     if (updateSql.RunOnMaster)

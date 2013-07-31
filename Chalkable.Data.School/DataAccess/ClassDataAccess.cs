@@ -15,6 +15,7 @@ namespace Chalkable.Data.School.DataAccess
         private const string GET_CLASSES_PROC = "spGetClasses";
         private const string SCHOOL_YEAR_ID_PARAM = "schoolYearId";
         private const string CALLER_ID_PARAM = "callerId";
+        private const string CALLER_ROLE_ID_PARAM = "callerRoleId";
         private const string MARKING_PERIOD_ID_PARAM = "markingPeriodId";
         private const string CLASS_ID_PARAM = "classId";
         private const string PERSON_ID_PARAM = "personId";
@@ -34,7 +35,8 @@ namespace Chalkable.Data.School.DataAccess
                     {CLASS_ID_PARAM, query.ClassId},
                     {CALLER_ID_PARAM, query.CallerId},
                     {START_PARAM, query.Start},
-                    {COUNT_PARAM, query.Count}
+                    {COUNT_PARAM, query.Count},
+                    {CALLER_ROLE_ID_PARAM, query.CallerRoleId}
                 };
 
             string filter1 = null;
@@ -74,6 +76,7 @@ namespace Chalkable.Data.School.DataAccess
     public class ClassQuery
     {
         public Guid CallerId { get; set; }
+        public int CallerRoleId { get; set; }
         public Guid? SchoolYearId { get; set; }
         public Guid? MarkingPeriodId { get; set; }
         public Guid? ClassId { get; set; }

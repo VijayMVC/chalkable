@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CreateDemoSchoolTaskHandler.cs" />
     <Compile Include="Parallel\AllSchoolRunner.cs" />
     <Compile Include="BackupTaskHandler.cs" />
     <Compile Include="CreateEmptySchoolTaskHandler.cs" />

@@ -75,6 +75,12 @@ namespace Chalkable.Common
             get { return (int)this["EmptySchoolsReserved"]; }
         }
 
+        [ConfigurationProperty("DemoSchoolsReserved")]
+        public int DemoSchoolsReserved
+        {
+            get { return (int)this["DemoSchoolsReserved"]; }
+        }
+
         [ConfigurationProperty("SchoolDbUser")]
         public string SchoolDbUser
         {

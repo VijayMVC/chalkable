@@ -71,7 +71,7 @@ namespace Chalkable.Data.Master.DataAccess
             return PaginatedSelect<School>(conds, School.ID_FIELD, start, count);
         }
 
-        public IList<School> GetSchools(bool empty)
+        public IList<School> GetSchools(bool empty, bool demo)
         {
             var conds = new Dictionary<string, object> { { School.IS_EMPTY_FIELD, empty } };
             return SelectMany<School>(conds);
