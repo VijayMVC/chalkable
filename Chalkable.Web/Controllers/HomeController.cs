@@ -76,6 +76,10 @@ namespace Chalkable.Web.Controllers
         public ActionResult Developer(string prefDemoSchool, bool needsTour, Guid? currentApplicationId)
         {
             //TODO: get prefix from demo school
+            if (Context.SchoolId.HasValue)
+            {
+                prefDemoSchool = MasterLocator.SchoolService.GetById(Context.SchoolId.Value).DemoPrefix;
+            }
             var developer = MasterLocator.DeveloperService.GetDeveloperById(MasterLocator.Context.UserId);
             PrepareJsonData(DeveloperViewData.Create(developer), CURRENT_PERSON_DATA);
             var applications = MasterLocator.ApplicationService.GetApplications();
@@ -155,16 +159,6 @@ namespace Chalkable.Web.Controllers
                 ViewData[ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
                 ViewData[PREFIX] = prefixDemoSchool;
             }
-            //if (schoolId != null)
-            //{
-            //    var currentSchool = ServiceLocator.SchoolService.GetById(schoolId.Value);
-            //    if (currentSchool.DeveloperInfoRef.HasValue)
-            //    {
-            //        ViewData[DEVELOPER_ID] = currentSchool.DeveloperInfoRef.Value.ToString();
-            //        PreparingJsonData(DeveloperInfoViewData.Create(currentSchool.DeveloperInfo), DEVELOPER_INFO);
-            //    }
-            //}
-
             //ViewData[NEEDS_TOUR] = needsTour;
             ViewData[SCHOOL_ID] = SchoolLocator.Context.SchoolId;
             ViewData[SCHOOL_NAME] = SchoolLocator.Context.SchoolName ?? UNKNOWN_SCHOOL_NAME;
@@ -179,11 +173,8 @@ namespace Chalkable.Web.Controllers
                 PrepareJsonData(MarkingPeriodViewData.Create(markingPeriod), MARKING_PERIOD_DATA);
                 var nextmp = SchoolLocator.MarkingPeriodService.GetNextMarkingPeriodInYear(markingPeriod.Id);
                 if (nextmp != null)
-                {
                     PrepareJsonData(MarkingPeriodViewData.Create(nextmp), NEXT_MARKING_PERIOD_DATA);
-                }
             }
-
         }
         
         private void PrepareTeacherJsonData(MarkingPeriod mp, bool getAllAnnouncementTypes)
@@ -237,6 +228,7 @@ namespace Chalkable.Web.Controllers
         private void PrepareClassesAdvancedData(IEnumerable<ClassDetails> classDetailses, MarkingPeriod mp, bool getAllAnnouncementTypes)
         {
             var classesAdvancedData = new List<object>();
+            classDetailses = classDetailses.Where(x => x.MarkingPeriodClasses.Any(y => y.MarkingPeriodRef == mp.Id));
             foreach (var classDetails in classDetailses)
             {
                 Guid classId = classDetails.Id;

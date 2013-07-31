@@ -56,7 +56,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 return new MarkingPeriodClassDataAccess(uow)
-                    .GetMarkingPeriodClass(new MarkingPeriodClassQuery
+                    .GetMarkingPeriodClassOrNull(new MarkingPeriodClassQuery
                         {
                             MarkingPeriodId = markingPeriodId,
                             ClassId = classId
