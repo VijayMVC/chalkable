@@ -1,0 +1,40 @@
+BODY {
+  DIV.page {
+    #content {
+      > DIV {
+        #main-wrapper {
+          #main {
+            DIV.developer {
+              .info{
+
+
+                .bg-line{
+                  background: url(images/profile/header-line.png) 0 10px no-repeat;
+                  height: 15px;
+                  width: auto;
+                }
+                font: normal 12px tahoma, arial, helvetica, sans-serif;
+                margin-top: 246px;
+
+                label{
+                  color: #808080;
+                  font-size: 17px;
+                  width: 160px;
+                  display: inline-block;
+                  margin-bottom: 9px;
+                }
+                input{
+                  width: 60%;
+                }
+
+                .align-right{
+                  text-align: right;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
