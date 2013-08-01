@@ -260,6 +260,7 @@
     <Compile Include="Models\PersonViewDatas\PersonSummaryViewData.cs" />
     <Compile Include="Models\PersonViewDatas\ShortPersonViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentInfoViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentSummaryViewData.cs" />
     <Compile Include="Models\PersonViewDatas\TeacherInfoViewData.cs" />
     <Compile Include="Models\PersonViewDatas\TeacherSummaryViewData.cs" />
     <Compile Include="Models\PhoneViewData.cs" />
@@ -269,9 +270,10 @@
     <Compile Include="Models\RoleViewData.cs" />
     <Compile Include="Models\RoomViewData.cs" />
     <Compile Include="Models\ScheduleSectionViewData.cs" />
-    <Compile Include="Models\SchoolInfoViewData.cs" />
-    <Compile Include="Models\SchoolPeopleViewData.cs" />
-    <Compile Include="Models\SchoolViewData.cs" />
+    <Compile Include="Models\SchoolsViewData\SchoolInfoViewData.cs" />
+    <Compile Include="Models\SchoolsViewData\SchoolPeopleViewData.cs" />
+    <Compile Include="Models\SchoolsViewData\SchoolViewData.cs" />
+    <Compile Include="Models\SchoolsViewData\ShortSchoolViewData.cs" />
     <Compile Include="Models\SchoolYearViewData.cs" />
     <Compile Include="Models\SearchViewData.cs" />
     <Compile Include="Models\SisSyncViewData.cs" />

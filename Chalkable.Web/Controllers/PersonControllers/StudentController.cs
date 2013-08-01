@@ -7,6 +7,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
@@ -39,29 +40,34 @@ namespace Chalkable.Web.Controllers.PersonControllers
         //    var mp = markingPeriod ?? SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
         //    Guid gradeLevelRef = student.StudentInfo.GradeLevelRef;
 
-        //    var attendances = SchoolLocator.AttendanceService.GetClassAttendanceComplex(null, mp.Id, null, student.Id, null, null, mp.StartDate, currentDateTime.Date);
-        //    var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineComplexByDateRange(mp.SchoolYearRef, schoolPersonId, mp.StartDate, currentDateTime.Date);
-        //    var allStudentsRankStats = SchoolLocator.GradingStatisticService.get(mp.SchoolYearRef, gradeLevelRef, null, null);
-        //    var currentStudentRankStats = allStudentsRankStats.First(x => x.StudentId == student.SchoolPersonId);
+        //    var attendances = SchoolLocator.AttendanceService.GetClassAttendanceComplex(new ClassAttendanceQuery
+        //        {
+        //            MarkingPeriodId = mp.Id,
+        //            StudentId = student.Id,
+        //            FromDate = mp.StartDate,
+        //            ToDate = currentDateTime.Date
+        //        });
+            
+        //    var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineDetails(mp.SchoolYearRef, schoolPersonId, mp.StartDate, currentDateTime.Date);
+        //    //var allStudentsRankStats = SchoolLocator.GradingStatisticService.get(mp.SchoolYearRef, gradeLevelRef, null, null);
+        //    //var currentStudentRankStats = allStudentsRankStats.First(x => x.StudentId == student.SchoolPersonId);
 
         //    var lastGrades = SchoolLocator.StudentAnnouncementService.LastGrades(schoolPersonId, 5);
-        //    var classes = SchoolLocator.ClassService.GetClasses(null, mp.Id, student.SchoolPersonId, 0);
+        //    var classes = SchoolLocator.ClassService.GetClasses(null, mp.Id, student.Id);
         //    if (markingPeriod != null)
         //    {
+        //        var rooms = SchoolLocator.RoomService.GetRooms();
         //        var periods = SchoolLocator.PeriodService.GetPeriods(markingPeriod.Id, null);
         //        maxPeriodNumber = periods.Count > 0 ? periods.Max(x => x.Order) : maxPeriodNumber;
         //        var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(currentDateTime.Date, currentDateTime);
         //        var classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(currentDateTime, null, null, student.Id, null);
-        //        announcementPeriod = AnnouncementsClassPeriodViewData.Create(classPeriods, periods, announcements, classes, currentDateTime.Date);
+        //        announcementPeriod = AnnouncementsClassPeriodViewData.Create(announcements, classPeriods, classes, rooms, currentDateTime.Date);
 
-        //        currentClassPeriod = classPeriods.FirstOrDefault(x => periods.Any(y => y.Id == x.GeneralPeriodRef && y.StartTime <= NowTimeInMinutes && y.EndTime >= NowTimeInMinutes));
+        //        currentClassPeriod = classPeriods.FirstOrDefault(x => x.Period.StartTime <= NowTimeInMinutes && x.Period.EndTime >= NowTimeInMinutes);
         //        if (currentClassPeriod != null)
-        //            currentAttendance = attendances.FirstOrDefault(x => x.ClassGeneralPeriodId == currentClassPeriod.Id && x.Date == currentDateTime.Date);
+        //            currentAttendance = attendances.FirstOrDefault(x => x.ClassPeriodRef == currentClassPeriod.Id && x.Date == currentDateTime.Date);
         //    }
-
-        //    double gradeAttendanceAvg = SchoolLocator.AttendanceService.CalcGradeAttendanceAvg(gradeLevelRef);
-        //    double gradeDisciplineAvg = SchoolLocator.DisciplineService.CalcGradeDisciplineAvg(gradeLevelRef);
-        //    var res = StudentSummaryViewData.Create(student, currentClassPeriod, attendances, gradeAttendanceAvg, disciplines, gradeDisciplineAvg,
+        //    var res = StudentSummaryViewData.Create(student, currentClassPeriod, attendances, disciplines, 
         //                                            lastGrades, currentStudentRankStats, allStudentsRankStats, announcementPeriod, currentAttendance,
         //                                            classes, SchoolLocator.GradingStyleService.GetMapper(), maxPeriodNumber);
         //    return Json(res, 7);

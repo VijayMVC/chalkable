@@ -12,6 +12,7 @@ using Chalkable.SisImportFacade;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
+using Chalkable.Web.Models.SchoolsViewData;
 
 
 namespace Chalkable.Web.Controllers

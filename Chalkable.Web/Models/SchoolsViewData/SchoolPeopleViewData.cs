@@ -2,7 +2,7 @@
 using Chalkable.Data.Master.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 
-namespace Chalkable.Web.Models
+namespace Chalkable.Web.Models.SchoolsViewData
 {
     public class SchoolPeopleViewData : SchoolInfoViewData
     {
