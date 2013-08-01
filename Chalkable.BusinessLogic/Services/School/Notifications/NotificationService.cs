@@ -205,7 +205,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         public void AddAttendanceNotificationToStudent(Guid toPersonId, Guid classAttendanceId)
         {
             var recipient = ServiceLocator.PersonService.GetPerson(toPersonId);
-            var classAtt = ServiceLocator.AttendanceService.GetClassAttendanceComplexById(classAttendanceId);
+            var classAtt = ServiceLocator.AttendanceService.GetClassAttendanceDetailsById(classAttendanceId);
             var notification = builder.BuildAttendanceNotificationToStudent(recipient, classAtt);
             AddNotification(notification);
         }

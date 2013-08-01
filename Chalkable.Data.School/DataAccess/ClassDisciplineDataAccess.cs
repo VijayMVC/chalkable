@@ -78,6 +78,23 @@ namespace Chalkable.Data.School.DataAccess
                 };
            return SelectOneOrNull<ClassDiscipline>(conds);
         }
+
+        public IList<DisciplineTotalPerType> CalcDisciplineTypeTotal(Guid? schoolYearId, Guid? markingPeriodId,
+                  Guid? studentId, DateTime? fromDate, DateTime? toDate)
+        {
+            var parametrs = new Dictionary<string, object>
+                {
+                    {MARKING_PERIOD_ID_PARAM, markingPeriodId},
+                    {SCHOOLYEAR_PARAM, schoolYearId},
+                    {FROM_DATE_PARAM, fromDate},
+                    {TO_DATE_PARAM, toDate},
+                    {STUDENT_ID_PARAM, studentId}
+                };
+            using (var reader = ExecuteStoredProcedureReader("spCalcDisciplineTypeTotal", parametrs))
+            {
+                return reader.ReadList<DisciplineTotalPerType>();
+            }
+        }
     }
 
     public class ClassDisciplineQuery

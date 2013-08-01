@@ -68,7 +68,7 @@ namespace Chalkable.Web.Controllers
                 return Json(ClassSummaryViewData.Create(c, curentRoom, students));
 
             var possibleAbsents = SchoolLocator.AttendanceService.PossibleAttendanceCount(mp.Id, classId, SchoolLocator.Context.NowSchoolTime.Date);
-            var classAttendances = SchoolLocator.AttendanceService.GetClassAttendanceComplex(new ClassAttendanceQuery
+            var classAttendances = SchoolLocator.AttendanceService.GetClassAttendanceDetails(new ClassAttendanceQuery
                 {
                     MarkingPeriodId = mp.Id,
                     ClassId = classId,

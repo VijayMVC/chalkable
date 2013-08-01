@@ -72,7 +72,8 @@ namespace Chalkable.Data.School.DataAccess
                     {SCHOOL_YEAR_ID_PARAM, query.SchoolYearId},
                     {ID_PARAM, query.Id},
                     {NEED_ALL_DATA_PARAM, query.NeedAllData},
-                    {TYPE_PARAM, query.Type}
+                    {TYPE_PARAM, query.Type},
+                    {CLASS_PERIOD_ID_PARAM, query.ClassPeriodId}
                 };
             using (var reader = ExecuteStoredProcedureReader(GET_CLASS_ATTENDANCE_PROC, parameters))
             {
@@ -89,6 +90,23 @@ namespace Chalkable.Data.School.DataAccess
                     res.Add(attendance);
                 }
                 return res;
+            }
+        } 
+        
+        public IList<AttendanceTotalPerType> CalcAttendanceTypeTotal(Guid? markingPeriodId, Guid? schoolYearId,
+               Guid? studentId, DateTime? fromDate, DateTime? toDate)
+        {
+            var parameters = new Dictionary<string, object>
+                {
+                    {MARKING_PERIOD_ID_PARAM, markingPeriodId},
+                    {SCHOOL_YEAR_ID_PARAM, schoolYearId},
+                    {FROM_DATE_PARAM, fromDate},
+                    {TO_DATE_PARAM, toDate},
+                    {STUDENT_ID_PARAM, studentId}
+                };
+            using (var reader = ExecuteStoredProcedureReader("spCalcAttendanceTypeTotal", parameters))
+            {
+               return reader.ReadList<AttendanceTotalPerType>();
             }
         } 
 
@@ -129,6 +147,13 @@ namespace Chalkable.Data.School.DataAccess
         }
     }
 
+    public class AttendanceTotalPerType
+    {
+        public Guid PersonId { get; set; }
+        public int Total { get; set; }
+        public AttendanceTypeEnum AttendanceType { get; set; }
+    }
+
     public class ClassAttendanceQuery
     {
         public Guid? Id { get; set; }
@@ -136,6 +161,7 @@ namespace Chalkable.Data.School.DataAccess
         public Guid? TeacherId { get; set; }
         public Guid? MarkingPeriodId { get; set; }
         public Guid? ClassId { get; set; }
+        public Guid? ClassPeriodId { get; set; }
         public Guid? SchoolYearId { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }

@@ -39,7 +39,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
             query.FromDate = start;
             query.ToDate = end;
             query.SchoolYearId = GetCurrentSchoolYearId();
-            var attendances = SchoolLocator.AttendanceService.GetClassAttendanceComplex(query);
+            var attendances = SchoolLocator.AttendanceService.GetClassAttendanceDetails(query);
             var res = PrepareMonthCalendar(start, end, date.Value, (time, b) => createAction(time, b, attendances));
             return Json(res, 6);
         }

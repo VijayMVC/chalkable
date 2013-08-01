@@ -209,7 +209,7 @@ namespace Chalkable.Web.Controllers
                                     FromDate = now.Date,
                                     ToDate = now.Date
                                 };
-                            var attendances = SchoolLocator.AttendanceService.GetClassAttendanceComplex(attQuery);
+                            var attendances = SchoolLocator.AttendanceService.GetClassAttendanceDetails(attQuery);
                             //check is it tour now or demo school
                             if (attendances.Any(x => x.Type == AttendanceTypeEnum.NotAssigned))
                             {
