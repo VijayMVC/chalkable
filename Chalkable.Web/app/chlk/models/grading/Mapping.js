@@ -1,6 +1,6 @@
-NAMESPACE('chlk.models.gradingStyles', function () {
+NAMESPACE('chlk.models.grading', function () {
     "use strict";
-    /** @class chlk.models.gradingStyles.Mapping*/
+    /** @class chlk.models.grading.Mapping*/
     CLASS(
         'Mapping', [
             [ria.serialize.SerializeProperty('gradingabcf')],

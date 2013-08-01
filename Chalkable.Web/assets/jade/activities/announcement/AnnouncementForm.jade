@@ -2,10 +2,12 @@
     -topData = self.getTopData();
     -announcement = self.getAnnouncement();
     -topItems = topData.getTopItems();
-    -classId = announcement.getRecipientId();
+    -classId = announcement.getClassId();
+    -console.info(classId);
     -typeId = self.getSelectedTypeId();
     -attachments=[];
     -announcement.getAnnouncementAttachments().forEach(function(attachment){attachments.push(attachment.__PROTECTED)});
+    -classes=self.getClassInfo() ? self.getClassInfo().getTypesByClass() : [];
     +ActionForm('announcement', 'save')
         +LeftRightToolbar(topItems, chlk.templates.class.TopBar)(
             selectedItemId=topData.getSelectedItemId(),
@@ -13,7 +15,7 @@
         ).classes-bar
         .action-bar.not-transparent.buttons(class=classId ? '' : 'x-hidden')
             .container.panel-bg
-                each item in self.getClassInfo().getTypesByClass()
+                each item in classes
                     BUTTON(
                         class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
                         typeId=item.getId(),

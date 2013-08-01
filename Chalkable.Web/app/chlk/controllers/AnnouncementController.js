@@ -10,6 +10,7 @@ REQUIRE('chlk.models.attachment.Attachment');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.AttachmentId');
+REQUIRE('chlk.models.id.MarkingPeriodId');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -161,27 +162,13 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.Announcement]],
         function saveAction(model) {
-
-            function save(){
-                /*this.announcementService.saveAnnouncement(
-                    model.getId(),
-                    model.getClassId(),
-                    model.getAnnouncementTypeId(),
-                    model.getSubject(),
-                    model.getContent(),
-                    model.getExpiresDate(),
-                    model.getAttachments(),
-                    model.getApplications(),
-                    model.getMarkingPeriodId()
-                );*/
-            }
-
             var result;
             var submitType = model.getSubmitType();
-            var schoolPersonId = model.getSchoolPersonRef();
+            var schoolPersonId = model.getPersonId();
             var announcementTypeId = model.getAnnouncementTypeId();
             var announcementTypeName = model.getAnnouncementTypeName();
             var classId = model.getClassId();
+            model.setMarkingPeriodId(session.get('markingPeriod').getId());
             if(submitType == 'listLast'){
                 result = this.announcementService
                     .listLast(classId, announcementTypeId,schoolPersonId)
@@ -196,30 +183,62 @@ NAMESPACE('chlk.controllers', function (){
             }else{
                 if(submitType == 'save'){
                     model.setAnnouncementAttachments(this.getContext().getSession().get('AnnouncementAttachments'));
-                    result = new ria.async.DeferredData(model);
-                    save.call(this);
+                    var announcementForm = new chlk.models.announcement.AnnouncementForm();
+                    announcementForm.setAnnouncement(model);
+                    result = this.addEditAction(announcementForm, false);
+                    this.saveAnnouncement(model);
                     return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result);
                 }else{
                     if(submitType == 'saveNoUpdate'){
-                        save.call(this);
+                        this.saveAnnouncement(model);
                     }else{
-                        /*this.announcementService.submitAnnouncement(
-                            model.getId(),
-                            model.getClassId(),
-                            model.getAnnouncementTypeId(),
-                            model.getSubject(),
-                            model.getContent(),
-                            model.getExpiresDate(),
-                            model.getAttachments(),
-                            model.getApplications(),
-                            model.getMarkingPeriodId()
-                        ).then(function(){
-                            this.redirect('feed', 'list', []);
-                        }.bind(this));*/
-                        return this.redirect_('feed', 'list', []);
+                        var session = this.getContext().getSession();
+                        if(session.get('role') != chlk.models.common.RoleEnum.ADMIN
+                            && session.get('finalizedClassesIds').indexOf(classId.valueOf()) > -1){
+                                model.setMarkingPeriodId(session.get('nextMarkingPeriod').getId());
+                                if(nextMp){
+                                    this.submitAnnouncement(model);
+                                }
+                        }else{
+                            this.submitAnnouncement(model);
+                        }
+
+                        //return this.redirect_('feed', 'list', []);
                     }
                 }
             }
+        },
+
+        [[chlk.models.announcement.Announcement]],
+        function saveAnnouncement(model){
+            this.announcementService.saveAnnouncement(
+                model.getId(),
+                model.getClassId(),
+                model.getAnnouncementTypeId(),
+                model.getSubject(),
+                model.getContent(),
+                model.getExpiresDate(),
+                model.getAttachments(),
+                model.getApplications(),
+                model.getMarkingPeriodId()
+            );
+        },
+
+        [[chlk.models.announcement.Announcement, chlk.models.id.MarkingPeriodId]],
+        function submitAnnouncement(model, markingPeriodId){
+            this.announcementService.submitAnnouncement(
+                model.getId(),
+                model.getClassId(),
+                model.getAnnouncementTypeId(),
+                model.getSubject(),
+                model.getContent(),
+                model.getExpiresDate(),
+                model.getAttachments(),
+                model.getApplications(),
+                model.getMarkingPeriodId()
+            ).then(function(){
+                this.redirect('feed', 'list', []);
+            }.bind(this));
         }
     ])
 });

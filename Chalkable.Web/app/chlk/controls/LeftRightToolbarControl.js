@@ -96,24 +96,26 @@ NAMESPACE('chlk.controls', function () {
 
             [[ria.dom.Dom, ria.dom.Dom]],
             VOID, function setPageByCurrentDot(node, toolbar){
-                var index = parseInt(node.getAttr('index'),10);
-                this.setCurrentIndex(index);
-                var nextButton = toolbar.find('.next-button');
-                var prevButton = toolbar.find('.prev-button');
-                toolbar.find('.paginator .current').removeClass('current');
-                node.addClass('current');
-                var width = toolbar.find('.first-container').width();
-                var secondContainer = toolbar.find('.second-container');
-                secondContainer.setCss('left', -width * index);
-                if(index == 0){
-                    prevButton.addClass('disabled');
-                }else{
-                    prevButton.removeClass('disabled');
-                }
-                if(index == this.getConfigs().dots.length - 1){
-                    nextButton.addClass('disabled');
-                }else{
-                    nextButton.removeClass('disabled');
+                if(this.getConfigs().needDots){
+                    var index = parseInt(node.getAttr('index'),10);
+                    this.setCurrentIndex(index);
+                    var nextButton = toolbar.find('.next-button');
+                    var prevButton = toolbar.find('.prev-button');
+                    toolbar.find('.paginator .current').removeClass('current');
+                    node.addClass('current');
+                    var width = toolbar.find('.first-container').width();
+                    var secondContainer = toolbar.find('.second-container');
+                    secondContainer.setCss('left', -width * index);
+                    if(index == 0){
+                        prevButton.addClass('disabled');
+                    }else{
+                        prevButton.removeClass('disabled');
+                    }
+                    if(index == this.getConfigs().dots.length - 1){
+                        nextButton.addClass('disabled');
+                    }else{
+                        nextButton.removeClass('disabled');
+                    }
                 }
             }
         ]);

@@ -18,6 +18,7 @@ REQUIRE('chlk.controls.PhotoContainerControl');
 REQUIRE('chlk.controls.SelectControl');
 
 REQUIRE('chlk.models.common.Role');
+REQUIRE('chlk.models.schoolYear.MarkingPeriod');
 
 NAMESPACE('chlk', function (){
 
@@ -47,5 +48,12 @@ NAMESPACE('chlk', function (){
     /** @class chlk.BaseApp */
     CLASS(
         'BaseApp', EXTENDS(ria.mvc.Application), [
+            function $(){
+                BASE();
+                var serializer = new ria.serialize.JsonSerializer();
+                this.getContext().getSession().set('markingPeriod', serializer.deserialize(window.markingPeriod, chlk.models.schoolYear.MarkingPeriod));
+                this.getContext().getSession().set('nextMarkingPeriod', serializer.deserialize(window.nextMarkingPeriod, chlk.models.schoolYear.MarkingPeriod));
+                this.getContext().getSession().set('finalizedClassesIds', window.finalizedClassesIds);
+            }
         ]);
 });

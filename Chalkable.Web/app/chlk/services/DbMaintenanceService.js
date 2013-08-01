@@ -28,7 +28,7 @@ NAMESPACE('chlk.services', function () {
 
             [[Number, Number]],
             ria.async.Future, function getBackups(start_, count_) {
-                return this.getPaginatedList('chalkable2/app/data/blobs.json', chlk.models.storage.Blob, {
+                return this.getPaginatedList('DbMaintenance/ListBackups.json', chlk.models.storage.Blob, {
                     start: start_,
                     count: count_
                 });
