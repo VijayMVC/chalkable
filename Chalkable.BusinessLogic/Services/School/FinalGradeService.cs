@@ -26,6 +26,7 @@ namespace Chalkable.BusinessLogic.Services.School
         
         FinalGradeDetails GetFinalGrade(Guid id, bool needBuildItems = false);
         PaginatedList<FinalGradeDetails> GetPaginatedFinalGrades(FinalGradeStatus status, int start = 0, int count = int.MaxValue);
+        IList<ClassDetails> GetFinalizedClasses(Guid markingPeriodId);
 
     }
     public class FinalGradeService : SchoolServiceBase, IFinalGradeService
@@ -261,5 +262,12 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
+
+        //TODO: needs tests 
+        public IList<ClassDetails> GetFinalizedClasses(Guid markingPeriodId)
+        {
+            var finalGrades = GetFinalGradeQueryResult(new FinalGradeQuery {MarkingPeriodId = markingPeriodId}).FinalGrades;
+            return finalGrades.Where(x=>x.Status != FinalGradeStatus.Open).Select(x => x.Class).ToList();
+        }
     }
 }
