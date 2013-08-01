@@ -32,6 +32,7 @@ namespace Chalkable.Data.Master.Model
         public SchoolStatus Status { get; set; }
         public ImportSystemTypeEnum ImportSystemType { get; set; }
         public string TimeZone { get; set; }
+        public const string DEMO_PREFIX_FIELD = "DemoPrefix";
         public string DemoPrefix { get; set; }
         public DateTime? LastUseDemo { get; set; }
     }
@@ -51,18 +52,18 @@ namespace Chalkable.Data.Master.Model
 
     public enum SchoolStatus
     {
-        Created = 1,
-        DataImported = 2,
-        PersonalInfoImported = 3,
-        GradeLevels = 4,
-        MarkingPeriods = 5,
-        BlockScheduling = 6,
-        DailyPeriods = 7,
-        ScheduleInfoImported = 8,
-        InvitedUser = 9 ,
-        TeacherLogged = 10,
-        InvitedStudent = 11,
-        StudentLogged = 12 ,
-        PayingCustomer = 13
+        Created = 0,
+        DataImported = 1,
+        PersonalInfoImported = 2,
+        GradeLevels = 3,
+        MarkingPeriods = 4,
+        BlockScheduling = 5,
+        DailyPeriods = 6,
+        ScheduleInfoImported = 7,
+        InvitedUser = 8 ,
+        TeacherLogged = 9,
+        InvitedStudent = 10,
+        StudentLogged = 11 ,
+        PayingCustomer = 12
     }
 }

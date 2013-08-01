@@ -19,14 +19,16 @@ namespace Chalkable.BusinessLogic.Services.School
         StudentDailyAttendance SetDailyAttendance(DateTime date, Guid personId,  int? timeIn, int? timeOut);
         StudentDailyAttendance GetDailyAttendance(DateTime date, Guid personId);
         IList<StudentDailyAttendance> GetDailyAttendances(DateTime date); 
-        IList<ClassAttendanceDetails> GetClassAttendanceComplex(ClassAttendanceQuery attendanceQuery, IList<Guid> gradeLevelIds = null);
-
-        ClassAttendanceDetails GetClassAttendanceComplexById(Guid classAttendanceId);
-        IList<ClassAttendanceDetails> GetClassAttendanceComplex(Guid? schoolYearId, Guid? markingPeriodId, Guid? classId, Guid? personId, AttendanceTypeEnum? type, DateTime date);
+        IList<ClassAttendanceDetails> GetClassAttendanceDetails(ClassAttendanceQuery attendanceQuery, IList<Guid> gradeLevelIds = null);
+        ClassAttendanceDetails GetClassAttendanceDetails(Guid studentId, Guid classPeriodId, DateTime date);
+        ClassAttendanceDetails GetClassAttendanceDetailsById(Guid classAttendanceId);
+        IList<ClassAttendanceDetails> GetClassAttendanceDetails(Guid? schoolYearId, Guid? markingPeriodId, Guid? classId, Guid? personId, AttendanceTypeEnum? type, DateTime date);
         ClassAttendanceDetails SwipeCard(Guid personId, DateTime dateTime, Guid classPeriodId);
 
 
         int PossibleAttendanceCount(Guid markingPeriodId, Guid classId, DateTime? tillDate);
+
+        IDictionary<AttendanceTypeEnum, int> CalcAttendanceTypeTotalForStudent(Guid studentId, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate);
     }
 
     public class AttendanceService : SchoolServiceBase, IAttendanceService
@@ -123,7 +125,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     });
                 if (res == null || res.Arrival == null)
                 {
-                    var firstPresentOrLate = GetClassAttendanceComplex(new ClassAttendanceQuery
+                    var firstPresentOrLate = GetClassAttendanceDetails(new ClassAttendanceQuery
                         {
                             StudentId = personId,
                             FromDate = date,
@@ -164,7 +166,7 @@ namespace Chalkable.BusinessLogic.Services.School
             throw new NotImplementedException();
         }
 
-        public IList<ClassAttendanceDetails> GetClassAttendanceComplex(ClassAttendanceQuery attendanceQuery, IList<Guid> gradeLevelIds = null)
+        public IList<ClassAttendanceDetails> GetClassAttendanceDetails(ClassAttendanceQuery attendanceQuery, IList<Guid> gradeLevelIds = null)
         {
             using (var uow = Read())
             {
@@ -175,9 +177,9 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<ClassAttendanceDetails> GetClassAttendanceComplex(Guid? schoolYearId, Guid? markingPeriodId, Guid? classId, Guid? personId, AttendanceTypeEnum? type, DateTime date)
+        public IList<ClassAttendanceDetails> GetClassAttendanceDetails(Guid? schoolYearId, Guid? markingPeriodId, Guid? classId, Guid? personId, AttendanceTypeEnum? type, DateTime date)
         {
-            return GetClassAttendanceComplex(new ClassAttendanceQuery
+            return GetClassAttendanceDetails(new ClassAttendanceQuery
                 {
                     SchoolYearId = schoolYearId,
                     MarkingPeriodId = markingPeriodId,
@@ -203,14 +205,14 @@ namespace Chalkable.BusinessLogic.Services.School
                 var classPerson = new ClassPersonDataAccess(uow).GetClassPerson(new ClassPersonQuery { ClassId = c.Id, PersonId = personId});
                 var res = SetClassAttendance(classPerson.Id, classPeriodId, dateTime, have <= must ? AttendanceTypeEnum.Present : AttendanceTypeEnum.Late);
                 uow.Commit();
-                return GetClassAttendanceComplex(new ClassAttendanceQuery { Id = res.Id, MarkingPeriodId = classPeriod.Period.MarkingPeriodRef }).First();
+                return GetClassAttendanceDetails(new ClassAttendanceQuery { Id = res.Id, MarkingPeriodId = classPeriod.Period.MarkingPeriodRef }).First();
             }
         }
 
         //TODO: needs test
-        public ClassAttendanceDetails GetClassAttendanceComplexById(Guid classAttendanceId)
+        public ClassAttendanceDetails GetClassAttendanceDetailsById(Guid classAttendanceId)
         {
-           return GetClassAttendanceComplex(new ClassAttendanceQuery
+           return GetClassAttendanceDetails(new ClassAttendanceQuery
                 {
                     Id = classAttendanceId,
                 }).First();
@@ -223,6 +225,33 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 return new ClassAttendanceDataAccess(uow).PossibleAttendanceCount(markingPeriodId, classId, tillDate);
             }
+        }
+        //TODO: needs test
+        private IEnumerable<AttendanceTotalPerType> CalcAttendanceTypeTotal(Guid? schoolYearId, Guid? markingPeriodId, Guid? studentId, DateTime? fromDate, DateTime? toDate)
+        {
+            using (var uow = Read())
+            {
+               return new ClassAttendanceDataAccess(uow).CalcAttendanceTypeTotal(markingPeriodId,
+                    schoolYearId, studentId, fromDate, toDate);
+            }
+        }
+
+        public IDictionary<AttendanceTypeEnum, int> CalcAttendanceTypeTotalForStudent(Guid studentId, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate)
+        {
+            var res = CalcAttendanceTypeTotal(schoolYearId, markingPeriodId, studentId, fromDate, toDate);
+            return res.GroupBy(x => x.AttendanceType).ToDictionary(x => x.Key, x => x.Sum(y => y.Total));
+        }
+
+
+        public ClassAttendanceDetails GetClassAttendanceDetails(Guid studentId, Guid classPeriodId, DateTime date)
+        {
+            return GetClassAttendanceDetails(new ClassAttendanceQuery
+                {
+                    ClassPeriodId = classPeriodId,
+                    StudentId = studentId,
+                    FromDate = date,
+                    ToDate = date
+                }).FirstOrDefault();
         }
     }
 }

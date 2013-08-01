@@ -18,6 +18,7 @@ namespace Chalkable.BackgroundTaskProcessor
             handlers.Add(BackgroundTaskTypeEnum.BackupDatabases, new BackupTaskHandler(true));
             handlers.Add(BackgroundTaskTypeEnum.RestoreDatabases, new BackupTaskHandler(false));
             handlers.Add(BackgroundTaskTypeEnum.DatabaseUpdate, new DatabaseUpdateTaskHandler());
+            handlers.Add(BackgroundTaskTypeEnum.CreateDemoSchool, new CreateDemoSchoolTaskHandler());
         }
 
         public void Process()

@@ -17,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassDisciplineDetails> GetClassDisciplineDetails(ClassDisciplineQuery query, IList<Guid> gradeLevelIds = null);
         IList<ClassDisciplineDetails> GetClassDisciplineDetails(Guid schoolYearId, Guid personId, DateTime start, DateTime end, bool needsAllData = false);
         IList<ClassDisciplineDetails> GetClassDisciplineDetails(Guid schoolYearId, DateTime date);
-        
+        IList<DisciplineTotalPerType> CalcDisciplineTypeTotalForStudent(Guid studentId, Guid? markingPeriodId, Guid? schoolYearId, DateTime? fromDate, DateTime? toDate);
     }
 
     public class DisciplineService : SchoolServiceBase, IDisciplineService
@@ -106,6 +106,20 @@ namespace Chalkable.BusinessLogic.Services.School
                     FromDate = date,
                     ToDate = date
                 });
+        }
+        
+        private IList<DisciplineTotalPerType> CalcDisciplineTypeTotal(Guid? studentId, Guid? markingPeriodId, Guid? schoolYearId, DateTime? fromDate, DateTime? toDate) 
+        {
+            using (var uow = Read())
+            {
+                return  new ClassDisciplineDataAccess(uow).CalcDisciplineTypeTotal(schoolYearId, 
+                    markingPeriodId, studentId, fromDate, toDate);
+            }
+        }
+        //TODO: needs test
+        public IList<DisciplineTotalPerType> CalcDisciplineTypeTotalForStudent(Guid studentId, Guid? markingPeriodId, Guid? schoolYearId, DateTime? fromDate, DateTime? toDate)
+        {
+            return CalcDisciplineTypeTotal(studentId, markingPeriodId, schoolYearId, fromDate, toDate);
         }
     }
 }

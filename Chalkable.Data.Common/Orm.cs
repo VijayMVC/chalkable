@@ -264,7 +264,12 @@ namespace Chalkable.Data.Common
                          builder.Append(" and ");
                      }
                      if (cond.Value != null)
-                         builder.AppendFormat("[{0}].[{1}] =@{2}", tableName, condsMapping[cond.Key], cond.Key);
+                     {
+                         if (NotNull.Instance == cond.Value)
+                             builder.AppendFormat("[{0}].[{1}] is not null", tableName, condsMapping[cond.Key], cond.Key);
+                         else
+                            builder.AppendFormat("[{0}].[{1}] =@{2}", tableName, condsMapping[cond.Key], cond.Key);
+                     }
                      else
                          builder.AppendFormat("[{0}].[{1}] is null", tableName, cond.Key);
                  }
@@ -324,5 +329,16 @@ namespace Chalkable.Data.Common
     {
         public string Sql { get; set; }
         public IDictionary<string, object> Parameters { get; set; } 
+    }
+
+    public class NotNull
+    {
+        private NotNull()
+        {
+            
+        }
+
+        private static NotNull instance = new NotNull();
+        public static NotNull Instance { get { return instance; } }
     }
 }

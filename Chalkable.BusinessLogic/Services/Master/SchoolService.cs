@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.Master
 {
@@ -14,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         Data.Master.Model.School Create(Guid districtId, string name, IList<UserInfo> principals);
         void CreateEmpty();
         PaginatedList<Data.Master.Model.School> GetSchools(Guid? districtId, int start = 0, int count = int.MaxValue);
-        IList<Data.Master.Model.School> GetSchools(bool empty, bool demo);
+        IList<Data.Master.Model.School> GetSchools(bool? empty, bool? demo);
         SisSync GetSyncData(Guid schoolId);
         void SetSyncData(SisSync sisSync);
         void Update(Data.Master.Model.School school);
@@ -51,7 +54,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, server, "Master"), false))
             {
                 var da = new SchoolDataAccess(unitOfWork);
-                da.CreateSchoolDataBase(school.Id.ToString());
+                da.CreateSchoolDataBase(school.Id.ToString(), Settings.Configuration.SchoolTemplateDataBase);
             }
         }
         
@@ -77,7 +80,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        public IList<Data.Master.Model.School> GetSchools(bool empty, bool demo)
+        public IList<Data.Master.Model.School> GetSchools(bool? empty, bool? demo)
         {
             using (var uow = Read())
             {
@@ -116,9 +119,62 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public void CreateDemo()
         {
-            throw new NotImplementedException();
-        }
+            Data.Master.Model.School school;
+            var prefix = Guid.NewGuid().ToString().Replace("-", "");
+            var prototypeId = Guid.Parse(PreferenceService.Get(Preference.DEMO_SCHOOL_ID).Value);
+            var prototype = GetById(prototypeId);
+            var server = prototype.ServerUrl;
+            using (var uow = Update())
+            {
+                
+                school = new Data.Master.Model.School
+                {
+                    DistrictRef = prototype.DistrictRef,
+                    Id = Guid.NewGuid(),
+                    Name = prototype.Name + prefix,
+                    ServerUrl = server,
+                    IsEmpty = false,
+                    TimeZone = prototype.TimeZone,
+                    DemoPrefix = prefix
+                };
+                var da = new SchoolDataAccess(uow);
+                da.Create(school);
+                uow.Commit();
+            }
 
+            using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, server, "Master"), false))
+            {
+                var da = new SchoolDataAccess(unitOfWork);
+                da.CreateSchoolDataBase(school.Id.ToString(), prototype.Id.ToString());
+            }
+
+            //wait for online for an hour
+            for (int i = 0; i < 3600; i++)
+            {
+                using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, server, "Master"), false))
+                {
+                    var da = new SchoolDataAccess(unitOfWork);
+                    var l = da.GetOnline(new[] { school.Id });
+                    if (l.Count > 0)
+                        break;
+                }
+                Thread.Sleep(1000);
+            }
+                        
+            
+            IList<Person> users;
+            using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, server, school.Id.ToString()), false))
+            {
+                var da = new PersonDataAccess(unitOfWork);
+                da.RepopulateDemoIds(prefix);
+                users = da.GetAll();
+            }
+            foreach (var person in users)
+            {
+                ServiceLocator.UserService.CreateSchoolUser(person.Email, "tester", school.Id, CoreRoles.GetById(person.RoleRef).Name);
+            }
+        }
+        
         public Data.Master.Model.School Create(Guid districtId, string name, IList<UserInfo> principals)
         {
             Data.Master.Model.School school = GetEmpty();

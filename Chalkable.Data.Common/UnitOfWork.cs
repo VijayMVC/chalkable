@@ -78,6 +78,8 @@ namespace Chalkable.Data.Common
             {
                 foreach (var pair in parameters)
                 {
+                    if (NotNull.Instance == pair.Value)
+                        continue;
                     SqlParameter parameter;
                    if (pair.Value != null)
                         parameter = new SqlParameter(CompleteToParam(pair.Key), pair.Value);

@@ -49,8 +49,30 @@ namespace Chalkable.BackgroundTaskProcessor
                     return false;
                 }
             }
+            {
+                var c = new SqlConnection(Settings.SchoolTemplateConnectionString);
+                var t = new AllSchoolRunner<long>.Task
+                {
+                    Database = c.Database,
+                    Server = c.DataSource,
+                    Data = data.Time,
+                    Success = false,
+                    Completed = false
+                };
+                if (backup)
+                    AllSchoolRunner<long>.Run(new List<AllSchoolRunner<long>.Task> { t }, x => BackupHelper.DoExport(x.Data, x.Server, x.Database), CheckStatus);
+                else
+                    AllSchoolRunner<long>.Run(new List<AllSchoolRunner<long>.Task> { t }, Restore, CheckStatus);
+                if (!t.Success)
+                {
+                    log.LogError(string.Format("Db {0} error: Template Database", actionName));
+                    if (t.ErrorMessage != null)
+                        log.LogError(t.ErrorMessage);
+                    return false;
+                }
+            }
 
-            var schools = sl.SchoolService.GetSchools(false, false);
+            var schools = sl.SchoolService.GetSchools(null, null);
             var runer = new AllSchoolRunner<long>();
             bool res;
             if (backup)

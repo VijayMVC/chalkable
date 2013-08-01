@@ -72,7 +72,7 @@ namespace Chalkable.Web.Controllers
                         ToTime = cp.Period.EndTime,
                         NeedAllData = true
                     };
-                var attendances = SchoolLocator.AttendanceService.GetClassAttendanceComplex(query);
+                var attendances = SchoolLocator.AttendanceService.GetClassAttendanceDetails(query);
                 listClassAttendance = ClassAttendanceViewData.Create(attendances, attendanceReason).ToList();
             }
             listClassAttendance.Sort((x, y) => string.CompareOrdinal(x.Student.LastName, y.Student.LastName));
@@ -120,7 +120,7 @@ namespace Chalkable.Web.Controllers
                     StudentId = studentId,
                     NeedAllData = true
                 };
-            var attendances = SchoolLocator.AttendanceService.GetClassAttendanceComplex(query);
+            var attendances = SchoolLocator.AttendanceService.GetClassAttendanceDetails(query);
             var dailAttendance = SchoolLocator.AttendanceService.GetDailyAttendance(date, studentId);
             var student = attendances.Count > 0 ? attendances.First().Student : SchoolLocator.PersonService.GetPerson(studentId);
             return Json(StudentAttendanceViewData.Create(student, attendances, dailAttendance));

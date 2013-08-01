@@ -20,58 +20,58 @@ namespace Chalkable.Web.Controllers.PersonControllers
     public class StudentController : PersonController
     {
 
-        //[RequireRequestValue("schoolPersonId")]
-        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User, AppPermissionType.Attendance, AppPermissionType.Discipline, AppPermissionType.Grade })]
-        //public ActionResult Summary(Guid schoolPersonId)
-        //{
-        //    if (!Context.SchoolId.HasValue)
-        //        throw new UnassignedUserException();
-        //    var currentDateTime = Context.NowSchoolTime;
-        //    var student = SchoolLocator.PersonService.GetPerson(schoolPersonId);
-        //    if (student.StudentInfo == null || student.StudentInfo.GradeLevel == null)
-        //        throw new UnassignedUserException(ChlkResources.ERR_STUDENT_IS_NOT_ASSIGNED_TO_GRADE_LEVEL);
-        //    if (SchoolLocator.Context.UserId != schoolPersonId && SchoolLocator.Context.Role == CoreRoles.STUDENT_ROLE)
-        //        return Json(ShortPersonViewData.Create(student));
-        //    var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(currentDateTime.Date);
-        //    ClassPeriod currentClassPeriod = null;
-        //    ClassAttendanceDetails currentAttendance = null;
-        //    IList<AnnouncementsClassPeriodViewData> announcementPeriod = new List<AnnouncementsClassPeriodViewData>();
-        //    int maxPeriodNumber = 9;
-        //    var mp = markingPeriod ?? SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
-        //    Guid gradeLevelRef = student.StudentInfo.GradeLevelRef;
-
-        //    var attendances = SchoolLocator.AttendanceService.GetClassAttendanceComplex(new ClassAttendanceQuery
-        //        {
-        //            MarkingPeriodId = mp.Id,
-        //            StudentId = student.Id,
-        //            FromDate = mp.StartDate,
-        //            ToDate = currentDateTime.Date
-        //        });
+        //TODO: stduent grade rank ... get last grades 
+        [RequireRequestValue("schoolPersonId")]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User, AppPermissionType.Attendance, AppPermissionType.Discipline, AppPermissionType.Grade })]
+        public ActionResult Summary(Guid schoolPersonId)
+        {
+            if (!Context.SchoolId.HasValue)
+                throw new UnassignedUserException();
+            var currentDateTime = Context.NowSchoolTime;
+            var student = SchoolLocator.PersonService.GetPerson(schoolPersonId);
+            if (student.StudentInfo == null || student.StudentInfo.GradeLevel == null)
+                throw new UnassignedUserException(ChlkResources.ERR_STUDENT_IS_NOT_ASSIGNED_TO_GRADE_LEVEL);
+            if (SchoolLocator.Context.UserId != schoolPersonId && SchoolLocator.Context.Role == CoreRoles.STUDENT_ROLE)
+                return Json(ShortPersonViewData.Create(student));
+            var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(currentDateTime.Date);
+            AttendanceTypeEnum? currentAttendanceType = null;
+            IList<AnnouncementsClassPeriodViewData> announcementPeriod = new List<AnnouncementsClassPeriodViewData>();
+            int maxPeriodNumber = 9;
+            var mp = markingPeriod ?? SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
+            var attendanceTotal = SchoolLocator.AttendanceService.CalcAttendanceTypeTotalForStudent(student.Id, null, mp.Id, null, currentDateTime.Date);
+            var disciplineTotal = SchoolLocator.DisciplineService.CalcDisciplineTypeTotalForStudent(student.Id, null, mp.Id, null, currentDateTime.Date);
             
-        //    var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineDetails(mp.SchoolYearRef, schoolPersonId, mp.StartDate, currentDateTime.Date);
-        //    //var allStudentsRankStats = SchoolLocator.GradingStatisticService.get(mp.SchoolYearRef, gradeLevelRef, null, null);
-        //    //var currentStudentRankStats = allStudentsRankStats.First(x => x.StudentId == student.SchoolPersonId);
+            //var allStudentsRankStats = SchoolLocator.GradingStatisticService.get(mp.SchoolYearRef, gradeLevelRef, null, null);
+            //var currentStudentRankStats = allStudentsRankStats.First(x => x.StudentId == student.SchoolPersonId);
 
-        //    var lastGrades = SchoolLocator.StudentAnnouncementService.LastGrades(schoolPersonId, 5);
-        //    var classes = SchoolLocator.ClassService.GetClasses(null, mp.Id, student.Id);
-        //    if (markingPeriod != null)
-        //    {
-        //        var rooms = SchoolLocator.RoomService.GetRooms();
-        //        var periods = SchoolLocator.PeriodService.GetPeriods(markingPeriod.Id, null);
-        //        maxPeriodNumber = periods.Count > 0 ? periods.Max(x => x.Order) : maxPeriodNumber;
-        //        var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(currentDateTime.Date, currentDateTime);
-        //        var classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(currentDateTime, null, null, student.Id, null);
-        //        announcementPeriod = AnnouncementsClassPeriodViewData.Create(announcements, classPeriods, classes, rooms, currentDateTime.Date);
+            //var lastGrades = SchoolLocator.StudentAnnouncementService.LastGrades(schoolPersonId, 5);
+            var classes = SchoolLocator.ClassService.GetClasses(null, mp.Id, student.Id);
+            Room currentRoom = null;
+            ClassDetails currentClass = null;
+            if (markingPeriod != null)
+            {
+                var rooms = SchoolLocator.RoomService.GetRooms();
+                var periods = SchoolLocator.PeriodService.GetPeriods(markingPeriod.Id, null);
+                maxPeriodNumber = periods.Count > 0 ? periods.Max(x => x.Order) : maxPeriodNumber;
+                var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(currentDateTime.Date, currentDateTime);
+                var classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(currentDateTime, null, null, student.Id, null);
+                announcementPeriod = AnnouncementsClassPeriodViewData.Create(announcements, classPeriods, classes, rooms, currentDateTime.Date);
 
-        //        currentClassPeriod = classPeriods.FirstOrDefault(x => x.Period.StartTime <= NowTimeInMinutes && x.Period.EndTime >= NowTimeInMinutes);
-        //        if (currentClassPeriod != null)
-        //            currentAttendance = attendances.FirstOrDefault(x => x.ClassPeriodRef == currentClassPeriod.Id && x.Date == currentDateTime.Date);
-        //    }
-        //    var res = StudentSummaryViewData.Create(student, currentClassPeriod, attendances, disciplines, 
-        //                                            lastGrades, currentStudentRankStats, allStudentsRankStats, announcementPeriod, currentAttendance,
-        //                                            classes, SchoolLocator.GradingStyleService.GetMapper(), maxPeriodNumber);
-        //    return Json(res, 7);
-        //}
+                var currentClassPeriod = classPeriods.FirstOrDefault(x => x.Period.StartTime <= NowTimeInMinutes && x.Period.EndTime >= NowTimeInMinutes);
+                if (currentClassPeriod != null)
+                {
+                    var currentAttendance = SchoolLocator.AttendanceService.GetClassAttendanceDetails(student.Id, 
+                        currentClassPeriod.Id, currentDateTime.Date);
+                    if (currentAttendance != null)
+                        currentAttendanceType = currentAttendance.Type;
+                    currentClass = classes.First(x => x.Id == currentClassPeriod.ClassRef);
+                    currentRoom = rooms.First(x => x.Id == currentClassPeriod.RoomRef);
+                }
+            }
+            var res = StudentSummaryViewData.Create(student, currentRoom, currentClass, classes, disciplineTotal,
+                            attendanceTotal, currentAttendanceType, announcementPeriod, maxPeriodNumber);
+            return Json(res, 7);
+        }
         
         
         [RequireRequestValue("personId")]

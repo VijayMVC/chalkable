@@ -60,7 +60,7 @@ namespace Chalkable.Tests.Services.School
             Assert.AreEqual(attendace.ClassPersonRef, clPerson.Id);
             Assert.AreEqual(attendace.Date, schoolDate.DateTime);
             Assert.AreEqual(attendace.AttendanceReasonRef, reason.Id);
-            var attendances = attService.GetClassAttendanceComplex(new ClassAttendanceQuery {Id = attendace.Id}, null);
+            var attendances = attService.GetClassAttendanceDetails(new ClassAttendanceQuery {Id = attendace.Id}, null);
             AssertAreEqual(attendace, attendances[0]);
 
             AssertForDeny(sl=> sl.AttendanceService.SetAttendanceForClass(clPeriod.Id, schoolDate.DateTime, AttendanceTypeEnum.Present), SchoolTestContext
@@ -71,12 +71,12 @@ namespace Chalkable.Tests.Services.School
             
             attService.SetAttendanceForClass(clPeriod.Id, schoolDate.DateTime, AttendanceTypeEnum.Present);
 
-            Assert.AreEqual(attService.GetClassAttendanceComplex(new ClassAttendanceQuery { Type = AttendanceTypeEnum.Late}, null).Count, 0);
-            Assert.AreEqual(attService.GetClassAttendanceComplex(null, null, null, null, null, schoolDate.DateTime.AddDays(-1)).Count, 0);
-            Assert.AreEqual(attService.GetClassAttendanceComplex(null, null, c2.Id, null, null, schoolDate.DateTime).Count, 0);
-            attendances = attService.GetClassAttendanceComplex(null, null, c.Id, null, null, schoolDate.DateTime);
+            Assert.AreEqual(attService.GetClassAttendanceDetails(new ClassAttendanceQuery { Type = AttendanceTypeEnum.Late}, null).Count, 0);
+            Assert.AreEqual(attService.GetClassAttendanceDetails(null, null, null, null, null, schoolDate.DateTime.AddDays(-1)).Count, 0);
+            Assert.AreEqual(attService.GetClassAttendanceDetails(null, null, c2.Id, null, null, schoolDate.DateTime).Count, 0);
+            attendances = attService.GetClassAttendanceDetails(null, null, c.Id, null, null, schoolDate.DateTime);
             Assert.AreEqual(attendances.Count, 2);
-            Assert.AreEqual(attService.GetClassAttendanceComplex(null, null, c.Id, student.Id, null, schoolDate.DateTime).Count, 1);
+            Assert.AreEqual(attService.GetClassAttendanceDetails(null, null, c.Id, student.Id, null, schoolDate.DateTime).Count, 1);
             Assert.AreEqual(attendances[0].Type, AttendanceTypeEnum.Present);
             Assert.AreEqual(attendances[1].Type, AttendanceTypeEnum.Present);
 
