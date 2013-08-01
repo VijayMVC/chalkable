@@ -133,12 +133,9 @@
     var currentSchoolId = '@ViewData["SchoolId"]';
     var currentSchoolName = '@ViewData["SchoolName"]';
     var newNotifications = parseInt('@ViewData["UnshownNotificationsCount"]', 10) || 0;
-
-    var markingPeriodStart = '@ViewData["CrocodocApiUrl"]';
-    var markingPeriodStart = '@ViewData["CrocodocApiUrl"]';
     
     var USER_ROLE_EXT = '@ViewData["Rolename"]';
-
+    var currentChlkPerson = JSON.parse(HtmlEncode('@ViewData["CurrentPerson"]')).data;
     var classesToFilter = '@ViewData["Classes"]' ? JSON.parse(HtmlEncode('@ViewData["Classes"]')).data || [] : [];
 
     var classesAdvancedData = '@ViewData["ClassesAdvancedData"]' ? JSON.parse(HtmlEncode('@ViewData["ClassesAdvancedData"]')).data || [] : [];
@@ -150,67 +147,12 @@
         };
     });
 
-    var markingPeriod = JSON.parse(HtmlEncode('@ViewData["MarkingPeriod"]')).data;
-    var nextMarkingPeriod = JSON.parse(HtmlEncode('@ViewData["NextMarkingPeriod"]')).data;
+    //var markingPeriod = JSON.parse(HtmlEncode('@ViewData["MarkingPeriod"]')).data;
+    //var nextMarkingPeriod = JSON.parse(HtmlEncode('@ViewData["NextMarkingPeriod"]')).data;
 
     var finalizedClassesIds = '@ViewData["FinalizedClassesIds"]' ? JSON.parse(HtmlEncode('@ViewData["FinalizedClassesIds"]')).data || [] : [];
 
-    var currentSchoolPersonId = parseInt('@ViewData["SchoolPersonId"]', 10) || 0;
-    var currentSchoolPersonPictureId = parseInt('@ViewData["PersonPictureId"]', 10) || 0;
 
-    var markingPeriodStart = '@ViewData["MarkingPeriodStart"]';
-    var markingPeriodEnd = '@ViewData["MarkingPeriodEnd"]';
-    var markingPeriodId = '@ViewData["MarkingPeriodId"]';
-    var markingPeriodName = '@ViewData["MarkingPeriodName"]';
-    var nextMarkingPeriodStart = '@ViewData["NextMarkingPeriodStart"]';
-    var nextMarkingPeriodEnd = '@ViewData["NextMarkingPeriodEnd"]';
-    var nextMarkingPeriodId = '@ViewData["NextMarkingPeriodId"]';
-    var nextMarkingPeriodName = '@ViewData["NextMarkingPeriodName"]';
-    var version = '@Chalkable.Web.Tools.CompilerHelper.Version';
-    changeFullName('@ViewData["FullName"]');
-    var facebookApplicationId = '@ViewData["FacebookApplicationId"]';
-    var googleApplicationId = '@ViewData["GoogleApplicationId"]';
-    var twitterApplicationId = '@ViewData["TwitterApplicationId"]';
-    var linkedInApplicationId = '@ViewData["LinkedInApplicationId"]';
-    var importantCount = '';
-    var crocodocUrl = '@ViewData["CrocodocApiUrl"]';
-
-    var studentRole = '@ViewData["StudentRole"]';
-    var teacherRole = '@ViewData["TeacherRole"]';
-    var adminGradeRole = '@ViewData["AdminGradeRole"]';
-    var needsTour = '@ViewData["NeedsTour"]';
-    var prefix = '@ViewData["Prefix"]';
-    var urlReferrer = '@ViewData["UrlReferrer"]';
-
-    var currentSchoolYearId = '@ViewData["CurrentSchoolYearId"]';
-    var lastSchoolYearId = '@ViewData["LastSchoolYearId"]';
-    var nextSchoolYearId = '@ViewData["NextSchoolYearId"]';
-    var schoolStatus = '@ViewData["SchoolStatus"]';
-    var redirectUrl = '@ViewData["redirectUrl"]';
-    var developerId = '@ViewData["DeveloperId"]';
-    var scriptsRoot = '@ViewData["ScriptsRoot"]';
-    var USER_ROLE_EXT = '@ViewData["Rolename"]';
-    USER_ROLE_EXT = USER_ROLE_EXT.toLowerCase();
-
-    var signupInfoId = '@ViewData["signupInfoId"]';
-
-    if (scriptsRoot[scriptsRoot.length - 1] != '/')
-        scriptsRoot = scriptsRoot + '/';
-
-    var gradesToFilter = '@ViewData["GradeLevels"]' ? JSON.parse(HtmlEncode('@ViewData["GradeLevels"]')).data || [] : [];
-    var itemsToFilter = classesToFilter.length ? classesToFilter : gradesToFilter;
-    var nextMpClassesIds = '@ViewData["NextMpClassesIds"]' ? JSON.parse(HtmlEncode('@ViewData["NextMpClassesIds"]')).data || [] : [];
-    var finalizedClassesIds = '@ViewData["FinalizedClassesIds"]' ? JSON.parse(HtmlEncode('@ViewData["FinalizedClassesIds"]')).data || [] : [];
-    var schoolPerson = '@ViewData["SchoolPersonData"]' ? JSON.parse(HtmlEncode('@ViewData["SchoolPersonData"]')).data || {} : {};
-    var developerInfo = '@ViewData["DeveloperInfo"]' ? JSON.parse(HtmlEncode('@ViewData["DeveloperInfo"]')).data || {} : {};
-    schoolPerson.pictureUrl47 = WEB_SITE_ROOT + "PersonPicture/Read?pictureId=" + schoolPerson.pictureid + "&width=47&height=47";
-    var attendanceReasons = '@ViewData["AttendanceReasons"]' ? JSON.parse(HtmlEncode('@ViewData["AttendanceReasons"]')).data || {} : {};
-
-
-    if (olark) {
-        olark('api.visitor.updateEmailAddress', { emailAddress: schoolPerson.email ? schoolPerson.email : "" });
-        olark('api.visitor.updateFullName', { fullName: schoolPerson.displayname + " , role: " + schoolPerson.rolename + " , school: " + currentSchoolName });
-    }
 
 </script>
 

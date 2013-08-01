@@ -72,6 +72,7 @@ NAMESPACE('chlk.controllers', function (){
             function dashboardDeveloperAction() {
 
                 var devSettings = new chlk.models.settings.DeveloperSettings();
+                devSettings.setDeveloperId(this.getCurrentPerson().getId());
                 return this.PushView(chlk.activities.settings.DeveloperPage, ria.async.DeferredData(devSettings));
             }
 

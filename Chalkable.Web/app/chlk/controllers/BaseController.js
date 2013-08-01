@@ -1,5 +1,6 @@
 REQUIRE('ria.mvc.Controller');
 REQUIRE('chlk.models.common.Role');
+REQUIRE('chlk.models.people.Person');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -62,6 +63,11 @@ NAMESPACE('chlk.controllers', function (){
            [[chlk.models.common.RoleEnum]],
            Boolean, function userInRole(roleId){
                return this.getCurrentRole().getRoleId() == roleId;
+           },
+
+
+           chlk.models.people.Person, function getCurrentPerson(){
+               return this.getContext().getSession().get('currentPerson');
            },
 
 
