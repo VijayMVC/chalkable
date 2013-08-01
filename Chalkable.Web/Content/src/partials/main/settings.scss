@@ -1,0 +1,109 @@
+@import "compass/css3/images";
+@import "compass/css3/border-radius";
+@import "compass/css3/box-shadow";
+
+$brown-text: #532f18;
+$txt-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
+
+BODY {
+  DIV.page {
+    #content {
+      DIV#content-wrapper{
+        &.general{
+          #main-wrapper {
+            background: url(images/profile/paper-bg.png);
+            #main{
+
+              .profile-toolbar-button{
+                background: url(images/profile/small-profile-icon.png) 8px 9px no-repeat !important;
+                padding-left: 0px;
+                margin-left: 15px;
+
+                BUTTON.x-btn-text{
+                  padding-left: 11px;
+                  padding-top: 1px;
+                  width: 88px;
+                }
+              }
+
+
+
+              fieldset#email-mid , fieldset#password-right{
+                margin-left: 25px;
+              }
+
+              .x-panel-header{
+               text-align: left !important;
+               font: bold 16px Arial;
+               color:$brown-text;
+               text-shadow: $txt-shadow;
+
+              }
+              .x-form-check-wrap{
+                line-height: 28px;
+                border-right: 1px solid #b6a570;
+                padding-left: 5px;
+
+                > INPUT{
+                  vertical-align: middle !important;
+                }
+
+                > LABEL {
+                  color:$brown-text;
+                  font: normal 14px Arial;
+                  text-shadow: $txt-shadow;
+                }
+              }
+
+              #password-reset-panel{
+                line-height: 35px;
+
+              }
+
+              SPAN#pw-change-button , SPAN#pw-save-button {
+                margin-top: 5px;
+                background-image: none !important;
+                border-radius: 5px;
+                min-height: 36px;
+                border: 1px solid #b3a066;
+                @include box-shadow(0px 1px 1px rgba(0, 0, 0, 0.21));
+                @include background(linear-gradient(top, #f3efe7, #dfd5c2) !important);
+
+                &:hover{
+                  @include background(linear-gradient(top, #f3eedf, #e1d3a6) !important);
+                }
+
+                >SPAN{
+                  background-image: none !important;
+                  min-height: 36px;
+
+                  >SPAN{
+                    background-image: none !important;
+                    min-height: 36px;
+
+                    >BUTTON{
+                      padding: 10px;
+                      color: $brown-text;
+                      text-shadow: $txt-shadow;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          #main-top, #footer {
+            background-image: url(images/profile/paper-top-bottom.png) !important;
+          }
+        }
+      }
+    }
+  }
+}
+INPUT[name=newpassword1] , INPUT[name=oldpassword] , INPUT[name=confirmnewpassword] {
+  width: 150px !important;
+  height: 25px !important;
+  border: 1px solid #b3a066;
+  color: #aba07f;
+  @include box-shadow(0px 1px 1px rgba(0, 0, 0, 0.21));
+
+}

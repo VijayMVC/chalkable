@@ -1,0 +1,244 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"  itemscope itemtype="Education">
+<head>
+    <title>@ViewBag.Title</title>
+    @ChlkHelpers.RenderPageMetadata()
+    <meta itemprop="image" content="@Url.Content("~/favicon.ico")">
+    <link rel="icon" href="@Url.Content("~/favicon.ico")" />
+
+    <link href="@Url.StaticContent("/Scripts/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.StaticContent("/Scripts/jquery/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.StaticContent("/app/jquery/validation/css/validationEngine.jquery.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.StaticContent("/Scripts/jquery/validation/css/template.css")" rel="stylesheet" type="text/css"/>  
+    <!-- Page specific CSS -->
+    @RenderSection("Styles", false)
+    @ChlkHelpers.GoogleAnalytics()
+</head>
+<body>
+    <div id="fb-root"></div>
+    <input type="hidden" value=" ServerTime :  @ViewData["CurrentServerDateTime"]"/>
+    <input type="hidden" value=" ServerDbTime:  @ViewData["CurrentServerDBDateTime"]"/>
+
+    <div id="page-header">
+        Revision: @Chalkable.Web.Tools.CompilerHelper.Version
+    </div>
+
+    @RenderSection("ContentSection", false)  
+    @RenderBody()
+
+    @if ((ViewData.ContainsKey("Prefix") && !string.IsNullOrEmpty((string)ViewData["Prefix"])) || (ViewData.ContainsKey("DeveloperId") && !string.IsNullOrEmpty((string)ViewData["DeveloperId"])))
+    {
+        <div id="demo-footer">
+            @if (ViewData.ContainsKey("DeveloperId") && !string.IsNullOrEmpty(Convert.ToString(ViewData["DeveloperId"])))
+            {
+                if (ViewData.ContainsKey("NeedsTour") && !string.IsNullOrEmpty(Convert.ToString(ViewData["NeedsTour"])))
+                {
+                    <span id="first-tooltip" style="display:none"></span>
+                }
+
+                <div id="current-app-name">
+
+                    </div>
+                    <div class="border demo-end hidden"></div>
+                    <div class="demo-end hidden">
+                        <h>Demo</h>
+                        <div id="demo-end-container"></div>
+                    </div>
+            }
+            else
+            {
+                <div id="fb">
+                    <h>Don't be shy</h>
+                    <div class="fb-like" data-href="https://chalkable.com" data-layout="button_count" data-send="true" data-width="55" data-show-faces="true"></div>
+                    <a id="principal"></a>
+                </div>
+                    <div class="border demo-end"></div>
+                    <div class="demo-end">
+                        <h>Demo</h>
+                        <div id="demo-end-container"></div>
+                    </div>
+                <div class="border"></div>
+                <div>
+                    <h>Sign up</h>
+                    <div id="demo-sign-up-container"></div>
+                </div>
+            }
+
+            <div class="border"></div>
+            
+
+            <div id="roles-buttons">
+                @if (ViewData.ContainsKey("DeveloperId") && !string.IsNullOrEmpty(Convert.ToString(ViewData["DeveloperId"])))
+                {
+                    <a class="demo-role-button" rolename="Developer"><span><div class="mark left"></div><div class="mark right"></div>Developer</span></a
+                >}<a class="demo-role-button" rolename="Student"><span><div class="mark left"></div><div class="mark right"></div>Student</span></a
+                ><a class="demo-role-button" rolename="Teacher"><span><div class="mark left"></div><div class="mark right"></div>Teacher</span></a
+                ><a class="demo-role-button" rolename="AdminGrade"><span><div class="mark left"></div><div class="mark right"></div>Admin</span></a
+                ><a class="demo-role-button coming" rolename="Parent"><span><span></span><div class="mark left"></div><div class="mark right"></div>Parent</span></a
+                ><a class="demo-role-button coming" rolename="District"><span><span></span><div class="mark left"></div><div class="mark right"></div>District</span></a>
+            </div>
+        </div>
+
+        <div id="tellfriend" class="contact_form">
+         <a class="close" href="#" >Close</a>
+             <form id='tellafriend_form' method="post" action="#">
+
+                 <label for="topersonmail">To: </label>
+                 <input class="std_input" type="text" id="topersonmail" name="topersonmail" size="40" maxlength="35" />
+
+                 <label for="frompersonmail">Your Email: </label>
+                 <input class="std_input" type="text" id="frompersonmail" name="frompersonmail" size="40" maxlength="35" value="" />
+
+                 <input class="std_input" type="hidden" id="subject" name="subject" size="40" value="Chalkable Demo - App store for school" />
+
+                 <label for="message">Message: </label>
+                 <textarea id="message" name="message" rows="18" cols="40">   Just checked out the Chalkable demo, thought you might want to take a look. It$quot;s an app store for school and a platform to make those apps work.
+				    https://www.chalkable.com/DemoSchool/Demo
+                 </textarea>
+
+                 <div id="tellafriend-submit-container"></div>
+            </form>
+         </div>
+    }
+
+	<div class="chlk-tooltip" id="chlk-tooltip-item"><div class="tooltip-content"></div><div class="tooltip-triangle"></div></div>
+
+    <script type="text/javascript" src='https://platform.twitter.com/anywhere.js?id=@ViewData["TwitterApplicationId"]&v=1' ></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery-1.8.3.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery.menu-aim.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery.maskedinput-1.3.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery.quicksand.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery-ui.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/snippet/jquery.snippet.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery.signaturepad.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/jquery/jquery.scrollTo.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/languages/jquery.validationEngine-en.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.validationEngine.js")"></script>
+
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/chlk-messages.js")"></script>
+    
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/html5shiv.js")"></script>
+    
+    <!--[if IE 6]><script  type="text/javascript" src="@Url.StaticContent("/Scripts/index/jq.png-min.js")"></script><![endif]-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    
+    
+   @ChlkHelpers.LinkedIn(ViewData["LinkedInApplicationId"]) 
+   @ChlkHelpers.Olark()
+   @ChlkHelpers.RenderSiteRoot(Url)
+    
+    <script type="text/javascript">
+        function prepareClassesInfo(classesAdvancedData){
+            var classesInfo = {};
+            classesAdvancedData.forEach(function(el) {
+                classesInfo[el.classid] = {
+                    mask: el.mask,
+                    typesByClass: el.typesbyclass
+                };
+            });
+            return classesInfo;
+        }
+        
+        var changeFullName = function (newFullName) {
+            window.fullName = newFullName;
+            window.fullName = window.fullName.replace(/\.+/g, '.');
+            var logOutBlock = $('#logout-block').find('.logout-area')[0];
+            $(logOutBlock).html(fullName);
+        };
+
+        window.base_url = '@Url.Content("~")';
+        var currentSchoolId = parseInt('@ViewData["SchoolId"]', 10) || 0;
+        var currentSchoolName = '@ViewData["SchoolName"]';
+        var newNotifications = parseInt('@ViewData["UnshownNotificationsCount"]', 10) || 0;
+        var currentSchoolPersonId = parseInt('@ViewData["SchoolPersonId"]', 10) || 0;
+        var currentSchoolPersonPictureId = parseInt('@ViewData["PersonPictureId"]', 10) || 0;
+
+        var markingPeriodStart = '@ViewData["MarkingPeriodStart"]';
+        var markingPeriodEnd = '@ViewData["MarkingPeriodEnd"]';
+        var markingPeriodId = '@ViewData["MarkingPeriodId"]';
+        var markingPeriodName = '@ViewData["MarkingPeriodName"]';
+        var nextMarkingPeriodStart = '@ViewData["NextMarkingPeriodStart"]';
+        var nextMarkingPeriodEnd = '@ViewData["NextMarkingPeriodEnd"]';
+        var nextMarkingPeriodId = '@ViewData["NextMarkingPeriodId"]';
+        var nextMarkingPeriodName = '@ViewData["NextMarkingPeriodName"]';
+        var version = '@Chalkable.Web.Tools.CompilerHelper.Version';
+        changeFullName('@ViewData["FullName"]');       
+        var facebookApplicationId = '@ViewData["FacebookApplicationId"]';
+        var googleApplicationId = '@ViewData["GoogleApplicationId"]';
+        var twitterApplicationId = '@ViewData["TwitterApplicationId"]';
+        var linkedInApplicationId = '@ViewData["LinkedInApplicationId"]';
+        var importantCount = '';
+        var crocodocUrl = '@ViewData["CrocodocApiUrl"]';
+
+        var studentRole = '@ViewData["StudentRole"]';
+        var teacherRole = '@ViewData["TeacherRole"]';
+        var adminGradeRole = '@ViewData["AdminGradeRole"]';
+        var needsTour = '@ViewData["NeedsTour"]';
+        var prefix = '@ViewData["Prefix"]';
+        var urlReferrer = '@ViewData["UrlReferrer"]';
+
+        var currentSchoolYearId = '@ViewData["CurrentSchoolYearId"]';
+        var lastSchoolYearId = '@ViewData["LastSchoolYearId"]';
+        var nextSchoolYearId = '@ViewData["NextSchoolYearId"]';
+        var schoolStatus = '@ViewData["SchoolStatus"]';
+        var redirectUrl = '@ViewData["redirectUrl"]';
+        var developerId = '@ViewData["DeveloperId"]';
+        var scriptsRoot = '@ViewData["ScriptsRoot"]';
+        var USER_ROLE_EXT = '@ViewData["Rolename"]';
+        USER_ROLE_EXT = USER_ROLE_EXT.toLowerCase();
+
+        var signupInfoId = '@ViewData["signupInfoId"]';
+
+        if (scriptsRoot[scriptsRoot.length - 1] != '/')
+            scriptsRoot = scriptsRoot + '/';
+
+        var classesToFilter = '@ViewData["Classes"]' ? JSON.parse(HtmlEncode('@ViewData["Classes"]')).data || [] : [];
+        var gradesToFilter = '@ViewData["GradeLevels"]' ? JSON.parse(HtmlEncode('@ViewData["GradeLevels"]')).data || [] : [];
+        var itemsToFilter = classesToFilter.length ? classesToFilter : gradesToFilter;
+        var nextMpClassesIds = '@ViewData["NextMpClassesIds"]' ? JSON.parse(HtmlEncode('@ViewData["NextMpClassesIds"]')).data || [] : [];
+        var finalizedClassesIds = '@ViewData["FinalizedClassesIds"]' ? JSON.parse(HtmlEncode('@ViewData["FinalizedClassesIds"]')).data || [] : [];
+        var classesAdvancedData = '@ViewData["ClassesAdvancedData"]' ? JSON.parse(HtmlEncode('@ViewData["ClassesAdvancedData"]')).data || [] : [];
+        var schoolPerson = '@ViewData["SchoolPersonData"]' ? JSON.parse(HtmlEncode('@ViewData["SchoolPersonData"]')).data || {} : {};
+        var developerInfo = '@ViewData["DeveloperInfo"]' ? JSON.parse(HtmlEncode('@ViewData["DeveloperInfo"]')).data || {} : {}; 
+        schoolPerson.pictureUrl47 = WEB_SITE_ROOT + "PersonPicture/Read?pictureId=" + schoolPerson.pictureid + "&width=47&height=47";
+        var classesInfo = prepareClassesInfo(classesAdvancedData);
+        var attendanceReasons = '@ViewData["AttendanceReasons"]' ? JSON.parse(HtmlEncode('@ViewData["AttendanceReasons"]')).data || {} : {};
+        
+
+        if (olark) {
+            olark('api.visitor.updateEmailAddress', { emailAddress: schoolPerson.email ? schoolPerson.email : "" });
+            olark('api.visitor.updateFullName', { fullName: schoolPerson.displayname + " , role: " + schoolPerson.rolename + " , school: " + currentSchoolName});
+        }
+        
+    </script>
+
+    <script type="text/json" id="application-value" class="valuable-script">
+        @Html.Raw(@ViewData["Application"])
+    </script>
+    
+    @RenderSection("Scripts", false)
+
+    <script type="text/javascript">
+        var values = document.getElementsByClassName('valuable-script'), value, name;
+        var len = values.length;
+        for(var i = 0; i < len; i++){
+            value = values[i];
+            if(value.text.trim()){
+                name = value.getAttribute('id').split('-')[0];
+                window[name] = JSON.parse(value.text).data;
+            }
+        }
+    </script>
+    
+    @ChlkHelpers.Facebook()
+    @ChlkHelpers.MixPanel()
+    @ChlkHelpers.WebKitAutofill()
+
+    @RenderSection("BottomScripts", false)
+    @RenderSection("TeacherTracking", false)
+    @RenderSection("AdminTracking", false)
+    @RenderSection("StudentTracking", false)
+    @RenderSection("LogOnTracking", false)
+</body>
+</html>
