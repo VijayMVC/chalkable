@@ -1,3 +1,4 @@
+REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 
 NAMESPACE('chlk.models.schoolYear', function () {
@@ -8,9 +9,9 @@ NAMESPACE('chlk.models.schoolYear', function () {
             chlk.models.id.MarkingPeriodId, 'id',
             String, 'description',
             [ria.serialize.SerializeProperty('startdate')],
-            String, 'startDate',
+            chlk.models.common.ChlkDate, 'startDate',
             [ria.serialize.SerializeProperty('enddate')],
-            String, 'endDate',
+            chlk.models.common.ChlkDate, 'endDate',
             Number, 'weekdays',
             String, 'name'
         ]);
