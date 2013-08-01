@@ -2,14 +2,14 @@
 -isAnnouncement = self.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf();
 -classId = self.getRecipientId() || self.getClassId();
 -attachments = self.getAnnouncementAttachments() || [];
-input(type='hidden', name='id', value=self.getId())
+input(type='hidden', name='id', value=self.getId().valueOf())
 input(type='hidden', name='announcementtypeid', value=self.getAnnouncementTypeId())
 input(type='hidden', name='statetyped', value=self.getStateTyped())
 input(type='hidden', name='systemtype', value=self.getSystemType())
-input(type='hidden', name='schoolpersonref', value=self.getSchoolPersonRef())
+input(type='hidden', name='personid', value=self.getPersonId().valueOf())
 input(type='hidden', name='gradingstyle', value=self.getGradingStyle())
 input(type='hidden', name='attachments', value=self.getAttachments())
-//input(type='hidden', name='created', value=self.getCreated())
+input(type='hidden', name='markingperiodid', value=self.getCreated())
 input(type='hidden', name='state', value=self.getState())
 //input(type='hidden', name='recipientId', value=self.getRecipientId())
 input(type='hidden', name='classId', value=classId)

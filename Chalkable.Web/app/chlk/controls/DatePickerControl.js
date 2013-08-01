@@ -16,12 +16,12 @@ NAMESPACE('chlk.controls', function () {
             Object, function processAttrs(name, value, attrs) {
                 attrs.id = attrs.id || ria.dom.NewGID();
                 attrs.name = name;
-                if (typeof value !== 'undefined')
+                if (value)
                     attrs.value = value.format('mm/dd/yy');
 
                 var options = attrs['data-options'];
                 this.queueReanimation_(attrs.id, options);
-                this.setValue(value.getDate());
+                value && this.setValue(value.getDate());
 
                 return attrs;
             },

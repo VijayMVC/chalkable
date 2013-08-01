@@ -163,7 +163,7 @@ NAMESPACE('chlk.controllers', function (){
         function saveAction(model) {
 
             function save(){
-                /*this.announcementService.saveAnnouncement(
+                this.announcementService.saveAnnouncement(
                     model.getId(),
                     model.getClassId(),
                     model.getAnnouncementTypeId(),
@@ -173,12 +173,12 @@ NAMESPACE('chlk.controllers', function (){
                     model.getAttachments(),
                     model.getApplications(),
                     model.getMarkingPeriodId()
-                );*/
+                );
             }
 
             var result;
             var submitType = model.getSubmitType();
-            var schoolPersonId = model.getSchoolPersonRef();
+            var schoolPersonId = model.getPersonId();
             var announcementTypeId = model.getAnnouncementTypeId();
             var announcementTypeName = model.getAnnouncementTypeName();
             var classId = model.getClassId();
@@ -196,7 +196,9 @@ NAMESPACE('chlk.controllers', function (){
             }else{
                 if(submitType == 'save'){
                     model.setAnnouncementAttachments(this.getContext().getSession().get('AnnouncementAttachments'));
-                    result = new ria.async.DeferredData(model);
+                    var announcementForm = new chlk.models.announcement.AnnouncementForm();
+                    announcementForm.setAnnouncement(model);
+                    result = this.addEditAction(announcementForm, false);
                     save.call(this);
                     return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result);
                 }else{

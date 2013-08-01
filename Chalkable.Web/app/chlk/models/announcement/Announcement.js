@@ -116,8 +116,8 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('schoolpersonname')],
             String, 'schoolPersonName',
 
-            [ria.serialize.SerializeProperty('schoolpersonref')],
-            chlk.models.id.SchoolPersonId, 'schoolPersonRef',
+            [ria.serialize.SerializeProperty('personid')],
+            chlk.models.id.SchoolPersonId, 'personId',
 
             [ria.serialize.SerializeProperty('shortcontent')],
             String, 'shortContent',
