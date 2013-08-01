@@ -13,6 +13,7 @@ namespace Chalkable.BackgroundTaskProducer
             Trace.WriteLine("BackgroundTaskProducer entry point called", "Information");
             var cp = new CompositeProducer();
             cp.AddProducer("Empty school producer", new EmptySchoolTaskProducer());
+            cp.AddProducer("Demo school producer", new CreateDemoSchoolTaskProducer());
             
             while (true)
             {

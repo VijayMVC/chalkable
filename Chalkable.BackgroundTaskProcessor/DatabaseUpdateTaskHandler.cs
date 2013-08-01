@@ -63,6 +63,11 @@ namespace Chalkable.BackgroundTaskProcessor
                     }
                     else
                     {
+                        using (var uow = new UnitOfWork(Settings.SchoolTemplateConnectionString, false))
+                        {
+                            var cmd = uow.GetTextCommandWithParams(updateSql.Sql, new Dictionary<string, object>());
+                            cmd.ExecuteNonQuery();
+                        }
                         var runer = new AllSchoolRunner<string>();
                         runer.Run(schools, updateSql.Sql, log, ExecSql, task1 => AllSchoolRunner<string>.TaskStatusEnum.Completed);
                     }

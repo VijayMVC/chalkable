@@ -45,13 +45,13 @@ namespace Chalkable.Data.Master.DataAccess
         } 
 
         //TODO: next methods runs on the school db server under master database
-        public void CreateSchoolDataBase(string dbName)
+        public void CreateSchoolDataBase(string dbName, string prototypeName)
         {
             //TODO: what if servers are different?
-            var sql = string.Format("Create Database [{0}] as copy of [{1}]", dbName, Settings.Configuration.SchoolTemplateDataBase);
+            var sql = string.Format("Create Database [{0}] as copy of [{1}]", dbName, prototypeName);
             ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
         }
-
+        
         public IList<string> GetOnline(IEnumerable<Guid> names)
         {
             var sql = string.Format("SELECT name FROM sys.databases WHERE name  in ({0}) and state = 0",
@@ -71,9 +71,18 @@ namespace Chalkable.Data.Master.DataAccess
             return PaginatedSelect<School>(conds, School.ID_FIELD, start, count);
         }
 
-        public IList<School> GetSchools(bool empty, bool demo)
+        public IList<School> GetSchools(bool? empty, bool? demo)
         {
-            var conds = new Dictionary<string, object> { { School.IS_EMPTY_FIELD, empty } };
+            var conds = new Dictionary<string, object>();
+            if (empty.HasValue)
+                conds.Add(School.IS_EMPTY_FIELD, empty);
+            if (demo.HasValue)
+            {
+                if (demo.Value)
+                    conds.Add(School.DEMO_PREFIX_FIELD, NotNull.Instance);
+                else
+                    conds.Add(School.DEMO_PREFIX_FIELD, null);
+            }
             return SelectMany<School>(conds);
         }
 

@@ -15,7 +15,7 @@ declare @class table
 	Class_CourseRef uniqueidentifier,
 	Class_TeacherRef uniqueidentifier,
 	Class_GradeLevelRef uniqueidentifier,
-	SisId int,
+	Class_SisId int,
 	Course_Id uniqueidentifier,
 	Course_Code  nvarchar(255),
 	Course_Title  nvarchar(255),
