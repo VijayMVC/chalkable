@@ -114,7 +114,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'schoolPersonName',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.SchoolPersonId, 'schoolPersonRef',
+            chlk.models.id.SchoolPersonId, 'personId',
 
             [ria.templates.ModelPropertyBind],
             String, 'shortContent',

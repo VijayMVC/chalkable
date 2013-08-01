@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.class.ClassForTopBar');
-REQUIRE('chlk.models.gradingStyles.Mapping');
+REQUIRE('chlk.models.grading.Mapping');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
 REQUIRE('chlk.models.id.CourseId');
 
@@ -32,6 +32,8 @@ NAMESPACE('chlk.models.announcement', function () {
 
             ArrayOf(chlk.models.announcement.StudentAnnouncement), 'items',
 
-            chlk.models.gradingStyles.Mapping, 'mapping'
+            chlk.models.grading.Mapping, 'mapping',
+
+            Number, 'selectedIndex'
         ]);
 });

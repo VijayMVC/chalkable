@@ -51,7 +51,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number, String, String, chlk.models.common.ChlkDate, String, String, chlk.models.id.MarkingPeriodId]],
             ria.async.Future, function saveAnnouncement(id, classId_, announcementTypeId_, subject_, content_, expiresdate_, attachments_, applications_, markingPeriodId_) {
-                return this.get('Announcement/Save.json', chlk.models.announcement.AnnouncementForm, {
+                return this.get('Announcement/SaveAnnouncement.json', chlk.models.announcement.AnnouncementForm, {
                     id:id.valueOf(),
                     announcementTypeRef:announcementTypeId_,
                     classId: classId_ ? classId_.valueOf() : null,
