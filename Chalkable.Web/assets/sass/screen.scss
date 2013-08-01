@@ -128,21 +128,34 @@ html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fiel
 .i-b{
   display: inline-block;
 }
+
+.d-b{
+  display: block;
+}
+
+.t-d{
+  text-decoration: none;
+}
+
 .v-t{
   vertical-align: top;
 }
 
 a, a:visited, a:link {
-  color: $link-color;
-  outline: none !important;
+  &:not(.not-blue){
+    color: $link-color;
+    outline: none !important;
+  }
 }
 .x-hidden{
   display: none !important;
 }
 
 a:active, a:hover {
-  color: lighten($link-color, 10%);
-  outline: none !important;
+  &:not(.not-blue){
+    color: lighten($link-color, 10%);
+    outline: none !important;
+  }
 }
 
 a.grey-link, .grey-link{

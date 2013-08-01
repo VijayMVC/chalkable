@@ -52,10 +52,10 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number, String, String, chlk.models.common.ChlkDate, String, String, chlk.models.id.MarkingPeriodId]],
             ria.async.Future, function saveAnnouncement(id, classId_, announcementTypeId_, subject_, content_, expiresdate_, attachments_, applications_, markingPeriodId_) {
                 return this.get('Announcement/SaveAnnouncement.json', chlk.models.announcement.AnnouncementForm, {
-                    id:id.valueOf(),
-                    announcementTypeRef:announcementTypeId_,
+                    announcementId:id.valueOf(),
+                    announcementTypeId:announcementTypeId_,
                     classId: classId_ ? classId_.valueOf() : null,
-                    markingPeriodId:markingPeriodId_,
+                    markingPeriodId:markingPeriodId_ ? markingPeriodId_.valueOf() : null,
                     subject: subject_,
                     content: content_,
                     attachments: attachments_,
@@ -67,8 +67,8 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number, String, String, chlk.models.common.ChlkDate, String, String, chlk.models.id.MarkingPeriodId]],
             ria.async.Future, function submitAnnouncement(id, classId_, announcementTypeId_, subject_, content_, expiresdate_, attachments_, applications_, markingPeriodId_) {
                 return this.get('Announcement/SubmitAnnouncement.json', chlk.models.announcement.AnnouncementForm, {
-                    id:id.valueOf(),
-                    announcementTypeRef:announcementTypeId_,
+                    announcementId:id.valueOf(),
+                    announcementTypeId:announcementTypeId_,
                     classId: classId_ ? classId_.valueOf() : null,
                     markingPeriodId: markingPeriodId_ ? markingPeriodId_.valueOf() : null,
                     subject: subject_,
@@ -99,7 +99,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId]],
             ria.async.Future, function editAnnouncement(id) {
-                return this.get('chalkable2/app/data/edit.json', chlk.models.announcement.AnnouncementForm, {
+                return this.get('Announcement/Edit.json', chlk.models.announcement.AnnouncementForm, {
                     announcementId: id.valueOf()
                 });
             },
@@ -114,7 +114,7 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function deleteDrafts(id) {
                 return this.post('Announcement/DeleteDrafts.json', chlk.models.announcement.Announcement, {
-                    schoolPersonId: id.valueOf()
+                    personId: id.valueOf()
                 });
             },
 

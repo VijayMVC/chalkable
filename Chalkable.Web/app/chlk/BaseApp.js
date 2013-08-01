@@ -51,9 +51,9 @@ NAMESPACE('chlk', function (){
             function $(){
                 BASE();
                 var serializer = new ria.serialize.JsonSerializer();
-                this.getContext().getSession().set('markingPeriod', serializer.deserialize(window.markingPeriod, chlk.models.schoolYear.MarkingPeriod));
-                this.getContext().getSession().set('nextMarkingPeriod', serializer.deserialize(window.nextMarkingPeriod, chlk.models.schoolYear.MarkingPeriod));
-                this.getContext().getSession().set('finalizedClassesIds', window.finalizedClassesIds);
+                window.markingPeriod && this.getContext().getSession().set('markingPeriod', serializer.deserialize(window.markingPeriod, chlk.models.schoolYear.MarkingPeriod));
+                window.nextMarkingPeriod && this.getContext().getSession().set('nextMarkingPeriod', serializer.deserialize(window.nextMarkingPeriod, chlk.models.schoolYear.MarkingPeriod));
+                window.finalizedClassesIds && this.getContext().getSession().set('finalizedClassesIds', window.finalizedClassesIds);
             }
         ]);
 });

@@ -76,6 +76,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             String, 'expiresDateText',
 
+            [ria.serialize.SerializeProperty('classid')],
             chlk.models.id.ClassId, 'classId',
 
             Boolean, 'gradable',

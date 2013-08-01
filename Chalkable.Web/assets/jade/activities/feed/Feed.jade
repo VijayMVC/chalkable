@@ -12,15 +12,16 @@
                         .grades
                     .bullet
                         +ActionLink('announcement', 'star', item.getId()).star
-                        .item-type
-                            .tooltip-announcement.ann-type
-                                .tooltip-content
-                                    Tooltip
-                            .attachment
-                                .icon.blue.icon.announcements-type-7
-                                .icon.black
-                                h2.animated-header=item.getSubject()
-                                p.animated=item.getShortContent()
-                                .animated=item.getExpiresDate().toString('d/m/y')
-                                .attachment-icon
-                                .apps-icon
+                        +ActionLink('announcement', 'view', item.getId()).d-b.t-d.not-blue
+                            .item-type
+                                .tooltip-announcement.ann-type
+                                    .tooltip-content
+                                        Tooltip
+                                .attachment
+                                    .icon.blue.icon.announcements-type-7
+                                    .icon.black
+                                    h2.animated-header=item.getSubject()
+                                    p.animated=item.getShortContent()
+                                    .animated=item.getExpiresDate().toString('d/m/y')
+                                    .attachment-icon
+                                    .apps-icon
