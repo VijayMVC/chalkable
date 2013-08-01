@@ -115,6 +115,7 @@ namespace Chalkable.Web.Controllers
         private const string MARKING_PERIOD_DATA = "MarkingPeriod";
         private const string NEXT_MARKING_PERIOD_DATA = "NextMarkingPeriod";
         private const string ATTENDANCE_REASONS_DATA = "AttendanceReasons";
+        private const string FINALIZED_CLASSES_IDS = "FinalizedClassesIds";
 
         private const string APPLICATION = "Application";
 
@@ -183,6 +184,10 @@ namespace Chalkable.Web.Controllers
             var personView = PersonViewData.Create(person);
             personView.DisplayName = person.ShortSalutationName;
             PrepareJsonData(personView, CURRENT_PERSON_DATA);
+
+            var finalizedClasses = SchoolLocator.FinalGradeService.GetFinalizedClasses(mp.Id);
+            PrepareJsonData(finalizedClasses.Select(x => x.Id), FINALIZED_CLASSES_IDS);
+
             var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, SchoolLocator.Context.UserId);
             var now = SchoolLocator.Context.NowSchoolTime;
             if (classes.Count > 0)
