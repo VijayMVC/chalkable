@@ -13,7 +13,7 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AnnouncementForm)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, '', '.ann-form-container', ria.mvc.PartialUpdateRuleActions.Replace)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementForm, '', '#main>DIV:visible', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementForm, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LastMessages, '', '.drop-down-container', ria.mvc.PartialUpdateRuleActions.Replace)],
         [chlk.activities.lib.PageClass('new-item')],
         'AnnouncementFormPage', EXTENDS(chlk.activities.lib.TemplatePage), [
@@ -22,7 +22,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function classClick(node, event){
                 var classId = node.getAttr('classId');
-                this.dom.find('input[name=classId]').setValue(classId);
+                this.dom.find('input[name=classid]').setValue(classId);
             },
 
             [ria.mvc.DomEventBind('click', '.action-button')],

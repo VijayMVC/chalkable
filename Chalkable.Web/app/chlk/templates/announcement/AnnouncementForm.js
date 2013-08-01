@@ -4,7 +4,7 @@ REQUIRE('chlk.models.class.ClassesForTopBar');
 
 NAMESPACE('chlk.templates.announcement', function () {
 
-    /** @class chlk.templates.announcement.Announcement*/
+    /** @class chlk.templates.announcement.AnnouncementForm*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AnnouncementForm.jade')],
         [ria.templates.ModelBind(chlk.models.announcement.AnnouncementForm)],

@@ -12,7 +12,7 @@ input(type='hidden', name='attachments', value=self.getAttachments())
 input(type='hidden', name='markingperiodid', value=self.getCreated())
 input(type='hidden', name='state', value=self.getState())
 //input(type='hidden', name='recipientId', value=self.getRecipientId())
-input(type='hidden', name='classId', value=classId)
+input(type='hidden', name='classid', value=classId)
 input(type='hidden', name='announcementtypename', value=self.getAnnouncementTypeName())
 .left-block
     if isAnnouncement
@@ -28,7 +28,7 @@ input(type='hidden', name='announcementtypename', value=self.getAnnouncementType
             selectOtherMonths: true
         },
         class="validate[required]"
-    )#due-date
+    )#expiresdate
 .attachments-and-applications
     #attach-file-area.announcement-item.attach-file-area
         button#add-application.simple-gray-button Attach App
@@ -36,7 +36,7 @@ input(type='hidden', name='announcementtypename', value=self.getAnnouncementType
             +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
     each attachment in attachments
         div(data-id=attachment.getId(), data-url="viewurl").announcement-item.attachment
-            +ActionLink('announcement', 'deleteAttachment', attachment.getId()).close-btn
+            +ActionLink('announcement', 'deleteAttachment', attachment.getId().valueOf()).close-btn
             img(src=attachment.getThumbnailUrl())
             .title
                 div=attachment.getName()
@@ -47,13 +47,13 @@ input(type='hidden', name='announcementtypename', value=self.getAnnouncementType
         value="submit"
     ).special-button.blue-button.submit-btn=(self.getState() ? "Save" : "Submit")
     if self.getState()
-        +ActionLink('announcement', 'delete', self.getId())
+        +ActionLink('announcement', 'delete', self.getId().valueOf())
             +Button()(
                 type="submit",
                 name="submitType",
                 value="submit"
             ).special-button.red-button.submit-btn Delete
     else
-        +ActionLink('announcement', 'discard', self.getId()).grey-link Discard
+        +ActionLink('announcement', 'discard', self.getPersonId().valueOf()).grey-link Discard
 
 
