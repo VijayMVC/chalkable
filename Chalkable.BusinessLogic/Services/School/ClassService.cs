@@ -12,7 +12,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IClassService
     {
-        ClassDetails Add(Guid schoolYearId, Guid courseInfoId, string name, string description, Guid teacherId, Guid gradeLevelId, List<Guid> markingPeriodsId);
+        ClassDetails Add(Guid schoolYearId, Guid courseInfoId, string name, string description, Guid teacherId, Guid gradeLevelId, List<Guid> markingPeriodsId, int? sisId = null);
         ClassDetails Edit(Guid classId, Guid courseInfoId, string name, string description, Guid teacherId, Guid gradeLevelId, List<Guid> markingPeriodsId);
         ClassDetails AddStudent(Guid classId, Guid personId);
         ClassDetails DeleteStudent(Guid classId, Guid personId);
@@ -37,7 +37,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         //TODO: needs test
         public ClassDetails Add(Guid schoolYearId, Guid courseInfoId, string name, string description, Guid teacherId,
-                         Guid gradeLevelId, List<Guid> markingPeriodsId)
+                         Guid gradeLevelId, List<Guid> markingPeriodsId, int? sisId = null)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -53,7 +53,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         GradeLevelRef = gradeLevelId,
                         Name = name,
                         SchoolYearRef = schoolYearId,
-                        TeacherRef = teacherId
+                        TeacherRef = teacherId,
+                        SisId = sisId
                     };
                 da.Insert(cClass);
                 CreateMarkingPeriodClasses(cClass, markingPeriodsId, uow);

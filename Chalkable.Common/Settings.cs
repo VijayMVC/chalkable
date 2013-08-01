@@ -86,10 +86,18 @@ namespace Chalkable.Common
         {
             get { return (string)this["SchoolDbUser"]; }
         }
+        
         [ConfigurationProperty("SchoolDbPassword")]
         public string SchoolDbPassword
         {
             get { return (string)this["SchoolDbPassword"]; }
+        }
+
+
+        [ConfigurationProperty("TaskProcessorDelay")]
+        public int TaskProcessorDelay
+        {
+            get { return (int) this["TaskProcessorDelay"]; }
         }
     }
 

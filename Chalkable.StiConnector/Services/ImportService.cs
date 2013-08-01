@@ -354,10 +354,7 @@ namespace Chalkable.StiConnector.Services
                 }
 
                 var c = ServiceLocatorSchool.ClassService.Add(schoolYear.Id, course.Id, stiCourse.FullName, stiCourse.FullName, teacher.Id
-                    , gradeLevels.First(x => x.Name == glName).Id, mps);
-                
-                
-                
+                    , gradeLevels.First(x => x.Name == glName).Id, mps, stiCourse.CourseID);
 
                 var scheduledSections = stiCourse.ScheduledSections.ToList();
                 foreach (var scheduledSection in scheduledSections)
@@ -371,9 +368,16 @@ namespace Chalkable.StiConnector.Services
                             room = ServiceLocatorSchool.RoomService.GetRooms().First(x => x.SisId == stiCourse.RoomID.Value);
                         else
                             room = noRoom;
-                        ServiceLocatorSchool.ClassPeriodService.Add(generalPeriod.Id, c.Id, room.Id);
+                        try
+                        {
+                            ServiceLocatorSchool.ClassPeriodService.Add(generalPeriod.Id, c.Id, room.Id);
+                        }
+                        catch (Exception ex)
+                        {
+                            //TODO: don't use exceptions in logic. need implement canadd
+                            Log.LogWarning(string.Format("class {0} wasn't added to room {1} and general period {2} because of {3}", c.Id, room.Id, generalPeriod.Id, ex.Message));
+                        }
                     }
-                    
                 }
                 counter++;
                 if (counter % 100 == 0)

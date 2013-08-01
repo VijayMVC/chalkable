@@ -1,4 +1,3 @@
-
 Alter procedure [dbo].[spGetClasses] @schoolYearId uniqueidentifier, @markingPeriodId uniqueidentifier, @callerId uniqueidentifier, @callerRoleId int,
 	 @personId uniqueidentifier, @start int, @count int, @classId uniqueidentifier, 
 	 @filter1 nvarchar(max), @filter2 nvarchar(max), @filter3 nvarchar(max)
@@ -16,6 +15,7 @@ declare @class table
 	Class_CourseRef uniqueidentifier,
 	Class_TeacherRef uniqueidentifier,
 	Class_GradeLevelRef uniqueidentifier,
+	SisId int,
 	Course_Id uniqueidentifier,
 	Course_Code  nvarchar(255),
 	Course_Title  nvarchar(255),
@@ -27,7 +27,7 @@ declare @class table
 	Person_LastName nvarchar(255),
 	Person_Gender nvarchar(255),
 	Person_Salutation nvarchar(255),
-	Person_Email nvarchar(256),
+	Person_Email nvarchar(256),	
 	Class_StudentsCount int
 )
 
@@ -79,6 +79,7 @@ select * from @class
 
 select mpc.* from MarkingPeriodClass mpc
 join @class c on c.Class_Id = mpc.ClassRef
+
 
 
 

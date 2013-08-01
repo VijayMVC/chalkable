@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
+using Chalkable.Common;
 using Microsoft.WindowsAzure.ServiceRuntime;
 
 
@@ -14,9 +15,11 @@ namespace Chalkable.BackgroundTaskProcessor
             // This is a sample worker implementation. Replace with your logic.
             Trace.WriteLine("Chalkable.BackgroundTaskProcessor entry point called", "Information");
             var processor = new TaskProcessor();
+            var delay = Settings.Configuration.TaskProcessorDelay;
+            if (delay < 0) delay = 7200000;
             while (true)
             {
-                Thread.Sleep(10000);
+                Thread.Sleep(delay);
                 try
                 {
                     processor.Process();
