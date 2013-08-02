@@ -14,10 +14,11 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class FinalGradeController : ChalkableController
     {
-        [AuthorizationFilter("System Admin, AdminGrade, AdminEdit, AdminView, Teacher, Parent")]
-        public ActionResult List(int status)
+        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Parent")]
+        public ActionResult List(int status, int? start, int? count)
         {
-            var finalGrades = SchoolLocator.FinalGradeService.GetPaginatedFinalGrades((FinalGradeStatus)status);
+            var finalGrades = SchoolLocator.FinalGradeService.GetPaginatedFinalGrades(
+                (FinalGradeStatus) status, start ?? 0, count ?? DEFAULT_PAGE_SIZE);
             return Json(finalGrades.Transform(FinalGradeViewData.Create));
         }
 
@@ -55,6 +56,22 @@ namespace Chalkable.Web.Controllers
                   finalGradeInfo.Attendance, finalGradeInfo.DropLowestAttendance, finalGradeInfo.Discipline, finalGradeInfo.DropLowestDiscipline
                   , finalGradeInfo.GradingStyle, byType);
             return Json(FinalGradeViewData.Create(finalGrade), 6);         
+        }
+
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult Submit(Guid finalGradeId)
+        {
+            SchoolLocator.FinalGradeService.Submit(finalGradeId);
+            var finalGrade = SchoolLocator.FinalGradeService.GetFinalGrade(finalGradeId);
+            return Json(FinalGradeViewData.Create(finalGrade));
+        }
+
+        [AuthorizationFilter("AdminGrade")]
+        public ActionResult ApproveReject(Guid finalGradeId, bool isApprove)
+        {
+            var res = SchoolLocator.FinalGradeService.ApproveReject(finalGradeId, isApprove);
+            return Json(res);
         }
     }
 }
