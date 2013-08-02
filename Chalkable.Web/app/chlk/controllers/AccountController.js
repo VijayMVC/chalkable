@@ -1,7 +1,7 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.DeveloperService');
 REQUIRE('chlk.activities.profile.DeveloperPage');
-REQUIRE('chlk.models.id.DeveloperId');
+REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.developer.DeveloperInfo');
 
 
@@ -25,11 +25,10 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
         [chlk.controllers.SidebarButton('settings')],
-         //[[chlk.models.id.DeveloperId]]
-         function profileDeveloperAction(){
-             //var result = this.developerService.getInfo(id);
-             var developerInfo = new chlk.models.developer.DeveloperInfo();
-             return this.PushView(chlk.activities.profile.DeveloperPage, ria.async.DeferredData(developerInfo));
+         [[chlk.models.id.SchoolPersonId]],
+         function profileDeveloperAction(id){
+             var result = this.developerService.getInfo(id);
+             return this.PushView(chlk.activities.profile.DeveloperPage, result);
          },
 
          [chlk.controllers.AccessForRoles([
@@ -46,7 +45,7 @@ NAMESPACE('chlk.controllers', function (){
                     model.getEmail()
                 )
                 .attach(this.validateResponse_());
-            return this.PushView(chlk.activities.profile.DeveloperPage, result);
+            return this.UpdateView(chlk.activities.profile.DeveloperPage, result);
 
         }
     ])

@@ -79,7 +79,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin, Developer")]
         public ActionResult UpdateInfo(Guid developerId, string name, string websiteLink, string email)
         {
-            var res = MasterLocator.DeveloperService.Edit(developerId, name, websiteLink, email);
+            var res = MasterLocator.DeveloperService.Edit(developerId, name, email, websiteLink);
             //TODO: mix panel 
             //MixPanelService.ChangedEmail(ServiceLocator.Context.UserName, email);
             //if (ServiceLocator.Context.RoleNameLowered == CoreRoles.DEVELOPER_ROLE.LoweredName)

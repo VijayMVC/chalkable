@@ -1,4 +1,4 @@
-REQUIRE('chlk.models.id.DeveloperId');
+REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.SchoolId');
 
 NAMESPACE('chlk.models.developer', function () {
@@ -6,7 +6,7 @@ NAMESPACE('chlk.models.developer', function () {
     /** @class chlk.models.developer.DeveloperInfo*/
     CLASS(
         'DeveloperInfo', [
-            chlk.models.id.DeveloperId, 'id',
+            chlk.models.id.SchoolPersonId, 'id',
             [ria.serialize.SerializeProperty('displayname')],
             String, 'displayName',
             String, 'email',
