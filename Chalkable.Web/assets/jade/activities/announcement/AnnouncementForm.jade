@@ -26,7 +26,52 @@
                         value="save"
                     ).action-button= item.getDescription()
         .ann-form-container(class=(classId && typeId ? '' : 'x-hidden'))
-            +RenderWith(announcement, chlk.templates.announcement.Announcement)
+            -typesEnum = chlk.models.announcement.AnnouncementTypeEnum;
+            -isAnnouncement = announcement.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf();
+            -attachments = announcement.getAnnouncementAttachments() || [];
+            input(type='hidden', name='id', value=announcement.getId().valueOf())
+            input(type='hidden', name='announcementtypeid', value=announcement.getAnnouncementTypeId())
+            input(type='hidden', name='statetyped', value=announcement.getStateTyped())
+            input(type='hidden', name='systemtype', value=announcement.getSystemType())
+            input(type='hidden', name='personid', value=announcement.getPersonId().valueOf())
+            input(type='hidden', name='gradingstyle', value=announcement.getGradingStyle())
+            input(type='hidden', name='attachments', value=announcement.getAttachments())
+            input(type='hidden', name='markingperiodid', value=announcement.getCreated())
+            input(type='hidden', name='state', value=announcement.getState())
+            input(type='hidden', name='classid', value=classId)
+            input(type='hidden', name='announcementtypename', value=announcement.getAnnouncementTypeName())
+            .left-block
+                if isAnnouncement
+                    TEXTAREA(id="subject",name="subject",placeholder="Subject")=announcement.getSubject()
+                TEXTAREA(id="content",name="content",placeholder=isAnnouncement ? "Message" : "Assignment")=announcement.getContent()
+                .drop-down-container
+                input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
+                input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
+            .right-block
+                +DatePicker('expiresdate', announcement.getExpiresDate())(
+                    data-options={
+                        showOtherMonths: true,
+                        selectOtherMonths: true
+                    },
+                    class="validate[required]"
+                )#expiresdate
+            .attachments-and-applications
+                +RenderWith(announcement, chlk.templates.announcement.Announcement)
+            .bottom-block
+                +Button()(
+                    type="submit",
+                    name="submitType",
+                    value="submit"
+                ).special-button.blue-button.submit-btn=(announcement.getState() ? Msg.Save : Msg.Submit)
+                if announcement.getState()
+                    +ActionLink('announcement', 'delete', announcement.getId().valueOf())
+                        +Button()(
+                            type="submit",
+                            name="submitType",
+                            value="submit"
+                        ).special-button.red-button.submit-btn=Msg.Delete
+                else
+                    +ActionLink('announcement', 'discard', announcement.getPersonId().valueOf()).grey-link.not-blue=Msg.Discard
         .choose-type(class=(classId && !typeId ? '' : 'x-hidden'))
         .choose-class(class=(classId ? 'x-hidden' : ''))
 

@@ -57,7 +57,14 @@ NAMESPACE('chlk.controllers', function (){
             }
             var announcementTypeId_ = announcement.getAnnouncementTypeId();
             if(announcementTypeId_){
-                model.setSelectedTypeId(announcementTypeId_);
+                if(classId_ && classInfo){
+                    var types = classInfo.getTypesByClass(), typeId = null;
+                    types.forEach(function(item){
+                        if(item.getId() == announcementTypeId_)
+                            typeId = announcementTypeId_;
+                    });
+                    typeId && model.setSelectedTypeId(typeId);
+                }
             }
             model.setTopData(topModel);
 
@@ -128,11 +135,8 @@ NAMESPACE('chlk.controllers', function (){
         function uploadAttachmentAction(announcementId, files) {
             var result = this.announcementService
                 .uploadAttachment(announcementId, files)
-                //.attach(this.validateResponse_())
                 .then(function(model){
-                    var announcementForm = new chlk.models.announcement.AnnouncementForm();
-                    announcementForm.setAnnouncement(model);
-                    return this.addEditAction(announcementForm, true);
+                    return model;
                 }.bind(this));
             return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result);
         },

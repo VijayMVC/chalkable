@@ -99,15 +99,6 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
-            ria.async.Future, function listForMonth(classId_, date_) {
-                return this.get('chalkable2/app/data/calendarMonth.json', ArrayOf(chlk.models.calendar.announcement.Day), {
-                    //classId: classId_.valueOf(),
-                    //date: date_.getDate()
-                });
-            },
-
-
             [[chlk.models.id.AnnouncementId]],
             ria.async.Future, function editAnnouncement(id) {
                 return this.get('Announcement/Edit.json', chlk.models.announcement.AnnouncementForm, {
