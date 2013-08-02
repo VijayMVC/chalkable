@@ -16,7 +16,11 @@ NAMESPACE('chlk.controllers', function (){
             function listBackupsAction(start_){
                 var result = this.dbMaintenanceService
                     .getBackups(start_ || 0, 10)
-                    .attach(this.validateResponse_());
+                    .attach(this.validateResponse_())
+                    .then(function(model){
+                        this.getContext().getSession().set('listBackups', model);
+                        return model;
+                    }.bind(this));
                 return this.PushView(chlk.activities.storage.DbMaintenancePage, result);
             },
 
@@ -29,6 +33,15 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.storage.DatabaseUpdate]],
             function runSqlAction(model){
                 this.dbMaintenanceService.databaseUpdate(model.getMasterSql(), model.getSchoolSql());
+            },
+
+            function backupAction(){
+                var result = this.dbMaintenanceService
+                    .backup()
+                    .then(function(success){
+                        return this.getContext().getSession().get('listBackups');
+                    }.bind(this));
+                return this.UpdateView(chlk.activities.storage.DbMaintenancePage, result);
             }
 
         ])

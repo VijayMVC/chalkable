@@ -4,6 +4,8 @@
             .left
                 +ActionLink('dbmaintenance', 'listBackups').pressed Backups
                 +ActionLink('dbmaintenance', 'updateDb') Update
+    +ActionLink('dbmaintenance', 'backup').i-b.t-d.not-blue
+        +Button().special-button2.green BackUp
     +Grid('dbmaintenance', 'listBackups', self).not-transparent
         +GridHead()
             .th Name

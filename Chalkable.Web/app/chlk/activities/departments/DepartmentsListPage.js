@@ -1,4 +1,4 @@
-REQUIRE('ria.mvc.TemplateActivity');
+REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.departments.Departments');
 
 NAMESPACE('chlk.activities.departments', function () {
@@ -7,5 +7,5 @@ NAMESPACE('chlk.activities.departments', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.departments.Departments)],
-        'DepartmentsListPage', EXTENDS(ria.mvc.TemplateActivity), [ ]);
+        'DepartmentsListPage', EXTENDS(chlk.activities.lib.TemplatePage), [ ]);
 });

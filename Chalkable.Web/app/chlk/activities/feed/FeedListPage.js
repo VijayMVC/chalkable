@@ -1,4 +1,4 @@
-REQUIRE('ria.mvc.TemplateActivity');
+REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.feed.Feed');
 
 NAMESPACE('chlk.activities.feed', function () {
@@ -7,5 +7,5 @@ NAMESPACE('chlk.activities.feed', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.feed.Feed)],
-        'FeedListPage', EXTENDS(ria.mvc.TemplateActivity), [ ]);
+        'FeedListPage', EXTENDS(chlk.activities.lib.TemplatePage), [ ]);
 });

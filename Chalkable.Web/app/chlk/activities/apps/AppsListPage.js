@@ -1,4 +1,4 @@
-REQUIRE('ria.mvc.TemplateActivity');
+REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.apps.Apps');
 
 NAMESPACE('chlk.activities.apps', function () {
@@ -7,5 +7,5 @@ NAMESPACE('chlk.activities.apps', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.apps.Apps)],
-        'AppsListPage', EXTENDS(ria.mvc.TemplateActivity), [ ]);
+        'AppsListPage', EXTENDS(chlk.activities.lib.TemplatePage), [ ]);
 });

@@ -35,16 +35,21 @@ NAMESPACE('chlk.controllers', function (){
 
         ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
 
+        [[ArrayOf(chlk.models.attachment.Attachment)]],
+        function prepareAttachments(attachments){
+            attachments.forEach(function(item){
+                if(item.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf())
+                    item.setThumbnailUrl(this.announcementService.getAttachmentUri(item.getId(), false, 170, 110));
+            }.bind(this));
+        },
+
         [[chlk.models.announcement.AnnouncementForm, Boolean]],
         function addEditAction(model, isEdit){
             var classes = this.classService.getClassesForTopBar();
             var topModel = new chlk.models.class.ClassesForTopBar();
             var announcement = model.getAnnouncement();
             var attachments = announcement.getAnnouncementAttachments();
-            attachments.forEach(function(item){
-                if(item.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf())
-                    item.setThumbnailUrl(this.announcementService.getAttachmentUri(item.getId(), false, 170, 110));
-            }.bind(this));
+            this.prepareAttachments(attachments);
             this.getContext().getSession().set('AnnouncementAttachments', attachments);
             announcement.setAttachments(attachments.map(function(item){return item.id}).join(','));
             topModel.setTopItems(classes);
@@ -136,6 +141,8 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.announcementService
                 .uploadAttachment(announcementId, files)
                 .then(function(model){
+                    var attachments = model.getAnnouncementAttachments();
+                    this.prepareAttachments(attachments);
                     return model;
                 }.bind(this));
             return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result);

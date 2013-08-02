@@ -28,7 +28,6 @@
         .ann-form-container(class=(classId && typeId ? '' : 'x-hidden'))
             -typesEnum = chlk.models.announcement.AnnouncementTypeEnum;
             -isAnnouncement = announcement.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf();
-            -attachments = announcement.getAnnouncementAttachments() || [];
             input(type='hidden', name='id', value=announcement.getId().valueOf())
             input(type='hidden', name='announcementtypeid', value=announcement.getAnnouncementTypeId())
             input(type='hidden', name='statetyped', value=announcement.getStateTyped())

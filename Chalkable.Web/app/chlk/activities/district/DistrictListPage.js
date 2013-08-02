@@ -1,4 +1,4 @@
-REQUIRE('ria.mvc.TemplateActivity');
+REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.district.Districts');
 
 NAMESPACE('chlk.activities.district', function () {
@@ -7,5 +7,5 @@ NAMESPACE('chlk.activities.district', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.district.Districts)],
-        'DistrictListPage', EXTENDS(ria.mvc.TemplateActivity), []);
+        'DistrictListPage', EXTENDS(chlk.activities.lib.TemplatePage), []);
 });

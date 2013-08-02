@@ -1,4 +1,4 @@
-REQUIRE('ria.mvc.TemplateActivity');
+REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.bgtasks.BgTaskLogs');
 
 NAMESPACE('chlk.activities.bgtasks', function () {
@@ -7,5 +7,5 @@ NAMESPACE('chlk.activities.bgtasks', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.bgtasks.BgTaskLogs)],
-        'BgTaskLogListPage', EXTENDS(ria.mvc.TemplateActivity), [ ]);
+        'BgTaskLogListPage', EXTENDS(chlk.activities.lib.TemplatePage), [ ]);
 });

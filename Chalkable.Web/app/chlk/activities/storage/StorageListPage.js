@@ -1,4 +1,4 @@
-REQUIRE('ria.mvc.TemplateActivity');
+REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.storage.Storages');
 
 NAMESPACE('chlk.activities.storage', function () {
@@ -7,5 +7,5 @@ NAMESPACE('chlk.activities.storage', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.storage.Storages)],
-        'StorageListPage', EXTENDS(ria.mvc.TemplateActivity), [ ]);
+        'StorageListPage', EXTENDS(chlk.activities.lib.TemplatePage), [ ]);
 });

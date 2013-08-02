@@ -1,4 +1,4 @@
-REQUIRE('ria.mvc.TemplateActivity');
+REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.profile.DeveloperProfile');
 
