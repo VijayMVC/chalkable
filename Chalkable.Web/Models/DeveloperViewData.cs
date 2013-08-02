@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Web.Models
@@ -9,12 +10,12 @@ namespace Chalkable.Web.Models
     public class DeveloperViewData
     {
         public Guid Id { get; set; }
-        public Guid UserId { get; set; }
         public string Name { get; set; }
         public string WebSiteLink { get; set; }
         public string Email { get; set; }
         public string DisplayName { get; set; }
         public Guid SchoolId { get; set; }
+        public RoleViewData Role { get; set; }
 
         private DeveloperViewData() { }
 
@@ -27,7 +28,7 @@ namespace Chalkable.Web.Models
                 WebSiteLink = developer.WebSite,
                 Email = developer.Email,
                 DisplayName = developer.DisplayName,
-                UserId = developer.User.Id,
+                Role = RoleViewData.Create(CoreRoles.DEVELOPER_ROLE),
                 SchoolId = developer.SchoolRef
             };
         }

@@ -24,14 +24,8 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public int State { get; set; }
         public Guid? DeveloperId { get; set; }
         public Guid? LiveAppId { get; set; }
-        public bool HasStudentMyApps { get; set; }
-        public bool HasTeacherMyApps { get; set; }
-        public bool HasAdminMyApps { get; set; }
-        public bool HasParentMyApps { get; set; }
-        public bool HasMyAppsView { get; set; }
-        public bool CanAttach { get; set; }
-        public bool ShowInGradeView { get; set; }
         public bool IsInternal { get; set; }
+        public ApplicationAccessViewData ApplicationAccess { get; set; }
         public ApplicationPriceViewData ApplicationPrice { get; set; }
         public IList<Guid> Picturesid { get; set; }
        
@@ -48,13 +42,8 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             ShortDescription = StringTools.BuildShortText(application.ShortDescription, SHORT_LENGHT);
             SmallPictureId = application.SmallPictureRef;
             BigPictureId = application.BigPictureRef;
+            ApplicationAccess = ApplicationAccessViewData.Create(application);
             ApplicationPrice = ApplicationPriceViewData.Create(application);
-            HasAdminMyApps = application.HasAdminMyApps;
-            HasStudentMyApps = application.HasStudentMyApps;
-            HasTeacherMyApps = application.HasTeacherMyApps;
-            HasParentMyApps = application.HasParentMyApps;
-            CanAttach = application.CanAttach;
-            ShowInGradeView = application.ShowInGradeView;
             LiveAppId = application.OriginalRef;
             IsInternal = application.IsInternal;
             Picturesid = application.Pictures.Select(x => x.Id).ToList();

@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Logic;
@@ -17,24 +18,32 @@ namespace Chalkable.Web.Controllers
 {
     public class DeveloperController : ChalkableController
     {
+        [HttpPost]
+        public ActionResult SignUp(string email, string password, string conformPassword)
+        {
+            var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
+            if (sysLocator.UserService.GetByLogin(email) == null)
+            {
+                var demoSchool = sysLocator.SchoolService.UseDemoSchool();
+                if (demoSchool != null)
+                {
+                    sysLocator.DeveloperService.Add(email, password, null, null, demoSchool.Id);
+                    return Redirect<HomeController>(x => x.LogOn(email, password, false));
+                }  
+                return Json(new ChalkableException(ChlkResources.ERR_DEMO_UNAVAILABLE));
+            }
+            return Json(new ChalkableException(ChlkResources.ERR_SIGNUP_USER_WITH_EMAIL_ALREADY_EXISTS));            
+        }
+
         public ActionResult ListApi()
         {
-            var demoSchools = MasterLocator.SchoolService.GetSchools(null);
-            //var id = MasterLocator.Context.SchoolId;
-            //var currentSchool = demoSchools.First(x => x.Id == id);
-
-            //TODO: get prefix from demo school 
-            var prefix = "test";
-            //if (currentSchool != null)
-            //    prefix = currentSchool.DemoPrefix;
-
+            var currentSchool = MasterLocator.SchoolService.GetById(Context.SchoolId.Value);
+           
             var result = new List<ApiExplorerViewData>();
 
-            if (!string.IsNullOrEmpty(prefix))
+            if (!string.IsNullOrEmpty(currentSchool.DemoPrefix))
             {
-
                 var descriptions = ChalkableApiExplorerLogic.GetApi();
-
                 var apiRoles = new List<string>();
 
                 foreach (var description in descriptions)
@@ -43,11 +52,10 @@ namespace Chalkable.Web.Controllers
                     if (loweredDescription == CoreRoles.SUPER_ADMIN_ROLE.LoweredName || loweredDescription == CoreRoles.CHECKIN_ROLE.LoweredName) continue;
 
                     apiRoles.Add(loweredDescription);
-                    var userName = prefix + PreferenceService.Get("demoschool" + loweredDescription).Value;
+                    var userName = currentSchool.DemoPrefix + PreferenceService.Get("demoschool" + loweredDescription).Value;
                     var token = ChalkableApiExplorerLogic.GetAccessTokenFor(userName, MasterLocator);
                     result.Add(ApiExplorerViewData.Create(description.Value, token, description.Key));
                 }
-
             }
             return Json(result, 8);
         }

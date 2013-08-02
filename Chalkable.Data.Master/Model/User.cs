@@ -34,6 +34,7 @@ namespace Chalkable.Data.Master.Model
         public string TimeZone { get; set; }
         public const string DEMO_PREFIX_FIELD = "DemoPrefix";
         public string DemoPrefix { get; set; }
+        public const string LAST_USED_DEMO_FIELD = "LastUseDemo";
         public DateTime? LastUseDemo { get; set; }
     }
 
