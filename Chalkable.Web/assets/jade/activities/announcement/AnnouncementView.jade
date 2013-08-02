@@ -1,0 +1,90 @@
+.announcement-view.not-transparent
+    -isNotStudent = true;
+    -isReadonly = false;
+    -studentAnnouncementsInfo=self.getStudentAnnouncements();
+    -selectedIndex=studentAnnouncementsInfo.getSelectedIndex() || 0;
+    -studentAnnouncements=studentAnnouncementsInfo.getItems();
+    -gradingStyle = studentAnnouncementsInfo.getGradingStyle();
+    -gradingMapping = studentAnnouncementsInfo.getMapping();
+    -getGrade = function(value){return GradingStyler.getLetterByGrade(value, gradingMapping, gradingStyle)};
+    -getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, gradingMapping, gradingStyle)};
+    .feed-item
+        if isNotStudent
+            .grades
+        .bullet
+            +ActionLink('announcement', 'star', self.getId()).star
+            .item-type
+                .attachment
+                    div(class="announcements-type-" + self.getAnnouncementTypeId()).icon.blue.icon
+                    .icon.black
+                    h2.animated-header=self.getSubject()
+                    p.animated=self.getShortContent()
+                    .animated=self.getExpiresDate().toString()
+                    .attachment-icon
+                    .apps-icon
+    .panel-bg
+        .action-bar.buttons
+            .container
+                .left
+                    +ActionLink('feed', 'list').back-button
+                .right
+                    +ActionLink('announcement', 'edit', self.getId()).edit-button Edit
+        .announcement-details-panel
+            .details-container.silver-panel
+                .left-block
+                    +ActionLink('feed', 'list').image-container
+                        img(src="http://local.chalkable.com:8080/chalkable/PersonPicture/Read?pictureId=64730&width=47&height=47&gender=f").avatar.avatar-47
+                .right-block
+                    h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
+                    p=self.getContent()
+                    .attachments-and-applications
+            if studentAnnouncements && studentAnnouncements.length
+                .silver-panel
+                    .auto-grade-buttons.right
+                        +Button().special-button2.green=Msg.Auto_grade
+                        +Button().special-button2.red=Msg.Grade_manually
+                    .grades-info.right
+                        TABLE
+                            TR
+                                TD=studentAnnouncementsInfo.getGradedStudentCount() + '/' + studentAnnouncements.length
+                                TD=getGrade(studentAnnouncementsInfo.getClassAvg())
+                            TR
+                                TD.small=Msg.Students_graded(studentAnnouncements.length)
+                                TD.small=Msg.Class_average
+                    .clear-right
+                +ListView(studentAnnouncementsInfo)(
+                    selectedIndex = selectedIndex).grades-individual.people-list
+                    each item, i in studentAnnouncements
+                        -value = item.getGradeValue();
+                        -normalValue = (value >= 0) ? value : '';
+                        -isDrop = item.isDropped();
+                        -res = (gradingStyle) ? (!isNaN(value) ? getGrade(value) : '') : ((value >= 0) ? value : '');
+                        -lbl = 'A - F';
+                        -itemCls = (isDrop ? 'dropped' :'');
+                        -selectedCls = (isReadonly ? 'not-selected' : '');
+                        .row(class=(i == selectedIndex ? 'selected' : ''), index=i)
+                            +ActionLink('schools', 'details', 1).left.image-container.white.shadow
+                                img.avatar.avatar47(src="https://dev.chalkable.com/PersonPicture/Read?pictureId=0&width=47&height=47&gender=F")
+                            .i-b.name-block
+                                p= item.getStudentInfo().getFullName()
+                                if !isReadonly
+                                    SPAN.container
+                                        SPAN.comment-grade
+
+                            .i-b.grade-block
+                                if self.getAnnouncementTypeId() != 1
+                                    div(class=selectedCls + ' ' + itemCls).i-b=isDrop ? Msg.Drop :res
+                                    div(class="selected " + itemCls, rowIndex=i, recId=item.getId()).i-b
+                                        if gradingStyle
+                                            .select-container
+                                                .select-container2
+                                                    +Select('gradeLetter')(id='grade-select-' + i).grade-select
+                                                        each item in GradingStyler.getGradeLetters()
+                                                            -currentValue = getGradeNumber(item);
+                                                            if currentValue != -1
+                                                                +Option(currentValue, item)
+                                                .letters=lbl
+                                        .input-container
+                                            INPUT(type="text", autofill="off", value=normalValue).grade-input
+                                            .letters 100 - 0
+
