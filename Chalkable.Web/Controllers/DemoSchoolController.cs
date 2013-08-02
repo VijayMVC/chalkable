@@ -42,25 +42,12 @@ namespace Chalkable.Web.Controllers
         public ActionResult LogOn(string rolename, string prefix)
         {
             if (string.IsNullOrEmpty(prefix))
-                throw new ChalkableException(ChlkResources.ERR_DEMO_SCHOOL_INVALID_PREFIX);
+                Json(new ChalkableException(ChlkResources.ERR_DEMO_SCHOOL_INVALID_PREFIX));
 
-            User user;
-            var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
-            if (rolename == CoreRoles.DEVELOPER_ROLE.LoweredName)
-            {
-                var schools = sysLocator.SchoolService.GetSchools(null, true);
-                var currentSchool = schools.First(x => x.DemoPrefix == prefix);
-                user = sysLocator.DeveloperService.GetDeveloperBySchool(currentSchool.Id).User;
-            }
-            else
-            {
-                var userName = prefix + PreferenceService.Get("DemoPrefix" + rolename.ToLower()).Value;
-                user = sysLocator.UserService.GetByLogin(userName);
-            }
-            if(user == null)
-                throw new ChalkableException("Invalid user name");
-
-            throw new NotImplementedException();
+            var context = LogOn(false, userService => userService.LoginToDemo(rolename, prefix));
+            if (context == null)
+                return Json(new ChalkableException("Invalid user name"));
+            return Json(new {Role = context.Role.LoweredName});
         }
     }
 }

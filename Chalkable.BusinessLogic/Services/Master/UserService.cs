@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Chalkable.BusinessLogic.Security;
@@ -15,6 +16,7 @@ namespace Chalkable.BusinessLogic.Services.Master
     {
         UserContext Login(string login, string password);
         UserContext Login(string confirmationKey);
+        UserContext LoginToDemo(string roleName, string demoPrefix);
         User GetByLogin(string login);
         User GetById(Guid id);
         User CreateSysAdmin(string login, string password);
@@ -65,6 +67,13 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
+        public UserContext LoginToDemo(string roleName, string demoPrefix)
+        {
+            using (var uow = Read())
+            {
+                return Login(GetDemoUser(roleName, demoPrefix), uow);
+            }
+        }
 
         private UserContext Login(User user, UnitOfWork uow)
         {
@@ -74,7 +83,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             string schoolServerUrl = null;
             string schoolTimeZone = null;
             CoreRole role;
-           
+
             if (user.SchoolUsers != null && user.SchoolUsers.Count > 0)
             {
                 if (user.SchoolUsers.Count == 1)
@@ -110,6 +119,26 @@ namespace Chalkable.BusinessLogic.Services.Master
             return res;
         }
 
+        private string BuildDemoUserName(string roleName, string prefix)
+        {
+            return prefix + PreferenceService.Get("DemoPrefix" + roleName.ToLower()).Value;
+        }
+
+        private User GetDemoUser(string roleName, string prefix)
+        {
+            if (roleName == CoreRoles.DEVELOPER_ROLE.LoweredName)
+            {
+                var schools = ServiceLocator.SchoolService.GetSchools(null, true);
+                var currentSchool = schools.FirstOrDefault(x => x.DemoPrefix == prefix);
+                if (currentSchool != null)
+                {
+                    var developer = ServiceLocator.DeveloperService.GetDeveloperBySchool(currentSchool.Id);
+                    if (developer != null) return developer.User;
+                }
+            }
+            return ServiceLocator.UserService.GetByLogin(BuildDemoUserName(roleName, prefix));
+        }
+        
         public User GetByLogin(string login)
         {
             using (var uow = Read())
@@ -207,7 +236,5 @@ namespace Chalkable.BusinessLogic.Services.Master
                 return new UserDataAccess(uow).GetSysAdmin();
             }
         }
-
-       
     }
 }

@@ -31,13 +31,9 @@ namespace Chalkable.Web.Controllers
 
         public ActionResult LogOn(string userName, string password, bool remember)
         {
-            var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var context = serviceLocator.UserService.Login(userName, password);
-            if (context != null)
-            {
-                ChalkableAuthentication.SignIn(context, remember);
+            var context = LogOn(remember, us => us.Login(userName, password));
+            if(context != null)
                 return Json(new { Success = true, data = new {Role = context.Role.LoweredName} }, JsonRequestBehavior.AllowGet);
-            }
             return Json(new { Success = false, UserName = userName }, JsonRequestBehavior.AllowGet);
         }
 
@@ -74,16 +70,17 @@ namespace Chalkable.Web.Controllers
 
 
         [AuthorizationFilter("Developer")]
-        public ActionResult Developer(bool needsTour, Guid? currentApplicationId)
+        public ActionResult Developer(Guid? currentApplicationId)
         {
             var prefDemoSchool = MasterLocator.SchoolService.GetById(Context.SchoolId.Value).DemoPrefix;
             var developer = MasterLocator.DeveloperService.GetDeveloperById(MasterLocator.Context.UserId);
             PrepareJsonData(DeveloperViewData.Create(developer), CURRENT_PERSON);
             var applications = MasterLocator.ApplicationService.GetApplications();
-            if (needsTour || applications.Count == 0)
+            if (applications.Count == 0)
             {
                 ViewData[REDIRECT_URL_KEY] = DEV_APP_INFO_URL;
             }
+            ViewData[NEEDS_TOUR] = false;
             PrepareCommonViewData(prefDemoSchool);
             if (applications.Count > 0)
             {
@@ -123,7 +120,7 @@ namespace Chalkable.Web.Controllers
         private const string ADMIN_VIEW_ROLE = "AdminViewRole";
 
         private const string CROCODOC_API_URL = "CrocodocApiUrl";
-
+        private const string NEEDS_TOUR = "NeedsTour";
         private const string UNSHOWN_NOTIFICATIONS_COUNT = "UnshownNotificationsCount";
         
         private const string VERSION = "Version";
