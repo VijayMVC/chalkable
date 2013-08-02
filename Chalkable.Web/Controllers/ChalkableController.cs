@@ -136,6 +136,20 @@ namespace Chalkable.Web.Controllers
                 return (int)(now - now.Date).TotalMinutes;
             }
         }
+        protected Guid EnsureMarkingPeriodId(Guid? markingPeriodId)
+        {
+            if (!Context.SchoolId.HasValue)
+                throw new ChalkableException(ChlkResources.ERR_NO_SCHOOL_INFO_ID);
+            if (!markingPeriodId.HasValue)
+            {
+                var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod()
+                         ?? SchoolLocator.MarkingPeriodService.GetMarkingPeriods(GetCurrentSchoolYearId()).FirstOrDefault();
+                if (mp == null) throw new NoMarkingPeriodException();
+                return mp.Id;
+            }
+            return markingPeriodId.Value;
+        }
+
 
         protected ActionResult Confirm(string key, Func<UserContext, ActionResult> redirectAction)
         {
