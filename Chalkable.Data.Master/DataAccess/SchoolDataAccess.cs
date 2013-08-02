@@ -62,7 +62,7 @@ namespace Chalkable.Data.Master.DataAccess
                     res.Add(SqlTools.ReadStringNull(reader, "name"));
             return res;
         }
-
+        
         public PaginatedList<School> GetSchools(Guid? districtId, int start, int count)
         {
             var conds = new Dictionary<string, object>();
@@ -70,8 +70,9 @@ namespace Chalkable.Data.Master.DataAccess
                 conds.Add(School.DISTRICT_REF_FIELD, districtId);
             return PaginatedSelect<School>(conds, School.ID_FIELD, start, count);
         }
+ 
 
-        public IList<School> GetSchools(bool? empty, bool? demo)
+        public IList<School> GetSchools(bool? empty, bool? demo, bool? usedDemo)
         {
             var conds = new Dictionary<string, object>();
             if (empty.HasValue)
@@ -83,6 +84,14 @@ namespace Chalkable.Data.Master.DataAccess
                 else
                     conds.Add(School.DEMO_PREFIX_FIELD, null);
             }
+            if (usedDemo.HasValue)
+            {
+                if (usedDemo.Value)
+                    conds.Add(School.LAST_USED_DEMO_FIELD, NotNull.Instance);
+                else
+                    conds.Add(School.LAST_USED_DEMO_FIELD, null);
+            }
+
             return SelectMany<School>(conds);
         }
 

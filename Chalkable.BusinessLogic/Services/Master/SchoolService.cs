@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
@@ -18,6 +19,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void CreateEmpty();
         PaginatedList<Data.Master.Model.School> GetSchools(Guid? districtId, int start = 0, int count = int.MaxValue);
         IList<Data.Master.Model.School> GetSchools(bool? empty, bool? demo);
+        Data.Master.Model.School UseDemoSchool();
         SisSync GetSyncData(Guid schoolId);
         void SetSyncData(SisSync sisSync);
         void Update(Data.Master.Model.School school);
@@ -85,7 +87,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 var da = new SchoolDataAccess(uow);
-                return da.GetSchools(empty, demo);
+                return da.GetSchools(empty, demo, null);
             }
         }
 
@@ -247,5 +249,18 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
+        public Data.Master.Model.School UseDemoSchool()
+        {
+            using (var uow = Update())
+            {
+                var da = new SchoolDataAccess(uow);
+                var notUsedDemo = da.GetSchools(null, true, false).FirstOrDefault();
+                if (notUsedDemo == null) return null;
+                notUsedDemo.LastUseDemo = DateTime.UtcNow.ConvertFromUtc(notUsedDemo.TimeZone);
+                da.Update(notUsedDemo);
+                uow.Commit();
+                return notUsedDemo;
+            }
+        }
     }
 }
