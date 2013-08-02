@@ -20,8 +20,7 @@ namespace Chalkable.BusinessLogic.Services
         public CoreRole Role { get; private set; }
         public string SchoolServerUrl { get; private set; }
         public string SchoolTimeZoneId { get; private set; }
-        public Guid? DeveloperId { get; set; }
-
+        
         public DateTime NowSchoolTime
         {
             get { return DateTime.UtcNow.ConvertFromUtc(SchoolTimeZoneId ?? "UTC"); }
@@ -30,7 +29,7 @@ namespace Chalkable.BusinessLogic.Services
         public bool IsOAuthUser { get; set; }
         public IList<AppPermissionType> AppPermissions { get; set; }
 
-        public UserContext(Guid id, Guid? schoolId, string login, string schoolName, string schoolTimeZoneId, string schoolServerUrl, CoreRole role, Guid? developerId)
+        public UserContext(Guid id, Guid? schoolId, string login, string schoolName, string schoolTimeZoneId, string schoolServerUrl, CoreRole role)
         {
             SchoolServerUrl = schoolServerUrl;
             SchoolName = schoolName;
@@ -40,8 +39,7 @@ namespace Chalkable.BusinessLogic.Services
             Role = role;
 
             SchoolTimeZoneId = schoolTimeZoneId;
-            DeveloperId = developerId;
-
+            
             if (schoolId.HasValue)
                 SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, SchoolServerUrl, schoolId);
             MasterConnectionString = Settings.MasterConnectionString;
@@ -55,7 +53,6 @@ namespace Chalkable.BusinessLogic.Services
             SchoolName = schoolName;
             SchoolId = schoolId;
             SchoolTimeZoneId = schoolTimeZoneId;
-            DeveloperId = developerId;
             SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, SchoolServerUrl, schoolId);   
         }
 
@@ -71,7 +68,6 @@ namespace Chalkable.BusinessLogic.Services
                     Role.Id.ToString(CultureInfo.InvariantCulture),
                     SchoolServerUrl ?? string.Empty,
                     SchoolTimeZoneId ?? string.Empty,
-                    DeveloperId.HasValue ? DeveloperId.ToString() : string.Empty
                 };
             return parameters.JoinString(DELIMITER.ToString(CultureInfo.InvariantCulture));
         }
@@ -84,17 +80,14 @@ namespace Chalkable.BusinessLogic.Services
             string schoolName = null;
             string schoolTimeZone = null;
             string schoolServerUrl = null;
-            var developerId = (Guid?) null;
             if (schoolId.HasValue)
             {
                 schoolName = sl[3]; 
                 schoolServerUrl = sl[5];
                 schoolTimeZone = sl[6];
-                if (!string.IsNullOrEmpty(sl[7]))
-                    developerId = Guid.Parse(sl[7]);
             }
             var role = CoreRoles.GetById(int.Parse(sl[4]));
-            var res = new UserContext(userId, schoolId, sl[2], schoolName, schoolTimeZone, schoolServerUrl, role, developerId);
+            var res = new UserContext(userId, schoolId, sl[2], schoolName, schoolTimeZone, schoolServerUrl, role);
             return res;
         }
     }

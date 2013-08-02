@@ -160,6 +160,7 @@
     <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\DbMaintenanceController.cs" />
+    <Compile Include="Controllers\DemoSchoolController.cs" />
     <Compile Include="Controllers\DeveloperController.cs" />
     <Compile Include="Controllers\DisciplineController.cs" />
     <Compile Include="Controllers\DisciplineTypeController.cs" />
@@ -366,6 +367,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Developer.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Developer\SignUp.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DemoSchool\Demo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DemoSchool\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

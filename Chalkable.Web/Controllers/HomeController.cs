@@ -74,13 +74,9 @@ namespace Chalkable.Web.Controllers
 
 
         [AuthorizationFilter("Developer")]
-        public ActionResult Developer(string prefDemoSchool, bool needsTour, Guid? currentApplicationId)
+        public ActionResult Developer(bool needsTour, Guid? currentApplicationId)
         {
-            //TODO: get prefix from demo school
-            if (Context.SchoolId.HasValue)
-            {
-                prefDemoSchool = MasterLocator.SchoolService.GetById(Context.SchoolId.Value).DemoPrefix;
-            }
+            var prefDemoSchool = MasterLocator.SchoolService.GetById(Context.SchoolId.Value).DemoPrefix;
             var developer = MasterLocator.DeveloperService.GetDeveloperById(MasterLocator.Context.UserId);
             PrepareJsonData(DeveloperViewData.Create(developer), CURRENT_PERSON);
             var applications = MasterLocator.ApplicationService.GetApplications();

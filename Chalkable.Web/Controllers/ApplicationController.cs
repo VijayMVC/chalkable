@@ -81,7 +81,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult GetInfo(Guid applicationId)
         {
             var res = MasterLocator.ApplicationService.GetApplicationById(applicationId);
-            return PrepareAppInfo(res);
+            return PrepareAppInfo(res, true);
         }
 
 

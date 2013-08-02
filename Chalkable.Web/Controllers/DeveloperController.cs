@@ -35,10 +35,14 @@ namespace Chalkable.Web.Controllers
             return Json(new ChalkableException(ChlkResources.ERR_SIGNUP_USER_WITH_EMAIL_ALREADY_EXISTS));            
         }
 
+        public ActionResult SignUp()
+        {
+            return View();
+        }
+
         public ActionResult ListApi()
         {
             var currentSchool = MasterLocator.SchoolService.GetById(Context.SchoolId.Value);
-           
             var result = new List<ApiExplorerViewData>();
 
             if (!string.IsNullOrEmpty(currentSchool.DemoPrefix))
@@ -107,7 +111,7 @@ namespace Chalkable.Web.Controllers
         private ActionResult RedirectAction(UserContext userContext, Guid applicationId)
         {
             if (userContext.Role == CoreRoles.DEVELOPER_ROLE)
-                return Redirect<HomeController>(x => x.Developer(null, false, applicationId));
+                return Redirect<HomeController>(x => x.Developer(false, applicationId));
             return Redirect<HomeController>(x => x.Index());
         }
     }
