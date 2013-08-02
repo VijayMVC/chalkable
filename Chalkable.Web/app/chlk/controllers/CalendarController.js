@@ -8,14 +8,14 @@ NAMESPACE('chlk.controllers', function (){
         'CalendarController', EXTENDS(chlk.controllers.BaseController), [
 
         [ria.mvc.Inject],
-        chlk.services.AnnouncementService, 'announcementService',
+        chlk.services.AnnouncementService, 'calendarService',
 
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER
         ])],
         [chlk.controllers.SidebarButton('calendar')],
         function monthTeacherAction(){
-            var result = this.announcementService
+            var result = this.calendarService
                 .listForMonth()
                 .attach(this.validateResponse_())
                 .then(function(data){

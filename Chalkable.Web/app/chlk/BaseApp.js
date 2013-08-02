@@ -13,6 +13,7 @@ REQUIRE('chlk.controls.GlanceBoxControl');
 REQUIRE('chlk.controls.GridControl');
 REQUIRE('chlk.controls.LeftRightToolbarControl');
 REQUIRE('chlk.controls.ListViewControl');
+REQUIRE('chlk.controls.LoadingImgControl');
 REQUIRE('chlk.controls.PaginatorControl');
 REQUIRE('chlk.controls.PhotoContainerControl');
 REQUIRE('chlk.controls.SelectControl');
@@ -24,12 +25,12 @@ NAMESPACE('chlk', function (){
 
     var logonShowed = false;
 
-    new ria.dom.Dom().on('click', '.action-bar .action-button:not(.pressed), .action-bar .action-link:not(.pressed)', function(node, event){
+    /*new ria.dom.Dom().on('click', '.action-bar .action-button:not(.pressed), .action-bar .action-link:not(.pressed)', function(node, event){
         node.parent('.action-bar')
             .find('.pressed')
             .removeClass('pressed');
         node.addClass('pressed');
-    });
+    });*/
 
     new ria.dom.Dom('.logout-area').on('click', function(node, event){
         var elem = node.parent().find('a');

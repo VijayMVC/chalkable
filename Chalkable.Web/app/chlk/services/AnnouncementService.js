@@ -12,6 +12,7 @@ REQUIRE('chlk.models.id.AttachmentId');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.id.AnnouncementAttachmentId');
 
 
 NAMESPACE('chlk.services', function () {
@@ -29,8 +30,18 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId, Object]],
             ria.async.Future, function uploadAttachment(announcementId, files) {
-                return this.uploadFiles('AnnouncementAttachment/AddAttachment', chlk.models.announcement.Announcement, {
+                return this.uploadFiles('AnnouncementAttachment/AddAttachment', files, chlk.models.announcement.Announcement, {
                     announcementId: announcementId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.AnnouncementAttachmentId, Boolean, Number, Number]],
+            String, function getAttachmentUri(announcementAttachmentId, needsDownload, width, heigh) {
+                return this.getUrl('AnnouncementAttachment/DownloadAttachment', {
+                    announcementAttachmentId: announcementAttachmentId.valueOf(),
+                    needsDownload: needsDownload,
+                    width: width,
+                    heigh: heigh
                 });
             },
 
@@ -88,15 +99,6 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
-            ria.async.Future, function listForMonth(classId_, date_) {
-                return this.get('chalkable2/app/data/calendarMonth.json', ArrayOf(chlk.models.calendar.announcement.Day), {
-                    //classId: classId_.valueOf(),
-                    //date: date_.getDate()
-                });
-            },
-
-
             [[chlk.models.id.AnnouncementId]],
             ria.async.Future, function editAnnouncement(id) {
                 return this.get('Announcement/Edit.json', chlk.models.announcement.AnnouncementForm, {
@@ -120,8 +122,8 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId]],
             ria.async.Future, function getAnnouncement(id) {
-                return this.get('chalkable2/app/data/annInfo.json', chlk.models.announcement.Announcement, {
-                    id: id.valueOf()
+                return this.get('Announcement/Read.json', chlk.models.announcement.Announcement, {
+                    announcementId: id.valueOf()
                 });
             }
         ])

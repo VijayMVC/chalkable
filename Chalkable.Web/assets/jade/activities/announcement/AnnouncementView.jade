@@ -1,13 +1,15 @@
 .announcement-view.not-transparent
     -isNotStudent = true;
     -isReadonly = false;
+    -studentAnnouncements = false;
     -studentAnnouncementsInfo=self.getStudentAnnouncements();
-    -selectedIndex=studentAnnouncementsInfo.getSelectedIndex() || 0;
-    -studentAnnouncements=studentAnnouncementsInfo.getItems();
-    -gradingStyle = studentAnnouncementsInfo.getGradingStyle();
-    -gradingMapping = studentAnnouncementsInfo.getMapping();
-    -getGrade = function(value){return GradingStyler.getLetterByGrade(value, gradingMapping, gradingStyle)};
-    -getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, gradingMapping, gradingStyle)};
+    -selectedIndex= studentAnnouncementsInfo ? studentAnnouncementsInfo.getSelectedIndex() : 0;
+    if studentAnnouncementsInfo
+        -studentAnnouncements=studentAnnouncementsInfo.getItems();
+        -gradingStyle = studentAnnouncementsInfo.getGradingStyle();
+        -gradingMapping = studentAnnouncementsInfo.getMapping();
+        -getGrade = function(value){return GradingStyler.getLetterByGrade(value, gradingMapping, gradingStyle)};
+        -getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, gradingMapping, gradingStyle)};
     .feed-item
         if isNotStudent
             .grades
