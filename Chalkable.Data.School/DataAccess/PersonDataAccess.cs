@@ -76,11 +76,8 @@ namespace Chalkable.Data.School.DataAccess
                 };
             using (var reader = ExecuteStoredProcedureReader("spGetPersonDetails", parameters))
             {
-                if (reader.Read())
-                {
-                    return ReadPersonDetailsData(reader);
-                }
-                return null;
+                reader.NextResult(); // skip AllCount 
+                return reader.Read() ? ReadPersonDetailsData(reader) : null;
             }
         }
 
