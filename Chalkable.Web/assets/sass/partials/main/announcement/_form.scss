@@ -53,6 +53,14 @@
           height: 82px;
         }
 
+        &:not(.attach-file-area){
+          background: url(images/app/debut_dark.png);
+        }
+
+        &.loading {
+          background: url(images/img-loader.gif) center center no-repeat,url(images/app/debut_dark.png);
+        }
+
         IMG{
           max-height: 110px;
           max-width: 170px;

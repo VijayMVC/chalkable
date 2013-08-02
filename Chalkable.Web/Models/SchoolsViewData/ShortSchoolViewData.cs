@@ -21,7 +21,9 @@ namespace Chalkable.Web.Models.SchoolsViewData
             Id = school.Id;
             Name = school.Name;
             StatusNumber = (int)school.Status;
-            Status = statusDic[school.Status];
+            //todo: remove this
+            if (statusDic.ContainsKey(school.Status))
+                Status = statusDic[school.Status];
             TimeZoneId = school.TimeZone;
             DemoPrefix = school.DemoPrefix;
         }

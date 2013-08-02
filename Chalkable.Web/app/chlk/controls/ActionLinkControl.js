@@ -26,7 +26,7 @@ NAMESPACE('chlk.controls', function () {
                 return JSON.parse(String('[' + decodeURIComponent(link) + ']'));
             },
 
-            [ria.mvc.DomEventBind('click', 'A[data-link]:not(.disabled), A[data-link]:not(.pressed)')],
+            [ria.mvc.DomEventBind('click', 'A[data-link]:not(.disabled, .pressed)')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function onActionLinkClick(node, event) {
                 lastClickedNode = node;

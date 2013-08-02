@@ -9,7 +9,7 @@ NAMESPACE('chlk.templates.profile', function () {
         [ria.templates.ModelBind(chlk.models.developer.DeveloperInfo)],
         'DeveloperProfile', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.DeveloperId, 'id',
+            chlk.models.id.SchoolPersonId, 'id',
             [ria.templates.ModelPropertyBind],
             String, 'displayName',
             [ria.templates.ModelPropertyBind],

@@ -34,6 +34,14 @@ NAMESPACE('chlk.services', function () {
                 return this.getServiceRoot() + uri;
             },
 
+            String, function getUrl(uri, params){
+                var p = params, r = [];
+                for(var key in p) if (p.hasOwnProperty(key)) {
+                    r.push([key, p[key]].join('='));
+                }
+                return this.resolveUri(uri) + '?' +  r.join('&');
+            },
+
             [[String, Object, Object]],
             ria.async.Future, function get(uri, clazz_, gParams_) {
 

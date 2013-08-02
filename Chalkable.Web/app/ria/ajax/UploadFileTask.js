@@ -25,12 +25,14 @@ NAMESPACE('ria.ajax', function () {
 
                       for (var i = 0, file; file = this._files[i]; ++i) {
                         formData.append(file.name, file);
+                        for(var param in this._params)if (this._params.hasOwnProperty(param)) {
+                          formData.append(param, this._params[param]);
+                        }
                       }
 
-                      var xhr = new XMLHttpRequest();
-                      xhr.open(this._method.valueOf(), this.getUrl_(), true);
+                      this._xhr.open(this._method.valueOf(), this.getUrl_(), true);
 
-                      xhr.send(formData);
+                      this._xhr.send(formData);
                 } catch (e) {
                     this._completer.completeError(e);
                 }

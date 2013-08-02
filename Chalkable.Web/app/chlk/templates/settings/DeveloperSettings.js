@@ -8,5 +8,7 @@ NAMESPACE('chlk.templates.settings', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/settings/DeveloperSettings.jade')],
         [ria.templates.ModelBind(chlk.models.settings.DeveloperSettings)],
         'DeveloperSettings', EXTENDS(chlk.templates.JadeTemplate), [
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.SchoolPersonId, 'developerId'
         ])
 });

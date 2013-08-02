@@ -10,7 +10,7 @@ NAMESPACE('chlk.templates.announcement', function () {
 
     /** @class chlk.templates.announcement.Announcement*/
     CLASS(
-        [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AnnouncementFormContent.jade')],
+        [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AnnouncementAppAttachments.jade')],
         [ria.templates.ModelBind(chlk.models.announcement.Announcement)],
         'Announcement', EXTENDS(chlk.templates.JadeTemplate), [
 

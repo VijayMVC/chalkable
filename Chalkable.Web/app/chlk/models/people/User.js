@@ -1,8 +1,6 @@
+REQUIRE('chlk.models.id.SchoolPersonId');
 NAMESPACE('chlk.models.people', function () {
     "use strict";
-
-    /** @class chlk.models.people.SchoolPersonId*/
-    IDENTIFIER('SchoolPersonId');
 
     /** @class chlk.models.people.User*/
     CLASS(
@@ -24,7 +22,7 @@ NAMESPACE('chlk.models.people', function () {
 
             String, 'grade',
 
-            Number, 'id',
+            chlk.models.id.SchoolPersonId, 'id',
 
             [ria.serialize.SerializeProperty('lastname')],
             String, 'lastName',
