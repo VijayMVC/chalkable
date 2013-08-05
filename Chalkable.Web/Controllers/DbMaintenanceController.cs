@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Services;
 using Chalkable.Data.Common.Backup;
 using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
@@ -14,16 +13,15 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("System Admin")]
         public ActionResult Backup()
         {
-            var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
             var data = new DatabaseBackupRestoreTaskData(DateTime.UtcNow.Ticks, true);
-            sl.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.BackupDatabases, DateTime.UtcNow, null, data.ToString());
+            MasterLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.BackupDatabases, DateTime.UtcNow, null, data.ToString());
             return Json(true);
         }
 
         [AuthorizationFilter("System Admin")]
         public ActionResult Restore(long time)
         {
-            var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
+            var sl = SchoolLocator.ServiceLocatorMaster;
             var data = new DatabaseBackupRestoreTaskData(time, true);
             sl.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.RestoreDatabases, DateTime.UtcNow, null, data.ToString());
             return Json(true);
@@ -32,14 +30,13 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("System Admin")]
         public ActionResult DatabaseUpdate(string masterSql, string schoolSql)
         {
-            var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
             var sqls = new List<UpdateSql>();
             var mSqls = SplitSql(masterSql, true);
             var sSqls = SplitSql(schoolSql, false);
             sqls.AddRange(mSqls);
             sqls.AddRange(sSqls);
             var data = new DatabaseUpdateTaskData(sqls);
-            serviceLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.RestoreDatabases, DateTime.UtcNow, null, data.ToString());
+            MasterLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.DatabaseUpdate, DateTime.UtcNow, null, data.ToString());
             return Json(true);
 
         }
@@ -47,8 +44,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("System Admin")]
         public ActionResult ListBackups(int start, int count)
         {
-            var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var res = serviceLocator.StorageBlobService.GetBlobs(BackupHelper.BACKUP_CONTAINER, null, start, count);
+            var res = MasterLocator.StorageBlobService.GetBlobs(BackupHelper.BACKUP_CONTAINER, null, start, count);
             return Json(res.Transform(BlobViewData.Create));
         }
 

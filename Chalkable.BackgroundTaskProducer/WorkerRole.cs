@@ -17,7 +17,7 @@ namespace Chalkable.BackgroundTaskProducer
             
             while (true)
             {
-                Thread.Sleep(10000);
+                Thread.Sleep(20000);
                 Trace.TraceInformation("Producing cycle is starting");
                 cp.Produce();
                 Trace.TraceInformation("Producing cycle is ended");

@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Chalkable.Data.Common.Storage
@@ -37,13 +33,13 @@ namespace Chalkable.Data.Common.Storage
             return res;
         }
 
-        public IList<ICloudBlob> GetBlobs(string containeraddress, string blobKeyPrefix)
+        public IList<ICloudBlob> GetBlobs(string containeraddress, string blobKeyPrefix, int start, int count)
         {
             var container = GetBlobClient().GetContainerReference(containeraddress);
             string prefix = null;
             if(!string.IsNullOrEmpty(blobKeyPrefix))
                 prefix = containeraddress + "/" + BuildBlobAddress(containeraddress, blobKeyPrefix);
-            var blobsItems = container.ListBlobs(prefix).ToList();
+            var blobsItems = container.ListBlobs(prefix).Skip(start).Take(count).ToList();
             IList<ICloudBlob> blobs = new List<ICloudBlob>();
             foreach (var listBlobItem in blobsItems)
             {

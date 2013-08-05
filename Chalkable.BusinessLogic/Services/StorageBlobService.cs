@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services
 
         public PaginatedList<BlobInfo> GetBlobs(string containeraddress, string keyPrefix = null, int start = 0, int count = int.MaxValue)
         {
-            var res = BlobInfo.Create(new BlobHelper().GetBlobs(containeraddress, keyPrefix));
+            var res = BlobInfo.Create(new BlobHelper().GetBlobs(containeraddress, keyPrefix, start, count));
             return new PaginatedList<BlobInfo>(res, start / count, count);
         }
 

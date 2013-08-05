@@ -50,7 +50,7 @@ namespace Chalkable.BackgroundTaskProcessor
             {
                 var data = task.GetData<DatabaseUpdateTaskData>();
                 var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
-                var schools = sl.SchoolService.GetSchools(false, false);
+                var schools = sl.SchoolService.GetSchools(null, null);
                 foreach (var updateSql in data.Sqls)
                 {
                     if (updateSql.RunOnMaster)
@@ -69,7 +69,13 @@ namespace Chalkable.BackgroundTaskProcessor
                             cmd.ExecuteNonQuery();
                         }
                         var runer = new AllSchoolRunner<string>();
-                        runer.Run(schools, updateSql.Sql, log, ExecSql, task1 => AllSchoolRunner<string>.TaskStatusEnum.Completed);
+                        if (
+                            !runer.Run(schools, updateSql.Sql, log, ExecSql,
+                                       task1 => AllSchoolRunner<string>.TaskStatusEnum.Completed))
+                        {
+                            res = false;
+                            break;
+                        }
                     }
                 }
             }
@@ -96,7 +102,7 @@ namespace Chalkable.BackgroundTaskProcessor
         private string ExecSql(AllSchoolRunner<string>.Task task)
         {
             string connectionString = string.Format(Settings.SchoolConnectionStringTemplate, task.Server,
-                                                            "master", Settings.Configuration.SchoolDbUser,
+                                                            task.Database, Settings.Configuration.SchoolDbUser,
                                                             Settings.Configuration.SchoolDbPassword);
             using (var uow = new UnitOfWork(connectionString, false))
             {

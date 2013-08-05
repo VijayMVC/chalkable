@@ -39,7 +39,7 @@ namespace Chalkable.Data.Master.Model
             var serializer = new XmlSerializer(typeof(UpdateSql[]));
             using (var s = new MemoryStream())
             {
-                serializer.Serialize(s, this);
+                serializer.Serialize(s, Sqls);
                 s.Seek(0, SeekOrigin.Begin);
                 return new StreamReader(s).ReadToEnd();
             }

@@ -103,7 +103,13 @@ namespace Chalkable.BackgroundTaskProcessor.Parallel
                 catch (Exception ex)
                 {
                     tasks[i].Success = false;
-                    tasks[i].ErrorMessage = ex.Message + "\n" + ex.StackTrace;
+                    tasks[i].ErrorMessage = "";
+                    while (ex != null)
+                    {
+                        tasks[i].ErrorMessage += ex.Message + "\n" + ex.StackTrace;
+                        ex = ex.InnerException;
+                    }
+                    
                     return;
                 }
             }
