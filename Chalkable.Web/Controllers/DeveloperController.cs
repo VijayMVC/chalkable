@@ -19,7 +19,7 @@ namespace Chalkable.Web.Controllers
     public class DeveloperController : ChalkableController
     {
         [HttpPost]
-        public ActionResult SignUp(string email, string password, string conformPassword)
+        public ActionResult SignUp(string email, string password, string confirmPassword)
         {
             var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
             if (sysLocator.UserService.GetByLogin(email) == null)

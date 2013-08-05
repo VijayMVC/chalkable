@@ -33,7 +33,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult Update(FinalGrade finalGradeInfo, GuidList finalGradeAnnouncementTypeIds, IntList perscents, IntList dropLowest, IntList gradingStyleBytype, bool needsTypesForClasses = false)
+        public ActionResult Update(FinalGrade finalGradeInfo, GuidList finalGradeAnnouncementTypeIds, IntList perscents, IntList dropLowest, IntList gradingStyleBytype)
         {
             if (finalGradeAnnouncementTypeIds.Count != perscents.Count 
                 || finalGradeAnnouncementTypeIds.Count != dropLowest.Count

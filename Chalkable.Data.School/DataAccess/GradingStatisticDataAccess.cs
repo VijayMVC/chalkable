@@ -59,6 +59,7 @@ namespace Chalkable.Data.School.DataAccess
             }
             return new DbQuery { Sql = sql.ToString(), Parameters = conds };
         }
+    
         private DbQuery BuildClassGradeStatisticQuery(StringBuilder sql, GradingStatisticQuery query)
         {
             var dbQuery = BuildGradeStatisicDbQuery(sql, query);
@@ -138,7 +139,57 @@ namespace Chalkable.Data.School.DataAccess
             return ReadMany<MarkingPeriodClassGradeAvg>(dbQuery, true);
         }
 
+        public IList<StudentGradeAvgPerDate> CalcStudentGradeAvgPerDate(Guid studentId, Guid markingPeriodId, Guid? classId, int dayInterval)
+        {
+            var parameters = new Dictionary<string, object>()
+                {
+                    {"studentId", studentId},
+                    {"markingPeriodId", markingPeriodId},
+                    {"classId", classId},
+                    {"dayInterval", dayInterval},
+                };
+            using (var reader = ExecuteStoredProcedureReader("spCalcStudentSummaryGradeStatsPerDate", parameters))
+            {
+                return reader.ReadList<StudentGradeAvgPerDate>();
+            }
+        }
 
+        public IList<StudentClassGradeStats> CaclStudentGradeStats(Guid classId, Guid markingPeriodId, Guid? studentId, int dayInterval)
+        {
+            var parameters = new Dictionary<string, object>
+                {
+                    {"studentId", studentId},
+                    {"markingPeriodId", markingPeriodId},
+                    {"classId", classId},
+                    {"dayInterval", dayInterval},
+                };
+            using (var reader = ExecuteStoredProcedureReader("spCalcStudentClassGradeStatsPerDate", parameters))
+            {
+                var stDic = new Dictionary<Guid, IDictionary<DateTime, GradeAvgPerDate>>();
+                while (reader.Read())
+                {
+                    var stId = SqlTools.ReadGuid(reader, StudentClassGradeStats.STUDENT_ID_FEILD);
+                    if(!stDic.ContainsKey(stId))
+                        stDic.Add(stId, new Dictionary<DateTime, GradeAvgPerDate>());
+                    var avgPerDate = reader.Read<GradeAvgPerDate>();
+                    avgPerDate.AnnTypeGradeAvgs = new List<AnnTypeGradeAvg>();
+                    stDic[stId].Add(avgPerDate.Date, avgPerDate);
+                }
+                reader.NextResult();
+                while (reader.Read())
+                {
+                    var stId = SqlTools.ReadGuid(reader, StudentClassGradeStats.STUDENT_ID_FEILD);
+                    var date = SqlTools.ReadDateTime(reader, GradeAvgPerDate.DATE_FIELD);
+                    stDic[stId][date].AnnTypeGradeAvgs.Add(reader.Read<AnnTypeGradeAvg>());
+                }
+                return stDic.Select(x=> new StudentClassGradeStats
+                    {
+                        ClassId = classId,
+                        StudentId = x.Key,
+                        GradeAvgPerDates = x.Value.Select(y=>y.Value).ToList()
+                    }).ToList();
+            }
+        }
     }
 
     public class GradingStatisticQuery
