@@ -1,0 +1,147 @@
+@import "compass/css3/border-radius";
+@import "compass/css3/box-shadow";
+@import "compass/css3/images";
+
+$border-color: #a1a1a1;
+
+BODY {
+  DIV.page{
+    >DIV#content {
+      DIV#content-wrapper{
+        &.profile{
+          .chlk-grid{
+            .row{
+              background: #ece1c1;
+
+              &.selected{
+                @include background(linear-gradient(top, #f3eedf, #e1d3a6));
+                @include box-shadow(0 0px 7px 1px #baa76e);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.chlk-grid{
+  .grid-focus{
+    position: absolute;
+    z-index: 0;
+  }
+
+  .row{
+    background: #eee;
+    padding: 5px 8px;
+    height: 69px;
+    border-top: 1px solid white !important;
+    border-bottom: 1px solid #d0d0d0;
+    cursor: pointer;
+    position: relative;
+
+
+    &.selected{
+      @include background(linear-gradient(top, #eaeaea, #c7c7c7));
+      color: #276284;
+      z-index: 2;
+      @include box-shadow(0 0px 7px 1px #999);
+    }
+  }
+
+
+
+}
+
+.grid{
+  font-size: 12px;
+  color: #565656;
+  position: relative;
+
+  .scroller{
+    overflow-x: auto;
+  }
+
+  .container{
+    display: table;
+    width:100%;
+    .head{
+      display: table-row;
+      @include border-radius(5px 5px 0 0);
+
+      .th{
+        display: table-cell;
+        text-align: center;
+        padding: 8px;
+
+        &:first-child{
+          @include border-radius(5px 0 0 0);
+        }
+
+        &:last-child{
+          @include border-radius(0 5px 0 0);
+        }
+
+        border: 1px solid $border-color;
+
+        &:not(:last-child){
+          border-right: none;
+        }
+      }
+    }
+
+    .body{
+      display: table-row-group;
+
+
+
+      .row{
+        display: table-row;
+
+
+
+
+
+
+        &:nth-child(even){
+          background-color: #fafafa;
+        }
+
+        .td{
+          padding: 2px 6px;
+          display: table-cell;
+          vertical-align: middle;
+
+          &.action-links{
+            A{
+              display: inline-block;
+              width:16px;
+              height: 16px;
+              vertical-align: middle;
+
+              &.profile{
+                background: url(images/controls/grid/report.png) 0 0 no-repeat;
+              }
+
+              &.view{
+                background: url(images/controls/grid/information.png) 0 0 no-repeat;
+              }
+
+              &.remove{
+                background: url(images/controls/grid/delete.gif) 0 0 no-repeat;
+              }
+
+              &.persons{
+                background: url(images/controls/grid/user.png) 0 0 no-repeat;
+              }
+
+              &.plugin{
+                background: url(images/controls/grid/plugin.gif) 0 0 no-repeat;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
