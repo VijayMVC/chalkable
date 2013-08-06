@@ -6,6 +6,7 @@ REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.activities.apps.AppsListPage');
 REQUIRE('chlk.activities.apps.AppInfoPage');
 REQUIRE('chlk.models.apps.Application');
+REQUIRE('chlk.models.apps.AppAccess');
 REQUIRE('chlk.models.id.AppId');
 REQUIRE('chlk.models.id.AppPermissionId');
 
@@ -68,6 +69,11 @@ NAMESPACE('chlk.controllers', function (){
                         new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(7), "Message", 7),
                         new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(8), "Schedule", 8)
                     ]);
+
+
+                    var appAccess = new chlk.models.apps.AppAccess();
+
+                    app.setAppAccess(appAccess);
 
                     var gradeLevels = this.gradeLevelService.getGradeLevels();
                     return new ria.async.DeferredData(new chlk.models.apps.AppInfoViewData(app, false, cats, gradeLevels));

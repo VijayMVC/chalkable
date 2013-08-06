@@ -4,18 +4,18 @@ NAMESPACE('chlk.models.apps', function () {
     CLASS(
         'AppAccess', [
             [ria.serialize.SerializeProperty('haststudentmyapps')],
-            Boolean, 'hasStudentMyApps',
+            Boolean, 'studentMyAppsEnabled',
             [ria.serialize.SerializeProperty('hasteachermyapps')],
-            Boolean, 'hasTeacherMyApps',
+            Boolean, 'teacherMyAppsEnabled',
             [ria.serialize.SerializeProperty('hasadminmyapps')],
-            Boolean, 'hasAdminMyApps',
+            Boolean, 'adminMyAppsEnabled',
             [ria.serialize.SerializeProperty('hasparentmypapps')],
-            Boolean, 'hasParentMyApps',
+            Boolean, 'parentMyAppsEnabled',
             [ria.serialize.SerializeProperty('hasmypappsview')],
-            Boolean, 'hasMyAppsView',
+            Boolean, 'myAppsViewVisible',
             [ria.serialize.SerializeProperty('canattach')],
-            Boolean, 'canAttach',
+            Boolean, 'attachEnabled',
             [ria.serialize.SerializeProperty('showingradeview')],
-            Boolean, 'showInGradeView'
+            Boolean, 'visibleInGradingView'
         ]);
 });

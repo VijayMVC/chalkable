@@ -9,6 +9,9 @@ mixin MyAppsPermission(prefix, app, suffix)
         span.app-name=app + " " + suffix
 
 app = self.app
+-console.log(app)
+myAppsAccess = app.getAppAccess()
+-console.log(myAppsAccess)
 .app-info
     .action-bar.not-transparent
         .container.panel-bg
@@ -27,29 +30,29 @@ app = self.app
                 .my-apps
                     .permission
                         +MyAppsPermission("Can Teachers Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("test", 'app-category', "t")
+                        +SlideCheckbox("hasteachermyapps", myAppsAccess.isTeacherMyAppsEnabled())
                     .permission
                         +MyAppsPermission("Can Students Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("test", 'app-category', "t")
+                        +SlideCheckbox("hasstudentmyapps", myAppsAccess.isStudentMyAppsEnabled())
                     .permission
                         +MyAppsPermission("Can Admins Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("test", 'app-category', "t")
+                        +SlideCheckbox("hasadminmyapps", myAppsAccess.isAdminMyAppsEnabled())
                     .permission
                         +MyAppsPermission("Can Parents Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("test", 'app-category', "t")
+                        +SlideCheckbox("hasparentmyapps", myAppsAccess.isParentMyAppsEnabled())
         .section.small
             .elem.first
                 label New Item:
                 .my-apps
                     .permission
                         +MyAppsPermission("Can Teachers Attach", app.getName(), "in New Items?")
-                        +SlideCheckbox("test", 'app-category', "t")
+                        +SlideCheckbox("canattach", myAppsAccess.isAttachEnabled())
             .elem
                 label Grading View:
                 .my-apps
                     .permission
                         +MyAppsPermission("Will be Teachers", '', 'viewing student output')
-                        +SlideCheckbox("test", 'app-category', "t")
+                        +SlideCheckbox("showingradeview", myAppsAccess.isVisibleInGradingView())
         .section
             .elem
                 label API Access:
