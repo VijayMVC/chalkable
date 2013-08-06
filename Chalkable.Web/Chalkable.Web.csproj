@@ -247,7 +247,12 @@
     <Compile Include="Models\DisciplineTypeViewData.cs" />
     <Compile Include="Models\DisciplineView.cs" />
     <Compile Include="Models\DistrictViewData.cs" />
-    <Compile Include="Models\FinalGradeViewData.cs" />
+    <Compile Include="Models\FinalGradesViewData\FinalGradeAnnouncementTypeViewData.cs" />
+    <Compile Include="Models\FinalGradesViewData\FinalGradeAnnTypeGradeStatsViewData.cs" />
+    <Compile Include="Models\FinalGradesViewData\FinalGradeDetailsViewData.cs" />
+    <Compile Include="Models\FinalGradesViewData\FinalGradeViewData.cs" />
+    <Compile Include="Models\FinalGradesViewData\StudentFinalGradeDetailsViewData.cs" />
+    <Compile Include="Models\FinalGradesViewData\StudentFinalGradeViewData.cs" />
     <Compile Include="Models\GradingClassSummaryViewData.cs" />
     <Compile Include="Models\GradingStudentSummaryViewData.cs" />
     <Compile Include="Models\GradingStyleViewData.cs" />

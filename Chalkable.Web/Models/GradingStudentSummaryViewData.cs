@@ -38,5 +38,9 @@ namespace Chalkable.Web.Models
         {
             return Create(gradeAvgPerDate.Date, gradeAvgPerDate.Avg);
         }
+        public static IList<GradingStatsByDateViewData> Create(IList<GradeAvgPerDate> gradeAvgPerDate)
+        {
+            return gradeAvgPerDate.Select(Create).ToList();
+        }
    }
 }

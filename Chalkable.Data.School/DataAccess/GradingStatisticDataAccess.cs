@@ -165,29 +165,41 @@ namespace Chalkable.Data.School.DataAccess
                 };
             using (var reader = ExecuteStoredProcedureReader("spCalcStudentClassGradeStatsPerDate", parameters))
             {
-                var stDic = new Dictionary<Guid, IDictionary<DateTime, ClassGradeAvgPerDate>>();
+                var stDic = new Dictionary<Guid, StudentClassGradeStats>();
                 while (reader.Read())
                 {
                     var stId = SqlTools.ReadGuid(reader, StudentClassGradeStats.STUDENT_ID_FEILD);
                     if(!stDic.ContainsKey(stId))
-                        stDic.Add(stId, new Dictionary<DateTime, ClassGradeAvgPerDate>());
-                    var avgPerDate = reader.Read<ClassGradeAvgPerDate>();
-                    avgPerDate.ClassId = classId;
-                    avgPerDate.AnnTypeGradeAvgs = new List<AnnTypeGradeAvg>();
-                    stDic[stId].Add(avgPerDate.Date, avgPerDate);
+                        stDic.Add(stId, new StudentClassGradeStats
+                            {
+                                ClassId = classId,
+                                StudentId = stId,
+                                GradeAvgPerDates = new List<GradeAvgPerDate>(),
+                                AnnTypesGradeStats = new List<AnnTypeGradeStats>()
+                            });
+                    stDic[stId].GradeAvgPerDates.Add(reader.Read<GradeAvgPerDate>()); 
                 }
                 reader.NextResult();
+                var anntypeDic = new Dictionary<Guid, IDictionary<int, AnnTypeGradeStats>>();
                 while (reader.Read())
                 {
                     var stId = SqlTools.ReadGuid(reader, StudentClassGradeStats.STUDENT_ID_FEILD);
-                    var date = SqlTools.ReadDateTime(reader, GradeAvgPerDate.DATE_FIELD);
-                    stDic[stId][date].AnnTypeGradeAvgs.Add(reader.Read<AnnTypeGradeAvg>());
+                    var annType = SqlTools.ReadInt32(reader, AnnTypeGradeStats.ANNOUNCEMENT_TYPE_ID_FIELD);
+                    if(!anntypeDic.ContainsKey(stId))
+                        anntypeDic.Add(stId, new Dictionary<int, AnnTypeGradeStats>());
+                    if(anntypeDic[stId].ContainsKey(annType))
+                        anntypeDic[stId].Add(annType, new AnnTypeGradeStats
+                            {
+                                AnnouncementTypeId = annType,
+                                GradeAvgPerDates = new List<GradeAvgPerDate>()
+                            });
+                     anntypeDic[stId][annType].GradeAvgPerDates.Add(reader.Read<GradeAvgPerDate>());
                 }
-                return stDic.Select(x=> new StudentClassGradeStats
-                    {
-                        StudentId = x.Key,
-                        GradeAvgPerDates = x.Value.Select(y=>y.Value).ToList()
-                    }).ToList();
+                foreach (var keyValue in stDic.Where(keyValue => anntypeDic.ContainsKey(keyValue.Key)))
+                {
+                    keyValue.Value.AnnTypesGradeStats = anntypeDic[keyValue.Key].Values.ToList();
+                }
+                return stDic.Values.ToList();
             }
         }
     }

@@ -8,6 +8,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
+using Chalkable.Web.Models.FinalGradesViewData;
 
 namespace Chalkable.Web.Controllers
 {
@@ -25,11 +26,22 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher")]
         public ActionResult Get(Guid classId, Guid? markingPeriodId, bool needBuildItems)
         {
+            return Json(FinalGradeViewData.Create(InternalGet(classId, ref markingPeriodId, needBuildItems)), 6);
+        }
+        [AuthorizationFilter("Teacher")]
+        public ActionResult GetDetailed(Guid classId, Guid? markingPeriodId, bool needBuildItems)
+        {
+            var fg = InternalGet(classId, ref markingPeriodId, needBuildItems);
+            var gradingStats = SchoolLocator.GradingStatisticService.GetStudentClassGradeStats(markingPeriodId.Value, classId, null);
+            var gradingMapper = SchoolLocator.GradingStyleService.GetMapper();
+            return Json(FinalGradeDetailsViewData.Create(fg, gradingStats, gradingMapper));
+        }
+
+        private FinalGradeDetails InternalGet(Guid classId, ref Guid? markingPeriodId, bool needBuildItems)
+        {
             markingPeriodId = EnsureMarkingPeriodId(markingPeriodId);
             var mpClass = SchoolLocator.MarkingPeriodService.GetMarkingPeriodClass(classId, markingPeriodId.Value);
-            var finalGrade = SchoolLocator.FinalGradeService.GetFinalGrade(mpClass.Id, needBuildItems);
-            //TODO: get announcement if needs  
-            return Json(FinalGradeViewData.Create(finalGrade), 6);
+            return SchoolLocator.FinalGradeService.GetFinalGrade(mpClass.Id, needBuildItems);
         }
 
         [AuthorizationFilter("Teacher")]
