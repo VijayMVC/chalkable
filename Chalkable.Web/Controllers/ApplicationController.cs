@@ -18,10 +18,11 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class ApplicationController : ChalkableController
     {
+        [AuthorizationFilter("SysAdmin, Developer")]
         public ActionResult List(int? start, int? count)
         {
             var applications = MasterLocator.ApplicationService.GetApplications(start ?? 0, count ?? DEFAULT_PAGE_SIZE, false);
-            return Json(BaseApplicationViewData.Create(applications));
+            return Json(applications.Transform(BaseApplicationViewData.Create));
         }
 
         [AuthorizationFilter("SysAdmin, Developer")]
@@ -152,23 +153,15 @@ namespace Chalkable.Web.Controllers
         public static ApplicationViewData PrepareAppInfo(IServiceLocatorMaster locator, Application application, 
             bool needsliveApp = false, bool needsSecretKey = false)
         {
-            var roles = new List<CoreRole>
-                {
-                    CoreRoles.ADMIN_GRADE_ROLE,
-                    CoreRoles.ADMIN_EDIT_ROLE,
-                    CoreRoles.ADMIN_VIEW_ROLE,
-                    CoreRoles.TEACHER_ROLE,
-                    CoreRoles.STUDENT_ROLE,
-                };
             bool cangetSecretKey = false;
             if (needsSecretKey)
                 cangetSecretKey = locator.ApplicationService.CanGetSecretKey(new List<Application> {application});
             var categories = locator.CategoryService.ListCategories();
-            var res = ApplicationViewData.Create(application, roles, categories, cangetSecretKey);
+            var res = ApplicationViewData.Create(application, categories, cangetSecretKey);
             if (needsliveApp && application.OriginalRef.HasValue)
             {
                 var liveApp = locator.ApplicationService.GetApplicationById(application.Id);
-                res.LiveApplication = ApplicationViewData.Create(liveApp, roles, categories, cangetSecretKey);
+                res.LiveApplication = ApplicationViewData.Create(liveApp,  categories, cangetSecretKey);
             }
             return res;
         }
