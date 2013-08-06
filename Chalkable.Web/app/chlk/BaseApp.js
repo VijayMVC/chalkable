@@ -3,6 +3,8 @@ REQUIRE('ria.dom.jQueryDom');
 REQUIRE('ria.dom.ready');
 
 REQUIRE('chlk.controls.ActionFormControl');
+REQUIRE('chlk.controls.LabeledCheckboxControl');
+REQUIRE('chlk.controls.SlideCheckboxControl');
 REQUIRE('chlk.controls.ActionLinkControl');
 REQUIRE('chlk.controls.AvatarControl');
 REQUIRE('chlk.controls.ButtonControl');

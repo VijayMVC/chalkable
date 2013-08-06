@@ -20,8 +20,8 @@
                 +GridBody()
                     each item in self.schools
                         +ActionForm('schools', 'importSchools').row
-                            input(type="hidden", name="sisSchoolId", value=item.getSisSchoolId())
-                            input(type="hidden", name="districtId", value=self.getDistrictId().valueOf())
+                            +Hidden("sisSchoolId", item.getSisSchoolId())
+                            +Hidden("districtId", self.getDistrictId().valueOf())
                             .td
                                 +Checkbox("schoolid", item.getSisSchoolId())
                             .td=item.getSisSchoolId()

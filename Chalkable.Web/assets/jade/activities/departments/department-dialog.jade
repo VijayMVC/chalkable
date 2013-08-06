@@ -3,7 +3,7 @@
         span Department
     .x-window-body
             +ActionForm('departments', 'save')
-                input(type="hidden",name="id", value=self.id)
+                +Hidden("id", self.id)
                 .x-form-field
                     label File:
                     input(type="text",name="iconfile")

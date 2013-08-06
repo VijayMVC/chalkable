@@ -68,7 +68,7 @@
    
 
         @{
-            var isDeveloper = (ViewData.ContainsKey("DeveloperId") && !string.IsNullOrEmpty((string) ViewData["DeveloperId"]));
+            var isDeveloper = (ViewData.ContainsKey("IsDeveloper") && (bool)ViewData["IsDeveloper"]);
             var isDemoSchool = (ViewData.ContainsKey("Prefix") && !string.IsNullOrEmpty((string)ViewData["Prefix"]));
             var needsTour = ViewData.ContainsKey("NeedsTour") && !string.IsNullOrEmpty(Convert.ToString(ViewData["NeedsTour"]));
         }
@@ -96,7 +96,7 @@
                     <div id="footer">&copy; <script>var dt = new Date();document.write(dt.getFullYear());</script> Chalkable</div>
                 </div>
             </div>
-            @ChlkHelpers.RenderDemoFooter(true, isDeveloper, needsTour)
+            <div id="demo-footer"></div>
         </div>
 
         <div id = "chlk-overlay" class ="x-hidden"></div>
@@ -147,8 +147,8 @@
         };
     });
 
-    var markingPeriod = JSON.parse(HtmlEncode('@ViewData["MarkingPeriod"]')).data;
-    var nextMarkingPeriod = JSON.parse(HtmlEncode('@ViewData["NextMarkingPeriod"]')).data;
+    //var markingPeriod = JSON.parse(HtmlEncode('@ViewData["MarkingPeriod"]')).data;
+    //var nextMarkingPeriod = JSON.parse(HtmlEncode('@ViewData["NextMarkingPeriod"]')).data;
 
     var finalizedClassesIds = '@ViewData["FinalizedClassesIds"]' ? JSON.parse(HtmlEncode('@ViewData["FinalizedClassesIds"]')).data || [] : [];
 
