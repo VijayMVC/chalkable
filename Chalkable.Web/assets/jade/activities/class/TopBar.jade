@@ -1,0 +1,12 @@
+BUTTON(
+    classId=self.getId(),
+    index=self.getIndex(),
+    class=self.isPressed() ? "pressed " : "",
+    type=self.isDisabled() ? "button" : "submit",
+    name="submitType",
+    value="save"
+).item.class-button.validate-skip
+    .img-wrapper
+        img(href="http://local.chalkable.com:8080/chalkable/Course/GetIcon?courseInfoId=10")
+    SPAN.text-container= self.getName()
+
