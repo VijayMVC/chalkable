@@ -104,7 +104,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public BackgroundTask ScheduleTask(BackgroundTaskTypeEnum type, DateTime scheduled, Guid? schoolRef, string data)
         {
-            DateTime now = DateTime.Now;
+            DateTime now = DateTime.UtcNow;
             var task = new BackgroundTask
                 {
                     Created = now,

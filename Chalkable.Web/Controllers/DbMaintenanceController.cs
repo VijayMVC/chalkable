@@ -52,7 +52,7 @@ namespace Chalkable.Web.Controllers
             long l;
             names = names.Where(x => long.TryParse(x.Substring(0, 18), out l)).ToList();
             var ticks = names.Select(x=>x.Substring(0, 18)).Distinct();
-            var res = ticks.ToDictionary(x=>x, x => new BackupViewData { Ticks = long.Parse(x), DateTime = new DateTime(long.Parse(x)) });
+            var res = ticks.ToDictionary(x => x, x => new BackupViewData { Ticks = x, Created = new DateTime(long.Parse(x)) });
             foreach (var name in names)
             {
                 var t = name.Substring(0, 18);

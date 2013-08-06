@@ -8,16 +8,20 @@
         +Button().special-button2.green BackUp
     +Grid('dbmaintenance', 'listBackups', self).not-transparent
         +GridHead()
-            .th Name
-            .th Uri
-            .th Size
+            .th Date
+            .th Ticks
+            .th Has Master
+            .th Has S. Template
+            .th School Count
             .th
         +GridBody()
             each item in self.items
                 +GridRow()
-                    .td= item.getName()
-                    .td= item.getUri()
-                    .td= item.getSize()
+                    .td= item.getCreated().toString("dd/mm/yy hh/min/ss")
+                    .td= item.getTicks()
+                    .td= item.isHasMaster()
+                    .td= item.isHasSchoolTemplate()
+                    .td= item.getSchoolCount()
                     .td.action-links
-                        +ActionLink('dbmaintenance', 'restore', item.getSize()).plugin
+                        +ActionLink('dbmaintenance', 'restore', item.getTicks()).plugin
 
