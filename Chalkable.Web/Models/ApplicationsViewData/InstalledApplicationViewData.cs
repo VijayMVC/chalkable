@@ -11,6 +11,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
 {
     public class InstalledApplicationViewData : BaseApplicationViewData
     {
+        public bool HasMyApp { get; set; }
         public IList<ApplicationInstallViewData> ApplicationInstalls { get; set; }
 
         protected InstalledApplicationViewData(Application application) : base(application)
@@ -18,7 +19,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         }
 
         public static IList<InstalledApplicationViewData> Create(IList<ApplicationInstall> installedApp, Person person,
-                                                         IList<Application> applications, IDictionary<int, bool> hasMyAppsDic = null)
+                                                         IList<Application> applications, IDictionary<Guid, bool> hasMyAppsDic = null)
         {
             var res = new List<InstalledApplicationViewData>();
             var dicApp = installedApp.GroupBy(x => x.ApplicationRef).ToDictionary(x => x.Key, x => x.ToList());
@@ -30,6 +31,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                 res.Add(new InstalledApplicationViewData(app)
                     {
                         ApplicationInstalls = ApplicationInstallViewData.Create(appInstalls, personId),
+                        HasMyApp = hasMyAppsDic != null && hasMyAppsDic.ContainsKey(appKey) && hasMyAppsDic[appKey],
                         MyAppsUrl = AppTools.BuildAppUrl(app, null, appInstalls.First().Id, AppMode.MyView)
                     });
             }

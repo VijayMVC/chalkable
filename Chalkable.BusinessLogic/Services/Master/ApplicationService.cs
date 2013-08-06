@@ -15,8 +15,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         IList<AppPermissionType> GetPermisions(string applicationUrl);
         PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null);
 
-        PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode filterMode = AppFilterMode.All
-            , AppSortingMode sortingMode = AppSortingMode.Newest, int start = 0, int count = int.MaxValue);
+        PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode? filterMode
+            , AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue);
 
         Application GetApplicationById(Guid id);
         Application GetApplicationByUrl(string url);
@@ -64,6 +64,13 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 query.UserId = Context.UserId;
                 query.Role = Context.Role.Id;
+                if (Context.Role != CoreRoles.DEVELOPER_ROLE && Context.SchoolId.HasValue)
+                {
+                    var school = ServiceLocator.SchoolService.GetById(Context.SchoolId.Value);
+                    var developer = ServiceLocator.DeveloperService.GetDeveloperBySchool(school.Id);
+                    if (developer != null)
+                        query.DeveloperId = developer.Id;
+                }
                 return new ApplicationDataAccess(uow).GetPaginatedApplications(query);
             }
         }
@@ -136,7 +143,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode filterMode = AppFilterMode.All, AppSortingMode sortingMode = AppSortingMode.Newest, int start = 0, int count = int.MaxValue)
+        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode? filterMode, AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue)
         {
             var query = new ApplicationQuery
                 {
@@ -146,6 +153,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                     Start = start,
                     Count = count
                 };
+            filterMode = filterMode ?? AppFilterMode.All;
+            sortingMode = sortingMode ?? AppSortingMode.Newest;
             if (filterMode != AppFilterMode.All)
                 query.Free = filterMode == AppFilterMode.Free;
             switch (sortingMode)

@@ -49,42 +49,85 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             Picturesid = application.Pictures.Select(x => x.Id).ToList();
         }
 
+        public static BaseApplicationViewData Create(Application application)
+        {
+            return new BaseApplicationViewData(application);
+        }
+
         public static IList<BaseApplicationViewData> Create(IList<Application> applications)
         {
-            return applications.Select(x=>new BaseApplicationViewData(x)).ToList();
+            return applications.Select(Create).ToList();
         }
     }
-
 
     public class ApplicationViewData : BaseApplicationViewData
     {
         public IList<ApplicationPersmissionsViewData> Permissions { get; set; }
-        //public ApplicationRatingViewData ApplicationRating { get; set; }
+        public ApplicationRatingViewData ApplicationRating { get; set; }
         public IList<CategoryViewData> Categories { get; set; }
         public IList<GradeLevelViewData> GradelLevels { get; set; }
         public IList<RoleViewData> CanLaunchRoles { get; set; }
         public DeveloperViewData Developer { get; set; }
         public BaseApplicationViewData LiveApplication { get; set; }
 
-        protected ApplicationViewData(Application application, bool canGetSecretKey): base(application)
+        protected ApplicationViewData(Application application, IList<Category> categories, bool canGetSecretKey)
+            : base(application)
         {
             Developer = DeveloperViewData.Create(application.Developer);
             Permissions = ApplicationPersmissionsViewData.Create(application.Permissions);
             if (canGetSecretKey)
                 SecretKey = application.SecretKey;
-        }
-
-        public static ApplicationViewData Create(Application application, IList<CoreRole> roles, IList<Category> categories, bool canGetSecretKey = false)
-        {
-            var res = new ApplicationViewData(application, canGetSecretKey);
             categories = categories.Where(x => application.Categories.Any(y => y.CategoryRef == x.Id)).ToList();
-            res.Categories = CategoryViewData.Create(categories);
-            return res;
+            Categories = CategoryViewData.Create(categories);
         }
-
+        public static ApplicationViewData Create(Application application, IList<Category> categories, bool canGetSecretKey = false)
+        {
+            return new ApplicationViewData(application,  categories, canGetSecretKey);
+        }
         public static IList<ApplicationViewData> Create(IList<Application> applications, IList<CoreRole> roles, IList<Category> categories)
         {
-            return applications.Select(x => Create(x, roles, categories)).ToList();
+            return applications.Select(x => Create(x, categories)).ToList();
         } 
+    }
+
+    public class ApplicationDetailsViewData : ApplicationViewData
+    {
+        public bool IsInstaledOnlyForMe { get; set; }
+        public IList<InstalledForPersonsGroupViewData> InstalledForPersonsGroup { get; set; } 
+
+        protected ApplicationDetailsViewData(Application application,  IList<Category> categories, bool canGetSecretKey) 
+            : base(application, categories, canGetSecretKey)
+        {
+        }
+        public static ApplicationDetailsViewData Create(Application application, IList<CoreRole> roles, IList<Category> categories)
+        {
+            return new ApplicationDetailsViewData(application, categories, false);
+        }
+    }
+
+    public class InstalledForPersonsGroupViewData
+    {
+        public enum GroupTypeEnum
+        {
+            Class = 1,
+            GradeLevel,
+            Department,
+            Role,
+            All,
+        }
+        public bool IsInstalled { get; set; }
+        public GroupTypeEnum GroupType { get; set; }
+        public string Id { get; set; }
+        public string Description { get; set; }
+        public static InstalledForPersonsGroupViewData Create(GroupTypeEnum groupType, string id, string description, bool isInstalled)
+        {
+            return new InstalledForPersonsGroupViewData
+            {
+                Description = description,
+                IsInstalled = isInstalled,
+                GroupType = groupType,
+                Id = id
+            };
+        }
     }
 }
