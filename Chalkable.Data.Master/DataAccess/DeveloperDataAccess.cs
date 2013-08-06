@@ -30,7 +30,7 @@ namespace Chalkable.Data.Master.DataAccess
             return ReadOne<Developer>(BuildGetDeveloperQuery(conds), true);
         }
 
-        public DbQuery BuildGetDeveloperQuery(IDictionary<string, object> conds)
+        public static DbQuery BuildGetDeveloperQuery(IDictionary<string, object> conds)
         {
             var developertype = typeof (Developer);
             var resulSet = Orm.ComplexResultSetQuery(new List<Type> { developertype, typeof(User) });

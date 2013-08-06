@@ -18,7 +18,8 @@ namespace Chalkable.Data.Master.DataAccess
 
         private void LoadApplicationData(Application app)
         {
-            app.Developer = SelectOne<Developer>(new Dictionary<string, object> { { "Id", app.DeveloperRef } });
+            var dvQuery = DeveloperDataAccess.BuildGetDeveloperQuery(new Dictionary<string, object> { {Developer.ID_FIELD, app.DeveloperRef}});
+            app.Developer = ReadOne<Developer>(dvQuery, true);
             app.Pictures = SelectMany<ApplicationPicture>(new Dictionary<string, object> { { ApplicationPicture.APPLICATION_REF_FIELD, app.Id } });
             app.Permissions = SelectMany<ApplicationPermission>(new Dictionary<string, object> { { ApplicationPermission.APPLICATION_REF_FIELD, app.Id } });
             app.Categories = SelectMany<ApplicationCategory>(new Dictionary<string, object> { {ApplicationCategory.APPLICATION_REF_FIELD, app.Id} });
