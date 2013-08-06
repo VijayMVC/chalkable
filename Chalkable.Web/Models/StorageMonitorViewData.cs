@@ -54,8 +54,8 @@ namespace Chalkable.Web.Models
 
     public class BackupViewData
     {
-        public long Ticks { get; set; }
-        public DateTime DateTime { get; set; }
+        public string Ticks { get; set; }
+        public DateTime Created { get; set; }
         public bool HasMaster { get; set; }
         public bool HasSchoolTemplate { get; set; }
         public int SchoolCount { get; set; }
