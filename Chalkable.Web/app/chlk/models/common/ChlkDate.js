@@ -23,17 +23,27 @@ NAMESPACE('chlk.models.common', function () {
 
             [[String]],
             String, function toString(format_){
-                return this.format(format_ || 'mm-dd-yy');
+                return this.format(format_ || 'm-dd-yy');
             },
 
             [[String]],
             String, function format(format){
-                return $.datepicker.formatDate(format, this.getDate() || getDate());
+                format = format.replace(/min/g, this.timepartToStr(this.getDate().getMinutes()));
+                var res =$.datepicker.formatDate(format, this.getDate() || getDate());
+                res = res.replace(/hh/g, this.timepartToStr(this.getDate().getHours()));
+                res = res.replace(/ss/g, this.timepartToStr(this.getDate().getSeconds()));
+                return res;
             },
 
             VOID, function deserialize(raw) {
                 var date = raw ? getDate(raw) : getDate();
                 this.setDate(date);
+            },
+
+            [[Number]],
+            String, function timepartToStr(t) {
+                return "" + ((t - t % 10) / 10) + (t % 10);
             }
+
         ]);
 });

@@ -125,9 +125,9 @@ namespace Chalkable.Data.Common.Backup
                 webRequestStream.Close();
             }
             WebResponse webResponse;
-            webResponse = webRequest.GetResponse();
             try
             {
+                webResponse = webRequest.GetResponse();
                 using (var stream = webResponse.GetResponseStream())
                 {
                     if (stream == null)
