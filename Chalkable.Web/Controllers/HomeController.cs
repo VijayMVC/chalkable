@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
-using Chalkable.Common.Web;
-using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -74,6 +71,7 @@ namespace Chalkable.Web.Controllers
         {
             var prefDemoSchool = MasterLocator.SchoolService.GetById(Context.SchoolId.Value).DemoPrefix;
             var developer = MasterLocator.DeveloperService.GetDeveloperById(MasterLocator.Context.UserId);
+            ViewData[IS_DEV] = true;
             PrepareJsonData(DeveloperViewData.Create(developer), CURRENT_PERSON);
             var applications = MasterLocator.ApplicationService.GetApplications();
             if (applications.Count == 0)
@@ -106,6 +104,7 @@ namespace Chalkable.Web.Controllers
         private const string CLASSES = "Classes";
         private const string CLASSES_ADV_DATA = "ClassesAdvancedData";
         private const string CURRENT_PERSON = "CurrentPerson";
+        private const string IS_DEV = "IsDeveloper";
         private const string MARKING_PERIOD = "MarkingPeriod";
         private const string NEXT_MARKING_PERIOD = "NextMarkingPeriod";
         private const string ATTENDANCE_REASONS = "AttendanceReasons";
