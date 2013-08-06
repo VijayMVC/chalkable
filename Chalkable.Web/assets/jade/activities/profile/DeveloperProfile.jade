@@ -3,7 +3,7 @@
         h2 Base Info
         +ActionForm('account', 'profileSave')
             -id = self.id ? self.id.valueOf() : null
-            input(type="hidden", name="id", value=id)
+            +Hidden("id", id)
             div
                 label Developer name
                 input(name="name", value=self.name)

@@ -30,6 +30,10 @@ NAMESPACE('chlk', function (){
             OVERRIDE, ria.mvc.ISession, function initSession_() {
                 var session = BASE();
                 session.set('role', new chlk.models.common.Role(chlk.models.common.RoleEnum.SYSADMIN, 'SysAdmin'));
+
+
+
+
                 return session;
             },
 

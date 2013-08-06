@@ -1,0 +1,86 @@
+mixin Textbox(tName, val)
+    input(type="text", name=tName, value=val)
+
+
+
+mixin MyAppsPermission(prefix, app, suffix)
+    .myapps-permission
+        label=prefix
+        span.app-name=app + " " + suffix
+
+app = self.app
+.app-info
+    .action-bar.not-transparent
+        .container.panel-bg
+            +ActionLink('apps', 'submit').chlk-add.opacity-button Submit
+    +ActionForm('apps', 'saveDraft')
+        .section.first
+            .elem
+                label App Name:
+                +Textbox("name", app.getName())
+            .elem
+                label App URL:
+                +Textbox("url", app.getUrl())
+        .section
+            .elem
+                label.top My Apps:
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Can Teachers Launch", app.getName(), "in My Apps?")
+                        +SlideCheckbox("test", 'app-category', "t")
+                    .permission
+                        +MyAppsPermission("Can Students Launch", app.getName(), "in My Apps?")
+                        +SlideCheckbox("test", 'app-category', "t")
+                    .permission
+                        +MyAppsPermission("Can Admins Launch", app.getName(), "in My Apps?")
+                        +SlideCheckbox("test", 'app-category', "t")
+                    .permission
+                        +MyAppsPermission("Can Parents Launch", app.getName(), "in My Apps?")
+                        +SlideCheckbox("test", 'app-category', "t")
+        .section.small
+            .elem.first
+                label New Item:
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Can Teachers Attach", app.getName(), "in New Items?")
+                        +SlideCheckbox("test", 'app-category', "t")
+            .elem
+                label Grading View:
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Will be Teachers", '', 'viewing student output')
+                        +SlideCheckbox("test", 'app-category', "t")
+        .section
+            .elem
+                label API Access:
+                .permissions
+                    each item in app.getPermissions()
+                        +LabeledCheckbox(item.getName(), 'app-permission', item.getId())
+        .section
+            .elem
+                label Subjects:
+                .categories
+                    each item in self.getCategories()
+                        +LabeledCheckbox(item.getName(), 'app-category', item.getId())
+        .section
+            .elem
+                label Grades:
+                .categories
+
+        .section
+            .elem
+                label.wide Short Description:
+                input(type="text")
+            .elem
+                label.wide Long Description:
+                textarea
+            .elem
+                label.wide Video Demo:
+                input(type="text")
+        .section
+            .elem
+                label Pricing:
+        .section
+            .elem
+                label Icons:
+        +Button().special-button.blue-button Update Draft

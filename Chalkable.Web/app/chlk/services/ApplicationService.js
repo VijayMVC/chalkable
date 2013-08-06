@@ -11,7 +11,7 @@ NAMESPACE('chlk.services', function () {
         'ApplicationService', EXTENDS(chlk.services.BaseService), [
             [[Number]],
             ria.async.Future, function getApps(pageIndex_) {
-                return this.getPaginatedList('chalkable2/app/data/apps.json', chlk.models.apps.Application, {
+                return this.getPaginatedList('Application/List.json', chlk.models.apps.Application, {
                     start: pageIndex_
                 });
             }

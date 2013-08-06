@@ -19,7 +19,7 @@ NAMESPACE('chlk.services', function () {
 
             [[String, String]],
             ria.async.Future, function addCategory(name, description) {
-                return this.post('Category/Create.json', chlk.models.apps.AppCategory, {
+                return this.post('Category/Add.json', chlk.models.apps.AppCategory, {
                     name: name,
                     description: description
                 });
@@ -48,7 +48,7 @@ NAMESPACE('chlk.services', function () {
             },
             [[chlk.models.id.AppCategoryId]],
             ria.async.Future, function getCategory(id) {
-                return this.post('Category/Info.json', chlk.models.apps.AppCategory, {
+                return this.post('Category/GetInfo.json', chlk.models.apps.AppCategory, {
                     categoryId: id.valueOf()
                 });
             }

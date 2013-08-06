@@ -5,3 +5,7 @@ mixin ActionForm(controller, action)
     -self.prepareData(attributes);
     form(attributes)
         block
+
+
+mixin Hidden(hidName, hidValue)
+    input(type="hidden", name=hidName, value=hidValue)
