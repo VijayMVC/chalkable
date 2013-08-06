@@ -64,13 +64,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 query.UserId = Context.UserId;
                 query.Role = Context.Role.Id;
-                if (Context.Role != CoreRoles.DEVELOPER_ROLE && Context.SchoolId.HasValue)
-                {
-                    var school = ServiceLocator.SchoolService.GetById(Context.SchoolId.Value);
-                    var developer = ServiceLocator.DeveloperService.GetDeveloperBySchool(school.Id);
-                    if (developer != null)
-                        query.DeveloperId = developer.Id;
-                }
+                query.DeveloperId = Context.DeveloperId;
                 return new ApplicationDataAccess(uow).GetPaginatedApplications(query);
             }
         }
