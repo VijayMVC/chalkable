@@ -16,7 +16,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         void Complete(Guid id, bool success);
         BackgroundTask Find(Guid? schoolId, BackgroundTaskStateEnum state, BackgroundTaskTypeEnum type);
         PaginatedList<BackgroundTaskService.BackgroundTaskLogItem> GetLogItems(Guid backgroundTaskId, int start, int count);
-        void SaveLog(BackgroundTaskService.BackgroundTaskLog log);
     }
     
     public class BackgroundTaskService : MasterServiceBase, IBackgroundTaskService
@@ -40,11 +39,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public class BackgroundTaskLog
+        public class BackgroundTaskLog : IDisposable
         {
             public const int LEVEL_INFO = 0;
             public const int LEVEL_WARN = 1;
             public const int LEVEL_ERROR = 2;
+            public const int FLUSH_SIZE = 20;
 
             private List<BackgroundTaskLogItem> items = new List<BackgroundTaskLogItem>();
             private Guid backgroundTaskId;
@@ -63,6 +63,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                         Level = level,
                         Time = DateTime.Now
                     });
+                if (items.Count >= FLUSH_SIZE)
+                    Flush();
             }
 
             public void LogInfo(string message)
@@ -81,6 +83,18 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
 
             public List<BackgroundTaskLogItem> Items { get { return items; } }
+
+            public void Flush()
+            {
+                var helper = new TableHelper<BackgroundTaskLogItem>();
+                helper.Save(Items);
+                items.Clear();
+            }
+
+            public void Dispose()
+            {
+                Flush();
+            }
         }
         
 
@@ -152,12 +166,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             var helper = new TableHelper<BackgroundTaskLogItem>();
             var items = helper.GetByPartKey(backgroundTaskId.ToString(), start, count);
             return items;
-        }
-
-        public void SaveLog(BackgroundTaskLog log)
-        {
-            var helper = new TableHelper<BackgroundTaskLogItem>();
-            helper.Save(log.Items);
         }
     }
 }

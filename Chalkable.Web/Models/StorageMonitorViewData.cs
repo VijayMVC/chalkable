@@ -51,4 +51,13 @@ namespace Chalkable.Web.Models
             return blobs.Select(Create).ToList();
         } 
     }
+
+    public class BackupViewData
+    {
+        public long Ticks { get; set; }
+        public DateTime DateTime { get; set; }
+        public bool HasMaster { get; set; }
+        public bool HasSchoolTemplate { get; set; }
+        public int SchoolCount { get; set; }
+    }
  }

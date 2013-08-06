@@ -212,11 +212,11 @@ namespace Chalkable.Data.Common
             return SelectMany<TEntity>(conditions ?? new Dictionary<string, object>());
         }
 
-        public virtual PaginatedList<TEntity> GetPage(int start, int count, string orderBy = null)
+        public virtual PaginatedList<TEntity> GetPage(int start, int count, string orderBy = null, Orm.OrderType orderType = Orm.OrderType.Asc)
         {
             if (string.IsNullOrEmpty(orderBy))
                 orderBy = "Id";
-            return PaginatedSelect<TEntity>(orderBy, start, count);
+            return PaginatedSelect<TEntity>(orderBy, start, count, orderType);
         }
 
         public void Insert(TEntity entity)

@@ -22,7 +22,7 @@ namespace Chalkable.Data.Master.DataAccess
 
         public PaginatedList<BackgroundTask> GetTasks(int start, int count)
         {
-            return GetPage(start, count, BackgroundTask.SCHEDULED_FIELD_NAME);
+            return GetPage(start, count, BackgroundTask.SCHEDULED_FIELD_NAME, Orm.OrderType.Desc);
         }
 
         public void Complete(Guid id, bool success)

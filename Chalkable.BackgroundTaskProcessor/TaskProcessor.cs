@@ -27,35 +27,33 @@ namespace Chalkable.BackgroundTaskProcessor
             var task = sl.BackgroundTaskService.GetTaskToProcess(DateTime.UtcNow);
             if (task == null)
                 return;
-            var log = new BackgroundTaskService.BackgroundTaskLog(task.Id);
-            if (!handlers.ContainsKey(task.Type))
+            using (var log = new BackgroundTaskService.BackgroundTaskLog(task.Id))
             {
-                Trace.TraceError(string.Format("No task handler for task type {0}", task.Type));
-            }
-            try
-            {
-                var res = handlers[task.Type].Handle(task, log);
-                if (res)
-                    log.LogInfo(string.Format("Task {0} processing succesfully completed", task.Id));
-                else
-                    log.LogError(string.Format("Task {0} processing failed", task.Id));
-                sl.BackgroundTaskService.Complete(task.Id, res);
-            }
-            catch (Exception ex)
-            {
-                while (ex != null)
+                if (!handlers.ContainsKey(task.Type))
                 {
-                    Trace.TraceError(ex.Message);
-                    Trace.TraceError(ex.StackTrace);
-                    log.LogError(ex.Message);
-                    log.LogError(ex.StackTrace);
-                    ex = ex.InnerException;
+                    Trace.TraceError(string.Format("No task handler for task type {0}", task.Type));
                 }
-                sl.BackgroundTaskService.Complete(task.Id, false);
-            }
-            finally
-            {
-                sl.BackgroundTaskService.SaveLog(log);
+                try
+                {
+                    var res = handlers[task.Type].Handle(task, log);
+                    if (res)
+                        log.LogInfo(string.Format("Task {0} processing succesfully completed", task.Id));
+                    else
+                        log.LogError(string.Format("Task {0} processing failed", task.Id));
+                    sl.BackgroundTaskService.Complete(task.Id, res);
+                }
+                catch (Exception ex)
+                {
+                    while (ex != null)
+                    {
+                        Trace.TraceError(ex.Message);
+                        Trace.TraceError(ex.StackTrace);
+                        log.LogError(ex.Message);
+                        log.LogError(ex.StackTrace);
+                        ex = ex.InnerException;
+                    }
+                    sl.BackgroundTaskService.Complete(task.Id, false);
+                }    
             }
         }
     }

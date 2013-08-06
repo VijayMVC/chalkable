@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
+using Chalkable.Common;
 using Chalkable.Data.Common.Backup;
 using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
@@ -44,8 +46,30 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("System Admin")]
         public ActionResult ListBackups(int start, int count)
         {
-            var res = MasterLocator.StorageBlobService.GetBlobs(BackupHelper.BACKUP_CONTAINER, null, start, count);
-            return Json(res.Transform(BlobViewData.Create));
+            var delim = new []{"/" + BackupHelper.BACKUP_CONTAINER + "/"};
+            var names = MasterLocator.StorageBlobService.GetBlobNames(BackupHelper.BACKUP_CONTAINER).Select(x=>x.Uri.ToString()).ToList();
+            names = names.Select(x => x.Split(delim, StringSplitOptions.None)[1]).ToList();
+            long l;
+            names = names.Where(x => long.TryParse(x.Substring(0, 18), out l)).ToList();
+            var ticks = names.Select(x=>x.Substring(0, 18)).Distinct();
+            var res = ticks.ToDictionary(x=>x, x => new BackupViewData { Ticks = long.Parse(x), DateTime = new DateTime(long.Parse(x)) });
+            foreach (var name in names)
+            {
+                var t = name.Substring(0, 18);
+                var vd = res[t];
+                if (name.Contains("ChalkableMaster"))
+                {
+                    vd.HasMaster = true;
+                }
+                else if (name.Contains("ChalkableSchoolTemplate"))
+                {
+                    vd.HasSchoolTemplate = true;
+                }
+                else
+                    vd.SchoolCount++;
+
+            }
+            return Json(new PaginatedList<BackupViewData>(res.Values.OrderBy(x => x.Ticks), start / count, count));
         }
 
         private static IEnumerable<UpdateSql> SplitSql(string sql, bool onMaster)

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Chalkable.Tests.Services
 {
@@ -15,6 +12,11 @@ namespace Chalkable.Tests.Services
         private string BuildBlobAddress(string containerAddress, string blobName)
         {
             return containerAddress + "/" + blobName;
+        }
+
+        public IList<IListBlobItem> GetBlobNames(string containeraddress, string keyPrefix = null)
+        {
+            throw new NotImplementedException();
         }
 
         public void AddBlob(string containerAddress, string key, byte[] content)

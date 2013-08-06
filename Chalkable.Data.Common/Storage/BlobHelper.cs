@@ -33,23 +33,35 @@ namespace Chalkable.Data.Common.Storage
             return res;
         }
 
-        public IList<ICloudBlob> GetBlobs(string containeraddress, string blobKeyPrefix, int start, int count)
+        public PaginatedList<ICloudBlob> GetBlobs(string containeraddress, string blobKeyPrefix, int start, int count)
         {
             var container = GetBlobClient().GetContainerReference(containeraddress);
             string prefix = null;
             if(!string.IsNullOrEmpty(blobKeyPrefix))
                 prefix = containeraddress + "/" + BuildBlobAddress(containeraddress, blobKeyPrefix);
-            var blobsItems = container.ListBlobs(prefix).Skip(start).Take(count).ToList();
-            IList<ICloudBlob> blobs = new List<ICloudBlob>();
-            foreach (var listBlobItem in blobsItems)
+            var all = container.ListBlobs(prefix).ToList();
+            var page = all.Skip(start).Take(count).ToList();
+            var list = new List<ICloudBlob>();
+            foreach (var listBlobItem in page)
             {
                 var blob = ConvertToCloudBlob(listBlobItem);
                 if (blob != null)
                 {
-                    blobs.Add(blob);
+                    list.Add(blob);
                 }
             }
+            var blobs = new PaginatedList<ICloudBlob>(list, start / count, count, all.Count);
             return blobs;
+        }
+
+        public IList<IListBlobItem> GetBlobNames(string containeraddress, string blobKeyPrefix)
+        {
+            var container = GetBlobClient().GetContainerReference(containeraddress);
+            string prefix = null;
+            if (!string.IsNullOrEmpty(blobKeyPrefix))
+                prefix = containeraddress + "/" + BuildBlobAddress(containeraddress, blobKeyPrefix);
+            var all = container.ListBlobs(prefix).ToList();
+            return all;
         }
 
 

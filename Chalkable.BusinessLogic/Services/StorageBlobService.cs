@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.Common.Storage;
@@ -14,6 +11,7 @@ namespace Chalkable.BusinessLogic.Services
     {
         PaginatedList<BlobContainerInfo> GetBlobContainers(int start = 0, int count = int.MaxValue);
         PaginatedList<BlobInfo> GetBlobs(string containeraddress, string keyPrefix = null, int start = 0, int count = int.MaxValue);
+        IList<IListBlobItem> GetBlobNames(string containeraddress, string keyPrefix = null);
         void AddBlob(string containerAddress, string key, byte[] content);
         byte[] GetBlobContent(string containerAddress, string key);
         void DeleteBlob(string blobAddress);
@@ -22,10 +20,6 @@ namespace Chalkable.BusinessLogic.Services
     }
     public class StorageBlobService :  IStorageBlobService
     {
-        public StorageBlobService()
-        {
-        }
-
         public PaginatedList<BlobContainerInfo> GetBlobContainers(int start = 0, int count = int.MaxValue)
         {
             var res = BlobContainerInfo.Create(new BlobHelper().GetBlobContainers());
@@ -34,8 +28,12 @@ namespace Chalkable.BusinessLogic.Services
 
         public PaginatedList<BlobInfo> GetBlobs(string containeraddress, string keyPrefix = null, int start = 0, int count = int.MaxValue)
         {
-            var res = BlobInfo.Create(new BlobHelper().GetBlobs(containeraddress, keyPrefix, start, count));
-            return new PaginatedList<BlobInfo>(res, start / count, count);
+            return new BlobHelper().GetBlobs(containeraddress, keyPrefix, start, count).Transform(BlobInfo.Create);
+        }
+
+        public IList<IListBlobItem> GetBlobNames(string containeraddress, string keyPrefix = null)
+        {
+            return new BlobHelper().GetBlobNames(containeraddress, keyPrefix);
         }
 
         public void AddBlob(string containerAddress, string key, byte[] content)
