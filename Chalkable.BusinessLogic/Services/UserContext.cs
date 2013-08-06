@@ -85,13 +85,14 @@ namespace Chalkable.BusinessLogic.Services
             string schoolName = null;
             string schoolTimeZone = null;
             string schoolServerUrl = null;
+            Guid? developerId = null;
             if (schoolId.HasValue)
             {
                 schoolName = sl[3]; 
                 schoolServerUrl = sl[5];
                 schoolTimeZone = sl[6];
+                developerId = string.IsNullOrEmpty(sl[7]) ? (Guid?)null : Guid.Parse(sl[7]);
             }
-            var developerId = string.IsNullOrEmpty(sl[7]) ? (Guid?) null : Guid.Parse(sl[7]);
             var role = CoreRoles.GetById(int.Parse(sl[4]));
             var res = new UserContext(userId, schoolId, sl[2], schoolName, schoolTimeZone, schoolServerUrl, role, developerId);
             return res;

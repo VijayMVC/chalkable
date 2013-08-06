@@ -9,38 +9,50 @@ using Chalkable.Data.School.Model.ApplicationInstall;
 
 namespace Chalkable.Web.Models.ApplicationsViewData
 {
-    public class AnnouncementApplicationViewData
+    public class AnnouncementApplicationViewData : BaseApplicationViewData
     {
-        public Guid Id { get; set; }
-        public Guid ApplicationId { get; set; }
+        public Guid AnnouncementApplicationId { get; set; }
         public Guid AnnouncementId { get; set; }
         public Guid? CurrentPersonId { get; set; }
         public bool Active { get; set; }
-        public string Name { get; set; }
         public string ViewUrl { get; set; }
         public string EditUrl { get; set; }
         public string GradingViewUrl { get; set; }
-        public BaseApplicationViewData Application { get; set; }
         public int Order { get; set; }
         public bool IsInstalledForMe { get; set; }
+
+        protected AnnouncementApplicationViewData(Application application) : base(application)
+        {
+        }
 
         public static AnnouncementApplicationViewData Create(AnnouncementApplication announcementApplication, 
             Application application, IList<ApplicationInstall> installs, Guid? currentPersonId)
         {
-            var res = new AnnouncementApplicationViewData
+            var res = new AnnouncementApplicationViewData(application)
                 {
-                    Id = announcementApplication.Id,
+                    AnnouncementApplicationId = announcementApplication.Id,
                     Active = announcementApplication.Active,
                     AnnouncementId = announcementApplication.AnnouncementRef,
-                    ApplicationId = announcementApplication.ApplicationRef,
                     EditUrl = AppTools.BuildAppUrl(application, null, installs.First().Id, AppMode.Edit),
                     ViewUrl = AppTools.BuildAppUrl(application, null, installs.First().Id, AppMode.View),
                     GradingViewUrl = AppTools.BuildAppUrl(application, null, installs.First().Id, AppMode.GradingView),
-                    Application = BaseApplicationViewData.Create(application),
                     CurrentPersonId = currentPersonId,
+                    Order = announcementApplication.Order
                 };
             res.IsInstalledForMe = installs != null && currentPersonId.HasValue &&
                                    installs.Any(x => x.OwnerRef == currentPersonId && x.Active);
+            return res;
+        }
+
+        public static IList<AnnouncementApplicationViewData> Create(IList<AnnouncementApplication> annApps
+            , IList<Application> applications, IList<ApplicationInstall> installs, Guid? currentPersonId)
+        {
+            var res = new List<AnnouncementApplicationViewData>();
+            foreach (var annApp in annApps)
+            {
+                var app = applications.First(x => x.Id == annApp.ApplicationRef);
+                res.Add(Create(annApp, app, installs, currentPersonId));
+            }
             return res;
         }
         
