@@ -62,7 +62,11 @@ NAMESPACE('chlk.controllers', function (){
                     app.setShortDescription("Short description");
                     app.setDescription("Long description");
                     app.setVideoModeUrl("Video Url");
-                    app.setPermissions([
+
+
+
+
+                    var permissions = [
                         new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(1), "User", 1),
                         new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(2), "Class", 2),
                         new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(3), "Grade", 3),
@@ -71,8 +75,7 @@ NAMESPACE('chlk.controllers', function (){
                         new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(6), "Discipline", 6),
                         new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(7), "Message", 7),
                         new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(8), "Schedule", 8)
-                    ]);
-
+                    ];
 
                     var appAccess = new chlk.models.apps.AppAccess();
 
@@ -80,7 +83,13 @@ NAMESPACE('chlk.controllers', function (){
 
                     var gradeLevels = this.gradeLevelService.getGradeLevels();
 
+                    app.setPermissions([new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(6), "Discipline", 6)]);
 
+
+                    var appState = new chlk.models.apps.AppState();
+                    appState.deserialize(1);
+
+                    app.setState(appState);
                     var g1 = new chlk.models.common.NameId;
                     g1.setId(1);
                     g1.setName('1st');
@@ -97,7 +106,7 @@ NAMESPACE('chlk.controllers', function (){
                     cat.setName('Math');
 
                     app.setCategories([cat]);
-                    return new ria.async.DeferredData(new chlk.models.apps.AppInfoViewData(app, false, cats, gradeLevels));
+                    return new ria.async.DeferredData(new chlk.models.apps.AppInfoViewData(app, false, cats, gradeLevels, permissions));
 
                 }, this);
             return this.PushView(chlk.activities.apps.AppInfoPage, result);

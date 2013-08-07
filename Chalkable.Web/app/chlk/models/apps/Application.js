@@ -5,6 +5,7 @@ REQUIRE('chlk.models.apps.AppPrice');
 REQUIRE('chlk.models.apps.AppAccess');
 REQUIRE('chlk.models.apps.AppPermission');
 REQUIRE('chlk.models.apps.AppCategory');
+REQUIRE('chlk.models.apps.AppState');
 REQUIRE('chlk.models.common.NameId');
 
 NAMESPACE('chlk.models.apps', function () {
@@ -30,7 +31,7 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'myAppsUrl',
             [ria.serialize.SerializeProperty('secretkey')],
             String, 'secretKey',
-            Number, 'state',
+            chlk.models.apps.AppState, 'state',
             [ria.serialize.SerializeProperty('developerid')],
             chlk.models.id.SchoolPersonId, 'developerId',
             [ria.serialize.SerializeProperty('liveappid')],
