@@ -4,6 +4,8 @@ REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.apps.AppPrice');
 REQUIRE('chlk.models.apps.AppAccess');
 REQUIRE('chlk.models.apps.AppPermission');
+REQUIRE('chlk.models.apps.AppCategory');
+REQUIRE('chlk.models.common.NameId');
 
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
@@ -33,20 +35,6 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.id.SchoolPersonId, 'developerId',
             [ria.serialize.SerializeProperty('liveappid')],
             chlk.models.id.AppId, 'liveAppId',
-            [ria.serialize.SerializeProperty('hasstudentmyapps')],
-            Boolean, 'hasStudentMyApps',
-            [ria.serialize.SerializeProperty('hasteachermyapps')],
-            Boolean, 'hasTeacherMyApps',
-            [ria.serialize.SerializeProperty('hasadminmyapps')],
-            Boolean, 'hasAdminMyApps',
-            [ria.serialize.SerializeProperty('hasparentmyapps')],
-            Boolean, 'hasParentMyApps',
-            [ria.serialize.SerializeProperty('hasmyappsview')],
-            Boolean, 'hasMyAppsView',
-            [ria.serialize.SerializeProperty('canattach')],
-            Boolean, 'canAttach',
-            [ria.serialize.SerializeProperty('showingradeview')],
-            Boolean, 'showInGradeView',
             [ria.serialize.SerializeProperty('isinternal')],
             Boolean, 'isInternal',
             [ria.serialize.SerializeProperty('applicationprice')],
@@ -55,6 +43,10 @@ NAMESPACE('chlk.models.apps', function () {
             ArrayOf(chlk.models.id.PictureId), 'pictureIds',
             [ria.serialize.SerializeProperty('applicationaccess')],
             chlk.models.apps.AppAccess, 'appAccess',
-            ArrayOf(chlk.models.apps.AppPermission), 'permissions'
+            ArrayOf(chlk.models.apps.AppPermission), 'permissions',
+
+            ArrayOf(chlk.models.apps.AppCategory), 'categories',
+            [ria.serialize.SerializeProperty('gradelevels')],
+            ArrayOf(chlk.models.common.NameId), 'gradeLevels'
         ]);
 });
