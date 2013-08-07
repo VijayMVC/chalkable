@@ -1287,6 +1287,7 @@
 		* @param {Map} options user options
 		*/
 		 _showPrompt: function(field, promptText, type, ajaxed, options, ajaxform) {
+            jQuery(field).removeClass('ok');
 			 var prompt = methods._getPrompt(field);
 			 // The ajax submit errors are not see has an error in the form,
 			 // When the form errors are returned, the engine see 2 bubbles, but those are ebing closed by the engine at the same time

@@ -395,7 +395,7 @@
       if (this.options.width != null) {
         return this.options.width;
       } else {
-        return "" + this.form_field.offsetWidth + "px";
+        return "" + jQuery(this.form_field).width() + "px";
       }
     };
 
