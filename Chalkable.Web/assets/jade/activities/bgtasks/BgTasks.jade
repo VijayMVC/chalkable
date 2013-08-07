@@ -1,0 +1,23 @@
+.bg-tasks
+    +Grid('backgroundtask', 'page', self).not-transparent
+        +GridHead()
+            .th Id
+            .th Created
+            .th Scheduled
+            .th Completed
+            .th Task State
+            .th Task Type
+            .th
+        +GridBody()
+            each item in self.items
+                +GridRow()
+                    .td= item.getId().valueOf()
+                    .td=item.getCreated().toString('dd/m/yy hh:min:ss')
+                    .td=item.getScheduled().toString('dd/m/yy hh:min:ss')
+                    .td=item.getCompleted() ? item.getCompleted().toString('d/m/y') : ""
+                    .td= item.getTaskState().toString()
+                    .td= item.getTaskType().valueOf()
+                    .td.action-links
+                        +ActionLink('backgroundtask', 'logs', item.getId()).profile
+                        +ActionLink('backgroundtask', 'delete', item.getId()).remove
+
