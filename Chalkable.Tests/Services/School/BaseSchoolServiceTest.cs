@@ -23,35 +23,10 @@ namespace Chalkable.Tests.Services.School
         public void SetUp()
         {
             CreateMasterDb();
-            CreateTestSchool();
+            InitBaseData();
         }
 
-        protected override void BeforCreateDb(string chalkableConnection, string masterConnection)
-        {        
-            if (ExistsDb(masterConnection, MASTER_DB_NAME))
-            {
-                using (var uow = new UnitOfWork(chalkableConnection, true))
-                {
-                    var schools = new SchoolDataAccess(uow).GetSchools();
-                    schools = schools.Where(x => x.Name == TEST_SCHOOL_NAME).ToList();
-                    uow.Commit();
-                    foreach (var school in schools)
-                    {
-                        try
-                        {
-                            DropDbIfExists(masterConnection, school.Id.ToString());
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.WriteLine(ex.Message);
-                        }  
-                    }
-                }
-            }
- 
-            base.BeforCreateDb(chalkableConnection, masterConnection);
-        }
-
+       
         private SchoolTestContext schoolTestContext;
         public SchoolTestContext SchoolTestContext
         {
@@ -75,35 +50,13 @@ namespace Chalkable.Tests.Services.School
         {
         }
 
-        private const string TEST_SCHOOL_NAME = "SchoolForTest";
-        protected void CreateTestSchool()
+        protected void InitBaseData()
         {
-            var chalkableMasterConnection = Settings.MasterConnectionString;
-            var masterConnection = chalkableMasterConnection.Replace(MASTER_DB_NAME, "Master");
-
-            var server = Settings.Servers[0];
-            var school = new Data.Master.Model.School
-            {
-                Id = Guid.NewGuid(),
-                Name = TEST_SCHOOL_NAME,
-                IsEmpty = false,
-                ServerUrl = server,
-                Status = SchoolStatus.PayingCustomer,
-                TimeZone = "UTC"
-            };
-            var sysLocator =ServiceLocatorFactory.CreateMasterSysAdmin();
-            using (var uow = new UnitOfWork(chalkableMasterConnection, true))
-            {
-                var da = new SchoolDataAccess(uow);
-                da.Create(school);
-                uow.Commit();
-                ExecuteQuery(masterConnection, "create database [" + school.Id.ToString() + "]");
-                var schoolDbConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, server, school.Id.ToString());
-                RunCreateSchoolScripts(schoolDbConnectionString);
-            }
+            var school = CreateTestSchool();
+            var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
             var schoolSl = sysLocator.SchoolServiceLocator(school.Id);
             SysAdminSchoolLocator = new BaseSchoolServiceLocatorTest(new BaseMasterServiceLocatorTest(schoolSl.Context));
-            SchoolTestContext = SchoolTestContext.CreateSchoolContext(schoolSl);
+            SchoolTestContext = SchoolTestContext.Create(schoolSl);
         }
 
     }

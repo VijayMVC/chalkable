@@ -30,6 +30,12 @@ namespace Chalkable.Tests.Services.Master
         {
         }
 
-
+        protected DeveloperSchoolTestContex CreateDeveloperSchoolTestContext()
+        {
+            CreateTestDemoSchool();
+            var school = sysAdminMasterLocator.SchoolService.UseDemoSchool();
+            var sysSchoolL = sysAdminMasterLocator.SchoolServiceLocator(school.Id);
+            return DeveloperSchoolTestContex.Create(sysSchoolL);
+        }
     }
 }

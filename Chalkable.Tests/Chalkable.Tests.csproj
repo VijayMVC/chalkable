@@ -52,9 +52,11 @@
     <Compile Include="DataAccess\OrmTest.cs" />
     <Compile Include="OnDataBaseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Master\ApplicationServiceTest.cs" />
     <Compile Include="Services\Master\BackgrounTaskServiceTest.cs" />
     <Compile Include="Services\Master\BaseMasterServiceLocatorTest.cs" />
     <Compile Include="Services\Master\DepartmentServiceTest.cs" />
+    <Compile Include="Services\Master\DeveloperSchoolTestContex.cs" />
     <Compile Include="Services\Master\EmailTestService.cs" />
     <Compile Include="Services\Master\MasterServiceTestBase.cs" />
     <Compile Include="Services\Master\PictureServiceTest.cs" />

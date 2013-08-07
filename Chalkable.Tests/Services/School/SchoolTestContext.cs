@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
@@ -19,7 +20,6 @@ namespace Chalkable.Tests.Services.School
         public const string TEACHER_USER = "Teacher";
         public const string STUDENT_USER = "Student";
         public const string PARENT_USER = "Parent";
-        public const string DEVELOPER_USER = "Devloper";
         public const string CHECKIN_USER = "Checkin";
 
         private const string PREFIX1 = "first_";
@@ -29,47 +29,48 @@ namespace Chalkable.Tests.Services.School
         private const string DEFAULT_PASSWORD = "tester";
         private const string DEFAULT_GENDER = "M";
 
-        private class UserInfoTest : UserInfo
+        protected class UserInfoTest : UserInfo
         {
             public CoreRole Role { get; set; }
         }
 
-
-        private IServiceLocatorSchool sysSchoolSl;
-        private SchoolTestContext(IServiceLocatorSchool sysSchoolSl)
+        protected IServiceLocatorSchool sysSchoolSl;
+        protected SchoolTestContext(IServiceLocatorSchool sysSchoolSl)
         {
             this.sysSchoolSl = sysSchoolSl;
+            InitBaseData(this.sysSchoolSl);
         }
-
-        public static SchoolTestContext CreateSchoolContext(IServiceLocatorSchool sysSchoolSl)
+        protected void InitBaseData(IServiceLocatorSchool sysSchoolSl)
         {
-            var res = new SchoolTestContext(sysSchoolSl);
-
             var userInfos = new List<UserInfoTest>
                 {
-                    CreateUserInfo(res.AdminGradeName, CoreRoles.ADMIN_GRADE_ROLE),
-                    CreateUserInfo(res.AdminViewName, CoreRoles.ADMIN_VIEW_ROLE),
-                    CreateUserInfo(res.AdminEditName, CoreRoles.ADMIN_EDIT_ROLE),
-                    CreateUserInfo(res.FirstTeacherName, CoreRoles.TEACHER_ROLE),
-                    CreateUserInfo(res.SecondTeacherName, CoreRoles.TEACHER_ROLE),
-                    CreateUserInfo(res.FirstStudentName, CoreRoles.STUDENT_ROLE),
-                    CreateUserInfo(res.SecondStudentName, CoreRoles.STUDENT_ROLE),
-                    CreateUserInfo(res.FirstParentName, CoreRoles.PARENT_ROLE),
-                    CreateUserInfo(res.SecondParentName, CoreRoles.PARENT_ROLE),
-                    CreateUserInfo(res.CheckinName, CoreRoles.CHECKIN_ROLE)
+                    CreateUserInfo(AdminGradeName, CoreRoles.ADMIN_GRADE_ROLE),
+                    CreateUserInfo(AdminViewName, CoreRoles.ADMIN_VIEW_ROLE),
+                    CreateUserInfo(AdminEditName, CoreRoles.ADMIN_EDIT_ROLE),
+                    CreateUserInfo(FirstTeacherName, CoreRoles.TEACHER_ROLE),
+                    CreateUserInfo(SecondTeacherName, CoreRoles.TEACHER_ROLE),
+                    CreateUserInfo(FirstStudentName, CoreRoles.STUDENT_ROLE),
+                    CreateUserInfo(SecondStudentName, CoreRoles.STUDENT_ROLE),
+                    CreateUserInfo(FirstParentName, CoreRoles.PARENT_ROLE),
+                    CreateUserInfo(SecondParentName, CoreRoles.PARENT_ROLE),
+                    CreateUserInfo(CheckinName, CoreRoles.CHECKIN_ROLE)
                 };
-            var gradeLevels =  sysSchoolSl.GradeLevelService.CreateDefault();
+            var gradeLevels = sysSchoolSl.GradeLevelService.CreateDefault();
             CreateUsers(sysSchoolSl, userInfos, gradeLevels[0].Id);
-            res.AdminGradeSl = res.CreateLocatorByPerson(res.AdminGrade);
-            res.AdminEditSl = res.CreateLocatorByPerson(res.AdminEdit);
-            res.AdminViewSl = res.CreateLocatorByPerson(res.AdminView);
-            res.FirstTeacherSl = res.CreateLocatorByPerson(res.FirstTeacher);
-            res.FirstStudentSl = res.CreateLocatorByPerson(res.FirstStudent);
-            res.FirstParentSl = res.CreateLocatorByPerson(res.FirstParent);
-            res.SecondTeacherSl = res.CreateLocatorByPerson(res.SecondTeahcer);
-            res.SecondStudentSl = res.CreateLocatorByPerson(res.SecondStudent);
-            res.SecondParentSl = res.CreateLocatorByPerson(res.SecondParent);
-            return res;
+            AdminGradeSl = CreateLocatorByPerson(AdminGrade);
+            AdminEditSl = CreateLocatorByPerson(AdminEdit);
+            AdminViewSl = CreateLocatorByPerson(AdminView);
+            FirstTeacherSl = CreateLocatorByPerson(FirstTeacher);
+            FirstStudentSl = CreateLocatorByPerson(FirstStudent);
+            FirstParentSl = CreateLocatorByPerson(FirstParent);
+            SecondTeacherSl = CreateLocatorByPerson(SecondTeahcer);
+            SecondStudentSl = CreateLocatorByPerson(SecondStudent);
+            SecondParentSl = CreateLocatorByPerson(SecondParent);
+        }
+
+        public static SchoolTestContext Create(IServiceLocatorSchool sysSchoolSl)
+        {
+            return new SchoolTestContext(sysSchoolSl);
         }
 
         private IServiceLocatorSchool CreateLocatorByPerson(Person person)
@@ -98,7 +99,7 @@ namespace Chalkable.Tests.Services.School
             return GetSchoolUser(sysSchoolSl, person.FirstName, CoreRoles.GetById(person.RoleRef));
         }
 
-        private static UserInfoTest CreateUserInfo(string name, CoreRole role)
+        protected static UserInfoTest CreateUserInfo(string name, CoreRole role)
         {
             return new UserInfoTest
                 {
@@ -226,7 +227,6 @@ namespace Chalkable.Tests.Services.School
         }
     }
 
-
     [Flags]
     public enum SchoolContextRoles
     {
@@ -239,6 +239,7 @@ namespace Chalkable.Tests.Services.School
         SecondTeacher = 64,
         SecondStudent = 128,
         SecondParent = 256,
-        Checkin = 512
+        Checkin = 512,
+        Developer = 1024
     }
 }
