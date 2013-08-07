@@ -29,7 +29,9 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return BaseSecurity.IsAdminOrTeacher(SchoolLocator.Context) 
                    || SchoolLocator.Context.UserId == personId;
         }
-        
+
+
+
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_USER_ME, true, CallType.Get, new[] { AppPermissionType.User, })]
         public ActionResult Me()
         {
@@ -60,14 +62,28 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var schoolYearId = GetCurrentSchoolYearId();
             var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, null, personId);
             return Json(PersonScheduleViewData.Create(person, classes));
-        } 
+        }
+        
+        private const string htmlContentType = "text/html";
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult UploadPicture(Guid personId)
+        {
+            byte[] bin;
+            string name;
+            if (!GetFileFromRequest(out bin, out name))
+                return Json(new ChalkableException (ChlkResources.ERR_FILE_IS_REQUIRED));
+            
+            MasterLocator.PersonPictureService.UploadPicture(personId, bin);
+            return Json(true, htmlContentType);
+        }
+
 
         protected void SavePhones(AdminTeacherInputModel model)
         {
             var prev = SchoolLocator.PhoneService.GetPhones(model.PersonId);
             foreach (var phone in prev)
             {
-                if (!model.Phones.Any(x=>x.Value == phone.Value))
+                if (!model.Phones.Any(x=>x.Id == phone.Id))
                     SchoolLocator.PhoneService.Delete(phone.Id);
             }
             if (model.Phones != null)
@@ -85,7 +101,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var prev = SchoolLocator.AddressService.GetAddress(model.PersonId);
             foreach (var address in prev)
             {
-                if (!model.Addresses.Any(x => x.Value == address.Value))
+                if (!model.Addresses.Any(x => x.Id == address.Id))
                     SchoolLocator.AddressService.Delete(address.Id);
             }
             if (model.Addresses != null)

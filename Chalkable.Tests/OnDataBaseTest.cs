@@ -111,9 +111,7 @@ namespace Chalkable.Tests
 
             ExecuteQuery(masterConnection, "create database " + MASTER_DB_NAME);
             ExecuteQuery(masterConnection, "create database " + SCHOOL_DB_TEMPLATE_NAME);
-            
-            
-            
+              
             SqlConnection.ClearAllPools();
             var masterSqlRoot = Path.Combine(SQLRoot, "ChalkableMaster");
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1000 - Create DB Script.sql"));
