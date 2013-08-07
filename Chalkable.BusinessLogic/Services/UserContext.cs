@@ -77,24 +77,41 @@ namespace Chalkable.BusinessLogic.Services
             return parameters.JoinString(DELIMITER.ToString(CultureInfo.InvariantCulture));
         }
 
+
+        private const int USER_ID = 0;
+        private const int SCHOOL_ID = 1;
+        private const int LOGIN = 2;
+        private const int SCHOOL_NAME = 3;
+        private const int ROLE_ID = 4;
+        private const int SCHOOL_SERVER_URL = 5;
+        private const int SCHOOL_TIMEZONE_ID = 6;
+        private const int DEVELOPER_ID = 7;
+
+
+
         public static UserContext FromString(string s)
         {
             var sl = s.Split(DELIMITER);
-            var userId = Guid.Parse(sl[0]);
-            var schoolId = string.IsNullOrEmpty(sl[1]) ? (Guid?)null : Guid.Parse(sl[1]);
+            var userId = Guid.Parse(sl[USER_ID]);
+            var schoolId = string.IsNullOrEmpty(sl[SCHOOL_ID]) ? (Guid?)null : Guid.Parse(sl[SCHOOL_ID]);
+            var login = sl[LOGIN];
+
             string schoolName = null;
             string schoolTimeZone = null;
             string schoolServerUrl = null;
-            Guid? developerId = null;
+            Guid? developerId = (Guid?)null;
+
             if (schoolId.HasValue)
             {
-                schoolName = sl[3]; 
-                schoolServerUrl = sl[5];
-                schoolTimeZone = sl[6];
-                developerId = string.IsNullOrEmpty(sl[7]) ? (Guid?)null : Guid.Parse(sl[7]);
+                schoolName = sl[SCHOOL_NAME];
+                schoolServerUrl = sl[SCHOOL_SERVER_URL];
+                schoolTimeZone = sl[SCHOOL_TIMEZONE_ID];
+
+                if (sl.Length > 7 && !string.IsNullOrEmpty(sl[DEVELOPER_ID]))
+                    developerId = Guid.Parse(sl[DEVELOPER_ID]);
             }
-            var role = CoreRoles.GetById(int.Parse(sl[4]));
-            var res = new UserContext(userId, schoolId, sl[2], schoolName, schoolTimeZone, schoolServerUrl, role, developerId);
+            var role = CoreRoles.GetById(int.Parse(sl[ROLE_ID]));
+            var res = new UserContext(userId, schoolId, login, schoolName, schoolTimeZone, schoolServerUrl, role, developerId);
             return res;
         }
     }
