@@ -83,7 +83,7 @@
                     // credit: jquery.h5validate.js / orefalo
                     //"regex": /^([\+][0-9]{1,3}[\ \.\-])?([\(]{1}[0-9]{2,6}[\)])?([0-9\ \.\-\/]{3,20})((x|ext|extension)[\ ]?[0-9]{1,4})?$/,
                     "regex": /^(\d{3}[-]?){1,2}(\d{4})$/,
-                    "alertText": "Invalid phone number"
+                    "alertText": "Not a valid phone number.  Must be in the format 123-4567 or 123-456-7890 (dashes optional)"
                 },
                 "email": {
                     // HTML5 compatible email regex ( http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#    e-mail-state-%28type=email%29 )

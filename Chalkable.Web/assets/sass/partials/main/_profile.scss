@@ -76,6 +76,18 @@ BODY {
           }
 
           &.edit-mode{
+            .title{
+              margin: 38px 0 0 14px;
+
+              .name-block{
+                margin: 21px 15px;
+              }
+            }
+
+            .sections{
+              margin: 0 0 0 10px;
+            }
+
             .info-view{
               display: none;
             }
@@ -102,6 +114,13 @@ BODY {
               color: #808080 !important;
             }
 
+            BUTTON.file{
+              @include border-radius(6px);
+              height: 26px;
+              width: 125px;
+              cursor: pointer;
+            }
+
             .section-buttons{
               .chlk-button{
                 margin: 100px 5px 0 0;
@@ -112,8 +131,14 @@ BODY {
               }
             }
 
+            .info-title {
+              color: #be8145;
+              padding-left: 5px;
+              font: bold 14px Arial;
+            }
+
             #cellService{
-              width: 206px;
+              width: 213px;
             }
 
             #genderSelect{
@@ -126,15 +151,15 @@ BODY {
 
             .grey-combo-container{
               .month-combo{
-                width:75px;
+                width:80px;
               }
 
               .day-combo{
-                width:60px;
+                width:47px;
               }
 
               .year-combo{
-                width:65px;
+                width:78px;
               }
             }
 
@@ -157,6 +182,22 @@ BODY {
             .sections-info {
               width: 213px;
               overflow: visible;
+
+              .section-data{
+                margin-top: 11px;
+
+                .primary-phone{
+                  margin-bottom: 12px;
+                }
+              }
+
+              .bd-select{
+                margin-bottom: 12px;
+
+                .chzn-container:not(:last-child){
+                  margin-right: 4px;
+                }
+              }
             }
           }
 
@@ -186,6 +227,17 @@ BODY {
 
             .low-font-size {
               font-size: 14px;
+
+              input{
+                color: $color;
+                background: transparent;
+                padding: 0;
+                font-weight: bold;
+
+                &:focus{
+                  border: none !important;
+                }
+              }
             }
 
             .section-title {
