@@ -1,7 +1,8 @@
 -addresses = self.getAddresses() || [];
 -primaryPhone = self.getPrimaryPhone() ? self.getPrimaryPhone().getValue() : '';
 -homePhone = self.getHomePhone() ? self.getHomePhone().getValue() : '';
-.teacher-info.info-page.edit-mode
+.teacher-info.info-page.view-mode.loader-container
+    .loader
     .action-bar.not-transparent.buttons
         .container.panel-bg
             .left
@@ -58,8 +59,10 @@
                     button.simple-gray-button.file Upload
                         +FileUpload('teachers', 'uploadPicture', [self.getId().valueOf()])#add-attachment.simple-gray-button
                 .name-block
-                    input(name="firstName", value=self.getFirstName())
-                    input(name="lastName", value=self.getLastName())
+                    input(name="firstname", value=self.getFirstName())
+                    input(name="lastname", value=self.getLastName())
+                    input(type="hidden", name="id", value=self.getId())
+                    input(type="hidden", name="salutation", value=self.getSalutation())
             .sections
                 .sections-info
                     .section-title=self.getRole().getName()
@@ -118,6 +121,6 @@
                                 -addressesModel.setItems(addresses);
                                 +RenderWith(addressesModel, chlk.templates.people.Addresses)
             +Button(type="submit").special-button.blue-button#submit-info-button=Msg.Save
-            +Button().special-button.blue-button#cancell-edit-info-button=Msg.Cancell
+            +Button().special-button.blue-button#cancell-edit-info-button=Msg.Cancel
 
 

@@ -10,6 +10,7 @@ NAMESPACE('chlk.templates.profile', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/profile/InfoView.jade')],
         [ria.templates.ModelBind(chlk.models.people.User)],
         'InfoView', EXTENDS(chlk.templates.people.User), [
+            [ria.templates.ModelPropertyBind],
             Boolean, 'ableEdit'
         ])
 });

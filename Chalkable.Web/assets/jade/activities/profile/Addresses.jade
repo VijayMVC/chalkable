@@ -1,7 +1,7 @@
 each address in self.getItems()
     textarea(
         class="home-address",
-        data-id=address.getId().valueOf(),
+        data-id=address.getId() ? address.getId().valueOf() : null,
         data-type=0
     )=address.getValue()
 

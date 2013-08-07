@@ -62,7 +62,8 @@ NAMESPACE('chlk.controllers', function (){
                 model.setPhonesValue(JSON.stringify(phonesValue));
                 model.setAddressesValue(JSON.stringify(addressesValue));
                 var roleName = model.getRole().getName(), roles = chlk.models.common.RoleEnum;
-                model.setAbleEdit(roleName != roles.STUDENT.valueOf() || roleName == roles.ADMINEDIT.valueOf() || roleName == roles.ADMINGRADE.valueOf());
+                var currentPerson = this.getContext().getSession().get('currentPerson');
+                model.setAbleEdit((roleName != roles.STUDENT.valueOf() && model.getId() == currentPerson.getId()) || roleName == roles.ADMINEDIT.valueOf() || roleName == roles.ADMINGRADE.valueOf());
                 model.setBirthDateText(res);
                 var gt = model.getGender() ? (model.getGender().toLowerCase() == 'm' ? 'Male' : 'Female') : '';
                 model.setGenderFullText(gt);
@@ -82,19 +83,15 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.people.User]],
             function infoEditAction(model){
-                console.info(model);
-                /*var result;
-                if(personId_){
-                    result = this.teacherService
-                        .getInfo(personId_)
-                        .attach(this.validateResponse_())
-                        .then(function(model){
-                            return this.prepareProfileData(model);
-                        }.bind(this));
-                }else{
-                    result = new ria.async.DeferredData(model_);
-                }
-                return this.PushView(chlk.activities.profile.InfoEditPage, result);*/
+                var result;
+                result = this.teacherService
+                    .updateInfo(model.getId(), model.getAddressesValue(), model.getEmail(), model.getFirstName(),
+                        model.getLastName(), model.getGender(), model.getPhonesValue(), model.getSalutation())
+                    .attach(this.validateResponse_())
+                    .then(function(model){
+                        return this.prepareProfileData(model);
+                    }.bind(this));
+                return this.UpdateView(chlk.activities.profile.InfoViewPage, result);
             },
 
             [[chlk.models.id.SchoolPersonId, Object]],
