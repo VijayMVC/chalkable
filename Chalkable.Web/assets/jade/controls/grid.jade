@@ -1,0 +1,21 @@
+mixin Grid(controller, action, data, params)
+    -console.info(controller, action, data, params);
+    .grid(attributes)
+        .loader
+        .scroller
+            .container
+                block
+        if(controller)
+            +Paginator(controller, action, data, params)
+
+mixin GridHead()
+    .head.panel-bg
+        block
+
+mixin GridBody()
+    .body
+        block
+
+mixin GridRow()
+    .row
+        block

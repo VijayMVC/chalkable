@@ -1,0 +1,18 @@
+mixin DateSelect()
+    -name=attributes.name
+    -attributes = self.processAttrs(attributes);
+    .date-select(attributes)
+        input(type="hidden", name=name, value=attributes.value ? attributes.value.toString('mm/dd/yy') : null, class="hidden-value")
+        +Select('monthCombo')(data-placeholder="Month").month-combo
+            each item in self.getMonths()
+                -console.info(item[0], attributes.day, item[0]==attributes.day);
+                +Option(item[0], item[1], item[0]==attributes.day)
+        +Select('dayCombo')(data-placeholder="Day").day-combo
+            each item in self.getDays()
+                +Option(item, item, item==attributes.month)
+        +Select('yearCombo')(data-placeholder="Year").year-combo
+            each item in self.getYears()
+                +Option(item, item, item==attributes.year)
+
+
+
