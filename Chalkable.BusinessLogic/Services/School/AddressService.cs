@@ -13,7 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Address Edit(Guid id, string value, string note, AddressType type);
         void Delete(Guid id);
         IList<Address> GetAddress();
-
+        IList<Address> GetAddress(Guid personId);
     }
     public class AddressService : SchoolServiceBase, IAddressService
     {
@@ -82,6 +82,18 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new AddressDataAccess(uow);
                 return da.GetAll();
+            }
+        }
+
+        public IList<Address> GetAddress(Guid personId)
+        {
+            if (!BaseSecurity.IsAdminOrTeacher(Context))
+                throw new ChalkableSecurityException();
+
+            using (var uow = Read())
+            {
+                var da = new AddressDataAccess(uow);
+                return da.GetAll(new Dictionary<string, object>{{Address.PERSON_REF_FIELD, personId}});
             }
         }
     }
