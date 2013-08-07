@@ -38,7 +38,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public bool IsPrimary { get; set; }
     }
 
-    public class TeacherInputModel
+    public class AdminTeacherInputModel
     {
         public Guid PersonId { get; set; }
         public AddressInputModel[] Addresses { get; set; }

@@ -29,7 +29,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
-        public ActionResult UpdateInfo(TeacherInputModel model)
+        public ActionResult UpdateInfo(AdminTeacherInputModel model)
         {
             var teacher = UpdateTeacherOrAdmin(model);
             //MixPanelService.ChangedEmail(SchoolLocator.Context., email);

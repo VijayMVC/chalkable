@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Address Add(Guid personId, string value, string note, AddressType type)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if(!BaseSecurity.IsAdminOrTeacher(Context))//TODO:can teacher do this?
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -45,6 +45,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Address Edit(Guid id, string value, string note, AddressType type)
         {
+            if (!BaseSecurity.IsAdminOrTeacher(Context))//TODO:can teacher do this?
+                throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new AddressDataAccess(uow);
