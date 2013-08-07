@@ -13,6 +13,7 @@ namespace Chalkable.Data.School.Model
         public string Value { get; set; }
         public string Note { get; set; }
         public AddressType Type { get; set; }
+        public const string PERSON_REF_FIELD = "PersonRef";
         public Guid PersonRef { get; set; }
         public int? SisId { get; set; }
     }

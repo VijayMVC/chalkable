@@ -9,6 +9,7 @@ namespace Chalkable.Data.School.Model
     public  class Phone
     {
         public Guid Id { get; set; }
+        public const string PERSON_REF_FIELD = "PersonRef";
         public Guid PersonRef { get; set; }
         public string Value { get; set; }
         public PhoneType Type { get; set; }

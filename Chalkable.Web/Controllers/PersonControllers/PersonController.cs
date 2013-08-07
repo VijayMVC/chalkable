@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -144,6 +145,62 @@ namespace Chalkable.Web.Controllers.PersonControllers
         {
             SchoolLocator.PersonService.Edit(personId, email, firstName, lastName, gender, salutation, birthdayDate);
             return EditPersonAdditionalInfo(personId, addressIndexes, phoneIndexes);
+        }
+
+
+
+
+
+
+
+
+
+        protected void SavePhones(TeacherInputModel model)
+        {
+            var prev = SchoolLocator.PhoneService.GetPhones(model.PersonId);
+            foreach (var phone in prev)
+            {
+                if (!model.Phones.Any(x=>x.Value == phone.Value))
+                    SchoolLocator.PhoneService.Delete(phone.Id);
+            }
+            foreach (var phone in model.Phones)
+            {
+                if (phone.Id.HasValue)
+                    SchoolLocator.PhoneService.Edit(phone.Id.Value, phone.Value, (PhoneType)phone.Type, phone.IsPrimary);
+                else
+                    SchoolLocator.PhoneService.Add(model.PersonId, phone.Value, (PhoneType)phone.Type, phone.IsPrimary);
+            }
+        }
+
+        protected void SaveAddresses(TeacherInputModel model)
+        {
+            var prev = SchoolLocator.AddressService.GetAddress(model.PersonId);
+            foreach (var address in prev)
+            {
+                if (!model.Addresses.Any(x => x.Value == address.Value))
+                    SchoolLocator.AddressService.Delete(address.Id);
+            }
+            foreach (var address in model.Addresses)
+            {
+                if (address.Id.HasValue)
+                    SchoolLocator.AddressService.Edit(address.Id.Value, address.Value, string.Empty, (AddressType)address.Type);
+                else
+                    SchoolLocator.AddressService.Add(model.PersonId, address.Value, string.Empty, (AddressType)address.Type);
+            }
+        }
+
+        private Person EditPersonAdditionalInfo(TeacherInputModel model)
+        {
+            SaveAddresses(model);
+            SavePhones(model);
+            var teacher = SchoolLocator.PersonService.GetPerson(model.PersonId);
+            return teacher;
+        }
+
+        protected Person UpdateTeacherOrAdmin(TeacherInputModel model)
+        {
+            SchoolLocator.PersonService.Edit(model.PersonId, model.Email, model.FirstName, model.LastName, model.Gender, model.Salutation, model.BirthdayDate);
+            return EditPersonAdditionalInfo(model);
         }
     }
 }
