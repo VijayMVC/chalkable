@@ -26,4 +26,24 @@ from
 
 GO
 
+ALTER view [dbo].[vwStudentFinalGrade]
+as
+select
+StudentFinalGrade.Id as StudentFinalGrade_Id,
+StudentFinalGrade.ClassPersonRef as StudentFinalGrade_ClassPersonRef,
+StudentFinalGrade.FinalGradeRef as StudentFinalGrade_FinalGradeRef,
+StudentFinalGrade.AdminGrade as StudentFinalGrade_AdminGrade,
+StudentFinalGrade.TeacherGrade as StudentFinalGrade_TeacherGrade,
+StudentFinalGrade.GradeByAnnouncement as StudentFinalGrade_GradeByAnnouncement,
+StudentFinalGrade.GradeByAttendance as StudentFinalGrade_GradeByAttendance,
+StudentFinalGrade.GradeByDiscipline as StudentFinalGrade_GradeByDiscipline,
+StudentFinalGrade.GradeByParticipation as StudentFinalGrade_GradeByParticipation,
+vwPerson.*
+from StudentFinalGrade
+join ClassPerson on ClassPerson.Id = StudentFinalGrade.ClassPersonRef
+join vwPerson on vwPerson.Id = ClassPerson.PersonRef
+GO
+
+
+
 

@@ -95,11 +95,16 @@ namespace Chalkable.Data.School.Model
 
     public class AnnouncementDetails : AnnouncementComplex
     {
-        public FinalGradeStatus? FinalGradeStatus { get; set; }
+        public int? FinalGradeStatus { get; set; }
         
+        public FinalGradeStatus? FinalGradeStatusTyped
+        {
+            get { return (FinalGradeStatus?) FinalGradeStatus; }
+        }
+
         public bool WasSubmittedToAdmin
         {
-            get { return FinalGradeStatus.HasValue && FinalGradeStatus.Value == Model.FinalGradeStatus.Submit; }
+            get { return FinalGradeStatusTyped.HasValue && FinalGradeStatusTyped.Value == Model.FinalGradeStatus.Submit; }
         }
 
         public IList<StudentAnnouncementDetails> StudentAnnouncements { get; set; }
