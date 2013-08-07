@@ -18,7 +18,9 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.apps.AppCategory), 'categories',
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.common.NameId), 'gradeLevels'
+            ArrayOf(chlk.models.common.NameId), 'gradeLevels',
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.apps.AppPermission), 'permissions'
 
         ])
 });
