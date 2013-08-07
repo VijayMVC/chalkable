@@ -20,8 +20,8 @@ NAMESPACE('chlk.controllers', function (){
                     var day = parseInt(bDate.format('d'), 10), str;
                     switch(day){
                         case 1: str = 'st';break;
-                        case 2: str = 'nd';break;
-                        case 3: str = 'rd';break;
+                        case 2: str = 'n&#100;';break;
+                        case 3: str = 'r&#100;';break;
                         default: str = 'st';
                     }
                     res = 'M d' + str + ' y';
@@ -64,7 +64,7 @@ NAMESPACE('chlk.controllers', function (){
                 var roleName = model.getRole().getName(), roles = chlk.models.common.RoleEnum;
                 var currentPerson = this.getContext().getSession().get('currentPerson');
                 model.setAbleEdit((roleName != roles.STUDENT.valueOf() && model.getId() == currentPerson.getId()) || roleName == roles.ADMINEDIT.valueOf() || roleName == roles.ADMINGRADE.valueOf());
-                model.setBirthDateText(res);
+                bDate && model.setBirthDateText(bDate.toString(res).replace(/&#100;/g, 'd'));
                 var gt = model.getGender() ? (model.getGender().toLowerCase() == 'm' ? 'Male' : 'Female') : '';
                 model.setGenderFullText(gt);
                 return model;
@@ -86,7 +86,7 @@ NAMESPACE('chlk.controllers', function (){
                 var result;
                 result = this.teacherService
                     .updateInfo(model.getId(), model.getAddressesValue(), model.getEmail(), model.getFirstName(),
-                        model.getLastName(), model.getGender(), model.getPhonesValue(), model.getSalutation())
+                        model.getLastName(), model.getGender(), model.getPhonesValue(), model.getSalutation(), model.getBirthDate())
                     .attach(this.validateResponse_())
                     .then(function(model){
                         return this.prepareProfileData(model);

@@ -42,6 +42,7 @@ NAMESPACE('chlk.models.people', function () {
             [ria.serialize.SerializeProperty('schoolid')],
             Number, 'schoolId',
 
+            [ria.serialize.SerializeProperty('birthdate')],
             chlk.models.common.ChlkDate, 'birthDate',
 
             String, 'birthDateText',

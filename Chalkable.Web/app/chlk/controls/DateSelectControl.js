@@ -20,6 +20,7 @@ NAMESPACE('chlk.controls', function () {
             Object, function processAttrs(attributes) {
                 attributes.id = attributes.id || ria.dom.NewGID();
                 var value = attributes.value;
+                console.info(value);
                 delete attributes.name;
                 if(value){
                     attributes.day = value.getDate();
@@ -56,11 +57,11 @@ NAMESPACE('chlk.controls', function () {
                         var hidden = container.find('.hidden-value');
                         jQuery('#' + attributes.id).find('select').on('change', function(event, options){
                             var dayValue = parseInt(daySelect.getValue(), 10);
-                            var monthValue = parseInt(monthSelect.getValue(), 10);
+                            var monthValue = (parseInt(monthSelect.getValue(), 10) || 0) + 1;
                             var yearValue = yearSelect.getValue();
                             if(!new ria.dom.Dom(this).hasClass('day-combo')){
                                 daySelect.setHTML('');
-                                var days = daysInMonth((monthValue || 0) + 1, yearValue || 2000), wasSelected=false;
+                                var days = daysInMonth(monthValue, yearValue || 2000), wasSelected=false;
                                 for(var i = 1; i <= days; i++){
                                     var option = new Option(i),selected=false;
                                     if(i === dayValue){
