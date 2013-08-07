@@ -1,0 +1,369 @@
+// This import applies a global reset to any page that imports this stylesheet.
+//@import "blueprint/reset";
+
+// To configure blueprint, edit the partials/_base.sass file.
+
+// Import all the default blueprint modules so that we can access their mixins.
+//@import "blueprint";
+
+// Import the non-default scaffolding module.
+//@import "blueprint/scaffolding";
+
+@import "compass/css3/border-radius";
+@import "compass/css3/background-size";
+@import "compass/css3/box-shadow";
+@import "compass/css3/images";
+@import "compass/css3/transition";
+@import "compass/css3/opacity";
+
+// Generate the blueprint framework according to your configuration:
+//@include blueprint;
+
+//@include blueprint-scaffolding;
+
+$margin: 15px;
+$sidebar-width: 300px;
+$column-width: 802px;
+
+$background: #a1d1e8; /*#4985a6;*/
+$panel-bg: #ecf6f9;
+
+$button-bg: #ecf6f9;
+$button-border: #bfcfdc;
+
+$link-color: #155c97;
+$border-color: #a1a1a1;
+
+h1,h2,h3,h4,h5,h6,strong {
+  color: #2f424b;
+}
+
+@font-face {
+    font-family: 'Jrhand';
+    src: url('fonts/jrhand-webfont.eot');
+    src: url('fonts/jrhand-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/jrhand-webfont.woff') format('woff'),
+         url('fonts/jrhand-webfont.ttf') format('truetype'),
+         url('fonts/jrhand-webfont.svg#jrhandregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'HelveticaNeue UltraLite';
+    src: url('fonts/helveticaneue-ultralight-webfont.eot');
+    src: url('fonts/helveticaneue-ultralight-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/helveticaneue-ultralight-webfont.woff') format('woff'),
+         url('fonts/helveticaneue-ultralight-webfont.ttf') format('truetype'),
+         url('fonts/helveticaneue-ultralight-webfont.svg#helvetica_neueregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Saginaw Bold';
+    src: url('fonts/saginawbold-webfont.eot');
+    src: url('fonts/saginawbold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/saginawbold-webfont.woff') format('woff'),
+         url('fonts/saginawbold-webfont.ttf') format('truetype'),
+         url('fonts/saginawbold-webfont.svg#saginaw_bold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Futura Heavy';
+    src: url('fonts/futura-webfont.eot');
+    src: url('fonts/futura-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/futura-webfont.woff') format('woff'),
+         url('fonts/futura-webfont.ttf') format('truetype'),
+         url('fonts/futura-webfont.svg#futura_hv_btheavy') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'HelveticaNeue';
+  src: url('fonts/HelveticaNeue.ttf') as "font/ttf";
+}
+
+@font-face {
+  font-family: 'Myriad Pro';
+  src: url(fonts/Myriad.ttf);
+}
+
+@font-face {
+  font-family: 'HelveticaNeue-CondensedBold', Helvetica;
+  src: url(fonts/HelveticaNeue-CondensedBold.ttf);
+}
+
+html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, p, blockquote, th, td {
+  margin: 0;
+  padding: 0;
+}
+
+.clear{clear:both;}
+
+.clear-right{clear:right;}
+
+.clear-left{clear:left;}
+
+.clear-right{clear:right;}
+
+.clear-left{clear:left;}
+
+.left{
+  float: left;
+}
+.right{
+  float: right;
+}
+.center{
+  text-align: center;
+}
+.i-b{
+  display: inline-block;
+}
+
+.d-b{
+  display: block;
+}
+
+.t-d{
+  text-decoration: none;
+}
+
+.v-t{
+  vertical-align: top;
+}
+
+a, a:visited, a:link {
+  &:not(.not-blue){
+    color: $link-color;
+    outline: none !important;
+  }
+}
+.x-hidden{
+  display: none !important;
+}
+
+input{
+  resize: none !important;
+}
+
+a:active, a:hover {
+  &:not(.not-blue){
+    color: lighten($link-color, 10%);
+    outline: none !important;
+  }
+}
+
+a.grey-link, .grey-link{
+  font: normal 13px "Helvetica Neue";
+  font-style: italic;
+  text-decoration: underline;
+  color: #797979;
+}
+
+HTML {
+  background: url(images/common/page-bg.gif);
+  height: 100%;
+}
+
+BODY {
+  background: url(images/common/body-bg.gif) 300px 0 repeat-y;
+  color: #51595d;
+  //text-align: center;
+  height: 100%;
+  width: 100%;
+  display: table;
+  position: relative;
+  margin: 0;
+
+  &.demo{
+    >DIV.application-preview-window{
+      bottom: 93px !important;
+    }
+  }
+
+  #logout-block{
+    position: absolute;
+    right: 0;
+    z-index: 100000;
+
+    .logout-area{
+      cursor: pointer;
+    }
+
+    >DIV, >A{
+      margin-right: 1px;
+      padding-left: 9px;
+      padding-right: 13px;
+    }
+
+    >SPAN{
+      background: url(images/common/logout-arrow.png) center 10px no-repeat, rgba(255, 255, 255, 0.6);
+      width: 19px;
+
+      &:hover{
+        background: url(images/common/logout-arrow.png) center 10px no-repeat, rgba(255, 255, 255, 0.75);
+      }
+
+      &:active{
+        background: url(images/common/logout-arrow.png) center 10px no-repeat, rgba(255, 255, 255, 0.9);
+      }
+    }
+
+    >*{
+      padding-top: 5px;
+      background: rgba(255, 255, 255, 0.6);
+      height: 21px;
+      line-height: 21px;
+      text-align: center;
+      font: normal 13px 'Myriad Pro';
+      color: #1c5166;
+      text-decoration: none;
+    }
+
+    >DIV, >SPAN{
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    >SPAN, >A{
+      display: inline-block;
+      @include transition-property("all");
+      @include transition-duration("0.2s");
+    }
+
+    >A.logout{
+      margin-top: 1px;
+      opacity: 0;
+      display: block;
+      visibility: hidden;
+      text-transform: capitalize;
+
+      &:hover{
+        background: rgba(255, 255, 255, 0.75);
+      }
+
+      &:active{
+        background: rgba(255, 255, 255, 0.9);
+      }
+    }
+  }
+
+  #page-header {
+    text-align:right;
+    color: #333;
+    padding: 1px 7px;
+    font-size: 12px;
+    font-family: Arial;
+
+    background: #e7e7e7;
+    border: 1px solid #adadad;
+    border-top: none;
+
+    @include border-bottom-radius(10px);
+    @include box-shadow(#ccc, 0px, 0px);
+
+    position: absolute;
+    left: 5px;
+    top: 0;
+
+    z-index: 5;
+  }
+
+  DIV.page {
+    background: url(images/common/sidebar-bg.gif) 0 0 repeat-y;
+    height: 100%;
+    display: table;
+
+    text-align: left;
+    //padding: $margin 0;
+    width: 100%;
+
+    &.demo{
+      >DIV#content, >DIV#sidebar{
+        margin-bottom: 90px;
+      }
+    }
+
+    >DIV#content {
+      padding-left: $sidebar-width + $margin;
+      padding-top: 11px;
+
+      .new-item{
+        #main-top {
+          background: url(images/common/paper-bg-top.gif) 1px 0 no-repeat;
+        }
+
+        #main-wrapper {
+          background: url(images/common/paper-bg-new.gif) 0 0 repeat-y;
+        }
+
+        #footer {
+          background: url(images/common/paper-bg-bottom.gif) 0 0 no-repeat;
+        }
+      }
+
+      .attendance{
+        #main-top {
+          background: url(images/attendance/paper-top-bg.png) 0 0 no-repeat;
+        }
+
+        #main-wrapper {
+          background: url(images/attendance/paper-bg.png) 0 0 repeat-y;
+        }
+
+        #footer {
+          background: url(images/attendance/paper-bottom-bg.png) 0 0 no-repeat;
+        }
+      }
+
+      > DIV {
+        text-align: left;
+        width: $column-width;
+
+        #main-top {
+          height: 11px;
+          background: url(images/common/paper-top-bg.png) 0 0 no-repeat;
+        }
+
+        #main-wrapper {
+          background: url(images/common/paper-bg.gif) 0 0 repeat-y;
+          position: relative;
+
+          #main {
+            background: url(images/common/paper-pin.png) 0 0 repeat-y;
+            min-height: 700px;
+            padding: 32px 74px 32px 61px;
+            position: relative;
+          }
+        }
+
+        #footer {
+          @include border-bottom-radius(10px);
+
+          background: url(images/common/paper-top-bottom.gif) 0 -11px no-repeat;
+          padding-top: 16px;
+          font-size: 12px;
+          color: lighten(#81919a, 25%);
+          text-align:center;
+          position: relative;
+        }
+      }
+    }
+  }
+}
+
+@import "partials/_sidebar";
+@import "partials/_demo";
+@import "partials/_controls";
+@import "partials/_main";
+
+

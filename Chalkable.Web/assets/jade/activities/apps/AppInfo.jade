@@ -1,0 +1,124 @@
+mixin Textbox(tName, val)
+    input(type="text", name=tName, value=val)(attributes).text
+
+
+
+mixin MyAppsPermission(prefix, app, suffix)
+    .myapps-permission
+        label=prefix
+        span.app-name=app + " " + suffix
+
+app = self.app
+myAppsAccess = app.getAppAccess()
+selectedAppCategories = {}
+selectedAppGradeLevels = {}
+selectedAppPermissions = {}
+appGradeLvls = []
+appCategories = []
+appPermissions = []
+
+
+each item in app.getGradeLevels()
+    -selectedAppGradeLevels[item.getId()] = true
+    -appGradeLvls.push(item.getId())
+each item in app.getCategories()
+    -selectedAppCategories[item.getId()] = true
+    -appCategories.push(item.getId().valueOf())
+
+each item in app.getPermissions()
+    -selectedAppPermissions[item.getId()] = true
+    -appPermissions.push(item.getId().valueOf())
+
+-appGradeLvls = appGradeLvls.join(',')
+-appCategories = appCategories.join(',')
+-appPermissions = appPermissions.join(',')
+
+.app-info
+    .action-bar.not-transparent.dev-app-info
+        .container.panel-bg
+            label API key:
+            +Textbox("apikey", "key").api-key
+            label= "Status: " + app.getState().toString()
+    +ActionForm('apps', 'update').app-info
+        +Button.blue-tb-right-button.submit-btn Submit App
+
+        +Hidden('draft', self.isDraft())
+        .section.first
+            .elem
+                label.hint App Name:
+                +Textbox("name", app.getName())
+            .elem
+                label.hint App URL:
+                +Textbox("url", app.getUrl())
+        .section
+            .elem
+                label.top.hint My Apps:
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Can Teachers Launch", app.getName(), "in My Apps?")
+                        +SlideCheckbox("hasTeacherMyApps", myAppsAccess.isTeacherMyAppsEnabled())
+                    .permission
+                        +MyAppsPermission("Can Students Launch", app.getName(), "in My Apps?")
+                        +SlideCheckbox("hasStudentMyApps", myAppsAccess.isStudentMyAppsEnabled())
+                    .permission
+                        +MyAppsPermission("Can Admins Launch", app.getName(), "in My Apps?")
+                        +SlideCheckbox("hasAdminMyApps", myAppsAccess.isAdminMyAppsEnabled())
+                    .permission
+                        +MyAppsPermission("Can Parents Launch", app.getName(), "in My Apps?")
+                        +SlideCheckbox("hasParentMyApps", myAppsAccess.isParentMyAppsEnabled())
+        .section.small
+            .elem.first
+                label.hint New Item:
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Can Teachers Attach", app.getName(), "in New Items?")
+                        +SlideCheckbox("canAttach", myAppsAccess.isAttachEnabled())
+            .elem
+                label.hint Grading View:
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Will be Teachers", '', 'viewing student output')
+                        +SlideCheckbox("showInGradeView", myAppsAccess.isVisibleInGradingView())
+        .section
+            .elem
+                label.hint API Access:
+                .permissions
+                    +CheckboxList('permissions', 'app-permission', appPermissions)
+                        each item in self.getPermissions()
+                            -isChecked = !!selectedAppPermissions[item.getId()]
+                            +LabeledCheckbox(item.getName(), 'app-permission'+ item.getId(), isChecked)
+        .section
+            .elem
+                label.hint Subjects:
+                .categories
+                    +CheckboxList('categories', 'app-category', appCategories)
+                        each item in self.getCategories()
+                            -isChecked = !!selectedAppCategories[item.getId()]
+                            +LabeledCheckbox(item.getName(), 'app-category' + item.getId(), isChecked)
+        .section
+            .elem
+                label.hint Grades:
+                .grade-levels
+                    +CheckboxList('gradeLevels', 'app-grade-level', appGradeLvls)
+                        each item in self.getGradeLevels()
+                            -isChecked = !!selectedAppGradeLevels[item.getId()]
+                            +LabeledCheckbox(item.getName(), 'app-grade-level' + item.getId(), isChecked)
+
+        .section
+            .elem
+                label.wide.hint Short Description:
+                +Textbox("shortDescription", app.getShortDescription())
+            .elem
+                label.wide.hint Long Description:
+                textarea(name="longDescription")=app.getDescription()
+            .elem
+                label.wide.hint Video Demo:
+                +Textbox("videoModeUrl", app.getVideoModeUrl())
+        .section
+            .elem
+                label.hint Pricing:
+                +SlideCheckbox("price", "true")
+        .section
+            .elem
+                label.hint Icons:
+        +Button().special-button.blue-button Update Draft
