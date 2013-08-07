@@ -102,6 +102,16 @@ BODY {
               color: #808080 !important;
             }
 
+            .section-buttons{
+              .chlk-button{
+                margin: 100px 5px 0 0;
+
+                BUTTON{
+                  width: 100px;
+                }
+              }
+            }
+
             #cellService{
               width: 206px;
             }
