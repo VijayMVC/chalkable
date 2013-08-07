@@ -51,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Phone Add(Guid personId, string value, PhoneType type, bool isPrimary)
         {
-            if(!(BaseSecurity.IsAdminEditor(Context) || Context.UserId == personId))
+            if (!(BaseSecurity.IsAdminOrTeacher(Context) || Context.UserId == personId))//TODO:can teacher do this?
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -77,7 +77,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new PhoneDataAccess(uow);
                 var phone = da.GetById(id);
-                if (!(BaseSecurity.IsAdminEditor(Context) || Context.UserId == phone.PersonRef))
+                if (!(BaseSecurity.IsAdminOrTeacher(Context) || Context.UserId == phone.PersonRef))//TODO:can teacher do this?
                     throw new ChalkableSecurityException();
                 phone.DigitOnlyValue = DigitsOnly(value);
                 phone.Value = value;

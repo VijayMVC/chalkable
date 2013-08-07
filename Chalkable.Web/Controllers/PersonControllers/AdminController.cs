@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Web.ActionFilters;
@@ -20,11 +17,9 @@ namespace Chalkable.Web.Controllers.PersonControllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
-        public ActionResult UpdateInfo(Guid personId, IntList addressIndexes, IntList phoneIndexes, string email,
-            string gender, DateTime? birthdayDate, string salutation, string firstName, string lastName)
+        public ActionResult UpdateInfo(AdminTeacherInputModel model)
         {
-            var teacher = UpdateTeacherOrAdmin(personId, email, firstName, lastName, gender, birthdayDate
-                                               , salutation, addressIndexes, phoneIndexes);
+            var teacher = UpdateTeacherOrAdmin(model);
             //MixPanelService.ChangedEmail(SchoolLocator.Context., email);
             return Json(GetInfo(teacher.Id, TeacherInfoViewData.Create));
         }
