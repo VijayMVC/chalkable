@@ -1,0 +1,22 @@
+mixin DemoRoleButton(name)
+    a.demo-role-button(rolename=name)
+        span
+            .mark.left
+            .mark.right
+            =name
+
+#dev-apps
+    +Select()#dev-apps-list
+        +Option("add-app", "Add app")
+.border.demo-end.hidden
+.demo-end.hidden
+    h3 Demo
+    #demo-end-container
+.border
+#roles-buttons
+    +DemoRoleButton('Developer')
+    +DemoRoleButton('Student')
+    +DemoRoleButton('Teacher')
+    +DemoRoleButton('Admin')
+    +DemoRoleButton('Parent').coming
+    +DemoRoleButton('District').coming
