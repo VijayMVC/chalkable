@@ -9,6 +9,7 @@ REQUIRE('chlk.controls.ActionLinkControl');
 REQUIRE('chlk.controls.AvatarControl');
 REQUIRE('chlk.controls.ButtonControl');
 REQUIRE('chlk.controls.CheckboxControl');
+REQUIRE('chlk.controls.CheckboxListControl');
 REQUIRE('chlk.controls.DatePickerControl');
 REQUIRE('chlk.controls.FileUploadControl');
 REQUIRE('chlk.controls.GlanceBoxControl');

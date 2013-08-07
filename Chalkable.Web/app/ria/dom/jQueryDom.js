@@ -260,6 +260,7 @@ NAMESPACE('ria.dom', function () {
                 this._dom.each(function () {
                     iterator(SELF(this));
                 });
+                return this;
             },
 
             [[ria.dom.DomIterator]],

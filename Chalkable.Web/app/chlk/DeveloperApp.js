@@ -26,6 +26,11 @@ NAMESPACE('chlk', function (){
                 return session;
             },
 
+            [[chlk.models.apps.Application]],
+            function switchApp(app){
+                this.getContext().getSession().set('currentApp', app);
+            },
+
             OVERRIDE, ria.async.Future, function onStart_() {
                 return BASE()
                     .then(function(data){

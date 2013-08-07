@@ -59,6 +59,9 @@ NAMESPACE('chlk.controllers', function (){
                     var app = this.getCurrentApp();
                     app.setName("Test APP");
                     app.setUrl("www.no.com");
+                    app.setShortDescription("Short description");
+                    app.setDescription("Long description");
+                    app.setVideoModeUrl("Video Url");
                     app.setPermissions([
                         new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(1), "User", 1),
                         new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(2), "Class", 2),
@@ -76,6 +79,24 @@ NAMESPACE('chlk.controllers', function (){
                     app.setAppAccess(appAccess);
 
                     var gradeLevels = this.gradeLevelService.getGradeLevels();
+
+
+                    var g1 = new chlk.models.common.NameId;
+                    g1.setId(1);
+                    g1.setName('1st');
+                    var g2 = new chlk.models.common.NameId;
+                    g2.setId(5);
+                    g2.setName('5th');
+                    app.setGradeLevels([
+                        g1, g2
+                    ]);
+
+
+                    var cat = new chlk.models.apps.AppCategory();
+                    cat.setId(new chlk.models.id.AppCategoryId('54e48fd5-cc7c-4726-867a-666ff876b317'));
+                    cat.setName('Math');
+
+                    app.setCategories([cat]);
                     return new ria.async.DeferredData(new chlk.models.apps.AppInfoViewData(app, false, cats, gradeLevels));
 
                 }, this);
