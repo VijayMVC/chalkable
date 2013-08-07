@@ -4,6 +4,7 @@ using System.Linq;
 using Chalkable.BusinessLogic.Mapping;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Logic;
+using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
@@ -13,7 +14,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public IList<AnnouncementAttachmentViewData> AnnouncementAttachments { get; set; }
         public IList<AnnouncementQnAViewData> AnnouncementQnAs { get; set; }
         public IList<AnnouncementReminderViewData> AnnouncementReminders { get; set; }
-        //public IList<AnnouncementApplicationViewData> Applications { get; set; }
+        public IList<AnnouncementApplicationViewData> Applications { get; set; }
         public StudentAnnouncementsViewData StudentAnnouncements { get; set; }
         public IList<String> autoGradeApps { get; set; }
 

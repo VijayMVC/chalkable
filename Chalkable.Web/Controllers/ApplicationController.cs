@@ -85,7 +85,6 @@ namespace Chalkable.Web.Controllers
             return PrepareAppInfo(res, true);
         }
 
-
         [AuthorizationFilter("SysAdmin, Developer")]
         public ActionResult Delete(Guid applicationId)
         {
@@ -133,6 +132,31 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult AddToAnnouncement(Guid announcementId, Guid applicationId)
+        {
+            var res = SchoolLocator.ApplicationSchoolService.AddToAnnouncement(announcementId, applicationId);
+            var appInstalls = SchoolLocator.AppMarketService.GetInstallations(applicationId, Context.UserId, false);
+            var app = MasterLocator.ApplicationService.GetApplicationById(applicationId);
+            return Json(AnnouncementApplicationViewData.Create(res, app, appInstalls, Context.UserId));
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult Attach(Guid announcementApplicationId)
+        {
+            SchoolLocator.ApplicationSchoolService.AttachAppToAnnouncement(announcementApplicationId);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GET_APP_ANNOUNCEMENT_APPLICATION, true, CallType.Post, new[] { AppPermissionType.Announcement })]
+        public ActionResult GetAnnouncementApplication(Guid announcementApplicationId)
+        {
+            var res = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
+            var app = MasterLocator.ApplicationService.GetApplicationById(res.ApplicationRef);
+            return Json(AnnouncementApplicationViewData.Create(res, app, null, null));
+        }
+
+
         [AuthorizationFilter]
         public ActionResult GetOauthCode(string applicationUrl)
         {
@@ -142,10 +166,7 @@ namespace Chalkable.Web.Controllers
             return Json(authorizationCode);
         }
 
-
         private const string contentType = "text/html";
-
-
         private ActionResult PrepareAppInfo(Application application, bool needsliveApp = false)
         {
             return Json(PrepareAppInfo(MasterLocator, application, needsliveApp), contentType);

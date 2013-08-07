@@ -25,6 +25,7 @@ namespace Chalkable.Web.Models
                 Scheduled = task.Scheduled,
                 TaskState = (int)task.State,
                 TaskType = (int)task.Type,
+                Completed = task.Completed
             };
         }
 

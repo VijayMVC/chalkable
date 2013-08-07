@@ -42,7 +42,16 @@ NAMESPACE('chlk.controllers', function (){
                         return this.getContext().getSession().get('listBackups');
                     }.bind(this));
                 return this.UpdateView(chlk.activities.storage.DbMaintenancePage, result);
-            }
+            },
 
+            [[String]],
+            function restoreAction(ticks){
+                var result = this.dbMaintenanceService
+                    .restore(ticks)
+                    .then(function(success){
+                        return this.getContext().getSession().get('listBackups');
+                    }.bind(this));
+                return this.UpdateView(chlk.activities.storage.DbMaintenancePage, result);
+            }
         ])
 });

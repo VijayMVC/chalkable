@@ -222,16 +222,17 @@ namespace Chalkable.Web.Controllers
         {
             var classesAdvancedData = new List<object>();
             classDetailses = classDetailses.Where(x => x.MarkingPeriodClasses.Any(y => y.MarkingPeriodRef == mp.Id));
+            var classesMaskDic = ClassController.BuildClassesUsageMask(SchoolLocator, mp.Id, SchoolLocator.Context.SchoolTimeZoneId);
+            var baseAnnTypes = SchoolLocator.AnnouncementTypeService.GetAnnouncementTypes(null);
             foreach (var classDetails in classDetailses)
             {
                 Guid classId = classDetails.Id;
-                var mask = ClassController.BuildClassUsageMask(SchoolLocator, classId, mp.Id, SchoolLocator.Context.SchoolTimeZoneId);
-                var typesByClasses = getAllAnnouncementTypes ? SchoolLocator.AnnouncementTypeService.GetAnnouncementTypes(null)
-                                                 : AnnouncementTypeController.GetTypesByClasses(SchoolLocator, mp.Id, classId);
+                var typesByClasses = getAllAnnouncementTypes ? baseAnnTypes
+                                    : AnnouncementTypeController.GetTypesByClass(SchoolLocator, mp.Id, classId);
                 classesAdvancedData.Add(new
                 {
                     ClassId = classId,
-                    Mask = mask,
+                    Mask = classesMaskDic.ContainsKey(classId) ? classesMaskDic[classId] : new List<int>(),
                     TypesByClass = AnnouncementTypeViewData.Create(typesByClasses)
                 });
             }
