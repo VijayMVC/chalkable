@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using NUnit.Framework;
@@ -18,22 +19,7 @@ namespace Chalkable.Tests.Services.Master
             var context = CreateDeveloperSchoolTestContext();
             //TODO: pictures upload test
 
-            var shortAppInfo = ShortApplicationInfo.Create("app1", "http://test.app1.com", "test_short_desc",
-                               "test_desc", "http://test.app.video.com", null, null);
-
-            var appPrice = ApplicationPricesInfo.Create(1, 30, 1000);
-            var appAccess = ApplicationAccessInfo.Create(true, true, false, false, true, true);
-            var appPermissionTypes = new List<AppPermissionType>
-                {
-                    AppPermissionType.Grade,
-                    AppPermissionType.User,
-                    AppPermissionType.Announcement
-                };
-            var categoriesIds = CategoryServiceTest.CreateDefaultCategories(SysAdminMasterLocator).Select(x=>x.Id).ToList();
-            var gradeLevels = new List<int> {1, 2, 3, 4, 5};
-            var appInfo = BaseApplicationInfo.Create(shortAppInfo, context.Developer.Id, appPermissionTypes, null, appPrice, 
-                categoriesIds, appAccess, gradeLevels);
-            
+            var appInfo = PrepareDefaultAppInfo(SysAdminMasterLocator, context.Developer.Id, "app1", "http://test.app1.com");
             //security check 
             AssertException<Exception>(() => context.AdminGradeSl.ServiceLocatorMaster.ApplicationUploadService.Create(appInfo));
             AssertException<Exception>(() => context.AdminEditSl.ServiceLocatorMaster.ApplicationUploadService.Create(appInfo));
@@ -62,12 +48,77 @@ namespace Chalkable.Tests.Services.Master
         }
         
         [Test]
-        public void UpdateTest()
+        public void UpdateDraftTest()
         {
-            
+            var context = CreateDeveloperSchoolTestContext();
+            var appInfo = PrepareDefaultAppInfo(SysAdminMasterLocator, context.Developer.Id, "app1", "http://test.app1.com");
+            var app = context.DeveloperMl.ApplicationUploadService.Create(appInfo);
+            appInfo.ShortApplicationInfo.Name = "app2";
+            appInfo.ShortApplicationInfo.Url = "http://test.app2.com";
+            appInfo.ShortApplicationInfo.Description = "testDec2";
+            appInfo.ShortApplicationInfo.ShortDescription = "testShortDec2";
+            appInfo.GradeLevels.RemoveAt(0);
+            appInfo.PermissionIds.RemoveAt(0);
+            appInfo.Categories.RemoveAt(0);
+            appInfo.ApplicationPrices = ApplicationPricesInfo.Create(2, 40, 2000);
+            appInfo.ApplicationAccessInfo = ApplicationAccessInfo.Create(false, false, false, false, true, true);
+
+            //security check 
+            AssertException<Exception>(() => context.AdminGradeSl.ServiceLocatorMaster.ApplicationUploadService.UpdateDraft(app.Id, appInfo));
+            AssertException<Exception>(() => context.AdminEditSl.ServiceLocatorMaster.ApplicationUploadService.UpdateDraft(app.Id, appInfo));
+            AssertException<Exception>(() => context.AdminViewSl.ServiceLocatorMaster.ApplicationUploadService.UpdateDraft(app.Id, appInfo));
+            AssertException<Exception>(() => context.FirstTeacherSl.ServiceLocatorMaster.ApplicationUploadService.UpdateDraft(app.Id, appInfo));
+            AssertException<Exception>(() => context.FirstStudentSl.ServiceLocatorMaster.ApplicationUploadService.UpdateDraft(app.Id, appInfo));
+
+            app = context.DeveloperMl.ApplicationUploadService.UpdateDraft(app.Id, appInfo);
+            CheckApplication(appInfo, app);
+            AssertAreEqual(app, context.DeveloperMl.ApplicationService.GetApplicationById(app.Id));
+
+            //check valid name, url
+            appInfo.ShortApplicationInfo.Name = null;
+            AssertException<Exception>(() => context.DeveloperMl.ApplicationUploadService.UpdateDraft(app.Id, appInfo));
+            appInfo.ShortApplicationInfo.Name = "app2";
+            appInfo.ShortApplicationInfo.Url = null;
+            AssertException<Exception>(() => context.DeveloperMl.ApplicationUploadService.UpdateDraft(app.Id, appInfo));
+
+            // check name , url dublicating
+            appInfo.ShortApplicationInfo.Name = "app1";
+            var app2 = context.DeveloperMl.ApplicationUploadService.Create(appInfo);
+            appInfo.ShortApplicationInfo.Url = "http://test.app2.com";
+            AssertException<Exception>(() => context.DeveloperMl.ApplicationUploadService.UpdateDraft(app2.Id, appInfo));
+            appInfo.ShortApplicationInfo.Name = "app2";
+            appInfo.ShortApplicationInfo.Url = "http://test.app1.com";
+            AssertException<Exception>(() => context.DeveloperMl.ApplicationUploadService.UpdateDraft(app2.Id, appInfo));
+         
+            //TODO: check access other developers to current app ... (fix developerSchoolContext)
         }
 
 
+
+        public static Application CreateDefaultDraftApp(IServiceLocatorMaster sysLocator, DeveloperSchoolTestContex developerContext, string name, string url)
+        {
+            var appInfo = PrepareDefaultAppInfo(sysLocator, developerContext.Developer.Id, name, url);
+            return developerContext.DeveloperMl.ApplicationUploadService.Create(appInfo);
+        }
+        public static BaseApplicationInfo PrepareDefaultAppInfo(IServiceLocatorMaster sysLocator, Guid developerId, string name, string url)
+        {
+            var shortAppInfo = ShortApplicationInfo.Create(name, url, "test_short_desc",
+                               "test_desc", "http://test.app.video.com", null, null);
+
+            var appPrice = ApplicationPricesInfo.Create(1, 30, 1000);
+            var appAccess = ApplicationAccessInfo.Create(true, true, false, false, true, true);
+            var appPermissionTypes = new List<AppPermissionType>
+                {
+                    AppPermissionType.Grade,
+                    AppPermissionType.User,
+                    AppPermissionType.Announcement
+                };
+            var categoriesIds = CategoryServiceTest.CreateDefaultCategories(sysLocator).Select(x => x.Id).ToList();
+            var gradeLevels = new List<int> { 1, 2, 3, 4, 5 };
+            return BaseApplicationInfo.Create(shortAppInfo, developerId, appPermissionTypes, null, appPrice,
+                categoriesIds, appAccess, gradeLevels);
+        }
+        
         private static void CheckApplication(BaseApplicationInfo appInfo, Application app)
         {
             Assert.AreEqual(appInfo.ShortApplicationInfo.Name, app.Name);

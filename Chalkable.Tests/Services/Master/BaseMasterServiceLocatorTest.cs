@@ -9,6 +9,7 @@ namespace Chalkable.Tests.Services.Master
         {
             StorageBlobService = new TestBlobStorageService();
             EmailService = new EmailTestService(this);
+            AccessControlService = new AccessControlTestService(this);
         }
     }
 }
