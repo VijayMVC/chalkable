@@ -14,6 +14,8 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'empty',
             [ria.templates.ModelPropertyBind],
+            Boolean, 'draft',
+            [ria.templates.ModelPropertyBind],
             Boolean, 'readOnly',
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.apps.AppCategory), 'categories',

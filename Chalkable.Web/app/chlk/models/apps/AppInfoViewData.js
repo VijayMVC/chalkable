@@ -15,6 +15,7 @@ NAMESPACE('chlk.models.apps', function () {
             ArrayOf(chlk.models.apps.AppPermission), 'permissions',
             Boolean, 'empty',
             Boolean, 'readOnly',
+            Boolean, 'draft',
 
             [[chlk.models.apps.Application, Boolean, ArrayOf(chlk.models.apps.AppCategory), ArrayOf(chlk.models.common.NameId), ArrayOf(chlk.models.apps.AppPermission)]],
             function $(app_, isReadonly, categories, gradeLevels, permissions){

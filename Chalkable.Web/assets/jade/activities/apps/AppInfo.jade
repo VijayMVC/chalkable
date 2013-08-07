@@ -39,8 +39,9 @@ each item in app.getPermissions()
             label API key:
             +Textbox("apikey", "key").api-key
             label= "Status: " + app.getState().toString()
-            +Button.blue-tb-right-button.submit-btn Submit App
-    +ActionForm('apps', 'saveDraft')
+    +ActionForm('apps', 'save').app-info
+        +Button.blue-tb-right-button.submit-btn Submit App
+
         .section.first
             .elem
                 label.hint App Name:
