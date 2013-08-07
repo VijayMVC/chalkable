@@ -14,10 +14,11 @@ NAMESPACE('chlk.controls', function () {
             [ria.mvc.DomEventBind('click', '.slide-checkbox')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function changed_($target, event) {
-                var checkbox = $target.find('input[type=checkbox]');
+                /*var checkbox = $target.find('input[type=checkbox]');
                 if (checkbox){
                     checkbox.setAttr('checked', !checkbox.is(':checked'));
                 }
+                return false;*/
 
             }
         ]);

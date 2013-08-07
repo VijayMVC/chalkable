@@ -12,11 +12,12 @@ app = self.app
 myAppsAccess = app.getAppAccess()
 selectedAppCategories = {}
 selectedAppGradeLevels = {}
+selectedAppPermissions = {}
 appGradeLvls = []
 appCategories = []
+appPermissions = []
 
--console.log(app.getGradeLevels())
--console.log(app.getCategories())
+
 each item in app.getGradeLevels()
     -selectedAppGradeLevels[item.getId()] = true
     -appGradeLvls.push(item.getId())
@@ -24,17 +25,23 @@ each item in app.getCategories()
     -selectedAppCategories[item.getId()] = true
     -appCategories.push(item.getId().valueOf())
 
+each item in app.getPermissions()
+    -selectedAppPermissions[item.getId()] = true
+    -appPermissions.push(item.getId().valueOf())
+
 -appGradeLvls = appGradeLvls.join(',')
 -appCategories = appCategories.join(',')
+-appPermissions = appPermissions.join(',')
 
 .app-info
     .action-bar.not-transparent.dev-app-info
         .container.panel-bg
             label API key:
             +Textbox("apikey", "key").api-key
-            label Status:
-            +Button.blue-tb-right-button.submit-btn Submit App
-    +ActionForm('apps', 'saveDraft')
+            label= "Status: " + app.getState().toString()
+    +ActionForm('apps', 'save').app-info
+        +Button.blue-tb-right-button.submit-btn Submit App
+
         .section.first
             .elem
                 label.hint App Name:
@@ -75,8 +82,10 @@ each item in app.getCategories()
             .elem
                 label.hint API Access:
                 .permissions
-                    each item in app.getPermissions()
-                        +LabeledCheckbox(item.getName(), 'app-permission', item.getId())
+                    +CheckboxList('appPermissions', 'app-permission', appPermissions)
+                        each item in self.getPermissions()
+                            -isChecked = !!selectedAppPermissions[item.getId()]
+                            +LabeledCheckbox(item.getName(), 'app-permission'+ item.getId(), isChecked)
         .section
             .elem
                 label.hint Subjects:
