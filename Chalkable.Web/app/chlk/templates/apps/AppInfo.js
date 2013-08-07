@@ -17,6 +17,7 @@ NAMESPACE('chlk.templates.apps', function () {
             Boolean, 'readOnly',
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.apps.AppCategory), 'categories',
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.common.NameId), 'gradeLevels'
 
         ])

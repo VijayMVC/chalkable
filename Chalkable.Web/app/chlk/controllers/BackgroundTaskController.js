@@ -34,27 +34,17 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.SidebarButton('settings')],
-            [[chlk.models.id.BgTaskId]],
-            function logsAction(id) {
+            [[chlk.models.id.BgTaskId, Boolean, Number]],
+            function logsPageAction(id, postback_, start_) {
                 var result = this.bgTaskService
-                    .getLogs(id)
+                    .getLogs(id, start_ || 0)
                     .attach(this.validateResponse_())
                     .then(function(data){
                         return new ria.async.DeferredData(new chlk.models.bgtasks.BgTasksLogListViewData(id, data));
                     });
-                return this.PushView(chlk.activities.bgtasks.BgTaskLogListPage, result);
-            },
-
-            [chlk.controllers.SidebarButton('settings')],
-            [[chlk.models.id.BgTaskId, Number]],
-            function logsPageAction(id, pageIndex_) {
-                var result = this.bgTaskService
-                    .getLogs(id)
-                    .attach(this.validateResponse_())
-                    .then(function(data){
-                        return new ria.async.DeferredData(new chlk.models.bgtasks.BgTasksLogListViewData(id, data));
-                    });
-                return this.UpdateView(chlk.activities.bgtasks.BgTaskLogListPage, result);
+                return postback_
+                    ? this.UpdateView(chlk.activities.bgtasks.BgTaskLogListPage, result)
+                    : this.PushView(chlk.activities.bgtasks.BgTaskLogListPage, result);;
             },
 
             [chlk.controllers.SidebarButton('settings')],

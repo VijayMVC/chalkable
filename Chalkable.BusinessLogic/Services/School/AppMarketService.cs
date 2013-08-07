@@ -152,15 +152,17 @@ namespace Chalkable.BusinessLogic.Services.School
                 var teacherClasses = new ClassDataAccess(uow).GetAll(new Dictionary<string, object> { { Class.TEACHER_REF_FIELD, schoolPersonId } });
                 teacherClasses = teacherClasses.Where(x => classids.Contains(x.Id)).ToList();
                 var da = new ApplicationInstallActionClassesDataAccess(uow);
+                var appInstallAcClasses = new List<ApplicationInstallActionClasses>();
                 foreach (var teacherClass in teacherClasses)
                 {
                     descriptionBuilder.AppendFormat(APP_CLASS_FMT, teacherClass.Name);
-                    da.Insert(new ApplicationInstallActionClasses
+                    appInstallAcClasses.Add(new ApplicationInstallActionClasses
                     {
                         AppInstallActionRef = res.Id,
                         ClassRef = teacherClass.Id
                     });
                 }
+                da.Insert(appInstallAcClasses);
             }
 
             if (BaseSecurity.IsAdminViewer(Context))
@@ -171,46 +173,51 @@ namespace Chalkable.BusinessLogic.Services.School
                         .Where(x => app.GradeLevels.Any(y => y.GradeLevel == x.Number))
                         .Where(x => gradelevelids.Contains(x.Id));
                     var da = new ApplicationInstallActionGradeLevelDataAccess(uow);
+                    var aiaGls = new List<ApplicationInstallActionGradeLevel>();
                     foreach (var gradeLevel in gradeLevels)
                     {
                         descriptionBuilder.AppendFormat(APP_GRADE_LEVEL_FMT, gradeLevel.Name);
-                        da.Insert(new ApplicationInstallActionGradeLevel
+                        aiaGls.Add(new ApplicationInstallActionGradeLevel
                         {
                             AppInstallActionRef = res.Id,
                             GradeLevelRef = gradeLevel.Id
                         });
                     }
+                    da.Insert(aiaGls);
                 }
                 if (departmentids != null)
                 {
                     var departments = new CourseDataAccess(uow).GetAll().Where(x => departmentids.Contains(x.Id)).ToList();
                     var da = new ApplicationInstallActionDepartmentDataAccess(uow);
+                    var aiaDepartments = new List<ApplicationInstallActionDepartment>();
                     foreach (var department in departments)
                     {
                         descriptionBuilder.AppendFormat(APP_DEPARTMENT_FMT, department.Title);
-                        da.Insert(new ApplicationInstallActionDepartment
+                        aiaDepartments.Add(new ApplicationInstallActionDepartment
                         {
                             AppInstallActionRef = res.Id,
                             DepartmentRef = department.Id,
                         });
                     }
+                    da.Insert(aiaDepartments);
                 }
                 if (roleids != null)
                 {
                     var roles = roleids.Select(CoreRoles.GetById).ToList();
                     var da = new ApplicationInstallActionRoleDataAccess(uow);
+                    var appInstallActionRoles = new List<ApplicationInstallActionRole>();
                     foreach (var role in roles)
                     {
                         descriptionBuilder.AppendFormat(APP_ROLE_FMT, role.Name);
-                        da.Insert(new ApplicationInstallActionRole
+                        appInstallActionRoles.Add(new ApplicationInstallActionRole
                         {
                             AppInstallActionRef = res.Id,
                             RoleId = role.Id
                         });
                     }
+                    da.Insert(appInstallActionRoles);
                 }
             }
-
             res.Description = descriptionBuilder.ToString();
             ada.Update(res);
             return res;

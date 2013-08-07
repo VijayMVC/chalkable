@@ -1,4 +1,4 @@
-ALTER function [dbo].[fnCalcStudentGradeAvgForFinalGrade] (@studentId uniqueidentifier, @finalGradeId uniqueidentifier, @date datetime2)
+create function [dbo].[fnCalcStudentGradeAvgForFinalGrade] (@studentId uniqueidentifier, @finalGradeId uniqueidentifier, @date datetime2)
 returns int
 as 
 begin
@@ -19,6 +19,7 @@ begin
 	return(@avg); 
 end
 GO
+
 create function fnCaclStudentAvgByAnnType (@studentId uniqueidentifier, @markingPeriodClassId uniqueidentifier, @annTypeId int, @date datetime2)
 returns int
 as

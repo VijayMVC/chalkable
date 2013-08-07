@@ -149,9 +149,12 @@ namespace Chalkable.Data.Common
             if (type == typeof(double))
                 return ReadDouble(reader, field);
 
+
+            if (type.IsNullableEnum())
+                return ReadInt32Null(reader, field);
             if (type.IsEnum)
                 return ReadInt32(reader, field);
-
+            
             if (type.IsNullableEnum())
                 return ReadInt32Null(reader, field);
             

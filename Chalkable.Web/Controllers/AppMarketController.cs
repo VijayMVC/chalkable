@@ -38,7 +38,7 @@ namespace Chalkable.Web.Controllers
         }
 
 
-         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher, Student")]
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher, Student")]
         public ActionResult Instal(Guid applicationId, Guid? personId, GuidList classids, IntList roleIds, GuidList departmentids, GuidList gradelevelids)
         {
             var schoolyearId = GetCurrentSchoolYearId();

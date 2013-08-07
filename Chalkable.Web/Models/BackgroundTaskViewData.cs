@@ -14,6 +14,7 @@ namespace Chalkable.Web.Models
         public DateTime? Completed { get; set; }
         public int TaskState { get; set; }
         public int TaskType { get; set; }
+        public Guid? SchoolId { get; set; }
         
         public static BackgroundTaskViewData Create(BackgroundTask task)
         {
@@ -25,7 +26,8 @@ namespace Chalkable.Web.Models
                 Scheduled = task.Scheduled,
                 TaskState = (int)task.State,
                 TaskType = (int)task.Type,
-                Completed = task.Completed
+                Completed = task.Completed,
+                SchoolId = task.SchoolRef
             };
         }
 

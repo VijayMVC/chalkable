@@ -51,10 +51,10 @@ namespace Chalkable.Web.Controllers
             //TODO: create default Announcement for teacher
             SchoolLocator.PersonService.ActivatePerson(context.UserId);
             //TODO: mix panel 
-            if(context.Role == CoreRoles.SUPER_ADMIN_ROLE)
+            if (context.Role == CoreRoles.SUPER_ADMIN_ROLE)
                 return Redirect<HomeController>(x => x.SysAdmin());
             if (context.Role == CoreRoles.TEACHER_ROLE)
-                return Redirect<HomeController>(x => x.Teacher());
+                return Redirect<HomeController>(x => x.Teacher(true));
             return Redirect<HomeController>(c => c.Index());
         }
 
@@ -93,8 +93,11 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult Teacher()
+        public ActionResult Teacher(bool? redirectToSetup)
         {
+            if (redirectToSetup.HasValue && redirectToSetup.Value)
+                ViewData[REDIRECT_URL_KEY] = string.Format(SETUP_REDIRECT_URL_FORMAT, Context.UserId);
+
             var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
             PrepareTeacherJsonData(mp, false);
             return View();
@@ -123,10 +126,8 @@ namespace Chalkable.Web.Controllers
         private const string UNSHOWN_NOTIFICATIONS_COUNT = "UnshownNotificationsCount";
         
         private const string VERSION = "Version";
-        private const string CONFIRM_REDIRECT_URL_FORMAT = "setup/hello/{0}";
+        private const string SETUP_REDIRECT_URL_FORMAT = "setup/hello/{0}";
         private const string CURR_SCHOOL_YEAR_ID = "CurrentSchoolYearId";
-        private const string LAST_SCHOOL_YEAR_ID = "LastSchoolYearId";
-        private const string NEXT_SCHOOL_YEAR_ID = "NextSchoolYearId";
         private const string REDIRECT_URL_KEY = "RedirectUrl";
         private const string INVITE_URL = "setup/invite";
         private const string ROLENAME_KEY = "Rolename";

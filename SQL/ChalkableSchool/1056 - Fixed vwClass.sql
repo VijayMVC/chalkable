@@ -26,8 +26,23 @@ from
 	join Course on Class.CourseRef = Course.Id
 	join GradeLevel on GradeLevel.Id = Class.GradeLevelRef
 	join Person on Person.Id = Class.TeacherRef
-
-
 GO
 
+ALTER view [dbo].[vwFinalGrade]
+as
+select FinalGrade.Id as FinalGrade_Id,
+FinalGrade.[Status] as FinalGrade_Status,
+FinalGrade.GradingStyle as FinalGrade_GradingStyle,
+FinalGrade.ParticipationPercent as FinalGrade_ParticipationPercent,
+FinalGrade.Attendance as FinalGrade_Attendance,
+FinalGrade.Discipline as FinalGrade_Discipline,
+FinalGrade.DropLowestAttendance as FinalGrade_DropLowestAttendance,
+FinalGrade.DropLowestDiscipline as FinalGrade_DropLowestDiscipline,
+MarkingPeriodClass.MarkingPeriodRef as MarkingPeriodClass_MarkingPeriodRef,
+vwClass.*
+from FinalGrade
+join MarkingPeriodClass on MarkingPeriodClass.Id = FinalGrade.Id
+join vwClass on vwClass.Class_Id = MarkingPeriodClass.ClassRef
+
+GO
 

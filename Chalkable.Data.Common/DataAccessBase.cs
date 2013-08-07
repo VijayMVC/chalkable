@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -48,10 +49,10 @@ namespace Chalkable.Data.Common
             ExecuteNonQueryParametrized(q.Sql, q.Parameters);
         }
 
+        
         protected void SimpleInsert<T>(IList<T> objs)
         {
-            var q = Orm.SimpleListInsert(objs);
-            ExecuteNonQueryParametrized(q.Sql, q.Parameters);
+            ModifyList(objs, SimpleInsert, Orm.SimpleListInsert);
         }
 
         protected void SimpleUpdate<T>(T obj)
@@ -61,12 +62,29 @@ namespace Chalkable.Data.Common
         }
         protected void SimpleUpdate<T>(IList<T> objs)
         {
+            ModifyList(objs, SimpleUpdate, Orm.SimpleUpdate);
+        }
+
+        private const int MAX_PARAMETER_NUMBER = 2000;
+        private void ModifyList<T>(IList<T> objs, Action<IList<T>> modifyAction, Func<IList<T>, DbQuery> buildQueryAction)
+        {
             if (objs.Count > 0)
             {
-                var q = Orm.SimpleUpdate(objs);
-                ExecuteNonQueryParametrized(q.Sql, q.Parameters);   
+                var fields = Orm.Fields<T>();
+                if (fields.Count * objs.Count > MAX_PARAMETER_NUMBER)
+                {
+                    var list1 = objs.Take(objs.Count / 2).ToList();
+                    modifyAction(list1);
+                    modifyAction(objs.Skip(list1.Count).ToList());
+                }
+                else
+                {
+                    var q = buildQueryAction(objs);
+                    ExecuteNonQueryParametrized(q.Sql, q.Parameters);
+                }
             }
         }
+
 
         protected void SimpleUpdate<T>(IDictionary<string, object> updateParams, IDictionary<string, object> conditions)
         {

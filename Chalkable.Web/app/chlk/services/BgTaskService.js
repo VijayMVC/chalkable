@@ -20,10 +20,10 @@ NAMESPACE('chlk.services', function () {
                 });
             },
             [[chlk.models.id.BgTaskId, Number]],
-            ria.async.Future, function getLogs(id, pageIndex_) {
+            ria.async.Future, function getLogs(id, start_) {
                 return this.getPaginatedList('BackgroundTask/GetTaskLogs.json', chlk.models.bgtasks.BgTaskLog, {
                     taskId: id.valueOf(),
-                    start: pageIndex_
+                    start: start_
                 });
             }
         ])

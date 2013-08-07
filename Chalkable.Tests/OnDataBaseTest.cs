@@ -84,7 +84,19 @@ namespace Chalkable.Tests
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1048 - create procedure spGetAnnouncementRecipientPersons.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1049 - fix in vwAnnouncementQnA.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1050 - add Number field to grade level.sql"));
-            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1051 - fix spGetClasses.sql"));             
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1051 - fix spGetClasses.sql"));
+
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1052 - added spGetClassDiscipline.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1052 - GetPersonsForAppInstall procedure.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1053 - GetPersonsForAppInstallCount procedure.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1053 - GetStudentCountToAppInstall.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1054 - create function fnCalcClassGradeAvgPerMP.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1054 - Demo school id repopulating.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1055 - Add SisId to vwPerson.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1056 - Fixed vwClass.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1057 - Fixed sp Get Classes.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1058 - create spCalcAttendanceTypeTotal.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1059 - create spCaclStuedntClassGradeStatsPerDate.sql"));             
         
         }
 
@@ -119,7 +131,12 @@ namespace Chalkable.Tests
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1012 - add application grade level table.sql"));
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1013 - added ConfirmationKey column to User table.sql"));
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1014 - added uq_developer_schoolRef key to Developer.sql"));
+            ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1015 - Funds.sql"));
+            ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1016 - Remove sis connection columns from sissync table.sql"));
+            ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1017 - Added Demo related columns to school.sql"));
+            ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1018 - Added Completed column to bg task.sql"));
             
+
             RunCreateSchoolScripts(chalkableSchoolTemplateConnection);
         }
     }

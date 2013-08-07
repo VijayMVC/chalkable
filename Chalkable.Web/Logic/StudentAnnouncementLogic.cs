@@ -15,10 +15,10 @@ namespace Chalkable.Web.Logic
         {
             var gradingItems = announcement.StudentAnnouncements.ToList();
             gradingItems = gradingItems.OrderBy(x => x.Person.LastName).ThenBy(x => x.Person.FirstName).ToList();
-            if(!announcement.FinalGradeStatus.HasValue)
+            if (!announcement.FinalGradeStatusTyped.HasValue)
                 throw new ChalkableException("finalGrade not exists");
             var res = StudentAnnouncementsViewData.Create(announcement, gradingItems, announcementAttachmentInfos,
-                                                         announcement.FinalGradeStatus.Value, announcement.GradingStyle);
+                                                         announcement.FinalGradeStatusTyped.Value, announcement.GradingStyle);
             res.GradingStyleMapper = GradingStyleLogic.GetGradingStyleMapper(serviceLocator);
             return res;
         }
