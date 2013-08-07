@@ -32,11 +32,11 @@ namespace Chalkable.Web.Controllers
                 markingPeriod = SchoolLocator.MarkingPeriodService.GetNextMarkingPeriodInYear(markingPeriod.Id);
             if (markingPeriod == null)
                 return Json(new NoMarkingPeriodException());
-            var res = GetTypesByClasses(SchoolLocator, markingPeriod.Id, classId);
+            var res = GetTypesByClass(SchoolLocator, markingPeriod.Id, classId);
             return Json(AnnouncementTypeViewData.Create(res), 3);
         }
 
-        public static IList<AnnouncementType> GetTypesByClasses(IServiceLocatorSchool serviceLocator, Guid markingPeriodId, Guid classId)
+        public static IList<AnnouncementType> GetTypesByClass(IServiceLocatorSchool serviceLocator, Guid markingPeriodId, Guid classId)
         {
             var finalAnnTypes = serviceLocator.FinalGradeService.GetFinalGradeAnnouncementTypes(markingPeriodId, classId);
             var annTypes = finalAnnTypes.Where(x => x.PercentValue > 0).Select(x => x.AnnouncementType).ToList();

@@ -18,10 +18,11 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class ApplicationController : ChalkableController
     {
+        [AuthorizationFilter("SysAdmin, Developer")]
         public ActionResult List(int? start, int? count)
         {
             var applications = MasterLocator.ApplicationService.GetApplications(start ?? 0, count ?? DEFAULT_PAGE_SIZE, false);
-            return Json(BaseApplicationViewData.Create(applications));
+            return Json(applications.Transform(BaseApplicationViewData.Create));
         }
 
         [AuthorizationFilter("SysAdmin, Developer")]
@@ -84,7 +85,6 @@ namespace Chalkable.Web.Controllers
             return PrepareAppInfo(res, true);
         }
 
-
         [AuthorizationFilter("SysAdmin, Developer")]
         public ActionResult Delete(Guid applicationId)
         {
@@ -132,6 +132,31 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult AddToAnnouncement(Guid announcementId, Guid applicationId)
+        {
+            var res = SchoolLocator.ApplicationSchoolService.AddToAnnouncement(announcementId, applicationId);
+            var appInstalls = SchoolLocator.AppMarketService.GetInstallations(applicationId, Context.UserId, false);
+            var app = MasterLocator.ApplicationService.GetApplicationById(applicationId);
+            return Json(AnnouncementApplicationViewData.Create(res, app, appInstalls, Context.UserId));
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult Attach(Guid announcementApplicationId)
+        {
+            SchoolLocator.ApplicationSchoolService.AttachAppToAnnouncement(announcementApplicationId);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GET_APP_ANNOUNCEMENT_APPLICATION, true, CallType.Post, new[] { AppPermissionType.Announcement })]
+        public ActionResult GetAnnouncementApplication(Guid announcementApplicationId)
+        {
+            var res = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
+            var app = MasterLocator.ApplicationService.GetApplicationById(res.ApplicationRef);
+            return Json(AnnouncementApplicationViewData.Create(res, app, null, null));
+        }
+
+
         [AuthorizationFilter]
         public ActionResult GetOauthCode(string applicationUrl)
         {
@@ -141,10 +166,7 @@ namespace Chalkable.Web.Controllers
             return Json(authorizationCode);
         }
 
-
         private const string contentType = "text/html";
-
-
         private ActionResult PrepareAppInfo(Application application, bool needsliveApp = false)
         {
             return Json(PrepareAppInfo(MasterLocator, application, needsliveApp), contentType);
@@ -152,23 +174,15 @@ namespace Chalkable.Web.Controllers
         public static ApplicationViewData PrepareAppInfo(IServiceLocatorMaster locator, Application application, 
             bool needsliveApp = false, bool needsSecretKey = false)
         {
-            var roles = new List<CoreRole>
-                {
-                    CoreRoles.ADMIN_GRADE_ROLE,
-                    CoreRoles.ADMIN_EDIT_ROLE,
-                    CoreRoles.ADMIN_VIEW_ROLE,
-                    CoreRoles.TEACHER_ROLE,
-                    CoreRoles.STUDENT_ROLE,
-                };
             bool cangetSecretKey = false;
             if (needsSecretKey)
                 cangetSecretKey = locator.ApplicationService.CanGetSecretKey(new List<Application> {application});
             var categories = locator.CategoryService.ListCategories();
-            var res = ApplicationViewData.Create(application, roles, categories, cangetSecretKey);
+            var res = ApplicationViewData.Create(application, categories, cangetSecretKey);
             if (needsliveApp && application.OriginalRef.HasValue)
             {
                 var liveApp = locator.ApplicationService.GetApplicationById(application.Id);
-                res.LiveApplication = ApplicationViewData.Create(liveApp, roles, categories, cangetSecretKey);
+                res.LiveApplication = ApplicationViewData.Create(liveApp,  categories, cangetSecretKey);
             }
             return res;
         }

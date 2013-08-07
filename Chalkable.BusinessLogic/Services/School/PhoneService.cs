@@ -10,6 +10,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IPhoneService
     {
         IList<Phone> GetPhones();
+        IList<Phone> GetPhones(Guid personId);
         Phone Add(Guid personId, string value, PhoneType type, bool isPrimary);
         Phone Edit(Guid id, string value, PhoneType type, bool isPrimary);
         void Delete(Guid id);
@@ -36,6 +37,15 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 return new PhoneDataAccess(uow).GetAll();
+            }
+        }
+
+        public IList<Phone> GetPhones(Guid personId)
+        {
+            using (var uow = Read())
+            {
+                return new PhoneDataAccess(uow)
+                    .GetAll(new Dictionary<string, object>{{Phone.PERSON_REF_FIELD, personId}});
             }
         }
 

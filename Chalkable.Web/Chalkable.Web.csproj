@@ -190,6 +190,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HtmlExtensions.cs" />
+    <Compile Include="Logic\ApplicationLogic.cs" />
     <Compile Include="Logic\AttachmentLogic.cs" />
     <Compile Include="Logic\ChalkableApiExplorerLogic.cs" />
     <Compile Include="Logic\ClassLogic.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="Models\AnnouncementsViewData\AnnouncementShortViewData.cs" />
     <Compile Include="Models\AnnouncementTypeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementViewData.cs" />
+    <Compile Include="Models\ApplicationsViewData\AnnouncementApplicationViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationAccessViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationPersmissionsViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationPriceViewData.cs" />

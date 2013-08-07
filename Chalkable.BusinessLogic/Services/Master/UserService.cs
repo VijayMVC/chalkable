@@ -83,6 +83,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             string schoolServerUrl = null;
             string schoolTimeZone = null;
             CoreRole role;
+            Guid? developerId = null;
 
             if (user.SchoolUsers != null && user.SchoolUsers.Count > 0)
             {
@@ -94,6 +95,11 @@ namespace Chalkable.BusinessLogic.Services.Master
                     schoolServerUrl = su.School.ServerUrl;
                     schoolTimeZone = su.School.TimeZone;
                     role = CoreRoles.GetById(su.Role);
+                    if (!string.IsNullOrEmpty(su.School.DemoPrefix))
+                    {
+                        var developer = new DeveloperDataAccess(uow).GetDeveloper(su.SchoolRef);
+                        if (developer != null) developerId = developer.Id;
+                    }
                 }
                 else
                     throw new NotSupportedException("multiple school users are not supported yet");
@@ -106,6 +112,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 {
                     role = CoreRoles.DEVELOPER_ROLE;
                     var developer = new DeveloperDataAccess(uow).GetDeveloper(user.Id);
+                    developerId = developer.Id;
                     var school = ServiceLocator.SchoolService.GetById(developer.SchoolRef);
                     schoolId = school.Id;
                     schoolName = school.Name;
@@ -115,7 +122,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 else
                     throw new Exception("User's role can not be defined");
             }
-            var res = new UserContext(user.Id, schoolId, user.Login, schoolName, schoolTimeZone, schoolServerUrl, role);
+            var res = new UserContext(user.Id, schoolId, user.Login, schoolName, schoolTimeZone, schoolServerUrl, role, developerId);
             return res;
         }
 

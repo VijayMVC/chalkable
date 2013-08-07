@@ -21,25 +21,6 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class AnnouncementController : AnnouncementBaseController
     {
-        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        //public ActionResult ListForWeek(DateTime? date)
-        //{            
-        //    var cal = new GregorianCalendar();
-        //    var today = date ?? ServiceLocator.Context.NowLocal;
-        //    var sunday = cal.AddDays(today, -((int) today.DayOfWeek));   
-
-        //    var saturday = cal.AddDays(sunday, 6);
-        //    IDictionary<int, DateTime> weekDictionary = new Dictionary<int, DateTime>();
-        //    weekDictionary.Add(0, sunday);
-        //    for(var i = 1; i < 7; i++)
-        //    {
-        //        weekDictionary.Add(i, cal.AddDays(sunday, i));
-        //    }
-        //    var listAnnouncement = ServiceLocator.AnnouncementService.GetAnnouncements(sunday,saturday);
-        //    var listDayAnnouncements = DayAnnouncementsViewData.Create(listAnnouncement, weekDictionary);
-        //    return DefaultRespond(listDayAnnouncements,10);
-        //}
-
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult Create(int? announcementTypeId, Guid? classId)
         {
@@ -204,5 +185,6 @@ namespace Chalkable.Web.Controllers
             var res = SchoolLocator.AnnouncementService.GetLastFieldValues(personId, classId, announcementTypeId);
             return Json(res.GroupBy(x => x).Select(x => x.Key));
         }
+
     }
 }
