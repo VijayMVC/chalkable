@@ -24,10 +24,7 @@ namespace Chalkable.Data.School.Model
         
         public override Guid Id
         {
-            get
-            {
-                return base.Id;
-            }
+            get{ return base.Id;}
             set
             {
                 base.Id = value;
@@ -46,8 +43,14 @@ namespace Chalkable.Data.School.Model
                 {
                     if(Id != Guid.Empty)
                         markingPeriodClass.Id = Id;
-                    if (_class != null && _class.Id != Guid.Empty)
-                        markingPeriodClass.ClassRef = _class.Id;
+                    if (_class != null)
+                    {
+                        if(_class.MarkingPeriodClasses == null || _class.MarkingPeriodClasses.Count == 0)
+                            _class.MarkingPeriodClasses = new List<MarkingPeriodClass>{value};
+                        if(_class.Id != Guid.Empty)
+                            markingPeriodClass.ClassRef = _class.Id;
+                    } 
+                        
                 }
             }
         }
@@ -59,8 +62,13 @@ namespace Chalkable.Data.School.Model
             {
                 _class = value;
                 if (value != null && markingPeriodClass != null)
+                {
                     markingPeriodClass.ClassRef = _class.Id;
-
+                    if (_class.MarkingPeriodClasses == null)
+                    {
+                        _class.MarkingPeriodClasses = new List<MarkingPeriodClass> {markingPeriodClass};
+                    }
+                }
             }
         }
     }
