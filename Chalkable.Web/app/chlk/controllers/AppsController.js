@@ -6,6 +6,7 @@ REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.activities.apps.AppsListPage');
 REQUIRE('chlk.activities.apps.AppInfoPage');
 REQUIRE('chlk.models.apps.Application');
+REQUIRE('chlk.models.apps.AppPostData');
 REQUIRE('chlk.models.apps.AppAccess');
 REQUIRE('chlk.models.id.AppId');
 REQUIRE('chlk.models.id.AppPermissionId');
@@ -114,9 +115,9 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
-        [[chlk.models.apps.Application]],
-        function updateDeveloperAction(){
-            //update app
+        [[chlk.models.apps.AppPostData]],
+        function updateDeveloperAction(model){
+
         }
     ])
 });

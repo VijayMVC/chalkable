@@ -39,9 +39,10 @@ each item in app.getPermissions()
             label API key:
             +Textbox("apikey", "key").api-key
             label= "Status: " + app.getState().toString()
-    +ActionForm('apps', 'save').app-info
+    +ActionForm('apps', 'update').app-info
         +Button.blue-tb-right-button.submit-btn Submit App
 
+        +Hidden('draft', self.isDraft())
         .section.first
             .elem
                 label.hint App Name:
@@ -55,34 +56,34 @@ each item in app.getPermissions()
                 .my-apps
                     .permission
                         +MyAppsPermission("Can Teachers Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("hasteachermyapps", myAppsAccess.isTeacherMyAppsEnabled())
+                        +SlideCheckbox("hasTeacherMyApps", myAppsAccess.isTeacherMyAppsEnabled())
                     .permission
                         +MyAppsPermission("Can Students Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("hasstudentmyapps", myAppsAccess.isStudentMyAppsEnabled())
+                        +SlideCheckbox("hasStudentMyApps", myAppsAccess.isStudentMyAppsEnabled())
                     .permission
                         +MyAppsPermission("Can Admins Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("hasadminmyapps", myAppsAccess.isAdminMyAppsEnabled())
+                        +SlideCheckbox("hasAdminMyApps", myAppsAccess.isAdminMyAppsEnabled())
                     .permission
                         +MyAppsPermission("Can Parents Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("hasparentmyapps", myAppsAccess.isParentMyAppsEnabled())
+                        +SlideCheckbox("hasParentMyApps", myAppsAccess.isParentMyAppsEnabled())
         .section.small
             .elem.first
                 label.hint New Item:
                 .my-apps
                     .permission
                         +MyAppsPermission("Can Teachers Attach", app.getName(), "in New Items?")
-                        +SlideCheckbox("canattach", myAppsAccess.isAttachEnabled())
+                        +SlideCheckbox("canAttach", myAppsAccess.isAttachEnabled())
             .elem
                 label.hint Grading View:
                 .my-apps
                     .permission
                         +MyAppsPermission("Will be Teachers", '', 'viewing student output')
-                        +SlideCheckbox("showingradeview", myAppsAccess.isVisibleInGradingView())
+                        +SlideCheckbox("showInGradeView", myAppsAccess.isVisibleInGradingView())
         .section
             .elem
                 label.hint API Access:
                 .permissions
-                    +CheckboxList('appPermissions', 'app-permission', appPermissions)
+                    +CheckboxList('permissions', 'app-permission', appPermissions)
                         each item in self.getPermissions()
                             -isChecked = !!selectedAppPermissions[item.getId()]
                             +LabeledCheckbox(item.getName(), 'app-permission'+ item.getId(), isChecked)
@@ -90,7 +91,7 @@ each item in app.getPermissions()
             .elem
                 label.hint Subjects:
                 .categories
-                    +CheckboxList('appCategories', 'app-category', appCategories)
+                    +CheckboxList('categories', 'app-category', appCategories)
                         each item in self.getCategories()
                             -isChecked = !!selectedAppCategories[item.getId()]
                             +LabeledCheckbox(item.getName(), 'app-category' + item.getId(), isChecked)
@@ -106,13 +107,13 @@ each item in app.getPermissions()
         .section
             .elem
                 label.wide.hint Short Description:
-                +Textbox("shortdescription", app.getShortDescription())
+                +Textbox("shortDescription", app.getShortDescription())
             .elem
                 label.wide.hint Long Description:
-                textarea=app.getDescription()
+                textarea(name="longDescription")=app.getDescription()
             .elem
                 label.wide.hint Video Demo:
-                +Textbox("videomodeurl", app.getVideoModeUrl())
+                +Textbox("videoModeUrl", app.getVideoModeUrl())
         .section
             .elem
                 label.hint Pricing:
