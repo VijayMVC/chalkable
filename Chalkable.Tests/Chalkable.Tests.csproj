@@ -52,6 +52,7 @@
     <Compile Include="DataAccess\OrmTest.cs" />
     <Compile Include="OnDataBaseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Master\AccessControlTestService.cs" />
     <Compile Include="Services\Master\ApplicationServiceTest.cs" />
     <Compile Include="Services\Master\BackgrounTaskServiceTest.cs" />
     <Compile Include="Services\Master\BaseMasterServiceLocatorTest.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Services\School\SchoolTestContext.cs" />
     <Compile Include="Services\School\SchoolYearServiceTest.cs" />
     <Compile Include="Services\School\StudentAnnouncementServiceTest.cs" />
+    <Compile Include="Services\ServiceTestBase.Assert.cs" />
     <Compile Include="Services\TestBlobStorageService.cs" />
     <Compile Include="Services\ServiceTestBase.cs" />
     <Compile Include="Sis\StiApi.cs" />
@@ -125,6 +127,10 @@
     <ProjectReference Include="..\Chalkable.StiConnector\Chalkable.StiConnector.csproj">
       <Project>{3D16203E-D19D-41E1-9918-2A9448427BFD}</Project>
       <Name>Chalkable.StiConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.csproj">
+      <Project>{3051f268-b03f-42ae-a06c-1d8dd751bdbf}</Project>
+      <Name>WindowsAzure.Acs.Oauth2</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

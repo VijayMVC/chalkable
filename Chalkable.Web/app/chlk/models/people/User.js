@@ -36,12 +36,15 @@ NAMESPACE('chlk.models.people', function () {
             [ria.serialize.SerializeProperty('localid')],
             String, 'localId',
 
+            String, 'password',
+
             [ria.serialize.SerializeProperty('role')],
             chlk.models.people.Role, 'role',
 
             [ria.serialize.SerializeProperty('schoolid')],
             Number, 'schoolId',
 
+            [ria.serialize.SerializeProperty('birthdate')],
             chlk.models.common.ChlkDate, 'birthDate',
 
             String, 'birthDateText',

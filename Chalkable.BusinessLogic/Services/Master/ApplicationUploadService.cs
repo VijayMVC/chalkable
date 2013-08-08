@@ -32,6 +32,9 @@ namespace Chalkable.BusinessLogic.Services.Master
         private Application EditApplication(Application application, BaseApplicationInfo applicationInfo, bool addToOauth = false,
                                             ApplicationStateEnum state = ApplicationStateEnum.Draft)
         {
+            if (application.DeveloperRef == Guid.Empty)
+                application.DeveloperRef = applicationInfo.DeveloperId;
+            
             if (!ApplicationSecurity.CanUploadApplication(Context) || !ApplicationSecurity.CanEditApplication(Context, application))
                 throw new ChalkableSecurityException(ChlkResources.ERR_APP_INVALID_RIGHTS);
 
@@ -57,8 +60,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             application.Description = applicationInfo.ShortApplicationInfo.Description;
             application.CreateDateTime = DateTime.UtcNow;
             application.VideoUrl = applicationInfo.ShortApplicationInfo.VideoDemoUrl;
-            application.DeveloperRef = applicationInfo.DeveloperId;
-
+            
             application.Price = applicationInfo.ApplicationPrices.Price;
             application.PricePerClass = applicationInfo.ApplicationPrices.PricePerClass;
             application.PricePerSchool = applicationInfo.ApplicationPrices.PricePerSchool;
@@ -79,13 +81,12 @@ namespace Chalkable.BusinessLogic.Services.Master
                     application.Id = Guid.NewGuid();
                     da.Insert(application);
                 }
-                else
-                    da.Update(application);
+                else da.Update(application);
 
-                da.UpdateCategories(application.Id, applicationInfo.Categories);
-                da.UpdatePictures(application.Id, applicationInfo.PicturesId);
-                da.UpdateGradeLevels(application.Id, applicationInfo.GradeLevels);
-                da.UpdatePermissions(application.Id, applicationInfo.PermissionIds);
+                application.Categories = da.UpdateCategories(application.Id, applicationInfo.Categories);
+                application.Pictures = da.UpdatePictures(application.Id, applicationInfo.PicturesId);
+                application.GradeLevels = da.UpdateGradeLevels(application.Id, applicationInfo.GradeLevels);
+                application.Permissions = da.UpdatePermissions(application.Id, applicationInfo.PermissionIds);
                 if (addToOauth)
                 {
                     if (!string.IsNullOrEmpty(application.Url))

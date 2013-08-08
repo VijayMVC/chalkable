@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.Data.Master.Model;
 using NUnit.Framework;
 
 namespace Chalkable.Tests.Services.Master
@@ -29,5 +31,14 @@ namespace Chalkable.Tests.Services.Master
             AssertAreEqual(SysAdminMasterLocator.CategoryService.ListCategories().Count, 0);
             
         }
+
+        public static IList<Category> CreateDefaultCategories(IServiceLocatorMaster locator, int count = 5)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                locator.CategoryService.Add("category_" + (i + 1), "category_description_" + (i + 1));
+            }
+            return locator.CategoryService.ListCategories();
+        } 
     }
 }

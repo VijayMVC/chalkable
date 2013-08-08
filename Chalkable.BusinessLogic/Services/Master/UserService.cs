@@ -173,7 +173,19 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public void ChangePassword(string login, string newPassword)
         {
-            throw new NotImplementedException();
+            if (BaseSecurity.IsSysAdmin(Context) || Context.Login == login)
+            {
+                using (var uow = Update())
+                {
+                    var da = new UserDataAccess(uow);
+                    var user = da.GetUser(login, null, null);
+                    user.Password = PasswordMd5(newPassword);
+                    da.Update(user);
+                    uow.Commit();
+                }
+            }
+            else
+                throw new ChalkableSecurityException();
         }
 
         public IList<User> GetUsers()

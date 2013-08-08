@@ -80,7 +80,11 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IApplicationService ApplicationService { get { return applicationService; } }
         public ICategoryService CategoryService { get { return categoryService; } }
         public IApplicationUploadService ApplicationUploadService { get { return applicationUploadService; } }
-        public IAccessControlService AccessControlService { get { return accessControlService; } }
+        public IAccessControlService AccessControlService
+        {
+            get { return accessControlService; }
+            protected set { accessControlService = value; }
+        }
         public IEmailService EmailService
         {
             get { return emailService; } 

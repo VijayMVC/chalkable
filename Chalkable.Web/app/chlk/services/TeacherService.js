@@ -15,17 +15,18 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.SchoolPersonId, String, String, String, String, String, String, String]],
-            ria.async.Future, function updateInfo(personId, addresses, email, firstName, lastName, gender, phones, salutation) {
+            [[chlk.models.id.SchoolPersonId, String, String, String, String, String, String, String, chlk.models.common.ChlkDate]],
+            ria.async.Future, function updateInfo(personId, addresses, email, firstName, lastName, gender, phones, salutation, birthDate) {
                 return this.post('Teacher/UpdateInfo.json', chlk.models.people.User, {
                     personId: personId.valueOf(),
-                    addresses: JSON.parse(addresses),
+                    addresses: addresses && JSON.parse(addresses),
                     email: email,
                     firstName: firstName,
                     lastName: lastName,
                     gender: gender,
-                    phones: JSON.parse(phones),
-                    salutation: salutation
+                    phones: phones && JSON.parse(phones),
+                    salutation: salutation,
+                    birthdayDate: birthDate && JSON.stringify(birthDate.getDate()).slice(1,-1)
                 });
             }
         ])

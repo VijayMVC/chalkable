@@ -22,17 +22,15 @@
                 .section-title.pacifico=self.getRole().getName()
                 div
                     .section-data
-                        .info-title=Msg.Id.toUpperCase()
-                        .data-info.big-font-size=self.getLocalId()
-                    .section-data
                         .info-title=Msg.Email
-                        .data-info.big-font-size=self.getEmail()
+                        .data-info.low-font-size
+                            input(type="text", value=self.getEmail())
                     .section-data
                         .info-title=Msg.Cell
                         .data-info.big-font-size=primaryPhone
                     .section-data
                         .info-title=Msg.Birthday
-                        .data-info.big-font-size=self.getBirthDateText()
+                        .data-info.low-font-size=self.getBirthDateText()
                     .section-data.gender-box
                         div(class=self.getGender() ? self.getGender().toLowerCase() : '').gender-img-box
                         p=self.getGenderFullText()
@@ -45,13 +43,13 @@
                     .section-data
                         .info-title=Msg.Home_Address
                         each address in addresses
-                            .data-info.big-font-size=address.getValue()
+                            .data-info.low-font-size=address.getValue()
         .sections-info.other-section
             .section-title.pacifico=Msg.Other(true)
         if self.isAbleEdit()
             +Button().special-button.blue-button#edit-info-button=Msg.Edit
     .info-edit
-        +ActionForm('teachers', 'infoEdit')#info-edit-form
+        +ActionForm('teachers', 'infoEdit')#info-edit-form.with-ok
             .title
                 .avatar-block
                     .avatar-container.with-border
@@ -59,8 +57,8 @@
                     button.simple-gray-button.file Upload
                         +FileUpload('teachers', 'uploadPicture', [self.getId().valueOf()])#add-attachment.simple-gray-button
                 .name-block
-                    input(name="firstname", value=self.getFirstName())
-                    input(name="lastname", value=self.getLastName())
+                    input(name="firstname", value=self.getFirstName(), class="validate[required]")
+                    input(name="lastname", value=self.getLastName(), class="validate[required]")
                     input(type="hidden", name="id", value=self.getId())
                     input(type="hidden", name="salutation", value=self.getSalutation())
             .sections
@@ -68,11 +66,8 @@
                     .section-title=self.getRole().getName()
                     div
                         .section-data
-                            .info-title=Msg.Id.toUpperCase()
-                            input(name="localId", value=self.getLocalId(), readonly)
-                        .section-data
                             .info-title=Msg.Email
-                            input(name="email", value=self.getEmail(), class="validate[required,email]")
+                            input(name="email", value=self.getEmail(), class="validate[custom[email], required]")
                         .section-data
                             .info-title=Msg.Cell
                             input(
@@ -80,7 +75,7 @@
                                 data-type=2,
                                 data-isPrimary=true,
                                 value=primaryPhone,
-                                class="validate[required,phone] primary-phone"
+                                class="validate[custom[phone], required] primary-phone"
                             )
                             input(name="phonesValue", value=self.getPhonesValue(), type="hidden")
                             +Select('cellService')(data-placeholder="*Cell Service*", value="")#cellService.grey-combo
@@ -94,12 +89,12 @@
                             .info-title=Msg.Birthday
                             +DateSelect().grey-combo-container(
                                 value=self.getBirthDate() ? self.getBirthDate().getDate() : null,
-                                name='birthDate'
+                                name='birthdate'
                             ).bd-select
                             .gender-part
                                 +Select('gender')(data-placeholder="Gender")#genderSelect.grey-combo
-                                    +Option('m', 'Male', self.getGender().toLowerCase() == 'm')
-                                    +Option('f', 'Female', self.getGender().toLowerCase() == 'f')
+                                    +Option('m', 'Male', self.getGender() && self.getGender().toLowerCase() == 'm')
+                                    +Option('f', 'Female', self.getGender() && self.getGender().toLowerCase() == 'f')
                 .sections-info
                     .section-title=Msg.Home
                     div
@@ -107,7 +102,7 @@
                             .info-title=Msg.Home_Phone
                             input(
                                 value=homePhone,
-                                class="validate[required] home-phone",
+                                class="validate[custom[phone], required] home-phone",
                                 data-id=homePhone && self.getHomePhone().getId().valueOf(),
                                 data-type=0,
                                 data-isPrimary=false,
@@ -120,7 +115,8 @@
                                 -addressesModel = new chlk.models.people.Addresses()
                                 -addressesModel.setItems(addresses);
                                 +RenderWith(addressesModel, chlk.templates.people.Addresses)
-            +Button(type="submit").special-button.blue-button#submit-info-button=Msg.Save
-            +Button().special-button.blue-button#cancell-edit-info-button=Msg.Cancel
+            .section-buttons
+                +Button(type="submit").special-button.blue-button#submit-info-button=Msg.Save
+                +Button(type="button").special-button.blue-button#cancell-edit-info-button=Msg.Cancel
 
 

@@ -196,10 +196,13 @@ namespace Chalkable.Data.Master.DataAccess
         public IList<ApplicationCategory> UpdateCategories(Guid id, IList<Guid> categories)
         {
             SimpleDelete<ApplicationCategory>(new Dictionary<string, object>{{ApplicationCategory.APPLICATION_REF_FIELD, id}});
-            var appCategories = new List<ApplicationCategory>();
-            foreach (var category in categories)
+            IList<ApplicationCategory> appCategories = new List<ApplicationCategory>();
+            if (categories != null)
             {
-                appCategories.Add(new ApplicationCategory { ApplicationRef = id, CategoryRef = category });
+                foreach (var category in categories)
+                {
+                    appCategories.Add(new ApplicationCategory { Id = Guid.NewGuid(), ApplicationRef = id, CategoryRef = category });
+                }
             }
             SimpleInsert(appCategories);
             return SelectMany<ApplicationCategory>(new Dictionary<string, object> { { ApplicationCategory.APPLICATION_REF_FIELD, id } });
@@ -208,10 +211,13 @@ namespace Chalkable.Data.Master.DataAccess
         public IList<ApplicationPicture> UpdatePictures(Guid id, IList<Guid> picturesId)
         {
             SimpleDelete<ApplicationPicture>(new Dictionary<string, object> { { ApplicationCategory.APPLICATION_REF_FIELD, id } });
-            var appPictures = new List<ApplicationPicture>();
-            foreach (var picture in picturesId)
+            IList<ApplicationPicture> appPictures = new List<ApplicationPicture>();
+            if (picturesId != null)
             {
-                appPictures.Add(new ApplicationPicture {ApplicationRef = id, Id = picture});
+                foreach (var picture in picturesId)
+                {
+                    appPictures.Add(new ApplicationPicture { ApplicationRef = id, Id = picture });
+                }
             }
             SimpleInsert(appPictures);
             return SelectMany<ApplicationPicture>(new Dictionary<string, object> { { ApplicationPicture.APPLICATION_REF_FIELD, id } });
@@ -220,10 +226,13 @@ namespace Chalkable.Data.Master.DataAccess
         public IList<ApplicationGradeLevel> UpdateGradeLevels(Guid id, IList<int> gradeLevels)
         {
             SimpleDelete<ApplicationGradeLevel>(new Dictionary<string, object> { { ApplicationGradeLevel.APPLICATION_REF_FIELD, id } });
-            var appGradeLevels = new List<ApplicationGradeLevel>();
-            foreach (var gradeLevel in gradeLevels)
+            IList<ApplicationGradeLevel> appGradeLevels = new List<ApplicationGradeLevel>();
+            if (gradeLevels != null)
             {
-                appGradeLevels.Add(new ApplicationGradeLevel { ApplicationRef = id, GradeLevel = gradeLevel, Id = Guid.NewGuid()});
+                foreach (var gradeLevel in gradeLevels)
+                {
+                    appGradeLevels.Add(new ApplicationGradeLevel { ApplicationRef = id, GradeLevel = gradeLevel, Id = Guid.NewGuid() });
+                }
             }
             SimpleInsert(appGradeLevels);
             return SelectMany<ApplicationGradeLevel>(new Dictionary<string, object> { { ApplicationGradeLevel.APPLICATION_REF_FIELD, id } });
@@ -231,6 +240,21 @@ namespace Chalkable.Data.Master.DataAccess
 
         public IList<ApplicationPermission> UpdatePermissions(Guid id, IList<AppPermissionType> permissionIds)
         {
+            SimpleDelete<ApplicationPermission>(new Dictionary<string, object> { {ApplicationPermission.APPLICATION_REF_FIELD, id} });
+            IList<ApplicationPermission> applicationPermissions = new List<ApplicationPermission>();
+            if (permissionIds != null)
+            {
+                foreach (var permissionId in permissionIds)
+                {
+                    applicationPermissions.Add(new ApplicationPermission
+                    {
+                        Id = Guid.NewGuid(),
+                        ApplicationRef = id,
+                        Permission = permissionId
+                    });
+                }
+            }
+            SimpleInsert(applicationPermissions);
             return SelectMany<ApplicationPermission>(new Dictionary<string, object> { { ApplicationPermission.APPLICATION_REF_FIELD, id } });
         }
 
