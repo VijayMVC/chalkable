@@ -9,26 +9,28 @@
         +Hidden("gender", self.getGender())
         .x-form-field
             label(for="salutation") Name:
-            input(type="text",name="salutation",class="validate[required] salutation",value=self.getSalutation())
-            input(type="text",name="firstname",class="validate[required] first-name",value=self.getFirstName())
-            input(type="text",name="lastname",class="validate[required] last-name",value=self.getLastName())
-            .form-ok
+            input(type="text",name="salutation",class="validate[required] salutation name-field",value=self.getSalutation())
+            input(type="text",name="firstname",class="validate[required] first-name name-field",value=self.getFirstName())
+            input(type="text",name="lastname",class="validate[required] last-name name-field",value=self.getLastName())
+            .form-ok.name-ok
         .x-form-field
+            label(for="salutation-label")
             label#example How students see your name.
             input(type="text",name="salutation-label",class="validate[required] salutation-label",
-                value=self.getSalutation() + " " + self.getFirstName() + " " + self.getLastName()
+                value=(self.getSalutation() || "") + " " + self.getFirstName() + " " + self.getLastName(),
+                required="required"
             )
         .x-form-field
             label(for="email") Email:
-            input(type="text",name="email",class="validate[required, custom(email)] email",value=self.getEmail())
+            input(type="text",name="email",class="validate[required,custom[email]] email",value=self.getEmail())
             .form-ok
         .x-form-field
             label(for="password") Password:
-            input(type="password",name="password",class="validate[required] password")
+            input(type="password",name="password",id="password", class="validate[required]")
             .form-ok
         .x-form-field
-            label(for="passwordConfirm") Password:
-            input(type="password",name="passwordConfirm",class="validate[required] password-confirm")
+            label(for="passwordConfirm") Password again:
+            input(type="password",name="passwordConfirm",class="validate[required, equals[password]] password-confirm")
             .form-ok
         .x-form-field
             label

@@ -81,18 +81,24 @@ NAMESPACE('ria.mvc', function () {
                     .handleProgress(function(progress) {
                         me.onModelProgress_(progress, msg_);
                     })
-                    .complete(function () { me.onModelComplete_(msg_); })
+                    .complete(function () {
+                        me.onModelComplete_(msg_);
+                    })
                     .catchError(function (error) {
                         me.onModelError_(error, msg_);
                         throw error;
                     })
-                    .then(function (model) { me.onModelReady_(model, msg_); return model })
+                    .then(function (model) {
+                        me.onModelReady_(model, msg_);
+                        return model
+                    })
 
                 return head;
             },
 
             [[ria.async.Future]],
             ria.async.Future, function refreshD(future) {
+                this.startLoading();
                 var me = this;
                 return future
                     .attach(this.getModelEvents_())
@@ -109,6 +115,10 @@ NAMESPACE('ria.mvc', function () {
                     .then(function (model) { me.onPartialRender_(model, msg); return model; })
                     .then(function (model) { me.onPartialRefresh_(model, msg); return model; })
             },
+
+            VOID, function startLoading() {},
+
+            VOID, function stopLoading() {},
 
             /** @deprecated */
             [[Object]],
@@ -134,7 +144,9 @@ NAMESPACE('ria.mvc', function () {
             [[Object, String]],
             VOID, function onModelReady_(data, msg_) {},
             [[String]],
-            VOID, function onModelComplete_(msg_) {},
+            VOID, function onModelComplete_(msg_) {
+                this.stopLoading();
+            },
             [[Object]],
             VOID, function onRender_(data) {},
             [[Object, String]],
