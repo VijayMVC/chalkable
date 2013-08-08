@@ -5,6 +5,7 @@ REQUIRE('chlk.services.AppCategoryService');
 REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.activities.apps.AppsListPage');
 REQUIRE('chlk.activities.apps.AppInfoPage');
+REQUIRE('chlk.activities.apps.AddAppDialog');
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.apps.AppPostData');
 REQUIRE('chlk.models.apps.AppAccess');
@@ -37,6 +38,7 @@ NAMESPACE('chlk.controllers', function (){
         },
         [[chlk.models.id.AppId]],
         function detailsAction(id) {
+
         },
 
 
@@ -47,26 +49,35 @@ NAMESPACE('chlk.controllers', function (){
             return result;
         },
 
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DEVELOPER
+        ])],
+        function refreshDeveloperAction() {
+            this.appsService
+                .getApps()
+                .then(function(data){
+                    var apps = data.getItems();
+                    this.getContext().getSession().set('dev-apps', apps);
+                }, this);
+        },
 
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
-        function detailsDeveloperAction() {
+        [[chlk.models.apps.Application]],
+        function detailsDeveloperAction(app_) {
+
+
+            app_ = this.getCurrentApp();
+            if (!app_){
+                return this.forward_('apps', 'add', []);
+            }
 
             var result = this.categoryService
                 .getCategories()
                 .then(function(data){
                     var cats = data.getItems();
-                    var app = this.getCurrentApp();
-                    app.setName("Test APP");
-                    app.setUrl("www.no.com");
-                    app.setShortDescription("Short description");
-                    app.setDescription("Long description");
-                    app.setVideoModeUrl("Video Url");
-
-
-
-
+                    var gradeLevels = this.gradeLevelService.getGradeLevels();
                     var permissions = [
                         new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(1), "User", 1),
                         new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(2), "Class", 2),
@@ -78,40 +89,42 @@ NAMESPACE('chlk.controllers', function (){
                         new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(8), "Schedule", 8)
                     ];
 
-                    var appAccess = new chlk.models.apps.AppAccess();
-
-                    app.setAppAccess(appAccess);
-
-                    var gradeLevels = this.gradeLevelService.getGradeLevels();
-
-                    app.setPermissions([new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(6), "Discipline", 6)]);
 
 
-                    var appState = new chlk.models.apps.AppState();
-                    appState.deserialize(1);
-
-                    app.setState(appState);
-                    var g1 = new chlk.models.common.NameId;
-                    g1.setId(1);
-                    g1.setName('1st');
-                    var g2 = new chlk.models.common.NameId;
-                    g2.setId(5);
-                    g2.setName('5th');
-                    app.setGradeLevels([
-                        g1, g2
-                    ]);
-
-
-                    var cat = new chlk.models.apps.AppCategory();
-                    cat.setId(new chlk.models.id.AppCategoryId('54e48fd5-cc7c-4726-867a-666ff876b317'));
-                    cat.setName('Math');
-
-                    app.setCategories([cat]);
-                    return new ria.async.DeferredData(new chlk.models.apps.AppInfoViewData(app, false, cats, gradeLevels, permissions));
+                    var appGradeLevels = app_.getGradeLevels();
+                    if (!appGradeLevels) app_.setGradeLevels([]);
+                    var appCategories = app_.getCategories();
+                    if (!appCategories) app_.setAppCategories([]);
+                    return new ria.async.DeferredData(new chlk.models.apps.AppInfoViewData(app_, false, cats, gradeLevels, permissions, true));
 
                 }, this);
             return this.PushView(chlk.activities.apps.AppInfoPage, result);
+
         },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DEVELOPER
+        ])],
+        function addDeveloperAction(){
+           var app = new chlk.models.apps.Application();
+           return this.PushView(chlk.activities.apps.AddAppDialog, new ria.async.DeferredData(app));
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DEVELOPER
+        ])],
+
+        [[chlk.models.apps.Application]],
+        function createDeveloperAction(model){
+            var devId = this.getCurrentPerson().getId();
+            var result = this.appsService
+                .createApp(devId, model.getName())
+                .then(function(data){
+                    return data;
+                });
+            return this.forward_('apps', 'details', [result]);
+        },
+
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],

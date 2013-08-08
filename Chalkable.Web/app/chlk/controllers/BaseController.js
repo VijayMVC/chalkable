@@ -65,7 +65,6 @@ NAMESPACE('chlk.controllers', function (){
                return this.getCurrentRole().getRoleId() == roleId;
            },
 
-
            chlk.models.people.User, function getCurrentPerson(){
                return this.getContext().getSession().get('currentPerson');
            },

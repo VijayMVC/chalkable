@@ -40,7 +40,7 @@ each item in app.getPermissions()
             +Textbox("apikey", "key").api-key
             label= "Status: " + app.getState().toString()
     +ActionForm('apps', 'update').app-info
-        +Button.blue-tb-right-button.submit-btn Submit App
+        +Button().blue-tb-right-button.submit-btn Submit App
 
         +Hidden('draft', self.isDraft())
         .section.first

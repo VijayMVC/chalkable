@@ -75,11 +75,11 @@
     
 
         <div class="page 
-    @if (isDemoSchool || isDeveloper)
-    {
-        @:demo
-    }
-    ">
+        @if (isDemoSchool || isDeveloper)
+        {
+            @:demo
+        }
+        ">
             <div id="sidebar"></div>
             <div id="content">
                 <div class="ribbon"></div>
@@ -96,9 +96,13 @@
                     <div id="footer">&copy; <script>var dt = new Date();document.write(dt.getFullYear());</script> Chalkable</div>
                 </div>
             </div>
-            <div id="demo-footer"></div>
+            
+            
         </div>
-
+        @if (isDemoSchool || isDeveloper)
+        {
+            <div id="demo-footer" class="top"></div>
+        }
         <div id = "chlk-overlay" class ="x-hidden"></div>
         <div id="chlk-pop-up-container" class="x-hidden"><div id="pop-up-triangle"></div></div>
         @RenderSection("MixPanelTracking", false)

@@ -10,6 +10,7 @@ NAMESPACE('chlk.models.apps', function () {
     CLASS(
         'AppInfoViewData', [
             chlk.models.apps.Application, 'app',
+            ArrayOf(chlk.models.apps.Application), 'apps',
             ArrayOf(chlk.models.apps.AppCategory), 'categories',
             ArrayOf(chlk.models.common.NameId), 'gradeLevels',
             ArrayOf(chlk.models.apps.AppPermission), 'permissions',
@@ -17,8 +18,8 @@ NAMESPACE('chlk.models.apps', function () {
             Boolean, 'readOnly',
             Boolean, 'draft',
 
-            [[chlk.models.apps.Application, Boolean, ArrayOf(chlk.models.apps.AppCategory), ArrayOf(chlk.models.common.NameId), ArrayOf(chlk.models.apps.AppPermission)]],
-            function $(app_, isReadonly, categories, gradeLevels, permissions){
+            [[chlk.models.apps.Application, Boolean, ArrayOf(chlk.models.apps.AppCategory), ArrayOf(chlk.models.common.NameId), ArrayOf(chlk.models.apps.AppPermission), Boolean]],
+            function $(app_, isReadonly, categories, gradeLevels, permissions, isDraft){
                 if (app_)
                     this.setApp(app_);
                 this.setEmpty(!!app_);
@@ -26,6 +27,7 @@ NAMESPACE('chlk.models.apps', function () {
                 this.setCategories(categories);
                 this.setGradeLevels(gradeLevels);
                 this.setPermissions(permissions);
+                this.setDraft(isDraft);
             }
         ]);
 });

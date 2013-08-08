@@ -1,0 +1,14 @@
+mixin AppsList(name, apps)
+    -attributes.name = name
+    select(attributes).app-list-combobox
+        each item in apps
+            +AppOption(app.getName(), 'apps', 'details', item.getId().valueOf(), false)
+        +AppOption('Add application', 'apps', 'add')
+
+mixin AppOption(displayName, controller, action, params, selected)
+    -attributes.value = value
+    -attributes.selected = selected
+    -attributes['data-controller'] = controller
+    -attributes['data-action'] = action
+    -attributes['data-params'] = params
+        option(attributes)=displayName
