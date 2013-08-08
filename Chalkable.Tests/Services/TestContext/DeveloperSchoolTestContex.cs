@@ -23,8 +23,12 @@ namespace Chalkable.Tests.Services.TestContext
         public IServiceLocatorMaster DeveloperMl { get { return DeveloperSl.ServiceLocatorMaster; } }
 
 
-        protected DeveloperSchoolTestContex(IServiceLocatorSchool sysSchoolSl)
-            : base(sysSchoolSl)
+        protected DeveloperSchoolTestContex(IServiceLocatorSchool sysSchoolSl) : base(sysSchoolSl)
+        {
+            
+        }
+
+        protected override void InitBaseData(IServiceLocatorSchool sysSchoolSl)
         {
             var userInfo = CreateUserInfo(DEVELOPER_USER, CoreRoles.DEVELOPER_ROLE);
             masterLocator = sysSchoolSl.ServiceLocatorMaster;
@@ -33,6 +37,7 @@ namespace Chalkable.Tests.Services.TestContext
             developerId = developer.Id;
             var devContext = masterLocator.UserService.Login(userInfo.Login, userInfo.Password);
             DeveloperSl = new BaseSchoolServiceLocatorTest(new BaseMasterServiceLocatorTest(devContext));
+            base.InitBaseData(sysSchoolSl);
         }
 
         public new static DeveloperSchoolTestContex Create(IServiceLocatorSchool sysSchoolSl)
