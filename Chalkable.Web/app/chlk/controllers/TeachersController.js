@@ -1,5 +1,6 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.TeacherService');
+REQUIRE('chlk.services.PersonService');
 REQUIRE('chlk.activities.profile.InfoViewPage');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.people.User');
@@ -12,6 +13,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.TeacherService, 'teacherService',
+
+            [ria.mvc.Inject],
+            chlk.services.PersonService, 'personService',
 
             [[chlk.models.people.User]],
             function prepareProfileData(model){
@@ -29,12 +33,6 @@ NAMESPACE('chlk.controllers', function (){
 
                 var phones = model.getPhones(), addresses = model.getAddresses() ,phonesValue=[], addressesValue=[];
                 phones.forEach(function(item){
-                    /*var values = [];
-                    values.push(item.getId().valueOf());
-                    values.push(item.getType());
-                    values.push(item.isIsPrimary());
-                    values.push(item.getValue());
-                    phonesValue.push(values.join())*/
                     var values = {
                         id: item.getId().valueOf(),
                         type: item.getType(),
@@ -95,8 +93,9 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [[chlk.models.id.SchoolPersonId, Object]],
-            function uploadPictureAction(model){
-
+            function uploadPictureAction(personId, files){
+                var result = this.personService
+                    .uploadPicture(personId, files);
             }
         ])
 });

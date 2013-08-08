@@ -49,7 +49,7 @@
         if self.isAbleEdit()
             +Button().special-button.blue-button#edit-info-button=Msg.Edit
     .info-edit
-        +ActionForm('teachers', 'infoEdit')#info-edit-form
+        +ActionForm('teachers', 'infoEdit')#info-edit-form.with-ok
             .title
                 .avatar-block
                     .avatar-container.with-border
@@ -93,8 +93,8 @@
                             ).bd-select
                             .gender-part
                                 +Select('gender')(data-placeholder="Gender")#genderSelect.grey-combo
-                                    +Option('m', 'Male', self.getGender().toLowerCase() == 'm')
-                                    +Option('f', 'Female', self.getGender().toLowerCase() == 'f')
+                                    +Option('m', 'Male', self.getGender() && self.getGender().toLowerCase() == 'm')
+                                    +Option('f', 'Female', self.getGender() && self.getGender().toLowerCase() == 'f')
                 .sections-info
                     .section-title=Msg.Home
                     div

@@ -19,14 +19,14 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function updateInfo(personId, addresses, email, firstName, lastName, gender, phones, salutation, birthDate) {
                 return this.post('Teacher/UpdateInfo.json', chlk.models.people.User, {
                     personId: personId.valueOf(),
-                    addresses: JSON.parse(addresses),
+                    addresses: addresses && JSON.parse(addresses),
                     email: email,
                     firstName: firstName,
                     lastName: lastName,
                     gender: gender,
-                    phones: JSON.parse(phones),
+                    phones: phones && JSON.parse(phones),
                     salutation: salutation,
-                    birthdayDate: JSON.stringify(birthDate.getDate()).slice(1,-1)
+                    birthdayDate: birthDate && JSON.stringify(birthDate.getDate()).slice(1,-1)
                 });
             }
         ])

@@ -54,6 +54,9 @@ NAMESPACE('chlk.templates.people', function () {
             String, 'localId',
 
             [ria.templates.ModelPropertyBind],
+            String, 'password',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.people.Phone), 'phones',
 
             [ria.templates.ModelPropertyBind],
