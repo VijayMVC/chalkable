@@ -103,7 +103,55 @@ namespace Chalkable.Tests.Services.Master
         [Test]
         public void SubmitTest()
         {
-            
+            var context = CreateDeveloperSchoolTestContext();
+            var app = CreateDefaultDraftApp(SysAdminMasterLocator, context, "app1", "http://test.app1.com");
+            var appInfo = BaseApplicationInfo.Create(app);
+
+            //security test 
+            AssertException<Exception>(() => context.AdminGradeSl.ServiceLocatorMaster.ApplicationUploadService.Submit(app.Id, appInfo));
+            AssertException<Exception>(() => context.AdminEditSl.ServiceLocatorMaster.ApplicationUploadService.Submit(app.Id, appInfo));
+            AssertException<Exception>(() => context.AdminViewSl.ServiceLocatorMaster.ApplicationUploadService.Submit(app.Id, appInfo));
+            AssertException<Exception>(() => context.FirstTeacherSl.ServiceLocatorMaster.ApplicationUploadService.Submit(app.Id, appInfo));
+            AssertException<Exception>(() => context.FirstStudentSl.ServiceLocatorMaster.ApplicationUploadService.Submit(app.Id, appInfo));
+
+            app = context.DeveloperMl.ApplicationUploadService.Submit(app.Id, appInfo);
+            CheckApplication(appInfo, app);
+            var app2 = context.DeveloperMl.ApplicationService.GetApplicationById(app.Id);
+            CheckApplication(appInfo, app2);
+            Assert.IsFalse(app.OriginalRef.HasValue);
+            Assert.AreEqual(app.State, ApplicationStateEnum.SubmitForApprove);
+
+            var dvName = context.Developer.Name;
+            var dvWebSite = context.Developer.WebSite;
+            context.DeveloperMl.DeveloperService.Edit(context.Developer.Id, null, context.Developer.Email, null);
+
+            AssertException<Exception>(() => context.DeveloperMl.ApplicationUploadService.Submit(app.Id, appInfo));
+
+
+            context.DeveloperMl.DeveloperService.Edit(context.Developer.Id, dvName, context.Developer.Email, dvWebSite);
+            appInfo.ShortApplicationInfo.ShortDescription = null;
+            AssertException<Exception>(() => context.DeveloperMl.ApplicationUploadService.Submit(app.Id, appInfo));
+            appInfo.ShortApplicationInfo.ShortDescription = "shortDesc";
+            appInfo.ShortApplicationInfo.Description = null;
+            AssertException<Exception>(() => context.DeveloperMl.ApplicationUploadService.Submit(app.Id, appInfo));
+            appInfo.ShortApplicationInfo.Description = "description";
+            appInfo.ShortApplicationInfo.BigPictureId = null;
+            AssertException<Exception>(() => context.DeveloperMl.ApplicationUploadService.Submit(app.Id, appInfo));
+            appInfo.ShortApplicationInfo.BigPictureId = Guid.NewGuid();
+            appInfo.ShortApplicationInfo.SmallPictureId = null;
+            AssertException<Exception>(() => context.DeveloperMl.ApplicationUploadService.Submit(app.Id, appInfo));
+            appInfo.ShortApplicationInfo.SmallPictureId = Guid.NewGuid();
+
+            // check name , url dublicating
+            appInfo.ShortApplicationInfo.Name = "app2";
+            app2 = context.DeveloperMl.ApplicationUploadService.Create(appInfo);
+            appInfo.ShortApplicationInfo.Url = "http://test.app1.com";
+            AssertException<Exception>(() => context.DeveloperMl.ApplicationUploadService.Submit(app2.Id, appInfo));
+            appInfo.ShortApplicationInfo.Name = "app1";
+            appInfo.ShortApplicationInfo.Url = "http://test.app2.com";
+            AssertException<Exception>(() => context.DeveloperMl.ApplicationUploadService.Submit(app2.Id, appInfo));
+
+
         }
 
         [Test]
@@ -188,6 +236,28 @@ namespace Chalkable.Tests.Services.Master
             Assert.IsFalse(app.OriginalRef.HasValue);
             Assert.AreEqual(context.DeveloperMl.ApplicationService.GetApplications().Count, 1);
 
+        }
+
+        [Test]
+        public void ChangeApplicationTypeTest()
+        {
+            var context = CreateDeveloperSchoolTestContext();
+            var app = CreateDefaultDraftApp(SysAdminMasterLocator, context, "app1", "http://test.app1.com");
+            Assert.IsFalse(app.IsInternal);
+
+            //security test
+            AssertException<Exception>(() => context.AdminGradeSl.ServiceLocatorMaster.ApplicationUploadService.ChangeApplicationType(app.Id, true));
+            AssertException<Exception>(() => context.AdminEditSl.ServiceLocatorMaster.ApplicationUploadService.ChangeApplicationType(app.Id, true));
+            AssertException<Exception>(() => context.AdminViewSl.ServiceLocatorMaster.ApplicationUploadService.ChangeApplicationType(app.Id, true));
+            AssertException<Exception>(() => context.FirstTeacherSl.ServiceLocatorMaster.ApplicationUploadService.ChangeApplicationType(app.Id, true));
+            AssertException<Exception>(() => context.FirstStudentSl.ServiceLocatorMaster.ApplicationUploadService.ChangeApplicationType(app.Id, true));
+            AssertException<Exception>(() => context.DeveloperMl.ApplicationUploadService.ChangeApplicationType(app.Id, true));
+
+            SysAdminMasterLocator.ApplicationUploadService.ChangeApplicationType(app.Id, true);
+            Assert.IsTrue(SysAdminMasterLocator.ApplicationService.GetApplicationById(app.Id).IsInternal);
+            Assert.AreEqual(context.AdminGradeSl.ServiceLocatorMaster.ApplicationService.GetApplications().Count, 0);
+            SysAdminMasterLocator.ApplicationUploadService.ChangeApplicationType(app.Id, false);
+            Assert.IsFalse(SysAdminMasterLocator.ApplicationService.GetApplicationById(app.Id).IsInternal);
         }
 
         public static Application CreateDefaultDraftApp(IServiceLocatorMaster sysLocator, DeveloperSchoolTestContex developerContext, string name, string url)
