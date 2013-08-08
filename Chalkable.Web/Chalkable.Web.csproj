@@ -227,6 +227,7 @@
     <Compile Include="Models\CalendarsViewData\AttendanceCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\DisciplineCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\MonthCalendarViewData.cs" />
+    <Compile Include="Models\CalendarsViewData\TeacherClassWeekCalendarViewData.cs" />
     <Compile Include="Models\CategoryViewData.cs" />
     <Compile Include="Models\ChalkableApiExplorerViewData\ApiExplorerControllerViewData.cs" />
     <Compile Include="Models\ChalkableApiExplorerViewData\ApiExplorerDropdownItemViewData.cs" />

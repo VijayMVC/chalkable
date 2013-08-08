@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
+using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.CalendarsViewData;
 
@@ -46,6 +48,33 @@ namespace Chalkable.Web.Controllers.CalendarControllers
                 start = start.AddDays(1);
             } while (start <= end);
             return res;
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult TeacherClassWeek(DateTime? date, Guid classId)
+        {
+            DateTime start, end;
+            WeekCalendar(ref date, out start, out end);
+
+            var res = new List<TeacherClassWeekCalendarViewData>();
+            MarkingPeriod mp = null;
+            IList<ClassPeriod> classPeriods = new List<ClassPeriod>();
+            var schoolYearId = GetCurrentSchoolYearId();
+            var days = SchoolLocator.CalendarDateService.GetLastDays(schoolYearId, false, start, end);
+
+            for (var i = 0; i <= days.Count; i++)
+            {
+                var d = days[i];
+                if (d == null || !d.ScheduleSectionRef.HasValue || !d.MarkingPeriodRef.HasValue) continue;
+                if (mp == null || mp.EndDate.Date < d.DateTime.Date)
+                {
+                    mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(d.DateTime.Date);
+                    classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(mp.Id, classId, null, null, null);
+                }
+                var currentClassPeriods = classPeriods.Where(x => x.Period.SectionRef == d.ScheduleSectionRef).ToList();
+                res.Add(TeacherClassWeekCalendarViewData.Create(d.DateTime.Date, currentClassPeriods));
+            }
+            return Json(res);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
