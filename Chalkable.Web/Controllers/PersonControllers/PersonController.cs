@@ -127,5 +127,16 @@ namespace Chalkable.Web.Controllers.PersonControllers
             SchoolLocator.PersonService.Edit(model.PersonId, model.Email, model.FirstName, model.LastName, model.Gender, model.Salutation, model.BirthdayDate);
             return EditPersonAdditionalInfo(model);
         }
+
+        public ActionResult ReChangePassword(Guid id, string newPassword)
+        {
+            if (MasterLocator.Context.UserId == id)
+            {
+                MasterLocator.UserService.ChangePassword(MasterLocator.Context.Login, newPassword);
+                //MixPanelService.ChangedPassword(ServiceLocator.Context.UserName);
+                return Json(true);
+            }
+            throw new ChalkableException(ChlkResources.ERR_NOT_CURRENT_USER);
+        }
     }
 }
