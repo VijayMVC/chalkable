@@ -1,0 +1,13 @@
+.bg-tasks
+    +Grid('backgroundtask', 'logsPage', self.items, [self.bgTaskId.valueOf(), true]).not-transparent
+        +GridHead()
+            .th Type
+            .th Message
+            .th Added
+        +GridBody()
+            each item in self.items.getItems()
+                +GridRow()
+                    .td= item.getId().valueOf()
+                    .td= item.getMessage()
+                    .td//= item.getAdded().toString('d/m/y')
+
