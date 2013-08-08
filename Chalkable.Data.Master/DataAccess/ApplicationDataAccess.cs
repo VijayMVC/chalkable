@@ -264,6 +264,7 @@ namespace Chalkable.Data.Master.DataAccess
             sql.Append("Select * from Application a where ");
             sql.Append("(").Append(string.Format("[{0}] = @{0} or ([{1}] = @{1} and [{1}] is not null)", Application.NAME_FIELD, Application.URL_FIELD)).Append(")");
             sql.Append(" and (").Append(string.Format("[{0}] is null or [{0}] <> @{0}", Application.ORIGINAL_REF_FIELD)).Append(")");
+            sql.AppendFormat(" and a.[Id] <> @{0}", Application.ID_FIELD);
             sql.Append(string.Format(" and not exists (select * from Application where [{0}] = a.[{1}] and [{1}] = @{1})", Application.ORIGINAL_REF_FIELD, Application.ID_FIELD));
             var ps = new Dictionary<string, object> {
                                                         {Application.ID_FIELD, currentApplicationId},

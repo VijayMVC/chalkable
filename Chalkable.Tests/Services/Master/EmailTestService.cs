@@ -43,32 +43,32 @@ namespace Chalkable.Tests.Services.Master
 
         public void SendInviteToPerson(Person person, string confirmationKey, string message, string messageTemplate)
         {
-            throw new NotImplementedException();
+            return;
         }
 
         public void SendResettedPasswordToPerson(Person person, string confirmationKey)
         {
-            throw new NotImplementedException();
+            return;
         }
 
         public void SendNotificationToPerson(Person person, string message)
         {
-            throw new NotImplementedException();
+            return;
         }
 
         public void SendMailToFriend(string fromMail, string toMail, string message, string subject = null)
         {
-            throw new NotImplementedException();
+            return;
         }
 
         public void SendApplicationEmailToDeveloper(Application application)
         {
-            throw new NotImplementedException();
+            return;
         }
 
         public void SendApplicationEmailToSysadmin(Application application)
         {
-            throw new NotImplementedException();
+            return;
         }
     }
 

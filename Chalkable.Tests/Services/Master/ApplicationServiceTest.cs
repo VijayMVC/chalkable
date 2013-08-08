@@ -28,6 +28,7 @@ namespace Chalkable.Tests.Services.Master
             AssertException<Exception>(() => context.FirstStudentSl.ServiceLocatorMaster.ApplicationUploadService.Create(appInfo));
 
             var application = context.DeveloperMl.ApplicationUploadService.Create(appInfo);
+            Assert.AreEqual(application.State, ApplicationStateEnum.Draft);
             CheckApplication(appInfo, application);
             AssertAreEqual(application, context.DeveloperMl.ApplicationService.GetApplicationById(application.Id));
             Assert.AreEqual(context.DeveloperMl.ApplicationService.GetApplications().Count, 1);
@@ -63,7 +64,7 @@ namespace Chalkable.Tests.Services.Master
             appInfo.ApplicationPrices = ApplicationPricesInfo.Create(2, 40, 2000);
             appInfo.ApplicationAccessInfo = ApplicationAccessInfo.Create(false, false, false, false, true, true);
 
-            //security check 
+            //security test 
             AssertException<Exception>(() => context.AdminGradeSl.ServiceLocatorMaster.ApplicationUploadService.UpdateDraft(app.Id, appInfo));
             AssertException<Exception>(() => context.AdminEditSl.ServiceLocatorMaster.ApplicationUploadService.UpdateDraft(app.Id, appInfo));
             AssertException<Exception>(() => context.AdminViewSl.ServiceLocatorMaster.ApplicationUploadService.UpdateDraft(app.Id, appInfo));
@@ -71,6 +72,7 @@ namespace Chalkable.Tests.Services.Master
             AssertException<Exception>(() => context.FirstStudentSl.ServiceLocatorMaster.ApplicationUploadService.UpdateDraft(app.Id, appInfo));
 
             app = context.DeveloperMl.ApplicationUploadService.UpdateDraft(app.Id, appInfo);
+            Assert.AreEqual(app.State, ApplicationStateEnum.Draft);
             CheckApplication(appInfo, app);
             AssertAreEqual(app, context.DeveloperMl.ApplicationService.GetApplicationById(app.Id));
 
@@ -85,15 +87,59 @@ namespace Chalkable.Tests.Services.Master
             appInfo.ShortApplicationInfo.Name = "app1";
             var app2 = context.DeveloperMl.ApplicationUploadService.Create(appInfo);
             appInfo.ShortApplicationInfo.Url = "http://test.app2.com";
+            Assert.IsTrue(context.DeveloperMl.ApplicationUploadService.Exists(app2.Id, 
+                appInfo.ShortApplicationInfo.Name, appInfo.ShortApplicationInfo.Url));
             AssertException<Exception>(() => context.DeveloperMl.ApplicationUploadService.UpdateDraft(app2.Id, appInfo));
             appInfo.ShortApplicationInfo.Name = "app2";
             appInfo.ShortApplicationInfo.Url = "http://test.app1.com";
+            Assert.IsTrue(context.DeveloperMl.ApplicationUploadService.Exists(app2.Id,
+                appInfo.ShortApplicationInfo.Name, appInfo.ShortApplicationInfo.Url));
             AssertException<Exception>(() => context.DeveloperMl.ApplicationUploadService.UpdateDraft(app2.Id, appInfo));
          
-            //TODO: check access other developers to current app ... (fix developerSchoolContext)
+            //TODO: test access other developers to current app ... (fix developerSchoolContext)
         }
 
+        [Test]
+        public void SubmitTest()
+        {
+            
+        }
 
+        [Test]
+        public void ApproveRejectTest()
+        {
+            var context = CreateDeveloperSchoolTestContext();
+            var appInfo = PrepareDefaultAppInfo(SysAdminMasterLocator, context.Developer.Id, "app1", "http://test.app1.com");
+            var app = context.DeveloperMl.ApplicationUploadService.Create(appInfo);
+
+            //security test
+            AssertException<Exception>(() => context.AdminGradeSl.ServiceLocatorMaster.ApplicationUploadService.ApproveReject(app.Id, true));
+            AssertException<Exception>(() => context.AdminEditSl.ServiceLocatorMaster.ApplicationUploadService.ApproveReject(app.Id, true));
+            AssertException<Exception>(() => context.AdminViewSl.ServiceLocatorMaster.ApplicationUploadService.ApproveReject(app.Id, true));
+            AssertException<Exception>(() => context.FirstTeacherSl.ServiceLocatorMaster.ApplicationUploadService.ApproveReject(app.Id, true));
+            AssertException<Exception>(() => context.FirstStudentSl.ServiceLocatorMaster.ApplicationUploadService.ApproveReject(app.Id, true));
+            AssertException<Exception>(() => context.DeveloperMl.ApplicationUploadService.ApproveReject(app.Id, true));
+
+            Assert.IsFalse(SysAdminMasterLocator.ApplicationUploadService.ApproveReject(app.Id, true));
+            app = context.DeveloperMl.ApplicationUploadService.Submit(app.Id, appInfo);
+            Assert.IsTrue(SysAdminMasterLocator.ApplicationUploadService.ApproveReject(app.Id, true));
+            app = context.DeveloperMl.ApplicationService.GetApplicationById(app.Id);
+            Assert.AreEqual(app.State, ApplicationStateEnum.Approved);
+            Assert.IsFalse(SysAdminMasterLocator.ApplicationUploadService.ApproveReject(app.Id, false));
+          
+            app = context.DeveloperMl.ApplicationUploadService.Submit(app.Id, appInfo);
+            Assert.IsTrue(SysAdminMasterLocator.ApplicationUploadService.ApproveReject(app.Id, false));
+            app = context.DeveloperMl.ApplicationService.GetApplicationById(app.Id);
+            Assert.AreEqual(app.State, ApplicationStateEnum.Rejected);
+
+
+        }
+
+        [Test]
+        public void GoLiveUnListTest()
+        {
+                        
+        }
 
         public static Application CreateDefaultDraftApp(IServiceLocatorMaster sysLocator, DeveloperSchoolTestContex developerContext, string name, string url)
         {
@@ -103,7 +149,7 @@ namespace Chalkable.Tests.Services.Master
         public static BaseApplicationInfo PrepareDefaultAppInfo(IServiceLocatorMaster sysLocator, Guid developerId, string name, string url)
         {
             var shortAppInfo = ShortApplicationInfo.Create(name, url, "test_short_desc",
-                               "test_desc", "http://test.app.video.com", null, null);
+                               "test_desc", "http://test.app.video.com", Guid.NewGuid(), Guid.NewGuid());
 
             var appPrice = ApplicationPricesInfo.Create(1, 30, 1000);
             var appAccess = ApplicationAccessInfo.Create(true, true, false, false, true, true);
