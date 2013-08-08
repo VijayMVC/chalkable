@@ -15,7 +15,7 @@
     .info-view
         .title
             .avatar-container.with-border
-                img(src="http://dev.chalkable.com/PersonPicture/Read?pictureId=132313&width=128&height=128&gender=m").avatar-128.avatar
+                img(src=self.getPictureUrl()).avatar-128.avatar
             h1=self.getFullName()
         .sections
             .sections-info
@@ -53,8 +53,8 @@
             .title
                 .avatar-block
                     .avatar-container.with-border
-                        img(src="http://dev.chalkable.com/PersonPicture/Read?pictureId=132313&width=128&height=128&gender=m").avatar-128.avatar
-                    button.simple-gray-button.file Upload
+                        img(src=self.getPictureUrl()).avatar-128.avatar
+                    button(type="button").simple-gray-button.file Upload
                         +FileUpload('teachers', 'uploadPicture', [self.getId().valueOf()])#add-attachment.simple-gray-button
                 .name-block
                     input(name="firstname", value=self.getFirstName(), class="validate[required]")

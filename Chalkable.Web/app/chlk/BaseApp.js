@@ -61,6 +61,7 @@ NAMESPACE('chlk', function (){
                 window.nextMarkingPeriod && this.getContext().getSession().set('nextMarkingPeriod', serializer.deserialize(window.nextMarkingPeriod, chlk.models.schoolYear.MarkingPeriod));
                 window.finalizedClassesIds && this.getContext().getSession().set('finalizedClassesIds', window.finalizedClassesIds);
                 window.currentChlkPerson && this.getContext().getSession().set('currentPerson', serializer.deserialize(window.currentChlkPerson, chlk.models.people.User));
+                this.getContext().getSession().set('azurePictureUrl', window.azurePictureUrl);
             }
         ]);
 });

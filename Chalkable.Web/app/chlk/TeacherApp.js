@@ -5,6 +5,7 @@ REQUIRE('chlk.controllers.FeedController');
 REQUIRE('chlk.controllers.AccountController');
 REQUIRE('chlk.controllers.CalendarController');
 REQUIRE('chlk.controllers.SettingsController');
+REQUIRE('chlk.controllers.SetupController');
 REQUIRE('chlk.controllers.TeachersController');
 
 NAMESPACE('chlk', function (){

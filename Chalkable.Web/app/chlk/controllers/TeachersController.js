@@ -65,6 +65,7 @@ NAMESPACE('chlk.controllers', function (){
                 bDate && model.setBirthDateText(bDate.toString(res).replace(/&#100;/g, 'd'));
                 var gt = model.getGender() ? (model.getGender().toLowerCase() == 'm' ? 'Male' : 'Female') : '';
                 model.setGenderFullText(gt);
+                model.setPictureUrl(this.personService.getPictureURL(model.getId(), 128));
                 return model;
             },
 
@@ -74,7 +75,9 @@ NAMESPACE('chlk.controllers', function (){
                     .getInfo(personId)
                     .attach(this.validateResponse_())
                     .then(function(model){
-                        return this.prepareProfileData(model);
+                        var res = this.prepareProfileData(model);
+                        this.getContext().getSession().set('userModel', res);
+                        return res;
                     }.bind(this));
                 return this.PushView(chlk.activities.profile.InfoViewPage, result);
             },
@@ -95,7 +98,12 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.SchoolPersonId, Object]],
             function uploadPictureAction(personId, files){
                 var result = this.personService
-                    .uploadPicture(personId, files);
+                    .uploadPicture(personId, files)
+                    .then(function(loaded){
+                        console.info(loaded);
+                        return this.getContext().getSession().get('userModel');
+                    }.bind(this));
+                return this.UpdateView(chlk.activities.profile.InfoViewPage, result);
             }
         ])
 });
