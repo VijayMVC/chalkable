@@ -19,8 +19,8 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.SchoolPersonId, String]],
             ria.async.Future, function changePassword(personId, password){
-                return this.get('Person/ReChange/Password', Boolean, {
-                    personId: personId.valueOf(),
+                return this.get('Person/ReChangePassword', Boolean, {
+                    id: personId.valueOf(),
                     newPassword: password
                 });
             },

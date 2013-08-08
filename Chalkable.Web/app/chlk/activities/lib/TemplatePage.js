@@ -33,15 +33,11 @@ NAMESPACE('chlk.activities.lib', function () {
                 this._pageClass && this._wrapper.addClass(this._pageClass);
             },
 
-            [[ria.async.Future]],
-            OVERRIDE, ria.async.Future, function refreshD(future) {
+            OVERRIDE, VOID, function startLoading() {
                 this.dom.addClass(LOADING_CLASS);
-                return BASE(future);
             },
 
-            [[String]],
-            OVERRIDE, VOID, function onModelComplete_(msg_) {
-                BASE();
+            OVERRIDE, VOID, function stopLoading() {
                 this.dom.removeClass(LOADING_CLASS);
             },
 
