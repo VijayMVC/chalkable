@@ -1,0 +1,764 @@
+@import "compass/css3/images";
+@import "compass/css3/border-radius";
+@import "compass/css3/transition";
+@import "compass/css3/box-shadow";
+
+$ext-grad: linear-gradient(top, #f3eee0, #ece1c1);
+$box-bg: #baa76e;
+$light-border : #af9c60;
+
+@mixin inner-shadow($inner-shadow){
+  box-shadow: inset 1px 1px 0px 0px #958658,  inset -1px -1px 0px 0px #f8f3e3;
+}
+
+@mixin marking-period-border($side){
+  border-#{$side}: 2px solid #dcd0ad;
+}
+
+@mixin font-smoothing($val: antialiased) {
+  -webkit-font-smoothing: $val;
+  -moz-font-smoothing: $val;
+  -ms-font-smoothing: $val;
+  -o-font-smoothing: $val;
+}
+
+.x-layer.x-combo-list.brown-list.mp1{
+  background: #f3eee0;
+  @include border-radius(5px);
+  border-color: #af9c60;
+
+  .x-combo-list-inner{
+    background: transparent;
+
+    .x-combo-list-item{
+      background: transparent !important;
+      @include border-radius(5px);
+      border-color: transparent;
+      padding-left: 15px;
+
+      &.x-combo-selected{
+        background: #f9f5eb !important;
+        border: none!important;
+      }
+    }
+  }
+}
+.new-bt-background{
+  @include background(linear-gradient(top, #f3eee0, #ece1c1));
+  @include border-radius(5px);
+  @include box-shadow(1px 1px 1px rgba(0, 0, 0, 0.2));
+  border: 1px solid $light-border;
+  cursor: pointer;
+
+  &:hover{
+    @include background(linear-gradient(top, #ece1c1, #f3eee0));
+  }
+}
+
+.generate-period-combo{
+  >DIV{
+    float: right;
+  }
+}
+
+.new-check-box{
+  INPUT[type="checkbox"]{
+   // visibility: hidden;
+    position: absolute;
+    display: none;
+  }
+  >DIV{
+    position: relative;
+    .new-checkbox-div{
+      background-image: url(images/new-check-box-img.png) !important;
+      background-repeat: no-repeat !important;
+      position: absolute;
+      top: 3px;
+      height: 12px;
+      width: 13px;
+    }
+    .new-check-marker{
+      background-image: url(images/new-check-marker.png) !important;
+      background-repeat: no-repeat !important;
+      height: 13px;
+      width: 16px;
+      position: relative;
+    }
+    .checkbox-text{
+      padding-left: 12px;
+      position: relative;
+      top: 1px;
+    }
+  }
+}
+
+BODY {
+  DIV.page {
+    #content {
+      DIV#content-wrapper{
+        &.settings, &.profile, &.class-profile{
+          #main-wrapper {
+            background-image: url(images/profile/paper-bg.png);
+            #main{
+
+              .back-button{
+                background: url(images/buttons/back-br.png) 8px 11px no-repeat !important;
+
+                BUTTON.x-btn-text{
+                  padding-left: 29px;
+                  padding-top: 1px;
+                }
+              }
+
+              .settings-toolbar-button{
+                background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat !important;
+                padding-left: 0px;
+                margin-left: 15px;
+
+                BUTTON.x-btn-text{
+                  padding-left: 11px;
+                  padding-top: 1px;
+                  width: 88px;
+                }
+              }
+
+              div.x-toolbar.x-small-editor.status.x-toolbar-layout-ct{
+                background: $box-bg !important;
+              }
+
+              #empty-status-bt{
+                width: 117px !important;
+              }
+
+              //:not(#attendance-toolbar){
+                >DIV>DIV.chlk-toolbar, .x-grid3-header, .x-grid3 .x-grid3-scroller .x-grid3-row-selected, .x-grid3 .x-grid3-scroller .x-grid3-row-over, .alphabet-selector {
+                  //background-image: url(images/profile/toolbar-bg.gif);
+                  @include background(linear-gradient(top, #f3eee0, #ece1c1));
+
+                  .x-toolbar-cell table.x-btn-pressed, .x-toolbar-cell table:hover{
+                    @include background(linear-gradient(top, #f3eedf, #e1d3a6));
+                  }
+
+                  .x-toolbar-cell table button{
+                    color: #957633;
+                    text-shadow: 0 1px 0 white;
+                  }
+                  div.bg-panel {
+                    background: $box-bg !important;
+                    border-top: 1px solid #958658 !important;
+                    border-left: 1px solid #958658 !important;
+                  }
+
+                  &.x-grid-row-over{
+                    opacity: 0.6;
+                  }
+                }
+              //}
+
+              .chalkable-period-view{
+
+                >DIV{
+                  height: 100%;
+                  >DIV{
+                    height: 100%;
+                  }
+                }
+
+                //border: 1px solid #ccc;
+                border-right: none;
+                border-bottom: none;
+                height: 760px ;
+
+                background-color: $box-bg !important;
+                DIV.hours{
+                  left : -29px;
+                  height: 100%;
+                  width: 40px;
+                  position: absolute;
+                  overflow: hidden;
+                  .hour{
+                    position: absolute;
+                    font-size: 11px;
+                    color: white;
+                    background: url(images/common/week-period-bg-2.png) no-repeat;
+                    height: 25px;
+                    width: 30px;
+                    font-family: Arial;
+                    font-weight: lighter;
+                    @include font-smoothing(antialiased);
+                    text-align: center;
+                    padding-top: 2px;
+                    text-shadow: 0 1px 0 white;
+                    span{
+                      font-size: 10px;
+                      @include font-smoothing(antialiased);
+
+                    }
+                  }
+                }
+                .schedule_sections{
+                  height: 100%;
+                  position: absolute;
+                  margin-left: 9px;
+
+                  DIV.header {
+                    height: 100%;
+                    background: url(images/status-bg.png);
+                    > DIV {
+                      height: 100%;
+                      line-height: 24px;
+                      display: inline-block;
+                      text-align: center;
+                      color: #666;
+                      font-weight: bold;
+                      font-size: 12px;
+
+                      &:not(:first-child){
+                        border-left: 1px solid #dcd0ad;
+                      }
+
+                      &:not(:last-child){
+                        border-right: 1px  solid #dcd0ad;
+                      }
+                    }
+                  }
+                }
+                .periods{
+                  position: relative;
+                  left: -10px;
+                }
+                DIV.items{
+
+                  height: 12 * 60px + 30px;
+                  position: relative;
+                  top: 16px;
+                  margin-left: 20px;
+
+                  .item.gradient-cnt{
+                    position: absolute;
+                    cursor: pointer;
+
+                    height: 50px;
+                    min-height: 19px;
+                    overflow: hidden;
+                    margin-left: 0.5%;
+
+                    >DIV{
+                      //background-image: url(images/buttons/class-schedule-bt.png) !important;
+                      //background-repeat: no-repeat !important;
+                      //background-size: 100% 100% !important;
+                      //color: #ffffff;
+                      @include background(linear-gradient(top, #f3eee0, #ece1c1));
+                      @include box-shadow(0px 1px 1px rgba(0, 0, 0, 0.2));
+                      border-radius: 6px;
+                      color: #423A22;
+                      border: 1px solid #897842;
+                      font-family: Arial;
+                      font-weight: bold;
+                      text-shadow: 0px 1px 0px white;
+                      text-align: center;
+                      padding-top: 4%;
+                      padding-bottom: 7%;
+                      width: 80%;
+                      height: 40%;
+                      display: block;
+                      position: relative;
+                      margin: 2% 0% 0% 4%;
+                    }
+                  }
+                }
+              }
+
+
+              .marking-period-view{
+                padding-top: 15px;
+                padding-bottom: 15px;
+                width: 670px;
+                left: -3px;
+                position: relative;
+
+              }
+
+              .view-title,.view-info,.chalkable-period-view{
+
+                width : auto;
+                @include border-radius(15px);
+                @include inner-shadow(inner-shadow);
+                padding: 7px 5px 7px 10px;
+
+                .new-combo{
+                  IMG{
+                    height:   27px !important;
+                    background-image: url(images/common/select-2.png) !important;
+                    background-repeat: no-repeat;
+
+                  }
+
+                  //Ext button selector
+                  INPUT{
+                    color : #717171 !important;
+                    text-align: center;
+                    height: 23px !important;
+                    @include border-radius(7px 0 0 7px);
+                    @include background(linear-gradient(top, #f3eee0, #ece1c1));
+                  }
+                  input.x-form-field.x-form-text{
+                    @include border-radius(7px 0 0 7px);
+                    @include background(linear-gradient(top, #f3eee0, #ece1c1));
+                  }
+                }
+
+                .marking-period-count-box{
+                  float: right;
+                  position: relative;
+                  top: -3px;
+                  display: inline-block;
+                  left: -33px;
+                }
+
+              }
+
+              .view-info{
+                padding-left : 25px;
+                overflow-x: auto;
+                padding-top: 20px;
+
+                &.blockScheduling{
+                  background: $box-bg !important;
+                }
+
+                &.markingPeriodView{
+                  background: $box-bg !important;
+                  @include border-radius(5px) ;
+                  background: $box-bg !important;
+
+
+
+                }
+
+                .selected{
+                  opacity: 1 !important;
+                }
+
+                .resets-every-week-chb{
+                  padding-top: 3px;
+                  padding-bottom: 10px;
+                  color: #51595D;
+                  font-size: 12px;
+                  margin-left: 400px;
+                  top: 3px;
+                  position: relative;
+                  .new-checkbox-div{
+                    top: 7px;
+                    left: -12px;
+                    visibility: hidden;
+                    display: none;
+                  }
+                }
+
+                .marking-period-info{
+                  cursor: pointer;
+                  opacity: 0.5;
+                  display: table-cell;
+                  width : 106px;
+                  height : 65px;
+
+
+                  &:not(:last-child){
+                    .marking-period-title{
+                      @include marking-period-border(bottom);
+                    }
+                  }
+
+                  .separator{
+                    height: 15px;
+                    top: -8px;
+                    position: relative;
+
+                    @include marking-period-border(left);
+
+                    &:last-child{
+                       @include marking-period-border(right);
+                    }
+                  }
+
+                  .marking-period-date{
+                    INPUT{
+                      width: 60px  !important;
+                      left: 12px;
+                      top: -6px;
+                      position: relative;
+                      border: 1px solid #c9c9c9  !important;
+                      @include background(linear-gradient(top, #f3eee0, #ece1c1));
+                    }
+                    IMG{
+                      position: relative;
+                      left: -78px;
+                    }
+                  }
+                  .marking-period-title{
+                    font: bold 16px Arial;
+                    text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
+                    color: #532f18;
+                    text-align: center;
+
+
+                    .mp-select-bt.new-check-box{
+                      >DIV{
+                        text-align: center;
+                        margin-left: 38px;
+                        top: -1px;
+                        left: -24px;
+                        .new-checkbox-div{
+                          visibility: hidden;
+                        }
+                        &:hover{
+                          @include background(linear-gradient(top, #fcfcfc, #dcdcdc));
+                          @include border-radius(8px);
+                          border: 1px solid #c9c9c9  !important;
+                          .new-checkbox-div{
+                            visibility: visible;
+                          }
+                        }
+                      }
+                    }
+
+                  }
+                }
+                .combo-box-style,.sections-info{
+                  display: inline-block;
+                }
+                .section-combo-box-div{
+                  position: relative;
+                  left: -15px;
+                  top: 8px;
+                  padding-left: 10px;
+                }
+                .weekdays-combo-box-div{
+                  position: relative;
+                  top: 0px;
+                  left: -15px;
+                  padding-left: 10px;
+
+                }
+                .sections-info{
+                  >DIV{
+                    @include border-radius(8px);
+                    border: 1px solid #d7d7d7;
+                    overflow: hidden;
+
+                    .second-week-div{
+                      display: inline-block;
+                      height: 50px;
+                      padding-bottom: 5px;
+                      padding-top: 5px;
+                      background: #8d7d4b;
+
+                      .day-section{
+                        display: inline-block;
+                        height: 50px;
+                        text-align: center;
+                        vertical-align: top;
+
+                        color: white;
+                        font-family: Arial;
+                        text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.21);
+
+                        .day{
+                          font-size: 14px;
+                        }
+                        .section-name{
+                          font-size: 18px;
+                          padding-top: 10px;
+                        }
+                      }
+                      &:not(:first-child){
+                        .day-section{
+                          border-left: 1px solid #d7d7d7;
+                        }
+                      }
+                      &:not(:last-child){
+                        .day-section{
+                          //border-right: 1px solid #ffffff;
+                        }
+                      }
+
+                    }
+                    .gradient{
+                      @include background(linear-gradient(top, #f3eee0, #ece1c1));
+                      .day-section{
+                        color: #423a22;
+                        text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.75);
+                      }
+                    }
+
+                  }
+                }
+              }
+
+              .view-title{
+                margin-bottom: 5px;
+                .title{
+
+                  color : #3a6e88;
+                  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+                  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.75);
+                  font-weight: 300;
+                  font-size: 18px;
+                }
+                .new-bt-background.add-period{
+                  position: relative;
+                  padding-left: 6px;
+                  padding-top: 2px;
+                  padding-bottom: 2px;
+                  padding-right: 5px;
+                  font-size: 14px;
+                  font-weight: bold;
+                  text-shadow: 0 1px 0 white;
+                  white-space: nowrap;
+                  width: 100px;
+                  float: right;
+                  top: -7px;
+
+                  #add-period-bt.chalk-add{
+                    background: url(images/icons/add-item-br.png) 0% 50% no-repeat !important;
+                  }
+
+                  DIV{
+                    padding-left: 20px;
+                    padding-bottom: 3px;
+                    padding-top: 3px;
+                  }
+                }
+
+                .schedule-switch-div{
+                  height: 25px;
+                  width: 80px;
+                  background: #8b6a3a;
+                  @include border-radius(5px);
+                  @include box-shadow(inset 2px 2px 1px -1px rgba(0, 0, 0, 0.2));
+                  border: 1px solid #653900;
+                  float: right;
+                  position: relative;
+                  top: -3px;
+                  color: #ffffff;
+                  font-weight: bold;
+                  font-size: 12px;
+                  z-index: 0;
+
+
+
+                  .switch-lable{
+                    @include border-radius(5px);
+                    width: 40px;
+                    height: 25px;
+                    @include background(linear-gradient(top, #f3eee0, #ece1c1));
+                    @include box-shadow(0px 1px 2px 1px rgba(0, 0, 0, 0.3));
+                    position: absolute;
+                    top: 0px;
+                    left: 40px;
+                    cursor: pointer;
+                    display: block;
+                    z-index: 1;
+                    @include transition-property("all");
+                    @include transition-duration("0.4s");
+                  }
+
+                  INPUT[type="checkbox"]{
+                    visibility: hidden;
+                    width: 40px;
+                    height: 25px;
+                  }
+                }
+                .schedule-switch-div:before{
+                  content: 'YES';
+                  left : 9px;
+                  top: 4px;
+                  position: absolute;
+                  z-index: 0;
+                }
+                .schedule-switch-div:after{
+                  content: 'NO';
+                  right: 9px;
+                  top: 4px;
+                  position: absolute;
+                  z-index: 0;
+
+                }
+
+
+                .schedule-switch-div input[type=checkbox]:checked + lable{
+                  left: 0px;
+                  @include box-shadow(0px 1px 2px 1px rgba(0, 0, 0, 0.3));
+
+                }
+                #switch-lable-id{
+                  @include box-shadow(0px 1px 2px 1px rgba(0, 0, 0, 0.3));
+                }
+              }
+
+
+
+              .new-combo.schedule{
+                .form-ok{
+                  display: none !important;
+                }
+              }
+            }
+          }
+          #main-top, #footer {
+            background-image: url(images/profile/paper-top-bottom.png) !important;
+          }
+        }
+
+      }
+    }
+  }
+}
+
+
+DIV.pop-up-window.schedule-pop-up{
+
+  border: 1px solid $light-border;
+  background: #efe6ce;
+
+  .triangle-right{
+    background: url(images/common/window-triangle-left-2.png) no-repeat;
+  }
+  .x-window-tl{
+    background: none !important;
+  }
+
+  .pop-up{
+    text-shadow: 0 1px 0 white;
+    white-space: nowrap;
+    .period-number{
+        color: #532f18;
+        font: bold 16px Arial;
+        text-shadow: 0px 1px 0px white;
+        text-align: center;
+        padding-bottom: 10px;
+        background: url(images/common/dialog-separator-br.png) bottom no-repeat !important;
+      > SPAN{
+        font: bold 16px Arial !important;
+      }
+    }
+    .info{
+      height:15px !important;
+      background: url(images/common/dialog-separator-br.png) bottom no-repeat !important;
+      .up{
+        font-size: 12px !important;
+        font-family: Georgia;
+        font-style: italic;
+        color: #423a22;
+      }
+    }
+
+    .period-edit-info{
+
+      height: 40px;
+      &:not(:last-child){
+        background: url(images/common/dialog-separator-br.png) bottom no-repeat;
+      }
+
+
+      .new-bt-background.delete-period-bt{
+        width: 85px;
+        font-size: 14px !important;
+        padding-left: 9px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        padding-right: 5px;
+        margin-left: 50px;
+        margin-top: 7px;
+      }
+
+      .edit-start-time,.title{
+        display: inline-block;
+        margin-left: 15px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+
+      .edit-start-time{
+        position: relative;
+        height: 20px;
+        .edit-div.new-combo.schedule{
+           INPUT{
+             text-align: center;
+             height: 23px !important;
+
+             color: #717171 !important;
+             font-size: 14px !important;
+
+           }
+           IMG{
+              height: 28px !important;
+           }
+        }
+      }
+
+      .title{
+        font-size: 18px;
+        color: #032633;
+        font-family: Arial;
+
+      }
+
+      .edit-div{
+
+
+        display: inline-block;
+        margin-left: 8px;
+        height: 26px !important;
+
+        INPUT{
+          height: 23px !important;
+          text-align: center;
+        }
+        .edit-bt{
+
+          color: #717171 !important;
+          font-size: 14px !important;
+          font-weight: bold !important;
+
+          @include background(linear-gradient(top, #f3eee0, #ece1c1));
+          @include border-radius(5px);
+          border: 1px solid #c9c9c9;
+          height: 26px !important;
+        }
+
+      }
+    }
+  }
+}
+#marking-period-count-box{
+  input[name=markingPeriodCount]{
+    @include background(linear-gradient(top, #f3eee0, #ece1c1));
+    border-top: 1px solid #AF9C60 !important;
+    border-left: 1px solid #AF9C60 !important;
+    border-bottom: 1px solid #AF9C60 !important;
+    IMG{
+      background-image: url(images/common/select-2.png) !important;
+    }
+  }
+}
+input[name=section-combo-box]{
+  width: 98px !important;
+  @include background(linear-gradient(top, #f3eee0, #ece1c1));
+  border-top: 1px solid #AF9C60 !important;
+  border-left: 1px solid #AF9C60 !important;
+  border-bottom: 1px solid #AF9C60 !important;
+}
+input[name=weekday-combo-box-name]{
+  width: 98px !important;
+  @include background(linear-gradient(top, #f3eee0, #ece1c1));
+  border-top: 1px solid #AF9C60 !important;
+  border-left: 1px solid #AF9C60 !important;
+  border-bottom: 1px solid #AF9C60 !important;
+}
+input#marking-period--checkbox{
+  display: block !important;
+  top: 10px;
+  left: -12px;
+}

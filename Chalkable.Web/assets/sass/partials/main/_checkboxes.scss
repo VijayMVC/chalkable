@@ -1,0 +1,119 @@
+.labeled-checkbox{
+
+  display: inline-block;
+  position: relative;
+  padding: 0 5px;
+  margin-bottom: 2px;
+  width: 119px;
+  vertical-align: top;
+  height: 26px;
+
+
+  &:nth-child(2n - 1){
+    margin-right: 50px;
+  }
+
+
+  label{
+    cursor: pointer;
+    font-size: 13px;
+    background: #DEDEDE;
+    color: #444;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 5px;
+    padding-left: 24px;
+    line-height: 25px;
+    display: inline-block;
+    text-align: left;
+  }
+  .checkbox{
+    position: relative;
+    z-index: 1;
+    margin: 7px 0;
+    width: auto;
+    &:checked{
+      & + label{
+        border: 1px solid #043d53;
+        @include box-shadow(inset 0 1px 1px 0 #96c3d8);
+        @include background(linear-gradient(top, #4c9cbc, #096485));
+        color: white;
+        line-height: 23px;
+        padding-left: 23px;
+      }
+    }
+  }
+
+}
+
+.slide-checkbox{
+  padding: 0;
+  display: inline-block;
+
+  >DIV{
+    width: 80px;
+    height: 25px;
+    background: #487991;
+    border: 1px solid #2A4653;
+    @include background(linear-gradient(top, #487991, #5E95B1));
+    //margin: 20px auto;
+    @include border-radius(5px);
+    position: relative;
+    //@include box-shadow(inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2));
+
+    &:after {
+      content: 'NO';
+      font: 12px/26px Arial, sans-serif;
+      color: #fff;
+      position: absolute;
+      right: 10px;
+      z-index: 0;
+      font-weight: bold;
+      top: 0px;
+      text-shadow: 1px 1px 0px rgba(255,255,255,.15);
+    }
+
+    &:before {
+      content: 'YES';
+      font: 12px/26px Arial, sans-serif;
+      color: #fff;
+      position: absolute;
+      left: 10px;
+      z-index: 0;
+      top: 0px;
+      font-weight: bold;
+    }
+
+    >LABEL{
+      display: block;
+      padding: 0 !important;
+      margin: 0;
+      width: 40px !important;
+      height: 25px;
+
+      @include border-radius(5px);
+      @include transition(left .4s ease);
+      cursor: pointer;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      z-index: 1;
+      //@include box-shadow(0px 2px 5px 0px rgba(0,0,0,0.3));
+      background: #CBCBCB;
+      @include background(linear-gradient(top, #CBCBCB, #8E8E8E));
+    }
+
+    >input{
+      visibility: hidden;
+
+      &[type=checkbox]:checked + label{
+        left: 40px;
+      }
+    }
+  }
+}

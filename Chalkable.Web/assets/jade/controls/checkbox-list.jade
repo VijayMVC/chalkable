@@ -1,0 +1,6 @@
+mixin CheckboxList(listName, checkboxPref, defaultVal)
+    -self.setParams({name: listName, checkboxPrefix: checkboxPref})
+    .checkbox-list
+        +Hidden(listName, defaultVal)
+        block
+
