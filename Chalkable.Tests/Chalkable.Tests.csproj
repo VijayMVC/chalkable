@@ -58,7 +58,7 @@
     <Compile Include="Services\Master\BaseMasterServiceLocatorTest.cs" />
     <Compile Include="Services\Master\CategoryServiceTest.cs" />
     <Compile Include="Services\Master\DepartmentServiceTest.cs" />
-    <Compile Include="Services\Master\DeveloperSchoolTestContex.cs" />
+    <Compile Include="Services\TestContext\DeveloperSchoolTestContex.cs" />
     <Compile Include="Services\Master\EmailTestService.cs" />
     <Compile Include="Services\Master\MasterServiceTestBase.cs" />
     <Compile Include="Services\Master\PictureServiceTest.cs" />
@@ -88,7 +88,7 @@
     <Compile Include="Services\School\PrivateMessageServiceTest.cs" />
     <Compile Include="Services\School\RoomServiceTest.cs" />
     <Compile Include="Services\School\ScheduleSectionServiceTest.cs" />
-    <Compile Include="Services\School\SchoolTestContext.cs" />
+    <Compile Include="Services\TestContext\SchoolTestContext.cs" />
     <Compile Include="Services\School\SchoolYearServiceTest.cs" />
     <Compile Include="Services\School\StudentAnnouncementServiceTest.cs" />
     <Compile Include="Services\ServiceTestBase.Assert.cs" />

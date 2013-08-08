@@ -12,6 +12,7 @@ using Chalkable.Data.Common;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 using Chalkable.Tests.Services.Master;
+using Chalkable.Tests.Services.TestContext;
 using NUnit.Framework;
 
 namespace Chalkable.Tests.Services.School
@@ -52,11 +53,10 @@ namespace Chalkable.Tests.Services.School
 
         protected void InitBaseData()
         {
-            var school = CreateTestSchool();
+            SchoolTestContext = CreateSchoolTestContext();
             var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var schoolSl = sysLocator.SchoolServiceLocator(school.Id);
-            SysAdminSchoolLocator = new BaseSchoolServiceLocatorTest(new BaseMasterServiceLocatorTest(schoolSl.Context));
-            SchoolTestContext = SchoolTestContext.Create(schoolSl);
+            var context = sysLocator.SchoolServiceLocator(SchoolTestContext.AdminGradeSl.Context.SchoolId.Value).Context;
+            SysAdminSchoolLocator = new BaseSchoolServiceLocatorTest(new BaseMasterServiceLocatorTest(context));
         }
 
     }

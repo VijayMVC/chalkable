@@ -7,6 +7,7 @@ using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
+using Chalkable.Tests.Services.TestContext;
 using NUnit.Framework;
 
 namespace Chalkable.Tests.Services.Master
@@ -71,6 +72,9 @@ namespace Chalkable.Tests.Services.Master
             AssertException<Exception>(() => context.FirstTeacherSl.ServiceLocatorMaster.ApplicationUploadService.UpdateDraft(app.Id, appInfo));
             AssertException<Exception>(() => context.FirstStudentSl.ServiceLocatorMaster.ApplicationUploadService.UpdateDraft(app.Id, appInfo));
 
+            var context2 = CreateDeveloperSchoolTestContext();
+            AssertException<Exception>(() => context2.DeveloperMl.ApplicationUploadService.UpdateDraft(app.Id, appInfo));
+
             app = context.DeveloperMl.ApplicationUploadService.UpdateDraft(app.Id, appInfo);
             Assert.AreEqual(app.State, ApplicationStateEnum.Draft);
             Assert.IsFalse(app.OriginalRef.HasValue);
@@ -97,7 +101,6 @@ namespace Chalkable.Tests.Services.Master
                 appInfo.ShortApplicationInfo.Name, appInfo.ShortApplicationInfo.Url));
             AssertException<Exception>(() => context.DeveloperMl.ApplicationUploadService.UpdateDraft(app2.Id, appInfo));
          
-            //TODO: test access other developers to current app ... (fix developerSchoolContext)
         }
 
         [Test]
@@ -113,6 +116,10 @@ namespace Chalkable.Tests.Services.Master
             AssertException<Exception>(() => context.AdminViewSl.ServiceLocatorMaster.ApplicationUploadService.Submit(app.Id, appInfo));
             AssertException<Exception>(() => context.FirstTeacherSl.ServiceLocatorMaster.ApplicationUploadService.Submit(app.Id, appInfo));
             AssertException<Exception>(() => context.FirstStudentSl.ServiceLocatorMaster.ApplicationUploadService.Submit(app.Id, appInfo));
+
+            var context2 = CreateDeveloperSchoolTestContext();
+            AssertException<Exception>(() => context2.DeveloperMl.ApplicationUploadService.Submit(app.Id, appInfo));
+
 
             app = context.DeveloperMl.ApplicationUploadService.Submit(app.Id, appInfo);
             CheckApplication(appInfo, app);
@@ -199,6 +206,10 @@ namespace Chalkable.Tests.Services.Master
             AssertException<Exception>(() => context.FirstTeacherSl.ServiceLocatorMaster.ApplicationUploadService.GoLive(app.Id));
             AssertException<Exception>(() => context.FirstStudentSl.ServiceLocatorMaster.ApplicationUploadService.GoLive(app.Id));
 
+            var context2 = CreateDeveloperSchoolTestContext();
+            AssertException<Exception>(() => context2.DeveloperMl.ApplicationUploadService.GoLive(app.Id));
+
+
             Assert.IsFalse(context.DeveloperMl.ApplicationUploadService.GoLive(app.Id));
             context.DeveloperMl.ApplicationUploadService.Submit(app.Id, appInfo);
             Assert.IsFalse(context.DeveloperMl.ApplicationUploadService.GoLive(app.Id));
@@ -224,6 +235,9 @@ namespace Chalkable.Tests.Services.Master
             AssertException<Exception>(() => context.AdminViewSl.ServiceLocatorMaster.ApplicationUploadService.UnList(app.Id));
             AssertException<Exception>(() => context.FirstTeacherSl.ServiceLocatorMaster.ApplicationUploadService.UnList(app.Id));
             AssertException<Exception>(() => context.FirstStudentSl.ServiceLocatorMaster.ApplicationUploadService.UnList(app.Id));
+
+            AssertException<Exception>(() => context2.DeveloperMl.ApplicationUploadService.UnList(app.Id));
+
 
             Assert.IsFalse(context.DeveloperMl.ApplicationUploadService.UnList(app.Id));
             context.DeveloperMl.ApplicationUploadService.Submit(app.Id, appInfo);
@@ -258,6 +272,12 @@ namespace Chalkable.Tests.Services.Master
             Assert.AreEqual(context.AdminGradeSl.ServiceLocatorMaster.ApplicationService.GetApplications().Count, 0);
             SysAdminMasterLocator.ApplicationUploadService.ChangeApplicationType(app.Id, false);
             Assert.IsFalse(SysAdminMasterLocator.ApplicationService.GetApplicationById(app.Id).IsInternal);
+        }
+
+        [Test]
+        public void GetApplicationsTest()
+        {
+                        
         }
 
         public static Application CreateDefaultDraftApp(IServiceLocatorMaster sysLocator, DeveloperSchoolTestContex developerContext, string name, string url)

@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
+using Chalkable.Tests.Services.Master;
 using Chalkable.Tests.Services.School;
 
-namespace Chalkable.Tests.Services.Master
+namespace Chalkable.Tests.Services.TestContext
 {
     public class DeveloperSchoolTestContex : SchoolTestContext
     {
