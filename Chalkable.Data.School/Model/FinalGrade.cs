@@ -45,10 +45,10 @@ namespace Chalkable.Data.School.Model
                         markingPeriodClass.Id = Id;
                     if (_class != null)
                     {
+                        if (_class.Id != Guid.Empty)
+                            markingPeriodClass.ClassRef = _class.Id;
                         if(_class.MarkingPeriodClasses == null || _class.MarkingPeriodClasses.Count == 0)
                             _class.MarkingPeriodClasses = new List<MarkingPeriodClass>{value};
-                        if(_class.Id != Guid.Empty)
-                            markingPeriodClass.ClassRef = _class.Id;
                     } 
                         
                 }

@@ -53,7 +53,7 @@ namespace Chalkable.BusinessLogic.Services.School
         //TODO: rewrite this
         public IList<FinalGradeAnnouncementType> GetFinalGradeAnnouncementTypes(Guid markingPeriodId, Guid classId)
         {
-            var markingPeriodClass = ServiceLocator.MarkingPeriodService.GetMarkingPeriodClass(markingPeriodId, classId);
+            var markingPeriodClass = ServiceLocator.MarkingPeriodService.GetMarkingPeriodClass(classId, markingPeriodId);
             if(markingPeriodClass != null)
                 return GetFinalGradeAnnouncementTypes(markingPeriodClass.Id);
             return new List<FinalGradeAnnouncementType>();

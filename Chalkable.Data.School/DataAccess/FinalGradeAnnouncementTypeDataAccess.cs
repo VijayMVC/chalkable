@@ -18,21 +18,20 @@ namespace Chalkable.Data.School.DataAccess
         {
             var res = new Dictionary<string, object>();
             if(query.Id.HasValue)
-                res.Add("Id", query.Id);
+                res.Add(FinalGradeAnnouncementType.ID_FIELD, query.Id);
             if (query.FinalGradeId.HasValue)
-                res.Add("FinalGradeRef", query.FinalGradeId);
+                res.Add(FinalGradeAnnouncementType.FINAL_GRADE_ID_FIELD, query.FinalGradeId);
             if (query.AnnouncementTypeId.HasValue)
-                res.Add("AnnouncementTypeRef", query.AnnouncementTypeId);
+                res.Add(FinalGradeAnnouncementType.ANNOUNCEMENT_TYPE_ID_FIELD, query.AnnouncementTypeId);
             return res;
         }
         private DbQuery BuildSelectQuery(Dictionary<string, object> conds)
         {
-            var sql = @"select {0} from FinalGradeAnnouncementType 
-                        join AnnouncementType on AnnouncementType.Id = FinalGradeAnnouncementType.AnnouncementTypeRef";
             var b = new StringBuilder();
-            var types = new List<Type> {typeof (FinalGradeAnnouncementType), typeof (AnnouncementType)};
-            b.AppendFormat(sql, Orm.ComplexResultSetQuery(types));
-            b = Orm.BuildSqlWhere(b, types[0], conds);
+            b.Append(@"select * from vwFinalGradeAnnouncementType ");
+            var type = typeof (FinalGradeAnnouncementType);
+            var fieldMapping = conds.Keys.ToDictionary(x => x, x => string.Format("{0}_{1}", type.Name, x)); //TODO: think about this 
+            b = Orm.BuildSqlWhere(b, "vwFinalGradeAnnouncementType", conds, fieldMapping);
             return new DbQuery {Parameters = conds, Sql = b.ToString()};
         }
         private DbQuery BuildSelectQuery(FinalGradeAnnouncementTypeQuery query)
