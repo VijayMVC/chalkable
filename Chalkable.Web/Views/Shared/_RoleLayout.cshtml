@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"  itemscope itemtype="Education">
+<head>
+    <title>@ViewBag.Title</title>
+    @ChlkHelpers.RenderPageMetadata()
+    <meta itemprop="image" content="@Url.Content("~/favicon.ico")">
+    <link rel="icon" href="@Url.Content("~/favicon.ico")" />
+    <!--Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css' />
+    <!-- Whole Site CSS -->
+    <link href="@Url.StaticContent("/Content/screen.css")" rel="stylesheet" media="screen, projection" type="text/css" />
+    <link href="@Url.StaticContent("/app/jquery/choosen/chosen.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.StaticContent("/app/jquery/datepicker/jquery-ui-1.10.3.custom.css")" rel="stylesheet" type="text/css" />
+    <!-- Page specific CSS -->
+    @RenderSection("Styles", false)
+    @ChlkHelpers.GoogleAnalytics()
+    @ChlkHelpers.Olark()
+    @ChlkHelpers.RenderSiteRoot(Url)
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/chlk-messages.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-2.0.2.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/choosen/chosen.jquery.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/datepicker/jquery-ui-1.10.3.custom.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/languages/jquery.validationEngine-en.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.validationEngine.js")"></script>
+    @if (IsSectionDefined("Scripts"))
+    {
+        @RenderSection("Scripts", false)
+    }
+    else
+    {
+        <script src="@Url.Content("~/app/ria/_bootstrap.js")" type="text/javascript">
+            ria.__CFG = {
+                "prettyStackTraces": true,
+                "checkedMode": true,
+                "enablePipelineMethodCall": true,
+                "AssertWithExceptions": false,
+                "stackTraceJs": "lib/stacktrace.js",
+
+                "#require": {
+                    "plugins": ["~/assets/jade.js"],
+                    "appCodeDir": "~/app/",
+                    "appRoot": "@Url.Content("~")",
+                    "libs": {
+                    }
+                },
+
+                "#mvc": @RenderSection("MVCSettings", false)
+            }
+        </script>
+    }
+</head>
+    <body>
+        <div id="fb-root"></div>
+        <input type="hidden" value=" ServerTime :  @ViewData["CurrentServerDateTime"]"/>
+        <input type="hidden" value=" ServerDbTime:  @ViewData["CurrentServerDBDateTime"]"/>
+
+        <div id="page-header">
+            Revision: @Chalkable.Web.Tools.CompilerHelper.Version
+        </div>
+
+        <div id="logout-block">
+            <div class ="logout-area">@ViewData["FullName"]</div><span class ="logout-area" id="logout-arrow"></span>
+            @Html.ActionLink("log out", "LogOut", "Home", null, new Dictionary<string, object> { { "class", "logout" } })
+        </div>
+   
+
+        @{
+            var isDeveloper = (ViewData.ContainsKey("IsDeveloper") && (bool)ViewData["IsDeveloper"]);
+            var isDemoSchool = (ViewData.ContainsKey("Prefix") && !string.IsNullOrEmpty((string)ViewData["Prefix"]));
+            var needsTour = ViewData.ContainsKey("NeedsTour") && !string.IsNullOrEmpty(Convert.ToString(ViewData["NeedsTour"]));
+        }
+    
+
+        <div class="page 
+    @if (isDemoSchool || isDeveloper)
+    {
+        @:demo
+    }
+    ">
+            <div id="sidebar"></div>
+            <div id="content">
+                <div class="ribbon"></div>
+                <div id="content-wrapper">
+                    <div id="main-top">
+                    </div>
+                    <div id="main-wrapper">
+                        <div id="main">
+                            @RenderBody()
+                       
+                        </div>
+                        <div id = "chlk-dialogs" class = "x-hidden"></div>
+                    </div>
+                    <div id="footer">&copy; <script>var dt = new Date();document.write(dt.getFullYear());</script> Chalkable</div>
+                </div>
+            </div>
+            <div id="demo-footer"></div>
+        </div>
+
+        <div id = "chlk-overlay" class ="x-hidden"></div>
+        <div id="chlk-pop-up-container" class="x-hidden"><div id="pop-up-triangle"></div></div>
+        @RenderSection("MixPanelTracking", false)
+    </body>
+    
+    
+<script type="text/json" id="application-value" class="valuable-script">
+    @Html.Raw(@ViewData["Application"])
+</script>
+    
+
+
+<script type="text/javascript">
+    var values = document.getElementsByClassName('valuable-script'), value, name;
+    var len = values.length;
+    for (var i = 0; i < len; i++) {
+        value = values[i];
+        if (value.text.trim()) {
+            name = value.getAttribute('id').split('-')[0];
+            window[name] = JSON.parse(value.text).data;
+        }
+    }
+</script>
+    <script type="">
+    var changeFullName = function (newFullName) {
+        window.fullName = newFullName;
+        window.fullName = window.fullName.replace(/\.+/g, '.');
+        var logOutBlock = $('#logout-block').find('.logout-area')[0];
+        $(logOutBlock).html(fullName);
+    };
+    changeFullName('@ViewData["FullName"]'); 
+    var currentSchoolId = '@ViewData["SchoolId"]';
+    var currentSchoolName = '@ViewData["SchoolName"]';
+    var newNotifications = parseInt('@ViewData["UnshownNotificationsCount"]', 10) || 0;
+    var azurePictureUrl = 'http://chalkable1.blob.core.windows.net/pictureconteiner/pictureconteiner_blob_';
+    
+    var USER_ROLE_EXT = '@ViewData["Rolename"]';
+    var currentChlkPerson = JSON.parse(HtmlEncode('@ViewData["CurrentPerson"]')).data;
+    var classesToFilter = '@ViewData["Classes"]' ? JSON.parse(HtmlEncode('@ViewData["Classes"]')).data || [] : [];
+
+    var classesAdvancedData = '@ViewData["ClassesAdvancedData"]' ? JSON.parse(HtmlEncode('@ViewData["ClassesAdvancedData"]')).data || [] : [];
+    var classesInfo = {};
+    classesAdvancedData && classesAdvancedData.forEach(function (el) {
+        classesInfo[el.classid] = {
+            mask: el.mask,
+            typesByClass: el.typesbyclass
+        };
+    });
+
+    //var markingPeriod = JSON.parse(HtmlEncode('@ViewData["MarkingPeriod"]')).data;
+    //var nextMarkingPeriod = JSON.parse(HtmlEncode('@ViewData["NextMarkingPeriod"]')).data;
+
+    var finalizedClassesIds = '@ViewData["FinalizedClassesIds"]' ? JSON.parse(HtmlEncode('@ViewData["FinalizedClassesIds"]')).data || [] : [];
+
+
+
+</script>
+
+    
+</html>
