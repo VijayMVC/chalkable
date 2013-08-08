@@ -62,7 +62,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
             var schoolYearId = GetCurrentSchoolYearId();
             var days = SchoolLocator.CalendarDateService.GetLastDays(schoolYearId, false, start, end);
 
-            for (var i = 0; i <= days.Count; i++)
+            for (var i = 0; i < days.Count; i++)
             {
                 var d = days[i];
                 if (d == null || !d.ScheduleSectionRef.HasValue || !d.MarkingPeriodRef.HasValue) continue;
