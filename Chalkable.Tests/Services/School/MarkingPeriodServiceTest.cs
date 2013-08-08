@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Tests.Services.TestContext;
 using NUnit.Framework;
 
 namespace Chalkable.Tests.Services.School

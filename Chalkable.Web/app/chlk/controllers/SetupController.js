@@ -1,5 +1,6 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.TeacherService');
+REQUIRE('chlk.services.PersonService');
 REQUIRE('chlk.activities.setup.HelloPage');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.people.User');
@@ -12,6 +13,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.TeacherService, 'teacherService',
+
+            [ria.mvc.Inject],
+            chlk.services.PersonService, 'personService',
 
             [[chlk.models.people.User]],
             function prepareProfileData(model){
@@ -59,15 +63,18 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.people.User]],
             function infoEditAction(model){
-                var result;
-                result = this.teacherService
-                    .updateInfo(model.getId(), model.getAddressesValue(), model.getEmail(), model.getFirstName(),
-                        model.getLastName(), model.getGender(), model.getPhonesValue(), model.getSalutation(), model.getBirthDate())
-                    .attach(this.validateResponse_())
-                    .then(function(model){
-                        return this.prepareProfileData(model);
+                this.personService.changePassword(model.getId(), model.getPassword())
+                    .then(function(changed){
+                        this.teacherService
+                            .updateInfo(model.getId(), model.getAddressesValue(), model.getEmail(), model.getFirstName(),
+                                model.getLastName(), model.getGender(), model.getPhonesValue(), model.getSalutation(), model.getBirthDate())
+                            .attach(this.validateResponse_())
+                            .then(function(model){
+                                this.StopLoading(chlk.activities.setup.HelloPage);
+                                return this.redirect_('feed', 'list', []);
+                            }.bind(this));
                     }.bind(this));
-                return this.UpdateView(chlk.activities.setup.HelloPage, result);
+                this.StartLoading(chlk.activities.setup.HelloPage);
             }
         ])
 });

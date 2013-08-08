@@ -9,6 +9,7 @@ using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
+using Chalkable.Tests.Services.TestContext;
 using NUnit.Framework;
 
 namespace Chalkable.Tests.Services
@@ -78,5 +79,24 @@ namespace Chalkable.Tests.Services
 
             base.BeforCreateDb(chalkableConnection, masterConnection);
         }
+
+
+        protected DeveloperSchoolTestContex CreateDeveloperSchoolTestContext()
+        {
+            CreateTestDemoSchool();
+            var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
+            var school = sysLocator.SchoolService.UseDemoSchool();
+            var sysSchoolL = sysLocator.SchoolServiceLocator(school.Id);
+            return DeveloperSchoolTestContex.Create(sysSchoolL);
+        }
+
+        protected SchoolTestContext CreateSchoolTestContext()
+        {
+            var school = CreateTestSchool();
+            var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
+            var schoolL = sysLocator.SchoolServiceLocator(school.Id);
+            return SchoolTestContext.Create(schoolL);
+        }
+
     }
 }

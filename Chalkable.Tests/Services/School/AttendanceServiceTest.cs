@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.Tests.Services.TestContext;
 using NUnit.Framework;
 
 namespace Chalkable.Tests.Services.School

@@ -1,0 +1,92 @@
+BODY {
+  $color: #9D9D9D;
+
+  DIV.page{
+    >DIV#content {
+      DIV#content-wrapper{
+        .setup-page{
+          h1{
+            text-align: center;
+            font: bold 32px "Myriad Pro";
+            text-shadow: 1px 1px 1px white;
+            color: $color;
+            padding: 3px 0 41px 41px;
+          }
+
+          #confirm-button{
+            margin: 25px 1px;
+
+            BUTTON{
+              width: 140px;
+            }
+          }
+
+          .x-form-field{
+            input[type="password"]{
+              background: url(images/register/lock-icon.png) 184px 3px no-repeat, #fff;
+            }
+
+            input[type="text"], input[type="password"]{
+              width: 190px;
+              height: 20px;
+              font: normal 16px 'Myriad Pro';
+              text-shadow: 1px 1px 1px white;
+              color: $color;
+              padding: 1px 3px 1px 7px;
+              border: 1px solid #c0c0c0;
+              text-align: center;
+              margin-bottom: 0;
+              @include border-radius(0);
+
+              &.salutation{
+                width: 30px;
+              }
+
+              &.first-name, &.last-name{
+                width: 115px;
+              }
+
+              &.salutation, &.first-name{
+                margin-right: 15px;
+              }
+
+              &.salutation-label{
+                border: 1px solid #b1b1b1;
+                @include background(linear-gradient(top, #ffffff, #dadada));
+                margin-top: 5px;
+                padding: 7px;
+                @include border-radius(5px);
+                margin-bottom: 39px;
+                width: 155px;
+                color: #000;
+              }
+            }
+
+            label{
+              width: 253px;
+              display: inline-block;
+              font: bold 17px "Myriad Pro";
+              text-shadow: 1px 1px 1px white;
+              text-align: right;
+              padding: 0;
+              color: #000;
+              margin-bottom: 23px;
+              margin-right: 15px;
+
+              &#example{
+                top: 153px;
+                left: 134px;
+                background: url(images/register/hint-arrow.png) 120px 3px no-repeat;
+                height: 50px;
+                padding-top: 19px;
+                position: absolute;
+                font: normal 13px 'Myriad Pro';
+                width: 300px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

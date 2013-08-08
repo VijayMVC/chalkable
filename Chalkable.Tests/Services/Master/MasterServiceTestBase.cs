@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.Tests.Services.TestContext;
 using NUnit.Framework;
 
 namespace Chalkable.Tests.Services.Master
@@ -28,14 +29,6 @@ namespace Chalkable.Tests.Services.Master
         [TearDown]
         public void TearDown()
         {
-        }
-
-        protected DeveloperSchoolTestContex CreateDeveloperSchoolTestContext()
-        {
-            CreateTestDemoSchool();
-            var school = sysAdminMasterLocator.SchoolService.UseDemoSchool();
-            var sysSchoolL = sysAdminMasterLocator.SchoolServiceLocator(school.Id);
-            return DeveloperSchoolTestContex.Create(sysSchoolL);
         }
     }
 }

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
-using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Tests.Services.Master;
+using Chalkable.Tests.Services.School;
 
-namespace Chalkable.Tests.Services.School
+namespace Chalkable.Tests.Services.TestContext
 {
     public class SchoolTestContext
     {
@@ -35,6 +35,7 @@ namespace Chalkable.Tests.Services.School
         }
 
         protected IServiceLocatorSchool sysSchoolSl;
+        
         protected SchoolTestContext(IServiceLocatorSchool sysSchoolSl)
         {
             this.sysSchoolSl = sysSchoolSl;
@@ -80,13 +81,13 @@ namespace Chalkable.Tests.Services.School
             return new BaseSchoolServiceLocatorTest(masterLocator);
         }
 
-        private static string GetUserLogin(string name)
+        private static string GetUserLogin(string name, Guid schoolId)
         {
-            return name + DEFAULT_MAIL;
+            return name + "_" + schoolId + "_" + DEFAULT_MAIL;
         }
         private static SchoolUser GetSchoolUser(IServiceLocatorSchool locator, string name, CoreRole role)
         {
-            var user = locator.ServiceLocatorMaster.UserService.GetByLogin(GetUserLogin(name));
+            var user = locator.ServiceLocatorMaster.UserService.GetByLogin(GetUserLogin(name, locator.Context.SchoolId.Value));
             return user.SchoolUsers.First(x => x.Role == role.Id);
         }
         private static Person GetPerson(IServiceLocatorSchool locator, string name, CoreRole role)
@@ -99,11 +100,11 @@ namespace Chalkable.Tests.Services.School
             return GetSchoolUser(sysSchoolSl, person.FirstName, CoreRoles.GetById(person.RoleRef));
         }
 
-        protected static UserInfoTest CreateUserInfo(string name, CoreRole role)
+        protected UserInfoTest CreateUserInfo(string name, CoreRole role)
         {
             return new UserInfoTest
                 {
-                    Login = GetUserLogin(name),
+                    Login = GetUserLogin(name, sysSchoolSl.Context.SchoolId.Value),
                     FirstName = name,
                     LastName = name,
                     Gender = DEFAULT_GENDER,

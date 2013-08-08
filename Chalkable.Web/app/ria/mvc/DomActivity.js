@@ -92,8 +92,11 @@ NAMESPACE('ria.mvc', function () {
             },
 
             [[String]],
-            OVERRIDE, VOID, function onModelWait_(msg_) { this.dom.addClass(MODEL_WAIT_CLASS); },
+            OVERRIDE, VOID, function onModelWait_(msg_) {
+                BASE(msg_);
+                this.dom.addClass(MODEL_WAIT_CLASS);
+            },
             [[String]],
-            OVERRIDE, VOID, function onModelComplete_(msg_) { this.dom.removeClass(MODEL_WAIT_CLASS); },
+            OVERRIDE, VOID, function onModelComplete_(msg_) { BASE(msg_);this.dom.removeClass(MODEL_WAIT_CLASS); },
         ]);
 });
