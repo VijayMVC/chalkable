@@ -32,13 +32,21 @@ namespace Chalkable.Tests.Services.Master
             
         }
 
-        public static IList<Category> CreateDefaultCategories(IServiceLocatorMaster locator, int count = 5)
+        public static IList<Category> GetDefaultCategories(IServiceLocatorMaster locator, int count = 5)
         {
-            for (int i = 0; i < count; i++)
+            var categories = locator.CategoryService.ListCategories();
+            if (categories.Count < count)
             {
-                locator.CategoryService.Add("category_" + (i + 1), "category_description_" + (i + 1));
+                for (long i = categories.Count - 1; i < count; i++)
+                {
+                   categories.Add(locator.CategoryService.Add("category_" + (i + 1), "category_description_" + (i + 1)));
+                }
             }
-            return locator.CategoryService.ListCategories();
+            return categories.OrderBy(x=>x.Id).Take(count).ToList();
         } 
+        public static IList<Guid> GetDefaultCategoriesIds(IServiceLocatorMaster locator, int count = 5)
+        {
+            return GetDefaultCategories(locator, count).Select(x=>x.Id).ToList();
+        }
     }
 }

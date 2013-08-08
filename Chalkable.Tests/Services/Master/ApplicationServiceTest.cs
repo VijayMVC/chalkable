@@ -277,7 +277,54 @@ namespace Chalkable.Tests.Services.Master
         [Test]
         public void GetApplicationsTest()
         {
-                        
+            var context = CreateDeveloperSchoolTestContext();
+            var app = CreateDefaultLiveApp(SysAdminMasterLocator, context, "app1", "http://test.app1.com");
+            Assert.AreEqual(SysAdminMasterLocator.ApplicationService.GetApplications().Count, 2);
+            var apps = context.AdminGradeSl.ServiceLocatorMaster.ApplicationService.GetApplications();
+            Assert.AreEqual(apps.Count, 1);
+            Assert.AreEqual(apps[0].State, ApplicationStateEnum.Draft);
+            Assert.IsTrue(apps[0].OriginalRef.HasValue);
+
+            // users developer school cann't get lives apps 
+            AssertException<Exception>(() => context.AdminGradeSl.ServiceLocatorMaster.ApplicationService.GetApplicationById(apps[0].OriginalRef.Value));
+            var schoolContext = CreateSchoolTestContext();
+            apps =  schoolContext.AdminGradeSl.ServiceLocatorMaster.ApplicationService.GetApplications();
+            Assert.AreEqual(apps.Count, 1);
+            Assert.AreEqual(apps[0].State, ApplicationStateEnum.Live);
+
+            var devContext2 = CreateDeveloperSchoolTestContext();
+            Assert.AreEqual(devContext2.DeveloperMl.ApplicationService.GetApplications().Count, 0);
+            Assert.AreEqual(devContext2.AdminGradeSl.ServiceLocatorMaster.ApplicationService.GetApplications().Count, 0);
+            var app2 = CreateDefaultDraftApp(SysAdminMasterLocator, context, "app2", "http://test.app2.com");
+            Assert.AreEqual(context.DeveloperMl.ApplicationService.GetApplications().Count, 3);
+            Assert.AreEqual(context.DeveloperMl.ApplicationService.GetApplications(0, int.MaxValue, false).Count, 2);
+            Assert.AreEqual(context.DeveloperMl.ApplicationService.GetApplications(0, int.MaxValue, true).Count, 1);
+
+            var appinfo = BaseApplicationInfo.Create(app);
+            appinfo.ApplicationAccessInfo = ApplicationAccessInfo.Create(false, false, false, false, false, false);
+            Assert.AreEqual(context.FirstStudentSl.ServiceLocatorMaster.ApplicationService.GetApplications().Count, 2);
+            Assert.AreEqual(context.FirstTeacherSl.ServiceLocatorMaster.ApplicationService.GetApplications().Count, 2);
+            context.DeveloperMl.ApplicationUploadService.UpdateDraft(app.Id, appinfo);
+            Assert.AreEqual(context.FirstStudentSl.ServiceLocatorMaster.ApplicationService.GetApplications().Count, 1);
+            Assert.AreEqual(context.FirstTeacherSl.ServiceLocatorMaster.ApplicationService.GetApplications().Count, 1);
+            appinfo.ApplicationAccessInfo = ApplicationAccessInfo.Create(false, false, false, false, true, false);
+            context.DeveloperMl.ApplicationUploadService.UpdateDraft(app.Id, appinfo);
+            Assert.AreEqual(context.FirstStudentSl.ServiceLocatorMaster.ApplicationService.GetApplications().Count, 1);
+            Assert.AreEqual(context.FirstTeacherSl.ServiceLocatorMaster.ApplicationService.GetApplications().Count, 2);
+            appinfo.ApplicationAccessInfo = ApplicationAccessInfo.Create(true, false, false, false, false, false);
+            Assert.AreEqual(context.FirstStudentSl.ServiceLocatorMaster.ApplicationService.GetApplications().Count, 2);
+            
+            //TODO: implementation 
+
+        }
+
+        public static Application CreateDefaultLiveApp(IServiceLocatorMaster sysLocator, DeveloperSchoolTestContex context, string name, string url)
+        {
+            var app = CreateDefaultDraftApp(sysLocator, context, name, url);
+            app = context.DeveloperMl.ApplicationUploadService.Submit(app.Id, BaseApplicationInfo.Create(app));
+            sysLocator.ApplicationUploadService.ApproveReject(app.Id, true);
+            context.DeveloperMl.ApplicationUploadService.GoLive(app.Id);
+            return context.DeveloperMl.ApplicationService.GetApplicationById(app.Id);
         }
 
         public static Application CreateDefaultDraftApp(IServiceLocatorMaster sysLocator, DeveloperSchoolTestContex developerContext, string name, string url)
@@ -298,7 +345,7 @@ namespace Chalkable.Tests.Services.Master
                     AppPermissionType.User,
                     AppPermissionType.Announcement
                 };
-            var categoriesIds = CategoryServiceTest.CreateDefaultCategories(sysLocator).Select(x => x.Id).ToList();
+            var categoriesIds = CategoryServiceTest.GetDefaultCategoriesIds(sysLocator);
             var gradeLevels = new List<int> { 1, 2, 3, 4, 5 };
             return BaseApplicationInfo.Create(shortAppInfo, developerId, appPermissionTypes, null, appPrice,
                 categoriesIds, appAccess, gradeLevels);

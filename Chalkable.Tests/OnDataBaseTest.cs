@@ -96,8 +96,10 @@ namespace Chalkable.Tests
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1056 - Fixed vwClass.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1057 - Fixed sp Get Classes.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1058 - create spCalcAttendanceTypeTotal.sql"));
-            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1059 - create spCaclStuedntClassGradeStatsPerDate.sql"));             
-        
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1059 - create spCaclStuedntClassGradeStatsPerDate.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1060 - Added PK to application install action grade level table.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1061 - fix vwFinalGradeAnnouncementType.sql"));             
+ 
         }
 
         protected void CreateMasterDb()

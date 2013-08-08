@@ -43,30 +43,16 @@ namespace Chalkable.Tests.Services.TestContext
         }
         protected void InitBaseData(IServiceLocatorSchool sysSchoolSl)
         {
-            var userInfos = new List<UserInfoTest>
-                {
-                    CreateUserInfo(AdminGradeName, CoreRoles.ADMIN_GRADE_ROLE),
-                    CreateUserInfo(AdminViewName, CoreRoles.ADMIN_VIEW_ROLE),
-                    CreateUserInfo(AdminEditName, CoreRoles.ADMIN_EDIT_ROLE),
-                    CreateUserInfo(FirstTeacherName, CoreRoles.TEACHER_ROLE),
-                    CreateUserInfo(SecondTeacherName, CoreRoles.TEACHER_ROLE),
-                    CreateUserInfo(FirstStudentName, CoreRoles.STUDENT_ROLE),
-                    CreateUserInfo(SecondStudentName, CoreRoles.STUDENT_ROLE),
-                    CreateUserInfo(FirstParentName, CoreRoles.PARENT_ROLE),
-                    CreateUserInfo(SecondParentName, CoreRoles.PARENT_ROLE),
-                    CreateUserInfo(CheckinName, CoreRoles.CHECKIN_ROLE)
-                };
             var gradeLevels = sysSchoolSl.GradeLevelService.CreateDefault();
-            CreateUsers(sysSchoolSl, userInfos, gradeLevels[0].Id);
-            AdminGradeSl = CreateLocatorByPerson(AdminGrade);
-            AdminEditSl = CreateLocatorByPerson(AdminEdit);
-            AdminViewSl = CreateLocatorByPerson(AdminView);
-            FirstTeacherSl = CreateLocatorByPerson(FirstTeacher);
-            FirstStudentSl = CreateLocatorByPerson(FirstStudent);
-            FirstParentSl = CreateLocatorByPerson(FirstParent);
-            SecondTeacherSl = CreateLocatorByPerson(SecondTeahcer);
-            SecondStudentSl = CreateLocatorByPerson(SecondStudent);
-            SecondParentSl = CreateLocatorByPerson(SecondParent);
+            AdminGradeSl = CreateUserWithLocator(AdminGradeName, CoreRoles.ADMIN_GRADE_ROLE, null);
+            AdminEditSl = CreateUserWithLocator(AdminEditName, CoreRoles.ADMIN_EDIT_ROLE, null);
+            AdminViewSl = CreateUserWithLocator(AdminViewName, CoreRoles.ADMIN_VIEW_ROLE, null);
+            FirstTeacherSl = CreateUserWithLocator(FirstTeacherName, CoreRoles.TEACHER_ROLE, null);
+            FirstStudentSl = CreateUserWithLocator(FirstStudentName, CoreRoles.STUDENT_ROLE, gradeLevels[0].Id);
+            FirstParentSl = CreateUserWithLocator(FirstParentName, CoreRoles.PARENT_ROLE, null);
+            SecondTeacherSl = CreateUserWithLocator(SecondTeacherName, CoreRoles.TEACHER_ROLE, null);
+            SecondStudentSl = CreateUserWithLocator(SecondStudentName, CoreRoles.STUDENT_ROLE, gradeLevels[0].Id);
+            SecondParentSl = CreateUserWithLocator(SecondParentName, CoreRoles.PARENT_ROLE, null);
         }
 
         public static SchoolTestContext Create(IServiceLocatorSchool sysSchoolSl)
@@ -74,14 +60,22 @@ namespace Chalkable.Tests.Services.TestContext
             return new SchoolTestContext(sysSchoolSl);
         }
 
-        private IServiceLocatorSchool CreateLocatorByPerson(Person person)
+        private IServiceLocatorSchool CreateUserWithLocator(string name, CoreRole role, Guid? gradeLevelId)
         {
-            var locator = ServiceLocatorFactory.CreateSchoolLocator(GetSchoolUser(person));
-            var masterLocator = new BaseMasterServiceLocatorTest(locator.Context);
+            var userinfo = CreateUserInfo(name, role);
+            sysSchoolSl.PersonService.Add(userinfo.Login, userinfo.Password, userinfo.FirstName, userinfo.LastName,
+                                              userinfo.Role.Name, userinfo.Gender, userinfo.Salutation, userinfo.BirthDate, gradeLevelId);
+            return CreateLocatorByUserInfo(userinfo);
+        }
+
+        private IServiceLocatorSchool CreateLocatorByUserInfo(UserInfoTest userInfo)
+        {
+            var context = sysSchoolSl.ServiceLocatorMaster.UserService.Login(userInfo.Login, userInfo.Password);
+            var masterLocator = new BaseMasterServiceLocatorTest(context);
             return new BaseSchoolServiceLocatorTest(masterLocator);
         }
 
-        private static string GetUserLogin(string name, Guid schoolId)
+        protected static string GetUserLogin(string name, Guid schoolId)
         {
             return name + "_" + schoolId + "_" + DEFAULT_MAIL;
         }
@@ -95,11 +89,7 @@ namespace Chalkable.Tests.Services.TestContext
             var schoolUser = GetSchoolUser(locator, name, role);
             return locator.PersonService.GetPerson(schoolUser.User.Id);
         }
-        private SchoolUser GetSchoolUser(Person person)
-        {
-            return GetSchoolUser(sysSchoolSl, person.FirstName, CoreRoles.GetById(person.RoleRef));
-        }
-
+        
         protected UserInfoTest CreateUserInfo(string name, CoreRole role)
         {
             return new UserInfoTest
@@ -111,14 +101,6 @@ namespace Chalkable.Tests.Services.TestContext
                     Password = DEFAULT_PASSWORD,
                     Role = role,
                 };
-        }
-        private static void CreateUsers(IServiceLocatorSchool sysSchoolSl, IList<UserInfoTest> userInfos, Guid? gradeLevelId)
-        {
-            foreach (var userInfo in userInfos)
-            {
-                sysSchoolSl.PersonService.Add(userInfo.Login, userInfo.Password, userInfo.FirstName, userInfo.LastName,
-                                              userInfo.Role.Name, userInfo.Gender, userInfo.Salutation, userInfo.BirthDate, gradeLevelId);
-            }
         }
        
         public string AdminGradeName

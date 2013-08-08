@@ -273,7 +273,7 @@ namespace Chalkable.Data.School.DataAccess
                         where Announcement.PersonRef = @personId 
                               and Announcement.AnnouncementTypeRef = @announcementTypeId
                               and MarkingPeriodClass.ClassRef = @classId
-                              and Announcement.Content is not null and and Announcement.Content <> ''
+                              and Announcement.Content is not null and Announcement.Content <> ''
                         order by Announcement.Id desc
                         OFFSET 0 ROWS FETCH NEXT @count ROWS ONLY";
             using (var reader = ExecuteReaderParametrized(sql, conds))
