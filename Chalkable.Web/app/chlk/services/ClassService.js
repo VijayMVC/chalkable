@@ -1,6 +1,6 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
-REQUIRE('chlk.models.class.ClassForTopBar');
+REQUIRE('chlk.models.class.Class');
 REQUIRE('chlk.models.class.ClassForWeekMask');
 REQUIRE('chlk.models.id.ClassId');
 
@@ -11,13 +11,13 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'ClassService', EXTENDS(chlk.services.BaseService), [
 
-            ArrayOf(chlk.models.class.ClassForTopBar), 'classesToFilter',
+            ArrayOf(chlk.models.class.Class), 'classesToFilter',
 
             Array, function getClassesForTopBar() {
                 var res = this.getClassesToFilter();
                 if(res)
                     return res;
-                res = new ria.serialize.JsonSerializer().deserialize(window.classesToFilter, ArrayOf(chlk.models.class.ClassForTopBar));
+                res = new ria.serialize.JsonSerializer().deserialize(window.classesToFilter, ArrayOf(chlk.models.class.Class));
                 this.setClassesToFilter(res);
                 return res;
             },

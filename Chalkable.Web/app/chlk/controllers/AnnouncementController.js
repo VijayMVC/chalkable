@@ -205,7 +205,7 @@ NAMESPACE('chlk.controllers', function (){
                             model.setAnnouncementTypeName(announcementTypeName);
                             return new ria.async.DeferredData(model);
                         }.bind(this));
-                    return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result);
+                    return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result, window.noLoadingMsg);
                 }else{
                     if(submitType == 'save'){
                         model.setAnnouncementAttachments(this.getContext().getSession().get('AnnouncementAttachments'));
@@ -236,7 +236,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.announcement.Announcement]],
-        function saveAnnouncement(model){
+        VOID, function saveAnnouncement(model){
             this.announcementService.saveAnnouncement(
                 model.getId(),
                 model.getClassId(),

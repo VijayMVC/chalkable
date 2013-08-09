@@ -5,6 +5,8 @@ REQUIRE('ria.mvc.DomEventBind');
 
 REQUIRE('ria.reflection.ReflectionClass');
 
+window.noLoadingMsg = 'no-loading';
+
 NAMESPACE('ria.mvc', function () {
 
     var MODEL_WAIT_CLASS = 'activity-model-wait';
@@ -91,12 +93,20 @@ NAMESPACE('ria.mvc', function () {
                 this._domAppendTo.remove(this.dom.empty());
             },
 
+            OVERRIDE, VOID, function startLoading() {
+                this.dom.addClass(MODEL_WAIT_CLASS);
+            },
+
+            OVERRIDE, VOID, function stopLoading() {
+                this.dom.removeClass(MODEL_WAIT_CLASS);
+            },
+
             [[String]],
             OVERRIDE, VOID, function onModelWait_(msg_) {
                 BASE(msg_);
-                this.dom.addClass(MODEL_WAIT_CLASS);
+                msg_ != window.noLoadingMsg && this.startLoading();
             },
             [[String]],
-            OVERRIDE, VOID, function onModelComplete_(msg_) { BASE(msg_);this.dom.removeClass(MODEL_WAIT_CLASS); },
+            OVERRIDE, VOID, function onModelComplete_(msg_) { BASE(msg_);this.stopLoading(); }
         ]);
 });

@@ -33,7 +33,7 @@ NAMESPACE('chlk.templates.grading', function () {
             Number, 'dropLowestAttendance',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'gradingstyle',
+            Number, 'gradingStyle',
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.AnnouncementTypeGrading), 'finalGradeAnnType'

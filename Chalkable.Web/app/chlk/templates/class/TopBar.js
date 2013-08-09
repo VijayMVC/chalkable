@@ -1,5 +1,5 @@
 REQUIRE('chlk.templates.JadeTemplate');
-REQUIRE('chlk.models.class.ClassForTopBar');
+REQUIRE('chlk.models.class.Class');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.CourseId');
 
@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.class', function () {
     /** @class chlk.templates.class.TopBar*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/class/TopBar.jade')],
-        [ria.templates.ModelBind(chlk.models.class.ClassForTopBar)],
+        [ria.templates.ModelBind(chlk.models.class.Class)],
         'TopBar', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.id.ClassId, 'id',

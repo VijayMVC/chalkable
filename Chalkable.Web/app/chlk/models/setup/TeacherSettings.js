@@ -1,15 +1,15 @@
 REQUIRE('chlk.models.class.ClassesForTopBar');
-REQUIRE('chlk.models.class.ClassForWeekMask');
-REQUIRE('chlk.models.announcement.AnnouncementCreate');
+REQUIRE('chlk.models.calendar.TeacherSettingsCalendarDay');
+REQUIRE('chlk.models.grading.Final');
 
-NAMESPACE('chlk.models.announcement', function () {
+NAMESPACE('chlk.models.setup', function () {
     "use strict";
 
     /** @class chlk.models.setup.TeacherSettings*/
     CLASS(
-        'TeacherSettings', EXTENDS(chlk.models.announcement.AnnouncementCreate), [
+        'TeacherSettings', [
             chlk.models.class.ClassesForTopBar, 'topData',
-            chlk.models.class.ClassForWeekMask, 'classInfo',
-            Number, 'selectedTypeId'
+            ArrayOf(chlk.models.calendar.TeacherSettingsCalendarDay), 'calendarInfo',
+            chlk.models.grading.Final, 'gradingInfo'
         ]);
 });

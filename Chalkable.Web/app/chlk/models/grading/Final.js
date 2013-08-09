@@ -4,9 +4,9 @@ REQUIRE('chlk.models.grading.AnnouncementTypeGrading');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
-    /** @class chlk.models.grading.Mapping*/
+    /** @class chlk.models.grading.Final*/
     CLASS(
-        'Mapping', [
+        'Final', [
             chlk.models.id.FinalGradeId, 'id',
 
             Number, 'state',
@@ -27,9 +27,23 @@ NAMESPACE('chlk.models.grading', function () {
             [ria.serialize.SerializeProperty('droplowestattendance')],
             Number, 'dropLowestAttendance',
 
-            Number, 'gradingstyle',
+            [ria.serialize.SerializeProperty('gradingstyle')],
+            Number, 'gradingStyle',
 
             [ria.serialize.SerializeProperty('finalgradeanntype')],
-            ArrayOf(chlk.models.grading.AnnouncementTypeGrading), 'finalGradeAnnType'
+            ArrayOf(chlk.models.grading.AnnouncementTypeGrading), 'finalGradeAnnType',
+
+
+            ArrayOf(Number), 'finalGradeAnnouncementTypeIds',
+
+            ArrayOf(Number), 'percents',
+
+            ArrayOf(Number), 'dropLowest',
+
+            ArrayOf(Number), 'gradingStyleByType',
+
+            Boolean, 'needsTypesForClasses',
+
+            Number, 'nextClassNumber'
         ]);
 });

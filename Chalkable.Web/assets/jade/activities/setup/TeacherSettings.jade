@@ -1,0 +1,17 @@
+.announcement-form.loader-container
+    -topData = self.getTopData();
+    -topItems = topData.getTopItems();
+    .loader
+    +LeftRightToolbar(topItems, chlk.templates.class.TopBar)(
+        selectedItemId=self.getGradingInfo().getClazz().getId().valueOf(),
+        pressAfterClick=false
+    ).classes-bar
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('setup', 'hello')=Msg.Go_Back
+            .right
+                +ActionLink('setup', 'hello', self.getGradingInfo().getNextClassNumber().valueOf()).next-class.disabled=Msg.Next_Class
+    div Hello!
+
+
