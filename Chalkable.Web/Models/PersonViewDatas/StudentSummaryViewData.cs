@@ -13,7 +13,6 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
         public int GradeLevelNumber { get; set; }
         public string CurrentClassName { get; set; }
-        public string RoomNumber { get; set; }
         public int? CurrentAttendanceType { get; set; }
         public int MaxPeriodNumber { get; set; }
         public IList<AnnouncementsClassPeriodViewData> PeriodSection { get; set; }
@@ -23,7 +22,6 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
         protected StudentSummaryViewData(Person person, Room room) : base(person, room)
         {
-            RoomNumber = room.RoomNumber;
         }
 
         public static StudentSummaryViewData Create(Person person, Room room,  ClassDetails currentClass, IList<ClassDetails> classes
