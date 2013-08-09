@@ -18,14 +18,19 @@ appCategories = []
 appPermissions = []
 
 
-each item in app.getGradeLevels()
+-actAppCategories = app.getGradeLevels() || []
+-actAppGradeLevels = app.getGradeLevels() || []
+-actAppPermissions = app.getPermissions() || []
+
+
+each item in actAppGradeLevels
     -selectedAppGradeLevels[item.getId()] = true
     -appGradeLvls.push(item.getId())
-each item in app.getCategories()
+each item in actAppCategories
     -selectedAppCategories[item.getId()] = true
     -appCategories.push(item.getId().valueOf())
 
-each item in app.getPermissions()
+each item in actAppPermissions
     -selectedAppPermissions[item.getId()] = true
     -appPermissions.push(item.getId().valueOf())
 

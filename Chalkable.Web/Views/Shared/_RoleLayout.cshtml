@@ -110,12 +110,20 @@
     
     
 <script type="text/json" id="application-value" class="valuable-script">
-    @Html.Raw(@ViewData["Application"])
+    @Html.Raw(@ViewData["DefaultApplication"])
 </script>
+
+    <script type="text/json" id="applications-value" class="valuable-script">
+    @Html.Raw(@ViewData["Applications"])
+</script>
+    
+    
+    
+    
     
 
 
-<script type="text/javascript">
+    <script type="text/javascript">
     var values = document.getElementsByClassName('valuable-script'), value, name;
     var len = values.length;
     for (var i = 0; i < len; i++) {

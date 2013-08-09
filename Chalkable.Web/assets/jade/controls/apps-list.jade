@@ -1,12 +1,18 @@
-mixin AppsList(name, apps)
+mixin AppsList(name, apps, currentApp)
     -attributes.name = name
+    -apps = apps || []
+    -selectedApp = {}
+    if currentApp
+        -selectedAppId = currentApp.getId()
+    else
+        -selectedAppId = null
     select(attributes).app-list-combobox
         each item in apps
-            +AppOption(app.getName(), 'apps', 'details', item.getId().valueOf(), false)
+            -isSelected = selectedAppId == item.getId()
+            +AppOption(item.getName(), 'apps', 'details', [item.getId().valueOf()], isSelected)
         +AppOption('Add application', 'apps', 'add')
 
 mixin AppOption(displayName, controller, action, params, selected)
-    -attributes.value = value
     -attributes.selected = selected
     -attributes['data-controller'] = controller
     -attributes['data-action'] = action
