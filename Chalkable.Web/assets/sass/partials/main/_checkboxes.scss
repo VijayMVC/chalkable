@@ -91,9 +91,9 @@
 
     >LABEL{
       display: block;
-      padding: 0 !important;
+      padding: 0;
       margin: 0;
-      width: 40px !important;
+      width: 40px;
       height: 25px;
 
       @include border-radius(5px);
@@ -113,6 +113,36 @@
 
       &[type=checkbox]:checked + label{
         left: 40px;
+      }
+    }
+  }
+}
+
+.profile{
+  .slide-checkbox{
+    >DIV{
+      width: 67px;
+      height: 23px;
+      border-color: #653900;
+      background: #8b6a3a;
+      @include border-radius(3px);
+      @include box-shadow(0 1px 1px #734c12);
+      border-bottom: none;
+
+      >LABEL{
+        width: 32px;
+        height: 23px;
+        left: -1px;
+        top: -1px;
+        @include border-radius(2px);
+        @include background(linear-gradient(top, #f3eee0, #ece1c2));
+        border: 1px solid #653900;
+      }
+
+      >input{
+        &[type=checkbox]:checked + label{
+          left: 34px;
+        }
       }
     }
   }

@@ -15,15 +15,12 @@
                 +ActionLink('setup', 'hello')=Msg.Go_Back
             .right
                 +ActionLink('setup', 'hello', self.getGradingInfo().getNextClassNumber().valueOf()).next-class.disabled=Msg.Next_Class
-    +ListView(gradingInfo)(
-        selectedIndex = selectedIndex,
-        itemsName = "FinalGradeAnnType"
-    ).ann-types-list
+    .grid-container.not-transparent
         each item, i in gradingInfo.getFinalGradeAnnType()
-            .row(class=(i == selectedIndex ? 'selected' : '') + " announcement-type-item", index=item.getIndex())
+            .row(index=item.getIndex()).announcement-type-item.gradient
                 .left.name=item.getTypeName()
                 .right.relative
-                    input(typeId=item.getId(), value=(item.getValue()+"%")).announcement-type-weight
+                    input(typeId=item.getId(), value=(item.getValue()+"%"), class=(item.getValue() ? "" : "disabled")).announcement-type-weight
                     .hint.absolute=Msg.Weight
                 .right.type-container
                     +Select('grading-type')
@@ -32,6 +29,7 @@
                 .right.relative.drop-lowest-block
                     .hint.absolute=Msg.Drop_lowest
                     +SlideCheckbox("dropLowest" + i, item.isDropLowest()).drop-lowest
+
 
 
 

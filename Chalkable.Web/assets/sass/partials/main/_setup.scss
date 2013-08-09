@@ -5,6 +5,18 @@ BODY {
     >DIV#content {
       DIV#content-wrapper{
         .announcement-type-item{
+          height: 53px;
+          width: 630px;
+          padding: 13px 13px 5px 13px;
+
+          &.disabled{
+            opacity: 0.5;
+          }
+
+          &:not(:last-child) {
+            margin-bottom: 3px;
+          }
+
           .name{
             color: #423a22;
             font: bold 24px Arial;
@@ -39,8 +51,24 @@ BODY {
           }
 
           .type-container{
+            margin: 0 19px;
+
             select{
-              width: 50px;
+              width: 75px;
+            }
+
+            .chzn-container{
+              width: 75px;
+
+              .chzn-single{
+                height: 31px;
+                font: bold 14px/31px Arial;
+                text-shadow: 1px 1px 1px white;
+                color: #532f18;
+                @include background(linear-gradient(top, #f3eee0, #ece1c1));
+                @include box-shadow(0 1px 0 0 white);
+                border: 1px solid #af9c60;
+              }
             }
           }
 
