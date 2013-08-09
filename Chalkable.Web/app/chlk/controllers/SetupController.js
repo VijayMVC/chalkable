@@ -87,7 +87,6 @@ NAMESPACE('chlk.controllers', function (){
                     this.finalGradeService.getFinalGrades(classId, false),
                     this.calendarService.getTeacherClassWeek(classId)
                 ]).then(function(result){
-                    var serializer = new ria.serialize.JsonSerializer();
                     var model = new chlk.models.setup.TeacherSettings();
                     var topModel = new chlk.models.class.ClassesForTopBar();
                     topModel.setTopItems(classes);
@@ -95,6 +94,13 @@ NAMESPACE('chlk.controllers', function (){
                     topModel.setSelectedItemId(classId);
                     model.setTopData(topModel);
                     model.setCalendarInfo(result[1]);
+                    var gradesInfo = result[0].getFinalGradeAnnType();
+                    gradesInfo.forEach(function(item, index){
+                        item.setIndex(index);
+                    });
+                    gradesInfo.sort(function(a,b){
+                        return b.getValue() > a.getValue();
+                    });
                     if(index < classes.length - 1)
                         result[0].setNextClassNumber(index++);
                     model.setGradingInfo(result[0]);

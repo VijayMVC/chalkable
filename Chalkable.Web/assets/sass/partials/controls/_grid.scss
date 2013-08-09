@@ -25,6 +25,13 @@ BODY {
   }
 }
 
+.grid-container.not-transparent{
+  .chlk-grid{
+    @include border-radius(5px);
+    overflow: hidden;
+  }
+}
+
 .chlk-grid{
   .grid-focus{
     position: absolute;

@@ -24,6 +24,12 @@ BODY {
   DIV.page{
     >DIV#content {
       DIV#content-wrapper.profile{
+        .gradient{
+          @include background(linear-gradient(top, #f3eee0, #ece1c1));
+          border-top: 1px solid #fff;
+          border-bottom: 1px solid #8c6c0d;
+        }
+
         color: $color;
 
         .pacifico {
