@@ -17,6 +17,8 @@ NAMESPACE('chlk.models.grading', function () {
             [ria.serialize.SerializeProperty('typename')],
             String, 'typeName',
 
-            Number, 'value'
+            Number, 'value',
+
+            Number, 'index'
         ]);
 });

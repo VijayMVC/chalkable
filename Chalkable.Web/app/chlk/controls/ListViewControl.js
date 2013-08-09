@@ -12,10 +12,13 @@ NAMESPACE('chlk.controls', function () {
 
             [[Object, Object]],
             VOID, function prepareData(data,configs_) {
+                var getItemsMethod = 'getItems';
                 if(configs_){
                     configs_.selectedIndex !== undefined && this.setCurrentIndex(configs_.selectedIndex);
+                   if(configs_.itemsName)
+                       getItemsMethod = 'get' + configs_.itemsName;
                 }
-                this.setCount(data.length || data.getItems().length);
+                this.setCount(data.length || data[getItemsMethod]().length);
                 this.context.getDefaultView().getCurrent()
                     .addRefreshCallback(function (activity, model) {
                         this.getCurrentIndex() !== undefined && this.focusGrid();

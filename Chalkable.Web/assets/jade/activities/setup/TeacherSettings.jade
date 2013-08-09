@@ -1,6 +1,9 @@
-.announcement-form.loader-container
+.setup-page.teacher-settings.loader-container
     -topData = self.getTopData();
     -topItems = topData.getTopItems();
+    -selectedIndex = 0;
+    -gradingInfo = self.getGradingInfo();
+    -gradingTypes = [[1, "A-F"], [0, "100-0"], [2, Msg.Complete + '-' + Msg.Incomplete], [3,Msg.Check.toLowerCase()]];
     .loader
     +LeftRightToolbar(topItems, chlk.templates.class.TopBar)(
         selectedItemId=self.getGradingInfo().getClazz().getId().valueOf(),
@@ -12,6 +15,23 @@
                 +ActionLink('setup', 'hello')=Msg.Go_Back
             .right
                 +ActionLink('setup', 'hello', self.getGradingInfo().getNextClassNumber().valueOf()).next-class.disabled=Msg.Next_Class
-    div Hello!
+    +ListView(gradingInfo)(
+        selectedIndex = selectedIndex,
+        itemsName = "FinalGradeAnnType"
+    ).ann-types-list
+        each item, i in gradingInfo.getFinalGradeAnnType()
+            .row(class=(i == selectedIndex ? 'selected' : '') + " announcement-type-item", index=item.getIndex())
+                .left.name=item.getTypeName()
+                .right.relative
+                    input(typeId=item.getId(), value=(item.getValue()+"%")).announcement-type-weight
+                    .hint.absolute=Msg.Weight
+                .right.type-container
+                    +Select('grading-type')
+                        each gsItem in gradingTypes
+                            +Option(gsItem[0], gsItem[1], item.getGradingStyle() == gsItem[0])
+                .right.relative.drop-lowest-block
+                    .hint.absolute=Msg.Drop_lowest
+                    +SlideCheckbox("dropLowest" + i, item.isDropLowest()).drop-lowest
+
 
 
