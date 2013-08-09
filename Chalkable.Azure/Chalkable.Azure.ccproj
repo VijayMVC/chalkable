@@ -66,7 +66,7 @@
     <Folder Include="Profiles" />
   </ItemGroup>
   <ItemGroup>
-    <PublishProfile Include="Profiles\chalkablestaging-1Production.azurePubxml" />
+    <PublishProfile Include="Profiles\chalkablestaging.azurePubxml" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>
