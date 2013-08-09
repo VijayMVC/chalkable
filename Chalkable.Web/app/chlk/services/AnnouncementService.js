@@ -94,8 +94,8 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function listLast(classId, announcementTypeId, schoolPersonId) {
                 return this.get('Announcement/ListLast.json', ArrayOf(String), {
                     classId: classId.valueOf(),
-                    announcementTypeRef: announcementTypeId,
-                    schoolPersonId: schoolPersonId.valueOf()
+                    announcementTypeId: announcementTypeId,
+                    personId: schoolPersonId.valueOf()
                 });
             },
 

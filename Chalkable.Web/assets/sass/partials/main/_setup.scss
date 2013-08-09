@@ -4,6 +4,51 @@ BODY {
   DIV.page{
     >DIV#content {
       DIV#content-wrapper{
+        .announcement-type-item{
+          .name{
+            color: #423a22;
+            font: bold 24px Arial;
+            text-shadow: 1px 1px 0px white;
+            height: 42px;
+            overflow: hidden;
+            line-height: 36px;
+            max-width: 350px;
+            text-overflow: ellipsis;
+          }
+
+          .announcement-type-weight{
+            border: 1px solid #af9c60;
+            font: bold 14px Arial;
+            color: #423a22;
+            height: 30px;
+            line-height: 30px;
+            padding: 0 6px;
+            width: 40px;
+            text-align: center;
+            @include box-shadow(inset 0 1px 2px #c5c5c5);
+          }
+
+          .hint {
+            bottom: -20px;
+            text-align: center;
+            font: normal 11px Arial;
+            color: #532f18;
+            left: 0;
+            right: 0;
+            text-shadow: 0 1px 0 white;
+          }
+
+          .type-container{
+            select{
+              width: 50px;
+            }
+          }
+
+          .drop-lowest-block{
+            margin-top: 6px;
+          }
+        }
+
         .setup-page{
           h1{
             text-align: center;

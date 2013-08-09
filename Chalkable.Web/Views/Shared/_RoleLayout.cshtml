@@ -160,8 +160,8 @@
         };
     });
 
-    //var markingPeriod = JSON.parse(HtmlEncode('@ViewData["MarkingPeriod"]')).data;
-    //var nextMarkingPeriod = JSON.parse(HtmlEncode('@ViewData["NextMarkingPeriod"]')).data;
+    var markingPeriod = JSON.parse(HtmlEncode('@ViewData["MarkingPeriod"]')).data;
+    var nextMarkingPeriod = JSON.parse(HtmlEncode('@ViewData["NextMarkingPeriod"]')).data;
 
     var finalizedClassesIds = '@ViewData["FinalizedClassesIds"]' ? JSON.parse(HtmlEncode('@ViewData["FinalizedClassesIds"]')).data || [] : [];
 

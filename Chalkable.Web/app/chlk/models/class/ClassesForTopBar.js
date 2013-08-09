@@ -1,4 +1,4 @@
-REQUIRE('chlk.models.class.ClassForTopBar');
+REQUIRE('chlk.models.class.Class');
 REQUIRE('chlk.models.id.ClassId');
 
 NAMESPACE('chlk.models.class', function () {
@@ -10,7 +10,7 @@ NAMESPACE('chlk.models.class', function () {
     /** @class chlk.models.class.ClassesForTopBar*/
     CLASS(
         'ClassesForTopBar', [
-            ArrayOf(chlk.models.class.ClassForTopBar), 'topItems',
+            ArrayOf(chlk.models.class.Class), 'topItems',
             chlk.models.id.ClassId, 'selectedItemId',
             Boolean, 'disabled'
         ]);
