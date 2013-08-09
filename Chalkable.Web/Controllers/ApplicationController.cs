@@ -175,8 +175,8 @@ namespace Chalkable.Web.Controllers
             bool needsliveApp = false, bool needsSecretKey = false)
         {
             bool cangetSecretKey = false;
-            if (needsSecretKey)
-                cangetSecretKey = locator.ApplicationService.CanGetSecretKey(new List<Application> {application});
+            //if (needsSecretKey)
+              //  cangetSecretKey = locator.ApplicationService.CanGetSecretKey(new List<Application> {application});
             var categories = locator.CategoryService.ListCategories();
             var res = ApplicationViewData.Create(application, categories, cangetSecretKey);
             if (needsliveApp && application.OriginalRef.HasValue)

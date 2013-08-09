@@ -8,9 +8,9 @@ REQUIRE('chlk.models.id.MarkingPeriodId');
 NAMESPACE('chlk.models.class', function () {
     "use strict";
 
-    /** @class chlk.models.class.ClassForTopBar*/
+    /** @class chlk.models.class.Class*/
     CLASS(
-        'ClassForTopBar', [
+        'Class', [
             chlk.models.course.Course, 'course',
 
             String, 'description',

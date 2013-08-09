@@ -1,13 +1,10 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
-REQUIRE('chlk.models.class.Class');
-REQUIRE('chlk.models.class.ClassForWeekMask');
-REQUIRE('chlk.models.id.ClassId');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
 
-    /** @class chlk.services.ClassService*/
+    /** @class chlk.services.PreferenceService*/
     CLASS(
         'ClassService', EXTENDS(chlk.services.BaseService), [
 

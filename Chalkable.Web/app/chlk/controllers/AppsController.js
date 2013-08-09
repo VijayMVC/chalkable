@@ -9,6 +9,7 @@ REQUIRE('chlk.activities.apps.AddAppDialog');
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.apps.AppPostData');
 REQUIRE('chlk.models.apps.AppAccess');
+REQUIRE('chlk.models.apps.AppState');
 REQUIRE('chlk.models.id.AppId');
 REQUIRE('chlk.models.id.AppPermissionId');
 
@@ -41,7 +42,9 @@ NAMESPACE('chlk.controllers', function (){
 
         },
 
-
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DEVELOPER
+        ])],
         chlk.models.apps.Application, function getCurrentApp(){
             var result = null;
             if (this.userInRole(this.getCurrentRole().getRoleId()))
@@ -49,30 +52,39 @@ NAMESPACE('chlk.controllers', function (){
             return result;
         },
 
+
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
-        function refreshDeveloperAction() {
-            this.appsService
-                .getApps()
-                .then(function(data){
-                    var apps = data.getItems();
-                    this.getContext().getSession().set('dev-apps', apps);
-                }, this);
+        [[chlk.models.id.AppId]],
+        chlk.models.apps.Application, function getAppById(id){
+            var result = null;
+            if (this.userInRole(this.getCurrentRole().getRoleId())){
+                var apps = this.getContext().getSession().get('dev-apps');
+                result = apps
+                        .filter(function(item){
+                            return item.getId() == id;
+                        });
+            }
+
+            if (result && result.length > 0) result = result[0];
+            return result;
         },
 
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
         [[chlk.models.apps.Application]],
-        function detailsDeveloperAction(app_) {
+        function switchApp(app) {
+            this.getContext().getSession().set('currentApp', app);
+        },
 
 
-            app_ = this.getCurrentApp();
-            if (!app_){
-                return this.forward_('apps', 'add', []);
-            }
-
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DEVELOPER
+        ])],
+        [[chlk.models.apps.Application]],
+        ria.async.Future, function prepareAppInfo(app_) {
             var result = this.categoryService
                 .getCategories()
                 .then(function(data){
@@ -94,11 +106,42 @@ NAMESPACE('chlk.controllers', function (){
                     var appGradeLevels = app_.getGradeLevels();
                     if (!appGradeLevels) app_.setGradeLevels([]);
                     var appCategories = app_.getCategories();
-                    if (!appCategories) app_.setAppCategories([]);
-                    return new ria.async.DeferredData(new chlk.models.apps.AppInfoViewData(app_, false, cats, gradeLevels, permissions, true));
+                    if (!appCategories) app_.setCategories([]);
+
+
+                    if (!app_.getState()){
+                        var appState = new chlk.models.apps.AppState();
+                        appState.deserialize(chlk.models.apps.AppStateEnum.DRAFT);
+                        app_.setState(appState);
+                    }
+
+
+
+                    if (!app_.getAppAccess())
+                        app_.setAppAccess(new chlk.models.apps.AppAccess());
+                    return new chlk.models.apps.AppInfoViewData(app_, false, cats, gradeLevels, permissions, true);
 
                 }, this);
-            return this.PushView(chlk.activities.apps.AppInfoPage, result);
+
+            return result;
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DEVELOPER
+        ])],
+        [[chlk.models.id.AppId]],
+        function detailsDeveloperAction(appId_) {
+            var app = null;
+            if (appId_)
+                app = this.getAppById(appId_);
+            if (!app)
+                app = this.getCurrentApp();
+            if (!app){
+                return this.forward_('apps', 'add', []);
+            }
+
+
+            return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(app));
 
         },
 
@@ -120,9 +163,9 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.appsService
                 .createApp(devId, model.getName())
                 .then(function(data){
-                    return data;
-                });
-            return this.forward_('apps', 'details', [result]);
+                    this.switchApp(data);
+                }, this);
+            return this.forward_('apps', 'details');
         },
 
         [chlk.controllers.AccessForRoles([
@@ -130,6 +173,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.apps.AppPostData]],
         function updateDeveloperAction(model){
+             //update all apps list
 
         }
     ])

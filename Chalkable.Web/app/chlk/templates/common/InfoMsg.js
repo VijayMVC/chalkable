@@ -1,5 +1,5 @@
 REQUIRE('chlk.templates.JadeTemplate');
-REQUIRE('chlk.models.class.ClassForTopBar');
+REQUIRE('chlk.models.class.Class');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.CourseId');
 

@@ -1,7 +1,7 @@
 mixin Checkbox(name, val)
-    input(type="hidden", name=name, value="false")
+    //input(type="hidden", name=name, value="false")
     if val
-        input(name=name, type="checkbox", checked)(attributes)
+        input(id=name, type="checkbox", checked)(attributes)
     else
-        input(name=name, type="checkbox")(attributes)
+        input(id=name, type="checkbox")(attributes)
 

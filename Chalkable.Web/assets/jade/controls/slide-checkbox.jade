@@ -1,7 +1,7 @@
 mixin SlideCheckbox(name, val)
     .slide-checkbox
         .wrapper
-            +Checkbox(name, val)
+            +Checkbox(name, val)(attributes)
             label(for=name)
 
 

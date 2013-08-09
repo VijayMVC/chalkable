@@ -1,4 +1,4 @@
-REQUIRE('chlk.models.class.ClassForTopBar');
+REQUIRE('chlk.models.class.Class');
 REQUIRE('chlk.models.grading.Mapping');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
 REQUIRE('chlk.models.id.CourseId');

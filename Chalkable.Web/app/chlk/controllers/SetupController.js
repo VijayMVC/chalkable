@@ -1,9 +1,17 @@
 REQUIRE('chlk.controllers.BaseController');
+
 REQUIRE('chlk.services.TeacherService');
 REQUIRE('chlk.services.PersonService');
+REQUIRE('chlk.services.FinalGradeService');
+REQUIRE('chlk.services.CalendarService');
+REQUIRE('chlk.services.ClassService');
+
 REQUIRE('chlk.activities.setup.HelloPage');
+REQUIRE('chlk.activities.setup.TeacherSettingsPage');
+
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.people.User');
+REQUIRE('chlk.models.setup.TeacherSettings');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -16,6 +24,15 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.PersonService, 'personService',
+
+            [ria.mvc.Inject],
+            chlk.services.FinalGradeService, 'finalGradeService',
+
+            [ria.mvc.Inject],
+            chlk.services.CalendarService, 'calendarService',
+
+            [ria.mvc.Inject],
+            chlk.services.ClassService, 'classService',
 
             [[chlk.models.people.User]],
             function prepareProfileData(model){
@@ -61,6 +78,45 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.setup.HelloPage, result);
             },
 
+            [[Number]],
+            function teacherSettingsAction(index){
+                var classes = this.classService.getClassesForTopBar();
+                var classId = classes[index].getId();
+
+                var result = ria.async.wait([
+                    this.finalGradeService.getFinalGrades(classId, false),
+                    this.calendarService.getTeacherClassWeek(classId)
+                ]).then(function(result){
+                    var serializer = new ria.serialize.JsonSerializer();
+                    var model = new chlk.models.setup.TeacherSettings();
+                    var topModel = new chlk.models.class.ClassesForTopBar();
+                    topModel.setTopItems(classes);
+                    topModel.setDisabled(true);
+                    topModel.setSelectedItemId(classId);
+                    model.setTopData(topModel);
+                    model.setCalendarInfo(result[1]);
+                    if(index < classes.length - 1)
+                        result[0].setNextClassNumber(index++);
+                    model.setGradingInfo(result[0]);
+                    return model;
+                });
+                return this.PushView(chlk.activities.setup.TeacherSettingsPage, result);
+            },
+
+            [[chlk.models.grading.Final]],
+            function teacherSettingsEditAction(model){
+                this.teacherService.update(model.getId(), model.getParticipation(), model.getAttendance(), model.getDropLowestAttendance(),
+                    model.getDiscipline(), model.getDropLowestDiscipline(), model.getGradingStyle(), model.getFinalGradeAnnouncementTypeIds(),
+                    model.getPercents(), model.getDropLowest(), model.getGradingStyleByType(), model.getNeedsTypesForClasses())
+                    .then(function(model){
+                        var index = model.getNextClassNumber();
+                        if(index){
+                            this.redirect_('setup', 'teacherSettings', [index]);
+                        }
+
+                    })
+            },
+
             [[chlk.models.people.User]],
             function infoEditAction(model){
                 this.personService.changePassword(model.getId(), model.getPassword())
@@ -71,7 +127,7 @@ NAMESPACE('chlk.controllers', function (){
                             .attach(this.validateResponse_())
                             .then(function(model){
                                 this.StopLoading(chlk.activities.setup.HelloPage);
-                                return this.redirect_('feed', 'list', []);
+                                return this.redirect_('setup', 'teacherSettings', [0]);
                             }.bind(this));
                     }.bind(this));
                 this.StartLoading(chlk.activities.setup.HelloPage);

@@ -6,9 +6,11 @@ mixin DemoRoleButton(name)
             =name
 
 
+-apps = self.getApps()
+-currentApp = self.getCurrentApp()
 
 #dev-apps
-    +AppsList('dev-apps-list', [])#dev-apps-list
+    +AppsList('dev-apps-list', apps, currentApp)#dev-apps-list
 .border.demo-end.hidden
 .demo-end.hidden
     h3 Demo

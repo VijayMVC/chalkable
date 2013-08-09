@@ -25,6 +25,7 @@ NAMESPACE('chlk', function (){
                 var serializer = new ria.serialize.JsonSerializer();
                 session.set('role', new chlk.models.common.Role(chlk.models.common.RoleEnum.DEVELOPER, 'Developer'));
                 session.set('currentApp', serializer.deserialize(window.application || {}, chlk.models.apps.Application));
+                session.set('dev-apps', serializer.deserialize(window.applications || {}, ArrayOf(chlk.models.apps.Application)));
                 return session;
             },
 
@@ -33,11 +34,10 @@ NAMESPACE('chlk', function (){
                 this.getContext().getSession().set('currentApp', app);
             },
 
-            /*ArrayOf(chlk.models.apps.Application), function getApps(){
-                var res = this.getContext().getSession();//.get('dev-apps') || [];
-                console.log(res);
+            ArrayOf(chlk.models.apps.Application), function getApps(){
+                var res = this.getContext().getSession().get('dev-apps') || [];
                 return res;
-            },*/
+            },
 
             chlk.models.apps.Application, function getCurrentApp(){
                 var res = this.getContext().getSession().get('currentApp');
