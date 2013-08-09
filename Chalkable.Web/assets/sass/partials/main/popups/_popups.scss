@@ -1,0 +1,254 @@
+#chlk-overlay{
+  display: block;
+  background-color: #000;
+  @include opacity(0.2);
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+
+  &.x-hidden{
+    display: none;
+  }
+}
+
+
+#chlk-dialogs{
+  min-width: 800px;
+  min-height: 700px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -12px;
+  bottom: -12px;
+
+  &.x-hidden{
+    display: none;
+  }
+
+  .dialog{
+    position: absolute;
+    visibility: visible;
+    z-index: 9003;
+
+    .x-window-header{
+      color: #5d6d75;
+      font-size: 18px;
+      margin-left: 25px;
+      padding: 5px 0 4px 0;
+      font: bold 24px Arial;
+    }
+
+    .x-window-body{
+      padding: 5px 15px 0px 0px;
+
+
+      .x-fieldset-header-text{
+        font: bold 11px tahoma, arial, helvetica, sans-serif;
+        color: #15428b;
+        margin-left: 20px;
+        text-align: left;
+        margin-bottom: 15px;
+        display: inline-block;
+      }
+    }
+
+    &.gray{
+      left: 191px;
+      top: 75px;
+      min-width: 390px;
+      min-height: 500px;
+      background: #e7e7e7;
+      border: 1px solid #adadad;
+      border-radius: 15px;
+    }
+
+
+
+    &.add-school{
+
+      left: 132px;
+      min-width: 500px;
+
+      .x-window-body{
+        padding: 7px;
+
+        .submit-btn{
+          margin-left: 180px;
+          margin-top: 25px;
+          margin-right: 5px;
+        }
+        .cancel-btn{
+
+        }
+
+        .x-form-field{
+          margin-bottom: 4px;
+          label{
+            width: 125px;
+            display: inline-block;
+            text-align: right;
+            height: 18px;
+            color: #808080;
+            font: normal 14px tahoma, arial, helvetica, sans-serif;
+            padding: 3px;
+            padding-left: 0;
+          }
+
+          #timezoneId{
+            width: 227px;
+          }
+          input{
+            width: 222px;
+            border-radius: 5px;
+
+
+            &.checkbox-last{
+              width: 12px;
+              margin-bottom: 40px;
+            }
+
+          }
+        }
+
+      }
+    }
+
+    &.add-district{
+      min-height: 290px;
+      .x-window-body{
+
+
+        .submit-btn{
+          margin-left: 180px;
+          margin-top: 25px;
+          margin-right: 5px;
+        }
+        .cancel-btn{
+
+        }
+
+        .x-form-field{
+          margin-bottom: 4px;
+          label{
+            width: 125px;
+            display: inline-block;
+            text-align: right;
+            height: 18px;
+            color: #808080;
+            font: normal 14px tahoma, arial, helvetica, sans-serif;
+            padding: 3px;
+            padding-left: 0;
+          }
+
+
+          input{
+            width: 222px;
+            border-radius: 5px;
+          }
+        }
+
+      }
+    }
+
+    &.add-department{
+      min-height: 200px;
+      .x-window-body{
+
+
+
+        .submit-btn{
+          margin-left: 265px;
+          margin-top: 5px;
+          margin-right: 5px;
+        }
+
+        .x-form-field{
+          margin-bottom: 4px;
+          label{
+            width: 125px;
+            display: inline-block;
+            text-align: right;
+            height: 18px;
+            color: #808080;
+            font: normal 14px tahoma, arial, helvetica, sans-serif;
+            padding: 3px;
+            padding-left: 0;
+          }
+          input{
+            width: 312px;
+            border-radius: 5px;
+          }
+        }
+      }
+    }
+
+    &.add-app-category{
+      min-height: 200px;
+      .x-window-body{
+
+
+
+        .submit-btn{
+          margin-left: 265px;
+          margin-top: 5px;
+          margin-right: 5px;
+        }
+
+        .x-form-field{
+          margin-bottom: 4px;
+          label{
+            width: 125px;
+            display: inline-block;
+            text-align: right;
+            height: 18px;
+            color: #808080;
+            font: normal 14px tahoma, arial, helvetica, sans-serif;
+            padding: 3px;
+            padding-left: 0;
+          }
+          input{
+            width: 312px;
+            border-radius: 5px;
+          }
+        }
+      }
+    }
+
+    &.add-app{
+      position: fixed;
+      bottom: 6px;
+      left: 5px;
+      width: 247px;
+      background: url(images/demo/demo-bg.png) 0 0 repeat;
+      height: 79px;
+
+
+      .add, .cancel{
+        margin-top: 8px;
+      }
+
+      .add{
+        margin-right: 20px;
+        margin-left: 6px;
+      }
+
+      button{
+        width: 90px;
+        font-size: 17px;
+        font-weight: bold;
+
+
+
+      }
+
+      input{
+        margin-top: 5px;
+        width: 225px;
+        margin-left: 6px;
+        border-radius: 0;
+      }
+    }
+  }
+}

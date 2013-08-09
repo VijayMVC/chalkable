@@ -1,0 +1,420 @@
+BODY {
+  DIV.page{
+    >DIV#content {
+      #main {
+        >SPAN.demo{
+          background: url(images/register/demo-bg.png) 0 0 no-repeat;
+          position: relative;
+          top: 365px;
+          left: 350px;
+          height: 0;
+          width: 0;
+          opacity: 0;
+          display: block;
+
+          .buttons-container{
+            height: 39px;
+            width: 258px;
+            position: absolute;
+            top: 316px;
+            left: 245px;
+            display: none;
+
+            a
+            {
+              float: right;
+              height: 39px;
+            }
+
+            a.Student
+            {
+              width: 85px;
+              background: url(images/common/demo-buttons-sprite.png) 0 0 no-repeat;
+
+              &:hover
+              {
+                background-position: -258px 0;
+              }
+
+              &:active
+              {
+                background-position: -516px 0;
+              }
+            }
+
+            a.Teacher
+            {
+              width: 88px;
+              background: url(images/common/demo-buttons-sprite.png) -85px 0 no-repeat;
+
+              &:hover
+              {
+                background-position: -343px 0;
+              }
+
+              &:active
+              {
+                background-position: -601px 0;
+              }
+            }
+
+            a.Admin
+            {
+              width: 85px;
+              background: url(images/common/demo-buttons-sprite.png) -173px 0 no-repeat;
+
+              &:hover
+              {
+                background-position: -431px 0;
+              }
+
+              &:active
+              {
+                background-position: -689px 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+  #demo-footer{
+    height: 79px;
+    border: 6px solid #c79051;
+    background: url(images/demo/demo-bg.png) 0 0 repeat;
+    background-color: #e7c58a;
+    -moz-border-image: url(images/demo/demo-bar.png) 6 round round;
+    -webkit-border-image: url(images/demo/demo-bar.png) 6 round round;
+    -o-border-image: url(images/demo/demo-bar.png) 6 round round;
+    border-image: url(images/demo/demo-bar.png) 6 round round;
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    .demo-end{
+      display: none;
+    }
+
+
+    #dev-apps{
+      &.wide{
+        min-width: 246px;
+      }
+    }
+
+    #dev-apps-list{
+      &.x-hidden{
+        display: none;
+      }
+    }
+
+    &.top{
+      z-index: 999999;
+    }
+
+    H{
+      background: url(images/demo/header3.png) 0 0 no-repeat;
+      @include background-size(100% 100%);
+      display: block;
+      height: 32px;
+      font: bold 18px Arial;
+      line-height: 32px;
+      text-align: center;
+      color: #74441d;
+      text-shadow: 1px -1px 0px white;
+    }
+
+    #first-tooltip{
+      background: url(images/developer/first-tooltip.png) 0 0 no-repeat;
+      position: absolute;
+      top: -80px;
+      left: 700px;
+      height: 67px;
+      width: 372px;
+      cursor: pointer;
+    }
+
+    #demo-sign-up-container, #demo-end-container{
+      text-align: center;
+      padding-top: 8px;
+
+      BUTTON{
+        font-size: 12px !important;
+      }
+    }
+
+    #app-name-form{
+      background: url(images/demo/demo-bg.png) 0 0 repeat;
+      padding: 7px 23px;
+
+      #add-app-name-field{
+        background: white !important;
+        border: 1px solid #957442 !important;
+        @include border-radius(3px !important);
+        font-size: 18px;
+        width: 182px !important;
+        height: 14px !important;
+        padding: 8px;
+      }
+
+      .x-panel-btns {
+        padding: 5px 0;
+
+        .form-button{
+          BUTTON{
+            width: 75px;
+          }
+
+          &.big{
+            position: relative;
+            left: -3px;
+
+            BUTTON{
+              width: 181px;
+            }
+          }
+        }
+      }
+    }
+
+    >DIV{
+      display: table-cell !important;
+      height: 80px;
+      vertical-align: top;
+
+      &:not(.border){
+        min-width: 170px;
+      }
+
+
+      &.border{
+        width:6px;
+        background: url(images/demo/demo-bar.png) 0 -7px no-repeat;
+      }
+
+      &.hidden{
+        display: none !important;
+      }
+
+      &#fb{
+
+        .fb-like{
+          padding: 11px 10px;
+          display: inline-block;
+
+          SPAN{
+            width: 150px !important;
+
+            IFRAME{
+              position: relative;
+            }
+          }
+
+          .fb_iframe_widget {
+            bottom: 79px;
+            top: auto !important;
+          }
+        }
+      }
+    }
+
+    #principal{
+      width: 41px;
+      background: url(images/demo/demo-email.png) 0 0 no-repeat;
+      cursor: pointer;
+      height: 28px;
+      display: inline-block;
+      vertical-align: middle;
+      margin: -3px 5px 0 0;
+
+      &:hover{
+        opacity: 0.8;
+      }
+
+      &:active{
+        opacity: 0.6;
+      }
+    }
+
+    A.demo-role-button{
+      display: inline-block;
+      padding: 5px;
+      text-align: center;
+      margin: 0 5px;
+
+      &:first-child{
+        margin-left: 10px;
+      }
+
+      &:not(.coming){
+        &:hover, &.active{
+          SPAN{
+            background: url(images/demo/active-bg.png) 0 0 no-repeat;
+            color: black;
+          }
+        }
+      }
+
+      SPAN{
+        margin: 5px;
+        background: white;
+        display: block;
+        line-height: 59px;
+        text-align: center;
+        font: bold 20px Arial;
+        color: #74441d;
+        width: 140px;
+        height: 65px;
+        line-height: 65px;
+        cursor: pointer;
+        text-shadow: 1px -1px 0px white;
+        position: relative;
+
+        >SPAN{
+          width: 150px;
+        }
+
+        .mark{
+          position: absolute;
+          top: 4px;
+          background: url(images/demo/red-mark.png) 0 0 no-repeat;
+          width: 4px;
+          height: 4px;
+
+          &.left{
+            left: 4px;
+          }
+
+          &.right{
+            right: 4px;
+          }
+        }
+      }
+
+      &.coming{
+        SPAN SPAN{
+          background: url(images/demo/coming.png) right 0 no-repeat;
+          top: -10px;
+          left: -10px;
+          right: -10px;
+          bottom: -10px;
+          position: absolute;
+        }
+      }
+    }
+  }
+
+  #tellfriend {
+    position: fixed;
+    display: none;
+    top: 0;
+    margin: 0 auto;
+    color: #fff;
+    padding: 15px;
+    width: 380px;
+    z-index: 10000000;
+    border: 1px solid #ccc;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    background-color: #f2f2f2;
+    left: 0;
+    right: 0;
+
+    #tellafriend-submit-container{
+      margin-top: 10px;
+      min-height: 10px !important;
+    }
+  }
+
+  #tellfriend a.close {
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    background: url(images/ui/close-btn.png) no-repeat;
+    height: 30px;
+    width: 30px;
+    overflow: hidden;
+    text-indent: -1000px;
+  }
+
+  #tellfriend form textarea {
+    height: 80px;
+  }
+
+  .contact-form {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    background-color: #f2f2f2;
+  }
+
+  .contact-form form input.std_input {
+    margin-bottom: 10px;
+  }
+
+  form label.clear {
+    clear: both;
+    float: left;
+    margin-top: 10px;
+  }
+
+  form label.full {
+    width: 99%;
+  }
+
+  form label.required {
+    font-weight: bold;
+  }
+
+  form select {
+    margin-bottom: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    font: 14px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+    color: #6e6e6e;
+  }
+
+  form label {
+    color: #808080;
+    font-size: 14px;
+  }
+
+  form input.std_input,
+  form textarea {
+    border: 1px solid #ccc;
+    width: 97%;
+    font: 15px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+    padding: 5px;
+    color: #6e6e6e;
+  }
+
+  form table {
+    width: 100%;
+  }
+
+  form table input.std_input {
+    width: 93%;
+  }
+
+  form table.three-col input.std_input {
+    width: 90%;
+  }
+
+  form input.form_but {
+    margin-top: 10px;
+    background-color: #93ba31;
+    border: 3px solid #afdd39;
+    color: #fff;
+    font: bold 15px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    padding: 5px 10px;
+  }
+
+}
