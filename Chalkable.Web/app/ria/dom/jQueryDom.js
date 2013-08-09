@@ -306,6 +306,10 @@ NAMESPACE('ria.dom', function () {
             SELF, function trigger(event) {
                 this._dom.trigger(event);
                 return this;
+            },
+
+            Boolean, function checked() {
+                return this.parent().find('.hidden-checkbox').getData('value');
             }
         ]);
 
