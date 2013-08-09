@@ -22,6 +22,12 @@ NAMESPACE('chlk.services', function () {
                     developerId: devId.valueOf(),
                     name: name
                 });
+            },
+            [[chlk.models.id.AppId]],
+            ria.async.Future, function getInfo(appId) {
+                return this.get('Application/GetInfo.json', chlk.models.apps.Application, {
+                    applicationId: appId.valueOf()
+                });
             }
 
 

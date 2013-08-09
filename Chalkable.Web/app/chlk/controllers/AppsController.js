@@ -45,35 +45,6 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
-        chlk.models.apps.Application, function getCurrentApp(){
-            var result = null;
-            if (this.userInRole(this.getCurrentRole().getRoleId()))
-                result = this.getContext().getSession().get('currentApp');
-            return result;
-        },
-
-
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.DEVELOPER
-        ])],
-        [[chlk.models.id.AppId]],
-        chlk.models.apps.Application, function getAppById(id){
-            var result = null;
-            if (this.userInRole(this.getCurrentRole().getRoleId())){
-                var apps = this.getContext().getSession().get('dev-apps');
-                result = apps
-                        .filter(function(item){
-                            return item.getId() == id;
-                        });
-            }
-
-            if (result && result.length > 0) result = result[0];
-            return result;
-        },
-
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.DEVELOPER
-        ])],
         [[chlk.models.apps.Application]],
         function switchApp(app) {
             this.getContext().getSession().set('currentApp', app);
@@ -81,6 +52,23 @@ NAMESPACE('chlk.controllers', function (){
 
 
         [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DEVELOPER
+        ])],
+        ria.async.Future, function getCurrentApp() {
+            return this.prepareAppInfo(this.getContext().getSession().get('currentApp'));
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DEVELOPER
+        ])],
+        [[ArrayOf(chlk.models.apps.Application)]],
+        function updateApps(apps) {
+            this.getContext().getSession().set('dev-apps', apps);
+        },
+
+
+
+            [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
         [[chlk.models.apps.Application]],
@@ -131,17 +119,19 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AppId]],
         function detailsDeveloperAction(appId_) {
-            var app = null;
-            if (appId_)
-                app = this.getAppById(appId_);
-            if (!app)
-                app = this.getCurrentApp();
-            if (!app){
-                return this.forward_('apps', 'add', []);
-            }
 
+            var app = appId_ ? this.appsService
+                    .getInfo(appId_)
+                    .then(function(data){
+                        if (!data){
+                            return this.forward_('apps', 'add', []);
+                        }
 
-            return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(app));
+                        return this.prepareAppInfo(data);
+                    }, this) :
+                    this.getCurrentApp();
+
+            return this.PushView(chlk.activities.apps.AppInfoPage, app);
 
         },
 
@@ -164,8 +154,20 @@ NAMESPACE('chlk.controllers', function (){
                 .createApp(devId, model.getName())
                 .then(function(data){
                     this.switchApp(data);
+                    this.appsService
+                        .getApps()
+                        .then(function(data){
+                            if (data){
+                                var items = data.getItems();
+                                this.updateApps(items);
+                            }
+                        }, this)
+
+                }, this)
+                .then(function(){
+                    return this.forward_('apps', 'details', []);
                 }, this);
-            return this.forward_('apps', 'details');
+            return result;
         },
 
         [chlk.controllers.AccessForRoles([
