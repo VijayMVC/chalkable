@@ -2,6 +2,8 @@ REQUIRE('chlk.BaseApp');
 REQUIRE('chlk.controllers.SettingsController');
 REQUIRE('chlk.controllers.AccountController');
 REQUIRE('chlk.controllers.AppsController');
+REQUIRE('chlk.models.apps.Application');
+REQUIRE('chlk.controls.AppsListControl');
 
 
 
@@ -31,6 +33,17 @@ NAMESPACE('chlk', function (){
                 this.getContext().getSession().set('currentApp', app);
             },
 
+            /*ArrayOf(chlk.models.apps.Application), function getApps(){
+                var res = this.getContext().getSession();//.get('dev-apps') || [];
+                console.log(res);
+                return res;
+            },*/
+
+            chlk.models.apps.Application, function getCurrentApp(){
+                var res = this.getContext().getSession().get('currentApp');
+                return res;
+            },
+
             OVERRIDE, ria.async.Future, function onStart_() {
                 return BASE()
                     .then(function(data){
@@ -41,10 +54,10 @@ NAMESPACE('chlk', function (){
                     })
                     .then(function(data){
                         new ria.dom.Dom()
-                            .fromHTML(ASSET('~/assets/jade/demofooters/DeveloperDemoFooter.jade')())
+                            .fromHTML(ASSET('~/assets/jade/demofooters/DeveloperDemoFooter.jade')(this))
                             .appendTo('#demo-footer');
                         return data;
-                    });
+                    }, this);
             }
         ]);
 });

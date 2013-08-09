@@ -11,7 +11,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
     {
         public DateTime Date { get; set; }
         public int Day { get; set; }
-        IList<AnnouncementCalendarDayItemViewData> CalendarDayItems { get; set; }
+        public IList<AnnouncementCalendarDayItemViewData> CalendarDayItems { get; set; }
 
         public static AnnouncementDayCalendarViewData Create(IList<Period> periods, DateTime date,IList<ClassPeriod> classPeriods, 
             IList<ClassDetails> classes, IList<AnnouncementComplex> announcements, IList<Room> rooms)

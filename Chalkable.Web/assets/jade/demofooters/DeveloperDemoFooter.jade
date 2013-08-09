@@ -5,9 +5,10 @@ mixin DemoRoleButton(name)
             .mark.right
             =name
 
+
+
 #dev-apps
-    +Select()#dev-apps-list
-        +Option("add-app", "Add app")
+    +AppsList('dev-apps-list', [])#dev-apps-list
 .border.demo-end.hidden
 .demo-end.hidden
     h3 Demo

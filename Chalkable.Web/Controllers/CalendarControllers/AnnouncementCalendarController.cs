@@ -94,9 +94,8 @@ namespace Chalkable.Web.Controllers.CalendarControllers
          [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_ANNOUNCEMENT_DAY, true, CallType.Get, new[] { AppPermissionType.Schedule })]
          public ActionResult Day(DateTime? date, Guid? schoolPersonId)
          {
-             DateTime start, end;
-             WeekCalendar(ref date, out start, out end);
-             return Json(BuildDayAnnCalendar(SchoolLocator, date, null, schoolPersonId, GetCurrentSchoolYearId()));
+             var res = BuildDayAnnCalendar(SchoolLocator, date, null, schoolPersonId, GetCurrentSchoolYearId());
+             return Json(res, 8);
          }
 
          public static IList<AnnouncementDayCalendarViewData> BuildDayAnnCalendar(IServiceLocatorSchool locator, DateTime? date, 

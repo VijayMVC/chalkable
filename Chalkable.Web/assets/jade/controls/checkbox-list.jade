@@ -1,6 +1,7 @@
 mixin CheckboxList(listName, checkboxPref, defaultVal)
-    -self.setParams({name: listName, checkboxPrefix: checkboxPref})
-    .checkbox-list
+    -attributes['data-name'] = escape(listName);
+    -attributes['data-prefix'] = escape(checkboxPref);
+    .checkbox-list(attributes)
         +Hidden(listName, defaultVal)
         block
 

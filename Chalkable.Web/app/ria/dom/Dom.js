@@ -248,6 +248,14 @@ NAMESPACE('ria.dom', function () {
             },
 
             [[SELF]],
+            SELF, function removeSelf() {
+                this.forEach(function(element){
+                    element.parentNode.removeChild(element);
+                });
+                return this;
+            },
+
+            [[SELF]],
             Boolean, function areEquals(el){
                 var val1 = this.valueOf(), val2 = el.valueOf(), len = val1.length;
                 if(len != val2.valueOf().length)
@@ -387,7 +395,12 @@ NAMESPACE('ria.dom', function () {
                 return this._dom.value;
             },
             [[Object]],
-            SELF, function setAllAttrs(obj) {},
+            SELF, function setAllAttrs(obj) {
+                for(var k in obj) if (obj.hasOwnProperty(k))
+                    this.setAttr(k, obj[k]);
+
+                return this;
+            },
             [[String, Object]],
             SELF, function setAttr(name, value) {
                 var node = this._dom[0];
@@ -399,7 +412,6 @@ NAMESPACE('ria.dom', function () {
                 this._dom.value = value;
                 return this;
             },
-
 
             /* data attributes */
 

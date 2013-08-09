@@ -10,26 +10,13 @@ NAMESPACE('chlk.controls', function () {
                 ASSET('~/assets/jade/controls/checkbox-list.jade')(this);
             },
 
-            String, 'name',
-            String, 'checkboxPrefix',
-
-            String, function getIds(){
-                return "test";
-            },
-
-
-            [[Object]],
-            VOID, function setParams(params){
-                this.setName(params.name);
-                this.setCheckboxPrefix(params.checkboxPrefix);
-            },
-
             [ria.mvc.DomEventBind('click', '.checkbox-list')],
             [[ria.dom.Dom, ria.dom.Event]],
             function onClicked($target, node){
                 var checkboxes = $target.find('input[type=checkbox]');
                 var res = [];
-                var prefix = this.getCheckboxPrefix();
+                var prefix = $target.getData('prefix');
+                var name = $target.getData('name');
                 checkboxes
                     .filter(function(el){
                         return el.is(":checked");
@@ -38,7 +25,7 @@ NAMESPACE('chlk.controls', function () {
                         res.push(el.getAttr('name').split(prefix).pop());
                     });
                 res = res.join(',');
-                new ria.dom.Dom("input[name=" + this.getName() + "]").setValue(res);
+                new ria.dom.Dom("input[name=" + name + "]").setValue(res);
             }
         ]);
 });

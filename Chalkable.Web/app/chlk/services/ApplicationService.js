@@ -14,6 +14,16 @@ NAMESPACE('chlk.services', function () {
                 return this.getPaginatedList('Application/List.json', chlk.models.apps.Application, {
                     start: pageIndex_
                 });
+            },
+
+            [[chlk.models.id.SchoolPersonId, String]],
+            ria.async.Future, function createApp(devId, name) {
+                return this.post('Application/Create.json', chlk.models.apps.Application, {
+                    developerId: devId.valueOf(),
+                    name: name
+                });
             }
+
+
         ])
 });

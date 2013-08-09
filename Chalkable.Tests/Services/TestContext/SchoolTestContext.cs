@@ -34,14 +34,15 @@ namespace Chalkable.Tests.Services.TestContext
             public CoreRole Role { get; set; }
         }
 
-        protected IServiceLocatorSchool sysSchoolSl;
-        
+        private IServiceLocatorSchool sysSchoolSl;
+
         protected SchoolTestContext(IServiceLocatorSchool sysSchoolSl)
         {
             this.sysSchoolSl = sysSchoolSl;
             InitBaseData(this.sysSchoolSl);
         }
-        protected void InitBaseData(IServiceLocatorSchool sysSchoolSl)
+
+        protected virtual void InitBaseData(IServiceLocatorSchool sysSchoolSl)
         {
             var gradeLevels = sysSchoolSl.GradeLevelService.CreateDefault();
             AdminGradeSl = CreateUserWithLocator(AdminGradeName, CoreRoles.ADMIN_GRADE_ROLE, null);
@@ -75,7 +76,7 @@ namespace Chalkable.Tests.Services.TestContext
             return new BaseSchoolServiceLocatorTest(masterLocator);
         }
 
-        protected static string GetUserLogin(string name, Guid schoolId)
+        private static string GetUserLogin(string name, Guid schoolId)
         {
             return name + "_" + schoolId + "_" + DEFAULT_MAIL;
         }
@@ -89,7 +90,7 @@ namespace Chalkable.Tests.Services.TestContext
             var schoolUser = GetSchoolUser(locator, name, role);
             return locator.PersonService.GetPerson(schoolUser.User.Id);
         }
-        
+
         protected UserInfoTest CreateUserInfo(string name, CoreRole role)
         {
             return new UserInfoTest

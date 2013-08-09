@@ -33,7 +33,8 @@ namespace Chalkable.Data.Master.DataAccess
                               School.ServerUrl as School_ServerUrl,
                               School.DistrictRef as School_DistrictRef,
                               School.IsEmpty as School_IsEmpty,
-                              School.TimeZone as School_TimeZone
+                              School.TimeZone as School_TimeZone,
+                              School.DemoPrefix as School_DemoPrefix
                         from [User]
                         join SchoolUser on [User].Id = SchoolUser.UserRef
                         join School on SchoolUser.SchoolRef = School.Id");
