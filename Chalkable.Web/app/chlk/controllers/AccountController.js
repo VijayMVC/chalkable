@@ -1,5 +1,6 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.DeveloperService');
+REQUIRE('chlk.services.AccountService');
 REQUIRE('chlk.activities.profile.DeveloperPage');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.developer.DeveloperInfo');
@@ -16,8 +17,21 @@ NAMESPACE('chlk.controllers', function (){
          [ria.mvc.Inject],
          chlk.services.DeveloperService, 'developerService',
 
+        [ria.mvc.Inject],
+        chlk.services.AccountService, 'accountService',
+
          function resetPasswordAction(){
 
+         },
+
+         function logoutAction(){
+             this.accountService
+                 .logOut()
+                 .then(function(res){
+                    if (res.isSuccess()){
+                        location.href = this.getContext().getSession().get('webSiteRoot');
+                    }
+                 }, this);
          },
 
 

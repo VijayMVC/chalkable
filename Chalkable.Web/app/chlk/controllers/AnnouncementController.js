@@ -22,7 +22,6 @@ NAMESPACE('chlk.controllers', function (){
         PICTURE: 1
     });
 
-
     /** @class chlk.controllers.AnnouncementController */
     CLASS(
         'AnnouncementController', EXTENDS(chlk.controllers.BaseController), [
@@ -218,7 +217,7 @@ NAMESPACE('chlk.controllers', function (){
                         if(submitType == 'saveNoUpdate'){
                             this.saveAnnouncement(model);
                         }else{
-                            if(session.get('role') != chlk.models.common.RoleEnum.ADMIN
+                            if(!this.userInRole(chlk.models.common.RoleEnum.ADMIN)
                                 && session.get('finalizedClassesIds').indexOf(classId.valueOf()) > -1){
                                     model.setMarkingPeriodId(session.get('nextMarkingPeriod').getId());
                                     if(nextMp){
@@ -227,8 +226,6 @@ NAMESPACE('chlk.controllers', function (){
                             }else{
                                 this.submitAnnouncement(model);
                             }
-
-                            //return this.redirect_('feed', 'list', []);
                         }
                     }
                 }
