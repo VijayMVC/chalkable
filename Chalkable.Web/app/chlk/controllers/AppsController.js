@@ -34,13 +34,6 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.apps.AppsListPage, result);
         },
-        [[chlk.models.id.AppId]],
-        function deleteAction(id) {
-        },
-        [[chlk.models.id.AppId]],
-        function detailsAction(id) {
-
-        },
 
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
@@ -107,6 +100,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     if (!app_.getAppAccess())
                         app_.setAppAccess(new chlk.models.apps.AppAccess());
+                    this.switchApp(app_);
                     return new chlk.models.apps.AppInfoViewData(app_, false, cats, gradeLevels, permissions, true);
 
                 }, this);
@@ -163,6 +157,32 @@ NAMESPACE('chlk.controllers', function (){
                             }
                         }, this)
 
+                }, this)
+                .then(function(){
+                    return this.forward_('apps', 'details', []);
+                }, this);
+            return result;
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DEVELOPER
+        ])],
+        [[chlk.models.id.AppId]],
+        function deleteDeveloperAction(id) {
+            var result = this.appsService
+                .deleteApp(id)
+                .then(function(data){
+                    this.appsService
+                        .getApps()
+                        .then(function(data){
+                            if (data){
+                                var items = data.getItems();
+                                this.updateApps(items);
+                                if (items.length > 0){
+                                    this.switchApp(items[0]);
+                                }
+                            }
+                        }, this)
                 }, this)
                 .then(function(){
                     return this.forward_('apps', 'details', []);

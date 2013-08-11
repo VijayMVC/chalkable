@@ -65,6 +65,12 @@ NAMESPACE('chlk.controllers', function (){
                 var teacherSettings = new chlk.models.settings.TeacherSettings();
                 return this.PushView(chlk.activities.settings.TeacherPage, ria.async.DeferredData(teacherSettings));
             },
+
+
+            function getCurrentApp() {
+                return this.getContext().getSession().get('currentApp');
+            },
+
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.DEVELOPER
             ])],
@@ -73,6 +79,10 @@ NAMESPACE('chlk.controllers', function (){
 
                 var devSettings = new chlk.models.settings.DeveloperSettings();
                 devSettings.setDeveloperId(this.getCurrentPerson().getId());
+                var app = this.getCurrentApp();
+                if (app){
+                    devSettings.setCurrentAppId(app.getId());
+                }
                 return this.PushView(chlk.activities.settings.DeveloperPage, ria.async.DeferredData(devSettings));
             }
 
