@@ -1,0 +1,172 @@
+@import "compass/css3/transition";
+BODY {
+  DIV.page {
+     #content {
+        > DIV {
+          #main-wrapper {
+            #main {
+              DIV.app-info{
+
+                form{
+                  .submit-btn{
+                    width: 125px;
+                    text-align: center;
+                    position: absolute;
+                    top: 35px;
+                    right: 78px;
+                    button{
+                      text-transform: uppercase;
+                      font-size: 13px;
+                    }
+                  }
+                }
+                .action-bar{
+                  label{
+                    font: normal 14px Arial;
+                    color: #818181;
+                    margin-left: 8px;
+                  }
+                  .api-key{
+                    background: none;
+                    border: none;
+                    color: #818181;
+                  }
+
+
+                }
+                .section{
+                  padding-top: 5px;
+                  border-bottom: 1px solid #bbb;
+                  margin-bottom: 1px;
+                  min-height: 90px;
+
+                  border-top: 1px solid #bbb;
+                  margin-top: 1px;
+
+                  .elem{
+                    .hint{
+                      padding-left: 80px;
+                      font: bold 14px tahoma, arial, helvetica, sans-serif;
+                      display: inline-block;
+                      width: 100px;
+                      color: black;
+                      text-align: right;
+                      margin-right: 10px;
+
+                      &.wide{
+                        width: 140px;
+                        padding-left: 41px;
+                      }
+                      &.top{
+                        margin-top: 15px;
+                      }
+                    }
+                    .permissions, .categories{
+                      width: 416px;
+                      margin-left: 190px;
+                      margin-top: -17px;
+                      margin-bottom: 10px;
+                    }
+
+
+                    .permissions{
+                      .checkbox-list{
+                        .labeled-checkbox{
+                          margin-right: 60px;
+                        }
+
+                      }
+                    }
+
+
+                    .grade-levels{
+                      margin-left: 190px;
+                      margin-top: -17px;
+                      margin-bottom: 8px;
+                      width: 350px;
+                      .labeled-checkbox{
+                        width: 69px;
+                        margin-right: 35px;
+
+                      }
+                    }
+
+
+                    .my-apps{
+                      margin-top: -23px;
+                      margin-left: -36px;
+                      .myapps-permission{
+
+                        margin-left: 225px;
+                        display: inline-block;
+                        margin-top: -18px;
+                        font-weight: normal;
+                        font-size: 12px;
+                        color: #444;
+                        margin-bottom: 12px;
+
+                        .slide-checkbox{
+                          margin-top: -5px;
+                        }
+
+                        label{
+                          width: 123px;
+                          text-align: left;
+                          display: inline-block;
+                          padding: 0;
+                          margin: 0;
+                          font-size: 12px;
+                          font-weight: normal;
+                        }
+                        .app-name{
+                          display: inline-block;
+                          width: 190px;
+                          max-width: 190px;
+                          overflow: hidden;
+                          text-overflow: ellipsis;
+                          white-space: nowrap;
+                          margin-right: 5px;
+                        }
+                      }
+                    }
+
+                    textarea{
+                      border-radius: 0;
+                      width: 300px;
+                      margin: 6px 6px 4px 0;
+                      height: 66px;
+                    }
+                    .text{
+                      border-radius: 0;
+                      width: 300px;
+                      margin: 6px 6px 4px 0;
+                    }
+                  }
+                  &.first{
+                    border-top: 0;
+                    padding-top: 20px;
+                  }
+                  &.last{
+
+                  }
+                  &.small{
+                    margin-top: 1px;
+                    min-height: 80px;
+                    .elem{
+                      &.first{
+                        margin-top: 10px;
+                      }
+
+                      .permission{
+                        margin-bottom: 4px;
+                      }
+                    }
+                }
+              }
+            }
+          }
+        }
+     }
+    }
+  }
+}
