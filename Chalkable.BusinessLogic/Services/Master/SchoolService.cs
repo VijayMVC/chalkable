@@ -5,6 +5,7 @@ using System.Threading;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
@@ -24,10 +25,14 @@ namespace Chalkable.BusinessLogic.Services.Master
         void SetSyncData(SisSync sisSync);
         void Update(Data.Master.Model.School school);
         void CreateDemo();
+        IList<Data.Master.Model.School> GetDemoSchoolsToDelete();
+        void DeleteSchool(Guid id);
     }
 
     public class SchoolService : MasterServiceBase, ISchoolService
     {
+        public const int DEMO_EXPIRE_HOURS = 3;
+
         public SchoolService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
         }
@@ -177,6 +182,25 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
         
+        public IList<Data.Master.Model.School> GetDemoSchoolsToDelete()
+        {
+            var dt = DateTime.UtcNow.AddHours(-DEMO_EXPIRE_HOURS);
+            using (var uow = Read())
+            {
+                var da = new SchoolDataAccess(uow);
+                da.GetAll(new Dictionary<string, object>
+                    {
+                        {Data.Master.Model.School.DEMO_PREFIX_FIELD, NotNull.Instance}
+                    });
+            }
+            throw new NotImplementedException();
+        }
+
+        public void DeleteSchool(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public Data.Master.Model.School Create(Guid districtId, string name, IList<UserInfo> principals)
         {
             Data.Master.Model.School school = GetEmpty();

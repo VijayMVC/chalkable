@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using NUnit.Framework;
@@ -66,7 +68,59 @@ namespace Chalkable.Tests.DataAccess
             var body = (MemberExpression)f.Body;
             return body.Member.Name;
         }
+
+        [Test]
+        public void CollectionTest()
+        {
+            var cc = new CustomCollection(){{5, 6}, {new object()}};
+        }
     }
 
- 
+    public class CustomCollection : ICollection<object>
+    {
+        public IEnumerator<object> GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void Add(object item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Add(int a, int b)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Contains(object item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CopyTo(object[] array, int arrayIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove(object item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Count { get; private set; }
+        public bool IsReadOnly { get; private set; }
+    }
+
+    
 }
