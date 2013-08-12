@@ -1,0 +1,67 @@
+@import "compass/css3/border-radius";
+
+.chlk-toolbar{
+    background: url(images/ui/toolbar-bg.gif) repeat-x;
+    height: 32px;
+    @include border-radius(5px);
+
+    .x-toolbar-left{
+        float:left;
+        width:auto;
+        height: 100%;
+        display: table-cell;
+        > TABLE{
+            height: 100%;
+        }
+    }
+
+    .x-toolbar-right{
+        float:right;
+        height: 100%;
+        display: table-cell;
+        > DIV {
+            height: 100%;
+            > DIV {
+                height: 100%;
+                > TABLE{
+                    height: 100%;
+                }
+            }
+        }
+    }
+
+    .chlk-toolbar-clear{
+        clear:both;
+    }
+
+    /*.x-btn-mc{
+        height: 26px !important;
+    }*/
+}
+
+//LR TOOLBAR
+
+.lr-toolbar{
+  .dots-container{
+    position: absolute;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    bottom: -37px;
+
+    .dot{
+      cursor: pointer;
+      margin: 2px;
+      width: 6px;
+      height: 7px;
+      background: url(images/profile/dots.png) 0 0 no-repeat;
+      display: inline-block;
+
+      &.active{
+        background-position: -12px 0;
+      }
+    }
+  }
+}
+
+//END LR TOOLBAR

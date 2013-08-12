@@ -1,0 +1,106 @@
+@import "compass/css3/border-radius";
+
+.glance-container{
+  .glance-box:not(:first-child){
+    margin-left: 17px;
+  }
+}
+
+.glance-box {
+  text-decoration: none;
+  >DIV{
+    //position: relative;
+    @include transition-property("all");
+    @include transition-duration("0.2s");
+    @include transition-delay("0.3s");
+  }
+  color: #957633;
+  display: inline-block;
+  vertical-align: top;
+  width: 95px;
+  height: 109px;
+  border-bottom: 1px solid #f9f5e8;
+  border-left: 1px solid #d9c594;
+  border-right: 1px solid #d9c594;
+  background: rgba(149,118,51,0.5);
+  border-radius: 11px;
+  text-align: center;
+  overflow: hidden;
+
+
+  &.hover-action-box{
+    >DIV{
+      &:hover{
+        margin-top: -79px;
+
+        .details{
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .glance-title{
+    text-align: center;
+    font-size: 15px;
+    text-shadow: 0 1px 1px white;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 0 3px;
+    color: #957633;
+    margin: 0;
+    font-family: Pacifico;
+    &.f-13{
+      font-size: 13px;
+    }
+  }
+
+  .value{
+    width: 66px;
+    height: 66px;
+    margin: 11px auto 1px;
+    font: bold 43px Arial;
+    color: #C7B587;
+    text-shadow: 0px 1px 1px white;
+    line-height: 66px;
+    background: #276435;
+    @include border-radius(33px);
+    overflow: hidden;
+
+    &:not(:first-child){
+      margin-left: 17px;
+    }
+    &.large{
+      font-size: 36px;
+    }
+    &.small{
+      font-size: 26px;
+    }
+    &.red{
+      background: #800000;
+    }
+  }
+
+  .details{
+    @include transition-property("all");
+    @include transition-duration("0.2s");
+    @include transition-delay("0.3s");
+
+    margin: 0 auto 10px;
+    display: inline-block;
+    background: url(images/profile/glance-details-bg.png) 0 0 no-repeat;
+    height: 58px;
+    width: 57px;
+    padding: 13px 3px 3px 3px;
+    overflow: hidden;
+    opacity: 0;
+    color: #957633;
+
+    >DIV{
+      font: normal 11px Arial;
+    }
+  }
+
+}
+
