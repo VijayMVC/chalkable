@@ -219,11 +219,13 @@ NAMESPACE('ria.dom', function () {
                 return this;
             },
 
-            OVERRIDE, Number, function height() {
-                return this._dom[0] ? this._dom[0].getBoundingClientRect().height : null;
+            [[Object]],
+            OVERRIDE, Number, function height(value_) {
+                return value ? this._dom.height(value) : this._dom.height();
             },
-            OVERRIDE, Number, function width() {
-                return this._dom[0] ? this._dom[0].getBoundingClientRect().width : null;
+            [[Object]],
+            OVERRIDE, Number, function width(value_) {
+                return value ? this._dom.width(value) : this._dom.width();
             },
 
             /* data attributes */

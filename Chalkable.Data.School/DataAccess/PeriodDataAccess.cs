@@ -19,50 +19,53 @@ namespace Chalkable.Data.School.DataAccess
         public void Delete(IList<Guid> markingPeriodIds)
         {
             var mpIds = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
-            var sql = string.Format("delete from Period where MarkingPeriodRef in ({0})", mpIds);
+            var sql = string.Format("delete from Period where {0} in ({1})", Period.MARKING_PERIOD_REF_FIELD, mpIds);
             ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
         }
 
 
         public Period GeComplextById(Guid id)
         {
-            return GetComplexPeriods(new Dictionary<string, object> { { "Id", id } }).First();
+            return GetComplexPeriods(new AndQueryCondition { { Period.ID_FIELD, id } }).First();
         }
         public IList<Period> GetPeriods(Guid sectionId)
         {
-            var conds = new AndQueryCondition { { "SectionRef", sectionId } };
+            var conds = new AndQueryCondition { { Period.SECTION_REF, sectionId } };
             return SelectMany<Period>(conds);
         }
 
         public Period GetPeriodOrNull(Guid sectionId, int time)
         {
-            var sql = "select * from Period where SectionRef = @sectionId and StartTime <= @time and EndTime >= @time";
-            var conds = new Dictionary<string, object> { { "sectionId", sectionId }, { "time", time } };
-            using (var reader = ExecuteReaderParametrized(sql, conds))
-            {
-                return reader.ReadOrNull<Period>();
-            }
+            var conds = new AndQueryCondition
+                {
+                    {Period.SECTION_REF, sectionId},
+                    {Period.START_TIME_FIELD, "time1", time, ConditionRelation.LessEqual},
+                    {Period.END_TIME_FIELD, "time2", time, ConditionRelation.GreaterEqual}
+                };
+            return SelectOneOrNull<Period>(conds);
         }
 
         public IList<Period> GetComplexPeriods(Guid? sectionId, Guid? markingPeriodId)
         {
-            var conds = new Dictionary<string, object>();
+            var conds = new AndQueryCondition();
             if (markingPeriodId.HasValue)
-                conds.Add("markingPeriodRef", markingPeriodId);
+                conds.Add(Period.MARKING_PERIOD_REF_FIELD, markingPeriodId);
             if (sectionId.HasValue)
-                conds.Add("sectionRef", sectionId);
+                conds.Add(Period.SECTION_REF, sectionId);
             return GetComplexPeriods(conds);
         }
-        private IList<Period> GetComplexPeriods(Dictionary<string, object> conds)
+        private IList<Period> GetComplexPeriods(QueryCondition conds)
         {
             var sql = @"select {0} from Period 
                         join ScheduleSection on ScheduleSection.Id = Period.SectionRef";
-            var b = new StringBuilder();
+            var dbQuery = new DbQuery(); 
             var types = new List<Type> { typeof(Period), typeof(ScheduleSection) };
-            b.AppendFormat(sql, Orm.ComplexResultSetQuery(types));
-            b = Orm.BuildSqlWhere(b, types[0], conds);
-            b.Append(" order by Period.StartTime, ScheduleSection.Number");
-            using (var reader = ExecuteReaderParametrized(b.ToString(), conds))
+            dbQuery.Sql.AppendFormat(sql, Orm.ComplexResultSetQuery(types));
+            conds.BuildSqlWhere(dbQuery, types[0].Name);
+            dbQuery.Sql.AppendFormat(" order by Period.{0}, ScheduleSection.{1}"
+                    , Period.START_TIME_FIELD, ScheduleSection.NUMBER_FIELD);
+
+            using (var reader = ExecuteReaderParametrized(dbQuery.Sql.ToString(), dbQuery.Parameters))
             {
                 var res = new List<Period>();
                 while (reader.Read())

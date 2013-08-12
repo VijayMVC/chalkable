@@ -39,6 +39,10 @@ NAMESPACE('chlk.models.grading', function () {
 
             ArrayOf(chlk.models.grading.AnnouncementTypeFinal), 'finalGradeAnnTypeSend',
 
+            Boolean, 'changed',
+
+            String, 'submitType',
+
             String, 'finalGradeAnnouncementTypeIds',
 
             String, 'percents',

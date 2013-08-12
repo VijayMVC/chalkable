@@ -9,6 +9,7 @@ namespace Chalkable.Data.School.Model
     public class ScheduleSection
     {
         public Guid Id { get; set; }
+        public const string NUMBER_FIELD = "Number";
         public int Number { get; set; }
         public string Name { get; set; }
         public Guid MarkingPeriodRef { get; set; }

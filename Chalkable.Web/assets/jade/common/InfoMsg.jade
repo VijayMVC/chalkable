@@ -1,0 +1,13 @@
+.dialog.info-msg.gray.center
+    if(self.getHeader())
+        h=self.getHeader()
+    p=self.getText()
+    .buttons-container
+        each button in self.getButtons()
+            -attrs = button.getAttributes() || {};
+            -attrs.clazz = (attrs.clazz || '') + ' ' + (button.getColor().valueOf() || 'blue') + (button.isClose() ? ' close' : '');
+            if(button.getController())
+                +ActionLink(button.getController(), button.getAction(), button.getParams() || []).button
+                    +Button()(id=attrs.id, class=attrs.clazz).special-button2=button.getText()
+            else
+                +Button()(id=attrs.id, class=attrs.clazz).special-button2.button=button.getText()

@@ -29,11 +29,13 @@ namespace Chalkable.Data.Master.DataAccess
         public void Complete(Guid id, bool success)
         {
             var state = (int)(success ? BackgroundTaskStateEnum.Processed : BackgroundTaskStateEnum.Failed);
-            SimpleUpdate<BackgroundTask>(new Dictionary<string, object>{
-                                                                            {BackgroundTask.STATE_FIELD_NAME, state},
-                                                                            {BackgroundTask.COMPLETED_FIELD_NAME, DateTime.UtcNow},
-                                                                        }
-                , new Dictionary<string, object>{{BackgroundTask.ID_FIELD_NAME, id}});
+            var conds = new AndQueryCondition {{BackgroundTask.ID_FIELD_NAME, id}};
+            var setParamsDic = new Dictionary<string, object>
+                {
+                    {BackgroundTask.STATE_FIELD_NAME, state},
+                    {BackgroundTask.COMPLETED_FIELD_NAME, DateTime.UtcNow},
+                };
+            SimpleUpdate<BackgroundTask>(setParamsDic, conds);
         }
 
         public BackgroundTask Find(Guid? schoolId, BackgroundTaskStateEnum state, BackgroundTaskTypeEnum type)

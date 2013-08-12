@@ -2,6 +2,10 @@ REQUIRE('ria.mvc.Controller');
 REQUIRE('chlk.models.common.Role');
 REQUIRE('chlk.models.people.User');
 
+REQUIRE('chlk.activities.common.InfoMsgDialog');
+REQUIRE('chlk.models.common.InfoMsg');
+REQUIRE('chlk.models.common.Button');
+
 NAMESPACE('chlk.controllers', function (){
 
     /** @class chlk.controllers.SidebarButton */
@@ -58,6 +62,27 @@ NAMESPACE('chlk.controllers', function (){
 
            chlk.models.common.Role, function getCurrentRole(){
                return this.getContext().getSession().get('role');
+           },
+
+           [[String, String, Array]],
+           function ShowMsgBox(text, header_, buttons_) {
+               var instance = new chlk.activities.common.InfoMsgDialog();
+               var model = new chlk.models.common.InfoMsg();
+               var buttons = [];
+               model.setText(text);
+               model.setHeader(header_);
+               if(buttons_){
+                   var serializer = new ria.serialize.JsonSerializer();
+                   buttons_.forEach(function(item){
+                       buttons.push(serializer.deserialize(item, chlk.models.common.Button));
+                   })
+               }else{
+                   var button = new chlk.models.common.Button();
+                   button.setText('Ok');
+                   button.setClose(true);
+               }
+               model.setButtons(buttons);
+               this.view.shadeD(instance, ria.async.DeferredData(model));
            },
 
            [[chlk.models.common.RoleEnum]],

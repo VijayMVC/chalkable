@@ -13,30 +13,28 @@ namespace Chalkable.Data.School.DataAccess
         public FinalGradeAnnouncementTypeDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
+        private static string BuildComplexFieldName(string fieldName, string tableName)
+        {
+            return string.Format("{0}_{1}", tableName, fieldName); 
+        }
 
-        private Dictionary<string, object> BuildConditions(FinalGradeAnnouncementTypeQuery query)
-        {
-            var res = new Dictionary<string, object>();
-            if(query.Id.HasValue)
-                res.Add(FinalGradeAnnouncementType.ID_FIELD, query.Id);
-            if (query.FinalGradeId.HasValue)
-                res.Add(FinalGradeAnnouncementType.FINAL_GRADE_ID_FIELD, query.FinalGradeId);
-            if (query.AnnouncementTypeId.HasValue)
-                res.Add(FinalGradeAnnouncementType.ANNOUNCEMENT_TYPE_ID_FIELD, query.AnnouncementTypeId);
-            return res;
-        }
-        private DbQuery BuildSelectQuery(Dictionary<string, object> conds)
-        {
-            var b = new StringBuilder();
-            b.Append(@"select * from vwFinalGradeAnnouncementType ");
-            var type = typeof (FinalGradeAnnouncementType);
-            var fieldMapping = conds.Keys.ToDictionary(x => x, x => string.Format("{0}_{1}", type.Name, x)); //TODO: think about this 
-            b = Orm.BuildSqlWhere(b, "vwFinalGradeAnnouncementType", conds, fieldMapping);
-            return new DbQuery(b, conds);
-        }
         private DbQuery BuildSelectQuery(FinalGradeAnnouncementTypeQuery query)
         {
-            return BuildSelectQuery(BuildConditions(query));
+            var res = new DbQuery();
+            const string vwFgAnnTypeName = "vwFinalGradeAnnouncementType";
+            res.Sql.AppendFormat(@"select * from {0}", vwFgAnnTypeName);
+            var type = typeof (FinalGradeAnnouncementType);
+
+            var qConds = new AndQueryCondition();
+            if (query.Id.HasValue)
+                qConds.Add(BuildComplexFieldName(FinalGradeAnnouncementType.ID_FIELD, type.Name), query.Id);
+            if (query.FinalGradeId.HasValue)
+                qConds.Add(BuildComplexFieldName(FinalGradeAnnouncementType.FINAL_GRADE_ID_FIELD, type.Name), query.FinalGradeId);
+            if (query.AnnouncementTypeId.HasValue)
+                qConds.Add(BuildComplexFieldName(FinalGradeAnnouncementType.ANNOUNCEMENT_TYPE_ID_FIELD, type.Name), query.AnnouncementTypeId);
+
+            qConds.BuildSqlWhere(res, vwFgAnnTypeName);
+            return res;
         }
 
         public IList<FinalGradeAnnouncementType> GetList(FinalGradeAnnouncementTypeQuery query)

@@ -11,6 +11,7 @@
     ).classes-bar
     +ActionForm('setup', 'teacherSettingsEdit')#update-ann-type-submit-form
         +Hidden('id', gradingInfo.getId())
+        +Hidden('changed')
         +Hidden('needsTypesForClasses', true)
         +Hidden('gradingStyleByType'))
         +Hidden('dropLowest')
@@ -30,7 +31,10 @@
                     -nextClass = gradingInfo.getNextClassNumber();
                     -action = (nextClass == 1) ? 'video' : 'teacherSettings';
                     -params = (nextClass == 1) ? [] : [nextClass - 2];
-                    +ActionLink('setup', action, params).go-back=Msg.Go_Back
+                    Button(type="submit",
+                        name="submitType",
+                        value="back"
+                    ).action-button.go-back=Msg.Go_Back
                     label#step=Msg.Step_of(2,2)
                 .right
                     Button(type="submit", disabled).action-button.next-class=(nextClass == topItems.length ? Msg.Confirm : Msg.Next_Class)

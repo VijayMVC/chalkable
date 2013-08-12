@@ -48,7 +48,8 @@ namespace Chalkable.Data.Common.Orm
         }
 
         private const string COMPLEX_RESULT_SET_FORMAT = " [{0}].[{1}] as {0}_{1}";
-        
+        private const string ID_FIELD = "Id";
+
         public static IList<string> FullFieldsNames(Type t)
         {
             return FullFieldsNames(t, t.Name);
@@ -149,75 +150,64 @@ namespace Chalkable.Data.Common.Orm
              return res;
          }
 
-         private static DbQuery SimpleUpdate<T>(Type t, IList<string> fields, T obj, int index = 0)
-         {
-             var updateParams = new Dictionary<string, object>();
-             foreach (var field in fields)
-             {
-                 var value = t.GetProperty(field).GetValue(obj);
-                 //if(value != null)
-                     updateParams.Add(field, value);
-             }
-             var conds = new Dictionary<string, object> { { "id", t.GetProperty("Id").GetValue(obj) } };
-             return SimpleUpdate(t, updateParams, conds, index);
-         }
 
-         public static DbQuery SimpleUpdate<T>(IDictionary<string, object> updateParams, IDictionary<string, object> conditions)
+
+         public static DbQuery SimpleUpdate<T>(IDictionary<string, object> updateParams, QueryCondition conditions)
          {
              var t = typeof(T);
              //var fields = Fields(t).Select(x => x.ToLower()).ToList();
              return SimpleUpdate(t,  updateParams, conditions);
          }
 
-         private static DbQuery SimpleUpdate(Type t, IDictionary<string, object> updateParams,
-                                             IDictionary<string, object> conditions, int index = 0)
+         private static DbQuery SimpleUpdate<T>(Type t, IList<string> fields, T obj, int index = 0)
          {
-            var setParamsPrefix = "set_param_" + index + "_";
-            var setParamMapper = new Dictionary<string, string>();
-            var setParams = new Dictionary<string, object>();
-            foreach (var updateParam in updateParams)
-            {
-                var setParamsKey = setParamsPrefix + updateParam.Key;
-                setParamMapper.Add(setParamsKey, updateParam.Key);
-                setParams.Add(setParamsKey, updateParam.Value);
-            }
-            var conds = new Dictionary<string, object>();
-            var condsMapper = new Dictionary<string, string>();
-            foreach (var condition in conditions)
-            {
-                var condsKey = condition.Key + "_" + index;
-                condsMapper.Add(condsKey, condition.Key);
-                conds.Add(condsKey, condition.Value);
-            }
-            return SimpleUpdate(t, setParams, setParamMapper, conds, condsMapper);
+              var updateParams = new Dictionary<string, object>();
+             foreach (var field in fields)
+             {
+                 var value = t.GetProperty(field).GetValue(obj);
+                 //if(value != null)
+                     updateParams.Add(field, value);
+             }
+             var queryConds = new AndQueryCondition
+                 {
+                     {ID_FIELD, ID_FIELD + "_" + index, t.GetProperty(ID_FIELD).GetValue(obj), ConditionRelation.Equal}
+                 };
+             return SimpleUpdate(t, updateParams, queryConds, index);
          }
 
-        private static DbQuery SimpleUpdate(Type t, IDictionary<string, object> updateParams, IDictionary<string, string> updateParamsMapper,
-                                            IDictionary<string, object> conditions, IDictionary<string, string> condsMapper)
-        {
-            var res = new DbQuery { Parameters = new Dictionary<string, object>() };
-            
-            res.Sql.Append("Update [").Append(t.Name).Append("] set");
-            res.Sql.Append(updateParams.Select(x => "[" + updateParamsMapper[x.Key] + "]=@" + x.Key).JoinString(","));
-            foreach (var condition in conditions)
-            {
-               res.Parameters.Add(condition);
-            }
-            foreach (var updateParam in updateParams)
-            {
-                if(!res.Parameters.ContainsKey(updateParam.Key))
-                    res.Parameters.Add(updateParam);
-            }
+         private static DbQuery SimpleUpdate(Type t, IEnumerable<KeyValuePair<string, object>> updateParams, QueryCondition queryCondition, int index = 0)
+         {
+             var setParamsPrefix = "set_param_" + index + "_";
+             var setParamMapper = new Dictionary<string, string>();
+             var setParams = new Dictionary<string, object>();
+             foreach (var updateParam in updateParams)
+             {
+                 var setParamsKey = setParamsPrefix + updateParam.Key;
+                 setParamMapper.Add(setParamsKey, updateParam.Key);
+                 setParams.Add(setParamsKey, updateParam.Value);
+             }
+             return SimpleUpdate(t, setParams, setParamMapper, queryCondition);
+         }
+         private static DbQuery SimpleUpdate(Type t, IDictionary<string, object> updateParams,
+                                             IDictionary<string, string> updateParamsMapper, QueryCondition queryCondition)
+         {
+             var res = new DbQuery { Parameters = new Dictionary<string, object>() };
+             res.Sql.Append("Update [").Append(t.Name).Append("] set");
+             res.Sql.Append(updateParams.Select(x => "[" + updateParamsMapper[x.Key] + "]=@" + x.Key).JoinString(","));
 
-            res.Sql = BuildSqlWhere(res.Sql, t, conditions, condsMapper);
-            return res;
-        }
-
+             foreach (var updateParam in updateParams)
+             {
+                 if (!res.Parameters.ContainsKey(updateParam.Key))
+                     res.Parameters.Add(updateParam);
+             }
+             queryCondition.BuildSqlWhere(res, t.Name);
+             return res;
+         }
 
         public static DbQuery SimpleDelete<T>(T obj)
         {
             var t = typeof(T);
-            var conds = new AndQueryCondition {{"Id", t.GetProperty("Id").GetValue(obj)}};
+            var conds = new AndQueryCondition { { ID_FIELD, t.GetProperty(ID_FIELD).GetValue(obj) } };
             return SimpleDelete<T>(conds);
         }
 
@@ -229,54 +219,6 @@ namespace Chalkable.Data.Common.Orm
             conditioins.BuildSqlWhere(res, t.Name);
             return res;
         }
-
-        public static StringBuilder BuildSqlWhere(StringBuilder builder, Type t, IDictionary<string, object> conds)
-        {
-            return BuildSqlWhere(builder, t.Name, conds);
-        }
-
-        public static StringBuilder BuildSqlWhere(StringBuilder builder, string tableName, IDictionary<string, object> conds)
-        {
-            return BuildSqlWhere(builder, tableName, conds, conds.Keys.ToDictionary(x => x, x => x));
-        }
-
-        public static StringBuilder BuildSqlWhere(StringBuilder builder, Type t, IDictionary<string, object> conds, IDictionary<string, string> condsMapping)
-        {
-            return BuildSqlWhere(builder, t.Name, conds, condsMapping);
-        }
-        
-        [Obsolete]
-        public static StringBuilder BuildSqlWhere(StringBuilder builder, string tableName, IDictionary<string, object> conds
-                                                   , IDictionary<string, string> condsMapping)
-        {
-             if (conds != null && conds.Count > 0)
-             {
-                 builder.Append(" where (");
-                 bool first = true;
-                 foreach (var cond in conds)
-                 {
-                     if (!condsMapping.ContainsKey(cond.Key))
-                         throw new ChalkableException("Incorrect conditions mapping");
-
-                     if (first) first = false;
-                     else
-                     {
-                         builder.Append(" and ");
-                     }
-                     if (cond.Value != null)
-                     {
-                         /*if (NotNull.Instance == cond.Value)
-                             builder.AppendFormat("[{0}].[{1}] is not null", tableName, condsMapping[cond.Key], cond.Key);
-                         else*/
-                            builder.AppendFormat("[{0}].[{1}] =@{2}", tableName, condsMapping[cond.Key], cond.Key);
-                     }
-                     else
-                         builder.AppendFormat("[{0}].[{1}] is null", tableName, condsMapping[cond.Key]);
-                 }
-                 builder.Append(")");
-             }
-             return builder;
-         }
 
 
         public static DbQuery SimpleSelect<T>(QueryCondition queryCondition)

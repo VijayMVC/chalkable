@@ -51,6 +51,12 @@ NAMESPACE('chlk.templates.grading', function () {
             String, 'percents',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'changed',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'submitType',
+
+            [ria.templates.ModelPropertyBind],
             String, 'dropLowest',
 
             [ria.templates.ModelPropertyBind],

@@ -21,18 +21,18 @@ namespace Chalkable.Data.School.DataAccess
         
         public void DeleteByAnnouncementId(Guid announcementId)
         {
-            var conds = new AndQueryCondition {{"announcementRef", announcementId}};
+            var conds = new AndQueryCondition {{AnnouncementReminder.ANNOUNCEMENT_REF_FIELD, announcementId}};
             SimpleDelete<AnnouncementReminder>(conds);
         }
 
         public AnnouncementReminder GetById(Guid id, Guid personId)
         {
-            var conds = new Dictionary<string, object> {{"id", id}};
+            var conds = new AndQueryCondition {{AnnouncementReminder.ID_FIELD, id}};
             var res = GetReminders(conds, personId);
             return res.First();
         }
 
-        private IList<AnnouncementReminder> GetReminders(Dictionary<string, object> conditions, Guid personId)
+        private IList<AnnouncementReminder> GetReminders(QueryCondition conds, Guid personId)
         {
 
             var annRType = typeof(AnnouncementReminder);
@@ -41,13 +41,16 @@ namespace Chalkable.Data.School.DataAccess
                                       from AnnouncementReminder 
                                       join Announcement  on Announcement.Id = AnnouncementReminder.AnnouncementRef "
                                       , Orm.ComplexResultSetQuery(types));
-            var b = new StringBuilder();
-            b.Append(sql);
-            b = Orm.BuildSqlWhere(b, annRType, conditions);
-            b.Append(@" and ((Announcement.PersonRef = @personId and AnnouncementReminder.PersonRef is null)
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.Append(sql);
+            conds.BuildSqlWhere(dbQuery, annRType.Name);
+
+            //var andConds = new AndQueryCondition{{}}
+
+            dbQuery.Sql.Append(@" and ((Announcement.PersonRef = @personId and AnnouncementReminder.PersonRef is null)
                              or (AnnouncementReminder.PersonRef = @personId))");
-            conditions.Add("@personId", personId);
-            using (var reader = ExecuteReaderParametrized(b.ToString(), conditions))
+            dbQuery.Parameters.Add("@personId", personId);
+            using (var reader = ExecuteReaderParametrized(dbQuery.Sql.ToString(), dbQuery.Parameters))
             {
                 var res = new List<AnnouncementReminder>();
                 while (reader.Read())
@@ -62,7 +65,7 @@ namespace Chalkable.Data.School.DataAccess
         
         public IList<AnnouncementReminder> GetList(Guid announcementId, Guid personId)
         {
-            var conds = new Dictionary<string, object> {{"AnnouncementRef", announcementId}};
+            var conds = new AndQueryCondition {{AnnouncementReminder.ANNOUNCEMENT_REF_FIELD, announcementId}};
             return GetReminders(conds, personId);
         }
 

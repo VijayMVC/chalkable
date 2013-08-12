@@ -50,7 +50,6 @@ NAMESPACE('chlk.activities.setup', function () {
                 });
                 var node = this.dom.find('.percents-count');
                 if(sum == 100){
-                    this.dom.find('.next-class, .go-back').removeClass('disabled');
                     this.dom.find('.next-class').setAttr('disabled', false);
                     node.removeClass('error')
                         .setHTML('100%')
@@ -61,7 +60,6 @@ NAMESPACE('chlk.activities.setup', function () {
                     }, 10);
                 }else{
                     var text = (sum > 100) ? 'Remove ' + (sum - 100) + '%' : 'Add ' + (100 - sum) + '%';
-                    this.dom.find('.next-class, .go-back').addClass('disabled');
                     this.dom.find('.next-class').setAttr('disabled', true);
                     node.addClass('error')
                         .setAttr('data-tooltip', text)
@@ -69,6 +67,12 @@ NAMESPACE('chlk.activities.setup', function () {
                         .setHTML(sum + '%')
                         .triggerEvent('mouseover');
                 }
+            },
+
+            [ria.mvc.DomEventBind('change', 'input, select')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function globalChange(el, event){
+                this.dom.find('[name=changed]').setValue(true);
             },
 
             [ria.mvc.DomEventBind('change', '.announcement-type-weight')],
