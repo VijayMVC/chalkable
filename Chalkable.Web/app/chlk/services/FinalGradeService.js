@@ -18,24 +18,22 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.FinalGradeId, Number, Number, Boolean, Number, Boolean,
-                Number, String, String, String, String, Boolean]],
+                Number, Array, Boolean]],
             ria.async.Future, function update(id, participation, attendance, dropLowestAttendance,
-                discipline, dropLowestDiscipline, gradingStyle, finalGradeAnnouncementTypeIds,
-                percents, dropLowest, gradingStyleByType, needsTypesForClasses) {
+                discipline, dropLowestDiscipline, gradingStyle, finalGradeAnnouncementTypes, needsTypesForClasses) {
                     return this.post('FinalGrade/Update.json', chlk.models.grading.Final, {
-                        id: id.valueOf(),
+                        finalGradeId: id.valueOf(),
                         participationPercent: participation,
                         attendance: attendance,
                         dropLowestAttendance: dropLowestAttendance,
                         discipline: discipline,
                         dropLowestDiscipline: dropLowestDiscipline,
                         gradingStyle: gradingStyle,
-                        finalGradeAnnouncementTypeIds: finalGradeAnnouncementTypeIds,//.split(','),
-                        percents: percents,//.split(','),
-                        dropLowest: dropLowest,//.split(','),
-                        gradingStyleByType: gradingStyleByType,//.split(','),
+
+                        finalGradeAnnouncementType: finalGradeAnnouncementTypes,
                         needsTypesForClasses: needsTypesForClasses
-                    });
+                    }
+                );
             }
         ])
 });

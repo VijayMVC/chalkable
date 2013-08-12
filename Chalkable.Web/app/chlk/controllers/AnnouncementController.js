@@ -219,7 +219,7 @@ NAMESPACE('chlk.controllers', function (){
                         }else{
                         //TODO nextMarkingPeriod
 
-                            if(!this.userInRole(chlk.models.common.RoleEnum.ADMIN)
+                            if(!this.userInRole(chlk.models.common.RoleEnum.ADMINEDIT) && !this.userInRole(chlk.models.common.RoleEnum.ADMINVIEW)
                                 && session.get('finalizedClassesIds').indexOf(classId.valueOf()) > -1){
                                     var nextMp = model.setMarkingPeriodId(session.get('nextMarkingPeriod'));
                                     if(nextMp){

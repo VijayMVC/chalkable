@@ -17,6 +17,7 @@ REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.setup.TeacherSettings');
 REQUIRE('chlk.models.grading.Final');
 REQUIRE('chlk.models.settings.Preference');
+REQUIRE('chlk.models.grading.AnnouncementTypeFinal');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -147,16 +148,32 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.grading.Final]],
             function teacherSettingsEditAction(model){
+                var finalGradeAnnouncementTypes = [], item, ids = model.getFinalGradeAnnouncementTypeIds().split(','),
+                    percents = model.getPercents().split(','),
+                    dropLowest = model.getDropLowest().split(','),
+                    gradingStyle = model.getGradingStyleByType().split(',');
+                ids.forEach(function(id, i){
+                    item = {};
+                    item.finalGradeAnnouncementTypeId = id;
+                    item.percentValue = JSON.parse(percents[i]);
+                    item.dropLowest = JSON.parse(dropLowest[i]);
+                    item.gradingStyle =JSON.parse(gradingStyle[i]);
+                    finalGradeAnnouncementTypes.push(item)
+                });
+                var index = model.getNextClassNumber();console.info(index);
+                var classes = this.classService.getClassesForTopBar();
+
                 this.finalGradeService.update(model.getId(), model.getParticipation(), model.getAttendance(), model.getDropLowestAttendance(),
-                    model.getDiscipline(), model.getDropLowestDiscipline(), model.getGradingStyle(), model.getFinalGradeAnnouncementTypeIds(),
-                    model.getPercents(), model.getDropLowest(), model.getGradingStyleByType(), model.isNeedsTypesForClasses())
+                    model.getDiscipline(), model.getDropLowestDiscipline(), model.getGradingStyle(), finalGradeAnnouncementTypes, model.isNeedsTypesForClasses())
                     .then(function(model){
-                        var index = model.getNextClassNumber();
-                        if(index){
+
+                        if(index < classes.length){
                             this.redirect_('setup', 'teacherSettings', [index]);
+                        }else{
+                            this.redirect_('setup', 'start', []);
                         }
 
-                    });
+                    }.bind(this));
                 this.StartLoading(chlk.activities.setup.TeacherSettingsPage);
             },
 

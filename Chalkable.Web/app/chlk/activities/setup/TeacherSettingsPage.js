@@ -40,11 +40,7 @@ NAMESPACE('chlk.activities.setup', function () {
                 this.dom.find('#settings-step1').addClass('x-hidden');
                 this.dom.find('#settings-step2, #settings-step3').removeClass('x-hidden');
                 var node = this.dom.find('.percents-count');
-                if(node.hasClass('error')){
-                    setTimeout(function(){
-                        node.triggerEvent('mouseover');
-                    }.bind(this), 10);
-                }
+                this.checkPercents();
             },
 
             VOID, function checkPercents(){
@@ -120,8 +116,6 @@ NAMESPACE('chlk.activities.setup', function () {
                 }
 
                 var parseVal = parseInt(el.getValue(), 10), form = new ria.dom.Dom('#update-ann-type-submit-form');
-                form.find('[name=id]').setValue(el.getAttr('typeId'));
-                form.find('[name=value]').setValue(parseVal);
 
                 el.setValue((parseVal && parseVal > 0) ? parseVal : 0);
                 var node = jQuery(el.valueOf());

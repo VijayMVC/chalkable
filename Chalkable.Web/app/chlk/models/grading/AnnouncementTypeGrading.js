@@ -1,9 +1,10 @@
 REQUIRE('chlk.models.id.AnnouncementTypeGradingId');
+REQUIRE('chlk.models.id.FinalGradeId');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
 
-    /** @class chlk.models.grading.AnnouncementTypeGrading*/
+   /** @class chlk.models.grading.AnnouncementTypeGrading*/
     CLASS(
         'AnnouncementTypeGrading', [
             [ria.serialize.SerializeProperty('droplowest')],

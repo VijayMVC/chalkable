@@ -19,7 +19,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.ClassId]],
             function my(classId_){
-                this.studentService.getStudents(classId_);
+                this.studentService.getStudents(classId_, null, false, sortType_, start_, count_);
             },
 
             [[chlk.models.id.SchoolPersonId]],

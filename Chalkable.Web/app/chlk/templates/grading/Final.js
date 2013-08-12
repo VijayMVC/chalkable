@@ -41,6 +41,8 @@ NAMESPACE('chlk.templates.grading', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.AnnouncementTypeGrading), 'finalGradeAnnType',
 
+            ArrayOf(chlk.models.grading.AnnouncementTypeFinal), 'finalGradeAnnTypeSend',
+
 
             [ria.templates.ModelPropertyBind],
             String, 'finalGradeAnnouncementTypeIds',

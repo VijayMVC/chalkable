@@ -63,15 +63,16 @@ NAMESPACE('chlk', function (){
             },
 
             function getCurrentPerson(){
-                return this.getContext().getSession().get('currentPerson');
+                return this.getContext().getSession().get('currentPerson', null);
             },
 
             OVERRIDE, ria.async.Future, function onStart_() {
                 return BASE()
                     .then(function(data){
-                        new ria.dom.Dom()
-                            .fromHTML(ASSET('~/assets/jade/common/logout.jade')(this))
-                            .appendTo("#logout-block");
+                        if(this.getCurrentPerson())
+                            new ria.dom.Dom()
+                                .fromHTML(ASSET('~/assets/jade/common/logout.jade')(this))
+                                .appendTo("#logout-block");
                         return data;
                     }, this);
             }

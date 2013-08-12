@@ -1,6 +1,7 @@
 REQUIRE('chlk.models.id.FinalGradeId');
 REQUIRE('chlk.models.class.Class');
 REQUIRE('chlk.models.grading.AnnouncementTypeGrading');
+REQUIRE('chlk.models.grading.AnnouncementTypeFinal');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
@@ -35,6 +36,8 @@ NAMESPACE('chlk.models.grading', function () {
             [ria.serialize.SerializeProperty('finalgradeanntype')],
             ArrayOf(chlk.models.grading.AnnouncementTypeGrading), 'finalGradeAnnType',
 
+
+            ArrayOf(chlk.models.grading.AnnouncementTypeFinal), 'finalGradeAnnTypeSend',
 
             String, 'finalGradeAnnouncementTypeIds',
 
