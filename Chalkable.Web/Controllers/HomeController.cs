@@ -62,7 +62,8 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin")]
         public ActionResult SysAdmin()
         {
-            ViewData["FullName"] = ControllerContext.HttpContext.User.Identity.Name;
+            var sysUser = MasterLocator.UserService.GetById(Context.UserId);
+            PrepareJsonData(SysAdminViewData.Create(sysUser), CURRENT_PERSON);
             return View();
         }
 
