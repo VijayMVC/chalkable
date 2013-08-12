@@ -36,7 +36,7 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
                 name += "-" + height + "x" + width;
             return name;
         }
-        public void UploadPicture(Guid id, byte[] content, int? height, int? width)
+        public virtual void UploadPicture(Guid id, byte[] content, int? height, int? width)
         {
             if(!BaseSecurity.HasChalkableRole(Context))
                 throw new ChalkableSecurityException();
@@ -45,7 +45,7 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
 
             ServiceLocator.StorageBlobService.AddBlob(PICTURE_CONTEINER_NAME, PictureName(id, height, width), content);
         }
-        public void DeletePicture(Guid id, int? height, int? width)
+        public virtual void DeletePicture(Guid id, int? height, int? width)
         {
             if (!BaseSecurity.HasChalkableRole(Context))
                 throw new ChalkableSecurityException();

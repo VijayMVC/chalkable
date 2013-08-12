@@ -18,6 +18,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IPictureService CourseIconService { get; }
         IPictureService DepartmentIconService { get; }
         IPictureService FundRequestPictureService { get; }
+        IPictureService ApplicationPictureService { get; }
         IApplicationService ApplicationService { get; }
         ICategoryService CategoryService { get; }
         IApplicationUploadService ApplicationUploadService { get; }
@@ -39,6 +40,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         private IPictureService courseIconService;
         private IPictureService departmentIconService;
         private IPictureService fundRequestPictureService;
+        private IPictureService applicationPictureService;
         private IApplicationService applicationService;
         private ICategoryService categoryService;
         private IAccessControlService accessControlService;
@@ -66,6 +68,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             fundService = new FundService(this);
             fundRequestPictureService = new FundRequestPictureService(this);
             developerService = new DeveloperService(this);
+            applicationPictureService = new ApplicationPictureService(this);
         }
 
         public IUserService UserService { get { return userService; } }
@@ -94,6 +97,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IFundService FundService { get { return fundService; } }
         public IDeveloperService DeveloperService { get { return developerService; } }
         public IPictureService FundRequestPictureService { get { return fundRequestPictureService; } }
+        public IPictureService ApplicationPictureService { get { return applicationPictureService; } }
+
 
         public IServiceLocatorSchool SchoolServiceLocator(Guid schoolId)
         {
@@ -106,6 +111,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        
+
+
+
     }
 }

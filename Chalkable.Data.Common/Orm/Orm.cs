@@ -6,7 +6,7 @@ using System.Text;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 
-namespace Chalkable.Data.Common
+namespace Chalkable.Data.Common.Orm
 {
     public static class Orm
     {

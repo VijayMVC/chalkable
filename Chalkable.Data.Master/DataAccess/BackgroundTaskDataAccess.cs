@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Chalkable.Common;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Data.Master.DataAccess

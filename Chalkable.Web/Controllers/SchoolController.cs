@@ -47,12 +47,11 @@ namespace Chalkable.Web.Controllers
             if(SchoolLocator.Context.SchoolId != schoolId)
                  SchoolLocator = MasterLocator.SchoolServiceLocator(school.Id);
             var persons = SchoolLocator.PersonService.GetPersons();
-            var countsPerRole = persons.GroupBy(x => x.RoleRef).ToDictionary(x => x.Key, x => x.Count());
-            var studentsCount = countsPerRole[CoreRoles.STUDENT_ROLE.Id];
-            var teachersCount = countsPerRole[CoreRoles.TEACHER_ROLE.Id];
-            var adminsCount = countsPerRole[CoreRoles.ADMIN_GRADE_ROLE.Id] 
-                              + countsPerRole[CoreRoles.ADMIN_EDIT_ROLE.Id]
-                              + countsPerRole[CoreRoles.ADMIN_VIEW_ROLE.Id];
+            var studentsCount = persons.Count(x => x.RoleRef == CoreRoles.STUDENT_ROLE.Id);   
+            var teachersCount = persons.Count(x => x.RoleRef == CoreRoles.TEACHER_ROLE.Id);
+            var adminsCount = persons.Count(x => x.RoleRef == CoreRoles.ADMIN_EDIT_ROLE.Id)
+                              + persons.Count(x => x.RoleRef == CoreRoles.ADMIN_GRADE_ROLE.Id)
+                              + persons.Count(x => x.RoleRef == CoreRoles.ADMIN_VIEW_ROLE.Id);
             var sisData = MasterLocator.SchoolService.GetSyncData(schoolId);
             var resView = SchoolPeopleViewData.Create(school, sisData, studentsCount, teachersCount, adminsCount);
             return Json(resView);

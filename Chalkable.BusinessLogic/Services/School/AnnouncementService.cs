@@ -99,7 +99,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 OwnedOnly = ownerOnly,
             };
             var res = GetAnnouncements(q);
-            return new PaginatedList<AnnouncementComplex>(res.Announcements, start / count, count);
+            return new PaginatedList<AnnouncementComplex>(res.Announcements, start / count, count, res.SourceCount);
         }
 
         public IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, IList<Guid> gradeLevelsIds = null, Guid? classId = null)

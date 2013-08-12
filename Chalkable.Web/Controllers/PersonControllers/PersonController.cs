@@ -64,17 +64,10 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(PersonScheduleViewData.Create(person, classes));
         }
         
-        private const string htmlContentType = "text/html";
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult UploadPicture(Guid personId)
         {
-            byte[] bin;
-            string name;
-            if (!GetFileFromRequest(out bin, out name))
-                return Json(new ChalkableException (ChlkResources.ERR_FILE_IS_REQUIRED));
-            
-            MasterLocator.PersonPictureService.UploadPicture(personId, bin);
-            return Json(true, htmlContentType);
+            return UploadPicture(MasterLocator.PersonPictureService, personId, null, null);
         }
 
 
