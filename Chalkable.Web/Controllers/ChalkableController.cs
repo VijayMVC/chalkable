@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -119,6 +120,22 @@ namespace Chalkable.Web.Controllers
             return false;
         }
 
+        private const string htmlContentType = "text/html";
+        protected ActionResult UploadPicture(IPictureService pictureService, Guid id, int? width, int? height)
+        {
+            byte[] bin;
+            string name;
+            if (!GetFileFromRequest(out bin, out name))
+                return Json(new ChalkableException(ChlkResources.ERR_FILE_IS_REQUIRED));
+
+            if (width.HasValue && height.HasValue)
+            {
+                pictureService.UploadPicture(id, bin, height, width);
+            }
+            else pictureService.UploadPicture(id, bin);
+            
+            return Json(true, htmlContentType);
+        }
 
         protected Guid GetCurrentSchoolYearId()
         {
