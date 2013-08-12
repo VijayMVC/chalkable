@@ -1,29 +1,19 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 
+REQUIRE('chlk.models.settings.Preference');
+
 NAMESPACE('chlk.services', function () {
     "use strict";
 
     /** @class chlk.services.PreferenceService*/
     CLASS(
-        'ClassService', EXTENDS(chlk.services.BaseService), [
-
-            ArrayOf(chlk.models.class.Class), 'classesToFilter',
-
-            Array, function getClassesForTopBar() {
-                var res = this.getClassesToFilter();
-                if(res)
-                    return res;
-                res = new ria.serialize.JsonSerializer().deserialize(window.classesToFilter, ArrayOf(chlk.models.class.Class));
-                this.setClassesToFilter(res);
-                return res;
-            },
-
-            [[chlk.models.id.ClassId]],
-            chlk.models.class.ClassForWeekMask, function getClassAnnouncementInfo(id){
-                var res = window.classesInfo[id.valueOf()];
-                res = new ria.serialize.JsonSerializer().deserialize(res, chlk.models.class.ClassForWeekMask);
-                return res;
+        'PreferenceService', EXTENDS(chlk.services.BaseService), [
+            [[String]],
+            ria.async.Future, function getPublic(key) {
+                return this.get('Preference/GetPublic.json', chlk.models.settings.Preference, {
+                    key: key
+                });
             }
         ])
 });

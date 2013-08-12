@@ -1,6 +1,7 @@
 REQUIRE('chlk.models.id.FinalGradeId');
 REQUIRE('chlk.models.class.Class');
 REQUIRE('chlk.models.grading.AnnouncementTypeGrading');
+REQUIRE('chlk.models.grading.AnnouncementTypeFinal');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
@@ -19,6 +20,8 @@ NAMESPACE('chlk.models.grading', function () {
 
             Number, 'participation',
 
+            Number, 'discipline',
+
             [ria.serialize.SerializeProperty('droplowestdiscipline')],
             Number, 'dropLowestDiscipline',
 
@@ -34,13 +37,15 @@ NAMESPACE('chlk.models.grading', function () {
             ArrayOf(chlk.models.grading.AnnouncementTypeGrading), 'finalGradeAnnType',
 
 
-            ArrayOf(Number), 'finalGradeAnnouncementTypeIds',
+            ArrayOf(chlk.models.grading.AnnouncementTypeFinal), 'finalGradeAnnTypeSend',
 
-            ArrayOf(Number), 'percents',
+            String, 'finalGradeAnnouncementTypeIds',
 
-            ArrayOf(Number), 'dropLowest',
+            String, 'percents',
 
-            ArrayOf(Number), 'gradingStyleByType',
+            String, 'dropLowest',
+
+            String, 'gradingStyleByType',
 
             Boolean, 'needsTypesForClasses',
 

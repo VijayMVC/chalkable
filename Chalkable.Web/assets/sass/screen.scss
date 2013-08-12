@@ -149,6 +149,58 @@ html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fiel
   position: absolute;
 }
 
+.opacity0{
+  opacity: 0;
+}
+
+.blue-arrow {
+  font: bold 22px 'Saginaw Bold';
+  color: #407d9b;
+  display: inline-block;
+  position: absolute;
+  word-spacing: 5px;
+  text-shadow: 1px -1px 0 white;
+
+  &.right-up-arrow {
+    padding: 9px 59px 0 0;
+    background: url(images/arrows/blue-right-up-arrow.png) right top no-repeat;
+    margin-right: 41px;
+    min-height: 26px;
+  }
+
+  &.div {
+    text-align: center;
+    display: block;
+    position: relative;
+    font-size: 30px;
+    word-spacing: 9px;
+    letter-spacing: 2px;
+  }
+}
+
+.chlk-tooltip {
+  position: absolute;
+  min-width: 55px;
+  display: none;
+
+  .tooltip-content {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    text-shadow: none;
+    text-align: center;
+    @include border-radius(5px);
+    font-size: 13px;
+    padding: 3px 5px;
+    line-height: 15px;
+  }
+
+  .tooltip-triangle {
+    height: 7px;
+    background: url(images/feed/triangle.png) center 0 no-repeat;
+  }
+}
+
+
 .gradient{
   @include border-radius(6px);
   @include background(linear-gradient(top, #ffffff, #f0f0f0));

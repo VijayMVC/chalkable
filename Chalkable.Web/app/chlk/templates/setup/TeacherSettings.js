@@ -15,6 +15,9 @@ NAMESPACE('chlk.templates.setup', function () {
             ArrayOf(chlk.models.calendar.TeacherSettingsCalendarDay), 'calendarInfo',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.grading.Final, 'gradingInfo'
+            chlk.models.grading.Final, 'gradingInfo',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'percentsSum'
         ]);
 });

@@ -79,6 +79,12 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin, Developer")]
+        public ActionResult UploadPicture(int? width, int? height)
+        {
+            return UploadPicture(MasterLocator.ApplicationPictureService, Guid.NewGuid(), width, height);
+        }
+
+        [AuthorizationFilter("SysAdmin, Developer")]
         public ActionResult GetInfo(Guid applicationId)
         {
             var res = MasterLocator.ApplicationService.GetApplicationById(applicationId);

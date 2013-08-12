@@ -44,7 +44,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.SchoolId]],
             ria.async.Future, function getDetails(schoolId) {
-                return this.get('chalkable2/data/schoolDetails.json', chlk.models.school.SchoolDetails, {
+                return this.get('School/Summary.json', chlk.models.school.SchoolDetails, {
                     schoolId: schoolId.valueOf()
                 });
             },
@@ -58,7 +58,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.SchoolId]],
             ria.async.Future, function getPeopleSummary(schoolId) {
-                return this.get('chalkable2/data/peopleSummary.json', chlk.models.school.SchoolPeopleSummary, {
+                return this.get('School/People.json', chlk.models.school.SchoolPeopleSummary, {
                     schoolId: schoolId.valueOf()
                 });
             },

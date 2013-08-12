@@ -73,6 +73,7 @@ var Msg = {
     Check: 'Check',
     CheckIn: 'Check-in',
     Class: 'Class',
+    Click: 'Click',
     Code: 'Code',
     Comment: 'Comment',
     Commented: 'Commented',
@@ -92,6 +93,7 @@ var Msg = {
     Details: 'Details',
     Discard: 'Discard',
     Discipline: 'Discipline',
+    Done: 'Done',
     Drop: 'Drop',
     Dropped: 'Dropped',
     Due: 'Due',
@@ -119,6 +121,7 @@ var Msg = {
     Message: 'Message',
     Messaging: 'Messaging',
     Method: oneOrMany('Method'),
+    Mistake: 'Mistake',
     Monthly: 'Monthly',
     Name: 'Name',
     New: 'New',
@@ -320,6 +323,9 @@ var Msg = {
     },
     Home_Address: 'Home Address',
     Home_Phone: 'Home Phone',
+    How_do_you_grade_students_in: function(courseName){
+        return 'How do you grade students in ' + courseName + '?'
+    },
     Import_Types: 'Import Types',
     Info_this_app_uses: 'Info this app uses:',
     Install_App: 'Install App',
@@ -330,6 +336,7 @@ var Msg = {
     Last_name: 'Last name',
     Last_week: 'Last week',
     Late_to_a_class: 'Late to a class',
+    Lets_do_it: 'Lets do it',
     Loading_text: 'Loading...',
     Long_Description: 'Long Description',
     Long_description_empty_text : 'Between 500-1500 characters works well',
@@ -390,10 +397,13 @@ var Msg = {
     Showing_items_due_before: function(endDateWithYear, endDate){
         return String.format('Showing items due before {0}. Check out the Calendar to see items due after {1}.', endDateWithYear, endDate)
     },
+    Step_of: function(a,b){
+        return 'Step ' + a + ' of ' + b;
+    },
     Student: oneOrMany('Student'),
     Students_are_in_trouble: 'Students are in trouble',
     Student_grades_are_out_of: function(coursename){
-        return String.format('Student grades in {0} are out of', coursename);
+        return 'Student grades in ' + coursename + ' are out of';
     },
     Students_doing_well: 'Students doing well',
     Show_all: 'Show all',
@@ -411,6 +421,7 @@ var Msg = {
     Task_State: 'Task State',
     Task_Type: 'Task Type',
     Teacher: oneOrMany('Teacher'),
+    Tell_Chalkable: 'Tell Chalkable',
     This_app_is_for: 'This app is for:',
     This_info_will_appear_in_the_App_Store: '*This info will appear in the App Store',
     Total_days_missed: 'Total days missed',

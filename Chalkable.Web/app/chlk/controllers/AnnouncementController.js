@@ -217,14 +217,18 @@ NAMESPACE('chlk.controllers', function (){
                         if(submitType == 'saveNoUpdate'){
                             this.saveAnnouncement(model);
                         }else{
-                            if(!this.userInRole(chlk.models.common.RoleEnum.ADMIN)
+                        //TODO nextMarkingPeriod
+
+                            if(!this.userInRole(chlk.models.common.RoleEnum.ADMINEDIT) && !this.userInRole(chlk.models.common.RoleEnum.ADMINVIEW)
                                 && session.get('finalizedClassesIds').indexOf(classId.valueOf()) > -1){
-                                    model.setMarkingPeriodId(session.get('nextMarkingPeriod').getId());
+                                    var nextMp = model.setMarkingPeriodId(session.get('nextMarkingPeriod'));
                                     if(nextMp){
                                         this.submitAnnouncement(model);
+                                        this.StartLoading(chlk.activities.announcement.AnnouncementFormPage);
                                     }
                             }else{
                                 this.submitAnnouncement(model);
+                                this.StartLoading(chlk.activities.announcement.AnnouncementFormPage);
                             }
                         }
                     }

@@ -146,3 +146,30 @@
     }
   }
 }
+
+BODY {
+  DIV.page{
+    >DIV#content {
+      DIV#content-wrapper.profile{
+        .lr-toolbar{
+          .first-container{
+            .second-container{
+              .item.class-button{
+                border-color: #baa76e;
+                background-image: url(images/profile/classes.png);
+                color: #655421;
+                font: normal 12px Georgia;
+                font-style: italic;
+                text-shadow: 1px 1px 0 white;
+
+                &:hover{
+                  background-position: center bottom;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

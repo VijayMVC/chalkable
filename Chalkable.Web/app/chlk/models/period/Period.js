@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.id.PeriodId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
+REQUIRE('chlk.models.common.ChlkTime');
 NAMESPACE('chlk.models.period', function () {
     "use strict";
 
@@ -9,10 +10,10 @@ NAMESPACE('chlk.models.period', function () {
             chlk.models.id.PeriodId, 'id',
 
             [ria.serialize.SerializeProperty('starttime')],
-            Number, 'startTime',
+            chlk.models.common.ChlkTime, 'startTime',
 
             [ria.serialize.SerializeProperty('endtime')],
-            Number, 'endTime',
+            chlk.models.common.ChlkTime, 'endTime',
 
             Number, 'order',
 
