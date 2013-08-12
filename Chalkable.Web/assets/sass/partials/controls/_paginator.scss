@@ -1,0 +1,78 @@
+.paginator-container{
+  font: normal 11px arial,tahoma, helvetica, sans-serif;
+  margin-top: 3px;
+  height: 33px;
+
+  .left-container{
+    float: left;
+
+    .first-page{
+      background: url(images/common/navigation-first.png) 0 0 no-repeat;
+    }
+
+    .prev-page{
+      background: url(images/common/navigation-prev.png) 0 0 no-repeat;
+    }
+
+    .next-page{
+      background: url(images/common/navigation-next.png) 0 0 no-repeat;
+    }
+
+    .last-page{
+      background: url(images/common/navigation-last.png) 0 0 no-repeat;
+    }
+
+    .info-container{
+      display: inline-block;
+      background: url(images/common/notification-total-of.png) 0 0 no-repeat;
+      width: 107px;
+      height: 33px;
+      padding: 0 7px;
+
+      INPUT{
+        width: 30px;
+        @include border-radius(5px);
+        border: 1px solid gray;
+        padding: 3px;
+        margin: 5px;
+        text-align: right;
+        margin-left: 10px;
+        height: 14px;
+        resize: none;
+
+        &[type="submit"]{
+          display: none;
+        }
+      }
+    }
+
+    >A{
+      height: 33px;
+      width: 28px;
+      display: inline-block;
+
+      &.disabled{
+        opacity: 0.6;
+      }
+
+      &:not(.disabled){
+        cursor: pointer;
+
+        &:hover{
+          opacity: 0.8;
+        }
+      }
+    }
+
+    >*{
+      vertical-align: top;
+      margin-right: 2px;
+    }
+  }
+
+  .right-container{
+    float: right;
+    padding-right: 10px;
+    font: normal 11px/32px Arial;
+  }
+}
