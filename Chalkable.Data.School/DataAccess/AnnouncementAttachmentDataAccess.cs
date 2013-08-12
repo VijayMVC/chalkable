@@ -19,48 +19,49 @@ namespace Chalkable.Data.School.DataAccess
 
         public AnnouncementAttachment GetById(Guid id, Guid callerId, int roleId)
         {
-            var conds = new Dictionary<string, object> {{"Id", id}};
+            var conds = new AndQueryCondition() { { AnnouncementAttachment.ID_FIELD, id } };
             return GetAnnouncementAttachments(conds, callerId, roleId).First();
         }
 
         public IList<AnnouncementAttachment> GetList(Guid callerId, int roleId, string filter = null)
         {
-            var conds = new Dictionary<string, object> ();
-            return GetAnnouncementAttachments(conds, callerId, roleId, filter);
+            return GetAnnouncementAttachments(new AndQueryCondition(), callerId, roleId, filter);
         }
 
         public PaginatedList<AnnouncementAttachment> GetPaginatedList(Guid announcementId, Guid callerId, int roleId, int start, int count, bool needsAllAttachments = true)
         {
-            var conds = new Dictionary<string, object> {{"announcementRef", announcementId}};
+            var conds = new AndQueryCondition { { AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD, announcementId } };
             var query = BuildGetAttachmentQuery(conds, callerId, roleId, needsAllAttachments);
             if (query == null)
             {
                 return new PaginatedList<AnnouncementAttachment>(new List<AnnouncementAttachment>(), start, count);
             }
-            return PaginatedSelect<AnnouncementAttachment>(query, "Id", start, count);
+            return PaginatedSelect<AnnouncementAttachment>(query, AnnouncementAttachment.ID_FIELD, start, count);
         }
 
         //private const string CALLER_ID = "@callerId"
-        private IList<AnnouncementAttachment> GetAnnouncementAttachments(Dictionary<string, object> conds, Guid callerId, int roleId, string filter = null)
+        private IList<AnnouncementAttachment> GetAnnouncementAttachments(QueryConditionSet conds, Guid callerId, int roleId, string filter = null)
         {
             var query = BuildGetAttachmentQuery(conds, callerId, roleId, true, filter);
             return query == null ? new List<AnnouncementAttachment>() : ReadMany<AnnouncementAttachment>(query);
         }
 
-        private DbQuery BuildGetAttachmentQuery(Dictionary<string, object> conds,  Guid callerId, int roleId, bool needsAllAttachments = true, string filter = null)
+        private DbQuery BuildGetAttachmentQuery(QueryConditionSet queryCondition,  Guid callerId, int roleId, bool needsAllAttachments = true, string filter = null)
         {
+            var res = new DbQuery();
+            var type = typeof(AnnouncementAttachment);
+            res.Sql.AppendFormat(@"select {0}.*
+                                   from AnnouncementAttachment 
+                                   join Announcement on Announcement.Id = AnnouncementAttachment.AnnouncementRef"
+                              , type.Name);
 
-            var sql = @"select {0}
-                        from AnnouncementAttachment 
-                        join Announcement on Announcement.Id = AnnouncementAttachment.AnnouncementRef ";
-            var b = new StringBuilder();
-            b.AppendFormat(sql, "AnnouncementAttachment.*");
-            b = Orm.BuildSqlWhere(b, typeof (AnnouncementAttachment), conds);
 
-            if (conds.Count == 0)
-                b.Append(" where ");
+            queryCondition.BuildSqlWhere(res, type.Name);
+
+            if (queryCondition.Count == 0)
+                res.Sql.Append(" where ");
             if (!needsAllAttachments)
-                b.Append(" and AnnouncementAttachment.PersonRef = @callerId");
+                res.Sql.Append(" and AnnouncementAttachment.PersonRef = @callerId");
             
             if (!string.IsNullOrEmpty(filter))
             {
@@ -69,51 +70,51 @@ namespace Chalkable.Data.School.DataAccess
                 if (sl.Length > 0)
                 {
                     filters.Add("@filter1");
-                    conds.Add("@filter1", string.Format(FILTER_FORMAT, sl[0]));
+                    res.Parameters.Add("@filter1", string.Format(FILTER_FORMAT, sl[0]));
                 }
                 if (sl.Length > 1)
                 {
                     filters.Add("@filter3");
-                    conds.Add("@filter2", string.Format(FILTER_FORMAT, sl[1]));
+                    res.Parameters.Add("@filter2", string.Format(FILTER_FORMAT, sl[1]));
                 }
                 if (sl.Length > 2)
                 {
                     filters.Add("@filter2");
-                    conds.Add("@filter3", string.Format(FILTER_FORMAT, sl[2]));
+                    res.Parameters.Add("@filter3", string.Format(FILTER_FORMAT, sl[2]));
                 }
-                b.AppendFormat(" and (LOWER(Name) like {0})", filters.JoinString(" or LOWER(Name) like "));
+                res.Sql.AppendFormat(" and (LOWER(Name) like {0})", filters.JoinString(" or LOWER(Name) like "));
             }
 
-            conds.Add("@callerId", callerId);
-            conds.Add("@roleId", roleId);
+            res.Parameters.Add("@callerId", callerId);
+            res.Parameters.Add("@roleId", roleId);
             if (CoreRoles.SUPER_ADMIN_ROLE.Id == roleId)
             {
-                return new DbQuery (sql, conds);
+                return res;
             }
             if (CoreRoles.ADMIN_EDIT_ROLE.Id == roleId || CoreRoles.ADMIN_GRADE_ROLE.Id == roleId ||
                 CoreRoles.ADMIN_VIEW_ROLE.Id == roleId)
             {
-                b.Append("and AnnouncementAttachment.PersonRef =@callerId");
-                return new DbQuery(sql, conds);
+                res.Sql.Append("and AnnouncementAttachment.PersonRef =@callerId");
+                return res;
             }
             if (CoreRoles.TEACHER_ROLE.Id == roleId)
             {
-                b.Append(@" and (Announcement.PersonRef = @callerId or AnnouncementAttachment.PersonRef = Announcement.PersonRef 
+                res.Sql.Append(@" and (Announcement.PersonRef = @callerId or AnnouncementAttachment.PersonRef = Announcement.PersonRef 
                                     or (Announcement.Id in (select AnnouncementRef from AnnouncementRecipient 
                                                            where RoleRef = @roleId or PersonRef = @callerId or ToAll = 1) 
                                          and AnnouncementAttachment.PersonRef = Announcement.PersonRef)
                                  )");
-                return new DbQuery (sql, conds);
-            
+                return res;
+
             }
             if (CoreRoles.STUDENT_ROLE.Id == roleId)
             {
-                b.Append(@" and (AnnouncementAttachment.PersonRef = @callerId 
+                res.Sql.Append(@" and (AnnouncementAttachment.PersonRef = @callerId 
                                    or (Announcement.MarkingPeriodClassRef in (select mpc.Id from MarkingPeriodClass mpc
                                                                               join ClassPerson cp on cp.ClassRef = mpc.ClassRef and cp.PersonRef = @callerId)
                                        and AnnouncementAttachment.PersonRef = Announcement.PersonRef)
                                 )");
-                return new DbQuery(sql, conds);
+                return res;
             }
             return null;
         }

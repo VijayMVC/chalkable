@@ -12,6 +12,9 @@ namespace Chalkable.Data.School.Model
         public const int DOCUMENT_DEFAULT_WIDTH = 110;
         public const int DOCUMENT_DEFAULT_HEIGHT = 170;
 
+        public const string ID_FIELD = "Id";
+        public const string ANNOUNCEMENT_REF_FIELD = "AnnouncementRef";
+
         public Guid Id { get; set; }
         public string Name { get; set; }
         public Guid PersonRef { get; set; }

@@ -17,7 +17,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Update(Guid announcementId, bool drop)
         {
-            var conds = new Dictionary<string, object> { { StudentAnnouncement.ANNOUNCEMENT_REF_FIELD_NAME, announcementId } };
+            var conds = new AndQueryCondition { { StudentAnnouncement.ANNOUNCEMENT_REF_FIELD_NAME, announcementId } };
             var updateParams = new Dictionary<string, object> {{DROP_PARAM, drop}};
             SimpleUpdate<StudentAnnouncement>(updateParams, conds);
         }

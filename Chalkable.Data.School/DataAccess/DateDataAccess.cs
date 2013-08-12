@@ -106,8 +106,8 @@ namespace Chalkable.Data.School.DataAccess
                              left join ScheduleSection on ScheduleSection.Id = [Date].ScheduleSectionRef"
                            , Orm.ComplexResultSetQuery(new List<Type> {typeof (ScheduleSection)}));
             var q = BuildConditionQuery(b, query);
-            b.AppendFormat(" order by DateTime desc OFFSET 0 ROWS FETCH NEXT {0} ROWS ONLY", query.Count);
-            q.Sql.Append(string.Format("select * from ({0})x order by x.DateTime", b));
+            b.AppendFormat(" order by DateTime desc OFFSET 0 ROWS FETCH NEXT {0} ROWS ONLY ", query.Count);
+            q.Sql.Append(string.Format(" select * from ({0})x order by x.DateTime", b));
             return ReadDetailsDate(q);
         } 
 
