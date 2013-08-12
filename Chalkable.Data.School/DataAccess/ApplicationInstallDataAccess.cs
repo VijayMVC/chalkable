@@ -86,10 +86,6 @@ namespace Chalkable.Data.School.DataAccess
                     {"applicationId", applicationId},
                     {"callerId", callerId},
                     {"personId", personId},
-                    {"roleIds", roles.JoinString(",")},
-                    {"departmentIds", departments.JoinString(",")},
-                    {"gradeLevelIds", gradeLevels.JoinString(",")},
-                    {"classIds", classes.JoinString(",")},
                     {"callerRoleId", callerRoleId},
 
                     {"hasAdminMyApps", hasAdminMyApps},
@@ -97,6 +93,11 @@ namespace Chalkable.Data.School.DataAccess
                     {"hasStudentMyApps", hasStudentMyApps},
                     {"canAttach", canAttach},
                 };
+            ps.Add("roleIds", roles == null || roles.Count == 0 ? null : roles.JoinString(","));
+            ps.Add("departmentIds", departments == null || departments.Count == 0 ? null : departments.JoinString(","));
+            ps.Add("gradeLevelIds", gradeLevels == null || gradeLevels.Count == 0 ? null : gradeLevels.JoinString(","));
+            ps.Add("classIds", classes == null || classes.Count == 0 ? null : classes.JoinString(","));
+           
             using (var reader = ExecuteStoredProcedureReader("spGetPersonsForApplicationInstallCount", ps))
             {
                 return reader.ReadList<PersonsForApplicationInstallCount>();

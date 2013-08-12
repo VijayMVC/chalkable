@@ -400,13 +400,25 @@ namespace Chalkable.Tests.Services.Master
 
         public static Application CreateDefaultLiveApp(IServiceLocatorMaster sysLocator, DeveloperSchoolTestContex context, string name, string url)
         {
-            var app = CreateDefaultDraftApp(sysLocator, context, name, url);
-            app = context.DeveloperMl.ApplicationUploadService.Submit(app.Id, BaseApplicationInfo.Create(app));
+            var appInfo = PrepareDefaultAppInfo(sysLocator, context.Developer.Id, name, url);
+            return CreateLiveApp(sysLocator, context, appInfo);
+        }
+
+        public static Application UpdateApp(IServiceLocatorMaster sysLocator, DeveloperSchoolTestContex context, Guid appId, BaseApplicationInfo appInfo)
+        {
+            var app = context.DeveloperMl.ApplicationUploadService.Submit(appId, appInfo);
             sysLocator.ApplicationUploadService.ApproveReject(app.Id, true);
             context.DeveloperMl.ApplicationUploadService.GoLive(app.Id);
             return context.DeveloperMl.ApplicationService.GetApplicationById(app.Id);
         }
+        public static Application CreateLiveApp(IServiceLocatorMaster sysLocator, DeveloperSchoolTestContex context, BaseApplicationInfo appInfo)
+        {
+            var app = context.DeveloperMl.ApplicationUploadService.Create(appInfo);
+            return UpdateApp(sysLocator, context, app.Id, appInfo);
+        }
 
+
+        
         public static Application CreateDefaultDraftApp(IServiceLocatorMaster sysLocator, DeveloperSchoolTestContex developerContext, string name, string url)
         {
             var appInfo = PrepareDefaultAppInfo(sysLocator, developerContext.Developer.Id, name, url);

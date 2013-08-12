@@ -13,7 +13,7 @@ namespace Chalkable.Data.School.Model.ApplicationInstall
         public const string OWNER_REF_FIELD = "OwnerRef";
         public Guid OwnerRef { get; set; }
         public Guid? PersonRef { get; set; }
-        public Guid ApplicatioinRef { get; set; }
+        public Guid ApplicationRef { get; set; }
         public string Description { get; set; }
 
         [NotDbFieldAttr]

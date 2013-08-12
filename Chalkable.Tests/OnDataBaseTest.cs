@@ -98,7 +98,8 @@ namespace Chalkable.Tests
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1058 - create spCalcAttendanceTypeTotal.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1059 - create spCaclStuedntClassGradeStatsPerDate.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1060 - Added PK to application install action grade level table.sql"));
-            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1061 - fix vwFinalGradeAnnouncementType.sql"));             
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1061 - fix vwFinalGradeAnnouncementType.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1062 - fix in spGetPersonsForApplicationInstallCount.sql"));             
  
         }
 
@@ -136,6 +137,7 @@ namespace Chalkable.Tests
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1017 - Added Demo related columns to school.sql"));
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1018 - Added Completed column to bg task.sql"));
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1019 - rename column in ApplicationRating.sql"));
+            ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1020 - alter columns  in Fund.sql"));
             
 
             RunCreateSchoolScripts(chalkableSchoolTemplateConnection);

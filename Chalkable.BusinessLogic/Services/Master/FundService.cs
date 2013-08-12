@@ -16,7 +16,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         decimal GetSchoolReserve(Guid schoolId);
         decimal GetRoleBalance(int roleId, Guid schoolId);
         FundRequest RequestByPurchaseOrder(Guid? schoolId, Guid? userId, decimal amount, string purchaseOrder, List<Pair<int, decimal>> roleDist, byte[] signature);
-        FundRequest RequestByPurchaseOrder(Guid? schoolId, int? userId, decimal amount, decimal adminAmount, decimal teacherAmount, decimal studentAmount, decimal parentAmount, string purchaseOrder, byte[] signature);
+        FundRequest RequestByPurchaseOrder(Guid? schoolId, Guid? userId, decimal amount, decimal adminAmount, decimal teacherAmount, decimal studentAmount, decimal parentAmount, string purchaseOrder, byte[] signature);
         void AddFundsToRole(Guid schoolId, int roleId, decimal amount, Guid? fundRequestId, string description);
         void AddFundsToClass(Guid classId, decimal amount, string discription);
         void AddFundsToPerson(Guid userId, decimal amount, string discription);
@@ -233,7 +233,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             return fr;
         }
 
-        public FundRequest RequestByPurchaseOrder(Guid? schoolId, int? userId, decimal amount, decimal adminAmount,
+        public FundRequest RequestByPurchaseOrder(Guid? schoolId, Guid? userId, decimal amount, decimal adminAmount,
                                                   decimal teacherAmount, decimal studentAmount, decimal parentAmount,
                                                   string purchaseOrder, byte[] signature)
         {
@@ -244,7 +244,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                                    new Pair<int, decimal>(CoreRoles.STUDENT_ROLE.Id, studentAmount),
                                    new Pair<int, decimal>(CoreRoles.PARENT_ROLE.Id, parentAmount)
                                };
-            return RequestByPurchaseOrder(schoolId, null, amount, purchaseOrder, roleDist, signature);
+            return RequestByPurchaseOrder(schoolId, userId, amount, purchaseOrder, roleDist, signature);
         }
 
         public void AddFundsToRole(Guid schoolId, int roleId, decimal amount, Guid? fundRequestId, string description)
@@ -457,11 +457,14 @@ namespace Chalkable.BusinessLogic.Services.Master
                             f.ToSchoolRef = schoolId.Value;
                             f.SchoolRef = schoolId.Value;
                             new FundDataAccess(uow).Insert(f);
+                        
                             var fundRequestRoles =
                                 new FundRequestRoleDistributionDataAccess(uow).GetAll(new Dictionary<string, object>
                                     {
                                         {FundRequestRoleDistribution.FUND_REQUEST_REF_FIELD, fundRequest.Id}
                                     });
+                            da.Update(fundRequest);
+                            uow.Commit();
                             foreach (var fundRequestRole in fundRequestRoles)
                             {
                                 var role = fundRequestRole.RoleRef;
@@ -477,9 +480,9 @@ namespace Chalkable.BusinessLogic.Services.Master
                     else
                     {
                         fundRequest.State = FundRequestState.Rejected;
+                        da.Update(fundRequest);
+                        uow.Commit();
                     }
-                    da.Update(fundRequest);
-                    uow.Commit();
                     return true;
                 }
             }

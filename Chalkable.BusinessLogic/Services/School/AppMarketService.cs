@@ -136,7 +136,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var res = new ApplicationInstallAction
             {
-                ApplicatioinRef = app.Id,
+                ApplicationRef = app.Id,
                 PersonRef = schoolPersonId,
                 Description = string.Empty,
                 Id = Guid.NewGuid(),
