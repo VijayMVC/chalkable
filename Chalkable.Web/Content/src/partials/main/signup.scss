@@ -1,0 +1,231 @@
+@import "compass/css3/border-radius";
+@import "compass/css3/images";
+
+BODY {
+  DIV.page {
+    #content {
+      > DIV#content-wrapper{
+        > DIV#main-wrapper{
+          > DIV#main{
+            #signups-grid{
+              .x-grid3-viewport{
+                width: 658px;
+                overflow: auto;
+
+                .x-grid3-header, .x-grid3-scroller{
+                  width: 1584px !important;
+
+                  TABLE{
+                    TD{
+                      width: 120px !important;
+                    }
+                  }
+
+                  .x-grid3-body, .x-grid3-row, .x-grid3-header-offset{
+                    width: auto !important;
+                  }
+                }
+              }
+            }
+
+            #school-csv-panel{
+              .x-column-inner, .x-column{
+                overflow: visible;
+                height: 51px;
+              }
+
+              .x-form-element{
+                .left-download{
+                  float: left;
+                  width: 85px;
+                }
+
+                .x-form-file-wrap{
+                  float: left;
+
+                  input {
+                    cursor: pointer;
+                  }
+
+                  .x-form-file{
+                    height: 32px !important;
+                    left: 0 !important;
+                    width: 74px !important;
+                  }
+
+                  TABLE{
+                    position: relative !important;
+                    background: url(images/register/upload-button.png) no-repeat;
+                    height:32px;
+                    width:73px !important;
+
+                    TBODY{
+                      opacity: 0;
+                    }
+                  }
+                }
+
+                >DIV{
+                  width: 300px;
+                }
+              }
+
+              .upload-field{
+                display: none;
+              }
+
+              .uploaded-form{
+                .x-form-element{
+
+                  .file-name{
+                    padding-top: 35px;
+                    color: #6d6f6e;
+                    font-family: Arial;
+                    font-size: 12px;
+                    width: 185px;
+
+                    &.error{
+                      color: red;
+                    }
+
+                    .close-button{
+                      height: 16px;
+                      width: 20px;
+                      display: inline-block;
+                      position: relative;
+                      top: 5px;
+                      margin-left: 5px;
+                    }
+                  }
+
+                  input {
+                    cursor: default;
+                  }
+
+                  TABLE{
+                    background: url(images/register/done-button.png) no-repeat;
+                    cursor: default !important;
+                    opacity: 1 !important;
+
+                    TBODY, TR, TD, EM, BUTTON{
+                      cursor: default !important;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.student-signup{
+  text-align: center;
+  h1{
+    text-align: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 24px;
+  }
+
+  INPUT{
+    border-color: #4c2312;
+    background: url(images/index/textfield_brown_student.png) repeat-x !important;
+    font: normal 18px Arial;
+    color: #cdc4bb;
+    vertical-align: middle;
+
+    &.ok{
+      background: url(images/index/ok-white.png) 319px center no-repeat,
+        url(images/index/textfield_brown_student.png) repeat-x !important;
+    }
+  }
+
+  P, .small-label, a{
+    text-align: center !important;
+    color: #7E684E;
+    text-shadow: 1px 1px 0 white;
+    font: 12px Helvetica, Arial, "Lucida Grande", sans-serif !important;
+    font-weight: 500;
+    vertical-align: middle;
+
+    &.bottom-label{
+      display: block;
+      margin-top: 12px;
+    }
+
+    &#retry-call{
+      background: url(images/index/retry.png) 0 2px no-repeat;
+      text-decoration: underline;
+      padding-left: 10px;
+      cursor: pointer;
+    }
+  }
+
+  form{
+    margin: 100px 168px 50px 0;
+  }
+
+  #code-container{
+    display: inline-block;
+    width: 221px;
+    padding: 31px 0 0 21px;
+    text-align: left;
+
+    INPUT, #send-code-button{
+      vertical-align: middle;
+      text-align: center;
+      margin: 0 8px;
+    }
+  }
+
+  #send-code-button{
+    background: url(images/index/submit-code.png) no-repeat !important;
+    width: 80px !important;
+    height: 38px !important;
+    min-height: 0;
+
+    SPAN{
+      background: none !important;
+      height: 38px !important;
+      min-height: 0;
+
+      BUTTON{
+        height: 38px !important;
+        width: 100%;
+      }
+    }
+  }
+
+  #call-me-button{
+    margin: 20px 0 12px 21px;
+
+    BUTTON{
+      width: 160px;
+      font-size: 20px;
+    }
+  }
+
+  #phone-number-container{
+    margin: 30px 0 9px 19px;
+  }
+
+  #error-box p, #error-box{
+    width: 344px;
+    height: 82px;
+  }
+
+  #error-box{
+    border-width: 1px 3px;
+    border-color: #ff0000;
+    border-style: solid;
+    line-height: 82px;
+    text-align: center;
+    margin: 0 auto;
+
+    p{
+      display: table-cell;
+    }
+  }
+}
