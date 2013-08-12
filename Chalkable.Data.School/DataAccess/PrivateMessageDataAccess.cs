@@ -53,7 +53,7 @@ namespace Chalkable.Data.School.DataAccess
                                         , prefix);
                 conds.Add("keyword", keyword);
             }
-            return new DbQuery {Parameters = conds, Sql = b.ToString()};
+            return new DbQuery (b, conds);
         }
 
         public static IList<PrivateMessageDetails> ReadListPrivateMessageDetails(DbDataReader reader)
@@ -103,7 +103,7 @@ namespace Chalkable.Data.School.DataAccess
                         where (FromPersonRef = @callerId and DeletedBySender = 0) 
                                or (ToPersonRef = @callerId and DeletedByRecipient = 0)";
             var conds = new Dictionary<string, object> {{"callerId", callerId}};
-            return ReadMany<PrivateMessage>(new DbQuery {Sql = sql, Parameters = conds});
+            return ReadMany<PrivateMessage>(new DbQuery (sql, conds));
         } 
 
         public PaginatedList<PrivateMessageDetails> GetIncomeMessages(IList<int> roles, string keyword, bool? read,

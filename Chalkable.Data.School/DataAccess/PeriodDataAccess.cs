@@ -30,7 +30,7 @@ namespace Chalkable.Data.School.DataAccess
         }
         public IList<Period> GetPeriods(Guid sectionId)
         {
-            var conds = new Dictionary<string, object> { { "SectionRef", sectionId } };
+            var conds = new AndQueryCondition { { "SectionRef", sectionId } };
             return SelectMany<Period>(conds);
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
@@ -16,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         decimal GetSchoolReserve(Guid schoolId);
         decimal GetRoleBalance(int roleId, Guid schoolId);
         FundRequest RequestByPurchaseOrder(Guid? schoolId, Guid? userId, decimal amount, string purchaseOrder, List<Pair<int, decimal>> roleDist, byte[] signature);
-        FundRequest RequestByPurchaseOrder(Guid? schoolId, int? userId, decimal amount, decimal adminAmount, decimal teacherAmount, decimal studentAmount, decimal parentAmount, string purchaseOrder, byte[] signature);
+        FundRequest RequestByPurchaseOrder(Guid? schoolId, Guid? userId, decimal amount, decimal adminAmount, decimal teacherAmount, decimal studentAmount, decimal parentAmount, string purchaseOrder, byte[] signature);
         void AddFundsToRole(Guid schoolId, int roleId, decimal amount, Guid? fundRequestId, string description);
         void AddFundsToClass(Guid classId, decimal amount, string discription);
         void AddFundsToPerson(Guid userId, decimal amount, string discription);
@@ -153,8 +154,8 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new FundDataAccess(uow);
 
-                var toschoolFunds = da.GetAll(new Dictionary<string, object> { { Fund.TO_SCHOOL_REF_FIELD, schoolId } });
-                var fromschoolFunds = da.GetAll(new Dictionary<string, object> { { Fund.FROM_SCHOOL_REF_FIELD, schoolId } });
+                var toschoolFunds = da.GetAll(new AndQueryCondition { { Fund.TO_SCHOOL_REF_FIELD, schoolId } });
+                var fromschoolFunds = da.GetAll(new AndQueryCondition { { Fund.FROM_SCHOOL_REF_FIELD, schoolId } });
                 var amountToschool = toschoolFunds.Sum(x => x.Amount);
                 var amountFromschool = fromschoolFunds.Sum(x => x.Amount);
                 return (amountToschool - amountFromschool);
@@ -233,7 +234,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             return fr;
         }
 
-        public FundRequest RequestByPurchaseOrder(Guid? schoolId, int? userId, decimal amount, decimal adminAmount,
+        public FundRequest RequestByPurchaseOrder(Guid? schoolId, Guid? userId, decimal amount, decimal adminAmount,
                                                   decimal teacherAmount, decimal studentAmount, decimal parentAmount,
                                                   string purchaseOrder, byte[] signature)
         {
@@ -244,7 +245,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                                    new Pair<int, decimal>(CoreRoles.STUDENT_ROLE.Id, studentAmount),
                                    new Pair<int, decimal>(CoreRoles.PARENT_ROLE.Id, parentAmount)
                                };
-            return RequestByPurchaseOrder(schoolId, null, amount, purchaseOrder, roleDist, signature);
+            return RequestByPurchaseOrder(schoolId, userId, amount, purchaseOrder, roleDist, signature);
         }
 
         public void AddFundsToRole(Guid schoolId, int roleId, decimal amount, Guid? fundRequestId, string description)
@@ -291,7 +292,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                     var da = new FundDataAccess(uow);
                     for (int i = 0; i < students.Count; i++)
                     {
-                        var fs = da.GetAll(new Dictionary<string, object>
+                        var fs = da.GetAll(new AndQueryCondition
                             {
                                 {Fund.TO_USER_REF_FIELD, students[i].Id},
                                 {Fund.FROM_USER_REF_FIELD, students[i].Id},
@@ -313,7 +314,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 using (var uow = Read())
                 {
                     var da = new FundDataAccess(uow);
-                    var fs = da.GetAll(new Dictionary<string, object>
+                    var fs = da.GetAll(new AndQueryCondition
                             {
                                 {Fund.TO_USER_REF_FIELD, userId},
                                 {Fund.FROM_USER_REF_FIELD, userId},
@@ -326,7 +327,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public IList<FundRequest> GetFundRequests()
         {
-            var ps = new Dictionary<string, object>();
+            var ps = new AndQueryCondition();
             if (BaseSecurity.IsSysAdmin(Context)){}
             else if (BaseSecurity.IsAdminViewer(Context))
                 ps.Add(FundRequest.SCHOOL_REF_FIELD, Context.SchoolId);
@@ -346,8 +347,8 @@ namespace Chalkable.BusinessLogic.Services.Master
             var schoolPerson = ServiceLocator.UserService.GetById(userId);
             if (!BaseSecurity.IsAdminTeacherOrExactStudent(schoolPerson, Context))
                 throw new ChalkableSecurityException();
-            var psFrom = new Dictionary<string, object> {{Fund.FROM_USER_REF_FIELD, userId}};
-            var psTo = new Dictionary<string, object> { { Fund.TO_USER_REF_FIELD, userId } };
+            var psFrom = new AndQueryCondition { { Fund.FROM_USER_REF_FIELD, userId } };
+            var psTo = new AndQueryCondition { { Fund.TO_USER_REF_FIELD, userId } };
             if (privateMoney.HasValue)
             {
                 psFrom.Add(Fund.IS_PRIVATE_FIELD, privateMoney);
@@ -398,7 +399,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             using (var uow = Read())
             {
-                return new ApplicationInstallActionDataAccess(uow).GetAll(new Dictionary<string, object>
+                return new ApplicationInstallActionDataAccess(uow).GetAll(new AndQueryCondition
                         {
                             {ApplicationInstallAction.OWNER_REF_FIELD, userId}
                         });
@@ -413,7 +414,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 var da = new FundDataAccess(uow);
-                return da.GetAll(new Dictionary<string, object> {{Fund.TO_SCHOOL_REF_FIELD, schoolId}}).Sum(x => x.Amount);
+                return da.GetAll(new AndQueryCondition { { Fund.TO_SCHOOL_REF_FIELD, schoolId } }).Sum(x => x.Amount);
             }
         }
 
@@ -457,11 +458,14 @@ namespace Chalkable.BusinessLogic.Services.Master
                             f.ToSchoolRef = schoolId.Value;
                             f.SchoolRef = schoolId.Value;
                             new FundDataAccess(uow).Insert(f);
+                        
                             var fundRequestRoles =
-                                new FundRequestRoleDistributionDataAccess(uow).GetAll(new Dictionary<string, object>
+                                new FundRequestRoleDistributionDataAccess(uow).GetAll(new AndQueryCondition
                                     {
                                         {FundRequestRoleDistribution.FUND_REQUEST_REF_FIELD, fundRequest.Id}
                                     });
+                            da.Update(fundRequest);
+                            uow.Commit();
                             foreach (var fundRequestRole in fundRequestRoles)
                             {
                                 var role = fundRequestRole.RoleRef;
@@ -477,9 +481,9 @@ namespace Chalkable.BusinessLogic.Services.Master
                     else
                     {
                         fundRequest.State = FundRequestState.Rejected;
+                        da.Update(fundRequest);
+                        uow.Commit();
                     }
-                    da.Update(fundRequest);
-                    uow.Commit();
                     return true;
                 }
             }

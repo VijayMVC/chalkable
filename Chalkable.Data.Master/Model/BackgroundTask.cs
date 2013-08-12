@@ -93,7 +93,8 @@ namespace Chalkable.Data.Master.Model
         BackupDatabases = 2,
         RestoreDatabases = 3,
         DatabaseUpdate = 4,
-        CreateDemoSchool = 5
+        CreateDemoSchool = 5,
+        DeleteSchool = 6
     }
 
     public enum BackgroundTaskStateEnum

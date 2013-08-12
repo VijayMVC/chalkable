@@ -7,6 +7,7 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -136,7 +137,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var res = new ApplicationInstallAction
             {
-                ApplicatioinRef = app.Id,
+                ApplicationRef = app.Id,
                 PersonRef = schoolPersonId,
                 Description = string.Empty,
                 Id = Guid.NewGuid(),
@@ -149,7 +150,7 @@ namespace Chalkable.BusinessLogic.Services.School
             descriptionBuilder.AppendFormat(APP_INSTALLED_FOR_FMT, app.Name);
             if (Context.Role.Id == CoreRoles.TEACHER_ROLE.Id && classids != null)
             {
-                var teacherClasses = new ClassDataAccess(uow).GetAll(new Dictionary<string, object> { { Class.TEACHER_REF_FIELD, schoolPersonId } });
+                var teacherClasses = new ClassDataAccess(uow).GetAll(new AndQueryCondition { { Class.TEACHER_REF_FIELD, schoolPersonId } });
                 teacherClasses = teacherClasses.Where(x => classids.Contains(x.Id)).ToList();
                 var da = new ApplicationInstallActionClassesDataAccess(uow);
                 var appInstallAcClasses = new List<ApplicationInstallActionClasses>();
@@ -230,7 +231,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new ApplicationInstallDataAccess(uow);
-                var ps = new Dictionary<string, object>
+                var ps = new AndQueryCondition
                     {
                         {ApplicationInstall.APPLICATION_REF_FIELD, applicationId},
                         {ApplicationInstall.ACTIVE_FIELD, true}
@@ -249,7 +250,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new ApplicationInstallDataAccess(uow);
-                var ps = new Dictionary<string, object>
+                var ps = new AndQueryCondition
                     {
                         {ApplicationInstall.APPLICATION_REF_FIELD, applicationId},
                         {ApplicationInstall.PERSON_REF_FIELD, personId},

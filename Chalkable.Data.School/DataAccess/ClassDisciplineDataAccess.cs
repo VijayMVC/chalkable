@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
@@ -70,7 +69,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public ClassDiscipline GetClassDiscipline(Guid classPeriodId, Guid classPersonId, DateTime date)
         {
-            var conds = new Dictionary<string, object>
+            var conds = new AndQueryCondition()
                 {
                     {ClassDiscipline.CLASS_PERIOD_REF_FIELD, classPeriodId},
                     {ClassDiscipline.CLASS_PERSON_REF_FIELD, classPersonId},

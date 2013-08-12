@@ -44,7 +44,12 @@ namespace Chalkable.BusinessLogic.Services.School
                 var max = 12;
                 for (int i = 1; i < max; i++)
                 {
-                    gradeLevels.Add(new GradeLevel { Id = Guid.NewGuid(), Name = i.ToString(CultureInfo.InvariantCulture) });
+                    gradeLevels.Add(new GradeLevel
+                        {
+                            Id = Guid.NewGuid(), 
+                            Name = i.ToString(CultureInfo.InvariantCulture),
+                            Number = i
+                        });
                 }
                 new GradeLevelDataAccess(uow).Insert(gradeLevels);
                 uow.Commit();

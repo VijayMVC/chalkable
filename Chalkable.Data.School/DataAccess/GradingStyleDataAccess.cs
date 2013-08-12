@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Chalkable.Data.Common;
+﻿using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
@@ -12,7 +12,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public void DeleteAll()
         {
-            SimpleDelete<GradingStyle>(new Dictionary<string, object>());
+            SimpleDelete(new AndQueryCondition());
         }
     }
 }

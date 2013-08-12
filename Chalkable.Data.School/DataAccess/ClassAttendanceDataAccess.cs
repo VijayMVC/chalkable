@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -122,7 +121,7 @@ namespace Chalkable.Data.School.DataAccess
                     {"markingPeriodId", markingPeriodId},
                     {"fromDate", fromDate},
                 };
-            return Exists(new DbQuery {Sql = sql, Parameters = conds});
+            return Exists(new DbQuery(sql, conds));
         }
 
         public int PossibleAttendanceCount(Guid markingPeriodId, Guid classId, DateTime? tillDate)
@@ -134,7 +133,7 @@ namespace Chalkable.Data.School.DataAccess
                         join ClassPerson on ClassPerson.ClassRef = ClassPeriod.ClassRef
                         where ClassPeriod.ClassRef = @classId and Period.MarkingPeriodRef = @markingPeriodId and [Date].IsSchoolDay = 1 ");
 
-            var conds = new Dictionary<string, object>()
+            var conds = new Dictionary<string, object>
                 {
                     {"classId", classId},
                     {"markingPeriodId", markingPeriodId}
@@ -144,7 +143,7 @@ namespace Chalkable.Data.School.DataAccess
                 conds.Add("tillDate", tillDate.Value);
                 b.Append(" and  [Date].[DateTime] <= @tillDate");
             }
-            return Count(new DbQuery {Parameters = conds, Sql = b.ToString()});
+            return Count(new DbQuery(b, conds));
         }
     }
 

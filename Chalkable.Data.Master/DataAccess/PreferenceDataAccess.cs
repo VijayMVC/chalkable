@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Chalkable.Data.Common;
+﻿using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Data.Master.DataAccess
@@ -12,7 +12,7 @@ namespace Chalkable.Data.Master.DataAccess
 
         public Preference GetPreferenceOrNull(string key)
         {
-            var conds = new Dictionary<string, object> {{"Key", key}};
+            var conds = new AndQueryCondition {{"Key", key}};
             return  SelectOneOrNull<Preference>(conds);
         }
     }

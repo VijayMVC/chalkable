@@ -16,6 +16,7 @@ namespace Chalkable.BusinessLogic.Services.Master
     public interface ISchoolService
     {
         Data.Master.Model.School GetById(Guid id);
+        Data.Master.Model.School GetByIdOrNull(Guid id);
         Data.Master.Model.School Create(Guid districtId, string name, IList<UserInfo> principals);
         void CreateEmpty();
         PaginatedList<Data.Master.Model.School> GetSchools(Guid? districtId, int start = 0, int count = int.MaxValue);
@@ -188,17 +189,29 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 var da = new SchoolDataAccess(uow);
-                da.GetAll(new Dictionary<string, object>
+                return da.GetAll(new AndQueryCondition
                     {
-                        {Data.Master.Model.School.DEMO_PREFIX_FIELD, NotNull.Instance}
+                        {Data.Master.Model.School.DEMO_PREFIX_FIELD, null, ConditionRelation.NotEqual},
+                        {Data.Master.Model.School.LAST_USED_DEMO_FIELD, dt, ConditionRelation.LessEqual}
                     });
             }
-            throw new NotImplementedException();
         }
 
         public void DeleteSchool(Guid id)
         {
-            throw new NotImplementedException();
+            var school = GetById(id);
+            using (var uow = Update())
+            {
+                var da = new SchoolDataAccess(uow);
+                da.Delete(id);
+                uow.Commit();
+            }
+
+            using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, school.ServerUrl, "Master"), false))
+            {
+                var da = new SchoolDataAccess(unitOfWork);
+                da.DeleteSchoolDataBase(school.Id.ToString());
+            }
         }
 
         public Data.Master.Model.School Create(Guid districtId, string name, IList<UserInfo> principals)
@@ -223,6 +236,15 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new SchoolDataAccess(uow);
                 return da.GetById(id);
+            }
+        }
+
+        public Data.Master.Model.School GetByIdOrNull(Guid id)
+        {
+            using (var uow = Read())
+            {
+                var da = new SchoolDataAccess(uow);
+                return da.GetByIdOrNull(id);
             }
         }
 

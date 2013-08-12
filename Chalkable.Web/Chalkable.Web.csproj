@@ -214,6 +214,7 @@
     <Compile Include="Models\ApplicationsViewData\ApplicationPriceViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationRatingViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationTotalPriceViewData.cs" />
+    <Compile Include="Models\ApplicationsViewData\ApplicationUpdateInputModel.cs" />
     <Compile Include="Models\ApplicationsViewData\InstalledApplicationViewData.cs" />
     <Compile Include="Models\AttendanceReasonViewData.cs" />
     <Compile Include="Models\BackgroundTaskLogViewData.cs" />

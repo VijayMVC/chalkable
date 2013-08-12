@@ -23,7 +23,7 @@ namespace Chalkable.Data.School.DataAccess
                     {ApplicationInstall.PERSON_REF_FIELD, personId},
                     {ApplicationInstall.OWNER_REF_FIELD, personId}
                 };
-            return ReadMany<ApplicationInstall>(new DbQuery {Parameters = ps, Sql = sql});
+            return ReadMany<ApplicationInstall>(new DbQuery(sql, ps));
         }
 
         public IList<ApplicationInstall> GetInstalledForClass(Class clazz)
@@ -40,12 +40,12 @@ namespace Chalkable.Data.School.DataAccess
                     {ApplicationInstallActionClasses.CLASS_REF_FIELD, clazz.Id},
                     {ApplicationInstallActionGradeLevel.GRADE_LEVEL_REF_FIELD, clazz.GradeLevelRef}
                 };
-            return ReadMany<ApplicationInstall>(new DbQuery {Parameters = ps, Sql = sql});
+            return ReadMany<ApplicationInstall>(new DbQuery(sql, ps));
         }
 
         public IList<ApplicationInstall> GetInstalledByAppId(Guid applicationId, Guid schoolYearId)
         {
-            return SelectMany<ApplicationInstall>(new Dictionary<string, object>
+            return SelectMany<ApplicationInstall>(new AndQueryCondition
                 {
                     {ApplicationInstall.APPLICATION_REF_FIELD, applicationId},
                     {ApplicationInstall.SCHOOL_YEAR_REF_FIELD, schoolYearId},
@@ -86,10 +86,6 @@ namespace Chalkable.Data.School.DataAccess
                     {"applicationId", applicationId},
                     {"callerId", callerId},
                     {"personId", personId},
-                    {"roleIds", roles.JoinString(",")},
-                    {"departmentIds", departments.JoinString(",")},
-                    {"gradeLevelIds", gradeLevels.JoinString(",")},
-                    {"classIds", classes.JoinString(",")},
                     {"callerRoleId", callerRoleId},
 
                     {"hasAdminMyApps", hasAdminMyApps},
@@ -97,6 +93,11 @@ namespace Chalkable.Data.School.DataAccess
                     {"hasStudentMyApps", hasStudentMyApps},
                     {"canAttach", canAttach},
                 };
+            ps.Add("roleIds", roles == null || roles.Count == 0 ? null : roles.JoinString(","));
+            ps.Add("departmentIds", departments == null || departments.Count == 0 ? null : departments.JoinString(","));
+            ps.Add("gradeLevelIds", gradeLevels == null || gradeLevels.Count == 0 ? null : gradeLevels.JoinString(","));
+            ps.Add("classIds", classes == null || classes.Count == 0 ? null : classes.JoinString(","));
+           
             using (var reader = ExecuteStoredProcedureReader("spGetPersonsForApplicationInstallCount", ps))
             {
                 return reader.ReadList<PersonsForApplicationInstallCount>();

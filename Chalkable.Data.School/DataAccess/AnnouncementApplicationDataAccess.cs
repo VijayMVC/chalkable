@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
-using Chalkable.Data.School.Model.ApplicationInstall;
 
 namespace Chalkable.Data.School.DataAccess
 {
@@ -29,7 +28,7 @@ namespace Chalkable.Data.School.DataAccess
             if (onlyActive)
                 sql += " and AnnouncementApplication.Active = 1";
             var ps = new Dictionary<string, object> {{"personId", personId}};
-            return ReadMany<AnnouncementApplication>(new DbQuery {Parameters = ps, Sql = sql});
+            return ReadMany<AnnouncementApplication>(new DbQuery (sql, ps));
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -20,14 +19,23 @@ namespace Chalkable.Data.School.DataAccess
         public void FullDelete(Guid id)
         {
             var b = new StringBuilder();
-            var conds = new Dictionary<string, object> {{"ClassPeriodRef", id}};
+            var conds = new AndQueryCondition {{"ClassPeriodRef", id}};
             var deleteAttQ = Orm.SimpleDelete<ClassAttendance>(conds);
+
             b.Append(deleteAttQ.Sql).Append(" ");
             b.Append(Orm.SimpleDelete<ClassDiscipline>(conds).Sql).Append(" ");
+            
             conds.Add("Id", id);
-            var classPeriodQ = Orm.SimpleDelete<ClassPeriod>(new Dictionary<string, object> {{"Id", id}});
+            var classPeriodQ = Orm.SimpleDelete<ClassPeriod>(new AndQueryCondition {{"Id", id}});
             b.Append(classPeriodQ.Sql);
-            ExecuteNonQueryParametrized(b.ToString(), conds);
+            
+            var allParams = deleteAttQ.Parameters;
+            foreach (var parameter in classPeriodQ.Parameters)
+            {
+                allParams.Add(parameter);    
+            }
+            
+            ExecuteNonQueryParametrized(b.ToString(), allParams);
         }
 
         public bool Exists(ClassPeriodQuery query)
@@ -46,7 +54,7 @@ namespace Chalkable.Data.School.DataAccess
                 mpDic.Add("@markingPeriodId_" + i, markingPeriodIds[i]);
             }
             sql = string.Format(sql, mpDic.Keys.JoinString(","));
-            return Exists(new DbQuery{Parameters = mpDic, Sql = sql});
+            return Exists(new DbQuery(sql, mpDic));
         }
 
         public bool IsClassStudentsAssignedToPeriod(Guid periodId, Guid classId)
@@ -57,7 +65,7 @@ namespace Chalkable.Data.School.DataAccess
 	                        join ClassPeriod cgp on cgp.ClassRef = csp.ClassRef and cgp.PeriodRef = @periodId)";
 
             var conds = new Dictionary<string, object> {{"periodId", periodId}, {"classId", classId}};
-            var query = new DbQuery{Sql = sql, Parameters = conds};
+            var query = new DbQuery(sql, conds);
             return Exists(query);
         }
 
@@ -69,9 +77,8 @@ namespace Chalkable.Data.School.DataAccess
 	                        join ClassPerson cPerson on cPerson.ClassRef = cPeriod.ClassRef and cPerson.PersonRef = @personId)";
 
             var conds = new Dictionary<string, object> { { "personId", personId }, { "classId", classId } };
-            var query = new DbQuery { Sql = sql, Parameters = conds };
+            var query = new DbQuery(sql, conds);
             return Exists(query);
-            
         }
 
 
@@ -81,7 +88,7 @@ namespace Chalkable.Data.School.DataAccess
                         join Class c on c.Id = cp.ClassRef
                         where cp.PeriodRef = @periodId";
             var conds = new Dictionary<string, object> {{"periodId", periodId}};
-            return ReadMany<Class>(new DbQuery {Sql = sql, Parameters = conds});
+            return ReadMany<Class>(new DbQuery(sql, conds));
         } 
         public IList<Room> GetAvailableRooms(Guid periodId)
         {
@@ -89,7 +96,7 @@ namespace Chalkable.Data.School.DataAccess
                         join Room r on r.Id = cp.RoomRef
                         where cp.PeriodRef = @periodId";
             var conds = new Dictionary<string, object> { { "periodId", periodId } };
-            return ReadMany<Room>(new DbQuery { Sql = sql, Parameters = conds });
+            return ReadMany<Room>(new DbQuery(sql, conds));
         } 
 
 
@@ -174,7 +181,7 @@ namespace Chalkable.Data.School.DataAccess
                 }
                 builder.AppendFormat(" and ClassPeriod.ClassRef in ({0})",  classIdsParams.JoinString(","));
             }
-            return new DbQuery {Sql = builder.ToString(), Parameters = conds};
+            return new DbQuery(builder.ToString(), conds);
         }
 
     }

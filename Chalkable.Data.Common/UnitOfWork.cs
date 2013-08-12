@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using Chalkable.Data.Common.Orm;
 
 namespace Chalkable.Data.Common
 {
@@ -79,9 +78,7 @@ namespace Chalkable.Data.Common
             {
                 foreach (var pair in parameters)
                 {
-                    if (NotNull.Instance == pair.Value)
-                        continue;
-                    SqlParameter parameter;
+                   SqlParameter parameter;
                    if (pair.Value != null)
                         parameter = new SqlParameter(CompleteToParam(pair.Key), pair.Value);
                    else

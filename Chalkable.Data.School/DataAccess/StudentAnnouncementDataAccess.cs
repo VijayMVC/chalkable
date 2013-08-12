@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Data.SqlClient;
-using System.Text;
-using Chalkable.Common;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
@@ -58,9 +56,9 @@ namespace Chalkable.Data.School.DataAccess
         {
             return SelectMany<StudentAnnouncement>(BuildConditions(query));
         } 
-        private Dictionary<string, object> BuildConditions(StudentAnnouncementQuery query)
+        private QueryCondition BuildConditions(StudentAnnouncementQuery query)
         {
-            var res = new Dictionary<string, object>();
+            var res = new AndQueryCondition();
             if(query.AnnouncementId.HasValue)
                 res.Add("announcementRef", query.AnnouncementId);
             if(query.State.HasValue)

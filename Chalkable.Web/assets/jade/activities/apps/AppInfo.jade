@@ -45,8 +45,7 @@ each item in actAppPermissions
             +Textbox("apikey", "key").api-key
             label= "Status: " + app.getState().toString()
     +ActionForm('apps', 'update').app-info
-        +Button().blue-tb-right-button.submit-btn Submit App
-
+        +Button(self.isDraft())(name="submit-btn", class = self.isDraft() ? "x-item-disabled" : "").blue-tb-right-button.submit-btn  Submit App
         +Hidden('draft', self.isDraft())
         .section.first
             .elem
@@ -114,7 +113,7 @@ each item in actAppPermissions
                 label.wide.hint Short Description:
                 +Textbox("shortDescription", app.getShortDescription())
             .elem
-                label.wide.hint Long Description:
+                label.wide.hint.top-align Long Description:
                 textarea(name="longDescription")=app.getDescription()
             .elem
                 label.wide.hint Video Demo:
@@ -122,8 +121,8 @@ each item in actAppPermissions
         .section
             .elem
                 label.hint Pricing:
-                +SlideCheckbox("price", true)
+                +SlideCheckbox("price", true).price-checkbox
         .section
             .elem
                 label.hint Icons:
-        +Button().special-button.blue-button Update Draft
+        +Button(false)(name="submit-draft-btn").special-button.blue-button Update Draft

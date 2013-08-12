@@ -1,9 +1,11 @@
-mixin Button()
+mixin Button(isDisabled)
     -value=attributes.value;
     -type=attributes.type;
     -name=attributes.name;
+    -attributes.disabled = isDisabled
+
     span.chlk-button(attributes)
         span
             span
-                button(type=type, name=name, value=value)
+                button(type=type, name=name, value=value, disabled=(isDisabled===true ? "disabled" : undefined))
                     block

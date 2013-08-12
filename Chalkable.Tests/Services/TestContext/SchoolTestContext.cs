@@ -209,6 +209,11 @@ namespace Chalkable.Tests.Services.TestContext
         {
             get { return (int) (NowTime - NowDate).TotalMinutes; }
         }
+
+        public Data.Master.Model.School School
+        {
+            get { return sysSchoolSl.ServiceLocatorMaster.SchoolService.GetById(sysSchoolSl.Context.SchoolId.Value); }
+        }
     }
 
     [Flags]

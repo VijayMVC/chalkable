@@ -296,11 +296,15 @@
   @include box-shadow(inset 0 1px 0 #9dc3d6);
   display: inline-block;
 
+
+
   SPAN, BUTTON{
     background: transparent;
     border: none;
-  }
 
+
+
+  }
 
   &:hover{
     @include background(linear-gradient(top, #6ea6c2, #3a738f));

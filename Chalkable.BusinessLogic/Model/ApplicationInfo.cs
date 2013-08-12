@@ -17,6 +17,13 @@ namespace Chalkable.BusinessLogic.Model
         public Guid DeveloperId { get; set; }
         public IList<AppPermissionType> PermissionIds { get; set; }
 
+        protected BaseApplicationInfo()
+        {
+            ShortApplicationInfo = new ShortApplicationInfo();
+            ApplicationAccessInfo = new ApplicationAccessInfo();
+            ApplicationPrices = new ApplicationPricesInfo();
+        }
+
         public static BaseApplicationInfo Create(ShortApplicationInfo shortApplicationInfo, Guid developerId
             , IList<AppPermissionType> permissionIds = null,  IList<Guid> picturesId = null
             , ApplicationPricesInfo applicationPricesInfo = null, IList<Guid> categories = null

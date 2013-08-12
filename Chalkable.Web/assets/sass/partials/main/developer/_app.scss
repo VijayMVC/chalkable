@@ -60,6 +60,32 @@ BODY {
                       &.top{
                         margin-top: 15px;
                       }
+
+                      &.top-align{
+                        vertical-align: top;
+                      }
+
+                    }
+
+
+                    .price-checkbox{
+                      &.slide-checkbox{
+                        >DIV{
+                          &:after {
+                            content: 'PAID';
+                            font: 10px/24px Arial, sans-serif;
+                            right: 13px;
+
+
+                          }
+
+                          &:before {
+                            content: 'FREE';
+                            font: 10px/24px Arial, sans-serif;
+                            left: 8px;
+                          }
+                        }
+                      }
                     }
                     .permissions, .categories{
                       width: 416px;

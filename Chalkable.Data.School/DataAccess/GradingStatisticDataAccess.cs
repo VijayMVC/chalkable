@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -40,7 +39,7 @@ namespace Chalkable.Data.School.DataAccess
                 var mpidsStr = query.MarkingPeriodIds.Select(x => "'" + x.ToString() + "'").ToString();
                 sql.AppendFormat(" and [MarkingPeriodClass].[{0}] in ({1})", MarkingPeriodClass.MARKING_PERIOD_REF_FIELD, mpidsStr);
             }
-            return new DbQuery { Sql = sql.ToString(), Parameters = conds };
+            return new DbQuery (sql, conds);
         }
 
         private DbQuery BuilStudentGradeStatisticQuery(StringBuilder sql, GradingStatisticQuery query)
@@ -58,7 +57,7 @@ namespace Chalkable.Data.School.DataAccess
                 conds.Add(Person.ID_FIELD, query.CallerId);
                 sql.AppendFormat(" and [Person].[{0}] = @{0}", Person.ID_FIELD);
             }
-            return new DbQuery { Sql = sql.ToString(), Parameters = conds };
+            return new DbQuery(sql, conds);
         }
     
         private DbQuery BuildClassGradeStatisticQuery(StringBuilder sql, GradingStatisticQuery query)
@@ -79,7 +78,7 @@ namespace Chalkable.Data.School.DataAccess
                 conds.Add(Person.ID_FIELD, query.CallerId);
                 sql.AppendFormat(personExistsingQueryTmp, Person.ID_FIELD);
             }
-            return new DbQuery { Sql = sql.ToString(), Parameters = conds };
+            return new DbQuery (sql, conds);
         }
 
         private DbQuery BuildStudentGradeAvgPerMPCDbQuey(GradingStatisticQuery query)
@@ -123,7 +122,7 @@ namespace Chalkable.Data.School.DataAccess
                         from ({0})x  group by {2}";
             sql = string.Format(sql, innerQuery, resultSetStr, groupBySetStr);
 
-            return ReadMany<StudentGradeAvgPerClass>(new DbQuery {Sql = sql, Parameters = innerQuery.Parameters}, true);
+            return ReadMany<StudentGradeAvgPerClass>(new DbQuery (sql, innerQuery.Parameters), true);
         }
 
         public IList<MarkingPeriodClassGradeAvg> CalcClassGradingPerMp(GradingStatisticQuery query)

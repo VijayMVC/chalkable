@@ -43,25 +43,22 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin, Developer")]
-        public ActionResult Update(Guid applicationId, ShortApplicationInfo shortApplicationInfo, IntList permissionsIds, 
-               ApplicationPricesInfo applicationPrices, Guid developerId, ApplicationAccessInfo applicationAccess,
-               GuidList categoriesid, GuidList picturesid, IntList gradelevels,  bool forSubmit)
+        public ActionResult Update(ApplicationUpdateInputModel applicationInputModel)
         {
-            var permissions = permissionsIds.Select(x => (AppPermissionType) x).ToList();
-            var baseAppInfo = BaseApplicationInfo.Create(shortApplicationInfo, developerId, permissions, picturesid, applicationPrices
-                                                         , categoriesid, applicationAccess, gradelevels);
-
-            if (string.IsNullOrEmpty(shortApplicationInfo.Name))
+            var shortAppinfo = applicationInputModel.ShortApplicationInfo;
+            var appId = applicationInputModel.ApplicationId;
+            if (string.IsNullOrEmpty(shortAppinfo.Name))
                 return Json(new ChalkableException(ChlkResources.ERR_APP_NAME_MISSING));
-            if (string.IsNullOrEmpty(shortApplicationInfo.Url))
+            if (string.IsNullOrEmpty(shortAppinfo.Url))
                 return Json(new ChalkableException(ChlkResources.ERR_APP_URL_MISSING));
-            if (MasterLocator.ApplicationUploadService.Exists(applicationId, shortApplicationInfo.Name, null))
+            if (MasterLocator.ApplicationUploadService.Exists(appId, shortAppinfo.Name, null))
                 return Json(new ChalkableException(ChlkResources.ERR_APP_NAME_MISSING));
-            if (MasterLocator.ApplicationUploadService.Exists(applicationId, null, shortApplicationInfo.Url))
+            if (MasterLocator.ApplicationUploadService.Exists(appId, null, shortAppinfo.Url))
                 return Json(new ChalkableException(ChlkResources.ERR_APP_DUPLICATE_URL));
 
-            var app = forSubmit ? MasterLocator.ApplicationUploadService.Submit(applicationId, baseAppInfo)
-                                : MasterLocator.ApplicationUploadService.UpdateDraft(applicationId, baseAppInfo);
+            var app = applicationInputModel.ForSubmit
+                                ? MasterLocator.ApplicationUploadService.Submit(appId, applicationInputModel)
+                                : MasterLocator.ApplicationUploadService.UpdateDraft(appId, applicationInputModel);
 
             //if (forSubmit) //TODO: mixpanel
             //{

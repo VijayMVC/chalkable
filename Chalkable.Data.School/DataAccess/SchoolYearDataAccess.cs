@@ -34,7 +34,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public bool Exists(string name)
         {
-            var conds = new Dictionary<string, object> {{"name", name}};
+            var conds = new AndQueryCondition { { "name", name } };
             return Exists<SchoolYear>(conds);
         }
 
@@ -51,7 +51,8 @@ namespace Chalkable.Data.School.DataAccess
                 conds.Add("id", currentSchoolYearId);
                 sqlCommand += " and Id != @id";
             }
-            return Exists(new DbQuery {Sql = sqlCommand, Parameters = conds});
+            var query = new DbQuery(sqlCommand, conds);
+            return Exists(query);
         }
     }
 }

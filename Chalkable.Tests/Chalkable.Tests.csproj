@@ -58,6 +58,7 @@
     <Compile Include="Services\Master\BaseMasterServiceLocatorTest.cs" />
     <Compile Include="Services\Master\CategoryServiceTest.cs" />
     <Compile Include="Services\Master\DepartmentServiceTest.cs" />
+    <Compile Include="Services\School\AppMarketServiceTest.cs" />
     <Compile Include="Services\TestContext\DeveloperSchoolTestContex.cs" />
     <Compile Include="Services\Master\EmailTestService.cs" />
     <Compile Include="Services\Master\MasterServiceTestBase.cs" />

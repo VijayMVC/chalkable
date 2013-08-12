@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -257,7 +256,7 @@ namespace Chalkable.Data.School.DataAccess
             var sql = @"select top 1 * from Announcement 
                       where PersonRef = @PersonRef and State = @state
                       order by Created desc";
-           return  ReadOneOrNull<Announcement>(new DbQuery {Sql = sql, Parameters = conds});
+           return  ReadOneOrNull<Announcement>(new DbQuery (sql, conds));
         }
 
         public IList<string> GetLastFieldValues(Guid personId, Guid classId, int announcementType, int count)
