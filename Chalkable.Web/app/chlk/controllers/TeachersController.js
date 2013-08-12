@@ -100,7 +100,6 @@ NAMESPACE('chlk.controllers', function (){
                 var result = this.personService
                     .uploadPicture(personId, files)
                     .then(function(loaded){
-                        console.info(loaded);
                         return this.getContext().getSession().get('userModel');
                     }.bind(this));
                 return this.UpdateView(chlk.activities.profile.InfoViewPage, result);

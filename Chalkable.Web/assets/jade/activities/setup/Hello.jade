@@ -1,6 +1,6 @@
 .setup-page.setup-hello.loader-container
     .loader
-    h1 Confirm your info
+    h1.title Confirm your info
     +ActionForm('setup', 'infoEdit')#hello-form
         +Hidden("id", self.getId())
         +Hidden("addressesValue", self.getAddressesValue())

@@ -7,6 +7,9 @@ NAMESPACE('chlk.activities.lib', function () {
         [[String]],
         function PageClass(clazz) {});
     /** @class chlk.activities.lib.TemplatePage*/
+
+    var LOADING_CLASS = 'loading-page';
+
     CLASS(
         'TemplatePage', EXTENDS(ria.mvc.TemplateActivity), [
             function $() {
@@ -29,6 +32,19 @@ NAMESPACE('chlk.activities.lib', function () {
 
                 this._pageClass && this._wrapper.addClass(this._pageClass);
             },
+
+            [[String]],
+            OVERRIDE, VOID, function onModelWait_(msg_) {
+                BASE();
+                this.dom.addClass(LOADING_CLASS);
+            },
+
+            [[String]],
+            OVERRIDE, VOID, function onModelComplete_(msg_) {
+                BASE();
+                this.dom.removeClass(LOADING_CLASS);
+            },
+
 
             OVERRIDE, VOID, function onStop_() {
                 BASE();

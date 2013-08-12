@@ -10,6 +10,7 @@ NAMESPACE('chlk.models.setup', function () {
         'TeacherSettings', [
             chlk.models.class.ClassesForTopBar, 'topData',
             ArrayOf(chlk.models.calendar.TeacherSettingsCalendarDay), 'calendarInfo',
-            chlk.models.grading.Final, 'gradingInfo'
+            chlk.models.grading.Final, 'gradingInfo',
+            Number, 'percentsSum'
         ]);
 });
