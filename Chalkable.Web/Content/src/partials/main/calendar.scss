@@ -1,0 +1,1703 @@
+@import "compass/css3/border-radius";
+@import "compass/css3/box-shadow";
+@import "compass/css3/background-size";
+@import "compass/css3/images";
+@import "compass/css3/transition";
+
+@mixin transition($transition-property, $transition-time, $method, $transition-time) {
+  -webkit-transition: $transition-property $transition-time $method $transition-time;
+  -moz-transition: $transition-property $transition-time $method $transition-time;
+  -ms-transition: $transition-property $transition-time $method $transition-time;
+  -o-transition: $transition-property $transition-time $method $transition-time;
+  transition: $transition-property $transition-time $method $transition-time;
+}
+
+$gray-font: #7b7b7b;
+$txt-shadow: 0px 1px 0px white;
+
+
+BODY {
+
+
+  .calendar-pop-up{
+    z-index: 100;
+    position: absolute;
+    display: none;
+
+    DIV.triangle-ad {
+      padding: 0;
+      position: absolute;
+      width: 10px;
+      height: 16px;
+      background: url(images/common/window-triangle-left.png) no-repeat;
+      top: 60px;
+      right: 177px;
+    }
+
+    DIV.pop-up-window {
+      min-height: 85px;
+      width: 177px;
+      @include border-radius(6px);
+      background: #EEE;
+      border-color: #B7B7B7;
+      @include box-shadow(0px 2px 6px 1px #989897);
+      text-shadow: white 0px 1px 1px;
+
+      DIV.pop-up {
+        position: relative;
+
+        H2.admin-day{
+          text-align: center;
+          background: url(images/common/dialog-separator.png) bottom  no-repeat;
+          height: 40px;
+          vertical-align: middle;
+          display: table-cell;
+          width: 177px;
+
+          >A{
+            cursor: pointer;
+            text-decoration: none !important;
+            font-size: 16px;
+            color: #7b7b7b;
+            font: bold 16px Arial !important;
+            font-style: normal !important;
+            text-shadow: 1px -1px 1px white;
+
+            &:hover {
+              color: #0c4358;
+            }
+          }
+        }
+
+        >DIV{
+
+          >UL{
+            >LI{
+              background: url(images/common/dialog-separator.png) bottom  no-repeat;
+              position: relative;
+              padding: 6px;
+              height: 44px;
+
+              >DIV{
+
+                text-align: center;
+
+                >.img-box{
+                  padding: 0px 5px;
+                  position: absolute;
+                  overflow: hidden !important;
+
+                  A{
+                    IMG{
+                      float: left;
+                      display: inline-block;
+                      @include box-shadow(0 1px 1px 0px #989897);
+                    }
+                  }
+                }
+
+                > .title-holder{
+
+                   position: relative;
+
+                  >P.title{
+                    text-align: center;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    width: auto;
+
+                    >A{
+                      text-decoration: none !important;
+                      font-size: 16px;
+                      color: #474747;
+                      font-family: Arial;
+                      font-style: normal;
+                      cursor: pointer;
+                      &:hover {
+                        color: #0c4358;
+                      }
+                    }
+                  }
+                  >P.under{
+                    display: inline-block;
+                    width: 53px;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    position: relative;
+
+                    >A{
+                      text-decoration: none !important;
+                      font-size: 12px;
+                      color: #7c7c7c;
+                      font-family: Georgia;
+                      font-style: italic;
+                      cursor: pointer;
+                      &:hover {
+                        color: #0c4358;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            DIV{
+              text-align: center;
+
+              >P.count{
+                font-size: 12px;
+                color: #7c7c7c;
+                font-family: Georgia;
+                font-style: italic;
+                display: inline-block;
+                height: 24px;
+                padding-top: 6px;
+
+                >A{
+                  text-decoration: none !important;
+                  font-size: 12px;
+                  color: #7c7c7c;
+                  font-family: Georgia;
+                  font-style: italic;
+                  cursor: pointer;
+                  &:hover {
+                    color: #0c4358;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+      }
+    }
+  }
+
+  DIV.page {
+    #content {
+      > DIV {
+        &.calendar {
+          #main-top, #footer {
+            background-image: url(images/calendar/paper-top-bottom.jpg) !important;
+          }
+
+          #main-wrapper {
+            background-image: url(images/calendar/paper-bg.jpg) !important;
+          }
+        }
+
+        #main-wrapper {
+          #main {
+            DIV.chalkable-calendar-view {
+              background: transparent none !important;
+              border: none;
+
+                  &.attendance, &.discipline, &.profile-calendar{
+                    .calendar-today-container{
+                      position: absolute;
+                      top: 42px;
+                      left: 95px;
+                      //position: relative;
+                    }
+                  }
+
+                  DIV.header {
+                    background: url(images/calendar/toolbar-bg.png) 0 0 no-repeat;
+                    height: 81px;
+                    position: relative;
+                    width: 660px;
+                    @include background-size(660px auto);
+					
+					.table-container{
+						padding-top: 31px;
+						text-align: center;
+						
+						.table-container2{
+							display: inline-block;
+							
+							.buttons-table{
+								display: table;
+								height: 50px;
+								
+								>DIV{
+									display: table-cell;
+									text-align: center;
+									vertical-align: middle;
+									
+									&.calendar-today-container{
+										width: 90px;
+                                      &.admin{
+                                        width: 143px;
+                                        position: relative;
+                                        right: 34px;
+                                      }
+									}
+									
+									&.prev-month-container, &.next-month-container{
+										width: 30px;
+									}
+									
+									&.calendar-day-container{
+										width: 45px;
+										text-align: right;
+									}
+									
+									&.calendar-week-container, &.calendar-month-container{
+										width: 29px;
+									}
+								}
+							}
+						}
+					}
+
+                    .calendar-today {
+                      background: url(images/calendar/today-button3.png) 0 0 no-repeat;
+                      width: 63px;
+                      height: 26px;
+                      border: none;
+                      cursor: pointer;
+					  display: inline-block;
+
+                      &:hover{
+                        background-position: -63px 0;
+                      }
+
+                      &:active{
+                        background-position: -126px 0;
+                      }
+                    }
+
+                    .calendar-today.week {
+                      left: 127px;
+                    }
+
+                    .calendar-today.admin-day-classes{
+                      background: url(images/calendar/teacher-classes-sprite.png) 0 0 no-repeat;
+                      display: inline-block;
+                      border: none;
+                      width: 71px;
+                      height: 27px;
+
+                      &:hover{
+                        background-position: 0px -37px;
+                      }
+
+                      &:active{
+                        background-position: 0px -74px;
+                      }
+
+                      &.pressed{
+                        background-position: 0px -74px;
+                      }
+                    }
+
+                    .calendar-today.admin-day-teachers{
+                      background: url(images/calendar/teacher-classes-sprite.png) -71px 0 no-repeat;
+                      display: inline-block;
+                      border: none;
+                      width: 71px;
+                      height: 27px;
+
+                      &:hover{
+                        background-position: -71px -37px;
+                      }
+
+                      &:active{
+                        background-position: -71px -74px;
+                      }
+
+                      &.pressed{
+                        background-position: -71px -74px;
+                      }
+                    }
+
+                    DIV.prev-month {
+                      background-image: url(images/calendar/prev-month.png);
+                    }
+					
+					DIV.prev-month, DIV.next-month{
+						height: 16px;
+						  width: 16px;
+						  cursor: pointer;
+						  display: inline-block;
+					} 
+
+                    DIV.next-month {
+                      background-image: url(images/calendar/next-month.png);
+                    }
+
+                    LABEL.current-month {
+                      color: #0c4358;
+                      text-shadow: 1px 1px 1px #87B7C6;
+                      font: {
+                        weight: bold;
+                        family: Arial;
+                        size: 20px;
+                      }
+                      display: block;
+                      height: 28px;
+                    }
+
+                    DIV.calendar-day {
+                      background: url(images/calendar/days-button.png) 0 0 no-repeat;
+                      height: 18px;
+                      width: 30px;
+                      cursor: pointer;
+					  display: block;
+					  float: right;
+
+                      &:hover{
+                        background-position: -90px 0;
+                      }
+
+                      &:active, &.pressed{
+                        background-position: -180px 0;
+                      }
+					  
+					  SPAN.tooltip{
+						background: url(images/calendar/day-pop-up.png) 0 0 no-repeat;
+						left: -20px;
+					  }
+                    }
+
+                    .calendar-week {
+                      background: url(images/calendar/days-button.png) -30px 0 no-repeat;
+                      cursor: pointer;
+                      width: 29px;
+
+                      &:hover{
+                        background-position: -120px 0;
+                      }
+
+                      &:active, &.pressed{
+                        background-position: -210px 0;
+                      }
+					  
+					  SPAN.tooltip{
+						background: url(images/calendar/week-pop-up.png) 0 0 no-repeat;
+						left: -6px;
+					  }
+                    }
+
+                    .calendar-month {
+                      background: url(images/calendar/days-button.png) -59px 0 no-repeat;
+                      cursor: pointer;
+                      width: 31px;
+
+                      &:hover{
+                        background-position: -149px 0;
+                      }
+
+                      &:active, &.pressed{
+                        background-position: -239px 0;
+                      }
+					  
+					  SPAN.tooltip{
+						background: url(images/calendar/month-pop-up.png) 0 0 no-repeat;
+						left: 10px;
+					  }
+                    }
+
+                    .calendar-day, .calendar-week, .calendar-month{
+						position: relative;
+						height: 27px;
+						&:hover{
+							SPAN.tooltip{
+							  display : block;
+							}
+						  }
+						  
+						  SPAN.tooltip{
+							top: -21px;
+							position: absolute;
+							height: 21px;
+							width: 40px;
+							display : none;
+							border: none;
+						  }
+                    }
+                  }
+
+                  //Admin Day table
+                  .outer-container{
+                    width: 660px;
+                    height: auto;
+                    overflow-y: hidden;
+                    overflow-x: scroll;
+
+                    TABLE{
+                      width: 660px;
+                      border-collapse: collapse;
+                      font-family: arial bold;
+                      color: #535353;
+                      text-shadow: 0px 1px 0px white;
+                      @include background(linear-gradient(top, #f4f4f4, #e5e5e5));
+
+                      thead{
+                        font-size: 13px;
+
+                        tr{
+
+                          th{
+                            height: 36px;
+                            text-align: center !important;
+                            @include background(linear-gradient(top, #f5f5f5, #e6e6e6));
+                            border-right: 1px solid #cacaca;
+                            border-left: 1px solid #cacaca;
+                            border-bottom: 1px solid #b8b8b8;
+                          }
+                        }
+                      }
+
+                      tbody{
+                        font-size: 13px;
+                        font-family: arial bold;
+
+                        tr{
+                          min-height: 36px;
+                          text-align: center !important;
+
+                          th, td{
+                            text-align: center !important;
+                            border-left: 1px solid #ffffff;
+                            border-right: 1px solid #cbcbcb;
+                            border-top: 1px solid #ffffff;
+                            border-bottom: 1px solid #cbcbcb;
+                            outline: 1px solid rgba(255, 255, 255, 0.41);
+                            outline-offset: -1px;
+
+
+                            /*Main Container Box for classname/teachername*/
+                            > DIV{
+                              min-height: 70px;
+                              min-width: 70px;
+                              white-space: nowrap;
+                              //max-width: 75px !important;
+                              padding: 5px;
+                            
+
+                              .classname, .teachername{
+                                position:relative;
+                                text-shadow: 0px 1px 0px white;
+                                color: #535353;
+
+                                >P{
+                                  //width: 75px;
+                                  overflow: hidden;
+                                  text-overflow: ellipsis;
+                                }
+
+                                &:hover {
+                                  color: #0c4358;
+                                  text-shadow: 0px 1px 0px white;
+                                  cursor: pointer;
+                                  opacity: 1;
+                                }
+                              }
+
+                              .period-info{
+                                z-index:2;
+                                position: absolute;
+                                left: -10px;
+                                font-size: 16px;
+                                color: #DE9155;
+                                background: url(images/common/week-period-bg.png) no-repeat;
+                                height: 25px;
+                                width: 30px;
+                                font-family: Arial;
+                                font-weight: bold;
+                                text-align: center;
+                                padding-top: 1px;
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+
+                  DIV.day-names {
+                    display: table;
+                    border-right: 1px solid #114d64;
+                    border-left: 1px solid #114d64;
+                    width: 658px;
+
+                    &.day {
+
+                      @include background(linear-gradient(top, #e9e9e9, #d9d9d9));
+                      >DIV {
+                        border-bottom: 1px solid #a9a9a9;
+                        border-top: 1px solid white;
+                        //width: 14.27%;
+                        width: 92px !important;
+                      }
+                    }
+                    
+                    >DIV {
+                      background: url(images/calendar/item-bg.png) 0 top repeat;
+                      height: 28px;
+                      text-align: center;
+                      display: inline-block;
+                      color: #a5a5a5;
+                      text-shadow: #EDEDED 0 1px 1px;
+                      font-weight: bold;
+                      font-family: Arial;
+                      font-size: 12px;
+                      text-transform:uppercase;
+                      border-left: 1px solid #ffffff;
+                      border-right: 1px solid #cbcbcb;
+                      //border-top: 1px solid #ffffff;
+                      border-bottom: 1px solid #cbcbcb;
+                      vertical-align: middle;
+                      //background-color: #dcdcdc;
+                      padding-top: 13px;
+                      width: 90px;
+                      padding-left: 1px;
+                      padding-right: 1px;
+
+                      &.week {
+                        background: url(images/common/week-header-bg.png) repeat-x;
+                        padding-top: 6px;
+                        height: 34px;
+                      }
+
+                      &.day {
+                       @include background(linear-gradient(top, #e9e9e9, #d9d9d9));
+                        border-left: none;
+                        border-right: none;
+                        //width: 94px;
+
+                        &.today {
+							@include background(linear-gradient(top, #f5f5f5, #e5e5e5));
+                        }
+                      }
+
+                      &.today{
+                        color: #7bb7d5;
+                      }
+                    }
+                  }
+
+                  DIV.tb-announcements {
+                    display: table;
+                    border-right: 1px solid #114d64;
+                    border-left: 1px solid #114d64;
+                    width: 658px;
+
+                    >DIV {
+                      background-color: #dcdcdc;
+                      height: 26px;
+                      width: 92px;
+                      text-align: center;
+                      display: table-cell;
+                      border-left: 1px solid #ffffff;
+                      border-right: 1px solid #cbcbcb;
+                      border-top: 1px solid #ffffff;
+                      border-bottom: 1px solid #cbcbcb;
+
+                      >DIV {
+                        height: 24px;
+                        width: 24px;
+                        margin: 0 auto;
+                        cursor: pointer;
+                        background: url(images/calendar/tb-announcements-icon.png) no-repeat;
+                      }
+                    }
+                  }
+
+                  DIV.items {
+                    border: 1px solid #114d64;
+                    border-top: none;
+                    height: auto;
+                    display: table;
+                    width: 658px;
+					text-shadow: white 0px 1px 1px;
+
+                    > DIV {
+                      display: inline-block;
+                      vertical-align: top;
+                    }
+
+                    DIV.item.week-day {
+						display: table-cell;
+                      &.day {
+                        display: table-cell;
+                        border: none;
+                        background: #dddddd;
+                        color: black !important;
+                        font-size: 13pt;
+                        font-family: Arial;
+                        font-weight: bold;
+						
+						&.today{
+							DIV.period-item{
+								@include background(linear-gradient(top, #eeeeee, #e5e5e5));
+							}
+						}
+
+                        DIV.period-item{
+
+                          border-bottom: 1px solid #a9a9a9;
+                          height: 50px;
+                          text-align: center;
+						  @include background(linear-gradient(top, #e2e2e2, #d9d9d9));
+
+                          >DIV.period-info {
+                            top: 17px;
+                          }
+
+                          >SPAN.time {
+                            font-size: 8pt;
+                            color: #aaa;
+                            top: 38px;
+                            position: absolute;
+							left: 7px;
+                          }
+
+                          >LI {
+                            padding-top: 16px;
+                            position:relative;
+
+                            >DIV{
+                              position: absolute;
+                              display: inline-block;
+                              overflow: hidden;
+                              background: transparent;
+
+                              &.p-container{
+                                top: 0;
+                                right: 0;
+                                width: 63px;
+                                padding-right: 3px;
+
+                                P.title {
+                                  color: black !important;
+                                  text-shadow: white 0px 1px 1px;
+                                  width: 62px;
+                                  overflow: hidden;
+                                  font-size: 12px;
+                                  display: table-cell;
+                                  vertical-align: middle;
+                                  height: 48px;
+
+                                  SPAN{
+                                    word-wrap: break-word;
+                                    width: 62px;
+                                    display: block;
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                  }
+                                }
+                              }
+
+                              &.course-icon{
+                                width: 30px;
+                                height: 30px;
+                                left: 0;
+                                top: 5px;
+
+                                IMG{
+                                  width: 24px;
+                                  margin: 7px 0 0 4px;
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+
+                      overflow: visible;
+
+                      height: 100%;
+                      @include background(linear-gradient(top, #f4f4f4, #e5e5e5));
+
+                      &.week.today {
+                        @include background(linear-gradient(top, #eaeaea, #e5e5e5));
+                      }
+
+                      >H2.number{
+                        height: 20px;
+                      }
+
+                      >DIV {
+                        min-height: 450px
+                      }
+
+                      DIV.period-item {
+                        padding-top:3px;
+                        height: 61px;
+                        position: relative;
+
+                        >DIV.period-info{
+                           //color: #be8145;
+                           position: absolute;
+                           left: -10px;
+                           font-size: 16px;
+                           color: #DE9155;
+                           background: url(images/common/week-period-bg.png) no-repeat;
+                           height: 25px;
+                           width: 30px;
+                           font-family: Arial;
+                           font-weight: bold;
+                           text-align: center;
+                           padding-top: 1px;
+                         }
+
+                        >LI{
+                          >DIV{
+                            @include border-radius(5px);
+							text-shadow: none;
+                            background: url(images/common/week-item-bg.png) no-repeat;
+                            padding-top: 5px;
+                            height: 40px;
+                            position: relative;
+                            text-shadow: #415a67 1px 1px 1px;
+
+                            P{
+                              display: block;
+                              height: 15px;
+                              white-space: nowrap;
+                            }
+
+                            P.title{
+                              color: white !important;
+                              text-align: center;
+                              font-family: Arial;
+                              font-size: 8.67px;
+                            }
+
+                            P.typename{
+                              color: white !important;
+                              text-align: center;
+                              font-family: Arial;
+                              font-weight: bold;
+                              font-size: 12px;
+                            }
+
+                            >DIV{
+                              display: inline-block;
+                              position: absolute;
+
+                              &.course-icon{
+                                width: 32px;
+                                height: 30px;
+                                overflow: hidden;
+                                display: inline-block;
+
+                                IMG{
+                                  width: 26px;
+                                  margin: 4px 0 0 6px;
+                                }
+                              }
+
+                              &.text-container{
+                                overflow: hidden;
+                                right: 9px;
+                                top: 5px;
+                                width: 48px;
+                              }
+                            }
+                          }
+                        }
+
+                        .title{
+                          color: #009;
+                          font-size: 14px;
+                        }
+
+                        .more{
+                          color: #000;
+                          font-size: 12px;
+                        }
+                      }
+                    }
+
+                    DIV.item {
+                      cursor: pointer;
+
+                      border-left: 1px solid #ffffff;
+                      border-right: 1px solid #cbcbcb;
+                      border-top: 1px solid #ffffff;
+                      border-bottom: 1px solid #cbcbcb;
+
+                      background: url(images/calendar/item-bg.png) 0 top repeat-x;
+
+                      overflow: hidden;
+                      width: 92px;
+                      height: 93px;
+
+                      &.not-current-month  {
+                        > DIV {
+                          > H2 {
+                            color: #ccc !important;
+                          }
+
+                          * {
+                            color: #999 !important;
+                          }
+                        }
+                      }
+
+                      &.today  {
+                        background-position: 0 bottom;
+                        > DIV {
+                          > H2 {
+                            color: #3c95c3 !important;
+                          }
+
+                          * {
+                            color: #3c95c3 !important;
+                          }
+                        }
+                      }
+
+                      &.sunday  {
+                        > DIV {
+                          > H2 {
+                            //color:red;
+                          }
+                        }
+                      }
+
+                      > DIV {
+                        width: 92px;
+                        height: 93px;
+
+                        position: relative;
+                        overflow: hidden;
+
+                        * {
+                          color: #333;
+                        }
+
+                        > H2 {
+                          position: absolute;
+                          top: 5px;
+                          right: 5px;
+                          color: #666;
+                        }
+
+                        > DIV.space{
+                          height: 18px;
+                        }
+
+                        > UL.day-announcements {
+                          padding: 0px 3px 1px 3px;
+
+                          &.no-admin {
+                            background: url(images/calendar/month-day-separator.png) bottom no-repeat;
+                          }
+
+                          >LI.items{
+                            padding-left: 11px;
+                            background: url(images/calendar/month-day-standard.png) 0px 2px no-repeat;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                          }
+                        }
+
+                        > UL.day-items {
+                          padding: 0px 3px;
+                        }
+
+                        > UL {
+
+                          margin: 0;
+                          display:block;
+
+                          > LI {
+                            font-size: 12px;
+                            padding: 0;
+                            margin: 0 3px 0 0;
+                            letter-spacing: -1px;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+      }
+    }
+  }
+  .dayPopper, .weekPopper, .month-pop, .top-pop{
+
+    /* dayPopper includes student day calendar and teacher day calendar*/
+
+    .pop-up{
+
+      .class-name {
+
+        H3.day-day{
+          text-align: center;
+          height: 40px;
+          vertical-align: middle;
+          display: table-cell;
+          width: 177px;
+
+          >A{
+            cursor: pointer;
+            text-decoration: none !important;
+            font-size: 16px;
+            color: #7b7b7b;
+            font: bold 16px Arial !important;
+            font-style: normal !important;
+            text-shadow: 1px -1px 1px white;
+
+            &:hover {
+              color: #0c4358;
+              @include transition-property("all");
+              @include transition-duration("0.5s");
+            }
+          }
+        }
+      }
+
+      .info{
+        font-weight: normal !important;
+        background: none !important;
+
+        H2.student-day, H3.day-day{
+          text-align: center;
+          background: url(images/common/dialog-separator.png) bottom  no-repeat;
+          height: 40px;
+          vertical-align: middle;
+          display: table-cell;
+          width: 177px;
+
+          >A{
+            cursor: pointer;
+            text-decoration: none !important;
+            font-size: 16px;
+            color: #7b7b7b;
+            font: bold 16px Arial !important;
+            font-style: normal !important;
+            text-shadow: 1px -1px 1px white;
+
+            &:hover {
+              color: #0c4358;
+              @include transition-property("all");
+              @include transition-duration("0.5s");
+            }
+          }
+        }
+
+        >DIV{
+
+          >UL{
+            >LI{
+              background: url(images/common/dialog-separator.png) bottom  no-repeat;
+              position: relative;
+              padding: 6px;
+              height: 44px;
+
+              >DIV{
+
+                text-align: center;
+
+                >.img-box{
+                  padding: 0px 5px;
+                  position: absolute;
+                  overflow: hidden !important;
+                  max-width: 36px;
+                  max-height: 44px;
+
+
+                  A{
+                    IMG{
+                      float: left;
+                      display: inline-block;
+                      @include box-shadow(0 1px 1px 0px #989897);
+                    }
+                  }
+                }
+
+                > .title-holder{
+                  display: inline-block;
+                  position: relative;
+
+                  >P.title{
+                    text-align: center;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+
+                    >A{
+                      text-decoration: none !important;
+                      font-size: 16px;
+                      color: #474747;
+                      font-family: Arial;
+                      font-style: normal;
+                      cursor: pointer;
+                      &:hover {
+                        @include transition-property("all");
+                        @include transition-duration("0.5s");
+                        color: #0c4358;
+                      }
+                    }
+                  }
+                  >P.under{
+                    display: inline-block;
+                    width: 53px;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    position: relative;
+                    top: 7px;
+
+                    >A{
+                      text-decoration: none !important;
+                      font-size: 12px;
+                      color: #7c7c7c;
+                      font-family: Georgia;
+                      font-style: italic;
+                      cursor: pointer;
+                      &:hover {
+                        color: #0c4358;
+                        @include transition-property("all");
+                        @include transition-duration("0.5s");
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            DIV{
+              text-align: center;
+
+              >P.count{
+                font-size: 12px;
+                color: #7c7c7c;
+                font-family: Georgia;
+                font-style: italic;
+                display: inline-block;
+                height: 24px;
+                padding-top: 6px;
+
+                >A{
+                  text-decoration: none !important;
+                  font-size: 12px;
+                  color: #7c7c7c;
+                  font-family: Georgia;
+                  font-style: italic;
+                  cursor: pointer;
+                  &:hover {
+                    color: #0c4358;
+                    @include transition-property("all");
+                    @include transition-duration("0.5s");
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        .up{
+          padding-bottom: 8px;
+          font-size: 18px !important;
+          font-family: Georgia  !important;
+          font-style: italic;
+          background: url(images/common/dialog-separator.png) bottom no-repeat;
+        }
+        .day-down{
+          display: inline-block;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+          position: relative;
+          top: 7px;
+
+          &.low{
+            background: url(images/common/dialog-separator.png) bottom no-repeat;
+            padding-bottom: 8px;
+            width: 100%;
+          }
+
+          >A{
+            text-decoration: none !important;
+            font-size: 12px;
+            color: #7c7c7c;
+            font-family: Georgia;
+            font-style: italic;
+            cursor: pointer;
+            line-height: 18px;
+            &:hover {
+              color: #0c4358;
+              @include transition-property("all");
+              @include transition-duration("0.5s");
+            }
+          }
+        }
+      }
+      .ann-button{
+        width: 129px;
+        line-height: 35px;
+        border: 1px solid #b3b3b3;
+        @include border-radius(4px);
+        @include background(linear-gradient(top, #f5f5f5, #e0e0e0));
+        @include box-shadow(0 1px 0 0 #fff inset, 0 1px 2px 0px #999);
+        text-align: center;
+        font: bold 12px Arial;
+        display: block;
+        text-decoration: none;
+        color: #3d3d3d;
+        text-shadow: 1px 1px 0 white;
+        padding: 9px 0;
+        margin: 12px auto;
+
+        &:hover{
+          @include background(linear-gradient(top, #e5e5e5, #d0d0d0));
+        }
+
+        &.plus-ann{
+          @include background(url(images/grading/plus.png) center center no-repeat,linear-gradient(top, #f5f5f5, #e0e0e0));
+          height: 14px;
+
+          &:hover{
+            @include background(url(images/grading/plus.png) center center no-repeat,linear-gradient(top, #e5e5e5, #d0d0d0));
+          }
+        }
+      }
+    }
+  }
+}
+
+DIV.grades-cell {
+  display: table-cell;
+  width: 35px;
+  vertical-align: bottom;
+  border-bottom: 1px solid;
+  border-collapse: collapse;
+}
+
+DIV.periods-cell {
+  display: table-cell;
+  border-left: 1px solid;
+  border-collapse: collapse;
+  >H1, P{
+    text-align: right;
+    padding-right: 5px;
+  }
+}
+
+DIV.calendar-day-row {
+  display: table-row;
+  width: 1024px;
+  height: 45px;
+}
+
+.calendar-day {
+  display: table;
+  border-collapse: collapse;
+}
+
+DIV.triangle {
+  padding: 0;
+  position: absolute;
+  width: 16px;
+  height: 10px;
+  background: url(images/common/window-triangle-top.png) no-repeat;
+  top: -19px;
+  left: 46%;
+
+  &.notification{
+    left: 206px;
+  }
+  &.empty{
+    top: -34px;
+  }
+}
+
+DIV.triangle-left {
+  padding: 0;
+  position: absolute;
+  width: 10px;
+  height: 16px;
+  background: url(images/common/window-triangle-right.png) no-repeat;
+  top: 45px;
+  left: 177px;
+}
+
+DIV.triangle-right {
+  padding: 0;
+  position: absolute;
+  width: 10px;
+  height: 16px;
+  background: url(images/common/window-triangle-left.png) no-repeat;
+  top: 45px;
+  left: -10px;
+}
+
+DIV.pop-up-window {
+  min-height: 85px;
+  @include border-radius(6px);
+  background: #EEE;
+  border-color: #B7B7B7;
+  @include box-shadow(0 2px 6px 0px #989897);
+  text-shadow: white 0px 1px 1px;
+
+  &.disciplines-popup{
+    .x-window-body{
+      height: auto !important;  
+
+      #discipline-table-container{
+        height: auto !important;          
+      }
+    }
+    
+  }
+
+
+    &.daily-pop-up{
+      .x-window-tl{
+        background: none;
+      }
+   
+      #discipline-table-container{
+
+        td, th{
+          width: 25%;
+          text-align: center;
+          height: auto;
+          min-height: 20px;
+        }
+        th{
+          position: relative;
+          top: -2px;
+        }
+
+        .disciplines-table{
+          border-spacing: 0;
+          padding: 0;
+          border-collapse: collapse;
+        
+
+
+          .dsc-row{
+              .notes{
+              border: 0;
+              border-radius: 0;
+              margin: 0px 2px 3px 2px;
+              height: 16px;
+              line-height: 16px;
+            }
+
+            .disciplines-container{
+              .editable-list{
+                height: auto;
+                overflow: hidden !important;
+                margin: 1px 2px 0px 2px;
+                background: white;
+
+                .list-item{
+                  font: normal 10px 'Myriad Pro' !important;
+                  display: inline-block;
+                  background: lightgray;
+                  border-radius: 10px;
+                  padding-left: 5px;
+                  padding-right: 5px;
+                  text-overflow: ellipsis;
+                  margin: 2px;
+                  float: left;
+
+                  .title{
+                    float: left;
+                    margin-top: 4px;
+                  }
+
+                  .del{
+                    float: right;
+                    font-weight: bold;
+                    cursor: pointer;
+                  }
+
+                  .x-btn-tl, .x-btn-tr, .x-btn-tc,
+                  .x-btn-ml, .x-btn-mr, .x-btn-mc,
+                  .x-btn-bl, .x-btn-br, .x-btn-bc{
+                    background-image: none !important;
+                  }
+
+                }
+
+
+              }
+            }
+          }
+        }
+
+
+      }
+
+      .att-table-container{
+        .row {
+          
+          div{
+            display: inline-block;
+            word-break: break-word;
+            width: 30%;
+            min-height: 21px;
+            color: #7c7c7c;
+            font-size: 12px;
+            text-align: left;
+            vertical-align: top;
+
+
+            &.centered{
+              text-align: center;
+            }
+          }
+
+          &.wide{
+            div{
+                width: 24%;    
+            }
+          
+          }
+
+          &.header{
+            border-bottom: 1px solid #d7d7d7;
+            border-top: 1px solid white;
+            font-size: 13px;
+
+            .popup-header-column{
+              padding: 0;
+              text-align: center;
+              &.border-right{
+                border-right: 1px solid #d7d7d7;  
+              }
+              &.border-left{
+                border-left: 1px solid white;   
+              }
+              
+            }
+          }
+          
+          
+
+          &.odd{
+            border-top: 1px solid white;
+            border-bottom: 1px solid #d7d7d7;
+          }
+          &.even{
+            border-bottom: 1px solid #d7d7d7;
+            border-top: 1px solid white;
+          }
+          &.last{
+            border-bottom: 0;
+          }
+
+          .attendance-column{
+            padding: 0;
+            vertical-align: top;
+            text-align: center;
+            font-size: 12px;
+
+
+
+
+            &.wide{
+                input{
+                  margin-left: -26px;
+                }  
+              }
+
+              input{
+                  margin-left: -16px;
+                  border-top-left-radius: 3px;
+                  border-bottom-left-radius: 3px;
+                  font-family: Arial;
+                  width: 49px !important;
+              }
+
+               &.absent{
+                color:  #860f0f;
+              }
+
+              &.excused{
+                color: #3989a1;
+              }
+
+              &.late{
+                color: #c97d11;
+              }
+
+              &.present{
+                 color: #276435;
+              }
+            }
+          }
+        }
+      }
+
+        DIV.pop-up{
+
+        &.wide{
+          h2{
+            &.popup-title{
+              width: 325px;  
+            }
+            
+
+          }
+        }
+        h2{
+          height: 25px !important;
+          &.popup-title{
+            background: none;
+            width: 300px;
+            display: inline-block;
+            font-size: 16px;
+            font-family: Georgia;
+            font-weight: normal;
+            border-bottom: 1px solid #d7d7d7;
+
+          }
+        }
+        text-align: center;
+
+        .row{
+          display: block;
+
+          &.time{
+
+            height: 17px;
+            border-top: 1px solid white;
+            border-bottom: 1px solid #d7d7d7;
+            div{
+              width: 108px;
+              font-size: 10px;
+              text-align: left;
+              display: inline-block;
+            }
+        }
+      }
+    }
+
+
+  .x-tool-close{
+	//display: none;
+  }
+
+  .x-window-tl {
+    background-image: url(../content/images/calendar/pop-up-top.png);
+    background-position: -2px -1px;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+  }
+
+  &.notification{
+    .x-window-tl {
+      background: transparent;
+    }
+  }
+
+  &.top-pop, &.month-pop{
+    .x-window-tl {
+      background: transparent;
+    }
+  }
+
+
+
+  DIV {
+    overflow: visible !important;
+  }
+
+  &:not(.notification){
+    DIV.pop-up {
+      max-height: 2000px;
+      //overflow-y: auto !important;
+
+      .items-list{
+        overflow: auto !important;
+      }
+    }
+  }
+
+  DIV.pop-up {
+    position: relative;
+
+    >DIV.info, >DIV.class-name {
+      background: url(images/common/dialog-separator.png) bottom  no-repeat;
+    }
+
+    .items-list{
+      min-height: 1px;
+      max-height: 1000px;
+    }
+
+    >DIV.info {
+      color: #939393;
+      text-align: center;
+      font-weight: bold;
+      padding: 5px;
+      >P.up {
+        font-size: 12px;
+      }
+      >P.down {
+        font-size: 10px;
+      }
+      position: relative;
+
+      &.month{
+        cursor: pointer;
+
+        &:hover{
+          //background-color: #f8f8f8;
+          background: url(images/calendar/popup-select-triangle.png) 167px center no-repeat, #f8f8f8;
+        }
+      }
+
+      .x-form-field-wrap{
+        position: absolute;
+        opacity: 0;
+        left: 5px;
+        cursor: pointer;
+
+        >*{
+          cursor: pointer;
+        }
+      }
+    }
+
+    >DIV.class-name {
+      font-size: 18px;
+      color: #959595;
+      font-family: Georgia;
+      text-align: center;
+      font-style: italic;
+      padding-bottom: 8px;
+    }
+  
+    >A{
+    
+      display: block;
+
+      >DIV.pop-up-plus {
+        padding: 0;
+        background: url(images/icons/add-item.png) no-repeat;
+        height: 18px;
+        width: 18px;
+        margin: 9px auto 0;
+        cursor: pointer;
+      }
+    }
+
+    H2{
+      text-align: center;
+      font-size: 18px;
+      color: #959595;
+      font-family: Georgial;
+      font-style: italic;
+      background: url(images/common/dialog-separator.png) bottom  no-repeat;
+      height: 40px;
+      vertical-align: middle;
+      display: table-cell;
+      width: 177px;
+      text-shadow: 1px -1px 1px white;
+
+      &.notifications{
+        text-align: left;
+        width: 304px;
+        padding-left: 20px;
+      }
+
+     
+    }
+
+    >DIV{
+
+      >UL{
+        >LI{
+          background: url(images/common/dialog-separator.png) bottom  no-repeat;
+          position: relative;
+
+          .unread {
+            background: #f4f4f4;
+            &:hover{
+              background: white;
+            }
+
+            .icon-title{
+              color:#22637c;
+            }
+          }
+
+          &:hover{
+            background: #f8f8f8;
+          }
+
+          >A{
+            padding-left: 55px;
+			       @include background-size(auto 36px !important);
+          }
+
+          >SPAN{
+            padding: 0 10px;
+          }
+
+          >A, >SPAN{
+            text-decoration: none;
+            cursor: pointer;
+
+            display: table-cell;
+            vertical-align: middle;
+
+            height: 53px;
+            width: 385px;
+            color: #9d9d9d;
+            text-shadow: 1px -1px 1px white;
+
+            &.unread{
+              color: #5b5b5b;
+              font-weight: bold;
+            }
+
+            &.pop-up-announcement{
+              background: url(images/common/announcement-type/1.png) 13px 7px  no-repeat;
+            }
+
+            >DIV{
+
+              >P.title{
+                font-size: 18px;
+                color: #032633;
+                font-family: Arial;
+                max-width: 110px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+              >P.item-title{
+                font-size: 18px;
+                color: #032633;
+                font-family: Arial;
+                max-width: 110px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-align: left;
+                padding-left: 5px;
+
+              }
+              >P.under{
+                font-size: 10px;
+                color: #7c7c7c;
+                font-family: Arial;
+              }
+              >P.classname-under{
+                font-size: 10px;
+                color: #7c7c7c;
+                font-family: Arial;
+                text-align: left;
+                padding-left: 5px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
