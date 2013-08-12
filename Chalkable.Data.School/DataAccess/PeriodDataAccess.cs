@@ -36,12 +36,11 @@ namespace Chalkable.Data.School.DataAccess
 
         public Period GetPeriodOrNull(Guid sectionId, int time)
         {
-            const string timeParamName = "time";
             var conds = new AndQueryCondition
                 {
                     {Period.SECTION_REF, sectionId},
-                    {Period.START_TIME_FIELD, timeParamName, ConditionRelation.LessEqual},
-                    {Period.END_TIME_FIELD, timeParamName, ConditionRelation.GreaterEqual}
+                    {Period.START_TIME_FIELD, "time1", time, ConditionRelation.LessEqual},
+                    {Period.END_TIME_FIELD, "time2", time, ConditionRelation.GreaterEqual}
                 };
             return SelectOneOrNull<Period>(conds);
         }
