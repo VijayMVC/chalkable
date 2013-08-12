@@ -8,7 +8,7 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'GradingService', EXTENDS(chlk.services.BaseService), [
             ria.async.Future, function getMapping() {
-                return this.get('Grading/UpdateItem'/*'chalkable2/data/grading-style.json'*/, chlk.models.grading.Mapping, {});
+                return this.get('Grading/UpdateItem', chlk.models.grading.Mapping, {});
             }
         ])
 });

@@ -45,28 +45,23 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult Update(FinalGrade finalGradeInfo, GuidList finalGradeAnnouncementTypeIds, IntList percents, IntList dropLowest, IntList gradingStyleBytype)
+        public ActionResult Update(FinalGradeInputModel finalGradeInfo)
         {
-            if (finalGradeAnnouncementTypeIds.Count != percents.Count 
-                || finalGradeAnnouncementTypeIds.Count != dropLowest.Count
-                || finalGradeAnnouncementTypeIds.Count != gradingStyleBytype.Count)
-                throw new ChalkableException(ChlkResources.ERR_FINALGRADE_LISTS_NOT_THE_SAME_SIZE);
             var byType = new List<FinalGradeAnnouncementType>();
-           
-            for (int i = 0; i < finalGradeAnnouncementTypeIds.Count; i++)
+            for (int i = 0; i < finalGradeInfo.FinalGradeAnnouncementType.Count; i++)
             {
                 byType.Add(new FinalGradeAnnouncementType
                 {
-                    Id = finalGradeAnnouncementTypeIds[i],
-                    DropLowest = dropLowest[i] == 1,
-                    FinalGradeRef = finalGradeInfo.Id,
-                    GradingStyle = (GradingStyleEnum)gradingStyleBytype[i],
-                    PercentValue = percents[i]
+                    Id = finalGradeInfo.FinalGradeAnnouncementType[i].FinalGradeAnnouncementTypeId,
+                    DropLowest = finalGradeInfo.FinalGradeAnnouncementType[i].DropLowest,
+                    FinalGradeRef = finalGradeInfo.FinalGradeId,
+                    GradingStyle = (GradingStyleEnum)finalGradeInfo.FinalGradeAnnouncementType[i].GradingStyle,
+                    PercentValue = finalGradeInfo.FinalGradeAnnouncementType[i].PercentValue
                 });
             }
-            var finalGrade = SchoolLocator.FinalGradeService.Update(finalGradeInfo.Id, finalGradeInfo.ParticipationPercent,
+            var finalGrade = SchoolLocator.FinalGradeService.Update(finalGradeInfo.FinalGradeId, finalGradeInfo.ParticipationPercent,
                   finalGradeInfo.Attendance, finalGradeInfo.DropLowestAttendance, finalGradeInfo.Discipline, finalGradeInfo.DropLowestDiscipline
-                  , finalGradeInfo.GradingStyle, byType);
+                  , (GradingStyleEnum)finalGradeInfo.GradingStyle, byType);
             return Json(FinalGradeViewData.Create(finalGrade), 6);         
         }
 

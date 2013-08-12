@@ -28,17 +28,17 @@
         .ann-form-container(class=(classId && typeId ? '' : 'x-hidden'))
             -typesEnum = chlk.models.announcement.AnnouncementTypeEnum;
             -isAnnouncement = announcement.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf();
-            input(type='hidden', name='id', value=announcement.getId().valueOf())
-            input(type='hidden', name='announcementtypeid', value=announcement.getAnnouncementTypeId())
-            input(type='hidden', name='statetyped', value=announcement.getStateTyped())
-            input(type='hidden', name='systemtype', value=announcement.getSystemType())
-            input(type='hidden', name='personid', value=announcement.getPersonId().valueOf())
-            input(type='hidden', name='gradingstyle', value=announcement.getGradingStyle())
-            input(type='hidden', name='attachments', value=announcement.getAttachments())
-            input(type='hidden', name='markingperiodid', value=announcement.getCreated())
-            input(type='hidden', name='state', value=announcement.getState())
-            input(type='hidden', name='classid', value=classId)
-            input(type='hidden', name='announcementtypename', value=announcement.getAnnouncementTypeName())
+            +Hidden('id', announcement.getId().valueOf())
+            +Hidden('announcementtypeid', announcement.getAnnouncementTypeId())
+            +Hidden('statetyped', announcement.getStateTyped())
+            +Hidden('systemtype', announcement.getSystemType())
+            +Hidden('personid', announcement.getPersonId().valueOf())
+            +Hidden('gradingstyle', announcement.getGradingStyle())
+            +Hidden('attachments', announcement.getAttachments())
+            +Hidden('markingperiodid', announcement.getCreated())
+            +Hidden('state', announcement.getState())
+            +Hidden('classid', classId)
+            +Hidden('announcementtypename', announcement.getAnnouncementTypeName())
             .left-block
                 if isAnnouncement
                     TEXTAREA(id="subject",name="subject",placeholder="Subject")=announcement.getSubject()

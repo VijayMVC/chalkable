@@ -39,7 +39,7 @@ namespace Chalkable.Web.Controllers
         {
             var userName = ControllerContext.HttpContext.User.Identity.Name;
             ChalkableAuthentication.SignOut();
-            return Json(new { Success = true, UserName = userName }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = true, data = new {success = true} }, JsonRequestBehavior.AllowGet);
         }
 
 

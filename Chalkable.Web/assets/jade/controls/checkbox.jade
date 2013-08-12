@@ -1,6 +1,6 @@
 mixin Checkbox(name, val)
     -attributes.checked = val;
     -self.prepareData(name, val);
-    input(type="hidden", name=name, value="false", data-value=val, class="hidden-checkbox")
+    +Hidden(name, false)(data-value=val, class="hidden-checkbox")
     input(id=name, name = name, type="checkbox")(attributes)
 

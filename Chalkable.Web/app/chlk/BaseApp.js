@@ -22,27 +22,12 @@ REQUIRE('chlk.controls.LoadingImgControl');
 REQUIRE('chlk.controls.PaginatorControl');
 REQUIRE('chlk.controls.PhotoContainerControl');
 REQUIRE('chlk.controls.VideoControl');
+REQUIRE('chlk.controls.LogoutControl');
 
 REQUIRE('chlk.models.common.Role');
 REQUIRE('chlk.models.schoolYear.MarkingPeriod');
 
 NAMESPACE('chlk', function (){
-
-    var logonShowed = false;
-
-    new ria.dom.Dom('.logout-area').on('click', function(node, event){
-        var elem = node.parent().find('a');
-        if(!logonShowed){
-            elem.setCss("visibility", "visible")
-                .setCss("opacity", 1);
-        }else{
-            elem.setCss("opacity", 0);
-            setTimeout(function(){
-                elem.setCss("visibility", "hidden");
-            }, 200);
-        }
-        logonShowed = !logonShowed;
-    });
 
     //TODO Remove jQuery
     jQuery(document).on('mouseover', '[data-tooltip]', function(){
@@ -73,7 +58,24 @@ NAMESPACE('chlk', function (){
                 window.nextMarkingPeriod && this.getContext().getSession().set('nextMarkingPeriod', serializer.deserialize(window.nextMarkingPeriod, chlk.models.schoolYear.MarkingPeriod));
                 window.finalizedClassesIds && this.getContext().getSession().set('finalizedClassesIds', window.finalizedClassesIds);
                 window.currentChlkPerson && this.getContext().getSession().set('currentPerson', serializer.deserialize(window.currentChlkPerson, chlk.models.people.User));
+                window.WEB_SITE_ROOT && this.getContext().getSession().set('webSiteRoot', window.WEB_SITE_ROOT);
                 this.getContext().getSession().set('azurePictureUrl', window.azurePictureUrl);
+            },
+
+            function getCurrentPerson(){
+                return this.getContext().getSession().get('currentPerson');
+            },
+
+            OVERRIDE, ria.async.Future, function onStart_() {
+                return BASE()
+                    .then(function(data){
+                        new ria.dom.Dom()
+                            .fromHTML(ASSET('~/assets/jade/common/logout.jade')(this))
+                            .appendTo("#logout-block");
+                        return data;
+                    }, this);
             }
+
+
         ]);
 });

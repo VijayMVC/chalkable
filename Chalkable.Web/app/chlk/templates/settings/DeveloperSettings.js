@@ -9,6 +9,8 @@ NAMESPACE('chlk.templates.settings', function () {
         [ria.templates.ModelBind(chlk.models.settings.DeveloperSettings)],
         'DeveloperSettings', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.SchoolPersonId, 'developerId'
+            chlk.models.id.SchoolPersonId, 'developerId',
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.AppId, 'currentAppId'
         ])
 });

@@ -255,6 +255,7 @@
     <Compile Include="Models\FinalGradesViewData\FinalGradeAnnouncementTypeViewData.cs" />
     <Compile Include="Models\FinalGradesViewData\FinalGradeAnnTypeGradeStatsViewData.cs" />
     <Compile Include="Models\FinalGradesViewData\FinalGradeDetailsViewData.cs" />
+    <Compile Include="Models\FinalGradesViewData\FinalGradeInputModel.cs" />
     <Compile Include="Models\FinalGradesViewData\FinalGradeViewData.cs" />
     <Compile Include="Models\FinalGradesViewData\StudentFinalGradeDetailsViewData.cs" />
     <Compile Include="Models\FinalGradesViewData\StudentFinalGradeViewData.cs" />
