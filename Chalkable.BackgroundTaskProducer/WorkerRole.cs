@@ -14,6 +14,7 @@ namespace Chalkable.BackgroundTaskProducer
             var cp = new CompositeProducer();
             cp.AddProducer("Empty school producer", new EmptySchoolTaskProducer());
             cp.AddProducer("Demo school producer", new CreateDemoSchoolTaskProducer());
+            cp.AddProducer("Demo school delete producer", new DemoSchoolDeleteTaskProducer());
             
             while (true)
             {

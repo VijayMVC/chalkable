@@ -45,25 +45,6 @@ namespace Chalkable.Data.Master.DataAccess
             return SelectMany<School>(new AndQueryCondition());
         } 
 
-        //TODO: next methods runs on the school db server under master database
-        public void CreateSchoolDataBase(string dbName, string prototypeName)
-        {
-            //TODO: what if servers are different?
-            var sql = string.Format("Create Database [{0}] as copy of [{1}]", dbName, prototypeName);
-            ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
-        }
-        
-        public IList<string> GetOnline(IEnumerable<Guid> names)
-        {
-            var sql = string.Format("SELECT name FROM sys.databases WHERE name  in ({0}) and state = 0",
-                                    names.Select(x => "'" + x + "'").JoinString(","));
-            var res = new List<string>();
-            using (var reader = ExecuteReaderParametrized(sql, new Dictionary<string, object>()))
-                while (reader.Read())
-                    res.Add(SqlTools.ReadStringNull(reader, "name"));
-            return res;
-        }
-        
         public PaginatedList<School> GetSchools(Guid? districtId, int start, int count)
         {
             var conds = new AndQueryCondition();
@@ -96,6 +77,39 @@ namespace Chalkable.Data.Master.DataAccess
                 SimpleUpdate(sisSync);
             else
                 SimpleInsert(sisSync);
+        }
+
+        public new void Delete(Guid id)
+        {
+            using (ExecuteStoredProcedureReader("spDeleteSchool", new Dictionary<string, object>{{"id", id}})) { }
+        }
+
+        //---------------------------------------------------------------------
+        //TODO: next methods runs on the school db server under master database
+        //---------------------------------------------------------------------
+
+        public void CreateSchoolDataBase(string dbName, string prototypeName)
+        {
+            //TODO: what if servers are different?
+            var sql = string.Format("Create Database [{0}] as copy of [{1}]", dbName, prototypeName);
+            ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
+        }
+
+        public IList<string> GetOnline(IEnumerable<Guid> names)
+        {
+            var sql = string.Format("SELECT name FROM sys.databases WHERE name  in ({0}) and state = 0",
+                                    names.Select(x => "'" + x + "'").JoinString(","));
+            var res = new List<string>();
+            using (var reader = ExecuteReaderParametrized(sql, new Dictionary<string, object>()))
+                while (reader.Read())
+                    res.Add(SqlTools.ReadStringNull(reader, "name"));
+            return res;
+        }
+
+        public void DeleteSchoolDataBase(string name)
+        {
+            var sql = string.Format("drop database [{0}]", name);
+            ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
         }
     }
 }
