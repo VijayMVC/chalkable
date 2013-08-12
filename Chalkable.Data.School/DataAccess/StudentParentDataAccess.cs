@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
@@ -51,12 +50,12 @@ namespace Chalkable.Data.School.DataAccess
                 }
                 return res;
             }
-        } 
+        }
 
-        
-        private Dictionary<string, object> BuildConditions(StudentParentQuery query)
+
+        private QueryCondition BuildConditions(StudentParentQuery query)
         {
-            var res = new Dictionary<string, object>();
+            var res = new AndQueryCondition();
             if(query.Id.HasValue)
                 res.Add("Id", query.Id);
             if(query.ParentId.HasValue)

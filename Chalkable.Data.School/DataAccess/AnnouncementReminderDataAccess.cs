@@ -21,7 +21,7 @@ namespace Chalkable.Data.School.DataAccess
         
         public void DeleteByAnnouncementId(Guid announcementId)
         {
-            var conds = new Dictionary<string, object> {{"announcementRef", announcementId}};
+            var conds = new AndQueryCondition {{"announcementRef", announcementId}};
             SimpleDelete<AnnouncementReminder>(conds);
         }
 

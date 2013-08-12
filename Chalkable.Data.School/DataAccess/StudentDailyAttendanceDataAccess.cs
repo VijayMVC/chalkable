@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
@@ -24,7 +21,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public StudentDailyAttendance SetStudentDailyAttendance(Guid personId, DateTime date, int? timeIn, int? timeOut)
         {
-            var parameter = new Dictionary<string, object>()
+            var parameter = new Dictionary<string, object>
                 {
                     {PERSON_ID_PARAM, personId},
                     {TIME_IN_PARAM, timeIn},
@@ -38,9 +35,9 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        private Dictionary<string, object> BuildConditions(StudentDailyAttendanceQuery query)
+        private QueryCondition BuildConditions(StudentDailyAttendanceQuery query)
         {
-            var conds = new Dictionary<string, object>();
+            var conds = new AndQueryCondition();
             if (query.Date.HasValue)
                 conds.Add(StudentDailyAttendance.DATE_FIELD_NAME, query.Date);
             if (query.PersonRef.HasValue)

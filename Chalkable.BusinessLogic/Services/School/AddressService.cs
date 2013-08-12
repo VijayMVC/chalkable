@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -95,7 +96,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new AddressDataAccess(uow);
-                return da.GetAll(new Dictionary<string, object>{{Address.PERSON_REF_FIELD, personId}});
+                return da.GetAll(new AndQueryCondition{{Address.PERSON_REF_FIELD, personId}});
             }
         }
     }

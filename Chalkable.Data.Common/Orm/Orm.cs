@@ -117,7 +117,7 @@ namespace Chalkable.Data.Common.Orm
                     res.Parameters.Add(field + "_" + i.ToString(), fieldValue);
                 }                
             }
-            res.Sql = b.ToString();
+            res.Sql = b;
             return res;
         }
 
@@ -145,7 +145,7 @@ namespace Chalkable.Data.Common.Orm
                          res.Parameters.Add(parameter);
                  }
              }
-             res.Sql = b.ToString();
+             res.Sql = b;
              return res;
          }
 
@@ -196,9 +196,9 @@ namespace Chalkable.Data.Common.Orm
                                             IDictionary<string, object> conditions, IDictionary<string, string> condsMapper)
         {
             var res = new DbQuery { Parameters = new Dictionary<string, object>() };
-            var b = new StringBuilder();
-            b.Append("Update [").Append(t.Name).Append("] set");
-            b.Append(updateParams.Select(x => "[" + updateParamsMapper[x.Key] + "]=@" + x.Key).JoinString(","));
+            
+            res.Sql.Append("Update [").Append(t.Name).Append("] set");
+            res.Sql.Append(updateParams.Select(x => "[" + updateParamsMapper[x.Key] + "]=@" + x.Key).JoinString(","));
             foreach (var condition in conditions)
             {
                res.Parameters.Add(condition);
@@ -209,8 +209,7 @@ namespace Chalkable.Data.Common.Orm
                     res.Parameters.Add(updateParam);
             }
 
-            b = BuildSqlWhere(b, t, conditions, condsMapper);
-            res.Sql = b.ToString();
+            res.Sql = BuildSqlWhere(res.Sql, t, conditions, condsMapper);
             return res;
         }
 
@@ -218,34 +217,35 @@ namespace Chalkable.Data.Common.Orm
         public static DbQuery SimpleDelete<T>(T obj)
         {
             var t = typeof(T);
-            var conds = new Dictionary<string, object> {{"Id", t.GetProperty("Id").GetValue(obj)}};
+            var conds = new AndQueryCondition {{"Id", t.GetProperty("Id").GetValue(obj)}};
             return SimpleDelete<T>(conds);
         }
-        
-        public static DbQuery SimpleDelete<T>(Dictionary<string, object> conditioins)
+
+        public static DbQuery SimpleDelete<T>(QueryCondition conditioins)
         {
-            var res = new DbQuery { Parameters = conditioins };
-            var b = new StringBuilder();
+            var res = new DbQuery();
             var t = typeof(T);
-            b.AppendFormat("Delete from [{0}]", t.Name);
-            b = BuildSqlWhere(b, t, conditioins);
-            res.Sql = b.ToString();
+            res.Sql.AppendFormat("Delete from [{0}]", t.Name);
+            conditioins.BuildSqlWhere(res, t.Name);
             return res;
         }
-
 
         public static StringBuilder BuildSqlWhere(StringBuilder builder, Type t, IDictionary<string, object> conds)
         {
             return BuildSqlWhere(builder, t.Name, conds);
         }
+
         public static StringBuilder BuildSqlWhere(StringBuilder builder, string tableName, IDictionary<string, object> conds)
         {
             return BuildSqlWhere(builder, tableName, conds, conds.Keys.ToDictionary(x => x, x => x));
         }
+
         public static StringBuilder BuildSqlWhere(StringBuilder builder, Type t, IDictionary<string, object> conds, IDictionary<string, string> condsMapping)
         {
             return BuildSqlWhere(builder, t.Name, conds, condsMapping);
         }
+        
+        [Obsolete]
         public static StringBuilder BuildSqlWhere(StringBuilder builder, string tableName, IDictionary<string, object> conds
                                                    , IDictionary<string, string> condsMapping)
         {
@@ -265,50 +265,49 @@ namespace Chalkable.Data.Common.Orm
                      }
                      if (cond.Value != null)
                      {
-                         if (NotNull.Instance == cond.Value)
+                         /*if (NotNull.Instance == cond.Value)
                              builder.AppendFormat("[{0}].[{1}] is not null", tableName, condsMapping[cond.Key], cond.Key);
-                         else
+                         else*/
                             builder.AppendFormat("[{0}].[{1}] =@{2}", tableName, condsMapping[cond.Key], cond.Key);
                      }
                      else
-                         builder.AppendFormat("[{0}].[{1}] is null", tableName, cond.Key);
+                         builder.AppendFormat("[{0}].[{1}] is null", tableName, condsMapping[cond.Key]);
                  }
                  builder.Append(")");
              }
              return builder;
          }
 
-        
-        public static DbQuery SimpleSelect<T>(Dictionary<string, object> conds)
+
+        public static DbQuery SimpleSelect<T>(QueryCondition queryCondition)
         {
-            return SimpleSelect(typeof (T).Name, conds);
+            return SimpleSelect(typeof(T).Name, queryCondition);
         }
-        public static DbQuery SimpleSelect(string tableName, Dictionary<string, object> conds)
+
+        public static DbQuery SimpleSelect(string tableName, QueryCondition queryCondition)
         {
-            var res = new DbQuery { Parameters = conds };
-            var b = new StringBuilder();
-            b.AppendFormat("Select * from [{0}] ", tableName);
-            b = BuildSqlWhere(b, tableName, conds);
-            res.Sql = b.ToString();
+            var res = new DbQuery();
+            res.Sql.AppendFormat("Select * from [{0}] ", tableName);
+            queryCondition.BuildSqlWhere(res, tableName);
             return res;   
         }
 
-        public static DbQuery CountSelect<T>(Dictionary<string, object> conds, string resultName)
+        public static DbQuery CountSelect<T>(QueryCondition queryCondition, string resultName)
         {
-            return CountSelect(SimpleSelect<T>(conds), resultName);
+            return CountSelect(SimpleSelect<T>(queryCondition), resultName);
         }
 
         public static DbQuery CountSelect(DbQuery query, string resultName)
         {
-            var b = new StringBuilder();
-            b.AppendFormat("Select Count(*) as {1} from ({0}) x", query.Sql, resultName);
-            query.Sql = b.ToString();
+            var inner = query.Sql.ToString();
+            query.Sql.Clear();
+            query.Sql.AppendFormat("Select Count(*) as {1} from ({0}) x", inner, resultName);
             return query;
         }
 
-        public static DbQuery PaginationSelect<T>(Dictionary<string, object> conds, string orderColumn, OrderType orderType, int start, int count)
+        public static DbQuery PaginationSelect<T>(QueryCondition queryCondition, string orderColumn, OrderType orderType, int start, int count)
         {
-            return PaginationSelect(SimpleSelect<T>(conds), orderColumn, orderType, start, count);
+            return PaginationSelect(SimpleSelect<T>(queryCondition), orderColumn, orderType, start, count);
         }
 
         public static DbQuery PaginationSelect(DbQuery innerSelect, string orderColumn, OrderType orderType, int start, int count)
@@ -318,27 +317,9 @@ namespace Chalkable.Data.Common.Orm
             b.AppendFormat("select x.* from ({0}) x ", innerSelect.Sql);
             b.AppendFormat(" order by x.{0} {1}", orderColumn, orederTypesMap[orderType]);
             b.AppendFormat(" OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", start, count);
-            innerSelect.Sql = b.ToString();
+            innerSelect.Sql = b;
             return innerSelect;
         }
 
-    }
-
-
-    public class DbQuery
-    {
-        public string Sql { get; set; }
-        public IDictionary<string, object> Parameters { get; set; } 
-    }
-
-    public class NotNull
-    {
-        private NotNull()
-        {
-            
-        }
-
-        private static NotNull instance = new NotNull();
-        public static NotNull Instance { get { return instance; } }
     }
 }

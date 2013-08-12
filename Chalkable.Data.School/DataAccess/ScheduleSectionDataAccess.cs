@@ -41,7 +41,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             var b = new StringBuilder();
             b.Append(@"delete from ClassPeriod where PeriodRef in (select Id from Period where SectionRef = @sectionRef) ");
-            var query = Orm.SimpleDelete<Period>(new Dictionary<string, object> {{"sectionRef", scheduleSection.Id}});
+            var query = Orm.SimpleDelete<Period>(new AndQueryCondition {{"sectionRef", scheduleSection.Id}});
             b.Append(" " + query.Sql + " ");
             var deleteSectionQuery = Orm.SimpleDelete(scheduleSection);
             b.Append(" " + deleteSectionQuery.Sql + " ");
@@ -50,7 +50,7 @@ namespace Chalkable.Data.School.DataAccess
               if(!query.Parameters.ContainsKey(parameter.Key))
                   query.Parameters.Add(parameter);
             }
-            ExecuteNonQueryParametrized(b.ToString(), query.Parameters as Dictionary<string, object>);
+            ExecuteNonQueryParametrized(b.ToString(), query.Parameters);
         }
 
         private const string REBUILD_SECTION_PROC = "spRebuildSections";
@@ -84,14 +84,14 @@ namespace Chalkable.Data.School.DataAccess
                 b.Append(" and Number <= @tillNumber ");
             }
             b.Append("  order by ScheduleSection.Number ");
-            return ReadMany<ScheduleSection>(new DbQuery {Sql = b.ToString(), Parameters = conds});
+            return ReadMany<ScheduleSection>(new DbQuery(b, conds));
         } 
 
         public IList<ScheduleSection> GetSections(IList<Guid> markingPeriodIds)
         {
             var mpIds = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
             var sql = string.Format("select * from ScheduleSection where MarkingPeriodRef in ({0})", mpIds);
-            return ReadMany<ScheduleSection>(new DbQuery { Sql = sql, Parameters = new Dictionary<string, object>() });
+            return ReadMany<ScheduleSection>(new DbQuery(sql, new Dictionary<string, object>()));
         }
     }
 }

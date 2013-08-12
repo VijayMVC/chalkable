@@ -88,13 +88,13 @@ namespace Chalkable.Data.School.DataAccess
             conds.Add("@roleId", roleId);
             if (CoreRoles.SUPER_ADMIN_ROLE.Id == roleId)
             {
-                return new DbQuery { Parameters = conds, Sql = b.ToString() };
+                return new DbQuery (sql, conds);
             }
             if (CoreRoles.ADMIN_EDIT_ROLE.Id == roleId || CoreRoles.ADMIN_GRADE_ROLE.Id == roleId ||
                 CoreRoles.ADMIN_VIEW_ROLE.Id == roleId)
             {
                 b.Append("and AnnouncementAttachment.PersonRef =@callerId");
-                return new DbQuery { Parameters = conds, Sql = b.ToString() };
+                return new DbQuery(sql, conds);
             }
             if (CoreRoles.TEACHER_ROLE.Id == roleId)
             {
@@ -103,7 +103,7 @@ namespace Chalkable.Data.School.DataAccess
                                                            where RoleRef = @roleId or PersonRef = @callerId or ToAll = 1) 
                                          and AnnouncementAttachment.PersonRef = Announcement.PersonRef)
                                  )");
-                return new DbQuery { Parameters = conds, Sql = b.ToString() };
+                return new DbQuery (sql, conds);
             
             }
             if (CoreRoles.STUDENT_ROLE.Id == roleId)
@@ -113,7 +113,7 @@ namespace Chalkable.Data.School.DataAccess
                                                                               join ClassPerson cp on cp.ClassRef = mpc.ClassRef and cp.PersonRef = @callerId)
                                        and AnnouncementAttachment.PersonRef = Announcement.PersonRef)
                                 )");
-                return new DbQuery { Parameters = conds, Sql = b.ToString() };
+                return new DbQuery(sql, conds);
             }
             return null;
         }

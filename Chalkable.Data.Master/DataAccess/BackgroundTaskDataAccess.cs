@@ -38,7 +38,7 @@ namespace Chalkable.Data.Master.DataAccess
 
         public BackgroundTask Find(Guid? schoolId, BackgroundTaskStateEnum state, BackgroundTaskTypeEnum type)
         {
-            return SelectOneOrNull<BackgroundTask>(new Dictionary<string, object> {
+            return SelectOneOrNull<BackgroundTask>(new AndQueryCondition {
                                                                         {BackgroundTask.SCHOOL_REF_FIELD_NAME, schoolId},
                                                                         {BackgroundTask.STATE_FIELD_NAME, state},
                                                                         {BackgroundTask.TYPE_FIELD_NAME, type},

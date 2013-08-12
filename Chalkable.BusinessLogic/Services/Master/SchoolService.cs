@@ -188,9 +188,9 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 var da = new SchoolDataAccess(uow);
-                da.GetAll(new Dictionary<string, object>
+                da.GetAll(new AndQueryCondition
                     {
-                        {Data.Master.Model.School.DEMO_PREFIX_FIELD, NotNull.Instance}
+                        {Data.Master.Model.School.DEMO_PREFIX_FIELD, null, ConditionRelation.NotEqual}
                     });
             }
             throw new NotImplementedException();

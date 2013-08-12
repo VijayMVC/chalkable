@@ -4,6 +4,7 @@ using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.ApplicationInstall;
@@ -49,7 +50,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 else
                 {
-                    var inst = new ApplicationInstallDataAccess(uow).GetAll(new Dictionary<string, object> {{ApplicationInstall.ACTIVE_FIELD, true}, {ApplicationInstall.APPLICATION_REF_FIELD, appId}});
+                    var inst = new ApplicationInstallDataAccess(uow).GetAll(new AndQueryCondition
+                        {
+                            {ApplicationInstall.ACTIVE_FIELD, true}, 
+                            {ApplicationInstall.APPLICATION_REF_FIELD, appId}
+                        });
                     res.AddRange(inst.Select(x=>x.PersonRef));
                 }
             }
@@ -105,7 +110,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new AnnouncementApplicationDataAccess(uow);
-                var ps = new Dictionary<string, object>();
+                var ps = new AndQueryCondition();
                 ps.Add(AnnouncementApplication.ANNOUNCEMENT_REF_FIELD, announcementId);
                 if (onlyActive)
                     ps.Add(AnnouncementApplication.ACTIVE_FIELD, true);

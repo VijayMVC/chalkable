@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
@@ -16,9 +17,9 @@ namespace Chalkable.Data.School.DataAccess
             SimpleDelete<ClassPerson>(BuildConditioins(query));
         }
 
-        public Dictionary<string, object> BuildConditioins(ClassPersonQuery query)
+        public QueryCondition BuildConditioins(ClassPersonQuery query)
         {
-            var conds = new Dictionary<string, object>();
+            var conds = new AndQueryCondition();
             if(query.Id.HasValue)
                 conds.Add(ClassPerson.ID_FIELD, query.Id);
             if(query.ClassId.HasValue)
