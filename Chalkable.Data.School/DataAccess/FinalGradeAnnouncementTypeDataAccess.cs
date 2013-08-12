@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
@@ -33,7 +32,7 @@ namespace Chalkable.Data.School.DataAccess
             var type = typeof (FinalGradeAnnouncementType);
             var fieldMapping = conds.Keys.ToDictionary(x => x, x => string.Format("{0}_{1}", type.Name, x)); //TODO: think about this 
             b = Orm.BuildSqlWhere(b, "vwFinalGradeAnnouncementType", conds, fieldMapping);
-            return new DbQuery {Parameters = conds, Sql = b.ToString()};
+            return new DbQuery(b, conds);
         }
         private DbQuery BuildSelectQuery(FinalGradeAnnouncementTypeQuery query)
         {

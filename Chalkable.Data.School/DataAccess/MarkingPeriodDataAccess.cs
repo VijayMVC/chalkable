@@ -65,12 +65,12 @@ namespace Chalkable.Data.School.DataAccess
                         order by StartDate";
 
             var conds = new Dictionary<string, object>{{"markingPeriodId", markingPeriodId}};
-            return ReadOne<MarkingPeriod>(new DbQuery {Parameters = conds, Sql = sql});
+            return ReadOne<MarkingPeriod>(new DbQuery (sql, conds));
         }
 
         public IList<MarkingPeriod> GetMarkingPeriods(Guid? schoolYearId)
         {
-            var conds = new Dictionary<string, object>();
+            var conds = new AndQueryCondition();
             if (schoolYearId.HasValue)
                 conds.Add("schoolYearRef", schoolYearId);
             return SelectMany<MarkingPeriod>(conds);
@@ -82,23 +82,20 @@ namespace Chalkable.Data.School.DataAccess
             b.Append(@"select * from MarkingPeriod where StartDate <= @date and EndDate >= @date");
             var conds = new Dictionary<string, object>();
             conds.Add("date", date);
-            return ReadOneOrNull<MarkingPeriod>(new DbQuery {Sql = b.ToString(), Parameters = conds});
+            return ReadOneOrNull<MarkingPeriod>(new DbQuery (b.ToString(), conds));
         }
 
         public bool IsOverlaped(DateTime startDate, DateTime endDate, Guid? currentMarkingPeriodId)
         {
-            var sqlCommand = "select * from MarkingPeriod where StartDate <= @endDate and EndDate >= @startDate";
-            var conds = new Dictionary<string, object>
+            var conds = new AndQueryCondition
                 {
-                    {"startDate", startDate},
-                    {"endDate", endDate}
+                    {MarkingPeriod.START_DATE_FIELD, endDate, ConditionRelation.LessEqual},
+                    {MarkingPeriod.END_DATE_FIELD, startDate, ConditionRelation.GreaterEqual}
                 };
             if (currentMarkingPeriodId.HasValue)
-            {
-                sqlCommand += " and Id != @id";
-                conds.Add("@id", currentMarkingPeriodId);
-            }
-            return Exists(new DbQuery {Sql = sqlCommand, Parameters = conds});
+                conds.Add(MarkingPeriod.ID_FIELD, currentMarkingPeriodId, ConditionRelation.NotEqual);
+            return Exists<MarkingPeriod>(conds);
+            
         } 
 
     }

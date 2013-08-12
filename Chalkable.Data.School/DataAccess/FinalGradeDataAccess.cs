@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
@@ -30,13 +29,13 @@ namespace Chalkable.Data.School.DataAccess
 
         public VwFinalGrade GetVwFinalGrade(Guid id)
         {
-            var conds = new Dictionary<string, object> { { "FinalGrade_Id", id } };
+            var conds = new AndQueryCondition { { "FinalGrade_Id", id } };
             var command = Orm.SimpleSelect<VwFinalGrade>(conds);
             return ReadOne<VwFinalGrade>(command, true);
         }
         public VwFinalGrade GetFirstFinalGrade(Guid markingPeriodId, Guid teacherId)
         {
-            var conds = new Dictionary<string, object>
+            var conds = new AndQueryCondition
                 {
                     {"MarkingPeriodClass_MarkingPeriodRef", markingPeriodId},
                     {"Class_TeacherRef", teacherId}
@@ -47,7 +46,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public bool Exists(Guid id)
         {
-            return Exists<FinalGrade>(new Dictionary<string, object> {{"Id", id}});
+            return Exists<FinalGrade>(new AndQueryCondition { { "Id", id } });
         }
         
 

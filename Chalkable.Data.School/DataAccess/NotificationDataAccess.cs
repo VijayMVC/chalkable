@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -17,9 +15,9 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        private Dictionary<string, object> BuildConditions(NotificationQuery query)
+        private AndQueryCondition BuildConditions(NotificationQuery query)
         {
-            var res = new Dictionary<string, object> {{"PersonRef", query.PersonId}};
+            var res = new AndQueryCondition { { "PersonRef", query.PersonId } };
             if (query.Id.HasValue)
                 res.Add("Id", query.Id);
             if(query.Shown.HasValue)
@@ -68,8 +66,9 @@ namespace Chalkable.Data.School.DataAccess
                     typeof (ClassPeriod)
                 };
             b.AppendFormat(sql, Orm.ComplexResultSetQuery(tables));
-            b = Orm.BuildSqlWhere(b, tables[0], conds);
-            return new DbQuery {Parameters = conds, Sql = b.ToString()};
+            var res = new DbQuery();
+            conds.BuildSqlWhere(res, tables[0].Name);
+            return res;
         }
 
         private IList<NotificationDetails> ReadListNotifcationDetails(DbDataReader reader)
@@ -105,7 +104,7 @@ namespace Chalkable.Data.School.DataAccess
         public IList<NotificationDetails> GetNotificationsDetails(NotificationQuery query)
         {
             var q = BuildGetNotificationDetailsDbQuery(query);
-            using (var reader = ExecuteReaderParametrized(q.Sql, q.Parameters))
+            using (var reader = ExecuteReaderParametrized(q.Sql.ToString(), q.Parameters))
             {
                 return ReadListNotifcationDetails(reader);
             }

@@ -4,6 +4,7 @@ using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
@@ -117,7 +118,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 var da = new ApplicationRatingDataAccess(uow);
-                return da.GetAll(new Dictionary<string, object> {{ApplicationRating.APPLICATION_REF_FIELD, applicationId}});
+                return da.GetAll(new AndQueryCondition {{ApplicationRating.APPLICATION_REF_FIELD, applicationId}});
             }
         }
 

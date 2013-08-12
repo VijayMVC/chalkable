@@ -51,18 +51,15 @@ namespace Chalkable.Data.School.DataAccess
         }
         public bool Exists(IList<Guid> markingPeriodIds)
         {
-            var sql = @"select * from MarkingPeriodClass where MarkingPeriodRef in ({0})";
             var mpIdsString = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
-            return Exists(new DbQuery
-                    {
-                        Parameters = new Dictionary<string, object>(),
-                        Sql = string.Format(sql, mpIdsString)
-                    });
+            var query = new DbQuery();
+            query.Sql.Append(string.Format(@"select * from MarkingPeriodClass where MarkingPeriodRef in ({0})", mpIdsString));
+            return Exists(query);
         }
 
-        private Dictionary<string, object> BuildConditions(MarkingPeriodClassQuery query)
+        private QueryCondition BuildConditions(MarkingPeriodClassQuery query)
         {
-            var res = new Dictionary<string, object>();
+            var res = new AndQueryCondition();
             if(query.Id.HasValue)
                 res.Add("Id", query.Id);
             if(query.ClassId.HasValue)

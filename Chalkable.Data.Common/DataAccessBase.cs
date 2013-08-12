@@ -47,7 +47,7 @@ namespace Chalkable.Data.Common
         protected void SimpleInsert<T>(T obj)
         {
             var q = Orm.Orm.SimpleInsert(obj);
-            ExecuteNonQueryParametrized(q.Sql, q.Parameters);
+            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
 
         
@@ -59,7 +59,7 @@ namespace Chalkable.Data.Common
         protected void SimpleUpdate<T>(T obj)
         {
             var q = Orm.Orm.SimpleUpdate(obj);
-            ExecuteNonQueryParametrized(q.Sql, q.Parameters);
+            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
         protected void SimpleUpdate<T>(IList<T> objs)
         {
@@ -81,7 +81,7 @@ namespace Chalkable.Data.Common
                 else
                 {
                     var q = buildQueryAction(objs);
-                    ExecuteNonQueryParametrized(q.Sql, q.Parameters);
+                    ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
                 }
             }
         }
@@ -90,30 +90,30 @@ namespace Chalkable.Data.Common
         protected void SimpleUpdate<T>(IDictionary<string, object> updateParams, IDictionary<string, object> conditions)
         {
             var q = Orm.Orm.SimpleUpdate<T>(updateParams, conditions);
-            ExecuteNonQueryParametrized(q.Sql, q.Parameters);
+            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
 
         protected void SimpleDelete<T>(T obj)
         {
             var q = Orm.Orm.SimpleDelete(obj);
-            ExecuteNonQueryParametrized(q.Sql, q.Parameters);
+            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
 
         protected void SimpleDelete<T>(Guid id)
         {
-            var conds = new Dictionary<string, object> {{"id", id}};
+            var conds = new AndQueryCondition {{"id", id}};
             var q = Orm.Orm.SimpleDelete<T>(conds);
-            ExecuteNonQueryParametrized(q.Sql, q.Parameters);
+            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
 
-        protected void SimpleDelete<T>(Dictionary<string, object> conds)
+        protected void SimpleDelete<T>(QueryCondition conds)
         {
             var q = Orm.Orm.SimpleDelete<T>(conds);
-            ExecuteNonQueryParametrized(q.Sql, q.Parameters);
+            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
         private T Read<T>(DbQuery query, Func<DbDataReader, T> action)
         {
-            using (var reader = ExecuteReaderParametrized(query.Sql, query.Parameters as Dictionary<string, object>))
+            using (var reader = ExecuteReaderParametrized(query.Sql.ToString(), query.Parameters as Dictionary<string, object>))
             {
                 return action(reader);
             }
@@ -133,14 +133,14 @@ namespace Chalkable.Data.Common
         protected IList<T> ReadMany<T>(DbQuery query, bool complexResultSet = false) where T : new()
         {
             return Read(query, reader => reader.ReadList<T>(complexResultSet));
-        } 
+        }
 
-        protected T SelectOne<T>(Dictionary<string, object> conditions) where T : new() 
+        protected T SelectOne<T>(QueryCondition conditions) where T : new() 
         {
             var command = Orm.Orm.SimpleSelect<T>(conditions);
             return ReadOne<T>(command);
         }
-        protected T SelectOneOrNull<T>(Dictionary<string, object> conditions) where T : new()
+        protected T SelectOneOrNull<T>(QueryCondition conditions) where T : new()
         {
             var command = Orm.Orm.SimpleSelect<T>(conditions);
             return ReadOneOrNull<T>(command);
@@ -148,9 +148,9 @@ namespace Chalkable.Data.Common
 
         protected IList<T> SelectMany<T>() where T : new()
         {
-            return SelectMany<T>(new Dictionary<string, object>());
+            return SelectMany<T>(new AndQueryCondition());
         }
-        protected IList<T> SelectMany<T>(Dictionary<string, object> conditions) where T : new()
+        protected IList<T> SelectMany<T>(QueryCondition conditions) where T : new()
         {
             var q = Orm.Orm.SimpleSelect<T>(conditions);
             return ReadMany<T>(q);
@@ -158,11 +158,11 @@ namespace Chalkable.Data.Common
 
         protected PaginatedList<T> PaginatedSelect<T>(string orderByColumn, int start, int count, Orm.Orm.OrderType orderType = Orm.Orm.OrderType.Asc) where T : new()
         {
-            var conds = new Dictionary<string, object>();
+            var conds = new AndQueryCondition();
             return PaginatedSelect<T>(conds, orderByColumn, start, count, orderType);
-        } 
+        }
 
-        protected PaginatedList<T> PaginatedSelect<T>(Dictionary<string, object> conditions, string orderByColumn,
+        protected PaginatedList<T> PaginatedSelect<T>(QueryCondition conditions, string orderByColumn,
                                                       int start, int count, Orm.Orm.OrderType orderType = Orm.Orm.OrderType.Asc) where T : new()
         {
             var q = Orm.Orm.PaginationSelect<T>(conditions, orderByColumn, orderType, start, count);
@@ -179,7 +179,7 @@ namespace Chalkable.Data.Common
         protected PaginatedList<T> ReadPaginatedResult<T>(DbQuery dbQuery, int start, int count,
                                                           Func<DbDataReader, IList<T>> readAction) where T : new()
         {
-            using (var reader = ExecuteReaderParametrized(dbQuery.Sql, dbQuery.Parameters as Dictionary<string, object>))
+            using (var reader = ExecuteReaderParametrized(dbQuery.Sql.ToString(), dbQuery.Parameters as Dictionary<string, object>))
             {
                 if (reader.Read())
                 {
@@ -196,8 +196,8 @@ namespace Chalkable.Data.Common
         {
             return ReadPaginatedResult(dbQuery, start, count, x => x.ReadList<T>());
         }
-        
-        protected bool Exists<T>(Dictionary<string, object> conditions) where T : new()
+
+        protected bool Exists<T>(QueryCondition conditions) where T : new()
         {
             var resName = "AllCount";
             var q = Orm.Orm.CountSelect<T>(conditions, resName);
@@ -218,17 +218,17 @@ namespace Chalkable.Data.Common
 
         public virtual TEntity GetById(Guid id)
         {
-            return SelectOne<TEntity>(new Dictionary<string, object> {{"Id", id}});
+            return SelectOne<TEntity>(new AndQueryCondition { { "Id", id } });
         }
 
         public virtual TEntity GetByIdOrNull(Guid id)
         {
-            return SelectOneOrNull<TEntity>(new Dictionary<string, object> { { "Id", id } });
+            return SelectOneOrNull<TEntity>(new AndQueryCondition { { "Id", id } });
         }
 
-        public virtual IList<TEntity> GetAll(Dictionary<string, object> conditions = null)
+        public virtual IList<TEntity> GetAll(QueryCondition conditions = null)
         {
-            return SelectMany<TEntity>(conditions ?? new Dictionary<string, object>());
+            return SelectMany<TEntity>(conditions ?? new AndQueryCondition());
         }
 
         public virtual PaginatedList<TEntity> GetPage(int start, int count, string orderBy = null, Orm.Orm.OrderType orderType = Orm.Orm.OrderType.Asc)

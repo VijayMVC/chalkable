@@ -37,12 +37,12 @@ namespace Chalkable.Data.Master.DataAccess
 
         public IList<School> GetEmpty()
         {
-            return SelectMany<School>(new Dictionary<string, object> {{School.IS_EMPTY_FIELD, true}});
+            return SelectMany<School>(new AndQueryCondition {{School.IS_EMPTY_FIELD, true}});
         }
 
         public IList<School> GetSchools()
         {
-            return SelectMany<School>(new Dictionary<string, object>());
+            return SelectMany<School>(new AndQueryCondition());
         } 
 
         //TODO: next methods runs on the school db server under master database
@@ -66,7 +66,7 @@ namespace Chalkable.Data.Master.DataAccess
         
         public PaginatedList<School> GetSchools(Guid? districtId, int start, int count)
         {
-            var conds = new Dictionary<string, object>();
+            var conds = new AndQueryCondition();
             if(districtId.HasValue)
                 conds.Add(School.DISTRICT_REF_FIELD, districtId);
             return PaginatedSelect<School>(conds, School.ID_FIELD, start, count);
@@ -75,30 +75,19 @@ namespace Chalkable.Data.Master.DataAccess
 
         public IList<School> GetSchools(bool? empty, bool? demo, bool? usedDemo)
         {
-            var conds = new Dictionary<string, object>();
+            var conds = new AndQueryCondition();
             if (empty.HasValue)
                 conds.Add(School.IS_EMPTY_FIELD, empty);
             if (demo.HasValue)
-            {
-                if (demo.Value)
-                    conds.Add(School.DEMO_PREFIX_FIELD, NotNull.Instance);
-                else
-                    conds.Add(School.DEMO_PREFIX_FIELD, null);
-            }
+                conds.Add(School.DEMO_PREFIX_FIELD, null, demo.Value ? ConditionRelation.NotEqual : ConditionRelation.Equal);
             if (usedDemo.HasValue)
-            {
-                if (usedDemo.Value)
-                    conds.Add(School.LAST_USED_DEMO_FIELD, NotNull.Instance);
-                else
-                    conds.Add(School.LAST_USED_DEMO_FIELD, null);
-            }
-
+                conds.Add(School.LAST_USED_DEMO_FIELD, null, usedDemo.Value ? ConditionRelation.NotEqual : ConditionRelation.Equal);
             return SelectMany<School>(conds);
         }
 
         public SisSync GetSyncData(Guid schoolId)
         {
-            return SelectOneOrNull<SisSync>(new Dictionary<string, object> {{"Id", schoolId}});
+            return SelectOneOrNull<SisSync>(new AndQueryCondition { { "Id", schoolId } });
         }
 
         public void SetSyncData(SisSync sisSync)

@@ -5,6 +5,7 @@ using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
@@ -266,7 +267,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new ApplicationDataAccess(uow);
                 application = da.GetApplicationById(id);
-                draftApps = da.GetAll(new Dictionary<string, object> {{Application.ORIGINAL_REF_FIELD, id}});
+                draftApps = da.GetAll(new AndQueryCondition {{Application.ORIGINAL_REF_FIELD, id}});
             
                 if (!ApplicationSecurity.CanEditApplication(Context, application))
                     throw new ChalkableSecurityException(ChlkResources.ERR_APP_INVALID_RIGHTS);

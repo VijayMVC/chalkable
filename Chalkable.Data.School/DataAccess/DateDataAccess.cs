@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -21,7 +20,7 @@ namespace Chalkable.Data.School.DataAccess
             var b = new StringBuilder();
             b.Append("delete from [Date] ");
             var  q = BuildConditionQuery(b, query);
-            ExecuteNonQueryParametrized(q.Sql, q.Parameters);
+            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
 
         private DbQuery BuildConditionQuery(StringBuilder builder, DateQuery query)
@@ -62,7 +61,7 @@ namespace Chalkable.Data.School.DataAccess
             {
                 builder.AppendFormat(" and [Date].IsSchoolDay = 1 ");
             }
-            return new DbQuery {Sql = builder.ToString(), Parameters = conds};
+            return new DbQuery {Sql = builder, Parameters = conds};
         }
 
 
@@ -95,7 +94,8 @@ namespace Chalkable.Data.School.DataAccess
             b.Append("select * from [Date]");
             var q = BuildConditionQuery(b, query);
             b.AppendFormat(" order by DateTime desc OFFSET 0 ROWS FETCH NEXT {0} ROWS ONLY", query.Count);
-            q.Sql = string.Format("select * from ({0})x order by x.DateTime", b);
+
+            q = new DbQuery(string.Format("select * from ({0})x order by x.DateTime", b), q.Parameters);
             return ReadMany<Date>(q);
         }
 
@@ -107,13 +107,13 @@ namespace Chalkable.Data.School.DataAccess
                            , Orm.ComplexResultSetQuery(new List<Type> {typeof (ScheduleSection)}));
             var q = BuildConditionQuery(b, query);
             b.AppendFormat(" order by DateTime desc OFFSET 0 ROWS FETCH NEXT {0} ROWS ONLY", query.Count);
-            q.Sql = string.Format("select * from ({0})x order by x.DateTime", b);
+            q.Sql.Append(string.Format("select * from ({0})x order by x.DateTime", b));
             return ReadDetailsDate(q);
         } 
 
         private IList<DateDetails> ReadDetailsDate(DbQuery query)
         {
-            using (var reader = ExecuteReaderParametrized(query.Sql, query.Parameters))
+            using (var reader = ExecuteReaderParametrized(query.Sql.ToString(), query.Parameters))
             {
                 var res = new List<DateDetails>();
                 while (reader.Read())
@@ -131,7 +131,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             var b = new StringBuilder();
             var dbQuery = BuildConditionQuery(b, query);
-            dbQuery.Sql = "select * from [Date] " + dbQuery.Sql;
+            dbQuery.Sql.Insert(0, "select * from [Date] ");
             return Exists(dbQuery);
         }
 
@@ -140,7 +140,7 @@ namespace Chalkable.Data.School.DataAccess
             var sql = @"select * from [Date] where MarkingPeriodRef in ({0})";
             var mpIdsString = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
             sql = string.Format(sql, mpIdsString);
-            return Exists(new DbQuery {Parameters = new Dictionary<string, object>(), Sql = sql});
+            return Exists(new DbQuery(sql, new Dictionary<string, object>()));
         }
     }
 

@@ -23,7 +23,7 @@ namespace Chalkable.Data.Master.DataAccess
                     where 
                         Fund.{0} = @{0} and (su1.{1} in ({1}) or su2.{1} in ({1}))", Fund.SCHOOL_REF_FIELD, roleIds.JoinString(","));
             var ps = new Dictionary<string, object> { {Fund.SCHOOL_REF_FIELD, schoolId} };
-            return ReadMany<Fund>(new DbQuery {Parameters = ps, Sql = sql});
+            return ReadMany<Fund>(new DbQuery (sql, ps));
 
         }
 

@@ -23,7 +23,7 @@ namespace Chalkable.Data.School.DataAccess
                     {ApplicationInstall.PERSON_REF_FIELD, personId},
                     {ApplicationInstall.OWNER_REF_FIELD, personId}
                 };
-            return ReadMany<ApplicationInstall>(new DbQuery {Parameters = ps, Sql = sql});
+            return ReadMany<ApplicationInstall>(new DbQuery(sql, ps));
         }
 
         public IList<ApplicationInstall> GetInstalledForClass(Class clazz)
@@ -40,12 +40,12 @@ namespace Chalkable.Data.School.DataAccess
                     {ApplicationInstallActionClasses.CLASS_REF_FIELD, clazz.Id},
                     {ApplicationInstallActionGradeLevel.GRADE_LEVEL_REF_FIELD, clazz.GradeLevelRef}
                 };
-            return ReadMany<ApplicationInstall>(new DbQuery {Parameters = ps, Sql = sql});
+            return ReadMany<ApplicationInstall>(new DbQuery(sql, ps));
         }
 
         public IList<ApplicationInstall> GetInstalledByAppId(Guid applicationId, Guid schoolYearId)
         {
-            return SelectMany<ApplicationInstall>(new Dictionary<string, object>
+            return SelectMany<ApplicationInstall>(new AndQueryCondition
                 {
                     {ApplicationInstall.APPLICATION_REF_FIELD, applicationId},
                     {ApplicationInstall.SCHOOL_YEAR_REF_FIELD, schoolYearId},

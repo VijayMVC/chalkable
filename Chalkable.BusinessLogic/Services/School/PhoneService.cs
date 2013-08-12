@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -45,7 +46,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 return new PhoneDataAccess(uow)
-                    .GetAll(new Dictionary<string, object>{{Phone.PERSON_REF_FIELD, personId}});
+                    .GetAll(new AndQueryCondition{{Phone.PERSON_REF_FIELD, personId}});
             }
         }
 
