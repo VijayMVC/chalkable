@@ -72,7 +72,7 @@ namespace Chalkable.Data.School.DataAccess
                     {"hasStudentMyApps", hasStudentMyApps},
                     {"canAttach", canAttach},
                 };
-            using (var reader = ExecuteStoredProcedureReader("spGetPersonsForApplicationInstallCount", ps))
+            using (var reader = ExecuteStoredProcedureReader("spGetPersonsForApplicationInstall", ps))
             {
                 return reader.ReadList<PersonsForApplicationInstall>();
             }

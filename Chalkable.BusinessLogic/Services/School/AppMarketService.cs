@@ -107,7 +107,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new ApplicationInstallDataAccess(uow);
                 var persons = da.GetPersonsForApplicationInstall(applicationId, Context.UserId, personId, roleIds, departmentIds, gradeLevelIds, classIds, Context.Role.Id
                                                    , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach);
-                var spIds = persons.Select(x => x.SchoolPersonId).Distinct().ToList();
+                var spIds = persons.Select(x => x.PersonId).Distinct().ToList();
                 var schoolYear = ServiceLocator.SchoolYearService.GetSchoolYearById(schoolYearId);
                 var res = RegistarationInstallationAction(uow, app, personId, roleIds, classIds, departmentIds, gradeLevelIds);
                 var appInstalls = new List<ApplicationInstall>();

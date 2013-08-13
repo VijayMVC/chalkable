@@ -12,6 +12,7 @@ namespace Chalkable.Data.School.Model
         public const string NUMBER_FIELD = "Number";
         public int Number { get; set; }
         public string Name { get; set; }
+        public const string MARKING_PERIOD_REF_FIELD = "MarkingPeriodRef";
         public Guid MarkingPeriodRef { get; set; }
         public int? SisId { get; set; }
     }

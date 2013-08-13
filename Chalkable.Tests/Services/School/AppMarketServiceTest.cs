@@ -149,78 +149,80 @@ namespace Chalkable.Tests.Services.School
         
         }
 
-        //[Test]
-        //public void CanInstallTest()
-        //{
-        //    var devContext = CreateDeveloperSchoolTestContext();
-        //    var c = ClassServiceTest.CreateClass(SchoolTestContext, SchoolTestContext.FirstTeacher,
-        //                                                 SchoolTestContext.FirstStudent, SchoolTestContext.SecondStudent);
+        [Test]
+        public void CanInstallTest()
+        {
+            var devContext = CreateDeveloperSchoolTestContext();
+            var c = ClassServiceTest.CreateClass(SchoolTestContext, SchoolTestContext.FirstTeacher,
+                                                         SchoolTestContext.FirstStudent, SchoolTestContext.SecondStudent);
+
+            var schoolyear = SchoolTestContext.AdminGradeSl.SchoolYearService.GetSchoolYearById(c.SchoolYearRef);
+            var department = SysAdminMasterLocator.ChalkableDepartmentService.Add("testDepartment", new List<string> { "k", "l" }, null);
+            SchoolTestContext.AdminGradeSl.CourseService.Edit(c.CourseRef, "test", "test", null, department.Id);
+            var roles = new List<int>
+                {
+                    CoreRoles.ADMIN_GRADE_ROLE.Id,
+                    CoreRoles.ADMIN_VIEW_ROLE.Id,
+                    CoreRoles.ADMIN_EDIT_ROLE.Id,
+                    CoreRoles.TEACHER_ROLE.Id,
+                    CoreRoles.STUDENT_ROLE.Id
+                };
+
+            var appinfo = ApplicationServiceTest.PrepareDefaultAppInfo(SysAdminMasterLocator, devContext.Developer.Id, "app1", "http://app1.com");
+            var applicationPriceInfo = ApplicationPricesInfo.Create(5, 10, 15);
+            appinfo.ApplicationPrices = applicationPriceInfo;
+            var gradeLevelsIds = SchoolTestContext.AdminGradeSl.GradeLevelService.GetGradeLevels().Select(x => x.Id).ToList();
+            var liveApp = SchoolTestContext.AdminGradeSl.ServiceLocatorMaster.ApplicationService
+                .GetApplicationById(ApplicationServiceTest.CreateLiveApp(SysAdminMasterLocator, devContext, appinfo).OriginalRef.Value);
+
+            Assert.IsFalse(SchoolTestContext.FirstTeacherSl.AppMarketService.CanInstall(liveApp.Id, null, null, null, null, null));
+            Assert.IsFalse(SchoolTestContext.AdminGradeSl.AppMarketService.CanInstall(liveApp.Id, null, null, null, null, null));
+
+            var fundRequest = SchoolTestContext.AdminGradeSl.ServiceLocatorMaster
+                .FundService.RequestByPurchaseOrder(SchoolTestContext.School.Id, null, 1000, 250, 250, 250, 0, "xxx", null);
+            SysAdminMasterLocator.FundService.ApproveReject(fundRequest.Id, true);
           
-        //    var schoolyear = SchoolTestContext.AdminGradeSl.SchoolYearService.GetCurrentSchoolYear(c.SchoolYearRef);
-        //    var department = SysAdminServiceLocator.ChalkableDepartmentService.Add("testDepartment", new List<string> { "k", "l" }, null);
-        //    devContext.School1AdminSL.RecreateEntities();
-        //    devContext.School1AdminSL.CourseInfoService.Edit(mathClass.CourseInfoId, "test", "test", null, department.Id);
+            var departments =SysAdminMasterLocator.ChalkableDepartmentService.GetChalkableDepartments().Select(x => x.Id).ToList();
 
+            Assert.IsFalse(SchoolTestContext.FirstTeacherSl.AppMarketService.CanInstall(liveApp.Id, devContext.AdminGrade.Id, null, null, null, null));
+            Assert.IsTrue(SchoolTestContext.FirstTeacherSl.AppMarketService.CanInstall(liveApp.Id, null, null, null, null, departments));
+            Assert.IsTrue(SchoolTestContext.FirstTeacherSl.AppMarketService.CanInstall(liveApp.Id, null, null, null, gradeLevelsIds, null));
+            Assert.IsTrue(SchoolTestContext.FirstTeacherSl.AppMarketService.CanInstall(liveApp.Id, null, roles, null, null, null));
+            Assert.IsTrue(SchoolTestContext.AdminGradeSl.AppMarketService.CanInstall(liveApp.Id, null, null, new List<Guid> {  c.Id }, null, null));
+            Assert.IsTrue(SchoolTestContext.FirstStudentSl.AppMarketService.CanInstall(liveApp.Id, null, null, null, null, null));
 
-        //    var roles = new List<int>();
-        //    roles.Add(SysAdminServiceLocator.UserService.GetRoleByName(CoreRoles.ADMIN_GRADE_ROLE.Name).Id);
-        //    roles.Add(SysAdminServiceLocator.UserService.GetRoleByName(CoreRoles.ADMIN_VIEW_ROLE.Name).Id);
-        //    roles.Add(SysAdminServiceLocator.UserService.GetRoleByName(CoreRoles.ADMIN_EDIT_ROLE.Name).Id);
-        //    roles.Add(SysAdminServiceLocator.UserService.GetRoleByName(CoreRoles.TEACHER_ROLE.Name).Id);
-        //    roles.Add(SysAdminServiceLocator.UserService.GetRoleByName(CoreRoles.STUDENT_ROLE.Name).Id);
+            Assert.IsTrue(SchoolTestContext.FirstTeacherSl.AppMarketService.CanInstall(liveApp.Id, null, null, new List<Guid> { c.Id }, null, null));
+            Assert.IsTrue(SchoolTestContext.FirstTeacherSl.AppMarketService.CanInstall(liveApp.Id, null, null, null, null, null));
+            Assert.IsTrue(SchoolTestContext.FirstTeacherSl.AppMarketService.CanInstall(liveApp.Id, SchoolTestContext.FirstTeacher.Id, null, null, null, null));
+            Assert.IsTrue(SchoolTestContext.FirstStudentSl.AppMarketService.CanInstall(liveApp.Id, SchoolTestContext.FirstStudent.Id, null, null, null, null));
 
-        //    var applicationPriceInfo = ApplicationPricesInfo.Create(5, 10, 15);
-        //    BaseApplicationInfo appInfo;
-        //    var application = devContext.School1AdminSL.ApplicationService.GetApplicationById(ApplicationServiceTest
-        //          .CreateDefualt(devContext, out appInfo, ApplicationStateEnum.Live, null, "app1", "http://app1.com", applicationPriceInfo).OriginalRef.Value);
+            SchoolTestContext.FirstTeacherSl.AppMarketService.Install(liveApp.Id, null, null, new List<Guid> { c.Id }
+                , null, null, schoolyear.Id, DateTime.UtcNow);
+           
+            Assert.IsFalse(SchoolTestContext.FirstTeacherSl.AppMarketService.CanInstall(liveApp.Id, null, null, new List<Guid> { c.Id }, null, null));
+            Assert.IsFalse(SchoolTestContext.FirstTeacherSl.AppMarketService.CanInstall(liveApp.Id, SchoolTestContext.FirstTeacher.Id, null, null, null, null));
+            Assert.IsFalse(SchoolTestContext.FirstTeacherSl.AppMarketService.CanInstall(liveApp.Id, null, null, null, null, null));
+            Assert.IsFalse(SchoolTestContext.FirstStudentSl.AppMarketService.CanInstall(liveApp.Id, SchoolTestContext.FirstStudent.Id, null, null, null, null));
+            var appInstalls = SchoolTestContext.FirstTeacherSl.AppMarketService.ListInstalledAppInstalls(SchoolTestContext.FirstTeacher.Id);
+            foreach (var appInstall in appInstalls)
+            {
+                SchoolTestContext.FirstTeacherSl.AppMarketService.Uninstall(appInstall.Id);
+            }
+            Assert.IsTrue(SchoolTestContext.FirstTeacherSl.AppMarketService.CanInstall(liveApp.Id, devContext.FirstTeacher.Id, null, null, null, null));
+            appinfo.ApplicationAccessInfo.CanAttach = false;
+            appinfo.ApplicationAccessInfo.HasStudentMyApps = false;
+            appinfo.ApplicationAccessInfo.HasTeacherMyApps = false;
 
-        //    Assert.IsFalse(devContext.School1TeacherSL.AppMarketService.CanInstall(application.Id, null, null, null, null, null));
-        //    Assert.IsFalse(devContext.School1AdminSL.AppMarketService.CanInstall(application.Id, null, null, null, null, null));
+            appinfo = ApplicationServiceTest.PrepareDefaultAppInfo(SysAdminMasterLocator, devContext.Developer.Id, "app2", "http://test.app2.com");
+            appinfo.ApplicationAccessInfo = ApplicationAccessInfo.Create(false, false, false, false, false, false);
+            appinfo.ApplicationPrices = applicationPriceInfo;
+            liveApp = SchoolTestContext.AdminGradeSl.ServiceLocatorMaster.ApplicationService
+                .GetApplicationById(ApplicationServiceTest.CreateLiveApp(SysAdminMasterLocator, devContext, appinfo).OriginalRef.Value);
 
-        //    var fundRequest = devContext.School1AdminSL.FundService.RequestByPurchaseOrder(schoolyear.SchoolInfoRef, null, 1000, 250, 250, 250, 0, "xxx", null);
-        //    SysAdminServiceLocator.FundService.ApproveReject(fundRequest.Id, true);
-        //    devContext.School1TeacherSL.RecreateEntities();
-        //    devContext.School1AdminSL.RecreateEntities();
+            AssertException<Exception>(() => devContext.FirstTeacherSl.AppMarketService.CanInstall(liveApp.Id, null, null, null, null, null));
+            AssertException<Exception>(() => devContext.FirstStudentSl.AppMarketService.CanInstall(liveApp.Id, devContext.FirstStudent.Id, null, null, null, null));
 
-        //    var departments = devContext.School1AdminSL.ChalkableDepartmentService.List().Select(x => x.Id).ToList();
-
-        //    Assert.IsFalse(devContext.School1TeacherSL.AppMarketService.CanInstall(application.Id, devContext.School1Admin.Id, null, null, null, null));
-        //    Assert.IsTrue(devContext.School1TeacherSL.AppMarketService.CanInstall(application.Id, null, null, null, null, departments));
-        //    Assert.IsTrue(devContext.School1TeacherSL.AppMarketService.CanInstall(application.Id, null, null, null, appInfo.GradeLevels, null));
-        //    Assert.IsTrue(devContext.School1TeacherSL.AppMarketService.CanInstall(application.Id, null, roles, null, null, null));
-        //    Assert.IsTrue(devContext.School1AdminSL.AppMarketService.CanInstall(application.Id, null, null, new List<int> { mathClass.ClassId }, null, null));
-        //    Assert.IsTrue(devContext.School1StudentSL.AppMarketService.CanInstall(application.Id, null, null, null, null, null));
-
-        //    Assert.IsTrue(devContext.School1TeacherSL.AppMarketService.CanInstall(application.Id, null, null, new List<int> { mathClass.ClassId }, null, null));
-        //    Assert.IsTrue(devContext.School1TeacherSL.AppMarketService.CanInstall(application.Id, null, null, null, null, null));
-        //    Assert.IsTrue(devContext.School1TeacherSL.AppMarketService.CanInstall(application.Id, devContext.School1Teacher.Id, null, null, null, null));
-        //    Assert.IsTrue(devContext.School1StudentSL.AppMarketService.CanInstall(application.Id, devContext.School1Student.Id, null, null, null, null));
-
-        //    devContext.School1TeacherSL.AppMarketService.Install(application.Id, devContext.School1Id, null, null,
-        //                                                          new List<int> { mathClass.ClassId }, null, null, schoolyear.Id,
-        //                                                          DateTime.UtcNow);
-        //    Assert.IsFalse(devContext.School1TeacherSL.AppMarketService.CanInstall(application.Id, null, null, new List<int> { mathClass.ClassId }, null, null));
-        //    Assert.IsFalse(devContext.School1TeacherSL.AppMarketService.CanInstall(application.Id, devContext.School1Teacher.Id, null, null, null, null));
-        //    Assert.IsFalse(devContext.School1TeacherSL.AppMarketService.CanInstall(application.Id, null, null, null, null, null));
-        //    Assert.IsFalse(devContext.School1StudentSL.AppMarketService.CanInstall(application.Id, devContext.School1Student.Id, null, null, null, null));
-        //    var appInstalls = devContext.School1TeacherSL.AppMarketService.ListInstalledAppInstalls(devContext.School1Teacher.Id);
-        //    foreach (var appInstall in appInstalls)
-        //    {
-        //        devContext.School1TeacherSL.AppMarketService.Uninstall(appInstall.Id);
-        //    }
-        //    Assert.IsTrue(devContext.School1TeacherSL.AppMarketService.CanInstall(application.Id, devContext.School1Teacher.Id, null, null, null, null));
-        //    appInfo.ApplicationAccessInfo.CanAttach = false;
-        //    appInfo.ApplicationAccessInfo.HasStudentMyApps = false;
-        //    appInfo.ApplicationAccessInfo.HasTeacherMyApps = false;
-
-        //    application = devContext.School1AdminSL.ApplicationService.GetApplicationById(ApplicationServiceTest
-        //        .CreateDefualt(devContext, out appInfo, ApplicationStateEnum.Live, ApplicationAccessInfo.Create(false, false, false, false, false, false),
-        //         "app2", "http://app2.com", applicationPriceInfo).OriginalRef.Value);
-
-        //    AssertException<Exception>(() => devContext.School1TeacherSL.AppMarketService.CanInstall(application.Id, null, null, null, null, null));
-        //    AssertException<Exception>(() => devContext.School1StudentSL.AppMarketService.CanInstall(application.Id, devContext.School1Student.Id, null, null, null, null));
-
-        //}
+        }
 
 
     }

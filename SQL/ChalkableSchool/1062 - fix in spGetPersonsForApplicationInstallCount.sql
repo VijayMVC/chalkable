@@ -53,7 +53,7 @@ declare @preResult table
 (
 [Type] int not null,
 GroupId nvarchar(256) not null,
-personId uniqueidentifier not null
+PersonId uniqueidentifier not null
 );
 declare @localPersons table
 (
@@ -199,7 +199,8 @@ Insert into @preResult
 select 4, cast(Id as nvarchar(256)), Id
 from @localPersons
 
-select * from @preResult
+select * 
+from @preResult
 
 GO
 

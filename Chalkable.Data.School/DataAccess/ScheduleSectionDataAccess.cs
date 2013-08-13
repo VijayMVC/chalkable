@@ -14,34 +14,11 @@ namespace Chalkable.Data.School.DataAccess
         public ScheduleSectionDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-
-//        public void Update(IList<ScheduleSection> scheduleSections)
-//        {
-//            var b = new StringBuilder();
-//            var parameters = new Dictionary<string, object>();
-//            var index = 0;
-//            if (scheduleSections != null && scheduleSections.Count > 0)
-//            {
-//                foreach (var scheduleSection in scheduleSections)
-//                {
-//                    b.AppendFormat(@" update ScheduleSection  set Number = @{0}, Name = @{1}, MarkingPeriodRef = @{2}
-//                                  where Id = @{3} ", "number_" + index, "name_" + index, "markingPeriodId_" + index, "Id_" + index);
-                    
-//                    parameters.Add("name_" + index, scheduleSection.Name);
-//                    parameters.Add("number_" + index, scheduleSection.Number);
-//                    parameters.Add("Id_" + index, scheduleSection.Id);
-//                    parameters.Add("markingPeriodId_" + index, scheduleSection.MarkingPeriodRef);
-//                    index++;
-//                }
-//                ExecuteNonQueryParametrized(b.ToString(), parameters);
-//            }
-//        }
-        
         public void Delete(ScheduleSection scheduleSection)
         {
             var b = new StringBuilder();
             b.Append(@"delete from ClassPeriod where PeriodRef in (select Id from Period where SectionRef = @sectionRef) ");
-            var query = Orm.SimpleDelete<Period>(new AndQueryCondition {{"sectionRef", scheduleSection.Id}});
+            var query = Orm.SimpleDelete<Period>(new AndQueryCondition {{Period.SECTION_REF, scheduleSection.Id}});
             b.Append(" " + query.Sql + " ");
             var deleteSectionQuery = Orm.SimpleDelete(scheduleSection);
             b.Append(" " + deleteSectionQuery.Sql + " ");
@@ -69,22 +46,14 @@ namespace Chalkable.Data.School.DataAccess
       
         public IList<ScheduleSection> GetSections(Guid markingPeriodId, int? fromNumber, int? tillNumber)
         {
-            var conds = new Dictionary<string, object> {{"@markingPeriodRef", markingPeriodId}};
-            var b = new StringBuilder();
-            b.Append(@"select * from ScheduleSection 
-                       where MarkingPeriodRef = @markingPeriodRef");
+            var conds = new AndQueryCondition { {ScheduleSection.MARKING_PERIOD_REF_FIELD, markingPeriodId} };
             if (fromNumber.HasValue)
-            {
-                conds.Add("fromNumber", fromNumber);
-                b.Append(" and Number >= @fromNumber");
-            }
+                conds.Add(ScheduleSection.NUMBER_FIELD, "fromNumber", fromNumber.Value, ConditionRelation.GreaterEqual);
             if (tillNumber.HasValue)
-            {
-                conds.Add("tillNumber", tillNumber);
-                b.Append(" and Number <= @tillNumber ");
-            }
-            b.Append("  order by ScheduleSection.Number ");
-            return ReadMany<ScheduleSection>(new DbQuery(b, conds));
+                conds.Add(ScheduleSection.NUMBER_FIELD, "tillNumber", tillNumber.Value, ConditionRelation.LessEqual);
+            var dbQuery = Orm.SimpleSelect<ScheduleSection>(conds);
+            dbQuery.Sql.AppendFormat("  order by ScheduleSection.{0} ", ScheduleSection.NUMBER_FIELD);
+            return ReadMany<ScheduleSection>(dbQuery);
         } 
 
         public IList<ScheduleSection> GetSections(IList<Guid> markingPeriodIds)
