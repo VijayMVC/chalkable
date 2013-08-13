@@ -1,6 +1,8 @@
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.apps.AppInfoViewData');
 REQUIRE('chlk.models.common.NameId');
+REQUIRE('chlk.models.id.AppGradeLevelId');
+REQUIRE('chlk.models.apps.AppGradeLevel');
 
 NAMESPACE('chlk.templates.apps', function () {
 
@@ -22,7 +24,7 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.apps.AppCategory), 'categories',
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.common.NameId), 'gradeLevels',
+            ArrayOf(chlk.models.apps.AppGradeLevel), 'gradeLevels',
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.apps.AppPermission), 'permissions'
 

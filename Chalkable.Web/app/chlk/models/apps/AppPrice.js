@@ -8,6 +8,27 @@ NAMESPACE('chlk.models.apps', function () {
             [ria.serialize.SerializeProperty('priceperclass')],
             Number, 'pricePerClass',
             [ria.serialize.SerializeProperty('priceperschool')],
-            Number, 'pricePerSchool'
+            Number, 'pricePerSchool',
+
+
+            function $(price_, pricePerClass_, pricePerSchool_){
+                if (price_)
+                    this.setPrice(price_);
+                if (pricePerClass_){
+                    this.setPricePerClass(pricePerClass_);
+                }
+                if (pricePerSchool_){
+                    this.setPricePerSchool(pricePerSchool_);
+                }
+            },
+
+
+            Object, function getPostData(){
+               return {
+                   price: this.getPrice(),
+                   priceperclass: this.getPricePerClass(),
+                   priceperschool: this.getPricePerSchool()
+               }
+            }
         ]);
 });

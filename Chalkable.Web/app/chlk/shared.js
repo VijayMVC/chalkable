@@ -145,19 +145,13 @@ var GradingStyler = {
     }
 };
 
+function debugPrint(name, obj){
+    console.log(name, 'start');
+    for (var prop in obj){
 
-/*var logonShowed = false;
-
-jQuery('.logout-area').click(function(){
-    var elem = jQuery(this).parent().find('a');
-    if(!logonShowed){
-        jQuery(elem).css("visibility", "visible");
-        elem.animate({opacity: 1}, 200);
-    }else{
-        elem.animate({opacity: 0}, 200, function(){
-            jQuery(elem).css("visibility", "hidden");
-        });
-
+        if (obj.hasOwnProperty(prop) && prop.indexOf('get') != -1){
+            console.log(prop, obj[prop]());
+        }
     }
-    logonShowed = !logonShowed;
-});*/
+    console.log(name, 'end');
+}
