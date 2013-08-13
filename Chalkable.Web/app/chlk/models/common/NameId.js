@@ -4,6 +4,14 @@ NAMESPACE('chlk.models.common', function () {
     CLASS(
         'NameId', [
             Number, 'id',
-            String, 'name'
+            String, 'name',
+
+            [[Number, String]],
+            function $(id_, name_){
+                if (id_)
+                    this.setId(id_);
+                if (name_)
+                    this.setName(name_);
+            }
         ]);
 });

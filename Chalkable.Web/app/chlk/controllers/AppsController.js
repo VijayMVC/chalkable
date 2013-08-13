@@ -8,6 +8,7 @@ REQUIRE('chlk.activities.apps.AppInfoPage');
 REQUIRE('chlk.activities.apps.AddAppDialog');
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.apps.AppPostData');
+REQUIRE('chlk.models.apps.ShortAppInfo');
 REQUIRE('chlk.models.apps.AppAccess');
 REQUIRE('chlk.models.apps.AppState');
 REQUIRE('chlk.models.id.AppId');
@@ -71,32 +72,17 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(data){
                     var cats = data.getItems();
                     var gradeLevels = this.gradeLevelService.getGradeLevels();
-                    var permissions = [
-                        new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(1), "User", 1),
-                        new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(2), "Class", 2),
-                        new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(3), "Grade", 3),
-                        new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(4), "Announcement", 4),
-                        new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(5), "Attendance", 5),
-                        new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(6), "Discipline", 6),
-                        new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(7), "Message", 7),
-                        new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(8), "Schedule", 8)
-                    ];
-
-
-
+                    var permissions = this.appsService.getAppPermissions();
                     var appGradeLevels = app_.getGradeLevels();
                     if (!appGradeLevels) app_.setGradeLevels([]);
                     var appCategories = app_.getCategories();
                     if (!appCategories) app_.setCategories([]);
-
 
                     if (!app_.getState()){
                         var appState = new chlk.models.apps.AppState();
                         appState.deserialize(chlk.models.apps.AppStateEnum.DRAFT);
                         app_.setState(appState);
                     }
-
-
 
                     if (!app_.getAppAccess())
                         app_.setAppAccess(new chlk.models.apps.AppAccess());
@@ -195,8 +181,73 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.apps.AppPostData]],
         function updateDeveloperAction(model){
-             //update all apps list
+             var shortAppData = new chlk.models.apps.ShortAppInfo(
+                model.getName(),
+                model.getUrl(),
+                model.getVideoModeUrl(),
+                model.getShortDescription(),
+                model.getLongDescription()
+             );
 
+                //small pic id,
+                //big pic id
+
+             var appAccess = new chlk.models.apps.AppAccess(
+                 model.isHasStudentMyApps(),
+                 model.isHasTeacherMyApps(),
+                 model.isHasAdminMyApps(),
+                 model.isHasParentMyApps(),
+                 model.isCanAttach(),
+                 model.isShowInGradingView()
+             );
+
+
+             var appPriceInfo = new chlk.models.apps.AppPrice(
+                 model.getPrice(),
+                 model.getPricePerClass(),
+                 model.getPricePerSchool()
+             );
+
+             var pictures = [];
+
+
+
+
+
+             var cats = model.getCategories() ? model.getCategories().split(',').map(function(item){
+                 return new chlk.models.id.AppCategoryId(item)
+             }) : [];
+
+
+             var gradeLevels = model.getGradeLevels() ? model.getGradeLevels().split(',').map(function(item){
+                 return new chlk.models.id.GradeLevelId(item)
+             }) : [];
+
+             var appPermissions = model.getPermissions() ? model.getPermissions().split(',').map(function(item){
+                 return new chlk.models.id.AppPermissionId(item)
+             }) : [];
+
+
+             var result = this.appsService
+                 .updateApp(
+                     model.getId(),
+                     shortAppData,
+                     appPermissions,
+                     appPriceInfo,
+                     this.getCurrentPerson().getId(),
+                     appAccess,
+                     cats,
+                     pictures,
+                     gradeLevels,
+                     !model.isDraft()
+                 )
+                 .then(function(updatedApp){
+                     this.switchApp(updatedApp);
+                 }, this)
+                     .then(function(){
+                         return this.forward_('apps', 'details', []);
+                     }, this);
+             return result;
         }
     ])
 });

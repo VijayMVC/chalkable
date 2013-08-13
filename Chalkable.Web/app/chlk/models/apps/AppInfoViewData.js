@@ -1,7 +1,7 @@
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.apps.AppCategory');
 REQUIRE('chlk.models.apps.AppPermission');
-REQUIRE('chlk.models.common.NameId');
+REQUIRE('chlk.models.apps.AppGradeLevel');
 
 
 NAMESPACE('chlk.models.apps', function () {
@@ -12,13 +12,13 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.apps.Application, 'app',
             ArrayOf(chlk.models.apps.Application), 'apps',
             ArrayOf(chlk.models.apps.AppCategory), 'categories',
-            ArrayOf(chlk.models.common.NameId), 'gradeLevels',
+            ArrayOf(chlk.models.apps.AppGradeLevel), 'gradeLevels',
             ArrayOf(chlk.models.apps.AppPermission), 'permissions',
             Boolean, 'empty',
             Boolean, 'readOnly',
             Boolean, 'draft',
 
-            [[chlk.models.apps.Application, Boolean, ArrayOf(chlk.models.apps.AppCategory), ArrayOf(chlk.models.common.NameId), ArrayOf(chlk.models.apps.AppPermission), Boolean]],
+            [[chlk.models.apps.Application, Boolean, ArrayOf(chlk.models.apps.AppCategory), ArrayOf(chlk.models.apps.AppGradeLevel), ArrayOf(chlk.models.apps.AppPermission), Boolean]],
             function $(app_, isReadonly, categories, gradeLevels, permissions, isDraft){
                 if (app_)
                     this.setApp(app_);
