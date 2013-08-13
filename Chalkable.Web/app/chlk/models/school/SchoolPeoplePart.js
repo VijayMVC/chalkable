@@ -7,7 +7,6 @@ NAMESPACE('chlk.models.school', function () {
     CLASS(
         'SchoolPeoplePart', [
             chlk.models.common.PaginatedList, 'users',
-            Boolean, 'byLastName',
             Number, 'selectedIndex',
 
             chlk.models.id.SchoolId, 'schoolId',

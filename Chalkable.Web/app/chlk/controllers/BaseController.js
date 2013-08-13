@@ -64,12 +64,13 @@ NAMESPACE('chlk.controllers', function (){
                return this.getContext().getSession().get('role');
            },
 
-           [[String, String, Array]],
-           function ShowMsgBox(text, header_, buttons_) {
+           [[String, String, Array, String]],
+           function ShowMsgBox(text, header_, buttons_, clazz_) {
                var instance = new chlk.activities.common.InfoMsgDialog();
                var model = new chlk.models.common.InfoMsg();
                var buttons = [];
                model.setText(text);
+               model.setClazz(clazz_ || '');
                model.setHeader(header_);
                if(buttons_){
                    var serializer = new ria.serialize.JsonSerializer();

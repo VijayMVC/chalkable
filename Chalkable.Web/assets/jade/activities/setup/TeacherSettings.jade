@@ -61,7 +61,11 @@
             a(href="mailto:someEmail@gmail.com?Subject=Classes setup mistake")#mistake=Msg.Mistake
         #settings-step1
             label#how-grade.blue-arrow.div=Msg.How_do_you_grade_students_in(classInfo.getName())
-            +Button(type="button")#tell-button.special-button2.blue=Msg.Tell_Chalkable.toUpperCase()
+            +Button()(
+                type="submit",
+                name="submitType",
+                value="message"
+            )#tell-button.special-button2.blue=Msg.Tell_Chalkable.toUpperCase()
         #settings-step2.x-hidden
             label#percents-label.blue-arrow.div=Msg.Student_grades_are_out_of(classInfo.getName())
                 -per = self.getPercentsSum();

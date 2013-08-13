@@ -165,39 +165,48 @@ NAMESPACE('chlk.controllers', function (){
                             text: Msg.Cancel,
                             color: chlk.models.common.ButtonColor.GREEN.valueOf(),
                             close: true
-                        }])
+                        }], 'center')
                     }else{
                         return this.redirect_('setup', action, params);
                     }
 
                 }else{
-                    var finalGradeAnnouncementTypes = [], item, ids = model.getFinalGradeAnnouncementTypeIds().split(','),
-                        percents = model.getPercents().split(','),
-                        dropLowest = model.getDropLowest().split(','),
-                        gradingStyle = model.getGradingStyleByType().split(',');
-                    ids.forEach(function(id, i){
-                        item = {};
-                        item.finalGradeAnnouncementTypeId = id;
-                        item.percentValue = JSON.parse(percents[i]);
-                        item.dropLowest = JSON.parse(dropLowest[i]);
-                        item.gradingStyle =JSON.parse(gradingStyle[i]);
-                        finalGradeAnnouncementTypes.push(item)
-                    });
+                    if(submitType == "message"){
+                        if(index > 1)
+                            this.ShowMsgBox('To make things easier we copy and\npaste your choices from the last page.\n\n'+
+                                    'Click any number to change it.', 'fyi.', [{
+                                text: Msg.GOT_IT.toUpperCase(),
+                                close: true
+                            }])
+                    }else{
+                        var finalGradeAnnouncementTypes = [], item, ids = model.getFinalGradeAnnouncementTypeIds().split(','),
+                            percents = model.getPercents().split(','),
+                            dropLowest = model.getDropLowest().split(','),
+                            gradingStyle = model.getGradingStyleByType().split(',');
+                        ids.forEach(function(id, i){
+                            item = {};
+                            item.finalGradeAnnouncementTypeId = id;
+                            item.percentValue = JSON.parse(percents[i]);
+                            item.dropLowest = JSON.parse(dropLowest[i]);
+                            item.gradingStyle =JSON.parse(gradingStyle[i]);
+                            finalGradeAnnouncementTypes.push(item)
+                        });
 
-                    var classes = this.classService.getClassesForTopBar();
+                        var classes = this.classService.getClassesForTopBar();
 
-                    this.finalGradeService.update(model.getId(), model.getParticipation(), model.getAttendance(), model.getDropLowestAttendance(),
-                        model.getDiscipline(), model.getDropLowestDiscipline(), model.getGradingStyle(), finalGradeAnnouncementTypes, model.isNeedsTypesForClasses())
-                        .then(function(model){
+                        this.finalGradeService.update(model.getId(), model.getParticipation(), model.getAttendance(), model.getDropLowestAttendance(),
+                            model.getDiscipline(), model.getDropLowestDiscipline(), model.getGradingStyle(), finalGradeAnnouncementTypes, model.isNeedsTypesForClasses())
+                            .then(function(model){
 
-                            if(index < classes.length){
-                                this.redirect_('setup', 'teacherSettings', [index]);
-                            }else{
-                                this.redirect_('setup', 'start', []);
-                            }
+                                if(index < classes.length){
+                                    this.redirect_('setup', 'teacherSettings', [index]);
+                                }else{
+                                    this.redirect_('setup', 'start', []);
+                                }
 
-                        }.bind(this));
-                    return this.StartLoading(chlk.activities.setup.TeacherSettingsPage);
+                            }.bind(this));
+                        return this.StartLoading(chlk.activities.setup.TeacherSettingsPage);
+                    }
                 }
             },
 
