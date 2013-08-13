@@ -308,6 +308,7 @@ var Msg = {
     First_name: 'First name',
     General_Information: 'General Information',
     Go_Back: 'Go Back',
+    GOT_IT: 'Got It',
     GPA: 'GPA',
     GradeLevel: 'GradeLevel',
     Grade_Level: 'Grade Level',

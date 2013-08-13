@@ -132,21 +132,21 @@
         }
     }
 </script>
-    <script type="">
+   <script type="">
     var changeFullName = function (newFullName) {
         window.fullName = newFullName;
         window.fullName = window.fullName.replace(/\.+/g, '.');
         var logOutBlock = $('#logout-block').find('.logout-area')[0];
         $(logOutBlock).html(fullName);
     };
-    changeFullName('@ViewData["FullName"]'); 
+    changeFullName('@ViewData["FullName"]');
     var currentSchoolId = '@ViewData["SchoolId"]';
     var currentSchoolName = '@ViewData["SchoolName"]';
     var newNotifications = parseInt('@ViewData["UnshownNotificationsCount"]', 10) || 0;
     var azurePictureUrl = 'http://chalkable1.blob.core.windows.net/pictureconteiner/pictureconteiner_blob_';
-    
+
     var USER_ROLE_EXT = '@ViewData["Rolename"]';
-    var currentChlkPerson = JSON.parse(HtmlEncode('@ViewData["CurrentPerson"]')).data;
+    var currentChlkPerson = '@ViewData["CurrentPerson"]' ? JSON.parse(HtmlEncode('@ViewData["CurrentPerson"]')).data : null;
     var classesToFilter = '@ViewData["Classes"]' ? JSON.parse(HtmlEncode('@ViewData["Classes"]')).data || [] : [];
 
     var classesAdvancedData = '@ViewData["ClassesAdvancedData"]' ? JSON.parse(HtmlEncode('@ViewData["ClassesAdvancedData"]')).data || [] : [];
@@ -158,8 +158,8 @@
         };
     });
 
-    var markingPeriod = JSON.parse(HtmlEncode('@ViewData["MarkingPeriod"]')).data;
-    var nextMarkingPeriod = JSON.parse(HtmlEncode('@ViewData["NextMarkingPeriod"]')).data;
+    var markingPeriod = '@ViewData["MarkingPeriod"]' ? JSON.parse(HtmlEncode('@ViewData["MarkingPeriod"]')).data : null;
+    var nextMarkingPeriod = '@ViewData["NextMarkingPeriod"]' ? JSON.parse(HtmlEncode('@ViewData["NextMarkingPeriod"]')).data : null;
 
     var finalizedClassesIds = '@ViewData["FinalizedClassesIds"]' ? JSON.parse(HtmlEncode('@ViewData["FinalizedClassesIds"]')).data || [] : [];
 
