@@ -208,7 +208,7 @@ namespace Chalkable.Tests.Services.School
             {
                 SchoolTestContext.FirstTeacherSl.AppMarketService.Uninstall(appInstall.Id);
             }
-            Assert.IsTrue(SchoolTestContext.FirstTeacherSl.AppMarketService.CanInstall(liveApp.Id, devContext.FirstTeacher.Id, null, null, null, null));
+            Assert.IsTrue(SchoolTestContext.FirstTeacherSl.AppMarketService.CanInstall(liveApp.Id, SchoolTestContext.FirstTeacher.Id, null, null, null, null));
             appinfo.ApplicationAccessInfo.CanAttach = false;
             appinfo.ApplicationAccessInfo.HasStudentMyApps = false;
             appinfo.ApplicationAccessInfo.HasTeacherMyApps = false;
