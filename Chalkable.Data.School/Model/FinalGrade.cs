@@ -6,6 +6,7 @@ namespace Chalkable.Data.School.Model
 {
     public class FinalGrade
     {
+        public const string ID_FIELD = "Id";
         public virtual Guid Id { get; set; }
         public FinalGradeStatus Status { get; set; }
         public int ParticipationPercent { get; set; }

@@ -19,14 +19,14 @@ namespace Chalkable.Data.School.DataAccess
         public void FullDelete(Guid id)
         {
             var b = new StringBuilder();
-            var conds = new AndQueryCondition {{"ClassPeriodRef", id}};
+            var conds = new AndQueryCondition {{ClassAttendance.CLASS_PERIOD_REF_FIELD, id}};
             var deleteAttQ = Orm.SimpleDelete<ClassAttendance>(conds);
 
             b.Append(deleteAttQ.Sql).Append(" ");
             b.Append(Orm.SimpleDelete<ClassDiscipline>(conds).Sql).Append(" ");
-            
-            conds.Add("Id", id);
-            var classPeriodQ = Orm.SimpleDelete<ClassPeriod>(new AndQueryCondition {{"Id", id}});
+
+            conds.Add(ClassPeriod.ID_FIELD, id);
+            var classPeriodQ = Orm.SimpleDelete<ClassPeriod>(new AndQueryCondition {{ClassPeriod.ID_FIELD, id}});
             b.Append(classPeriodQ.Sql);
             
             var allParams = deleteAttQ.Parameters;
@@ -84,19 +84,21 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<Class> GetAvailableClasses(Guid periodId)
         {
-            var sql = @"select c.* from ClassPeriod cp
-                        join Class c on c.Id = cp.ClassRef
-                        where cp.PeriodRef = @periodId";
-            var conds = new Dictionary<string, object> {{"periodId", periodId}};
-            return ReadMany<Class>(new DbQuery(sql, conds));
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.Append(@"select c.* from ClassPeriod 
+                                 join Class c on c.Id = ClassPeriod.ClassRef");
+            var conds = new AndQueryCondition { { ClassPeriod.PERIOD_REF_FIELD, periodId } };
+            conds.BuildSqlWhere(dbQuery, typeof(ClassPeriod).Name);
+            return ReadMany<Class>(dbQuery);
         } 
         public IList<Room> GetAvailableRooms(Guid periodId)
         {
-            var sql = @"select r.* from ClassPeriod cp 
-                        join Room r on r.Id = cp.RoomRef
-                        where cp.PeriodRef = @periodId";
-            var conds = new Dictionary<string, object> { { "periodId", periodId } };
-            return ReadMany<Room>(new DbQuery(sql, conds));
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.Append(@"select r.* from ClassPeriod  
+                                 join Room r on r.Id = ClassPeriod.RoomRef");
+            var conds = new AndQueryCondition {{ClassPeriod.PERIOD_REF_FIELD, periodId}};
+            conds.BuildSqlWhere(dbQuery, typeof(ClassPeriod).Name);
+            return ReadMany<Room>(dbQuery);
         } 
 
 

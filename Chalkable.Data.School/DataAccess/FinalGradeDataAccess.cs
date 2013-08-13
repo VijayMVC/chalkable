@@ -46,7 +46,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public bool Exists(Guid id)
         {
-            return Exists<FinalGrade>(new AndQueryCondition { { "Id", id } });
+            return Exists<FinalGrade>(new AndQueryCondition { { FinalGrade.ID_FIELD, id } });
         }
         
 

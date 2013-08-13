@@ -19,12 +19,7 @@ namespace Chalkable.Data.School.DataAccess
         //TODO: build generel method for list deleting 
         public void Delete(List<MarkingPeriodClass> markingPeriodClasses)
         {
-            var b = new StringBuilder();
-            foreach (var markingPeriodClass in markingPeriodClasses)
-            {
-                b.AppendFormat("delete from MarkingPeriodClass where Id = '{0}' ", markingPeriodClass.Id);
-            }
-            ExecuteNonQueryParametrized(b.ToString(), new Dictionary<string, object>());
+            SimpleDelete<MarkingPeriodClass>(markingPeriodClasses);
         }
        
         public void Delete(MarkingPeriodClassQuery query)
@@ -61,7 +56,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             var res = new AndQueryCondition();
             if(query.Id.HasValue)
-                res.Add("Id", query.Id);
+                res.Add(MarkingPeriodClass.ID_FIELD, query.Id);
             if(query.ClassId.HasValue)
                 res.Add(MarkingPeriodClass.CLASS_REF_FIELD, query.ClassId);
             if(query.MarkingPeriodId.HasValue)

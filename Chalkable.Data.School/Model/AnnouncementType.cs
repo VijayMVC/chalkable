@@ -6,6 +6,7 @@ namespace Chalkable.Data.School.Model
 {
     public class AnnouncementType
     {
+        public const string ID_FIELD = "Id";
         public int Id { get; set; }
         public bool IsSystem { get; set; }
         public string Name { get; set; }

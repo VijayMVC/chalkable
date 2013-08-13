@@ -200,25 +200,25 @@ namespace Chalkable.Data.School.DataAccess
 
         public Announcement GetAnnouncement(Guid id, int roleId, Guid callerId)
         {
-            var b = new StringBuilder();
-            b.Append("select Announcement.* from Announcement ");
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.Append("select Announcement.* from Announcement ");
             bool firstConds = true;
             var conds = new Dictionary<string, object>();
             if (IsAdmin(roleId))
-                b.Append(" where ");
+                dbQuery.Sql.Append(" where ");
             if (CoreRoles.TEACHER_ROLE.Id == roleId)
             {
-                b.Append(@" where Announcement.PersonRef = @callerId 
+                dbQuery.Sql.Append(@" where Announcement.PersonRef = @callerId 
                             or (AnnouncementTypeRef = @adminType and Announcement.Id in (select ar.AnnouncementRef from AnnouncementRecipient ar 
                                                                                           where ar.ToAll = 1 or ar.PersonRef = @callerId or ar.RoleRef = @roleId))");
-                conds.Add("callerId", callerId);
-                conds.Add("adminType", (int)SystemAnnouncementType.Admin);
-                conds.Add("@roleId", roleId);
+                dbQuery.Parameters.Add("callerId", callerId);
+                dbQuery.Parameters.Add("adminType", (int)SystemAnnouncementType.Admin);
+                dbQuery.Parameters.Add("@roleId", roleId);
                 firstConds = false;
             }
             if (CoreRoles.STUDENT_ROLE.Id == roleId)
             {
-                b.Append(@" where (
+                dbQuery.Sql.Append(@" where (
                                         (Announcement.MarkingPeriodClassRef in (select mpc.Id from MarkingPeriodClass mpc
                                                                                join ClassPerson cp on cp.ClassRef = mpc.ClassRef
                                                                                where cp.PersonRef = @callerId)
@@ -230,27 +230,23 @@ namespace Chalkable.Data.School.DataAccess
                                              )
                                  )");
 
-                conds.Add("callerId", callerId);
-                conds.Add("adminType", (int)SystemAnnouncementType.Admin);
-                conds.Add("@roleId", roleId);
+                dbQuery.Parameters.Add("callerId", callerId);
+                dbQuery.Parameters.Add("adminType", (int)SystemAnnouncementType.Admin);
+                dbQuery.Parameters.Add("@roleId", roleId);
                 firstConds = false;
             }
 
-            if (!firstConds) b.Append(" and ");
-            b.Append(" Announcement.Id =@id");
-
-            conds.Add("id", id);
-            using (var reader = ExecuteReaderParametrized(b.ToString(), conds))
-            {
-                return reader.ReadOrNull<Announcement>();
-            }
+            if (!firstConds) dbQuery.Sql.Append(" and ");
+            dbQuery.Sql.Append(" Announcement.Id =@id");
+            dbQuery.Parameters.Add("id", id);
+            return ReadOneOrNull<Announcement>(dbQuery);
         }
 
         public Announcement GetLastDraft(Guid personId)
         {
             var conds = new Dictionary<string, object>
                 {
-                    {"PersonRef", personId},
+                    {Announcement.PERSON_REF_FIELD, personId},
                     {STATE_PARAM, AnnouncementState.Draft}
                 };
             var sql = @"select top 1 * from Announcement 
@@ -281,7 +277,7 @@ namespace Chalkable.Data.School.DataAccess
                 var res = new List<string>();
                 while (reader.Read())
                 {
-                    res.Add(SqlTools.ReadStringNull(reader, "Content"));
+                    res.Add(SqlTools.ReadStringNull(reader, Announcement.CONTENT_FIELD));
                 }
                 return res;
             }

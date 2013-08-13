@@ -220,6 +220,20 @@ namespace Chalkable.Data.Common.Orm
             return res;
         }
 
+        public static DbQuery SimpleDelete<T>(IList<T> objs)
+        {
+            var t = typeof (T);
+            var res = SimpleDelete<T>(new AndQueryCondition());
+            var idProperty = t.GetProperty(ID_FIELD);
+            var ids = objs.Select(x => idProperty.GetValue(x)).ToList();
+            for (int i = 0; i < ids.Count; i++)
+            {
+                res.Parameters.Add("@" + ID_FIELD + "_" + i, ids[0]);
+            }
+            res.Sql.AppendFormat(" where Id in ({0})", res.Parameters.Select(x=>x.Key).JoinString(","));
+            return res;
+        }
+
 
         public static DbQuery SimpleSelect<T>(QueryCondition queryCondition)
         {

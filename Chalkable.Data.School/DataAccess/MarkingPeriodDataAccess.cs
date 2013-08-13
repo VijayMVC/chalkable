@@ -43,15 +43,13 @@ namespace Chalkable.Data.School.DataAccess
 
         public MarkingPeriod GetLast(DateTime tillDate)
         {
+            var q = new DbQuery();
             var sqlCommand = @"select top 1 * from MarkingPeriod 
                                where StartDate <= @{0}
                                order by EndDate desc ";
-            var conds = new Dictionary<string, object>{{TILL_DATE_PARAM, tillDate}};
-            sqlCommand = string.Format(sqlCommand, TILL_DATE_PARAM);
-            using (var reader = ExecuteReaderParametrized(sqlCommand, conds))
-            {
-                return reader.ReadOrNull<MarkingPeriod>();
-            }
+            q.Parameters.Add(TILL_DATE_PARAM, tillDate);
+            q.Sql.AppendFormat(sqlCommand, TILL_DATE_PARAM);
+            return ReadOneOrNull<MarkingPeriod>(q);
         }
 
         public MarkingPeriod GetNextInYear(Guid markingPeriodId)
@@ -72,17 +70,18 @@ namespace Chalkable.Data.School.DataAccess
         {
             var conds = new AndQueryCondition();
             if (schoolYearId.HasValue)
-                conds.Add("schoolYearRef", schoolYearId);
+                conds.Add(MarkingPeriod.SCHOOL_YEAR_REF, schoolYearId);
             return SelectMany<MarkingPeriod>(conds);
         } 
 
         public MarkingPeriod GetMarkingPeriod(DateTime date)
         {
-            var b = new StringBuilder();
-            b.Append(@"select * from MarkingPeriod where StartDate <= @date and EndDate >= @date");
-            var conds = new Dictionary<string, object>();
-            conds.Add("date", date);
-            return ReadOneOrNull<MarkingPeriod>(new DbQuery (b.ToString(), conds));
+            var conds = new AndQueryCondition
+                {
+                    {MarkingPeriod.START_DATE_FIELD, "date1", date, ConditionRelation.LessEqual},
+                    {MarkingPeriod.END_DATE_FIELD, "date2", date, ConditionRelation.GreaterEqual}
+                };
+            return SelectOneOrNull<MarkingPeriod>(conds);   
         }
 
         public bool IsOverlaped(DateTime startDate, DateTime endDate, Guid? currentMarkingPeriodId)

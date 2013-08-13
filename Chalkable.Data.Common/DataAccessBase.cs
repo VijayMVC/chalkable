@@ -98,6 +98,11 @@ namespace Chalkable.Data.Common
             var q = Orm.Orm.SimpleDelete(obj);
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
+        protected void SimpleDelete<T>(IList<T> objs)
+        {
+            var q = Orm.Orm.SimpleDelete(objs);
+            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
+        }
 
         protected void SimpleDelete<T>(Guid id)
         {
@@ -215,6 +220,7 @@ namespace Chalkable.Data.Common
             var q = Orm.Orm.CountSelect(query, resName);
             return Read(q, reader => reader.Read() ? SqlTools.ReadInt32(reader, resName) : 0);
         }
+
 
         public virtual TEntity GetById(Guid id)
         {

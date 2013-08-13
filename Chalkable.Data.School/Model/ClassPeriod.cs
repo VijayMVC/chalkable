@@ -5,7 +5,9 @@ namespace Chalkable.Data.School.Model
 {
     public class ClassPeriod
     {
+        public const string ID_FIELD = "Id";
         public Guid Id { get; set; }
+        public const string PERIOD_REF_FIELD = "PeriodRef";
         public Guid PeriodRef { get; set; }
         public Guid ClassRef { get; set; }
         public Guid RoomRef { get; set; }

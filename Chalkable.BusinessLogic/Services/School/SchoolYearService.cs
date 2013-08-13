@@ -64,7 +64,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public SchoolYear Edit(Guid id, string name, string description, DateTime startDate, DateTime endDate)
         {
-            if(BaseSecurity.IsAdminEditor(Context))
+            if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -130,7 +130,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new SchoolYearDataAccess(uow);
-                return da.GetSchoolYears();
+                return da.GetAll();
             }
         }
     }

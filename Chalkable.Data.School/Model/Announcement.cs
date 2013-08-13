@@ -13,7 +13,9 @@ namespace Chalkable.Data.School.Model
     public class Announcement
     {
         public Guid Id { get; set; }
+        public const string PERSON_REF_FIELD = "PersonRef";
         public Guid PersonRef { get; set; }
+        public const string CONTENT_FIELD = "Content";
         public string Content { get; set; }
         public DateTime Created { get; set; }
         public DateTime Expires { get; set; }

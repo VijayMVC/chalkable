@@ -13,7 +13,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public AnnouncementType GetById(int id)
         {
-            return SelectOne<AnnouncementType>(new AndQueryCondition { { "Id", id } });
+            return SelectOne<AnnouncementType>(new AndQueryCondition { { AnnouncementType.ID_FIELD, id } });
         }
         public IList<AnnouncementType> GetList(bool? gradeble)
         {

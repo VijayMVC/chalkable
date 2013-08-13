@@ -17,6 +17,7 @@ namespace Chalkable.Data.School.Model
         public const string END_DATE_FIELD = "EndDate";
         public DateTime EndDate { get; set; }
         public string Description { get; set; }
+        public const string SCHOOL_YEAR_REF = "SchoolYearRef";
         public Guid SchoolYearRef { get; set; }
         public int WeekDays { get; set; }
         public int? SisId { get; set; }
