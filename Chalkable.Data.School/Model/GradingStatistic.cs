@@ -54,6 +54,12 @@ namespace Chalkable.Data.School.Model
         public int? Avg { get; set; }
     }
 
+    public class DepartmentGradeAvg
+    {
+        public Guid ChalkableDepartmentRef { get; set; }
+        public int? Avg { get; set; }
+    }
+
 
     public class GradeAvgPerDate
     {
