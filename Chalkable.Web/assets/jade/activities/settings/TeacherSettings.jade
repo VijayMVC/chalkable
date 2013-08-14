@@ -1,0 +1,47 @@
+.settings
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('settings', 'generalTeacher').pressed General
+                +ActionLink('settings', 'grading') Grading
+            .right
+                +ActionLink('teachers', 'info', currentChlkPerson.id) Profile
+
+    .general
+        .block
+            .header SMS
+            .fields
+                .field
+                    +Checkbox('ch1', false)
+                    label Announcements
+
+                .field
+                    +Checkbox('ch1', false)
+                    label Private messages
+
+                .field
+                    +Checkbox('ch1', false)
+                    label Notifications
+
+        .block
+            .header Email
+            .fields
+                .field
+                    +Checkbox('ch1', false)
+                    label Announcements
+
+                .field
+                    +Checkbox('ch1', false)
+                    label Private messages
+
+                .field
+                    +Checkbox('ch1', false)
+                    label Notifications
+        .block
+            .header Password
+            .fields
+                +ActionLink('account', 'changePassword') Reset Password
+
+
+
+
