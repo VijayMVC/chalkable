@@ -37,7 +37,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<FinalGradeAnnouncementType> GetFinalGradeAnnouncementTypes(Guid finalGradeId)
         {
-            using (var uow = Update())
+            using (var uow = Read())
             {
                 var fgDa = new FinalGradeDataAccess(uow);
                 if (!fgDa.Exists(finalGradeId))
