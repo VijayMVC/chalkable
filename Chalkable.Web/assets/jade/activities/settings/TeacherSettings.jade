@@ -2,8 +2,8 @@
     .action-bar.not-transparent.buttons
         .container.panel-bg
             .left
-                +ActionLink('settings', 'listBackups').pressed General
-                +ActionLink('dbmaintenance', 'updateDb') Grading
+                +ActionLink('settings', 'generalTeacher').pressed General
+                +ActionLink('settings', 'grading') Grading
             .right
                 +ActionLink('teachers', 'info', currentChlkPerson.id) Profile
 
@@ -12,35 +12,35 @@
             .header SMS
             .fields
                 .field
-                    +Checkbox()
+                    +Checkbox('ch1', false)
                     label Announcements
 
                 .field
-                    +Checkbox()
+                    +Checkbox('ch1', false)
                     label Private messages
 
                 .field
-                    +Checkbox()
+                    +Checkbox('ch1', false)
                     label Notifications
 
         .block
             .header Email
             .fields
                 .field
-                    +Checkbox()
+                    +Checkbox('ch1', false)
                     label Announcements
 
                 .field
-                    +Checkbox()
+                    +Checkbox('ch1', false)
                     label Private messages
 
                 .field
-                    +Checkbox()
+                    +Checkbox('ch1', false)
                     label Notifications
         .block
             .header Password
             .fields
-                +ActionLink('account', 'resetPassword') Reset Password
+                +ActionLink('account', 'changePassword') Reset Password
 
 
 

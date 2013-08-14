@@ -1,5 +1,4 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
-REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.settings.TeacherSettings');
 
 NAMESPACE('chlk.activities.settings', function () {
