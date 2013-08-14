@@ -1,5 +1,4 @@
 REQUIRE('ria.serialize.JsonSerializer');
-
 REQUIRE('ria.ajax.JsonGetTask');
 REQUIRE('ria.ajax.JsonPostTask');
 REQUIRE('ria.ajax.UploadFileTask');
@@ -22,8 +21,10 @@ NAMESPACE('chlk.services', function () {
 
     /** @class chlk.services.BaseService*/
     CLASS(
-        'BaseService', [
+        'BaseService', IMPLEMENTS(ria.mvc.IContextable), [
 
+
+            ria.mvc.IContext, 'context',
 
             String, function getServiceRoot(){
 

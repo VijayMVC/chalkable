@@ -139,9 +139,34 @@ namespace Chalkable.Data.School.DataAccess
             return ReadMany<MarkingPeriodClassGradeAvg>(dbQuery, true);
         }
 
-        public IList<StudentGradeAvgPerDate> CalcStudentGradeStats(Guid studentId, Guid markingPeriodId, Guid? classId, int dayInterval)
+        public IList<DepartmentGradeAvg> CalcDepartmentGradeAvgPerMp(Guid markingPeriodId, Guid callerId, int role, IList<Guid> gradeLevels)
         {
-            var parameters = new Dictionary<string, object>()
+            var query = new GradingStatisticQuery
+                {
+                    CallerId = callerId,
+                    Role = role,
+                    MarkingPeriodIds = new List<Guid> {markingPeriodId}
+                };
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.Append(@"select Course.ChalkableDepartmentRef,
+                                       AVG(dbo.fnCalcClassGradeAvgPerMP(MarkingPeriodClass.Id)) as [Avg]
+                                 from Course 
+                                 join Class on Class.CourseRef = Course.Id
+                                 join MarkingPeriodClass on MarkingPeriodClass.ClassRef = Class.Id
+                                 group by Course.ChalkableDepartmentRef");
+            dbQuery.Sql.Append(" where Course.ChalkableDepartmentRef is not null");
+            if (gradeLevels != null && gradeLevels.Count > 0)
+            {
+                var gradeLevelsStr = gradeLevels.Select(x => "'" + x.ToString() + "'").JoinString(",");
+                dbQuery.Sql.AppendFormat(" and Class.GradeLevelRef in ({0})", gradeLevelsStr);
+            }
+            dbQuery = BuildClassGradeStatisticQuery(dbQuery.Sql, query);
+            return ReadMany<DepartmentGradeAvg>(dbQuery);
+        } 
+
+        public IList<StudentGradeAvgPerDate> CalcStudentGradeStatsPerDate(Guid studentId, Guid markingPeriodId, Guid? classId, int dayInterval)
+        {
+            var parameters = new Dictionary<string, object>
                 {
                     {"studentId", studentId},
                     {"markingPeriodId", markingPeriodId},
@@ -200,6 +225,21 @@ namespace Chalkable.Data.School.DataAccess
                     keyValue.Value.AnnTypesGradeStats = anntypeDic[keyValue.Key].Values.ToList();
                 }
                 return stDic.Values.ToList();
+            }
+        }
+   
+        public IList<ClassPersonGradingStats> CalcGradingStats(Guid callerId, int role, Guid studentId, Guid markingPeriodId)
+        {
+            var parameters = new Dictionary<string, object>
+                {
+                    {"studentId", studentId},
+                    {"markingPeriodId", markingPeriodId},
+                    {"callerId", callerId},
+                    {"role", role},
+                };
+            using (var reader = ExecuteStoredProcedureReader("spCalcGradingStats", parameters))
+            {
+                return reader.ReadList<ClassPersonGradingStats>();
             }
         }
     }

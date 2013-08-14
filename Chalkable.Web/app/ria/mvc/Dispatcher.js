@@ -94,6 +94,16 @@ NAMESPACE('ria.mvc', function () {
                 return this.loadControllers_(new ria.reflection.ReflectionClass(ria.mvc.Controller));
             },
 
+            [[ria.mvc.IContext]],
+            ria.async.Future, function initControllers(context) {
+                var onAppInitFutures = [];
+                for(var name in this.controllers) if (this.controllers.hasOwnProperty(name)) {
+                    onAppInitFutures.push(this.prepareInstance_(this.controllers[name], context).onAppInit());
+                }
+
+                return ria.async.wait(onAppInitFutures);
+            },
+
             [[ria.reflection.ReflectionClass]],
             ria.async.Future, function loadControl_(baseRef) {
                 var onAppStartFutures = [];

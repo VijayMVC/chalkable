@@ -18,21 +18,24 @@ appCategories = []
 appPermissions = []
 
 
--actAppCategories = app.getGradeLevels() || []
+-actAppCategories = app.getCategories() || []
 -actAppGradeLevels = app.getGradeLevels() || []
 -actAppPermissions = app.getPermissions() || []
 
 
+
+
+
 each item in actAppGradeLevels
-    -selectedAppGradeLevels[item.getId()] = true
-    -appGradeLvls.push(item.getId())
+    -selectedAppGradeLevels[item.valueOf()] = true
+    -appGradeLvls.push(item.valueOf())
 each item in actAppCategories
     -selectedAppCategories[item.getId()] = true
     -appCategories.push(item.getId().valueOf())
 
 each item in actAppPermissions
-    -selectedAppPermissions[item.getId()] = true
-    -appPermissions.push(item.getId().valueOf())
+    -selectedAppPermissions[item.getType()] = true
+    -appPermissions.push(item.getType())
 
 -appGradeLvls = appGradeLvls.join(',')
 -appCategories = appCategories.join(',')
@@ -47,6 +50,7 @@ each item in actAppPermissions
     +ActionForm('apps', 'update').app-info
         +Button(self.isDraft())(name="submit-btn", class = self.isDraft() ? "x-item-disabled" : "").blue-tb-right-button.submit-btn  Submit App
         +Hidden('draft', self.isDraft())
+        +Hidden('id', app.getId())
         .section.first
             .elem
                 label.hint App Name:
@@ -82,14 +86,14 @@ each item in actAppPermissions
                 .my-apps
                     .permission
                         +MyAppsPermission("Will be Teachers", '', 'viewing student output')
-                        +SlideCheckbox("showInGradeView", myAppsAccess.isVisibleInGradingView())
+                        +SlideCheckbox("showInGradingView", myAppsAccess.isVisibleInGradingView())
         .section
             .elem
                 label.hint API Access:
                 .permissions
                     +CheckboxList('permissions', 'app-permission', appPermissions)
                         each item in self.getPermissions()
-                            -isChecked = !!selectedAppPermissions[item.getId()]
+                            -isChecked = !!selectedAppPermissions[item.getId().valueOf()]
                             +LabeledCheckbox(item.getName(), 'app-permission'+ item.getId(), isChecked)
         .section
             .elem
@@ -105,7 +109,7 @@ each item in actAppPermissions
                 .grade-levels
                     +CheckboxList('gradeLevels', 'app-grade-level', appGradeLvls)
                         each item in self.getGradeLevels()
-                            -isChecked = !!selectedAppGradeLevels[item.getId()]
+                            -isChecked = !!selectedAppGradeLevels[item.getId().valueOf()]
                             +LabeledCheckbox(item.getName(), 'app-grade-level' + item.getId(), isChecked)
 
         .section

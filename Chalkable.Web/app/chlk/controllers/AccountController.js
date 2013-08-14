@@ -2,8 +2,11 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.DeveloperService');
 REQUIRE('chlk.services.AccountService');
 REQUIRE('chlk.activities.profile.DeveloperPage');
+REQUIRE('chlk.activities.profile.ChangePasswordPage');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.developer.DeveloperInfo');
+REQUIRE('chlk.models.account.ChangePassword');
+
 
 
 
@@ -20,9 +23,24 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.AccountService, 'accountService',
 
-         function resetPasswordAction(){
-
+         function changePasswordAction(){
+             var model = new ria.async.DeferredData(new Class());
+             return this.PushView(chlk.activities.profile.ChangePasswordPage, model);
          },
+
+        [[chlk.models.account.ChangePassword]],
+        function doChangePasswordAction(model){
+            this.accountService
+                .changePassword(model.getOldPassword(), model.getNewPassword(), model.getNewPasswordConfirmation())
+                .then(
+                    function(success){
+                        if (success)
+                            return this.redirect_('settings', 'dashboardTeacher', []);
+                        else
+                            return this.redirect_('account', 'changePassword', []);
+                    }.bind(this)
+                );
+        },
 
          function logoutAction(){
              this.accountService

@@ -1,4 +1,5 @@
 REQUIRE('ria.mvc.IContext');
+REQUIRE('ria.mvc.IContextable');
 REQUIRE('ria.async.Future');
 
 REQUIRE('ria.serialize.JsonSerializer');
@@ -53,6 +54,15 @@ NAMESPACE('ria.mvc', function () {
              * Use either global var or session
              */
             ria.async.Future, function onAppStart() {
+                return ria.async.DeferredAction();
+            },
+
+            /**
+             * Method is called once Application pre dispatch
+             * A magic method 'cause you can load required resources but can not use this to store them
+             * Use either global var or session
+             */
+            ria.async.Future, function onAppInit() {
                 return ria.async.DeferredAction();
             },
 

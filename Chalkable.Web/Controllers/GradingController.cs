@@ -22,7 +22,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult TeacherSummary(Guid teacherId)
         {
             var schoolYearId = GetCurrentSchoolYearId();
-            var gradingStats = SchoolLocator.GradingStatisticService.GetStudentGradePerClass(teacherId, schoolYearId);
+            var gradingStats = SchoolLocator.GradingStatisticService.GetStudentsGradePerClass(teacherId, schoolYearId);
             gradingStats = gradingStats.Where(x => x.Avg.HasValue).ToList();
             var classes = SchoolLocator.ClassService.GetClasses(null, null, teacherId);
             return Json(GradingTeacherClassSummaryViewData.Create(gradingStats, classes), 6);
@@ -42,7 +42,7 @@ namespace Chalkable.Web.Controllers
         {
             var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(30, true);
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(Context.NowSchoolTime.Date, true);
-            var gradingStats = SchoolLocator.GradingStatisticService.GetStudentGradeStats(studentId, mp.Id, classId);
+            var gradingStats = SchoolLocator.GradingStatisticService.GetStudentGradePerDate(studentId, mp.Id, classId);
             return Json(GradingStudentSummaryViewData.Create(announcements, gradingStats));
         }
 

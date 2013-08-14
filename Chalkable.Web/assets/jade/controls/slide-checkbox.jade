@@ -1,7 +1,9 @@
 mixin SlideCheckbox(name, val)
     .slide-checkbox(attributes)
         .wrapper
-            +Checkbox(name, val)
+            +Hidden(name, false)
+            -attributes.checked = val
+            input(id=name, name = name, type="checkbox")(attributes)
             label(for=name)
 
 

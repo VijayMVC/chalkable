@@ -9,6 +9,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Common;
 using Chalkable.Web.Models;
 
 namespace Chalkable.Web.Controllers
@@ -16,10 +17,6 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class DemoSchoolController : ChalkableController
     {
-
-        private const string errorMessageKey = "ErrorMessage";
-        private const string demoPrefixKey = "DemoPrefix";
-
         public ActionResult Index()
         {
             var roles = new List<CoreRole>
@@ -33,8 +30,8 @@ namespace Chalkable.Web.Controllers
             var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
             var demoSchool = sysLocator.SchoolService.UseDemoSchool();
             if (demoSchool == null)
-                ViewData[errorMessageKey] = ChlkResources.ERR_DEMO_UNAVAILABLE;
-            else ViewData[demoPrefixKey] = demoSchool.DemoPrefix;
+                ViewData[ViewConstants.ERROR_MESSAGE_KEY] = ChlkResources.ERR_DEMO_UNAVAILABLE;
+            else ViewData[ViewConstants.DEMO_PREFIX_KEY] = demoSchool.DemoPrefix;
             return View(RoleViewData.Create(roles));
         }
 
@@ -46,7 +43,7 @@ namespace Chalkable.Web.Controllers
 
             var context = LogOn(false, userService => userService.LoginToDemo(rolename, prefix));
             if (context == null)
-                return Json(new ChalkableException("Invalid user name"));
+                return Json(new ChalkableException(ChlkResources.INVITING_USER));
             return Json(new {Role = context.Role.LoweredName});
         }
     }

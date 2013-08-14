@@ -411,10 +411,22 @@ namespace Chalkable.Tests.Services.Master
             context.DeveloperMl.ApplicationUploadService.GoLive(app.Id);
             return context.DeveloperMl.ApplicationService.GetApplicationById(app.Id);
         }
+
         public static Application CreateLiveApp(IServiceLocatorMaster sysLocator, DeveloperSchoolTestContex context, BaseApplicationInfo appInfo)
         {
             var app = context.DeveloperMl.ApplicationUploadService.Create(appInfo);
             return UpdateApp(sysLocator, context, app.Id, appInfo);
+        }
+
+        public static Application CreateDefaultFreeApp(IServiceLocatorMaster sysLocator, DeveloperSchoolTestContex context)
+        {
+            var apps = context.DeveloperMl.ApplicationService.GetApplications(0, int.MaxValue, false);
+            var name = "app" + (apps.Count + 1);
+            var url = string.Format("http://test.{0}.com", name);
+            var appInfo = PrepareDefaultAppInfo(sysLocator, context.Developer.Id, name, url);
+            appInfo.ApplicationPrices = ApplicationPricesInfo.Create(0, null, null);
+            var app = CreateLiveApp(sysLocator, context, appInfo);
+            return sysLocator.ApplicationService.GetApplicationById(app.OriginalRef.Value);
         }
 
 
@@ -430,7 +442,7 @@ namespace Chalkable.Tests.Services.Master
                                "test_desc", "http://test.app.video.com", Guid.NewGuid(), Guid.NewGuid());
 
             var appPrice = ApplicationPricesInfo.Create(1, 30, 1000);
-            var appAccess = ApplicationAccessInfo.Create(true, true, false, false, true, true);
+            var appAccess = ApplicationAccessInfo.Create(true, true, true, true, true, true);
             var appPermissionTypes = new List<AppPermissionType>
                 {
                     AppPermissionType.Grade,

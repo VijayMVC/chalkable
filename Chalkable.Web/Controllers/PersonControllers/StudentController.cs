@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -92,6 +93,20 @@ namespace Chalkable.Web.Controllers.PersonControllers
             if (myStudentsOnly == true && CoreRoles.TEACHER_ROLE == SchoolLocator.Context.Role)
                 teacherId = SchoolLocator.Context.UserId;
             var res = PersonLogic.GetPersons(SchoolLocator, start, count, byLastName, filter, roleName, classId, null, teacherId);
+            return Json(res);
+        }
+
+       
+        [RequireRequestValue("personId")]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_GRADING_STAT, true, CallType.Get, new[] {AppPermissionType.User, AppPermissionType.Grade})]
+        public ActionResult Grading(Guid personId, Guid markingPeriodId)
+        {
+            if (!BaseSecurity.IsAdminEditorOrCurrentPerson(personId, Context))
+                throw new ChalkableSecurityException(ChlkResources.ERR_VIEW_INFO_INVALID_RIGHTS);
+            var student = SchoolLocator.PersonService.GetPerson(personId);
+            var gardingStats = SchoolLocator.GradingStatisticService.GetFullGradingStats(markingPeriodId, student.Id);
+            var gradingMapper = SchoolLocator.GradingStyleService.GetMapper();
+            var res = StudentGradingViewData.Create(student, gardingStats, gradingMapper);
             return Json(res);
         }
     }

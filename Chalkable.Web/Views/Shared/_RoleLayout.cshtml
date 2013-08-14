@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+﻿@using Chalkable.Web.Common
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"  itemscope itemtype="Education">
 <head>
     <title>@ViewBag.Title</title>
@@ -54,8 +55,8 @@
 </head>
     <body>
         <div id="fb-root"></div>
-        <input type="hidden" value=" ServerTime :  @ViewData["CurrentServerDateTime"]"/>
-        <input type="hidden" value=" ServerDbTime:  @ViewData["CurrentServerDBDateTime"]"/>
+        <input type="hidden" value=" ServerTime :  @ViewData.GetValueOrNull("CurrentServerDateTime")"/>
+        <input type="hidden" value=" ServerDbTime:  @ViewData.GetValueOrNull("CurrentServerDBDateTime")"/>
 
         <div id="page-header">
             Revision: @Chalkable.Web.Tools.CompilerHelper.Version
@@ -65,9 +66,9 @@
    
 
         @{
-            var isDeveloper = (ViewData.ContainsKey("IsDeveloper") && (bool)ViewData["IsDeveloper"]);
-            var isDemoSchool = (ViewData.ContainsKey("Prefix") && !string.IsNullOrEmpty((string)ViewData["Prefix"]));
-            var needsTour = ViewData.ContainsKey("NeedsTour") && !string.IsNullOrEmpty(Convert.ToString(ViewData["NeedsTour"]));
+            var isDeveloper = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
+            var isDemoSchool = !string.IsNullOrEmpty((string)ViewData.GetValueOrNull("Prefix"));
+            var needsTour = !string.IsNullOrEmpty(Convert.ToString(ViewData.GetValueOrNull(ViewConstants.NEEDS_TOUR)));
         }
     
 
@@ -108,20 +109,14 @@
     
     
 <script type="text/json" id="application-value" class="valuable-script">
-    @Html.Raw(@ViewData["DefaultApplication"])
+    @Html.Raw(@ViewData.GetValueOrNull(ViewConstants.DEFAULT_APPLICATION))
 </script>
 
     <script type="text/json" id="applications-value" class="valuable-script">
-    @Html.Raw(@ViewData["Applications"])
+    @Html.Raw(@ViewData.GetValueOrNull(ViewConstants.APPLICATIONS))
 </script>
-    
-    
-    
-    
-    
 
-
-    <script type="text/javascript">
+<script type="text/javascript">
     var values = document.getElementsByClassName('valuable-script'), value, name;
     var len = values.length;
     for (var i = 0; i < len; i++) {
@@ -132,40 +127,33 @@
         }
     }
 </script>
-   <script type="">
-    var changeFullName = function (newFullName) {
-        window.fullName = newFullName;
-        window.fullName = window.fullName.replace(/\.+/g, '.');
-        var logOutBlock = $('#logout-block').find('.logout-area')[0];
-        $(logOutBlock).html(fullName);
-    };
-    changeFullName('@ViewData["FullName"]');
-    var currentSchoolId = '@ViewData["SchoolId"]';
-    var currentSchoolName = '@ViewData["SchoolName"]';
-    var newNotifications = parseInt('@ViewData["UnshownNotificationsCount"]', 10) || 0;
-    var azurePictureUrl = 'http://chalkable1.blob.core.windows.net/pictureconteiner/pictureconteiner_blob_';
+    <script type="">
+        
+        function parseJsonToObj(json){
+            return json ? JSON.parse(HtmlEncode(json)).data : null;
+        }
+        function parseJsonToArray(json){
+            return parseJsonToObj(json) || [];
+        }
 
-    var USER_ROLE_EXT = '@ViewData["Rolename"]';
-    var currentChlkPerson = '@ViewData["CurrentPerson"]' ? JSON.parse(HtmlEncode('@ViewData["CurrentPerson"]')).data : null;
-    var classesToFilter = '@ViewData["Classes"]' ? JSON.parse(HtmlEncode('@ViewData["Classes"]')).data || [] : [];
+        var school = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.SCHOOL)'); 
+        var newNotifications = parseInt('@ViewData.GetValueOrNull(ViewConstants.UNSHOWN_NOTIFICATIONS_COUNT)', 10) || 0;
+        var azurePictureUrl = 'http://chalkable1.blob.core.windows.net/pictureconteiner/pictureconteiner_blob_';
 
-    var classesAdvancedData = '@ViewData["ClassesAdvancedData"]' ? JSON.parse(HtmlEncode('@ViewData["ClassesAdvancedData"]')).data || [] : [];
-    var classesInfo = {};
-    classesAdvancedData && classesAdvancedData.forEach(function (el) {
-        classesInfo[el.classid] = {
-            mask: el.mask,
-            typesByClass: el.typesbyclass
-        };
-    });
+        var USER_ROLE_EXT = '@ViewData.GetValueOrNull("Rolename")';
+        var currentChlkPerson = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.CURRENT_PERSON)');
+        var classesToFilter = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.CLASSES)');
+        var classesAdvancedData = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.CLASSES_ADV_DATA)');
+        var classesInfo = {};
+        classesAdvancedData && classesAdvancedData.forEach(function (el) {
+            classesInfo[el.classid] = {
+                mask: el.mask,
+                typesByClass: el.typesbyclass
+            };
+        });
 
-    var markingPeriod = '@ViewData["MarkingPeriod"]' ? JSON.parse(HtmlEncode('@ViewData["MarkingPeriod"]')).data : null;
-    var nextMarkingPeriod = '@ViewData["NextMarkingPeriod"]' ? JSON.parse(HtmlEncode('@ViewData["NextMarkingPeriod"]')).data : null;
-
-    var finalizedClassesIds = '@ViewData["FinalizedClassesIds"]' ? JSON.parse(HtmlEncode('@ViewData["FinalizedClassesIds"]')).data || [] : [];
-
-
-
-</script>
-
-    
+        var markingPeriod =  parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.MARKING_PERIOD)');
+        var nextMarkingPeriod = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.NEXT_MARKING_PERIOD)'); 
+        var finalizedClassesIds = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.FINALIZED_CLASSES_IDS)'); 
+    </script>
 </html>

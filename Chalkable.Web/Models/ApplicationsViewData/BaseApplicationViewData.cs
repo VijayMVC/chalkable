@@ -65,7 +65,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public IList<ApplicationPersmissionsViewData> Permissions { get; set; }
         public ApplicationRatingViewData ApplicationRating { get; set; }
         public IList<CategoryViewData> Categories { get; set; }
-        public IList<GradeLevelViewData> GradelLevels { get; set; }
+        public IList<int> GradeLevels { get; set; }
         public IList<RoleViewData> CanLaunchRoles { get; set; }
         public DeveloperViewData Developer { get; set; }
         public BaseApplicationViewData LiveApplication { get; set; }
@@ -79,6 +79,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                 SecretKey = application.SecretKey;
             categories = categories.Where(x => application.Categories.Any(y => y.CategoryRef == x.Id)).ToList();
             Categories = CategoryViewData.Create(categories);
+            GradeLevels = application.GradeLevels.Select(x => x.GradeLevel).ToList();
         }
         public static ApplicationViewData Create(Application application, IList<Category> categories, bool canGetSecretKey = false)
         {

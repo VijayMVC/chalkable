@@ -1,5 +1,6 @@
 REQUIRE('chlk.BaseApp');
 REQUIRE('chlk.controllers.SettingsController');
+REQUIRE('chlk.controllers.DeveloperController');
 REQUIRE('chlk.controllers.AccountController');
 REQUIRE('chlk.controllers.AppsController');
 REQUIRE('chlk.models.apps.Application');
@@ -22,27 +23,12 @@ NAMESPACE('chlk', function (){
 
             OVERRIDE, ria.mvc.ISession, function initSession_() {
                 var session = BASE();
-                var serializer = new ria.serialize.JsonSerializer();
                 session.set('role', new chlk.models.common.Role(chlk.models.common.RoleEnum.DEVELOPER, 'Developer'));
-                session.set('currentApp', serializer.deserialize(window.application || {}, chlk.models.apps.Application));
-                session.set('dev-apps', serializer.deserialize(window.applications || {}, ArrayOf(chlk.models.apps.Application)));
+                this.saveInSession(session, 'application', chlk.models.apps.Application, 'currentApp');
+                this.saveInSession(session, 'applications', ArrayOf(chlk.models.apps.Application), 'dev-apps');
                 return session;
             },
 
-            [[chlk.models.apps.Application]],
-            function switchApp(app){
-                this.getContext().getSession().set('currentApp', app);
-            },
-
-            ArrayOf(chlk.models.apps.Application), function getApps(){
-                var res = this.getContext().getSession().get('dev-apps') || [];
-                return res;
-            },
-
-            chlk.models.apps.Application, function getCurrentApp(){
-                var res = this.getContext().getSession().get('currentApp');
-                return res;
-            },
 
             OVERRIDE, ria.async.Future, function onStart_() {
                 return BASE()
@@ -52,12 +38,6 @@ NAMESPACE('chlk', function (){
                             .appendTo("#sidebar");
                         return data;
                     })
-                    .then(function(data){
-                        new ria.dom.Dom()
-                            .fromHTML(ASSET('~/assets/jade/demofooters/DeveloperDemoFooter.jade')(this))
-                            .appendTo('#demo-footer');
-                        return data;
-                    }, this);
             }
         ]);
 });

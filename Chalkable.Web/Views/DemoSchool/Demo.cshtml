@@ -1,4 +1,5 @@
-﻿@using Chalkable.Web.Models
+﻿@using Chalkable.Web.Common
+@using Chalkable.Web.Models
 @model IList<RoleVieawData>
 
 @{
@@ -10,8 +11,8 @@
 
     <script type="text/javascript">
 
-        var errorMessage = HtmlEncode('@ViewData["ErrorMessage"]');
-        var demoPrefix = '@ViewData["DemoPrefix"]';
+        var errorMessage = HtmlEncode('@ViewData.GetValueOrNull(ViewConstants.ERROR_MESSAGE_KEY)');
+        var demoPrefix = '@ViewData.GetValueOrNull(ViewConstants.DEMO_PREFIX_KEY)';
         
         jQuery(document).ready(function () {
             if (thisBrowser.isIE) {
@@ -94,9 +95,9 @@
                 {
                     switch (item.Name) 
                         {
-                        case "AdminGrade": <a class="Admin" href='LogOn.json?rolename=AdminGrade&prefix=@ViewData["DemoPrefix"]'></a>; break;
+                        case "AdminGrade": <a class="Admin" href='LogOn.json?rolename=AdminGrade&prefix=@ViewData[ViewConstants.DEMO_PREFIX_KEY]'></a>; break;
                         case "Teacher":
-                        case "Student": <a class="@item.Name" href='LogOn.json?rolename=@item.Name&prefix=@ViewData["DemoPrefix"]'></a>; break;
+                        case "Student": <a class="@item.Name" href='LogOn.json?rolename=@item.Name&prefix=@ViewData[ViewConstants.DEMO_PREFIX_KEY]'></a>; break;
                         }
                 }
             }

@@ -52,7 +52,7 @@ namespace Chalkable.Web.Controllers
             if (string.IsNullOrEmpty(shortAppinfo.Url))
                 return Json(new ChalkableException(ChlkResources.ERR_APP_URL_MISSING));
             if (MasterLocator.ApplicationUploadService.Exists(appId, shortAppinfo.Name, null))
-                return Json(new ChalkableException(ChlkResources.ERR_APP_NAME_MISSING));
+                return Json(new ChalkableException(ChlkResources.ERR_APP_DUPLICATE_NAME));
             if (MasterLocator.ApplicationUploadService.Exists(appId, null, shortAppinfo.Url))
                 return Json(new ChalkableException(ChlkResources.ERR_APP_DUPLICATE_URL));
 

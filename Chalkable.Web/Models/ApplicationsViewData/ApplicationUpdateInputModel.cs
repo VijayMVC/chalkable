@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 
 namespace Chalkable.Web.Models.ApplicationsViewData
@@ -18,9 +19,10 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             set { PermissionIds = value.Select(x => (AppPermissionType)x).ToList(); }
         }
 
+       
         public ApplicationUpdateInputModel()
         {
-            Permissions = new List<int>();
+            Permissions = new IntList();
         }
     }
 }
