@@ -103,11 +103,11 @@ namespace Chalkable.Web.Controllers.PersonControllers
         {
             if (!BaseSecurity.IsAdminEditorOrCurrentPerson(personId, Context))
                 throw new ChalkableSecurityException(ChlkResources.ERR_VIEW_INFO_INVALID_RIGHTS);
-
             var student = SchoolLocator.PersonService.GetPerson(personId);
-            var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId);
-            //SchoolLocator.GradingStatisticService.GetStudentsGradePerClass()
-            throw new NotImplementedException();
+            var gardingStats = SchoolLocator.GradingStatisticService.GetFullGradingStats(markingPeriodId, student.Id);
+            var gradingMapper = SchoolLocator.GradingStyleService.GetMapper();
+            var res = StudentGradingViewData.Create(student, gardingStats, gradingMapper);
+            return Json(res);
         }
     }
 }

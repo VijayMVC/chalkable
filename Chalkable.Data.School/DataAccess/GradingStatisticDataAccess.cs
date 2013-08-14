@@ -164,7 +164,7 @@ namespace Chalkable.Data.School.DataAccess
             return ReadMany<DepartmentGradeAvg>(dbQuery);
         } 
 
-        public IList<StudentGradeAvgPerDate> CalcStudentGradeStats(Guid studentId, Guid markingPeriodId, Guid? classId, int dayInterval)
+        public IList<StudentGradeAvgPerDate> CalcStudentGradeStatsPerDate(Guid studentId, Guid markingPeriodId, Guid? classId, int dayInterval)
         {
             var parameters = new Dictionary<string, object>
                 {
@@ -225,6 +225,21 @@ namespace Chalkable.Data.School.DataAccess
                     keyValue.Value.AnnTypesGradeStats = anntypeDic[keyValue.Key].Values.ToList();
                 }
                 return stDic.Values.ToList();
+            }
+        }
+   
+        public IList<ClassPersonGradingStats> CalcGradingStats(Guid callerId, int role, Guid studentId, Guid markingPeriodId)
+        {
+            var parameters = new Dictionary<string, object>
+                {
+                    {"studentId", studentId},
+                    {"markingPeriodId", markingPeriodId},
+                    {"callerId", callerId},
+                    {"role", role},
+                };
+            using (var reader = ExecuteStoredProcedureReader("spCalcGradingStats", parameters))
+            {
+                return reader.ReadList<ClassPersonGradingStats>();
             }
         }
     }

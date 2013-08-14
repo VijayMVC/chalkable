@@ -13,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<StudentGradeAvgPerDate> GetStudentGradePerDate(Guid studentId, Guid markingPeriodId, Guid? classId);
         IList<StudentClassGradeStats> GetStudentClassGradeStats(Guid markingPeriodId, Guid classId, Guid? studentId);
         IList<DepartmentGradeAvg> GetDepartmentGradeAvgPerMp(Guid markingPeriodId, IList<Guid> gradeLevelIds);
+        IList<ClassPersonGradingStats> GetFullGradingStats(Guid markingPeriodId, Guid studentId);
     }
     public class GradingStatisticService : SchoolServiceBase, IGradingStatisticService
     {
@@ -69,14 +70,14 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-
         public IList<StudentGradeAvgPerDate> GetStudentGradePerDate(Guid studentId, Guid markingPeriodId, Guid? classId)
         {
             using (var uow = Read())
             {
-                return   new GradingStatisticDataAccess(uow).CalcStudentGradeStats(studentId, markingPeriodId, classId, 7);
+                return   new GradingStatisticDataAccess(uow).CalcStudentGradeStatsPerDate(studentId, markingPeriodId, classId, 7);
             }
         }
+
         public IList<StudentClassGradeStats> GetStudentClassGradeStats(Guid markingPeriodId, Guid classId, Guid? studentId)
         {
             using (var uow = Read())
@@ -85,13 +86,21 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-
         public IList<DepartmentGradeAvg> GetDepartmentGradeAvgPerMp(Guid markingPeriodId, IList<Guid> gradeLevelIds)
         {
             using (var uow = Read())
             {
                 return new GradingStatisticDataAccess(uow).CalcDepartmentGradeAvgPerMp(markingPeriodId, Context.UserId,
                                                                                        Context.Role.Id, gradeLevelIds);
+            }
+        }
+
+
+        public IList<ClassPersonGradingStats> GetFullGradingStats(Guid markingPeriodId, Guid studentId)
+        {
+            using (var uow = Read())
+            {
+                return new GradingStatisticDataAccess(uow).CalcGradingStats(Context.UserId, Context.Role.Id, studentId, markingPeriodId);
             }
         }
     }

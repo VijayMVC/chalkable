@@ -87,5 +87,23 @@ namespace Chalkable.Data.School.Model
         public const string ANNOUNCEMENT_TYPE_ID_FIELD = "AnnouncementTypeId";
         public int AnnouncementTypeId { get; set; }
         public IList<GradeAvgPerDate> GradeAvgPerDates { get; set; } 
-    } 
+    }
+ 
+    public class ClassPersonGradingStats  : ClassPerson
+    {
+        public Guid CourseId { get; set; }
+        public Guid ClassName { get; set; }
+        public Guid MarkingPeriodClassId { get; set; }
+        public int? StudentAvg { get; set; }
+        public int? ClassAvg { get; set; }
+        public int AnnouncementTypeId { get; set; }
+        public string AnnouncementTypeName { get; set; }
+        public int? StudentItemTypeAvg { get; set; }
+        public int? ClassItemTypeAvg { get; set; }
+        public Guid AnnouncementId { get; set; }
+        public int AnnouncementOrder { get; set; }
+        public bool AnnouncementDropped { get; set; }
+        public int? ItemAvg { get; set; }
+        public int? StudentGrade { get; set; }
+    }
 }
