@@ -21,7 +21,8 @@ NAMESPACE('chlk.controls', function () {
                 this.setCount(data.length || data[getItemsMethod]().length);
                 this.context.getDefaultView().getCurrent()
                     .addRefreshCallback(function (activity, model) {
-                        this.getCurrentIndex() !== undefined && this.focusGrid();
+                        if(this.getCurrentIndex() !== undefined && !new ria.dom.Dom(':focus').exists())
+                            this.focusGrid();
                         var grid = new ria.dom.Dom('.chlk-grid');
                         this.setGrid(grid);
                     }.bind(this));

@@ -65,13 +65,9 @@ NAMESPACE('chlk.controllers', function (){
            },
 
            [[String, String, Array, String]],
-           function ShowMsgBox(text, header_, buttons_, clazz_) {
+           function ShowMsgBox(text_, header_, buttons_, clazz_) {
                var instance = new chlk.activities.common.InfoMsgDialog();
-               var model = new chlk.models.common.InfoMsg();
                var buttons = [];
-               model.setText(text);
-               model.setClazz(clazz_ || '');
-               model.setHeader(header_);
                if(buttons_){
                    var serializer = new ria.serialize.JsonSerializer();
                    buttons_.forEach(function(item){
@@ -82,7 +78,7 @@ NAMESPACE('chlk.controllers', function (){
                    button.setText('Ok');
                    button.setClose(true);
                }
-               model.setButtons(buttons);
+               var model = new chlk.models.common.InfoMsg(text_, header_, buttons, clazz_);
                this.view.shadeD(instance, ria.async.DeferredData(model));
            },
 

@@ -13,6 +13,14 @@ NAMESPACE('chlk.activities.common', function () {
                  var node = this.dom.find('.centered');
                  node.setCss('margin-top', -parseInt(node.height()/2, 10) + 'px');
                  node.setCss('margin-left', -parseInt(node.width()/2, 10) + 'px');
-             }
+             },
+
+
+            [ria.mvc.DomEventBind('click', 'button, a')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            Boolean, function onBtnClick(node, event) {
+                this.close();
+                event.preventDefault();
+            }
          ]);
  });

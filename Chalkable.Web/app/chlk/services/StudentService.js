@@ -8,13 +8,13 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.StudentService*/
     CLASS(
         'StudentService', EXTENDS(chlk.services.BaseService), [
-            [[chlk.models.id.ClassId, String, Boolean, Number, Number, Number]],
-            ria.async.Future, function getStudents(classId_, filter_, myStudentsOnly_, sortType_, start_, count_) {
-                return this.get('Student/GetStudents.json', chlk.models.people.User, {
+            [[chlk.models.id.ClassId, String, Boolean, Boolean, Number, Number]],
+            ria.async.Future, function getStudents(classId_, filter_, myStudentsOnly_, byLastName_, start_, count_) {
+                return this.getPaginatedList('Student/GetStudents.json', chlk.models.people.User, {
                     classId: classId_ && classId_.valueOf(),
                     filter: filter_,
                     myStudentsOnly: myStudentsOnly_,
-                    sortType: sortType_,
+                    byLastName: byLastName_,
                     start: start_,
                     count: count_
                 });

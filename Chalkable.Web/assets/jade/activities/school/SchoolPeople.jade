@@ -33,5 +33,4 @@
                             +Select('gradeLevelId')#gradeLevelId
                                 each item in gradeLevels
                                     +Option(item.getId(), item.getName())
-                .people-list-container.not-transparent
-                    +RenderWith(self.getUsersPart(), chlk.templates.school.SchoolPeoplePart)
+                +RenderWith(self.getUsersPart(), chlk.templates.people.UsersList)

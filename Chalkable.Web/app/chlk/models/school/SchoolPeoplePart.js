@@ -1,17 +1,14 @@
 REQUIRE('chlk.models.id.SchoolId');
 REQUIRE('chlk.models.common.Role');
+REQUIRE('chlk.models.people.UsersList');
 
 NAMESPACE('chlk.models.school', function () {
     "use strict";
     /** @class chlk.models.school.SchoolPeoplePart*/
     CLASS(
-        'SchoolPeoplePart', [
-            chlk.models.common.PaginatedList, 'users',
-            Number, 'selectedIndex',
-
+        'SchoolPeoplePart', EXTENDS(chlk.models.people.UsersList), [
             chlk.models.id.SchoolId, 'schoolId',
             Number, 'roleId',
-            Number, 'gradeLevelId',
-            Boolean, 'byLastName'
+            Number, 'gradeLevelId'
         ]);
 });

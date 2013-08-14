@@ -46,6 +46,10 @@ NAMESPACE('ria.dom', function () {
                 }
             },
 
+            OVERRIDE, Boolean, function exists() {
+                return !!this._dom.valueOf()[0];
+            },
+
             /* DatePicker */
             [[Object, Date]],
             SELF, function datepicker(options, value_){

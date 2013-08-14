@@ -1,0 +1,7 @@
+.loader
+input(type="hidden", name="start", value=(self.getStart() || 0))
++ListView(self.getUsers())(
+    selectedIndex = selectedIndex).people-list
+    +RenderWith(self.getUsers(), chlk.templates.people.UsersForGrid)
+
+

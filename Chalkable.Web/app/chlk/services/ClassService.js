@@ -1,6 +1,6 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
-REQUIRE('chlk.models.class.Class');
+REQUIRE('chlk.models.class.ClassForTopBar');
 REQUIRE('chlk.models.class.ClassForWeekMask');
 REQUIRE('chlk.models.id.ClassId');
 
@@ -11,15 +11,25 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'ClassService', EXTENDS(chlk.services.BaseService), [
 
-            ArrayOf(chlk.models.class.Class), 'classesToFilter',
+            ArrayOf(chlk.models.class.ClassForTopBar), 'classesToFilter',
+            ArrayOf(chlk.models.class.ClassForTopBar), 'classesToFilterWithAll',
 
-            Array, function getClassesForTopBar() {
-                var res = this.getClassesToFilter();
+            [[Boolean]],
+            Array, function getClassesForTopBar(withAll_) {
+                var res = this.getClassesToFilter(), res1 = this.getClassesToFilterWithAll();
                 if(res)
-                    return res;
-                res = new ria.serialize.JsonSerializer().deserialize(window.classesToFilter, ArrayOf(chlk.models.class.Class));
+                    return withAll_ ? res1 : res;
+                res = new ria.serialize.JsonSerializer().deserialize(window.classesToFilter, ArrayOf(chlk.models.class.ClassForTopBar));
                 this.setClassesToFilter(res);
-                return res;
+                var classesToFilterWithAll = window.classesToFilter.slice();
+                classesToFilterWithAll.unshift({
+                    name: 'All',
+                    description: 'All',
+                    id: ''
+                });
+                res1 = new ria.serialize.JsonSerializer().deserialize(classesToFilterWithAll, ArrayOf(chlk.models.class.ClassForTopBar));
+                this.setClassesToFilterWithAll(res1);
+                return withAll_ ? res1 : res;
             },
 
             [[chlk.models.id.ClassId]],

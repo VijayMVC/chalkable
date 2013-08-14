@@ -65,6 +65,10 @@ NAMESPACE('chlk.models.people', function () {
 
             String, 'addressesValue',
 
-            String, 'phonesValue'
+            String, 'phonesValue',
+
+            Number, 'index',
+
+            Boolean, 'selected'
         ]);
 });

@@ -163,8 +163,7 @@ NAMESPACE('chlk.controllers', function (){
                             color: chlk.models.common.ButtonColor.RED.valueOf()
                         }, {
                             text: Msg.Cancel,
-                            color: chlk.models.common.ButtonColor.GREEN.valueOf(),
-                            close: true
+                            color: chlk.models.common.ButtonColor.GREEN.valueOf()
                         }], 'center');
                     }else{
                         return this.redirect_('setup', action, params);
@@ -175,8 +174,7 @@ NAMESPACE('chlk.controllers', function (){
                         if(index > 1)
                             this.ShowMsgBox('To make things easier we copy and\npaste your choices from the last page.\n\n'+
                                     'Click any number to change it.', 'fyi.', [{
-                                text: Msg.GOT_IT.toUpperCase(),
-                                close: true
+                                text: Msg.GOT_IT.toUpperCase()
                             }])
                     }else{
                         var finalGradeAnnouncementTypes = [], item, ids = model.getFinalGradeAnnouncementTypeIds().split(','),

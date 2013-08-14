@@ -1,0 +1,10 @@
+each item, i in self.getItems()
+    .row(class=(i == 0 ? 'selected' : ''), index=i)
+        +ActionLink('students', 'info', item.getId().valueOf()).left.image-container.white.shadow
+            img.avatar.avatar47(class=item.getGender(), src=item.getPictureUrl())
+        p.left= item.getFullName()
+        .right
+            +Button().message-button.blue-gradient-btn Message
+        .clear
+
+

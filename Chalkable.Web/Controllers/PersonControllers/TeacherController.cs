@@ -38,10 +38,10 @@ namespace Chalkable.Web.Controllers.PersonControllers
 
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult GetTeachers(string filter, int? start, int? count, Guid? classId, int? sortType)
+        public ActionResult GetTeachers(string filter, int? start, int? count, Guid? classId, bool? byLastName)
         {
             var role = CoreRoles.TEACHER_ROLE.Name;
-            return Json(PersonLogic.GetPersons(SchoolLocator, start, count, sortType, filter, role, classId));
+            return Json(PersonLogic.GetPersons(SchoolLocator, start, count, byLastName, filter, role, classId));
         }
     }
 }

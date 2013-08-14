@@ -1,4 +1,4 @@
-mixin LeftRightToolbar(data, tplClass)
+mixin LeftRightToolbar(data, tplClass, controller, action, params)
     -configs=self.prepareData(data, attributes)
     .lr-toolbar(attributes)
         .A(class=configs.disablePrevButton ? configs.disabledClass : "").prev-button.arrow
@@ -8,6 +8,7 @@ mixin LeftRightToolbar(data, tplClass)
                     -item.setPressed && item.setPressed(configs.selectedItemId == item.getId().valueOf());
                     -item.setDisabled && item.setDisabled(!configs.pressAfterClick);
                     -item.setIndex && item.setIndex(i);
+                    -if(controller){item.setController(controller);item.setAction(action);item.setParams(params);}
                     +RenderWith(item, tplClass)
         .A(class=configs.disableNextButton ? configs.disabledClass : "").next-button.arrow
         if(configs.needDots)

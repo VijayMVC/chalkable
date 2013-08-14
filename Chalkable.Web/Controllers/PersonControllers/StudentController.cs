@@ -85,13 +85,13 @@ namespace Chalkable.Web.Controllers.PersonControllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_GET_STUDENTS, true, CallType.Get, new[] { AppPermissionType.User, })]
-        public ActionResult GetStudents(string filter, bool? myStudentsOnly, int? start, int? count, Guid? classId, int? sortType)
+        public ActionResult GetStudents(string filter, bool? myStudentsOnly, int? start, int? count, Guid? classId, bool? byLastName)
         {
             var roleName = CoreRoles.STUDENT_ROLE.Name;
             Guid? teacherId = null;
             if (myStudentsOnly == true && CoreRoles.TEACHER_ROLE == SchoolLocator.Context.Role)
                 teacherId = SchoolLocator.Context.UserId;
-            var res = PersonLogic.GetPersons(SchoolLocator, start, count, sortType, filter, roleName, classId, null, teacherId);
+            var res = PersonLogic.GetPersons(SchoolLocator, start, count, byLastName, filter, roleName, classId, null, teacherId);
             return Json(res);
         }
     }
