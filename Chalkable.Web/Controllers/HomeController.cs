@@ -11,6 +11,7 @@ using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Common;
+using Chalkable.Web.Controllers.PersonControllers;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.ClassesViewData;
@@ -59,6 +60,7 @@ namespace Chalkable.Web.Controllers
                 return Redirect<HomeController>(x => x.Teacher(true));
             return Redirect<HomeController>(c => c.Index());
         }
+        
 
         [AuthorizationFilter("SysAdmin")]
         public ActionResult SysAdmin()

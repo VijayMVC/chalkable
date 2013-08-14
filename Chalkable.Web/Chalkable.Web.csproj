@@ -187,7 +187,6 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\StorageMonitorController.cs" />
     <Compile Include="Controllers\PersonControllers\PersonController.cs" />
-    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Extensions\StaticContentExtenstion.cs" />
     <Compile Include="Extensions\ViewDataExtension.cs" />
     <Compile Include="Global.asax.cs">
@@ -280,6 +279,7 @@
     <Compile Include="Models\PersonViewDatas\PersonViewData.cs" />
     <Compile Include="Models\PersonViewDatas\PersonSummaryViewData.cs" />
     <Compile Include="Models\PersonViewDatas\ShortPersonViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentGradingViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentInfoViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentSummaryViewData.cs" />
     <Compile Include="Models\PersonViewDatas\TeacherInfoViewData.cs" />
