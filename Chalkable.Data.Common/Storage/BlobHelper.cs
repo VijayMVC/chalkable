@@ -64,7 +64,6 @@ namespace Chalkable.Data.Common.Storage
             return all;
         }
 
-
         public void AddBlob(string containerAddress, string key, byte[] content)
         {
             var blobCl = GetBlobClient();
@@ -86,7 +85,6 @@ namespace Chalkable.Data.Common.Storage
             blob.Delete();
         }
         
-       
         public void DeleteBlob(string containderName, string key)
         {
             var client = GetBlobClient();
@@ -100,8 +98,7 @@ namespace Chalkable.Data.Common.Storage
                 throw new BlobNotFoundException(ChlkResources.ERR_BLOB_WITH_ADDRESS_NOT_EXISTS);
             blob.Delete();
         }
-
-
+        
         public byte[] GetBlobContent(string containerAddress, string key)
         {
             var blobCl = GetBlobClient();
@@ -127,9 +124,22 @@ namespace Chalkable.Data.Common.Storage
             }
         }
 
+        public string GetBlobsRelativeAddress(string containerName)
+        {
+            var conteiner = GetBlobClient().GetContainerReference(containerName);
+            if (conteiner.Exists())
+            {
+                var conteinerAddress = conteiner.Uri.ToString();
+                return conteinerAddress + "/" + BuildBlobAddress(containerName, "");
+            }
+            throw new BlobNotFoundException("Container doesn't exists");
+        }
+
+        private string blobAddressTpl = "{0}_blob_{1}";
+
         private string BuildBlobAddress(string containerAddress, string key)
         {
-            return containerAddress + "_blob_" + key;
+            return string.Format(blobAddressTpl, containerAddress, key);
         }
     }
 }

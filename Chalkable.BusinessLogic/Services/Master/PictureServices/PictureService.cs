@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Storage;
 
 namespace Chalkable.BusinessLogic.Services.Master.PictureServices
 {
@@ -26,6 +27,11 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
         public PictureService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
             supportedSizes = new List<PictureSize>();
+        }
+
+        public static string GetPicturesRelativeAddress()
+        {
+            return (new BlobHelper()).GetBlobsRelativeAddress(PICTURE_CONTEINER_NAME);
         }
 
         private const string PICTURE_CONTEINER_NAME = "pictureconteiner";
