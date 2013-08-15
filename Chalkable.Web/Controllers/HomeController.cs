@@ -124,6 +124,7 @@ namespace Chalkable.Web.Controllers
                     ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
                 }
             }
+            ViewData[ViewConstants.AZURE_PICTURE_URL] = "http://chalkable1.blob.core.windows.net/pictureconteiner/pictureconteiner_blob_"; //TODO: get this from PictureService 
             ViewData[ViewConstants.NEEDS_TOUR] = false; //TODO : tour 
             ViewData[ViewConstants.CURR_SCHOOL_YEAR_ID] = GetCurrentSchoolYearId();
             ViewData[ViewConstants.VERSION] = CompilerHelper.Version;
