@@ -17,6 +17,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         UserContext Login(string login, string password);
         UserContext Login(string confirmationKey);
         UserContext LoginToDemo(string roleName, string demoPrefix);
+        UserContext ReLogin(Guid id);
         User GetByLogin(string login);
         User GetById(Guid id);
         User CreateSysAdmin(string login, string password);
@@ -72,6 +73,16 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 return Login(GetDemoUser(roleName, demoPrefix), uow);
+            }
+        }
+        
+        public UserContext ReLogin(Guid id)
+        {
+            if (Context != null && Context.UserId == id)  return null;
+            using (var uow = Read())
+            {
+                var user = new UserDataAccess(uow).GetUser(null, null, id);
+                return Login(user, uow);
             }
         }
 
