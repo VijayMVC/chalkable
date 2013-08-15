@@ -1,0 +1,17 @@
+.apps-list
+    +Grid('apps', 'list', self).not-transparent
+        +GridHead()
+            .th Application Name
+            .th Description
+            .th isInternal
+            .th
+        +GridBody()
+            each item in self.items
+                +GridRow()
+                    .td= item.getName()
+                    .td= item.getShortDescription()
+                    .td
+                    .td.action-links
+                        +ActionLink('apps', 'details', item.getId()).profile
+                        +ActionLink('apps', 'delete', item.getId()).remove
+
