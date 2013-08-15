@@ -12,88 +12,12 @@
 
 @section ContentSection {
 <div id="wrapper">
-<div id="toppanel">
-   <div id="panel">
-      <div class="tab">
-         @*<a id="close" class="closer" href="#">*@
-         <button id="close" class="toplogin closer">Close</button>
-         @*</a>*@			
-      </div>
-      <div class="content clearfix">
-        <section class="signinarea">
-            <div id="formContainer">
-               <form id="login" action="@Url.Content("~/Home/LogOn")" method="post">
-               <div class = "sign-in-errors">
-                  @Html.ValidationMessage("ValidationError")
-               </div>
-               <ul id="form" class="signinformclass">
-                  <h3 class="signintitle">Sign in</h3>
-                  <li>
-                     <label class="signinformlabel">Email
-                     </label>
-                     <div>
-                        <input id="UserName" name="UserName" type="email" spellcheck="false" class="fieldtext validate[required,custom[email]]"
-                           value="" autofocus="autofocus" tabindex="1" required />
-                     </div>
-                     <p class="instruct index">
-                     </p>
-                  </li>
-                  <li>
-                     <label class="signinformlabel" id="title4" >Password
-                     </label>
-                     <div class="the-password">
-                        <input id="Password" name="Password" type="password" class="pw field-password validate[required]"
-                           value="" maxlength="25" tabindex="2" onkeyup="" required />
-                     </div>
-                  </li>
-                  <li>
-                     <fieldset>
-                        <div>
-                           <div class="fake-input checkbox">
-                              <span><input id="RememberMe" name="remember" type="checkbox" value="true"><input name="remember" type="hidden" value="false"></span>
-                           </div>
-                        </div>
-                     </fieldset>
-                  </li>
-                  <li>
-                     <p class="stayin">Stay signed in</p>
-                  </li>
-                  <li class="signin_button_container">
-                     <a href="#" class="sign_in_button" tabindex="3" >Sign in</a>
-                     <p class="forgot"> <a href="#" id="flipToRecover" class="flipLink"> Forgot Password?</a> </p>
-                  </li>
-               </ul>
-               <input type="submit" tabindex="3" style="visibility:hidden;"/>
-               </form>
-               <form id="recover" action="@Url.Content("~/Account/ResetPassword")" method="post">
-               <ul id="form" class="signinformclass">
-                  <h3 class="signintitle">Forgot Password</h3>
-                  <li>
-                     <label class="signinformlabel">Email </label>
-                     <div>
-                        <input id="recovery-email" type="email" name="email" spellcheck="false" class="fieldtext validate[required,custom[email]]" value="" maxlength="60" tabindex="2" required/>
-                     </div>
-                     <p class="instruct index">	</p>
-                  </li>
-                  <li class="signin_button_container recovery">
-                     <a href="#" class="email_me_button">Email Me</a>
-                     <p class="forgot recovery"> <a href="#" id="flipToLogin" class="flipLink">↩ Go Back</a> </p>
-                  </li>
-               </ul>
-               <input type="submit" value="Recover" style="visibility: hidden" />
-               </form>
-            </div>
-         </section>
-      </div>
-   </div>
-</div>
-
-<!-- The tab on top -->
-<div class="tab" id="signinanchor">
-	<ul class="login">
-		<li id="toggle"><button id="open" class="toplogin open">Sign in </button></li>
-	</ul>
-</div> <div class="content clearfix"></div>
+    @ChlkHelpers.RenderSignInForm(Url, Html)
+    <div class="tab" id="signinanchor">
+	    <ul class="login">
+		    <li id="toggle"><button id="open" class="toplogin open">Sign in </button></li>
+	    </ul>
+    </div> <div class="content clearfix"></div>
     <!-- / top -->
     
 <!--Splash-->
@@ -293,6 +217,8 @@
     <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/waypoints.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/cycle.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/jquery.fancybox.js")"></script>
+    
+
 }
 
 @section MixPanelTracking {

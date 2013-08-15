@@ -1,5 +1,6 @@
 ﻿@using System.Configuration
 @using System.Web.Mvc
+@using System.Web.Mvc.Html;
 @using Chalkable.Web.Extensions
 
 @helper MixPanel()
@@ -122,81 +123,79 @@
     <meta itemprop="description" content="I just signed up for Chalkable to get amazing apps into my school. Check it out for yourself.">
 }
 
-
-
-
-@helper RenderDemoFooter(bool isDemoSchool, bool isDeveloper, bool needsTour)
+@helper RenderSignInForm(UrlHelper Url, System.Web.Mvc.HtmlHelper Html)
 {
-    if (isDemoSchool || isDeveloper)
-    {
-        <div id="demo-footer">
-            @if (isDeveloper)
-            {
-                if (needsTour)
-                {
-                    <span id="first-tooltip" style="display:none"></span>
-                }
-
-                    <div id="current-app-name"></div>
-                    <div class="border demo-end hidden"></div>
-                    <div class="demo-end hidden">
-                        <h3>Demo</h3>
-                        <div id="demo-end-container"></div>
-                    </div>
-            }
-            else
-            {
-                <div id="fb">
-                    <h>Don't be shy</h>
-                    <div class="fb-like" data-href="https://chalkable.com" data-layout="button_count" data-send="true" data-width="55" data-show-faces="true"></div>
-                    <a id="principal"></a>
+   <div id="toppanel">
+       <div id="panel">
+          <div class="tab">
+             <button id="close" class="toplogin closer">Close</button>		
+          </div>
+          <div class="content clearfix">
+            <section class="signinarea">
+                <div id="formContainer">
+                   <form id="login" action="@Url.Content("~/Home/LogOn")" method="post">
+                   <div class = "sign-in-errors">
+                      @Html.ValidationMessage("ValidationError")
+                   </div>
+                   <ul id="form" class="signinformclass">
+                      <h3 class="signintitle">Sign in</h3>
+                      <li>
+                         <label class="signinformlabel">Email
+                         </label>
+                         <div>
+                            <input id="UserName" name="UserName" type="email" spellcheck="false" class="fieldtext validate[required,custom[email]]"
+                               value="" autofocus="autofocus" tabindex="1" required />
+                         </div>
+                         <p class="instruct index">
+                         </p>
+                      </li>
+                      <li>
+                         <label class="signinformlabel" id="title4" >Password
+                         </label>
+                         <div class="the-password">
+                            <input id="Password" name="Password" type="password" class="pw field-password validate[required]"
+                               value="" maxlength="25" tabindex="2" onkeyup="" required />
+                         </div>
+                      </li>
+                      <li>
+                         <fieldset>
+                            <div>
+                               <div class="fake-input checkbox">
+                                  <span><input id="RememberMe" name="remember" type="checkbox" value="true"><input name="remember" type="hidden" value="false"></span>
+                               </div>
+                            </div>
+                         </fieldset>
+                      </li>
+                      <li>
+                         <p class="stayin">Stay signed in</p>
+                      </li>
+                      <li class="signin_button_container">
+                         <a href="#" class="sign_in_button" tabindex="3" >Sign in</a>
+                         <p class="forgot"> <a href="#" id="flipToRecover" class="flipLink"> Forgot Password?</a> </p>
+                      </li>
+                   </ul>
+                   <input type="submit" tabindex="3" style="visibility:hidden;"/>
+                   </form>
+                   <form id="recover" action="@Url.Content("~/Account/ResetPassword")" method="post">
+                   <ul id="form" class="signinformclass">
+                      <h3 class="signintitle">Forgot Password</h3>
+                      <li>
+                         <label class="signinformlabel">Email </label>
+                         <div>
+                            <input id="recovery-email" type="email" name="email" spellcheck="false" class="fieldtext validate[required,custom[email]]" value="" maxlength="60" tabindex="2" required/>
+                         </div>
+                         <p class="instruct index">	</p>
+                      </li>
+                      <li class="signin_button_container recovery">
+                         <a href="#" class="email_me_button">Email Me</a>
+                         <p class="forgot recovery"> <a href="#" id="flipToLogin" class="flipLink">↩ Go Back</a> </p>
+                      </li>
+                   </ul>
+                   <input type="submit" value="Recover" style="visibility: hidden" />
+                   </form>
                 </div>
-                    <div class="border demo-end"></div>
-                    <div class="demo-end">
-                        <h>Demo</h>
-                        <div id="demo-end-container"></div>
-                    </div>
-                <div class="border"></div>
-                <div>
-                    <h>Sign up</h>
-                    <div id="demo-sign-up-container"></div>
-                </div>
-            }
-
-            <div class="border"></div>
-            
-
-            <div id="roles-buttons">
-                @if (isDeveloper)
-                {
-                    <a class="demo-role-button" rolename="Developer"><span><div class="mark left"></div><div class="mark right"></div>Developer</span></a
-                >}<a class="demo-role-button" rolename="Student"><span><div class="mark left"></div><div class="mark right"></div>Student</span></a
-                ><a class="demo-role-button" rolename="Teacher"><span><div class="mark left"></div><div class="mark right"></div>Teacher</span></a
-                ><a class="demo-role-button" rolename="AdminGrade"><span><div class="mark left"></div><div class="mark right"></div>Admin</span></a
-                ><a class="demo-role-button coming" rolename="Parent"><span><span></span><div class="mark left"></div><div class="mark right"></div>Parent</span></a
-                ><a class="demo-role-button coming" rolename="District"><span><span></span><div class="mark left"></div><div class="mark right"></div>District</span></a>
-            </div>
-        </div>
-
-        <div id="tellfriend" class="contact_form">
-         <a class="close" href="#" >Close</a>
-             <form id='tellafriend_form' method="post" action="#">
-
-                 <label for="topersonmail">To: </label>
-                 <input class="std_input" type="text" id="topersonmail" name="topersonmail" size="40" maxlength="35" />
-
-                 <label for="frompersonmail">Your Email: </label>
-                 <input class="std_input" type="text" id="frompersonmail" name="frompersonmail" size="40" maxlength="35" value="" />
-
-                 <input class="std_input" type="hidden" id="subject" name="subject" size="40" value="Chalkable Demo - App store for school" />
-
-                 <label for="message">Message: </label>
-                 <textarea id="message" name="message" rows="18" cols="40">   Just checked out the Chalkable demo, thought you might want to take a look. It$quot;s an app store for school and a platform to make those apps work.
-				    https://www.chalkable.com/DemoSchool/Demo
-                 </textarea>
-
-                 <div id="tellafriend-submit-container"></div>
-            </form>
-         </div>
-     }
-}    
+             </section>
+          </div>
+       </div>
+    </div>
+}  
