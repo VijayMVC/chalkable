@@ -40,7 +40,7 @@
         .block
             .header Password
             .fields
-                a#changePasswordLink
+                a#changePasswordLink(href='javascript:')
                     |Reset Password
             div.x-hidden#changePasswordForm
                 +ActionForm('account', 'TeacherChangePassword')#info-edit-form.with-ok
