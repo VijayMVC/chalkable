@@ -142,6 +142,16 @@
             white-space: nowrap;
           }
         }
+
+        &.action-link, &.button-link{
+          height: 76px;
+          width: 67px;
+          overflow: hidden;
+
+          .text-container{
+            padding-top:49px;
+          }
+        }
       }
     }
   }

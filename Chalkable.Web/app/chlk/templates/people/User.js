@@ -81,6 +81,12 @@ NAMESPACE('chlk.templates.people', function () {
             String, 'addressesValue',
 
             [ria.templates.ModelPropertyBind],
-            String, 'phonesValue'
+            String, 'phonesValue',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'index',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'selected'
         ])
 });

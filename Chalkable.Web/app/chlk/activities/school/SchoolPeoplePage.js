@@ -1,6 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.school.SchoolPeople');
-REQUIRE('chlk.templates.school.SchoolPeoplePart');
+REQUIRE('chlk.templates.people.UsersList');
 
 NAMESPACE('chlk.activities.school', function () {
 
@@ -9,7 +9,7 @@ NAMESPACE('chlk.activities.school', function () {
         [ria.mvc.DomAppendTo('#main')],
         [chlk.activities.lib.PageClass('profile')],
         [ria.mvc.TemplateBind(chlk.templates.school.SchoolPeople)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.school.SchoolPeoplePart, '', '.people-list-container', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.people.UsersList, '', '.people-list-container', ria.mvc.PartialUpdateRuleActions.Replace)],
         'SchoolPeoplePage', EXTENDS(chlk.activities.lib.TemplatePage), [
             [ria.mvc.DomEventBind('change', '#roleId')],
             [[ria.dom.Dom, ria.dom.Event]],

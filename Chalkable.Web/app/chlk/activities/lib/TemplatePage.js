@@ -33,18 +33,15 @@ NAMESPACE('chlk.activities.lib', function () {
                 this._pageClass && this._wrapper.addClass(this._pageClass);
             },
 
-            [[String]],
-            OVERRIDE, VOID, function onModelWait_(msg_) {
+            OVERRIDE, VOID, function startFullLoading() {
                 BASE();
                 this.dom.addClass(LOADING_CLASS);
             },
 
-            [[String]],
-            OVERRIDE, VOID, function onModelComplete_(msg_) {
+            OVERRIDE, VOID, function stopLoading() {
                 BASE();
                 this.dom.removeClass(LOADING_CLASS);
             },
-
 
             OVERRIDE, VOID, function onStop_() {
                 BASE();

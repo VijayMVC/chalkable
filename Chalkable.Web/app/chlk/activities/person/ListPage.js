@@ -1,15 +1,20 @@
-REQUIRE('chlk.activities.lib.TemplatePage');
-REQUIRE('chlk.templates.profile.InfoView');
-REQUIRE('chlk.templates.people.Addresses');
+REQUIRE('chlk.activities.person.PersonGrid');
+REQUIRE('chlk.templates.teacher.StudentsList');
 
-NAMESPACE('chlk.activities.profile', function () {
+NAMESPACE('chlk.activities.person', function () {
 
-    var serializer = new ria.serialize.JsonSerializer();
-
-    /** @class chlk.activities.profile.InfoViewPage */
+    /** @class chlk.activities.person.ListPage */
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
-        [chlk.activities.lib.PageClass('profile')],
-        [ria.mvc.TemplateBind(chlk.templates.profile.InfoView)],
-        'InfoViewPage', EXTENDS(chlk.activities.lib.TemplatePage), []);
+        [ria.mvc.TemplateBind(chlk.templates.teacher.StudentsList)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.people.UsersGrid, '', '.grid-container', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.people.UsersForGrid, '', '.people-list', ria.mvc.PartialUpdateRuleActions.Append)],
+        'ListPage', EXTENDS(chlk.activities.person.PersonGrid), [
+            /*[ria.mvc.DomEventBind('click', '.first-last')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function classClick(node, event){
+                var classId = node.getAttr('classId');
+                this.dom.find('input[name=classid]').setValue(classId);
+            }*/
+        ]);
 });

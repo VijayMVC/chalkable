@@ -118,11 +118,10 @@ NAMESPACE('chlk.controllers', function (){
                 var serializer = new ria.serialize.JsonSerializer();
                 var model = new chlk.models.school.SchoolPeople();
                 model.setSchoolInfo(result[0]);
-                var usersModel = new chlk.models.school.SchoolPeoplePart();
+                var usersModel = new chlk.models.school.UsersList();
                 usersModel.setSelectedIndex(0);
                 usersModel.setByLastName(true);
                 usersModel.setUsers(result[1]);
-                usersModel.setSchoolId(result[0].getId());
                 model.setUsersPart(usersModel);
                 var roles = result[2];
                 newGradeLevels.unshift(serializer.deserialize({name: 'All Grades', id: null}, chlk.models.common.NameId));
@@ -159,7 +158,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.school.SchoolPeoplePage, result);
         },*/
 
-        [[chlk.models.school.SchoolPeoplePart]],
+        [[chlk.models.people.UsersList]],
         VOID, function setPeopleFilterAction(model_) {
             var result = ria.async.wait([
                 this.adminService.getUsers(model_.getSchoolId(),model_.getRoleId() || null, model_.getGradeLevelId() || null, model_.isByLastName(),0)

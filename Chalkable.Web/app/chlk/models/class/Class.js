@@ -15,8 +15,6 @@ NAMESPACE('chlk.models.class', function () {
 
             String, 'description',
 
-            Boolean, 'disabled',
-
             [ria.serialize.SerializeProperty('gradelevel')],
             chlk.models.grading.GradeLevel, 'gradeLevel',
 
@@ -27,10 +25,6 @@ NAMESPACE('chlk.models.class', function () {
 
             String, 'name',
 
-            chlk.models.people.User, 'teacher',
-
-            Boolean, 'pressed',
-
-            Number, 'index'
+            chlk.models.people.User, 'teacher'
         ]);
 });

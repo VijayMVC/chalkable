@@ -155,7 +155,7 @@ NAMESPACE('chlk.controllers', function (){
                     var action = backToVideo ? 'video' : 'teacherSettings';
                     var params = backToVideo ? [] : [index - 2];
                     if(model.isChanged()){
-                        this.ShowMsgBox('Are you sure you want to go?', null, [{
+                        return this.ShowMsgBox('Are you sure you want to go?', null, [{
                             text: Msg.OK,
                             controller: 'setup',
                             action: action,
@@ -163,9 +163,8 @@ NAMESPACE('chlk.controllers', function (){
                             color: chlk.models.common.ButtonColor.RED.valueOf()
                         }, {
                             text: Msg.Cancel,
-                            color: chlk.models.common.ButtonColor.GREEN.valueOf(),
-                            close: true
-                        }], 'center')
+                            color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                        }], 'center');
                     }else{
                         return this.redirect_('setup', action, params);
                     }
@@ -175,8 +174,7 @@ NAMESPACE('chlk.controllers', function (){
                         if(index > 1)
                             this.ShowMsgBox('To make things easier we copy and\npaste your choices from the last page.\n\n'+
                                     'Click any number to change it.', 'fyi.', [{
-                                text: Msg.GOT_IT.toUpperCase(),
-                                close: true
+                                text: Msg.GOT_IT.toUpperCase()
                             }])
                     }else{
                         var finalGradeAnnouncementTypes = [], item, ids = model.getFinalGradeAnnouncementTypeIds().split(','),

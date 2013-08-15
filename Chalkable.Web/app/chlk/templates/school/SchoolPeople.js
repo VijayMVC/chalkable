@@ -1,6 +1,6 @@
 REQUIRE('chlk.models.school.SchoolPeopleSummary');
 REQUIRE('chlk.models.school.SchoolPeople');
-REQUIRE('chlk.models.school.SchoolPeoplePart');
+REQUIRE('chlk.models.people.UsersList');
 
 NAMESPACE('chlk.templates.school', function () {
 
@@ -10,7 +10,7 @@ NAMESPACE('chlk.templates.school', function () {
         [ria.templates.ModelBind(chlk.models.school.SchoolPeople)],
         'SchoolPeople', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.school.SchoolPeoplePart, 'usersPart',
+            chlk.models.people.UsersList, 'usersPart',
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.common.NameId), 'roles',
             [ria.templates.ModelPropertyBind],

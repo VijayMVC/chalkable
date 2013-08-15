@@ -38,15 +38,26 @@ NAMESPACE('chlk.controls', function () {
                 var controller = args.shift(),
                     action = args.shift();
 
+
+
+                if(node.hasClass('defer')){
+                    setTimeout(function(){
+                        this.updateState(controller, action, args);
+                    }.bind(this),10)
+                }else{
+                    this.updateState(controller, action, args);
+                }
+
+                event.preventDefault();
+            },
+
+            VOID, function updateState(controller, action, args){
                 var state = this.context.getState();
                 state.setController(controller);
                 state.setAction(action);
                 state.setParams(args);
                 state.setPublic(false);
-
                 this.context.stateUpdated();
-
-                event.preventDefault();
             }
         ]);
 });

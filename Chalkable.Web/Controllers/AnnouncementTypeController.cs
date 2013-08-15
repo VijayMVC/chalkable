@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common.Exceptions;
@@ -32,15 +31,18 @@ namespace Chalkable.Web.Controllers
                 markingPeriod = SchoolLocator.MarkingPeriodService.GetNextMarkingPeriodInYear(markingPeriod.Id);
             if (markingPeriod == null)
                 return Json(new NoMarkingPeriodException());
-            var res = GetTypesByClass(SchoolLocator, markingPeriod.Id, classId);
+
+            var standard = new[] {SchoolLocator.AnnouncementTypeService.GetAnnouncementTypeById((int) SystemAnnouncementType.Standard)};
+            var markingPeriodClass = SchoolLocator.MarkingPeriodService.GetMarkingPeriodClass(classId, markingPeriod.Id);
+            var res = GetTypesByClass(SchoolLocator, markingPeriodClass.Id, standard);
             return Json(AnnouncementTypeViewData.Create(res), 3);
         }
 
-        public static IList<AnnouncementType> GetTypesByClass(IServiceLocatorSchool serviceLocator, Guid markingPeriodId, Guid classId)
+        public static IList<AnnouncementType> GetTypesByClass(IServiceLocatorSchool serviceLocator, Guid markingPeriodClassId, IEnumerable<AnnouncementType> defaults)
         {
-            var finalAnnTypes = serviceLocator.FinalGradeService.GetFinalGradeAnnouncementTypes(markingPeriodId, classId);
+            var finalAnnTypes = serviceLocator.FinalGradeService.GetFinalGradeAnnouncementTypes(markingPeriodClassId);
             var annTypes = finalAnnTypes.Where(x => x.PercentValue > 0).Select(x => x.AnnouncementType).ToList();
-            annTypes.Add(serviceLocator.AnnouncementTypeService.GetAnnouncementTypeById((int)SystemAnnouncementType.Standard));
+            annTypes.AddRange(defaults);
             foreach (var announcementType in annTypes)
             {
                 announcementType.CanCreate = true;

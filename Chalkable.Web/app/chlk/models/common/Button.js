@@ -15,7 +15,6 @@ NAMESPACE('chlk.models.common', function () {
             String, 'action',
             Array, 'params',
             chlk.models.common.ButtonColor, 'color',
-            Boolean, 'close',
             Object, 'attributes',
             String, 'text'
         ]);

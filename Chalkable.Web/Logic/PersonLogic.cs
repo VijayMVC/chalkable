@@ -10,8 +10,8 @@ namespace Chalkable.Web.Logic
     {
         private const int DEFAULT_COUNT = 10;
 
-        public static PaginatedList<PersonViewData> GetPersons(IServiceLocatorSchool locator, int? start, int? count, 
-            int? sortType, string filter = null, string roleName = null, Guid? classId = null
+        public static PaginatedList<PersonViewData> GetPersons(IServiceLocatorSchool locator, int? start, int? count,
+            bool? byLastName = true, string filter = null, string roleName = null, Guid? classId = null
             , GuidList gradeLevelsIds = null, Guid? teacherId = null)
         {
             var query = new PersonQuery
@@ -23,7 +23,7 @@ namespace Chalkable.Web.Logic
                     RoleId = string.IsNullOrEmpty(roleName) ? default(int?) : CoreRoles.GetByName(roleName).Id,
                     Start = start ?? 0,
                     Count = count ?? DEFAULT_COUNT,
-                    SortType = (SortTypeEnum?) sortType ?? SortTypeEnum.ByLastName
+                    SortType = byLastName.Value ? SortTypeEnum.ByLastName : SortTypeEnum.ByFirstName
                 };
             var res = locator.PersonService.GetPaginatedPersons(query);
             return res.Transform(PersonViewData.Create);

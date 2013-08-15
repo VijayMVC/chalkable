@@ -98,7 +98,7 @@ NAMESPACE('ria.mvc', function () {
 
             [[ria.async.Future]],
             ria.async.Future, function refreshD(future) {
-                this.startLoading();
+                this.startFullLoading();
                 var me = this;
                 return future
                     .attach(this.getModelEvents_())
@@ -117,6 +117,8 @@ NAMESPACE('ria.mvc', function () {
             },
 
             VOID, function startLoading() {},
+
+            VOID, function startFullLoading() {},
 
             VOID, function stopLoading() {},
 
