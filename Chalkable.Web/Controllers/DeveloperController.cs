@@ -40,6 +40,12 @@ namespace Chalkable.Web.Controllers
             return View();
         }
 
+
+        public ActionResult Info()
+        {
+            return View();
+        }
+
         public ActionResult ListApi()
         {
             var currentSchool = MasterLocator.SchoolService.GetById(Context.SchoolId.Value);

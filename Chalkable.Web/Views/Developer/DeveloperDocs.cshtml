@@ -3,10 +3,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+@{
+    var inIframe = !String.IsNullOrEmpty(Request.QueryString["InFrame"]);    
+}
+
 @section Styles {
     <link href="@Url.StaticContent("/Content/screen-index.css")" rel="stylesheet" type="text/css" />
 
-    @if(!String.IsNullOrEmpty(Request.QueryString["InFrame"])){
+    @if (inIframe)
+    {
         <style>
             #page-header, .olrk-noquirks{
                 display: none;
@@ -20,113 +26,31 @@
 }
 
 @section ContentSection {
-@if(String.IsNullOrEmpty(Request.QueryString["InFrame"])){
-
-<div id="toppanel">
-	<div id="panel">
-			<div class="tab">
-				<a id="close" class="closer" href="#"><button class="toplogin closer">Close</button></a>			
-			</div>
-		<div class="content clearfix">
-			<section class="signinarea">
-				<div id="formContainer">
-            	<form id="login" action="@Url.Content("~/Account/LogOn")" method="post">
-                    
-                    <div class = "sign-in-errors">
-                          @Html.ValidationMessage("ValidationError")
-                    </div>
-            		<ul id="form" class="signinformclass">
-            		            		<h3 class="signintitle">Sign in</h3>        
-
-            		    <li>
-            		        <label class="signinformlabel">Email
-            		        </label>
-            		        <div>
-            		            <input id="UserName" name="UserName" type="email" spellcheck="false" class="fieldtext validate[required,custom[email]]"
-            		            value="" maxlength="60" tabindex="1" required />
-            		        </div>
-            		        <p class="instruct index">
-            		        </p>
-
-            		    </li>
-            		    <li>
-            		        <label class="signinformlabel" id="title4" >Password
-            		        </label>
-            		        <div class="the-password">
-            		            <input id="Password" name="Password" type="password" class="pw field-password validate[required]"
-            		            value="" maxlength="25" tabindex="2" onkeyup="" required />
-            		        </div>
-            		       
-            		    </li>
-
-						<li>
-                            <fieldset>
-                                <div>
-                                    <div class="fake-input checkbox">
-                                        <span>@Html.CheckBoxFor(x=>x.RememberMe, new {id = "RememberMe"})</span>
-                                        @*<span>    <input type="checkbox" id="RememberMeCheckBox" name="RememberMeCheckBox" /></span>*@
-                                        @*<input type="hidden" id="RememberMe" name="RememberMe" />*@
-                                    </div>
-                                    </div>
-                                </fieldset>
-                            </li>
-						<li>
-						<p class="stayin">Stay signed in</p>
-
-            		    </li>
-            		    <li class="signin_button_container">
-            		    		<a href="#" class="sign_in_button" tabindex="3" >Sign in</a>
-            		           <p class="forgot"> <a href="#" id="flipToRecover" class="flipLink"> Forgot Password?</a> </p>
-            		    </li>
-            		</ul>
-                 
-                    
-
-            		<input type="submit" tabindex="3" style="visibility:hidden;"/>
-             </form>
-             <form id="recover" action="@Url.Content("~/Account/ResetPassword")" method="post">
-                        <ul id="form" class="signinformclass">
-                            <h3 class="signintitle">Forgot Password</h3>
-                            <li>
-                                <label class="signinformlabel">Email </label>
-                                <div>
-                                    <input id="recovery-email" type="email" name="email" spellcheck="false" class="fieldtext" value="" maxlength="60" tabindex="2" required/>
-                                </div>
-                                <p class="instruct index">	</p>
-                            </li>
-
-                            <li class="signin_button_container recovery">
-                                <a href="#" class="email_me_button">Email Me</a>
-                                <p class="forgot recovery"> <a href="#" id="flipToLogin" class="flipLink">↩ Go Back</a> </p>
-                            </li>
-                        </ul>
-                        <input type="submit" value="Recover" style="visibility: hidden" />
-                    </form>
-
-                </div>
-           </section>
-       </div>
-    </div>
-</div>
+    
 
 
-		    <div id="docs_top_wrapper" class="faq_sticky_navigation developers" >
-                <div id="sticky_navigation" class="developers">
-                    <div class="demo_container">
-                        <ul id="nav1">
-                            <li><a href="@Url.Content("~/#start")"><img src="@Url.StaticContent("/Content/images/common/nav-logo-150.png")" class="navlogo_faq developers"></a></li>
-                            <li><a target="_top" href="@Url.Content("~/Account/Developers")"><h5 class="dev_nav_logo">Developers</h5></a></li>
-                            <li class="loginnav dev one"><a id="open" class="open" href="#" style="margin-left: 596px; width:200px">Sign in</a></li>
-                        </ul>
-                    </div>
+@if (!inIframe)
+{
+    
+        @ChlkHelpers.RenderSignInForm(Url, Html)
+	    <div id="docs_top_wrapper" class="faq_sticky_navigation developers" >
+            <div id="sticky_navigation" class="developers">
+                <div class="demo_container">
+                    <ul id="nav1">
+                        <li><a href="@Url.Content("~/#start")"><img src="@Url.StaticContent("/Content/images/common/nav-logo-150.png")" class="navlogo_faq developers"></a></li>
+                        <li><a target="_top" href="@Url.Content("~/Account/Developers")"><h5 class="dev_nav_logo">Developers</h5></a></li>
+                        <li class="loginnav dev one"><a id="open" class="open" href="#" style="margin-left: 596px; width:200px">Sign in</a></li>
+                    </ul>
                 </div>
             </div>
-		}
+        </div>
+}
 
 <div id="outer-wrap">
 
     <div class="wrapper docs">
-        @if(String.IsNullOrEmpty(Request.QueryString["InFrame"])){
+        @if (!inIframe)
+        {
             <div class="leftwrap">
                <div class="fixed-sider">
                     <ul>
@@ -595,59 +519,10 @@ function getMe()
 
 </div><!--outer wrap-->
 
-@if(String.IsNullOrEmpty(Request.QueryString["InFrame"])){
+    @if(!inIframe){
+      @Html.Partial("Footer")
 
-<div id="footer_container">
-              <div class="wrapper">
-                <div id="footer">
-                <div>
-	                <span class="staples"><img src="@Url.StaticContent("/Content/images/index/staples.png")" alt="staples"/></span>
-                </div>
-
-                  <div class="coll">
-                    <h3>Some Links.</h3>
-                    <ul>
-                      <li ><a href="@Url.Content("~/Account/LogOn")" class="scroll">Feature tour</a></li>
-                      <li><a href="@Url.Content("~/Account/LogOn")" class="scroll">Pricing &amp; Signup</a></li>
-                      <li><a href="@Url.Content("~/Account/Faq")">FAQ</a></li>
-                      <li><a href="@Url.Content("~/Account/Developers")">Developers</a></li>
-                      <li><a href="http://blog.chalkable.com/">Blog</a></li>
-                      <li><a href="https://chalkable.uservoice.com/">Feedback</a></li>
-                      <a href="https://mixpanel.com/f/partner"><img src="https://cdn.mxpnl.com/site_media/images/partner/badge_light.png" alt="Mobile Analytics" /></a>
-                    </ul>
-                  </div>
-                  <div class="coll">
-                    <h3>Say Hi.</h3>
-                    <ul>
-                      <li>Chalkable</li>
-                      <li>500 7th Ave.</li>
-				      <li>17th Floor</li>
-				      <li>New York, NY 10018</li>
-                      <li><a href="mailto:info@chalkable.com">Email Us</a></li>
-                      <li><a href="mailto:jobs@chalkable.com">Jobs</a></li>
-                    </ul>
-                  </div>
-                  <div class="coll ">
-                    <h3>Don&#39;t Be Shy.</h3>
-                    <ul class="social">
-                      <li><img src="@Url.StaticContent("/Content/images/index/icon1.png")" alt="" /><a href="https://twitter.com/#!/chalkable">Follow us</a></li>
-                      <li><img src="@Url.StaticContent("/Content/images/index/icon2.png")" alt="" /><a href="https://www.facebook.com/chalkable">Like us</a></li>
-                      <span class="call_us"><img src="@Url.StaticContent("/Content/images/index/phone_icon.png")" alt="phone"><li>Call us</li></span>
-                      <li class="phone_number">646.494.3464</li>
-                    </ul>
-                  </div>
-                  <div class="coll last">
-                    <h3>Fine Print.</h3>
-                    <ul>
-                      <li><a href="http://cl.ly/361V222N3T213e1m1J0Z">Press</a></li>
-                      <li><a href="@Url.Content("~/Account/Terms#developer")">Terms</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-}
+    }
 }
 
 @section BottomScripts {
