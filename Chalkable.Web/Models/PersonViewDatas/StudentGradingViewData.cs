@@ -27,6 +27,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 {
                     stGrading = new ClassPersonGradingStatsViewData
                     {
+                        ClassPersonId = gSt.Id,
+                        PersonId = gSt.PersonRef,
                         ClassId = gSt.ClassRef,
                         ClassName = gSt.ClassName,
                         ClassAvg = gSt.ClassAvg,

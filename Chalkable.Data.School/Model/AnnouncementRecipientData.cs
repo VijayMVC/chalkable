@@ -14,6 +14,6 @@ namespace Chalkable.Data.School.Model
         public Guid PersonRef { get; set; }
         public bool Starred { get; set; }
         public bool StarredAutomatically { get; set; }
-
+        public DateTime? LastModifiedDate { get; set; }
     }
 }

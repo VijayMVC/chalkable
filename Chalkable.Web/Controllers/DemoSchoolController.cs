@@ -22,8 +22,6 @@ namespace Chalkable.Web.Controllers
             var roles = new List<CoreRole>
                             {
                                 CoreRoles.ADMIN_GRADE_ROLE,
-                                CoreRoles.ADMIN_EDIT_ROLE,
-                                CoreRoles.ADMIN_VIEW_ROLE,
                                 CoreRoles.TEACHER_ROLE,
                                 CoreRoles.STUDENT_ROLE
                             };

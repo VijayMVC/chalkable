@@ -11,14 +11,15 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public void Update(Guid announcementId, Guid personId, bool starred, int? starredAutomatically)
+        public void Update(Guid announcementId, Guid personId, bool starred, int? starredAutomatically, DateTime modifiedDate)
         {
-            var parameters = new Dictionary<string, object>()
+            var parameters = new Dictionary<string, object>
                 {
                     {"@announcementId", announcementId},
                     {"@personId", personId},
                     {"@starred", starred},
-                    {"@starredAutomatically", starredAutomatically}
+                    {"@starredAutomatically", starredAutomatically},
+                    {"@currentDate", modifiedDate}
                 };
             ExecuteStoredProcedureReader("spUpdateAnnouncemetRecipientData", parameters).Dispose();
         }

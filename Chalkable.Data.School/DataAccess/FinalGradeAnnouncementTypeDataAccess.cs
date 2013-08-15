@@ -55,6 +55,6 @@ namespace Chalkable.Data.School.DataAccess
     {
         public Guid? Id { get; set; }
         public Guid? FinalGradeId { get; set; }
-        public Guid? AnnouncementTypeId { get; set; }
+        public int? AnnouncementTypeId { get; set; }
     }
 }
