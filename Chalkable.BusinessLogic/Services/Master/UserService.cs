@@ -78,12 +78,15 @@ namespace Chalkable.BusinessLogic.Services.Master
         
         public UserContext ReLogin(Guid id)
         {
-            if (Context != null && Context.UserId == id)  return null;
-            using (var uow = Read())
+            if (Context != null && Context.UserId == id)
             {
-                var user = new UserDataAccess(uow).GetUser(null, null, id);
-                return Login(user, uow);
+                using (var uow = Read())
+                {
+                    var user = new UserDataAccess(uow).GetUser(null, null, id);
+                    return Login(user, uow);
+                }
             }
+            return null;
         }
 
         private UserContext Login(User user, UnitOfWork uow)
