@@ -13,7 +13,7 @@ using Chalkable.Web.Models.PersonViewDatas;
 namespace Chalkable.Web.Controllers.PersonControllers
 {
     [RequireHttps, TraceControllerFilter]
-    public class PersonController : ChalkableController
+    public class PersonController : UserController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_USER_ME, true, CallType.Get, new[] { AppPermissionType.User, })]
         public ActionResult Me()
@@ -100,8 +100,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             if (context == null)
                 throw new ChalkableSecurityException();
         }
-
-
+        
         protected void SavePhones(AdminTeacherInputModel model)
         {
             var prev = SchoolLocator.PhoneService.GetPhones(model.PersonId);

@@ -54,7 +54,7 @@ $(document).ready(function () {
             unSuccessLogIn();
         } else {
          var options = {
-              url: WEB_SITE_ROOT + 'Home/LogOn.json',
+              url: WEB_SITE_ROOT + 'User/LogOn.json',
               type: "post",
               dataType: "json",
               data: form.serialize(),

@@ -16,7 +16,7 @@ using Chalkable.Web.Models.ChalkableApiExplorerViewData;
 
 namespace Chalkable.Web.Controllers
 {
-    public class DeveloperController : ChalkableController
+    public class DeveloperController : UserController
     {
         [HttpPost]
         public ActionResult SignUp(string email, string password, string confirmPassword)
@@ -28,7 +28,7 @@ namespace Chalkable.Web.Controllers
                 if (demoSchool != null)
                 {
                     sysLocator.DeveloperService.Add(email, password, null, null, demoSchool.Id);
-                    return Redirect<HomeController>(x => x.LogOn(email, password, false));
+                    return LogOn(email, password, false);
                 }  
                 return Json(new ChalkableException(ChlkResources.ERR_DEMO_UNAVAILABLE));
             }

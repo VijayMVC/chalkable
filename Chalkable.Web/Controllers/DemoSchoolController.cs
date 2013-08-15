@@ -15,7 +15,7 @@ using Chalkable.Web.Models;
 namespace Chalkable.Web.Controllers
 {
     [RequireHttps, TraceControllerFilter]
-    public class DemoSchoolController : ChalkableController
+    public class DemoSchoolController : UserController
     {
         public ActionResult Index()
         {
