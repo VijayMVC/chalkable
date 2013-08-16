@@ -40,8 +40,21 @@
         .block
             .header Password
             .fields
-                +ActionLink('account', 'changePassword') Reset Password
-
-
+                a#changePasswordLink(href='javascript:')
+                    |Reset Password
+            div.x-hidden#changePasswordForm
+                +ActionForm('account', 'TeacherChangePassword')#info-edit-form.with-ok
+                    .title
+                        .name-block
+                            .info-title=Msg.Old_Password
+                            input(name="oldPassword", type="password", class="validate[required]")
+                            .info-title=Msg.New_Password
+                            input(name="newPassword", id="newPassword", type="password", class="validate[required]")
+                            .info-title=Msg.New_Password_Confirm
+                            input(name="newPasswordConfirmation", id="newPasswordConfirmation", type="password", class="validate[required, equals[newPassword]]")
+                    br
+                    .section-buttons
+                        +Button(type="submit").special-button.blue-button#submit-pwd-button=Msg.Save
+                        +Button(type="button").special-button.blue-button#cancell-edit-pwd-button=Msg.Cancel
 
 

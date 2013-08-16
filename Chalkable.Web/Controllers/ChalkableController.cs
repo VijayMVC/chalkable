@@ -94,7 +94,7 @@ namespace Chalkable.Web.Controllers
             InitServiceLocators(context);
         }
 
-        private void InitServiceLocators(UserContext context)
+        protected void InitServiceLocators(UserContext context)
         {
             SchoolLocator = ServiceLocatorFactory.CreateSchoolLocator(context);
             MasterLocator = SchoolLocator.ServiceLocatorMaster;
@@ -165,27 +165,6 @@ namespace Chalkable.Web.Controllers
                 return mp.Id;
             }
             return markingPeriodId.Value;
-        }
-
-
-        protected ActionResult Confirm(string key, Func<UserContext, ActionResult> redirectAction)
-        {
-            var context = LogOn(false, us => us.Login(key));
-            if (context != null)
-            {
-                InitServiceLocators(context);
-                return redirectAction(context);
-            }
-            return Redirect<HomeController>(c => c.Index());
-        }
-
-        protected UserContext LogOn(bool remember, Func<IUserService, UserContext> logOnAction)
-        {
-            var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var context = logOnAction(serviceLocator.UserService);
-            if (context != null)
-                ChalkableAuthentication.SignIn(context, remember);
-            return context;
         }
     }
 }

@@ -15,15 +15,13 @@ using Chalkable.Web.Models;
 namespace Chalkable.Web.Controllers
 {
     [RequireHttps, TraceControllerFilter]
-    public class DemoSchoolController : ChalkableController
+    public class DemoSchoolController : UserController
     {
         public ActionResult Index()
         {
             var roles = new List<CoreRole>
                             {
                                 CoreRoles.ADMIN_GRADE_ROLE,
-                                CoreRoles.ADMIN_EDIT_ROLE,
-                                CoreRoles.ADMIN_VIEW_ROLE,
                                 CoreRoles.TEACHER_ROLE,
                                 CoreRoles.STUDENT_ROLE
                             };

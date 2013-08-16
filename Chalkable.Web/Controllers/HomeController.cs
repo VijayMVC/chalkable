@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
@@ -21,47 +22,14 @@ using Chalkable.Web.Tools;
 
 namespace Chalkable.Web.Controllers
 {
+    [RequireHttps, TraceControllerFilter]
     public class HomeController : ChalkableController
     {
-
         public ActionResult Index()
         {
             return View();
         }
-
-        public ActionResult LogOn(string userName, string password, bool remember)
-        {
-            var context = LogOn(remember, us => us.Login(userName, password));
-            if(context != null)
-                return Json(new { Success = true, data = new {Role = context.Role.LoweredName} }, JsonRequestBehavior.AllowGet);
-            return Json(new { Success = false, UserName = userName }, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult LogOut()
-        {
-            var userName = ControllerContext.HttpContext.User.Identity.Name;
-            ChalkableAuthentication.SignOut();
-            return Json(new { success = true, data = new {success = true} }, JsonRequestBehavior.AllowGet);
-        }
-
-
-        public ActionResult Confirm(string key)
-        {
-            return Confirm(key, AfterConfirmAction);
-        }
-        private ActionResult AfterConfirmAction(UserContext context)
-        {
-            //TODO: create default Announcement for teacher
-            SchoolLocator.PersonService.ActivatePerson(context.UserId);
-            //TODO: mix panel 
-            if (context.Role == CoreRoles.SUPER_ADMIN_ROLE)
-                return Redirect<HomeController>(x => x.SysAdmin());
-            if (context.Role == CoreRoles.TEACHER_ROLE)
-                return Redirect<HomeController>(x => x.Teacher(true));
-            return Redirect<HomeController>(c => c.Index());
-        }
-        
-
+      
         [AuthorizationFilter("SysAdmin")]
         public ActionResult SysAdmin()
         {
@@ -69,7 +37,6 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(SysAdminViewData.Create(sysUser), ViewConstants.CURRENT_PERSON);
             return View();
         }
-
 
         [AuthorizationFilter("Developer")]
         public ActionResult Developer(Guid? currentApplicationId)
@@ -124,6 +91,7 @@ namespace Chalkable.Web.Controllers
                     ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
                 }
             }
+            ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.NEEDS_TOUR] = false; //TODO : tour 
             ViewData[ViewConstants.CURR_SCHOOL_YEAR_ID] = GetCurrentSchoolYearId();
             ViewData[ViewConstants.VERSION] = CompilerHelper.Version;

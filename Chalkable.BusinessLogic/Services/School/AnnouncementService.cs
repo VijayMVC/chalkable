@@ -239,14 +239,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 res.Created = dateNow;
             }
             res = PreperingReminderData(unitOfWork, res);
-            //var fgat = Entities.FinalGradeAnnouncementTypes.FirstOrDefault(x => x.FinalGrade.MarkingPeriodClassRef == res.MarkingPeriodClassRef
-            //                                                                 && x.AnnouncementTypeRef == res.AnnouncementTypeRef);
-            //if (fgat != null)
-            //    res.GradingStyle = fgat.GradingStyle;
-            //else
-            //    res.GradingStyleEnumTyped = GradingStyleEnum.Numeric100;
-            
-            res.GradingStyle = GradingStyleEnum.Numeric100;
+            var fgat = new FinalGradeAnnouncementTypeDataAccess(unitOfWork)
+                .GetOneOrNull(new FinalGradeAnnouncementTypeQuery
+                    {
+                        AnnouncementTypeId = res.AnnouncementTypeRef,
+                        FinalGradeId = res.MarkingPeriodClassRef
+                    });
+            res.GradingStyle = fgat != null ? fgat.GradingStyle : GradingStyleEnum.Numeric100;           
             dataAccess.Update(res);
             return res;
         }
@@ -391,7 +390,8 @@ namespace Chalkable.BusinessLogic.Services.School
             var ann = GetAnnouncementById(id);
             using (var uow = Update())
             {
-                new AnnouncementRecipientDataDataAccess(uow).Update(id, Context.UserId, starred, null);
+                new AnnouncementRecipientDataDataAccess(uow)
+                    .Update(id, Context.UserId, starred, null, Context.NowSchoolTime.Date);
                 uow.Commit();
                 return ann;
             }

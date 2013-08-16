@@ -13,7 +13,7 @@ NAMESPACE('chlk.services', function () {
             },
 
             ria.async.Future, function logOut() {
-                return this.post('Home/LogOut.json', chlk.models.common.SimpleResult, {});
+                return this.post('User/LogOut.json', chlk.models.common.SimpleResult, {});
             },
 
             [[String,String,String]],

@@ -8,5 +8,7 @@ NAMESPACE('chlk.activities.profile', function () {
         [ria.mvc.DomAppendTo('#main')],
         [chlk.activities.lib.PageClass('profile')],
         [ria.mvc.TemplateBind(chlk.templates.profile.ChangePassword)],
-        'ChangePasswordPage', EXTENDS(chlk.activities.lib.TemplatePage), [ ]);
+        'ChangePasswordPage', EXTENDS(chlk.activities.lib.TemplatePage), [
+
+        ]);
 });

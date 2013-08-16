@@ -13,25 +13,8 @@ using Chalkable.Web.Models.PersonViewDatas;
 namespace Chalkable.Web.Controllers.PersonControllers
 {
     [RequireHttps, TraceControllerFilter]
-    public class PersonController : ChalkableController
+    public class PersonController : UserController
     {
-        protected PersonInfoViewData GetInfo(Guid id, Func<PersonDetails, PersonInfoViewData> vdCreator)
-        {
-            if (!CanGetInfo(id))
-                throw new ChalkableSecurityException(ChlkResources.ERR_VIEW_INFO_INVALID_RIGHTS);
-
-            var person = SchoolLocator.PersonService.GetPersonDetails(id);
-            return vdCreator(person);
-        }
-
-        private bool CanGetInfo(Guid personId)
-        {
-            return BaseSecurity.IsAdminOrTeacher(SchoolLocator.Context) 
-                   || SchoolLocator.Context.UserId == personId;
-        }
-
-
-
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_USER_ME, true, CallType.Get, new[] { AppPermissionType.User, })]
         public ActionResult Me()
         {
@@ -70,7 +53,54 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return UploadPicture(MasterLocator.PersonPictureService, personId, null, null);
         }
 
+        public ActionResult ReChangePassword(Guid id, string newPassword)
+        {
+            if (MasterLocator.Context.UserId == id)
+            {
+                MasterLocator.UserService.ChangePassword(MasterLocator.Context.Login, newPassword);
+                //MixPanelService.ChangedPassword(ServiceLocator.Context.UserName);
+                return Json(true);
+            }
+            throw new ChalkableException(ChlkResources.ERR_NOT_CURRENT_USER);
+        }
 
+        protected PersonInfoViewData GetInfo(Guid id, Func<PersonDetails, PersonInfoViewData> vdCreator)
+        {
+            if (!CanGetInfo(id))
+                throw new ChalkableSecurityException(ChlkResources.ERR_VIEW_INFO_INVALID_RIGHTS);
+
+            var person = SchoolLocator.PersonService.GetPersonDetails(id);
+            return vdCreator(person);
+        }
+        private bool CanGetInfo(Guid personId)
+        {
+            return BaseSecurity.IsAdminOrTeacher(SchoolLocator.Context)
+                   || SchoolLocator.Context.UserId == personId;
+        }
+
+        protected Person UpdateTeacherOrAdmin(AdminTeacherInputModel model)
+        {
+            SchoolLocator.PersonService.Edit(model.PersonId, model.Email, model.FirstName, model.LastName, model.Gender, model.Salutation, model.BirthdayDate);
+            return EditPersonAdditionalInfo(model);
+        }
+
+        private Person EditPersonAdditionalInfo(AdminTeacherInputModel model)
+        {
+            SaveAddresses(model);
+            SavePhones(model);
+            var person = SchoolLocator.PersonService.GetPerson(model.PersonId);
+            ReLogOn(person);
+            return person;
+        }
+
+        protected void ReLogOn(Person person)
+        {
+            //TODO: think about how to get rememberMe  
+            var context = LogOn(false, us => us.ReLogin(person.Id));
+            if (context == null)
+                throw new ChalkableSecurityException();
+        }
+        
         protected void SavePhones(AdminTeacherInputModel model)
         {
             var prev = SchoolLocator.PhoneService.GetPhones(model.PersonId);
@@ -107,29 +137,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 }
         }
 
-        private Person EditPersonAdditionalInfo(AdminTeacherInputModel model)
-        {
-            SaveAddresses(model);
-            SavePhones(model);
-            var teacher = SchoolLocator.PersonService.GetPerson(model.PersonId);
-            return teacher;
-        }
 
-        protected Person UpdateTeacherOrAdmin(AdminTeacherInputModel model)
-        {
-            SchoolLocator.PersonService.Edit(model.PersonId, model.Email, model.FirstName, model.LastName, model.Gender, model.Salutation, model.BirthdayDate);
-            return EditPersonAdditionalInfo(model);
-        }
 
-        public ActionResult ReChangePassword(Guid id, string newPassword)
-        {
-            if (MasterLocator.Context.UserId == id)
-            {
-                MasterLocator.UserService.ChangePassword(MasterLocator.Context.Login, newPassword);
-                //MixPanelService.ChangedPassword(ServiceLocator.Context.UserName);
-                return Json(true);
-            }
-            throw new ChalkableException(ChlkResources.ERR_NOT_CURRENT_USER);
-        }
     }
 }
