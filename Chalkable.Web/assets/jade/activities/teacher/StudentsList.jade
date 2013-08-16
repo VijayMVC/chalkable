@@ -1,0 +1,17 @@
+.students-list
+    -topData = self.getTopData();
+    -topItems = topData.getTopItems();
+    -selectedId = topData.getSelectedItemId();
+    +LeftRightToolbar(topItems, chlk.templates.class.TopBar, 'students', self.isMy() ? "my" : "all", [])(
+        selectedItemId=selectedId ? selectedId.valueOf() : ""
+    ).classes-bar
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .right
+                +ActionLink('students', 'my', [])(class=self.isMy() ? "pressed" : "")=Msg.My_Students
+                +ActionLink('students', 'all', [])(class=self.isMy() ? "" : "pressed")=Msg.Whole_School
+    +ActionForm('students', 'updateList')#people-list-form
+        input(type="hidden", name="my", value=self.isMy()))
+        input(type="hidden", name="classId", value=self.getTopData().getSelectedItemId()))
+        .users-list-container
+            +RenderWith(self.getUsersPart(), chlk.templates.people.UsersList)
