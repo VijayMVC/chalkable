@@ -185,15 +185,12 @@ namespace Chalkable.BusinessLogic.Services.Master
         
         public IList<Data.Master.Model.School> GetDemoSchoolsToDelete()
         {
-            var dt = DateTime.UtcNow.AddHours(-DEMO_EXPIRE_HOURS);
+            var expires = DateTime.UtcNow.AddHours(-DEMO_EXPIRE_HOURS);
             using (var uow = Read())
             {
                 var da = new SchoolDataAccess(uow);
-                return da.GetAll(new AndQueryCondition
-                    {
-                        {Data.Master.Model.School.DEMO_PREFIX_FIELD, null, ConditionRelation.NotEqual},
-                        {Data.Master.Model.School.LAST_USED_DEMO_FIELD, dt, ConditionRelation.LessEqual}
-                    });
+                return da.GetSchoolsToDelete(expires);
+                
             }
         }
 
