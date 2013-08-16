@@ -25,7 +25,7 @@
         if (clazz == undefined)
             throw Error('Expected class in ClassOf, but got undefined');
 
-        if (!ria.__API.isClassConstructor(clazz) && clazz !== window.SELF)
+        if (!ria.__API.isClassConstructor(clazz) && clazz !== SELF)
             throw Error('Expected class in ClassOf, but got ' + ria.__API.getIdentifierOfType(clazz));
 
         return new ClassOfDescriptor(clazz);

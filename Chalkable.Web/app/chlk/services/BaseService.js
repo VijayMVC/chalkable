@@ -27,16 +27,7 @@ NAMESPACE('chlk.services', function () {
             ria.mvc.IContext, 'context',
 
             String, function getServiceRoot(){
-
-
-                var siteRoot = ria.__CFG["#require"].siteRoot;
-                var serviceRoot = ria.__CFG["#require"].serviceRoot;
-
-                if (siteRoot[siteRoot.length - 1] != '/' && serviceRoot[0] != '/'){
-                    siteRoot += '/';
-                }
-
-                return siteRoot + serviceRoot;
+                return this.getContext().getSession().get('siteRoot');
             },
 
             [[String]],

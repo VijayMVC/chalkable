@@ -19,7 +19,7 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.apps.AppStateEnum, 'stateId',
             function $(){
                 this._states= {};
-                this._states[chlk.models.apps.AppStateEnum.DRAFT] = "Draft";
+                this._states[chlk.models.apps.AppStateEnum.DRAFT] = "Not Submitted";
                 this._states[chlk.models.apps.AppStateEnum.SUBMIT_FOR_APPROVE] = "Submitted for approve";
                 this._states[chlk.models.apps.AppStateEnum.APPROVED] = "Approved";
                 this._states[chlk.models.apps.AppStateEnum.REJECTED] = "Rejected";

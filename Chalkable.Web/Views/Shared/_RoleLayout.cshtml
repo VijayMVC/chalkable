@@ -1,4 +1,5 @@
 ﻿@using Chalkable.Web.Common
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"  itemscope itemtype="Education">
 <head>
@@ -26,32 +27,9 @@
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/datepicker/jquery-ui-1.10.3.custom.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/languages/jquery.validationEngine-en.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.validationEngine.js")"></script>
-    @if (IsSectionDefined("Scripts"))
-    {
-        @RenderSection("Scripts", false)
-    }
-    else
-    {
-        <script src="@Url.Content("~/app/ria/_bootstrap.js")" type="text/javascript">
-            ria.__CFG = {
-                "prettyStackTraces": true,
-                "checkedMode": true,
-                "enablePipelineMethodCall": true,
-                "AssertWithExceptions": false,
-                "stackTraceJs": "lib/stacktrace.js",
+    
+        
 
-                "#require": {
-                    "plugins": ["~/assets/jade.js"],
-                    "appCodeDir": "~/app/",
-                    "appRoot": "@Url.Content("~")",
-                    "libs": {
-                    }
-                },
-
-                "#mvc": @RenderSection("MVCSettings", false)
-            }
-        </script>
-    }
 </head>
     <body>
         <div id="fb-root"></div>
@@ -70,6 +48,9 @@
             var isDemoSchool = !string.IsNullOrEmpty((string)ViewData.GetValueOrNull("Prefix"));
             var needsTour = !string.IsNullOrEmpty(Convert.ToString(ViewData.GetValueOrNull(ViewConstants.NEEDS_TOUR)));
         }
+        
+        
+
     
 
         <div class="page 
@@ -105,7 +86,13 @@
         <div id="chlk-pop-up-container" class="x-hidden"><div id="pop-up-triangle"></div></div>
         <div class="chlk-tooltip" id="chlk-tooltip-item"><div class="tooltip-content"></div><div class="tooltip-triangle"></div></div>
         @RenderSection("MixPanelTracking", false)
-    </body>
+        
+        
+        
+        
+       
+        
+   
     
     
 <script type="text/json" id="application-value" class="valuable-script">
@@ -156,4 +143,56 @@
         var nextMarkingPeriod = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.NEXT_MARKING_PERIOD)'); 
         var finalizedClassesIds = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.FINALIZED_CLASSES_IDS)'); 
     </script>
+    
+    @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)
+    {
+        <script src="@Url.Content("~/app/ria/_bootstrap.js")" type="text/javascript">
+            ria.__CFG = {
+                "prettyStackTraces": true,
+                "checkedMode": true,
+                "enablePipelineMethodCall": true,
+                "AssertWithExceptions": false,
+                "stackTraceJs": "lib/stacktrace.js",
+
+                "#require": {
+                    "plugins": ["~/assets/jade.js"],
+                    "appCodeDir": "~/app/",
+                    "appRoot": "@Url.Content("~")",
+                    "libs": {
+                        }
+                },
+
+                "#mvc": @RenderSection("MVCSettings", false)
+            }
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            var roleAppScript = @Url.Content("~/Scripts/") + currentChlkPerson.role.name + "App.compiled.js";
+            (function(appUrl) {
+                var scr = document.createElement('script');
+                scr.setAttribute('type', 'text/javascript');
+                scr.src = appUrl;
+                
+                var cfgObject = {
+                    "prettyStackTraces": true,
+                    "checkedMode": false,
+                    "enablePipelineMethodCall": true,
+                    "AssertWithExceptions": true,
+                    "#mvc": @RenderSection("MVCSettings", false)
+                };
+
+                cfgObject = JSON.stringify(cfgObject);
+                scr.innerHTML = "ria.__CFG = " + cfgObject;
+                document.getElementsByTagName('head').item(0).appendChild(scr);
+            })(roleAppScript);
+        </script>
+    }
+    
+    
+    
+    
+    
+    </body> 
 </html>

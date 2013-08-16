@@ -46,6 +46,9 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, 'WEB_SITE_ROOT', null, 'webSiteRoot');
                 this.saveInSession(session, 'azurePictureUrl');
 
+                var siteRoot = window.location.toString().split(window.location.pathname).shift();
+                var serviceRoot = "/";
+                session.set('siteRoot', siteRoot + serviceRoot);
                 return session;
             },
 

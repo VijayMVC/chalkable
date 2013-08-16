@@ -41,6 +41,12 @@ var _RELEASE = false;
         serviceRoot += '/';
     }
 
+    if (siteRoot[siteRoot.length - 1] != '/' && serviceRoot[0] != '/'){
+        siteRoot += '/';
+    }
+
+
+
     var appDir = "";
     var root = ria.__CFG["#require"].appRoot;
     if (root === undefined) {

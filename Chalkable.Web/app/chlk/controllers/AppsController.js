@@ -13,6 +13,7 @@ REQUIRE('chlk.models.apps.AppAccess');
 REQUIRE('chlk.models.apps.AppState');
 REQUIRE('chlk.models.id.AppId');
 REQUIRE('chlk.models.id.AppPermissionId');
+REQUIRE('chlk.models.apps.AppGeneralInfoViewData');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -22,10 +23,6 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.ApplicationService, 'appsService',
-        [ria.mvc.Inject],
-        chlk.services.AppCategoryService, 'categoryService',
-        [ria.mvc.Inject],
-        chlk.services.GradeLevelService, 'gradeLevelService',
 
         [chlk.controllers.SidebarButton('apps')],
         [[Number]],
@@ -203,6 +200,25 @@ NAMESPACE('chlk.controllers', function (){
                          return this.forward_('apps', 'details', []);
                      }, this);
              return result;
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DEVELOPER
+        ])],
+
+        [[chlk.models.id.AppId]],
+        function generalDeveloperAction(appId_){
+            var app = this.appsService
+                .getInfo(appId_)
+                .then(function(data){
+                    if (!data.getId()){
+                        return this.forward_('apps', 'add', []);
+                    }
+                    else{
+                        var appGeneralInfo = new chlk.models.apps.AppGeneralInfoViewData(app.getId(), app.getName(), app.getStatus());
+                        return this.PushView(chlk.activities.apps.AppGeneralInfoPage, new ria.async.DeferredData(appGeneralInfo));
+                    }
+                }, this)
         }
     ])
 });

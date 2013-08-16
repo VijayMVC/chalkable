@@ -16,3 +16,4 @@ Chalkable.Web/assets/sass/*.css
 *.orig
 Chalkable.Web/assets/sass/partials/controls/*.css
 Chalkable.Web/Content/*.css
+Chalkable.Web/Scripts/*.compiled.js

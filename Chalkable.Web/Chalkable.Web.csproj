@@ -313,6 +313,9 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
     <Content Include="loaderio-f0d51fdd912a285e8c3b581c292489c8.html" />
+    <Content Include="Scripts\DeveloperApp.compiled.js" />
+    <Content Include="Scripts\SysAdminApp.compiled.js" />
+    <Content Include="Scripts\TeacherApp.compiled.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

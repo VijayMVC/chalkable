@@ -458,14 +458,14 @@ ria.__SYNTAX = ria.__SYNTAX || {};
         processedMethods.push('$$');
 
         var ClassProxy = function ClassProxy() {
-            var _old_SELF = window.SELF;
+            var _old_SELF = SELF;
             try {
-                window.SELF = ClassProxy;
+                SELF = ClassProxy;
                 return $$.call(undefined, this, ClassProxy, ClassProxy.prototype.$, arguments);
             } catch (e) {
                 throw new Exception('Error instantiating class ' + name, e);
             } finally {
-                window.SELF = _old_SELF;
+                SELF = _old_SELF;
             }
         };
 
@@ -525,8 +525,8 @@ ria.__SYNTAX = ria.__SYNTAX || {};
     if (ria.__CFG.enablePipelineMethodCall) {
         ria.__API.addPipelineMethodCallStage('CallInit',
             function (body, meta, scope, callSession) {
-                callSession.__OLD_SELF = window.SELF;
-                window.SELF = body.__SELF;
+                callSession.__OLD_SELF = SELF;
+                SELF = body.__SELF;
 
                 callSession.__OLD_BASE = window.BASE;
                 var base = body.__BASE_BODY;
@@ -537,7 +537,7 @@ ria.__SYNTAX = ria.__SYNTAX || {};
 
         ria.__API.addPipelineMethodCallStage('CallFinally',
             function (body, meta, scope, callSession) {
-                window.SELF = callSession.__OLD_SELF;
+                SELF = callSession.__OLD_SELF;
                 delete callSession.__OLD_SELF;
 
                 window.BASE = callSession.__OLD_BASE;
