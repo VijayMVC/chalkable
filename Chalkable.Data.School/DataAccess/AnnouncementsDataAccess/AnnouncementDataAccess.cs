@@ -1,27 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
-namespace Chalkable.Data.School.DataAccess
+namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
-    public class AnnouncementDataAccess : DataAccessBase<Announcement>
+    public abstract class AnnouncementDataAccess : DataAccessBase<Announcement>
     {
-        public AnnouncementDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        protected AnnouncementDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
 
 
         private const string CREATE_PORCEDURE = "spCreateAnnouncement";
         private const string GET_DETAILS_PROCEDURE = "spGetAnnouncementDetails";
-        private const string GET_STUDENT_ANNOUNCEMENTS = "spGetStudentAnnouncements";
-        private const string GET_TEACHER_ANNOUNCEMENTS = "spGetTeacherAnnouncements";
-        private const string GET_ADMIN_ANNOUNCEMENTS = "spGetAdminAnnouncements";
         private const string GET_ANNOUNCEMENT_RECIPIENT_PERSON = "spGetAnnouncementRecipientPersons";
         private const string DELETE_PROCEDURE = "spDeleteAnnouncement";
         private const string REORDER_PROCEDURE = "spReorderAnnouncements";
@@ -62,7 +58,7 @@ namespace Chalkable.Data.School.DataAccess
             }
             return announcement;
         }
-        private AnnouncementQueryResult GetAnnouncementsComplex(string procedureName, Dictionary<string, object> parameters, AnnouncementsQuery query)
+        protected AnnouncementQueryResult GetAnnouncementsComplex(string procedureName, Dictionary<string, object> parameters, AnnouncementsQuery query)
         {
             parameters.Add(ID_PARAM, query.Id);
             parameters.Add(ROLE_ID_PARAM, query.RoleId);
@@ -78,19 +74,24 @@ namespace Chalkable.Data.School.DataAccess
             parameters.Add("staredOnly", query.StarredOnly);
             using (var reader = ExecuteStoredProcedureReader(procedureName, parameters))
             {
-                var res = new AnnouncementQueryResult { Query = query};
-                bool first = true;
-                while (reader.Read())
-                {
-                    res.Announcements.Add(reader.Read<AnnouncementComplex>());
-                    if (first)
-                    {
-                        res.SourceCount = SqlTools.ReadInt32(reader, "AllCount");
-                        first = false;
-                    }
-                }
-                return res;
+                return ReadAnnouncementsQueryResult(reader, query);
             }
+        }
+
+        protected AnnouncementQueryResult ReadAnnouncementsQueryResult(DbDataReader reader, AnnouncementsQuery query)
+        {
+            var res = new AnnouncementQueryResult { Query = query };
+            bool first = true;
+            while (reader.Read())
+            {
+                res.Announcements.Add(reader.Read<AnnouncementComplex>());
+                if (first)
+                {
+                    res.SourceCount = SqlTools.ReadInt32(reader, "AllCount");
+                    first = false;
+                }
+            }
+            return res;
         }
    
         public AnnouncementDetails Create(int announcementTypeId, Guid? classId, Guid markingPeriodId, DateTime created, Guid personId)
@@ -126,25 +127,8 @@ namespace Chalkable.Data.School.DataAccess
             ExecuteStoredProcedureReader(DELETE_PROCEDURE, parameters).Dispose();
         }
         
-        public AnnouncementQueryResult GetStudentAnnouncements(AnnouncementsQuery query)
-        {
-            var parameters = new Dictionary<string, object>{{"gradedOnly", query.GradedOnly}};
-            return GetAnnouncementsComplex(GET_STUDENT_ANNOUNCEMENTS, parameters, query);
-        }
-        public AnnouncementQueryResult GetTeacherAnnouncements(AnnouncementsQuery query)
-        {
-            var parameters = new Dictionary<string, object>
-                {
-                    {"gradedOnly", query.GradedOnly},
-                    {"allSchoolItems", query.AllSchoolItems}
-                };
-            return GetAnnouncementsComplex(GET_TEACHER_ANNOUNCEMENTS, parameters, query);
-        }
-        public AnnouncementQueryResult GetAdminAnnouncements(AnnouncementsQuery query)
-        {
-            var parameters = new Dictionary<string, object> { { "gradeLevelsIds", query.GradeLevelIds } };
-            return GetAnnouncementsComplex(GET_ADMIN_ANNOUNCEMENTS, parameters, query);
-        }
+        public abstract AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query);
+        
         public void ReorderAnnouncements(Guid schoolYearId, int announcementTypeId, Guid ownerId, Guid recipientId)
         {
             var parameters = new Dictionary<string, object>
@@ -158,6 +142,7 @@ namespace Chalkable.Data.School.DataAccess
             {
             }
         }
+ 
         public AnnouncementDetails GetDetails(Guid id, Guid callerId)
         {
             var parameters = new Dictionary<string, object>
@@ -188,59 +173,20 @@ namespace Chalkable.Data.School.DataAccess
                 return res;
             }
         } 
-        
-        
-        private bool IsAdmin(int roleId)
-        {
-            return CoreRoles.SUPER_ADMIN_ROLE.Id == roleId
-                   || CoreRoles.ADMIN_EDIT_ROLE.Id == roleId
-                   || CoreRoles.ADMIN_GRADE_ROLE.Id == roleId
-                   || CoreRoles.ADMIN_VIEW_ROLE.Id == roleId;
-        }
-
+       
         public Announcement GetAnnouncement(Guid id, int roleId, Guid callerId)
         {
             var dbQuery = new DbQuery();
             dbQuery.Sql.Append("select Announcement.* from Announcement ");
-            bool firstConds = true;
-            if (IsAdmin(roleId))
-                dbQuery.Sql.Append(" where ");
-            if (CoreRoles.TEACHER_ROLE.Id == roleId)
-            {
-                dbQuery.Sql.Append(@" where Announcement.PersonRef = @callerId 
-                            or (AnnouncementTypeRef = @adminType and Announcement.Id in (select ar.AnnouncementRef from AnnouncementRecipient ar 
-                                                                                          where ar.ToAll = 1 or ar.PersonRef = @callerId or ar.RoleRef = @roleId))");
-                dbQuery.Parameters.Add("callerId", callerId);
-                dbQuery.Parameters.Add("adminType", (int)SystemAnnouncementType.Admin);
-                dbQuery.Parameters.Add("@roleId", roleId);
-                firstConds = false;
-            }
-            if (CoreRoles.STUDENT_ROLE.Id == roleId)
-            {
-                dbQuery.Sql.Append(@" where (
-                                        (Announcement.MarkingPeriodClassRef in (select mpc.Id from MarkingPeriodClass mpc
-                                                                               join ClassPerson cp on cp.ClassRef = mpc.ClassRef
-                                                                               where cp.PersonRef = @callerId)
-                                        ) or (AnnouncementTypeRef = @adminType 
-                                                 and Announcement.Id in (select ar.AnnouncementRef from AnnouncementRecipient ar 
-                                                                         where ar.ToAll = 1 or ar.PersonRef = @callerId or ar.RoleRef = @roleId
-                                                                               or ar.GradeLevelRef in (select GradeLevelRef from StudentInfo where Id = @callerId)
-                                                                        )
-                                             )
-                                 )");
-
-                dbQuery.Parameters.Add("callerId", callerId);
-                dbQuery.Parameters.Add("adminType", (int)SystemAnnouncementType.Admin);
-                dbQuery.Parameters.Add("@roleId", roleId);
-                firstConds = false;
-            }
-
-            if (!firstConds) dbQuery.Sql.Append(" and ");
-            dbQuery.Sql.Append(" Announcement.Id =@id");
-            dbQuery.Parameters.Add("id", id);
+            dbQuery.Sql.Append(" where ");
+            dbQuery.Sql.AppendFormat(" Announcement.{0} = @{0}", Announcement.ID_FIELD);
+            dbQuery.Parameters.Add(Announcement.ID_FIELD, id);
+            BuildConditionForGetSimpleAnnouncement(dbQuery, roleId, callerId);
             return ReadOneOrNull<Announcement>(dbQuery);
         }
-
+        
+        protected abstract void BuildConditionForGetSimpleAnnouncement(DbQuery dbQuery, int role, Guid callerId);
+        
         public Announcement GetLastDraft(Guid personId)
         {
             var conds = new Dictionary<string, object>

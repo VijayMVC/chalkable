@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -38,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var saDa = new StudentAnnouncementDataAccess(uow);
                 var sa = saDa.GetById(studentAnnouncementId);
-                var annDa = new AnnouncementDataAccess(uow);
+                var annDa = new AnnouncementForTeacherDataAccess(uow);
                 var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(sa.AnnouncementRef);
 
                 if(!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))

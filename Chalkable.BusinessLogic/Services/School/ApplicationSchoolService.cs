@@ -6,6 +6,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.ApplicationInstall;
 
@@ -36,7 +37,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 if (announcementAppId.HasValue)
                 {
-                    var anDa = new AnnouncementDataAccess(uow);
+                    var anDa = new AnnouncementForTeacherDataAccess(uow);
                     var da = new AnnouncementApplicationDataAccess(uow);
                     var announcementApplication = da.GetById(announcementAppId.Value);
                     var ann = anDa.GetById(announcementApplication.AnnouncementRef);
@@ -95,7 +96,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new AnnouncementApplicationDataAccess(uow);
                 var aa = da.GetById(announcementAppId);
-                var ann = new AnnouncementDataAccess(uow).GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.UserId);
+                var ann = new AnnouncementForTeacherDataAccess(uow).GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.UserId);
                 if (Context.UserId != ann.PersonRef)
                     throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                 aa.Active = true;
