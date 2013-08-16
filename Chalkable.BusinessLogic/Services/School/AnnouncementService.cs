@@ -7,6 +7,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -52,29 +53,27 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
+        private AnnouncementDataAccess CreateAnnoucnementDataAccess(UnitOfWork unitOfWork)
+        {
+            if(BaseSecurity.IsAdminViewer(Context))
+                return new AnnouncementForAdminDataAccess(unitOfWork);
+            if(Context.Role == CoreRoles.TEACHER_ROLE)
+                return new AnnouncementForTeacherDataAccess(unitOfWork);
+            if(Context.Role == CoreRoles.STUDENT_ROLE)
+                return new AnnouncementForStudentDataAccess(unitOfWork);
+            throw new ChalkableException("Unsupported role for announcements");
+        }
 
-        private delegate AnnouncementQueryResult GetAnnouncementDelegate(AnnouncementDataAccess dataAccess, AnnouncementsQuery query);
-        private static Dictionary<string, GetAnnouncementDelegate> getAnnouncementByRole = new Dictionary<string, GetAnnouncementDelegate>
-                                            {
-                                                {CoreRoles.STUDENT_ROLE.Name, (dataAccess, query) => dataAccess.GetStudentAnnouncements(query)},
-                                                {CoreRoles.TEACHER_ROLE.Name, (dataAccess, query) => dataAccess.GetTeacherAnnouncements(query)},
-                                                {CoreRoles.ADMIN_VIEW_ROLE.Name, (dataAccess, query) => dataAccess.GetAdminAnnouncements(query)},
-                                                {CoreRoles.ADMIN_EDIT_ROLE.Name, (dataAccess, query) => dataAccess.GetAdminAnnouncements(query)},
-                                                {CoreRoles.ADMIN_GRADE_ROLE.Name, (dataAccess, query) => dataAccess.GetAdminAnnouncements(query)},
-                                            };
-        
+
         public AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
         {
             using (var uow = Read())
             {
-                if (!getAnnouncementByRole.ContainsKey(Context.Role.Name))
-                    throw new ChalkableException(ChlkResources.ERR_GET_ANNOUNCEMENT_IS_UNSUPPORTED);
-                
-                var da = new AnnouncementDataAccess(uow);
+                var da = CreateAnnoucnementDataAccess(uow);
                 query.RoleId = Context.Role.Id;
                 query.PersonId = Context.UserId;
                 query.Now = Context.NowSchoolTime.Date;
-                return  getAnnouncementByRole[Context.Role.Name].Invoke(da, query);
+                return da.GetAnnouncements(query);
             }
         }
 
@@ -122,7 +121,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                var annDa = new AnnouncementDataAccess(uow);
+                var annDa = CreateAnnoucnementDataAccess(uow);
                 var nowLocalDate = Context.NowSchoolTime;
                 var markingPeriod = ServiceLocator.MarkingPeriodService.GetLastMarkingPeriod(nowLocalDate);
                 var res = annDa.Create(announcementTypeId, classId, markingPeriod.Id, nowLocalDate, Context.UserId);
@@ -135,7 +134,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                var da = new AnnouncementDataAccess(uow);
+                var da = CreateAnnoucnementDataAccess(uow);
                 return da.GetDetails(announcementId, Context.UserId);
             }
         }
@@ -145,7 +144,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                var da = new AnnouncementDataAccess(uow);
+                var da = CreateAnnoucnementDataAccess(uow);
                 var announcement = da.GetById(announcementId);
                 if (!AnnouncementSecurity.CanDeleteAnnouncement(announcement, Context))
                     throw new ChalkableSecurityException();
@@ -158,7 +157,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                var da = new AnnouncementDataAccess(uow);
+                var da = CreateAnnoucnementDataAccess(uow);
                 da.Delete(null, Context.UserId, classId, announcementType, state);
                 uow.Commit();
             }
@@ -171,7 +170,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                var da = new AnnouncementDataAccess(uow);
+                var da = CreateAnnoucnementDataAccess(uow);
                 da.Delete(null, Context.UserId, null, null, state);
                 uow.Commit();
             }
@@ -181,7 +180,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                var da = new AnnouncementDataAccess(uow);
+                var da = CreateAnnoucnementDataAccess(uow);
                 var ann =  da.GetById(announcementId);
                 if(!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
                     throw new ChalkableSecurityException();
@@ -203,7 +202,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                var da = new AnnouncementDataAccess(uow);
+                var da = CreateAnnoucnementDataAccess(uow);
                 var res = da.GetById(announcement.AnnouncementId);
                 if (!AnnouncementSecurity.CanModifyAnnouncement(res, Context))
                     throw new ChalkableSecurityException();
@@ -255,7 +254,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                var da = new AnnouncementDataAccess(uow);
+                var da = CreateAnnoucnementDataAccess(uow);
                 var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId);
                 var res = Submit(da, uow, announcementId, recipientId, mp.Id);
                 da.ReorderAnnouncements(mp.SchoolYearRef, res.AnnouncementTypeRef, res.PersonRef, recipientId);
@@ -266,7 +265,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                var da = new AnnouncementDataAccess(uow);
+                var da = CreateAnnoucnementDataAccess(uow);
                 Submit(da, uow, announcementId, null, null);
                 uow.Commit();
             }
@@ -349,7 +348,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var ouw = Read())
             {
-                var da = new AnnouncementDataAccess(ouw);
+                var da = CreateAnnoucnementDataAccess(ouw);
                 var res = da.GetAnnouncement(id, Context.Role.Id, Context.UserId); // security here 
                 if(res == null)
                     throw new ChalkableSecurityException();
@@ -402,7 +401,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                var da = new AnnouncementDataAccess(uow);
+                var da = CreateAnnoucnementDataAccess(uow);
                 return da.GetLastDraft(Context.UserId);
             }
         }
@@ -415,7 +414,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableException(ChlkResources.ERR_NO_RECIPIENTS_IN_DRAFT_STATE);
             using (var uow = Read())
             {
-                return new AnnouncementDataAccess(uow).GetAnnouncementRecipientPersons(announcementId, Context.UserId);
+                return CreateAnnoucnementDataAccess(uow).GetAnnouncementRecipientPersons(announcementId, Context.UserId);
             }
         }
 
@@ -423,7 +422,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new AnnouncementDataAccess(uow).GetLastFieldValues(personId, classId, announcementType, 10);
+                return CreateAnnoucnementDataAccess(uow).GetLastFieldValues(personId, classId, announcementType, 10);
             }
         }
 

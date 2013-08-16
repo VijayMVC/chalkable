@@ -116,7 +116,7 @@ namespace Chalkable.Data.Common
             var q = Orm.Orm.SimpleDelete<T>(conds);
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
-        private T Read<T>(DbQuery query, Func<DbDataReader, T> action)
+        protected T Read<T>(DbQuery query, Func<DbDataReader, T> action)
         {
             using (var reader = ExecuteReaderParametrized(query.Sql.ToString(), query.Parameters as Dictionary<string, object>))
             {

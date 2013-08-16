@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using Chalkable.Common;
@@ -37,6 +38,7 @@ namespace Chalkable.Data.School.DataAccess
         private const string SCHOOL_YEAR_ID_PARAM = "schoolYearId";
         private const string ID_PARAM = "id";
         private const string NEED_ALL_DATA_PARAM = "needAllData";
+
 
 
         public IList<ClassAttendance> SetAttendance(ClassAttendance attendance, IList<Guid> classPersonsIds)
@@ -145,6 +147,29 @@ namespace Chalkable.Data.School.DataAccess
             }
             return Count(new DbQuery(b, conds));
         }
+
+        private string FN_GET_STUDENT_ABSENT_FROM_DAY = "fnGetStudentsAbsentFromDay({0}, {1})";
+
+        public IDictionary<Guid, DateTime> GetStudentAbsentFromDay(DateTime fromDate, DateTime toDate)
+        {
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.Append("select * from ").AppendFormat(FN_GET_STUDENT_ABSENT_FROM_DAY, "@fromDate", "@toDate");
+            dbQuery.Parameters.Add("@fromDate", fromDate);
+            dbQuery.Parameters.Add("@toDate", toDate);
+            return  Read(dbQuery, ReadStudentAbsentFromDay);
+        } 
+
+        private IDictionary<Guid, DateTime> ReadStudentAbsentFromDay(DbDataReader reader)
+        {
+                var res = new Dictionary<Guid, DateTime>();
+                while (reader.Read())
+                {
+                    var personId = SqlTools.ReadGuid(reader, "PersonId");
+                    var date = SqlTools.ReadDateTime(reader, "Date");
+                    res.Add(personId,date);
+                }
+                return res;    
+        } 
     }
 
     public class AttendanceTotalPerType
