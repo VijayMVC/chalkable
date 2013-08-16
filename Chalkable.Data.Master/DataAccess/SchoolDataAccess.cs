@@ -111,5 +111,12 @@ namespace Chalkable.Data.Master.DataAccess
             var sql = string.Format("drop database [{0}]", name);
             ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
         }
+
+        public IList<School> GetSchoolsToDelete(DateTime expires)
+        {
+            var sql = string.Format(@"Select * from school s where [{0}] is not null and [{1}] <= @{1} and 
+                            not exists(select * from Developer where schoolref = s.id)", School.DEMO_PREFIX_FIELD, School.LAST_USED_DEMO_FIELD);
+            return ReadMany<School>(new DbQuery(sql, new Dictionary<string, object> { { School.LAST_USED_DEMO_FIELD , expires} }));
+        }
     }
 }
