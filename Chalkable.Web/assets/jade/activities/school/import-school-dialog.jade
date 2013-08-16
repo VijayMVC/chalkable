@@ -5,7 +5,6 @@
         .container.panel-bg
             +Grid.not-transparent
                 +GridHead()
-                    .th
                     .th sis school id
                     .th sis school Year id
                     .th Name
@@ -22,8 +21,6 @@
                         +ActionForm('schools', 'importSchools').row
                             +Hidden("sisSchoolId", item.getSisSchoolId())
                             +Hidden("districtId", self.getDistrictId().valueOf())
-                            .td
-                                +Checkbox("schoolid", item.getSisSchoolId())
                             .td=item.getSisSchoolId()
                             .td
                                 +Select('sisSchoolYearId')
