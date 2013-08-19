@@ -46,8 +46,10 @@
             if studentAnnouncements && studentAnnouncements.length
                 .silver-panel
                     .auto-grade-buttons.right
-                        +Button()(disabled = true).special-button2.green=Msg.Auto_grade
-                        +Button()(disabled = true).special-button2.red=Msg.Grade_manually
+                        +Button()(disabled = true).special-button2.green
+                            =Msg.Auto_grade
+                        +Button()(disabled = true).special-button2.red
+                            =Msg.Grade_manually
                     .grades-info.right
                         TABLE
                             TR

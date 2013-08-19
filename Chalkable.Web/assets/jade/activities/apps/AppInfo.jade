@@ -18,9 +18,9 @@ appCategories = []
 appPermissions = []
 
 
--actAppCategories = app.getCategories() || []
--actAppGradeLevels = app.getGradeLevels() || []
--actAppPermissions = app.getPermissions() || []
+actAppCategories = app.getCategories() || []
+actAppGradeLevels = app.getGradeLevels() || []
+actAppPermissions = app.getPermissions() || []
 
 
 
@@ -37,9 +37,9 @@ each item in actAppPermissions
     -selectedAppPermissions[item.getType()] = true
     -appPermissions.push(item.getType())
 
--appGradeLvls = appGradeLvls.join(',')
--appCategories = appCategories.join(',')
--appPermissions = appPermissions.join(',')
+appGradeLvls = appGradeLvls.join(',')
+appCategories = appCategories.join(',')
+appPermissions = appPermissions.join(',')
 
 .app-info
     .action-bar.not-transparent.dev-app-info

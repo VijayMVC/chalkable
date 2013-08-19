@@ -69,7 +69,8 @@
                     type="submit",
                     name="submitType",
                     value="submit"
-                ).special-button.blue-button.submit-btn=(announcement.getState() ? Msg.Save : Msg.Submit)
+                ).special-button.blue-button.submit-btn
+                    =(announcement.getState() ? Msg.Save : Msg.Submit)
                 if announcement.getState()
                     +ActionLink('announcement', 'delete', announcement.getId().valueOf())
                         +Button()(
