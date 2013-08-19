@@ -571,11 +571,15 @@ button.toplogin {
       -webkit-font-smoothing: antialiased;
       -moz-font-smoothing: antialiased;
       overflow: hidden;
-      span.sis_name i.underlines {
-        background-image: url(images/index/center_line.png);
-        background-repeat: repeat-x;
-        background-position: 0 34px;
-        height: 3px;
+      span.sis_name {
+        background-color: transparent !important;
+
+        i.underlines {
+          background-image: url(images/index/center_line.png);
+          background-repeat: repeat-x;
+          background-position: 0 34px;
+          height: 3px;
+        }
       }
     }
   }
