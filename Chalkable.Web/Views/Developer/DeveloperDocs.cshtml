@@ -248,7 +248,7 @@ applicationinstallid:      ID indicating current user has application installed 
                 <p class="docs"><strong>In this section we will describe in detail the JavaScript interaction between your app and Chalkable. </strong></p>
                 <p class="docs"><strong>IMPORTANT: You will need to include a link to our Javascript file <em>chlk-post-message-api.js</em> in your project. <a href="https://github.com/Chalkable?tab=repositories" target="_blank">View it on GitHub now</a>.</strong> We recommend using the hosted version as it is subject to updates.</p>
                     <div class="gray-box">
-                        <pre style="margin:0 !important;"><code style="width: 1050px;">&lt;script type="text/javascript" src="https://chalkable.com/Scripts/api/chlk-post-message-api.js"&gt;&lt;/script&gt;</code></pre>
+                        <pre style="margin:0 !important;"><code style="width: 1050px;">&lt;script type="text/javascript" src="https://chalkable.com/app/api/chlk-post-message-api.js"&gt;&lt;/script&gt;</code></pre>
                     </div>
                     <p class="docs left">1.  A teacher, who has installed your app via the Chalkable App Store, clicks Attach App in a New Item assignment and chooses your app.</p>
                     <p class="docs left">2.  Your App URL is loaded with the edit mode appended – Ex. <span class="monaco">http://www.MyEdTechApp.com/?mode=edit</span>. The teacher will use your app’s UI to prepare it to be attached to the assignment.</p>
@@ -304,7 +304,7 @@ CHLK_MESSENGER.addYourself(saveAndClose);
 &lt;/style&gt;
 
 &lt;script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"&gt;&lt;/script&gt;
-&lt;script type="text/javascript" src="https://chalkable.com/Scripts/api/chlk-post-message-api.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="https://chalkable.com/app/api/chlk-post-message-api.js"&gt;&lt;/script&gt;
 
 &lt;script type="text/javascript"&gt;
     CHLK_MESSENGER.addYourself(function () {
@@ -527,13 +527,13 @@ function getMe()
 
 @section BottomScripts {
 
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/jquery-ui.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/all_not_minified.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/signIn_Flip_Shake.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/waypoints.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/cycle.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/prettify.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/jquery.fancybox.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/jquery-ui.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/all_not_minified.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/signIn_Flip_Shake.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/waypoints.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/cycle.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/jquery.fancybox.js")"></script>
 
     <script type="text/javascript">
        
