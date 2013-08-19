@@ -149,8 +149,20 @@ html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fiel
   position: absolute;
 }
 
+.small-gray-link{
+  font: normal 13px "Helvetica Neue";
+  font-style: italic;
+  text-decoration: underline;
+  color: #797979;
+  cursor: pointer;
+}
+
 .opacity0{
   opacity: 0;
+}
+
+.no-padding{
+  padding: 0;
 }
 
 .blue-arrow {

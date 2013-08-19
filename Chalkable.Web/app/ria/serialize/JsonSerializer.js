@@ -32,8 +32,11 @@ NAMESPACE('ria.serialize', function () {
                 return clazz(raw || '');
             }
 
-            if (clazz === Number || clazz === String)
+            if (clazz === Number || clazz === String){
+                if(clazz === Number && raw === '')
+                    return null;
                 return clazz(raw || '');
+            }
 
             if (ria.__API.isIdentifier(clazz))
                 return raw !== undefined ? clazz(raw) : null;

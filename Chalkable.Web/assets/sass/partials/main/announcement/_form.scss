@@ -3,10 +3,89 @@
 @import "compass/css3/transform";
 @import "compass/css3/box-shadow";
 
+.attachments-and-applications {
+  width: 600px;
+
+  .announcement-item{
+    display: inline-block;
+    height: 110px;
+    width: 171px;
+    position: relative;
+    margin-bottom: 25px;
+    vertical-align: top;
+    text-align: center;
+    line-height: 107px;
+
+    &:not(:last-child){
+      margin-right: 19px;
+    }
+
+    &.attach-file-area{
+      border: 6px dashed silver;
+      @include border-radius(6px);
+      line-height: 40px;
+      padding: 14px 0;
+      height: 82px;
+    }
+
+    &:not(.attach-file-area){
+      background: url(images/app/debut_dark.png);
+    }
+
+    &.loading {
+      background: url(images/img-loader.gif) center center no-repeat,url(images/app/debut_dark.png);
+    }
+
+    IMG{
+      max-height: 110px;
+      max-width: 170px;
+      vertical-align: middle;
+    }
+
+    &:hover{
+      .title{
+        max-height: 80px;
+      }
+      cursor:pointer;
+    }
+
+    .title{
+      font-size: 14px;
+      background: rgba(0, 0, 0, 0.7);
+      position: absolute;
+      color: white;
+      word-wrap: break-word;
+      border: 1px solid black;
+      @include box-shadow(inset 0 1px -1px 1px #828282);
+
+      overflow: hidden;
+      max-height: 0;
+
+      @include transition-property("all");
+      @include transition-duration("0.2s");
+      bottom: 0;
+      left: 0;
+      right: 0;
+      line-height: 15px;
+
+      >DIV{
+        padding: 7px;
+        font-size: 14px;
+        color: white;
+      }
+    }
+  }
+}
+
 .announcement-form{
 
   .ann-form-container{
     padding: 31px 0 0 4px;
+
+    .reminders-container{
+      background: url(images/announcement/reminder-bg.png) -11px 20px no-repeat;
+      padding-top: 50px;
+    }
 
     .left-block, .right-block{
       display: inline-block;
@@ -28,80 +107,6 @@
       }
     }
 
-    .attachments-and-applications {
-      width: 600px;
-
-      .announcement-item{
-        display: inline-block;
-        height: 110px;
-        width: 171px;
-        position: relative;
-        margin-bottom: 25px;
-        vertical-align: top;
-        text-align: center;
-        line-height: 107px;
-
-        &:not(:last-child){
-          margin-right: 19px;
-        }
-
-        &.attach-file-area{
-          border: 6px dashed silver;
-          @include border-radius(6px);
-          line-height: 40px;
-          padding: 14px 0;
-          height: 82px;
-        }
-
-        &:not(.attach-file-area){
-          background: url(images/app/debut_dark.png);
-        }
-
-        &.loading {
-          background: url(images/img-loader.gif) center center no-repeat,url(images/app/debut_dark.png);
-        }
-
-        IMG{
-          max-height: 110px;
-          max-width: 170px;
-          vertical-align: middle;
-        }
-
-        &:hover{
-          .title{
-            max-height: 80px;
-          }
-          cursor:pointer;
-        }
-
-        .title{
-          font-size: 14px;
-          background: rgba(0, 0, 0, 0.7);
-          position: absolute;
-          color: white;
-          word-wrap: break-word;
-          border: 1px solid black;
-          @include box-shadow(inset 0 1px -1px 1px #828282);
-
-          overflow: hidden;
-          max-height: 0;
-
-          @include transition-property("all");
-          @include transition-duration("0.2s");
-          bottom: 0;
-          left: 0;
-          right: 0;
-          line-height: 15px;
-
-          >DIV{
-            padding: 7px;
-            font-size: 14px;
-            color: white;
-          }
-        }
-      }
-    }
-
     .submit-btn{
       BUTTON{
         width: 100px;
@@ -115,11 +120,11 @@
     font-size: 14px;
 
     &#subject{
-      height: 17px !important;
+      height: 17px;
     }
 
     &#content{
-      height: 133px !important;
+      height: 133px;
     }
   }
 

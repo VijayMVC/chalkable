@@ -32,6 +32,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             ArrayOf(chlk.models.announcement.StudentAnnouncement), 'items',
 
+            [ria.serialize.SerializeProperty('gradingstylemapper')],
             chlk.models.grading.Mapping, 'mapping',
 
             Number, 'selectedIndex'

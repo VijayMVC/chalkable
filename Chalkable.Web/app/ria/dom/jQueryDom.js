@@ -231,12 +231,12 @@ NAMESPACE('ria.dom', function () {
             },
 
             [[Object]],
-            OVERRIDE, Number, function height(value_) {
-                return value ? this._dom.height(value) : this._dom.height();
+            OVERRIDE, Object, function height(value_) {
+                return value_ ? this._dom.height(value_) : this._dom.height();
             },
             [[Object]],
-            OVERRIDE, Number, function width(value_) {
-                return value ? this._dom.width(value) : this._dom.width();
+            OVERRIDE, Object, function width(value_) {
+                return value_ ? this._dom.width(value_) : this._dom.width();
             },
 
             /* data attributes */
@@ -315,14 +315,32 @@ NAMESPACE('ria.dom', function () {
                 return ria.__API.clone(this._dom);
             },
 
-            [[String]],
-            SELF, function trigger(event) {
-                this._dom.trigger(event);
+            [[String, Object]],
+            SELF, function trigger(event, params_) {
+                this._dom.trigger(event, params_);
                 return this;
             },
 
             Boolean, function checked() {
                 return this.parent().find('.hidden-checkbox').getData('value') || false;
+            },
+
+            /* Form */
+
+            Object, function serialize(){
+                var o = {};
+                var array = this.dom.serializeArray();
+                array.forEach(function() {
+                    if (o[this.name] !== undefined) {
+                        if (!o[this.name].push) {
+                            o[this.name] = [o[this.name]];
+                        }
+                        o[this.name].push(this.value || '');
+                    } else {
+                        o[this.name] = this.value || '';
+                    }
+                });
+                return o;
             }
         ]);
 

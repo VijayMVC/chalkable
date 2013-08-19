@@ -50,6 +50,12 @@
   }
 }
 
+.special-button, .special-button2{
+  &.disabled{
+    opacity: 0.6;
+  }
+}
+
 .special-button{
 
   padding-left: 21px;

@@ -861,6 +861,8 @@
       this.show_search_field_default();
       this.results_reset_cleanup();
       this.form_field_jq.trigger("change");
+
+      //ria && ria.dom && ria.dom.Dom && new ria.dom.Dom(this.form_field_jq[0]).triggerEvent('change');
       if (this.active_field) {
         return this.results_hide();
       }
@@ -909,6 +911,8 @@
           this.form_field_jq.trigger("change", {
             'selected': this.form_field.options[item.options_index].value
           });
+            //ria && ria.dom && ria.dom.Dom && new ria.dom.Dom(this.form_field_jq[0]).triggerEvent('change');
+
         }
         this.current_selectedIndex = this.form_field.selectedIndex;
         return this.search_field_scale();
@@ -945,6 +949,7 @@
         this.form_field_jq.trigger("change", {
           deselected: this.form_field.options[result_data.options_index].value
         });
+          //ria && ria.dom && ria.dom.Dom && new ria.dom.Dom(this.form_field_jq[0]).triggerEvent('change');
         this.search_field_scale();
         return true;
       } else {

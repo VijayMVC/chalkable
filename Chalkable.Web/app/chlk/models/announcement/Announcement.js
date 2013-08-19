@@ -102,8 +102,7 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('ownerattachmentscount')],
             Number, 'ownerAttachmentsCount',
 
-            [ria.serialize.SerializeProperty('ownerinfo')],
-            chlk.models.people.User, 'ownerInfo',
+            chlk.models.people.User, 'owner',
 
             [ria.serialize.SerializeProperty('qnacount')],
             Number, 'qnaCount',

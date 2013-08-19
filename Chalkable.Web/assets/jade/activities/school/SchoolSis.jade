@@ -21,7 +21,7 @@
                 .x-form-field
                     label Password:
                     input(type="text",name="sisPassword", value=self.sisPassword)
-                +Button(type="submit").special-button.blue-button.submit-btn Save
+                +Button()(type="submit").special-button.blue-button.submit-btn Save
         .sis-sync-info
             +ActionForm('schools', 'updateSisSyncInfo')
                 .x-form-field
@@ -40,6 +40,6 @@
                     label Schedule sync frequency:
                     input(type="text",name="scheduleSyncFreq")
                     +Button.special-button.blue-button.submit-btn Run
-                +Button(type="submit").special-button.blue-button.submit-btn Save
+                +Button()(type="submit").special-button.blue-button.submit-btn Save
 
 

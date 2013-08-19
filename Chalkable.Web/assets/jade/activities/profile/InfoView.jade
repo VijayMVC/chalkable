@@ -116,7 +116,7 @@
                                 -addressesModel.setItems(addresses);
                                 +RenderWith(addressesModel, chlk.templates.people.Addresses)
             .section-buttons
-                +Button(type="submit").special-button.blue-button#submit-info-button=Msg.Save
-                +Button(type="button").special-button.blue-button#cancell-edit-info-button=Msg.Cancel
+                +Button()(type="submit").special-button.blue-button#submit-info-button=Msg.Save
+                +Button()(type="button").special-button.blue-button#cancell-edit-info-button=Msg.Cancel
 
 

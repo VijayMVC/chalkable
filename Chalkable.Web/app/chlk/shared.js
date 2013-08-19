@@ -132,8 +132,9 @@ var GradingStyler = {
     },
 
     getGradeNumberValue: function (value, gradingMappings, gradingStyle){
-        var mapping = gradingMappings['get' + this.getGradingStyle(gradingStyle)];
-        return mapping[this.getGradeValueId(value, mapping)];
+        var mapping = gradingMappings['get' + this.getGradingStyle(gradingStyle)]();
+        //return mapping[this.getGradeValueId(value, mapping)];
+        return mapping[GradingStyler.getGradeLettersMap()[this.getGradingStyle(gradingStyle)].indexOf(value)];
     },
 
     getFromMapped: function(gradingStyle, value){

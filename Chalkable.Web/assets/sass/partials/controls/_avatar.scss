@@ -19,62 +19,62 @@
     display: inline-block;
   }
 
-  .avatar {
-    overflow: hidden;
-    display: block;
-    background-position: center center;
-    background-repeat: no-repeat;
+}
 
-    &.white{
-      border: 2px solid #fff;
+.avatar {
+  overflow: hidden;
+  display: block;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  &.white{
+    border: 2px solid #fff;
+  }
+
+  &.gray{
+    border: 2px solid #f4f4f4;
+  }
+
+  &.avatar-24 {
+    width: 24px;
+    height: 24px;
+  }
+
+  &.avatar-40 {
+    width: 40px;
+    height: 40px;
+  }
+
+  &.avatar-47 {
+    width: 47px;
+    height: 47px;
+
+    &.size-41{
+      width: 41px;
+      height: 41px;
     }
+  }
 
-    &.gray{
-      border: 2px solid #f4f4f4;
-    }
+  &.avatar-64 {
+    width: 64px;
+    height: 64px;
+  }
 
-    &.avatar-24 {
-      width: 24px;
-      height: 24px;
-    }
+  &.avatar-128 {
+    width: 128px;
+    height: 128px;
+  }
 
-    &.avatar-40 {
-      width: 40px;
-      height: 40px;
-    }
+  &.avatar-256 {
+    width: 256px;
+    height: 256px;
+  }
 
-    &.avatar-47 {
-      width: 47px;
-      height: 47px;
-
-      &.size-41{
-        width: 41px;
-        height: 41px;
-      }
-    }
-
-    &.avatar-64 {
-      width: 64px;
-      height: 64px;
-    }
-
-    &.avatar-128 {
-      width: 128px;
-      height: 128px;
-    }
-
-    &.avatar-256 {
-      width: 256px;
-      height: 256px;
-    }
-
-    &.blank{
-      margin: 5px;
-      float: left;
-      width: 64px;
-      height: 64px;
-    }
-
+  &.blank{
+    margin: 5px;
+    float: left;
+    width: 64px;
+    height: 64px;
   }
 
 }

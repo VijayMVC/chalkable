@@ -1,15 +1,17 @@
 .announcement-view.not-transparent
-    -isNotStudent = true;
-    -isReadonly = false;
-    -studentAnnouncements = false;
-    -studentAnnouncementsInfo=self.getStudentAnnouncements();
-    -selectedIndex= studentAnnouncementsInfo ? studentAnnouncementsInfo.getSelectedIndex() : 0;
+    isNotStudent = true;
+    isReadonly = false;
+    studentAnnouncements = false;
+    studentAnnouncementsInfo = self.getStudentAnnouncements();
+    selectedIndex = studentAnnouncementsInfo ? studentAnnouncementsInfo.getSelectedIndex() : 0;
+    applications = self.getApplications();
+    applicationsInGradeView = applications.filter(function(item){return item.applicationviewdata.showingradeview});
     if studentAnnouncementsInfo
-        -studentAnnouncements=studentAnnouncementsInfo.getItems();
-        -gradingStyle = studentAnnouncementsInfo.getGradingStyle();
-        -gradingMapping = studentAnnouncementsInfo.getMapping();
-        -getGrade = function(value){return GradingStyler.getLetterByGrade(value, gradingMapping, gradingStyle)};
-        -getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, gradingMapping, gradingStyle)};
+        studentAnnouncements = studentAnnouncementsInfo.getItems();
+        gradingStyle = studentAnnouncementsInfo.getGradingStyle();
+        gradingMapping = studentAnnouncementsInfo.getMapping();
+        getGrade = function(value){return GradingStyler.getLetterByGrade(value, gradingMapping, gradingStyle)};
+        getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, gradingMapping, gradingStyle)};
     .feed-item
         if isNotStudent
             .grades
@@ -35,20 +37,23 @@
             .details-container.silver-panel
                 .left-block
                     +ActionLink('feed', 'list').image-container
-                        img(src="http://local.chalkable.com:8080/chalkable/PersonPicture/Read?pictureId=64730&width=47&height=47&gender=f").avatar.avatar-47
+                        img(src=self.getOwner().getPictureUrl()).avatar.avatar-47
                 .right-block
                     h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
                     p=self.getContent()
                     .attachments-and-applications
+                        +RenderWith(self._model, chlk.templates.announcement.Announcement)
             if studentAnnouncements && studentAnnouncements.length
                 .silver-panel
                     .auto-grade-buttons.right
-                        +Button().special-button2.green=Msg.Auto_grade
-                        +Button().special-button2.red=Msg.Grade_manually
+                        +Button()(disabled = true).special-button2.green=Msg.Auto_grade
+                        +Button()(disabled = true).special-button2.red=Msg.Grade_manually
                     .grades-info.right
                         TABLE
                             TR
-                                TD=studentAnnouncementsInfo.getGradedStudentCount() + '/' + studentAnnouncements.length
+                                TD
+                                    span#graded-count=studentAnnouncementsInfo.getGradedStudentCount()
+                                    ='/' + studentAnnouncements.length
                                 TD=getGrade(studentAnnouncementsInfo.getClassAvg())
                             TR
                                 TD.small=Msg.Students_graded(studentAnnouncements.length)
@@ -57,36 +62,20 @@
                 +ListView(studentAnnouncementsInfo)(
                     selectedIndex = selectedIndex).grades-individual.people-list
                     each item, i in studentAnnouncements
-                        -value = item.getGradeValue();
-                        -normalValue = (value >= 0) ? value : '';
-                        -isDrop = item.isDropped();
-                        -res = (gradingStyle) ? (!isNaN(value) ? getGrade(value) : '') : ((value >= 0) ? value : '');
-                        -lbl = 'A - F';
-                        -itemCls = (isDrop ? 'dropped' :'');
-                        -selectedCls = (isReadonly ? 'not-selected' : '');
                         .row(class=(i == selectedIndex ? 'selected' : ''), index=i)
-                            +ActionLink('schools', 'details', 1).left.image-container.white.shadow
-                                img.avatar.avatar47(src="https://dev.chalkable.com/PersonPicture/Read?pictureId=0&width=47&height=47&gender=F")
-                            .i-b.name-block
-                                p= item.getStudentInfo().getFullName()
-                                if !isReadonly
-                                    SPAN.container
-                                        SPAN.comment-grade
-
-                            .i-b.grade-block
-                                if self.getAnnouncementTypeId() != 1
-                                    div(class=selectedCls + ' ' + itemCls).i-b=isDrop ? Msg.Drop :res
-                                    div(class="selected " + itemCls, rowIndex=i, recId=item.getId()).i-b
-                                        if gradingStyle
-                                            .select-container
-                                                .select-container2
-                                                    +Select('gradeLetter')(id='grade-select-' + i).grade-select
-                                                        each item in GradingStyler.getGradeLetters()
-                                                            -currentValue = getGradeNumber(item);
-                                                            if currentValue != -1
-                                                                +Option(currentValue, item)
-                                                .letters=lbl
-                                        .input-container
-                                            INPUT(type="text", autofill="off", value=normalValue).grade-input
-                                            .letters 100 - 0
+                            ownerPictureUrl = self.getOwner().getPictureUrl();
+                            notAnnouncement = self.getAnnouncementTypeId() != chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf();
+                            +Hidden('ownerPictureUrl', ownerPictureUrl)
+                            +Hidden('notAnnouncement', notAnnouncement)
+                            +Hidden('readonly', isReadonly)
+                            +Hidden('gradingStyle', gradingStyle)
+                            .top-content(id = "top-content-" + item.getId())
+                                +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
+                                    ownerPictureUrl = ownerPictureUrl,
+                                    notAnnouncement = notAnnouncement,
+                                    readonly = isReadonly,
+                                    applicationsInGradeView = applications.filter(function(item){return item.applicationviewdata.showingradeview}),
+                                    gradingStyle = gradingStyle,
+                                    gradingMapping = studentAnnouncementsInfo.getMapping()
+                                )
 

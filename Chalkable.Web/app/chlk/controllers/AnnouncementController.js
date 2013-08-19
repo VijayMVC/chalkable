@@ -2,11 +2,14 @@ REQUIRE('chlk.controllers.BaseController');
 
 REQUIRE('chlk.services.AnnouncementService');
 REQUIRE('chlk.services.ClassService');
+REQUIRE('chlk.services.PersonService');
+REQUIRE('chlk.services.GradingService');
 REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.AnnouncementViewPage');
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.LastMessages');
 REQUIRE('chlk.models.attachment.Attachment');
+REQUIRE('chlk.models.announcement.StudentAnnouncement');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.AttachmentId');
@@ -32,6 +35,12 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.ClassService, 'classService',
 
+        [ria.mvc.Inject],
+        chlk.services.PersonService, 'personService',
+
+        [ria.mvc.Inject],
+        chlk.services.GradingService, 'gradingService',
+
         ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
 
         [[ArrayOf(chlk.models.attachment.Attachment)]],
@@ -40,6 +49,12 @@ NAMESPACE('chlk.controllers', function (){
                 if(item.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf())
                     item.setThumbnailUrl(this.announcementService.getAttachmentUri(item.getId(), false, 170, 110));
             }.bind(this));
+        },
+
+        [[chlk.models.announcement.StudentAnnouncement]],
+        function updateAnnouncementGradeAction(model){
+            var result = this.gradingService.updateItem(model.getId(), model.getGradeValue(), model.getComment(), model.isDropped());
+            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, result);
         },
 
         [[chlk.models.announcement.AnnouncementForm, Boolean]],
@@ -108,7 +123,14 @@ NAMESPACE('chlk.controllers', function (){
                     var expires = model.getExpiresDate();
                     var expiresDate = expires.getDate();
                     var date = expires.format('(D m/d)');
+                    var attachments = model.getAnnouncementAttachments();
+                    this.prepareAttachments(attachments);
                     model.setExpiresDateColor('blue');
+                    model.getOwner().setPictureUrl(this.personService.getPictureURL(model.getOwner().getId(), 24));
+                    model.getStudentAnnouncements().getItems().forEach(function(item){
+                        var student = item.getStudentInfo();
+                        student.setPictureUrl(this.personService.getPictureURL(student.getId(), 24));
+                    }.bind(this));
                     if(formatDate(now, 'dd-mm-yy') == expires.format('dd-mm-yy')){
                         model.setExpiresDateColor('blue');
                         model.setExpiresDateText(Msg.Due_today);

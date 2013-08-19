@@ -30,6 +30,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'announcementTypeName',
 
             [ria.templates.ModelPropertyBind],
+            Array, 'applications',
+
+            [ria.templates.ModelPropertyBind],
             String, 'applicationName',
 
             [ria.templates.ModelPropertyBind],
@@ -99,6 +102,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             Number, 'order',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.people.User, 'owner',
+
+            [ria.templates.ModelPropertyBind],
             Number, 'ownerAttachmentsCount',
 
             [ria.templates.ModelPropertyBind],
@@ -159,6 +165,11 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'wasAnnouncementTypeGraded',
 
             [ria.templates.ModelPropertyBind],
-            String, 'submitType'
+            String, 'submitType',
+
+
+            Boolean, 'needButtons',
+
+            Boolean, 'needDeleteButton'
         ])
 });

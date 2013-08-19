@@ -93,6 +93,11 @@ INPUT, TEXTAREA{
   }
 }
 
+TEXTAREA.animated-textarea{
+  @include transition-property("height");
+  @include transition-duration("0.2s");
+}
+
 .close-btn{
   background: url(images/ui/close-btn-2.png) 0 0 no-repeat;
   height: 27px;
