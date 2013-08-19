@@ -1,0 +1,557 @@
+﻿@{
+    ViewBag.Title = "Developer_Docs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@{
+    var inIframe = !String.IsNullOrEmpty(Request.QueryString["InFrame"]);    
+}
+
+@section Styles {
+    <link href="@Url.StaticContent("/Content/screen-index.css")" rel="stylesheet" type="text/css" />
+
+    @if (inIframe)
+    {
+        <style>
+            #page-header, .olrk-noquirks{
+                display: none;
+            }
+
+            BODY .wrapper.docs {
+                width: auto;
+            }
+        </style>
+    }
+}
+
+@section ContentSection {
+    
+
+
+@if (!inIframe)
+{
+    
+        @ChlkHelpers.RenderSignInForm(Url, Html)
+	    <div id="docs_top_wrapper" class="faq_sticky_navigation developers" >
+            <div id="sticky_navigation" class="developers">
+                <div class="demo_container">
+                    <ul id="nav1">
+                        <li><a href="@Url.Content("~/#start")"><img src="@Url.StaticContent("/Content/images/common/nav-logo-150.png")" class="navlogo_faq developers"></a></li>
+                        <li><a target="_top" href="@Url.Content("~/Developer/Info")"><h5 class="dev_nav_logo">Developers</h5></a></li>
+                        <li class="loginnav dev one"><a id="open" class="open" href="#" style="margin-left: 596px; width:200px">Sign in</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+}
+
+<div id="outer-wrap">
+
+    <div class="wrapper docs">
+        @if (!inIframe)
+        {
+            <div class="leftwrap">
+               <div class="fixed-sider">
+                    <ul>
+                        <li><a href="#submitting" class="scroll">Submitting your app</a></li>
+                        <li><a href="#iframe" class="scroll">Chalkable iFrame</a></li>
+                        <li><a href="#my_apps" class="scroll">My Apps</a></li>
+                        <li><a href="#new_item" class="scroll">New Item</a></li>
+                        <li><a href="#javascript" class="scroll">Javascript Interaction</a></li>
+                        <li><a href="#quickstart" class="scroll">Quick Start</a></li>
+                        <li><a href="#auth" class="scroll">Authentication</a></li>
+                        <li><a href="#_concepts" class="scroll">Concepts</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        }
+
+        <div class="midwrap">
+            <h1 class="docs">Developer Documentation</h1>
+            <hr />
+
+            <div class="gray-box">
+                <p class="docs">This guide describes integrating your web app for use within the Chalkable experience. Your app will be displayed within an <span class=monaco>iframe</span> and should utilize user data via the Chalkable API to provide a great experience.</p>
+            </div>
+
+            <br /><br />
+
+            <div class="clear-box">
+                <p class="docs">Integrating your web app with Chalkable gives you the opportunity to be listed in the Chalkable App Store, collect payments, and deeply integrate into the core Chalkable experience. Using the API, your app will be able to leverage the Chalkable platform (user info, schedule, grading, attendance, discipline, messaging, notifications, etc) to help you deliver a great experience.</p>
+
+                <p class="docs">Apps on Chalkable are web apps that are loaded in an <span class=monaco>iframe</span> in the context of chalkable.com. Your app can be built using any language that supports web programming, such as PHP, Python, Java or C#.</p>
+
+            </div>
+
+            <div class="gray-box">
+                <h2 class="docshead" style="margin-left: -23px !important;">Chalkable in 60 seconds</h2>
+                <div id="vidyard_container">
+                    <div class="vidyard_wrapper">
+                        <a href="http://www.youtube.com/embed/IsY9NJWf1nY?rel=0;autoplay=1" rel="media-gallery" class="fancybox-media">
+                            <div class = "vidyard_play_button" style="padding-left: 400px !important;"></div>
+                            <img alt="Chalkable" src="@Url.StaticContent("/Content/images/index/main_vid_placeholder_image.png")" width="503" />
+                        </a>
+                
+                    </div>
+                </div>
+            </div>
+
+            <div class="clear-box" id="summary">
+                <h2 class="docshead">Guide summary</h2>
+                <p class="docs">In this guide we will explain the following concepts:</p>
+                <ul>
+                    <li><a href="#submitting" class="scroll">Submitting your app to the Chalkable App Store</a></li>
+                    <li><a href="#iframe" class="scroll">Chalkable iFrame</a></li>
+                    <li><a href="#my_apps" class="scroll">Using your app: My Apps and New Item</a></li>
+                    <li><a href="#auth" class="scroll">Authentication</a></li>
+                    <li><a href="#javascript" class="scroll">JavaScript Interaction</a></li>
+                    <li><a href="#" class="scroll">Analytics and Payment</a></li>
+                </ul>
+            </div>
+            <br />
+
+            <div class="gray-box">
+                <p class="docs">If you want to start building right now, check out the <a href="#quickstart" class="scroll">quick start tutorial</a> and the API Explorer.</p>
+            </div>
+
+            <div class="clear-box" id="submitting">
+                <h2 class="docshead">Submitting your app</h2>
+                <p class="docs">Registering your app with Chalkable is the first step to getting into the Chalkable Web App store. Sign up on <a target="_top" href="@Url.Content("~/Developer/Signup")">https://chalkable.com/developer/signup</a>. Enter your <strong>Application Name</strong> and <strong>App URL</strong>, and we immediately provide an <strong>API Key</strong>.</p>
+                <p class="docs"><strong>API Key – </strong>This is the key used in the OAuth authentication process for your app. Your app will use OAuth to authenticate users.</p>
+                <p class="docs"><strong>App URL – </strong>This is the URL that Chalkable will load for your application within an <span class="monaco">iframe</span>.</p>
+                <p class="docs"><strong>App Name – </strong> This is the name that is shown in the Chalkable app store and used in the OAuth authentication process.</p>
+            </div>
+
+            <div class="clear-box" id="iframe">
+                <h2 class="docshead">Chalkable iFrame</h2>
+                <p class="docs">Users will interact with your app in an <span class="monaco">iframe</span>. The <span class="monaco">iframe</span> is populated by the App URL which you provide for your app. The App URL should be the page that contains the HTML, JavaScript and CSS that make up your app. In an upcoming section we will discuss the My Apps and New Item concepts. When a user requests your app within one of these contexts the App URL loaded in the <span class="monaco">iframe</span> is appended with a mode.</p>
+            </div>
+
+             <div class="gray-box" style="margin-bottom: 20px;">
+                <p class="docs">There is some chrome (black modal) surrounding the <span class=monaco>iframe</span>.<br />
+                90px on each side and 50px on the top. The NEW TAB button above the iframe opens your app in a new browser tab with no chrome.
+                </p>
+             </div>
+
+            <div class="gray-box">
+
+                <h2 class="docshead" style="text-align: left;">App URL parameters:</h2><br />
+                    <p class="docs left">Chalkable will append four parameters to you application's URL: the current <span class=monaco>mode</span> along with three identifying parameters.</p>
+                    <p class="docs left">The <span class=monaco>mode</span> will change depending on the context in which the app is being interacted with:</p><br />
+
+                        <ul>
+                            <li>
+                                <p class="docs left"><span class=monaco>view</span>: &nbsp Students (or Teacher) viewing your application in the New Item (not grading section)</p>
+                            </li>
+                            <li>
+                                <p class="docs left"><span class=monaco>myview</span>: &nbsp User viewing your app via My Apps page</p>
+                            </li>
+                            <li>
+                                <p class="docs left"><span class=monaco>edit</span>: &nbsp Teacher preparing your app to be attached to <a href="#new_item" class="scroll">New Item</a> assignment </p>
+                            </li>
+                            <li>
+                                <p class="docs left"><span class=monaco>gradingview</span>: Teacher reviewing students’ work in New Item grading area</p>
+                            </li>
+                        </ul>
+                        
+                    <p class="docs left"><strong>Here are the parameters Chalkable appends to your URL:</strong></p><br />
+
+<pre><code class="remove" style="width: 890px;">
+mode:                      the current application state (see above)
+                          
+announcementapplicationid: the unique ID of the current assignment (integer) 
+                           
+studentid:                 the unique ID of the student using the app (integer) 
+                           
+code:                      the Oauth code used by Chalkable to identify your app (string)
+
+applicationinstallid:      ID indicating current user has application installed (integer)
+                           This parameter only occurs in "myview"- the My Apps view 
+</code></pre>
+
+
+                    <p class="docs left"><strong>Loaded in the iframe, the full URL looks like:</strong></p><br />
+                    <pre>Teacher creating an assignment with application attached:<code style="width: 1078px;">http://www.MyEdTechApp.com/?mode=edit&announcementapplicationid=1234&code=123456789abcdefg</code></pre>
+
+                    <pre>Student viewing application attached to an assignment:<code style="width: 1078px;">http://www.MyEdTechApp.com/?mode=view&announcementapplicationid=1234&code=123456789abcdefg</code></pre>
+
+                    <pre>User viewing application in My Apps:<code style="width: 1078px;">http://www.MyEdTechApp.com/?mode=myview&applicationinstallid=1234&code=123456789abcdefg</code></pre>
+
+                    <p class="docs left">To find the current applicaiton state, it is easy to fetch the "mode" URL parameter in javascript, see this link for a perfect example:</p>
+                    <p class="docs left"><a href="http://stackoverflow.com/questions/1403888/get-url-parameter-with-jquery" target="_blank">http://stackoverflow.com/questions/1403888/get-url-parameter-with-jquery</a></p>
+
+
+            </div>
+
+            <div class="clear-box">
+                <h2 class="docshead" style="margin-bottom:-20px;">How will users interact with your app?</h2>
+            </div>
+
+            <div class="clear-box" id="my_apps">
+                <h2 class="docshead">My Apps</h2>
+                <p class="docs">A simple page of app icons where users can launch apps their installed apps. When a user clicks your app’s icon they will interact with your app in a Chalkable <span class="monaco">iframe</span>. They can then click NEW TAB to open your app in a new browser tab.</p><br />
+            </div>
+
+            <div class="gray-box">
+                <p class="docs left">When your app is loaded in the My Apps context, your App URL + the myview mode is loaded:
+                </p><br />
+                <pre><code>http://www.MyEdTechApp.com/?mode=myview</code></pre>
+            </div>
+
+            <div class="clear-box" id="new_item">
+                <h2 class="docshead">New Item</h2>
+                <p class="docs">New Item is the heart of the Chalkable app experience. Teachers use the Chalkable platform to send assignments to their students. Teachers can attach your app directly into these assignments. Here is how:</p><br />
+                        <p class="docs"><strong>Teacher attaching your app:</strong></p>
+                        <ul class="num">
+                            <li>A teacher, who has installed your app via the Chalkable App Store, clicks Attach App in a New Item assignment and chooses your app.</li>
+                            <li>Your App URL is loaded with the edit mode appended – Ex. <span class="monaco">http://www.MyEdTechApp.com/?mode=edit</span>. The teacher uses your app’s UI to prepare it to be attached to the assignment.</li>
+                            <li>The teacher then clicks the ATTACH button. </li>
+
+                            <li>The modal window and <span class="monaco">iframe</span> are then closed and your app is attached in the item.</li>
+                        </ul>
+
+
+                        <p class="docs"><strong>Student viewing that app:</strong></p>
+                        <ul class="num">
+                            <li>A student opens the assignment and clicks on your app.</li>
+                            <li>Your App URL is loaded with the view mode appended Ex. <span class="monaco">http://www.MyEdTechApp.com/?mode=view</span>.</li>
+                                <ul>
+                                    <li>Note that your app can use the API to determine that the current user role is a student.</li>
+                                </ul>
+
+                        </ul>
+
+                        <p class="docs"><strong>Teacher viewing your app in an item</strong></p>
+                        <ul class="num">
+                            <li>A teacher opens an item that they have previously sent to students and clicks on your app.</li>
+                                <ul>
+                                    <li>Note that this is probably just the teacher “checking" what they attached. You may want to include some kind of edit functionality when the user role = teacher for the view mode. An edit functionality allows teachers to make minor corrections to what they’ve attached. Remember that some students may have already viewed the app and depending on your app’s functionality, a teacher making changes after an app is attached may cause confusion.</li>
+                                </ul>
+                        </ul>
+
+
+                        <p class="docs"><strong>Teacher viewing/grading student work:</strong></p>
+                        <ul class="num">
+                            <li>A teacher opens an item that they have previously sent to students and navigates down to the grading area. With a student selected, the teacher clicks on your app.</li>
+                            <li>Your App URL is loaded with the gradingview mode appended. Ex. <span class="monaco">http://www.MyEdTechApp.com/?mode=gradingview</span>.</li>
+                                <ul>
+                                    <li>Clicking the<strong> NEW TAB</strong> button opens your app in a new browser tab.</li>
+                                </ul>
+                        </ul>
+
+            </div>
+
+             <div class="clear-box" id="javascript">
+                <h2 class="docshead">Javascript Interaction</h2>
+                <p class="docs"><strong>In this section we will describe in detail the JavaScript interaction between your app and Chalkable. </strong></p>
+                <p class="docs"><strong>IMPORTANT: You will need to include a link to our Javascript file <em>chlk-post-message-api.js</em> in your project. <a href="https://github.com/Chalkable?tab=repositories" target="_blank">View it on GitHub now</a>.</strong> We recommend using the hosted version as it is subject to updates.</p>
+                    <div class="gray-box">
+                        <pre style="margin:0 !important;"><code style="width: 1050px;">&lt;script type="text/javascript" src="https://chalkable.com/Scripts/api/chlk-post-message-api.js"&gt;&lt;/script&gt;</code></pre>
+                    </div>
+                    <p class="docs left">1.  A teacher, who has installed your app via the Chalkable App Store, clicks Attach App in a New Item assignment and chooses your app.</p>
+                    <p class="docs left">2.  Your App URL is loaded with the edit mode appended – Ex. <span class="monaco">http://www.MyEdTechApp.com/?mode=edit</span>. The teacher will use your app’s UI to prepare it to be attached to the assignment.</p>
+                    <p class="docs left">3.  Your JavaScript code should register a callback that will be called when the teacher clicks <strong>ATTACH</strong> or <strong>SAVE</strong>, depending on which <a href="#iframe" class="scroll">View</a> Mode they are in (see code example below). This will let Chalkable know which function of yours to call.</p>
+
+
+                <div class="gray-box">
+<pre class="js"><code class="prettyprint linenums" style="width: 1045px;">
+function saveAndClose(){
+        //For saving, finalizing and anything else your app might need to do before closing.
+    	//Can be called in mode=edit (when teacher clicks ATTACH) or mode=view (when user clicks SAVE)
+        //return true if your app is ready for the iframe to be closed and the app to be attached.
+    return true;
+}
+CHLK_MESSENGER.addYourself(saveAndClose);
+    	//Should be called on app start to register a callback for attach and save buttons
+
+</code></pre>
+                </div>
+                <br />
+
+                    <p class="docs left">4.  After the teacher clicks <strong>ATTACH</strong>, Chalkable calls the callback you registered and your app has the ability to, for example, finish saving before your app returns <span class="monaco">true</span> or <span class="monaco">false</span>. </li>
+                    <p class="docs">•	<span class="monaco blue">Return true</span>: if your app is ready for the iframe to be closed and the app to be attached.</p>
+                    <p class="docs">•	<span class="monaco blue">Return false</span>: if your app is NOT ready for the iframe to be closed and the app to be attached.</p>
+             </div>
+
+            <div class="clear-box" id="quickstart">
+                <h2 class="docshead">Quick Start</h2>
+                            <div class="gray-box">
+                                <p class="docs center">This quick start tutorial describes signing up, creating an example app, and submitting your app. </p>
+                                <p class="docs center"><a class="slidee" href="#javascript">Check out a simple javascript</a> interaction between Chalkable and an example app. Copy and paste as you please.</p>
+                                    <div class="slider">
+                                        <div class="gray-box" style="margin-left: -20px;">
+<pre class="example" style="line-height: 22px;">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Example App&lt;/title&gt;
+&lt;style&gt;
+    .mode{
+        display: none;
+    }
+
+    .current-mode{
+        display: block;
+    }
+    #mode-name{
+        font-size: 30px;
+        text-align: center;
+        color:white;
+        border-bottom: 2px solid white;
+    }
+&lt;/style&gt;
+
+&lt;script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="https://chalkable.com/Scripts/api/chlk-post-message-api.js"&gt;&lt;/script&gt;
+
+&lt;script type="text/javascript"&gt;
+    CHLK_MESSENGER.addYourself(function () {
+        return true;
+    });
+
+    function getURLParameter(name) {
+        return decodeURIComponent (
+            (new RegExp(name + '=' + '(.+?)(&|jQuery)')).exec(document.location.href)||[,null]
+        );
+    }
+
+    jQuery(document).ready(function () {
+        var mode = getURLParameter("mode").split(',')[1];
+
+        if (mode !== undefined && mode !== null) {
+            jQuery(".mode").removeClass('current-mode');
+            jQuery('.' + mode).addClass('current-mode');
+            jQuery('#mode-name').html(mode);
+        }
+    });
+
+&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+        &lt;div id="title"&gt;Example App&lt;/div&gt;
+        &lt;div id="mode-name"&gt;&lt;/div&gt;
+        &lt;div class = "mode view"&gt;Students (or Teacher) viewing you application in the New Item (not grading section) mode: &lt;br /&gt;
+            http://www.MyEdTechApp.com/?mode=myview
+        &lt;/div&gt;
+        &lt;div class = "mode edit"&gt;Teacher preparing your app to be attached to New Item assignment: &lt;br /&gt; 
+            http://www.MyEdTechApp.com/?mode=edit
+        &lt;/div&gt;
+        &lt;div class = "mode myview"&gt;User viewing your app via My Apps page: &lt;br /&gt; 
+            http://www.MyEdTechApp.com/?mode=myview
+        &lt;/div&gt;
+        &lt;div class = "mode gradingview"&gt;Teacher reviewing students’ work in New Item grading area: &lt;br /&gt; 
+            http://www.MyEdTechApp.com/?mode=gradingview
+        &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+                                    </div>
+                                </div>
+                        </div>
+
+                    <ul class="num">
+                        <li>Check out the <a href="#quickstart" class="slidee">quick start html file</a> in the link above or <a href="https://github.com/Chalkable?tab=repositories" target="_blank">download them from GitHub now</a>. You can view a sample application built with Ruby on Rails and use the examples as a base to build your great app for Chalkable.</li>
+                        <li>Signup for a free developer account at: <a target="_top" href="@Url.Content("~/Developer/SignUp")"> https://chalkable.com/developer/signup </a>. You will immediately be taken to our interactive API Explorer and receive an API key. </li>
+                        <li>Experiment. Build stuff. Break stuff. Make it great.</li>
+                        <li>Have your app live and hosted on your own servers. Make sure to include the <a href="#javascript" class="scroll">JavaScript interactions</a> required by Chalkable.</li>
+                        <li>When you are ready to submit it to Chalkalble, sign in anywhere on <a target="_top" href="@Url.Content("~/#start")">Chalkable.com</a> and complete the app info page, selecting the appropriate fields for your app.</li>
+                    </ul>              
+             </div>
+
+
+             <div class="gray-box" id="auth">
+                <h2 class="docshead">Authentication</h2>
+                <p class="docs" style="padding:10px;">Most of Chalkable’s API methods require apps to be authenticated. In this section we will describe how to authenticate with Chalkable.</p>
+                <ul class="num">
+                    <li>When your app is opened in an iframe, Chalkable includes an authorization code in the URL.</li>
+                    <li>To access the Chalkable API, you will need to utilize this auth code (code param appended to your app URL) to perform authentication. Below is an example URL in the context of Chalkable.</li><br />
+                    <li><pre><code style="width: 1078px;" class="remove">http://www.MyEdTechApp.com/?mode=view&announcementapplicationid=1234&studentid=123456&code=123456789abcdefg</code></pre></li>
+                    <li>In this instance, the authorizaiton code to be used for retreiving the access token will be <span class="monaco">123456789abcdefg</span></li>
+                    <li>To retrieve an access token, perform a POST call on our authorization server at:<br /><span class="monaco"> https://chalkable-access-control.accesscontrol.windows.net/v2/OAuth2-13 </span> with following parameters:</li>
+                </ul>
+
+    <pre><code class="remove">
+    <i class="client">client_id</i> = {App URL}
+    <i class="client">client_secret</i> = {API key}
+    <i class="client">scope</i> = https://chalkable.com
+    <i class="client">grant_type</i> = authorization_code
+    <i class="client">code</i> = {auth code retrieved from your URL, <span class="monaco">123456789abcdefg</span> in above example URL}
+    <i class="client">redirect_uri</i> = {App URL}
+     </code></pre>
+            
+    <p class="docs left code">Example in Ruby:</p>
+<pre><code class="prettyprint linenums" style="width: 1112px;">
+require 'rest-client'
+require 'json'
+
+
+APP_CONFIG = {
+    :acs_url => "https://chalkable-access-control.accesscontrol.windows.net/v2/OAuth2-13",
+    :client_id => "www.MyEdTechApp.com/",
+    :client_secret => "Your API key from Chalkable Developer portal",
+    :scope => "https://chalkable.com",
+    :redirect_uri => "www.MyEdTechApp.com/",
+    :service_url => "https://chalkable.com/User/Me.json"
+}
+
+
+def get_access_token(code)
+  begin
+    @@response = RestClient.post(
+        APP_CONFIG[:acs_url],
+        'client_id' => APP_CONFIG[:client_id],
+        'client_secret' =>APP_CONFIG[:client_secret],
+        'scope' => APP_CONFIG[:scope],
+        'redirect_uri' => APP_CONFIG[:redirect_uri],
+        'grant_type' => 'authorization_code',
+        'code' => code
+    )
+  rescue => e
+    return :res => e, :error => true, :stack_trace => e.backtrace
+  end
+  return :res => JSON.parse(@@response), :error => false
+end
+
+
+def get_current_user(access_token)
+  begin
+    @@response = RestClient.get(APP_CONFIG[:service_url], :authorization => "Bearer:" + access_token)
+    res = JSON.parse(@@response)['data']
+    res[:is_teacher] = res['rolename'] == 'Teacher'
+    return :res => res, :error => false
+  rescue => e
+    return :res => e, :error => true, :stack_trace => e.backtrace
+  end
+end
+
+
+token = get_access_token(25346243456868468)
+puts token
+puts get_current_user(token)
+
+</code></pre>  
+                
+                <p class="docs left code">If the request succeeds, the server responds with a 200 OK HTTP status code and the results.</p> 
+                <p class="docs left code">You will get a JSON response with the following fields:</p>
+<pre><code class="remove" style="width:1079px;">
+{
+   "token_type":"http://schemas.xmlsoap.org/ws/2009/11/swt-token-profile-1.0",
+   "access_token":"{a long string}",
+   "expires_in":86399,
+   "refresh_token":"td+G+gWGeMJ1Z8Isn0lyRg==",
+   "scope":"https://www.chalkable.com/"
+}
+
+</code></pre>  
+             
+
+    <p class="docs left code">To call any API method that requires authentication, store the authorization code which you retrieved in the previous steps in a variable. We recommend converting the code to base 64.</p>
+    <p class="docs left code"> Next, add it to your GET or POST header:</p>
+        <pre><code class="remove">Authorization: Bearer: + {Base64 of access token}</code></pre>
+    <p class="docs left code">Example (in Javascript with Sencha ExtJS):</p>
+
+<pre><code class="prettyprint linenums">
+function getMe()
+{
+    Ext.Ajax.request({
+        url: 'https://chalkable.com/User/Me.json',
+        method: 'GET',
+        headers: {"Authorization": "Bearer:" + ACCESS_TOKEN_BASE_64},
+
+        success: function(response) {
+            var obj = JSON.parse(response.responseText);
+            alert(obj.data.firstname);
+        }
+    });
+}
+</code></pre>
+
+  <p class="docs left code">You will get a JSON response with the following fields:</p>
+<pre><code class="remove" style="width:1079px;">
+{
+  "email": "TestBryanFisher@chalkable.com",
+  "roledescription": "Teacher",
+  "rolename": "Teacher",
+  "grade": null,
+  "active": true,
+  "id": 2274433,
+  "displayname": "Bryan Fisher",
+  "firstname": "Bryan",
+  "lastname": "Fisher",
+  "gender": "M",
+  "pictureid": 130902,
+  "picturewidth": null,
+  "pictureheight": null
+}
+
+</code></pre>  
+
+             </div><!--#auth-->
+
+             <div class="clear-box" id="_concepts">
+                <h2 class="docshead">Concepts</h2>
+                <p class="docs"><strong>App Store: </strong></p>
+                    <p class="docs left">The Chalkable App Store is a listing of web apps that are integrated with Chalkable.</p><br /> 
+                <p class="docs"><strong>Installing an app: </strong></p> 
+                    <p class="docs left">Within the Chalkable App Store users can install an app. They can install an app for themselves or another user depending on their role. For example a student can only install apps for themselves, a teacher can install apps for their class, and an admin can install apps for the whole school or a subgroup (Ex. 9th grade, teachers and students who are in a math classes). When an app is installed, the app icon appears for the user on their My Apps page. Depending on the app the icon may also appear on the New Item Attach App screen. </p><br />
+                <p class="docs"><strong>New Item: </strong></p> 
+                    <p class="docs left">Teachers use the Chalkable platform to send assignments to their students. Teachers can attach your app directly into these assignments and students can interact with your application.</p><br />
+               <p class="docs"><strong>Adding an app to a New Item: </strong></p> 
+                    <p class="docs left">Your app will be embedded into assignments that students will use, simply by clicking the "Attach" button at the top of the frame.</p>
+                  <p class="docs"><strong>API Explorer: </strong></p>
+                    <p class="docs left">Play with our data. Serve up some JSON responses and learn the methods. Click sign up to gain immediate access to the developer portal and the API Explorer. </p>
+                 <p class="docs"><strong>App Info: </strong></p> 
+                    <p class="docs left">The page in your developer account where you submit information about your app to Chalkable. This information includes descriptions and artwork as well as which users will be using the app and what data the app will access.</p><br />
+                <p class="docs"><strong>Submitting your app: </strong></p> 
+                     <p class="docs left"><a target="_top" href="@Url.Content("~/Developer/Signup")">Sign up</a> and recieve an API key immediately. In our developer portal you can interact with the API Explorer, and when you're ready you can submit your app by filling out a short form and uploading your icons.</p>
+                <p class="docs"><strong>Auth Code: </strong></p>
+                    <p class="docs left">The code that Chalkable places into the URL used when your app is loaded in the iframe. Your app should use the auth code as part of the POST call your app makes on Chalkable’s authorization servers to receive an access token.</p><br /> 
+                
+             </div>
+
+
+    </div><!--midwrap-->
+
+    </div><!--wrapper docs-->
+
+</div><!--outer wrap-->
+
+    @if(!inIframe){
+      @Html.Partial("Footer")
+
+    }
+}
+
+@section BottomScripts {
+
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/jquery-ui.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/all_not_minified.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/signIn_Flip_Shake.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/waypoints.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/cycle.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/prettify.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/Scripts/index/jquery.fancybox.js")"></script>
+
+    <script type="text/javascript">
+       
+        jQuery('code').addClass('prettyprint');
+        jQuery('code.remove').removeClass('prettyprint');
+        jQuery('pre.example').addClass('prettyprint linenums');
+
+        prettyPrint();
+
+        jQuery('a.slidee').click(function (o) {
+            o.preventDefault();
+            $('.slider').slideDown('slow', function () {
+                return false;
+            });
+        });
+    </script>
+    
+    
+
+         
+}

@@ -1,0 +1,7 @@
+mixin LabeledCheckbox(text, name, val)
+    .labeled-checkbox
+        +Checkbox(name, val).checkbox
+        label(for=name)=text
+
+
+
