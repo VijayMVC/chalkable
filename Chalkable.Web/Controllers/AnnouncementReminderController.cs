@@ -14,8 +14,8 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult AddReminder(Guid announcementId, int? before)
         {
-            AnnouncementReminder res = SchoolLocator.AnnouncementReminderService.AddReminder(announcementId, before);
-            var view = PrepareFullAnnouncementViewData(res.Id);
+            SchoolLocator.AnnouncementReminderService.AddReminder(announcementId, before);
+            var view = PrepareFullAnnouncementViewData(announcementId);
             return Json(view, 5);
         }
 
