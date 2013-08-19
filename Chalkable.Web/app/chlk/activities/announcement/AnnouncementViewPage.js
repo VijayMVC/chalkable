@@ -11,7 +11,7 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AnnouncementView)],
         'AnnouncementViewPage', EXTENDS(chlk.activities.lib.TemplatePage), [
-            ria.dom.Dom, 'currentContainer',
+            //ria.dom.Dom, 'currentContainer',
 
             chlk.models.grading.Mapping, 'mapping',
             Array, 'applicationsInGradeView',
@@ -22,28 +22,77 @@ NAMESPACE('chlk.activities.announcement', function () {
                 if(event.keyCode == ria.dom.Keys.ENTER){
                     var value = node.getValue();
                     value = parseInt(value, 10);
-                    if(value > 100)
-                        value = 100;
-                    if(value < 0)
-                        value = 0;
+                    if(!value && value != 0)
+                        value = '';
+                    if(value){
+                        if(value > 100)
+                            value = 100;
+                        if(value < 0)
+                            value = 0;
+                    }
                     node.setValue(value);
-                    this.updateItem(node);
+                    this.updateItem(node, true);
                 }
             },
 
-            [[ria.dom.Dom]],
-            VOID, function updateItem(node){
+            [ria.mvc.DomEventBind('keypress', '.comment-input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function commentPress(node, event){
+                if(event.keyCode == ria.dom.Keys.ENTER){
+                    this.updateItem(node, false);
+                    node.parent('.small-pop-up').addClass('x-hidden');
+                }
+            },
+
+            [ria.mvc.DomEventBind('click', '.drop-link')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function dropClick(node, event){
                 var row = node.parent('.row');
-                this.setCurrentContainer(row.find('.top-content'));
+                if(node.hasClass('undrop')){
+                    row.find('[name=dropped]').setValue(false);
+                    this.updateItem(node, false);
+                }else{
+                    row.find('[name=dropped]').setValue(true);
+                    row.find('.grade-input').setValue('');
+                    this.updateItem(node, true);
+                }
+            },
+
+            [ria.mvc.DomEventBind('click', '.comment-grade')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function commentClick(node, event){
+                var popUp = node.find('.small-pop-up');
+                popUp.removeClass('x-hidden');
+                setTimeout(function(){
+                    jQuery(popUp.find('textarea').valueOf()).focus();
+                }, 10);
+            },
+
+            [ria.mvc.DomEventBind('click')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function wholeDomClick(node, event){
+                var target = new ria.dom.Dom(event.target);
+                if(!target.hasClass('comment-grade') && !target.parent('.comment-grade').exists())
+                    this.dom.find(('.small-pop-up:visible')).addClass('x-hidden');
+            },
+
+            [[ria.dom.Dom, Boolean]],
+            VOID, function updateItem(node, selectNext_){
+                var row = node.parent('.row');
+                var container = row.find('.top-content');
+                container.addClass('loading');
+                //this.setCurrentContainer(container.addClass('loading'));
                 var form = row.find('form');
                 form.triggerEvent('submit');
-                /*var o = form.serialize();
-                var serializer = new ria.serialize.JsonSerializer();
-                var model = serializer.deserialize(o, chlk.models.announcement.StudentAnnouncement);*/
-                var next = row.next();
-                if(next.exists()){
-                    row.removeClass('selected');
-                    next.addClass('selected');
+                if(selectNext_){
+                    setTimeout(function(){
+                        var next = row.next();
+                        if(next.exists()){
+                            row.removeClass('selected');
+                            next.addClass('selected');
+                            jQuery(next.find('.grade-input').valueOf()).focus();
+                        }
+                    },1);
                 }
             },
 
@@ -56,8 +105,14 @@ NAMESPACE('chlk.activities.announcement', function () {
                     var node = new ria.dom.Dom(this);
                     var row = node.parent('.row');
                     row.find('.grade-input').setValue(node.getValue());
-                    that.updateItem(node);
+                    that.updateItem(node, true);
                 });
+                //new ria.dom.Dom().on('click', function(){console.info('aaaa');this.wholeDomClick()}.bind(this));
+            },
+
+            OVERRIDE, VOID, function onStop_() {
+                BASE();
+                //new ria.dom.Dom().off('click', this.wholeDomClick);
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.StudentAnnouncement)],
@@ -70,8 +125,15 @@ NAMESPACE('chlk.activities.announcement', function () {
                     readonly: !!this.dom.find('[name=readonly]').getValue(),
                     gradingStyle: parseInt(this.dom.find('[name=gradingStyle]').getValue(), 10)
                 });
-                this.getCurrentContainer().empty();
-                tpl.renderTo(this.getCurrentContainer());
+                var container = this.dom.find('#top-content-' + model.getId().valueOf());
+                container.empty();
+                tpl.renderTo(container.removeClass('loading'));
+                var gradedCount = this.dom.find('.grade-input[value]').count();
+                this.dom.find('#graded-count').setHTML(gradedCount.toString());
+                /*setTimeout(function(){
+                    if(container.parent('.row').hasClass('selected'))
+                        jQuery(container.find('.grade-input').valueOf()).focus();
+                },1);*/
             }
         ]
     );

@@ -19,14 +19,14 @@ student = self.getStudentInfo();
         if !self.isReadonly()
             SPAN.container
                 SPAN.comment-grade=(self.getComment() ? Msg.Commented : Msg.Comment)
-                    .small-pop-up
+                    .small-pop-up.x-hidden
                         .container
                             .triangle
                             div
                                 div
                                     img.avatar-24(src=self.getOwnerPictureUrl())
                                 div
-                                    textarea(name="comment").comment-input=self.getComment()
+                                    +TextArea(name="comment").comment-input=self.getComment()
                                     span.enter=Msg.Enter_when_done
                 if self.isNotAnnouncement() && !self.isReadonly()
                     |&nbsp;
@@ -47,5 +47,5 @@ student = self.getStudentInfo();
                                         +Option(currentValue, item, res == item)
                         .letters=lbl
                 .input-container
-                    INPUT(type="text", autofill="off", value=normalValue, name="gradevalue").grade-input
+                    INPUT(type="text", autofill="off", value=normalValue, name="gradevalue").no-padding.grade-input.with-grid-focus
                     .letters 100 - 0

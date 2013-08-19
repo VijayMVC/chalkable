@@ -15,6 +15,26 @@ $red-color: #842727;
     border-top: 1px solid #fff;
     border-bottom: 1px solid #d0d0d0;
     padding: 16px;
+
+    .auto-grade-buttons, .grades-info{
+      height: 51px;
+    }
+
+    .auto-grade-buttons{
+      margin-right: 11px;
+
+      .special-button2{
+        margin: 5px;
+        >SPAN{
+          >SPAN{
+            >BUTTON{
+              font-size: 12px;
+              width: 94px;
+            }
+          }
+        }
+      }
+    }
   }
 
   .edit-button{
@@ -145,6 +165,12 @@ $red-color: #842727;
 
     .grades-individual{
       .row{
+        .top-content{
+          &.loading{
+            background: url(images/loaders/horizontal-small.gif) right 26px no-repeat
+          }
+        }
+
         &.selected{
           .name-block{
             SPAN.container{
@@ -176,11 +202,13 @@ $red-color: #842727;
         }
 
         .name-block{
+          margin-left: 10px;
+
           p{
-            padding: 4px 0 9px 0;
+            padding: 20px 0 2px 0;
             text-overflow: ellipsis;
             overflow: hidden;
-            max-width: 220px;
+            max-width: 328px;
           }
 
           span.container{
@@ -199,7 +227,6 @@ $red-color: #842727;
                 position: absolute;
                 border: 1px solid #b9b9b9;
                 @include border-radius(5px);
-                display: none;
                 z-index: 100;
 
                 >DIV.container{
@@ -262,10 +289,10 @@ $red-color: #842727;
           .selected{
             display: none;
             text-align: right;
-            margin-top: -8px;
+            margin-top: -9px;
 
             .input-container{
-              margin-right: 65px;
+              margin-left: 6px;
             }
 
             .input-container, .select-container{
@@ -284,8 +311,26 @@ $red-color: #842727;
               display: none;
             }
 
-            INPUT{
-              width: 65px;
+            A.chzn-single{
+              DIV{
+                B{
+                  background: url(images/grading/select-arrow.png) 5px 13px no-repeat;
+                }
+              }
+            }
+
+            DIV.chzn-container{
+              width: 65px!important;
+
+              .chzn-results LI {
+                font-family: Arial;
+                color: gray;
+                text-align: left;
+                padding-left: 15px;
+              }
+            }
+
+            INPUT, A.chzn-single{
               height: 31px;
               line-height: 31px;
               border: 1px solid #BCBCBC;
@@ -293,51 +338,15 @@ $red-color: #842727;
               background: white;
               text-align: center;
               overflow: hidden;
+            }
 
-              &:not(.grade-select){
-                @include box-shadow(inset 1px 2px 4px -2px #828282);
+            A.chzn-single{
+              width: 61px;
+            }
 
-                &:focus, &.focused{
-                  border: 1px solid #276284;
-                  @include box-shadow(0 0 4px #276284);
-                }
-              }
-
-              &.grade-select{
-                height: 25px;
-                margin-bottom: 4px;
-              }
-
-              .x-form-field-wrap{
-                INPUT{
-                  width: 40px !important;
-                }
-
-                .x-form-trigger, .x-form-trigger-over{
-                  margin-top: 3px;
-                  width: 64px !important;
-                  height: 25px;
-                  border: none;
-                  background: url(images/grading/select-arrow.png) 5px 10px no-repeat;
-                  background-color: white;
-                }
-              }
-
-              .grade-select{
-                border: none;
-              }
-
-              SELECT{
-                border: none;
-                width: 73px;
-                position: relative;
-                top: -3px;
-                padding-left: 15px;
-
-                OPTION{
-                  width: 53px;
-                }
-              }
+            INPUT{
+              vertical-align: middle;
+              width: 65px;
             }
 
             .letters{
@@ -346,14 +355,18 @@ $red-color: #842727;
               font-size: 10px;
               color: #5F5F5F;
               font-family: Arial;
-              left: 23px;
-              bottom: -14px;
+              left: 26px;
+              bottom: -10px;
               letter-spacing: 1px;
             }
           }
 
           .not-selected{
             display: block;
+            padding-left: 90px;
+            margin-top: -9px;
+            width: 60px;
+            text-align: center;
           }
 
           .comment-icon{
@@ -385,7 +398,6 @@ DIV.triangle {
   position: absolute;
   border: 1px solid #b9b9b9;
   @include border-radius(5px);
-  display: none;
   z-index: 100;
 
   >DIV.container{

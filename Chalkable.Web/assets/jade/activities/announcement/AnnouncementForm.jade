@@ -42,20 +42,28 @@
             .left-block
                 if isAnnouncement
                     TEXTAREA(id="subject",name="subject",placeholder="Subject")=announcement.getSubject()
-                TEXTAREA(id="content",name="content",placeholder=isAnnouncement ? "Message" : "Assignment")=announcement.getContent()
+                +TextArea(id="content",name="content",placeholder=isAnnouncement ? "Message" : "Assignment")=announcement.getContent()
                 .drop-down-container
                 input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
                 input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
             .right-block
-                +DatePicker('expiresdate', announcement.getExpiresDate())(
-                    data-options={
-                        showOtherMonths: true,
-                        selectOtherMonths: true
-                    },
-                    class="validate[required]"
-                )#expiresdate
+                .date-picker-container
+                    +DatePicker('expiresdate', announcement.getExpiresDate())(
+                        data-options={
+                            showOtherMonths: true,
+                            selectOtherMonths: true
+                        },
+                        class="validate[required]"
+                    )#expiresdate
+                SPAN#reminders-button.small-gray-link=Msg.Reminder(true)
+                .reminders-container
+                    .reminders
+                    .chlk-add=Msg.Add_reminder
             .attachments-and-applications
-                +RenderWith(announcement, chlk.templates.announcement.Announcement)
+                +RenderWith(announcement, chlk.templates.announcement.Announcement)(
+                    needButtons = true,
+                    needDeleteButton = true
+                )
             .bottom-block
                 +Button()(
                     type="submit",

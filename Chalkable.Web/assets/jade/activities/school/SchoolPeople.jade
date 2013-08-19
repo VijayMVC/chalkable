@@ -21,7 +21,7 @@
             +GlanceBox(null, null, {value: school.getInvitesCount(), title: 'Invites'})
         h2 People
         +ActionForm('schools', 'setPeopleFilter')#people-form
-            +Button(type="submit").x-hidden
+            +Button()(type="submit").x-hidden
             .loader-container
                 .loader
                 .action-bar.not-transparent.people-tb

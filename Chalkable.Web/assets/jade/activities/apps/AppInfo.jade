@@ -48,7 +48,7 @@ each item in actAppPermissions
             +Textbox("apikey", "key").api-key
             label= "Status: " + app.getState().toString()
     +ActionForm('apps', 'update').app-info
-        +Button(self.isDraft())(name="submit-btn", class = self.isDraft() ? "x-item-disabled" : "").blue-tb-right-button.submit-btn  Submit App
+        +Button()(disabled = self.isDraft(), name="submit-btn", class = self.isDraft() ? "x-item-disabled" : "").blue-tb-right-button.submit-btn  Submit App
         +Hidden('draft', self.isDraft())
         +Hidden('id', app.getId())
         .section.first
@@ -129,4 +129,4 @@ each item in actAppPermissions
         .section
             .elem
                 label.hint Icons:
-        +Button(false)(name="submit-draft-btn").special-button.blue-button Update Draft
+        +Button()(name="submit-draft-btn").special-button.blue-button Update Draft

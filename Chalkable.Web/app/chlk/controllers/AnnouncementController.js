@@ -123,6 +123,8 @@ NAMESPACE('chlk.controllers', function (){
                     var expires = model.getExpiresDate();
                     var expiresDate = expires.getDate();
                     var date = expires.format('(D m/d)');
+                    var attachments = model.getAnnouncementAttachments();
+                    this.prepareAttachments(attachments);
                     model.setExpiresDateColor('blue');
                     model.getOwner().setPictureUrl(this.personService.getPictureURL(model.getOwner().getId(), 24));
                     model.getStudentAnnouncements().getItems().forEach(function(item){

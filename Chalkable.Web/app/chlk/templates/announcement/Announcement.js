@@ -165,6 +165,11 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'wasAnnouncementTypeGraded',
 
             [ria.templates.ModelPropertyBind],
-            String, 'submitType'
+            String, 'submitType',
+
+
+            Boolean, 'needButtons',
+
+            Boolean, 'needDeleteButton'
         ])
 });

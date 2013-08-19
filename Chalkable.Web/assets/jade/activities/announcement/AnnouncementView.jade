@@ -42,15 +42,18 @@
                     h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
                     p=self.getContent()
                     .attachments-and-applications
+                        +RenderWith(self._model, chlk.templates.announcement.Announcement)
             if studentAnnouncements && studentAnnouncements.length
                 .silver-panel
                     .auto-grade-buttons.right
-                        +Button().special-button2.green=Msg.Auto_grade
-                        +Button().special-button2.red=Msg.Grade_manually
+                        +Button()(disabled = true).special-button2.green=Msg.Auto_grade
+                        +Button()(disabled = true).special-button2.red=Msg.Grade_manually
                     .grades-info.right
                         TABLE
                             TR
-                                TD=studentAnnouncementsInfo.getGradedStudentCount() + '/' + studentAnnouncements.length
+                                TD
+                                    span#graded-count=studentAnnouncementsInfo.getGradedStudentCount()
+                                    ='/' + studentAnnouncements.length
                                 TD=getGrade(studentAnnouncementsInfo.getClassAvg())
                             TR
                                 TD.small=Msg.Students_graded(studentAnnouncements.length)
@@ -66,7 +69,7 @@
                             +Hidden('notAnnouncement', notAnnouncement)
                             +Hidden('readonly', isReadonly)
                             +Hidden('gradingStyle', gradingStyle)
-                            .top-content
+                            .top-content(id = "top-content-" + item.getId())
                                 +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
                                     ownerPictureUrl = ownerPictureUrl,
                                     notAnnouncement = notAnnouncement,

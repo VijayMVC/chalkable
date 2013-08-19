@@ -231,12 +231,12 @@ NAMESPACE('ria.dom', function () {
             },
 
             [[Object]],
-            OVERRIDE, Number, function height(value_) {
-                return value ? this._dom.height(value) : this._dom.height();
+            OVERRIDE, Object, function height(value_) {
+                return value_ ? this._dom.height(value_) : this._dom.height();
             },
             [[Object]],
-            OVERRIDE, Number, function width(value_) {
-                return value ? this._dom.width(value) : this._dom.width();
+            OVERRIDE, Object, function width(value_) {
+                return value_ ? this._dom.width(value_) : this._dom.width();
             },
 
             /* data attributes */

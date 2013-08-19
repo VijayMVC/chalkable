@@ -1,6 +1,7 @@
 REQUIRE('chlk.controls.Base');
 
 NAMESPACE('chlk.controls', function () {
+    var otherInputWithFocusClass = 'with-grid-focus';
 
     /** @class app.controls.ListView */
     CLASS(
@@ -97,13 +98,13 @@ NAMESPACE('chlk.controls', function () {
                 this.setCurrentIndex(parseInt(node.getAttr('index'), 10));
             },
 
-            [ria.mvc.DomEventBind('keydown', '.grid-focus')],
+            [ria.mvc.DomEventBind('keydown', '.grid-focus, .' + otherInputWithFocusClass)],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function keyArrowsClick(node, event) {
                 var currentIndex = this.getCurrentIndex();
                 if((event.which == 38 && currentIndex) || (event.which == 40 && currentIndex < this.getCount() - 1)){
                     var parent = node.parent('.chlk-grid');
-                    parent.find('.selected').removeClass('selected');
+                    parent.find('.row.selected').removeClass('selected');
                     if(event.which == 38){
                         currentIndex--;
                     }else{
@@ -114,6 +115,7 @@ NAMESPACE('chlk.controls', function () {
                         .addClass('selected');
                     this.setCurrentIndex(currentIndex);
                     this.scrollToElement();
+                    this.focusGrid();
                 }
             },
 
@@ -131,7 +133,12 @@ NAMESPACE('chlk.controls', function () {
             [[ria.dom.Dom]],
             VOID, function focusGrid(node_) {
                 node_ = node_ && node_.valueOf()[0] ? node_ : new ria.dom.Dom('.chlk-grid');
-                node_.find('.grid-focus').valueOf()[0].focus();
+                var focusNode = node_.find('.row.selected').find('.' + otherInputWithFocusClass);
+                if(focusNode.exists()){
+                    focusNode.valueOf()[0].focus()
+                }else{
+                    node_.find('.grid-focus').valueOf()[0].focus();
+                }
             },
 
             VOID, function scrollToElement(){
