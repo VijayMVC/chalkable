@@ -1410,6 +1410,9 @@
   <data name="USERS_PROCESSED" xml:space="preserve">
     <value>{0} users are processed</value>
   </data>
+  <data name="USER_NOT_FOUND_IN_DEMO_SCHOOL" xml:space="preserve">
+    <value>User with role {0} is not found in demo school {1}</value>
+  </data>
   <data name="WORKER_ROLE_WORKING" xml:space="preserve">
     <value>Working</value>
   </data>

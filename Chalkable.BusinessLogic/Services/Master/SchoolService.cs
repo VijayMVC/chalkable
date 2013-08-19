@@ -5,7 +5,6 @@ using System.Threading;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.Common;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
@@ -20,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         Data.Master.Model.School Create(Guid districtId, string name, IList<UserInfo> principals);
         void CreateEmpty();
         PaginatedList<Data.Master.Model.School> GetSchools(Guid? districtId, int start = 0, int count = int.MaxValue);
-        IList<Data.Master.Model.School> GetSchools(bool? empty, bool? demo);
+        IList<Data.Master.Model.School> GetSchools(bool? empty, bool? demo, bool? usedDemo = null);
         Data.Master.Model.School UseDemoSchool();
         SisSync GetSyncData(Guid schoolId);
         void SetSyncData(SisSync sisSync);
@@ -88,12 +87,12 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        public IList<Data.Master.Model.School> GetSchools(bool? empty, bool? demo)
+        public IList<Data.Master.Model.School> GetSchools(bool? empty, bool? demo, bool? usedDemo = null)
         {
             using (var uow = Read())
             {
                 var da = new SchoolDataAccess(uow);
-                return da.GetSchools(empty, demo, null);
+                return da.GetSchools(empty, demo, usedDemo);
             }
         }
 
@@ -179,7 +178,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
             foreach (var person in users)
             {
-                ServiceLocator.UserService.CreateSchoolUser(person.Email, "tester", school.Id, CoreRoles.GetById(person.RoleRef).Name);
+                ServiceLocator.UserService.CreateSchoolUser(person.Email, "tester", school.Id, CoreRoles.GetById(person.RoleRef).Name, person.Id);
             }
         }
         

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
@@ -13,6 +10,7 @@ namespace Chalkable.BusinessLogic.Services.Master
     {
         Developer GetDeveloperBySchool(Guid schoolId);
         Developer GetDeveloperById(Guid developerId);
+        IList<Developer> GetDevelopers();
         Developer Add(string login, string password, string name, string webSite, Guid schoolId);
         Developer Edit(Guid developerId, string name, string email, string webSite);
     }
@@ -37,6 +35,14 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 return new DeveloperDataAccess(uow).GetById(developerId);
+            }
+        }
+
+        public IList<Developer> GetDevelopers()
+        {
+            using (var uow = Read())
+            {
+                return new DeveloperDataAccess(uow).GetAll();
             }
         }
 

@@ -13,7 +13,7 @@ namespace Chalkable.BackgroundTaskProducer.Producers
             var existing = sl.BackgroundTaskService.Find(null, BackgroundTaskStateEnum.Created, BackgroundTaskTypeEnum.CreateDemoSchool);
             if (existing == null)
             {
-                var have = sl.SchoolService.GetSchools(false, true).Count;
+                var have = sl.SchoolService.GetSchools(false, true, false).Count;
                 int need = Settings.Configuration.DemoSchoolsReserved;
                 int cnt = Math.Max(0, need - have);
                 if (cnt > 0)

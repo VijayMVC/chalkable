@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
-using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
@@ -33,16 +29,18 @@ namespace Chalkable.Web.Controllers
             return View(RoleViewData.Create(roles));
         }
 
-        [HttpPost]
-        public ActionResult LogOn(string rolename, string prefix)
+        public ActionResult LogOnIntoDemo(string rolename, string prefix)
         {
             if (string.IsNullOrEmpty(prefix))
                 Json(new ChalkableException(ChlkResources.ERR_DEMO_SCHOOL_INVALID_PREFIX));
 
             var context = LogOn(false, userService => userService.LoginToDemo(rolename, prefix));
             if (context == null)
-                return Json(new ChalkableException(ChlkResources.INVITING_USER));
-            return Json(new {Role = context.Role.LoweredName});
+                return Json(new ChalkableException(string.Format(ChlkResources.USER_NOT_FOUND_IN_DEMO_SCHOOL, rolename, prefix)));
+            if (rolename.ToLower() == CoreRoles.ADMIN_GRADE_ROLE.LoweredName) return Redirect<HomeController>(c => c.Admin(false));
+            if (rolename.ToLower() == CoreRoles.TEACHER_ROLE.LoweredName) return Redirect<HomeController>(c => c.Teacher(false));
+            if (rolename.ToLower() == CoreRoles.STUDENT_ROLE.LoweredName) return Redirect<HomeController>(c => c.Student(false));
+            throw new ChalkableSecurityException(ChlkResources.ERR_DEMO_SCHOOL_INCORRECT_ROLE);
         }
     }
 }

@@ -7,7 +7,7 @@
     ViewBag.Title = "Demo";
 }
 
-@section Scripts {
+@section BottomScripts {
 
     <script type="text/javascript">
 
@@ -50,40 +50,13 @@
             });
             jQuery('#home-logo').attr('href', WEB_SITE_ROOT);
 
-            if(errorMessage) {
-                addInfoMessage({
-                    header: 'oops',
-                    leftAlign: true,
-                    blueButton: true,
-                    buttonText: 'GOT IT',
-                    text: errorMessage.replace(/&lt;/g, '<').replace(/&gt;/g, '>'),
-                    handler: function() {
-                        window.location.href = WEB_SITE_ROOT + '#start';
-                    }
-                });
+            if (errorMessage) {
+                alert(errorMessage);
+                window.location.href = WEB_SITE_ROOT + '#start';
             }
         });
     </script>
 }
-
-@*@section Sidebar {
-    <h2>App store for school</h2>
-    <p><img src="@Url.StaticContent("/Content/images/login/talk.png")" align="left" />   Amazing digital tools and
-           content can transform the way students learn in school. The Chalkable app store lists the best education apps from across the web.
-    </p>
-
-    <h2>The chalkable platform</h2>
-    <p><img src="@Url.StaticContent("/Content/images/login/folder.png")" align="left" />Lots of Apps. One login.
-           One calendar. One gradebo-ok. It all just works. The platform is the set of tools for students, tea-chers, admins, and parents. Tools like the Feed, Calendar, Grading, Messaging and more.
-    </p>
-
-    <h2>Make learning better</h2>
-    <p><img src="@Url.StaticContent("/Content/images/login/hw.png")" align="left" /> Learning, we all do it. It’s an
-           important part of what makes us human. When thinking about learning, it seemed to us that “good learning” has an awful lot to do with good tools and good content.</p>
-
-<p>The most powerful tools and most immersive content live on the web. With the Chalkable App store and platform, schools gain access...and that makes for a better learning experience
-    </p>
-}*@
 
 @Html.ValidationSummary(true, "Looks like that's an incorrect email and password. If you're having trouble, click 'Forgot Info' below.")
 
@@ -95,9 +68,9 @@
                 {
                     switch (item.Name) 
                         {
-                        case "AdminGrade": <a class="Admin" href='LogOn.json?rolename=AdminGrade&prefix=@ViewData[ViewConstants.DEMO_PREFIX_KEY]'></a>; break;
+                        case "AdminGrade": <a class="Admin" href='LogOnIntoDemo.json?rolename=AdminGrade&prefix=@ViewData[ViewConstants.DEMO_PREFIX_KEY]'></a>; break;
                         case "Teacher":
-                        case "Student": <a class="@item.Name" href='LogOn.json?rolename=@item.Name&prefix=@ViewData[ViewConstants.DEMO_PREFIX_KEY]'></a>; break;
+                        case "Student": <a class="@item.Name" href='LogOnIntoDemo.json?rolename=@item.Name&prefix=@ViewData[ViewConstants.DEMO_PREFIX_KEY]'></a>; break;
                         }
                 }
             }

@@ -75,6 +75,18 @@ namespace Chalkable.Web.Controllers
             return View();
         }
 
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
+        public ActionResult Admin(bool? redirectToSetup)
+        {
+            throw new NotImplementedException();
+        }
+
+        [AuthorizationFilter("Student")]
+        public ActionResult Student(bool? redirectToSetup)
+        {
+            throw new NotImplementedException();
+        }
+
         private void PrepareCommonViewData(string prefixDemoSchool = null, MarkingPeriod markingPeriod = null)
         {
             //TODO: render data for demo school 

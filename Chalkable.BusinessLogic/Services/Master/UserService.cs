@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -21,10 +20,9 @@ namespace Chalkable.BusinessLogic.Services.Master
         User GetByLogin(string login);
         User GetById(Guid id);
         User CreateSysAdmin(string login, string password);
-        User CreateSchoolUser(string login, string password, Guid schoolId, string role);
+        User CreateSchoolUser(string login, string password, Guid schoolId, string role, Guid? id = null);
         void ChangePassword(string login, string newPassword);
         void ChangeUserLogin(Guid id, string login);
-        IList<User> GetUsers();
         User GetSysAdmin();
 
     }
@@ -142,7 +140,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         private string BuildDemoUserName(string roleName, string prefix)
         {
-            return prefix + PreferenceService.Get("DemoPrefix" + roleName.ToLower()).Value;
+            return prefix + PreferenceService.Get("demoschool" + roleName.ToLower()).Value;
         }
 
         private User GetDemoUser(string roleName, string prefix)
@@ -202,19 +200,14 @@ namespace Chalkable.BusinessLogic.Services.Master
                 throw new ChalkableSecurityException();
         }
 
-        public IList<User> GetUsers()
-        {
-            throw new NotImplementedException();
-        }
-
-        private User CreateUser(string login, string password, Guid? schoolId, string role, bool isSysAdmin, bool isDeveloper)
+        private User CreateUser(string login, string password, Guid? schoolId, string role, bool isSysAdmin, bool isDeveloper, Guid? id = null)
         {
             using (var uow = Update())
             {
                 var userDa = new UserDataAccess(uow);
                 var user = new User
                 {
-                    Id = Guid.NewGuid(),
+                    Id = id ?? Guid.NewGuid(),
                     IsDeveloper = isDeveloper,
                     IsSysAdmin = isSysAdmin,
                     Login = login,
@@ -240,12 +233,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public User CreateSchoolUser(string login, string password, Guid schoolId, string role)
+        public User CreateSchoolUser(string login, string password, Guid schoolId, string role, Guid? id)
         {
             if(!UserSecurity.CanCreate(Context, schoolId))
                 throw new ChalkableSecurityException();
 
-            return CreateUser(login, password, schoolId, role, false, false);
+            return CreateUser(login, password, schoolId, role, false, false, id);
         }
 
         public void ChangeUserLogin(Guid id, string login)
