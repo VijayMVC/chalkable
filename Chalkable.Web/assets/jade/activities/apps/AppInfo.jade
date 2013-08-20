@@ -1,12 +1,30 @@
-mixin Textbox(tName, val)
+mixin Textbox(tName, val, isReadonly)
+    if isReadonly
+        -attributes.disabled = isReadonly
     input(type="text", name=tName, value=val)(attributes).text
 
 
+
+mixin TextArea(tName, val, isReadonly)
+    if isReadonly
+        -attributes.disabled = isReadonly
+    textarea(name=tName)(attributes)=val
 
 mixin MyAppsPermission(prefix, app, suffix)
     .myapps-permission
         label=prefix
         span.app-name=app + " " + suffix
+
+
+
+mixin IconBox(title, dims)
+    .upload-img-block
+        .top=dims
+
+
+
+
+
 
 app = self.app
 myAppsAccess = app.getAppAccess()
@@ -42,51 +60,53 @@ appCategories = appCategories.join(',')
 appPermissions = appPermissions.join(',')
 
 .app-info
-    .action-bar.not-transparent.dev-app-info
-        .container.panel-bg
-            label API key:
-            +Textbox("apikey", "key").api-key
-            label= "Status: " + app.getState().toString()
+    if !self.isReadOnly()
+        .action-bar.not-transparent.dev-app-info
+            .container.panel-bg
+                label API key:
+                +Textbox("apikey", "key").api-key
+                label= "Status: " + app.getState().toString()
     +ActionForm('apps', 'update').app-info
-        +Button()(disabled = self.isDraft(), name="submit-btn", class = self.isDraft() ? "x-item-disabled" : "").blue-tb-right-button.submit-btn  Submit App
+        if !self.isReadOnly()
+            +Button()(disabled = self.isDraft(), name="submit-btn", class = self.isDraft() ? "x-item-disabled" : "").blue-tb-right-button.submit-btn  Submit App
         +Hidden('draft', self.isDraft())
         +Hidden('id', app.getId())
         .section.first
             .elem
                 label.hint App Name:
-                +Textbox("name", app.getName())
+                +Textbox("name", app.getName(), self.isReadOnly())
             .elem
                 label.hint App URL:
-                +Textbox("url", app.getUrl())
+                +Textbox("url", app.getUrl(), self.isReadOnly())
         .section
             .elem
                 label.top.hint My Apps:
                 .my-apps
                     .permission
                         +MyAppsPermission("Can Teachers Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("hasTeacherMyApps", myAppsAccess.isTeacherMyAppsEnabled())
+                        +SlideCheckbox("hasTeacherMyApps", myAppsAccess.isTeacherMyAppsEnabled(), self.isReadOnly())
                     .permission
                         +MyAppsPermission("Can Students Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("hasStudentMyApps", myAppsAccess.isStudentMyAppsEnabled())
+                        +SlideCheckbox("hasStudentMyApps", myAppsAccess.isStudentMyAppsEnabled(), self.isReadOnly())
                     .permission
                         +MyAppsPermission("Can Admins Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("hasAdminMyApps", myAppsAccess.isAdminMyAppsEnabled())
+                        +SlideCheckbox("hasAdminMyApps", myAppsAccess.isAdminMyAppsEnabled(), self.isReadOnly())
                     .permission
                         +MyAppsPermission("Can Parents Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("hasParentMyApps", myAppsAccess.isParentMyAppsEnabled())
+                        +SlideCheckbox("hasParentMyApps", myAppsAccess.isParentMyAppsEnabled(), self.isReadOnly())
         .section.small
             .elem.first
                 label.hint New Item:
                 .my-apps
                     .permission
                         +MyAppsPermission("Can Teachers Attach", app.getName(), "in New Items?")
-                        +SlideCheckbox("canAttach", myAppsAccess.isAttachEnabled())
+                        +SlideCheckbox("canAttach", myAppsAccess.isAttachEnabled(), self.isReadOnly())
             .elem
                 label.hint Grading View:
                 .my-apps
                     .permission
                         +MyAppsPermission("Will be Teachers", '', 'viewing student output')
-                        +SlideCheckbox("showInGradingView", myAppsAccess.isVisibleInGradingView())
+                        +SlideCheckbox("showInGradingView", myAppsAccess.isVisibleInGradingView(), self.isReadOnly())
         .section
             .elem
                 label.hint API Access:
@@ -94,7 +114,7 @@ appPermissions = appPermissions.join(',')
                     +CheckboxList('permissions', 'app-permission', appPermissions)
                         each item in self.getPermissions()
                             -isChecked = !!selectedAppPermissions[item.getId().valueOf()]
-                            +LabeledCheckbox(item.getName(), 'app-permission'+ item.getId(), isChecked)
+                            +LabeledCheckbox(item.getName(), 'app-permission'+ item.getId(), isChecked, self.isReadOnly())
         .section
             .elem
                 label.hint Subjects:
@@ -102,7 +122,7 @@ appPermissions = appPermissions.join(',')
                     +CheckboxList('categories', 'app-category', appCategories)
                         each item in self.getCategories()
                             -isChecked = !!selectedAppCategories[item.getId()]
-                            +LabeledCheckbox(item.getName(), 'app-category' + item.getId(), isChecked)
+                            +LabeledCheckbox(item.getName(), 'app-category' + item.getId(), isChecked, self.isReadOnly())
         .section
             .elem
                 label.hint Grades:
@@ -110,25 +130,31 @@ appPermissions = appPermissions.join(',')
                     +CheckboxList('gradeLevels', 'app-grade-level', appGradeLvls)
                         each item in self.getGradeLevels()
                             -isChecked = !!selectedAppGradeLevels[item.getId().valueOf()]
-                            +LabeledCheckbox(item.getName(), 'app-grade-level' + item.getId(), isChecked)
+                            +LabeledCheckbox(item.getName(), 'app-grade-level' + item.getId(), isChecked, self.isReadOnly())
 
         .section
             .elem
                 label.wide.hint Short Description:
-                +Textbox("shortDescription", app.getShortDescription())
+                +Textbox("shortDescription", app.getShortDescription(), self.isReadOnly())
             .elem
                 label.wide.hint.top-align Long Description:
-                textarea(name="longDescription")=app.getDescription()
+                +TextArea("longDescription", app.getDescription(), self.isReadOnly())
             .elem
                 label.wide.hint Video Demo:
-                +Textbox("videoModeUrl", app.getVideoModeUrl())
+                +Textbox("videoModeUrl", app.getVideoModeUrl(), self.isReadOnly())
         .section
             .elem
                 label.hint Pricing:
-                +SlideCheckbox("price", true).price-checkbox
+                +SlideCheckbox("price", true, self.isReadOnly()).price-checkbox
                 .app-pricing
                     span Test
         .section
             .elem
                 label.hint Icons:
-        +Button()(name="submit-draft-btn").special-button.blue-button Update Draft
+                .icons
+                    +IconBox("Icon")
+                    +IconBox("Banner")
+                .screenshots
+                    +IconBox("Screenshots")
+        if !self.isReadOnly()
+            +Button()(name="submit-draft-btn").special-button.blue-button Update Draft

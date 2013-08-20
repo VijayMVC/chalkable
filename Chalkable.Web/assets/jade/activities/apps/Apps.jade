@@ -1,16 +1,30 @@
+mixin AppManagementControls(id, state)
+    if state != chlk.models.apps.AppStateEnum.SUBMIT_FOR_APPROVE
+        span=state.toString()
+    else
+        +ActionLink('apps', 'approve', id).btn Approve
+        +ActionLink('apps', 'decline', id).btn Decline
+        +ActionLink('a', 'b', 'c').btn Test
+
 .apps-list
-    +Grid('apps', 'list', self).not-transparent
+    +Grid('apps', 'page', self).not-transparent
         +GridHead()
+            .th
             .th Application Name
             .th Description
-            .th isInternal
+            .th State
+            .th.narrow isInternal
             .th
         +GridBody()
             each item in self.items
                 +GridRow()
+                    .td
                     .td= item.getName()
                     .td= item.getShortDescription()
+                    .td.app-state
+                        +AppManagementControls(item.getId(), item.getState())
                     .td
+                        +Checkbox('isInternal', item.isInternal())
                     .td.action-links
                         +ActionLink('apps', 'details', item.getId()).profile
                         +ActionLink('apps', 'delete', item.getId()).remove

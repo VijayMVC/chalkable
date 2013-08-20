@@ -19,7 +19,7 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.id.AppId, 'id',
 
             [ria.serialize.SerializeProperty('isinternal')],
-            Boolean, 'isInternal',
+            Boolean, 'internal',
 
             //[
                 String, 'name',
@@ -46,8 +46,6 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.id.SchoolPersonId, 'developerId',
             [ria.serialize.SerializeProperty('liveappid')],
             chlk.models.id.AppId, 'liveAppId',
-            [ria.serialize.SerializeProperty('isinternal')],
-            Boolean, 'isInternal',
             [ria.serialize.SerializeProperty('applicationprice')],
             chlk.models.apps.AppPrice, 'applicationPrice',
             [ria.serialize.SerializeProperty('picturesid')],
