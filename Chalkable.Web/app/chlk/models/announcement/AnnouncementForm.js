@@ -10,6 +10,7 @@ NAMESPACE('chlk.models.announcement', function () {
         'AnnouncementForm', EXTENDS(chlk.models.announcement.AnnouncementCreate), [
             chlk.models.class.ClassesForTopBar, 'topData',
             chlk.models.class.ClassForWeekMask, 'classInfo',
-            Number, 'selectedTypeId'
+            Number, 'selectedTypeId',
+            Array, 'reminders'
         ]);
 });

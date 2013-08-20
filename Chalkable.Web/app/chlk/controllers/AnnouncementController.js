@@ -4,14 +4,17 @@ REQUIRE('chlk.services.AnnouncementService');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.PersonService');
 REQUIRE('chlk.services.GradingService');
+REQUIRE('chlk.services.AnnouncementReminderService');
 REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.AnnouncementViewPage');
 REQUIRE('chlk.models.announcement.AnnouncementForm');
+REQUIRE('chlk.models.announcement.Reminder');
 REQUIRE('chlk.models.announcement.LastMessages');
 REQUIRE('chlk.models.attachment.Attachment');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.AnnouncementId');
+REQUIRE('chlk.models.id.ReminderId');
 REQUIRE('chlk.models.id.AttachmentId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 
@@ -33,6 +36,9 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.AnnouncementService, 'announcementService',
 
         [ria.mvc.Inject],
+        chlk.services.AnnouncementReminderService, 'announcementReminderService',
+
+        [ria.mvc.Inject],
         chlk.services.ClassService, 'classService',
 
         [ria.mvc.Inject],
@@ -42,6 +48,35 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.GradingService, 'gradingService',
 
         ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
+
+        [[chlk.models.announcement.Reminder]],
+        function editAddReminderAction(model) {
+            if(model.isDuplicate()){
+                this.ShowMsgBox('This reminder was added before!.', 'fyi.', [{
+                    text: Msg.GOT_IT.toUpperCase()
+                }])
+            }else{
+                var result, before = model.getBefore();
+                if(model.getId().valueOf()){
+                    this.announcementReminderService.editReminder(model.getId(), before);
+                }else{
+                    result = this.announcementReminderService.addReminder(model.getAnnouncementId(), before)
+                        .then(function(announcement){
+                            var reminders = announcement.getAnnouncementReminders(), res;
+                            res = reminders.filter(function(item){
+                                return item.getBefore() == before;
+                            });
+                            return res[0];
+                        });
+                    return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result, window.noLoadingMsg);
+                }
+            }
+        },
+
+        [[chlk.models.id.ReminderId]],
+        function removeReminderAction(announcementReminderId) {
+            this.announcementReminderService.deleteReminder(announcementReminderId);
+        },
 
         [[ArrayOf(chlk.models.attachment.Attachment)]],
         function prepareAttachments(attachments){
@@ -62,6 +97,11 @@ NAMESPACE('chlk.controllers', function (){
             var classes = this.classService.getClassesForTopBar();
             var topModel = new chlk.models.class.ClassesForTopBar();
             var announcement = model.getAnnouncement();
+            var reminders = announcement.getAnnouncementReminders(), remindersArr=[];
+            reminders.forEach(function(item){
+                remindersArr.push(item.getBefore());
+            });
+            model.setReminders(remindersArr);
             var attachments = announcement.getAnnouncementAttachments();
             this.prepareAttachments(attachments);
             this.getContext().getSession().set('AnnouncementAttachments', attachments);
@@ -127,7 +167,7 @@ NAMESPACE('chlk.controllers', function (){
                     this.prepareAttachments(attachments);
                     model.setExpiresDateColor('blue');
                     model.getOwner().setPictureUrl(this.personService.getPictureURL(model.getOwner().getId(), 24));
-                    model.getStudentAnnouncements().getItems().forEach(function(item){
+                    model.getStudentAnnouncements() && model.getStudentAnnouncements().getItems().forEach(function(item){
                         var student = item.getStudentInfo();
                         student.setPictureUrl(this.personService.getPictureURL(student.getId(), 24));
                     }.bind(this));

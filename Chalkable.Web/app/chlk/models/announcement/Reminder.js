@@ -1,4 +1,5 @@
 REQUIRE('chlk.models.id.ReminderId');
+REQUIRE('chlk.models.id.AnnouncementId');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
@@ -10,10 +11,14 @@ NAMESPACE('chlk.models.announcement', function () {
 
             chlk.models.id.ReminderId, 'id',
 
+            chlk.models.id.AnnouncementId, 'announcementId',
+
             [ria.serialize.SerializeProperty('isowner')],
             Boolean, 'isOwner',
 
             [ria.serialize.SerializeProperty('reminddate')],
-            chlk.models.common.ChlkDate, 'remindDate'
+            chlk.models.common.ChlkDate, 'remindDate',
+
+            Boolean, 'duplicate'
         ]);
 });

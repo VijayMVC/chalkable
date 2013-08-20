@@ -82,14 +82,57 @@
   .ann-form-container{
     padding: 31px 0 0 4px;
 
+    .attachments-and-applications {
+      padding: 41px 0 30px;
+    }
+
     .reminders-container{
       background: url(images/announcement/reminder-bg.png) -11px 20px no-repeat;
       padding-top: 50px;
+
+      .reminder{
+        margin-bottom: 10px;
+
+        INPUT, SELECT{
+          color: #787878;
+        }
+
+        INPUT{
+          width: 20px;
+          border-radius: 0;
+          margin-right: 5px;
+          vertical-align: middle;
+          padding: 0;
+        }
+
+        SELECT{
+          width: 72px;
+        }
+
+        .chzn-container{
+          >A{
+            height: 20px;
+            font: normal 14px/20px "Myriad Pro";
+          }
+        }
+
+        .remove-btn{
+          margin-left: 5px;
+          display: inline-block;
+          vertical-align: middle;
+        }
+      }
+
     }
 
     .left-block, .right-block{
       display: inline-block;
       vertical-align: top;
+    }
+
+    #reminders-button{
+      margin-top: 10px;
+      display: inline-block;
     }
 
     .left-block{
