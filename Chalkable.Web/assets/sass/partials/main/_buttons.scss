@@ -1,6 +1,17 @@
 .chlk-add{
   background: url(images/icons/add-item.png) 5px 50% no-repeat;
+}
+
+.remove-btn, .chlk-add{
+  color: #9b9b9b;
+  font: normal 13px arial italic;
+  cursor: pointer;
   padding-left: 25px;
+  height: 18px;
+}
+
+.remove-btn{
+  background: url(images/icons/close-item.png) 0% 50% no-repeat;
 }
 
 .opacity-button{

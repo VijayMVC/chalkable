@@ -56,9 +56,17 @@
                         class="validate[required]"
                     )#expiresdate
                 SPAN#reminders-button.small-gray-link=Msg.Reminder(true)
-                .reminders-container
+                .reminders-container.x-hidden
                     .reminders
-                    .chlk-add=Msg.Add_reminder
+                        each reminder in announcement.getAnnouncementReminders()
+                            +RenderWith(reminder, chlk.templates.announcement.AnnouncementReminder)
+                    .reminder.new-reminder.x-hidden
+                        input.reminder-input
+                        +Select().reminder-select
+                            +Option(7, Msg.Week(true))
+                            +Option(1, Msg.Day(true), true)
+                        SPAN.remove-btn.remove-reminder
+                    .chlk-add#add-reminder.opacity-button=Msg.Add_reminder
             .attachments-and-applications
                 +RenderWith(announcement, chlk.templates.announcement.Announcement)(
                     needButtons = true,
@@ -82,5 +90,10 @@
                     +ActionLink('announcement', 'discard', announcement.getPersonId().valueOf()).grey-link.not-blue=Msg.Discard
         .choose-type(class=(classId && !typeId ? '' : 'x-hidden'))
         .choose-class(class=(classId ? 'x-hidden' : ''))
+    +ActionForm('announcement', 'editAddReminder')(data-reminders=self.getReminders())#add-edit-reminder
+        +Hidden('id')
+        +Hidden('announcementId', announcement.getId())
+        +Hidden('before')
+        +Hidden('duplicate', false)
 
 

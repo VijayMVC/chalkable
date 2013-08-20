@@ -11,15 +11,23 @@ NAMESPACE('chlk.templates.announcement', function () {
         'AnnouncementForm', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.announcement.Announcement, 'announcement',
+
             [ria.templates.ModelPropertyBind],
             chlk.models.class.ClassesForTopBar, 'topData',
+
             [ria.templates.ModelPropertyBind],
             chlk.models.class.ClassForWeekMask, 'classInfo',
+
             [ria.templates.ModelPropertyBind],
             Number, 'selectedTypeId',
+
             [ria.templates.ModelPropertyBind],
             Boolean, 'isDraft',
+
             [ria.templates.ModelPropertyBind],
-            Array, 'recipients'
+            Array, 'recipients',
+
+            [ria.templates.ModelPropertyBind],
+            Array, 'reminders'
         ])
 });

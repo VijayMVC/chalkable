@@ -1,6 +1,7 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.announcement.AnnouncementForm');
 REQUIRE('chlk.templates.announcement.Announcement');
+REQUIRE('chlk.templates.announcement.AnnouncementReminder');
 REQUIRE('chlk.templates.announcement.LastMessages');
 REQUIRE('chlk.templates.class.TopBar');
 
@@ -12,6 +13,7 @@ NAMESPACE('chlk.activities.announcement', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AnnouncementForm)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementReminder, '', '.reminders', ria.mvc.PartialUpdateRuleActions.Append)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, '', '.attachments-and-applications', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementForm, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LastMessages, '', '.drop-down-container', ria.mvc.PartialUpdateRuleActions.Replace)],
@@ -22,6 +24,18 @@ NAMESPACE('chlk.activities.announcement', function () {
             VOID, function classClick(node, event){
                 var classId = node.getAttr('classId');
                 this.dom.find('input[name=classid]').setValue(classId);
+            },
+
+            [ria.mvc.DomEventBind('click', '#add-reminder')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function addReminderClick(node, event){
+                this.dom.find('.new-reminder').removeClass('x-hidden');
+            },
+
+            [ria.mvc.DomEventBind('click', '#reminders-button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function showRemindersClick(node, event){
+                this.dom.find('.reminders-container').toggleClass('x-hidden');
             },
 
             [ria.mvc.DomEventBind('click', '.action-button')],
@@ -37,6 +51,20 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function formClick(node, event){
 
+            },
+
+            [ria.mvc.DomEventBind('click', '.remove-reminder')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function removeReminderClick(node, event){
+                setTimeout(function(){
+                    node.parent('.reminder').remove();
+                }, 10);
+            },
+
+            [ria.mvc.DomEventBind('change', '.reminder-input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function inputChange(node, event){
+                this.addEditReminder(node);
             },
 
             /*[ria.mvc.DomEventBind('click', '#content')],
@@ -87,6 +115,19 @@ NAMESPACE('chlk.activities.announcement', function () {
                 if(model.getClass() == chlk.models.announcement.LastMessages){
                     this.dom.find('#content').triggerEvent('focus');
                 }
+
+                if(model.getClass() == chlk.models.announcement.Reminder){
+                    var parent = this.dom.find('.new-reminder');
+                    var input = parent.find('.reminder-input');
+                    var select = parent.find('.reminder-select');
+                    input.setAttr('disabled', false).setValue('');
+                    select.setAttr('disabled', false)
+                        .find('option[value=1]').setAttr('selected', true)
+                        .find('option[value=7]').setAttr('selected', false);
+                    parent.find('.remove-reminder').removeClass('x-hidden');
+                    jQuery(select.valueOf()).trigger('liszt:updated');
+                    parent.addClass('x-hidden');
+                }
             },
 
             OVERRIDE, VOID, function onStart_() {
@@ -97,6 +138,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(!target.parent('.drop-down-container').exists() && target.getAttr('name') != 'content')
                         that.dom.find('.new-item-dropdown').addClass('x-hidden');
                 };
+                jQuery(this.dom.valueOf()).on('change', '.reminder-select', function(){
+                    that.addEditReminder(new ria.dom.Dom(this));
+                });
                 new ria.dom.Dom().on('click', handler);
             },
 
@@ -104,6 +148,37 @@ NAMESPACE('chlk.activities.announcement', function () {
                 new ria.dom.Dom('#save-form-button').triggerEvent('click');
                 new ria.dom.Dom().off('click', handler);
                 BASE();
+            },
+
+            [[ria.dom.Dom]],
+            VOID, function addEditReminder(node) {
+                var parent = node.parent('.reminder');
+                var input = parent.find('.reminder-input');
+                var inputValue = input.getValue();
+                if(inputValue){
+                    var select = parent.find('.reminder-select');
+                    var id = parent.getData('id');
+                    var form = this.dom.find('#add-edit-reminder');
+                    var reminders = form.getData('reminders'), isDuplicate = false;
+                    var before = parseInt(select.getValue(), 10) * parseInt(inputValue, 10);
+                    isDuplicate = reminders.indexOf(before) > -1;
+                    if(!isDuplicate){
+                        reminders.push(before);
+                        form.setData('reminders', reminders);
+
+                        if(!id){
+                            input.setAttr('disabled', true);
+                            select.setAttr('disabled', true);
+                            parent.find('.remove-reminder').addClass('x-hidden');
+                            jQuery(select.valueOf()).trigger('liszt:updated');
+                        }
+                    }
+                    form.find('[name=duplicate]').setValue(isDuplicate);
+                    form.find('[name=id]').setValue(id || '');
+                    form.find('[name=before]').setValue(before);
+                    form.triggerEvent('submit');
+                }
+
             }
         ]
     );

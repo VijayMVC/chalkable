@@ -1,4 +1,5 @@
 REQUIRE('chlk.controllers.BaseController');
+REQUIRE('chlk.services.CalendarService');
 REQUIRE('chlk.activities.calendar.announcement.MonthPage');
 
 NAMESPACE('chlk.controllers', function (){
@@ -8,7 +9,7 @@ NAMESPACE('chlk.controllers', function (){
         'CalendarController', EXTENDS(chlk.controllers.BaseController), [
 
         [ria.mvc.Inject],
-        chlk.services.AnnouncementService, 'calendarService',
+        chlk.services.CalendarService, 'calendarService',
 
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER
