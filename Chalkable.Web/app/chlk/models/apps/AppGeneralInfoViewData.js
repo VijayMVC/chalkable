@@ -12,9 +12,9 @@ NAMESPACE('chlk.models.apps', function () {
 
             [[chlk.models.id.AppId, String, chlk.models.apps.AppState]],
             function $(id, name, state){
-                this.setId(id);
-                this.setName(name);
-                this.setState(state);
+                this.setAppId(id);
+                this.setAppName(name);
+                this.setAppState(state);
             }
         ]);
 });

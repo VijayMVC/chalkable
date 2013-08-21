@@ -5,6 +5,7 @@ REQUIRE('chlk.services.AppCategoryService');
 REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.activities.apps.AppsListPage');
 REQUIRE('chlk.activities.apps.AppInfoPage');
+REQUIRE('chlk.activities.apps.AppGeneralInfoPage');
 REQUIRE('chlk.activities.apps.AddAppDialog');
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.apps.AppPostData');
@@ -270,7 +271,7 @@ NAMESPACE('chlk.controllers', function (){
                         return this.forward_('apps', 'add', []);
                     }
                     else{
-                        var appGeneralInfo = new chlk.models.apps.AppGeneralInfoViewData(app.getId(), app.getName(), app.getStatus());
+                        var appGeneralInfo = new chlk.models.apps.AppGeneralInfoViewData(data.getId(), data.getName(), data.getState());
                         return this.PushView(chlk.activities.apps.AppGeneralInfoPage, new ria.async.DeferredData(appGeneralInfo));
                     }
                 }, this)
