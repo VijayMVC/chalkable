@@ -11,8 +11,13 @@
     <link href="@Url.StaticContent("/app/jquery/validation/css/validationEngine.jquery.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.StaticContent("/app/jquery/validation/css/template_index.css")" rel="stylesheet" type="text/css"/>
     <!-- Page specific CSS -->
+
     @RenderSection("Styles", false)
-    @ChlkHelpers.GoogleAnalytics()
+    @if(!Chalkable.Web.Tools.CompilerHelper.IsDebug)
+    {
+        ChlkHelpers.GoogleAnalytics();    
+    }
+    
 </head>
 <body>
     <div id="fb-root"></div>
@@ -42,7 +47,6 @@
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.scrollTo.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/languages/jquery.validationEngine-en.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.validationEngine.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/datepicker/jquery-timepicker.js")"></script>
 
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-messages.js")"></script>
@@ -52,12 +56,16 @@
     <!--[if IE 6]><script  type="text/javascript" src="@Url.StaticContent("/app/chlk/index/jq.png-min.js")"></script><![endif]-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     
-    
-   @ChlkHelpers.LinkedIn(ViewData["LinkedInApplicationId"]) 
-   @ChlkHelpers.Olark()
+   @if(!Chalkable.Web.Tools.CompilerHelper.IsDebug)
+   {
+       ChlkHelpers.LinkedIn(ViewData["LinkedInApplicationId"]);
+       
+       ChlkHelpers.Facebook();
+       
+   }
+   @ChlkHelpers.MixPanel(); 
+   @ChlkHelpers.Olark(); 
    @ChlkHelpers.RenderSiteRoot(Url)
-   @ChlkHelpers.Facebook()
-   @ChlkHelpers.MixPanel()
    @ChlkHelpers.WebKitAutofill()
    @RenderSection("BottomScripts", false)
    @RenderSection("MixPanelTracking", false)

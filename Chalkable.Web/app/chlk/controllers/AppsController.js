@@ -5,6 +5,7 @@ REQUIRE('chlk.services.AppCategoryService');
 REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.activities.apps.AppsListPage');
 REQUIRE('chlk.activities.apps.AppInfoPage');
+REQUIRE('chlk.activities.apps.AppGeneralInfoPage');
 REQUIRE('chlk.activities.apps.AddAppDialog');
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.apps.AppPostData');
@@ -39,11 +40,17 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.apps.AppsListPage, result);
         },
 
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.DEVELOPER
-        ])],
-        [[chlk.models.apps.Application]],
-        ria.async.Future, function prepareAppInfo(app_) {
+        [[Number]],
+        function pageAction(pageIndex_) {
+            var result = this.appsService
+                .getApps(pageIndex_ | 0)
+                .attach(this.validateResponse_());
+            return this.UpdateView(chlk.activities.apps.AppsListPage, result);
+        },
+
+
+        [[chlk.models.apps.Application, Boolean]],
+        ria.async.Future, function prepareAppInfo(app_, readOnly) {
             var result = this.categoryService
                 .getCategories()
                 .then(function(data){
@@ -62,7 +69,10 @@ NAMESPACE('chlk.controllers', function (){
                     }
                     if (!app_.getAppAccess())
                         app_.setAppAccess(new chlk.models.apps.AppAccess());
-                    return new chlk.models.apps.AppInfoViewData(app_, false, cats, gradeLevels, permissions, true);
+
+
+
+                    return new chlk.models.apps.AppInfoViewData(app_, readOnly, cats, gradeLevels, permissions, true);
 
                 }, this);
 
@@ -74,6 +84,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AppId]],
         function detailsDeveloperAction(appId_) {
+            var isReadonly = false;
             var app = this.appsService
                     .getInfo(appId_)
                     .then(function(data){
@@ -81,8 +92,47 @@ NAMESPACE('chlk.controllers', function (){
                             return this.forward_('apps', 'add', []);
                         }
                         else
-                            return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data));
+                            return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data, isReadonly));
                     }, this)
+        },
+
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.SYSADMIN
+        ])],
+        [[chlk.models.id.AppId]],
+        function approveSysAdminAction(appId) {
+            return this.appsService
+                .approveApp(appId)
+                .then(function(data){
+                    return this.redirect_('apps', 'list', []);
+                }, this);
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.SYSADMIN
+        ])],
+        [[chlk.models.id.AppId]],
+        function declineSysAdminAction(appId) {
+            return this.appsService
+                .declineApp(appId)
+                .then(function(data){
+                    return this.redirect_('apps', 'list', []);
+                }, this);
+        },
+
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.SYSADMIN
+        ])],
+        [[chlk.models.id.AppId]],
+        function detailsSysAdminAction(appId) {
+            var isReadonly = true;
+            var app = this.appsService
+                .getInfo(appId)
+                .then(function(data){
+                        return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data, isReadonly));
+                }, this);
         },
 
         [chlk.controllers.AccessForRoles([
@@ -221,7 +271,7 @@ NAMESPACE('chlk.controllers', function (){
                         return this.forward_('apps', 'add', []);
                     }
                     else{
-                        var appGeneralInfo = new chlk.models.apps.AppGeneralInfoViewData(app.getId(), app.getName(), app.getStatus());
+                        var appGeneralInfo = new chlk.models.apps.AppGeneralInfoViewData(data.getId(), data.getName(), data.getState());
                         return this.PushView(chlk.activities.apps.AppGeneralInfoPage, new ria.async.DeferredData(appGeneralInfo));
                     }
                 }, this)

@@ -13,8 +13,6 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.ApplicationService, 'appsService',
 
-
-
             OVERRIDE, ria.async.Future, function onAppInit() {
                 this.appsService.getDevApplicationListChange()
                     .on(this.refresh_);
@@ -39,14 +37,6 @@ NAMESPACE('chlk.controllers', function (){
                     .appendTo(new ria.dom.Dom('#demo-footer').empty());
             },
 
-
-            [chlk.controllers.AccessForRoles([
-                chlk.models.common.RoleEnum.DEVELOPER
-            ])],
-            function generalAction(){
-
-            },
-
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.DEVELOPER
             ])],
@@ -54,6 +44,7 @@ NAMESPACE('chlk.controllers', function (){
                var devDocsModel = new chlk.models.developer.DeveloperDocs(this.getContext().getSession().get('webSiteRoot') + '/Developer/DeveloperDocs?InFrame=true');
                return this.PushView(chlk.activities.developer.DeveloperDocsPage, new ria.async.DeferredData(devDocsModel));
             }
+
 
         ])
 });

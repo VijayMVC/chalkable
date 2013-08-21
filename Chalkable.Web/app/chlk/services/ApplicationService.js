@@ -75,6 +75,21 @@ NAMESPACE('chlk.services', function () {
                     : ria.async.DeferredData(this.getCurrentApp());
 
             },
+
+
+            [[chlk.models.id.AppId]],
+            ria.async.Future, function approveApp(appId) {
+                return this
+                    .post('Application/Approve.json', Boolean, {applicationId: appId.valueOf()});
+            },
+
+            [[chlk.models.id.AppId]],
+            ria.async.Future, function declineApp(appId) {
+                return this
+                    .post('Application/Decline.json', Boolean, {applicationId: appId.valueOf()});
+            },
+
+
             [[chlk.models.id.SchoolPersonId, String]],
             ria.async.Future, function createApp(devId, name) {
                 return this

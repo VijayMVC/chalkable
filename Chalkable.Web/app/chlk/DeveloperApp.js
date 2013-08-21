@@ -17,7 +17,7 @@ NAMESPACE('chlk', function (){
                 var dispatcher = BASE();
 
                 dispatcher.setDefaultControllerId('apps');
-                dispatcher.setDefaultControllerAction('details');
+                dispatcher.setDefaultControllerAction('general');
                 return dispatcher;
             },
 
