@@ -17,8 +17,11 @@
     <link href="@Url.StaticContent("/app/jquery/datepicker/jquery-ui-1.10.3.custom.css")" rel="stylesheet" type="text/css" />
     <!-- Page specific CSS -->
     @RenderSection("Styles", false)
-    @ChlkHelpers.GoogleAnalytics()
-    @ChlkHelpers.Olark()
+    @if(!Chalkable.Web.Tools.CompilerHelper.IsDebug)
+    {
+        ChlkHelpers.GoogleAnalytics();
+        ChlkHelpers.Olark();
+    }
     @ChlkHelpers.RenderSiteRoot(Url)
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-messages.js")"></script>

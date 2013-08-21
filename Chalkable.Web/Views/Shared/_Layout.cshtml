@@ -11,8 +11,13 @@
     <link href="@Url.StaticContent("/app/jquery/validation/css/validationEngine.jquery.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.StaticContent("/app/jquery/validation/css/template_index.css")" rel="stylesheet" type="text/css"/>
     <!-- Page specific CSS -->
+
     @RenderSection("Styles", false)
-    @ChlkHelpers.GoogleAnalytics()
+    @if(!Chalkable.Web.Tools.CompilerHelper.IsDebug)
+    {
+        ChlkHelpers.GoogleAnalytics();    
+    }
+    
 </head>
 <body>
     <div id="fb-root"></div>
@@ -52,12 +57,15 @@
     <!--[if IE 6]><script  type="text/javascript" src="@Url.StaticContent("/app/chlk/index/jq.png-min.js")"></script><![endif]-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     
+   @if(!Chalkable.Web.Tools.CompilerHelper.IsDebug)
+   {
+       ChlkHelpers.LinkedIn(ViewData["LinkedInApplicationId"]);
+       ChlkHelpers.Olark();
+       ChlkHelpers.Facebook();
+       ChlkHelpers.MixPanel();
+   }
     
-   @ChlkHelpers.LinkedIn(ViewData["LinkedInApplicationId"]) 
-   @ChlkHelpers.Olark()
    @ChlkHelpers.RenderSiteRoot(Url)
-   @ChlkHelpers.Facebook()
-   @ChlkHelpers.MixPanel()
    @ChlkHelpers.WebKitAutofill()
    @RenderSection("BottomScripts", false)
    @RenderSection("MixPanelTracking", false)
