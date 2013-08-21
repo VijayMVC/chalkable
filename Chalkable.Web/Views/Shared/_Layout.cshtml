@@ -47,7 +47,6 @@
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.scrollTo.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/languages/jquery.validationEngine-en.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.validationEngine.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/datepicker/jquery-timepicker.js")"></script>
 
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-messages.js")"></script>
@@ -60,11 +59,12 @@
    @if(!Chalkable.Web.Tools.CompilerHelper.IsDebug)
    {
        ChlkHelpers.LinkedIn(ViewData["LinkedInApplicationId"]);
-       ChlkHelpers.Olark();
+       
        ChlkHelpers.Facebook();
-       ChlkHelpers.MixPanel();
+       
    }
-    
+   @ChlkHelpers.MixPanel(); 
+   @ChlkHelpers.Olark(); 
    @ChlkHelpers.RenderSiteRoot(Url)
    @ChlkHelpers.WebKitAutofill()
    @RenderSection("BottomScripts", false)
