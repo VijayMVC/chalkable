@@ -1,0 +1,183 @@
+﻿@{
+    ViewBag.Title = "Developers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link href="@Url.StaticContent("/Content/screen-index.css")" rel="stylesheet" type="text/css" />
+    <style>
+        #faq {
+            float: none;
+            height: auto; 
+            width: auto;
+            border: none;
+        }
+    </style>
+}
+
+@section ContentSection {
+@ChlkHelpers.RenderSignInForm(Url, Html)
+
+
+		<div id="docs_top_wrapper" class="faq_sticky_navigation developers" >
+			<div id="sticky_navigation" class="developers">
+				<div class="demo_container">
+                    <ul id="nav1">
+                        <li><a href="@Url.Content("~/#start")"><img src="@Url.StaticContent("/Content/images/common/nav-logo-150.png")" class="navlogo_faq developers"></a></li>
+				        <li><a href="#">
+				        <h5 class="dev_nav_logo">Developers</h5>
+				        </a></li>
+				        <li class="loginnav dev one"><a id="open" class="open" href="#" style="margin-left: 596px; width:200px">Sign in</a></li>
+                    </ul>
+				</div>
+			</div>
+	    </div>          
+
+
+<div class="wrapper">
+	<section class="splash dev">
+        <div id="vidyard_container">
+            <div class="vidyard_wrapper">
+                <a href="http://youtu.be/T1ccDPTC-PA?rel=0;autoplay=1" rel="media-gallery" class="fancybox-media">
+                    <div class = "vidyard_play_button"></div>
+                    <img alt="Chalkable" src="@Url.StaticContent("/Content/images/index/flask-vid.png")" width="503" />
+                </a>
+                
+            </div>
+        </div>
+
+	<div class="titletext devs">
+		<h1 class="dev">iFrame + API</h1>
+        <h3 class="syncs dev">API FOR SCHOOL DATA. </h3>
+		<h3 class="syncs dev">APP STORE FOR DISTRIBUTION.</h3>
+		<h3 class="syncs dev">BUILT IN
+            <span class="cycle dev" style="display:none">
+                <span class="sis_name" style="position:absolute; width: 200px;"><i class="underlines dev">GRADEBOOK</i>.</span>
+                <span class="sis_name" style="position:absolute; width: 200px;"><i class="underlines dev">CALENDAR</i>.</span>
+                <span class="sis_name" style="position:absolute; width: 200px;"><i class="underlines dev">MESSAGING</i>.</span>
+                <span class="sis_name" style="position:absolute; width: 200px;"><i class="underlines dev">ATTENDANCE</i>.</span>
+                <span class="sis_name" style="position:absolute; width: 200px;"><i class="underlines dev">DISCIPLINE</i>.</span>
+                <span class="sis_name" style="position:absolute; width: 200px;"><i class="underlines dev">FEED</i>.</span>
+                <span class="sis_name" style="position:absolute; width: 200px;"><i class="underlines dev">STUDENT</i>.</span>
+                <span class="sis_name" style="position:absolute; width: 300px;"><i class="underlines dev">STUDENT PROFILES</i>.</span>
+            </span>
+
+        </h3>
+		
+		<h3 class="syncs dev low">70/30 SPLIT. YOU KEEP 70.</h3>
+		
+			<div id="floatingbuttons" class ="dev">
+				<a href="@Url.Content("~/Developer/DeveloperDocs")" class="docs-button" ></a>
+				<a href="@Url.Content("~/Developer/Signup")" class="signup-button" ></a>
+			</div>
+	</div>
+	</section>
+<!--End Splash-->
+
+
+<section id="developers">
+	<div id="main_body_container">
+		<div class="wrapper developers">
+			<div id="body_container" style="margin-top:-254px;">
+				
+				<div class="dev_vids_wrapper">
+					<div class="vid_1">
+						<a href="http://www.youtube.com/embed/F7idVdfvU7A?rel=0;autoplay=1" rel="media-gallery" class="fancybox-media" id="embedded_assingment_vid"></a>
+						<p class="vid_title">
+							 Standard integration
+						</p>
+					</div>
+					<div class="vid_2">
+						<a href="http://www.youtube.com/embed/-oYYkjYMZzk?rel=0;autoplay=1" rel="media-gallery" class="fancybox-media" id="embedded_assingment_vid"></a>
+						<p class="vid_title">
+							 Advanced integration
+						</p>
+					</div>
+					<div class="vid_3">
+						<a href="http://youtu.be/4j4ib81IxGc?rel=0;autoplay=1" rel="media-gallery" class="fancybox-media my_apps_vid"></a>
+						<p class="vid_title">
+							 Authentication
+						</p>
+					</div>
+				</div>
+
+		                <div class="wrapper">
+			                <div id="body_container">
+				                <div class="details_box">
+					                <div class="contents">
+						                <div class="details dev">
+							                <h3 class="dev-head">iFrame</h3>
+							                <p>
+								                iFrame canvases display your web app in Chalkable. Our RESTful API provides access to powerful school data points such as student and teacher scheduling, real time attendance, announcements, grading records, discipline records and more. We encourage you, the developer, to push the limits of what can be done with big data and today's web technologies. 
+							                </p>
+							                <p>
+								               Use the API to authenticate the user...
+							                </p>
+                                            <img class="down-arrow-dev" src="@Url.StaticContent("/Content/images/index/down-arrow-dev.png")" />
+						                </div>
+					                </div>
+					                <img src="@Url.StaticContent("/Content/images/index/gbooks-iframe.png")" alt="app store" class="khan-dev-img" />
+				                </div>
+				                <div class="details_box" id="lowerdetail">
+					                <div class="image_box">
+						                <img src="@Url.StaticContent("/Content/images/index/api-explorer-prev.png")" alt="platform"/ class="api-explorer-dev">
+					                </div>
+					                <div class="contents" style="margin-top: -68px !important;">
+						                <div class="details dev">
+							                <h3 class="dev-head">API</h3>
+							                <p>
+                                                With the API your app can authenticate users, identify user roles (student/teacher/admin), read announcements, gather scheduling data, push grades to the Chalkable gradebook, and so much more.
+                                                <br />
+                                                View our <a href="@Url.Content("~/Developer/DeveloperDocs")">documentation page</a> to learn more about the Chalkable experience: how our app store works, how teachers and students will use your app within the context of Chalkable, and how our platform uses basic Javascript callback functions for integration.
+							                </p>
+							                <p>
+								                <a href="@Url.Content("~/Developer/Signup")">Sign up</a> to immediately receive an API key and make your first calls with the live API Explorer.
+							                </p>
+						                </div>
+					                </div>
+				                </div>
+			                </div>
+		                </div>
+
+                        <div class="price_bott_section dev" style="margin-bottom: 29px !important;">
+				            <h3 class="dev-ready">ARE YOU READY?</h3>
+				            <ul class="btn_grp">
+					            <div id="lowerbuttons" class="index">
+                                    <a href="@Url.Content("~/Developer/DeveloperDocs")" class="docs-button"></a>
+					                <a href="@Url.Content("~/Developer/Signup")" class="signup-button"></a>
+					            </div>
+				            </ul>
+			            </div>
+			</div>
+		</div>
+	</div>
+</section>
+
+</div> <!--wrapper-->
+   
+}
+
+@Html.Partial("Footer")
+
+@section BottomScripts {
+
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/jquery-ui.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/all_not_minified.js")"></script>
+    
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/signIn_Flip_Shake.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/waypoints.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/cycle.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/jquery.fancybox.js")"></script>
+
+
+    <script type="text/javascript">
+
+        $(window).load(function () {
+            $('.sign_in_button').click(function () {
+                var form = $('form#login');
+                form.submit();
+                return false;
+            });
+        });
+    </script>
+}
