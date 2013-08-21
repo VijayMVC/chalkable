@@ -1,0 +1,27 @@
++ActionForm('message', 'searchPage')
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('message', 'new', []) +new message
+            .right
+                +ActionLink('message', 'page', [true, true, self.getRole(), self.getKeyword()])(class=self.isInbox() ? "pressed" : "") inbox
+                +ActionLink('message', 'page', [true, false, self.getRole(), self.getKeyword()])(class=self.isInbox() ? "" : "pressed") sent
+                input(name="role", type="hidden", value=self.getRole())
+                input(name="inbox", type="hidden", value=self.isInbox())
+                input(name="keyword", type="text", value=self.getKeyword())
+                +Button()(type="submit") Ok
+
+
+    +Grid('message', 'page', self.getMessages(), [true]).not-transparent
+        +GridHead()
+            .th Id
+            .th Subject
+            .th Sent
+        +GridBody()
+            each item in self.getMessages().getItems()
+                +GridRow()
+                    .td= item.getId().valueOf()
+                    .td= item.getSubject()
+                    .td=item.getSent().toString('dd/m/yy hh:min:ss')
+
+

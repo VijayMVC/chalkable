@@ -125,7 +125,14 @@ namespace Chalkable.BusinessLogic.Services.Master
         //TODO: do we ned this?
         public bool CanGetSecretKey(IList<Application> applications)
         {
-            throw new System.NotImplementedException();
+            if (Context.Role.Id == CoreRoles.STUDENT_ROLE.Id)//WHY???
+                return true;
+            if (Context.Role.Id == CoreRoles.DEVELOPER_ROLE.Id)
+            {
+                var developer = ServiceLocator.DeveloperService.GetDeveloperById(Context.UserId);
+                return applications.All(x => x.DeveloperRef == developer.Id);
+            }
+            return false;
         }
 
         public bool HasMyApps(Application application)
