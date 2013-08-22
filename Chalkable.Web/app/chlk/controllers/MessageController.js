@@ -3,6 +3,7 @@ REQUIRE('chlk.models.messages.Message');
 REQUIRE('chlk.models.messages.MessageList');
 REQUIRE('chlk.models.id.MessageId');
 REQUIRE('chlk.services.MessageService');
+REQUIRE('chlk.services.PersonService');
 REQUIRE('chlk.activities.messages.MessageListPage');
 REQUIRE('chlk.models.common.PaginatedList');
 
@@ -14,6 +15,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.MessageService, 'messageService',
+
+            [ria.mvc.Inject],
+            chlk.services.PersonService, 'personService',
 
             [chlk.controllers.SidebarButton('message')],
             [[Boolean, Boolean, String, String, Number]],
@@ -35,8 +39,25 @@ NAMESPACE('chlk.controllers', function (){
 
             [chlk.controllers.SidebarButton('message')],
             [[chlk.models.messages.MessageList]],
-            function searchPageAction(model) {
-                return this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
+            function doAction(model) {
+                if (model.getSubmitType() == "search")
+                    return this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
+                if (model.getSubmitType() == "delete")
+                    this.messageService.del(model.getSelectedIds())
+                        .then(function(x){
+                            this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
+                        }.bind(this));
+                if (model.getSubmitType() == "markAsRead")
+                    this.messageService.markAs(model.getSelectedIds(), true)
+                        .then(function(x){
+                            this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
+                        }.bind(this));
+                if (model.getSubmitType() == "markAsUnread")
+                    this.messageService.markAs(model.getSelectedIds(), false)
+                        .then(function(x){
+                            this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
+                        }.bind(this));
+
             },
 
             [[chlk.models.common.PaginatedList, Boolean, String, String]],
@@ -47,6 +68,7 @@ NAMESPACE('chlk.controllers', function (){
                 result.setInbox(inbox_);
                 result.setRole(role_);
                 result.setKeyword(keyword_);
+
                 return new ria.async.DeferredData(result);
             }
         ])

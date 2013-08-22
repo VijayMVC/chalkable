@@ -8,6 +8,11 @@ NAMESPACE('chlk.templates', function () {
     /** @class app.templates.JadeTemplate */
     CLASS(
         'JadeTemplate', EXTENDS(ria.templates.CompiledTemplate), [
-            Function, 'block'
+            Function, 'block',
+            [[Object, Number]],
+            String, function getPictureURL(id, size_){
+                var url = window.azurePictureUrl + id.valueOf();
+                return size_ ? (url + '-' + size_ + 'x' + size_): url;
+            }
         ])
 });

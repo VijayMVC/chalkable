@@ -14,6 +14,8 @@ NAMESPACE('chlk.models.messages', function () {
             chlk.models.common.PaginatedList, 'messages',
             Boolean, 'inbox',
             String, 'role',
-            String, 'keyword'
+            String, 'keyword',
+            String, 'selectedIds',
+            String, 'submitType'
         ]);
 });

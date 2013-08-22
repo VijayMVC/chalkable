@@ -22,6 +22,21 @@ NAMESPACE('chlk.services', function () {
                     role: role_ ? role_ : "",
                     keyword: keyword_
                 });
+            },
+
+            [[String, Boolean]],
+            ria.async.Future, function markAs(ids, read) {
+                return this.get('PrivateMessage/MarkAsRead.json', null, {
+                    ids: ids,
+                    read: read
+                });
+            },
+
+            [[String]],
+            ria.async.Future, function del(ids) {
+                return this.get('PrivateMessage/Delete.json', null,{
+                    ids: ids
+                });
             }
         ])
 });
