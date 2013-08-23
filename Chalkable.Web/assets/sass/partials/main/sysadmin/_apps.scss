@@ -1,0 +1,32 @@
+BODY {
+  DIV.page {
+     #content {
+        > DIV {
+          #main-wrapper {
+            #main {
+              DIV.apps-list{
+                .head{
+                  .th{
+                    &.narrow{
+                      width: 30px;
+                    }
+
+
+                }
+
+              }
+              .td{
+                  &.app-state{
+                    .btn{
+                      margin-right: 5px;
+                    }
+
+                  }
+                }
+              }
+            }
+          }
+        }
+    }
+  }
+}

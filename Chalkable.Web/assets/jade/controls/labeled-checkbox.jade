@@ -1,0 +1,7 @@
+mixin LabeledCheckbox(text, name, val, isReadOnly)
+    .labeled-checkbox
+        +Checkbox(name, val, isReadOnly).checkbox
+        label(for=name)=text
+
+
+
