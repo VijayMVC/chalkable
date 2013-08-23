@@ -224,6 +224,15 @@ NAMESPACE('ria.dom', function () {
                 this._dom.attr(name, value);
                 return this;
             },
+
+
+            [[String]],
+            SELF, function removeAttr(name) {
+                this._dom.removeAttr(name);
+                return this;
+            },
+
+
             [[Object]],
             OVERRIDE, SELF, function setValue(value) {
                 this._dom.val(value);

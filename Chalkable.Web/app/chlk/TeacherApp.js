@@ -8,6 +8,7 @@ REQUIRE('chlk.controllers.SettingsController');
 REQUIRE('chlk.controllers.SetupController');
 REQUIRE('chlk.controllers.StudentsController');
 REQUIRE('chlk.controllers.TeachersController');
+REQUIRE('chlk.controllers.MessageController');
 
 NAMESPACE('chlk', function (){
 

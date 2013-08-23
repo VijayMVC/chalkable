@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
@@ -25,7 +20,7 @@ namespace Chalkable.Web.Controllers
             return Json(res.Transform(PrivateMessageViewData.Create));
         }
 
-        [RequireRequestValue("schoolPersonId")]
+        [RequireRequestValue("personId")]
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_PRIVATE_MESSAGES_SEND, true, CallType.Get, new[] { AppPermissionType.Message })]
         public ActionResult Send(Guid personId, string subject, string body)
         {

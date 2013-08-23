@@ -73,44 +73,46 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void MarkAsRead(IList<Guid> ids, bool read)
         {
-            using (var uow = Update())
-            {
-                var da = new PrivateMessageDataAccess(uow);
-                var messages = da.GetNotDeleted(Context.UserId).Where(x=>ids.Contains(x.Id)).ToList();
-                if(messages.Count == 0)
-                    throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_MARK_INVALID_RIGHTS);
-
-                foreach (var message in messages)
+            if (ids != null)
+                using (var uow = Update())
                 {
-                    if (!PrivateMessageSecurity.CanMarkMessage(message, Context))
+                    var da = new PrivateMessageDataAccess(uow);
+                    var messages = da.GetNotDeleted(Context.UserId).Where(x=>ids.Contains(x.Id)).ToList();
+                    if(messages.Count == 0)
                         throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_MARK_INVALID_RIGHTS);
-                    message.Read = read;
+
+                    foreach (var message in messages)
+                    {
+                        if (!PrivateMessageSecurity.CanMarkMessage(message, Context))
+                            throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_MARK_INVALID_RIGHTS);
+                        message.Read = read;
+                    }
+                    da.Update(messages);
+                    uow.Commit();
                 }
-                da.Update(messages);
-                uow.Commit();
-            }
         }
 
         public void Delete(IList<Guid> ids)
         {
-            using (var uow = Update())
-            {
-                var da = new PrivateMessageDataAccess(uow);
-                var messages = da.GetNotDeleted(Context.UserId).Where(x => ids.Contains(x.Id)).ToList();
-                if (messages.Count == 0)
-                    throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_DELETE_INVALID_RIGHTS);
-
-                foreach (var message in messages)
+            if (ids != null)
+                using (var uow = Update())
                 {
-                    if (!PrivateMessageSecurity.CanDeleteMessage(message, Context))
+                    var da = new PrivateMessageDataAccess(uow);
+                    var messages = da.GetNotDeleted(Context.UserId).Where(x => ids.Contains(x.Id)).ToList();
+                    if (messages.Count == 0)
                         throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_DELETE_INVALID_RIGHTS);
 
-                    message.DeletedByRecipient = message.ToPersonRef == Context.UserId;
-                    message.DeletedBySender = message.FromPersonRef == Context.UserId;
+                    foreach (var message in messages)
+                    {
+                        if (!PrivateMessageSecurity.CanDeleteMessage(message, Context))
+                            throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_DELETE_INVALID_RIGHTS);
+
+                        message.DeletedByRecipient = message.ToPersonRef == Context.UserId;
+                        message.DeletedBySender = message.FromPersonRef == Context.UserId;
+                    }
+                    da.Update(messages);
+                    uow.Commit();
                 }
-                da.Update(messages);
-                uow.Commit();
-            }
         }
     }
 }

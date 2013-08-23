@@ -24,12 +24,12 @@ namespace Chalkable.Data.School.DataAccess
 
             var field1 = "PrivateMessage_FromPersonRef";
             var field2 = "PrivateMessage_DeletedBySender";
-            var prefix = SENDER_PREFIX;
+            var prefix = RECIPIENT_PREFIX;
             if (isIncome)
             {
                 field1 = "PrivateMessage_ToPersonRef";
                 field2 = "PrivateMessage_DeletedByRecipient";
-                prefix = RECIPIENT_PREFIX;
+                prefix = SENDER_PREFIX;
             }
             var conds = new Dictionary<string, object> { { "read", read }, { "personId", personId } };
             var b = new StringBuilder();
@@ -43,7 +43,7 @@ namespace Chalkable.Data.School.DataAccess
             if (roles != null && roles.Count > 0)
             {
                 var rolesString = roles.JoinString(",");
-                b.AppendFormat("PrivateMessage_{1}RoleId in ({0})", rolesString, prefix);
+                b.AppendFormat(" and PrivateMessage_{1}RoleRef in ({0})", rolesString, prefix);
             }
             if (string.IsNullOrEmpty(keyword))
             {
