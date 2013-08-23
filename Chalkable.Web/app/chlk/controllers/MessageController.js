@@ -1,6 +1,8 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.models.messages.Message');
+REQUIRE('chlk.models.messages.SendMessage');
 REQUIRE('chlk.models.messages.MessageList');
+REQUIRE('chlk.activities.messages.AddDialog');
 REQUIRE('chlk.models.id.MessageId');
 REQUIRE('chlk.services.MessageService');
 REQUIRE('chlk.services.PersonService');
@@ -70,6 +72,22 @@ NAMESPACE('chlk.controllers', function (){
                 result.setKeyword(keyword_);
 
                 return new ria.async.DeferredData(result);
+            },
+
+            function sendPageAction()
+            {
+                var model = ria.async.DeferredData(new chlk.models.messages.Message());
+                return this.ShadeView(chlk.activities.messages.AddDialog, model);
+            },
+
+            [[chlk.models.messages.SendMessage]],
+            function sendAction(model)
+            {
+                this.messageService.send(model)
+                    .then(function(x){
+                        this.view.getCurrent().close();
+                        this.pageAction(true);
+                    }.bind(this));
             }
         ])
 });

@@ -2,7 +2,7 @@
     .action-bar.not-transparent.buttons
         .container.panel-bg
             .left
-                +ActionLink('message', 'new', []) +new message
+                +ActionLink('message', 'sendPage', []) +new message
             .right
                 +ActionLink('message', 'page', [true, true, self.getRole(), self.getKeyword()])(class=self.isInbox() ? "pressed" : "") inbox
                 +ActionLink('message', 'page', [true, false, self.getRole(), self.getKeyword()])(class=self.isInbox() ? "" : "pressed") sent
@@ -29,12 +29,13 @@
                 +ActionLink('message', 'page', [true, self.isInbox(), 'admingrade,adminedit,adminview', self.getKeyword()]) Admin
     input(name="selectedIds", type="hidden")#selectedIds
     +Grid('message', 'page', self.getMessages(), [true]).not-transparent
-        +GridHead()
-            .th
-            .th Read
-            .th Person
-            .th Subject
-            .th Sent
+        //
+            +GridHead()
+                .th
+                .th Read
+                .th Person
+                .th Subject
+                .th Sent
         +GridBody()
             each item in self.getMessages().getItems()
                 +GridRow()
