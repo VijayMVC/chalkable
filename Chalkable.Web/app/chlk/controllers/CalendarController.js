@@ -1,7 +1,11 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.CalendarService');
 REQUIRE('chlk.services.ClassService');
+
+REQUIRE('chlk.activities.calendar.announcement.WeekPage');
 REQUIRE('chlk.activities.calendar.announcement.MonthPage');
+REQUIRE('chlk.activities.calendar.announcement.MonthDayPopUp');
+
 REQUIRE('chlk.models.calendar.announcement.Month');
 REQUIRE('chlk.models.class.ClassesForTopBar');
 
@@ -20,9 +24,63 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER
         ])],
+
+        [[chlk.models.common.ChlkDate]],
+        VOID, function showMonthDayPopUpAction(date) {
+            var result = this.calendarService.getMonthDayInfo(date)
+                .then(function(model){
+                    model.setTarget(chlk.controls.getActionLinkControlLastNode());
+                    return model;
+                });
+            return this.ShadeView(chlk.activities.calendar.announcement.MonthDayPopUp, result);
+        },
+
+        [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
+        function weekAction(date_, classId_){
+            var markingPeriod = this.getContext().getSession().get('markingPeriod');
+            var today = new chlk.models.common.ChlkDate(new Date());
+            var date = date_ || today;
+            var dayNumber = date.getDate().getDay(), sunday = date, saturday = date;
+            if(dayNumber){
+                sunday = date.add(chlk.models.common.ChlkDateEnum.DAY, -dayNumber);
+            }
+            if(dayNumber !=6)
+                saturday = sunday.add(chlk.models.common.ChlkDateEnum.DAY, 6);
+            var title = sunday.format('MM d - ');
+            title = title + (sunday.format('M') == saturday.format('M') ? saturday.format('d') : saturday.format('M d'));
+            var prevDate = sunday.add(chlk.models.common.ChlkDateEnum.DAY, -1);
+            var nextDate = saturday.add(chlk.models.common.ChlkDateEnum.DAY, 1);
+            var result = this.calendarService
+                .getWeekInfo(classId_, date_)
+                .attach(this.validateResponse_())
+                .then(function(days){
+                    var model = new chlk.models.calendar.announcement.Week();
+                    model.setCurrentTitle(title);
+                    model.setCurrentDate(date);
+                    var startDate = markingPeriod.getStartDate();
+                    var endDate = markingPeriod.getEndDate();
+                    if(prevDate.format('yy-mm-dd') >= startDate.format('yy-mm-dd')){
+                        model.setPrevDate(prevDate);
+                    }
+                    if(nextDate.format('yy-mm-dd') <= endDate.format('yy-mm-dd')){
+                        model.setNextDate(nextDate);
+                    }
+                    model.setItems(days);
+                    var classes = this.classService.getClassesForTopBar(true);
+                    var topModel = new chlk.models.class.ClassesForTopBar();
+                    topModel.setTopItems(classes);
+                    topModel.setDisabled(false);
+                    classId_ && topModel.setSelectedItemId(classId_);
+                    model.setTopData(topModel);
+                    return new ria.async.DeferredData(model);
+                }.bind(this));
+
+            return this.PushView(chlk.activities.calendar.announcement.WeekPage, result);
+        },
+
         [chlk.controllers.SidebarButton('calendar')],
         [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
-        function monthTeacherAction(date_, classId_){
+        function monthAction(date_, classId_){
             var markingPeriod = this.getContext().getSession().get('markingPeriod');
             var today = new chlk.models.common.ChlkDate(new Date());
             var date = date_ || today;
@@ -40,21 +98,21 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(days){
                     var model = new chlk.models.calendar.announcement.Month();
-                    model.setCurrentMonth(date.format('MM'));
+                    model.setCurrentTitle(date.format('MM'));
                     model.setCurrentDate(date);
                     var startDate = markingPeriod.getStartDate().getDate();
                     var endDate = markingPeriod.getEndDate().getDate();
                     if(prevDate >= startDate){
-                        model.setPrevMonthDate(new chlk.models.common.ChlkDate(prevDate));
+                        model.setPrevDate(new chlk.models.common.ChlkDate(prevDate));
                     }else{
                         if(startDate.getMonth() != date.getDate().getMonth())
-                            model.setPrevMonthDate(markingPeriod.getStartDate());
+                            model.setPrevDate(markingPeriod.getStartDate());
                     }
                     if(nextDate <= endDate){
-                        model.setNextMonthDate(new chlk.models.common.ChlkDate(nextDate));
+                        model.setNextDate(new chlk.models.common.ChlkDate(nextDate));
                     }else{
                         if(nextDate.getMonth() != date.getDate().getMonth())
-                            model.setNextMonthDate(markingPeriod.getEndDate());
+                            model.setNextDate(markingPeriod.getEndDate());
                     }
                     days.forEach(function(day){
                         var itemsArray = [], itemsObject = {};
@@ -98,7 +156,7 @@ NAMESPACE('chlk.controllers', function (){
                         day.setClassName((day.isCurrentMonth() && date >= markingPeriod.getStartDate().getDate() &&
                             date <= markingPeriod.getEndDate().getDate()) ? '' : 'not-current-month');
                     }.bind(this));
-                    model.setDays(days);
+                    model.setItems(days);
                     var classes = this.classService.getClassesForTopBar(true);
                     var topModel = new chlk.models.class.ClassesForTopBar();
                     topModel.setTopItems(classes);

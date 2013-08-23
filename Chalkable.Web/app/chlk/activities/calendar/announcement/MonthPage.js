@@ -3,7 +3,7 @@ REQUIRE('chlk.templates.calendar.announcement.MonthPage');
 
 NAMESPACE('chlk.activities.calendar.announcement', function () {
 
-    /** @class chlk.activities.calendar.MonthPage */
+    /** @class chlk.activities.calendar.announcement.MonthPage */
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [chlk.activities.lib.PageClass('calendar')],

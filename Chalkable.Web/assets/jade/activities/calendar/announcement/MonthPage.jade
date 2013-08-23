@@ -3,7 +3,7 @@
     topItems = topData.getTopItems();
     selectedId = topData.getSelectedItemId();
     selectedId = selectedId ? selectedId.valueOf() : "";
-    +LeftRightToolbar(topItems, chlk.templates.class.TopBar, 'calendar', 'monthTeacher', [self.getCurrentDate().format('mm-dd-yy')])(
+    +LeftRightToolbar(topItems, chlk.templates.class.TopBar, 'calendar', 'month', [self.getCurrentDate().format('mm-dd-yy')])(
         selectedItemId=selectedId
     ).classes-bar
     .header
@@ -11,46 +11,46 @@
             .buttons-container
                 .buttons
                     .calendar-today-container
-                        +ActionLink('calendar', 'monthTeacher', [null], selectedId).calendar-today
+                        +ActionLink('calendar', 'month', [null], selectedId).calendar-today
                     .prev-month-container
-                        if self.getPrevMonthDate()
-                            +ActionLink('calendar', 'monthTeacher', [self.getPrevMonthDate().format('mm-dd-yy'), selectedId]).prev-month
+                        if self.getPrevDate()
+                            +ActionLink('calendar', 'month', [self.getPrevDate().format('mm-dd-yy'), selectedId]).prev-month
                         else
                             A.prev-month
                     .current-month-container
-                        label.current-month=self.getCurrentMonth()
+                        label.current-month=self.getCurrentTitle()
                     .next-month-container
-                        if self.getNextMonthDate()
-                            +ActionLink('calendar', 'monthTeacher', [self.getNextMonthDate().format('mm-dd-yy'), selectedId]).next-month
+                        if self.getNextDate()
+                            +ActionLink('calendar', 'month', [self.getNextDate().format('mm-dd-yy'), selectedId]).next-month
                         else
                             A.next-month
                     .calendar-day-container
-                        span.tooltip
                         +ActionLink('calendar', 'day').calendar-day
+                            span.tooltip
                     .calendar-week-container
-                        span.tooltip
                         +ActionLink('calendar', 'week').calendar-week
+                            span.tooltip
                     .calendar-month-container
-                        span.tooltip
-                        +ActionLink('calendar', 'monthTeacher').calendar-month.pressed
+                        +ActionLink('calendar', 'month').calendar-month.pressed
+                            span.tooltip
     .day-names
         div
-           p Sunday
+            p=Msg.Sunday
         div
-            p Monday
+            p=Msg.Monday
         div
-            p Tuesday
+            p=Msg.Tuesday
         div
-            p Wednesday
+            p=Msg.Wednesday
         div
-            p Thursday
+            p=Msg.Thursday
         div
-            p Friday
+            p=Msg.Friday
         div
-            p Saturday
+            p=Msg.Saturday
     .items
-        each item in self.getDays()
-            div(class = ((item.isSunday() ? 'sunday ' : ' ') + item.getClassName() + ' ' + item.getTodayClassName())).gradient-cnt.item
+        each item in self.getItems()
+            +ActionLink('calendar', 'showMonthDayPopUp', item.getDate().format('mm-dd-yy'))(class = ((item.isSunday() ? 'sunday ' : ' ') + item.getClassName() + ' ' + item.getTodayClassName())).gradient-cnt.item
                 div
                     h2.number=item.getDay()
                     .space

@@ -15,6 +15,33 @@ function formatDate(date, format){
 
 NAMESPACE('chlk.models.common', function () {
     "use strict";
+
+    var second = 1000,
+        minute = 60 * second,
+        hour = 60 * minute,
+        day = 24 * hour,
+        week = 7 * day;
+
+    /** @class chlk.models.common.MillisecondsEnum*/
+    ENUM('MillisecondsEnum', {
+        SECOND: second,
+        MINUTE: minute,
+        HOUR: hour,
+        DAY: day,
+        WEEK: week
+    });
+
+    /** @class chlk.models.common.ChlkDateEnum*/
+    ENUM('ChlkDateEnum', {
+        SECOND: 'sec',
+        MINUTE: 'min',
+        HOUR: 'h',
+        DAY: 'd',
+        WEEK: 'w',
+        MONTH: 'mon',
+        YEAR: 'y'
+    });
+
     /** @class chlk.models.common.ChlkDate*/
     CLASS(
         'ChlkDate', IMPLEMENTS(ria.serialize.IDeserializable), [
@@ -29,6 +56,26 @@ NAMESPACE('chlk.models.common', function () {
             [[String]],
             String, function toString(format_){
                 return this.format(format_ || 'm-dd-yy');
+            },
+
+            [[chlk.models.common.ChlkDateEnum, Number]],
+            SELF, function add(type, count){
+                var dateEnum = chlk.models.common.ChlkDateEnum;
+                var thisDate = this.getDate();
+                var sec = thisDate.getSeconds();
+                var min = thisDate.getMinutes();
+                var h = thisDate.getHours();
+                var day = thisDate.getDate();
+                var mon = thisDate.getMinutes();
+                var y = thisDate.getFullYear();
+                var date = new chlk.models.common.ChlkDate(), res;
+                switch (type){
+                    case dateEnum.YEAR: res = new Date(y + count, mon, day, h, min, sec); break;
+                    case dateEnum.MONTH: res = new Date(y, mon + count, day, h, min, sec); break;
+                    default: res = thisDate.getTime() + count;
+                }
+                date.setDate(new Date(res));
+                return date;
             },
 
             [[String]],

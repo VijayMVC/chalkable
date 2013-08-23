@@ -300,13 +300,14 @@ BODY {
                 width: 658px;
                 text-shadow: white 0px 1px 1px;
 
-                > DIV {
+                > DIV, >A {
                   display: inline-block;
                   vertical-align: top;
                 }
 
-                DIV.item {
+                .item {
                   cursor: pointer;
+                  text-decoration: none;
 
                   border-left: 1px solid #ffffff;
                   border-right: 1px solid #cbcbcb;
@@ -415,6 +416,47 @@ BODY {
           }
         }
 
+      }
+    }
+  }
+}
+
+.calendar-popup{
+  width: 177px;
+  margin: 0 -7px;
+
+  .items-list{
+    position: relative;
+    top: 7px;
+  }
+
+  .ann-button{
+    width: 129px;
+    line-height: 35px;
+    border: 1px solid #b3b3b3;
+    @include border-radius(4px);
+    @include background(linear-gradient(top, #f5f5f5, #e0e0e0));
+    @include box-shadow(0 1px 0 0 #fff inset, 0 1px 2px 0px #999);
+    text-align: center;
+    font: bold 12px Arial;
+    display: block;
+    text-decoration: none;
+    color: #3d3d3d;
+    text-shadow: 1px 1px 0 white;
+    padding: 9px 0;
+    margin: 12px auto;
+
+    &:hover{
+      @include background(linear-gradient(top, #e5e5e5, #d0d0d0));
+    }
+
+    &.plus-ann{
+      margin-top: 28px;
+      @include background(url(images/grading/plus.png) center center no-repeat,linear-gradient(top, #f5f5f5, #e0e0e0));
+      height: 14px;
+
+      &:hover{
+        @include background(url(images/grading/plus.png) center center no-repeat,linear-gradient(top, #e5e5e5, #d0d0d0));
       }
     }
   }

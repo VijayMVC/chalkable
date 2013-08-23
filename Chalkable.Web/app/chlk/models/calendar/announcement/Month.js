@@ -1,4 +1,4 @@
-REQUIRE('chlk.models.calendar.announcement.Day');
+REQUIRE('chlk.models.calendar.announcement.MonthItem');
 REQUIRE('chlk.models.class.ClassesForTopBar');
 REQUIRE('chlk.models.common.ChlkDate');
 
@@ -8,17 +8,17 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
     /** @class chlk.models.calendar.announcement.Month*/
     CLASS(
         'Month', [
-            ArrayOf(chlk.models.calendar.announcement.Day), 'days',
+            ArrayOf(chlk.models.calendar.announcement.MonthItem), 'items',
 
             chlk.models.class.ClassesForTopBar, 'topData',
 
             Number, 'selectedTypeId',
 
-            String, 'currentMonth',
+            String, 'currentTitle',
 
-            chlk.models.common.ChlkDate, 'nextMonthDate',
+            chlk.models.common.ChlkDate, 'nextDate',
 
-            chlk.models.common.ChlkDate, 'prevMonthDate',
+            chlk.models.common.ChlkDate, 'prevDate',
 
             chlk.models.common.ChlkDate, 'currentDate'
         ]);

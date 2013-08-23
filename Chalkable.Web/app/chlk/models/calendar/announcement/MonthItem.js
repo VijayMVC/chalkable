@@ -1,13 +1,14 @@
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.schoolYear.ScheduleSection');
 REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.models.Popup');
 
 NAMESPACE('chlk.models.calendar.announcement', function () {
     "use strict";
 
-    /** @class chlk.models.calendar.announcement.Day*/
+    /** @class chlk.models.calendar.announcement.MonthItem*/
     CLASS(
-        'Day', [
+        'MonthItem', EXTENDS(chlk.models.Popup), [
             Number, 'day',
             [ria.serialize.SerializeProperty('iscurrentmonth')],
             Boolean, 'currentMonth',

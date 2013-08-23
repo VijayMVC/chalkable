@@ -3,7 +3,7 @@ REQUIRE('chlk.templates.Popup');
 
 NAMESPACE('chlk.templates.school', function () {
 
-    /** @class chlk.templates.ActionButtons*/
+    /** @class chlk.templates.school.ActionButtons*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/school/ActionButtons.jade')],
         [ria.templates.ModelBind(chlk.models.school.ActionButtons)],

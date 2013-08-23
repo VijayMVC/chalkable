@@ -64,6 +64,10 @@ NAMESPACE('chlk.models.announcement', function () {
 
             [ria.serialize.SerializeProperty('class')],
             Object, 'clazz',
+
+            [ria.serialize.SerializeProperty('classname')],
+            String, 'className',
+
             String, 'comment',
             String, 'content',
             chlk.models.common.ChlkDate, 'created',
@@ -118,6 +122,9 @@ NAMESPACE('chlk.models.announcement', function () {
 
             [ria.serialize.SerializeProperty('personid')],
             chlk.models.id.SchoolPersonId, 'personId',
+
+            [ria.serialize.SerializeProperty('personname')],
+            String, 'personName',
 
             [ria.serialize.SerializeProperty('shortcontent')],
             String, 'shortContent',

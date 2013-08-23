@@ -130,9 +130,12 @@ NAMESPACE('chlk.controllers', function (){
             return new ria.async.DeferredData(model);
         },
 
+
+        //TODO date, useDraft
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.ClassId, Number]],
         function addAction(classId_, announcementTypeId_) {
+            this.getView().reset();
             var result = this.announcementService
                 .addAnnouncement(classId_, announcementTypeId_)
                 .attach(this.validateResponse_())
@@ -155,6 +158,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementId]],
         function viewAction(announcementId) {
+            this.getView().reset();
             var result = this.announcementService
                 .getAnnouncement(announcementId)
                 .attach(this.validateResponse_())

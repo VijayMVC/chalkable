@@ -98,7 +98,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
-                this.setMapping(model.getStudentAnnouncements().getMapping());
+                model.getStudentAnnouncements() && this.setMapping(model.getStudentAnnouncements().getMapping());
                 this.setApplicationsInGradeView(model.getApplications().filter(function(item){return item.applicationviewdata.showingradeview}));
                 var that = this;
                 jQuery(this.dom.valueOf()).on('change', '.grade-select', function(){

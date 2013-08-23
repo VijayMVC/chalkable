@@ -195,6 +195,69 @@ TEXTAREA.animated-textarea{
       @include transform(rotate(270deg));
     }
   }
+
+  h2{
+    text-align: center;
+    font-size: 18px;
+    color: #959595;
+    font-family: Georgial;
+    font-style: italic;
+    background: url(images/common/dialog-separator.png) bottom no-repeat;
+    height: 25px;
+    vertical-align: middle;
+    display: table-cell;
+    width: 177px;
+    text-shadow: 1px -1px 1px white;
+  }
+
+  ul{
+    >LI{
+      background: url(images/common/dialog-separator.png) bottom no-repeat;
+      position: relative;
+
+      &:hover{
+        background: #f8f8f8;
+      }
+
+      >A, >SPAN{
+        background-position: 13px 7px;
+        background-repeat: no-repeat;
+        text-decoration: none;
+        cursor: pointer;
+        display: table-cell;
+        vertical-align: middle;
+        height: 53px;
+        width: 385px;
+        color: #9d9d9d;
+        text-shadow: 1px -1px 1px white;
+        padding-left: 55px;
+        @include background-size(auto 36px );
+
+        P.title, P.item-title {
+          font-size: 18px;
+          color: #032633;
+          font-family: Arial;
+          max-width: 110px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          text-align: left;
+          padding-left: 5px;
+        }
+
+        P.under, P.classname-under {
+          font-size: 10px;
+          color: #7c7c7c;
+          font-family: Arial;
+          text-align: left;
+          padding-left: 5px;
+        }
+      }
+
+      .pop-up-announcement {
+        background-image: url(images/common/announcement-type/1.png);
+      }
+    }
+  }
 }
 
 .activity-model-wait, .loadind{

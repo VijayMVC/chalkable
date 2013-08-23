@@ -183,3 +183,24 @@ BODY {
     }
   }
 }
+
+BODY {
+  DIV.page{
+    >DIV#content {
+      DIV#content-wrapper.calendar{
+        .lr-toolbar{
+          .first-container{
+            .second-container{
+              .item.class-button{
+                border-color: #4398ae;
+                background-color: #4398ae;
+                background-image: url(images/common/classesbar-controls-calendar.png);
+                color: #4398ae;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

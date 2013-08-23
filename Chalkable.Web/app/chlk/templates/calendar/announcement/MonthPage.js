@@ -9,7 +9,7 @@ NAMESPACE('chlk.templates.calendar.announcement', function () {
         [chlk.activities.lib.PageClass('calendar')],
         'MonthPage', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.calendar.announcement.Day), 'days',
+            ArrayOf(chlk.models.calendar.announcement.MonthItem), 'items',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.class.ClassesForTopBar, 'topData',
@@ -18,13 +18,13 @@ NAMESPACE('chlk.templates.calendar.announcement', function () {
             Number, 'selectedTypeId',
 
             [ria.templates.ModelPropertyBind],
-            String, 'currentMonth',
+            String, 'currentTitle',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.ChlkDate, 'nextMonthDate',
+            chlk.models.common.ChlkDate, 'nextDate',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.ChlkDate, 'prevMonthDate',
+            chlk.models.common.ChlkDate, 'prevDate',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'currentDate'
