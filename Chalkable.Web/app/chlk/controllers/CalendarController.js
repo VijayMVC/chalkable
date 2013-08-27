@@ -5,6 +5,8 @@ REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.activities.calendar.announcement.WeekPage');
 REQUIRE('chlk.activities.calendar.announcement.MonthPage');
 REQUIRE('chlk.activities.calendar.announcement.MonthDayPopUp');
+REQUIRE('chlk.activities.calendar.announcement.WeekBarPopUp');
+REQUIRE('chlk.activities.calendar.announcement.WeekDayPopUp');
 
 REQUIRE('chlk.models.calendar.announcement.Month');
 REQUIRE('chlk.models.class.ClassesForTopBar');
@@ -33,6 +35,20 @@ NAMESPACE('chlk.controllers', function (){
                     return model;
                 });
             return this.ShadeView(chlk.activities.calendar.announcement.MonthDayPopUp, result);
+        },
+
+        [[chlk.models.common.ChlkDate, Number]],
+        VOID, function showWeekBarPopUpAction(date, periodNumber_) {
+            var result = this.calendarService.getWeekDayInfo(date, periodNumber_)
+                .then(function(model){
+                    model.setTarget(chlk.controls.getActionLinkControlLastNode());
+                    if(periodNumber_ >= 0)
+                        model.setDate(date);
+                    return model;
+                });
+            if(periodNumber_ >= 0)
+                return this.ShadeView(chlk.activities.calendar.announcement.WeekDayPopUp, result);
+            return this.ShadeView(chlk.activities.calendar.announcement.WeekBarPopUp, result);
         },
 
         [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],

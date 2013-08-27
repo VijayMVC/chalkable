@@ -33,9 +33,21 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function getMonthDayInfo(date){
                 var monthCalendarData = this.getContext().getSession().get('monthCalendarData', []), res = null;
                 monthCalendarData.forEach(function(day){
-                    if(day.getDate().format('mm-dd-yy') == date.format('mm-dd-yy'))
+                    if(day.getDate().isSameDay(date))
                         res = day;
                 });
+                return new ria.async.DeferredData(res);
+            },
+
+            [[chlk.models.common.ChlkDate, Number]],
+            ria.async.Future, function getWeekDayInfo(date, periodNumber_){
+                var weekCalendarData = this.getContext().getSession().get('weekCalendarData', []), res = null;
+                weekCalendarData.forEach(function(day){
+                    if(day.getDate().isSameDay(date))
+                        res = day;
+                });
+                if(periodNumber_ >= 0)
+                    res = res.getAnnouncementPeriods()[periodNumber_];
                 return new ria.async.DeferredData(res);
             },
 
@@ -125,6 +137,7 @@ NAMESPACE('chlk.services', function () {
                 startArray.forEach(function (item){pushEmptyPeriods(item,  0, item.getAnnouncementPeriods(), data[index]);});
                 endArray.forEach(function (item){pushEmptyPeriods(item, 0, item.getAnnouncementPeriods(), data[index]);});
                 var res = startArray.concat(data).concat(endArray);
+                this.getContext().getSession().set('weekCalendarData', res);
                 return res;
             },
 

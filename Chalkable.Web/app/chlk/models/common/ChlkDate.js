@@ -33,13 +33,13 @@ NAMESPACE('chlk.models.common', function () {
 
     /** @class chlk.models.common.ChlkDateEnum*/
     ENUM('ChlkDateEnum', {
-        SECOND: 'sec',
-        MINUTE: 'min',
-        HOUR: 'h',
-        DAY: 'd',
-        WEEK: 'w',
-        MONTH: 'mon',
-        YEAR: 'y'
+        SECOND: 'SECOND',
+        MINUTE: 'MINUTE',
+        HOUR: 'HOUR',
+        DAY: 'DAY',
+        WEEK: 'WEEK',
+        MONTH: 'MONTH',
+        YEAR: 'YEAR'
     });
 
     /** @class chlk.models.common.ChlkDate*/
@@ -72,7 +72,7 @@ NAMESPACE('chlk.models.common', function () {
                 switch (type){
                     case dateEnum.YEAR: res = new Date(y + count, mon, day, h, min, sec); break;
                     case dateEnum.MONTH: res = new Date(y, mon + count, day, h, min, sec); break;
-                    default: res = thisDate.getTime() + count;
+                    default: res = thisDate.getTime() + count * chlk.models.common.MillisecondsEnum[type.valueOf()].valueOf();
                 }
                 date.setDate(new Date(res));
                 return date;
@@ -85,6 +85,12 @@ NAMESPACE('chlk.models.common', function () {
                 res = res.replace(/hh/g, this.timepartToStr(this.getDate().getHours()));
                 res = res.replace(/ss/g, this.timepartToStr(this.getDate().getSeconds()));
                 return res;
+            },
+
+            [[SELF]],
+            Boolean, function isSameDay(date){
+                //VALIDATE_ARG('date', [SELF], date);
+                return this.format('mm-dd-yy') == date.format('mm-dd-yy');
             },
 
             VOID, function deserialize(raw) {

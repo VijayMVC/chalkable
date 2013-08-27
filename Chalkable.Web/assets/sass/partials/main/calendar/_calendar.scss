@@ -292,6 +292,34 @@ BODY {
                 }
               }
 
+              DIV.tb-announcements {
+                display: table;
+                border-right: 1px solid #114d64;
+                border-left: 1px solid #114d64;
+                width: 658px;
+
+                >DIV {
+                  background-color: #dcdcdc;
+                  height: 26px;
+                  width: 92px;
+                  text-align: center;
+                  display: table-cell;
+                  border-left: 1px solid #ffffff;
+                  border-right: 1px solid #cbcbcb;
+                  border-top: 1px solid #ffffff;
+                  border-bottom: 1px solid #cbcbcb;
+
+                  >.bar-item {
+                    display: block;
+                    height: 24px;
+                    width: 24px;
+                    margin: 0 auto;
+                    cursor: pointer;
+                    background: url(images/calendar/tb-announcements-icon.png) no-repeat;
+                  }
+                }
+              }
+
               DIV.items {
                 border: 1px solid #114d64;
                 border-top: none;
@@ -410,6 +438,202 @@ BODY {
                       }
                     }
                   }
+
+                  &.week-day {
+                    display: table-cell;
+                    &.day {
+                      display: table-cell;
+                      border: none;
+                      background: #dddddd;
+                      color: black !important;
+                      font-size: 13pt;
+                      font-family: Arial;
+                      font-weight: bold;
+
+                      &.today{
+                          .period-item{
+                              @include background(linear-gradient(top, #eeeeee, #e5e5e5));
+                          }
+                      }
+
+                      .period-item{
+
+                        border-bottom: 1px solid #a9a9a9;
+                        height: 50px;
+                        text-align: center;
+                        @include background(linear-gradient(top, #e2e2e2, #d9d9d9));
+
+                        >DIV.period-info {
+                          top: 17px;
+                        }
+
+                        >SPAN.time {
+                          font-size: 8pt;
+                          color: #aaa;
+                          top: 38px;
+                          position: absolute;
+                          left: 7px;
+                        }
+
+                        >LI {
+                          padding-top: 16px;
+                          position:relative;
+
+                          >DIV{
+                            position: absolute;
+                            display: inline-block;
+                            overflow: hidden;
+                            background: transparent;
+
+                            &.p-container{
+                              top: 0;
+                              right: 0;
+                              width: 63px;
+                              padding-right: 3px;
+
+                              P.title {
+                                color: black !important;
+                                text-shadow: white 0px 1px 1px;
+                                width: 62px;
+                                overflow: hidden;
+                                font-size: 12px;
+                                display: table-cell;
+                                vertical-align: middle;
+                                height: 48px;
+
+                                SPAN{
+                                  word-wrap: break-word;
+                                  width: 62px;
+                                  display: block;
+                                  white-space: nowrap;
+                                  overflow: hidden;
+                                  text-overflow: ellipsis;
+                                }
+                              }
+                            }
+
+                            &.course-icon{
+                              width: 30px;
+                              height: 30px;
+                              left: 0;
+                              top: 5px;
+
+                              IMG{
+                                width: 24px;
+                                margin: 7px 0 0 4px;
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+
+                    overflow: visible;
+
+                    height: 100%;
+                    @include background(linear-gradient(top, #f4f4f4, #e5e5e5));
+
+                    &.week.today {
+                      @include background(linear-gradient(top, #eaeaea, #e5e5e5));
+                    }
+
+                    >H2.number{
+                      height: 20px;
+                    }
+
+                    >DIV {
+                      min-height: 450px
+                    }
+
+                    .period-item {
+                      padding-top:3px;
+                      height: 61px;
+                      position: relative;
+                      display: block;
+
+                      >DIV.period-info{
+                         //color: #be8145;
+                         position: absolute;
+                         left: -10px;
+                         font-size: 16px;
+                         color: #DE9155;
+                         background: url(images/common/week-period-bg.png) no-repeat;
+                         height: 25px;
+                         width: 30px;
+                         font-family: Arial;
+                         font-weight: bold;
+                         text-align: center;
+                         padding-top: 1px;
+                       }
+
+                      >LI{
+                        >DIV{
+                          @include border-radius(5px);
+                          text-shadow: none;
+                          background: url(images/common/week-item-bg.png) no-repeat;
+                          padding-top: 5px;
+                          height: 40px;
+                          position: relative;
+                          text-shadow: #415a67 1px 1px 1px;
+
+                          P{
+                            display: block;
+                            height: 15px;
+                            white-space: nowrap;
+                          }
+
+                          P.title{
+                            color: white !important;
+                            text-align: center;
+                            font-family: Arial;
+                            font-size: 8.67px;
+                          }
+
+                          P.typename{
+                            color: white !important;
+                            text-align: center;
+                            font-family: Arial;
+                            font-weight: bold;
+                            font-size: 12px;
+                          }
+
+                          >DIV{
+                            display: inline-block;
+                            position: absolute;
+
+                            &.course-icon{
+                              width: 32px;
+                              height: 30px;
+                              overflow: hidden;
+                              display: inline-block;
+
+                              IMG{
+                                width: 26px;
+                                margin: 4px 0 0 6px;
+                              }
+                            }
+
+                            &.text-container{
+                              overflow: hidden;
+                              right: 9px;
+                              top: 5px;
+                              width: 48px;
+                            }
+                          }
+                        }
+                      }
+
+                      .title{
+                        color: #009;
+                        font-size: 14px;
+                      }
+
+                      .more{
+                        color: #000;
+                        font-size: 12px;
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -428,6 +652,238 @@ BODY {
   .items-list{
     position: relative;
     top: 7px;
+  }
+
+  >DIV.class-name {
+    font-size: 18px;
+    color: #959595;
+    font-family: Georgia;
+    text-align: center;
+    font-style: italic;
+    padding-bottom: 8px;
+  }
+
+  H3.day-day{
+    text-align: center;
+    height: 40px;
+    vertical-align: middle;
+    display: table-cell;
+    width: 177px;
+
+    >A{
+      cursor: pointer;
+      text-decoration: none !important;
+      font-size: 16px;
+      color: #7b7b7b;
+      font: bold 16px Arial !important;
+      font-style: normal !important;
+      text-shadow: 1px -1px 1px white;
+
+      &:hover {
+        color: #0c4358;
+        @include transition-property("all");
+        @include transition-duration("0.5s");
+      }
+    }
+  }
+
+  >DIV.info, >DIV.class-name {
+    background: url(images/common/dialog-separator.png) bottom  no-repeat;
+  }
+
+  .info{
+    font-weight: normal;
+    background: none;
+    color: #939393;
+    text-align: center;
+    padding: 5px;
+    >P.up {
+      font-size: 12px;
+    }
+    >P.down {
+      font-size: 10px;
+    }
+    position: relative;
+
+    &.month{
+      cursor: pointer;
+
+      &:hover{
+        background: url(images/calendar/popup-select-triangle.png) 167px center no-repeat, #f8f8f8;
+      }
+    }
+
+    H2.student-day, H3.day-day{
+      text-align: center;
+      background: url(images/common/dialog-separator.png) bottom  no-repeat;
+      height: 40px;
+      vertical-align: middle;
+      display: table-cell;
+      width: 177px;
+
+      >A{
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 16px;
+        color: #7b7b7b;
+        font: bold 16px Arial;
+        font-style: normal;
+        text-shadow: 1px -1px 1px white;
+
+        &:hover {
+          color: #0c4358;
+          @include transition-property("all");
+          @include transition-duration("0.5s");
+        }
+      }
+    }
+
+    >DIV{
+
+      >UL{
+        >LI{
+          background: url(images/common/dialog-separator.png) bottom  no-repeat;
+          position: relative;
+          padding: 6px;
+          height: 44px;
+
+          >DIV{
+
+            text-align: center;
+
+            >.img-box{
+              padding: 0px 5px;
+              position: absolute;
+              overflow: hidden !important;
+              max-width: 36px;
+              max-height: 44px;
+
+
+              A{
+                IMG{
+                  float: left;
+                  display: inline-block;
+                  @include box-shadow(0 1px 1px 0px #989897);
+                }
+              }
+            }
+
+            > .title-holder{
+              display: inline-block;
+              position: relative;
+
+              >P.title{
+                text-align: center;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                >A{
+                  text-decoration: none !important;
+                  font-size: 16px;
+                  color: #474747;
+                  font-family: Arial;
+                  font-style: normal;
+                  cursor: pointer;
+                  &:hover {
+                    @include transition-property("all");
+                    @include transition-duration("0.5s");
+                    color: #0c4358;
+                  }
+                }
+              }
+              >P.under{
+                display: inline-block;
+                width: 53px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                position: relative;
+                top: 7px;
+
+                >A{
+                  text-decoration: none !important;
+                  font-size: 12px;
+                  color: #7c7c7c;
+                  font-family: Georgia;
+                  font-style: italic;
+                  cursor: pointer;
+                  &:hover {
+                    color: #0c4358;
+                    @include transition-property("all");
+                    @include transition-duration("0.5s");
+                  }
+                }
+              }
+            }
+          }
+        }
+        DIV{
+          text-align: center;
+
+          >P.count{
+            font-size: 12px;
+            color: #7c7c7c;
+            font-family: Georgia;
+            font-style: italic;
+            display: inline-block;
+            height: 24px;
+            padding-top: 6px;
+
+            >A{
+              text-decoration: none !important;
+              font-size: 12px;
+              color: #7c7c7c;
+              font-family: Georgia;
+              font-style: italic;
+              cursor: pointer;
+              &:hover {
+                color: #0c4358;
+                @include transition-property("all");
+                @include transition-duration("0.5s");
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .up{
+      padding-bottom: 8px;
+      font-size: 18px !important;
+      font-family: Georgia  !important;
+      font-style: italic;
+      background: url(images/common/dialog-separator.png) bottom no-repeat;
+    }
+    .day-down{
+      display: inline-block;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+      top: 7px;
+
+      &.low{
+        background: url(images/common/dialog-separator.png) bottom no-repeat;
+        padding-bottom: 8px;
+        width: 100%;
+      }
+
+      >A{
+        text-decoration: none !important;
+        font-size: 12px;
+        color: #7c7c7c;
+        font-family: Georgia;
+        font-style: italic;
+        cursor: pointer;
+        line-height: 18px;
+        &:hover {
+          color: #0c4358;
+          @include transition-property("all");
+          @include transition-duration("0.5s");
+        }
+      }
+    }
   }
 
   .ann-button{

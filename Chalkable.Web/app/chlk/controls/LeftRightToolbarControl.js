@@ -64,7 +64,7 @@ NAMESPACE('chlk.controls', function () {
                             that.setPageByCurrentDot(toolbar.find('.paginator A[index="' + pageIndex + '"]'), toolbar);
                             toolbar.on('click', '.second-container>*:not(.pressed)', function(node, event){
                                 toolbar.find('.second-container>.pressed').removeClass('pressed');
-                                node.addClass('pressed');
+                                setTimeout(function() {node.addClass('pressed');}, 1);
                             });
                         }
                         toolbar.on('click', '.arrow:not(.disabled)', function(node, event){

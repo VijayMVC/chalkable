@@ -41,16 +41,15 @@
     .tb-announcements
         each item,i in self.getItems()
             div
-                -console.info(self, item);
-                anns = item.getAnouncements();
+                anns = item.getAnnouncements();
                 if anns && anns.length
-                    div(data-day = item.getDay()).bar-item
+                    +ActionLink('calendar', 'showWeekBarPopUp', item.getDate().format('mm-dd-yy')).bar-item
     .items
         each item in self.getItems()
             div(class = item.getTodayClassName(), data-day = item.getDay()).gradient-cnt.item.week-day.week
                 ul
                     each announcementPeriod,i in item.getAnnouncementPeriods()
-                        .period-item(data-index=i)
+                        +ActionLink('calendar', 'showWeekBarPopUp', item.getDate().format('mm-dd-yy'), i).period-item
                             if item.getDate().format('DD') == Msg.Sunday
                                 .period-info=i+1
                             else
@@ -61,5 +60,11 @@
                                             .course-icon
                                                 img
                                             .text-container
-                                                p.typename
+                                                p.typename=anns[0].getAnnouncementTypeName()
+                                                p.title=anns[0].getClassName()
+                                if anns.length > 1
+                                    li
+                                        .more-announcements-item
+                                            p.typename #{anns.length} #{Msg.Item(true)}
+                                            p.title=anns[0].getTitle()
 
