@@ -1,7 +1,8 @@
 -attachments = self.getAnnouncementAttachments() || [];
 if self.needButtons
     #attach-file-area.announcement-item.attach-file-area
-        button#add-application.simple-gray-button Attach App
+        if self.getAnnouncementTypeId() != chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf()
+            button#add-application.simple-gray-button Attach App
         button.simple-gray-button.file Attach File
             +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
 each attachment, i in attachments
