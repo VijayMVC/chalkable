@@ -176,5 +176,6 @@ appPermissions = appPermissions.join(',')
                 .elem.screenshots
                     label.hint Screenshots:
                     .screenshots
+                        //+RenderWith(app.(), chlk.templates.apps.AppPicture)
         if !self.isReadOnly()
             +Button()(name="submit-draft-btn").submit-draft-btn.special-button.blue-button Update Draft
