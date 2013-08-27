@@ -4,7 +4,7 @@ REQUIRE('chlk.models.Popup');
 
 NAMESPACE('chlk.templates', function () {
 
-    /** @class chlk.templates.School*/
+    /** @class chlk.templates.Popup*/
     CLASS(
         [ria.templates.ModelBind(chlk.models.Popup)],
         'Popup', EXTENDS(chlk.templates.JadeTemplate), [

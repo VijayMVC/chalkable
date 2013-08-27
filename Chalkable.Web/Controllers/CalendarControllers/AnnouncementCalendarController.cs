@@ -119,7 +119,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              IList<ClassPeriod> classPeriods = new List<ClassPeriod>();
              IList<Period> periods = new List<Period>();
              Guid? prevMpId = null;
-             var days = locator.CalendarDateService.GetLastDays(schoolYearId, false, start, end);
+             var days = locator.CalendarDateService.GetLastDays(schoolYearId, false, start, end).Reverse();
              foreach (var d in days)
              {
                  if (d.MarkingPeriodRef.HasValue && d.ScheduleSectionRef.HasValue)

@@ -39,6 +39,16 @@ NAMESPACE('chlk.services', function () {
                 return new ria.async.DeferredData(res);
             },
 
+            [[chlk.models.common.ChlkDate]],
+            ria.async.Future, function getDayPopupInfo(date){
+                var dayCalendarData = this.getContext().getSession().get('dayCalendarData', []), res = null;
+                dayCalendarData.forEach(function(day){
+                    if(day.getDate().isSameDay(date))
+                        res = day;
+                });
+                return new ria.async.DeferredData(res);
+            },
+
             [[chlk.models.common.ChlkDate, Number]],
             ria.async.Future, function getWeekDayInfo(date, periodNumber_){
                 var weekCalendarData = this.getContext().getSession().get('weekCalendarData', []), res = null;
@@ -57,6 +67,16 @@ NAMESPACE('chlk.services', function () {
                     classId: classId_ && classId_.valueOf(),
                     date: date_ && date_.toString('mm-dd-yy')
                 });
+            },
+
+            [[chlk.models.common.ChlkDate]],
+            ria.async.Future, function getDayInfo(date_) {
+                return this.get('AnnouncementCalendar/Day.json', ArrayOf(chlk.models.calendar.announcement.DayItem), {
+                    date: date_ && date_.toString('mm-dd-yy')
+                }).then(function(model){
+                    this.getContext().getSession().set('dayCalendarData', model);
+                    return model;
+                }.bind(this));
             },
 
             [[ArrayOf(chlk.models.calendar.announcement.WeekItem), chlk.models.common.ChlkDate]],
