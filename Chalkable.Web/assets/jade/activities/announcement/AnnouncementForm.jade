@@ -69,10 +69,10 @@
                         SPAN.remove-btn.remove-reminder
                     .chlk-add#add-reminder.opacity-button=Msg.Add_reminder
             .attachments-and-applications
-                +RenderWith(announcement, chlk.templates.announcement.Announcement)(
-                    needButtons = true,
-                    needDeleteButton = true
-                )
+                -console.info(announcement);
+                -announcement.setNeedButtons(true);
+                -announcement.setNeedDeleteButton(true);
+                +RenderWith(announcement, chlk.templates.announcement.Announcement)
             .bottom-block
                 +Button()(
                     type="submit",

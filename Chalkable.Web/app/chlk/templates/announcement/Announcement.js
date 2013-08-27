@@ -170,9 +170,10 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             String, 'submitType',
 
-
+            [ria.templates.ModelPropertyBind],
             Boolean, 'needButtons',
 
+            [ria.templates.ModelPropertyBind],
             Boolean, 'needDeleteButton'
         ])
 });
