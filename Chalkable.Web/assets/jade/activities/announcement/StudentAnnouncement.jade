@@ -1,0 +1,51 @@
+getGrade = function(value){return GradingStyler.getLetterByGrade(value, self.getGradingMapping(), self.getGradingStyle())};
+getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, self.getGradingMapping(), self.getGradingStyle())};
+value = self.getGradeValue();
+normalValue = (value >= 0) ? value : '';
+isDrop = self.isDropped();
+res = (self.getGradingStyle()) ? (!isNaN(value) ? getGrade(value) : '') : ((value >= 0) ? value : '');
+lbl = 'A - F';
+itemCls = (isDrop ? 'dropped' :'');
+selectedCls = (!self.isReadonly() ? 'not-selected' : '');
+student = self.getStudentInfo();
++ActionForm('announcement', 'updateAnnouncementGrade')
+    input(type="submit").x-hidden
+    +Hidden('id', self.getId())
+    +Hidden('dropped', isDrop)
+    +ActionLink('students', 'info', student.getId()).left.image-container.white.shadow
+        img.avatar.avatar-47(src=student.getPictureUrl())
+    .i-b.name-block
+        p= student.getFullName()
+        if !self.isReadonly()
+            SPAN.container
+                SPAN.comment-grade=(self.getComment() ? Msg.Commented : Msg.Comment)
+                    .small-pop-up.x-hidden
+                        .container
+                            .triangle
+                            div
+                                div
+                                    img.avatar-24(src=self.getOwnerPictureUrl())
+                                div
+                                    +TextArea(name="comment").comment-input=self.getComment()
+                                    span.enter=Msg.Enter_when_done
+                if self.isNotAnnouncement() && !self.isReadonly()
+                    |&nbsp;
+                    A(id="drop-"+self.getId(), class="drop-link " + (isDrop ? "undrop" : ""))=(isDrop ? Msg.Undrop :Msg.Drop)
+    .i-b.grade-block
+        if self.isNotAnnouncement()
+            if(self.getApplicationsInGradeView().length || self.getAttachments().length)
+                .grade-triangle
+            div(class=selectedCls + ' ' + itemCls).i-b=isDrop ? Msg.Drop :res
+            div(class="selected " + itemCls, rowIndex=i, recId=self.getId()).i-b
+                if self.getGradingStyle()
+                    .select-container
+                        .select-container2
+                            +Select('gradeLetter')(id='grade-select-' + self.getId(), data-placeholder=" ").grade-select
+                                each item in GradingStyler.getGradeLetters()
+                                    -currentValue = getGradeNumber(item);
+                                    if currentValue != -1
+                                        +Option(currentValue, item, res == item)
+                        .letters=lbl
+                .input-container
+                    INPUT(type="text", autofill="off", value=normalValue, name="gradevalue").no-padding.grade-input.with-grid-focus
+                    .letters 100 - 0
