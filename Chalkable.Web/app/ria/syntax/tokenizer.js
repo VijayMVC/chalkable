@@ -30,6 +30,7 @@
             || ria.__API.isInterface(type)
             || ria.__API.isEnum(type)
             || ria.__API.isIdentifier(type)
+            || ria.__API.isDelegate(type)
             //|| ArrayOfDescriptor.isArrayOfDescriptor(type)
             ;
     }
