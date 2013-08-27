@@ -69,14 +69,15 @@ NAMESPACE('ria.mvc', function () {
              */
             [[ria.mvc.IActivity]],
             VOID, function push(activity) {
-                var top = this.getCurrent();
+                /*var top = this.getCurrent();
                 if (top) {
                     top.stop();
 
                     if (this.isSameActivityGroup_(top, activity))
                         this.pop_().stop();
-                }
+                }*/
 
+                this.reset();
                 this.push_(activity);
             },
 
