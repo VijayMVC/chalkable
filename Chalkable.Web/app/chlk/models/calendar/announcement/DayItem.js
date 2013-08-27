@@ -10,6 +10,8 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
 
             Number, 'day',
 
+            String, 'todayClassName',
+
             [ria.serialize.SerializeProperty('calendardayitems')],
             ArrayOf(chlk.models.calendar.announcement.CalendarDayItem), 'calendarDayItems'
         ]);
