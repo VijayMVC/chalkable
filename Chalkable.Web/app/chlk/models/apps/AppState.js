@@ -25,9 +25,18 @@ NAMESPACE('chlk.models.apps', function () {
                 this._states[chlk.models.apps.AppStateEnum.REJECTED] = "Rejected";
                 this._states[chlk.models.apps.AppStateEnum.LIVE] = "Live";
             },
-            String, function toString(){
-                return this._states[this.getStateId()];
+
+            [[Boolean]],
+            String, function toString(hasLiveCopy_){
+                var prefix = "";
+                var currentStateId = this.getStateId();
+                if (hasLiveCopy_){
+                    if (currentStateId != chlk.models.apps.AppStateEnum.DRAFT && currentStateId != chlk.models.apps.AppStateEnum.LIVE)
+                        prefix = "Live - ";
+                }
+                return prefix + this._states[this.getStateId()];
             },
+            [[Number]],
             VOID, function deserialize(raw) {
                 this.setStateId(new chlk.models.apps.AppStateEnum(Number(raw)));
             }

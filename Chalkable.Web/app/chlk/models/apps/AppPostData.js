@@ -1,4 +1,5 @@
 REQUIRE('chlk.models.id.AppId');
+REQUIRE('chlk.models.id.PictureId');
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
     /** @class chlk.models.apps.AppPostData*/
@@ -24,6 +25,9 @@ NAMESPACE('chlk.models.apps', function () {
 
             Number, 'price',
             Number, 'pricePerClass',
-            Number, 'pricePerSchool'
+            Number, 'pricePerSchool',
+
+            chlk.models.id.PictureId, 'appIconId',
+            chlk.models.id.PictureId, 'appBannerId'
         ]);
 });

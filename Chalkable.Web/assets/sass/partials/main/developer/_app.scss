@@ -19,6 +19,11 @@ BODY {
                       font-size: 13px;
                     }
                   }
+
+
+                  .submit-draft-btn{
+                    margin-left: 189px;
+                  }
                 }
                 .action-bar{
                   label{
@@ -43,6 +48,16 @@ BODY {
                   border-top: 1px solid #bbb;
                   margin-top: 1px;
 
+
+                  .app-pricing{
+                    .elem{
+                      .price-box{
+                        width: 50px;
+                      }
+                    }
+
+                  }
+
                   .elem{
                     .hint{
                       padding-left: 80px;
@@ -66,6 +81,112 @@ BODY {
                       }
 
                     }
+
+                    &.screenshots{
+                      margin-top: 60px;
+                      margin-bottom: 25px;
+                    }
+
+                    &.icons{
+                      margin-top: 15px;
+                    }
+
+                    .icons, .screenshots{
+                      display: inline-block;
+                      vertical-align: top;
+
+
+                      .thumbnail{
+                        position: relative;
+                          img{
+                            vertical-align: top;
+                          }
+
+                          &.small-icon-item{
+                            width: 74px;
+                            height: 74px;
+                            margin: 0 85px 0 31px;
+
+                            img{
+                              width: 74px;
+                              height: 74px;
+                            }
+                          }
+
+                          &.big-icon-item{
+
+                            img{
+                              width: 170px;
+                              height: 110px;
+                            }
+                          }
+
+                          &.screenshot-item{
+                            width: 170px;
+                            height: 104px;
+
+                            img{
+                              width: 170px;
+                              height: 104px;
+                              max-height: 104px;
+                            }
+                          }
+                      }
+
+                      .upload-img-block {
+                        border: 6px dashed silver;
+                        border-radius: 6px !important;
+                        display: inline-block;
+                        margin-right: 60px;
+                        height: 100px;
+                        width: 117px;
+                        position: relative;
+                        text-align: center;
+
+                        .top, .bottom{
+                          color: #808080;
+                          font: normal 11px Arial;
+                          position: absolute;
+                          left: 0;
+                          right: 0;
+
+                          &.top{
+                            top: 9px
+                          }
+
+                          button{
+                            width: 101px;
+                            height: 30px;
+                          }
+
+
+                          &.bottom{
+                            bottom: 9px;
+
+                          }
+                        }
+
+                        .action-link{
+                          display: inline-block;
+                          margin-top: 9px;
+                        }
+                      }
+                    }
+
+                    .icons{
+                      margin-top: 5px;
+
+                      DIV{
+                        display: inline-block;
+                      }
+                    }
+
+                    .screenshots{
+                      margin-top: 0px;
+                    }
+
+
+
 
 
                     .price-checkbox{
@@ -179,7 +300,8 @@ BODY {
                     padding-top: 20px;
                   }
                   &.last{
-
+                    border-bottom: 0;
+                    padding-bottom: 20px;
                   }
                   &.small{
                     margin-top: 1px;
@@ -193,7 +315,11 @@ BODY {
                         margin-bottom: 4px;
                       }
                     }
-                }
+                  }
+
+
+
+
               }
             }
           }

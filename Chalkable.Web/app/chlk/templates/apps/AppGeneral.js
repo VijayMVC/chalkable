@@ -1,6 +1,5 @@
-REQUIRE('chlk.models.apps.AppState');
 REQUIRE('chlk.models.apps.AppGeneralInfoViewData');
-REQUIRE('chlk.models.id.AppId');
+REQUIRE('chlk.models.apps.Application');
 
 NAMESPACE('chlk.templates.apps', function () {
 
@@ -10,11 +9,6 @@ NAMESPACE('chlk.templates.apps', function () {
         [ria.templates.ModelBind(chlk.models.apps.AppGeneralInfoViewData)],
         'AppGeneral', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            String, 'appName',
-            [ria.templates.ModelPropertyBind],
-            chlk.models.apps.AppState, 'appState',
-            [ria.templates.ModelPropertyBind],
-            chlk.models.id.AppId, 'appId'
-
+            chlk.models.apps.Application, 'app'
         ])
 });

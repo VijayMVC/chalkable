@@ -10,7 +10,6 @@ NAMESPACE('chlk.models.apps', function () {
     CLASS(
         'AppInfoViewData', [
             chlk.models.apps.Application, 'app',
-            ArrayOf(chlk.models.apps.Application), 'apps',
             ArrayOf(chlk.models.apps.AppCategory), 'categories',
             ArrayOf(chlk.models.apps.AppGradeLevel), 'gradeLevels',
             ArrayOf(chlk.models.apps.AppPermission), 'permissions',

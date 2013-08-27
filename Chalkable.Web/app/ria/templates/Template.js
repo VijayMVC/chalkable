@@ -129,7 +129,13 @@ NAMESPACE('ria.templates', function () {
                     if (_.converter) {
                         value = convertWith(value, _.converter);
                     }
-                    _.destProp.invokeSetterOn(scope, value);
+                    try{
+                        _.destProp.invokeSetterOn(scope, value);
+                    }
+                    catch(e){
+                        throw new ria.templates.Exception("Error assigning property " + _destProp.getName(), e);
+                    }
+
                 });
             },
 

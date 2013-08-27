@@ -177,15 +177,15 @@ namespace Chalkable.Web.Controllers
         public static ApplicationViewData PrepareAppInfo(IServiceLocatorMaster locator, Application application, 
             bool needsliveApp = false, bool needsSecretKey = false)
         {
-            bool cangetSecretKey = false;
-            //if (needsSecretKey)
-              //  cangetSecretKey = locator.ApplicationService.CanGetSecretKey(new List<Application> {application});
+            bool canGetSecretKey = false;
+            if (needsSecretKey)
+                canGetSecretKey = locator.ApplicationService.CanGetSecretKey(new List<Application> {application});
             var categories = locator.CategoryService.ListCategories();
-            var res = ApplicationViewData.Create(application, categories, cangetSecretKey);
+            var res = ApplicationViewData.Create(application, categories, canGetSecretKey);
             if (needsliveApp && application.OriginalRef.HasValue)
             {
                 var liveApp = locator.ApplicationService.GetApplicationById(application.Id);
-                res.LiveApplication = ApplicationViewData.Create(liveApp,  categories, cangetSecretKey);
+                res.LiveApplication = ApplicationViewData.Create(liveApp,  categories, canGetSecretKey);
             }
             return res;
         }

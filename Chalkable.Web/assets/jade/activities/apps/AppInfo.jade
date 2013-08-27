@@ -1,14 +1,14 @@
 mixin Textbox(tName, val, isReadonly)
     if isReadonly
         -attributes.disabled = isReadonly
-    input(type="text", name=tName, value=val)(attributes).text
+    input(type="text", name=tName, value=val, class="validate[required]")(attributes).text
 
 
 
 mixin TextArea(tName, val, isReadonly)
     if isReadonly
         -attributes.disabled = isReadonly
-    textarea(name=tName)(attributes)=val
+    textarea(name=tName, class="validate[required]")(attributes)=val
 
 mixin MyAppsPermission(prefix, app, suffix)
     .myapps-permission
@@ -17,9 +17,7 @@ mixin MyAppsPermission(prefix, app, suffix)
 
 
 
-mixin IconBox(title, dims)
-    .upload-img-block
-        .top=dims
+
 
 
 
@@ -28,6 +26,10 @@ mixin IconBox(title, dims)
 
 app = self.app
 myAppsAccess = app.getAppAccess()
+
+
+appPrice = app.getApplicationPrice()
+
 selectedAppCategories = {}
 selectedAppGradeLevels = {}
 selectedAppPermissions = {}
@@ -35,6 +37,9 @@ appGradeLvls = []
 appCategories = []
 appPermissions = []
 
+
+
+isFreeApp = (app.getApplicationPrice().getPrice() || 0) == 0
 
 actAppCategories = app.getCategories() || []
 actAppGradeLevels = app.getGradeLevels() || []
@@ -64,7 +69,7 @@ appPermissions = appPermissions.join(',')
         .action-bar.not-transparent.dev-app-info
             .container.panel-bg
                 label API key:
-                +Textbox("apikey", "key").api-key
+                +Textbox("apikey", app.getSecretKey()).api-key
                 label= "Status: " + app.getState().toString()
     +ActionForm('apps', 'update').app-info
         if !self.isReadOnly()
@@ -145,16 +150,31 @@ appPermissions = appPermissions.join(',')
         .section
             .elem
                 label.hint Pricing:
-                +SlideCheckbox("price", true, self.isReadOnly()).price-checkbox
-                .app-pricing
-                    span Test
-        .section
-            .elem
-                label.hint Icons:
-                .icons
-                    +IconBox("Icon")
-                    +IconBox("Banner")
-                .screenshots
-                    +IconBox("Screenshots")
+                +SlideCheckbox("price", isFreeApp, self.isReadOnly()).price-checkbox
+
+            .app-pricing
+                .elem
+                    label.hint Cost per user:
+                    +Textbox('costPerUser', appPrice.getPrice()).price-box
+                    div
+                        span Is there a flat rate for whole school purchases?
+                        +SlideCheckbox("schoolFlatRateEnabled", appPrice.getPricePerSchool() > 0, self.isReadOnly())
+
+                .elem
+                    label.wide.hint School flat rate:
+                    +Textbox('costPerSchool', appPrice.getPricePerSchool()).price-box
+                    +SlideCheckbox("canAttach", myAppsAccess.isAttachEnabled(), self.isReadOnly())
+        .section.last
+            .pictures
+                .elem.icons
+                    label.hint Icons:
+                    .icons
+                        .icon
+                            +RenderWith(app.getIconPicture(), chlk.templates.apps.AppPicture)
+                        .banner
+                            +RenderWith(app.getBannerPicture(), chlk.templates.apps.AppPicture)
+                .elem.screenshots
+                    label.hint Screenshots:
+                    .screenshots
         if !self.isReadOnly()
-            +Button()(name="submit-draft-btn").special-button.blue-button Update Draft
+            +Button()(name="submit-draft-btn").submit-draft-btn.special-button.blue-button Update Draft

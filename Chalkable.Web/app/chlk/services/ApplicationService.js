@@ -10,6 +10,7 @@ REQUIRE('chlk.models.apps.ShortAppInfo');
 REQUIRE('chlk.models.id.GradeLevelId');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.AppPermissionId');
+REQUIRE('chlk.models.id.PictureId');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -77,10 +78,27 @@ NAMESPACE('chlk.services', function () {
             },
 
 
+            [[Object, Number, Number]],
+            ria.async.Future, function uploadPicture(file, width_, height_) {
+                return this.uploadFiles('Application/UploadPicture', file, chlk.models.id.PictureId, {
+                    width: width_,
+                    height: height_
+                });
+
+            },
+
+
             [[chlk.models.id.AppId]],
-            ria.async.Future, function approveApp(appId) {
+            ria.async.Future, function goLive(appId) {
                 return this
-                    .post('Application/Approve.json', Boolean, {applicationId: appId.valueOf()});
+                    .post('Application/GoLive.json', Boolean, {applicationId: appId.valueOf()});
+            },
+
+
+            [[chlk.models.id.AppId]],
+            ria.async.Future, function unlist(appId) {
+                return this
+                    .post('Application/Unlist.json', Boolean, {applicationId: appId.valueOf()});
             },
 
             [[chlk.models.id.AppId]],

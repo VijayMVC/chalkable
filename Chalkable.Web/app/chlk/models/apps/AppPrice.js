@@ -1,7 +1,7 @@
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
 
-    /** @class chlk.model.apps.AppPrice*/
+    /** @class chlk.models.apps.AppPrice*/
     CLASS(
         'AppPrice', [
             Number, 'price',

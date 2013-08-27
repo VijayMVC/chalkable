@@ -134,7 +134,7 @@ namespace Chalkable.Web.Controllers
             }
             else pictureService.UploadPicture(id, bin);
             
-            return Json(true, htmlContentType);
+            return Json(id, htmlContentType);
         }
 
         protected Guid GetCurrentSchoolYearId()

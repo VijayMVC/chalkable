@@ -31,10 +31,10 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
 
         public static string GetPicturesRelativeAddress()
         {
-            return (new BlobHelper()).GetBlobsRelativeAddress(PICTURE_CONTEINER_NAME);
+            return (new BlobHelper()).GetBlobsRelativeAddress(PICTURE_CONTAINER_NAME);
         }
 
-        private const string PICTURE_CONTEINER_NAME = "pictureconteiner";
+        private const string PICTURE_CONTAINER_NAME = "pictureconteiner";
         private string PictureName(Guid id, int? height, int? width)
         {
             var name = id.ToString();
@@ -49,17 +49,17 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
             if (height.HasValue && width.HasValue)
                 content = ImageUtils.Scale(content, height.Value, width.Value);
 
-            ServiceLocator.StorageBlobService.AddBlob(PICTURE_CONTEINER_NAME, PictureName(id, height, width), content);
+            ServiceLocator.StorageBlobService.AddBlob(PICTURE_CONTAINER_NAME, PictureName(id, height, width), content);
         }
         public virtual void DeletePicture(Guid id, int? height, int? width)
         {
             if (!BaseSecurity.HasChalkableRole(Context))
                 throw new ChalkableSecurityException();
-            ServiceLocator.StorageBlobService.DeleteBlob(PICTURE_CONTEINER_NAME, PictureName(id, height, width));
+            ServiceLocator.StorageBlobService.DeleteBlob(PICTURE_CONTAINER_NAME, PictureName(id, height, width));
         }
         public byte[] GetPicture(Guid id, int? height, int? width)
         {
-            return ServiceLocator.StorageBlobService.GetBlobContent(PICTURE_CONTEINER_NAME, PictureName(id, height, width));
+            return ServiceLocator.StorageBlobService.GetBlobContent(PICTURE_CONTAINER_NAME, PictureName(id, height, width));
         }
 
         protected class PictureSize
