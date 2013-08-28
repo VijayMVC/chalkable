@@ -26,7 +26,7 @@ mixin AppPricing(appPrice, isReadOnly)
         .elem
             label.hint Pricing:
             +SlideCheckbox("free", isFreeApp, isReadOnly).price-checkbox
-        .prices
+        .prices(class = isFreeApp ?  "x-hidden" : undefined)
             .elem.cost-per-user
                 label.hint Cost per user:
                 +Textbox('costPerUser', appPrice.getPrice()).price-box
