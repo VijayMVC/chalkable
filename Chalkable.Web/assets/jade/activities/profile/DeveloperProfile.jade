@@ -1,0 +1,21 @@
+.developer
+    .info
+        h2 Base Info
+        +ActionForm('account', 'profileSave')
+            -id = self.id ? self.id.valueOf() : null
+            +Hidden("id", id)
+            div
+                label Developer name
+                input(name="name", value=self.name)
+            div
+                label Developer email
+                input(name="email", value=self.email)
+            div
+                label Developer web site
+                input(name="website", value=self.webSite)
+            div.align-right
+                Button Save
+        div.bg-line
+
+
+
