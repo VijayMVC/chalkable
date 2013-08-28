@@ -53,7 +53,8 @@ NAMESPACE('chlk.controllers', function (){
                     .saveDepartment(
                         model.getId(),
                         model.getName(),
-                        model.getKeywords()
+                        model.getKeywords(),
+                        model.getIcon()
                     )
                     .attach(this.validateResponse_())
                     .then(function (data) {

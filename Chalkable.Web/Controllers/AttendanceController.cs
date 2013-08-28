@@ -18,9 +18,9 @@ namespace Chalkable.Web.Controllers
     public class AttendanceController : ChalkableController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Attendance })]
-        public ActionResult SetAttendance(Guid classschoolpersonid, Guid classgeneralperiodid, int type, Guid? attendanceReasonId, DateTime date)
+        public ActionResult SetAttendance(Guid classPersonid, Guid classPeriodId, int type, Guid? attendanceReasonId, DateTime date)
         {
-            SchoolLocator.AttendanceService.SetClassAttendance(classschoolpersonid, classgeneralperiodid, date, (AttendanceTypeEnum)type, attendanceReasonId);
+            SchoolLocator.AttendanceService.SetClassAttendance(classPersonid, classPeriodId, date, (AttendanceTypeEnum)type, attendanceReasonId);
             return Json(true);
         }
 
@@ -30,19 +30,19 @@ namespace Chalkable.Web.Controllers
         {
             for (int i = 0; i < classPersonIds.Count; ++i)
             {
-                var classSchoolPersonId = classPersonIds[i];
+                var classPersonId = classPersonIds[i];
                 var attendanceType = attendanceTypes[i];
                 var reason = attReasons != null ? (attReasons[i] != Guid.Empty ? attReasons[i] : (Guid?)null) : null;
                 var periodId = classPeriodIds[i];
-                SchoolLocator.AttendanceService.SetClassAttendance(classSchoolPersonId, periodId, date, (AttendanceTypeEnum)attendanceType, reason);
+                SchoolLocator.AttendanceService.SetClassAttendance(classPersonId, periodId, date, (AttendanceTypeEnum)attendanceType, reason);
             }
             return Json(true);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE_FOR_CLASS, true, CallType.Post, new[] { AppPermissionType.Attendance })]
-        public ActionResult SetAttendanceForClass(int type, Guid? attendanceReason, Guid classGeneralPeriodId, DateTime date)
+        public ActionResult SetAttendanceForClass(int type, Guid? attendanceReason, Guid classPeriodId, DateTime date)
         {
-            SchoolLocator.AttendanceService.SetAttendanceForClass(classGeneralPeriodId, date, (AttendanceTypeEnum)type, attendanceReason);
+            SchoolLocator.AttendanceService.SetAttendanceForClass(classPeriodId, date, (AttendanceTypeEnum)type, attendanceReason);
             return Json(true);
         }
 

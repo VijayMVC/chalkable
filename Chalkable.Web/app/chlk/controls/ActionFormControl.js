@@ -6,7 +6,7 @@ NAMESPACE('chlk.controls', function () {
         rbracket = /\[\]$/,
         rCRLF = /\r?\n/g,
         rreturn = /\r/g,
-        rsubmitterTypes = /^(?:submit|button|image|reset|file)$/i,
+        rsubmitterTypes = /^(?:submit|button|image|reset)$/i,
         manipulation_rcheckableType = /^(?:checkbox|radio)$/i,
         rsubmittable = /^(?:input|select|textarea|keygen)/i;
 
@@ -62,15 +62,11 @@ NAMESPACE('chlk.controls', function () {
 
     function valueOfElement( elem ) {
         var ret;
-
         var hooks = valHooks[ elem.type ] || valHooks[ elem.nodeName.toLowerCase() ];
-
         if ( hooks && (ret = hooks( elem, "value" )) !== undefined ) {
             return ret;
         }
-
         ret = elem.value;
-
         return typeof ret === "string" ?
             // handle most common string cases
             ret.replace(rreturn, "") :
@@ -94,8 +90,9 @@ NAMESPACE('chlk.controls', function () {
                     ( _.checked || !manipulation_rcheckableType.test( type ) );
             })
             .map(function(elem) {
+                if (elem.type.toLowerCase() == 'file')
+                    return { name: elem.name, value: elem.files };
                 var val = valueOfElement(elem);
-
                 return val == null ?
                     null :
                     isArray( val ) ?
