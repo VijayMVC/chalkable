@@ -8,6 +8,7 @@ REQUIRE('chlk.models.school.Timezone');
 REQUIRE('chlk.models.school.SchoolSisInfo');
 REQUIRE('chlk.models.district.District');
 REQUIRE('chlk.models.id.SchoolId');
+REQUIRE('chlk.models.Success');
 
 
 
@@ -65,7 +66,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.SchoolId]],
             ria.async.Future, function del(schoolId) {
-                return this.get('School/delete.json', chlk.models.school.SchoolPeopleSummary, {
+                return this.post('School/delete.json', chlk.models.Success, {
                     schoolId: schoolId.valueOf()
                 });
             },

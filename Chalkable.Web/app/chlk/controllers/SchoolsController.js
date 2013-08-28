@@ -196,6 +196,7 @@ NAMESPACE('chlk.controllers', function (){
                 this.schoolService.del(id)
                     .then(function()
                         {
+                            this.ShowMsgBox("School will be deleted", "School delete task is created");
                             this.pageAction(districtId);
                         }.bind(this));
         }
