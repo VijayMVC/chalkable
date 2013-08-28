@@ -42,6 +42,7 @@ namespace Chalkable.Web.Models
 
     public class PersonSearchViewData : SearchViewData
     {
+        public int RoleId { get; set; }
         public string Role { get; set; }
         public string Gender { get; set; }
         
@@ -51,6 +52,7 @@ namespace Chalkable.Web.Models
             {
                 Description = person.FullName,
                 Id = person.Id,
+                RoleId = person.RoleRef,
                 Role = CoreRoles.GetById(person.RoleRef).LoweredName,
                 Gender = person.Gender,
                 SearchType = (int)SearchTypeEnum.Persons,
@@ -202,7 +204,7 @@ namespace Chalkable.Web.Models
 
         public override IList<SearchViewData> Build(object searchRes)
         {
-            var classes = searchRes as IList<Class>;
+            var classes = searchRes as IList<ClassDetails>;
             if (classes == null || (SearchTypeEnum)searchType != SearchTypeEnum.Classes)
                 throw new ChalkableException(ChlkResources.ERR_INVALID_SEARCH_VIEW_BUILDER);
             return classes.Select(ClassSearchViewData.Create).ToList();

@@ -1,5 +1,7 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
+REQUIRE('chlk.models.people.User');
+
 
 REQUIRE('chlk.models.id.SchoolPersonId');
 
@@ -29,6 +31,14 @@ NAMESPACE('chlk.services', function () {
             String, function getPictureURL(personId, size_){
                 var url = window.azurePictureUrl + personId.valueOf();
                 return size_ ? (url + '-' + size_ + 'x' + size_): url;
+            },
+
+            [[String]],
+            ria.async.Future, function getPersons(filter_) {
+                return this.getPaginatedList('Person/GetPersons.json', chlk.models.people.User, {
+                    filter: filter_
+                })
+                .then(function(model){return model.getItems();});
             }
         ])
 });

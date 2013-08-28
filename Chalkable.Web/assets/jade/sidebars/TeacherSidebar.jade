@@ -2,6 +2,7 @@
 #sidebar-controls
     .search-wrapper
         #search-bar
+            +SearchBox(chlk.services.SearchService, "search", chlk.templates.search.SiteSearch)#siteSearch(name="siteSearch")
 
     .wrapper
         +ActionLink('announcement','add').fullwidth-button.add-new

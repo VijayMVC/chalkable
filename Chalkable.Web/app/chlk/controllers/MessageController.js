@@ -3,6 +3,7 @@ REQUIRE('chlk.models.messages.Message');
 REQUIRE('chlk.models.messages.SendMessage');
 REQUIRE('chlk.models.messages.MessageList');
 REQUIRE('chlk.activities.messages.AddDialog');
+REQUIRE('chlk.activities.messages.ViewDialog');
 REQUIRE('chlk.models.id.MessageId');
 REQUIRE('chlk.services.MessageService');
 REQUIRE('chlk.services.PersonService');
@@ -32,6 +33,7 @@ NAMESPACE('chlk.controllers', function (){
                     .getMessages(start_ | 0, null, inbox_, role_, keyword_)
                     .attach(this.validateResponse_())
                     .then(function(model){
+                        this.getContext().getSession().set('currentMessages', model.getItems());
                         return this.convertModel(model, inbox_, role_, keyword_);
                     }.bind(this));
                 return postback_ ?
@@ -74,9 +76,17 @@ NAMESPACE('chlk.controllers', function (){
                 return new ria.async.DeferredData(result);
             },
 
-            function sendPageAction()
+            [[String]],
+            function sendPageAction(replayOnId_)
             {
-                var model = ria.async.DeferredData(new chlk.models.messages.Message());
+                var message;
+                if (replayOnId_)
+                {
+                    message = this.getMessageFromSession(replayOnId_);
+                }
+                else
+                    message = new chlk.models.messages.Message();
+                model = ria.async.DeferredData(message);
                 return this.ShadeView(chlk.activities.messages.AddDialog, model);
             },
 
@@ -88,6 +98,22 @@ NAMESPACE('chlk.controllers', function (){
                         this.view.getCurrent().close();
                         this.pageAction(true);
                     }.bind(this));
+            },
+
+            [[String]],
+            function viewPageAction(id)
+            {
+                var message = this.getMessageFromSession(id);
+                var model = ria.async.DeferredData(message);
+                return this.ShadeView(chlk.activities.messages.ViewDialog, model);
+            },
+
+            function getMessageFromSession(id)
+            {
+                return this.getContext().getSession().get('currentMessages', []).
+                    filter(function(message){
+                        return message.getId().valueOf() == id;
+                    })[0];
             }
         ])
 });

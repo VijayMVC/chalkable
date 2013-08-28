@@ -24,11 +24,11 @@ NAMESPACE('chlk.models.common', function () {
 
     /** @class chlk.models.common.MillisecondsEnum*/
     ENUM('MillisecondsEnum', {
-        SECOND: second,
-        MINUTE: minute,
-        HOUR: hour,
-        DAY: day,
-        WEEK: week
+        SECOND: 1000,
+        MINUTE: 60000,
+        HOUR: 3600000,
+        DAY: 86400000,
+        WEEK: 604800000
     });
 
     /** @class chlk.models.common.ChlkDateEnum*/

@@ -1,3 +1,5 @@
-mixin SearchBox(id, name, service, method)
-    input(id=id, name=name, type="text", search-box="search-box")
+mixin SearchBox(service, method, tpl)
+    -self.initialize(attributes, service, method, tpl);
+    input(attributes, type="text", search-box="search-box")
+    input(id=attributes.id + '-hidden', name=attributes.name, type="hidden")
     div

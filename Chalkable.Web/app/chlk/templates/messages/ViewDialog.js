@@ -1,16 +1,16 @@
 REQUIRE('chlk.templates.JadeTemplate');
 REQUIRE('chlk.models.messages.Message');
-REQUIRE('chlk.templates.messages.RecipientAutoComplete');
+REQUIRE('chlk.models.id.MessageId');
+REQUIRE('chlk.models.people.Person');
 REQUIRE('chlk.models.common.ChlkDate');
-
 
 NAMESPACE('chlk.templates.messages', function () {
 
-    /** @class chlk.templates.messages.AddDialog*/
+    /** @class chlk.templates.messages.ViewDialog*/
     CLASS(
-        [ria.templates.TemplateBind('~/assets/jade/activities/messages/AddDialog.jade')],
+        [ria.templates.TemplateBind('~/assets/jade/activities/messages/ViewDialog.jade')],
         [ria.templates.ModelBind(chlk.models.messages.Message)],
-        'AddDialog', EXTENDS(chlk.templates.JadeTemplate), [
+        'ViewDialog', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.id.MessageId, 'id',
 
@@ -30,3 +30,4 @@ NAMESPACE('chlk.templates.messages', function () {
             chlk.models.common.ChlkDate, 'sent'
         ])
 });
+

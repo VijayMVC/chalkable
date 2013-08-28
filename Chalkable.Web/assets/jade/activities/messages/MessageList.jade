@@ -28,7 +28,7 @@
                 +ActionLink('message', 'page', [true, self.isInbox(), 'teacher', self.getKeyword()]) Teacher
                 +ActionLink('message', 'page', [true, self.isInbox(), 'admingrade,adminedit,adminview', self.getKeyword()]) Admin
     input(name="selectedIds", type="hidden")#selectedIds
-    +Grid('message', 'page', self.getMessages(), [true]).not-transparent
+    +Grid('message', 'page', self.getMessages(), [true, self.isInbox(), self.getRole(), self.getKeyword()]).not-transparent
         //
             +GridHead()
                 .th
@@ -39,17 +39,28 @@
         +GridBody()
             each item in self.getMessages().getItems()
                 +GridRow()
-                    .td
+                    +ActionLink('message', 'viewPage', item.getId().valueOf())
                         +Checkbox(item.getId().valueOf(), false)(name='ch')
-                    .td=item.isRead()
-                    .td
+                        span= item.isRead()
                         if self.isInbox()
-                            +ActionLink('teachers', 'info', item.getSender().getId().valueOf()).left.image-container.white.shadow
-                                img.avatar.avatar47(class=item.getSender().getGender(), src=self.getPictureURL(item.getSender().getId(), 47))
+                            img.avatar.avatar47(class=item.getSender().getGender(), src=self.getPictureURL(item.getSender().getId(), 47))
                         else
-                            +ActionLink('teachers', 'info', item.getRecipient().getId().valueOf()).left.image-container.white.shadow
-                                img.avatar.avatar47(class=item.getRecipient().getGender(), src=self.getPictureURL(item.getRecipient().getId(), 47))
-                    .td= item.getSubject()
-                    .td=item.getSent().toString('dd/m/yy hh:min:ss')
+                            img.avatar.avatar47(class=item.getRecipient().getGender(), src=self.getPictureURL(item.getRecipient().getId(), 47))
+
+                        span= item.getSubject()
+                        span= item.getSent().toString('dd/m/yy hh:min:ss')
+                    //
+                        .td
+                            +Checkbox(item.getId().valueOf(), false)(name='ch')
+                        .td=item.isRead()
+                        .td
+                            if self.isInbox()
+                                +ActionLink('teachers', 'info', item.getSender().getId().valueOf()).left.image-container.white.shadow
+                                    img.avatar.avatar47(class=item.getSender().getGender(), src=self.getPictureURL(item.getSender().getId(), 47))
+                            else
+                                +ActionLink('teachers', 'info', item.getRecipient().getId().valueOf()).left.image-container.white.shadow
+                                    img.avatar.avatar47(class=item.getRecipient().getGender(), src=self.getPictureURL(item.getRecipient().getId(), 47))
+                        .td= item.getSubject()
+                        .td=item.getSent().toString('dd/m/yy hh:min:ss')
 
 

@@ -8,6 +8,7 @@ using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Logic;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Controllers.PersonControllers
@@ -15,7 +16,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
     [RequireHttps, TraceControllerFilter]
     public class PersonController : UserController
     {
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_USER_ME, true, CallType.Get, new[] { AppPermissionType.User, })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_USER_ME, true, CallType.Get, new[] { AppPermissionType.User })]
         public ActionResult Me()
         {
             var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.UserId);
@@ -137,7 +138,11 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 }
         }
 
-
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult GetPersons(string filter)
+        {
+            return Json(PersonLogic.GetPersons(SchoolLocator, 0, int.MaxValue, true, filter));
+        }
 
     }
 }

@@ -59,7 +59,7 @@ namespace Chalkable.Data.School.DataAccess
             queryCondition.BuildSqlWhere(res, type.Name);
 
             if (queryCondition.Count == 0)
-                res.Sql.Append(" where ");
+                res.Sql.Append(" where 1 = 1 ");
             if (!needsAllAttachments)
                 res.Sql.Append(" and AnnouncementAttachment.PersonRef = @callerId");
             
