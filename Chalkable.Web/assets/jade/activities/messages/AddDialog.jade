@@ -1,0 +1,17 @@
+.dialog.gray
+    .x-window-header
+        span Send Message
+    .x-window-body
+        .general-info
+            +ActionForm('message', 'send')
+                .x-form-field
+                    label To:
+                    +SearchBox("recipientId", "recipientId", "", "")
+                .x-form-field
+                    label Subject:
+                    input(type="text",name="subject")
+                .x-form-field
+                    label Body:
+                    input(type="text",name="body")
+                +Button()(type="submit").special-button.blue-button.submit-btn Submit
+                +Button.special-button.red-button.close Cancel
