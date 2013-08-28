@@ -21,7 +21,9 @@ mixin MyAppsPermission(prefix, app, suffix)
 
 
 mixin AppPricing(appPrice, isReadOnly)
-    isFreeApp = (appPrice.getPrice() || 0) == 0
+    isFreeApp = (appPrice.getPrice() || appPrice.getPricePerSchool() || appPrice.getPricePerClass() || 0 ) == 0
+    isSchoolFlatRateEnabled =  appPrice.getPricePerSchool() > 0
+    isClassFlatRateEnabled =  appPrice.getPricePerClass() > 0
     .app-pricing
         .elem
             label.hint Pricing:
@@ -34,16 +36,16 @@ mixin AppPricing(appPrice, isReadOnly)
                 label.wide.hint School flat rate:
                 .price-elem
                     span Is there a flat rate for whole school purchases?
-                    +SlideCheckbox("schoolFlatRateEnabled", appPrice.getPricePerSchool() > 0, isReadOnly)
-            .elem.school-flat-rate
+                    +SlideCheckbox("schoolFlatRateEnabled",isSchoolFlatRateEnabled , isReadOnly)
+            .elem.school-flat-rate(class = !isSchoolFlatRateEnabled ?  "x-hidden" : undefined)
                 label.hint School cost:
                 +Textbox('costPerSchool', appPrice.getPricePerSchool()).price-box
             .elem
                 label.wide.hint Class flat rate:
                 .price-elem
                     span Is there a flat rate for whole class purchases?
-                    +SlideCheckbox("classFlatRateEnabled", appPrice.getPricePerClass() > 0, isReadOnly)
-            .elem.class-flat-rate
+                    +SlideCheckbox("classFlatRateEnabled", isClassFlatRateEnabled, isReadOnly)
+            .elem.class-flat-rate(class = !isClassFlatRateEnabled ?  "x-hidden" : undefined)
                 label.hint Class cost:
                 +Textbox('costPerClass', appPrice.getPricePerClass()).price-box
 
