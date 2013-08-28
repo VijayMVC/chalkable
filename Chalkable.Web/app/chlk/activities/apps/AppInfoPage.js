@@ -35,9 +35,8 @@ NAMESPACE('chlk.activities.apps', function () {
                 submitBtnWrapper.addClass(DISABLED_CLASS);
                 var submitBtn = submitBtnWrapper.find('button');
                 submitBtn.setAttr('disabled', true);
-
-
-
+                var isDraftHidden = this.dom.find('input[name=draft]');
+                isDraftHidden.setValue('true');
                 var updateDraftBtnWrapper = this.dom.find('.submit-draft-btn');
                 updateDraftBtnWrapper.removeClass(DISABLED_CLASS);
                 updateDraftBtnWrapper.removeClass("disabled");
@@ -47,13 +46,19 @@ NAMESPACE('chlk.activities.apps', function () {
             },
 
 
+            [ria.mvc.DomEventBind('click', '.close-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function picturesChanged(node, event){
+                this.onFormChange(node, event);
+            },
+
             [ria.mvc.DomEventBind('input', 'input')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function inputsChanged(node, event){
                 this.onFormChange(node, event);
             },
 
-            [ria.mvc.DomEventBind('change', 'input[type=checkbox]')],
+            [ria.mvc.DomEventBind('change', 'input[type=checkbox], input[type=file]')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function checkboxesChanged(node, event){
                 this.onFormChange(node, event);
