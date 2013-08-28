@@ -13,25 +13,26 @@ NAMESPACE('chlk.controls', function () {
             [[Object]],
             Object, function prepareData(attrs) {
                 attrs.id = attrs.id || ria.dom.NewGID();
-                var that = this, params = attrs['data-params'],
+                var that = this, params = attrs['data-params'] || [],
                     controller = attrs['data-controller'],
                     action = attrs['data-action'];
-                this.context.getDefaultView()
-                    .onActivityRefreshed(function (activity, model) {
-                        var node = ria.dom.Dom('#' + attrs.id);
-                        node.on('change', function(target, event){
-                            var files = target.valueOf()[0].files;
-                            var state = that.context.getState();
-                            params.push(files);
-                            state.setController(controller);
-                            state.setAction(action);
-                            state.setParams(params);
-                            state.setPublic(false);
-
-                            that.context.stateUpdated();
-                        })
-                    }.bind(this));
-
+                if (controller)
+                {
+                    this.context.getDefaultView()
+                        .onActivityRefreshed(function (activity, model) {
+                            var node = ria.dom.Dom('#' + attrs.id);
+                            node.on('change', function(target, event){
+                                var files = target.valueOf()[0].files;
+                                var state = that.context.getState();
+                                params.push(files);
+                                state.setController(controller);
+                                state.setAction(action);
+                                state.setParams(params);
+                                state.setPublic(false);
+                                that.context.stateUpdated();
+                            })
+                        }.bind(this));
+                }
                 return attrs;
             }
         ]);
