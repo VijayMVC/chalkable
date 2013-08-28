@@ -35,6 +35,7 @@ namespace Chalkable.Web.Controllers
         {
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             var sysUser = MasterLocator.UserService.GetById(Context.UserId);
+            ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             PrepareJsonData(SysAdminViewData.Create(sysUser), ViewConstants.CURRENT_PERSON);
             return View();
         }
