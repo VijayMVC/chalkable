@@ -1,0 +1,100 @@
+.announcement-form.loader-container
+    -topData = self.getTopData();
+    -announcement = self.getAnnouncement();
+    -topItems = topData.getTopItems();
+    -classId = announcement.getClassId() ? announcement.getClassId().valueOf() : null;
+    -typeId = self.getSelectedTypeId();
+    -attachments=[];
+    -announcement.getAnnouncementAttachments().forEach(function(attachment){attachments.push(attachment.__PROTECTED)});
+    -classes=self.getClassInfo() ? self.getClassInfo().getTypesByClass() : [];
+    .loader
+    +ActionForm('announcement', 'save')(onlySubmitValidate=true)
+        +LeftRightToolbar(topItems, chlk.templates.class.TopBar)(
+            selectedItemId=topData.getSelectedItemId(),
+            pressAfterClick=!announcement.getState()
+        ).classes-bar
+        -console.info(classId, 'class = ' + (classId ? '' : 'x-hidden'));
+        .action-bar.not-transparent.buttons(class=(classId ? '' : 'x-hidden'))
+            .container.panel-bg
+                each item in classes
+                    BUTTON(
+                        class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
+                        typeId=item.getId(),
+                        typeName=item.getName(),
+                        type = announcement.getState() ? "button" : "submit",
+                        name="submitType",
+                        value="save"
+                    ).action-button= item.getDescription()
+        .ann-form-container(class=(classId && typeId ? '' : 'x-hidden'))
+            -typesEnum = chlk.models.announcement.AnnouncementTypeEnum;
+            -isAnnouncement = announcement.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf();
+            +Hidden('id', announcement.getId().valueOf())
+            +Hidden('announcementtypeid', announcement.getAnnouncementTypeId())
+            +Hidden('statetyped', announcement.getStateTyped())
+            +Hidden('systemtype', announcement.getSystemType())
+            +Hidden('personid', announcement.getPersonId().valueOf())
+            +Hidden('gradingstyle', announcement.getGradingStyle())
+            +Hidden('attachments', announcement.getAttachments())
+            +Hidden('markingperiodid', announcement.getCreated())
+            +Hidden('state', announcement.getState())
+            +Hidden('classid', classId)
+            +Hidden('announcementtypename', announcement.getAnnouncementTypeName())
+            .left-block
+                if isAnnouncement
+                    TEXTAREA(id="subject",name="subject",placeholder="Subject")=announcement.getSubject()
+                +TextArea(id="content",name="content",placeholder=isAnnouncement ? "Message" : "Assignment")=announcement.getContent()
+                .drop-down-container
+                input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
+                input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
+            .right-block
+                .date-picker-container
+                    +DatePicker('expiresdate', announcement.getExpiresDate())(
+                        data-options={
+                            showOtherMonths: true,
+                            selectOtherMonths: true
+                        },
+                        class="validate[required]"
+                    )#expiresdate
+                SPAN#reminders-button.small-gray-link=Msg.Reminder(true)
+                .reminders-container.x-hidden
+                    .reminders
+                        reminders = announcement.getAnnouncementReminders() || [];
+                        each reminder in reminders
+                            +RenderWith(reminder, chlk.templates.announcement.AnnouncementReminder)
+                    .reminder.new-reminder.x-hidden
+                        input.reminder-input
+                        +Select().reminder-select
+                            +Option(7, Msg.Week(true))
+                            +Option(1, Msg.Day(true), true)
+                        SPAN.remove-btn.remove-reminder
+                    .chlk-add#add-reminder.opacity-button=Msg.Add_reminder
+            .attachments-and-applications
+                -console.info(announcement);
+                -announcement.setNeedButtons(true);
+                -announcement.setNeedDeleteButton(true);
+                +RenderWith(announcement, chlk.templates.announcement.Announcement)
+            .bottom-block
+                +Button()(
+                    type="submit",
+                    name="submitType",
+                    value="submit"
+                ).special-button.blue-button.submit-btn
+                    =(announcement.getState() ? Msg.Save : Msg.Submit)
+                if announcement.getState()
+                    +ActionLink('announcement', 'delete', announcement.getId().valueOf())
+                        +Button()(
+                            type="submit",
+                            name="submitType",
+                            value="submit"
+                        ).special-button.red-button.submit-btn=Msg.Delete
+                else
+                    +ActionLink('announcement', 'discard', announcement.getPersonId().valueOf()).grey-link.not-blue=Msg.Discard
+        .choose-type(class=(classId && !typeId ? '' : 'x-hidden'))
+        .choose-class(class=(classId ? 'x-hidden' : ''))
+    +ActionForm('announcement', 'editAddReminder')(data-reminders=self.getReminders())#add-edit-reminder
+        +Hidden('id')
+        +Hidden('announcementId', announcement.getId())
+        +Hidden('before')
+        +Hidden('duplicate', false)
+
+
