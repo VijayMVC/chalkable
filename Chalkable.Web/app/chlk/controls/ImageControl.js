@@ -13,10 +13,12 @@ NAMESPACE('chlk.controls', function () {
             [[Object]],
             VOID, function onImgError(event){
                 var node = jQuery(event.target);
-                var needAlternative = node.attr('src') != this.getAlternativeSrc();
-                var src = needAlternative ? this.getAlternativeSrc() : this.getDefaultSrc();
+                var alternativeSrc = node.attr('alternativeSrc');
+                var defaultSrc = node.attr('defaultSrc');
+                var needAlternative = node.attr('src') != alternativeSrc;
+                var src = needAlternative ? alternativeSrc : defaultSrc;
                 node.attr('src', src);
-                if(!(needAlternative && this.getDefaultSrc()))
+                if(!(needAlternative && defaultSrc))
                     node.off('error.load');
             },
 
@@ -31,8 +33,8 @@ NAMESPACE('chlk.controls', function () {
                     attributes.alternativeSrc = attributes.defaultSrc;
                     delete attributes.defaultSrc;
                 }
-                attributes.alternativeSrc && this.setAlternativeSrc(attributes.alternativeSrc);
-                attributes.defaultSrc && this.setDefaultSrc(attributes.defaultSrc);
+                //attributes.alternativeSrc && this.setAlternativeSrc(attributes.alternativeSrc);
+                //attributes.defaultSrc && this.setDefaultSrc(attributes.defaultSrc);
                 if(attributes.alternativeSrc)
                     this.context.getDefaultView()
                         .onActivityRefreshed(function (activity, model) {
