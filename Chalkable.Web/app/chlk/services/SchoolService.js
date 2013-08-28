@@ -63,6 +63,13 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.SchoolId]],
+            ria.async.Future, function del(schoolId) {
+                return this.get('School/delete.json', chlk.models.school.SchoolPeopleSummary, {
+                    schoolId: schoolId.valueOf()
+                });
+            },
+
             ria.async.Future, function getTimezones() {
                 return this.getPaginatedList('School/ListTimezones.json', chlk.models.school.Timezone, {});
             }
