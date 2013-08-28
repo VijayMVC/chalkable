@@ -1,0 +1,15 @@
+.dialog.gray
+    .x-window-header
+        span= self.getSender().getFirstName() + self.getSender().getLastName()
+    .x-window-body
+        .general-info
+            div
+                =self.subject
+            div
+                =self.body
+            +ActionLink('message', 'sendPage', self.id)
+                |Replay
+            +Button.special-button.red-button.close Cancel
+
+
+

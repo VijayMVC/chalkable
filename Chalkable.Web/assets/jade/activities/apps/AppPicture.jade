@@ -1,0 +1,22 @@
+mixin Thumbnail(id, url, title, dimsX, dimsY, pictureCls, readOnly)
+    .thumbnail(class=pictureCls)
+        if !readOnly
+            +ActionLink('apps', 'deletePicture', [title, dimsX, dimsY]).close-btn
+            +LoadingImage(src=url)
+
+
+mixin IconBox(id, url, title, dimsX, dimsY, pictureCls, readOnly)
+    +Hidden('app' + title + 'Id', id.valueOf())
+    if id.valueOf()
+        +Thumbnail(id, url, title, dimsX, dimsY, pictureCls, readOnly)
+    else
+        .upload-img-block
+            .top=dimsX + "px x " + dimsY + "px"
+            .bottom
+                button.simple-gray-button.file=title
+                    +FileUpload('apps', 'uploadPicture', [dimsX, dimsY, title]).simple-gray-button
+                    +ActionLink('apps', 'd', id) Download Attachment
+
+
+
++IconBox(self.pictureId, self.pictureUrl, self.title, self.width, self.height, self.pictureClass, !self.editable)
