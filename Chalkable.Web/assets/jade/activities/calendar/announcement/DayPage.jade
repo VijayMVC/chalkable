@@ -40,7 +40,7 @@
                         +ActionLink('calendar', 'showDayPopUp', item.getDate().format('mm-dd-yy'), i).period-item.day
                             if(item.getDate().getDate().getDay() == 0)
                                 .period-info=(i+1)
-                                span.time #{calendarDayItem.getPeriod().getStartTime()} #{calendarDayItem.getPeriod().getEndTime()}
+                                span.time #{calendarDayItem.getPeriod().getStartTime()} - #{calendarDayItem.getPeriod().getEndTime()}
                             else
                                 li
                                     .course-icon

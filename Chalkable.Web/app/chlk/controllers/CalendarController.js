@@ -8,6 +8,7 @@ REQUIRE('chlk.activities.calendar.announcement.DayPage');
 REQUIRE('chlk.activities.calendar.announcement.MonthDayPopUp');
 REQUIRE('chlk.activities.calendar.announcement.WeekBarPopUp');
 REQUIRE('chlk.activities.calendar.announcement.WeekDayPopUp');
+REQUIRE('chlk.activities.calendar.announcement.DayPeriodPopUp');
 
 REQUIRE('chlk.models.calendar.announcement.Month');
 REQUIRE('chlk.models.class.ClassesForTopBar');
@@ -40,8 +41,15 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.calendar.announcement.MonthDayPopUp, result);
         },
 
-        [[chlk.models.common.ChlkDate]],
-        VOID, function showDayPopUpAction(date) {
+        [[chlk.models.common.ChlkDate, Number]],
+        VOID, function showDayPopUpAction(date, periodNumber) {
+            var result = this.calendarService.getDayPopupInfo(date, periodNumber)
+                .then(function(model){
+                    model.setTarget(chlk.controls.getActionLinkControlLastNode());
+                    model.setDate(date);
+                    return model;
+                });
+            return this.ShadeView(chlk.activities.calendar.announcement.DayPeriodPopUp, result);
         },
 
         [[chlk.models.common.ChlkDate, Number]],
