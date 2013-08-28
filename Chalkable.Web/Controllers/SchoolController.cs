@@ -72,6 +72,13 @@ namespace Chalkable.Web.Controllers
             return Json(SisSyncViewData.Create(syncInfo));
         }
 
+        [AuthorizationFilter("SysAdmin")]
+        public ActionResult Delete(Guid schoolId)
+        {
+            MasterLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.DeleteSchool, DateTime.UtcNow, schoolId, schoolId.ToString());
+            return Json(true);
+        }
+
         public ActionResult ListTimeZones()
         {
             var tzCollection = DateTimeTools.GetAll();
