@@ -6,7 +6,7 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'name',
             String, 'url',
             [ria.serialize.SerializeProperty('videodemourl')],
-            String, 'videoModeUrl',
+            String, 'videoDemoUrl',
             [ria.serialize.SerializeProperty('shortdescription')],
             String, 'shortDescription',
             String, 'description',
@@ -17,10 +17,10 @@ NAMESPACE('chlk.models.apps', function () {
 
 
             [[String, String, String, String, String, chlk.models.id.PictureId, chlk.models.id.PictureId]],
-            function $(name, url, videoModeUrl, shortDescr, descr, smallPictureId_, bigPictureId_){
+            function $(name, url, videoDemoUrl, shortDescr, descr, smallPictureId_, bigPictureId_){
                 this.setName(name);
                 this.setUrl(url);
-                this.setVideoModeUrl(videoModeUrl);
+                this.setVideoDemoUrl(videoDemoUrl);
                 this.setShortDescription(shortDescr);
                 this.setDescription(descr);
                 if (smallPictureId_)
@@ -33,7 +33,7 @@ NAMESPACE('chlk.models.apps', function () {
                 return {
                     name: this.getName(),
                     url: this.getUrl(),
-                    videomodeurl: this.getVideoModeUrl(),
+                    videodemourl: this.getVideoDemoUrl(),
                     shortdescription: this.getShortDescription(),
                     description: this.getDescription(),
                     smallpictureid: this.getSmallPictureId() ? this.getSmallPictureId().valueOf() : null,

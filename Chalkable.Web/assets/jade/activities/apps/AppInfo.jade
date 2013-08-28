@@ -176,7 +176,7 @@ appPermissions = appPermissions.join(',')
                 +TextArea("longDescription", app.getDescription(), self.isReadOnly())
             .elem
                 label.wide.hint Video Demo:
-                +Textbox("videoModeUrl", app.getVideoModeUrl(), self.isReadOnly())
+                +Textbox("videoDemoUrl", app.getVideoDemoUrl(), self.isReadOnly())
         .section
             +AppPricing(appPrice, self.isReadOnly())
         .section.last

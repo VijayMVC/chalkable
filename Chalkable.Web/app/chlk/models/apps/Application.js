@@ -26,7 +26,7 @@ NAMESPACE('chlk.models.apps', function () {
                 String, 'name',
                 String, 'url',
                 [ria.serialize.SerializeProperty('videodemourl')],
-                String, 'videoModeUrl',
+                String, 'videoDemoUrl',
                 [ria.serialize.SerializeProperty('shortdescription')],
                 String, 'shortDescription',
                 String, 'description',

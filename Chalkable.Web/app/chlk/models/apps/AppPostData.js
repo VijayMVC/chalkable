@@ -12,7 +12,7 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'categories',
             String, 'name',
             String, 'url',
-            String, 'videoModeUrl',
+            String, 'videoDemoUrl',
             String, 'shortDescription',
             String, 'longDescription',
 

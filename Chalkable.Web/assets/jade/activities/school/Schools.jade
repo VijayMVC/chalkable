@@ -7,8 +7,7 @@
     +Grid('schools', 'page', self.items, [districtId]).not-transparent
         +GridHead()
             .th School Name
-            .th Local ID
-            .th NCES ID
+            .th ID
             .th School Type
             .th URL
             .th
@@ -16,11 +15,10 @@
             each item in self.items.getItems()
                 +GridRow()
                     .td= item.getName()
-                    .td= item.getLocalId()
-                    .td= item.getNcesId()
+                    .td= item.getId()
                     .td= item.getSchoolType()
                     .td= item.getSchoolUrl()
                     .td.action-links
-                        +ActionLink('schools', 'details', item.getId()).profile
-                        +ActionLink('schools', 'delete', item.getId()).remove
+                        +ActionLink('schools', 'details', item.getId().valueOf()).profile
+                        +ActionLink('schools', 'delete', [item.getId().valueOf(), districtId.valueOf()]).remove
 

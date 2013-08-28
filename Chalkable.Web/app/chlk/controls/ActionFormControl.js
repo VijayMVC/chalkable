@@ -179,7 +179,7 @@ NAMESPACE('chlk.controls', function () {
 
             [[Object]],
             VOID, function prepareData(attributes){
-                var formSelector = attributes.id ? '#' + attributes.id : (attributes.class ? '.' + attributes.class : 'form');
+                attributes.id = attributes.id || ria.dom.NewGID();
                 if(attributes.onlySubmitValidate){
                     this.setOnlySubmitValidate(true);
                 }else{

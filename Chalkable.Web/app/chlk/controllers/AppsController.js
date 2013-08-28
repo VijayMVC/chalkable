@@ -288,7 +288,7 @@ NAMESPACE('chlk.controllers', function (){
              var shortAppData = new chlk.models.apps.ShortAppInfo(
                 model.getName(),
                 model.getUrl(),
-                model.getVideoModeUrl(),
+                model.getVideoDemoUrl(),
                 model.getShortDescription(),
                 model.getLongDescription(),
                 model.getAppIconId(),

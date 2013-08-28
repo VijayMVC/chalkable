@@ -6,6 +6,7 @@ NAMESPACE('chlk.activities.apps', function () {
 
 
     var HIDDEN_CLASS = 'x-hidden';
+    var DISABLED_CLASS = 'x-item-disabled';
 
     /** @class chlk.activities.apps.AppInfoPage*/
     CLASS(
@@ -26,6 +27,41 @@ NAMESPACE('chlk.activities.apps', function () {
             VOID, function toggleAppPaymentInfo(node, event){
                 var appPricing = this.dom.find('.prices');
                 appPricing.toggleClass(HIDDEN_CLASS, node.checked());
+            },
+
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function onFormChange(node, event){
+                var submitBtnWrapper = this.dom.find('.submit-btn');
+                submitBtnWrapper.addClass(DISABLED_CLASS);
+                var submitBtn = submitBtnWrapper.find('button');
+                submitBtn.setAttr('disabled', true);
+                var isDraftHidden = this.dom.find('input[name=draft]');
+                isDraftHidden.setValue('true');
+                var updateDraftBtnWrapper = this.dom.find('.submit-draft-btn');
+                updateDraftBtnWrapper.removeClass(DISABLED_CLASS);
+                updateDraftBtnWrapper.removeClass("disabled");
+                updateDraftBtnWrapper.removeAttr("disabled");
+                var updateDraftBtn = updateDraftBtnWrapper.find('button');
+                updateDraftBtn.removeAttr('disabled');
+            },
+
+
+            [ria.mvc.DomEventBind('click', '.close-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function picturesChanged(node, event){
+                this.onFormChange(node, event);
+            },
+
+            [ria.mvc.DomEventBind('input', 'input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function inputsChanged(node, event){
+                this.onFormChange(node, event);
+            },
+
+            [ria.mvc.DomEventBind('change', 'input[type=checkbox], input[type=file]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function checkboxesChanged(node, event){
+                this.onFormChange(node, event);
             },
 
             [ria.mvc.DomEventBind('click', 'input[name=schoolFlatRateEnabled]')],
