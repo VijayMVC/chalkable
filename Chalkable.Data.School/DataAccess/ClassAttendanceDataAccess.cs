@@ -130,7 +130,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             var b = new StringBuilder();
             b.Append(@" select count(*) from ClassPeriod 
-                        join Period on Period.Id = ClassPeiod.PeriodRef
+                        join Period on Period.Id = ClassPeriod.PeriodRef
                         join [Date] on [Date].MarkingPeriodRef = Period.MarkingPeriodRef and [Date].ScheduleSectionRef = Period.SectionRef
                         join ClassPerson on ClassPerson.ClassRef = ClassPeriod.ClassRef
                         where ClassPeriod.ClassRef = @classId and Period.MarkingPeriodRef = @markingPeriodId and [Date].IsSchoolDay = 1 ");

@@ -28,7 +28,7 @@
                 +ActionLink('message', 'page', [true, self.isInbox(), 'teacher', self.getKeyword()]) Teacher
                 +ActionLink('message', 'page', [true, self.isInbox(), 'admingrade,adminedit,adminview', self.getKeyword()]) Admin
     input(name="selectedIds", type="hidden")#selectedIds
-    +Grid('message', 'page', self.getMessages(), [true]).not-transparent
+    +Grid('message', 'page', self.getMessages(), [true, self.isInbox(), self.getRole(), self.getKeyword()]).not-transparent
         //
             +GridHead()
                 .th
