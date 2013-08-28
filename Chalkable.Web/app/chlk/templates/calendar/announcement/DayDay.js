@@ -1,22 +1,20 @@
 REQUIRE('chlk.templates.Popup');
-REQUIRE('chlk.models.calendar.announcement.DayItem');
+REQUIRE('chlk.models.common.ChlkDate');
+REQUIRE('chlk.models.calendar.announcement.CalendarDayItem');
 NAMESPACE('chlk.templates.calendar.announcement', function () {
 
     /** @class chlk.templates.calendar.announcement.DayDay*/
     CLASS(
-        [ria.templates.TemplateBind('~/assets/jade/activities/calendar/announcement/DayPopUp.jade')],
-        [ria.templates.ModelBind(chlk.models.calendar.announcement.DayItem)],
+        [ria.templates.TemplateBind('~/assets/jade/activities/calendar/announcement/DayPeriodPopUp.jade')],
+        [ria.templates.ModelBind(chlk.models.calendar.announcement.CalendarDayItem)],
         'DayDay', EXTENDS(chlk.templates.Popup), [
             [ria.templates.ModelPropertyBind],
-            Number, 'day',
+            ArrayOf(chlk.models.announcement.AnnouncementClassPeriod), 'announcementClassPeriods',
 
             [ria.templates.ModelPropertyBind],
-            String, 'todayClassName',
+            chlk.models.period.Period, 'period',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.ChlkDate, 'date',
-
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.calendar.announcement.CalendarDayItem), 'calendarDayItems'
+            chlk.models.common.ChlkDate, 'date'
         ])
 });

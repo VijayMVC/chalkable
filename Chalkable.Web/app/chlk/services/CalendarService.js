@@ -5,7 +5,7 @@ REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.calendar.announcement.MonthItem');
 REQUIRE('chlk.models.calendar.announcement.Week');
 REQUIRE('chlk.models.calendar.announcement.WeekItem');
-REQUIRE('chlk.models.calendar.announcement.DayItem');
+REQUIRE('chlk.models.calendar.announcement.CalendarDayItem');
 REQUIRE('chlk.models.calendar.TeacherSettingsCalendarDay');
 
 REQUIRE('chlk.models.id.ClassId');
@@ -39,13 +39,14 @@ NAMESPACE('chlk.services', function () {
                 return new ria.async.DeferredData(res);
             },
 
-            [[chlk.models.common.ChlkDate]],
-            ria.async.Future, function getDayPopupInfo(date){
+            [[chlk.models.common.ChlkDate, Number]],
+            ria.async.Future, function getDayPopupInfo(date, periodNumber){
                 var dayCalendarData = this.getContext().getSession().get('dayCalendarData', []), res = null;
                 dayCalendarData.forEach(function(day){
                     if(day.getDate().isSameDay(date))
                         res = day;
                 });
+                res = res.getCalendarDayItems()[periodNumber];
                 return new ria.async.DeferredData(res);
             },
 

@@ -6,10 +6,12 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
 
     /** @class chlk.models.calendar.announcement.CalendarDayItem*/
     CLASS(
-        'CalendarDayItem', [
+        'CalendarDayItem', EXTENDS(chlk.models.Popup), [
             [ria.serialize.SerializeProperty('announcementclassperiods')],
             ArrayOf(chlk.models.announcement.AnnouncementClassPeriod), 'announcementClassPeriods',
 
-            chlk.models.period.Period, 'period'
+            chlk.models.period.Period, 'period',
+
+            chlk.models.common.ChlkDate, 'date'
         ]);
 });
