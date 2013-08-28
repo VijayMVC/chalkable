@@ -7,7 +7,7 @@ NAMESPACE('chlk.models.departments', function () {
         'Department', [
             chlk.models.id.DepartmentId, 'id',
             String, 'name',
-            //ArrayOf(String), 'keywords'
-            String, 'keywords'
+            String, 'keywords',
+            Object, 'icon'
         ]);
 });

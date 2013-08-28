@@ -21,7 +21,7 @@ namespace Chalkable.Data.School.DataAccess
             var conds = new Dictionary<string, object>();
             if (query.ClassId.HasValue)
             {
-                conds.Add(ClassPerson.CLASS_REF_FIELD, query.ClassId);
+                conds.Add(Class.ID_FIELD, query.ClassId);
                 sql.AppendFormat(" and [Class].[{0}] = @{0}", Class.ID_FIELD);
             }
             if (query.TeacherId.HasValue)
@@ -63,7 +63,6 @@ namespace Chalkable.Data.School.DataAccess
         private DbQuery BuildClassGradeStatisticQuery(StringBuilder sql, GradingStatisticQuery query)
         {
             var dbQuery = BuildGradeStatisicDbQuery(sql, query);
-            sql.Append(dbQuery.Sql);
             var conds = dbQuery.Parameters;
             var personExistsingQueryTmp = string.Format("and exists(select * from [ClassPerson] where [{1}] = [Class].[{2}] [{0}] =@"
                               , ClassPerson.PERSON_REF_FIELD, ClassPerson.CLASS_REF_FIELD, Class.ID_FIELD);

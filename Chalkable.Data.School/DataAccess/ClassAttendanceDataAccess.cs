@@ -129,7 +129,7 @@ namespace Chalkable.Data.School.DataAccess
         public int PossibleAttendanceCount(Guid markingPeriodId, Guid classId, DateTime? tillDate)
         {
             var b = new StringBuilder();
-            b.Append(@" select count(*) from ClassPeriod 
+            b.Append(@" select ClassPeriod.* from ClassPeriod 
                         join Period on Period.Id = ClassPeriod.PeriodRef
                         join [Date] on [Date].MarkingPeriodRef = Period.MarkingPeriodRef and [Date].ScheduleSectionRef = Period.SectionRef
                         join ClassPerson on ClassPerson.ClassRef = ClassPeriod.ClassRef

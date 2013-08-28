@@ -11,7 +11,7 @@
             each item in self.items
                 +GridRow()
                     .td= item.getName()
-                    .td= item.getKeywords().join(',')
+                    .td= item.getKeywords()
                     .td.action-links
                         +ActionLink('departments', 'update', item.getId()).profile
                         +ActionLink('departments', 'delete', item.getId()).remove

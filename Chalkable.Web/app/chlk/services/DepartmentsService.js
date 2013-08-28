@@ -15,27 +15,28 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[String, String]],
-            ria.async.Future, function addDepartment(name, keywords) {
-                return this.post('ChalkableDepartment/Create.json', chlk.models.departments.Department, {
+            [[String, String, FileList]],
+            ria.async.Future, function addDepartment(name, keywords, files) {
+                return this.uploadFiles('ChalkableDepartment/create.json', files, chlk.models.departments.Department, {
                     name: name,
                     keywords: keywords
                 });
             },
 
-            [[chlk.models.id.DepartmentId, String, String]],
-            ria.async.Future, function updateDepartment(id, name, keywords) {
-                return this.post('ChalkableDepartment/Update.json', chlk.models.departments.Department, {
+            [[chlk.models.id.DepartmentId, String, String, FileList]],
+            ria.async.Future, function updateDepartment(id, name, keywords, files) {
+
+                return this.uploadFiles('ChalkableDepartment/create.json', files, chlk.models.departments.Department, {
                     chalkableDepartmentId: id.valueOf(),
                     name: name,
                     keywords: keywords
                 });
             },
 
-            [[chlk.models.id.DepartmentId, String, String]],
-            ria.async.Future, function saveDepartment(id_, name, keywords) {
-                if (id_ && id_.valueOf()) return this.updateDepartment(id_, name, keywords);
-                return this.addDepartment(name, keywords);
+            [[chlk.models.id.DepartmentId, String, String, FileList]],
+            ria.async.Future, function saveDepartment(id_, name, keywords, files) {
+                if (id_ && id_.valueOf()) return this.updateDepartment(id_, name, keywords, files);
+                return this.addDepartment(name, keywords, files);
             },
 
             [[chlk.models.id.DepartmentId]],
