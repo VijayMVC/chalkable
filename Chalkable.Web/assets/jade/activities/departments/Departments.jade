@@ -4,12 +4,15 @@
             +ActionLink('departments', 'add').chlk-add.opacity-button Add Department
     +Grid('departments', 'page', self).not-transparent
         +GridHead()
+            .th
             .th Name
             .th keywords
             .th
         +GridBody()
             each item in self.items
                 +GridRow()
+                    .td
+                        img.avatar.avatar47(src=self.getPictureURL(item.getId(), 46, 26))
                     .td= item.getName()
                     .td= item.getKeywords()
                     .td.action-links
