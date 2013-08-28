@@ -206,6 +206,8 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.announcementService
                 .uploadAttachment(announcementId, files)
                 .then(function(model){
+                    model.setNeedButtons(true);
+                    model.setNeedDeleteButton(true);
                     var attachments = model.getAnnouncementAttachments();
                     this.prepareAttachments(attachments);
                     return model;

@@ -168,6 +168,10 @@ NAMESPACE('chlk.models.announcement', function () {
 
             chlk.models.id.MarkingPeriodId, 'markingPeriodId',
 
-            String, 'submitType'
+            String, 'submitType',
+
+            Boolean, 'needButtons',
+
+            Boolean, 'needDeleteButton'
         ]);
 });
