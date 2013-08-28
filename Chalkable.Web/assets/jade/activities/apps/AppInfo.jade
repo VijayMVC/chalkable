@@ -20,6 +20,36 @@ mixin MyAppsPermission(prefix, app, suffix)
 
 
 
+mixin AppPricing(appPrice, isReadOnly)
+    isFreeApp = (appPrice.getPrice() || appPrice.getPricePerSchool() || appPrice.getPricePerClass() || 0 ) == 0
+    isSchoolFlatRateEnabled =  appPrice.getPricePerSchool() > 0
+    isClassFlatRateEnabled =  appPrice.getPricePerClass() > 0
+    .app-pricing
+        .elem
+            label.hint Pricing:
+            +SlideCheckbox("free", isFreeApp, isReadOnly).price-checkbox
+        .prices(class = isFreeApp ?  "x-hidden" : undefined)
+            .elem.cost-per-user
+                label.hint Cost per user:
+                +Textbox('costPerUser', appPrice.getPrice()).price-box
+            .elem
+                label.wide.hint School flat rate:
+                .price-elem
+                    span Is there a flat rate for whole school purchases?
+                    +SlideCheckbox("schoolFlatRateEnabled",isSchoolFlatRateEnabled , isReadOnly)
+            .elem.school-flat-rate(class = !isSchoolFlatRateEnabled ?  "x-hidden" : undefined)
+                label.hint School cost:
+                +Textbox('costPerSchool', appPrice.getPricePerSchool()).price-box
+            .elem
+                label.wide.hint Class flat rate:
+                .price-elem
+                    span Is there a flat rate for whole class purchases?
+                    +SlideCheckbox("classFlatRateEnabled", isClassFlatRateEnabled, isReadOnly)
+            .elem.class-flat-rate(class = !isClassFlatRateEnabled ?  "x-hidden" : undefined)
+                label.hint Class cost:
+                +Textbox('costPerClass', appPrice.getPricePerClass()).price-box
+
+
 
 
 
@@ -39,7 +69,7 @@ appPermissions = []
 
 
 
-isFreeApp = (app.getApplicationPrice().getPrice() || 0) == 0
+
 
 actAppCategories = app.getCategories() || []
 actAppGradeLevels = app.getGradeLevels() || []
@@ -148,22 +178,7 @@ appPermissions = appPermissions.join(',')
                 label.wide.hint Video Demo:
                 +Textbox("videoModeUrl", app.getVideoModeUrl(), self.isReadOnly())
         .section
-            .elem
-                label.hint Pricing:
-                +SlideCheckbox("price", isFreeApp, self.isReadOnly()).price-checkbox
-
-            .app-pricing
-                .elem
-                    label.hint Cost per user:
-                    +Textbox('costPerUser', appPrice.getPrice()).price-box
-                    div
-                        span Is there a flat rate for whole school purchases?
-                        +SlideCheckbox("schoolFlatRateEnabled", appPrice.getPricePerSchool() > 0, self.isReadOnly())
-
-                .elem
-                    label.wide.hint School flat rate:
-                    +Textbox('costPerSchool', appPrice.getPricePerSchool()).price-box
-                    +SlideCheckbox("canAttach", myAppsAccess.isAttachEnabled(), self.isReadOnly())
+            +AppPricing(appPrice, self.isReadOnly())
         .section.last
             .pictures
                 .elem.icons
@@ -176,6 +191,7 @@ appPermissions = appPermissions.join(',')
                 .elem.screenshots
                     label.hint Screenshots:
                     .screenshots
+                        +Hidden('appScreenShotIds', "")
                         //+RenderWith(app.(), chlk.templates.apps.AppPicture)
         if !self.isReadOnly()
-            +Button()(name="submit-draft-btn").submit-draft-btn.special-button.blue-button Update Draft
+            +Button()(disabled = !self.isDraft(),name="submit-draft-btn", class = !self.isDraft() ? "x-item-disabled" : "").submit-draft-btn.special-button.blue-button Update Draft

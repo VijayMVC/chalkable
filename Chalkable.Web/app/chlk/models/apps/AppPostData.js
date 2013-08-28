@@ -23,11 +23,16 @@ NAMESPACE('chlk.models.apps', function () {
             Boolean, 'canAttach',
             Boolean, 'showInGradingView',
 
-            Number, 'price',
-            Number, 'pricePerClass',
-            Number, 'pricePerSchool',
+            Number, 'costPerUser',
+            Number, 'costPerSchool',
+            Number, 'costPerClass',
+
+            Boolean, 'free',
+            Boolean, 'classFlatRateEnabled',
+            Boolean, 'schoolFlatRateEnabled',
 
             chlk.models.id.PictureId, 'appIconId',
-            chlk.models.id.PictureId, 'appBannerId'
+            chlk.models.id.PictureId, 'appBannerId',
+            String, 'appScreenShotIds'
         ]);
 });

@@ -63,7 +63,7 @@ namespace Chalkable.Data.School.DataAccess
                         order by StartDate";
 
             var conds = new Dictionary<string, object>{{"markingPeriodId", markingPeriodId}};
-            return ReadOne<MarkingPeriod>(new DbQuery (sql, conds));
+            return ReadOneOrNull<MarkingPeriod>(new DbQuery (sql, conds));
         }
 
         public IList<MarkingPeriod> GetMarkingPeriods(Guid? schoolYearId)

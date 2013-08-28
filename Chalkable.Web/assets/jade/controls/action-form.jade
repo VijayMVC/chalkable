@@ -7,4 +7,4 @@ mixin ActionForm(controller, action)
         block
 
 mixin Hidden(hidName, hidValue)
-    input(type="hidden", name=hidName, value=hidValue)
+    input(type="hidden", name=hidName, value=hidValue)(attributes)

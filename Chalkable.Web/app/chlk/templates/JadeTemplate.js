@@ -10,9 +10,13 @@ NAMESPACE('chlk.templates', function () {
         'JadeTemplate', EXTENDS(ria.templates.CompiledTemplate), [
             Function, 'block',
             [[Object, Number]],
-            String, function getPictureURL(id, size_){
+            String, function getPictureURL(id, sizeH_, sizeW_){
                 var url = window.azurePictureUrl + id.valueOf();
-                return size_ ? (url + '-' + size_ + 'x' + size_): url;
+                if (sizeH_ && sizeW_)
+                    return url + '-' + sizeH_ + 'x' + sizeW_;
+                if (sizeH_)
+                    return url + '-' + sizeH_ + 'x' + sizeH_;
+                return url;
             }
         ])
 });
