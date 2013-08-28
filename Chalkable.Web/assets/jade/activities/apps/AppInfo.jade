@@ -194,4 +194,4 @@ appPermissions = appPermissions.join(',')
                         +Hidden('appScreenShotIds', "")
                         //+RenderWith(app.(), chlk.templates.apps.AppPicture)
         if !self.isReadOnly()
-            +Button()(name="submit-draft-btn").submit-draft-btn.special-button.blue-button Update Draft
+            +Button()(disabled = !self.isDraft(),name="submit-draft-btn", class = !self.isDraft() ? "x-item-disabled" : "").submit-draft-btn.special-button.blue-button Update Draft

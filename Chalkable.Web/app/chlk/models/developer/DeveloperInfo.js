@@ -17,7 +17,7 @@ NAMESPACE('chlk.models.developer', function () {
             String, 'name',
             [ria.serialize.SerializeProperty('schoolid')],
             chlk.models.id.SchoolId, 'schoolId',
-            [ria.serialize.SerializeProperty('website')],
+            [ria.serialize.SerializeProperty('websitelink')],
             String, 'webSite'
         ]);
 });

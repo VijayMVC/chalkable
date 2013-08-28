@@ -57,8 +57,8 @@ NAMESPACE('chlk.controllers', function (){
         },
 
 
-        [[chlk.models.apps.Application, Boolean]],
-        ria.async.Future, function prepareAppInfo(app_, readOnly) {
+        [[chlk.models.apps.Application, Boolean, Boolean]],
+        ria.async.Future, function prepareAppInfo(app_, readOnly, isDraft) {
             var result = this.categoryService
                 .getCategories()
                 .then(function(data){
@@ -89,7 +89,7 @@ NAMESPACE('chlk.controllers', function (){
                     var bannerUrl = this.pictureService.getPictureUrl(appBannerId, 170, 110);
                     app_.setBannerPicture(new chlk.models.apps.AppPicture(appBannerId, bannerUrl, 170, 110, 'Banner', !readOnly));
 
-                    return new chlk.models.apps.AppInfoViewData(app_, readOnly, cats, gradeLevels, permissions, true);
+                    return new chlk.models.apps.AppInfoViewData(app_, readOnly, cats, gradeLevels, permissions, isDraft);
 
                 }, this);
 
@@ -99,9 +99,10 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
-        [[chlk.models.id.AppId]],
-        function detailsDeveloperAction(appId_) {
+        [[chlk.models.id.AppId, Boolean]],
+        function detailsDeveloperAction(appId_, isSubmit_) {
             var isReadonly = false;
+            var isDraft = !(!!isSubmit_);
             var app = this.appsService
                     .getInfo(appId_)
                     .then(function(data){
@@ -109,7 +110,7 @@ NAMESPACE('chlk.controllers', function (){
                             return this.forward_('apps', 'add', []);
                         }
                         else
-                            return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data, isReadonly));
+                            return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data, isReadonly, isDraft));
                     }, this)
         },
 
@@ -197,7 +198,7 @@ NAMESPACE('chlk.controllers', function (){
             var app = this.appsService
                 .getInfo(appId)
                 .then(function(data){
-                        return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data, isReadonly));
+                        return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data, isReadonly, true));
                 }, this);
         },
 
@@ -244,7 +245,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.apps.Application]],
         function updateApp(app) {
             this.getContext().getSession().set('currentApp', app);
-            return this.forward_('apps', 'details', []);
+            return this.forward_('apps', 'details', [app.getId().valueOf(), true]);
         },
 
         [chlk.controllers.AccessForRoles([
