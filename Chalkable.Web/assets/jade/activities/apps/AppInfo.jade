@@ -26,25 +26,26 @@ mixin AppPricing(appPrice, isReadOnly)
         .elem
             label.hint Pricing:
             +SlideCheckbox("free", isFreeApp, isReadOnly).price-checkbox
-        .elem.cost-per-user
-            label.hint Cost per user:
-            +Textbox('costPerUser', appPrice.getPrice()).price-box
-        .elem
-            label.wide.hint School flat rate:
-            .price-elem
-                span Is there a flat rate for whole school purchases?
-                +SlideCheckbox("schoolFlatRateEnabled", appPrice.getPricePerSchool() > 0, isReadOnly)
-        .elem.school-flat-rate
-            label.hint School cost:
-            +Textbox('costPerSchool', appPrice.getPricePerSchool()).price-box
-        .elem
-            label.wide.hint Class flat rate:
-            .price-elem
-                span Is there a flat rate for whole class purchases?
-                +SlideCheckbox("classFlatRateEnabled", appPrice.getPricePerClass() > 0, isReadOnly)
-        .elem.class-flat-rate
-            label.hint Class cost:
-            +Textbox('costPerClass', appPrice.getPricePerClass()).price-box
+        .prices
+            .elem.cost-per-user
+                label.hint Cost per user:
+                +Textbox('costPerUser', appPrice.getPrice()).price-box
+            .elem
+                label.wide.hint School flat rate:
+                .price-elem
+                    span Is there a flat rate for whole school purchases?
+                    +SlideCheckbox("schoolFlatRateEnabled", appPrice.getPricePerSchool() > 0, isReadOnly)
+            .elem.school-flat-rate
+                label.hint School cost:
+                +Textbox('costPerSchool', appPrice.getPricePerSchool()).price-box
+            .elem
+                label.wide.hint Class flat rate:
+                .price-elem
+                    span Is there a flat rate for whole class purchases?
+                    +SlideCheckbox("classFlatRateEnabled", appPrice.getPricePerClass() > 0, isReadOnly)
+            .elem.class-flat-rate
+                label.hint Class cost:
+                +Textbox('costPerClass', appPrice.getPricePerClass()).price-box
 
 
 

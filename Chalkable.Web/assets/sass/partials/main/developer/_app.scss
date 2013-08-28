@@ -108,6 +108,10 @@ BODY {
 
                     &.icons{
                       margin-top: 15px;
+
+                      .icon{
+                        float: left;
+                      }
                     }
 
                     .icons, .screenshots{
