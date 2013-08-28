@@ -1757,7 +1757,7 @@ exports.globals = {};
             return type === Function || type === String || type === Boolean || type === Number || type === RegExp || type === Object || type === Array || type === Date;
         }
         function isCustomType(type) {
-            return ria.__API.isClassConstructor(type) || ria.__API.isInterface(type) || ria.__API.isEnum(type) || ria.__API.isIdentifier(type);
+            return ria.__API.isClassConstructor(type) || ria.__API.isInterface(type) || ria.__API.isEnum(type) || ria.__API.isIdentifier(type) || ria.__API.isDelegate(type);
         }
         function isImportedType(type) {
             if (!type) throw Error("value expected");
@@ -1913,7 +1913,7 @@ exports.globals = {};
         var ExceptionMeta = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([ "Exception", [ [ [ String, Object ] ], function $(msg, inner_) {}, String, function toString() {}, String, function getMessage() {}, Array, function getStack() {} ] ]));
         ria.__SYNTAX.Registry.registry("Exception", ExceptionMeta);
     })();
-    __ASSETS._2oki7nu2p2lw61or = function anonymous(locals) {
+    __ASSETS._trzyxk3vtpzj8aor = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.ActionLink_mixin.call({
@@ -1922,7 +1922,7 @@ exports.globals = {};
                 id: "home-logo"
             },
             escaped: {}
-        }, "developer", "general");
+        }, "apps", "general");
         buf.push('<div id="sidebar-controls"><div class="search-wrapper"><div id="search-bar"></div></div><div class="wrapper"><div class="buttons-row">');
         jade.globals.ActionLink_mixin.call({
             buf: buf,
@@ -1980,7 +1980,7 @@ exports.globals = {};
         buf.push("</div></div></div>");
         return buf.join("");
     };
-    __ASSETS._qu6nm3obgm34n29 = function anonymous(locals) {
+    __ASSETS._y24qgi22nfiozuxr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         currentUserName = self.getCurrentPerson().getDisplayName();
@@ -2436,7 +2436,7 @@ exports.globals = {};
         (ria = ria || {}).mvc = ria.mvc || {};
         (function() {
             "use strict";
-            ria.mvc.IContext = ria.__API.ifc(function() {}, "ria.mvc.IContext", [ [ "getState", ria.mvc.State, [], [] ], [ "getDefaultView", ria.mvc.IView, [], [] ], [ "getSession", ria.mvc.ISession, [], [] ], [ "stateUpdated", null, [], [] ] ]);
+            ria.mvc.IContext = ria.__API.ifc(function() {}, "ria.mvc.IContext", [ [ "getState", ria.mvc.State, [], [] ], [ "getDefaultView", ria.mvc.IView, [], [] ], [ "getSession", ria.mvc.ISession, [], [] ], [ "getService", ria.__API.Class, [ ria.__API.ClassOf(ria.__API.Class) ], [ "clazz" ] ], [ "stateUpdated", null, [], [] ] ]);
         })();
     })();
     "ria.mvc.IContext";
@@ -2679,7 +2679,11 @@ exports.globals = {};
                 this.callAction_(state);
                 if (!state.isDispatched()) return;
                 this.postDispatchAction_();
-            }, [ [ String, String, Array ] ], function Redirect(controller, action, arg_) {}, [ [ String, String, Array ] ], function Forward(controller, action, arg_) {}, [ [ ria.__API.ImplementerOf(ria.mvc.IActivity), ria.async.Future ] ], function PushView(clazz, data) {
+            }, [ [ String, String, Array ] ], function Redirect(controller, action_, arg_) {
+                return this.redirect_(controller, action_ || null, arg_ || null);
+            }, [ [ String, String, Array ] ], function Forward(controller, action_, arg_) {
+                return this.forward_(controller, action_ || null, arg_ || null);
+            }, [ [ ria.__API.ImplementerOf(ria.mvc.IActivity), ria.async.Future ] ], function PushView(clazz, data) {
                 var instance = new clazz();
                 this.view.pushD(instance, data);
             }, [ [ ria.__API.ImplementerOf(ria.mvc.IActivity), ria.async.Future ] ], function ShadeView(clazz, data) {
@@ -2870,7 +2874,7 @@ exports.globals = {};
                 this.controls.forEach(function(_) {
                     getC(_, context).init();
                 });
-            }, [ [ ria.__API.ClassOf(ria.__API.Class), ria.mvc.IContext ] ], Object, function getCached_(type, context) {
+            }, [ [ ria.__API.ClassOf(ria.__API.Class), ria.mvc.IContext ] ], ria.__API.Class, function getCached_(type, context) {
                 var ref = new ria.reflection.ReflectionClass(type);
                 var name = ref.getName();
                 if (this.cache.hasOwnProperty(name)) {
@@ -2881,7 +2885,7 @@ exports.globals = {};
                     ref.getPropertyReflector("context").invokeSetterOn(instanse, context);
                 }
                 return instanse;
-            }, [ [ ria.reflection.ReflectionClass, ria.mvc.IContext ] ], Object, function prepareInstance_(ref, context) {
+            }, [ [ ria.reflection.ReflectionClass, ria.mvc.IContext ] ], ria.__API.Class, function prepareInstance_(ref, context) {
                 var instanse = ref.instantiate();
                 ref.getPropertiesReflector().forEach(function(_) {
                     if (_.isReadonly()) return;
@@ -2892,6 +2896,8 @@ exports.globals = {};
                     ref.getPropertyReflector("context").invokeSetterOn(instanse, context);
                 }
                 return instanse;
+            }, [ [ ria.__API.ClassOf(ria.__API.Class), ria.mvc.IContext ] ], ria.__API.Class, function createService(clazz, context) {
+                return this.getCached_(clazz, context);
             }, [ [ ria.mvc.State, ria.mvc.IContext ] ], ria.__SYNTAX.Modifiers.VOID, function dispatch(state, context) {
                 var index;
                 try {
@@ -2933,15 +2939,19 @@ exports.globals = {};
     (function() {
         (ria = ria || {}).mvc = ria.mvc || {};
         (function() {
+            ria.mvc.ServiceCreateDelegate = ria.__API.delegate("ria.mvc.ServiceCreateDelegate", ria.__API.Class, [ ria.__API.ClassOf(ria.__API.Class), ria.mvc.IContext ], [ "clazz", "context" ]);
             ria.mvc.BaseContext = function ClassCompilerImpl() {
                 var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "ria.mvc." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }("BaseContext", ria.__SYNTAX.IMPLEMENTS(ria.mvc.IContext), [ ria.mvc.IView, "defaultView", ria.mvc.ISession, "session", ria.mvc.Dispatcher, "dispatcher", ria.__SYNTAX.Modifiers.VOID, function stateUpdated() {
+            }("BaseContext", ria.__SYNTAX.IMPLEMENTS(ria.mvc.IContext), [ ria.mvc.ServiceCreateDelegate, "serviceCreateDelegate", ria.mvc.IView, "defaultView", ria.mvc.ISession, "session", ria.mvc.Dispatcher, "dispatcher", ria.__SYNTAX.Modifiers.VOID, function stateUpdated() {
                 if (!this.dispatcher.isDispatching()) this.dispatcher.dispatch(this.dispatcher.getState(), this);
             }, ria.mvc.State, function getState() {
                 return this.dispatcher.getState();
+            }, [ [ ria.__API.ClassOf(ria.__API.Class) ] ], ria.__API.Class, function getService(clazz) {
+                if (!this.serviceCreateDelegate) throw ria.__API.Exception("No service creator is provided");
+                return this.serviceCreateDelegate(clazz, this);
             } ]);
         })();
     })();
@@ -3050,6 +3060,9 @@ exports.globals = {};
                 activity.show();
                 this._stack.unshift(activity);
             }, [ [ ria.mvc.IActivity ] ], ria.__SYNTAX.Modifiers.VOID, function onActivityClosed_(activity) {
+                if (!this._stack.filter(function(_) {
+                    return _ && _.equals(activity);
+                }).length) return;
                 while (this.getCurrent() != null) {
                     if (this.getCurrent().equals(activity)) {
                         this.pop();
@@ -3064,11 +3077,7 @@ exports.globals = {};
                 this.push(activity);
                 activity.refreshD(data);
             }, [ [ ria.mvc.IActivity ] ], ria.__SYNTAX.Modifiers.VOID, function push(activity) {
-                var top = this.getCurrent();
-                if (top) {
-                    top.stop();
-                    if (this.isSameActivityGroup_(top, activity)) this.pop_().stop();
-                }
+                this.reset();
                 this.push_(activity);
             }, [ [ ria.mvc.IActivity, ria.async.Future ] ], ria.__SYNTAX.Modifiers.VOID, function shadeD(activity, data) {
                 this.shade(activity);
@@ -3184,6 +3193,7 @@ exports.globals = {};
                 context.setDispatcher(this._dispatcher);
                 context.setSession(this.initSession_());
                 context.setDefaultView(this.initView_());
+                context.setServiceCreateDelegate(this._dispatcher.createService);
                 return context;
             }, [ [ HashChangeEvent ] ], ria.__SYNTAX.Modifiers.VOID, function onHashChanged_(event) {
                 this.dispatch(event.newUrl);
@@ -3668,6 +3678,9 @@ exports.globals = {};
             }, [ [ Object ] ], ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.SELF, function setAllAttrs(obj) {}, [ [ String, Object ] ], ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.SELF, function setAttr(name, value) {
                 this._dom.attr(name, value);
                 return this;
+            }, [ [ String ] ], ria.__SYNTAX.Modifiers.SELF, function removeAttr(name) {
+                this._dom.removeAttr(name);
+                return this;
             }, [ [ Object ] ], ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.SELF, function setValue(value) {
                 this._dom.val(value);
                 return this;
@@ -3750,6 +3763,7 @@ exports.globals = {};
         })();
     })();
     "ria.async.Task";
+    "ria.dom.Dom";
     (function() {
         (ria = ria || {}).dom = ria.dom || {};
         (function() {
@@ -3800,7 +3814,7 @@ exports.globals = {};
             };
         })();
     })();
-    __ASSETS._ifd2qfitv99c0udi = function anonymous(locals) {
+    __ASSETS._khpycj2hu9q0vn29 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.ActionForm_mixin = function(controller, action) {
@@ -3954,7 +3968,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("ActionFormControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_ifd2qfitv99c0udi")(this);
+                ASSET("_khpycj2hu9q0vn29")(this);
             }, [ ria.mvc.DomEventBind("click", "FORM [type=submit]") ], [ [ ria.dom.Dom, ria.dom.Event ] ], Boolean, function submitClicked_($target, event) {
                 var $form = $target.parent("FORM");
                 $form.setData("submit-name", $target.getAttr("name"));
@@ -4011,10 +4025,10 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._d6fq7m5zgfqlrf6r = function anonymous(locals) {
+    __ASSETS._nrpc6mehvog30udi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
-        jade.globals.LabeledCheckbox_mixin = function(text, name, val) {
+        jade.globals.LabeledCheckbox_mixin = function(text, name, val, isReadOnly) {
             var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
             buf.push('<div class="labeled-checkbox">');
             jade.globals.Checkbox_mixin.call({
@@ -4023,7 +4037,7 @@ exports.globals = {};
                     "class": "checkbox"
                 },
                 escaped: {}
-            }, name, val);
+            }, name, val, isReadOnly);
             buf.push("<label" + jade.attrs({
                 "for": name
             }, {
@@ -4043,15 +4057,16 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("LabeledCheckboxControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_d6fq7m5zgfqlrf6r")(this);
+                ASSET("_nrpc6mehvog30udi")(this);
             }, [ [ ria.dom.Dom, ria.dom.Event ] ], Boolean, function changed_($target, event) {} ]);
         })();
     })();
-    __ASSETS._j0v56mitk002uik9 = function anonymous(locals) {
+    __ASSETS._86rjiaon48q41jor = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
-        jade.globals.SlideCheckbox_mixin = function(name, val) {
+        jade.globals.SlideCheckbox_mixin = function(name, val, isReadOnly) {
             var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
+            console.log("readonly", isReadOnly);
             buf.push("<div" + jade.attrs(jade.merge({
                 "class": "slide-checkbox"
             }, attributes), jade.merge({}, escaped, true)) + '><div class="wrapper">');
@@ -4067,11 +4082,17 @@ exports.globals = {};
                 id: true,
                 name: true,
                 type: true
-            }, escaped, true)) + "/><label" + jade.attrs({
-                "for": name
-            }, {
-                "for": true
-            }) + "></label></div></div>");
+            }, escaped, true)) + "/>");
+            if (!isReadOnly) {
+                buf.push("<label" + jade.attrs({
+                    "for": name
+                }, {
+                    "for": true
+                }) + "></label>");
+            } else {
+                buf.push("<label></label>");
+            }
+            buf.push("</div></div>");
         };
         return buf.join("");
     };
@@ -4086,11 +4107,11 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("SlideCheckboxControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_j0v56mitk002uik9")(this);
+                ASSET("_86rjiaon48q41jor")(this);
             } ]);
         })();
     })();
-    __ASSETS._29ltwginyftg9zfr = function anonymous(locals) {
+    __ASSETS._7tewvcgzbhkyy14i = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.ActionLink_mixin = function(controller, action) {
@@ -4121,7 +4142,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("ActionLinkControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_29ltwginyftg9zfr")(this);
+                ASSET("_7tewvcgzbhkyy14i")(this);
             }, [ [ Array ] ], String, function getLink(values) {
                 if (!values[2] || Array.isArray(values[2]) && !values[2].length) values.splice(2, 1);
                 return encodeURIComponent(values.map(function(_) {
@@ -4154,7 +4175,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._fnxqi6w8s2ceg66r = function anonymous(locals) {
+    __ASSETS._v6p97ap0l6tdfgvi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.Avatar_mixin = function(link, cls, border) {
@@ -4184,11 +4205,11 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("AvatarControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_fnxqi6w8s2ceg66r")(this);
+                ASSET("_v6p97ap0l6tdfgvi")(this);
             } ]);
         })();
     })();
-    __ASSETS._zjochpjbt0a1nhfr = function anonymous(locals) {
+    __ASSETS._01ntmdla1zrjatt9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.Button_mixin = function() {
@@ -4227,7 +4248,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("ButtonControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_zjochpjbt0a1nhfr")(this);
+                ASSET("_01ntmdla1zrjatt9")(this);
             }, [ [ Object ] ], Object, function processAttrs(attributes) {
                 if (attributes.disabled) if (Array.isArray(attributes.class)) {
                     attributes.class = attributes.class || [];
@@ -4239,12 +4260,13 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._85enlmx6rstyy14i = function anonymous(locals) {
+    __ASSETS._oq7zlte8qgogk3xr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
-        jade.globals.Checkbox_mixin = function(name, val) {
+        jade.globals.Checkbox_mixin = function(name, val, isReadOnly) {
             var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
             attributes.checked = val;
+            attributes.disabled = isReadOnly;
             self.prepareData(name, val);
             jade.globals.Hidden_mixin.call({
                 buf: buf,
@@ -4280,7 +4302,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("CheckboxControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_85enlmx6rstyy14i")(this);
+                ASSET("_oq7zlte8qgogk3xr")(this);
             }, [ [ String, Boolean ] ], ria.__SYNTAX.Modifiers.VOID, function prepareData(name, value) {
                 this.context.getDefaultView().onActivityRefreshed(function(activity, model) {
                     var hidden = activity.getDom().find(".hidden-checkbox[name=" + name + "]");
@@ -4295,7 +4317,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._50h5m9rkd3d6lxr = function anonymous(locals) {
+    __ASSETS._9nii3njovw75jyvi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.CheckboxList_mixin = function(listName, checkboxPref, defaultVal) {
@@ -4324,7 +4346,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("CheckboxListControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_50h5m9rkd3d6lxr")(this);
+                ASSET("_9nii3njovw75jyvi")(this);
             }, [ ria.mvc.DomEventBind("click", ".checkbox-list") ], [ [ ria.dom.Dom, ria.dom.Event ] ], function onClicked($target, node) {
                 var checkboxes = $target.find("input[type=checkbox]");
                 var res = [];
@@ -4340,7 +4362,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._rtzykgwg8znwb3xr = function anonymous(locals) {
+    __ASSETS._83uaiywbpltvgqfr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.DatePicker_mixin = function(name, value_) {
@@ -4361,7 +4383,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("DatePickerControl", ria.__SYNTAX.EXTENDS(ria.mvc.DomControl), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_rtzykgwg8znwb3xr")(this);
+                ASSET("_83uaiywbpltvgqfr")(this);
             }, Date, "value", [ [ String, Object, Object ] ], Object, function processAttrs(name, value, attrs) {
                 attrs.id = attrs.id || ria.dom.NewGID();
                 attrs.name = name;
@@ -4382,7 +4404,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._gg8ojzf5744pldi = function anonymous(locals) {
+    __ASSETS._rsrxw3swvbvb1emi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.Select_mixin = function(name, controller, action, params) {
@@ -4440,7 +4462,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("SelectControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_gg8ojzf5744pldi")(this);
+                ASSET("_rsrxw3swvbvb1emi")(this);
             }, [ [ Object ] ], ria.__SYNTAX.Modifiers.VOID, function updateSelect(node) {
                 var that = this;
                 node.chosen({
@@ -4471,7 +4493,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._mhkql0nq4oi7wrk9 = function anonymous(locals) {
+    __ASSETS._6z8jddsl1ve7b9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.DateSelect_mixin = function() {
@@ -4602,7 +4624,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("DateSelectControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_mhkql0nq4oi7wrk9")(this);
+                ASSET("_6z8jddsl1ve7b9")(this);
             }, Array, "days", Array, "months", Array, "years", [ [ Object ] ], Object, function processAttrs(attributes) {
                 attributes.id = attributes.id || ria.dom.NewGID();
                 var value = attributes.value;
@@ -4657,7 +4679,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._rplxhjvn19rdaemi = function anonymous(locals) {
+    __ASSETS._u3d2q20yfucba9k9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.FileUpload_mixin = function(controller, action, params) {
@@ -4685,7 +4707,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("FileUploadControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_rplxhjvn19rdaemi")(this);
+                ASSET("_u3d2q20yfucba9k9")(this);
             }, [ [ Object ] ], Object, function prepareData(attrs) {
                 attrs.id = attrs.id || ria.dom.NewGID();
                 var that = this, params = attrs["data-params"], controller = attrs["data-controller"], action = attrs["data-action"];
@@ -4706,7 +4728,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._z02e25rbgn5klnmi = function anonymous(locals) {
+    __ASSETS._7dnma29zy9cnmi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.GlanceBox_mixin = function(controller, action, data) {
@@ -4765,7 +4787,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("GlanceBoxControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_z02e25rbgn5klnmi")(this);
+                ASSET("_7dnma29zy9cnmi")(this);
             }, [ [ Number ] ], String, function getValueClass(value) {
                 var res = "";
                 if (value >= 100 && value < 1e3) res = "large"; else if (value >= 1e3) res = "small";
@@ -4781,7 +4803,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._v634h7vyi9q9f6r = function anonymous(locals) {
+    __ASSETS._lr02fx9pyqr529 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.Grid_mixin = function(controller, action, data, params) {
@@ -4830,11 +4852,11 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("GridControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_v634h7vyi9q9f6r")(this);
+                ASSET("_lr02fx9pyqr529")(this);
             } ]);
         })();
     })();
-    __ASSETS._20u2q5mkswwb3xr = function anonymous(locals) {
+    __ASSETS._g4uro2zi3jfko6r = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.LeftRightToolbar_mixin = function(data, tplClass, controller, action, params) {
@@ -4932,7 +4954,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("LeftRightToolbarControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_20u2q5mkswwb3xr")(this);
+                ASSET("_g4uro2zi3jfko6r")(this);
                 this.setDefaultConfigs({
                     itemsCount: 8,
                     fixedPadding: false,
@@ -4971,7 +4993,9 @@ exports.globals = {};
                         that.setPageByCurrentDot(toolbar.find('.paginator A[index="' + pageIndex + '"]'), toolbar);
                         toolbar.on("click", ".second-container>*:not(.pressed)", function(node, event) {
                             toolbar.find(".second-container>.pressed").removeClass("pressed");
-                            node.addClass("pressed");
+                            setTimeout(function() {
+                                node.addClass("pressed");
+                            }, 1);
                         });
                     }
                     toolbar.on("click", ".arrow:not(.disabled)", function(node, event) {
@@ -5023,7 +5047,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._lb9175mt390e8kt9 = function anonymous(locals) {
+    __ASSETS._e5n0calyz4zpvi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.ListView_mixin = function(data) {
@@ -5049,7 +5073,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("ListViewControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_lb9175mt390e8kt9")(this);
+                ASSET("_e5n0calyz4zpvi")(this);
                 this.setDefaultConfigs({
                     selectedIndex: null,
                     infiniteScroll: false,
@@ -5149,7 +5173,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._94yvw1wgsh96n7b9 = function anonymous(locals) {
+    __ASSETS._g015l4je3mu0udi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.LoadingImage_mixin = function() {
@@ -5170,7 +5194,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("LoadingImgControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_94yvw1wgsh96n7b9")(this);
+                ASSET("_g015l4je3mu0udi")(this);
             }, [ [ Number, Object ] ], ria.__SYNTAX.Modifiers.VOID, function checkImage(timeOut, img) {
                 var parent = img.parent();
                 setTimeout(function() {
@@ -5195,7 +5219,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._8ru3si7j8m2t9 = function anonymous(locals) {
+    __ASSETS._idojvb3optzw7b9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.Paginator_mixin = function(controller, action, data, params) {
@@ -5281,7 +5305,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("PaginatorControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_8ru3si7j8m2t9")(this);
+                ASSET("_idojvb3optzw7b9")(this);
             }, [ ria.mvc.DomEventBind("submit", ".paginator-container form") ], [ [ ria.dom.Dom, ria.dom.Event ] ], Boolean, function onPrevPageClick(node, event) {
                 try {
                     var state = this.context.getState();
@@ -5323,7 +5347,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._ofhd1jed2tfenrk9 = function anonymous(locals) {
+    __ASSETS._dfewdmdklizwu3di = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.PhotoContainer_mixin = function(link) {
@@ -5356,11 +5380,11 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("PhotoContainerControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_ofhd1jed2tfenrk9")(this);
+                ASSET("_dfewdmdklizwu3di")(this);
             } ]);
         })();
     })();
-    __ASSETS._05awd9esn86ko6r = function anonymous(locals) {
+    __ASSETS._43vwycavu6czyqfr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.Video_mixin = function(iframe) {
@@ -5385,7 +5409,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("VideoControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_05awd9esn86ko6r")(this);
+                ASSET("_43vwycavu6czyqfr")(this);
                 this.setConfigs({
                     wmode: "transparent",
                     allowScriptAccess: "always",
@@ -5409,7 +5433,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._huien3bzolej0pb9 = function anonymous(locals) {
+    __ASSETS._dr4cxh1mcjotuik9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.Logout_mixin = function(controller, action, userName) {
@@ -5439,7 +5463,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("LogoutControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_huien3bzolej0pb9")(this);
+                ASSET("_dr4cxh1mcjotuik9")(this);
                 this.setLogoutShown(false);
             }, Boolean, "logoutShown", [ ria.mvc.DomEventBind("click", ".logout-area") ], [ [ ria.dom.Dom, ria.dom.Event ] ], function onClicked($target, node) {
                 var elem = $target.parent().find("a");
@@ -5455,7 +5479,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._qknoalgchd01kyb9 = function anonymous(locals) {
+    __ASSETS._zwuctmaxqvjthuxr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.TextArea_mixin = function() {
@@ -5480,13 +5504,585 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("TextAreaControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_qknoalgchd01kyb9")(this);
+                ASSET("_zwuctmaxqvjthuxr")(this);
             }, [ [ Object ] ], Object, function processAttrs(attributes) {
                 attributes.id = attributes.id || ria.dom.NewGID();
                 this.context.getDefaultView().onActivityRefreshed(function(activity, model) {
                     jQuery("textarea#" + attributes.id).autosize();
                 }.bind(this));
                 return attributes;
+            } ]);
+        })();
+    })();
+    __ASSETS._br51m69u23xr = function anonymous(locals) {
+        var buf = [];
+        var self = locals || {};
+        jade.globals.SearchBox_mixin = function(service, method, tpl) {
+            var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
+            self.initialize(attributes, service, method, tpl);
+            buf.push("<input" + jade.attrs(jade.merge({
+                type: "text",
+                "search-box": "search-box"
+            }, attributes), jade.merge({
+                type: true,
+                "search-box": true
+            }, escaped, true)) + "/><input" + jade.attrs({
+                id: attributes.id + "-hidden",
+                name: attributes.name,
+                type: "hidden"
+            }, {
+                id: true,
+                name: true,
+                type: true
+            }) + "/><div></div>");
+        };
+        return buf.join("");
+    };
+    "ria.async.ICancelable";
+    (function() {
+        (ria = ria || {}).async = ria.async || {};
+        (function() {
+            "use strict";
+            ria.async.TimerDelegate = ria.__API.delegate("ria.async.TimerDelegate", null, [ Object, Number ], [ "timer", "lag" ]);
+            ria.async.Timer = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "ria.async." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("Timer", ria.__SYNTAX.IMPLEMENTS(ria.async.ICancelable), [ [ [ Number, ria.async.TimerDelegate ] ], function $(duration, handler) {
+                var me = this;
+                var lastCall = new Date();
+                this.cleaner = clearInterval;
+                this.timer = setInterval(function() {
+                    handler(me, -(lastCall.getTime() - (lastCall = new Date()).getTime()));
+                }, duration < 0 ? 0 : duration);
+            }, ria.__SYNTAX.Modifiers.VOID, function cancel() {
+                this.cleaner(this.timer);
+            } ]);
+        })();
+    })();
+    "ria.async.Task";
+    "ria.async.Timer";
+    (function() {
+        (ria = ria || {}).ajax = ria.ajax || {};
+        (function() {
+            "use strict";
+            ria.ajax.Method =             function wrapper() {
+                var values = {};
+                function Method(value) {
+                    return values.hasOwnProperty(value) ? values[value] : undefined;
+                }
+                ria.__API.identifier(Method, "ria.ajax.Method");
+                function MethodImpl(value) {
+                    this.valueOf = function() {
+                        return value;
+                    };
+                    this.toString = function toString() {
+                        return "[ria.ajax.Method#" + value + "]";
+                    };
+                }
+                ria.__API.extend(MethodImpl, Method);
+                values["get"] = Method.GET = new MethodImpl("get");
+                values["post"] = Method.POST = new MethodImpl("post");
+                values["put"] = Method.PUT = new MethodImpl("put");
+                values["delete"] = Method.DELETE = new MethodImpl("delete");
+                return Method;
+            }();
+            ria.ajax.Task = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "ria.ajax." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("Task", ria.__SYNTAX.EXTENDS(ria.async.Task), [ [ [ String, ria.ajax.Method, Object ] ], function $(url, method_, params_) {
+                BASE();
+                this._method = method_;
+                this._url = url;
+                this._params = params_ || {};
+                this._requestTimeout = null;
+                this._xhr = new XMLHttpRequest();
+                this._xhr.addEventListener("progress", this.updateProgress_, false);
+                this._xhr.addEventListener("load", this.transferComplete_, false);
+                this._xhr.addEventListener("error", this.transferFailed_, false);
+                this._xhr.addEventListener("abort", this.transferCanceled_, false);
+            }, ria.__SYNTAX.Modifiers.OVERRIDE, function cancel() {
+                this._xhr.abort();
+            }, [ [ ria.ajax.Method ] ], ria.__SYNTAX.Modifiers.SELF, function method(method) {
+                this._method = method;
+                return this;
+            }, [ [ Object ] ], ria.__SYNTAX.Modifiers.SELF, function params(obj) {
+                var p = this._params;
+                for (var key in obj) if (obj.hasOwnProperty(key) && obj[key] != undefined && obj[key] != null) {
+                    p[key] = obj[key];
+                }
+                return this;
+            }, [ [ String ] ], ria.__SYNTAX.Modifiers.SELF, function disableCache(paramName_) {
+                this._params[paramName_ || "_"] = Math.random().toString(36).substr(2) + new Date().getTime().toString(36);
+                return this;
+            }, [ [ Number ] ], ria.__SYNTAX.Modifiers.SELF, function timeout(duration) {
+                this._requestTimeout = duration;
+                return this;
+            }, ria.__SYNTAX.Modifiers.FINAL, String, function getParamsAsQueryString_() {
+                var p = this._params, r = [];
+                for (var key in p) if (p.hasOwnProperty(key)) {
+                    r.push([ key, p[key] ].map(encodeURIComponent).join("="));
+                }
+                return r.join("&");
+            }, ria.__SYNTAX.Modifiers.FINAL, String, function getParamsString_() {
+                var p = this._params, r = [];
+                for (var key in p) if (p.hasOwnProperty(key)) {
+                    r.push([ key, p[key] ].join("="));
+                }
+                return r.join("&");
+            }, ria.__SYNTAX.Modifiers.VOID, function updateProgress_(oEvent) {
+                this._completer.progress(oEvent);
+            }, ria.__SYNTAX.Modifiers.VOID, function transferComplete_(evt) {
+                this._completer.complete(this._xhr.responseText);
+            }, ria.__SYNTAX.Modifiers.VOID, function transferFailed_(evt) {
+                this._completer.completeError(Error(evt));
+            }, ria.__SYNTAX.Modifiers.VOID, function transferCanceled_(evt) {
+                this._completer.cancel();
+            }, String, function getUrl_() {
+                if (this._method != ria.ajax.Method.GET) return this._url;
+                return this._url + (/\?/.test(this._url) ? "&" : "?") + this.getParamsAsQueryString_();
+            }, Object, function getBody_() {
+                return this._method != ria.ajax.Method.GET ? JSON.stringify(this._params) : this.getParamsString_();
+            }, ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function do_() {
+                try {
+                    BASE();
+                    this._xhr.open(this._method.valueOf(), this.getUrl_(), true);
+                    if (this._method != ria.ajax.Method.GET) {
+                        if (this._params) {
+                            this._xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+                        }
+                    }
+                    this._xhr.send(this.getBody_());
+                } catch (e) {
+                    this._completer.completeError(e);
+                }
+                this._requestTimeout && new ria.async.Timer(this._requestTimeout, this.timeoutHandler_);
+            }, [ [ ria.async.Timer, Number ] ], ria.__SYNTAX.Modifiers.VOID, function timeoutHandler_(timer, lag) {
+                timer.cancel();
+                this._completer.isCompleted() || this.cancel();
+            } ]);
+        })();
+    })();
+    "ria.ajax.Task";
+    (function() {
+        (ria = ria || {}).ajax = ria.ajax || {};
+        (function() {
+            "use strict";
+            ria.ajax.JsonGetTask = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "ria.ajax." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("JsonGetTask", ria.__SYNTAX.EXTENDS(ria.ajax.Task), [ function $(url) {
+                BASE(url, ria.ajax.Method.GET);
+            }, ria.__SYNTAX.Modifiers.OVERRIDE, ria.async.Future, function run() {
+                return BASE().then(function(data) {
+                    return JSON.parse(data);
+                });
+            } ]);
+        })();
+    })();
+    "ria.ajax.Task";
+    (function() {
+        (ria = ria || {}).ajax = ria.ajax || {};
+        (function() {
+            "use strict";
+            ria.ajax.JsonPostTask = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "ria.ajax." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("JsonPostTask", ria.__SYNTAX.EXTENDS(ria.ajax.Task), [ function $(url) {
+                BASE(url, ria.ajax.Method.POST);
+            }, ria.__SYNTAX.Modifiers.OVERRIDE, ria.async.Future, function run() {
+                return BASE().then(function(data) {
+                    return JSON.parse(data);
+                });
+            } ]);
+        })();
+    })();
+    "ria.ajax.Task";
+    (function() {
+        (ria = ria || {}).ajax = ria.ajax || {};
+        (function() {
+            "use strict";
+            ria.ajax.UploadFileTask = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "ria.ajax." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("UploadFileTask", ria.__SYNTAX.EXTENDS(ria.ajax.Task), [ [ [ String, Object ] ], function $(url, files) {
+                BASE(url, ria.ajax.Method.POST);
+                this._files = files;
+            }, ria.__SYNTAX.Modifiers.OVERRIDE, ria.async.Future, function run() {
+                return BASE().then(function(data) {
+                    return JSON.parse(data);
+                });
+            }, ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function do_() {
+                try {
+                    var formData = new FormData();
+                    for (var i = 0, file; file = this._files[i]; ++i) {
+                        formData.append(file.name, file);
+                        for (var param in this._params) if (this._params.hasOwnProperty(param)) {
+                            formData.append(param, this._params[param]);
+                        }
+                    }
+                    this._xhr.open(this._method.valueOf(), this.getUrl_(), true);
+                    this._xhr.send(formData);
+                } catch (e) {
+                    this._completer.completeError(e);
+                }
+                this._requestTimeout && new ria.async.Timer(this._requestTimeout, this.timeoutHandler_);
+            } ]);
+        })();
+    })();
+    (function() {
+        ((chlk = chlk || {}).models = chlk.models || {}).common = chlk.models.common || {};
+        (function() {
+            "use strict";
+            chlk.models.common.PaginatedList = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.models.common." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("PaginatedList", [ [ [ Function ] ], function $(itemClass) {
+                this.itemClass = itemClass;
+            }, ria.__SYNTAX.Modifiers.READONLY, Function, "itemClass", ria.__API.ArrayOf(Object), "items", Number, "pageIndex", Number, "pageSize", Number, "totalCount", Number, "totalPages", Boolean, "hasNextPage", Boolean, "hasPreviousPage", ria.__SYNTAX.Modifiers.VOID, function setItems(values) {
+                null;
+                this.items = values;
+            } ]);
+        })();
+    })();
+    "ria.serialize.JsonSerializer";
+    "ria.ajax.JsonGetTask";
+    "ria.ajax.JsonPostTask";
+    "ria.ajax.UploadFileTask";
+    "chlk.models.common.PaginatedList";
+    (function() {
+        (chlk = chlk || {}).services = chlk.services || {};
+        (function() {
+            "use strict";
+            chlk.services.DataException = function ExceptionCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateException(def);
+                var name = "chlk.services." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("DataException", [ function $(msg, inner_) {
+                BASE(msg, inner_);
+            } ]);
+            var Serializer = new ria.serialize.JsonSerializer();
+            chlk.services.BaseService = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.services." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("BaseService", ria.__SYNTAX.IMPLEMENTS(ria.mvc.IContextable), [ ria.mvc.IContext, "context", String, function getServiceRoot() {
+                return this.getContext().getSession().get("siteRoot");
+            }, [ [ String ] ], String, function resolveUri(uri) {
+                return this.getServiceRoot() + uri;
+            }, String, function getUrl(uri, params) {
+                var p = params, r = [];
+                for (var key in p) if (p.hasOwnProperty(key)) {
+                    r.push([ key, p[key] ].join("="));
+                }
+                return this.resolveUri(uri) + "?" + r.join("&");
+            }, [ [ String, Object, Object ] ], ria.async.Future, function get(uri, clazz_, gParams_) {
+                return new ria.ajax.JsonGetTask(this.resolveUri(uri)).params(gParams_ || {}).run().then(function(data) {
+                    if (!data.success) throw chlk.services.DataException("Server error", Error(data.message));
+                    if (!clazz_) return data.data || null;
+                    return Serializer.deserialize(data.data, clazz_);
+                });
+            }, [ [ String, Object, Object, Object ] ], ria.async.Future, function uploadFiles(uri, files, clazz_, gParams_) {
+                return new ria.ajax.UploadFileTask(this.resolveUri(uri), files).params(gParams_ || {}).run().then(function(data) {
+                    if (!data.success) throw chlk.services.DataException("Server error", Error(data.message));
+                    if (!clazz_) return data.data || null;
+                    return Serializer.deserialize(data.data, clazz_);
+                });
+            }, [ [ String, Object, Object ] ], ria.async.Future, function post(uri, clazz, gParams) {
+                return new ria.ajax.JsonPostTask(this.resolveUri(uri)).params(gParams).run().then(function(data) {
+                    if (!data.success) throw chlk.services.DataException("Server error", Error(data.message));
+                    return Serializer.deserialize(data.data, clazz);
+                });
+            }, [ [ String, Object, Object ] ], ria.async.Future, function postArray(uri, clazz, gParams) {
+                return new ria.ajax.JsonPostTask(this.resolveUri(uri)).params(gParams).run().then(function(data) {
+                    if (!data.success) throw chlk.services.DataException("Server error", Error(data.message));
+                    return Serializer.deserialize(data.data, ria.__API.ArrayOf(clazz));
+                });
+            }, [ [ String, Object, Object ] ], ria.async.Future, function getArray(uri, clazz, gParams) {
+                return new ria.ajax.JsonGetTask(this.resolveUri(uri)).params(gParams).run().then(function(data) {
+                    if (!data.success) throw chlk.services.DataException("Server error", Error(data.message));
+                    return Serializer.deserialize(data.data, ria.__API.ArrayOf(clazz));
+                });
+            }, [ [ String, Object, Object ] ], ria.async.Future, function getPaginatedList(uri, clazz, gParams) {
+                return new ria.ajax.JsonGetTask(this.resolveUri(uri)).params(gParams).run().then(function(data) {
+                    var model = new chlk.models.common.PaginatedList(clazz);
+                    model.setItems(Serializer.deserialize(data.data, ria.__API.ArrayOf(clazz)));
+                    model.setPageIndex(Number(data.pageindex));
+                    model.setPageSize(Number(data.pagesize));
+                    model.setTotalCount(Number(data.totalcount));
+                    model.setTotalPages(Number(data.totalpages));
+                    model.setHasNextPage(Boolean(data.hasnextpage));
+                    model.setHasPreviousPage(Boolean(data.haspreviouspage));
+                    return model;
+                });
+            } ]);
+        })();
+    })();
+    (function() {
+        (ria = ria || {}).templates = ria.templates || {};
+        (function() {
+            ria.templates.Exception = function ExceptionCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateException(def);
+                var name = "ria.templates." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("Exception", [ function $(msg, inner_) {
+                BASE(msg, inner_);
+            } ]);
+        })();
+    })();
+    (function() {
+        (ria = ria || {}).templates = ria.templates || {};
+        (function() {
+            "use strict";
+            ria.templates.IConverter = ria.__API.ifc(function() {}, "ria.templates.IConverter", [ [ "convert", Object, [], [ "source" ] ] ]);
+        })();
+    })();
+    "ria.templates.IConverter";
+    (function() {
+        (ria = ria || {}).templates = ria.templates || {};
+        (function() {
+            "use strict";
+            ria.templates.IConverterFactory = ria.__API.ifc(function() {}, "ria.templates.IConverterFactory", [ [ "canCreate", Boolean, [ ria.__API.ImplementerOf(ria.templates.IConverter) ], [ "converterClass" ] ], [ "create", ria.templates.IConverter, [ ria.__API.ImplementerOf(ria.templates.IConverter) ], [ "converterClass" ] ] ]);
+        })();
+    })();
+    "ria.templates.Exception";
+    "ria.templates.IConverterFactory";
+    "ria.reflection.ReflectionClass";
+    (function() {
+        (ria = ria || {}).templates = ria.templates || {};
+        (function() {
+            ria.templates.ConverterFactoriesManager = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "ria.templates." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("ConverterFactoriesManager", [ function $() {
+                this._map = {};
+                this._cache = {};
+            }, [ [ ria.templates.IConverterFactory ] ], ria.__SYNTAX.Modifiers.VOID, function register(factory) {
+                var hashCode = factory.getHashCode();
+                if (this._map.hasOwnProperty(hashCode)) throw new ria.templates.Exception("Factory " + ria.__API.getIdentifierOfValue(factory) + " already registered");
+                this._map[hashCode] = factory;
+            }, [ [ ria.templates.IConverterFactory ] ], ria.__SYNTAX.Modifiers.VOID, function unregister(factory) {
+                var hashCode = factory.getHashCode();
+                if (!this._map.hasOwnProperty(hashCode)) throw new ria.templates.Exception("Factory " + ria.__API.getIdentifierOfValue(factory) + " not registered");
+                delete this._map[factory.getHashCode()];
+            }, [ [ ria.__API.ImplementerOf(ria.templates.IConverter) ] ], ria.templates.IConverter, function create(converterClass) {
+                var name = ria.__API.getIdentifierOfType(converterClass);
+                if (this._cache.hasOwnProperty(name)) return this._cache[name];
+                for (var key in this._map) if (this._map.hasOwnProperty(key)) {
+                    var factory = this._map[key];
+                    if (factory.canCreate(converterClass)) return this._cache[name] = factory.create(converterClass);
+                }
+                throw new ria.__API.Exception("No factory agreed to create convertor " + name);
+            } ]);
+            ria.templates.ConverterFactories = new ria.templates.ConverterFactoriesManager();
+        })();
+    })();
+    "ria.templates.Exception";
+    "ria.templates.ConverterFactories";
+    "ria.dom.Dom";
+    "ria.reflection.ReflectionClass";
+    (function() {
+        (ria = ria || {}).templates = ria.templates || {};
+        (function() {
+            "use strict";
+            function appendTo(content, to) {
+                var dom = new ria.dom.Dom();
+                dom.fromHTML(content).appendTo(to);
+            }
+            ria.templates.ModelBind = ria.__API.annotation("ria.templates.ModelBind", [], [ "model" ]);
+            ria.templates.ModelPropertyBind = ria.__API.annotation("ria.templates.ModelPropertyBind", [ String, ria.__API.ImplementerOf(ria.templates.IConverter) ], [ "name_", "converter_" ]);
+            ria.templates.TemplateBind = ria.__API.annotation("ria.templates.TemplateBind", [ String ], [ "tpl" ]);
+            ria.templates.Template = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "ria.templates." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }(ria.__SYNTAX.Modifiers.ABSTRACT, "Template", [ Number, "collectionIndex", Array, "collection", function $() {
+                this._modelClass = null;
+                this._bindings = [];
+                this._bundle = "";
+                this._tpl = null;
+                this._model = null;
+                this.bind_();
+            }, ria.__SYNTAX.Modifiers.VOID, function bind_() {
+                var self = ria.reflection.ReflectionClass(this.getClass());
+                if (!self.isAnnotatedWith(ria.templates.TemplateBind)) throw new ria.templates.Exception("Template class is not bound to template. Please use " + ria.__API.getIdentifierOfType(ria.templates.TemplateBind));
+                this._tpl = self.findAnnotation(ria.templates.TemplateBind).pop().tpl;
+                if (!self.isAnnotatedWith(ria.templates.ModelBind)) throw new ria.templates.Exception("Template class is not bound to model. Please use " + ria.__API.getIdentifierOfType(ria.templates.ModelBind));
+                this._modelClass = self.findAnnotation(ria.templates.ModelBind).pop().model;
+                if (this._modelClass === undefined) throw new ria.templates.Exception("Template class is bound to model. But model not loaded");
+                if (!ria.__API.isClassConstructor(this._modelClass)) return;
+                var model = ria.reflection.ReflectionClass(this._modelClass);
+                var selfProperties = self.getPropertiesReflector(), bindings = this._bindings;
+                selfProperties.filter(function(_) {
+                    return _.isAnnotatedWith(ria.templates.ModelPropertyBind);
+                }).forEach(function(property) {
+                    var modelBind = property.findAnnotation(ria.templates.ModelPropertyBind).pop();
+                    var modelPropertyName = modelBind.name_ || property.getShortName();
+                    var modelProperty = model.getPropertyReflector(modelPropertyName);
+                    if (modelProperty == null) throw ria.templates.Exception('Property "' + modelPropertyName + '" not found in model ' + model.getName());
+                    var converter = modelBind.converter_;
+                    if (converter !== undefined) {
+                        var ref = ria.reflection.ReflectionClass(converter.converter);
+                        if (!ref.implementsIfc(ria.templates.IConverter)) throw new ria.templates.Exception("Converter class " + ref.getName() + " expected to implement " + ria.__API.getIdentifierOfType(ria.templates.IConverter));
+                        converter = bind.converter;
+                    }
+                    bindings.push({
+                        sourceProp: modelProperty,
+                        destProp: property,
+                        converter: converter
+                    });
+                });
+            }, ria.__API.ClassOf(ria.__API.Class), function getModelClass() {
+                return this._modelClass;
+            }, ria.__SYNTAX.Modifiers.VOID, function assign(model) {
+                if (ria.__API.isArrayOfDescriptor(this._modelClass) && !Array.isArray(model)) {
+                    throw ria.templates.Exception("Expected instance of " + ria.__API.getIdentifierOfType(this._modelClass) + " but got " + ria.__API.getIdentifierOfValue(model));
+                } else if (ria.__API.isClassConstructor(this._modelClass) && !(model instanceof this._modelClass)) {
+                    throw ria.templates.Exception("Expected instance of " + ria.__API.getIdentifierOfType(this._modelClass) + " but got " + ria.__API.getIdentifierOfValue(model));
+                }
+                this._model = model;
+                var convertWith = this.convertWith, scope = this;
+                this._bindings.forEach(function(_) {
+                    var value = _.sourceProp.invokeGetterOn(model);
+                    if (_.converter) {
+                        value = convertWith(value, _.converter);
+                    }
+                    try {
+                        _.destProp.invokeSetterOn(scope, value);
+                    } catch (e) {
+                        throw new ria.templates.Exception("Error assigning property " + _destProp.getName(), e);
+                    }
+                });
+            }, ria.__SYNTAX.Modifiers.VOID, function options(options) {
+                if ("function" == typeof options.block) {
+                    this.setBlock(options.block);
+                }
+                delete options.block;
+                if ("undefined" !== typeof options.collection) {
+                    this.setCollection(options.collection);
+                }
+                delete options.collection;
+                if ("number" === typeof options.collectionIndex) {
+                    this.setCollectionIndex(options.collectionIndex);
+                }
+                delete options.collectionIndex;
+                var ref = ria.reflection.ReflectionClass(this.getClass()), scope = this;
+                var handled = {};
+                options = ria.__API.clone(options);
+                ref.getPropertiesReflector().filter(function(_) {
+                    return !_.isAnnotatedWith(ria.templates.ModelBind);
+                }).forEach(function(property) {
+                    var key = property.getShortName();
+                    if (options.hasOwnProperty(key)) {
+                        property.invokeSetterOn(scope, options[key]);
+                        delete options[key];
+                    }
+                });
+                Object.getOwnPropertyNames(options).forEach(function(k) {
+                    throw new ria.templates.Exception("Unknown property " + k + " in template " + ref.getName());
+                });
+            }, ria.__SYNTAX.Modifiers.ABSTRACT, String, function render() {}, ria.__SYNTAX.Modifiers.VOID, function renderTo(to) {
+                appendTo(this.render(), to);
+            }, ria.__SYNTAX.Modifiers.VOID, function renderBuffer() {
+                this._bundle += this.render();
+            }, String, function flushBuffer() {
+                var buffer = this._bundle;
+                this._bundle = "";
+                return buffer;
+            }, ria.__SYNTAX.Modifiers.VOID, function flushBufferTo(to) {
+                appendTo(this.flushBuffer(), to);
+            }, ria.__SYNTAX.Modifiers.SELF, function getInstanceOfTemplate_(tplClass, options_) {
+                var tpl = new tplClass();
+                if (!(tpl instanceof ria.__SYNTAX.Modifiers.SELF)) throw new ria.__API.Exception("Can render model only with " + hwax.templates.Template.__IDENTIFIER__);
+                options_ && tpl.options(options_);
+                return tpl;
+            }, [ [ Object, ria.__API.ClassOf(ria.__SYNTAX.Modifiers.SELF), Object ] ], String, function renderWith(data, tplClass, options_) {
+                var tpl = this.getInstanceOfTemplate_(tplClass, options_ || {});
+                if (!Array.isArray(data)) {
+                    data = [ data ];
+                } else {
+                    tpl.setCollection(data);
+                }
+                data.forEach(function(_, i) {
+                    tpl.assign(_);
+                    tpl.setCollectionIndex(i);
+                    tpl.renderBuffer();
+                });
+                return tpl.flushBuffer();
+            }, [ [ Object, ria.__API.ImplementerOf(ria.templates.IConverter) ] ], Object, function convertWith(value, clazz) {
+                return ria.templates.ConverterFactories.create(clazz).convert(clazz);
+            }, Object, function getContext_() {
+                return this;
+            } ]);
+        })();
+    })();
+    "chlk.controls.Base";
+    "chlk.services.BaseService";
+    "ria.templates.Template";
+    (function() {
+        (chlk = chlk || {}).controls = chlk.controls || {};
+        (function() {
+            chlk.controls.SearchBoxControl = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.controls." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("SearchBoxControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
+                BASE();
+                ASSET("_br51m69u23xr")(this);
+            }, [ [ Object, ria.__API.ClassOf(chlk.services.BaseService), String, ria.__API.ClassOf(ria.templates.Template) ] ], ria.__SYNTAX.Modifiers.VOID, function initialize(attrs, service, method, tpl) {
+                attrs.id = attrs.id || ria.dom.NewGID();
+                var serviceIns = this.getContext().getService(service);
+                var ref = ria.reflection.ReflectionClass(service);
+                var methodRef = ref.getMethodReflector(method);
+                var stub = function() {
+                    return methodRef.invokeOn(serviceIns, ria.__API.clone(arguments));
+                };
+                this.queueReanimation_(attrs.id, attrs["default-value"] ? attrs["default-value"].valueOf() : null, stub, tpl);
+            }, [ [ String, String, Function, ria.__API.ClassOf(ria.templates.Template) ] ], ria.__SYNTAX.Modifiers.VOID, function queueReanimation_(id, defaultValue_, serviceF, tpl) {
+                this.context.getDefaultView().onActivityRefreshed(function(activity, model) {
+                    if (defaultValue_) ria.dom.Dom("#" + id + "-hidden").setValue(defaultValue_);
+                    this.reanimate_(ria.dom.Dom("#" + id), serviceF, tpl, activity, model);
+                }.bind(this));
+            }, [ [ ria.dom.Dom, Function, ria.__API.ClassOf(ria.templates.Template), ria.mvc.IActivity, Object ] ], ria.__SYNTAX.Modifiers.VOID, function reanimate_(node, serviceF, tplClass, activity, model) {
+                var id = node.getAttr("id");
+                var tpl = new tplClass();
+                jQuery(node.valueOf()).autocomplete({
+                    source: function(request, response) {
+                        serviceF(request.term).then(response);
+                    },
+                    focus: function() {
+                        return false;
+                    },
+                    select: function(event, ui) {
+                        var li = jQuery(event.toElement).closest("li");
+                        ria.dom.Dom("#" + id + "-hidden").setValue(li.data("value"));
+                        node.setValue(li.data("title"));
+                        return false;
+                    }
+                }).data("ui-autocomplete")._renderItem = function(ul, item) {
+                    var fixedInstance = ria.__API.inheritFrom(item.constructor);
+                    for (var k in item) if (item.hasOwnProperty(k)) fixedInstance[k] = item[k];
+                    tpl.assign(fixedInstance);
+                    return jQuery(jQuery.parseHTML(tpl.render())).appendTo(ul);
+                };
             } ]);
         })();
     })();
@@ -5570,19 +6166,94 @@ exports.globals = {};
         ((chlk = chlk || {}).models = chlk.models || {}).common = chlk.models.common || {};
         (function() {
             "use strict";
+            var second = 1e3, minute = 60 * second, hour = 60 * minute, day = 24 * hour, week = 7 * day;
+            chlk.models.common.MillisecondsEnum =             function wrapper() {
+                var values = {};
+                function MillisecondsEnum(value) {
+                    return values.hasOwnProperty(value) ? values[value] : undefined;
+                }
+                ria.__API.identifier(MillisecondsEnum, "chlk.models.common.MillisecondsEnum");
+                function MillisecondsEnumImpl(value) {
+                    this.valueOf = function() {
+                        return value;
+                    };
+                    this.toString = function toString() {
+                        return "[chlk.models.common.MillisecondsEnum#" + value + "]";
+                    };
+                }
+                ria.__API.extend(MillisecondsEnumImpl, MillisecondsEnum);
+                values[1e3] = MillisecondsEnum.SECOND = new MillisecondsEnumImpl(1e3);
+                values[6e4] = MillisecondsEnum.MINUTE = new MillisecondsEnumImpl(6e4);
+                values[36e5] = MillisecondsEnum.HOUR = new MillisecondsEnumImpl(36e5);
+                values[864e5] = MillisecondsEnum.DAY = new MillisecondsEnumImpl(864e5);
+                values[6048e5] = MillisecondsEnum.WEEK = new MillisecondsEnumImpl(6048e5);
+                return MillisecondsEnum;
+            }();
+            chlk.models.common.ChlkDateEnum =             function wrapper() {
+                var values = {};
+                function ChlkDateEnum(value) {
+                    return values.hasOwnProperty(value) ? values[value] : undefined;
+                }
+                ria.__API.identifier(ChlkDateEnum, "chlk.models.common.ChlkDateEnum");
+                function ChlkDateEnumImpl(value) {
+                    this.valueOf = function() {
+                        return value;
+                    };
+                    this.toString = function toString() {
+                        return "[chlk.models.common.ChlkDateEnum#" + value + "]";
+                    };
+                }
+                ria.__API.extend(ChlkDateEnumImpl, ChlkDateEnum);
+                values["SECOND"] = ChlkDateEnum.SECOND = new ChlkDateEnumImpl("SECOND");
+                values["MINUTE"] = ChlkDateEnum.MINUTE = new ChlkDateEnumImpl("MINUTE");
+                values["HOUR"] = ChlkDateEnum.HOUR = new ChlkDateEnumImpl("HOUR");
+                values["DAY"] = ChlkDateEnum.DAY = new ChlkDateEnumImpl("DAY");
+                values["WEEK"] = ChlkDateEnum.WEEK = new ChlkDateEnumImpl("WEEK");
+                values["MONTH"] = ChlkDateEnum.MONTH = new ChlkDateEnumImpl("MONTH");
+                values["YEAR"] = ChlkDateEnum.YEAR = new ChlkDateEnumImpl("YEAR");
+                return ChlkDateEnum;
+            }();
             chlk.models.common.ChlkDate = function ClassCompilerImpl() {
                 var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.models.common." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }("ChlkDate", ria.__SYNTAX.IMPLEMENTS(ria.serialize.IDeserializable), [ Date, "date", [ [ String ] ], String, function toString(format_) {
+            }("ChlkDate", ria.__SYNTAX.IMPLEMENTS(ria.serialize.IDeserializable), [ Date, "date", [ [ Date ] ], function $(date_) {
+                date_ && this.setDate(date_);
+            }, [ [ String ] ], String, function toString(format_) {
                 return this.format(format_ || "m-dd-yy");
+            }, [ [ chlk.models.common.ChlkDateEnum, Number ] ], ria.__SYNTAX.Modifiers.SELF, function add(type, count) {
+                var dateEnum = chlk.models.common.ChlkDateEnum;
+                var thisDate = this.getDate();
+                var sec = thisDate.getSeconds();
+                var min = thisDate.getMinutes();
+                var h = thisDate.getHours();
+                var day = thisDate.getDate();
+                var mon = thisDate.getMinutes();
+                var y = thisDate.getFullYear();
+                var date = new chlk.models.common.ChlkDate(), res;
+                switch (type) {
+                  case dateEnum.YEAR:
+                    res = new Date(y + count, mon, day, h, min, sec);
+                    break;
+
+                  case dateEnum.MONTH:
+                    res = new Date(y, mon + count, day, h, min, sec);
+                    break;
+
+                  default:
+                    res = thisDate.getTime() + count * chlk.models.common.MillisecondsEnum[type.valueOf()].valueOf();
+                }
+                date.setDate(new Date(res));
+                return date;
             }, [ [ String ] ], String, function format(format) {
                 format = format.replace(/min/g, this.timepartToStr(this.getDate().getMinutes()));
                 var res = $.datepicker.formatDate(format, this.getDate() || getDate());
                 res = res.replace(/hh/g, this.timepartToStr(this.getDate().getHours()));
                 res = res.replace(/ss/g, this.timepartToStr(this.getDate().getSeconds()));
                 return res;
+            }, [ [ ria.__SYNTAX.Modifiers.SELF ] ], Boolean, function isSameDay(date) {
+                return this.format("mm-dd-yy") == date.format("mm-dd-yy");
             }, ria.__SYNTAX.Modifiers.VOID, function deserialize(raw) {
                 var date = raw ? getDate(raw) : getDate();
                 this.setDate(date);
@@ -5653,6 +6324,7 @@ exports.globals = {};
     "chlk.controls.VideoControl";
     "chlk.controls.LogoutControl";
     "chlk.controls.TextAreaControl";
+    "chlk.controls.SearchBoxControl";
     "chlk.models.common.Role";
     "chlk.models.schoolYear.MarkingPeriod";
     (function() {
@@ -5702,7 +6374,7 @@ exports.globals = {};
                     tooltip.find(".tooltip-content").html("");
                 });
                 return BASE().then(function(data) {
-                    if (this.getCurrentPerson()) new ria.dom.Dom().fromHTML(ASSET("_qu6nm3obgm34n29")(this)).appendTo("#logout-block");
+                    if (this.getCurrentPerson()) new ria.dom.Dom().fromHTML(ASSET("_y24qgi22nfiozuxr")(this)).appendTo("#logout-block");
                     return data;
                 }, this);
             } ]);
@@ -6021,204 +6693,6 @@ exports.globals = {};
             } ]);
         })();
     })();
-    (function() {
-        (ria = ria || {}).templates = ria.templates || {};
-        (function() {
-            ria.templates.Exception = function ExceptionCompilerImpl() {
-                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
-                ria.__SYNTAX.validateException(def);
-                var name = "ria.templates." + def.name;
-                return ria.__SYNTAX.compileClass(name, def);
-            }("Exception", [ function $(msg, inner_) {
-                BASE(msg, inner_);
-            } ]);
-        })();
-    })();
-    (function() {
-        (ria = ria || {}).templates = ria.templates || {};
-        (function() {
-            "use strict";
-            ria.templates.IConverter = ria.__API.ifc(function() {}, "ria.templates.IConverter", [ [ "convert", Object, [], [ "source" ] ] ]);
-        })();
-    })();
-    "ria.templates.IConverter";
-    (function() {
-        (ria = ria || {}).templates = ria.templates || {};
-        (function() {
-            "use strict";
-            ria.templates.IConverterFactory = ria.__API.ifc(function() {}, "ria.templates.IConverterFactory", [ [ "canCreate", Boolean, [ ria.__API.ImplementerOf(ria.templates.IConverter) ], [ "converterClass" ] ], [ "create", ria.templates.IConverter, [ ria.__API.ImplementerOf(ria.templates.IConverter) ], [ "converterClass" ] ] ]);
-        })();
-    })();
-    "ria.templates.Exception";
-    "ria.templates.IConverterFactory";
-    "ria.reflection.ReflectionClass";
-    (function() {
-        (ria = ria || {}).templates = ria.templates || {};
-        (function() {
-            ria.templates.ConverterFactoriesManager = function ClassCompilerImpl() {
-                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
-                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
-                var name = "ria.templates." + def.name;
-                return ria.__SYNTAX.compileClass(name, def);
-            }("ConverterFactoriesManager", [ function $() {
-                this._map = {};
-                this._cache = {};
-            }, [ [ ria.templates.IConverterFactory ] ], ria.__SYNTAX.Modifiers.VOID, function register(factory) {
-                var hashCode = factory.getHashCode();
-                if (this._map.hasOwnProperty(hashCode)) throw new ria.templates.Exception("Factory " + ria.__API.getIdentifierOfValue(factory) + " already registered");
-                this._map[hashCode] = factory;
-            }, [ [ ria.templates.IConverterFactory ] ], ria.__SYNTAX.Modifiers.VOID, function unregister(factory) {
-                var hashCode = factory.getHashCode();
-                if (!this._map.hasOwnProperty(hashCode)) throw new ria.templates.Exception("Factory " + ria.__API.getIdentifierOfValue(factory) + " not registered");
-                delete this._map[factory.getHashCode()];
-            }, [ [ ria.__API.ImplementerOf(ria.templates.IConverter) ] ], ria.templates.IConverter, function create(converterClass) {
-                var name = ria.__API.getIdentifierOfType(converterClass);
-                if (this._cache.hasOwnProperty(name)) return this._cache[name];
-                for (var key in this._map) if (this._map.hasOwnProperty(key)) {
-                    var factory = this._map[key];
-                    if (factory.canCreate(converterClass)) return this._cache[name] = factory.create(converterClass);
-                }
-                throw new ria.__API.Exception("No factory agreed to create convertor " + name);
-            } ]);
-            ria.templates.ConverterFactories = new ria.templates.ConverterFactoriesManager();
-        })();
-    })();
-    "ria.templates.Exception";
-    "ria.templates.ConverterFactories";
-    "ria.dom.Dom";
-    "ria.reflection.ReflectionClass";
-    (function() {
-        (ria = ria || {}).templates = ria.templates || {};
-        (function() {
-            "use strict";
-            function appendTo(content, to) {
-                var dom = new ria.dom.Dom();
-                dom.fromHTML(content).appendTo(to);
-            }
-            ria.templates.ModelBind = ria.__API.annotation("ria.templates.ModelBind", [], [ "model" ]);
-            ria.templates.ModelPropertyBind = ria.__API.annotation("ria.templates.ModelPropertyBind", [ String, ria.__API.ImplementerOf(ria.templates.IConverter) ], [ "name_", "converter_" ]);
-            ria.templates.TemplateBind = ria.__API.annotation("ria.templates.TemplateBind", [ String ], [ "tpl" ]);
-            ria.templates.Template = function ClassCompilerImpl() {
-                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
-                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
-                var name = "ria.templates." + def.name;
-                return ria.__SYNTAX.compileClass(name, def);
-            }(ria.__SYNTAX.Modifiers.ABSTRACT, "Template", [ Number, "collectionIndex", Array, "collection", function $() {
-                this._modelClass = null;
-                this._bindings = [];
-                this._bundle = "";
-                this._tpl = null;
-                this._model = null;
-                this.bind_();
-            }, ria.__SYNTAX.Modifiers.VOID, function bind_() {
-                var self = ria.reflection.ReflectionClass(this.getClass());
-                if (!self.isAnnotatedWith(ria.templates.TemplateBind)) throw new ria.templates.Exception("Template class is not bound to template. Please use " + ria.__API.getIdentifierOfType(ria.templates.TemplateBind));
-                this._tpl = self.findAnnotation(ria.templates.TemplateBind).pop().tpl;
-                if (!self.isAnnotatedWith(ria.templates.ModelBind)) throw new ria.templates.Exception("Template class is not bound to model. Please use " + ria.__API.getIdentifierOfType(ria.templates.ModelBind));
-                this._modelClass = self.findAnnotation(ria.templates.ModelBind).pop().model;
-                if (this._modelClass === undefined) throw new ria.templates.Exception("Template class is bound to model. But model not loaded");
-                if (!ria.__API.isClassConstructor(this._modelClass)) return;
-                var model = ria.reflection.ReflectionClass(this._modelClass);
-                var selfProperties = self.getPropertiesReflector(), bindings = this._bindings;
-                selfProperties.filter(function(_) {
-                    return _.isAnnotatedWith(ria.templates.ModelPropertyBind);
-                }).forEach(function(property) {
-                    var modelBind = property.findAnnotation(ria.templates.ModelPropertyBind).pop();
-                    var modelPropertyName = modelBind.name_ || property.getShortName();
-                    var modelProperty = model.getPropertyReflector(modelPropertyName);
-                    if (modelProperty == null) throw ria.templates.Exception('Property "' + modelPropertyName + '" not found in model ' + model.getName());
-                    var converter = modelBind.converter_;
-                    if (converter !== undefined) {
-                        var ref = ria.reflection.ReflectionClass(converter.converter);
-                        if (!ref.implementsIfc(ria.templates.IConverter)) throw new ria.templates.Exception("Converter class " + ref.getName() + " expected to implement " + ria.__API.getIdentifierOfType(ria.templates.IConverter));
-                        converter = bind.converter;
-                    }
-                    bindings.push({
-                        sourceProp: modelProperty,
-                        destProp: property,
-                        converter: converter
-                    });
-                });
-            }, ria.__API.ClassOf(ria.__API.Class), function getModelClass() {
-                return this._modelClass;
-            }, ria.__SYNTAX.Modifiers.VOID, function assign(model) {
-                if (ria.__API.isArrayOfDescriptor(this._modelClass) && !Array.isArray(model)) {
-                    throw ria.templates.Exception("Expected instance of " + ria.__API.getIdentifierOfType(this._modelClass) + " but got " + ria.__API.getIdentifierOfValue(model));
-                } else if (ria.__API.isClassConstructor(this._modelClass) && !(model instanceof this._modelClass)) {
-                    throw ria.templates.Exception("Expected instance of " + ria.__API.getIdentifierOfType(this._modelClass) + " but got " + ria.__API.getIdentifierOfValue(model));
-                }
-                this._model = model;
-                var convertWith = this.convertWith, scope = this;
-                this._bindings.forEach(function(_) {
-                    var value = _.sourceProp.invokeGetterOn(model);
-                    if (_.converter) {
-                        value = convertWith(value, _.converter);
-                    }
-                    _.destProp.invokeSetterOn(scope, value);
-                });
-            }, ria.__SYNTAX.Modifiers.VOID, function options(options) {
-                if ("function" == typeof options.block) {
-                    this.setBlock(options.block);
-                }
-                delete options.block;
-                if ("undefined" !== typeof options.collection) {
-                    this.setCollection(options.collection);
-                }
-                delete options.collection;
-                if ("number" === typeof options.collectionIndex) {
-                    this.setCollectionIndex(options.collectionIndex);
-                }
-                delete options.collectionIndex;
-                var ref = ria.reflection.ReflectionClass(this.getClass()), scope = this;
-                var handled = {};
-                options = ria.__API.clone(options);
-                ref.getPropertiesReflector().filter(function(_) {
-                    return !_.isAnnotatedWith(ria.templates.ModelBind);
-                }).forEach(function(property) {
-                    var key = property.getShortName();
-                    if (options.hasOwnProperty(key)) {
-                        property.invokeSetterOn(scope, options[key]);
-                        delete options[key];
-                    }
-                });
-                Object.getOwnPropertyNames(options).forEach(function(k) {
-                    throw new ria.templates.Exception("Unknown property " + k + " in template " + ref.getName());
-                });
-            }, ria.__SYNTAX.Modifiers.ABSTRACT, String, function render() {}, ria.__SYNTAX.Modifiers.VOID, function renderTo(to) {
-                appendTo(this.render(), to);
-            }, ria.__SYNTAX.Modifiers.VOID, function renderBuffer() {
-                this._bundle += this.render();
-            }, String, function flushBuffer() {
-                var buffer = this._bundle;
-                this._bundle = "";
-                return buffer;
-            }, ria.__SYNTAX.Modifiers.VOID, function flushBufferTo(to) {
-                appendTo(this.flushBuffer(), to);
-            }, ria.__SYNTAX.Modifiers.SELF, function getInstanceOfTemplate_(tplClass, options_) {
-                var tpl = new tplClass();
-                if (!(tpl instanceof ria.__SYNTAX.Modifiers.SELF)) throw new ria.__API.Exception("Can render model only with " + hwax.templates.Template.__IDENTIFIER__);
-                options_ && tpl.options(options_);
-                return tpl;
-            }, [ [ Object, ria.__API.ClassOf(ria.__SYNTAX.Modifiers.SELF), Object ] ], String, function renderWith(data, tplClass, options_) {
-                var tpl = this.getInstanceOfTemplate_(tplClass, options_ || {});
-                if (!Array.isArray(data)) {
-                    data = [ data ];
-                } else {
-                    tpl.setCollection(data);
-                }
-                data.forEach(function(_, i) {
-                    tpl.assign(_);
-                    tpl.setCollectionIndex(i);
-                    tpl.renderBuffer();
-                });
-                return tpl.flushBuffer();
-            }, [ [ Object, ria.__API.ImplementerOf(ria.templates.IConverter) ] ], Object, function convertWith(value, clazz) {
-                return ria.templates.ConverterFactories.create(clazz).convert(clazz);
-            }, Object, function getContext_() {
-                return this;
-            } ]);
-        })();
-    })();
     "ria.mvc.DomActivity";
     "ria.templates.Template";
     (function() {
@@ -6387,7 +6861,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._wlqftkr5zcqsemi = function anonymous(locals) {
+    __ASSETS._469u3bivb863l3di = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push("<div" + jade.attrs({
@@ -6482,7 +6956,7 @@ exports.globals = {};
         buf.push("</div></div>");
         return buf.join("");
     };
-    __ASSETS._pyoj30rl6q63l3di = function anonymous(locals) {
+    __ASSETS._ge22iah97ug9o1or = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.RenderWith_mixin = function(data, tplClass) {
@@ -6542,13 +7016,16 @@ exports.globals = {};
         (chlk = chlk || {}).templates = chlk.templates || {};
         (function() {
             "use strict";
-            ASSET("_pyoj30rl6q63l3di")();
+            ASSET("_ge22iah97ug9o1or")();
             chlk.templates.JadeTemplate = function ClassCompilerImpl() {
                 var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }("JadeTemplate", ria.__SYNTAX.EXTENDS(ria.templates.CompiledTemplate), [ Function, "block" ]);
+            }("JadeTemplate", ria.__SYNTAX.EXTENDS(ria.templates.CompiledTemplate), [ Function, "block", [ [ Object, Number ] ], String, function getPictureURL(id, size_) {
+                var url = window.azurePictureUrl + id.valueOf();
+                return size_ ? url + "-" + size_ + "x" + size_ : url;
+            } ]);
         })();
     })();
     (function() {
@@ -6752,7 +7229,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.common." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_wlqftkr5zcqsemi") ], [ ria.templates.ModelBind(chlk.models.common.InfoMsg) ], "InfoMsg", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], String, "text", [ ria.templates.ModelPropertyBind ], String, "header", [ ria.templates.ModelPropertyBind ], String, "clazz", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.common.Button), "buttons" ]);
+            }([ ria.templates.TemplateBind("_469u3bivb863l3di") ], [ ria.templates.ModelBind(chlk.models.common.InfoMsg) ], "InfoMsg", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], String, "text", [ ria.templates.ModelPropertyBind ], String, "header", [ ria.templates.ModelPropertyBind ], String, "clazz", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.common.Button), "buttons" ]);
         })();
     })();
     "chlk.activities.lib.TemplateDialog";
@@ -6830,6 +7307,8 @@ exports.globals = {};
                 this.view.shadeD(instance, ria.async.DeferredData(model));
             }, [ [ chlk.models.common.RoleEnum ] ], Boolean, function userInRole(roleId) {
                 return this.getCurrentRole().getRoleId() == roleId;
+            }, Boolean, function userIsAdmin() {
+                return this.userInRole(chlk.models.common.RoleEnum.ADMINEDIT) || this.userInRole(chlk.models.common.RoleEnum.ADMINGRADE) || this.userInRole(chlk.models.common.RoleEnum.ADMINVIEW);
             }, chlk.models.people.User, function getCurrentPerson() {
                 return this.getContext().getSession().get("currentPerson");
             }, ria.__SYNTAX.Modifiers.OVERRIDE, ria.reflection.ReflectionMethod, function resolveRoleAction_(state) {
@@ -6907,7 +7386,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._amq115i6khloko6r = function anonymous(locals) {
+    __ASSETS._mxecjw9kopfrbe29 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="settings"><div class="row"><div class="item">');
@@ -6996,7 +7475,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.settings." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_amq115i6khloko6r") ], [ ria.templates.ModelBind(chlk.models.settings.Dashboard) ], "Dashboard", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], Boolean, "departmentsVisible", [ ria.templates.ModelPropertyBind ], Boolean, "appCategoriesVisible", [ ria.templates.ModelPropertyBind ], Boolean, "storageMonitorVisible", [ ria.templates.ModelPropertyBind ], Boolean, "preferencesVisible", [ ria.templates.ModelPropertyBind ], Boolean, "backgroundTaskMonitorVisible", [ ria.templates.ModelPropertyBind ], Boolean, "dbMaintenanceVisible" ]);
+            }([ ria.templates.TemplateBind("_mxecjw9kopfrbe29") ], [ ria.templates.ModelBind(chlk.models.settings.Dashboard) ], "Dashboard", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], Boolean, "departmentsVisible", [ ria.templates.ModelPropertyBind ], Boolean, "appCategoriesVisible", [ ria.templates.ModelPropertyBind ], Boolean, "storageMonitorVisible", [ ria.templates.ModelPropertyBind ], Boolean, "preferencesVisible", [ ria.templates.ModelPropertyBind ], Boolean, "backgroundTaskMonitorVisible", [ ria.templates.ModelPropertyBind ], Boolean, "dbMaintenanceVisible" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -7012,7 +7491,7 @@ exports.globals = {};
             }([ ria.mvc.DomAppendTo("#main") ], [ ria.mvc.TemplateBind(chlk.templates.settings.Dashboard) ], "DashboardPage", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePage), []);
         })();
     })();
-    __ASSETS._cp0unrz1p89i19k9 = function anonymous(locals) {
+    __ASSETS._54aj4u9tn0xav2t9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="settings"><div class="action-bar not-transparent buttons"><div class="container panel-bg"><div class="left">');
@@ -7123,7 +7602,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.settings." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_cp0unrz1p89i19k9") ], [ ria.templates.ModelBind(chlk.models.settings.TeacherSettings) ], "TeacherSettings", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], Boolean, "annoucementNotificationsViaSms", [ ria.templates.ModelPropertyBind ], Boolean, "messagesNotificationsViaSms", [ ria.templates.ModelPropertyBind ], Boolean, "notificationsViaSms", [ ria.templates.ModelPropertyBind ], Boolean, "annoucementNotificationsViaEmail", [ ria.templates.ModelPropertyBind ], Boolean, "messagesNotificationsViaEmail", [ ria.templates.ModelPropertyBind ], Boolean, "notificationsViaEmail" ]);
+            }([ ria.templates.TemplateBind("_54aj4u9tn0xav2t9") ], [ ria.templates.ModelBind(chlk.models.settings.TeacherSettings) ], "TeacherSettings", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], Boolean, "annoucementNotificationsViaSms", [ ria.templates.ModelPropertyBind ], Boolean, "messagesNotificationsViaSms", [ ria.templates.ModelPropertyBind ], Boolean, "notificationsViaSms", [ ria.templates.ModelPropertyBind ], Boolean, "annoucementNotificationsViaEmail", [ ria.templates.ModelPropertyBind ], Boolean, "messagesNotificationsViaEmail", [ ria.templates.ModelPropertyBind ], Boolean, "notificationsViaEmail" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -7149,7 +7628,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._onjznjd30jp2e29 = function anonymous(locals) {
+    __ASSETS._bt2dh3qwyer0be29 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="settings"><h2>Preferences</h2><div class="preferences grid"><div class="loader"></div><div class="scroller"><div class="container"><div class="body"><div class="row header"><div class="col">Key</div><div class="col">Value</div><div class="col">Hint</div><div class="col">Is public</div><div class="col"></div></div>');
@@ -7296,7 +7775,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.settings." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_onjznjd30jp2e29") ], [ ria.templates.ModelBind(chlk.models.settings.PreferencesList) ], "Preferences", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.settings.Preference), "items" ]);
+            }([ ria.templates.TemplateBind("_bt2dh3qwyer0be29") ], [ ria.templates.ModelBind(chlk.models.settings.PreferencesList) ], "Preferences", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.settings.Preference), "items" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -7312,7 +7791,7 @@ exports.globals = {};
             }([ ria.mvc.DomAppendTo("#main") ], [ chlk.activities.lib.PageClass("settings") ], [ ria.mvc.TemplateBind(chlk.templates.settings.Preferences) ], "PreferencesPage", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePage), []);
         })();
     })();
-    __ASSETS._sltg5a2ciur0y66r = function anonymous(locals) {
+    __ASSETS._7a2x6jho4g8n0zfr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="settings"><div class="developer"></div><div class="search-wrapper"><div id="search-bar"></div></div><div class="wrapper"><div class="row">');
@@ -7382,7 +7861,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.settings." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_sltg5a2ciur0y66r") ], [ ria.templates.ModelBind(chlk.models.settings.DeveloperSettings) ], "DeveloperSettings", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolPersonId, "developerId", [ ria.templates.ModelPropertyBind ], chlk.models.id.AppId, "currentAppId" ]);
+            }([ ria.templates.TemplateBind("_7a2x6jho4g8n0zfr") ], [ ria.templates.ModelBind(chlk.models.settings.DeveloperSettings) ], "DeveloperSettings", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolPersonId, "developerId", [ ria.templates.ModelPropertyBind ], chlk.models.id.AppId, "currentAppId" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -7397,299 +7876,6 @@ exports.globals = {};
                 var name = "chlk.activities.settings." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
             }([ ria.mvc.DomAppendTo("#main") ], [ chlk.activities.lib.PageClass("settings") ], [ ria.mvc.TemplateBind(chlk.templates.settings.DeveloperSettings) ], "DeveloperPage", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePage), []);
-        })();
-    })();
-    "ria.async.ICancelable";
-    (function() {
-        (ria = ria || {}).async = ria.async || {};
-        (function() {
-            "use strict";
-            ria.async.TimerDelegate = ria.__API.delegate("ria.async.TimerDelegate", null, [ Object, Number ], [ "timer", "lag" ]);
-            ria.async.Timer = function ClassCompilerImpl() {
-                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
-                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
-                var name = "ria.async." + def.name;
-                return ria.__SYNTAX.compileClass(name, def);
-            }("Timer", ria.__SYNTAX.IMPLEMENTS(ria.async.ICancelable), [ [ [ Number, ria.async.TimerDelegate ] ], function $(duration, handler) {
-                var me = this;
-                var lastCall = new Date();
-                this.cleaner = clearInterval;
-                this.timer = setInterval(function() {
-                    handler(me, -(lastCall.getTime() - (lastCall = new Date()).getTime()));
-                }, duration < 0 ? 0 : duration);
-            }, ria.__SYNTAX.Modifiers.VOID, function cancel() {
-                this.cleaner(this.timer);
-            } ]);
-        })();
-    })();
-    "ria.async.Task";
-    "ria.async.Timer";
-    (function() {
-        (ria = ria || {}).ajax = ria.ajax || {};
-        (function() {
-            "use strict";
-            ria.ajax.Method =             function wrapper() {
-                var values = {};
-                function Method(value) {
-                    return values.hasOwnProperty(value) ? values[value] : undefined;
-                }
-                ria.__API.identifier(Method, "ria.ajax.Method");
-                function MethodImpl(value) {
-                    this.valueOf = function() {
-                        return value;
-                    };
-                    this.toString = function toString() {
-                        return "[ria.ajax.Method#" + value + "]";
-                    };
-                }
-                ria.__API.extend(MethodImpl, Method);
-                values["get"] = Method.GET = new MethodImpl("get");
-                values["post"] = Method.POST = new MethodImpl("post");
-                values["put"] = Method.PUT = new MethodImpl("put");
-                values["delete"] = Method.DELETE = new MethodImpl("delete");
-                return Method;
-            }();
-            ria.ajax.Task = function ClassCompilerImpl() {
-                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
-                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
-                var name = "ria.ajax." + def.name;
-                return ria.__SYNTAX.compileClass(name, def);
-            }("Task", ria.__SYNTAX.EXTENDS(ria.async.Task), [ [ [ String, ria.ajax.Method, Object ] ], function $(url, method_, params_) {
-                BASE();
-                this._method = method_;
-                this._url = url;
-                this._params = params_ || {};
-                this._requestTimeout = null;
-                this._xhr = new XMLHttpRequest();
-                this._xhr.addEventListener("progress", this.updateProgress_, false);
-                this._xhr.addEventListener("load", this.transferComplete_, false);
-                this._xhr.addEventListener("error", this.transferFailed_, false);
-                this._xhr.addEventListener("abort", this.transferCanceled_, false);
-            }, ria.__SYNTAX.Modifiers.OVERRIDE, function cancel() {
-                this._xhr.abort();
-            }, [ [ ria.ajax.Method ] ], ria.__SYNTAX.Modifiers.SELF, function method(method) {
-                this._method = method;
-                return this;
-            }, [ [ Object ] ], ria.__SYNTAX.Modifiers.SELF, function params(obj) {
-                var p = this._params;
-                for (var key in obj) if (obj.hasOwnProperty(key) && obj[key] != undefined && obj[key] != null) {
-                    p[key] = obj[key];
-                }
-                return this;
-            }, [ [ String ] ], ria.__SYNTAX.Modifiers.SELF, function disableCache(paramName_) {
-                this._params[paramName_ || "_"] = Math.random().toString(36).substr(2) + new Date().getTime().toString(36);
-                return this;
-            }, [ [ Number ] ], ria.__SYNTAX.Modifiers.SELF, function timeout(duration) {
-                this._requestTimeout = duration;
-                return this;
-            }, ria.__SYNTAX.Modifiers.FINAL, String, function getParamsAsQueryString_() {
-                var p = this._params, r = [];
-                for (var key in p) if (p.hasOwnProperty(key)) {
-                    r.push([ key, p[key] ].map(encodeURIComponent).join("="));
-                }
-                return r.join("&");
-            }, ria.__SYNTAX.Modifiers.FINAL, String, function getParamsString_() {
-                var p = this._params, r = [];
-                for (var key in p) if (p.hasOwnProperty(key)) {
-                    r.push([ key, p[key] ].join("="));
-                }
-                return r.join("&");
-            }, ria.__SYNTAX.Modifiers.VOID, function updateProgress_(oEvent) {
-                this._completer.progress(oEvent);
-            }, ria.__SYNTAX.Modifiers.VOID, function transferComplete_(evt) {
-                this._completer.complete(this._xhr.responseText);
-            }, ria.__SYNTAX.Modifiers.VOID, function transferFailed_(evt) {
-                this._completer.completeError(Error(evt));
-            }, ria.__SYNTAX.Modifiers.VOID, function transferCanceled_(evt) {
-                this._completer.cancel();
-            }, String, function getUrl_() {
-                if (this._method != ria.ajax.Method.GET) return this._url;
-                return this._url + (/\?/.test(this._url) ? "&" : "?") + this.getParamsAsQueryString_();
-            }, Object, function getBody_() {
-                return this._method != ria.ajax.Method.GET ? JSON.stringify(this._params) : this.getParamsString_();
-            }, ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function do_() {
-                try {
-                    BASE();
-                    this._xhr.open(this._method.valueOf(), this.getUrl_(), true);
-                    if (this._method != ria.ajax.Method.GET) {
-                        if (this._params) {
-                            this._xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-                        }
-                    }
-                    this._xhr.send(this.getBody_());
-                } catch (e) {
-                    this._completer.completeError(e);
-                }
-                this._requestTimeout && new ria.async.Timer(this._requestTimeout, this.timeoutHandler_);
-            }, [ [ ria.async.Timer, Number ] ], ria.__SYNTAX.Modifiers.VOID, function timeoutHandler_(timer, lag) {
-                timer.cancel();
-                this._completer.isCompleted() || this.cancel();
-            } ]);
-        })();
-    })();
-    "ria.ajax.Task";
-    (function() {
-        (ria = ria || {}).ajax = ria.ajax || {};
-        (function() {
-            "use strict";
-            ria.ajax.JsonGetTask = function ClassCompilerImpl() {
-                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
-                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
-                var name = "ria.ajax." + def.name;
-                return ria.__SYNTAX.compileClass(name, def);
-            }("JsonGetTask", ria.__SYNTAX.EXTENDS(ria.ajax.Task), [ function $(url) {
-                BASE(url, ria.ajax.Method.GET);
-            }, ria.__SYNTAX.Modifiers.OVERRIDE, ria.async.Future, function run() {
-                return BASE().then(function(data) {
-                    return JSON.parse(data);
-                });
-            } ]);
-        })();
-    })();
-    "ria.ajax.Task";
-    (function() {
-        (ria = ria || {}).ajax = ria.ajax || {};
-        (function() {
-            "use strict";
-            ria.ajax.JsonPostTask = function ClassCompilerImpl() {
-                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
-                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
-                var name = "ria.ajax." + def.name;
-                return ria.__SYNTAX.compileClass(name, def);
-            }("JsonPostTask", ria.__SYNTAX.EXTENDS(ria.ajax.Task), [ function $(url) {
-                BASE(url, ria.ajax.Method.POST);
-            }, ria.__SYNTAX.Modifiers.OVERRIDE, ria.async.Future, function run() {
-                return BASE().then(function(data) {
-                    return JSON.parse(data);
-                });
-            } ]);
-        })();
-    })();
-    "ria.ajax.Task";
-    (function() {
-        (ria = ria || {}).ajax = ria.ajax || {};
-        (function() {
-            "use strict";
-            ria.ajax.UploadFileTask = function ClassCompilerImpl() {
-                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
-                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
-                var name = "ria.ajax." + def.name;
-                return ria.__SYNTAX.compileClass(name, def);
-            }("UploadFileTask", ria.__SYNTAX.EXTENDS(ria.ajax.Task), [ [ [ String, Object ] ], function $(url, files) {
-                BASE(url, ria.ajax.Method.POST);
-                this._files = files;
-            }, ria.__SYNTAX.Modifiers.OVERRIDE, ria.async.Future, function run() {
-                return BASE().then(function(data) {
-                    return JSON.parse(data);
-                });
-            }, ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function do_() {
-                try {
-                    var formData = new FormData();
-                    for (var i = 0, file; file = this._files[i]; ++i) {
-                        formData.append(file.name, file);
-                        for (var param in this._params) if (this._params.hasOwnProperty(param)) {
-                            formData.append(param, this._params[param]);
-                        }
-                    }
-                    this._xhr.open(this._method.valueOf(), this.getUrl_(), true);
-                    this._xhr.send(formData);
-                } catch (e) {
-                    this._completer.completeError(e);
-                }
-                this._requestTimeout && new ria.async.Timer(this._requestTimeout, this.timeoutHandler_);
-            } ]);
-        })();
-    })();
-    (function() {
-        ((chlk = chlk || {}).models = chlk.models || {}).common = chlk.models.common || {};
-        (function() {
-            "use strict";
-            chlk.models.common.PaginatedList = function ClassCompilerImpl() {
-                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
-                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
-                var name = "chlk.models.common." + def.name;
-                return ria.__SYNTAX.compileClass(name, def);
-            }("PaginatedList", [ [ [ Function ] ], function $(itemClass) {
-                this.itemClass = itemClass;
-            }, ria.__SYNTAX.Modifiers.READONLY, Function, "itemClass", ria.__API.ArrayOf(Object), "items", Number, "pageIndex", Number, "pageSize", Number, "totalCount", Number, "totalPages", Boolean, "hasNextPage", Boolean, "hasPreviousPage", ria.__SYNTAX.Modifiers.VOID, function setItems(values) {
-                null;
-                this.items = values;
-            } ]);
-        })();
-    })();
-    "ria.serialize.JsonSerializer";
-    "ria.ajax.JsonGetTask";
-    "ria.ajax.JsonPostTask";
-    "ria.ajax.UploadFileTask";
-    "chlk.models.common.PaginatedList";
-    (function() {
-        (chlk = chlk || {}).services = chlk.services || {};
-        (function() {
-            "use strict";
-            chlk.services.DataException = function ExceptionCompilerImpl() {
-                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
-                ria.__SYNTAX.validateException(def);
-                var name = "chlk.services." + def.name;
-                return ria.__SYNTAX.compileClass(name, def);
-            }("DataException", [ function $(msg, inner_) {
-                BASE(msg, inner_);
-            } ]);
-            var Serializer = new ria.serialize.JsonSerializer();
-            chlk.services.BaseService = function ClassCompilerImpl() {
-                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
-                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
-                var name = "chlk.services." + def.name;
-                return ria.__SYNTAX.compileClass(name, def);
-            }("BaseService", ria.__SYNTAX.IMPLEMENTS(ria.mvc.IContextable), [ ria.mvc.IContext, "context", String, function getServiceRoot() {
-                return this.getContext().getSession().get("siteRoot");
-            }, [ [ String ] ], String, function resolveUri(uri) {
-                return this.getServiceRoot() + uri;
-            }, String, function getUrl(uri, params) {
-                var p = params, r = [];
-                for (var key in p) if (p.hasOwnProperty(key)) {
-                    r.push([ key, p[key] ].join("="));
-                }
-                return this.resolveUri(uri) + "?" + r.join("&");
-            }, [ [ String, Object, Object ] ], ria.async.Future, function get(uri, clazz_, gParams_) {
-                return new ria.ajax.JsonGetTask(this.resolveUri(uri)).params(gParams_ || {}).run().then(function(data) {
-                    if (!data.success) throw chlk.services.DataException("Server error", Error(data.message));
-                    if (!clazz_) return data.data || null;
-                    return Serializer.deserialize(data.data, clazz_);
-                });
-            }, [ [ String, Object, Object, Object ] ], ria.async.Future, function uploadFiles(uri, files, clazz_, gParams_) {
-                return new ria.ajax.UploadFileTask(this.resolveUri(uri), files).params(gParams_ || {}).run().then(function(data) {
-                    if (!data.success) throw chlk.services.DataException("Server error", Error(data.message));
-                    if (!clazz_) return data.data || null;
-                    return Serializer.deserialize(data.data, clazz_);
-                });
-            }, [ [ String, Object, Object ] ], ria.async.Future, function post(uri, clazz, gParams) {
-                return new ria.ajax.JsonPostTask(this.resolveUri(uri)).params(gParams).run().then(function(data) {
-                    if (!data.success) throw chlk.services.DataException("Server error", Error(data.message));
-                    return Serializer.deserialize(data.data, clazz);
-                });
-            }, [ [ String, Object, Object ] ], ria.async.Future, function postArray(uri, clazz, gParams) {
-                return new ria.ajax.JsonPostTask(this.resolveUri(uri)).params(gParams).run().then(function(data) {
-                    if (!data.success) throw chlk.services.DataException("Server error", Error(data.message));
-                    return Serializer.deserialize(data.data, ria.__API.ArrayOf(clazz));
-                });
-            }, [ [ String, Object, Object ] ], ria.async.Future, function getArray(uri, clazz, gParams) {
-                return new ria.ajax.JsonGetTask(this.resolveUri(uri)).params(gParams).run().then(function(data) {
-                    if (!data.success) throw chlk.services.DataException("Server error", Error(data.message));
-                    return Serializer.deserialize(data.data, ria.__API.ArrayOf(clazz));
-                });
-            }, [ [ String, Object, Object ] ], ria.async.Future, function getPaginatedList(uri, clazz, gParams) {
-                return new ria.ajax.JsonGetTask(this.resolveUri(uri)).params(gParams).run().then(function(data) {
-                    var model = new chlk.models.common.PaginatedList(clazz);
-                    model.setItems(Serializer.deserialize(data.data, ria.__API.ArrayOf(clazz)));
-                    model.setPageIndex(Number(data.pageindex));
-                    model.setPageSize(Number(data.pagesize));
-                    model.setTotalCount(Number(data.totalcount));
-                    model.setTotalPages(Number(data.totalpages));
-                    model.setHasNextPage(Boolean(data.hasnextpage));
-                    model.setHasPreviousPage(Boolean(data.haspreviouspage));
-                    return model;
-                });
-            } ]);
         })();
     })();
     "chlk.services.BaseService";
@@ -7950,6 +8136,30 @@ exports.globals = {};
             }("AppCategory", [ chlk.models.id.AppCategoryId, "id", String, "name", String, "description" ]);
         })();
     })();
+    "chlk.models.id.PictureId";
+    (function() {
+        ((chlk = chlk || {}).models = chlk.models || {}).apps = chlk.models.apps || {};
+        (function() {
+            "use strict";
+            chlk.models.apps.AppPicture = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.models.apps." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("AppPicture", [ chlk.models.id.PictureId, "pictureId", String, "pictureUrl", String, "pictureClass", Number, "width", Number, "height", String, "title", Boolean, "editable", [ [ chlk.models.id.PictureId, String, Number, Number, String, Boolean ] ], function $(pictureId_, pictureUrl_, width_, height_, title_, editable_) {
+                if (pictureId_) this.setPictureId(pictureId_);
+                if (pictureUrl_) this.setPictureUrl(pictureUrl_);
+                if (width_) this.setWidth(width_);
+                if (height_) this.setHeight(height_);
+                if (title_) this.setTitle(title_);
+                var cls = "small-icon-item";
+                if (this.getWidth() == 170) cls = "big-icon-item";
+                if (this.getWidth() == 640) cls = "screeshot-item";
+                this.setPictureClass(cls);
+                if (editable_) this.setEditable(editable_);
+            } ]);
+        })();
+    })();
     "ria.serialize.IDeserializable";
     (function() {
         ((chlk = chlk || {}).models = chlk.models || {}).apps = chlk.models.apps || {};
@@ -7989,9 +8199,14 @@ exports.globals = {};
                 this._states[chlk.models.apps.AppStateEnum.APPROVED] = "Approved";
                 this._states[chlk.models.apps.AppStateEnum.REJECTED] = "Rejected";
                 this._states[chlk.models.apps.AppStateEnum.LIVE] = "Live";
-            }, String, function toString() {
-                return this._states[this.getStateId()];
-            }, ria.__SYNTAX.Modifiers.VOID, function deserialize(raw) {
+            }, [ [ Boolean ] ], String, function toString(hasLiveCopy_) {
+                var prefix = "";
+                var currentStateId = this.getStateId();
+                if (hasLiveCopy_) {
+                    if (currentStateId != chlk.models.apps.AppStateEnum.DRAFT && currentStateId != chlk.models.apps.AppStateEnum.LIVE) prefix = "Live - ";
+                }
+                return prefix + this._states[this.getStateId()];
+            }, [ [ Number ] ], ria.__SYNTAX.Modifiers.VOID, function deserialize(raw) {
                 this.setStateId(new chlk.models.apps.AppStateEnum(Number(raw)));
             } ]);
         })();
@@ -8019,6 +8234,7 @@ exports.globals = {};
     "chlk.models.apps.AppAccess";
     "chlk.models.apps.AppPermission";
     "chlk.models.apps.AppCategory";
+    "chlk.models.apps.AppPicture";
     "chlk.models.apps.AppState";
     "chlk.models.common.NameId";
     (function() {
@@ -8030,7 +8246,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.models.apps." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }("Application", [ chlk.models.id.AppId, "id", [ ria.serialize.SerializeProperty("isinternal") ], Boolean, "isInternal", String, "name", String, "url", [ ria.serialize.SerializeProperty("videodemourl") ], String, "videoModeUrl", [ ria.serialize.SerializeProperty("shortdescription") ], String, "shortDescription", String, "description", [ ria.serialize.SerializeProperty("smallpictureid") ], chlk.models.id.PictureId, "smallPictureId", [ ria.serialize.SerializeProperty("bigpictureid") ], chlk.models.id.PictureId, "bigPictureId", [ ria.serialize.SerializeProperty("myappsurl") ], String, "myAppsUrl", [ ria.serialize.SerializeProperty("secretkey") ], String, "secretKey", chlk.models.apps.AppState, "state", [ ria.serialize.SerializeProperty("developerid") ], chlk.models.id.SchoolPersonId, "developerId", [ ria.serialize.SerializeProperty("liveappid") ], chlk.models.id.AppId, "liveAppId", [ ria.serialize.SerializeProperty("isinternal") ], Boolean, "isInternal", [ ria.serialize.SerializeProperty("applicationprice") ], chlk.models.apps.AppPrice, "applicationPrice", [ ria.serialize.SerializeProperty("picturesid") ], ria.__API.ArrayOf(chlk.models.id.PictureId), "pictureIds", [ ria.serialize.SerializeProperty("applicationaccess") ], chlk.models.apps.AppAccess, "appAccess", ria.__API.ArrayOf(chlk.models.apps.AppPermission), "permissions", ria.__API.ArrayOf(chlk.models.apps.AppCategory), "categories", [ ria.serialize.SerializeProperty("gradelevels") ], ria.__API.ArrayOf(chlk.models.id.AppGradeLevelId), "gradeLevels" ]);
+            }("Application", [ chlk.models.id.AppId, "id", [ ria.serialize.SerializeProperty("isinternal") ], Boolean, "internal", String, "name", String, "url", [ ria.serialize.SerializeProperty("videodemourl") ], String, "videoModeUrl", [ ria.serialize.SerializeProperty("shortdescription") ], String, "shortDescription", String, "description", [ ria.serialize.SerializeProperty("smallpictureid") ], chlk.models.id.PictureId, "smallPictureId", [ ria.serialize.SerializeProperty("bigpictureid") ], chlk.models.id.PictureId, "bigPictureId", chlk.models.apps.AppPicture, "iconPicture", chlk.models.apps.AppPicture, "bannerPicture", ria.__API.ArrayOf(chlk.models.apps.AppPicture), "screenshotPictures", [ ria.serialize.SerializeProperty("myappsurl") ], String, "myAppsUrl", [ ria.serialize.SerializeProperty("secretkey") ], String, "secretKey", chlk.models.apps.AppState, "state", [ ria.serialize.SerializeProperty("developerid") ], chlk.models.id.SchoolPersonId, "developerId", [ ria.serialize.SerializeProperty("liveappid") ], chlk.models.id.AppId, "liveAppId", [ ria.serialize.SerializeProperty("applicationprice") ], chlk.models.apps.AppPrice, "applicationPrice", [ ria.serialize.SerializeProperty("picturesid") ], ria.__API.ArrayOf(chlk.models.id.PictureId), "pictureIds", [ ria.serialize.SerializeProperty("applicationaccess") ], chlk.models.apps.AppAccess, "appAccess", ria.__API.ArrayOf(chlk.models.apps.AppPermission), "permissions", ria.__API.ArrayOf(chlk.models.apps.AppCategory), "categories", [ ria.serialize.SerializeProperty("gradelevels") ], ria.__API.ArrayOf(chlk.models.id.AppGradeLevelId), "gradeLevels" ]);
         })();
     })();
     (function() {
@@ -8073,6 +8289,7 @@ exports.globals = {};
     "chlk.models.id.GradeLevelId";
     "chlk.models.id.SchoolPersonId";
     "chlk.models.id.AppPermissionId";
+    "chlk.models.id.PictureId";
     (function() {
         (chlk = chlk || {}).services = chlk.services || {};
         (function() {
@@ -8112,6 +8329,23 @@ exports.globals = {};
                 return appId_ ? this.get("Application/GetInfo.json", chlk.models.apps.Application, {
                     applicationId: appId_.valueOf()
                 }) : ria.async.DeferredData(this.getCurrentApp());
+            }, [ [ Object, Number, Number ] ], ria.async.Future, function uploadPicture(file, width_, height_) {
+                return this.uploadFiles("Application/UploadPicture", file, chlk.models.id.PictureId, {
+                    width: width_,
+                    height: height_
+                });
+            }, [ [ chlk.models.id.AppId ] ], ria.async.Future, function goLive(appId) {
+                return this.post("Application/GoLive.json", Boolean, {
+                    applicationId: appId.valueOf()
+                });
+            }, [ [ chlk.models.id.AppId ] ], ria.async.Future, function unlist(appId) {
+                return this.post("Application/Unlist.json", Boolean, {
+                    applicationId: appId.valueOf()
+                });
+            }, [ [ chlk.models.id.AppId ] ], ria.async.Future, function declineApp(appId) {
+                return this.post("Application/Decline.json", Boolean, {
+                    applicationId: appId.valueOf()
+                });
             }, [ [ chlk.models.id.SchoolPersonId, String ] ], ria.async.Future, function createApp(devId, name) {
                 return this.post("Application/Create.json", chlk.models.apps.Application, {
                     developerId: devId.valueOf(),
@@ -8166,7 +8400,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._21twwroj9v3u9pb9 = function anonymous(locals) {
+    __ASSETS._lwzoran4r8gp66r = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.DemoRoleButton_mixin = function(name) {
@@ -8229,24 +8463,40 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.common.footers." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_21twwroj9v3u9pb9") ], [ ria.templates.ModelBind(chlk.models.common.footers.DeveloperFooter) ], "DeveloperFooter", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.apps.Application, "currentApp", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.apps.Application), "developerApps" ]);
+            }([ ria.templates.TemplateBind("_lwzoran4r8gp66r") ], [ ria.templates.ModelBind(chlk.models.common.footers.DeveloperFooter) ], "DeveloperFooter", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.apps.Application, "currentApp", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.apps.Application), "developerApps" ]);
         })();
     })();
-    __ASSETS._16md38r5k9qc9pb9 = function anonymous(locals) {
+    __ASSETS._u8t63eybq33di = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
-        jade.globals.Textbox_mixin = function(tName, val) {
+        jade.globals.Textbox_mixin = function(tName, val, isReadonly) {
             var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
+            if (isReadonly) {
+                attributes.disabled = isReadonly;
+            }
             buf.push("<input" + jade.attrs(jade.merge({
                 type: "text",
                 name: tName,
                 value: val,
-                "class": "text"
+                "class": "validate[required]" + " " + "text"
             }, attributes), jade.merge({
                 type: true,
                 name: true,
                 value: true
             }, escaped, true)) + "/>");
+        };
+        jade.globals.TextArea_mixin = function(tName, val, isReadonly) {
+            var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
+            if (isReadonly) {
+                attributes.disabled = isReadonly;
+            }
+            buf.push("<textarea" + jade.attrs(jade.merge({
+                name: tName,
+                "class": "validate[required]"
+            }, attributes), jade.merge({
+                name: true,
+                "class": true
+            }, escaped, true)) + ">" + jade.escape(null == (jade.interp = val) ? "" : jade.interp) + "</textarea>");
         };
         jade.globals.MyAppsPermission_mixin = function(prefix, app, suffix) {
             var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
@@ -8254,12 +8504,14 @@ exports.globals = {};
         };
         var app = self.app;
         var myAppsAccess = app.getAppAccess();
+        var appPrice = app.getApplicationPrice();
         var selectedAppCategories = {};
         var selectedAppGradeLevels = {};
         var selectedAppPermissions = {};
         var appGradeLvls = [];
         var appCategories = [];
         var appPermissions = [];
+        var isFreeApp = (app.getApplicationPrice().getPrice() || 0) == 0;
         var actAppCategories = app.getCategories() || [];
         var actAppGradeLevels = app.getGradeLevels() || [];
         var actAppPermissions = app.getPermissions() || [];
@@ -8320,33 +8572,38 @@ exports.globals = {};
         var appGradeLvls = appGradeLvls.join(",");
         var appCategories = appCategories.join(",");
         var appPermissions = appPermissions.join(",");
-        buf.push('<div class="app-info"><div class="action-bar not-transparent dev-app-info"><div class="container panel-bg"><label>API key:</label>');
-        jade.globals.Textbox_mixin.call({
-            buf: buf,
-            attributes: {
-                "class": "api-key"
-            },
-            escaped: {}
-        }, "apikey", "key");
-        buf.push("<label>" + jade.escape(null == (jade.interp = "Status: " + app.getState().toString()) ? "" : jade.interp) + "</label></div></div>");
+        buf.push('<div class="app-info">');
+        if (!self.isReadOnly()) {
+            buf.push('<div class="action-bar not-transparent dev-app-info"><div class="container panel-bg"><label>API key:</label>');
+            jade.globals.Textbox_mixin.call({
+                buf: buf,
+                attributes: {
+                    "class": "api-key"
+                },
+                escaped: {}
+            }, "apikey", app.getSecretKey());
+            buf.push("<label>" + jade.escape(null == (jade.interp = "Status: " + app.getState().toString()) ? "" : jade.interp) + "</label></div></div>");
+        }
         jade.globals.ActionForm_mixin.call({
             buf: buf,
             block: function() {
-                jade.globals.Button_mixin.call({
-                    buf: buf,
-                    block: function() {
-                        buf.push(" Submit App");
-                    },
-                    attributes: {
-                        disabled: self.isDraft(),
-                        name: "submit-btn",
-                        "class": (self.isDraft() ? "x-item-disabled" : "") + " " + "blue-tb-right-button" + " " + "submit-btn"
-                    },
-                    escaped: {
-                        disabled: true,
-                        name: true
-                    }
-                });
+                if (!self.isReadOnly()) {
+                    jade.globals.Button_mixin.call({
+                        buf: buf,
+                        block: function() {
+                            buf.push(" Submit App");
+                        },
+                        attributes: {
+                            disabled: self.isDraft(),
+                            name: "submit-btn",
+                            "class": (self.isDraft() ? "x-item-disabled" : "") + " " + "blue-tb-right-button" + " " + "submit-btn"
+                        },
+                        escaped: {
+                            disabled: true,
+                            name: true
+                        }
+                    });
+                }
                 jade.globals.Hidden_mixin.call({
                     buf: buf
                 }, "draft", self.isDraft());
@@ -8356,53 +8613,53 @@ exports.globals = {};
                 buf.push('<div class="section first"><div class="elem"><label class="hint">App Name:</label>');
                 jade.globals.Textbox_mixin.call({
                     buf: buf
-                }, "name", app.getName());
+                }, "name", app.getName(), self.isReadOnly());
                 buf.push('</div><div class="elem"><label class="hint">App URL:</label>');
                 jade.globals.Textbox_mixin.call({
                     buf: buf
-                }, "url", app.getUrl());
+                }, "url", app.getUrl(), self.isReadOnly());
                 buf.push('</div></div><div class="section"><div class="elem"><label class="top hint">My Apps:</label><div class="my-apps"><div class="permission">');
                 jade.globals.MyAppsPermission_mixin.call({
                     buf: buf
                 }, "Can Teachers Launch", app.getName(), "in My Apps?");
                 jade.globals.SlideCheckbox_mixin.call({
                     buf: buf
-                }, "hasTeacherMyApps", myAppsAccess.isTeacherMyAppsEnabled());
+                }, "hasTeacherMyApps", myAppsAccess.isTeacherMyAppsEnabled(), self.isReadOnly());
                 buf.push('</div><div class="permission">');
                 jade.globals.MyAppsPermission_mixin.call({
                     buf: buf
                 }, "Can Students Launch", app.getName(), "in My Apps?");
                 jade.globals.SlideCheckbox_mixin.call({
                     buf: buf
-                }, "hasStudentMyApps", myAppsAccess.isStudentMyAppsEnabled());
+                }, "hasStudentMyApps", myAppsAccess.isStudentMyAppsEnabled(), self.isReadOnly());
                 buf.push('</div><div class="permission">');
                 jade.globals.MyAppsPermission_mixin.call({
                     buf: buf
                 }, "Can Admins Launch", app.getName(), "in My Apps?");
                 jade.globals.SlideCheckbox_mixin.call({
                     buf: buf
-                }, "hasAdminMyApps", myAppsAccess.isAdminMyAppsEnabled());
+                }, "hasAdminMyApps", myAppsAccess.isAdminMyAppsEnabled(), self.isReadOnly());
                 buf.push('</div><div class="permission">');
                 jade.globals.MyAppsPermission_mixin.call({
                     buf: buf
                 }, "Can Parents Launch", app.getName(), "in My Apps?");
                 jade.globals.SlideCheckbox_mixin.call({
                     buf: buf
-                }, "hasParentMyApps", myAppsAccess.isParentMyAppsEnabled());
+                }, "hasParentMyApps", myAppsAccess.isParentMyAppsEnabled(), self.isReadOnly());
                 buf.push('</div></div></div></div><div class="section small"><div class="elem first"><label class="hint">New Item:</label><div class="my-apps"><div class="permission">');
                 jade.globals.MyAppsPermission_mixin.call({
                     buf: buf
                 }, "Can Teachers Attach", app.getName(), "in New Items?");
                 jade.globals.SlideCheckbox_mixin.call({
                     buf: buf
-                }, "canAttach", myAppsAccess.isAttachEnabled());
+                }, "canAttach", myAppsAccess.isAttachEnabled(), self.isReadOnly());
                 buf.push('</div></div></div><div class="elem"><label class="hint">Grading View:</label><div class="my-apps"><div class="permission">');
                 jade.globals.MyAppsPermission_mixin.call({
                     buf: buf
                 }, "Will be Teachers", "", "viewing student output");
                 jade.globals.SlideCheckbox_mixin.call({
                     buf: buf
-                }, "showInGradingView", myAppsAccess.isVisibleInGradingView());
+                }, "showInGradingView", myAppsAccess.isVisibleInGradingView(), self.isReadOnly());
                 buf.push('</div></div></div></div><div class="section"><div class="elem"><label class="hint">API Access:</label><div class="permissions">');
                 jade.globals.CheckboxList_mixin.call({
                     buf: buf,
@@ -8415,7 +8672,7 @@ exports.globals = {};
                                     isChecked = !!selectedAppPermissions[item.getId().valueOf()];
                                     jade.globals.LabeledCheckbox_mixin.call({
                                         buf: buf
-                                    }, item.getName(), "app-permission" + item.getId(), isChecked);
+                                    }, item.getName(), "app-permission" + item.getId(), isChecked, self.isReadOnly());
                                 }
                             } else {
                                 var $$l = 0;
@@ -8425,7 +8682,7 @@ exports.globals = {};
                                     isChecked = !!selectedAppPermissions[item.getId().valueOf()];
                                     jade.globals.LabeledCheckbox_mixin.call({
                                         buf: buf
-                                    }, item.getName(), "app-permission" + item.getId(), isChecked);
+                                    }, item.getName(), "app-permission" + item.getId(), isChecked, self.isReadOnly());
                                 }
                             }
                         }).call(this);
@@ -8443,7 +8700,7 @@ exports.globals = {};
                                     isChecked = !!selectedAppCategories[item.getId()];
                                     jade.globals.LabeledCheckbox_mixin.call({
                                         buf: buf
-                                    }, item.getName(), "app-category" + item.getId(), isChecked);
+                                    }, item.getName(), "app-category" + item.getId(), isChecked, self.isReadOnly());
                                 }
                             } else {
                                 var $$l = 0;
@@ -8453,7 +8710,7 @@ exports.globals = {};
                                     isChecked = !!selectedAppCategories[item.getId()];
                                     jade.globals.LabeledCheckbox_mixin.call({
                                         buf: buf
-                                    }, item.getName(), "app-category" + item.getId(), isChecked);
+                                    }, item.getName(), "app-category" + item.getId(), isChecked, self.isReadOnly());
                                 }
                             }
                         }).call(this);
@@ -8471,7 +8728,7 @@ exports.globals = {};
                                     isChecked = !!selectedAppGradeLevels[item.getId().valueOf()];
                                     jade.globals.LabeledCheckbox_mixin.call({
                                         buf: buf
-                                    }, item.getName(), "app-grade-level" + item.getId(), isChecked);
+                                    }, item.getName(), "app-grade-level" + item.getId(), isChecked, self.isReadOnly());
                                 }
                             } else {
                                 var $$l = 0;
@@ -8481,7 +8738,7 @@ exports.globals = {};
                                     isChecked = !!selectedAppGradeLevels[item.getId().valueOf()];
                                     jade.globals.LabeledCheckbox_mixin.call({
                                         buf: buf
-                                    }, item.getName(), "app-grade-level" + item.getId(), isChecked);
+                                    }, item.getName(), "app-grade-level" + item.getId(), isChecked, self.isReadOnly());
                                 }
                             }
                         }).call(this);
@@ -8490,11 +8747,15 @@ exports.globals = {};
                 buf.push('</div></div></div><div class="section"><div class="elem"><label class="wide hint">Short Description:</label>');
                 jade.globals.Textbox_mixin.call({
                     buf: buf
-                }, "shortDescription", app.getShortDescription());
-                buf.push('</div><div class="elem"><label class="wide hint top-align">Long Description:</label><textarea name="longDescription">' + jade.escape(null == (jade.interp = app.getDescription()) ? "" : jade.interp) + '</textarea></div><div class="elem"><label class="wide hint">Video Demo:</label>');
+                }, "shortDescription", app.getShortDescription(), self.isReadOnly());
+                buf.push('</div><div class="elem"><label class="wide hint top-align">Long Description:</label>');
+                jade.globals.TextArea_mixin.call({
+                    buf: buf
+                }, "longDescription", app.getDescription(), self.isReadOnly());
+                buf.push('</div><div class="elem"><label class="wide hint">Video Demo:</label>');
                 jade.globals.Textbox_mixin.call({
                     buf: buf
-                }, "videoModeUrl", app.getVideoModeUrl());
+                }, "videoModeUrl", app.getVideoModeUrl(), self.isReadOnly());
                 buf.push('</div></div><div class="section"><div class="elem"><label class="hint">Pricing:</label>');
                 jade.globals.SlideCheckbox_mixin.call({
                     buf: buf,
@@ -8502,21 +8763,54 @@ exports.globals = {};
                         "class": "price-checkbox"
                     },
                     escaped: {}
-                }, "price", true);
-                buf.push('<div class="app-pricing"><span>Test</span></div></div></div><div class="section"><div class="elem"><label class="hint">Icons:</label></div></div>');
-                jade.globals.Button_mixin.call({
+                }, "price", isFreeApp, self.isReadOnly());
+                buf.push('</div><div class="app-pricing"><div class="elem"><label class="hint">Cost per user:</label>');
+                jade.globals.Textbox_mixin.call({
                     buf: buf,
-                    block: function() {
-                        buf.push("Update Draft");
-                    },
                     attributes: {
-                        name: "submit-draft-btn",
-                        "class": "special-button" + " " + "blue-button"
+                        "class": "price-box"
                     },
-                    escaped: {
-                        name: true
-                    }
-                });
+                    escaped: {}
+                }, "costPerUser", appPrice.getPrice());
+                buf.push("<div><span>Is there a flat rate for whole school purchases?</span>");
+                jade.globals.SlideCheckbox_mixin.call({
+                    buf: buf
+                }, "schoolFlatRateEnabled", appPrice.getPricePerSchool() > 0, self.isReadOnly());
+                buf.push('</div></div><div class="elem"><label class="wide hint">School flat rate:</label>');
+                jade.globals.Textbox_mixin.call({
+                    buf: buf,
+                    attributes: {
+                        "class": "price-box"
+                    },
+                    escaped: {}
+                }, "costPerSchool", appPrice.getPricePerSchool());
+                jade.globals.SlideCheckbox_mixin.call({
+                    buf: buf
+                }, "canAttach", myAppsAccess.isAttachEnabled(), self.isReadOnly());
+                buf.push('</div></div></div><div class="section last"><div class="pictures"><div class="elem icons"><label class="hint">Icons:</label><div class="icons"><div class="icon">');
+                jade.globals.RenderWith_mixin.call({
+                    buf: buf
+                }, app.getIconPicture(), chlk.templates.apps.AppPicture);
+                buf.push('</div><div class="banner">');
+                jade.globals.RenderWith_mixin.call({
+                    buf: buf
+                }, app.getBannerPicture(), chlk.templates.apps.AppPicture);
+                buf.push('</div></div></div><div class="elem screenshots"><label class="hint">Screenshots:</label><div class="screenshots"><!--+RenderWith(app.(), chlk.templates.apps.AppPicture)--></div></div></div></div>');
+                if (!self.isReadOnly()) {
+                    jade.globals.Button_mixin.call({
+                        buf: buf,
+                        block: function() {
+                            buf.push("Update Draft");
+                        },
+                        attributes: {
+                            name: "submit-draft-btn",
+                            "class": "submit-draft-btn" + " " + "special-button" + " " + "blue-button"
+                        },
+                        escaped: {
+                            name: true
+                        }
+                    });
+                }
             },
             attributes: {
                 "class": "app-info"
@@ -8556,7 +8850,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.models.apps." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }("AppInfoViewData", [ chlk.models.apps.Application, "app", ria.__API.ArrayOf(chlk.models.apps.Application), "apps", ria.__API.ArrayOf(chlk.models.apps.AppCategory), "categories", ria.__API.ArrayOf(chlk.models.apps.AppGradeLevel), "gradeLevels", ria.__API.ArrayOf(chlk.models.apps.AppPermission), "permissions", Boolean, "empty", Boolean, "readOnly", Boolean, "draft", [ [ chlk.models.apps.Application, Boolean, ria.__API.ArrayOf(chlk.models.apps.AppCategory), ria.__API.ArrayOf(chlk.models.apps.AppGradeLevel), ria.__API.ArrayOf(chlk.models.apps.AppPermission), Boolean ] ], function $(app_, isReadonly, categories, gradeLevels, permissions, isDraft) {
+            }("AppInfoViewData", [ chlk.models.apps.Application, "app", ria.__API.ArrayOf(chlk.models.apps.AppCategory), "categories", ria.__API.ArrayOf(chlk.models.apps.AppGradeLevel), "gradeLevels", ria.__API.ArrayOf(chlk.models.apps.AppPermission), "permissions", Boolean, "empty", Boolean, "readOnly", Boolean, "draft", [ [ chlk.models.apps.Application, Boolean, ria.__API.ArrayOf(chlk.models.apps.AppCategory), ria.__API.ArrayOf(chlk.models.apps.AppGradeLevel), ria.__API.ArrayOf(chlk.models.apps.AppPermission), Boolean ] ], function $(app_, isReadonly, categories, gradeLevels, permissions, isDraft) {
                 if (app_) this.setApp(app_);
                 this.setEmpty(!!app_);
                 this.setReadOnly(isReadonly);
@@ -8580,10 +8874,10 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.apps." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_16md38r5k9qc9pb9") ], [ ria.templates.ModelBind(chlk.models.apps.AppInfoViewData) ], "AppInfo", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.apps.Application, "app", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.apps.Application), "apps", [ ria.templates.ModelPropertyBind ], Boolean, "empty", [ ria.templates.ModelPropertyBind ], Boolean, "draft", [ ria.templates.ModelPropertyBind ], Boolean, "readOnly", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.apps.AppCategory), "categories", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.apps.AppGradeLevel), "gradeLevels", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.apps.AppPermission), "permissions" ]);
+            }([ ria.templates.TemplateBind("_u8t63eybq33di") ], [ ria.templates.ModelBind(chlk.models.apps.AppInfoViewData) ], "AppInfo", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.apps.Application, "app", [ ria.templates.ModelPropertyBind ], Boolean, "empty", [ ria.templates.ModelPropertyBind ], Boolean, "draft", [ ria.templates.ModelPropertyBind ], Boolean, "readOnly", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.apps.AppCategory), "categories", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.apps.AppGradeLevel), "gradeLevels", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.apps.AppPermission), "permissions" ]);
         })();
     })();
-    __ASSETS._drfh4evpc94o0f6r = function anonymous(locals) {
+    __ASSETS._jprdx4btrdjnstt9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push("<iframe" + jade.attrs({
@@ -8619,7 +8913,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.developer." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_drfh4evpc94o0f6r") ], [ ria.templates.ModelBind(chlk.models.developer.DeveloperDocs) ], "DeveloperDocs", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], String, "docsUrl" ]);
+            }([ ria.templates.TemplateBind("_jprdx4btrdjnstt9") ], [ ria.templates.ModelBind(chlk.models.developer.DeveloperDocs) ], "DeveloperDocs", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], String, "docsUrl" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -8681,7 +8975,7 @@ exports.globals = {};
                 var model = new chlk.models.common.footers.DeveloperFooter(this.appsService.getCurrentApp(), apps);
                 footerTpl.assign(model);
                 new ria.dom.Dom().fromHTML(footerTpl.render()).appendTo(new ria.dom.Dom("#demo-footer").empty());
-            }, [ chlk.controllers.AccessForRoles([ chlk.models.common.RoleEnum.DEVELOPER ]) ], function generalAction() {}, [ chlk.controllers.AccessForRoles([ chlk.models.common.RoleEnum.DEVELOPER ]) ], function docsAction() {
+            }, [ chlk.controllers.AccessForRoles([ chlk.models.common.RoleEnum.DEVELOPER ]) ], function docsAction() {
                 var devDocsModel = new chlk.models.developer.DeveloperDocs(this.getContext().getSession().get("webSiteRoot") + "/Developer/DeveloperDocs?InFrame=true");
                 return this.PushView(chlk.activities.developer.DeveloperDocsPage, new ria.async.DeferredData(devDocsModel));
             } ]);
@@ -8810,7 +9104,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._w77cp12h7ueuerk9 = function anonymous(locals) {
+    __ASSETS._r52gg2e2clqv9529 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="developer"><div class="info"><h2>Base Info</h2>');
@@ -8855,7 +9149,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.profile." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_w77cp12h7ueuerk9") ], [ ria.templates.ModelBind(chlk.models.developer.DeveloperInfo) ], "DeveloperProfile", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolPersonId, "id", [ ria.templates.ModelPropertyBind ], String, "displayName", [ ria.templates.ModelPropertyBind ], String, "email", [ ria.templates.ModelPropertyBind ], String, "firstName", [ ria.templates.ModelPropertyBind ], String, "lastName", [ ria.templates.ModelPropertyBind ], String, "name", [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolId, "schoolId", [ ria.templates.ModelPropertyBind ], String, "webSite" ]);
+            }([ ria.templates.TemplateBind("_r52gg2e2clqv9529") ], [ ria.templates.ModelBind(chlk.models.developer.DeveloperInfo) ], "DeveloperProfile", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolPersonId, "id", [ ria.templates.ModelPropertyBind ], String, "displayName", [ ria.templates.ModelPropertyBind ], String, "email", [ ria.templates.ModelPropertyBind ], String, "firstName", [ ria.templates.ModelPropertyBind ], String, "lastName", [ ria.templates.ModelPropertyBind ], String, "name", [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolId, "schoolId", [ ria.templates.ModelPropertyBind ], String, "webSite" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -8871,7 +9165,7 @@ exports.globals = {};
             }([ ria.mvc.DomAppendTo("#main") ], [ chlk.activities.lib.PageClass("profile") ], [ ria.mvc.TemplateBind(chlk.templates.profile.DeveloperProfile) ], "DeveloperPage", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePage), []);
         })();
     })();
-    __ASSETS._abl1g6sidt3dte29 = function anonymous(locals) {
+    __ASSETS._45uac5c89scvunmi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="info-edit">');
@@ -8921,7 +9215,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.profile." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_abl1g6sidt3dte29") ], [ ria.templates.ModelBind(ria.__API.Class) ], "ChangePassword", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), []);
+            }([ ria.templates.TemplateBind("_45uac5c89scvunmi") ], [ ria.templates.ModelBind(ria.__API.Class) ], "ChangePassword", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), []);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -9043,9 +9337,68 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._6yozbw7xubf8yqfr = function anonymous(locals) {
+    "chlk.services.BaseService";
+    "chlk.models.id.PictureId";
+    "ria.async.Future";
+    (function() {
+        (chlk = chlk || {}).services = chlk.services || {};
+        (function() {
+            "use strict";
+            chlk.services.PictureService = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.services." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("PictureService", ria.__SYNTAX.EXTENDS(chlk.services.BaseService), [ [ [ chlk.models.id.PictureId, Number, Number ] ], String, function getPictureUrl(id, width_, height_) {
+                var prefix = this.getContext().getSession().get("azurePictureUrl");
+                var suffix = "";
+                if (width_) {
+                    suffix = height_ ? "-" + width_ + "x" + height_ : "-" + width_ + "x" + width_;
+                }
+                return id.valueOf() ? prefix + id.valueOf() + suffix : "#";
+            } ]);
+        })();
+    })();
+    __ASSETS._atzem18al594quxr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
+        jade.globals.AppManagementControls_mixin = function(id, state) {
+            var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
+            if (state != chlk.models.apps.AppStateEnum.SUBMIT_FOR_APPROVE) {
+                buf.push("<span>" + jade.escape(null == (jade.interp = state.toString()) ? "" : jade.interp) + "</span>");
+            } else {
+                jade.globals.ActionLink_mixin.call({
+                    buf: buf,
+                    block: function() {
+                        buf.push("Approve");
+                    },
+                    attributes: {
+                        "class": "btn"
+                    },
+                    escaped: {}
+                }, "apps", "approve", id);
+                jade.globals.ActionLink_mixin.call({
+                    buf: buf,
+                    block: function() {
+                        buf.push("Decline");
+                    },
+                    attributes: {
+                        "class": "btn"
+                    },
+                    escaped: {}
+                }, "apps", "decline", id);
+                jade.globals.ActionLink_mixin.call({
+                    buf: buf,
+                    block: function() {
+                        buf.push("Test");
+                    },
+                    attributes: {
+                        "class": "btn"
+                    },
+                    escaped: {}
+                }, "a", "b", "c");
+            }
+        };
         buf.push('<div class="apps-list">');
         jade.globals.Grid_mixin.call({
             buf: buf,
@@ -9053,7 +9406,7 @@ exports.globals = {};
                 jade.globals.GridHead_mixin.call({
                     buf: buf,
                     block: function() {
-                        buf.push('<div class="th">Application Name</div><div class="th">Description</div><div class="th">isInternal</div><div class="th"></div>');
+                        buf.push('<div class="th"></div><div class="th">Application Name</div><div class="th">Description</div><div class="th">State</div><div class="th narrow">isInternal</div><div class="th"></div>');
                     }
                 });
                 jade.globals.GridBody_mixin.call({
@@ -9067,7 +9420,15 @@ exports.globals = {};
                                     jade.globals.GridRow_mixin.call({
                                         buf: buf,
                                         block: function() {
-                                            buf.push('<div class="td">' + jade.escape(null == (jade.interp = item.getName()) ? "" : jade.interp) + '</div><div class="td">' + jade.escape(null == (jade.interp = item.getShortDescription()) ? "" : jade.interp) + '</div><div class="td"></div><div class="td action-links">');
+                                            buf.push('<div class="td"></div><div class="td">' + jade.escape(null == (jade.interp = item.getName()) ? "" : jade.interp) + '</div><div class="td">' + jade.escape(null == (jade.interp = item.getShortDescription()) ? "" : jade.interp) + '</div><div class="td app-state">');
+                                            jade.globals.AppManagementControls_mixin.call({
+                                                buf: buf
+                                            }, item.getId(), item.getState());
+                                            buf.push('</div><div class="td">');
+                                            jade.globals.Checkbox_mixin.call({
+                                                buf: buf
+                                            }, "isInternal", item.isInternal());
+                                            buf.push('</div><div class="td action-links">');
                                             jade.globals.ActionLink_mixin.call({
                                                 buf: buf,
                                                 attributes: {
@@ -9094,7 +9455,15 @@ exports.globals = {};
                                     jade.globals.GridRow_mixin.call({
                                         buf: buf,
                                         block: function() {
-                                            buf.push('<div class="td">' + jade.escape(null == (jade.interp = item.getName()) ? "" : jade.interp) + '</div><div class="td">' + jade.escape(null == (jade.interp = item.getShortDescription()) ? "" : jade.interp) + '</div><div class="td"></div><div class="td action-links">');
+                                            buf.push('<div class="td"></div><div class="td">' + jade.escape(null == (jade.interp = item.getName()) ? "" : jade.interp) + '</div><div class="td">' + jade.escape(null == (jade.interp = item.getShortDescription()) ? "" : jade.interp) + '</div><div class="td app-state">');
+                                            jade.globals.AppManagementControls_mixin.call({
+                                                buf: buf
+                                            }, item.getId(), item.getState());
+                                            buf.push('</div><div class="td">');
+                                            jade.globals.Checkbox_mixin.call({
+                                                buf: buf
+                                            }, "isInternal", item.isInternal());
+                                            buf.push('</div><div class="td action-links">');
                                             jade.globals.ActionLink_mixin.call({
                                                 buf: buf,
                                                 attributes: {
@@ -9122,7 +9491,7 @@ exports.globals = {};
                 "class": "not-transparent"
             },
             escaped: {}
-        }, "apps", "list", self);
+        }, "apps", "page", self);
         buf.push("</div>");
         return buf.join("");
     };
@@ -9136,7 +9505,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_8ru3si7j8m2t9") ], [ ria.templates.ModelBind(chlk.models.common.PaginatedList) ], "PaginatedList", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(Object), "items", [ ria.templates.ModelPropertyBind ], Number, "pageIndex", [ ria.templates.ModelPropertyBind ], Number, "pageSize", [ ria.templates.ModelPropertyBind ], Number, "totalCount", [ ria.templates.ModelPropertyBind ], Number, "totalPages", [ ria.templates.ModelPropertyBind ], Boolean, "hasNextPage", [ ria.templates.ModelPropertyBind ], Boolean, "hasPreviousPage" ]);
+            }([ ria.templates.TemplateBind("_idojvb3optzw7b9") ], [ ria.templates.ModelBind(chlk.models.common.PaginatedList) ], "PaginatedList", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(Object), "items", [ ria.templates.ModelPropertyBind ], Number, "pageIndex", [ ria.templates.ModelPropertyBind ], Number, "pageSize", [ ria.templates.ModelPropertyBind ], Number, "totalCount", [ ria.templates.ModelPropertyBind ], Number, "totalPages", [ ria.templates.ModelPropertyBind ], Boolean, "hasNextPage", [ ria.templates.ModelPropertyBind ], Boolean, "hasPreviousPage" ]);
         })();
     })();
     "chlk.templates.PaginatedList";
@@ -9149,7 +9518,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.apps." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_6yozbw7xubf8yqfr") ], [ ria.templates.ModelBind(chlk.models.common.PaginatedList) ], "Apps", ria.__SYNTAX.EXTENDS(chlk.templates.PaginatedList), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.apps.Application), "items" ]);
+            }([ ria.templates.TemplateBind("_atzem18al594quxr") ], [ ria.templates.ModelBind(chlk.models.common.PaginatedList) ], "Apps", ria.__SYNTAX.EXTENDS(chlk.templates.PaginatedList), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.apps.Application), "items" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -9165,20 +9534,174 @@ exports.globals = {};
             }([ ria.mvc.DomAppendTo("#main") ], [ ria.mvc.TemplateBind(chlk.templates.apps.Apps) ], "AppsListPage", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePage), []);
         })();
     })();
+    __ASSETS._wt6yhihj3mhx5hfr = function anonymous(locals) {
+        var buf = [];
+        var self = locals || {};
+        jade.globals.Thumbnail_mixin = function(id, url, title, dimsX, dimsY, pictureCls, readOnly) {
+            var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
+            buf.push("<div" + jade.attrs({
+                "class": "thumbnail" + " " + pictureCls
+            }, {
+                "class": true
+            }) + ">");
+            if (!readOnly) {
+                jade.globals.ActionLink_mixin.call({
+                    buf: buf,
+                    attributes: {
+                        "class": "close-btn"
+                    },
+                    escaped: {}
+                }, "apps", "deletePicture", [ title, dimsX, dimsY ]);
+                jade.globals.LoadingImage_mixin.call({
+                    buf: buf,
+                    attributes: {
+                        src: url
+                    },
+                    escaped: {
+                        src: true
+                    }
+                });
+            }
+            buf.push("</div>");
+        };
+        jade.globals.IconBox_mixin = function(id, url, title, dimsX, dimsY, pictureCls, readOnly) {
+            var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
+            jade.globals.Hidden_mixin.call({
+                buf: buf
+            }, "app" + title + "Id", id.valueOf());
+            if (id.valueOf()) {
+                jade.globals.Thumbnail_mixin.call({
+                    buf: buf
+                }, id, url, title, dimsX, dimsY, pictureCls, readOnly);
+            } else {
+                buf.push('<div class="upload-img-block"><div class="top">' + jade.escape(null == (jade.interp = dimsX + "px x " + dimsY + "px") ? "" : jade.interp) + '</div><div class="bottom"><button class="simple-gray-button file">' + jade.escape(null == (jade.interp = title) ? "" : jade.interp));
+                jade.globals.FileUpload_mixin.call({
+                    buf: buf,
+                    attributes: {
+                        "class": "simple-gray-button"
+                    },
+                    escaped: {}
+                }, "apps", "uploadPicture", [ dimsX, dimsY, title ]);
+                jade.globals.ActionLink_mixin.call({
+                    buf: buf,
+                    block: function() {
+                        buf.push("Download Attachment");
+                    }
+                }, "apps", "d", id);
+                buf.push("</button></div></div>");
+            }
+        };
+        jade.globals.IconBox_mixin.call({
+            buf: buf
+        }, self.pictureId, self.pictureUrl, self.title, self.width, self.height, self.pictureClass, !self.editable);
+        return buf.join("");
+    };
+    "chlk.models.apps.AppPicture";
+    (function() {
+        ((chlk = chlk || {}).templates = chlk.templates || {}).apps = chlk.templates.apps || {};
+        (function() {
+            chlk.templates.apps.AppPicture = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.templates.apps." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }([ ria.templates.TemplateBind("_wt6yhihj3mhx5hfr") ], [ ria.templates.ModelBind(chlk.models.apps.AppPicture) ], "AppPicture", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.PictureId, "pictureId", [ ria.templates.ModelPropertyBind ], String, "pictureUrl", [ ria.templates.ModelPropertyBind ], Number, "width", [ ria.templates.ModelPropertyBind ], Number, "height", [ ria.templates.ModelPropertyBind ], String, "title", [ ria.templates.ModelPropertyBind ], Boolean, "editable", [ ria.templates.ModelPropertyBind ], String, "pictureClass" ]);
+        })();
+    })();
     "chlk.activities.lib.TemplatePage";
     "chlk.templates.apps.AppInfo";
+    "chlk.templates.apps.AppPicture";
     (function() {
         ((chlk = chlk || {}).activities = chlk.activities || {}).apps = chlk.activities.apps || {};
         (function() {
+            var HIDDEN_CLASS = "x-hidden";
             chlk.activities.apps.AppInfoPage = function ClassCompilerImpl() {
                 var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.activities.apps." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.mvc.DomAppendTo("#main") ], [ ria.mvc.TemplateBind(chlk.templates.apps.AppInfo) ], "AppInfoPage", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePage), []);
+            }([ ria.mvc.DomAppendTo("#main") ], [ ria.mvc.TemplateBind(chlk.templates.apps.AppInfo) ], [ ria.mvc.PartialUpdateRule(chlk.templates.apps.AppPicture, "icon", ".icon", ria.mvc.PartialUpdateRuleActions.Replace) ], [ ria.mvc.PartialUpdateRule(chlk.templates.apps.AppPicture, "banner", ".banner", ria.mvc.PartialUpdateRuleActions.Replace) ], "AppInfoPage", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePage), [ function $() {
+                BASE();
+                this._priceCheckbox = new ria.dom.Dom("#price");
+            }, [ ria.mvc.DomEventBind("click", ".price-checkbox") ], [ [ ria.dom.Dom, ria.dom.Event ] ], ria.__SYNTAX.Modifiers.VOID, function toggleAppPaymentInfo(node, event) {
+                var appPricing = node.parent().find(".app-pricing");
+                appPricing.toggleClass(HIDDEN_CLASS, !this._priceCheckbox.is(":checked"));
+            } ]);
         })();
     })();
-    __ASSETS._aighut76ujysnhfr = function anonymous(locals) {
+    __ASSETS._2pnf70me2buik9 = function anonymous(locals) {
+        var buf = [];
+        var self = locals || {};
+        jade.globals.RenderAppState_mixin = function(id, state, hasLiveApp) {
+            var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
+            buf.push('<div class="app-status">' + jade.escape(null == (jade.interp = state.toString(hasLiveApp)) ? "" : jade.interp) + "</div>");
+            if (state == chlk.models.apps.AppStateEnum.APPROVED) {
+                jade.globals.ActionLink_mixin.call({
+                    buf: buf,
+                    block: function() {
+                        buf.push("Live");
+                    }
+                }, "apps", "goLive", id);
+            }
+            if (state == chlk.models.apps.AppStateEnum.LIVE) {
+                jade.globals.ActionLink_mixin.call({
+                    buf: buf,
+                    block: function() {
+                        buf.push("Unlist");
+                    }
+                }, "apps", "unlist", id);
+            }
+        };
+        var app = self.getApp();
+        buf.push('<div class="app-general-info"><div class="action-bar not-transparent dev-app-info"><div class="container panel-bg"></div></div><div class="app-header"><div class="app-icon"><img src="#" width="100" height="80"/></div><div class="app-description"><div class="title">' + jade.escape(null == (jade.interp = app.getName()) ? "" : jade.interp) + "</div>");
+        jade.globals.RenderAppState_mixin.call({
+            buf: buf
+        }, app.getId(), app.getState(), app.getLiveAppId());
+        buf.push("</div></div></div>");
+        return buf.join("");
+    };
+    "chlk.models.apps.Application";
+    (function() {
+        ((chlk = chlk || {}).models = chlk.models || {}).apps = chlk.models.apps || {};
+        (function() {
+            "use strict";
+            chlk.models.apps.AppGeneralInfoViewData = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.models.apps." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("AppGeneralInfoViewData", [ chlk.models.apps.Application, "app", String, "appThumbnail", [ [ chlk.models.apps.Application ] ], function $(app) {
+                this.setApp(app);
+            } ]);
+        })();
+    })();
+    "chlk.models.apps.AppGeneralInfoViewData";
+    "chlk.models.apps.Application";
+    (function() {
+        ((chlk = chlk || {}).templates = chlk.templates || {}).apps = chlk.templates.apps || {};
+        (function() {
+            chlk.templates.apps.AppGeneral = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.templates.apps." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }([ ria.templates.TemplateBind("_2pnf70me2buik9") ], [ ria.templates.ModelBind(chlk.models.apps.AppGeneralInfoViewData) ], "AppGeneral", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.apps.Application, "app" ]);
+        })();
+    })();
+    "chlk.activities.lib.TemplatePage";
+    "chlk.templates.apps.AppGeneral";
+    (function() {
+        ((chlk = chlk || {}).activities = chlk.activities || {}).apps = chlk.activities.apps || {};
+        (function() {
+            chlk.activities.apps.AppGeneralInfoPage = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.activities.apps." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }([ ria.mvc.DomAppendTo("#main") ], [ ria.mvc.TemplateBind(chlk.templates.apps.AppGeneral) ], "AppGeneralInfoPage", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePage), []);
+        })();
+    })();
+    __ASSETS._wg3c2canx1zfflxr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="dialog add-app">');
@@ -9224,7 +9747,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.apps." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_aighut76ujysnhfr") ], [ ria.templates.ModelBind(chlk.models.apps.Application) ], "AddAppDialog", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], String, "name" ]);
+            }([ ria.templates.TemplateBind("_wg3c2canx1zfflxr") ], [ ria.templates.ModelBind(chlk.models.apps.Application) ], "AddAppDialog", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], String, "name" ]);
         })();
     })();
     "chlk.activities.lib.TemplateDialog";
@@ -9259,6 +9782,7 @@ exports.globals = {};
         })();
     })();
     "chlk.models.id.AppId";
+    "chlk.models.id.PictureId";
     (function() {
         ((chlk = chlk || {}).models = chlk.models || {}).apps = chlk.models.apps || {};
         (function() {
@@ -9268,38 +9792,23 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.models.apps." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }("AppPostData", [ chlk.models.id.AppId, "id", Boolean, "draft", String, "gradeLevels", String, "permissions", String, "categories", String, "name", String, "url", String, "videoModeUrl", String, "shortDescription", String, "longDescription", Boolean, "hasTeacherMyApps", Boolean, "hasAdminMyApps", Boolean, "hasStudentMyApps", Boolean, "hasParentMyApps", Boolean, "canAttach", Boolean, "showInGradingView", Number, "price", Number, "pricePerClass", Number, "pricePerSchool" ]);
-        })();
-    })();
-    "chlk.models.apps.AppState";
-    "chlk.models.id.AppId";
-    (function() {
-        ((chlk = chlk || {}).models = chlk.models || {}).apps = chlk.models.apps || {};
-        (function() {
-            "use strict";
-            chlk.models.apps.AppGeneralInfoViewData = function ClassCompilerImpl() {
-                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
-                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
-                var name = "chlk.models.apps." + def.name;
-                return ria.__SYNTAX.compileClass(name, def);
-            }("AppGeneralInfoViewData", [ String, "appName", chlk.models.apps.AppState, "appState", chlk.models.id.AppId, "appId", [ [ chlk.models.id.AppId, String, chlk.models.apps.AppState ] ], function $(id, name, state) {
-                this.setId(id);
-                this.setName(name);
-                this.setState(state);
-            } ]);
+            }("AppPostData", [ chlk.models.id.AppId, "id", Boolean, "draft", String, "gradeLevels", String, "permissions", String, "categories", String, "name", String, "url", String, "videoModeUrl", String, "shortDescription", String, "longDescription", Boolean, "hasTeacherMyApps", Boolean, "hasAdminMyApps", Boolean, "hasStudentMyApps", Boolean, "hasParentMyApps", Boolean, "canAttach", Boolean, "showInGradingView", Number, "price", Number, "pricePerClass", Number, "pricePerSchool", chlk.models.id.PictureId, "appIconId", chlk.models.id.PictureId, "appBannerId" ]);
         })();
     })();
     "chlk.controllers.BaseController";
     "chlk.services.ApplicationService";
     "chlk.services.AppCategoryService";
     "chlk.services.GradeLevelService";
+    "chlk.services.PictureService";
     "chlk.activities.apps.AppsListPage";
     "chlk.activities.apps.AppInfoPage";
+    "chlk.activities.apps.AppGeneralInfoPage";
     "chlk.activities.apps.AddAppDialog";
     "chlk.models.apps.Application";
     "chlk.models.apps.AppPostData";
     "chlk.models.apps.ShortAppInfo";
     "chlk.models.apps.AppAccess";
+    "chlk.models.apps.AppPicture";
     "chlk.models.apps.AppState";
     "chlk.models.id.AppId";
     "chlk.models.id.AppPermissionId";
@@ -9312,10 +9821,13 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.controllers." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }("AppsController", ria.__SYNTAX.EXTENDS(chlk.controllers.BaseController), [ [ ria.mvc.Inject ], chlk.services.ApplicationService, "appsService", [ ria.mvc.Inject ], chlk.services.AppCategoryService, "categoryService", [ ria.mvc.Inject ], chlk.services.GradeLevelService, "gradeLevelService", [ chlk.controllers.SidebarButton("apps") ], [ [ Number ] ], function listAction(pageIndex_) {
+            }("AppsController", ria.__SYNTAX.EXTENDS(chlk.controllers.BaseController), [ [ ria.mvc.Inject ], chlk.services.ApplicationService, "appsService", [ ria.mvc.Inject ], chlk.services.AppCategoryService, "categoryService", [ ria.mvc.Inject ], chlk.services.GradeLevelService, "gradeLevelService", [ ria.mvc.Inject ], chlk.services.PictureService, "pictureService", [ chlk.controllers.SidebarButton("apps") ], [ [ Number ] ], function listAction(pageIndex_) {
                 var result = this.appsService.getApps(pageIndex_ | 0).attach(this.validateResponse_());
                 return this.PushView(chlk.activities.apps.AppsListPage, result);
-            }, [ chlk.controllers.AccessForRoles([ chlk.models.common.RoleEnum.DEVELOPER ]) ], [ [ chlk.models.apps.Application ] ], ria.async.Future, function prepareAppInfo(app_) {
+            }, [ [ Number ] ], function pageAction(pageIndex_) {
+                var result = this.appsService.getApps(pageIndex_ | 0).attach(this.validateResponse_());
+                return this.UpdateView(chlk.activities.apps.AppsListPage, result);
+            }, [ [ chlk.models.apps.Application, Boolean ] ], ria.async.Future, function prepareAppInfo(app_, readOnly) {
                 var result = this.categoryService.getCategories().then(function(data) {
                     var cats = data.getItems();
                     var gradeLevels = this.gradeLevelService.getGradeLevels();
@@ -9330,14 +9842,51 @@ exports.globals = {};
                         app_.setState(appState);
                     }
                     if (!app_.getAppAccess()) app_.setAppAccess(new chlk.models.apps.AppAccess());
-                    return new chlk.models.apps.AppInfoViewData(app_, false, cats, gradeLevels, permissions, true);
+                    var appIconId = app_.getSmallPictureId() || new chlk.models.id.PictureId("");
+                    var iconUrl = this.pictureService.getPictureUrl(appIconId, 74);
+                    app_.setIconPicture(new chlk.models.apps.AppPicture(appIconId, iconUrl, 74, 74, "Icon", !readOnly));
+                    var appBannerId = app_.getBigPictureId() || new chlk.models.id.PictureId("");
+                    var bannerUrl = this.pictureService.getPictureUrl(appBannerId, 170, 110);
+                    app_.setBannerPicture(new chlk.models.apps.AppPicture(appBannerId, bannerUrl, 170, 110, "Banner", !readOnly));
+                    return new chlk.models.apps.AppInfoViewData(app_, readOnly, cats, gradeLevels, permissions, true);
                 }, this);
                 return result;
             }, [ chlk.controllers.AccessForRoles([ chlk.models.common.RoleEnum.DEVELOPER ]) ], [ [ chlk.models.id.AppId ] ], function detailsDeveloperAction(appId_) {
+                var isReadonly = false;
                 var app = this.appsService.getInfo(appId_).then(function(data) {
                     if (!data.getId()) {
                         return this.forward_("apps", "add", []);
-                    } else return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data));
+                    } else return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data, isReadonly));
+                }, this);
+            }, [ chlk.controllers.AccessForRoles([ chlk.models.common.RoleEnum.DEVELOPER ]) ], [ [ Number, Number, String, Object ] ], function uploadPictureDeveloperAction(width, height, msg, file) {
+                var result = this.appsService.uploadPicture(file, width, height).then(function(id) {
+                    var pictureUrl = this.pictureService.getPictureUrl(id, width, height);
+                    return new chlk.models.apps.AppPicture(id, pictureUrl, width, height, msg, true);
+                }.bind(this));
+                return this.UpdateView(chlk.activities.apps.AppInfoPage, result, msg.toLowerCase());
+            }, [ chlk.controllers.AccessForRoles([ chlk.models.common.RoleEnum.DEVELOPER ]) ], [ [ String, Number, Number ] ], function deletePictureDeveloperAction(title, width, height) {
+                var result = new ria.async.DeferredData(new chlk.models.apps.AppPicture(new chlk.models.id.PictureId(""), "#", width, height, title, true));
+                return this.UpdateView(chlk.activities.apps.AppInfoPage, result, title.toLowerCase());
+            }, [ chlk.controllers.AccessForRoles([ chlk.models.common.RoleEnum.SYSADMIN ]) ], [ [ chlk.models.id.AppId ] ], function approveSysAdminAction(appId) {
+                return this.appsService.approveApp(appId).then(function(data) {
+                    return this.redirect_("apps", "list", []);
+                }, this);
+            }, [ chlk.controllers.AccessForRoles([ chlk.models.common.RoleEnum.SYSADMIN ]) ], [ [ chlk.models.id.AppId ] ], function declineSysAdminAction(appId) {
+                return this.appsService.declineApp(appId).then(function(data) {
+                    return this.redirect_("apps", "list", []);
+                }, this);
+            }, [ chlk.controllers.AccessForRoles([ chlk.models.common.RoleEnum.DEVELOPER ]) ], [ [ chlk.models.id.AppId ] ], function goLiveDeveloperAction(appId) {
+                return this.appsService.goLive(appId).then(function(data) {
+                    return this.redirect_("apps", "general", []);
+                }, this);
+            }, [ chlk.controllers.AccessForRoles([ chlk.models.common.RoleEnum.DEVELOPER ]) ], [ [ chlk.models.id.AppId ] ], function unlistDeveloperAction(appId) {
+                return this.appsService.unlist(appId).then(function(data) {
+                    return this.redirect_("apps", "general", []);
+                }, this);
+            }, [ chlk.controllers.AccessForRoles([ chlk.models.common.RoleEnum.SYSADMIN ]) ], [ [ chlk.models.id.AppId ] ], function detailsSysAdminAction(appId) {
+                var isReadonly = true;
+                var app = this.appsService.getInfo(appId).then(function(data) {
+                    return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data, isReadonly));
                 }, this);
             }, [ chlk.controllers.AccessForRoles([ chlk.models.common.RoleEnum.DEVELOPER ]) ], function addDeveloperAction() {
                 var app = new chlk.models.apps.Application();
@@ -9353,6 +9902,9 @@ exports.globals = {};
                     return this.forward_("apps", "details", []);
                 }, this);
                 return result;
+            }, [ chlk.controllers.AccessForRoles([ chlk.models.common.RoleEnum.DEVELOPER ]) ], [ [ chlk.models.apps.Application ] ], function updateApp(app) {
+                this.getContext().getSession().set("currentApp", app);
+                return this.forward_("apps", "details", []);
             }, [ chlk.controllers.AccessForRoles([ chlk.models.common.RoleEnum.DEVELOPER ]) ], [ [ chlk.models.id.AppId ] ], function tryDeleteApplicationAction(id) {
                 return this.ShowMsgBox("Are you sure you want to delete?", null, [ {
                     text: "Cancel",
@@ -9365,7 +9917,7 @@ exports.globals = {};
                     color: chlk.models.common.ButtonColor.RED.valueOf()
                 } ], "center");
             }, [ chlk.controllers.AccessForRoles([ chlk.models.common.RoleEnum.DEVELOPER ]) ], [ [ chlk.models.apps.AppPostData ] ], function updateDeveloperAction(model) {
-                var shortAppData = new chlk.models.apps.ShortAppInfo(model.getName(), model.getUrl(), model.getVideoModeUrl(), model.getShortDescription(), model.getLongDescription());
+                var shortAppData = new chlk.models.apps.ShortAppInfo(model.getName(), model.getUrl(), model.getVideoModeUrl(), model.getShortDescription(), model.getLongDescription(), model.getAppIconId(), model.getAppBannerId());
                 var appAccess = new chlk.models.apps.AppAccess(model.isHasStudentMyApps(), model.isHasTeacherMyApps(), model.isHasAdminMyApps(), model.isHasParentMyApps(), model.isCanAttach(), model.isShowInGradingView());
                 var appPriceInfo = new chlk.models.apps.AppPrice(model.getPrice(), model.getPricePerClass(), model.getPricePerSchool());
                 var pictures = [];
@@ -9378,10 +9930,8 @@ exports.globals = {};
                 var appPermissions = model.getPermissions() ? model.getPermissions().split(",").map(function(item) {
                     return new chlk.models.id.AppPermissionId(item);
                 }) : [];
-                var result = this.appsService.updateApp(model.getId(), shortAppData, appPermissions, appPriceInfo, this.getCurrentPerson().getId(), appAccess, cats, pictures, gradeLevels, !model.isDraft()).then(function(updatedApp) {
-                    this.switchApp(updatedApp);
-                }, this).then(function() {
-                    return this.forward_("apps", "details", []);
+                var result = this.appsService.updateApp(model.getId(), shortAppData, appPermissions, appPriceInfo, this.getCurrentPerson().getId(), appAccess, cats, pictures, gradeLevels, !model.isDraft()).then(function(newApp) {
+                    return this.updateApp(newApp);
                 }, this);
                 return result;
             }, [ chlk.controllers.AccessForRoles([ chlk.models.common.RoleEnum.DEVELOPER ]) ], [ [ chlk.models.id.AppId ] ], function generalDeveloperAction(appId_) {
@@ -9389,14 +9939,13 @@ exports.globals = {};
                     if (!data.getId()) {
                         return this.forward_("apps", "add", []);
                     } else {
-                        var appGeneralInfo = new chlk.models.apps.AppGeneralInfoViewData(app.getId(), app.getName(), app.getStatus());
-                        return this.PushView(chlk.activities.apps.AppGeneralInfoPage, new ria.async.DeferredData(appGeneralInfo));
+                        return this.PushView(chlk.activities.apps.AppGeneralInfoPage, new ria.async.DeferredData(new chlk.models.apps.AppGeneralInfoViewData(data)));
                     }
                 }, this);
             } ]);
         })();
     })();
-    __ASSETS._xia7hgok2924vx6r = function anonymous(locals) {
+    __ASSETS._g5kgj4zvq4yam7vi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.AppsList_mixin = function(name, apps, currentApp) {
@@ -9462,7 +10011,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("AppsListControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_xia7hgok2924vx6r")(this);
+                ASSET("_g5kgj4zvq4yam7vi")(this);
             }, [ ria.mvc.DomEventBind("click", ".app-list-combobox") ], [ [ ria.dom.Dom, ria.dom.Event ] ], function onClicked($target, node) {
                 var selected = $target.find("option:selected");
                 var controller = selected.getData("controller");
@@ -9497,7 +10046,7 @@ exports.globals = {};
             }("DeveloperApp", ria.__SYNTAX.EXTENDS(chlk.BaseApp), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.mvc.Dispatcher, function initDispatcher_() {
                 var dispatcher = BASE();
                 dispatcher.setDefaultControllerId("apps");
-                dispatcher.setDefaultControllerAction("details");
+                dispatcher.setDefaultControllerAction("general");
                 return dispatcher;
             }, ria.__SYNTAX.Modifiers.OVERRIDE, ria.mvc.ISession, function initSession_() {
                 var session = BASE();
@@ -9507,7 +10056,7 @@ exports.globals = {};
                 return session;
             }, ria.__SYNTAX.Modifiers.OVERRIDE, ria.async.Future, function onStart_() {
                 return BASE().then(function(data) {
-                    new ria.dom.Dom().fromHTML(ASSET("_2oki7nu2p2lw61or")()).appendTo("#sidebar");
+                    new ria.dom.Dom().fromHTML(ASSET("_trzyxk3vtpzj8aor")()).appendTo("#sidebar");
                     return data;
                 });
             } ]);
