@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -124,6 +123,40 @@ namespace Chalkable.Web.Controllers
             var dailAttendance = SchoolLocator.AttendanceService.GetDailyAttendance(date, studentId);
             var student = attendances.Count > 0 ? attendances.First().Student : SchoolLocator.PersonService.GetPerson(studentId);
             return Json(StudentAttendanceViewData.Create(student, attendances, dailAttendance));
+        }
+
+        [AuthorizationFilter("Teacher", Preference.API_DESCR_ATTENDANCE_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Attendance })]
+        public ActionResult AttendanceSummary(DateTime? date)
+        {
+            date = date ?? SchoolLocator.Context.NowSchoolTime;
+            var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(date.Value);
+            if (markingPeriod == null)
+                throw new NoMarkingPeriodException();
+            var trouble = new List<Person>();
+            var well = new List<Person>();
+            var query = new ClassAttendanceQuery
+            {
+                MarkingPeriodId = markingPeriod.Id,
+                FromDate = date,
+                ToDate = date,
+                TeacherId = SchoolLocator.Context.UserId,
+                Type = AttendanceTypeEnum.Absent | AttendanceTypeEnum.Excused | AttendanceTypeEnum.Late | AttendanceTypeEnum.Present
+            };
+            var studentsList = SchoolLocator.PersonService.GetPersons().Where(x=>x.RoleRef == CoreRoles.STUDENT_ROLE.Id).ToList();
+
+
+            var all = SchoolLocator.AttendanceService.GetClassAttendanceDetails(query);
+            foreach (var student in studentsList)
+            {
+                var attendances = all.Where(x => x.Student.Id == student.Id).ToList();
+                var stat = attendances.Where(t => t.Type == AttendanceTypeEnum.Absent || t.Type == AttendanceTypeEnum.Late).ToList();
+                if (stat.Count >= 5)
+                    trouble.Add(student);
+                else if (stat.Count <= 1)
+                    well.Add(student);
+            }
+            
+            return Json(AttendanceSummaryViewData.Create(trouble, well, all, markingPeriod), 5);
         }
     }
 }
