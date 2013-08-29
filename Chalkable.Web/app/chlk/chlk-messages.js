@@ -412,11 +412,15 @@ var Msg = {
         return 'Step ' + a + ' of ' + b;
     },
     Student: oneOrMany('Student'),
-    Students_are_in_trouble: 'Students are in trouble',
+    Students_are_in_trouble: function(count){
+        return count > 1 ? 'Students are in trouble' : 'Student is in trouble';
+    },
     Student_grades_are_out_of: function(coursename){
         return 'Student grades in ' + coursename + ' are out of';
     },
-    Students_doing_well: 'Students doing well',
+    Students_doing_well: function(count){
+        return count > 1 ? 'Students doing well' : 'Student doing well';
+    },
     Show_all: 'Show all',
     Short_Description: 'Short Description',
     Short_description_empty_text: 'Up to 150 characters',

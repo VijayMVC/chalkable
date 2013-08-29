@@ -9,6 +9,13 @@ NAMESPACE('chlk.models.class', function () {
         'ClassesForTopBar', [
             ArrayOf(chlk.models.class.Class), 'topItems',
             chlk.models.id.ClassId, 'selectedItemId',
-            Boolean, 'disabled'
+            Boolean, 'disabled',
+
+            [[ArrayOf(chlk.models.class.Class)]],
+            function $(classes_){
+                BASE();
+                if(classes_)
+                    this.setTopItems(classes_);
+            }
         ]);
 });
