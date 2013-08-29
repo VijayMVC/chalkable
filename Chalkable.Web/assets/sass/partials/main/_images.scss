@@ -12,3 +12,32 @@
     @include box-shadow(0px 3px 3px -2px black);
   }
 }
+
+.images-wrapper {
+  height: 181px;
+  width: 162px;
+  margin: 0 auto;
+  display: block;
+  position: relative;
+  background-color: #c9c9c9;
+  background: url(images/feed/pictures-box.png) 0 0 no-repeat;
+
+  TABLE {
+    border-spacing: 0;
+    border-collapse: collapse;
+    TBODY{
+      border-spacing: 0;
+      TR {
+        border-spacing: 0;
+        TD {
+          border-spacing: 0;
+          border: 1px solid #878787;
+
+          .image-container{
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}

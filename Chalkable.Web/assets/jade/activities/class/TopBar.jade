@@ -1,20 +1,9 @@
 if(self.getCourse())
-    srcId = self.getCourse().getDepartmentId();
-    alternativeSrcId = self.getCourse().getId();
-    -if(!srcId){srcId = alternativeSrcId; alternativeSrcId = null};
-    src = self.getPictureURL(srcId, 80, 45);
-    alternativeSrc = null;
-    -if(alternativeSrcId){alternativeSrc = self.getPictureURL(alternativeSrcId, 80, 45)};
-    -defaultSrc = window.WEB_SITE_ROOT + 'Content/images/common/course-icons/all.png';
     if self.getController()
         //params = (params && params.length ? params.join('/') + '/' : '');
         +ActionLink(self.getController(), self.getAction(), self.getParams(), self.getId())(class=self.isPressed() ? "pressed " : "").item.class-button.button-link
             .img-wrapper
-                +Image()(
-                    src=src,
-                    alternativeSrc=alternativeSrc,
-                    defaultSrc=defaultSrc
-                )
+                +ClassImg(self.getCourse(), 45, 80)
             SPAN.text-container= self.getName()
     else
         BUTTON(
@@ -26,9 +15,5 @@ if(self.getCourse())
             value="save"
         ).item.class-button.validate-skip
             .img-wrapper
-                +Image()(
-                    src=src,
-                    alternativeSrc=alternativeSrc,
-                    defaultSrc=defaultSrc
-                )
+                +ClassImg(self.getCourse(), 45, 80).avatar
             SPAN.text-container= self.getName()

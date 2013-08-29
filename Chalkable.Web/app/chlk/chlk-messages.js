@@ -420,6 +420,7 @@ var Msg = {
     Show_all: 'Show all',
     Short_Description: 'Short Description',
     Short_description_empty_text: 'Up to 150 characters',
+    Stats_and_facts: 'Stats and facts',
     Strongest_class: 'Strongest class',
     Students_graded: function(count){
         return String.format("Student{0} graded", (count == 1 ? '' : 's'));
@@ -444,6 +445,7 @@ var Msg = {
     Video_Demo_empty_text: 'Video Url',
     Undrop: 'Undrop',
     Unsaved_changes: 'Unsaved changes',
+    Upcoming_assignments: 'Upcoming assignments',
     Update: 'Update',
     Update_Draft: 'Update Draft',
     User_Ratings: 'User Ratings',
