@@ -16,6 +16,8 @@ NAMESPACE('chlk.templates', function () {
                 var url = window.azurePictureUrl + id.valueOf();
                 if (sizeH_ && sizeW_)
                     return url + '-' + sizeH_ + 'x' + sizeW_;
+                if (sizeH_)
+                    return url + '-' + sizeH_ + 'x' + sizeH_;
                 return url;
             }
         ])

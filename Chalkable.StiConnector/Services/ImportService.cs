@@ -470,20 +470,12 @@ namespace Chalkable.StiConnector.Services
                 else
                     Log.LogWarning(string.Format(ChlkResources.ERR_STI_NO_ADDRESS_FOR_PERSON, person.PersonID));
 
-                if (person.Document != null && person.Document.MIMEType.ToLower().StartsWith(img))//TODO: other picture formats
+                if (person.Document != null)
                 {
-                    //TODO: implement
-                    /*var p = new Picture()
+                    if (person.Document.MIMEType.ToLower().StartsWith(img))//TODO: other picture formats
                     {
-                        Content = person.Document.Data
-                    };
-                    var pp = new PersonPicture()
-                    {
-                        Picture = p,
-                        PersonInfo = sp.PersonInfo
-                    };
-                    ChalkableEntities.Pictures.AddObject(p);
-                    ChalkableEntities.PersonPictures.AddObject(pp);*/
+                        ServiceLocatorMaster.PersonPictureService.UploadPicture(pr.Id, person.Document.Data);    
+                    }
                 }
             }
         }
