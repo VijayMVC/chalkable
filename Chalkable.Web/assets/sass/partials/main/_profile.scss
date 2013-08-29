@@ -30,6 +30,16 @@ BODY {
             padding: 16px 11px 0 13px;
           }
 
+          .lr-toolbar {
+            margin-bottom: 40px;
+            margin-left: 14px;
+            width: 671px;
+
+            .second-container{
+              text-align: center;
+            }
+          }
+
           .periods-link {
             display: inline-block;
             text-align: center;
@@ -40,6 +50,10 @@ BODY {
             z-index: 100;
             width: 75px;
             height: 82px;
+
+            &:not(:last-child){
+              margin-right: 10px;
+            }
 
             .announcement-box {
               position: relative;
@@ -74,6 +88,9 @@ BODY {
                 text-align: center;
                 width: 43px;
                 text-shadow: 0 1px 0 white;
+                display: inline-block;
+                vertical-align: middle;
+                color: #3989a1;
               }
             }
           }
