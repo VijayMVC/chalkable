@@ -1,0 +1,29 @@
+.attendance-summary
+    topData = self.getTopData();
+    topItems = topData.getTopItems();
+    +LeftRightToolbar(topItems, chlk.templates.class.TopBar, 'attendance', 'classList', [null])(
+        selectedItemId=""
+    ).classes-bar
+    summary = self.getSummary();
+    .not-transparent
+        .trouble-students
+            .well-trouble-items
+                trouble = summary.getTrouble();
+                if trouble.length
+                    p #{trouble.length} #{Msg.Students_are_in_trouble(trouble.length)}
+                    each student in trouble
+                        div
+                            .avatar-container
+                                +PersonImg(student, 40)
+                            p=student.getDisplayName()
+        .well-students
+            .well-trouble-items
+                well = summary.getWell();
+                    if well.length
+                        p #{well.length} #{Msg.Students_doing_well(trouble.length)}
+                        each student in well
+                            div
+                                .avatar-container
+                                    +PersonImg(student, 40)
+                                p=student.getDisplayName()
+

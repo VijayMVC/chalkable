@@ -19,7 +19,7 @@
             +ActionLink('announcement', 'star', self.getId()).star
             .item-type
                 .attachment
-                    div(class="announcements-type-" + self.getAnnouncementTypeId()).icon.blue.icon
+                    div(class="announcement-type-" + self.getAnnouncementTypeId()).icon.blue.icon
                     .icon.black
                     h2.animated-header=self.getSubject()
                     p.animated=self.getShortContent()

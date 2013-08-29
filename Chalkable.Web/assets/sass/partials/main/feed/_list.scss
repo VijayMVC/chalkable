@@ -104,16 +104,6 @@ $star-size: 18px;
       height: $height;
       font: normal 11px/13px arial, tahoma, helvetica;
 
-      @for $i from 1 through 11 {
-        .announcements-type-#{$i}{
-          background: url(images/common/announcement-type/#{$i}.png) 0 50% no-repeat;
-
-          &.black{
-            background: url(images/common/announcement-type/bw/#{$i}_bw.png) 0 50% no-repeat;
-          }
-        }
-      }
-
       .animated{
         @include transition-property("all");
         @include transition-duration($duration);

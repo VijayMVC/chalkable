@@ -74,12 +74,12 @@ namespace Chalkable.Data.School.DataAccess
                 }
                 if (sl.Length > 1)
                 {
-                    filters.Add("@filter3");
+                    filters.Add("@filter2");
                     res.Parameters.Add("@filter2", string.Format(FILTER_FORMAT, sl[1]));
                 }
                 if (sl.Length > 2)
                 {
-                    filters.Add("@filter2");
+                    filters.Add("@filter3");
                     res.Parameters.Add("@filter3", string.Format(FILTER_FORMAT, sl[2]));
                 }
                 res.Sql.AppendFormat(" and (LOWER(Name) like {0})", filters.JoinString(" or LOWER(Name) like "));

@@ -1,4 +1,10 @@
-.class-info.info-page.loader-container
+mixin IfBlock_(items, i, index)
+    if index == 0 || i + index < items.length
+        TD
+            .image-container
+                +PersonImg(items[i+index], 64)
+
+.class-info.class-profile.loader-container
     .loader
     .action-bar.not-transparent.buttons
         .container.panel-bg
@@ -7,41 +13,35 @@
                 +ActionLink('class', 'details', self.getId()) Info
                 +ActionLink('class', 'details', self.getId()) Scheduling
                 +ActionLink('class', 'details', self.getId()) Apps
-    .info-view
-        .title
-            .avatar-container.with-border
-                img(src=self.getPictureUrl()).avatar-128.avatar
-            h1=self.getFullName()
-        .sections
-            .sections-info
-                .section-title.pacifico=self.getRole().getName()
-                div
-                    .section-data
-                        .info-title=Msg.Email
-                        .data-info.low-font-size
-                            input(type="text", value=self.getEmail())
-                    .section-data
-                        .info-title=Msg.Cell
-                        .data-info.big-font-size=primaryPhone
-                    .section-data
-                        .info-title=Msg.Birthday
-                        .data-info.low-font-size=self.getBirthDateText()
-                    .section-data.gender-box
-                        div(class=self.getGender() ? self.getGender().toLowerCase() : '').gender-img-box
-                        p=self.getGenderFullText()
-            .sections-info
-                .section-title.pacifico=Msg.Home
-                div
-                    .section-data
-                        .info-title=Msg.Home_Phone
-                        .data-info.big-font-size=homePhone
-                    .section-data
-                        .info-title=Msg.Home_Address
-                        each address in addresses
-                            .data-info.low-font-size=address.getValue()
-        .sections-info.other-section
-            .section-title.pacifico=Msg.Other(true)
-        if self.isAbleEdit()
-            +Button().special-button.blue-button#edit-info-button=Msg.Edit
-
-
+    .info-view.summary-page
+        #top-summary-panel
+            #avatar-photo-conainer
+                .images-wrapper
+                    TABLE
+                        TBODY
+                            each student,i in self.getStudents()
+                                if i % 4 == 0
+                                    TR
+                                        +IfBlock_(self.getStudents(), i, 0)
+                                        +IfBlock_(self.getStudents(), i, 1)
+                                        +IfBlock_(self.getStudents(), i, 2)
+                                        +IfBlock_(self.getStudents(), i, 3)
+            #student-info-panel
+                h1.info
+                    .class-icon-container
+                        +ClassImg(self.getCourse(), 45, 80)
+                    =self.getName()
+                h2.no-line
+                    +ActionLink('teachers', 'info', self.getTeacher().getId().valueOf())=self.getTeacher().getDisplayName()
+                    | - #{self.getRoom() && self.getRoom().getDescription()}
+                .glance-container
+                    +GlanceBox(null, null, {value: self.getClassAverageBox().getTitle(), title: Msg.Class_average, items: self.getClassAverageBox().getHover()})
+                    +GlanceBox(null, null, {value: self.getClassAttendanceBox().getTitle(), title: Msg.Attendance_count, items: self.getClassAttendanceBox().getHover()})
+                    +GlanceBox(null, null, {value: self.getClassDisciplineBox().getTitle(), title: Msg.Discipline_count, items: self.getClassDisciplineBox().getHover()})
+                    +GlanceBox(null, null, {value: self.getClassSize(), title: Msg.Class_size}, 'brown')
+        .today-work-panel
+            h2=Msg.Upcoming_assignments
+            .period-toolbar
+                +LeftRightToolbar(self.getAnnouncementsByDate(), chlk.templates.announcement.AnnouncementsByDate)(hideArrows)
+        .today-work-panel
+            h2.stats=Msg.Stats_and_facts

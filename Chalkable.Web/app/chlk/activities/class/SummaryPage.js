@@ -1,5 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.class.ClassSummary');
+REQUIRE('chlk.templates.announcement.AnnouncementsByDate');
 
 NAMESPACE('chlk.activities.class', function () {
 

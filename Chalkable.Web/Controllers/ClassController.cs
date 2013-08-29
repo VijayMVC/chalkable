@@ -81,8 +81,8 @@ namespace Chalkable.Web.Controllers
                 ClassId = classId,
                 MarkingPeriodId = mp.Id,
             });
-            
-            var dates = SchoolLocator.CalendarDateService.GetLastDays(mp.Id, true, currentDateTime.Date, null, 9).Select(x => x.DateTime).ToList();
+
+            var dates = SchoolLocator.CalendarDateService.GetLastDays(mp.SchoolYearRef, true, currentDateTime.Date, currentDateTime.Date.AddDays(8), 9).Select(x => x.DateTime).ToList();
             IList<AnnouncementComplex> anns = new List<AnnouncementComplex>();
             if (dates.Count > 0)
                 anns = SchoolLocator.AnnouncementService.GetAnnouncements(currentDateTime.Date, dates.Last().Date, false, null, classId);

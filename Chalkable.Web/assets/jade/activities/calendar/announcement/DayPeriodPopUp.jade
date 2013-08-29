@@ -5,8 +5,8 @@
     roomNumber = announcementclassperiod.getClassPeriod().getRoomNumber();
     .class-name
         h3.day-day
-            //todo add link to the class
-            a=announcementclassperiod.getClassPeriod().getClazz().getName()
+            clazz = announcementclassperiod.getClassPeriod().getClazz();
+            +ActionLink('class', 'details', clazz.getId().valueOf())=clazz.getName()
     .info
         if roomNumber
             p.day-down
@@ -23,7 +23,7 @@
             ul.day-announcements
                 each item in announcements
                     li.items
-                        +ActionLink('announcement', 'view', item.getId()).pop-up-announcement
+                        +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getAnnouncementTypeId()).pop-up-announcement
                             div
                                 p.item-title #{item.getAnnouncementTypeName()} #{item.getOrder()}
     +ActionLink('announcement', 'add').ann-button.plus-ann

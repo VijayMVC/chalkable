@@ -2,6 +2,7 @@
 @import "compass/css3/images";
 @import "compass/css3/transform";
 
+@import "partials/main/_attendance";
 @import "partials/main/_buttons";
 @import "partials/main/_checkboxes";
 @import "partials/main/_images";
@@ -73,6 +74,16 @@ BODY {
   }
 }
 
+@for $i from 1 through 11 {
+  .announcement-type-#{$i}{
+    background: url(images/common/announcement-type/#{$i}.png) 0 50% no-repeat;
+
+    &.black{
+      background: url(images/common/announcement-type/bw/#{$i}_bw.png) 0 50% no-repeat;
+    }
+  }
+}
+
 $grey-color: #717171;
 
 .grey-combo + .chzn-container, .grey-combo-container .chzn-container{
@@ -80,6 +91,11 @@ $grey-color: #717171;
   A{
     color: $grey-color;
   }
+}
+
+.image-container {
+  overflow: hidden;
+  display: inline-block;
 }
 
 INPUT, TEXTAREA{
@@ -253,9 +269,7 @@ TEXTAREA.animated-textarea{
         }
       }
 
-      .pop-up-announcement {
-        background-image: url(images/common/announcement-type/1.png);
-      }
+
     }
   }
 }
