@@ -1,0 +1,13 @@
+a.periods-link.item
+    .announcement-box
+        each announcement in self.getAnnouncement()
+            div(
+                class = "announcement-type-" + announcement.getAnnouncementTypeId(),
+                style = "bottom: " + (i*4) + "px;left: " + (20 + i*4) + "px; z-index: " + (98 - xindex)
+            ).announcement-button
+    .period-box
+        dt = new chlk.models.common.ChlkDate(getDate());
+        dayText = self.getDate().isSameDay(dt) ? Msg.Today : self.getDate().format('DD');
+        .day=dayText
+
+

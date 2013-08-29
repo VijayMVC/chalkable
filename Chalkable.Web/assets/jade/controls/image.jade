@@ -17,3 +17,16 @@ mixin PersonImg(person, size)
         -attributes.class.push('avatar');
         -attributes.class.push('avatar' + size);
         +Image()(attributes)
+
+mixin ClassImg(course, width, height)
+    srcId = course.getDepartmentId();
+    alternativeSrcId = course.getId();
+    -if(!srcId){srcId = alternativeSrcId; alternativeSrcId = null};
+    src = chlk.templates.JadeTemplate.prototype.getPictureURL(srcId, height, width);
+    alternativeSrc = null;
+    -if(alternativeSrcId){alternativeSrc = chlk.templates.JadeTemplate.prototype.getPictureURL(alternativeSrcId, height, width)};
+    -defaultSrc = window.WEB_SITE_ROOT + 'Content/images/common/course-icons/all.png';
+    -attributes.src = src;
+    -attributes.alternativeSrc = alternativeSrc;
+    -attributes.defaultSrc = defaultSrc;
+    +Image()(attributes)

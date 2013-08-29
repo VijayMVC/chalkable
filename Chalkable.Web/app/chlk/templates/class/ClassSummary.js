@@ -9,7 +9,7 @@ NAMESPACE('chlk.templates.class', function () {
         [ria.templates.ModelBind(chlk.models.class.ClassSummary)],
         'ClassSummary', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            String, 'room',
+            chlk.models.class.Room, 'room',
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.people.User), 'students',
@@ -24,10 +24,10 @@ NAMESPACE('chlk.templates.class', function () {
             chlk.models.common.HoverBox, 'classDisciplineBox',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.HoverBox, 'classAttendanceBox',
+            chlk.models.common.HoverBox, 'classAverageBox',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.AnnouncementsByDate), 'announcementsbydate',
+            ArrayOf(chlk.models.announcement.AnnouncementsByDate), 'announcementsByDate',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.ClassId, 'id',
