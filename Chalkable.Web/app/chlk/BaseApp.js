@@ -25,6 +25,7 @@ REQUIRE('chlk.controls.VideoControl');
 REQUIRE('chlk.controls.LogoutControl');
 REQUIRE('chlk.controls.TextAreaControl');
 REQUIRE('chlk.controls.SearchBoxControl');
+REQUIRE('chlk.controls.ImageControl');
 
 REQUIRE('chlk.models.common.Role');
 REQUIRE('chlk.models.schoolYear.MarkingPeriod');

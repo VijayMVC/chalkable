@@ -8,6 +8,7 @@ REQUIRE('chlk.models.school.Timezone');
 REQUIRE('chlk.models.school.SchoolSisInfo');
 REQUIRE('chlk.models.district.District');
 REQUIRE('chlk.models.id.SchoolId');
+REQUIRE('chlk.models.Success');
 
 
 
@@ -59,6 +60,13 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.SchoolId]],
             ria.async.Future, function getPeopleSummary(schoolId) {
                 return this.get('School/People.json', chlk.models.school.SchoolPeopleSummary, {
+                    schoolId: schoolId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.SchoolId]],
+            ria.async.Future, function del(schoolId) {
+                return this.post('School/delete.json', chlk.models.Success, {
                     schoolId: schoolId.valueOf()
                 });
             },

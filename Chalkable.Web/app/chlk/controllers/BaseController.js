@@ -78,7 +78,7 @@ NAMESPACE('chlk.controllers', function (){
                }else{
                    var button = new chlk.models.common.Button();
                    button.setText('Ok');
-                   button.setClose(true);
+                   buttons.push(button);
                }
                var model = new chlk.models.common.InfoMsg(text_, header_, buttons, clazz_);
                this.view.shadeD(instance, ria.async.DeferredData(model));

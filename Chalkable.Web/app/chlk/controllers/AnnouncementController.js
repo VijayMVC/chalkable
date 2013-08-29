@@ -215,9 +215,26 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result);
         },
 
-        [[chlk.models.id.AnnouncementId]],
-        function deleteAction(announcementId) {
+        [[chlk.models.id.AnnouncementId, String]],
+        function deleteAction(announcementId, typeName) {
             this.getContext().getSession().set('noSave', true);
+            this.ShowMsgBox('You are about to delete this item.\n'+
+                    'All grades and attachments for this ' + typeName + ' will\n' +
+                    'be gone forever.\n' +
+                    'Are you sure?', 'whoa.', [{
+                text: "Cancel",
+                color: chlk.models.common.ButtonColor.GREEN.valueOf()
+            }, {
+                text: 'Delete',
+                controller: 'announcement',
+                action: 'deleteAnnouncement',
+                params: [announcementId.valueOf()],
+                color: chlk.models.common.ButtonColor.RED.valueOf()
+            }]);
+        },
+
+        [[chlk.models.id.AnnouncementId]],
+        function deleteAnnouncementAction(announcementId) {
             this.announcementService
                 .deleteAnnouncement(announcementId)
                 .attach(this.validateResponse_())

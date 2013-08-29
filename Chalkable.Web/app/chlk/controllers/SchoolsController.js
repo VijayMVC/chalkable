@@ -191,9 +191,14 @@ NAMESPACE('chlk.controllers', function (){
                 this.context.getDefaultView().getCurrent().close();
         },
 
-        [[chlk.models.id.DistrictId]],
-        VOID, function deleteAction(id){
-
+        [[chlk.models.id.SchoolId, chlk.models.id.DistrictId]],
+        VOID, function deleteAction(id, districtId){
+                this.schoolService.del(id)
+                    .then(function()
+                        {
+                            this.ShowMsgBox("School will be deleted", "School delete task is created");
+                            this.pageAction(districtId);
+                        }.bind(this));
         }
     ])
 });

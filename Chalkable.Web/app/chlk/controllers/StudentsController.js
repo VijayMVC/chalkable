@@ -1,4 +1,4 @@
-REQUIRE('chlk.controllers.BaseController');
+REQUIRE('chlk.controllers.UserController');
 REQUIRE('chlk.services.StudentService');
 REQUIRE('chlk.services.PersonService');
 REQUIRE('chlk.services.ClassService');
@@ -12,13 +12,10 @@ NAMESPACE('chlk.controllers', function (){
 
     /** @class chlk.controllers.StudentsController */
     CLASS(
-        'StudentsController', EXTENDS(chlk.controllers.BaseController), [
+        'StudentsController', EXTENDS(chlk.controllers.UserController), [
 
             [ria.mvc.Inject],
             chlk.services.StudentService, 'studentService',
-
-            [ria.mvc.Inject],
-            chlk.services.PersonService, 'personService',
 
             [ria.mvc.Inject],
             chlk.services.ClassService, 'classService',
@@ -95,7 +92,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.SchoolPersonId]],
             function infoAction(personId){
-                /*var result = this.studentService
+                var result = this.studentService
                     .getInfo(personId)
                     .attach(this.validateResponse_())
                     .then(function(model){
@@ -103,7 +100,7 @@ NAMESPACE('chlk.controllers', function (){
                         this.getContext().getSession().set('userModel', res);
                         return res;
                     }.bind(this));
-                return this.PushView(chlk.activities.profile.InfoViewPage, result);*/
+                return this.PushView(chlk.activities.profile.InfoViewPage, result);
             }
         ])
 });

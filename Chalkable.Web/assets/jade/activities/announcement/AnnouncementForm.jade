@@ -81,12 +81,13 @@
                 ).special-button.blue-button.submit-btn
                     =(announcement.getState() ? Msg.Save : Msg.Submit)
                 if announcement.getState()
-                    +ActionLink('announcement', 'delete', announcement.getId().valueOf())
+                    +ActionLink('announcement', 'delete', announcement.getId().valueOf(), announcement.getAnnouncementTypeName())
                         +Button()(
                             type="submit",
                             name="submitType",
                             value="submit"
-                        ).special-button.red-button.submit-btn=Msg.Delete
+                        ).special-button.red-button.submit-btn
+                            =Msg.Delete
                 else
                     +ActionLink('announcement', 'discard', announcement.getPersonId().valueOf()).grey-link.not-blue=Msg.Discard
         .choose-type(class=(classId && !typeId ? '' : 'x-hidden'))

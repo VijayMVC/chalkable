@@ -12,7 +12,7 @@ namespace Chalkable.Web.Models
     {
         public IList<StudentAnnouncementViewData> Items { get; set; }
         public int GradingStyle { get; set; }
-        public string AnnouncmentTitel { get; set; }
+        public string AnnouncmentTitle { get; set; }
         public int? AnnouncementTypeId { get; set; }
         public int? ClassAvg { get; set; }
         public string ClassName { get; set; }
@@ -39,7 +39,7 @@ namespace Chalkable.Web.Models
             var res = Create(items, attachments, state, gradingStyle);
             res.ClassName = anouncement.ClassName;
             res.CourseId = anouncement.CourseId;
-            //res.AnnouncmentTitel = anouncement.Title;
+            //res.AnnouncmentTitle = anouncement.Title;
             res.AnnouncementTypeId = anouncement.AnnouncementTypeRef;
             return res;
         }

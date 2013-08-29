@@ -2,6 +2,8 @@ REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.departments.Department');
 REQUIRE('chlk.models.dbmaintenance.DbBackup');
+REQUIRE('chlk.models.Success');
+
 
 
 NAMESPACE('chlk.services', function () {
@@ -22,7 +24,7 @@ NAMESPACE('chlk.services', function () {
 
             [[String, String]],
             ria.async.Future, function databaseUpdate(masterSql, schoolSql) {
-                return this.get('dbmaintenance/DatabaseUpdate.json', chlk.models.Success, {
+                return this.post('dbmaintenance/DatabaseUpdate.json', chlk.models.Success, {
                     masterSql: masterSql,
                     schoolSql: schoolSql
                 });

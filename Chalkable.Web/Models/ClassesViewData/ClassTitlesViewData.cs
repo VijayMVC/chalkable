@@ -11,7 +11,7 @@ namespace Chalkable.Web.Models.ClassesViewData
         {
            return new ClassHoverBoxViewData<ClassAttendanceHoverViewData>
                 {
-                    Titel = ((100*attendances.Count(x => x.Type == AttendanceTypeEnum.Absent))/possibleAbsents).ToString(),
+                    Title = ((100*attendances.Count(x => x.Type == AttendanceTypeEnum.Absent))/possibleAbsents).ToString(),
                     Hover = ClassAttendanceHoverViewData.Create(attendances)
                 };
         }
@@ -20,7 +20,7 @@ namespace Chalkable.Web.Models.ClassesViewData
             classGradingStats = classGradingStats.OrderByDescending(x => x.MarkingPeriod.StartDate).ToList();
             var res = new ClassHoverBoxViewData<ClassAverageForMpHoverViewData>
                 {
-                    Titel = classGradingStats.First().Avg.ToString()
+                    Title = classGradingStats.First().Avg.ToString()
                 };
             classGradingStats.RemoveAt(0);
             res.Hover = ClassAverageForMpHoverViewData.Create(classGradingStats);
@@ -30,7 +30,7 @@ namespace Chalkable.Web.Models.ClassesViewData
         public static ClassHoverBoxViewData<ClassDisciplineHoveViewData> Create(IList<DisciplineType> disciplineTypes, IList<ClassDisciplineDetails> disciplineList)
         {
             var res = new ClassHoverBoxViewData<ClassDisciplineHoveViewData>();
-            res.Titel = disciplineList.Sum(x => x.DisciplineTypes.Count).ToString();
+            res.Title = disciplineList.Sum(x => x.DisciplineTypes.Count).ToString();
             disciplineTypes = disciplineTypes.Take(MAX_HOVER_LIST_NUMBER).ToList();
             res.Hover = ClassDisciplineHoveViewData.Create(disciplineTypes, disciplineList);
             return res;

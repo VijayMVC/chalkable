@@ -3,6 +3,7 @@ REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.class.ClassForTopBar');
 REQUIRE('chlk.models.class.ClassForWeekMask');
 REQUIRE('chlk.models.id.ClassId');
+REQUIRE('chlk.models.class.ClassSummary');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -37,6 +38,13 @@ NAMESPACE('chlk.services', function () {
                 var res = window.classesInfo[id.valueOf()];
                 res = new ria.serialize.JsonSerializer().deserialize(res, chlk.models.class.ClassForWeekMask);
                 return res;
+            },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getSummary(classId) {
+                return this.get('Class/ClassSummary.json', chlk.models.class.ClassSummary, {
+                    classId: classId
+                });
             }
         ])
 });

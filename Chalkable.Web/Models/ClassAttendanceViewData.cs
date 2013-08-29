@@ -35,7 +35,8 @@ namespace Chalkable.Web.Models
                     Date = attendance.Date,
                     AttendanceReasonId = attendance.AttendanceReasonRef,
                     Period = PeriodViewData.Create(attendance.ClassPeriod.Period),
-                    Student = ShortPersonViewData.Create(attendance.Student)
+                    Student = ShortPersonViewData.Create(attendance.Student),
+                    Type = (int)attendance.Type
                 };
             if (reason != null)
                 res.AttendanceReason = AttendanceReasonViewData.Create(reason);

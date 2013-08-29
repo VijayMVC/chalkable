@@ -57,7 +57,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
             var res = new StudentHoverBoxViewData<StudentDisciplineSummaryViewData>
                 {
                     Hover = StudentDisciplineSummaryViewData.Create(disciplineTotalPerTypes).OrderByDescending(x => x.Total).ToList(),
-                    Titel = disciplineTotalPerTypes.Sum(x => x.Total).ToString()
+                    Title = disciplineTotalPerTypes.Sum(x => x.Total).ToString()
                 };
             return res;
         }
@@ -68,7 +68,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
             var res = new StudentHoverBoxViewData<StudentAttendanceSummaryViewData>
                 {
                     Hover = StudentAttendanceSummaryViewData.Create(attDic),
-                    Titel = totalAbsentsAndLates.ToString()
+                    Title = totalAbsentsAndLates.ToString()
                 };
             return res;
         }
