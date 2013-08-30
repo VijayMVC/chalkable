@@ -17,6 +17,30 @@ var thisBrowser= (function(){
     }
 })();
 
+function joinUrls(){
+    function joinTwo(a, b){
+        if(!a){
+            return b;
+        }
+        if(!b){
+            return a;
+        }
+        if((a[a.length-1] == '/')){
+            a = a.slice(0, -1);
+        }
+        if((b[0] == '/')){
+            b = b.slice(1);
+        }
+       return a + '/' + b;
+    }
+
+    var res = '';
+    [].slice.call(arguments).forEach(function (arg){
+        res = joinTwo(res, arg);
+    });
+    return res;
+}
+
 function HtmlEncode(s)
 {
     var el = document.createElement("div");

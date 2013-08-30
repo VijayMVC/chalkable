@@ -140,6 +140,7 @@
         var currentChlkPerson = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.CURRENT_PERSON)');
         var classesToFilter = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.CLASSES)');
         var classesAdvancedData = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.CLASSES_ADV_DATA)');
+        var scriptsRoot = '@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot';
         var classesInfo = {};
         classesAdvancedData && classesAdvancedData.forEach(function (el) {
             classesInfo[el.classid] = {

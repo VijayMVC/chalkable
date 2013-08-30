@@ -6,7 +6,7 @@ mixin PersonImg(person, size)
     if(person.getGender())
         src = chlk.templates.JadeTemplate.prototype.getPictureURL(person.getId, size, size);
         isWoman = person.getGender().toLowerCase() == 'f';
-        alternativeHref = window.WEB_SITE_ROOT + 'Content/avatars/' + size + '/.no-avatar';
+        alternativeHref = joinUrls(window.scriptsRoot, 'Content/avatars/' + size + '/.no-avatar');
         if isWoman
             alternativeHref = alternativeHref + '-female.png';
         else
@@ -19,7 +19,7 @@ mixin PersonImg(person, size)
         +Image()(attributes)
 
 mixin ClassImg(course, width, height)
-    -defaultSrc = window.WEB_SITE_ROOT + 'Content/images/common/course-icons/all.png';
+    -defaultSrc =joinUrls(window.scriptsRoot, 'Content/images/common/course-icons/all.png');
     if course
         srcId = course.getDepartmentId();
         alternativeSrcId = course.getId();
@@ -27,7 +27,6 @@ mixin ClassImg(course, width, height)
         src = chlk.templates.JadeTemplate.prototype.getPictureURL(srcId, height, width);
         alternativeSrc = null;
         -if(alternativeSrcId){alternativeSrc = chlk.templates.JadeTemplate.prototype.getPictureURL(alternativeSrcId, height, width)};
-        -defaultSrc = window.WEB_SITE_ROOT + 'Content/images/common/course-icons/all.png';
         -attributes.src = src;
         -attributes.alternativeSrc = alternativeSrc;
         -attributes.defaultSrc = defaultSrc;

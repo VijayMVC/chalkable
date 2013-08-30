@@ -38,7 +38,7 @@ NAMESPACE('chlk.controls', function () {
                 configs.selectedIndex !== undefined && this.setCurrentIndex(configs.selectedIndex);
                 this.setConfigs(configs);
 
-                this.setCount(data.length || data[getItemsMethod]().length);
+                this.setCount(data.length != undefined ? data.length : data[getItemsMethod]().length);
                 this.context.getDefaultView().getCurrent()
                     .addRefreshCallback(function (activity, model) {
                         if(this.getCurrentIndex() !== undefined && !new ria.dom.Dom(':focus').exists())
