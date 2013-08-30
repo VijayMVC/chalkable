@@ -21,7 +21,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         Application GetApplicationById(Guid id);
         Application GetApplicationByUrl(string url);
-        ApplicationRating WriteReveiw(Guid applicationId, int rating, string review);
+        ApplicationRating WriteReview(Guid applicationId, int rating, string review);
         IList<ApplicationRating> GetRatings(Guid applicationId);
         bool CanGetSecretKey(IList<Application> applications);
         bool HasMyApps(Application application);
@@ -95,7 +95,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public ApplicationRating WriteReveiw(Guid applicationId, int rating, string review)
+        public ApplicationRating WriteReview(Guid applicationId, int rating, string review)
         {
             using (var uow = Update())
             {
