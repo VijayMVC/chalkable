@@ -71,7 +71,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              IList<Period> periods = new List<Period>();
              var res = new List<AnnouncementCalendarWeekViewData>();
              var schoolYearId = GetCurrentSchoolYearId();
-             var days = SchoolLocator.CalendarDateService.GetLastDays(schoolYearId, false, start, end).Reverse();
+             var days = SchoolLocator.CalendarDateService.GetLastDays(schoolYearId, false, start, end);
              Guid? prevMpId = null;
              foreach (var d in days)
              {
@@ -119,7 +119,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              IList<ClassPeriod> classPeriods = new List<ClassPeriod>();
              IList<Period> periods = new List<Period>();
              Guid? prevMpId = null;
-             var days = locator.CalendarDateService.GetLastDays(schoolYearId, false, start, end).Reverse();
+             var days = locator.CalendarDateService.GetLastDays(schoolYearId, false, start, end);
              foreach (var d in days)
              {
                  if (d.MarkingPeriodRef.HasValue && d.ScheduleSectionRef.HasValue)

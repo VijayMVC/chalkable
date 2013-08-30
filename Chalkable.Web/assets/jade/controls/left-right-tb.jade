@@ -8,7 +8,7 @@ mixin LeftRightToolbar(data, tplClass, controller, action, params)
                     -item.setPressed && item.setPressed(configs.selectedItemId == item.getId().valueOf());
                     -item.setDisabled && item.setDisabled(!configs.pressAfterClick);
                     -item.setIndex && item.setIndex(i);
-                    -if(controller){item.setController(controller);item.setAction(action);item.setParams(params);}
+                    -if(controller){item.setController(controller);item.setAction(action);params && item.setParams(params);}
                     +RenderWith(item, tplClass)
         .A(class=configs.disableNextButton ? configs.disabledClass : "").next-button.arrow
         if(configs.needDots)

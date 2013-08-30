@@ -15,7 +15,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
             ria.async.Future, function getClassList(classId, date_) {
-                return this.getPaginatedList('Attendance/ClassList.json', chlk.models.attendance.ClassAttendance, {
+                return this.get('Attendance/ClassList.json', ArrayOf(chlk.models.attendance.ClassAttendance), {
                     classId: classId.valueOf(),
                     date: date_ && date_.toString('mm-dd-yy')
                 });

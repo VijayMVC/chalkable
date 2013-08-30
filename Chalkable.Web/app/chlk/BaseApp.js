@@ -48,6 +48,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, 'currentChlkPerson', chlk.models.people.User, 'currentPerson');
                 this.saveInSession(session, 'WEB_SITE_ROOT', null, 'webSiteRoot');
                 this.saveInSession(session, 'azurePictureUrl');
+                this.saveInSession(session, 'attendanceReasons', ArrayOf(chlk.models.attendance.AttendanceReason));
 
                 var siteRoot = window.location.toString().split(window.location.pathname).shift();
                 var serviceRoot = "/";
@@ -58,7 +59,7 @@ NAMESPACE('chlk', function (){
             [[ria.mvc.ISession, String, Object, String]],
             function saveInSession(session, key, cls_, destKey_){
                var serializer = new ria.serialize.JsonSerializer();
-               var value = window[key] || {};
+               var value = window[key] || (cls_ && (ria.__API.isArrayOfDescriptor(cls_) || cls_ == Array) ? [] : {});
 
                var destK = destKey_ ?  destKey_ : key;
                if (value){
