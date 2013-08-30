@@ -1,0 +1,69 @@
+.students-list
+    topData = self.getTopData();
+    topItems = topData.getTopItems();
+    selectedId = topData.getSelectedItemId();
+    valuesEnum = chlk.models.attendance.AttendanceTypesValue;
+    +LeftRightToolbar(topItems, chlk.templates.class.TopBar, 'attendance', 'classList')(
+        selectedItemId=selectedId ? selectedId.valueOf() : ""
+    ).classes-bar
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +DatePicker('attendanceDate', self.getDate())(
+                    data-options={
+                        showOtherMonths: true,
+                        selectOtherMonths: true
+                    }
+                )#attendance-date
+            .right
+                +ActionLink('attendance', 'classList', []).pressed
+                    =Msg.List
+                +ActionLink('attendance', 'classList', [])
+                    =Msg.Room
+                +ActionLink('attendance', 'classList', [])
+                    =Msg.Card
+    .people-list-container.not-transparent
+        items = self.getItems()
+        .top.panel-bg
+            +ActionLink('attendance', 'markAll', [])#all-present-link=Msg.Mark_all_Present
+        .action-bar.buttons.filter
+            .container.panel-bg
+                .left
+                    A(class=self.isByLastName()?"":"pressed").action-button.first-last=Msg.First_name
+                    A(class=self.isByLastName()?"pressed":"").action-button.first-last=Msg.Last_name
+        .grid-container.loader-container
+            +ListView(self.getItems())#class-attendance-list-panel.people-list
+                each item, i in self.getItems()
+                    .row(class=(i == 0 ? 'selected' : ''), index=i)
+                        value = item.getType();
+                        needDropdown = (value > valuesEnum.PRESENT.valueOf()) && (self.getReasons().filter(function(item){return item.attendancetype == value}).length);
+                        reason = needDropdown ? (item.getAttendanceReason() ? item.getAttendanceReason().getDescription() : '') : '';
+                        name = self.convertWith(value, chlk.converters.ClassAttendanceIdToNameConverter)
+                        student = item.getStudent();
+                        +ActionLink('students', 'info', student.getId().valueOf()).left.image-container.white.shadow
+                            +PersonImg(student, 47)
+                        p.left= student.getFullName()
+                        .right
+                            .student-attendance-container
+                                len = self.getItems().length;
+                                if (i== 5 || (i == len - 1 && len < 6))
+                                    .keyboard-suggestion
+                                .attendance-option
+                                div(class=name.toLowerCase().replace(/\//g, '-')).attendance-text
+                                    =(value == valuesEnum.NA.valueOf() ? '_______' : name)
+                                .attendance-combo
+                                    a(href="javascript:").left-arrow
+                                        span
+                                    div(class=needDropdown ? "with-dropdown" : '').current-attendance
+                                    a(href="javascript:").right-arrow
+                                        span
+                                    .combo-list
+                                        .connector
+                                            div(class=(reason ? "" : "selected")).option=name
+                                            each reasonItem in self.getReasons()
+                                                div(
+                                                    class=(reasonItem.getId() == reason.getId() ? "selected" : ""),
+                                                    data-id=reasonItem.getId().valueOf()
+                                                ).option=reasonItem.getDescription()
+                                            .press-enter=Msg.Press_enter
+                        .clear
