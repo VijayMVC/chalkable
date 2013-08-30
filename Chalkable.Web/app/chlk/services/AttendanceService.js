@@ -2,6 +2,10 @@ REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.attendance.AttendanceSummary');
 REQUIRE('chlk.models.attendance.ClassAttendance');
+REQUIRE('chlk.models.id.ClassPersonId');
+REQUIRE('chlk.models.id.ClassPeriodId');
+REQUIRE('chlk.models.id.AttendanceReasonId');
+REQUIRE('chlk.models.common.ChlkDate');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -18,6 +22,17 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Attendance/ClassList.json', ArrayOf(chlk.models.attendance.ClassAttendance), {
                     classId: classId.valueOf(),
                     date: date_ && date_.toString('mm-dd-yy')
+                });
+            },
+
+            [[chlk.models.id.ClassPersonId, chlk.models.id.ClassPeriodId, Number, chlk.models.id.AttendanceReasonId, chlk.models.common.ChlkDate]],
+            ria.async.Future, function setAttendance(classPersonId, classPeriodId, type, attendanceReasonId_, date) {
+                return this.get('Attendance/SetAttendance.json', ArrayOf(chlk.models.attendance.ClassAttendance), {
+                    classPersonId: classPersonId.valueOf(),
+                    classPeriodId: classPeriodId.valueOf(),
+                    attendanceReasonId: attendanceReasonId_ && attendanceReasonId_.valueOf(),
+                    type: type,
+                    date: date && date.toString('mm-dd-yy')
                 });
             }
         ])

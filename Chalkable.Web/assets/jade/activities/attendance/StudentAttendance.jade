@@ -1,0 +1,33 @@
+valuesEnum = chlk.models.attendance.AttendanceTypesValue;
+value = self.getType();
+reasons = self.getReasons().filter(function(item){return self.attendancetype == value});
+needDropdown = (value > valuesEnum.PRESENT.valueOf()) && reasons.length;
+reason = needDropdown ? self.getAttendanceReason() : '';
+name = self.getTypeName();
+student = self.getStudent();
++ActionForm('attendance', 'setAttendance').student-attendance-form
+    +Hidden('classpersonid', self.getClassPersonId().valueOf())
+    +Hidden('type', value)
+    +Hidden('classperiodid', self.getClassPeriodId().valueOf())
+    +Hidden('attendanceReasonId', reason && reason.getId().valueOf())
+    +Hidden('date', self.getDate().format('mm-dd-yy'))
+    +Hidden('attendanceReasonDescription', reason && reason.getDescription())
+    .attendance-option
+        =(reason ? reason.getDescription() : '')
+    div(class=name.toLowerCase().replace(/\//g, '-')).attendance-text
+        =(value == valuesEnum.NA.valueOf() ? '_______' : name)
+    .attendance-combo
+        BUTTON(href="javascript:", name="submitType", value="leftArrow", type="submit").left-arrow
+            span
+        div(class=needDropdown ? "with-dropdown" : '').current-attendance=self.getTypeName().valueOf()
+        BUTTON(href="javascript:", name="submitType", value="rightArrow", type="submit").right-arrow
+            span
+        .combo-list
+            .connector
+            div(class=(reason ? "" : "selected")).option=name
+            each reasonItem in reasons
+                div(
+                    class=(reason && reasonItem.getId() == reason.getId() ? "selected" : ""),
+                    data-id=reasonItem.getId().valueOf()
+                ).option=reasonItem.getDescription()
+            .press-enter=Msg.Press_enter

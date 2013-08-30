@@ -152,6 +152,7 @@
         var markingPeriod =  parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.MARKING_PERIOD)');
         var nextMarkingPeriod = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.NEXT_MARKING_PERIOD)'); 
         var finalizedClassesIds = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.FINALIZED_CLASSES_IDS)'); 
+        var attendanceReasons = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ATTENDANCE_REASONS)');
     </script>
     
     @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)

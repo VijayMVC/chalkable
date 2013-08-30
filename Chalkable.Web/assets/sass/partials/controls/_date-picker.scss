@@ -15,6 +15,7 @@
   width: 210px;
   overflow: hidden;
   padding: 0;
+  z-index: 10 !important;
   @include box-shadow(0 0 5px gray);
 
   TABLE{
