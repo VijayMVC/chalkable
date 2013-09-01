@@ -21,9 +21,17 @@
 
 @import "partials/main/developer/_app";
 @import "partials/main/developer/_app_general";
+
+
+@import "partials/main/apps/_app_wrapper";
 //@import "partials/main/developer/_docs";
 @import "partials/main/sysadmin/_apps";
 @import "partials/main/popups/_popups";
+@import "partials/main/popups/_add_app";
+@import "partials/main/popups/_add_school";
+@import "partials/main/popups/_add_district";
+@import "partials/main/popups/_add_department";
+@import "partials/main/popups/_add_app_category";
 
 
 BODY {
