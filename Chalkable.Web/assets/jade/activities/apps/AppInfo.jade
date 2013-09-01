@@ -1,14 +1,16 @@
-mixin Textbox(tName, val, isReadonly)
+mixin Textbox(tName, val, isReadonly, validationRule)
+    rule = validationRule ? "validate[" + validationRule + "]": "validate[required]"
     if isReadonly
         -attributes.disabled = isReadonly
-    input(type="text", name=tName, value=val, class="validate[required]")(attributes).text
+    input(type="text", name=tName, value=val, class=rule)(attributes).text
 
 
 
-mixin TextArea(tName, val, isReadonly)
+mixin TextArea(tName, val, isReadonly, validationRule)
+    rule = validationRule ? "validate[" + validationRule + "]": "validate[required]"
     if isReadonly
         -attributes.disabled = isReadonly
-    textarea(name=tName, class="validate[required]")(attributes)=val
+    textarea(name=tName, class=rule)(attributes)=val
 
 mixin MyAppsPermission(prefix, app, suffix)
     .myapps-permission
@@ -31,7 +33,7 @@ mixin AppPricing(appPrice, isReadOnly)
         .prices(class = isFreeApp ?  "x-hidden" : undefined)
             .elem.cost-per-user
                 label.hint Cost per user:
-                +Textbox('costPerUser', appPrice.getPrice()).price-box
+                +Textbox('costPerUser', appPrice.getPrice(), isReadOnly, "required, custom[number]").price-box
             .elem
                 label.wide.hint School flat rate:
                 .price-elem
@@ -39,7 +41,7 @@ mixin AppPricing(appPrice, isReadOnly)
                     +SlideCheckbox("schoolFlatRateEnabled",isSchoolFlatRateEnabled , isReadOnly)
             .elem.school-flat-rate(class = !isSchoolFlatRateEnabled ?  "x-hidden" : undefined)
                 label.hint School cost:
-                +Textbox('costPerSchool', appPrice.getPricePerSchool()).price-box
+                +Textbox('costPerSchool', appPrice.getPricePerSchool(), isReadOnly, "required, custom[number]").price-box
             .elem
                 label.wide.hint Class flat rate:
                 .price-elem
@@ -47,7 +49,7 @@ mixin AppPricing(appPrice, isReadOnly)
                     +SlideCheckbox("classFlatRateEnabled", isClassFlatRateEnabled, isReadOnly)
             .elem.class-flat-rate(class = !isClassFlatRateEnabled ?  "x-hidden" : undefined)
                 label.hint Class cost:
-                +Textbox('costPerClass', appPrice.getPricePerClass()).price-box
+                +Textbox('costPerClass', appPrice.getPricePerClass(), isReadOnly, "required, custom[number]").price-box
 
 
 
@@ -109,10 +111,10 @@ appPermissions = appPermissions.join(',')
         .section.first
             .elem
                 label.hint App Name:
-                +Textbox("name", app.getName(), self.isReadOnly())
+                +Textbox("name", app.getName(), self.isReadOnly(), "required")
             .elem
                 label.hint App URL:
-                +Textbox("url", app.getUrl(), self.isReadOnly())
+                +Textbox("url", app.getUrl(), self.isReadOnly(), "required, custom[url]")
         .section
             .elem
                 label.top.hint My Apps:
@@ -170,13 +172,13 @@ appPermissions = appPermissions.join(',')
         .section
             .elem
                 label.wide.hint Short Description:
-                +Textbox("shortDescription", app.getShortDescription(), self.isReadOnly())
+                +Textbox("shortDescription", app.getShortDescription(), self.isReadOnly(), "required, maxSize[150]")
             .elem
                 label.wide.hint.top-align Long Description:
-                +TextArea("longDescription", app.getDescription(), self.isReadOnly())
+                +TextArea("longDescription", app.getDescription(), self.isReadOnly(), "required, maxSize[1000]")
             .elem
                 label.wide.hint Video Demo:
-                +Textbox("videoDemoUrl", app.getVideoDemoUrl(), self.isReadOnly())
+                +Textbox("videoDemoUrl", app.getVideoDemoUrl(), self.isReadOnly(), "required, custom[url]")
         .section
             +AppPricing(appPrice, self.isReadOnly())
         .section.last

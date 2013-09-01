@@ -81,6 +81,7 @@ NAMESPACE('chlk.controllers', function (){
 
 
 
+
                     var appIconId = app_.getSmallPictureId() || new chlk.models.id.PictureId('');
                     var iconUrl = this.pictureService.getPictureUrl(appIconId, 74);
                     app_.setIconPicture(new chlk.models.apps.AppPicture(appIconId, iconUrl, 74, 74, 'Icon', !readOnly));

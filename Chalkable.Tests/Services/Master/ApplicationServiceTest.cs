@@ -360,9 +360,9 @@ namespace Chalkable.Tests.Services.Master
             Assert.AreEqual(apps[0].Id, app3.Id);
             Assert.AreEqual(apps[1].Id, app2.Id);
 
-            teacherAppS.WriteReveiw(app.Id, 5, "review 1");
-            teacherAppS.WriteReveiw(app2.Id, 6, "review 2");
-            teacherAppS.WriteReveiw(app3.Id, 3, "review 3");
+            teacherAppS.WriteReview(app.Id, 5, "review 1");
+            teacherAppS.WriteReview(app2.Id, 6, "review 2");
+            teacherAppS.WriteReview(app3.Id, 3, "review 3");
 
             apps = teacherAppS.GetApplications(null, null, null, null, AppSortingMode.HighestRated);
             Assert.AreEqual(apps[0].Id, app2.Id);

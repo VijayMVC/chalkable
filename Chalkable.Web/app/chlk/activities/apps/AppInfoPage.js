@@ -52,7 +52,7 @@ NAMESPACE('chlk.activities.apps', function () {
                 this.onFormChange(node, event);
             },
 
-            [ria.mvc.DomEventBind('input', 'input')],
+            [ria.mvc.DomEventBind('keyup', 'input')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function inputsChanged(node, event){
                 this.onFormChange(node, event);
