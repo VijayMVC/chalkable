@@ -163,11 +163,14 @@ NAMESPACE('chlk.controllers', function (){
                 .getAnnouncement(announcementId)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    var now = getDate(), days;
+                    var now = getDate();
+                    var days = 0;
+                    var expTxt = "";
                     var expires = model.getExpiresDate();
                     var expiresDate = expires.getDate();
                     var date = expires.format('(D m/d)');
                     var attachments = model.getAnnouncementAttachments();
+
                     this.prepareAttachments(attachments);
                     model.setExpiresDateColor('blue');
                     model.getOwner().setPictureUrl(this.personService.getPictureURL(model.getOwner().getId(), 24));
@@ -181,20 +184,14 @@ NAMESPACE('chlk.controllers', function (){
                     }else{
                         if(now > expires.getDate()){
                             model.setExpiresDateColor('red');
-                            days = Math.ceil((now - expiresDate)/1000/3600/24);
-                            if(days == 1){
-                                model.setExpiresDateText(Msg.Due_yesterday + " " + date);
-                            }else{
-                                model.setExpiresDateText(Msg.Due_days_ago(days) + " " + date);
-                            }
+                            days = getDateDiffInDays(expiresDate, now);
+                            expTxt = days == 1 ? Msg.Due_yesterday + " " + date : Msg.Due_days_ago(days) + " " + date;
+
                         }else{
-                            days = Math.ceil((expiresDate - now)/1000/3600/24);
-                            if(days == 1){
-                                model.setExpiresDateText(Msg.Due_tomorrow + " " + date);
-                            }else{
-                                model.setExpiresDateText(Msg.Due_in_days(days) + " " + date);
-                            }
+                            days = getDateDiffInDays(now, expiresDate);
+                            expTxt = days == 1 ? Msg.Due_tomorrow + " " + date : Msg.Due_in_days(days) + " " + date;
                         }
+                        model.setExpiresDateText(expTxt);
                     }
                     return new ria.async.DeferredData(model);
                 }.bind(this));
@@ -217,7 +214,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementId, String]],
         function deleteAction(announcementId, typeName) {
-            this.getContext().getSession().set('noSave', true);
+            this.disableAnnouncementSaving(true);
             this.ShowMsgBox('You are about to delete this item.\n'+
                     'All grades and attachments for this ' + typeName + ' will\n' +
                     'be gone forever.\n' +
@@ -245,7 +242,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.SchoolPersonId]],
         function discardAction(schoolPersonId) {
-            this.getContext().getSession().set('noSave', true);
+            this.disableAnnouncementSaving(true);
             this.announcementService
                 .deleteDrafts(schoolPersonId)
                 .attach(this.validateResponse_())
@@ -267,10 +264,20 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result);
         },
 
+
+        Boolean, function isAnnouncementSavingDisabled(){
+            return this.getContext().getSession().get('noSave', false);
+        },
+
+        [[Boolean]],
+        function disableAnnouncementSaving(val){
+            this.getContext().getSession().set('noSave', val);
+        }
+
         [[chlk.models.announcement.Announcement]],
         function saveAction(model) {
-            if(!this.getContext().getSession().get('noSave', false)){
-                this.getContext().getSession().set('noSave', false);
+            if(!this.isAnnouncementSavingDisabled()){
+                this.disableAnnouncementSaving(false);
                 var session = this.getContext().getSession();
                 var result;
                 var submitType = model.getSubmitType();
