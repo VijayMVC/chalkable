@@ -10,20 +10,20 @@
 		<FileUpdate Files="Chalkable.Web\Tools\CompilerHelper.cs" 
 			Regex='VERSION = "private-build";'
 			ReplacementText='VERSION = "$(Version)";' />
-		<FileUpdate Files="Chalkable.Web\Assets\configuration.xml" 
+		<FileUpdate Files="Chalkable.Web\StorageAssets\configuration.xml" 
 			Regex='private-build' 
 			ReplacementText='$(Version)' />
-		<FileUpdate Files="Chalkable.Web\Assets\configuration.xml" 
+		<FileUpdate Files="Chalkable.Web\StorageAssets\configuration.xml" 
 			Regex='private-build' 
 			ReplacementText='$(Version)' />
 			
-		<FileUpdate Files="Chalkable.Web\Assets\configuration.xml" 
+		<FileUpdate Files="Chalkable.Web\StorageAssets\configuration.xml" 
 			Regex='\.\.' 
 			ReplacementText='!!!' />	
-		<FileUpdate Files="Chalkable.Web\Assets\configuration.xml" 
+		<FileUpdate Files="Chalkable.Web\StorageAssets\configuration.xml" 
 			Regex='\.' 
 			ReplacementText='-' />
-		<FileUpdate Files="Chalkable.Web\Assets\configuration.xml" 
+		<FileUpdate Files="Chalkable.Web\StorageAssets\configuration.xml" 
 			Regex='!!!' 
 			ReplacementText='..' />				
 	</Target>
