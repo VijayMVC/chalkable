@@ -11,6 +11,6 @@ NAMESPACE('chlk.models.bgtasks', function () {
             [ria.serialize.SerializeProperty('logtype')],
             Number, 'logType',
             String, 'message',
-            chlk.models.common.ChlkDate, 'added'
+            chlk.models.common.ChlkDate, 'time'
         ]);
 });
