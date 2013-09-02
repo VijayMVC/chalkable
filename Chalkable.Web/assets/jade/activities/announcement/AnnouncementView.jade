@@ -1,0 +1,83 @@
+.announcement-view.not-transparent
+    isNotStudent = true;
+    isReadonly = false;
+    studentAnnouncements = false;
+    studentAnnouncementsInfo = self.getStudentAnnouncements();
+    selectedIndex = studentAnnouncementsInfo ? studentAnnouncementsInfo.getSelectedIndex() : 0;
+    applications = self.getApplications();
+    applicationsInGradeView = applications.filter(function(item){return item.applicationviewdata.showingradeview});
+    if studentAnnouncementsInfo
+        studentAnnouncements = studentAnnouncementsInfo.getItems();
+        gradingStyle = studentAnnouncementsInfo.getGradingStyle();
+        gradingMapping = studentAnnouncementsInfo.getMapping();
+        getGrade = function(value){return GradingStyler.getLetterByGrade(value, gradingMapping, gradingStyle)};
+        getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, gradingMapping, gradingStyle)};
+    .feed-item
+        if isNotStudent
+            .grades
+        .bullet
+            +ActionLink('announcement', 'star', self.getId()).star
+            .item-type
+                .attachment
+                    div(class="announcement-type-" + self.getAnnouncementTypeId()).icon.blue.icon
+                    .icon.black
+                    h2.animated-header=self.getSubject()
+                    p.animated=self.getShortContent()
+                    .animated=self.getExpiresDate().toString()
+                    .attachment-icon
+                    .apps-icon
+    .panel-bg
+        .action-bar.buttons
+            .container
+                .left
+                    +ActionLink('feed', 'list').back-button
+                .right
+                    +ActionLink('announcement', 'edit', self.getId()).edit-button Edit
+        .announcement-details-panel
+            .details-container.silver-panel
+                .left-block
+                    +ActionLink('feed', 'list').image-container
+                        img(src=self.getOwner().getPictureUrl()).avatar.avatar-47
+                .right-block
+                    h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
+                    p=self.getContent()
+                    .attachments-and-applications
+                        +RenderWith(self._model, chlk.templates.announcement.Announcement)
+            if studentAnnouncements && studentAnnouncements.length
+                .silver-panel
+                    .auto-grade-buttons.right
+                        +Button()(disabled = true).special-button2.green
+                            =Msg.Auto_grade
+                        +Button()(disabled = true).special-button2.red
+                            =Msg.Grade_manually
+                    .grades-info.right
+                        TABLE
+                            TR
+                                TD
+                                    span#graded-count=studentAnnouncementsInfo.getGradedStudentCount()
+                                    ='/' + studentAnnouncements.length
+                                TD=getGrade(studentAnnouncementsInfo.getClassAvg())
+                            TR
+                                TD.small=Msg.Students_graded(studentAnnouncements.length)
+                                TD.small=Msg.Class_average
+                    .clear-right
+                +ListView(studentAnnouncementsInfo)(
+                    selectedIndex = selectedIndex).grades-individual.people-list
+                    each item, i in studentAnnouncements
+                        .row(class=(i == selectedIndex ? 'selected' : ''), index=i)
+                            ownerPictureUrl = self.getOwner().getPictureUrl();
+                            notAnnouncement = self.getAnnouncementTypeId() != chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf();
+                            +Hidden('ownerPictureUrl', ownerPictureUrl)
+                            +Hidden('notAnnouncement', notAnnouncement)
+                            +Hidden('readonly', isReadonly)
+                            +Hidden('gradingStyle', gradingStyle)
+                            .top-content(id = "top-content-" + item.getId())
+                                +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
+                                    ownerPictureUrl = ownerPictureUrl,
+                                    notAnnouncement = notAnnouncement,
+                                    readonly = isReadonly,
+                                    applicationsInGradeView = applications.filter(function(item){return item.applicationviewdata.showingradeview}),
+                                    gradingStyle = gradingStyle,
+                                    gradingMapping = studentAnnouncementsInfo.getMapping()
+                                )
+
