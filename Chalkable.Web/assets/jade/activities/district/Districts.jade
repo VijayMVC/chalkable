@@ -1,0 +1,27 @@
+.districts
+    .action-bar.not-transparent
+        .container.panel-bg
+            +ActionLink('district', 'add').chlk-add.opacity-button Add District
+    +Grid('district', 'page', self).not-transparent
+        +GridHead()
+            .th Name
+            .th DB Name
+            .th SIS URL
+            .th SIS User name
+            .th SIS password
+            .th SIS system type
+            .th
+        +GridBody()
+            each item in self.items
+                +GridRow()
+                    .td= item.getName()
+                    .td= item.getDbName()
+                    .td= item.getSisUrl()
+                    .td= item.getSisUserName()
+                    .td *
+                    .td= item.getSisSystemType()
+                    .td.action-links
+                        +ActionLink('schools', 'list', item.getId()).profile
+                        +ActionLink('district', 'update', item.getId()).view
+                        +ActionLink('district', 'delete', item.getId()).remove
+

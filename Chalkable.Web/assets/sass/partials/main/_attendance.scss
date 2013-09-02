@@ -1,0 +1,228 @@
+BODY {
+  DIV.page{
+    >DIV#content {
+      DIV#content-wrapper{
+        #main{
+          .well-trouble-items{
+            >DIV{
+              min-height: 25px;
+              padding: 6px 10px 4px 10px;
+              @include background(linear-gradient(top, #f6f6f6, #e5e5e5));
+              border-top: 1px solid white;
+              border-bottom: 1px solid #979797;
+              @include border-radius(5px);
+
+              P{
+                padding-left: 27px;
+                font-size: 14px;
+                color: #5f5f5f;
+                text-shadow: 0 1px 1px white;
+                width: 230px;
+              }
+
+              .avatar-container{
+                background: #F4F4F4;
+                padding: 2px;
+                border-bottom: 1px solid #ACACAC;
+                @include border-radius(0);
+                border-width: 0 0 1px 0;
+                @include box-shadow(none);
+              }
+
+              >DIV, >P{
+                display: inline-block;
+                vertical-align: middle;
+                word-break: break-word;
+              }
+            }
+            >P{
+              padding: 5px;
+              font-weight: bold;
+            }
+
+            IMG{
+              margin: -1px;
+            }
+          }
+
+          #class-attendance-list-panel{
+
+            .row{
+              P {
+                width: 240px;
+              }
+
+              >.right{
+                margin-top: 22px;
+              }
+            }
+
+            .keyboard-suggestion{
+              position: absolute;
+              z-index: 9999;
+              background: url(images/attendance/keyboard-suggestion.png) center center no-repeat;
+              width: image-width('attendance/keyboard-suggestion.png');
+              height: image-height('attendance/keyboard-suggestion.png');
+              top: -21px;
+              display: none;
+            }
+
+            .student-attendance-container{
+              text-shadow: 1px 1px 0 white;
+              position: relative;
+
+              &.active{
+                .attendance-combo{
+                  .current-attendance{
+                    height: 29px;
+                    background: #ebebeb;
+                  }
+                }
+              }
+
+              .attendance-option{
+                display: inline-block;
+                padding-right: 25px;
+                width: 150px;
+                text-align: right;
+                font: bold 12px Arial;
+                color: #a7a7a7;
+              }
+              .attendance-text, .attendance-option{
+                vertical-align: top;
+                height: 27px;
+                line-height: 27px !important;
+              }
+              .attendance-text, .current-attendance{
+                font: bold 14px Arial;
+              }
+              .attendance-text{
+                display: inline-block;
+                width: 157px;
+                text-align: center;
+
+                &.present{
+                  color: #276435;
+                }
+
+                &.absent{
+                  color: #880909;
+                }
+
+                &.excused{
+                  color: #619bae;
+                }
+
+                &.late{
+                  color: #c97d11;
+                }
+
+                &.n-a{
+                  color: #bcbcbc;
+                }
+              }
+              .attendance-combo{
+                display: none;
+                position: relative;
+                width: 157px;
+
+                .left-arrow, .right-arrow{
+                  width: 36px;
+                  height: 27px;
+
+                  SPAN{
+                    border-top: 5px solid transparent;
+                    border-bottom: 5px solid transparent;
+                    display: inline-block;
+                  }
+                }
+                .left-arrow{
+                  @include border-radius(3px 0 0 3px);
+
+                  span{
+                    border-right: 10px solid #181818;
+                  }
+                }
+                .right-arrow{
+                  span{
+                    border-left: 10px solid #181818;
+                  }
+                }
+                .current-attendance, .left-arrow, .right-arrow, .combo-list{
+                  @include box-shadow(0 1px 2px #a3a3a3);
+                  display: inline-block;
+                  border-top: 1px solid white;
+                  vertical-align: top;
+                }
+                .current-attendance, .left-arrow, .right-arrow{
+                  line-height: 26px;
+                  text-align: center;
+                  border-width: 1px 0 0 0;
+                  color: #2e2e2e;
+                  @include background(linear-gradient(top, #f5f5f5, #e0e0e0));
+
+                  &:hover, &:active{
+                    @include box-shadow(0 1px 2px #c0c0c0);
+                  }
+                }
+                .current-attendance{
+                  height: 26px;
+                  min-width: 74px;
+                  margin: 0 4px;
+                }
+                .combo-list{
+                  display: none;
+                  position: absolute;
+                  top: 30px;
+                  left: 0;
+                  right: 3px;
+                  padding-top: 3px;
+                  border-radius: 3px;
+                  background: #ebebeb;
+                  z-index: 1;
+                  text-align: center;
+
+                  .connector{
+                    position: absolute;
+                    height: 3px;
+                    background: beige;
+                    top: -1px;
+                    left: 39px;
+                    width: 76px;
+                    background: #ebebeb;
+                  }
+
+                  .option{
+                    padding: 7px 8px;
+                    font: normal 12px Arial;
+                    color: #383838;
+                    text-align: left;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+
+                    &.selected{
+                      font: bold 12px Arial;
+                      background: #e1e1e1;
+                      color: #2f7790;
+                    }
+                  }
+                }
+              }
+            }
+
+            .row.selected{
+              .student-attendance-container{
+                .attendance-text{
+                  display: none;
+                }
+                .attendance-combo{
+                  display: inline-block;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
