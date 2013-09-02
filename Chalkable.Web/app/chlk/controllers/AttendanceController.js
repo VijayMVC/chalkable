@@ -56,6 +56,8 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
         function classListAction(classId, date_) {
+            if(!classId.valueOf())
+                return this.Redirect('attendance', 'summary', []);
             var result = this.attendanceService
                 .getClassList(classId, date_)
                 .attach(this.validateResponse_())

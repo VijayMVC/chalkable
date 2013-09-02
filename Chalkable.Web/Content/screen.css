@@ -231,18 +231,27 @@ a:not(.not-blue), a:visited:not(.not-blue), a:link:not(.not-blue) {
   display: none !important;
 }
 
-/* line 237, ../assets/sass/screen.scss */
+/* line 236, ../assets/sass/screen.scss */
+.x-zero {
+  position: absolute;
+  z-index: 0;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+/* line 244, ../assets/sass/screen.scss */
 input {
   resize: none !important;
 }
 
-/* line 242, ../assets/sass/screen.scss */
+/* line 249, ../assets/sass/screen.scss */
 a:active:not(.not-blue), a:hover:not(.not-blue) {
   color: #1b77c4;
   outline: none !important;
 }
 
-/* line 248, ../assets/sass/screen.scss */
+/* line 255, ../assets/sass/screen.scss */
 a.grey-link, .grey-link {
   font: normal 13px "Helvetica Neue";
   font-style: italic;
@@ -250,13 +259,13 @@ a.grey-link, .grey-link {
   color: #797979;
 }
 
-/* line 255, ../assets/sass/screen.scss */
+/* line 262, ../assets/sass/screen.scss */
 HTML {
   background: url(images/common/page-bg.gif);
   height: 100%;
 }
 
-/* line 260, ../assets/sass/screen.scss */
+/* line 267, ../assets/sass/screen.scss */
 BODY {
   background: url(images/common/body-bg.gif) 300px 0 repeat-y;
   color: #51595d;
@@ -266,40 +275,40 @@ BODY {
   position: relative;
   margin: 0;
 }
-/* line 271, ../assets/sass/screen.scss */
+/* line 278, ../assets/sass/screen.scss */
 BODY.demo > DIV.application-preview-window {
   bottom: 93px !important;
 }
-/* line 276, ../assets/sass/screen.scss */
+/* line 283, ../assets/sass/screen.scss */
 BODY #logout-block {
   position: absolute;
   right: 0;
   z-index: 100000;
 }
-/* line 281, ../assets/sass/screen.scss */
+/* line 288, ../assets/sass/screen.scss */
 BODY #logout-block .logout-area {
   cursor: pointer;
 }
-/* line 285, ../assets/sass/screen.scss */
+/* line 292, ../assets/sass/screen.scss */
 BODY #logout-block > DIV, BODY #logout-block > A {
   margin-right: 1px;
   padding-left: 9px;
   padding-right: 13px;
 }
-/* line 291, ../assets/sass/screen.scss */
+/* line 298, ../assets/sass/screen.scss */
 BODY #logout-block > SPAN {
   background: url(images/common/logout-arrow.png) center 10px no-repeat, rgba(255, 255, 255, 0.6);
   width: 19px;
 }
-/* line 295, ../assets/sass/screen.scss */
+/* line 302, ../assets/sass/screen.scss */
 BODY #logout-block > SPAN:hover {
   background: url(images/common/logout-arrow.png) center 10px no-repeat, rgba(255, 255, 255, 0.75);
 }
-/* line 299, ../assets/sass/screen.scss */
+/* line 306, ../assets/sass/screen.scss */
 BODY #logout-block > SPAN:active {
   background: url(images/common/logout-arrow.png) center 10px no-repeat, rgba(255, 255, 255, 0.9);
 }
-/* line 304, ../assets/sass/screen.scss */
+/* line 311, ../assets/sass/screen.scss */
 BODY #logout-block > * {
   padding-top: 5px;
   background: rgba(255, 255, 255, 0.6);
@@ -310,12 +319,12 @@ BODY #logout-block > * {
   color: #1c5166;
   text-decoration: none;
 }
-/* line 315, ../assets/sass/screen.scss */
+/* line 322, ../assets/sass/screen.scss */
 BODY #logout-block > DIV, BODY #logout-block > SPAN {
   display: inline-block;
   vertical-align: top;
 }
-/* line 320, ../assets/sass/screen.scss */
+/* line 327, ../assets/sass/screen.scss */
 BODY #logout-block > SPAN, BODY #logout-block > A {
   display: inline-block;
   -webkit-transition-property: all;
@@ -327,7 +336,7 @@ BODY #logout-block > SPAN, BODY #logout-block > A {
   -o-transition-duration: 0.2s;
   transition-duration: 0.2s;
 }
-/* line 326, ../assets/sass/screen.scss */
+/* line 333, ../assets/sass/screen.scss */
 BODY #logout-block > A.logout {
   margin-top: 1px;
   opacity: 0;
@@ -335,15 +344,15 @@ BODY #logout-block > A.logout {
   visibility: hidden;
   text-transform: capitalize;
 }
-/* line 333, ../assets/sass/screen.scss */
+/* line 340, ../assets/sass/screen.scss */
 BODY #logout-block > A.logout:hover {
   background: rgba(255, 255, 255, 0.75);
 }
-/* line 337, ../assets/sass/screen.scss */
+/* line 344, ../assets/sass/screen.scss */
 BODY #logout-block > A.logout:active {
   background: rgba(255, 255, 255, 0.9);
 }
-/* line 343, ../assets/sass/screen.scss */
+/* line 350, ../assets/sass/screen.scss */
 BODY #page-header {
   text-align: right;
   color: #333;
@@ -367,7 +376,7 @@ BODY #page-header {
   top: 0;
   z-index: 5;
 }
-/* line 364, ../assets/sass/screen.scss */
+/* line 371, ../assets/sass/screen.scss */
 BODY DIV.page {
   background: url(images/common/sidebar-bg.gif) 0 0 repeat-y;
   height: 100%;
@@ -375,62 +384,62 @@ BODY DIV.page {
   text-align: left;
   width: 100%;
 }
-/* line 374, ../assets/sass/screen.scss */
+/* line 381, ../assets/sass/screen.scss */
 BODY DIV.page.demo > DIV#content, BODY DIV.page.demo > DIV#sidebar {
   margin-bottom: 90px;
 }
-/* line 379, ../assets/sass/screen.scss */
+/* line 386, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content {
   padding-left: 315px;
   padding-top: 11px;
 }
-/* line 384, ../assets/sass/screen.scss */
+/* line 391, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content .new-item #main-top {
   background: url(images/common/paper-bg-top.gif) 1px 0 no-repeat;
 }
-/* line 388, ../assets/sass/screen.scss */
+/* line 395, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content .new-item #main-wrapper {
   background: url(images/common/paper-bg-new.gif) 0 0 repeat-y;
 }
-/* line 392, ../assets/sass/screen.scss */
+/* line 399, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content .new-item #footer {
   background: url(images/common/paper-bg-bottom.gif) 0 0 no-repeat;
 }
-/* line 398, ../assets/sass/screen.scss */
+/* line 405, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content .attendance #main-top {
   background: url(images/attendance/paper-top-bg.png) 0 0 no-repeat;
 }
-/* line 402, ../assets/sass/screen.scss */
+/* line 409, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content .attendance #main-wrapper {
   background: url(images/attendance/paper-bg.png) 0 0 repeat-y;
 }
-/* line 406, ../assets/sass/screen.scss */
+/* line 413, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content .attendance #footer {
   background: url(images/attendance/paper-bottom-bg.png) 0 0 no-repeat;
 }
-/* line 411, ../assets/sass/screen.scss */
+/* line 418, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content > DIV {
   text-align: left;
   width: 802px;
 }
-/* line 415, ../assets/sass/screen.scss */
+/* line 422, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content > DIV #main-top {
   height: 11px;
   background: url(images/common/paper-top-bg.png) 0 0 no-repeat;
 }
-/* line 420, ../assets/sass/screen.scss */
+/* line 427, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content > DIV #main-wrapper {
   background: url(images/common/paper-bg.gif) 0 0 repeat-y;
   position: relative;
 }
-/* line 424, ../assets/sass/screen.scss */
+/* line 431, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content > DIV #main-wrapper #main {
   background: url(images/common/paper-pin.png) 0 0 repeat-y;
   min-height: 700px;
   padding: 32px 74px 32px 61px;
   position: relative;
 }
-/* line 432, ../assets/sass/screen.scss */
+/* line 439, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content > DIV #footer {
   -moz-border-radius-bottomleft: 10px;
   -webkit-border-bottom-left-radius: 10px;
@@ -1371,9 +1380,13 @@ BODY form input.form_but {
   padding: 5px 10px;
 }
 
-/* line 13, ../assets/sass/partials/controls/_action-bar.scss */
-DIV#content-wrapper.profile .action-bar.buttons .container .action-link:not(.disabled):hover, DIV#content-wrapper.profile .action-bar.buttons .container .action-link:not(.disabled).pressed, DIV#content-wrapper.profile .action-bar.buttons .container .action-button:not(.disabled):hover, DIV#content-wrapper.profile .action-bar.buttons .container .action-button:not(.disabled).pressed {
+/* line 12, ../assets/sass/partials/controls/_action-bar.scss */
+DIV#content-wrapper.profile .action-bar.buttons .container .action-link:not(.disabled), DIV#content-wrapper.profile .action-bar.buttons .container .action-button:not(.disabled) {
   color: #957633;
+  text-shadow: 0 1px 0 white;
+}
+/* line 16, ../assets/sass/partials/controls/_action-bar.scss */
+DIV#content-wrapper.profile .action-bar.buttons .container .action-link:not(.disabled):hover, DIV#content-wrapper.profile .action-bar.buttons .container .action-link:not(.disabled).pressed, DIV#content-wrapper.profile .action-bar.buttons .container .action-button:not(.disabled):hover, DIV#content-wrapper.profile .action-bar.buttons .container .action-button:not(.disabled).pressed {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f3eedf), color-stop(100%, #e1d3a6));
   background: -webkit-linear-gradient(top, #f3eedf, #e1d3a6);
   background: -moz-linear-gradient(top, #f3eedf, #e1d3a6);
@@ -1381,6 +1394,14 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link:not(.dis
   background: linear-gradient(top, #f3eedf, #e1d3a6);
 }
 /* line 19, ../assets/sass/partials/controls/_action-bar.scss */
+DIV#content-wrapper.profile .action-bar.buttons .container .action-link:not(.disabled):hover.back, DIV#content-wrapper.profile .action-bar.buttons .container .action-link:not(.disabled).pressed.back, DIV#content-wrapper.profile .action-bar.buttons .container .action-button:not(.disabled):hover.back, DIV#content-wrapper.profile .action-bar.buttons .container .action-button:not(.disabled).pressed.back {
+  background: url(images/profile/back.png) 3px center no-repeat, -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f3eedf), color-stop(100%, #e1d3a6));
+  background: url(images/profile/back.png) 3px center no-repeat, -webkit-linear-gradient(top, #f3eedf, #e1d3a6);
+  background: url(images/profile/back.png) 3px center no-repeat, -moz-linear-gradient(top, #f3eedf, #e1d3a6);
+  background: url(images/profile/back.png) 3px center no-repeat, -o-linear-gradient(top, #f3eedf, #e1d3a6);
+  background: url(images/profile/back.png) 3px center no-repeat, linear-gradient(top, #f3eedf, #e1d3a6);
+}
+/* line 25, ../assets/sass/partials/controls/_action-bar.scss */
 DIV#content-wrapper.profile .action-bar.buttons .container .action-link.settings:hover, DIV#content-wrapper.profile .action-bar.buttons .container .action-button.settings:hover {
   background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat, -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f3eedf), color-stop(100%, #e1d3a6));
   background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat, -webkit-linear-gradient(top, #f3eedf, #e1d3a6);
@@ -1388,12 +1409,12 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.settings
   background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat, -o-linear-gradient(top, #f3eedf, #e1d3a6);
   background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat, linear-gradient(top, #f3eedf, #e1d3a6);
 }
-/* line 23, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 29, ../assets/sass/partials/controls/_action-bar.scss */
 DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled, DIV#content-wrapper.profile .action-bar.buttons .container .action-link[disabled], DIV#content-wrapper.profile .action-bar.buttons .container .action-button.disabled, DIV#content-wrapper.profile .action-bar.buttons .container .action-button[disabled] {
   opacity: 0.6;
 }
 
-/* line 36, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 42, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container .action-link, .action-bar.buttons .container .action-button {
   padding: 0 10px;
   border-left: 1px solid white;
@@ -1407,7 +1428,7 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   border-width: 0 1px 0 1px;
   text-align: center;
 }
-/* line 49, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 55, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container .action-link:hover, .action-bar.buttons .container .action-link.pressed, .action-bar.buttons .container .action-button:hover, .action-bar.buttons .container .action-button.pressed {
   color: #2f7790;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f6f6f6), color-stop(100%, #d8d8d8));
@@ -1416,18 +1437,31 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   background: -o-linear-gradient(top, #f6f6f6, #d8d8d8);
   background: linear-gradient(top, #f6f6f6, #d8d8d8);
 }
-/* line 54, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 60, ../assets/sass/partials/controls/_action-bar.scss */
+.action-bar.buttons .container .action-link.back, .action-bar.buttons .container .action-button.back {
+  background: url(images/profile/back.png) 3px center no-repeat;
+  padding-left: 26px !important;
+}
+/* line 64, ../assets/sass/partials/controls/_action-bar.scss */
+.action-bar.buttons .container .action-link.back:hover, .action-bar.buttons .container .action-link.back.pressed, .action-bar.buttons .container .action-button.back:hover, .action-bar.buttons .container .action-button.back.pressed {
+  background: url(images/profile/back.png) 3px center no-repeat, -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f6f6f6), color-stop(100%, #d8d8d8));
+  background: url(images/profile/back.png) 3px center no-repeat, -webkit-linear-gradient(top, #f6f6f6, #d8d8d8);
+  background: url(images/profile/back.png) 3px center no-repeat, -moz-linear-gradient(top, #f6f6f6, #d8d8d8);
+  background: url(images/profile/back.png) 3px center no-repeat, -o-linear-gradient(top, #f6f6f6, #d8d8d8);
+  background: url(images/profile/back.png) 3px center no-repeat, linear-gradient(top, #f6f6f6, #d8d8d8);
+}
+/* line 69, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container .action-link.settings, .action-bar.buttons .container .action-button.settings {
   background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat;
   padding-left: 19px;
   width: 65px;
 }
-/* line 61, ../assets/sass/partials/controls/_action-bar.scss */
-.action-bar.buttons .container > .left {
+/* line 76, ../assets/sass/partials/controls/_action-bar.scss */
+.action-bar.buttons .container > .left:not(.no-border) {
   border-right: 1px solid white;
 }
-/* line 64, ../assets/sass/partials/controls/_action-bar.scss */
-.action-bar.buttons .container > .left > .action-link:first-child, .action-bar.buttons .container > .left > .action-button:first-child {
+/* line 79, ../assets/sass/partials/controls/_action-bar.scss */
+.action-bar.buttons .container > .left:not(.no-border) > .action-link:first-child, .action-bar.buttons .container > .left:not(.no-border) > .action-button:first-child {
   border-left: none;
   -webkit-border-radius: 5px 0 0 5px;
   -moz-border-radius: 5px 0 0 5px;
@@ -1435,12 +1469,12 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   -o-border-radius: 5px 0 0 5px;
   border-radius: 5px 0 0 5px;
 }
-/* line 70, ../assets/sass/partials/controls/_action-bar.scss */
-.action-bar.buttons .container > .right {
+/* line 85, ../assets/sass/partials/controls/_action-bar.scss */
+.action-bar.buttons .container > .right:not(.no-border) {
   border-left: 1px solid #d0d0d0;
 }
-/* line 73, ../assets/sass/partials/controls/_action-bar.scss */
-.action-bar.buttons .container > .right > .action-link:last-child, .action-bar.buttons .container > .right > .action-button:last-child {
+/* line 88, ../assets/sass/partials/controls/_action-bar.scss */
+.action-bar.buttons .container > .right:not(.no-border) > .action-link:last-child, .action-bar.buttons .container > .right:not(.no-border) > .action-button:last-child {
   border-right: none;
   -webkit-border-radius: 0 5px 5px 0;
   -moz-border-radius: 0 5px 5px 0;
@@ -1448,7 +1482,7 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   -o-border-radius: 0 5px 5px 0;
   border-radius: 0 5px 5px 0;
 }
-/* line 82, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 97, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.not-transparent .container {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -1456,7 +1490,7 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   -o-border-radius: 5px;
   border-radius: 5px;
 }
-/* line 87, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 102, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar .container {
   height: 34px;
   border-bottom: 1px solid #a1a1a1;
@@ -1464,7 +1498,7 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   white-space: nowrap;
   overflow: hidden;
 }
-/* line 94, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 109, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar .container .action-link, .action-bar .container .action-button {
   text-decoration: none;
   font: normal 11px/34px arial, tahoma, verdana, helvetica;
@@ -1581,36 +1615,52 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   resize: none;
   width: 159px;
 }
+/* line 13, ../assets/sass/partials/controls/_date-picker.scss */
+.hasDatepicker.tb-date-picker {
+  font: normal 13px/9px Arial;
+  color: #5d5d5d;
+  text-shadow: 0 0 1px #b7b7b7;
+  height: 21px;
+  border: none;
+  background: url(images/announcement/due-icon.png) 8px center no-repeat;
+  padding-left: 28px;
+  cursor: pointer;
+}
+/* line 23, ../assets/sass/partials/controls/_date-picker.scss */
+.hasDatepicker.tb-date-picker:focus {
+  outline: none;
+}
 
-/* line 14, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 29, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget {
   width: 210px;
   overflow: hidden;
   padding: 0;
+  z-index: 10 !important;
   -webkit-box-shadow: 0 0 5px gray;
   -moz-box-shadow: 0 0 5px gray;
   box-shadow: 0 0 5px gray;
 }
-/* line 20, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 36, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget TABLE {
   margin: 0;
 }
-/* line 24, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 40, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-header {
   background: url(images/mini-calendar/header-bg.png) no-repeat;
   height: 24px;
   padding-top: 8px;
 }
-/* line 29, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 45, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-header .ui-datepicker-title {
   color: white;
   font: bold 14px 'Helvetica';
 }
-/* line 34, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 50, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-header .ui-corner-all {
   top: 0;
 }
-/* line 37, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 53, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-header .ui-corner-all > SPAN {
   width: 8px;
   height: 8px;
@@ -1618,27 +1668,27 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   opacity: 0.6;
   top: 75%;
 }
-/* line 45, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 61, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-header .ui-corner-all.ui-datepicker-next {
   right: 0;
 }
-/* line 47, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 63, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-header .ui-corner-all.ui-datepicker-next > SPAN {
   background: url(images/mini-calendar/arrow-right.png) center center no-repeat;
 }
-/* line 52, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 68, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-header .ui-corner-all.ui-datepicker-prev {
   left: 0;
 }
-/* line 54, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 70, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-header .ui-corner-all.ui-datepicker-prev > SPAN {
   background: url(images/mini-calendar/arrow-left.png) center center no-repeat;
 }
-/* line 60, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 76, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-header .ui-corner-all.ui-state-hover > SPAN {
   opacity: 1;
 }
-/* line 69, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 85, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-calendar thead th {
   background: #F4F4F4;
   height: 19px;
@@ -1646,7 +1696,7 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   padding: 0;
   font: normal 10px arial, helvetica,tahoma,sans-serif;
 }
-/* line 80, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 96, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-calendar tbody tr td {
   border: 1px solid #a5a4a4;
   padding: 0;
@@ -1655,44 +1705,44 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   background-image: url(images/mini-calendar/active-day.png);
   font: bold 11px Arial;
 }
-/* line 88, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 104, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-calendar tbody tr td A {
   text-align: center;
   color: #666;
 }
-/* line 93, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 109, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-calendar tbody tr td.ui-datepicker-other-month {
   background-image: url(images/mini-calendar/passive-day.png);
 }
-/* line 96, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 112, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-calendar tbody tr td.ui-datepicker-other-month A {
   color: #b4b3b3;
 }
-/* line 101, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 117, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-calendar tbody tr td.ui-datepicker-today {
   background: #FFA;
 }
-/* line 105, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 121, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-calendar tbody tr td:hover {
   background: #ddecfe;
 }
-/* line 109, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 125, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-calendar tbody tr td.ui-datepicker-current-day {
   background-image: url(images/mini-calendar/current.png);
 }
-/* line 111, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 127, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-calendar tbody tr td.ui-datepicker-current-day a {
   color: #e0e0e0;
 }
-/* line 116, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 132, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-calendar tbody tr td:first-child {
   border-left-width: 0;
 }
-/* line 120, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 136, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-calendar tbody tr td:last-child {
   border-right-width: 0;
 }
-/* line 126, ../assets/sass/partials/controls/_date-picker.scss */
+/* line 142, ../assets/sass/partials/controls/_date-picker.scss */
 .ui-datepicker.ui-widget .ui-datepicker-calendar tbody tr:last-child td {
   border-bottom-width: 0;
 }
@@ -2307,6 +2357,246 @@ BODY DIV.page > DIV#content DIV#content-wrapper.calendar .lr-toolbar .first-cont
 /* line 15, ../assets/sass/partials/controls/_select.scss */
 .chzn-container.chzn-container-single .chzn-single div b {
   background: url(images/common/select-arrows.png) no-repeat 9px center;
+}
+
+/* line 7, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main .well-trouble-items > DIV {
+  min-height: 25px;
+  padding: 6px 10px 4px 10px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f6f6f6), color-stop(100%, #e5e5e5));
+  background: -webkit-linear-gradient(top, #f6f6f6, #e5e5e5);
+  background: -moz-linear-gradient(top, #f6f6f6, #e5e5e5);
+  background: -o-linear-gradient(top, #f6f6f6, #e5e5e5);
+  background: linear-gradient(top, #f6f6f6, #e5e5e5);
+  border-top: 1px solid white;
+  border-bottom: 1px solid #979797;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
+/* line 15, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main .well-trouble-items > DIV P {
+  padding-left: 27px;
+  font-size: 14px;
+  color: #5f5f5f;
+  text-shadow: 0 1px 1px white;
+  width: 230px;
+}
+/* line 23, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main .well-trouble-items > DIV .avatar-container {
+  background: #F4F4F4;
+  padding: 2px;
+  border-bottom: 1px solid #ACACAC;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+  border-width: 0 0 1px 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+/* line 32, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main .well-trouble-items > DIV > DIV, BODY DIV.page > DIV#content DIV#content-wrapper #main .well-trouble-items > DIV > P {
+  display: inline-block;
+  vertical-align: middle;
+  word-break: break-word;
+}
+/* line 38, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main .well-trouble-items > P {
+  padding: 5px;
+  font-weight: bold;
+}
+/* line 43, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main .well-trouble-items IMG {
+  margin: -1px;
+}
+/* line 51, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .row P {
+  width: 240px;
+}
+/* line 55, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .row > .right {
+  margin-top: 22px;
+}
+/* line 60, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .keyboard-suggestion {
+  position: absolute;
+  z-index: 9999;
+  background: url(images/attendance/keyboard-suggestion.png) center center no-repeat;
+  width: 183px;
+  height: 70px;
+  top: -21px;
+}
+/* line 69, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container {
+  text-shadow: 1px 1px 0 white;
+  position: relative;
+}
+/* line 75, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container.active .attendance-combo .current-attendance {
+  height: 29px;
+  background: #ebebeb;
+}
+/* line 82, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-option {
+  display: inline-block;
+  padding-right: 25px;
+  width: 150px;
+  text-align: right;
+  font: bold 12px Arial;
+  color: #a7a7a7;
+}
+/* line 90, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-text, BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-option {
+  vertical-align: top;
+  height: 27px;
+  line-height: 27px !important;
+}
+/* line 95, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-text, BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .current-attendance {
+  font: bold 14px Arial;
+}
+/* line 98, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-text {
+  display: inline-block;
+  width: 157px;
+  text-align: center;
+}
+/* line 103, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-text.present {
+  color: #276435;
+}
+/* line 107, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-text.absent {
+  color: #880909;
+}
+/* line 111, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-text.excused {
+  color: #619bae;
+}
+/* line 115, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-text.late {
+  color: #c97d11;
+}
+/* line 119, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-text.n-a {
+  color: #bcbcbc;
+}
+/* line 123, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo {
+  display: none;
+  position: relative;
+  width: 157px;
+}
+/* line 128, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .left-arrow, BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .right-arrow {
+  width: 36px;
+  height: 27px;
+}
+/* line 132, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .left-arrow SPAN, BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .right-arrow SPAN {
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  display: inline-block;
+}
+/* line 138, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .left-arrow {
+  -webkit-border-radius: 3px 0 0 3px;
+  -moz-border-radius: 3px 0 0 3px;
+  -ms-border-radius: 3px 0 0 3px;
+  -o-border-radius: 3px 0 0 3px;
+  border-radius: 3px 0 0 3px;
+}
+/* line 141, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .left-arrow span {
+  border-right: 10px solid #181818;
+}
+/* line 146, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .right-arrow span {
+  border-left: 10px solid #181818;
+}
+/* line 150, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .current-attendance, BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .left-arrow, BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .right-arrow, BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .combo-list {
+  -webkit-box-shadow: 0 1px 2px #a3a3a3;
+  -moz-box-shadow: 0 1px 2px #a3a3a3;
+  box-shadow: 0 1px 2px #a3a3a3;
+  display: inline-block;
+  border-top: 1px solid white;
+  vertical-align: top;
+}
+/* line 156, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .current-attendance, BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .left-arrow, BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .right-arrow {
+  line-height: 26px;
+  text-align: center;
+  border-width: 1px 0 0 0;
+  color: #2e2e2e;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f5f5f5), color-stop(100%, #e0e0e0));
+  background: -webkit-linear-gradient(top, #f5f5f5, #e0e0e0);
+  background: -moz-linear-gradient(top, #f5f5f5, #e0e0e0);
+  background: -o-linear-gradient(top, #f5f5f5, #e0e0e0);
+  background: linear-gradient(top, #f5f5f5, #e0e0e0);
+}
+/* line 163, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .current-attendance:hover, BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .current-attendance:active, BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .left-arrow:hover, BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .left-arrow:active, BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .right-arrow:hover, BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .right-arrow:active {
+  -webkit-box-shadow: 0 1px 2px silver;
+  -moz-box-shadow: 0 1px 2px silver;
+  box-shadow: 0 1px 2px silver;
+}
+/* line 167, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .current-attendance {
+  height: 26px;
+  min-width: 74px;
+  margin: 0 4px;
+}
+/* line 172, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .combo-list {
+  display: none;
+  position: absolute;
+  top: 30px;
+  left: 0;
+  right: 3px;
+  padding-top: 3px;
+  border-radius: 3px;
+  background: #ebebeb;
+  z-index: 1;
+  text-align: center;
+}
+/* line 184, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .combo-list .connector {
+  position: absolute;
+  height: 3px;
+  background: beige;
+  top: -1px;
+  left: 39px;
+  width: 76px;
+  background: #ebebeb;
+}
+/* line 194, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .combo-list .option {
+  padding: 7px 8px;
+  font: normal 12px Arial;
+  color: #383838;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* line 202, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .student-attendance-container .attendance-combo .combo-list .option.selected {
+  font: bold 12px Arial;
+  background: #e1e1e1;
+  color: #2f7790;
+}
+/* line 214, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .row.selected .student-attendance-container .attendance-text {
+  display: none;
+}
+/* line 217, ../assets/sass/partials/main/_attendance.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-panel .row.selected .student-attendance-container .attendance-combo {
+  display: inline-block;
 }
 
 /* line 1, ../assets/sass/partials/main/_buttons.scss */
@@ -2958,11 +3248,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .lr-toolbar {
   margin-left: 14px;
   width: 671px;
 }
-/* line 38, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .lr-toolbar .second-container {
-  text-align: center;
-}
-/* line 43, ../assets/sass/partials/main/_profile.scss */
+/* line 39, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link {
   display: inline-block;
   text-align: center;
@@ -2974,11 +3260,11 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link {
   width: 75px;
   height: 82px;
 }
-/* line 54, ../assets/sass/partials/main/_profile.scss */
+/* line 50, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link:not(:last-child) {
   margin-right: 10px;
 }
-/* line 58, ../assets/sass/partials/main/_profile.scss */
+/* line 54, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .announcement-box {
   position: relative;
   z-index: 98;
@@ -2986,13 +3272,13 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .ann
   padding-left: 20px;
   height: 67px;
 }
-/* line 65, ../assets/sass/partials/main/_profile.scss */
+/* line 61, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .announcement-box .announcement {
   position: absolute;
   height: 48px;
   width: 48px;
 }
-/* line 72, ../assets/sass/partials/main/_profile.scss */
+/* line 68, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .period-box {
   padding: 6px 2px 2px 2px;
   width: 66px;
@@ -3007,7 +3293,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .per
   z-index: 100;
   background: url(images/profile/course-container.png) 0 0 no-repeat;
 }
-/* line 86, ../assets/sass/partials/main/_profile.scss */
+/* line 82, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .period-box .day {
   font: normal 12px Arial;
   text-align: center;
@@ -3017,7 +3303,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .per
   vertical-align: middle;
   color: #3989a1;
 }
-/* line 98, ../assets/sass/partials/main/_profile.scss */
+/* line 94, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .gradient {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f3eee0), color-stop(100%, #ece1c1));
   background: -webkit-linear-gradient(top, #f3eee0, #ece1c1);
@@ -3027,121 +3313,125 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .gradient {
   border-top: 1px solid #fff;
   border-bottom: 1px solid #8c6c0d;
 }
-/* line 106, ../assets/sass/partials/main/_profile.scss */
+/* line 102, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .pacifico {
   font-family: Pacifico;
   font-weight: normal;
 }
-/* line 113, ../assets/sass/partials/main/_profile.scss */
+/* line 109, ../assets/sass/partials/main/_profile.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile .second-container {
+  text-align: center;
+}
+/* line 114, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile .glance-container .glance-box {
   height: 119px;
   cursor: pointer;
 }
-/* line 117, ../assets/sass/partials/main/_profile.scss */
+/* line 118, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile .glance-container .glance-box P {
   font: bold 14px Arial;
   white-space: normal;
   margin-top: 6px;
 }
-/* line 125, ../assets/sass/partials/main/_profile.scss */
+/* line 126, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #top-summary-panel {
   margin-top: 22px;
   margin-bottom: 61px;
 }
-/* line 130, ../assets/sass/partials/main/_profile.scss */
+/* line 131, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile .class-icon-container {
   display: inline-block;
   height: 35px;
   overflow: hidden;
 }
-/* line 136, ../assets/sass/partials/main/_profile.scss */
+/* line 137, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile h2 {
   font-family: Jrhand;
   font-weight: normal;
 }
-/* line 140, ../assets/sass/partials/main/_profile.scss */
+/* line 141, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile h2:not(.no-line) {
   padding-bottom: 2px;
   background-position: 0 bottom;
   margin-bottom: 6px;
 }
-/* line 146, ../assets/sass/partials/main/_profile.scss */
+/* line 147, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile h2 a {
   text-decoration: none;
   color: #957633;
 }
-/* line 152, ../assets/sass/partials/main/_profile.scss */
+/* line 153, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile h2.stats {
   margin-top: 83px;
 }
-/* line 156, ../assets/sass/partials/main/_profile.scss */
+/* line 157, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile h1 {
   font: bold 36px Arial;
 }
-/* line 160, ../assets/sass/partials/main/_profile.scss */
+/* line 161, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile h1.info {
   font-size: 34px;
   margin-top: 5px;
   margin-bottom: 18px;
 }
-/* line 165, ../assets/sass/partials/main/_profile.scss */
+/* line 166, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile h1.info .class-icon-container {
   margin-right: 10px;
 }
-/* line 168, ../assets/sass/partials/main/_profile.scss */
+/* line 169, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile h1.info .class-icon-container IMG {
   width: 45px;
 }
-/* line 174, ../assets/sass/partials/main/_profile.scss */
+/* line 175, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #avatar-photo-conainer {
   width: 272px;
 }
-/* line 177, ../assets/sass/partials/main/_profile.scss */
+/* line 178, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #avatar-photo-conainer .images-wrapper {
   background: url(images/profile/students-box.png) 0 0 no-repeat;
   height: 237px;
   width: 213px;
   margin: 0 0 0 20px;
 }
-/* line 186, ../assets/sass/partials/main/_profile.scss */
+/* line 187, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #avatar-photo-conainer .images-wrapper TABLE TBODY TR TD {
   border-color: #757474;
 }
-/* line 189, ../assets/sass/partials/main/_profile.scss */
+/* line 190, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #avatar-photo-conainer .images-wrapper TABLE TBODY TR TD .image-container {
   width: 52px;
   height: 58px;
 }
-/* line 193, ../assets/sass/partials/main/_profile.scss */
+/* line 194, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #avatar-photo-conainer .images-wrapper TABLE TBODY TR TD .image-container IMG {
   width: 58px;
   height: 58px;
   margin-left: -3px;
 }
-/* line 206, ../assets/sass/partials/main/_profile.scss */
+/* line 207, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #student-info-panel, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #avatar-photo-conainer {
   display: inline-block;
   vertical-align: top;
 }
-/* line 211, ../assets/sass/partials/main/_profile.scss */
+/* line 212, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #student-info-panel {
   width: 426px;
   overflow: visible;
 }
-/* line 215, ../assets/sass/partials/main/_profile.scss */
+/* line 216, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #student-info-panel .glance-container {
   margin-left: -14px;
   margin-top: 25px;
 }
-/* line 222, ../assets/sass/partials/main/_profile.scss */
+/* line 223, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main #avatar-photo-conainer {
   padding-top: 7px;
 }
-/* line 227, ../assets/sass/partials/main/_profile.scss */
+/* line 228, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page h1 {
   font-size: 30px;
 }
-/* line 231, ../assets/sass/partials/main/_profile.scss */
+/* line 232, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page input {
   color: #acacac;
   height: 21px;
@@ -3151,66 +3441,66 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page input {
   border: none;
   margin-top: 2px;
 }
-/* line 241, ../assets/sass/partials/main/_profile.scss */
+/* line 242, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page textarea {
   background-color: #fff;
   border-color: #9e9e9e transparent transparent transparent;
 }
-/* line 246, ../assets/sass/partials/main/_profile.scss */
+/* line 247, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page input, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page textarea {
   width: 196px;
 }
-/* line 251, ../assets/sass/partials/main/_profile.scss */
+/* line 252, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .title .avatar-block {
   width: 150px;
 }
-/* line 255, ../assets/sass/partials/main/_profile.scss */
+/* line 256, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .title .avatar-block, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .title .name-block {
   display: inline-block;
   vertical-align: top;
 }
-/* line 260, ../assets/sass/partials/main/_profile.scss */
+/* line 261, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .title .name-block {
   margin-top: 20px;
 }
-/* line 264, ../assets/sass/partials/main/_profile.scss */
+/* line 265, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .title input {
   width: 120px;
   margin: 2px;
 }
-/* line 271, ../assets/sass/partials/main/_profile.scss */
+/* line 272, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page.edit-mode .title {
   margin: 38px 0 0 14px;
 }
-/* line 274, ../assets/sass/partials/main/_profile.scss */
+/* line 275, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page.edit-mode .title .name-block {
   margin: 21px 15px;
 }
-/* line 279, ../assets/sass/partials/main/_profile.scss */
+/* line 280, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page.edit-mode .sections {
   margin: 0 0 0 10px;
 }
-/* line 283, ../assets/sass/partials/main/_profile.scss */
+/* line 284, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page.edit-mode .info-view {
   display: none;
 }
-/* line 289, ../assets/sass/partials/main/_profile.scss */
+/* line 290, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page.view-mode .info-edit {
   display: none;
 }
-/* line 295, ../assets/sass/partials/main/_profile.scss */
+/* line 296, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page.teacher-info h1 {
   display: inline-block;
 }
-/* line 301, ../assets/sass/partials/main/_profile.scss */
+/* line 302, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .section-title {
   background-position: 0 28px !important;
 }
-/* line 305, ../assets/sass/partials/main/_profile.scss */
+/* line 306, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .section-title, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .info-title {
   color: #808080 !important;
 }
-/* line 309, ../assets/sass/partials/main/_profile.scss */
+/* line 310, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit BUTTON.file {
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
@@ -3221,45 +3511,45 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-e
   width: 125px;
   cursor: pointer;
 }
-/* line 317, ../assets/sass/partials/main/_profile.scss */
+/* line 318, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .section-buttons .chlk-button {
   margin: 100px 5px 0 0;
 }
-/* line 320, ../assets/sass/partials/main/_profile.scss */
+/* line 321, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .section-buttons .chlk-button BUTTON {
   width: 100px;
 }
-/* line 326, ../assets/sass/partials/main/_profile.scss */
+/* line 327, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .info-title {
   color: #be8145;
   padding-left: 5px;
   font: bold 14px Arial;
 }
-/* line 332, ../assets/sass/partials/main/_profile.scss */
+/* line 333, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit #cellService {
   width: 213px;
 }
-/* line 336, ../assets/sass/partials/main/_profile.scss */
+/* line 337, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit #genderSelect {
   width: 80px;
 }
-/* line 340, ../assets/sass/partials/main/_profile.scss */
+/* line 341, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .chzn-container {
   font-weight: normal;
 }
-/* line 345, ../assets/sass/partials/main/_profile.scss */
+/* line 346, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .grey-combo-container .month-combo {
   width: 80px;
 }
-/* line 349, ../assets/sass/partials/main/_profile.scss */
+/* line 350, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .grey-combo-container .day-combo {
   width: 47px;
 }
-/* line 353, ../assets/sass/partials/main/_profile.scss */
+/* line 354, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .grey-combo-container .year-combo {
   width: 78px;
 }
-/* line 358, ../assets/sass/partials/main/_profile.scss */
+/* line 359, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .add-button {
   cursor: pointer;
   color: #64a5d2;
@@ -3267,40 +3557,40 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-e
   font-size: 14px;
   font-weight: normal;
 }
-/* line 365, ../assets/sass/partials/main/_profile.scss */
+/* line 366, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .add-button.add-address {
   margin-left: 60px;
 }
-/* line 371, ../assets/sass/partials/main/_profile.scss */
+/* line 372, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections {
   margin-top: 30px;
 }
-/* line 374, ../assets/sass/partials/main/_profile.scss */
+/* line 375, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections .sections-info {
   width: 213px;
   overflow: visible;
 }
-/* line 378, ../assets/sass/partials/main/_profile.scss */
+/* line 379, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections .sections-info .section-data {
   margin-top: 11px;
 }
-/* line 381, ../assets/sass/partials/main/_profile.scss */
+/* line 382, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections .sections-info .section-data .primary-phone {
   margin-bottom: 12px;
 }
-/* line 386, ../assets/sass/partials/main/_profile.scss */
+/* line 387, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections .sections-info .bd-select {
   margin-bottom: 12px;
 }
-/* line 389, ../assets/sass/partials/main/_profile.scss */
+/* line 390, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections .sections-info .bd-select .chzn-container:not(:last-child) {
   margin-right: 4px;
 }
-/* line 396, ../assets/sass/partials/main/_profile.scss */
+/* line 397, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .other-section {
   width: 100%;
 }
-/* line 400, ../assets/sass/partials/main/_profile.scss */
+/* line 401, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info {
   display: inline-block;
   vertical-align: top;
@@ -3309,41 +3599,41 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sectio
   text-shadow: 0 1px 0 white;
   word-wrap: break-word;
 }
-/* line 408, ../assets/sass/partials/main/_profile.scss */
+/* line 409, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info:not(:first-child) {
   margin-left: 7px;
 }
-/* line 412, ../assets/sass/partials/main/_profile.scss */
+/* line 413, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .info-title {
   color: #be8145;
 }
-/* line 416, ../assets/sass/partials/main/_profile.scss */
+/* line 417, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .big-font-size {
   font-size: 20px;
 }
-/* line 420, ../assets/sass/partials/main/_profile.scss */
+/* line 421, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .low-font-size {
   font-size: 14px;
 }
-/* line 423, ../assets/sass/partials/main/_profile.scss */
+/* line 424, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .low-font-size input {
   color: #957633;
   background: transparent;
   padding: 0;
   font-weight: bold;
 }
-/* line 429, ../assets/sass/partials/main/_profile.scss */
+/* line 430, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .low-font-size input:focus {
   border: none !important;
 }
-/* line 435, ../assets/sass/partials/main/_profile.scss */
+/* line 436, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .section-title {
   width: 100%;
   display: inline-block;
   background: url(images/profile/header-line.png) 0 35px no-repeat;
   font-size: 24px;
 }
-/* line 442, ../assets/sass/partials/main/_profile.scss */
+/* line 443, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .gender-box {
   color: #957633;
   display: inline-block;
@@ -3368,68 +3658,68 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sectio
   font-family: Pacifico;
   font-weight: normal;
 }
-/* line 451, ../assets/sass/partials/main/_profile.scss */
+/* line 452, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .gender-box .gender-img-box {
   display: block;
   height: 71%;
 }
-/* line 455, ../assets/sass/partials/main/_profile.scss */
+/* line 456, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .gender-box .gender-img-box.m {
   background: url(images/profile/gender-img.png) center center no-repeat;
 }
-/* line 459, ../assets/sass/partials/main/_profile.scss */
+/* line 460, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .gender-box .gender-img-box.f {
   background: url(images/profile/gender-female-img.png) center center no-repeat;
 }
-/* line 464, ../assets/sass/partials/main/_profile.scss */
+/* line 465, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .gender-box > P {
   position: relative;
   top: -6px;
 }
-/* line 472, ../assets/sass/partials/main/_profile.scss */
+/* line 473, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page #edit-info-button {
   margin-top: 180px;
 }
-/* line 475, ../assets/sass/partials/main/_profile.scss */
+/* line 476, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page #edit-info-button BUTTON {
   width: 100px;
 }
-/* line 481, ../assets/sass/partials/main/_profile.scss */
+/* line 482, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main h1, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main h2, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status {
   font-family: Pacifico;
   font-weight: normal;
   color: #957633;
 }
-/* line 488, ../assets/sass/partials/main/_profile.scss */
+/* line 489, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status #show-buttons-popup {
   margin-left: 10px;
   font-size: 10px;
   display: inline-block;
 }
-/* line 495, ../assets/sass/partials/main/_profile.scss */
+/* line 496, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main h2, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status {
   font-size: 24px;
 }
-/* line 499, ../assets/sass/partials/main/_profile.scss */
+/* line 500, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main h2:not(.no-line) {
   background: url(images/profile/header-line.png) 0 36px no-repeat;
 }
-/* line 503, ../assets/sass/partials/main/_profile.scss */
+/* line 504, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main h1 {
   font-size: 48px;
   margin: 0 0 -11px;
   white-space: nowrap;
 }
-/* line 509, ../assets/sass/partials/main/_profile.scss */
+/* line 510, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .line {
   background: url(images/profile/header-line.png) 0 28px no-repeat !important;
   height: 36px;
 }
-/* line 515, ../assets/sass/partials/main/_profile.scss */
+/* line 516, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .profile-page-margin {
   margin: 31px -17px 0 -15px;
 }
-/* line 519, ../assets/sass/partials/main/_profile.scss */
+/* line 520, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-small-img-container {
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
@@ -3444,49 +3734,49 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-small-img-
   display: inline-block;
   background: white;
 }
-/* line 527, ../assets/sass/partials/main/_profile.scss */
+/* line 528, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-small-img-container IMG {
   margin: 5px;
   float: left;
   width: 64px;
   height: 64px;
 }
-/* line 536, ../assets/sass/partials/main/_profile.scss */
+/* line 537, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-people h1 {
   font-size: 42px;
   margin: 19px 10px 0;
 }
-/* line 543, ../assets/sass/partials/main/_profile.scss */
+/* line 544, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-people .people-tb .right .chzn-container {
   margin: 4px;
 }
-/* line 547, ../assets/sass/partials/main/_profile.scss */
+/* line 548, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-people .people-tb .right select {
   width: 150px;
 }
-/* line 557, ../assets/sass/partials/main/_profile.scss */
+/* line 558, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-sis .sis-user-info .x-form-field LABEL {
   width: 90px;
   display: inline-block;
 }
-/* line 563, ../assets/sass/partials/main/_profile.scss */
+/* line 564, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-sis .sis-sync-info {
   margin-top: 20px;
 }
-/* line 565, ../assets/sass/partials/main/_profile.scss */
+/* line 566, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-sis .sis-sync-info .x-form-field {
   height: 60px;
 }
-/* line 567, ../assets/sass/partials/main/_profile.scss */
+/* line 568, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-sis .sis-sync-info .x-form-field LABEL {
   width: 140px;
   display: inline-block;
 }
-/* line 578, ../assets/sass/partials/main/_profile.scss */
+/* line 579, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-details .school-info {
   margin-left: 34px;
 }
-/* line 584, ../assets/sass/partials/main/_profile.scss */
+/* line 585, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .settings .header {
   text-align: left !important;
   font: bold 16px Arial;
@@ -3494,11 +3784,11 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .settings .header 
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
 }
-/* line 591, ../assets/sass/partials/main/_profile.scss */
+/* line 592, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .settings .general {
   margin-left: 18px;
 }
-/* line 592, ../assets/sass/partials/main/_profile.scss */
+/* line 593, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .settings .general .block {
   padding: 10px;
   height: 123px;
@@ -3506,32 +3796,32 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .settings .general
   float: left;
   margin-left: 8px;
 }
-/* line 600, ../assets/sass/partials/main/_profile.scss */
+/* line 601, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .settings .general .block .fields {
   margin-top: 10px;
 }
-/* line 604, ../assets/sass/partials/main/_profile.scss */
+/* line 605, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .settings .general .block .fields .field label {
   line-height: 30px;
 }
 
-/* line 621, ../assets/sass/partials/main/_profile.scss */
+/* line 622, ../assets/sass/partials/main/_profile.scss */
 .action-buttons-popup .buttons {
   width: 381px;
 }
-/* line 624, ../assets/sass/partials/main/_profile.scss */
+/* line 625, ../assets/sass/partials/main/_profile.scss */
 .action-buttons-popup .buttons .chlk-button {
   margin-bottom: 5px;
 }
-/* line 627, ../assets/sass/partials/main/_profile.scss */
+/* line 628, ../assets/sass/partials/main/_profile.scss */
 .action-buttons-popup .buttons .chlk-button:nth-child(2n-1) {
   margin-right: 5px;
 }
-/* line 631, ../assets/sass/partials/main/_profile.scss */
+/* line 632, ../assets/sass/partials/main/_profile.scss */
 .action-buttons-popup .buttons .chlk-button BUTTON {
   width: 170px;
 }
-/* line 637, ../assets/sass/partials/main/_profile.scss */
+/* line 638, ../assets/sass/partials/main/_profile.scss */
 .action-buttons-popup #admin-emails {
   width: 200px;
 }
@@ -3991,7 +4281,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper .db-maintenance .db-update-form 
   border-radius: 5px 5px 0 0;
 }
 /* line 73, ../assets/sass/partials/main/people/_list.scss */
-.people-list-container .top > span {
+.people-list-container .top > span, .people-list-container .top > A {
   color: #5d5d5d;
   text-shadow: 1px 1px 0 white;
   font: bold 12px Arial;
@@ -5995,47 +6285,49 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem.ico
   float: left;
 }
 /* line 117, ../assets/sass/partials/main/developer/_app.scss */
-BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots {
+BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots {
   display: inline-block;
   vertical-align: top;
 }
 /* line 122, ../assets/sass/partials/main/developer/_app.scss */
-BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .thumbnail, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .thumbnail {
+BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .thumbnail, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures .thumbnail, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .thumbnail {
   position: relative;
 }
 /* line 124, ../assets/sass/partials/main/developer/_app.scss */
-BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .thumbnail img, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .thumbnail img {
+BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .thumbnail img, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures .thumbnail img, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .thumbnail img {
   vertical-align: top;
 }
 /* line 128, ../assets/sass/partials/main/developer/_app.scss */
-BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .thumbnail.small-icon-item, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .thumbnail.small-icon-item {
+BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .thumbnail.small-icon-item, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures .thumbnail.small-icon-item, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .thumbnail.small-icon-item {
   width: 74px;
   height: 74px;
   margin: 0 85px 0 31px;
 }
 /* line 133, ../assets/sass/partials/main/developer/_app.scss */
-BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .thumbnail.small-icon-item img, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .thumbnail.small-icon-item img {
+BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .thumbnail.small-icon-item img, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures .thumbnail.small-icon-item img, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .thumbnail.small-icon-item img {
   width: 74px;
   height: 74px;
 }
 /* line 141, ../assets/sass/partials/main/developer/_app.scss */
-BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .thumbnail.big-icon-item img, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .thumbnail.big-icon-item img {
+BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .thumbnail.big-icon-item img, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures .thumbnail.big-icon-item img, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .thumbnail.big-icon-item img {
   width: 170px;
   height: 110px;
 }
 /* line 147, ../assets/sass/partials/main/developer/_app.scss */
-BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .thumbnail.screenshot-item, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .thumbnail.screenshot-item {
+BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .thumbnail.screenshot-item, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures .thumbnail.screenshot-item, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .thumbnail.screenshot-item {
   width: 170px;
   height: 104px;
+  display: inline-block;
+  float: right;
 }
-/* line 151, ../assets/sass/partials/main/developer/_app.scss */
-BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .thumbnail.screenshot-item img, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .thumbnail.screenshot-item img {
+/* line 153, ../assets/sass/partials/main/developer/_app.scss */
+BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .thumbnail.screenshot-item img, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures .thumbnail.screenshot-item img, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .thumbnail.screenshot-item img {
   width: 170px;
   height: 104px;
   max-height: 104px;
 }
-/* line 159, ../assets/sass/partials/main/developer/_app.scss */
-BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block {
+/* line 161, ../assets/sass/partials/main/developer/_app.scss */
+BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures .upload-img-block, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block {
   border: 6px dashed silver;
   border-radius: 6px !important;
   display: inline-block;
@@ -6045,89 +6337,89 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .ic
   position: relative;
   text-align: center;
 }
-/* line 169, ../assets/sass/partials/main/developer/_app.scss */
-BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .top, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .bottom, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .top, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .bottom {
+/* line 171, ../assets/sass/partials/main/developer/_app.scss */
+BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .top, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .bottom, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures .upload-img-block .top, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures .upload-img-block .bottom, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .top, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .bottom {
   color: #808080;
   font: normal 11px Arial;
   position: absolute;
   left: 0;
   right: 0;
 }
-/* line 176, ../assets/sass/partials/main/developer/_app.scss */
-BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .top.top, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .bottom.top, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .top.top, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .bottom.top {
+/* line 178, ../assets/sass/partials/main/developer/_app.scss */
+BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .top.top, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .bottom.top, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures .upload-img-block .top.top, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures .upload-img-block .bottom.top, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .top.top, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .bottom.top {
   top: 9px;
 }
-/* line 180, ../assets/sass/partials/main/developer/_app.scss */
-BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .top button, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .bottom button, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .top button, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .bottom button {
+/* line 182, ../assets/sass/partials/main/developer/_app.scss */
+BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .top button, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .bottom button, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures .upload-img-block .top button, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures .upload-img-block .bottom button, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .top button, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .bottom button {
   width: 101px;
   height: 30px;
 }
-/* line 186, ../assets/sass/partials/main/developer/_app.scss */
-BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .top.bottom, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .bottom.bottom, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .top.bottom, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .bottom.bottom {
+/* line 188, ../assets/sass/partials/main/developer/_app.scss */
+BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .top.bottom, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .bottom.bottom, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures .upload-img-block .top.bottom, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures .upload-img-block .bottom.bottom, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .top.bottom, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .bottom.bottom {
   bottom: 9px;
 }
-/* line 192, ../assets/sass/partials/main/developer/_app.scss */
-BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .action-link, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .action-link {
+/* line 194, ../assets/sass/partials/main/developer/_app.scss */
+BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons .upload-img-block .action-link, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshot-pictures .upload-img-block .action-link, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots .upload-img-block .action-link {
   display: inline-block;
   margin-top: 9px;
 }
-/* line 199, ../assets/sass/partials/main/developer/_app.scss */
+/* line 201, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons {
   margin-top: 5px;
 }
-/* line 202, ../assets/sass/partials/main/developer/_app.scss */
+/* line 204, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .icons DIV {
   display: inline-block;
 }
-/* line 207, ../assets/sass/partials/main/developer/_app.scss */
+/* line 209, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .screenshots {
   margin-top: 0px;
 }
-/* line 218, ../assets/sass/partials/main/developer/_app.scss */
+/* line 220, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .price-checkbox.slide-checkbox > DIV:after {
   content: 'PAID';
   font: 10px/24px Arial, sans-serif;
   right: 13px;
 }
-/* line 226, ../assets/sass/partials/main/developer/_app.scss */
+/* line 228, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .price-checkbox.slide-checkbox > DIV:before {
   content: 'FREE';
   font: 10px/24px Arial, sans-serif;
   left: 8px;
 }
-/* line 233, ../assets/sass/partials/main/developer/_app.scss */
+/* line 235, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .price-checkbox.slide-checkbox > DIV > input[type=checkbox]:checked + .app-pricing {
   display: block;
 }
-/* line 240, ../assets/sass/partials/main/developer/_app.scss */
+/* line 242, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .permissions, BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .categories {
   width: 416px;
   margin-left: 190px;
   margin-top: -17px;
   margin-bottom: 10px;
 }
-/* line 250, ../assets/sass/partials/main/developer/_app.scss */
+/* line 252, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .permissions .checkbox-list .labeled-checkbox {
   margin-right: 60px;
 }
-/* line 258, ../assets/sass/partials/main/developer/_app.scss */
+/* line 260, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .grade-levels {
   margin-left: 190px;
   margin-top: -17px;
   margin-bottom: 8px;
   width: 350px;
 }
-/* line 263, ../assets/sass/partials/main/developer/_app.scss */
+/* line 265, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .grade-levels .labeled-checkbox {
   width: 69px;
   margin-right: 35px;
 }
-/* line 271, ../assets/sass/partials/main/developer/_app.scss */
+/* line 273, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .my-apps {
   margin-top: -23px;
   margin-left: -36px;
 }
-/* line 274, ../assets/sass/partials/main/developer/_app.scss */
+/* line 276, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .my-apps .myapps-permission {
   margin-left: 225px;
   display: inline-block;
@@ -6137,11 +6429,11 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .my
   color: #444;
   margin-bottom: 12px;
 }
-/* line 284, ../assets/sass/partials/main/developer/_app.scss */
+/* line 286, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .my-apps .myapps-permission .slide-checkbox {
   margin-top: -5px;
 }
-/* line 288, ../assets/sass/partials/main/developer/_app.scss */
+/* line 290, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .my-apps .myapps-permission label {
   width: 123px;
   text-align: left;
@@ -6151,7 +6443,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .my
   font-size: 12px;
   font-weight: normal;
 }
-/* line 297, ../assets/sass/partials/main/developer/_app.scss */
+/* line 299, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .my-apps .myapps-permission .app-name {
   display: inline-block;
   width: 190px;
@@ -6161,39 +6453,39 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .my
   white-space: nowrap;
   margin-right: 5px;
 }
-/* line 309, ../assets/sass/partials/main/developer/_app.scss */
+/* line 311, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem textarea {
   border-radius: 0;
   width: 300px;
   margin: 6px 6px 4px 0;
   height: 66px;
 }
-/* line 315, ../assets/sass/partials/main/developer/_app.scss */
+/* line 317, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section .elem .text {
   border-radius: 0;
   width: 300px;
   margin: 6px 6px 4px 0;
 }
-/* line 321, ../assets/sass/partials/main/developer/_app.scss */
+/* line 323, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section.first {
   border-top: 0;
   padding-top: 20px;
 }
-/* line 325, ../assets/sass/partials/main/developer/_app.scss */
+/* line 327, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section.last {
   border-bottom: 0;
   padding-bottom: 20px;
 }
-/* line 329, ../assets/sass/partials/main/developer/_app.scss */
+/* line 331, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section.small {
   margin-top: 1px;
   min-height: 80px;
 }
-/* line 333, ../assets/sass/partials/main/developer/_app.scss */
+/* line 335, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section.small .elem.first {
   margin-top: 10px;
 }
-/* line 337, ../assets/sass/partials/main/developer/_app.scss */
+/* line 339, ../assets/sass/partials/main/developer/_app.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-info .section.small .elem .permission {
   margin-bottom: 4px;
 }
@@ -6224,6 +6516,109 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.app-general-info .app-heade
 BODY DIV.page #content > DIV #main-wrapper #main DIV.app-general-info .app-header .app-description .app-status {
   padding-top: 2px;
   font-size: 14px;
+}
+
+/* line 2, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+#chlk-dialogs .app-wrapper {
+  width: auto;
+  border: none;
+  -webkit-box-shadow: inset 0 1px -1px 1px #828282;
+  -moz-box-shadow: inset 0 1px -1px 1px #828282;
+  box-shadow: inset 0 1px -1px 1px #828282;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+  background: transparent;
+  top: 50px !important;
+  left: 90px !important;
+  right: 90px !important;
+  position: fixed !important;
+  bottom: 0;
+  z-index: 100001 !important;
+}
+/* line 18, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+#chlk-dialogs .app-wrapper .window-error-message {
+  font-size: 40px;
+  position: relative;
+  top: 300px;
+  text-align: center;
+}
+/* line 23, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+#chlk-dialogs .app-wrapper .window-error-message .error-title {
+  font-family: Arial;
+  color: #ffffff;
+}
+/* line 27, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+#chlk-dialogs .app-wrapper .window-error-message .error-text {
+  font-size: 25px;
+  font-family: Pacifico;
+  color: #ffffff;
+}
+/* line 34, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+#chlk-dialogs .app-wrapper h1 {
+  text-align: center;
+  font: bold 18px Arial;
+  color: #434343;
+  margin-bottom: 29px;
+}
+/* line 41, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+#chlk-dialogs .app-wrapper.app-install {
+  width: 620px !important;
+}
+/* line 47, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+#chlk-dialogs .app-wrapper .x-window-header .x-close-btn {
+  background: url(images/ui/white-close-btn.png) 0 0 no-repeat !important;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  float: right;
+  cursor: pointer;
+}
+/* line 55, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+#chlk-dialogs .app-wrapper .x-window-header .x-close-btn:hover {
+  opacity: 0.8;
+}
+/* line 60, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+#chlk-dialogs .app-wrapper .x-window-header .toolbar {
+  position: absolute;
+  left: 0;
+  top: -16px;
+}
+/* line 65, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+#chlk-dialogs .app-wrapper .x-window-header .toolbar > DIV, #chlk-dialogs .app-wrapper .x-window-header .toolbar > A {
+  display: inline-block;
+  padding: 11px 15px 12px 11px;
+  background: #070707;
+  color: white;
+  font: bold 14px Arial;
+  word-spacing: 3px;
+  -webkit-box-shadow: inset 0px 0 0px 1px #3a3a3a;
+  -moz-box-shadow: inset 0px 0 0px 1px #3a3a3a;
+  box-shadow: inset 0px 0 0px 1px #3a3a3a;
+  border: 1px solid #070707;
+  text-decoration: none;
+  cursor: pointer;
+}
+/* line 82, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+#chlk-dialogs .app-wrapper .x-window-header .toolbar > DIV:hover, #chlk-dialogs .app-wrapper .x-window-header .toolbar > A:hover {
+  opacity: 0.7;
+}
+/* line 89, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+#chlk-dialogs .app-wrapper .iframe-wrap {
+  background: url(images/app/debut_dark.png);
+  border: 1px solid black;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100% !important;
+  width: 100%;
+}
+/* line 97, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+#chlk-dialogs .app-wrapper .iframe-wrap iframe {
+  border: 0;
+  width: 100% !important;
+  height: 99.5% !important;
 }
 
 /* line 10, ../assets/sass/partials/main/sysadmin/_apps.scss */
@@ -6257,8 +6652,12 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.apps-list .td .app-icon {
 #chlk-overlay.x-hidden {
   display: none;
 }
+/* line 17, ../assets/sass/partials/main/popups/_popups.scss */
+#chlk-overlay.black {
+  opacity: .85;
+}
 
-/* line 18, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 23, ../assets/sass/partials/main/popups/_popups.scss */
 #chlk-dialogs {
   min-width: 800px;
   min-height: 700px;
@@ -6269,17 +6668,17 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.apps-list .td .app-icon {
   bottom: -12px;
   z-index: 10000;
 }
-/* line 28, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 33, ../assets/sass/partials/main/popups/_popups.scss */
 #chlk-dialogs.x-hidden {
   display: none;
 }
-/* line 32, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 37, ../assets/sass/partials/main/popups/_popups.scss */
 #chlk-dialogs .dialog {
   position: absolute;
   visibility: visible;
   z-index: 9003;
 }
-/* line 37, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 42, ../assets/sass/partials/main/popups/_popups.scss */
 #chlk-dialogs .dialog .x-window-header {
   color: #5d6d75;
   font-size: 18px;
@@ -6287,11 +6686,11 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.apps-list .td .app-icon {
   padding: 5px 0 4px 0;
   font: bold 24px Arial;
 }
-/* line 45, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 50, ../assets/sass/partials/main/popups/_popups.scss */
 #chlk-dialogs .dialog .x-window-body {
   padding: 5px 15px 0px 0px;
 }
-/* line 49, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 54, ../assets/sass/partials/main/popups/_popups.scss */
 #chlk-dialogs .dialog .x-window-body .x-fieldset-header-text {
   font: bold 11px tahoma, arial, helvetica, sans-serif;
   color: #15428b;
@@ -6300,7 +6699,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.apps-list .td .app-icon {
   margin-bottom: 15px;
   display: inline-block;
 }
-/* line 59, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 64, ../assets/sass/partials/main/popups/_popups.scss */
 #chlk-dialogs .dialog.gray {
   left: 191px;
   top: 75px;
@@ -6311,12 +6710,12 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.apps-list .td .app-icon {
   -moz-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
-/* line 67, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 72, ../assets/sass/partials/main/popups/_popups.scss */
 #chlk-dialogs .dialog.gray:not(.info-msg) {
   min-height: 500px;
   min-width: 390px;
 }
-/* line 72, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 77, ../assets/sass/partials/main/popups/_popups.scss */
 #chlk-dialogs .dialog.gray.info-msg {
   padding: 22px;
   color: #6F6F6F;
@@ -6324,54 +6723,87 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.apps-list .td .app-icon {
   font-size: 16px;
   min-width: 300px;
 }
-/* line 79, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 84, ../assets/sass/partials/main/popups/_popups.scss */
 #chlk-dialogs .dialog.gray.info-msg h1 {
   font-size: 24px;
   color: #6F6F6F;
 }
-/* line 84, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 89, ../assets/sass/partials/main/popups/_popups.scss */
 #chlk-dialogs .dialog.gray.info-msg PRE {
   margin: 20px 0;
   min-height: 1px;
   font-family: Arial;
 }
-/* line 91, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 96, ../assets/sass/partials/main/popups/_popups.scss */
 #chlk-dialogs .dialog.gray.info-msg .buttons-container .button {
   display: inline-block;
 }
-/* line 94, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 99, ../assets/sass/partials/main/popups/_popups.scss */
 #chlk-dialogs .dialog.gray.info-msg .buttons-container .button BUTTON {
   min-width: 100px;
 }
-/* line 98, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 103, ../assets/sass/partials/main/popups/_popups.scss */
 #chlk-dialogs .dialog.gray.info-msg .buttons-container .button:not(:last-child) {
   margin-right: 20px;
 }
-/* line 105, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 110, ../assets/sass/partials/main/popups/_popups.scss */
 #chlk-dialogs .dialog.gray.centered {
   left: 50%;
   top: 50%;
 }
-/* line 113, ../assets/sass/partials/main/popups/_popups.scss */
+
+/* line 4, ../assets/sass/partials/main/popups/_add_app.scss */
+#chlk-dialogs .dialog.add-app {
+  position: fixed;
+  bottom: 6px;
+  left: 5px;
+  width: 247px;
+  background: url(images/demo/demo-bg.png) 0 0 repeat;
+  height: 79px;
+}
+/* line 13, ../assets/sass/partials/main/popups/_add_app.scss */
+#chlk-dialogs .dialog.add-app .add, #chlk-dialogs .dialog.add-app .cancel {
+  margin-top: 8px;
+}
+/* line 17, ../assets/sass/partials/main/popups/_add_app.scss */
+#chlk-dialogs .dialog.add-app .add {
+  margin-right: 20px;
+  margin-left: 6px;
+}
+/* line 22, ../assets/sass/partials/main/popups/_add_app.scss */
+#chlk-dialogs .dialog.add-app button {
+  width: 90px;
+  font-size: 17px;
+  font-weight: bold;
+}
+/* line 31, ../assets/sass/partials/main/popups/_add_app.scss */
+#chlk-dialogs .dialog.add-app input {
+  margin-top: 5px;
+  width: 225px;
+  margin-left: 6px;
+  border-radius: 0;
+}
+
+/* line 4, ../assets/sass/partials/main/popups/_add_school.scss */
 #chlk-dialogs .dialog.add-school {
   left: 132px;
   min-width: 500px;
 }
-/* line 118, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 9, ../assets/sass/partials/main/popups/_add_school.scss */
 #chlk-dialogs .dialog.add-school .x-window-body {
   padding: 7px;
 }
-/* line 121, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 12, ../assets/sass/partials/main/popups/_add_school.scss */
 #chlk-dialogs .dialog.add-school .x-window-body .submit-btn {
   margin-left: 180px;
   margin-top: 25px;
   margin-right: 5px;
 }
-/* line 130, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 21, ../assets/sass/partials/main/popups/_add_school.scss */
 #chlk-dialogs .dialog.add-school .x-window-body .x-form-field {
   margin-bottom: 4px;
 }
-/* line 132, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 23, ../assets/sass/partials/main/popups/_add_school.scss */
 #chlk-dialogs .dialog.add-school .x-window-body .x-form-field label {
   width: 125px;
   display: inline-block;
@@ -6382,35 +6814,36 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.apps-list .td .app-icon {
   padding: 3px;
   padding-left: 0;
 }
-/* line 143, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 34, ../assets/sass/partials/main/popups/_add_school.scss */
 #chlk-dialogs .dialog.add-school .x-window-body .x-form-field #timezoneId {
   width: 227px;
 }
-/* line 146, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 37, ../assets/sass/partials/main/popups/_add_school.scss */
 #chlk-dialogs .dialog.add-school .x-window-body .x-form-field input {
   width: 222px;
   border-radius: 5px;
 }
-/* line 151, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 42, ../assets/sass/partials/main/popups/_add_school.scss */
 #chlk-dialogs .dialog.add-school .x-window-body .x-form-field input.checkbox-last {
   width: 12px;
   margin-bottom: 40px;
 }
-/* line 162, ../assets/sass/partials/main/popups/_popups.scss */
+
+/* line 4, ../assets/sass/partials/main/popups/_add_district.scss */
 #chlk-dialogs .dialog.add-district {
   min-height: 290px;
 }
-/* line 167, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 9, ../assets/sass/partials/main/popups/_add_district.scss */
 #chlk-dialogs .dialog.add-district .x-window-body .submit-btn {
   margin-left: 180px;
   margin-top: 25px;
   margin-right: 5px;
 }
-/* line 176, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 18, ../assets/sass/partials/main/popups/_add_district.scss */
 #chlk-dialogs .dialog.add-district .x-window-body .x-form-field {
   margin-bottom: 4px;
 }
-/* line 178, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 20, ../assets/sass/partials/main/popups/_add_district.scss */
 #chlk-dialogs .dialog.add-district .x-window-body .x-form-field label {
   width: 125px;
   display: inline-block;
@@ -6421,26 +6854,27 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.apps-list .td .app-icon {
   padding: 3px;
   padding-left: 0;
 }
-/* line 190, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 32, ../assets/sass/partials/main/popups/_add_district.scss */
 #chlk-dialogs .dialog.add-district .x-window-body .x-form-field input {
   width: 222px;
   border-radius: 5px;
 }
-/* line 199, ../assets/sass/partials/main/popups/_popups.scss */
+
+/* line 4, ../assets/sass/partials/main/popups/_add_department.scss */
 #chlk-dialogs .dialog.add-department {
   min-height: 200px;
 }
-/* line 205, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 10, ../assets/sass/partials/main/popups/_add_department.scss */
 #chlk-dialogs .dialog.add-department .x-window-body .submit-btn {
   margin-left: 265px;
   margin-top: 5px;
   margin-right: 5px;
 }
-/* line 211, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 16, ../assets/sass/partials/main/popups/_add_department.scss */
 #chlk-dialogs .dialog.add-department .x-window-body .x-form-field {
   margin-bottom: 4px;
 }
-/* line 213, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 18, ../assets/sass/partials/main/popups/_add_department.scss */
 #chlk-dialogs .dialog.add-department .x-window-body .x-form-field label {
   width: 125px;
   display: inline-block;
@@ -6451,26 +6885,27 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.apps-list .td .app-icon {
   padding: 3px;
   padding-left: 0;
 }
-/* line 223, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 28, ../assets/sass/partials/main/popups/_add_department.scss */
 #chlk-dialogs .dialog.add-department .x-window-body .x-form-field input {
   width: 312px;
   border-radius: 5px;
 }
-/* line 231, ../assets/sass/partials/main/popups/_popups.scss */
+
+/* line 4, ../assets/sass/partials/main/popups/_add_app_category.scss */
 #chlk-dialogs .dialog.add-app-category {
   min-height: 200px;
 }
-/* line 237, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 10, ../assets/sass/partials/main/popups/_add_app_category.scss */
 #chlk-dialogs .dialog.add-app-category .x-window-body .submit-btn {
   margin-left: 265px;
   margin-top: 5px;
   margin-right: 5px;
 }
-/* line 243, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 16, ../assets/sass/partials/main/popups/_add_app_category.scss */
 #chlk-dialogs .dialog.add-app-category .x-window-body .x-form-field {
   margin-bottom: 4px;
 }
-/* line 245, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 18, ../assets/sass/partials/main/popups/_add_app_category.scss */
 #chlk-dialogs .dialog.add-app-category .x-window-body .x-form-field label {
   width: 125px;
   display: inline-block;
@@ -6481,60 +6916,29 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.apps-list .td .app-icon {
   padding: 3px;
   padding-left: 0;
 }
-/* line 255, ../assets/sass/partials/main/popups/_popups.scss */
+/* line 28, ../assets/sass/partials/main/popups/_add_app_category.scss */
 #chlk-dialogs .dialog.add-app-category .x-window-body .x-form-field input {
   width: 312px;
   border-radius: 5px;
 }
-/* line 263, ../assets/sass/partials/main/popups/_popups.scss */
-#chlk-dialogs .dialog.add-app {
-  position: fixed;
-  bottom: 6px;
-  left: 5px;
-  width: 247px;
-  background: url(images/demo/demo-bg.png) 0 0 repeat;
-  height: 79px;
-}
-/* line 272, ../assets/sass/partials/main/popups/_popups.scss */
-#chlk-dialogs .dialog.add-app .add, #chlk-dialogs .dialog.add-app .cancel {
-  margin-top: 8px;
-}
-/* line 276, ../assets/sass/partials/main/popups/_popups.scss */
-#chlk-dialogs .dialog.add-app .add {
-  margin-right: 20px;
-  margin-left: 6px;
-}
-/* line 281, ../assets/sass/partials/main/popups/_popups.scss */
-#chlk-dialogs .dialog.add-app button {
-  width: 90px;
-  font-size: 17px;
-  font-weight: bold;
-}
-/* line 290, ../assets/sass/partials/main/popups/_popups.scss */
-#chlk-dialogs .dialog.add-app input {
-  margin-top: 5px;
-  width: 225px;
-  margin-left: 6px;
-  border-radius: 0;
-}
 
-/* line 33, ../assets/sass/partials/_main.scss */
+/* line 42, ../assets/sass/partials/_main.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main-top, BODY DIV.page > DIV#content DIV#content-wrapper.profile #footer {
   background-image: url(images/profile/paper-top-bottom.png);
 }
-/* line 37, ../assets/sass/partials/_main.scss */
+/* line 46, ../assets/sass/partials/_main.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #footer {
   background-position: 0 -50px;
 }
-/* line 41, ../assets/sass/partials/_main.scss */
+/* line 50, ../assets/sass/partials/_main.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main-wrapper {
   background-image: url(images/profile/paper-bg.png);
 }
-/* line 45, ../assets/sass/partials/_main.scss */
+/* line 54, ../assets/sass/partials/_main.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main-wrapper #main .not-transparent {
   background: #baa76e;
 }
-/* line 49, ../assets/sass/partials/_main.scss */
+/* line 58, ../assets/sass/partials/_main.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main-wrapper #main .panel-bg {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f3eee0), color-stop(100%, #ece1c1));
   background: -webkit-linear-gradient(top, #f3eee0, #ece1c1);
@@ -6542,7 +6946,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main-wrapper #main .pan
   background: -o-linear-gradient(top, #f3eee0, #ece1c1);
   background: linear-gradient(top, #f3eee0, #ece1c1);
 }
-/* line 57, ../assets/sass/partials/_main.scss */
+/* line 66, ../assets/sass/partials/_main.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper #main .not-transparent {
   background: #c9c9c9;
   border: 1px solid #a1a1a1;
@@ -6556,7 +6960,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main .not-transparent {
   -o-border-radius: 9px;
   border-radius: 9px;
 }
-/* line 67, ../assets/sass/partials/_main.scss */
+/* line 76, ../assets/sass/partials/_main.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper #main .panel-bg {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f5f5f5), color-stop(100%, #e7e7e7));
   background: -webkit-linear-gradient(top, #f5f5f5, #e7e7e7);
@@ -6565,121 +6969,121 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main .panel-bg {
   background: linear-gradient(top, #f5f5f5, #e7e7e7);
 }
 
-/* line 77, ../assets/sass/partials/_main.scss */
+/* line 86, ../assets/sass/partials/_main.scss */
 .announcement-type-1 {
   background: url(images/common/announcement-type/1.png) 0 50% no-repeat;
 }
-/* line 80, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-1.black {
   background: url(images/common/announcement-type/bw/1_bw.png) 0 50% no-repeat;
 }
 
-/* line 77, ../assets/sass/partials/_main.scss */
+/* line 86, ../assets/sass/partials/_main.scss */
 .announcement-type-2 {
   background: url(images/common/announcement-type/2.png) 0 50% no-repeat;
 }
-/* line 80, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-2.black {
   background: url(images/common/announcement-type/bw/2_bw.png) 0 50% no-repeat;
 }
 
-/* line 77, ../assets/sass/partials/_main.scss */
+/* line 86, ../assets/sass/partials/_main.scss */
 .announcement-type-3 {
   background: url(images/common/announcement-type/3.png) 0 50% no-repeat;
 }
-/* line 80, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-3.black {
   background: url(images/common/announcement-type/bw/3_bw.png) 0 50% no-repeat;
 }
 
-/* line 77, ../assets/sass/partials/_main.scss */
+/* line 86, ../assets/sass/partials/_main.scss */
 .announcement-type-4 {
   background: url(images/common/announcement-type/4.png) 0 50% no-repeat;
 }
-/* line 80, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-4.black {
   background: url(images/common/announcement-type/bw/4_bw.png) 0 50% no-repeat;
 }
 
-/* line 77, ../assets/sass/partials/_main.scss */
+/* line 86, ../assets/sass/partials/_main.scss */
 .announcement-type-5 {
   background: url(images/common/announcement-type/5.png) 0 50% no-repeat;
 }
-/* line 80, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-5.black {
   background: url(images/common/announcement-type/bw/5_bw.png) 0 50% no-repeat;
 }
 
-/* line 77, ../assets/sass/partials/_main.scss */
+/* line 86, ../assets/sass/partials/_main.scss */
 .announcement-type-6 {
   background: url(images/common/announcement-type/6.png) 0 50% no-repeat;
 }
-/* line 80, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-6.black {
   background: url(images/common/announcement-type/bw/6_bw.png) 0 50% no-repeat;
 }
 
-/* line 77, ../assets/sass/partials/_main.scss */
+/* line 86, ../assets/sass/partials/_main.scss */
 .announcement-type-7 {
   background: url(images/common/announcement-type/7.png) 0 50% no-repeat;
 }
-/* line 80, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-7.black {
   background: url(images/common/announcement-type/bw/7_bw.png) 0 50% no-repeat;
 }
 
-/* line 77, ../assets/sass/partials/_main.scss */
+/* line 86, ../assets/sass/partials/_main.scss */
 .announcement-type-8 {
   background: url(images/common/announcement-type/8.png) 0 50% no-repeat;
 }
-/* line 80, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-8.black {
   background: url(images/common/announcement-type/bw/8_bw.png) 0 50% no-repeat;
 }
 
-/* line 77, ../assets/sass/partials/_main.scss */
+/* line 86, ../assets/sass/partials/_main.scss */
 .announcement-type-9 {
   background: url(images/common/announcement-type/9.png) 0 50% no-repeat;
 }
-/* line 80, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-9.black {
   background: url(images/common/announcement-type/bw/9_bw.png) 0 50% no-repeat;
 }
 
-/* line 77, ../assets/sass/partials/_main.scss */
+/* line 86, ../assets/sass/partials/_main.scss */
 .announcement-type-10 {
   background: url(images/common/announcement-type/10.png) 0 50% no-repeat;
 }
-/* line 80, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-10.black {
   background: url(images/common/announcement-type/bw/10_bw.png) 0 50% no-repeat;
 }
 
-/* line 77, ../assets/sass/partials/_main.scss */
+/* line 86, ../assets/sass/partials/_main.scss */
 .announcement-type-11 {
   background: url(images/common/announcement-type/11.png) 0 50% no-repeat;
 }
-/* line 80, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-11.black {
   background: url(images/common/announcement-type/bw/11_bw.png) 0 50% no-repeat;
 }
 
-/* line 88, ../assets/sass/partials/_main.scss */
+/* line 97, ../assets/sass/partials/_main.scss */
 .grey-combo + .chzn-container, .grey-combo-container .chzn-container {
   color: #717171;
 }
-/* line 90, ../assets/sass/partials/_main.scss */
+/* line 99, ../assets/sass/partials/_main.scss */
 .grey-combo + .chzn-container A, .grey-combo-container .chzn-container A {
   color: #717171;
 }
 
-/* line 95, ../assets/sass/partials/_main.scss */
+/* line 104, ../assets/sass/partials/_main.scss */
 .image-container {
   overflow: hidden;
   display: inline-block;
 }
 
-/* line 100, ../assets/sass/partials/_main.scss */
+/* line 109, ../assets/sass/partials/_main.scss */
 INPUT, TEXTAREA {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -6694,12 +7098,12 @@ INPUT, TEXTAREA {
   color: #6e6e6e;
   margin: 0;
 }
-/* line 110, ../assets/sass/partials/_main.scss */
+/* line 119, ../assets/sass/partials/_main.scss */
 INPUT::-webkit-input-placeholder, INPUT:-moz-placeholder, INPUT::-moz-placeholder, TEXTAREA::-webkit-input-placeholder, TEXTAREA:-moz-placeholder, TEXTAREA::-moz-placeholder {
   color: gray;
 }
 
-/* line 115, ../assets/sass/partials/_main.scss */
+/* line 124, ../assets/sass/partials/_main.scss */
 TEXTAREA.animated-textarea {
   -webkit-transition-property: height;
   -moz-transition-property: height;
@@ -6711,7 +7115,7 @@ TEXTAREA.animated-textarea {
   transition-duration: 0.2s;
 }
 
-/* line 120, ../assets/sass/partials/_main.scss */
+/* line 129, ../assets/sass/partials/_main.scss */
 .close-btn {
   background: url(images/ui/close-btn-2.png) 0 0 no-repeat;
   height: 27px;
@@ -6721,12 +7125,12 @@ TEXTAREA.animated-textarea {
   right: -16px;
   cursor: pointer;
 }
-/* line 129, ../assets/sass/partials/_main.scss */
+/* line 138, ../assets/sass/partials/_main.scss */
 .close-btn:hover {
   opacity: 0.7;
 }
 
-/* line 136, ../assets/sass/partials/_main.scss */
+/* line 145, ../assets/sass/partials/_main.scss */
 .horizontal-loader {
   height: 20px;
   position: absolute;
@@ -6736,7 +7140,7 @@ TEXTAREA.animated-textarea {
   bottom: -25px;
 }
 
-/* line 145, ../assets/sass/partials/_main.scss */
+/* line 154, ../assets/sass/partials/_main.scss */
 .loader {
   display: none;
   position: absolute;
@@ -6753,7 +7157,7 @@ TEXTAREA.animated-textarea {
   border-radius: 5px;
 }
 
-/* line 157, ../assets/sass/partials/_main.scss */
+/* line 166, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container {
   position: absolute;
   min-height: 85px;
@@ -6770,22 +7174,22 @@ TEXTAREA.animated-textarea {
   text-shadow: white 0px 1px 1px;
   padding: 7px;
 }
-/* line 167, ../assets/sass/partials/_main.scss */
+/* line 176, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container #pop-up-triangle {
   position: absolute;
   height: 10px;
   background: url(images/common/window-triangle-top.png) center center no-repeat;
 }
-/* line 174, ../assets/sass/partials/_main.scss */
+/* line 183, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container.popup-bottom #pop-up-triangle, #chlk-pop-up-container.popup-top #pop-up-triangle {
   left: 0;
   right: 0;
 }
-/* line 181, ../assets/sass/partials/_main.scss */
+/* line 190, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container.popup-bottom #pop-up-triangle {
   top: -10px;
 }
-/* line 187, ../assets/sass/partials/_main.scss */
+/* line 196, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container.popup-top #pop-up-triangle {
   bottom: -10px;
   -webkit-transform: rotate(180deg);
@@ -6794,12 +7198,12 @@ TEXTAREA.animated-textarea {
   -o-transform: rotate(180deg);
   transform: rotate(180deg);
 }
-/* line 194, ../assets/sass/partials/_main.scss */
+/* line 203, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container.popup-left #pop-up-triangle, #chlk-pop-up-container.popup-right #pop-up-triangle {
   width: 16px;
   top: 30px;
 }
-/* line 201, ../assets/sass/partials/_main.scss */
+/* line 210, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container.popup-left #pop-up-triangle {
   right: -13px;
   -webkit-transform: rotate(90deg);
@@ -6808,7 +7212,7 @@ TEXTAREA.animated-textarea {
   -o-transform: rotate(90deg);
   transform: rotate(90deg);
 }
-/* line 208, ../assets/sass/partials/_main.scss */
+/* line 217, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container.popup-right #pop-up-triangle {
   left: -13px;
   -webkit-transform: rotate(270deg);
@@ -6817,7 +7221,7 @@ TEXTAREA.animated-textarea {
   -o-transform: rotate(270deg);
   transform: rotate(270deg);
 }
-/* line 214, ../assets/sass/partials/_main.scss */
+/* line 223, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container h2 {
   text-align: center;
   font-size: 18px;
@@ -6831,16 +7235,16 @@ TEXTAREA.animated-textarea {
   width: 177px;
   text-shadow: 1px -1px 1px white;
 }
-/* line 229, ../assets/sass/partials/_main.scss */
+/* line 238, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container ul > LI {
   background: url(images/common/dialog-separator.png) bottom no-repeat;
   position: relative;
 }
-/* line 233, ../assets/sass/partials/_main.scss */
+/* line 242, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container ul > LI:hover {
   background: #f8f8f8;
 }
-/* line 237, ../assets/sass/partials/_main.scss */
+/* line 246, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container ul > LI > A, #chlk-pop-up-container ul > LI > SPAN {
   background-position: 13px 7px;
   background-repeat: no-repeat;
@@ -6858,7 +7262,7 @@ TEXTAREA.animated-textarea {
   -o-background-size: auto 36px;
   background-size: auto 36px;
 }
-/* line 251, ../assets/sass/partials/_main.scss */
+/* line 260, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container ul > LI > A P.title, #chlk-pop-up-container ul > LI > A P.item-title, #chlk-pop-up-container ul > LI > SPAN P.title, #chlk-pop-up-container ul > LI > SPAN P.item-title {
   font-size: 18px;
   color: #032633;
@@ -6869,7 +7273,7 @@ TEXTAREA.animated-textarea {
   text-align: left;
   padding-left: 5px;
 }
-/* line 262, ../assets/sass/partials/_main.scss */
+/* line 271, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container ul > LI > A P.under, #chlk-pop-up-container ul > LI > A P.classname-under, #chlk-pop-up-container ul > LI > SPAN P.under, #chlk-pop-up-container ul > LI > SPAN P.classname-under {
   font-size: 10px;
   color: #7c7c7c;
@@ -6878,21 +7282,21 @@ TEXTAREA.animated-textarea {
   padding-left: 5px;
 }
 
-/* line 277, ../assets/sass/partials/_main.scss */
+/* line 286, ../assets/sass/partials/_main.scss */
 .activity-model-wait .loader, .loadind .loader {
   display: block;
 }
-/* line 280, ../assets/sass/partials/_main.scss */
+/* line 289, ../assets/sass/partials/_main.scss */
 .activity-model-wait .loader .loader, .loadind .loader .loader {
   display: none;
 }
 
-/* line 286, ../assets/sass/partials/_main.scss */
+/* line 295, ../assets/sass/partials/_main.scss */
 .loader-container {
   position: relative;
 }
 
-/* line 290, ../assets/sass/partials/_main.scss */
+/* line 299, ../assets/sass/partials/_main.scss */
 .loading-page {
   background: url(images/loaders/horizontal.gif) center center no-repeat;
   position: absolute;
@@ -6901,25 +7305,35 @@ TEXTAREA.animated-textarea {
   left: 0;
   right: 0;
 }
-/* line 298, ../assets/sass/partials/_main.scss */
+/* line 307, ../assets/sass/partials/_main.scss */
 .loading-page > DIV {
   display: none;
 }
 
-/* line 305, ../assets/sass/partials/_main.scss */
+/* line 312, ../assets/sass/partials/_main.scss */
+.press-enter {
+  padding-right: 12px;
+  background: url(images/grading/enter.png) right center no-repeat;
+  color: #5d5d5d;
+  text-align: center;
+  font: normal 10px Arial;
+  display: inline-block;
+}
+
+/* line 323, ../assets/sass/partials/_main.scss */
 BODY .chzn-container-single .chzn-single {
   padding: 0 0 0 4px;
 }
-/* line 308, ../assets/sass/partials/_main.scss */
+/* line 326, ../assets/sass/partials/_main.scss */
 BODY .chzn-container-single .chzn-single SPAN {
   text-align: center;
 }
-/* line 313, ../assets/sass/partials/_main.scss */
+/* line 331, ../assets/sass/partials/_main.scss */
 BODY .chzn-container-single .chzn-results {
   margin: 0;
   padding: 0;
 }
-/* line 317, ../assets/sass/partials/_main.scss */
+/* line 335, ../assets/sass/partials/_main.scss */
 BODY .chzn-container-single .chzn-results LI {
   padding: 5px;
   overflow: hidden;
