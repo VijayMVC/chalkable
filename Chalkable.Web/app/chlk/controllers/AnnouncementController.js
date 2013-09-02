@@ -272,7 +272,7 @@ NAMESPACE('chlk.controllers', function (){
         [[Boolean]],
         function disableAnnouncementSaving(val){
             this.getContext().getSession().set('noSave', val);
-        }
+        },
 
         [[chlk.models.announcement.Announcement]],
         function saveAction(model) {
