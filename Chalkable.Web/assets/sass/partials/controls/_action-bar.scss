@@ -10,9 +10,15 @@ DIV#content-wrapper{
         .container{
           .action-link, .action-button{
             &:not(.disabled){
+              color: #957633;
+              text-shadow: 0 1px 0 white;
+
               &:hover, &.pressed{
-                color: #957633;
                 @include background(linear-gradient(top, #f3eedf, #e1d3a6));
+
+                &.back{
+                  @include background(url(images/profile/back.png) 3px center no-repeat, linear-gradient(top, #f3eedf, #e1d3a6));
+                }
               }
             }
 
@@ -49,6 +55,15 @@ DIV#content-wrapper{
         &:hover, &.pressed{
           color: #2f7790;
           @include background(linear-gradient(top, #f6f6f6,#d8d8d8));
+        }
+
+        &.back{
+          background: url(images/profile/back.png) 3px center no-repeat;
+          padding-left: 26px !important;
+
+          &:hover, &.pressed{
+            @include background(url(images/profile/back.png) 3px center no-repeat, linear-gradient(top, #f6f6f6,#d8d8d8));
+          }
         }
 
         &.settings{
