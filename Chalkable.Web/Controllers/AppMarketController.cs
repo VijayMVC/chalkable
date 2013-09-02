@@ -39,7 +39,7 @@ namespace Chalkable.Web.Controllers
 
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher, Student")]
-        public ActionResult Instal(Guid applicationId, Guid? personId, GuidList classids, IntList roleIds, GuidList departmentids, GuidList gradelevelids)
+        public ActionResult Install(Guid applicationId, Guid? personId, GuidList classids, IntList roleIds, GuidList departmentids, GuidList gradelevelids)
         {
             var schoolyearId = GetCurrentSchoolYearId();
             if (!SchoolLocator.AppMarketService.CanInstall(applicationId, personId, roleIds, classids, gradelevelids, departmentids))

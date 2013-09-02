@@ -22,6 +22,9 @@ mixin MyAppsPermission(prefix, app, suffix)
 
 
 
+
+
+
 mixin AppPricing(appPrice, isReadOnly)
     isFreeApp = (appPrice.getPrice() || appPrice.getPricePerSchool() || appPrice.getPricePerClass() || 0 ) == 0
     isSchoolFlatRateEnabled =  appPrice.getPricePerSchool() > 0
@@ -192,8 +195,9 @@ appPermissions = appPermissions.join(',')
                             +RenderWith(app.getBannerPicture(), chlk.templates.apps.AppPicture)
                 .elem.screenshots
                     label.hint Screenshots:
-                    .screenshots
-                        +Hidden('appScreenShotIds', "")
-                        //+RenderWith(app.(), chlk.templates.apps.AppPicture)
+
+                    .screenshot-pictures
+                        +RenderWith(app.getScreenshotPictures(), chlk.templates.apps.AppScreenshots)
+
         if !self.isReadOnly()
             +Button()(disabled = !self.isDraft(),name="submit-draft-btn", class = !self.isDraft() ? "x-item-disabled" : "").submit-draft-btn.special-button.blue-button Update Draft

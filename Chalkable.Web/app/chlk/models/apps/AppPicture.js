@@ -31,7 +31,7 @@ NAMESPACE('chlk.models.apps', function () {
                 if (this.getWidth() == 170)
                     cls = "big-icon-item";
                 if (this.getWidth() == 640)
-                    cls = "screeshot-item";
+                    cls = "screenshot-item";
                 this.setPictureClass(cls);
                 if (editable_)
                     this.setEditable(editable_);

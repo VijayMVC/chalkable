@@ -9,6 +9,7 @@ REQUIRE('chlk.models.apps.AppPermission');
 REQUIRE('chlk.models.apps.AppCategory');
 REQUIRE('chlk.models.apps.AppPicture');
 REQUIRE('chlk.models.apps.AppState');
+REQUIRE('chlk.models.apps.AppScreenshots');
 REQUIRE('chlk.models.common.NameId');
 
 
@@ -38,7 +39,7 @@ NAMESPACE('chlk.models.apps', function () {
 
             chlk.models.apps.AppPicture, 'iconPicture',
             chlk.models.apps.AppPicture, 'bannerPicture',
-            ArrayOf(chlk.models.apps.AppPicture), 'screenshotPictures',
+            chlk.models.apps.AppScreenshots,  'screenshotPictures',
 
             [ria.serialize.SerializeProperty('myappsurl')],
             String, 'myAppsUrl',
@@ -52,7 +53,7 @@ NAMESPACE('chlk.models.apps', function () {
             [ria.serialize.SerializeProperty('applicationprice')],
             chlk.models.apps.AppPrice, 'applicationPrice',
             [ria.serialize.SerializeProperty('picturesid')],
-            ArrayOf(chlk.models.id.PictureId), 'pictureIds',
+            ArrayOf(chlk.models.id.PictureId), 'screenshotIds',
             [ria.serialize.SerializeProperty('applicationaccess')],
             chlk.models.apps.AppAccess, 'appAccess',
             ArrayOf(chlk.models.apps.AppPermission), 'permissions',
