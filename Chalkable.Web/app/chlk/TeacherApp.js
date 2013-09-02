@@ -7,6 +7,7 @@ REQUIRE('chlk.controllers.AttendanceController');
 REQUIRE('chlk.controllers.AccountController');
 REQUIRE('chlk.controllers.CalendarController');
 REQUIRE('chlk.controllers.ClassController');
+REQUIRE('chlk.controllers.GradingController');
 REQUIRE('chlk.controllers.SettingsController');
 REQUIRE('chlk.controllers.SetupController');
 REQUIRE('chlk.controllers.StudentsController');

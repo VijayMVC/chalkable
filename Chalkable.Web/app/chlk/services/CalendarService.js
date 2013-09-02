@@ -64,7 +64,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
             ria.async.Future, function getTeacherClassWeek(classId_, date_) {
-                return this.get('AnnouncementCalendar/TeacherClassWeek.json', null, {
+                return this.get('AnnouncementCalendar/TeacherClassWeek.json', ArrayOf(chlk.models.calendar.TeacherSettingsCalendarDay), {
                     classId: classId_ && classId_.valueOf(),
                     date: date_ && date_.toString('mm-dd-yy')
                 });

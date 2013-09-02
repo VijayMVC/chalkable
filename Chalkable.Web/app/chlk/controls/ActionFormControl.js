@@ -117,7 +117,7 @@ NAMESPACE('chlk.controls', function () {
                 var $form = $target.parent('FORM');
 
                 $form.setData('submit-name', $target.getAttr('name'));
-                $form.setData('submit-value', $target.getValue());
+                $form.setData('submit-value', $target.getValue() || $target.getAttr('value'));
                 $form.setData('submit-skip', $target.hasClass('validate-skip'))
             },
 
