@@ -36,7 +36,6 @@ NAMESPACE('chlk.controllers', function (){
                 var start = start_ || 0;
                 usersData.getItems().forEach(function(item, index){
                     item.setIndex(start_ + index);
-                    item.setPictureUrl(this.personService.getPictureURL(item.getId(), 47));
                 }.bind(this));
                 return usersData;
             },

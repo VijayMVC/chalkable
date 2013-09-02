@@ -37,6 +37,7 @@
             .details-container.silver-panel
                 .left-block
                     +ActionLink('feed', 'list').image-container
+                        +PersonImg(self.getOwner(), 47)
                         img(src=self.getOwner().getPictureUrl()).avatar.avatar-47
                 .right-block
                     h2(class=self.getExpiresDateColor())=self.getExpiresDateText()

@@ -90,21 +90,22 @@ NAMESPACE('chlk.controllers', function (){
                 else
                     type = 2;
             }
-            try{
-                if(model.getAttendanceReasonId() && model.getReasons().filter(function(item){
-                    return item.getAttendanceType() == type && item.getId() == model.getAttendanceReasonId();
-                }).length > 0)
-                    this.attendanceService.setAttendance(model.getClassPersonId(), model.getClassPeriodId(), type, model.getAttendanceReasonId(), model.getDate());
-                else
-                    console.info('WARNING setAttendance: type = ' + type + ', reasonId = ' + model.getAttendanceReasonId());
-            }catch(e){
-                console.info('ERROR setAttendance: type = ' + type + ', reasonId = ' + model.getAttendanceReasonId());
-            }
             var items = this.getContext().getSession().get('attendanceData');
             var item = items.filter(function(item){
                 return item.getClassPersonId() == model.getClassPersonId()
             })[0];
             item.setType(type);
+            try{
+                if(model.getAttendanceReasonId() && model.getAttendanceReasonId().valueOf() && item.getReasons().filter(function(item){
+                    return item.getAttendanceType() == type && item.getId() == model.getAttendanceReasonId();
+                }).length == 0)
+                    console.info('WARNING setAttendance: type = ' + type + ', reasonId = ' + model.getAttendanceReasonId());
+                else
+                    this.attendanceService.setAttendance(model.getClassPersonId(), model.getClassPeriodId(), type, model.getAttendanceReasonId(), model.getDate());
+
+            }catch(e){
+                console.info('ERROR setAttendance: type = ' + type + ', reasonId = ' + model.getAttendanceReasonId());
+            }
             if(model.getAttendanceReasonId() && model.getAttendanceReasonId().valueOf()){
                 if(item.getAttendanceReason()){
                     item.getAttendanceReason().setId(model.getAttendanceReasonId());
