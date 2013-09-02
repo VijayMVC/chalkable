@@ -161,6 +161,7 @@ var Msg = {
     School: 'School',
     Score: 'Score',
     Screenshot: oneOrMany('Screenshot'),
+    Settings: 'Settings',
     Simple: 'Simple',
     Source: 'Source',
     Staff: 'Staff',
