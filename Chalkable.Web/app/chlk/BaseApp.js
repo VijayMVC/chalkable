@@ -29,15 +29,32 @@ REQUIRE('chlk.controls.ImageControl');
 
 REQUIRE('chlk.models.common.Role');
 REQUIRE('chlk.models.schoolYear.MarkingPeriod');
+REQUIRE('chlk.models.attendance.AttendanceReason');
+
+REQUIRE('chlk.AppApiHost');
 
 NAMESPACE('chlk', function (){
+
+    /** @class chlk.ConvertersFactory */
+    CLASS(
+        'ConvertersFactory', IMPLEMENTS(ria.templates.IConverterFactory), [
+            [[ImplementerOf(ria.templates.IConverter)]],
+            Boolean, function canCreate(converterClass) {
+                return true;
+            },
+
+            [[ImplementerOf(ria.templates.IConverter)]],
+            ria.templates.IConverter, function create(converterClass) {
+                return new converterClass();
+            }
+        ]);
 
     /** @class chlk.BaseApp */
     CLASS(
         'BaseApp', EXTENDS(ria.mvc.Application), [
             function $(){
                 BASE();
-
+                this.apiHost_ = new chlk.AppApiHost();
             },
 
             OVERRIDE, ria.mvc.ISession, function initSession_() {
@@ -74,6 +91,8 @@ NAMESPACE('chlk', function (){
 
             OVERRIDE, ria.async.Future, function onStart_() {
 
+                ria.templates.ConverterFactories.register(new chlk.ConvertersFactory());
+
                 //TODO Remove jQuery
                 jQuery(document).on('mouseover', '[data-tooltip]', function(){
                     var node = jQuery(this), tooltip = jQuery('#chlk-tooltip-item'), offset = node.offset();
@@ -92,6 +111,7 @@ NAMESPACE('chlk', function (){
                     tooltip.find('.tooltip-content').html('');
                 });
 
+                this.apiHost_.onStart(this.context);
 
                 return BASE()
                     .then(function(data){
@@ -101,8 +121,11 @@ NAMESPACE('chlk', function (){
                                 .appendTo("#logout-block");
                         return data;
                     }, this);
-            }
+            },
 
+            OVERRIDE, function onStop_() {
+                this.apiHost_.onStop();
+            }
 
         ]);
 });

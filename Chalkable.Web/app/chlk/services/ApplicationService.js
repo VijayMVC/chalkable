@@ -41,10 +41,11 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.apps.Application]],
             function switchApp(app){
                 this.getContext().getSession().set('currentApp', app);
+                return app;
             },
 
             function getCurrentApp(){
-                return this.getContext().getSession().get('currentApp') || {};
+                return this.getContext().getSession().get('currentApp') || new chlk.models.apps.Application();
             },
 
             [[Boolean]],
@@ -69,12 +70,25 @@ NAMESPACE('chlk.services', function () {
                 return obj ? obj.map(function(item){ return item.valueOf();}).join(',') : "";
             },
 
-            [[chlk.models.id.AppId]],
-            ria.async.Future, function getInfo(appId_) {
+            [[chlk.models.id.AppId, Boolean]],
+            ria.async.Future, function getInfo(appId_, switchApp_) {
+                var mustSwitch = switchApp_ ? switchApp_ : true;
                 return appId_
-                    ? this.get('Application/GetInfo.json', chlk.models.apps.Application, {applicationId: appId_.valueOf()})
+                    ? this
+                        .get('Application/GetInfo.json', chlk.models.apps.Application, {applicationId: appId_.valueOf()})
+                        .then(function(app){
+                            return new ria.async.DeferredData(mustSwitch ? this.switchApp(app) : app);
+                        }, this)
                     : ria.async.DeferredData(this.getCurrentApp());
 
+            },
+
+            [[chlk.models.id.AppId]],
+            ria.async.Future, function getLiveAppInfo() {
+                var currentApp = this.getCurrentApp();
+                var liveAppId = null;
+                liveAppId = currentApp.getLiveAppId() ? currentApp.getLiveAppId() : null;
+                return this.getInfo(liveAppId, false);
             },
 
 
@@ -93,11 +107,21 @@ NAMESPACE('chlk.services', function () {
                         .post('Application/Approve.json', Boolean, {applicationId: appId.valueOf()});
             },
 
+            [[chlk.models.id.AppId]],
+            ria.async.Future, function declineApp(appId) {
+                return this
+                    .post('Application/Decline.json', Boolean, {applicationId: appId.valueOf()});
+            },
+
 
             [[chlk.models.id.AppId]],
             ria.async.Future, function goLive(appId) {
                 return this
-                    .post('Application/GoLive.json', Boolean, {applicationId: appId.valueOf()});
+                    .post('Application/GoLive.json', Boolean, {applicationId: appId.valueOf()})
+                    .then(function(data){
+                        var currentApp = this.getCurrentApp();
+                        return this.getInfo(currentApp.getId());
+                    }, this)
             },
 
 
@@ -105,13 +129,10 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function unlist(appId) {
                 return this
                     .post('Application/Unlist.json', Boolean, {applicationId: appId.valueOf()});
+
             },
 
-            [[chlk.models.id.AppId]],
-            ria.async.Future, function declineApp(appId) {
-                return this
-                    .post('Application/Decline.json', Boolean, {applicationId: appId.valueOf()});
-            },
+
 
 
             [[chlk.models.id.SchoolPersonId, String]],
@@ -125,8 +146,7 @@ NAMESPACE('chlk.services', function () {
                         return this.getDevApps(true)
                         .then(function(items){
                             this.devApplicationListChange.notify([items]);
-                            this.switchApp(data);
-                            return data;
+                            return this.switchApp(data);
                         }, this)
                     }, this);
             },
@@ -138,8 +158,7 @@ NAMESPACE('chlk.services', function () {
                         return this.getDevApps(true)
                             .then(function(items){
                                 this.devApplicationListChange.notify([items]);
-                                this.switchApp(items.length > 0 ? items[items.length - 1] : new chlk.models.apps.Application());
-                                return data;
+                                return this.switchApp(items.length > 0 ? items[items.length - 1] : new chlk.models.apps.Application());
                             }, this)
                     }, this);
             },
@@ -165,10 +184,13 @@ NAMESPACE('chlk.services', function () {
                     developerId: devId.valueOf(),
                     applicationAccessInfo: appAccess.getPostData(),
                     categories: this.arrayToIds(categories),
-                    //add pictures
+                    picturesid: this.arrayToIds(pictures_ || ""),
                     gradeLevels: this.arrayToIds(gradeLevels),
                     forSubmit: forSubmit
                 })
+                .then(function(newApp){
+                    return this.switchApp(newApp);
+                }, this);
                 //here only if name was changed
             },
 
@@ -185,8 +207,5 @@ NAMESPACE('chlk.services', function () {
                     new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(7), "Discipline")
                 ];
             }
-
-
-
         ])
 });

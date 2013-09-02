@@ -5,6 +5,7 @@ REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.id.AttendanceReasonId');
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.period.Period');
+REQUIRE('chlk.models.attendance.AttendanceReason');
 
 NAMESPACE('chlk.models.attendance', function () {
     "use strict";
@@ -29,6 +30,15 @@ NAMESPACE('chlk.models.attendance', function () {
             chlk.models.people.User, 'student',
 
             [ria.serialize.SerializeProperty('attendancereasonid')],
-            chlk.models.id.AttendanceReasonId, 'attendanceReasonId'
+            chlk.models.id.AttendanceReasonId, 'attendanceReasonId',
+
+            [ria.serialize.SerializeProperty('attendancereason')],
+            chlk.models.attendance.AttendanceReason, 'attendanceReason',
+
+            ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
+
+            String, 'submitType',
+
+            String, 'attendanceReasonDescription'
         ]);
 });

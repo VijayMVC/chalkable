@@ -15,15 +15,6 @@ NAMESPACE('chlk.models.attendance', function () {
         NA: 1
     });
 
-    /** @class chlk.models.attendance.AttendanceTypesName*/
-    ENUM('AttendanceTypesName', {
-        2: 'Present',
-        4: 'Excused',
-        8: 'Absent',
-        16: 'Late',
-        1: 'N/A'
-    });
-
     /** @class chlk.models.attendance.ClassList*/
     CLASS(
         'ClassList', EXTENDS(chlk.models.common.PageWithClasses), [

@@ -70,7 +70,7 @@
     height: 61px;
     @include border-radius(5px 5px 0 0);
 
-    >span{
+    >span, >A{
       color: #5d5d5d;
       text-shadow: 1px 1px 0 white;
       font: bold 12px Arial;

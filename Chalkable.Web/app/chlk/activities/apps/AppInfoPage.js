@@ -1,6 +1,7 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.apps.AppInfo');
 REQUIRE('chlk.templates.apps.AppPicture');
+REQUIRE('chlk.templates.apps.AppScreenshots');
 
 NAMESPACE('chlk.activities.apps', function () {
 
@@ -14,7 +15,7 @@ NAMESPACE('chlk.activities.apps', function () {
         [ria.mvc.TemplateBind(chlk.templates.apps.AppInfo)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppPicture, 'icon', '.icon', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppPicture, 'banner', '.banner', ria.mvc.PartialUpdateRuleActions.Replace)],
-        //[ria.mvc.PartialUpdateRule(chlk.templates.apps.AppPicture, 'screenshot', '.screenshots', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppScreenshots, 'screenshots', '.screenshot-pictures', ria.mvc.PartialUpdateRuleActions.Replace)],
 
         'AppInfoPage', EXTENDS(chlk.activities.lib.TemplatePage), [
             function $(){
@@ -52,7 +53,7 @@ NAMESPACE('chlk.activities.apps', function () {
                 this.onFormChange(node, event);
             },
 
-            [ria.mvc.DomEventBind('input', 'input')],
+            [ria.mvc.DomEventBind('keyup', 'input')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function inputsChanged(node, event){
                 this.onFormChange(node, event);

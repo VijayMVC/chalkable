@@ -2,7 +2,7 @@ mixin Thumbnail(id, url, title, dimsX, dimsY, pictureCls, readOnly)
     .thumbnail(class=pictureCls)
         if !readOnly
             +ActionLink('apps', 'deletePicture', [title, dimsX, dimsY]).close-btn
-            +LoadingImage(src=url)
+        +LoadingImage(src=url)
 
 
 mixin IconBox(id, url, title, dimsX, dimsY, pictureCls, readOnly)

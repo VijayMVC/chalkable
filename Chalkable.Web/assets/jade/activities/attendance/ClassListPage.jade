@@ -3,7 +3,6 @@
     topItems = topData.getTopItems();
     selectedId = topData.getSelectedItemId();
     valuesEnum = chlk.models.attendance.AttendanceTypesValue;
-    namesEnum = chlk.models.attendance.AttendanceTypesName;
     +LeftRightToolbar(topItems, chlk.templates.class.TopBar, 'attendance', 'classList')(
         selectedItemId=selectedId ? selectedId.valueOf() : ""
     ).classes-bar
@@ -33,13 +32,13 @@
                     A(class=self.isByLastName()?"":"pressed").action-button.first-last=Msg.First_name
                     A(class=self.isByLastName()?"pressed":"").action-button.first-last=Msg.Last_name
         .grid-container.loader-container
-            +ListView(self.getItems())#class-attendance-list-panel.people-list
+            +ListView(self.getItems())(
+                selectedIndex = 0
+            )#class-attendance-list-panel.people-list
                 each item, i in self.getItems()
                     .row(class=(i == 0 ? 'selected' : ''), index=i)
-                        value = item.getType();
-                        needDropdown = (value > valuesEnum.PRESENT.valueOf()) && (self.getReasons().filter(function(item){return item.attendancetype == value}).length);
-                        reason = needDropdown ? (item.getAttendanceReason() ? item.getAttendanceReason().getDescription() : '') : '';
-                        name = namesEnum[value].valueOf();
+                        if(i == 0 && item.getType() == valuesEnum.NA.valueOf())
+                            -item.setType(valuesEnum.PRESENT.valueOf());
                         student = item.getStudent();
                         +ActionLink('students', 'info', student.getId().valueOf()).left.image-container.white.shadow
                             +PersonImg(student, 47)
@@ -49,22 +48,7 @@
                                 len = self.getItems().length;
                                 if (i== 5 || (i == len - 1 && len < 6))
                                     .keyboard-suggestion
-                                .attendance-option
-                                div(class=name.toLowerCase().replace(/\//g, '-')).attendance-text
-                                    =(value == valuesEnum.NA.valueOf() ? '_______' : name)
-                                .attendance-combo
-                                    a(href="javascript:").left-arrow
-                                        span
-                                    div(class=needDropdown ? "with-dropdown" : '').current-attendance
-                                    a(href="javascript:").right-arrow
-                                        span
-                                    .combo-list
-                                        .connector
-                                            div(class=(reason ? "" : "selected")).option=name
-                                            each reasonItem in self.getReasons()
-                                                div(
-                                                    class=(reasonItem.getId() == reason.getId() ? "selected" : ""),
-                                                    data-id=reasonItem.getId().valueOf()
-                                                ).option=reasonItem.getDescription()
-                                            .press-enter=Msg.Press_enter
+                                div(class="container-" + item.getClassPersonId().valueOf())
+                                    -item.setReasons(self.getReasons());
+                                    +RenderWith(item, chlk.templates.attendance.ClassAttendance)
                         .clear

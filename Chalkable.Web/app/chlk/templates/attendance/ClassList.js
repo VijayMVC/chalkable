@@ -1,6 +1,8 @@
 REQUIRE('chlk.templates.common.PageWithClasses');
 REQUIRE('chlk.models.attendance.ClassList');
 
+REQUIRE('chlk.converters.ClassAttendanceIdToNameConverter');
+
 NAMESPACE('chlk.templates.attendance', function () {
 
     /** @class chlk.templates.attendance.ClassList*/

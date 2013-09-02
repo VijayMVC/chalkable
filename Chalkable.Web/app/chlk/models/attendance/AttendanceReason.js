@@ -11,6 +11,15 @@ NAMESPACE('chlk.models.attendance', function () {
 
             chlk.models.id.AttendanceReasonId, 'id',
 
-            String, 'description'
+            String, 'description',
+
+            [[chlk.models.id.AttendanceReasonId, String]],
+            function $(id_, description_){
+                BASE();
+                if(id_)
+                    this.setId(id_);
+                if(description_)
+                    this.setDescription(description_);
+            }
         ]);
 });

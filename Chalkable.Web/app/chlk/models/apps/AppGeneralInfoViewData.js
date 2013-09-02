@@ -6,18 +6,15 @@ NAMESPACE('chlk.models.apps', function () {
     CLASS(
         'AppGeneralInfoViewData', [
             chlk.models.apps.Application, 'app',
+            chlk.models.apps.Application, 'liveApp',
+            Boolean, 'isLiveApp',
             String, 'appThumbnail',
-            [[chlk.models.apps.Application]],
-            function $(app){
+            [[chlk.models.apps.Application, chlk.models.apps.Application, String]],
+            function $(app, liveApp, appThumbnail){
                 this.setApp(app);
-
-
-
-                //var pictureId = app.getSmallPictureId().valueOf();
-                //this.setAppThumbnal(pictureId ? )
-                //if (){
-                //    appThumbnal =
-                //}
+                this.setLiveApp(liveApp);
+                this.setAppThumbnail(appThumbnail);
+                this.setIsLiveApp(app.getId() != liveApp.getId());
             }
         ]);
 });
