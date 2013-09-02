@@ -1,0 +1,66 @@
++ActionForm('message', 'do')
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('message', 'sendPage', []) +new message
+            .right
+                +ActionLink('message', 'page', [true, true, self.getRole(), self.getKeyword()])(class=self.isInbox() ? "pressed" : "") inbox
+                +ActionLink('message', 'page', [true, false, self.getRole(), self.getKeyword()])(class=self.isInbox() ? "" : "pressed") sent
+                input(name="role", type="hidden", value=self.getRole())
+                input(name="inbox", type="hidden", value=self.isInbox())
+                input(name="keyword", type="text", value=self.getKeyword())
+                +Button()(type="submit", submitType="search") Ok
+
+    .action-bar.buttons.filter
+        .container.panel-bg
+            .left
+                +Checkbox('checkboxall', false)
+                +Button()(type="submit", , name="submitType", value="delete").special-button#delete-button Delete
+                if self.isInbox()
+                    |Mark
+                    +Button()(type="submit", name="submitType", value="markAsRead").special-button#mark-read-button Read
+                    +Button()(type="submit", name="submitType", value="markAsUnread").special-button#mark-unread-button Unread
+            .right
+                |View
+                +ActionLink('message', 'page', [true, self.isInbox(), '', self.getKeyword()]) All
+                +ActionLink('message', 'page', [true, self.isInbox(), 'parent', self.getKeyword()]) Parent
+                +ActionLink('message', 'page', [true, self.isInbox(), 'student', self.getKeyword()]) Student
+                +ActionLink('message', 'page', [true, self.isInbox(), 'teacher', self.getKeyword()]) Teacher
+                +ActionLink('message', 'page', [true, self.isInbox(), 'admingrade,adminedit,adminview', self.getKeyword()]) Admin
+    input(name="selectedIds", type="hidden")#selectedIds
+    +Grid('message', 'page', self.getMessages(), [true, self.isInbox(), self.getRole(), self.getKeyword()]).not-transparent
+        //
+            +GridHead()
+                .th
+                .th Read
+                .th Person
+                .th Subject
+                .th Sent
+        +GridBody()
+            each item in self.getMessages().getItems()
+                +GridRow()
+                    +ActionLink('message', 'viewPage', item.getId().valueOf())
+                        +Checkbox(item.getId().valueOf(), false)(name='ch')
+                        span= item.isRead()
+                        if self.isInbox()
+                            img.avatar.avatar47(class=item.getSender().getGender(), src=self.getPictureURL(item.getSender().getId(), 47))
+                        else
+                            img.avatar.avatar47(class=item.getRecipient().getGender(), src=self.getPictureURL(item.getRecipient().getId(), 47))
+
+                        span= item.getSubject()
+                        span= item.getSent().toString('dd/m/yy hh:min:ss')
+                    //
+                        .td
+                            +Checkbox(item.getId().valueOf(), false)(name='ch')
+                        .td=item.isRead()
+                        .td
+                            if self.isInbox()
+                                +ActionLink('teachers', 'info', item.getSender().getId().valueOf()).left.image-container.white.shadow
+                                    img.avatar.avatar47(class=item.getSender().getGender(), src=self.getPictureURL(item.getSender().getId(), 47))
+                            else
+                                +ActionLink('teachers', 'info', item.getRecipient().getId().valueOf()).left.image-container.white.shadow
+                                    img.avatar.avatar47(class=item.getRecipient().getGender(), src=self.getPictureURL(item.getRecipient().getId(), 47))
+                        .td= item.getSubject()
+                        .td=item.getSent().toString('dd/m/yy hh:min:ss')
+
+
