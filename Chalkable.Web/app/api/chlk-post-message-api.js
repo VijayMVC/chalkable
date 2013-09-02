@@ -1,4 +1,4 @@
-
+//todo: add enums
 
 var chlkRequestSiteRoot = function () {
     var result = "";
@@ -31,22 +31,37 @@ var chlkGetDomain = function(url){
     return result;
 }
 
-var CHLK_MESSENGER = (function(){
+var CHLK_MESSENGER = (function () {
+
+
+    var ChlkActionTypes = {
+        ADD_ME: 'addMe',
+        CLOSE_ME : 'closeMe',
+        SAVE_ME: 'saveMe',
+        SHOW_PLUS: 'showPlus',
+        ADD_YOURSELF: 'addYourself',
+        UPDATE_ORIGIN: 'updateOrigin',
+        REQUEST_ORIGIN: 'requestOrigin',
+    };
     var messenger = {
         parentURL: chlkRequestSiteRoot(),
+
+
+
+
         updated: false,
         closeMe : function(data){
-            this.postAction(data, 'closeMe', this.parentURL);
+            this.postAction(data, ChlkActionTypes.CLOSE_ME, this.parentURL);
         },
 
         requestOrigin: function(data){
-            this.postAction(data, 'requestOrigin', "*");
+            this.postAction(data, ChlkActionTypes.REQUEST_ORIGIN, "*");
         },
 
         updateOrigin: function(origin){
             this.parentURL = origin;
             this.updated = true;
-            var res = {action: 'showPlus', isApp : true};
+            var res = {action: ChlkActionTypes.SHOW_PLUS, isApp : true};
             this.postMessage(res, null, this.parentURL);
         },
 
@@ -58,16 +73,16 @@ var CHLK_MESSENGER = (function(){
         },
 
         addMe : function(data){
-            this.postAction(data, 'addMe', this.parentURL);
+            this.postAction(data, ChlkActionTypes.ADD_ME, this.parentURL);
         },
 
         saveMe : function(data){
-            this.postAction(data, 'saveMe', this.parentURL);
+            this.postAction(data, ChlkActionTypes.SAVE_ME, this.parentURL);
         },
 
         addApp : function(rWindow, rURL, data){
             var res = data || {};
-            res.action = 'addYourself';
+            res.action = ChlkActionTypes.ADD_YOURSELF;
             this.postMessage(res, rWindow, rURL);
         },
 
@@ -96,13 +111,13 @@ var CHLK_MESSENGER = (function(){
             }
             var that = this;
             function callback(e){
-                if(e.data.action === 'addYourself'){
+                if (e.data.action === ChlkActionTypes.ADD_YOURSELF) {
                     var attach = !!e.data.attach;
                     var result = fn(e.data);
                     attach === true ? CHLK_MESSENGER.addMe({appReady: result})
                                     : CHLK_MESSENGER.saveMe({appReady: result});
                 }
-                if (e.data.action === 'updateOrigin'){
+                if (e.data.action === ChlkActionTypes.UPDATE_ORIGIN){
                     that.updateOrigin(e.origin);
                 }
             }

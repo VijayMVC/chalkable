@@ -33,6 +33,6 @@ NAMESPACE('chlk.models.apps', function () {
 
             chlk.models.id.PictureId, 'appIconId',
             chlk.models.id.PictureId, 'appBannerId',
-            String, 'appScreenShotIds'
+            String, 'appScreenshots'
         ]);
 });

@@ -13,6 +13,11 @@ function formatDate(date, format){
     return $.datepicker.formatDate(format, date || getDate());
 }
 
+
+function getDateDiffInDays(begin, end){
+    return Math.ceil((end - begin)/1000/3600/24);
+}
+
 NAMESPACE('chlk.models.common', function () {
     "use strict";
 

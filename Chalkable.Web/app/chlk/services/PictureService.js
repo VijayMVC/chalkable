@@ -15,7 +15,7 @@ NAMESPACE('chlk.services', function () {
                 if (width_){
                     suffix =  height_ ? "-" + width_ + "x" + height_ : "-" + width_ + "x" + width_;
                 }
-                return id.valueOf() ? prefix + id.valueOf() + suffix: '#';
+                return id && id.valueOf() ? prefix + id.valueOf() + suffix: '#';
             }
         ])
 });

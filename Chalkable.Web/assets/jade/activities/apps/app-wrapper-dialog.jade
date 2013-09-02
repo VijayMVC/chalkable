@@ -1,0 +1,12 @@
+.app-wrapper
+    .x-window-header
+        .toolbar
+            each btn in self.buttons
+                btnTarget = btn.isTargetBlank() ? "_blank" : undefined
+                url = btn.getUrl() ? btn.getUrl() : "javascript:void(0)"
+                a(id=btn.getId(), target = btnTarget, href= url)=btn.getTitle()
+        .x-close-btn.close
+    .iframe-wrap
+        iframe
+
+

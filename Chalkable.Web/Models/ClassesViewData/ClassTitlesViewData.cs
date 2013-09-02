@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Chalkable.Data.School.Model;
 
@@ -11,7 +12,9 @@ namespace Chalkable.Web.Models.ClassesViewData
         {
            return new ClassHoverBoxViewData<ClassAttendanceHoverViewData>
                 {
-                    Title = ((100*attendances.Count(x => x.Type == AttendanceTypeEnum.Absent))/possibleAbsents).ToString(),
+                    Title = possibleAbsents > 0 
+                        ? ((100 * attendances.Count(x => x.Type == AttendanceTypeEnum.Absent)) / possibleAbsents).ToString(CultureInfo.InvariantCulture) 
+                        : "0",
                     Hover = ClassAttendanceHoverViewData.Create(attendances)
                 };
         }

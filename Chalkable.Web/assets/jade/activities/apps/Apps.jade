@@ -1,5 +1,7 @@
-mixin AppManagementControls(id, state)
-    if state.getStateId() != chlk.models.apps.AppStateEnum.SUBMIT_FOR_APPROVE
+mixin AppManagementControls(id, state, liveId)
+    if (liveId && liveId.valueOf())
+        span Live
+    else if state.getStateId() != chlk.models.apps.AppStateEnum.SUBMIT_FOR_APPROVE
         span=state.toString()
     else
         +ActionLink('apps', 'approve', id).btn Approve
@@ -17,13 +19,14 @@ mixin AppManagementControls(id, state)
         +GridBody()
             each item in self.items
                 +GridRow()
-                    pictureLink = item.getSmallPictureId() ? self.getPictureURL(item.getSmallPictureId(), 74) : '#'
+
+                    pictureLink = item.getSmallPictureId() ? self.getPictureURL(item.getSmallPictureId(), 74, 74) : '#'
                     .td
                         img.app-icon(src=pictureLink)
                     .td= item.getName()
                     .td= item.getShortDescription()
                     .td.app-state
-                        +AppManagementControls(item.getId(), item.getState())
+                        +AppManagementControls(item.getId(), item.getState(), item.getLiveAppId())
                     .td
                         +Checkbox('isInternal', item.isInternal())
                     .td.action-links

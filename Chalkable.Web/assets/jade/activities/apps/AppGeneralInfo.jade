@@ -1,20 +1,24 @@
-mixin RenderAppState(id, state, hasLiveApp)
-    .app-status=state.toString(hasLiveApp)
-    if state == chlk.models.apps.AppStateEnum.APPROVED
-        +ActionLink('apps', 'goLive', id) Live
-    if state == chlk.models.apps.AppStateEnum.LIVE
-        +ActionLink('apps', 'unlist', id) Unlist
+mixin RenderAppState(id, state, liveAppId, isLiveApp)
+    stateId = state.getStateId()
+    .app-status=state.toString(isLiveApp)
+    if isLiveApp
+        +ActionLink('apps', 'unlist', liveAppId.valueOf(), id.valueOf()) Unlist
+    else
+        if stateId  == chlk.models.apps.AppStateEnum.APPROVED
+            +ActionLink('apps', 'goLive', id) Live
+
 app = self.getApp()
+liveApp = self.getLiveApp()
 
 .app-general-info
     .action-bar.not-transparent.dev-app-info
         .container.panel-bg
     .app-header
         .app-icon
-            img(src="#", width=100, height=80)
+            img(src=self.appThumbnail, width=100, height=80)
         .app-description
             .title=app.getName()
-            +RenderAppState(app.getId(), app.getState(), app.getLiveAppId())
+            +RenderAppState(app.getId(), liveApp.getState(), liveApp.getId(), self.isLiveApp)
 
 
 

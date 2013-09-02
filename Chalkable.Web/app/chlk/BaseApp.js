@@ -30,6 +30,9 @@ REQUIRE('chlk.controls.ImageControl');
 
 REQUIRE('chlk.models.common.Role');
 REQUIRE('chlk.models.schoolYear.MarkingPeriod');
+REQUIRE('chlk.models.attendance.AttendanceReason');
+
+REQUIRE('chlk.AppApiHost');
 
 NAMESPACE('chlk', function (){
 
@@ -52,6 +55,7 @@ NAMESPACE('chlk', function (){
         'BaseApp', EXTENDS(ria.mvc.Application), [
             function $(){
                 BASE();
+                this.apiHost_ = new chlk.AppApiHost();
             },
 
             OVERRIDE, ria.mvc.ISession, function initSession_() {
@@ -108,6 +112,7 @@ NAMESPACE('chlk', function (){
                     tooltip.find('.tooltip-content').html('');
                 });
 
+                this.apiHost_.onStart(this.context);
 
                 return BASE()
                     .then(function(data){
@@ -117,8 +122,11 @@ NAMESPACE('chlk', function (){
                                 .appendTo("#logout-block");
                         return data;
                     }, this);
-            }
+            },
 
+            OVERRIDE, function onStop_() {
+                this.apiHost_.onStop();
+            }
 
         ]);
 });

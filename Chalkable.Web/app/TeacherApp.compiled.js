@@ -1913,7 +1913,7 @@ exports.globals = {};
         var ExceptionMeta = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([ "Exception", [ [ [ String, Object ] ], function $(msg, inner_) {}, String, function toString() {}, String, function getMessage() {}, Array, function getStack() {} ] ]));
         ria.__SYNTAX.Registry.registry("Exception", ExceptionMeta);
     })();
-    __ASSETS._ihgenbsa8l6ry66r = function anonymous(locals) {
+    __ASSETS._2pnt1wcpwwjnhfr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.ActionLink_mixin.call({
@@ -2052,7 +2052,7 @@ exports.globals = {};
         buf.push("</div></div></div>");
         return buf.join("");
     };
-    __ASSETS._y24qgi22nfiozuxr = function anonymous(locals) {
+    __ASSETS._tsj822rosin0o1or = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         currentUserName = self.getCurrentPerson().getDisplayName();
@@ -3886,7 +3886,7 @@ exports.globals = {};
             };
         })();
     })();
-    __ASSETS._khpycj2hu9q0vn29 = function anonymous(locals) {
+    __ASSETS._o2nzrmzbsj0jm7vi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.ActionForm_mixin = function(controller, action) {
@@ -3901,15 +3901,15 @@ exports.globals = {};
         };
         jade.globals.Hidden_mixin = function(hidName, hidValue) {
             var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
-            buf.push("<input" + jade.attrs({
+            buf.push("<input" + jade.attrs(jade.merge({
                 type: "hidden",
                 name: hidName,
                 value: hidValue
-            }, {
+            }, attributes), jade.merge({
                 type: true,
                 name: true,
                 value: true
-            }) + "/>");
+            }, escaped, true)) + "/>");
         };
         return buf.join("");
     };
@@ -3979,7 +3979,7 @@ exports.globals = {};
     (function() {
         (chlk = chlk || {}).controls = chlk.controls || {};
         (function() {
-            var r20 = /%20/g, rbracket = /\[\]$/, rCRLF = /\r?\n/g, rreturn = /\r/g, rsubmitterTypes = /^(?:submit|button|image|reset|file)$/i, manipulation_rcheckableType = /^(?:checkbox|radio)$/i, rsubmittable = /^(?:input|select|textarea|keygen)/i;
+            var r20 = /%20/g, rbracket = /\[\]$/, rCRLF = /\r?\n/g, rreturn = /\r/g, rsubmitterTypes = /^(?:submit|button|image|reset)$/i, manipulation_rcheckableType = /^(?:checkbox|radio)$/i, rsubmittable = /^(?:input|select|textarea|keygen)/i;
             function isNodeName(elem, name) {
                 return elem.nodeName && elem.nodeName.toLowerCase() === name.toLowerCase();
             }
@@ -4021,6 +4021,10 @@ exports.globals = {};
                     var type = _.type;
                     return _.name && !ria.dom.Dom(_).is(":disabled") && rsubmittable.test(_.nodeName) && !rsubmitterTypes.test(type) && (_.checked || !manipulation_rcheckableType.test(type));
                 }).map(function(elem) {
+                    if (elem.type.toLowerCase() == "file") return {
+                        name: elem.name,
+                        value: elem.files
+                    };
                     var val = valueOfElement(elem);
                     return val == null ? null : isArray(val) ? val.map(function(val) {
                         return {
@@ -4040,7 +4044,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("ActionFormControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_khpycj2hu9q0vn29")(this);
+                ASSET("_o2nzrmzbsj0jm7vi")(this);
             }, [ ria.mvc.DomEventBind("click", "FORM [type=submit]") ], [ [ ria.dom.Dom, ria.dom.Event ] ], Boolean, function submitClicked_($target, event) {
                 var $form = $target.parent("FORM");
                 $form.setData("submit-name", $target.getAttr("name"));
@@ -4086,7 +4090,7 @@ exports.globals = {};
                 }
                 return true;
             }, Boolean, "onlySubmitValidate", [ [ Object ] ], ria.__SYNTAX.Modifiers.VOID, function prepareData(attributes) {
-                var formSelector = attributes.id ? "#" + attributes.id : attributes.class ? "." + attributes.class : "form";
+                attributes.id = attributes.id || ria.dom.NewGID();
                 if (attributes.onlySubmitValidate) {
                     this.setOnlySubmitValidate(true);
                 } else {
@@ -4097,7 +4101,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._nrpc6mehvog30udi = function anonymous(locals) {
+    __ASSETS._a2rog4oxpqm5nrk9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.LabeledCheckbox_mixin = function(text, name, val, isReadOnly) {
@@ -4129,32 +4133,24 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("LabeledCheckboxControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_nrpc6mehvog30udi")(this);
+                ASSET("_a2rog4oxpqm5nrk9")(this);
             }, [ [ ria.dom.Dom, ria.dom.Event ] ], Boolean, function changed_($target, event) {} ]);
         })();
     })();
-    __ASSETS._86rjiaon48q41jor = function anonymous(locals) {
+    __ASSETS._9gtklxwo131bgldi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.SlideCheckbox_mixin = function(name, val, isReadOnly) {
             var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
-            console.log("readonly", isReadOnly);
             buf.push("<div" + jade.attrs(jade.merge({
                 "class": "slide-checkbox"
             }, attributes), jade.merge({}, escaped, true)) + '><div class="wrapper">');
-            jade.globals.Hidden_mixin.call({
-                buf: buf
-            }, name, false);
             attributes.checked = val;
-            buf.push("<input" + jade.attrs(jade.merge({
-                id: name,
-                name: name,
-                type: "checkbox"
-            }, attributes), jade.merge({
-                id: true,
-                name: true,
-                type: true
-            }, escaped, true)) + "/>");
+            jade.globals.Checkbox_mixin.call({
+                buf: buf,
+                attributes: jade.merge({}, attributes),
+                escaped: jade.merge({}, escaped, true)
+            }, name, val);
             if (!isReadOnly) {
                 buf.push("<label" + jade.attrs({
                     "for": name
@@ -4179,11 +4175,11 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("SlideCheckboxControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_86rjiaon48q41jor")(this);
+                ASSET("_9gtklxwo131bgldi")(this);
             } ]);
         })();
     })();
-    __ASSETS._7tewvcgzbhkyy14i = function anonymous(locals) {
+    __ASSETS._ss6l2rsak5nopqfr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.ActionLink_mixin = function(controller, action) {
@@ -4214,7 +4210,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("ActionLinkControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_7tewvcgzbhkyy14i")(this);
+                ASSET("_ss6l2rsak5nopqfr")(this);
             }, [ [ Array ] ], String, function getLink(values) {
                 if (!values[2] || Array.isArray(values[2]) && !values[2].length) values.splice(2, 1);
                 return encodeURIComponent(values.map(function(_) {
@@ -4247,7 +4243,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._v6p97ap0l6tdfgvi = function anonymous(locals) {
+    __ASSETS._da00q73f1r2akyb9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.Avatar_mixin = function(link, cls, border) {
@@ -4277,11 +4273,11 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("AvatarControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_v6p97ap0l6tdfgvi")(this);
+                ASSET("_da00q73f1r2akyb9")(this);
             } ]);
         })();
     })();
-    __ASSETS._01ntmdla1zrjatt9 = function anonymous(locals) {
+    __ASSETS._g5528ay2z8pk3xr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.Button_mixin = function() {
@@ -4320,7 +4316,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("ButtonControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_01ntmdla1zrjatt9")(this);
+                ASSET("_g5528ay2z8pk3xr")(this);
             }, [ [ Object ] ], Object, function processAttrs(attributes) {
                 if (attributes.disabled) if (Array.isArray(attributes.class)) {
                     attributes.class = attributes.class || [];
@@ -4332,7 +4328,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._oq7zlte8qgogk3xr = function anonymous(locals) {
+    __ASSETS._vrx1sigr0hfwp14i = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.Checkbox_mixin = function(name, val, isReadOnly) {
@@ -4374,7 +4370,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("CheckboxControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_oq7zlte8qgogk3xr")(this);
+                ASSET("_vrx1sigr0hfwp14i")(this);
             }, [ [ String, Boolean ] ], ria.__SYNTAX.Modifiers.VOID, function prepareData(name, value) {
                 this.context.getDefaultView().onActivityRefreshed(function(activity, model) {
                     var hidden = activity.getDom().find(".hidden-checkbox[name=" + name + "]");
@@ -4389,7 +4385,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._9nii3njovw75jyvi = function anonymous(locals) {
+    __ASSETS._8rwddvi2jawnrk9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.CheckboxList_mixin = function(listName, checkboxPref, defaultVal) {
@@ -4418,7 +4414,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("CheckboxListControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_9nii3njovw75jyvi")(this);
+                ASSET("_8rwddvi2jawnrk9")(this);
             }, [ ria.mvc.DomEventBind("click", ".checkbox-list") ], [ [ ria.dom.Dom, ria.dom.Event ] ], function onClicked($target, node) {
                 var checkboxes = $target.find("input[type=checkbox]");
                 var res = [];
@@ -4434,7 +4430,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._83uaiywbpltvgqfr = function anonymous(locals) {
+    __ASSETS._9spda6cwx0drhpvi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.DatePicker_mixin = function(name, value_) {
@@ -4455,7 +4451,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("DatePickerControl", ria.__SYNTAX.EXTENDS(ria.mvc.DomControl), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_83uaiywbpltvgqfr")(this);
+                ASSET("_9spda6cwx0drhpvi")(this);
             }, Date, "value", [ [ String, Object, Object ] ], Object, function processAttrs(name, value, attrs) {
                 attrs.id = attrs.id || ria.dom.NewGID();
                 attrs.name = name;
@@ -4476,7 +4472,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._rsrxw3swvbvb1emi = function anonymous(locals) {
+    __ASSETS._i2l6uoh5jlvrt3xr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.Select_mixin = function(name, controller, action, params) {
@@ -4534,7 +4530,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("SelectControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_rsrxw3swvbvb1emi")(this);
+                ASSET("_i2l6uoh5jlvrt3xr")(this);
             }, [ [ Object ] ], ria.__SYNTAX.Modifiers.VOID, function updateSelect(node) {
                 var that = this;
                 node.chosen({
@@ -4565,7 +4561,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._6z8jddsl1ve7b9 = function anonymous(locals) {
+    __ASSETS._mj8jphkmn4qp8pvi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.DateSelect_mixin = function() {
@@ -4696,7 +4692,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("DateSelectControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_6z8jddsl1ve7b9")(this);
+                ASSET("_mj8jphkmn4qp8pvi")(this);
             }, Array, "days", Array, "months", Array, "years", [ [ Object ] ], Object, function processAttrs(attributes) {
                 attributes.id = attributes.id || ria.dom.NewGID();
                 var value = attributes.value;
@@ -4751,7 +4747,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._u3d2q20yfucba9k9 = function anonymous(locals) {
+    __ASSETS._xaeixusor = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.FileUpload_mixin = function(controller, action, params) {
@@ -4779,31 +4775,33 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("FileUploadControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_u3d2q20yfucba9k9")(this);
+                ASSET("_xaeixusor")(this);
             }, [ [ Object ] ], Object, function prepareData(attrs) {
                 attrs.id = attrs.id || ria.dom.NewGID();
-                var that = this, params = attrs["data-params"], controller = attrs["data-controller"], action = attrs["data-action"];
-                this.context.getDefaultView().onActivityRefreshed(function(activity, model) {
-                    var node = ria.dom.Dom("#" + attrs.id);
-                    node.on("change", function(target, event) {
-                        var files = target.valueOf()[0].files;
-                        var state = that.context.getState();
-                        params.push(files);
-                        state.setController(controller);
-                        state.setAction(action);
-                        state.setParams(params);
-                        state.setPublic(false);
-                        that.context.stateUpdated();
-                    });
-                }.bind(this));
+                var that = this, params = attrs["data-params"] || [], controller = attrs["data-controller"], action = attrs["data-action"];
+                if (controller) {
+                    this.context.getDefaultView().onActivityRefreshed(function(activity, model) {
+                        var node = ria.dom.Dom("#" + attrs.id);
+                        node.on("change", function(target, event) {
+                            var files = target.valueOf()[0].files;
+                            var state = that.context.getState();
+                            params.push(files);
+                            state.setController(controller);
+                            state.setAction(action);
+                            state.setParams(params);
+                            state.setPublic(false);
+                            that.context.stateUpdated();
+                        });
+                    }.bind(this));
+                }
                 return attrs;
             } ]);
         })();
     })();
-    __ASSETS._7dnma29zy9cnmi = function anonymous(locals) {
+    __ASSETS._xvd3uzjdwwylow29 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
-        jade.globals.GlanceBox_mixin = function(controller, action, data) {
+        jade.globals.GlanceBox_mixin = function(controller, action, data, color) {
             var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
             if (controller) {
                 jade.globals.ActionLink_mixin.call({
@@ -4819,7 +4817,7 @@ exports.globals = {};
                 }, {
                     "class": true
                 }) + "><div><div" + jade.attrs({
-                    "class": "value" + " " + self.getValueClass(data.value)
+                    "class": "value" + " " + (self.getValueClass(data.value) + color ? " " + color : "")
                 }, {
                     "class": true
                 }) + ">" + jade.escape((jade.interp = data.value) == null ? "" : jade.interp) + '</div><p class="glance-title">' + jade.escape((jade.interp = data.title) == null ? "" : jade.interp) + "</p>");
@@ -4830,14 +4828,14 @@ exports.globals = {};
                         if ("number" == typeof $$obj.length) {
                             for (var i = 0, $$l = $$obj.length; i < $$l; i++) {
                                 var item = $$obj[i];
-                                buf.push("<div>" + jade.escape((jade.interp = self.getShortText(item.value, item.title)) == null ? "" : jade.interp) + "</div>");
+                                buf.push("<div>" + jade.escape((jade.interp = self.getShortText(item.getTotal(), item.getSummary())) == null ? "" : jade.interp) + "</div>");
                             }
                         } else {
                             var $$l = 0;
                             for (var i in $$obj) {
                                 $$l++;
                                 var item = $$obj[i];
-                                buf.push("<div>" + jade.escape((jade.interp = self.getShortText(item.value, item.title)) == null ? "" : jade.interp) + "</div>");
+                                buf.push("<div>" + jade.escape((jade.interp = self.getShortText(item.getTotal(), item.getSummary())) == null ? "" : jade.interp) + "</div>");
                             }
                         }
                     }).call(this);
@@ -4859,7 +4857,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("GlanceBoxControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_7dnma29zy9cnmi")(this);
+                ASSET("_xvd3uzjdwwylow29")(this);
             }, [ [ Number ] ], String, function getValueClass(value) {
                 var res = "";
                 if (value >= 100 && value < 1e3) res = "large"; else if (value >= 1e3) res = "small";
@@ -4875,7 +4873,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._lr02fx9pyqr529 = function anonymous(locals) {
+    __ASSETS._pt2g0mbabdx9lik9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.Grid_mixin = function(controller, action, data, params) {
@@ -4924,11 +4922,11 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("GridControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_lr02fx9pyqr529")(this);
+                ASSET("_pt2g0mbabdx9lik9")(this);
             } ]);
         })();
     })();
-    __ASSETS._g4uro2zi3jfko6r = function anonymous(locals) {
+    __ASSETS._rmpex2bgtlu15rk9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.LeftRightToolbar_mixin = function(data, tplClass, controller, action, params) {
@@ -5026,7 +5024,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("LeftRightToolbarControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_g4uro2zi3jfko6r")(this);
+                ASSET("_rmpex2bgtlu15rk9")(this);
                 this.setDefaultConfigs({
                     itemsCount: 8,
                     fixedPadding: false,
@@ -5119,7 +5117,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._e5n0calyz4zpvi = function anonymous(locals) {
+    __ASSETS._2wgnmpjxjhnf80k9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.ListView_mixin = function(data) {
@@ -5145,7 +5143,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("ListViewControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_e5n0calyz4zpvi")(this);
+                ASSET("_2wgnmpjxjhnf80k9")(this);
                 this.setDefaultConfigs({
                     selectedIndex: null,
                     infiniteScroll: false,
@@ -5245,7 +5243,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._g015l4je3mu0udi = function anonymous(locals) {
+    __ASSETS._ryilsm3w4z8semi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.LoadingImage_mixin = function() {
@@ -5266,7 +5264,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("LoadingImgControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_g015l4je3mu0udi")(this);
+                ASSET("_ryilsm3w4z8semi")(this);
             }, [ [ Number, Object ] ], ria.__SYNTAX.Modifiers.VOID, function checkImage(timeOut, img) {
                 var parent = img.parent();
                 setTimeout(function() {
@@ -5291,7 +5289,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._idojvb3optzw7b9 = function anonymous(locals) {
+    __ASSETS._vfh3bbb5kqzuayvi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.Paginator_mixin = function(controller, action, data, params) {
@@ -5377,7 +5375,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("PaginatorControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_idojvb3optzw7b9")(this);
+                ASSET("_vfh3bbb5kqzuayvi")(this);
             }, [ ria.mvc.DomEventBind("submit", ".paginator-container form") ], [ [ ria.dom.Dom, ria.dom.Event ] ], Boolean, function onPrevPageClick(node, event) {
                 try {
                     var state = this.context.getState();
@@ -5419,7 +5417,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._dfewdmdklizwu3di = function anonymous(locals) {
+    __ASSETS._ydqtn0kscsaif6r = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.PhotoContainer_mixin = function(link) {
@@ -5452,11 +5450,11 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("PhotoContainerControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_dfewdmdklizwu3di")(this);
+                ASSET("_ydqtn0kscsaif6r")(this);
             } ]);
         })();
     })();
-    __ASSETS._43vwycavu6czyqfr = function anonymous(locals) {
+    __ASSETS._b7v3ifduos5ah5mi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.Video_mixin = function(iframe) {
@@ -5481,7 +5479,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("VideoControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_43vwycavu6czyqfr")(this);
+                ASSET("_b7v3ifduos5ah5mi")(this);
                 this.setConfigs({
                     wmode: "transparent",
                     allowScriptAccess: "always",
@@ -5505,7 +5503,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._dr4cxh1mcjotuik9 = function anonymous(locals) {
+    __ASSETS._bjeo0opxqg2e29 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.Logout_mixin = function(controller, action, userName) {
@@ -5535,7 +5533,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("LogoutControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_dr4cxh1mcjotuik9")(this);
+                ASSET("_bjeo0opxqg2e29")(this);
                 this.setLogoutShown(false);
             }, Boolean, "logoutShown", [ ria.mvc.DomEventBind("click", ".logout-area") ], [ [ ria.dom.Dom, ria.dom.Event ] ], function onClicked($target, node) {
                 var elem = $target.parent().find("a");
@@ -5551,7 +5549,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._zwuctmaxqvjthuxr = function anonymous(locals) {
+    __ASSETS._qof00lqdrmp9zfr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.TextArea_mixin = function() {
@@ -5576,7 +5574,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("TextAreaControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_zwuctmaxqvjthuxr")(this);
+                ASSET("_qof00lqdrmp9zfr")(this);
             }, [ [ Object ] ], Object, function processAttrs(attributes) {
                 attributes.id = attributes.id || ria.dom.NewGID();
                 this.context.getDefaultView().onActivityRefreshed(function(activity, model) {
@@ -5586,7 +5584,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._br51m69u23xr = function anonymous(locals) {
+    __ASSETS._41crbiipexy74x6r = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.SearchBox_mixin = function(service, method, tpl) {
@@ -6118,7 +6116,7 @@ exports.globals = {};
                 return ria.__SYNTAX.compileClass(name, def);
             }("SearchBoxControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
                 BASE();
-                ASSET("_br51m69u23xr")(this);
+                ASSET("_41crbiipexy74x6r")(this);
             }, [ [ Object, ria.__API.ClassOf(chlk.services.BaseService), String, ria.__API.ClassOf(ria.templates.Template) ] ], ria.__SYNTAX.Modifiers.VOID, function initialize(attrs, service, method, tpl) {
                 attrs.id = attrs.id || ria.dom.NewGID();
                 var serviceIns = this.getContext().getService(service);
@@ -6155,6 +6153,95 @@ exports.globals = {};
                     tpl.assign(fixedInstance);
                     return jQuery(jQuery.parseHTML(tpl.render())).appendTo(ul);
                 };
+            } ]);
+        })();
+    })();
+    __ASSETS._smj47o6q7kg1fw29 = function anonymous(locals) {
+        var buf = [];
+        var self = locals || {};
+        jade.globals.Image_mixin = function() {
+            var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
+            attributes = self.processAttrs(attributes);
+            buf.push("<img" + jade.attrs(jade.merge({}, attributes), jade.merge({}, escaped, true)) + "/>");
+        };
+        jade.globals.PersonImg_mixin = function(person, size) {
+            var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
+            if (person.getGender()) {
+                var src = chlk.templates.JadeTemplate.prototype.getPictureURL(person.getId, size, size);
+                var isWoman = person.getGender().toLowerCase() == "f";
+                var alternativeHref = window.WEB_SITE_ROOT + "Content/avatars/" + size + "/.no-avatar";
+                if (isWoman) {
+                    var alternativeHref = alternativeHref + "-female.png";
+                } else {
+                    var alternativeHref = alternativeHref + ".png";
+                }
+                attributes.src = src;
+                attributes.alternativeSrc = alternativeHref;
+                attributes.class = attributes.class || [];
+                attributes.class.push("avatar");
+                attributes.class.push("avatar" + size);
+                jade.globals.Image_mixin.call({
+                    buf: buf,
+                    attributes: jade.merge({}, attributes),
+                    escaped: jade.merge({}, escaped, true)
+                });
+            }
+        };
+        jade.globals.ClassImg_mixin = function(course, width, height) {
+            var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
+            var srcId = course.getDepartmentId();
+            var alternativeSrcId = course.getId();
+            if (!srcId) {
+                srcId = alternativeSrcId;
+                alternativeSrcId = null;
+            }
+            var src = chlk.templates.JadeTemplate.prototype.getPictureURL(srcId, height, width);
+            var alternativeSrc = null;
+            if (alternativeSrcId) {
+                alternativeSrc = chlk.templates.JadeTemplate.prototype.getPictureURL(alternativeSrcId, height, width);
+            }
+            defaultSrc = window.WEB_SITE_ROOT + "Content/images/common/course-icons/all.png";
+            attributes.src = src;
+            attributes.alternativeSrc = alternativeSrc;
+            attributes.defaultSrc = defaultSrc;
+            jade.globals.Image_mixin.call({
+                buf: buf,
+                attributes: jade.merge({}, attributes),
+                escaped: jade.merge({}, escaped, true)
+            });
+        };
+        return buf.join("");
+    };
+    "chlk.controls.Base";
+    (function() {
+        (chlk = chlk || {}).controls = chlk.controls || {};
+        (function() {
+            chlk.controls.ImageControl = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.controls." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("ImageControl", ria.__SYNTAX.EXTENDS(chlk.controls.Base), [ ria.__SYNTAX.Modifiers.OVERRIDE, ria.__SYNTAX.Modifiers.VOID, function onCreate_() {
+                BASE();
+                ASSET("_smj47o6q7kg1fw29")(this);
+            }, [ [ Object ] ], ria.__SYNTAX.Modifiers.VOID, function onImgError(event) {
+                var node = jQuery(event.target);
+                var alternativeSrc = node.attr("alternativeSrc");
+                var defaultSrc = node.attr("defaultSrc");
+                var needAlternative = node.attr("src") != alternativeSrc;
+                var src = needAlternative ? alternativeSrc : defaultSrc;
+                node.attr("src", src);
+                if (!(needAlternative && defaultSrc)) node.off("error.load");
+            }, String, "alternativeSrc", String, "defaultSrc", [ [ Object ] ], Object, function processAttrs(attributes) {
+                attributes.id = attributes.id || ria.dom.NewGID();
+                if (!attributes.alternativeSrc && attributes.defaultSrc) {
+                    attributes.alternativeSrc = attributes.defaultSrc;
+                    delete attributes.defaultSrc;
+                }
+                if (attributes.alternativeSrc) this.context.getDefaultView().onActivityRefreshed(function(activity, model) {
+                    jQuery("#" + attributes.id).on("error.load", this.onImgError);
+                }.bind(this));
+                return attributes;
             } ]);
         })();
     })();
@@ -6397,6 +6484,7 @@ exports.globals = {};
     "chlk.controls.LogoutControl";
     "chlk.controls.TextAreaControl";
     "chlk.controls.SearchBoxControl";
+    "chlk.controls.ImageControl";
     "chlk.models.common.Role";
     "chlk.models.schoolYear.MarkingPeriod";
     (function() {
@@ -6446,7 +6534,7 @@ exports.globals = {};
                     tooltip.find(".tooltip-content").html("");
                 });
                 return BASE().then(function(data) {
-                    if (this.getCurrentPerson()) new ria.dom.Dom().fromHTML(ASSET("_y24qgi22nfiozuxr")(this)).appendTo("#logout-block");
+                    if (this.getCurrentPerson()) new ria.dom.Dom().fromHTML(ASSET("_tsj822rosin0o1or")(this)).appendTo("#logout-block");
                     return data;
                 }, this);
             } ]);
@@ -6933,7 +7021,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._469u3bivb863l3di = function anonymous(locals) {
+    __ASSETS._a34nm9vam57e3ik9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push("<div" + jade.attrs({
@@ -7028,7 +7116,7 @@ exports.globals = {};
         buf.push("</div></div>");
         return buf.join("");
     };
-    __ASSETS._ge22iah97ug9o1or = function anonymous(locals) {
+    __ASSETS._3vynirkx0kpdgqfr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.RenderWith_mixin = function(data, tplClass) {
@@ -7088,15 +7176,18 @@ exports.globals = {};
         (chlk = chlk || {}).templates = chlk.templates || {};
         (function() {
             "use strict";
-            ASSET("_ge22iah97ug9o1or")();
+            ASSET("_3vynirkx0kpdgqfr")();
             chlk.templates.JadeTemplate = function ClassCompilerImpl() {
                 var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }("JadeTemplate", ria.__SYNTAX.EXTENDS(ria.templates.CompiledTemplate), [ Function, "block", [ [ Object, Number ] ], String, function getPictureURL(id, size_) {
+            }("JadeTemplate", ria.__SYNTAX.EXTENDS(ria.templates.CompiledTemplate), [ Function, "block", [ [ Object, Number ] ], String, function getPictureURL(id, sizeH_, sizeW_) {
+                if (!id) return null;
                 var url = window.azurePictureUrl + id.valueOf();
-                return size_ ? url + "-" + size_ + "x" + size_ : url;
+                if (sizeH_ && sizeW_) return url + "-" + sizeH_ + "x" + sizeW_;
+                if (sizeH_) return url + "-" + sizeH_ + "x" + sizeH_;
+                return url;
             } ]);
         })();
     })();
@@ -7301,7 +7392,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.common." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_469u3bivb863l3di") ], [ ria.templates.ModelBind(chlk.models.common.InfoMsg) ], "InfoMsg", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], String, "text", [ ria.templates.ModelPropertyBind ], String, "header", [ ria.templates.ModelPropertyBind ], String, "clazz", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.common.Button), "buttons" ]);
+            }([ ria.templates.TemplateBind("_a34nm9vam57e3ik9") ], [ ria.templates.ModelBind(chlk.models.common.InfoMsg) ], "InfoMsg", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], String, "text", [ ria.templates.ModelPropertyBind ], String, "header", [ ria.templates.ModelPropertyBind ], String, "clazz", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.common.Button), "buttons" ]);
         })();
     })();
     "chlk.activities.lib.TemplateDialog";
@@ -7373,7 +7464,7 @@ exports.globals = {};
                 } else {
                     var button = new chlk.models.common.Button();
                     button.setText("Ok");
-                    button.setClose(true);
+                    buttons.push(button);
                 }
                 var model = new chlk.models.common.InfoMsg(text_, header_, buttons, clazz_);
                 this.view.shadeD(instance, ria.async.DeferredData(model));
@@ -7685,7 +7776,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.models.announcement." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }("Announcement", [ chlk.models.id.AnnouncementId, "id", [ ria.serialize.SerializeProperty("announcementattachments") ], ria.__API.ArrayOf(chlk.models.attachment.Attachment), "announcementAttachments", [ ria.serialize.SerializeProperty("announcementreminders") ], ria.__API.ArrayOf(chlk.models.announcement.Reminder), "announcementReminders", [ ria.serialize.SerializeProperty("announcementtypeid") ], Number, "announcementTypeId", [ ria.serialize.SerializeProperty("announcementtypename") ], String, "announcementTypeName", Array, "applications", [ ria.serialize.SerializeProperty("applicationname") ], String, "applicationName", [ ria.serialize.SerializeProperty("applicationscount") ], Number, "applicationsCount", String, "attachments", [ ria.serialize.SerializeProperty("attachmentscount") ], Number, "attachmentsCount", [ ria.serialize.SerializeProperty("attachmentsummary") ], Number, "attachmentsSummary", [ ria.serialize.SerializeProperty("autogradeapps") ], ria.__API.ArrayOf(String), "autoGradeApps", Number, "avg", [ ria.serialize.SerializeProperty("avgnumeric") ], Number, "avgNumeric", [ ria.serialize.SerializeProperty("class") ], Object, "clazz", [ ria.serialize.SerializeProperty("classname") ], String, "className", String, "comment", String, "content", chlk.models.common.ChlkDate, "created", Number, "dropped", [ ria.serialize.SerializeProperty("expiresdate") ], chlk.models.common.ChlkDate, "expiresDate", String, "expiresDateColor", String, "expiresDateText", [ ria.serialize.SerializeProperty("classid") ], chlk.models.id.ClassId, "classId", Boolean, "gradable", Number, "grade", [ ria.serialize.SerializeProperty("gradesummary") ], Number, "gradesSummary", [ ria.serialize.SerializeProperty("gradingstudentscount") ], Number, "gradingStudentsCount", [ ria.serialize.SerializeProperty("gradingstyle") ], Number, "gradingStyle", [ ria.serialize.SerializeProperty("isowner") ], Boolean, "isOwner", [ ria.serialize.SerializeProperty("nongradingstudentscount") ], Number, "nonGradingStudentsCount", Number, "order", [ ria.serialize.SerializeProperty("ownerattachmentscount") ], Number, "ownerAttachmentsCount", chlk.models.people.User, "owner", [ ria.serialize.SerializeProperty("qnacount") ], Number, "qnaCount", [ ria.serialize.SerializeProperty("recipientid") ], chlk.models.id.ClassId, "recipientId", [ ria.serialize.SerializeProperty("schoolpersongender") ], String, "schoolPersonGender", [ ria.serialize.SerializeProperty("schoolpersonname") ], String, "schoolPersonName", [ ria.serialize.SerializeProperty("personid") ], chlk.models.id.SchoolPersonId, "personId", [ ria.serialize.SerializeProperty("personname") ], String, "personName", [ ria.serialize.SerializeProperty("shortcontent") ], String, "shortContent", [ ria.serialize.SerializeProperty("showgradingicon") ], Boolean, "showGradingIcon", Boolean, "starred", Number, "state", [ ria.serialize.SerializeProperty("statetyped") ], Number, "stateTyped", [ ria.serialize.SerializeProperty("studentannouncementid") ], chlk.models.id.StudentAnnouncementId, "studentAnnouncementId", [ ria.serialize.SerializeProperty("studentannouncements") ], chlk.models.announcement.StudentAnnouncements, "studentAnnouncements", [ ria.serialize.SerializeProperty("studentscount") ], Number, "studentsCount", [ ria.serialize.SerializeProperty("studentscountwithattachments") ], Number, "studentsWithAttachmentsCount", [ ria.serialize.SerializeProperty("studentscountwithoutattachments") ], Number, "studentsWithoutAttachmentsCount", String, "subject", [ ria.serialize.SerializeProperty("systemtype") ], Number, "systemType", String, "title", [ ria.serialize.SerializeProperty("wasannouncementtypegraded") ], Boolean, "wasAnnouncementTypeGraded", [ ria.serialize.SerializeProperty("wassubmittedtoadmin") ], Boolean, "wasSubmittedToAdmin", chlk.models.id.MarkingPeriodId, "markingPeriodId", String, "submitType" ]);
+            }("Announcement", [ chlk.models.id.AnnouncementId, "id", [ ria.serialize.SerializeProperty("announcementattachments") ], ria.__API.ArrayOf(chlk.models.attachment.Attachment), "announcementAttachments", [ ria.serialize.SerializeProperty("announcementreminders") ], ria.__API.ArrayOf(chlk.models.announcement.Reminder), "announcementReminders", [ ria.serialize.SerializeProperty("announcementtypeid") ], Number, "announcementTypeId", [ ria.serialize.SerializeProperty("announcementtypename") ], String, "announcementTypeName", Array, "applications", [ ria.serialize.SerializeProperty("applicationname") ], String, "applicationName", [ ria.serialize.SerializeProperty("applicationscount") ], Number, "applicationsCount", String, "attachments", [ ria.serialize.SerializeProperty("attachmentscount") ], Number, "attachmentsCount", [ ria.serialize.SerializeProperty("attachmentsummary") ], Number, "attachmentsSummary", [ ria.serialize.SerializeProperty("autogradeapps") ], ria.__API.ArrayOf(String), "autoGradeApps", Number, "avg", [ ria.serialize.SerializeProperty("avgnumeric") ], Number, "avgNumeric", [ ria.serialize.SerializeProperty("class") ], Object, "clazz", [ ria.serialize.SerializeProperty("classname") ], String, "className", String, "comment", String, "content", chlk.models.common.ChlkDate, "created", Number, "dropped", [ ria.serialize.SerializeProperty("expiresdate") ], chlk.models.common.ChlkDate, "expiresDate", String, "expiresDateColor", String, "expiresDateText", [ ria.serialize.SerializeProperty("classid") ], chlk.models.id.ClassId, "classId", Boolean, "gradable", Number, "grade", [ ria.serialize.SerializeProperty("gradesummary") ], Number, "gradesSummary", [ ria.serialize.SerializeProperty("gradingstudentscount") ], Number, "gradingStudentsCount", [ ria.serialize.SerializeProperty("gradingstyle") ], Number, "gradingStyle", [ ria.serialize.SerializeProperty("isowner") ], Boolean, "isOwner", [ ria.serialize.SerializeProperty("nongradingstudentscount") ], Number, "nonGradingStudentsCount", Number, "order", [ ria.serialize.SerializeProperty("ownerattachmentscount") ], Number, "ownerAttachmentsCount", chlk.models.people.User, "owner", [ ria.serialize.SerializeProperty("qnacount") ], Number, "qnaCount", [ ria.serialize.SerializeProperty("recipientid") ], chlk.models.id.ClassId, "recipientId", [ ria.serialize.SerializeProperty("schoolpersongender") ], String, "schoolPersonGender", [ ria.serialize.SerializeProperty("schoolpersonname") ], String, "schoolPersonName", [ ria.serialize.SerializeProperty("personid") ], chlk.models.id.SchoolPersonId, "personId", [ ria.serialize.SerializeProperty("personname") ], String, "personName", [ ria.serialize.SerializeProperty("shortcontent") ], String, "shortContent", [ ria.serialize.SerializeProperty("showgradingicon") ], Boolean, "showGradingIcon", Boolean, "starred", Number, "state", [ ria.serialize.SerializeProperty("statetyped") ], Number, "stateTyped", [ ria.serialize.SerializeProperty("studentannouncementid") ], chlk.models.id.StudentAnnouncementId, "studentAnnouncementId", [ ria.serialize.SerializeProperty("studentannouncements") ], chlk.models.announcement.StudentAnnouncements, "studentAnnouncements", [ ria.serialize.SerializeProperty("studentscount") ], Number, "studentsCount", [ ria.serialize.SerializeProperty("studentscountwithattachments") ], Number, "studentsWithAttachmentsCount", [ ria.serialize.SerializeProperty("studentscountwithoutattachments") ], Number, "studentsWithoutAttachmentsCount", String, "subject", [ ria.serialize.SerializeProperty("systemtype") ], Number, "systemType", String, "title", [ ria.serialize.SerializeProperty("wasannouncementtypegraded") ], Boolean, "wasAnnouncementTypeGraded", [ ria.serialize.SerializeProperty("wassubmittedtoadmin") ], Boolean, "wasSubmittedToAdmin", chlk.models.id.MarkingPeriodId, "markingPeriodId", String, "submitType", Boolean, "needButtons", Boolean, "needDeleteButton" ]);
         })();
     })();
     "chlk.models.common.ChlkDate";
@@ -7927,11 +8018,104 @@ exports.globals = {};
             }("ClassForTopBar", ria.__SYNTAX.EXTENDS(chlk.models.class.Class), [ String, "controller", String, "action", Array, "params", Boolean, "pressed", Number, "index", Boolean, "disabled" ]);
         })();
     })();
+    (function() {
+        ((chlk = chlk || {}).models = chlk.models || {}).common = chlk.models.common || {};
+        (function() {
+            "use strict";
+            chlk.models.common.HoverBoxItem = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.models.common." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("HoverBoxItem", [ String, "summary", Number, "total" ]);
+        })();
+    })();
+    "chlk.models.common.HoverBoxItem";
+    (function() {
+        ((chlk = chlk || {}).models = chlk.models || {}).common = chlk.models.common || {};
+        (function() {
+            "use strict";
+            chlk.models.common.HoverBox = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.models.common." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("HoverBox", [ Number, "title", ria.__API.ArrayOf(chlk.models.common.HoverBoxItem), "hover" ]);
+        })();
+    })();
+    (function() {
+        ((chlk = chlk || {}).models = chlk.models || {}).id = chlk.models.id || {};
+        (function() {
+            "use strict";
+            chlk.models.id.RoomId =             function wrapper() {
+                var values = {};
+                function RoomId(value) {
+                    return values.hasOwnProperty(value) ? values[value] : values[value] = new RoomIdImpl(value);
+                }
+                ria.__API.identifier(RoomId, "chlk.models.id.RoomId");
+                function RoomIdImpl(value) {
+                    this.valueOf = function() {
+                        return value;
+                    };
+                    this.toString = function toString() {
+                        return "[chlk.models.id.RoomId#" + value + "]";
+                    };
+                }
+                ria.__API.extend(RoomIdImpl, RoomId);
+                return RoomId;
+            }();
+        })();
+    })();
+    "chlk.models.id.RoomId";
+    (function() {
+        ((chlk = chlk || {}).models = chlk.models || {}).class = chlk.models.class || {};
+        (function() {
+            "use strict";
+            chlk.models.class.Room = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.models.class." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("Room", [ Object, "building", Number, "capacity", String, "description", [ ria.serialize.SerializeProperty("homeroomnumber") ], Number, "homeRoomNumber", chlk.models.id.RoomId, "id", [ ria.serialize.SerializeProperty("phonenumber") ], Number, "phoneNumber", [ ria.serialize.SerializeProperty("roomnumber") ], Number, "roomNumber", [ ria.serialize.SerializeProperty("roomtypedescription") ], Number, "roomTypeDescription", [ ria.serialize.SerializeProperty("roomtypeid") ], Number, "roomTypeId", Object, "size" ]);
+        })();
+    })();
+    "chlk.models.common.ChlkDate";
+    "chlk.models.announcement.Announcement";
+    (function() {
+        ((chlk = chlk || {}).models = chlk.models || {}).announcement = chlk.models.announcement || {};
+        (function() {
+            "use strict";
+            chlk.models.announcement.AnnouncementsByDate = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.models.announcement." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("AnnouncementsByDate", [ ria.__API.ArrayOf(chlk.models.announcement.Announcement), "announcements", chlk.models.common.ChlkDate, "date", Number, "day" ]);
+        })();
+    })();
+    "chlk.models.people.User";
+    "chlk.models.common.HoverBox";
+    "chlk.models.class.Room";
+    "chlk.models.announcement.AnnouncementsByDate";
+    "chlk.models.id.ClassId";
+    (function() {
+        ((chlk = chlk || {}).models = chlk.models || {}).class = chlk.models.class || {};
+        (function() {
+            "use strict";
+            chlk.models.class.ClassSummary = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.models.class." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("ClassSummary", [ chlk.models.class.Room, "room", ria.__API.ArrayOf(chlk.models.people.User), "students", [ ria.serialize.SerializeProperty("classsize") ], Number, "classSize", [ ria.serialize.SerializeProperty("classattendancebox") ], chlk.models.common.HoverBox, "classAttendanceBox", [ ria.serialize.SerializeProperty("classdisciplinebox") ], chlk.models.common.HoverBox, "classDisciplineBox", [ ria.serialize.SerializeProperty("classaveragebox") ], chlk.models.common.HoverBox, "classAverageBox", [ ria.serialize.SerializeProperty("announcementsbydate") ], ria.__API.ArrayOf(chlk.models.announcement.AnnouncementsByDate), "announcementsByDate", chlk.models.id.ClassId, "id", String, "name", String, "description", chlk.models.course.Course, "course", [ ria.serialize.SerializeProperty("gradelevel") ], chlk.models.grading.GradeLevel, "gradeLevel", chlk.models.people.User, "teacher", [ ria.serialize.SerializeProperty("markingperiodsid") ], ria.__API.ArrayOf(chlk.models.id.MarkingPeriodId), "markingPeriodsId" ]);
+        })();
+    })();
     "chlk.services.BaseService";
     "ria.async.Future";
     "chlk.models.class.ClassForTopBar";
     "chlk.models.class.ClassForWeekMask";
     "chlk.models.id.ClassId";
+    "chlk.models.class.ClassSummary";
     (function() {
         (chlk = chlk || {}).services = chlk.services || {};
         (function() {
@@ -7959,6 +8143,10 @@ exports.globals = {};
                 var res = window.classesInfo[id.valueOf()];
                 res = new ria.serialize.JsonSerializer().deserialize(res, chlk.models.class.ClassForWeekMask);
                 return res;
+            }, [ [ chlk.models.id.ClassId ] ], ria.async.Future, function getSummary(classId) {
+                return this.get("Class/ClassSummary.json", chlk.models.class.ClassSummary, {
+                    classId: classId.valueOf()
+                });
             } ]);
         })();
     })();
@@ -8096,7 +8284,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._lygjxl0m1ymygb9 = function anonymous(locals) {
+    __ASSETS._p1sb317ej1lcjtt9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="announcement-form loader-container">');
@@ -8286,16 +8474,11 @@ exports.globals = {};
                     escaped: {}
                 });
                 buf.push('<SPAN class="remove-btn remove-reminder"></SPAN></div><div id="add-reminder" class="chlk-add opacity-button">' + jade.escape(null == (jade.interp = Msg.Add_reminder) ? "" : jade.interp) + '</div></div></div><div class="attachments-and-applications">');
+                console.info(announcement);
+                announcement.setNeedButtons(true);
+                announcement.setNeedDeleteButton(true);
                 jade.globals.RenderWith_mixin.call({
-                    buf: buf,
-                    attributes: {
-                        needButtons: true,
-                        needDeleteButton: true
-                    },
-                    escaped: {
-                        needButtons: true,
-                        needDeleteButton: true
-                    }
+                    buf: buf
                 }, announcement, chlk.templates.announcement.Announcement);
                 buf.push('</div><div class="bottom-block">');
                 jade.globals.Button_mixin.call({
@@ -8321,6 +8504,9 @@ exports.globals = {};
                         block: function() {
                             jade.globals.Button_mixin.call({
                                 buf: buf,
+                                block: function() {
+                                    buf.push(jade.escape(null == (jade.interp = Msg.Delete) ? "" : jade.interp));
+                                },
                                 attributes: {
                                     type: "submit",
                                     name: "submitType",
@@ -8334,7 +8520,7 @@ exports.globals = {};
                                 }
                             });
                         }
-                    }, "announcement", "delete", announcement.getId().valueOf());
+                    }, "announcement", "delete", announcement.getId().valueOf(), announcement.getAnnouncementTypeName());
                 } else {
                     jade.globals.ActionLink_mixin.call({
                         buf: buf,
@@ -8399,15 +8585,19 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.announcement." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_lygjxl0m1ymygb9") ], [ ria.templates.ModelBind(chlk.models.announcement.AnnouncementForm) ], "AnnouncementForm", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.announcement.Announcement, "announcement", [ ria.templates.ModelPropertyBind ], chlk.models.class.ClassesForTopBar, "topData", [ ria.templates.ModelPropertyBind ], chlk.models.class.ClassForWeekMask, "classInfo", [ ria.templates.ModelPropertyBind ], Number, "selectedTypeId", [ ria.templates.ModelPropertyBind ], Boolean, "isDraft", [ ria.templates.ModelPropertyBind ], Array, "recipients", [ ria.templates.ModelPropertyBind ], Array, "reminders" ]);
+            }([ ria.templates.TemplateBind("_p1sb317ej1lcjtt9") ], [ ria.templates.ModelBind(chlk.models.announcement.AnnouncementForm) ], "AnnouncementForm", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.announcement.Announcement, "announcement", [ ria.templates.ModelPropertyBind ], chlk.models.class.ClassesForTopBar, "topData", [ ria.templates.ModelPropertyBind ], chlk.models.class.ClassForWeekMask, "classInfo", [ ria.templates.ModelPropertyBind ], Number, "selectedTypeId", [ ria.templates.ModelPropertyBind ], Boolean, "isDraft", [ ria.templates.ModelPropertyBind ], Array, "recipients", [ ria.templates.ModelPropertyBind ], Array, "reminders" ]);
         })();
     })();
-    __ASSETS._vtpl925nr48cl3di = function anonymous(locals) {
+    __ASSETS._10et5v9qx4y7rpb9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         attachments = self.getAnnouncementAttachments() || [];
         if (self.needButtons) {
-            buf.push('<div id="attach-file-area" class="announcement-item attach-file-area"><button id="add-application" class="simple-gray-button">Attach App</button><button class="simple-gray-button file">Attach File');
+            buf.push('<div id="attach-file-area" class="announcement-item attach-file-area">');
+            if (self.getAnnouncementTypeId() != chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf()) {
+                buf.push('<button id="add-application" class="simple-gray-button">Attach App</button>');
+            }
+            buf.push('<button class="simple-gray-button file">Attach File');
             jade.globals.FileUpload_mixin.call({
                 buf: buf,
                 attributes: {
@@ -8507,10 +8697,10 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.announcement." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_vtpl925nr48cl3di") ], [ ria.templates.ModelBind(chlk.models.announcement.Announcement) ], "Announcement", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.AnnouncementId, "id", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "created", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.attachment.Attachment), "announcementAttachments", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.announcement.Reminder), "announcementReminders", [ ria.templates.ModelPropertyBind ], Number, "announcementTypeId", [ ria.templates.ModelPropertyBind ], String, "announcementTypeName", [ ria.templates.ModelPropertyBind ], Array, "applications", [ ria.templates.ModelPropertyBind ], String, "applicationName", [ ria.templates.ModelPropertyBind ], Number, "applicationsCount", [ ria.templates.ModelPropertyBind ], String, "attachments", [ ria.templates.ModelPropertyBind ], Number, "attachmentsCount", [ ria.templates.ModelPropertyBind ], Number, "attachmentsSummary", [ ria.templates.ModelPropertyBind ], Number, "avg", [ ria.templates.ModelPropertyBind ], Number, "avgNumeric", [ ria.templates.ModelPropertyBind ], Object, "clazz", [ ria.templates.ModelPropertyBind ], String, "comment", [ ria.templates.ModelPropertyBind ], String, "content", [ ria.templates.ModelPropertyBind ], chlk.models.id.ClassId, "classId", [ ria.templates.ModelPropertyBind ], Number, "dropped", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "expiresDate", [ ria.templates.ModelPropertyBind ], String, "expiresDateColor", [ ria.templates.ModelPropertyBind ], String, "expiresDateText", [ ria.templates.ModelPropertyBind ], Boolean, "gradable", [ ria.templates.ModelPropertyBind ], Number, "grade", [ ria.templates.ModelPropertyBind ], Number, "gradesSummary", [ ria.templates.ModelPropertyBind ], Number, "gradingStudentsCount", [ ria.templates.ModelPropertyBind ], Number, "gradingStyle", [ ria.templates.ModelPropertyBind ], Boolean, "isOwner", [ ria.templates.ModelPropertyBind ], Number, "nonGradingStudentsCount", [ ria.templates.ModelPropertyBind ], Number, "order", [ ria.templates.ModelPropertyBind ], chlk.models.people.User, "owner", [ ria.templates.ModelPropertyBind ], Number, "ownerAttachmentsCount", [ ria.templates.ModelPropertyBind ], Number, "qnaCount", [ ria.templates.ModelPropertyBind ], chlk.models.id.ClassId, "recipientId", [ ria.templates.ModelPropertyBind ], String, "schoolPersonGender", [ ria.templates.ModelPropertyBind ], String, "schoolPersonName", [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolPersonId, "personId", [ ria.templates.ModelPropertyBind ], String, "shortContent", [ ria.templates.ModelPropertyBind ], Boolean, "showGradingIcon", [ ria.templates.ModelPropertyBind ], Boolean, "starred", [ ria.templates.ModelPropertyBind ], Number, "state", [ ria.templates.ModelPropertyBind ], Number, "stateTyped", [ ria.templates.ModelPropertyBind ], chlk.models.id.StudentAnnouncementId, "studentAnnouncementId", [ ria.templates.ModelPropertyBind ], chlk.models.announcement.StudentAnnouncements, "studentAnnouncements", [ ria.templates.ModelPropertyBind ], Number, "studentsCount", [ ria.templates.ModelPropertyBind ], Number, "studentsWithAttachmentsCount", [ ria.templates.ModelPropertyBind ], Number, "studentsWithoutAttachmentsCount", [ ria.templates.ModelPropertyBind ], String, "subject", [ ria.templates.ModelPropertyBind ], Number, "systemType", [ ria.templates.ModelPropertyBind ], String, "title", [ ria.templates.ModelPropertyBind ], Boolean, "wasAnnouncementTypeGraded", [ ria.templates.ModelPropertyBind ], String, "submitType", Boolean, "needButtons", Boolean, "needDeleteButton" ]);
+            }([ ria.templates.TemplateBind("_10et5v9qx4y7rpb9") ], [ ria.templates.ModelBind(chlk.models.announcement.Announcement) ], "Announcement", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.AnnouncementId, "id", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "created", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.attachment.Attachment), "announcementAttachments", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.announcement.Reminder), "announcementReminders", [ ria.templates.ModelPropertyBind ], Number, "announcementTypeId", [ ria.templates.ModelPropertyBind ], String, "announcementTypeName", [ ria.templates.ModelPropertyBind ], Array, "applications", [ ria.templates.ModelPropertyBind ], String, "applicationName", [ ria.templates.ModelPropertyBind ], Number, "applicationsCount", [ ria.templates.ModelPropertyBind ], String, "attachments", [ ria.templates.ModelPropertyBind ], Number, "attachmentsCount", [ ria.templates.ModelPropertyBind ], Number, "attachmentsSummary", [ ria.templates.ModelPropertyBind ], Number, "avg", [ ria.templates.ModelPropertyBind ], Number, "avgNumeric", [ ria.templates.ModelPropertyBind ], Object, "clazz", [ ria.templates.ModelPropertyBind ], String, "comment", [ ria.templates.ModelPropertyBind ], String, "content", [ ria.templates.ModelPropertyBind ], chlk.models.id.ClassId, "classId", [ ria.templates.ModelPropertyBind ], Number, "dropped", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "expiresDate", [ ria.templates.ModelPropertyBind ], String, "expiresDateColor", [ ria.templates.ModelPropertyBind ], String, "expiresDateText", [ ria.templates.ModelPropertyBind ], Boolean, "gradable", [ ria.templates.ModelPropertyBind ], Number, "grade", [ ria.templates.ModelPropertyBind ], Number, "gradesSummary", [ ria.templates.ModelPropertyBind ], Number, "gradingStudentsCount", [ ria.templates.ModelPropertyBind ], Number, "gradingStyle", [ ria.templates.ModelPropertyBind ], Boolean, "isOwner", [ ria.templates.ModelPropertyBind ], Number, "nonGradingStudentsCount", [ ria.templates.ModelPropertyBind ], Number, "order", [ ria.templates.ModelPropertyBind ], chlk.models.people.User, "owner", [ ria.templates.ModelPropertyBind ], Number, "ownerAttachmentsCount", [ ria.templates.ModelPropertyBind ], Number, "qnaCount", [ ria.templates.ModelPropertyBind ], chlk.models.id.ClassId, "recipientId", [ ria.templates.ModelPropertyBind ], String, "schoolPersonGender", [ ria.templates.ModelPropertyBind ], String, "schoolPersonName", [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolPersonId, "personId", [ ria.templates.ModelPropertyBind ], String, "shortContent", [ ria.templates.ModelPropertyBind ], Boolean, "showGradingIcon", [ ria.templates.ModelPropertyBind ], Boolean, "starred", [ ria.templates.ModelPropertyBind ], Number, "state", [ ria.templates.ModelPropertyBind ], Number, "stateTyped", [ ria.templates.ModelPropertyBind ], chlk.models.id.StudentAnnouncementId, "studentAnnouncementId", [ ria.templates.ModelPropertyBind ], chlk.models.announcement.StudentAnnouncements, "studentAnnouncements", [ ria.templates.ModelPropertyBind ], Number, "studentsCount", [ ria.templates.ModelPropertyBind ], Number, "studentsWithAttachmentsCount", [ ria.templates.ModelPropertyBind ], Number, "studentsWithoutAttachmentsCount", [ ria.templates.ModelPropertyBind ], String, "subject", [ ria.templates.ModelPropertyBind ], Number, "systemType", [ ria.templates.ModelPropertyBind ], String, "title", [ ria.templates.ModelPropertyBind ], Boolean, "wasAnnouncementTypeGraded", [ ria.templates.ModelPropertyBind ], String, "submitType", [ ria.templates.ModelPropertyBind ], Boolean, "needButtons", [ ria.templates.ModelPropertyBind ], Boolean, "needDeleteButton" ]);
         })();
     })();
-    __ASSETS._vcnl4b78rfk9y66r = function anonymous(locals) {
+    __ASSETS._daou5tvm31yycik9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         var before = self.getBefore();
@@ -8564,10 +8754,10 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.announcement." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_vcnl4b78rfk9y66r") ], [ ria.templates.ModelBind(chlk.models.announcement.Reminder) ], "AnnouncementReminder", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], Number, "before", [ ria.templates.ModelPropertyBind ], chlk.models.id.ReminderId, "id", [ ria.templates.ModelPropertyBind ], chlk.models.id.AnnouncementId, "announcementId", [ ria.templates.ModelPropertyBind ], Boolean, "isOwner", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "remindDate", [ ria.templates.ModelPropertyBind ], Boolean, "duplicate" ]);
+            }([ ria.templates.TemplateBind("_daou5tvm31yycik9") ], [ ria.templates.ModelBind(chlk.models.announcement.Reminder) ], "AnnouncementReminder", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], Number, "before", [ ria.templates.ModelPropertyBind ], chlk.models.id.ReminderId, "id", [ ria.templates.ModelPropertyBind ], chlk.models.id.AnnouncementId, "announcementId", [ ria.templates.ModelPropertyBind ], Boolean, "isOwner", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "remindDate", [ ria.templates.ModelPropertyBind ], Boolean, "duplicate" ]);
         })();
     })();
-    __ASSETS._wjoozfm6ejulq5mi = function anonymous(locals) {
+    __ASSETS._4qh84rhn2l3ow29 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         length = self.getItems().length;
@@ -8647,40 +8837,53 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.announcement." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_wjoozfm6ejulq5mi") ], [ ria.templates.ModelBind(chlk.models.announcement.LastMessages) ], "LastMessages", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], Array, "items", [ ria.templates.ModelPropertyBind ], String, "announcementTypeName" ]);
+            }([ ria.templates.TemplateBind("_4qh84rhn2l3ow29") ], [ ria.templates.ModelBind(chlk.models.announcement.LastMessages) ], "LastMessages", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], Array, "items", [ ria.templates.ModelPropertyBind ], String, "announcementTypeName" ]);
         })();
     })();
-    __ASSETS._tvzw3pax94fgvi = function anonymous(locals) {
+    __ASSETS._kbrr8qhvb3jif6r = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
-        if (self.getController()) {
-            var params = self.getParams();
-            buf.push("<!--params = (params && params.length ? params.join('/') + '/' : '');-->");
-            jade.globals.ActionLink_mixin.call({
-                buf: buf,
-                block: function() {
-                    buf.push('<div class="img-wrapper"><img href="http://local.chalkable.com:8080/chalkable/Course/GetIcon?courseInfoId=10"/></div><SPAN class="text-container">' + jade.escape(null == (jade.interp = self.getName()) ? "" : jade.interp) + "</SPAN>");
-                },
-                attributes: {
-                    "class": (self.isPressed() ? "pressed " : "") + " " + "item" + " " + "class-button" + " " + "button-link"
-                },
-                escaped: {}
-            }, self.getController(), self.getAction(), params, self.getId());
-        } else {
-            buf.push("<BUTTON" + jade.attrs({
-                classId: self.getId(),
-                index: self.getIndex(),
-                type: self.isDisabled() ? "button" : "submit",
-                name: "submitType",
-                value: "save",
-                "class": (self.isPressed() ? "pressed " : "") + " " + "item" + " " + "class-button" + " " + "validate-skip"
-            }, {
-                classId: true,
-                index: true,
-                type: true,
-                name: true,
-                value: true
-            }) + '><div class="img-wrapper"><img href="http://local.chalkable.com:8080/chalkable/Course/GetIcon?courseInfoId=10"/></div><SPAN class="text-container">' + jade.escape(null == (jade.interp = self.getName()) ? "" : jade.interp) + "</SPAN></BUTTON>");
+        if (self.getCourse()) {
+            if (self.getController()) {
+                buf.push("<!--params = (params && params.length ? params.join('/') + '/' : '');-->");
+                jade.globals.ActionLink_mixin.call({
+                    buf: buf,
+                    block: function() {
+                        buf.push('<div class="img-wrapper">');
+                        jade.globals.ClassImg_mixin.call({
+                            buf: buf
+                        }, self.getCourse(), 45, 80);
+                        buf.push('</div><SPAN class="text-container">' + jade.escape(null == (jade.interp = self.getName()) ? "" : jade.interp) + "</SPAN>");
+                    },
+                    attributes: {
+                        "class": (self.isPressed() ? "pressed " : "") + " " + "item" + " " + "class-button" + " " + "button-link"
+                    },
+                    escaped: {}
+                }, self.getController(), self.getAction(), self.getParams(), self.getId());
+            } else {
+                buf.push("<BUTTON" + jade.attrs({
+                    classId: self.getId(),
+                    index: self.getIndex(),
+                    type: self.isDisabled() ? "button" : "submit",
+                    name: "submitType",
+                    value: "save",
+                    "class": (self.isPressed() ? "pressed " : "") + " " + "item" + " " + "class-button" + " " + "validate-skip"
+                }, {
+                    classId: true,
+                    index: true,
+                    type: true,
+                    name: true,
+                    value: true
+                }) + '><div class="img-wrapper">');
+                jade.globals.ClassImg_mixin.call({
+                    buf: buf,
+                    attributes: {
+                        "class": "avatar"
+                    },
+                    escaped: {}
+                }, self.getCourse(), 45, 80);
+                buf.push('</div><SPAN class="text-container">' + jade.escape(null == (jade.interp = self.getName()) ? "" : jade.interp) + "</SPAN></BUTTON>");
+            }
         }
         return buf.join("");
     };
@@ -8696,7 +8899,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.class." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_tvzw3pax94fgvi") ], [ ria.templates.ModelBind(chlk.models.class.ClassForTopBar) ], "TopBar", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.ClassId, "id", [ ria.templates.ModelPropertyBind ], String, "name", [ ria.templates.ModelPropertyBind ], chlk.models.course.Course, "course", [ ria.templates.ModelPropertyBind ], Boolean, "pressed", [ ria.templates.ModelPropertyBind ], Boolean, "disabled", [ ria.templates.ModelPropertyBind ], Number, "index", [ ria.templates.ModelPropertyBind ], String, "controller", [ ria.templates.ModelPropertyBind ], String, "action", [ ria.templates.ModelPropertyBind ], Array, "params" ]);
+            }([ ria.templates.TemplateBind("_kbrr8qhvb3jif6r") ], [ ria.templates.ModelBind(chlk.models.class.ClassForTopBar) ], "TopBar", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.ClassId, "id", [ ria.templates.ModelPropertyBind ], String, "name", [ ria.templates.ModelPropertyBind ], chlk.models.course.Course, "course", [ ria.templates.ModelPropertyBind ], Boolean, "pressed", [ ria.templates.ModelPropertyBind ], Boolean, "disabled", [ ria.templates.ModelPropertyBind ], Number, "index", [ ria.templates.ModelPropertyBind ], String, "controller", [ ria.templates.ModelPropertyBind ], String, "action", [ ria.templates.ModelPropertyBind ], Array, "params" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -8821,7 +9024,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._9fyvtcq9r2fkcsor = function anonymous(locals) {
+    __ASSETS._379h4wlbmogsnhfr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="announcement-view not-transparent">');
@@ -8858,7 +9061,7 @@ exports.globals = {};
             escaped: {}
         }, "announcement", "star", self.getId());
         buf.push('<div class="item-type"><div class="attachment"><div' + jade.attrs({
-            "class": "announcements-type-" + self.getAnnouncementTypeId() + " " + "icon" + " " + "blue" + " " + "icon"
+            "class": "announcement-type-" + self.getAnnouncementTypeId() + " " + "icon" + " " + "blue" + " " + "icon"
         }, {}) + '></div><div class="icon black"></div><h2 class="animated-header">' + jade.escape(null == (jade.interp = self.getSubject()) ? "" : jade.interp) + '</h2><p class="animated">' + jade.escape(null == (jade.interp = self.getShortContent()) ? "" : jade.interp) + '</p><div class="animated">' + jade.escape(null == (jade.interp = self.getExpiresDate().toString()) ? "" : jade.interp) + '</div><div class="attachment-icon"></div><div class="apps-icon"></div></div></div></div></div><div class="panel-bg"><div class="action-bar buttons"><div class="container"><div class="left">');
         jade.globals.ActionLink_mixin.call({
             buf: buf,
@@ -9070,10 +9273,10 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.announcement." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_9fyvtcq9r2fkcsor") ], [ ria.templates.ModelBind(chlk.models.announcement.Announcement) ], "AnnouncementView", ria.__SYNTAX.EXTENDS(chlk.templates.announcement.Announcement), []);
+            }([ ria.templates.TemplateBind("_379h4wlbmogsnhfr") ], [ ria.templates.ModelBind(chlk.models.announcement.Announcement) ], "AnnouncementView", ria.__SYNTAX.EXTENDS(chlk.templates.announcement.Announcement), []);
         })();
     })();
-    __ASSETS._ondzxeazudte29 = function anonymous(locals) {
+    __ASSETS._xm5whz7kcfp0t3xr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         var getGrade = function(value) {
@@ -9232,7 +9435,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.announcement." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_ondzxeazudte29") ], [ ria.templates.ModelBind(chlk.models.announcement.StudentAnnouncement) ], "StudentAnnouncement", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.AnnouncementId, "announcementId", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.attachment.Attachment), "attachments", [ ria.templates.ModelPropertyBind ], String, "comment", [ ria.templates.ModelPropertyBind ], Boolean, "dropped", [ ria.templates.ModelPropertyBind ], Number, "gradeValue", [ ria.templates.ModelPropertyBind ], chlk.models.id.StudentAnnouncementId, "id", [ ria.templates.ModelPropertyBind ], Number, "state", [ ria.templates.ModelPropertyBind ], chlk.models.people.User, "studentInfo", String, "ownerPictureUrl", Boolean, "notAnnouncement", Boolean, "readonly", Array, "applicationsInGradeView", Number, "gradingStyle", chlk.models.grading.Mapping, "gradingMapping" ]);
+            }([ ria.templates.TemplateBind("_xm5whz7kcfp0t3xr") ], [ ria.templates.ModelBind(chlk.models.announcement.StudentAnnouncement) ], "StudentAnnouncement", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.AnnouncementId, "announcementId", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.attachment.Attachment), "attachments", [ ria.templates.ModelPropertyBind ], String, "comment", [ ria.templates.ModelPropertyBind ], Boolean, "dropped", [ ria.templates.ModelPropertyBind ], Number, "gradeValue", [ ria.templates.ModelPropertyBind ], chlk.models.id.StudentAnnouncementId, "id", [ ria.templates.ModelPropertyBind ], Number, "state", [ ria.templates.ModelPropertyBind ], chlk.models.people.User, "studentInfo", String, "ownerPictureUrl", Boolean, "notAnnouncement", Boolean, "readonly", Array, "applicationsInGradeView", Number, "gradingStyle", chlk.models.grading.Mapping, "gradingMapping" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -9494,13 +9697,26 @@ exports.globals = {};
                 return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
             }, [ [ chlk.models.id.AnnouncementId, Object ] ], function uploadAttachmentAction(announcementId, files) {
                 var result = this.announcementService.uploadAttachment(announcementId, files).then(function(model) {
+                    model.setNeedButtons(true);
+                    model.setNeedDeleteButton(true);
                     var attachments = model.getAnnouncementAttachments();
                     this.prepareAttachments(attachments);
                     return model;
                 }.bind(this));
                 return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result);
-            }, [ [ chlk.models.id.AnnouncementId ] ], function deleteAction(announcementId) {
+            }, [ [ chlk.models.id.AnnouncementId, String ] ], function deleteAction(announcementId, typeName) {
                 this.getContext().getSession().set("noSave", true);
+                this.ShowMsgBox("You are about to delete this item.\n" + "All grades and attachments for this " + typeName + " will\n" + "be gone forever.\n" + "Are you sure?", "whoa.", [ {
+                    text: "Cancel",
+                    color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                }, {
+                    text: "Delete",
+                    controller: "announcement",
+                    action: "deleteAnnouncement",
+                    params: [ announcementId.valueOf() ],
+                    color: chlk.models.common.ButtonColor.RED.valueOf()
+                } ]);
+            }, [ [ chlk.models.id.AnnouncementId ] ], function deleteAnnouncementAction(announcementId) {
                 this.announcementService.deleteAnnouncement(announcementId).attach(this.validateResponse_()).then(function(model) {
                     return this.redirect_("feed", "list", []);
                 }.bind(this));
@@ -9570,7 +9786,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._lwoje4cb9abmaemi = function anonymous(locals) {
+    __ASSETS._zsl4e6z6pkdwjyvi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="feed-container">');
@@ -9603,7 +9819,9 @@ exports.globals = {};
                                     jade.globals.ActionLink_mixin.call({
                                         buf: buf,
                                         block: function() {
-                                            buf.push('<div class="item-type"><div class="tooltip-announcement ann-type"><div class="tooltip-content"><Tooltip></Tooltip></div></div><div class="attachment"><div class="icon blue icon announcements-type-7"></div><div class="icon black"></div><h2 class="animated-header">' + jade.escape(null == (jade.interp = item.getSubject()) ? "" : jade.interp) + '</h2><p class="animated">' + jade.escape(null == (jade.interp = item.getShortContent()) ? "" : jade.interp) + '</p><div class="animated">' + jade.escape(null == (jade.interp = item.getExpiresDate().toString("d/m/y")) ? "" : jade.interp) + '</div><div class="attachment-icon"></div><div class="apps-icon"></div></div></div>');
+                                            buf.push('<div class="item-type"><div class="tooltip-announcement ann-type"><div class="tooltip-content"><Tooltip></Tooltip></div></div><div class="attachment"><div' + jade.attrs({
+                                                "class": "announcement-type-" + item.getAnnouncementTypeId() + " " + "icon" + " " + "blue"
+                                            }, {}) + '></div><div class="icon black"></div><h2 class="animated-header">' + jade.escape(null == (jade.interp = item.getSubject()) ? "" : jade.interp) + '</h2><p class="animated">' + jade.escape(null == (jade.interp = item.getShortContent()) ? "" : jade.interp) + '</p><div class="animated">' + jade.escape(null == (jade.interp = item.getExpiresDate().toString("d/m/y")) ? "" : jade.interp) + '</div><div class="attachment-icon"></div><div class="apps-icon"></div></div></div>');
                                         },
                                         attributes: {
                                             "class": "d-b" + " " + "t-d" + " " + "not-blue"
@@ -9632,7 +9850,9 @@ exports.globals = {};
                                     jade.globals.ActionLink_mixin.call({
                                         buf: buf,
                                         block: function() {
-                                            buf.push('<div class="item-type"><div class="tooltip-announcement ann-type"><div class="tooltip-content"><Tooltip></Tooltip></div></div><div class="attachment"><div class="icon blue icon announcements-type-7"></div><div class="icon black"></div><h2 class="animated-header">' + jade.escape(null == (jade.interp = item.getSubject()) ? "" : jade.interp) + '</h2><p class="animated">' + jade.escape(null == (jade.interp = item.getShortContent()) ? "" : jade.interp) + '</p><div class="animated">' + jade.escape(null == (jade.interp = item.getExpiresDate().toString("d/m/y")) ? "" : jade.interp) + '</div><div class="attachment-icon"></div><div class="apps-icon"></div></div></div>');
+                                            buf.push('<div class="item-type"><div class="tooltip-announcement ann-type"><div class="tooltip-content"><Tooltip></Tooltip></div></div><div class="attachment"><div' + jade.attrs({
+                                                "class": "announcement-type-" + item.getAnnouncementTypeId() + " " + "icon" + " " + "blue"
+                                            }, {}) + '></div><div class="icon black"></div><h2 class="animated-header">' + jade.escape(null == (jade.interp = item.getSubject()) ? "" : jade.interp) + '</h2><p class="animated">' + jade.escape(null == (jade.interp = item.getShortContent()) ? "" : jade.interp) + '</p><div class="animated">' + jade.escape(null == (jade.interp = item.getExpiresDate().toString("d/m/y")) ? "" : jade.interp) + '</div><div class="attachment-icon"></div><div class="apps-icon"></div></div></div>');
                                         },
                                         attributes: {
                                             "class": "d-b" + " " + "t-d" + " " + "not-blue"
@@ -9664,7 +9884,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_idojvb3optzw7b9") ], [ ria.templates.ModelBind(chlk.models.common.PaginatedList) ], "PaginatedList", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(Object), "items", [ ria.templates.ModelPropertyBind ], Number, "pageIndex", [ ria.templates.ModelPropertyBind ], Number, "pageSize", [ ria.templates.ModelPropertyBind ], Number, "totalCount", [ ria.templates.ModelPropertyBind ], Number, "totalPages", [ ria.templates.ModelPropertyBind ], Boolean, "hasNextPage", [ ria.templates.ModelPropertyBind ], Boolean, "hasPreviousPage" ]);
+            }([ ria.templates.TemplateBind("_vfh3bbb5kqzuayvi") ], [ ria.templates.ModelBind(chlk.models.common.PaginatedList) ], "PaginatedList", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(Object), "items", [ ria.templates.ModelPropertyBind ], Number, "pageIndex", [ ria.templates.ModelPropertyBind ], Number, "pageSize", [ ria.templates.ModelPropertyBind ], Number, "totalCount", [ ria.templates.ModelPropertyBind ], Number, "totalPages", [ ria.templates.ModelPropertyBind ], Boolean, "hasNextPage", [ ria.templates.ModelPropertyBind ], Boolean, "hasPreviousPage" ]);
         })();
     })();
     "chlk.templates.PaginatedList";
@@ -9677,7 +9897,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.feed." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_lwoje4cb9abmaemi") ], [ ria.templates.ModelBind(chlk.models.common.PaginatedList) ], "Feed", ria.__SYNTAX.EXTENDS(chlk.templates.PaginatedList), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.announcement.Announcement), "items" ]);
+            }([ ria.templates.TemplateBind("_zsl4e6z6pkdwjyvi") ], [ ria.templates.ModelBind(chlk.models.common.PaginatedList) ], "Feed", ria.__SYNTAX.EXTENDS(chlk.templates.PaginatedList), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.announcement.Announcement), "items" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -9766,7 +9986,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.models.developer." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }("DeveloperInfo", [ chlk.models.id.SchoolPersonId, "id", [ ria.serialize.SerializeProperty("displayname") ], String, "displayName", String, "email", [ ria.serialize.SerializeProperty("firstname") ], String, "firstName", [ ria.serialize.SerializeProperty("lastname") ], String, "lastName", String, "name", [ ria.serialize.SerializeProperty("schoolid") ], chlk.models.id.SchoolId, "schoolId", [ ria.serialize.SerializeProperty("website") ], String, "webSite" ]);
+            }("DeveloperInfo", [ chlk.models.id.SchoolPersonId, "id", [ ria.serialize.SerializeProperty("displayname") ], String, "displayName", String, "email", [ ria.serialize.SerializeProperty("firstname") ], String, "firstName", [ ria.serialize.SerializeProperty("lastname") ], String, "lastName", String, "name", [ ria.serialize.SerializeProperty("schoolid") ], chlk.models.id.SchoolId, "schoolId", [ ria.serialize.SerializeProperty("websitelink") ], String, "webSite" ]);
         })();
     })();
     "chlk.services.BaseInfoService";
@@ -9836,7 +10056,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._r52gg2e2clqv9529 = function anonymous(locals) {
+    __ASSETS._bnn880zb7m5z5mi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="developer"><div class="info"><h2>Base Info</h2>');
@@ -9881,7 +10101,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.profile." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_r52gg2e2clqv9529") ], [ ria.templates.ModelBind(chlk.models.developer.DeveloperInfo) ], "DeveloperProfile", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolPersonId, "id", [ ria.templates.ModelPropertyBind ], String, "displayName", [ ria.templates.ModelPropertyBind ], String, "email", [ ria.templates.ModelPropertyBind ], String, "firstName", [ ria.templates.ModelPropertyBind ], String, "lastName", [ ria.templates.ModelPropertyBind ], String, "name", [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolId, "schoolId", [ ria.templates.ModelPropertyBind ], String, "webSite" ]);
+            }([ ria.templates.TemplateBind("_bnn880zb7m5z5mi") ], [ ria.templates.ModelBind(chlk.models.developer.DeveloperInfo) ], "DeveloperProfile", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolPersonId, "id", [ ria.templates.ModelPropertyBind ], String, "displayName", [ ria.templates.ModelPropertyBind ], String, "email", [ ria.templates.ModelPropertyBind ], String, "firstName", [ ria.templates.ModelPropertyBind ], String, "lastName", [ ria.templates.ModelPropertyBind ], String, "name", [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolId, "schoolId", [ ria.templates.ModelPropertyBind ], String, "webSite" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -9897,7 +10117,7 @@ exports.globals = {};
             }([ ria.mvc.DomAppendTo("#main") ], [ chlk.activities.lib.PageClass("profile") ], [ ria.mvc.TemplateBind(chlk.templates.profile.DeveloperProfile) ], "DeveloperPage", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePage), []);
         })();
     })();
-    __ASSETS._45uac5c89scvunmi = function anonymous(locals) {
+    __ASSETS._tzp1m4sxb6426gvi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="info-edit">');
@@ -9947,7 +10167,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.profile." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_45uac5c89scvunmi") ], [ ria.templates.ModelBind(ria.__API.Class) ], "ChangePassword", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), []);
+            }([ ria.templates.TemplateBind("_tzp1m4sxb6426gvi") ], [ ria.templates.ModelBind(ria.__API.Class) ], "ChangePassword", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), []);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -10136,29 +10356,6 @@ exports.globals = {};
             }();
         })();
     })();
-    (function() {
-        ((chlk = chlk || {}).models = chlk.models || {}).id = chlk.models.id || {};
-        (function() {
-            "use strict";
-            chlk.models.id.RoomId =             function wrapper() {
-                var values = {};
-                function RoomId(value) {
-                    return values.hasOwnProperty(value) ? values[value] : values[value] = new RoomIdImpl(value);
-                }
-                ria.__API.identifier(RoomId, "chlk.models.id.RoomId");
-                function RoomIdImpl(value) {
-                    this.valueOf = function() {
-                        return value;
-                    };
-                    this.toString = function toString() {
-                        return "[chlk.models.id.RoomId#" + value + "]";
-                    };
-                }
-                ria.__API.extend(RoomIdImpl, RoomId);
-                return RoomId;
-            }();
-        })();
-    })();
     "chlk.models.id.ClassPeriodId";
     "chlk.models.id.ClassId";
     "chlk.models.id.RoomId";
@@ -10201,20 +10398,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.models.calendar.announcement." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }("CalendarDayItem", [ [ ria.serialize.SerializeProperty("announcementclassperiods") ], ria.__API.ArrayOf(chlk.models.announcement.AnnouncementClassPeriod), "announcementClassPeriods", chlk.models.period.Period, "period" ]);
-        })();
-    })();
-    "chlk.models.calendar.announcement.CalendarDayItem";
-    (function() {
-        (((chlk = chlk || {}).models = chlk.models || {}).calendar = chlk.models.calendar || {}).announcement = chlk.models.calendar.announcement || {};
-        (function() {
-            "use strict";
-            chlk.models.calendar.announcement.DayItem = function ClassCompilerImpl() {
-                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
-                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
-                var name = "chlk.models.calendar.announcement." + def.name;
-                return ria.__SYNTAX.compileClass(name, def);
-            }("DayItem", [ chlk.models.common.ChlkDate, "date", Number, "day", [ ria.serialize.SerializeProperty("calendardayitems") ], ria.__API.ArrayOf(chlk.models.calendar.announcement.CalendarDayItem), "calendarDayItems" ]);
+            }("CalendarDayItem", ria.__SYNTAX.EXTENDS(chlk.models.Popup), [ [ ria.serialize.SerializeProperty("announcementclassperiods") ], ria.__API.ArrayOf(chlk.models.announcement.AnnouncementClassPeriod), "announcementClassPeriods", chlk.models.period.Period, "period", chlk.models.common.ChlkDate, "date" ]);
         })();
     })();
     "chlk.models.common.ChlkDate";
@@ -10237,7 +10421,7 @@ exports.globals = {};
     "chlk.models.calendar.announcement.MonthItem";
     "chlk.models.calendar.announcement.Week";
     "chlk.models.calendar.announcement.WeekItem";
-    "chlk.models.calendar.announcement.DayItem";
+    "chlk.models.calendar.announcement.CalendarDayItem";
     "chlk.models.calendar.TeacherSettingsCalendarDay";
     "chlk.models.id.ClassId";
     (function() {
@@ -10264,6 +10448,13 @@ exports.globals = {};
                     if (day.getDate().isSameDay(date)) res = day;
                 });
                 return new ria.async.DeferredData(res);
+            }, [ [ chlk.models.common.ChlkDate, Number ] ], ria.async.Future, function getDayPopupInfo(date, periodNumber) {
+                var dayCalendarData = this.getContext().getSession().get("dayCalendarData", []), res = null;
+                dayCalendarData.forEach(function(day) {
+                    if (day.getDate().isSameDay(date)) res = day;
+                });
+                res = res.getCalendarDayItems()[periodNumber];
+                return new ria.async.DeferredData(res);
             }, [ [ chlk.models.common.ChlkDate, Number ] ], ria.async.Future, function getWeekDayInfo(date, periodNumber_) {
                 var weekCalendarData = this.getContext().getSession().get("weekCalendarData", []), res = null;
                 weekCalendarData.forEach(function(day) {
@@ -10276,6 +10467,13 @@ exports.globals = {};
                     classId: classId_ && classId_.valueOf(),
                     date: date_ && date_.toString("mm-dd-yy")
                 });
+            }, [ [ chlk.models.common.ChlkDate ] ], ria.async.Future, function getDayInfo(date_) {
+                return this.get("AnnouncementCalendar/Day.json", ria.__API.ArrayOf(chlk.models.calendar.announcement.DayItem), {
+                    date: date_ && date_.toString("mm-dd-yy")
+                }).then(function(model) {
+                    this.getContext().getSession().set("dayCalendarData", model);
+                    return model;
+                }.bind(this));
             }, [ [ ria.__API.ArrayOf(chlk.models.calendar.announcement.WeekItem), chlk.models.common.ChlkDate ] ], ria.__API.ArrayOf(chlk.models.calendar.announcement.WeekItem), function prepareWeekData(data, date_) {
                 var max = 0, index = 0, kil = 0, empty = 0, empty2 = 0, sun, date, startArray = [], endArray = [];
                 var len = data.length;
@@ -10364,7 +10562,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._wnygqghqa9ssjor = function anonymous(locals) {
+    __ASSETS._lpcmnojr70dg3nmi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="chlk-calendar">');
@@ -10647,7 +10845,7 @@ exports.globals = {};
         buf.push("</div></div>");
         return buf.join("");
     };
-    __ASSETS._pclz4x3fyrlr3sor = function anonymous(locals) {
+    __ASSETS._othn9vjqwyd5cdi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="chlk-calendar">');
@@ -10902,7 +11100,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.calendar.announcement." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_pclz4x3fyrlr3sor") ], [ ria.templates.ModelBind(chlk.models.calendar.announcement.Month) ], [ chlk.activities.lib.PageClass("calendar") ], "MonthPage", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.calendar.announcement.MonthItem), "items", [ ria.templates.ModelPropertyBind ], chlk.models.class.ClassesForTopBar, "topData", [ ria.templates.ModelPropertyBind ], Number, "selectedTypeId", [ ria.templates.ModelPropertyBind ], String, "currentTitle", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "nextDate", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "prevDate", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "currentDate" ]);
+            }([ ria.templates.TemplateBind("_othn9vjqwyd5cdi") ], [ ria.templates.ModelBind(chlk.models.calendar.announcement.Month) ], [ chlk.activities.lib.PageClass("calendar") ], "MonthPage", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.calendar.announcement.MonthItem), "items", [ ria.templates.ModelPropertyBind ], chlk.models.class.ClassesForTopBar, "topData", [ ria.templates.ModelPropertyBind ], Number, "selectedTypeId", [ ria.templates.ModelPropertyBind ], String, "currentTitle", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "nextDate", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "prevDate", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "currentDate" ]);
         })();
     })();
     "chlk.templates.calendar.announcement.MonthPage";
@@ -10915,7 +11113,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.calendar.announcement." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_wnygqghqa9ssjor") ], [ ria.templates.ModelBind(chlk.models.calendar.announcement.Week) ], [ chlk.activities.lib.PageClass("calendar") ], "WeekPage", ria.__SYNTAX.EXTENDS(chlk.templates.calendar.announcement.MonthPage), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.calendar.announcement.WeekItem), "items" ]);
+            }([ ria.templates.TemplateBind("_lpcmnojr70dg3nmi") ], [ ria.templates.ModelBind(chlk.models.calendar.announcement.Week) ], [ chlk.activities.lib.PageClass("calendar") ], "WeekPage", ria.__SYNTAX.EXTENDS(chlk.templates.calendar.announcement.MonthPage), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.calendar.announcement.WeekItem), "items" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -10942,6 +11140,288 @@ exports.globals = {};
                 var name = "chlk.activities.calendar.announcement." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
             }([ ria.mvc.DomAppendTo("#main") ], [ chlk.activities.lib.PageClass("calendar") ], [ ria.mvc.TemplateBind(chlk.templates.calendar.announcement.MonthPage) ], "MonthPage", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePage), []);
+        })();
+    })();
+    __ASSETS._zzd6l1zu305ghkt9 = function anonymous(locals) {
+        var buf = [];
+        var self = locals || {};
+        buf.push('<div class="chlk-calendar"><div class="header"><div class="header-container"><div class="buttons-container"><div class="buttons"><div class="calendar-today-container">');
+        jade.globals.ActionLink_mixin.call({
+            buf: buf,
+            attributes: {
+                "class": "calendar-today" + " " + "week"
+            },
+            escaped: {}
+        }, "calendar", "day");
+        buf.push('</div><div class="prev-month-container">');
+        if (self.getPrevDate()) {
+            jade.globals.ActionLink_mixin.call({
+                buf: buf,
+                attributes: {
+                    "class": "prev-month" + " " + "week" + " " + "teacher"
+                },
+                escaped: {}
+            }, "calendar", "day", self.getPrevDate().format("mm-dd-yy"));
+        } else {
+            buf.push('<A class="prev-month week teacher"></A>');
+        }
+        buf.push('</div><div class="current-month-container week"><label class="current-month">' + jade.escape(null == (jade.interp = self.getCurrentTitle()) ? "" : jade.interp) + '</label></div><div class="next-month-container">');
+        if (self.getNextDate()) {
+            jade.globals.ActionLink_mixin.call({
+                buf: buf,
+                attributes: {
+                    "class": "next-month" + " " + "week"
+                },
+                escaped: {}
+            }, "calendar", "day", self.getNextDate().format("mm-dd-yy"));
+        } else {
+            buf.push('<A class="next-month week"></A>');
+        }
+        buf.push('</div><div class="calendar-day-container">');
+        jade.globals.ActionLink_mixin.call({
+            buf: buf,
+            block: function() {
+                buf.push('<span class="tooltip"></span>');
+            },
+            attributes: {
+                "class": "calendar-day" + " " + "week" + " " + "pressed"
+            },
+            escaped: {}
+        }, "calendar", "day");
+        buf.push('</div><div class="calendar-week-container">');
+        jade.globals.ActionLink_mixin.call({
+            buf: buf,
+            block: function() {
+                buf.push('<span class="tooltip"></span>');
+            },
+            attributes: {
+                "class": "calendar-week" + " " + "week"
+            },
+            escaped: {}
+        }, "calendar", "week");
+        buf.push('</div><div class="calendar-month-container">');
+        jade.globals.ActionLink_mixin.call({
+            buf: buf,
+            block: function() {
+                buf.push('<span class="tooltip"></span>');
+            },
+            attributes: {
+                "class": "calendar-month" + " " + "week"
+            },
+            escaped: {}
+        }, "calendar", "month");
+        buf.push('</div></div></div></div></div><div class="day-names day">');
+        (function() {
+            var $$obj = self.getItems();
+            if ("number" == typeof $$obj.length) {
+                for (var i = 0, $$l = $$obj.length; i < $$l; i++) {
+                    var item = $$obj[i];
+                    buf.push("<div" + jade.attrs({
+                        "class": item.getTodayClassName() + " " + "day"
+                    }, {}) + ">");
+                    if (item.getDate().getDate().getDay()) {
+                        buf.push("<p>" + jade.escape(null == (jade.interp = item.getDate().format("DD")) ? "" : jade.interp) + "</p>");
+                    }
+                    buf.push("</div>");
+                }
+            } else {
+                var $$l = 0;
+                for (var i in $$obj) {
+                    $$l++;
+                    var item = $$obj[i];
+                    buf.push("<div" + jade.attrs({
+                        "class": item.getTodayClassName() + " " + "day"
+                    }, {}) + ">");
+                    if (item.getDate().getDate().getDay()) {
+                        buf.push("<p>" + jade.escape(null == (jade.interp = item.getDate().format("DD")) ? "" : jade.interp) + "</p>");
+                    }
+                    buf.push("</div>");
+                }
+            }
+        }).call(this);
+        buf.push('</div><div class="items">');
+        (function() {
+            var $$obj = self.getItems();
+            if ("number" == typeof $$obj.length) {
+                for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+                    var item = $$obj[$index];
+                    buf.push("<div" + jade.attrs({
+                        "class": item.getTodayClassName() + " " + "gradient-cnt" + " " + "item" + " " + "week-day" + " " + "day"
+                    }, {}) + "><ul>");
+                    var items = item.getCalendarDayItems() || [];
+                    (function() {
+                        var $$obj = items;
+                        if ("number" == typeof $$obj.length) {
+                            for (var i = 0, $$l = $$obj.length; i < $$l; i++) {
+                                var calendarDayItem = $$obj[i];
+                                jade.globals.ActionLink_mixin.call({
+                                    buf: buf,
+                                    block: function() {
+                                        if (item.getDate().getDate().getDay() == 0) {
+                                            buf.push('<div class="period-info">' + jade.escape(null == (jade.interp = i + 1) ? "" : jade.interp) + '</div><span class="time">' + jade.escape((jade.interp = calendarDayItem.getPeriod().getStartTime()) == null ? "" : jade.interp) + " - " + jade.escape((jade.interp = calendarDayItem.getPeriod().getEndTime()) == null ? "" : jade.interp) + "</span>");
+                                        } else {
+                                            buf.push('<li><div class="course-icon"><div class="img"></div></div><div class="p-container"><p class="title day-title">');
+                                            var period = calendarDayItem.getAnnouncementClassPeriods()[0];
+                                            if (period) {
+                                                buf.push("<span>" + jade.escape(null == (jade.interp = period.getClassPeriod().getClazz().getName()) ? "" : jade.interp) + "</span>");
+                                            }
+                                            buf.push("</p></div></li>");
+                                        }
+                                    },
+                                    attributes: {
+                                        "class": "period-item" + " " + "day"
+                                    },
+                                    escaped: {}
+                                }, "calendar", "showDayPopUp", item.getDate().format("mm-dd-yy"), i);
+                            }
+                        } else {
+                            var $$l = 0;
+                            for (var i in $$obj) {
+                                $$l++;
+                                var calendarDayItem = $$obj[i];
+                                jade.globals.ActionLink_mixin.call({
+                                    buf: buf,
+                                    block: function() {
+                                        if (item.getDate().getDate().getDay() == 0) {
+                                            buf.push('<div class="period-info">' + jade.escape(null == (jade.interp = i + 1) ? "" : jade.interp) + '</div><span class="time">' + jade.escape((jade.interp = calendarDayItem.getPeriod().getStartTime()) == null ? "" : jade.interp) + " - " + jade.escape((jade.interp = calendarDayItem.getPeriod().getEndTime()) == null ? "" : jade.interp) + "</span>");
+                                        } else {
+                                            buf.push('<li><div class="course-icon"><div class="img"></div></div><div class="p-container"><p class="title day-title">');
+                                            var period = calendarDayItem.getAnnouncementClassPeriods()[0];
+                                            if (period) {
+                                                buf.push("<span>" + jade.escape(null == (jade.interp = period.getClassPeriod().getClazz().getName()) ? "" : jade.interp) + "</span>");
+                                            }
+                                            buf.push("</p></div></li>");
+                                        }
+                                    },
+                                    attributes: {
+                                        "class": "period-item" + " " + "day"
+                                    },
+                                    escaped: {}
+                                }, "calendar", "showDayPopUp", item.getDate().format("mm-dd-yy"), i);
+                            }
+                        }
+                    }).call(this);
+                    buf.push("</ul></div>");
+                }
+            } else {
+                var $$l = 0;
+                for (var $index in $$obj) {
+                    $$l++;
+                    var item = $$obj[$index];
+                    buf.push("<div" + jade.attrs({
+                        "class": item.getTodayClassName() + " " + "gradient-cnt" + " " + "item" + " " + "week-day" + " " + "day"
+                    }, {}) + "><ul>");
+                    var items = item.getCalendarDayItems() || [];
+                    (function() {
+                        var $$obj = items;
+                        if ("number" == typeof $$obj.length) {
+                            for (var i = 0, $$l = $$obj.length; i < $$l; i++) {
+                                var calendarDayItem = $$obj[i];
+                                jade.globals.ActionLink_mixin.call({
+                                    buf: buf,
+                                    block: function() {
+                                        if (item.getDate().getDate().getDay() == 0) {
+                                            buf.push('<div class="period-info">' + jade.escape(null == (jade.interp = i + 1) ? "" : jade.interp) + '</div><span class="time">' + jade.escape((jade.interp = calendarDayItem.getPeriod().getStartTime()) == null ? "" : jade.interp) + " - " + jade.escape((jade.interp = calendarDayItem.getPeriod().getEndTime()) == null ? "" : jade.interp) + "</span>");
+                                        } else {
+                                            buf.push('<li><div class="course-icon"><div class="img"></div></div><div class="p-container"><p class="title day-title">');
+                                            var period = calendarDayItem.getAnnouncementClassPeriods()[0];
+                                            if (period) {
+                                                buf.push("<span>" + jade.escape(null == (jade.interp = period.getClassPeriod().getClazz().getName()) ? "" : jade.interp) + "</span>");
+                                            }
+                                            buf.push("</p></div></li>");
+                                        }
+                                    },
+                                    attributes: {
+                                        "class": "period-item" + " " + "day"
+                                    },
+                                    escaped: {}
+                                }, "calendar", "showDayPopUp", item.getDate().format("mm-dd-yy"), i);
+                            }
+                        } else {
+                            var $$l = 0;
+                            for (var i in $$obj) {
+                                $$l++;
+                                var calendarDayItem = $$obj[i];
+                                jade.globals.ActionLink_mixin.call({
+                                    buf: buf,
+                                    block: function() {
+                                        if (item.getDate().getDate().getDay() == 0) {
+                                            buf.push('<div class="period-info">' + jade.escape(null == (jade.interp = i + 1) ? "" : jade.interp) + '</div><span class="time">' + jade.escape((jade.interp = calendarDayItem.getPeriod().getStartTime()) == null ? "" : jade.interp) + " - " + jade.escape((jade.interp = calendarDayItem.getPeriod().getEndTime()) == null ? "" : jade.interp) + "</span>");
+                                        } else {
+                                            buf.push('<li><div class="course-icon"><div class="img"></div></div><div class="p-container"><p class="title day-title">');
+                                            var period = calendarDayItem.getAnnouncementClassPeriods()[0];
+                                            if (period) {
+                                                buf.push("<span>" + jade.escape(null == (jade.interp = period.getClassPeriod().getClazz().getName()) ? "" : jade.interp) + "</span>");
+                                            }
+                                            buf.push("</p></div></li>");
+                                        }
+                                    },
+                                    attributes: {
+                                        "class": "period-item" + " " + "day"
+                                    },
+                                    escaped: {}
+                                }, "calendar", "showDayPopUp", item.getDate().format("mm-dd-yy"), i);
+                            }
+                        }
+                    }).call(this);
+                    buf.push("</ul></div>");
+                }
+            }
+        }).call(this);
+        buf.push("</div></div>");
+        return buf.join("");
+    };
+    "chlk.models.calendar.announcement.CalendarDayItem";
+    (function() {
+        (((chlk = chlk || {}).models = chlk.models || {}).calendar = chlk.models.calendar || {}).announcement = chlk.models.calendar.announcement || {};
+        (function() {
+            "use strict";
+            chlk.models.calendar.announcement.DayItem = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.models.calendar.announcement." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("DayItem", [ chlk.models.common.ChlkDate, "date", Number, "day", String, "todayClassName", [ ria.serialize.SerializeProperty("calendardayitems") ], ria.__API.ArrayOf(chlk.models.calendar.announcement.CalendarDayItem), "calendarDayItems" ]);
+        })();
+    })();
+    "chlk.models.calendar.announcement.DayItem";
+    "chlk.models.calendar.announcement.Month";
+    (function() {
+        (((chlk = chlk || {}).models = chlk.models || {}).calendar = chlk.models.calendar || {}).announcement = chlk.models.calendar.announcement || {};
+        (function() {
+            "use strict";
+            chlk.models.calendar.announcement.Day = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.models.calendar.announcement." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("Day", ria.__SYNTAX.EXTENDS(chlk.models.calendar.announcement.Month), [ ria.__API.ArrayOf(chlk.models.calendar.announcement.DayItem), "items" ]);
+        })();
+    })();
+    "chlk.templates.calendar.announcement.MonthPage";
+    "chlk.models.calendar.announcement.Day";
+    (function() {
+        (((chlk = chlk || {}).templates = chlk.templates || {}).calendar = chlk.templates.calendar || {}).announcement = chlk.templates.calendar.announcement || {};
+        (function() {
+            chlk.templates.calendar.announcement.DayPage = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.templates.calendar.announcement." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }([ ria.templates.TemplateBind("_zzd6l1zu305ghkt9") ], [ ria.templates.ModelBind(chlk.models.calendar.announcement.Day) ], [ chlk.activities.lib.PageClass("calendar") ], "DayPage", ria.__SYNTAX.EXTENDS(chlk.templates.calendar.announcement.MonthPage), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.calendar.announcement.DayItem), "items" ]);
+        })();
+    })();
+    "chlk.activities.lib.TemplatePage";
+    "chlk.templates.calendar.announcement.DayPage";
+    (function() {
+        (((chlk = chlk || {}).activities = chlk.activities || {}).calendar = chlk.activities.calendar || {}).announcement = chlk.activities.calendar.announcement || {};
+        (function() {
+            chlk.activities.calendar.announcement.DayPage = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.activities.calendar.announcement." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }([ ria.mvc.DomAppendTo("#main") ], [ chlk.activities.lib.PageClass("calendar") ], [ ria.mvc.TemplateBind(chlk.templates.calendar.announcement.DayPage) ], "DayPage", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePage), []);
         })();
     })();
     "ria.mvc.TemplateActivity";
@@ -11018,7 +11498,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._wzceypuxnknsif6r = function anonymous(locals) {
+    __ASSETS._c20ae4n2p0newmi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="calendar-popup">');
@@ -11038,7 +11518,7 @@ exports.globals = {};
                                 buf.push('<div><p class="title">' + jade.escape(null == (jade.interp = item.getTitle()) ? "" : jade.interp) + '</p><p class="under">' + jade.escape(null == (jade.interp = item.getClassName() || item.getPersonName()) ? "" : jade.interp) + "</p></div>");
                             },
                             attributes: {
-                                "class": "pop-up-announcement"
+                                "class": "announcement-type-" + item.getAnnouncementTypeId() + " " + "pop-up-announcement"
                             },
                             escaped: {}
                         }, "announcement", "view", item.getId());
@@ -11056,7 +11536,7 @@ exports.globals = {};
                                 buf.push('<div><p class="title">' + jade.escape(null == (jade.interp = item.getTitle()) ? "" : jade.interp) + '</p><p class="under">' + jade.escape(null == (jade.interp = item.getClassName() || item.getPersonName()) ? "" : jade.interp) + "</p></div>");
                             },
                             attributes: {
-                                "class": "pop-up-announcement"
+                                "class": "announcement-type-" + item.getAnnouncementTypeId() + " " + "pop-up-announcement"
                             },
                             escaped: {}
                         }, "announcement", "view", item.getId());
@@ -11083,7 +11563,7 @@ exports.globals = {};
                                 buf.push('<div><p class="item-title">' + jade.escape(null == (jade.interp = item.getTitle()) ? "" : jade.interp) + '</p><p class="classname-under">' + jade.escape(null == (jade.interp = item.getClassName()) ? "" : jade.interp) + "</p></div>");
                             },
                             attributes: {
-                                "class": "pop-up-item"
+                                "class": "announcement-type-" + item.getAnnouncementTypeId() + " " + "pop-up-item"
                             },
                             escaped: {}
                         }, "announcement", "view", item.getId());
@@ -11103,7 +11583,7 @@ exports.globals = {};
                                 buf.push('<div><p class="item-title">' + jade.escape(null == (jade.interp = item.getTitle()) ? "" : jade.interp) + '</p><p class="classname-under">' + jade.escape(null == (jade.interp = item.getClassName()) ? "" : jade.interp) + "</p></div>");
                             },
                             attributes: {
-                                "class": "pop-up-item"
+                                "class": "announcement-type-" + item.getAnnouncementTypeId() + " " + "pop-up-item"
                             },
                             escaped: {}
                         }, "announcement", "view", item.getId());
@@ -11147,7 +11627,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.calendar.announcement." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_wzceypuxnknsif6r") ], [ ria.templates.ModelBind(chlk.models.calendar.announcement.MonthItem) ], "MonthDay", ria.__SYNTAX.EXTENDS(chlk.templates.Popup), [ [ ria.templates.ModelPropertyBind ], Number, "day", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "date", [ ria.templates.ModelPropertyBind ], chlk.models.schoolYear.ScheduleSection, "scheduleSection", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.announcement.Announcement), "announcements", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.announcement.Announcement), "items", [ ria.templates.ModelPropertyBind ], ria.dom.Dom, "target" ]);
+            }([ ria.templates.TemplateBind("_c20ae4n2p0newmi") ], [ ria.templates.ModelBind(chlk.models.calendar.announcement.MonthItem) ], "MonthDay", ria.__SYNTAX.EXTENDS(chlk.templates.Popup), [ [ ria.templates.ModelPropertyBind ], Number, "day", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "date", [ ria.templates.ModelPropertyBind ], chlk.models.schoolYear.ScheduleSection, "scheduleSection", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.announcement.Announcement), "announcements", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.announcement.Announcement), "items", [ ria.templates.ModelPropertyBind ], ria.dom.Dom, "target" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePopup";
@@ -11163,7 +11643,7 @@ exports.globals = {};
             }([ ria.mvc.DomAppendTo("#chlk-pop-up-container") ], [ chlk.activities.lib.IsHorizontalAxis(false) ], [ chlk.activities.lib.isTopLeftPosition(false) ], [ ria.mvc.ActivityGroup("CalendarPopUp") ], [ ria.mvc.TemplateBind(chlk.templates.calendar.announcement.MonthDay) ], "MonthDayPopUp", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePopup), []);
         })();
     })();
-    __ASSETS._ojsvjbr2asymygb9 = function anonymous(locals) {
+    __ASSETS._lxbbokq6xj3y2e29 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="calendar-popup">');
@@ -11182,7 +11662,7 @@ exports.globals = {};
                                 buf.push('<div><p class="title">' + jade.escape(null == (jade.interp = item.getTitle()) ? "" : jade.interp) + '</p><p class="classname-under">' + jade.escape(null == (jade.interp = item.getClassName() || item.getPersonName()) ? "" : jade.interp) + "</p></div>");
                             },
                             attributes: {
-                                "class": "pop-up-announcement"
+                                "class": "announcement-type-" + item.getAnnouncementTypeId() + " " + "pop-up-announcement"
                             },
                             escaped: {}
                         }, "announcement", "view", item.getId());
@@ -11200,7 +11680,7 @@ exports.globals = {};
                                 buf.push('<div><p class="title">' + jade.escape(null == (jade.interp = item.getTitle()) ? "" : jade.interp) + '</p><p class="classname-under">' + jade.escape(null == (jade.interp = item.getClassName() || item.getPersonName()) ? "" : jade.interp) + "</p></div>");
                             },
                             attributes: {
-                                "class": "pop-up-announcement"
+                                "class": "announcement-type-" + item.getAnnouncementTypeId() + " " + "pop-up-announcement"
                             },
                             escaped: {}
                         }, "announcement", "view", item.getId());
@@ -11230,7 +11710,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.calendar.announcement." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_ojsvjbr2asymygb9") ], [ ria.templates.ModelBind(chlk.models.calendar.announcement.WeekItem) ], "WeekDay", ria.__SYNTAX.EXTENDS(chlk.templates.Popup), [ [ ria.templates.ModelPropertyBind ], Number, "day", [ ria.templates.ModelPropertyBind ], Boolean, "sunday", [ ria.templates.ModelPropertyBind ], String, "todayClassName", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "date", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.announcement.AnnouncementPeriod), "announcementPeriods", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.announcement.Announcement), "announcements", [ ria.templates.ModelPropertyBind ], ria.dom.Dom, "target" ]);
+            }([ ria.templates.TemplateBind("_lxbbokq6xj3y2e29") ], [ ria.templates.ModelBind(chlk.models.calendar.announcement.WeekItem) ], "WeekDay", ria.__SYNTAX.EXTENDS(chlk.templates.Popup), [ [ ria.templates.ModelPropertyBind ], Number, "day", [ ria.templates.ModelPropertyBind ], Boolean, "sunday", [ ria.templates.ModelPropertyBind ], String, "todayClassName", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "date", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.announcement.AnnouncementPeriod), "announcementPeriods", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.announcement.Announcement), "announcements" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePopup";
@@ -11246,7 +11726,7 @@ exports.globals = {};
             }([ ria.mvc.DomAppendTo("#chlk-pop-up-container") ], [ chlk.activities.lib.IsHorizontalAxis(false) ], [ chlk.activities.lib.isTopLeftPosition(false) ], [ ria.mvc.ActivityGroup("CalendarPopUp") ], [ ria.mvc.TemplateBind(chlk.templates.calendar.announcement.WeekDay) ], "WeekBarPopUp", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePopup), []);
         })();
     })();
-    __ASSETS._6mvgnbzqjhdgf1or = function anonymous(locals) {
+    __ASSETS._qcvh4xa5frrrizfr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="calendar-popup">');
@@ -11254,7 +11734,12 @@ exports.globals = {};
         var period = self.getPeriod();
         var roomNumber = self.getRoomNumber();
         if (announcements.length > 0) {
-            buf.push('<div class="class-name"><h3 class="day-day"><!--todo add link to the class--><a>' + jade.escape(null == (jade.interp = announcements[0].getClassName()) ? "" : jade.interp) + "</a></h3></div>");
+            buf.push('<div class="class-name"><h3 class="day-day">');
+            var clazz = announcementclassperiod.getClassPeriod().getClazz();
+            jade.globals.ActionLink_mixin.call({
+                buf: buf
+            }, "class", "details", announcements[0].getClassId().valueOf());
+            buf.push("</h3></div>");
         }
         buf.push('<div class="info">');
         if (roomNumber) {
@@ -11275,7 +11760,7 @@ exports.globals = {};
                                 buf.push('<div><p class="item-title">' + jade.escape((jade.interp = item.getAnnouncementTypeName()) == null ? "" : jade.interp) + " " + jade.escape((jade.interp = item.getOrder()) == null ? "" : jade.interp) + "</p></div>");
                             },
                             attributes: {
-                                "class": "pop-up-announcement"
+                                "class": "announcement-type-" + item.getAnnouncementTypeId() + " " + "pop-up-announcement"
                             },
                             escaped: {}
                         }, "announcement", "view", item.getId());
@@ -11293,7 +11778,7 @@ exports.globals = {};
                                 buf.push('<div><p class="item-title">' + jade.escape((jade.interp = item.getAnnouncementTypeName()) == null ? "" : jade.interp) + " " + jade.escape((jade.interp = item.getOrder()) == null ? "" : jade.interp) + "</p></div>");
                             },
                             attributes: {
-                                "class": "pop-up-announcement"
+                                "class": "announcement-type-" + item.getAnnouncementTypeId() + " " + "pop-up-announcement"
                             },
                             escaped: {}
                         }, "announcement", "view", item.getId());
@@ -11323,7 +11808,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.announcement." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_6mvgnbzqjhdgf1or") ], [ ria.templates.ModelBind(chlk.models.announcement.AnnouncementPeriod) ], "AnnouncementPeriod", ria.__SYNTAX.EXTENDS(chlk.templates.Popup), [ [ ria.templates.ModelPropertyBind ], chlk.models.period.Period, "period", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.announcement.Announcement), "announcements", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "date", [ ria.templates.ModelPropertyBind ], Number, "roomNumber" ]);
+            }([ ria.templates.TemplateBind("_qcvh4xa5frrrizfr") ], [ ria.templates.ModelBind(chlk.models.announcement.AnnouncementPeriod) ], "AnnouncementPeriod", ria.__SYNTAX.EXTENDS(chlk.templates.Popup), [ [ ria.templates.ModelPropertyBind ], chlk.models.period.Period, "period", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.announcement.Announcement), "announcements", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "date", [ ria.templates.ModelPropertyBind ], Number, "roomNumber" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePopup";
@@ -11339,19 +11824,119 @@ exports.globals = {};
             }([ ria.mvc.DomAppendTo("#chlk-pop-up-container") ], [ chlk.activities.lib.IsHorizontalAxis(true) ], [ chlk.activities.lib.isTopLeftPosition(false) ], [ ria.mvc.ActivityGroup("CalendarPopUp") ], [ ria.mvc.TemplateBind(chlk.templates.announcement.AnnouncementPeriod) ], "WeekDayPopUp", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePopup), []);
         })();
     })();
+    __ASSETS._ziwaa7sbwkf8yqfr = function anonymous(locals) {
+        var buf = [];
+        var self = locals || {};
+        buf.push('<div class="calendar-popup">');
+        var announcementclassperiod = self.getAnnouncementClassPeriods()[0];
+        var announcements = announcementclassperiod.getAnnouncements();
+        var period = self.getPeriod();
+        var roomNumber = announcementclassperiod.getClassPeriod().getRoomNumber();
+        buf.push('<div class="class-name"><h3 class="day-day">');
+        var clazz = announcementclassperiod.getClassPeriod().getClazz();
+        jade.globals.ActionLink_mixin.call({
+            buf: buf
+        }, "class", "details", clazz.getId().valueOf());
+        buf.push('</h3></div><div class="info">');
+        if (roomNumber) {
+            buf.push('<p class="day-down"><a>Rm ' + jade.escape((jade.interp = roomNumber) == null ? "" : jade.interp) + "</a></p><br/>");
+        }
+        buf.push('<p class="day-down"><a>' + jade.escape((jade.interp = period.getStartTime()) == null ? "" : jade.interp) + " " + jade.escape((jade.interp = period.getEndTime()) == null ? "" : jade.interp) + '</a></p><br/><p class="day-down"><a>' + jade.escape(null == (jade.interp = self.getDate().format("DD, MM d")) ? "" : jade.interp) + "</a></p><br/></div>");
+        if (announcements.length > 0) {
+            buf.push('<div class="announcements-list"><ul class="day-announcements">');
+            (function() {
+                var $$obj = announcements;
+                if ("number" == typeof $$obj.length) {
+                    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+                        var item = $$obj[$index];
+                        buf.push('<li class="items">');
+                        jade.globals.ActionLink_mixin.call({
+                            buf: buf,
+                            block: function() {
+                                buf.push('<div><p class="item-title">' + jade.escape((jade.interp = item.getAnnouncementTypeName()) == null ? "" : jade.interp) + " " + jade.escape((jade.interp = item.getOrder()) == null ? "" : jade.interp) + "</p></div>");
+                            },
+                            attributes: {
+                                "class": "announcement-type-" + item.getAnnouncementTypeId() + " " + "pop-up-announcement"
+                            },
+                            escaped: {}
+                        }, "announcement", "view", item.getId());
+                        buf.push("</li>");
+                    }
+                } else {
+                    var $$l = 0;
+                    for (var $index in $$obj) {
+                        $$l++;
+                        var item = $$obj[$index];
+                        buf.push('<li class="items">');
+                        jade.globals.ActionLink_mixin.call({
+                            buf: buf,
+                            block: function() {
+                                buf.push('<div><p class="item-title">' + jade.escape((jade.interp = item.getAnnouncementTypeName()) == null ? "" : jade.interp) + " " + jade.escape((jade.interp = item.getOrder()) == null ? "" : jade.interp) + "</p></div>");
+                            },
+                            attributes: {
+                                "class": "announcement-type-" + item.getAnnouncementTypeId() + " " + "pop-up-announcement"
+                            },
+                            escaped: {}
+                        }, "announcement", "view", item.getId());
+                        buf.push("</li>");
+                    }
+                }
+            }).call(this);
+            buf.push("</ul></div>");
+        }
+        jade.globals.ActionLink_mixin.call({
+            buf: buf,
+            attributes: {
+                "class": "ann-button" + " " + "plus-ann"
+            },
+            escaped: {}
+        }, "announcement", "add");
+        buf.push("</div>");
+        return buf.join("");
+    };
+    "chlk.templates.Popup";
+    "chlk.models.common.ChlkDate";
+    "chlk.models.calendar.announcement.CalendarDayItem";
+    (function() {
+        (((chlk = chlk || {}).templates = chlk.templates || {}).calendar = chlk.templates.calendar || {}).announcement = chlk.templates.calendar.announcement || {};
+        (function() {
+            chlk.templates.calendar.announcement.DayDay = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.templates.calendar.announcement." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }([ ria.templates.TemplateBind("_ziwaa7sbwkf8yqfr") ], [ ria.templates.ModelBind(chlk.models.calendar.announcement.CalendarDayItem) ], "DayDay", ria.__SYNTAX.EXTENDS(chlk.templates.Popup), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.announcement.AnnouncementClassPeriod), "announcementClassPeriods", [ ria.templates.ModelPropertyBind ], chlk.models.period.Period, "period", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "date" ]);
+        })();
+    })();
+    "chlk.activities.lib.TemplatePopup";
+    "chlk.templates.calendar.announcement.DayDay";
+    (function() {
+        (((chlk = chlk || {}).activities = chlk.activities || {}).calendar = chlk.activities.calendar || {}).announcement = chlk.activities.calendar.announcement || {};
+        (function() {
+            chlk.activities.calendar.announcement.DayPeriodPopUp = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.activities.calendar.announcement." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }([ ria.mvc.DomAppendTo("#chlk-pop-up-container") ], [ chlk.activities.lib.IsHorizontalAxis(true) ], [ chlk.activities.lib.isTopLeftPosition(false) ], [ ria.mvc.ActivityGroup("CalendarPopUp") ], [ ria.mvc.TemplateBind(chlk.templates.calendar.announcement.DayDay) ], "DayPeriodPopUp", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePopup), []);
+        })();
+    })();
     "chlk.controllers.BaseController";
     "chlk.services.CalendarService";
     "chlk.services.ClassService";
     "chlk.activities.calendar.announcement.WeekPage";
     "chlk.activities.calendar.announcement.MonthPage";
+    "chlk.activities.calendar.announcement.DayPage";
     "chlk.activities.calendar.announcement.MonthDayPopUp";
     "chlk.activities.calendar.announcement.WeekBarPopUp";
     "chlk.activities.calendar.announcement.WeekDayPopUp";
+    "chlk.activities.calendar.announcement.DayPeriodPopUp";
     "chlk.models.calendar.announcement.Month";
     "chlk.models.class.ClassesForTopBar";
     (function() {
         (chlk = chlk || {}).controllers = chlk.controllers || {};
         (function() {
+            var Serializer = new ria.serialize.JsonSerializer();
             chlk.controllers.CalendarController = function ClassCompilerImpl() {
                 var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
@@ -11363,6 +11948,13 @@ exports.globals = {};
                     return model;
                 });
                 return this.ShadeView(chlk.activities.calendar.announcement.MonthDayPopUp, result);
+            }, [ [ chlk.models.common.ChlkDate, Number ] ], ria.__SYNTAX.Modifiers.VOID, function showDayPopUpAction(date, periodNumber) {
+                var result = this.calendarService.getDayPopupInfo(date, periodNumber).then(function(model) {
+                    model.setTarget(chlk.controls.getActionLinkControlLastNode());
+                    model.setDate(date);
+                    return model;
+                });
+                return this.ShadeView(chlk.activities.calendar.announcement.DayPeriodPopUp, result);
             }, [ [ chlk.models.common.ChlkDate, Number ] ], ria.__SYNTAX.Modifiers.VOID, function showWeekBarPopUpAction(date, periodNumber_) {
                 var result = this.calendarService.getWeekDayInfo(date, periodNumber_).then(function(model) {
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
@@ -11371,6 +11963,64 @@ exports.globals = {};
                 });
                 if (periodNumber_ >= 0) return this.ShadeView(chlk.activities.calendar.announcement.WeekDayPopUp, result);
                 return this.ShadeView(chlk.activities.calendar.announcement.WeekBarPopUp, result);
+            }, [ [ chlk.models.common.ChlkDate ] ], function dayAction(date_) {
+                var markingPeriod = this.getContext().getSession().get("markingPeriod");
+                var today = new chlk.models.common.ChlkDate(new Date());
+                var date = date_ || today;
+                var dayNumber = date.getDate().getDay(), sunday = date, saturday = date;
+                if (dayNumber) {
+                    sunday = date.add(chlk.models.common.ChlkDateEnum.DAY, -dayNumber);
+                }
+                if (dayNumber != 6) saturday = sunday.add(chlk.models.common.ChlkDateEnum.DAY, 6);
+                var title = sunday.format("MM d - ");
+                title = title + (sunday.format("M") == saturday.format("M") ? saturday.format("d") : saturday.format("M d"));
+                var prevDate = sunday.add(chlk.models.common.ChlkDateEnum.DAY, -1);
+                var nextDate = saturday.add(chlk.models.common.ChlkDateEnum.DAY, 1);
+                var result = this.calendarService.getDayInfo(date_).attach(this.validateResponse_()).then(function(days) {
+                    var max = 0, index = 0, len, item;
+                    if (days.length == 6) {
+                        var sunday = new chlk.models.calendar.announcement.DayItem();
+                        var sunDate = days[0].getDate().add(chlk.models.common.ChlkDateEnum.DAY, -1);
+                        sunday.setDate(sunDate);
+                        sunday.setDay(sunDate.getDate().getDate());
+                        sunday.setCalendarDayItems([]);
+                        days.unshift(sunday);
+                    }
+                    days.forEach(function(day, i) {
+                        day.setTodayClassName(today.isSameDay(day.getDate()) ? "today" : "");
+                        if (!day.getCalendarDayItems()) day.setCalendarDayItems([]);
+                        len = day.getCalendarDayItems().length;
+                        if (max < len) {
+                            max = len;
+                            index = i;
+                        }
+                    });
+                    days.forEach(function(day) {
+                        len = day.getCalendarDayItems().length;
+                        if (max > len) {
+                            for (var i = len; i < max; i++) {
+                                item = new chlk.models.calendar.announcement.CalendarDayItem();
+                                item.setPeriod(days[index].getCalendarDayItems()[i].getPeriod());
+                                item.setAnnouncementClassPeriods([]);
+                                day.getCalendarDayItems().push(item);
+                            }
+                        }
+                    });
+                    var model = new chlk.models.calendar.announcement.Day();
+                    model.setCurrentTitle(title);
+                    model.setCurrentDate(date);
+                    var startDate = markingPeriod.getStartDate();
+                    var endDate = markingPeriod.getEndDate();
+                    if (prevDate.format("yy-mm-dd") >= startDate.format("yy-mm-dd")) {
+                        model.setPrevDate(prevDate);
+                    }
+                    if (nextDate.format("yy-mm-dd") <= endDate.format("yy-mm-dd")) {
+                        model.setNextDate(nextDate);
+                    }
+                    model.setItems(days);
+                    return new ria.async.DeferredData(model);
+                }.bind(this));
+                return this.PushView(chlk.activities.calendar.announcement.DayPage, result);
             }, [ [ chlk.models.common.ChlkDate, chlk.models.id.ClassId ] ], function weekAction(date_, classId_) {
                 var markingPeriod = this.getContext().getSession().get("markingPeriod");
                 var today = new chlk.models.common.ChlkDate(new Date());
@@ -11488,7 +12138,241 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._mxecjw9kopfrbe29 = function anonymous(locals) {
+    __ASSETS._n6ulzaw9pe3ik9 = function anonymous(locals) {
+        var buf = [];
+        var self = locals || {};
+        var IfBlock__mixin = function(items, i, index) {
+            var block = this.block, attributes = this.attributes || {}, escaped = this.escaped || {}, buf = this.buf;
+            if (index == 0 || i + index < items.length) {
+                buf.push('<TD><div class="image-container">');
+                jade.globals.PersonImg_mixin.call({
+                    buf: buf
+                }, items[i + index], 64);
+                buf.push("</div></TD>");
+            }
+        };
+        buf.push('<div class="class-info class-profile loader-container"><div class="loader"></div><div class="action-bar not-transparent buttons"><div class="container panel-bg"><div class="left">');
+        jade.globals.ActionLink_mixin.call({
+            buf: buf,
+            block: function() {
+                buf.push("Now");
+            },
+            attributes: {
+                "class": "pressed"
+            },
+            escaped: {}
+        }, "class", "details", self.getId());
+        jade.globals.ActionLink_mixin.call({
+            buf: buf,
+            block: function() {
+                buf.push("Info");
+            }
+        }, "class", "details", self.getId());
+        jade.globals.ActionLink_mixin.call({
+            buf: buf,
+            block: function() {
+                buf.push("Scheduling");
+            }
+        }, "class", "details", self.getId());
+        jade.globals.ActionLink_mixin.call({
+            buf: buf,
+            block: function() {
+                buf.push("Apps");
+            }
+        }, "class", "details", self.getId());
+        buf.push('</div></div></div><div class="info-view summary-page"><div id="top-summary-panel"><div id="avatar-photo-conainer"><div class="images-wrapper"><TABLE><TBODY>');
+        (function() {
+            var $$obj = self.getStudents();
+            if ("number" == typeof $$obj.length) {
+                for (var i = 0, $$l = $$obj.length; i < $$l; i++) {
+                    var student = $$obj[i];
+                    if (i % 4 == 0) {
+                        buf.push("<TR>");
+                        IfBlock__mixin.call({
+                            buf: buf
+                        }, self.getStudents(), i, 0);
+                        IfBlock__mixin.call({
+                            buf: buf
+                        }, self.getStudents(), i, 1);
+                        IfBlock__mixin.call({
+                            buf: buf
+                        }, self.getStudents(), i, 2);
+                        IfBlock__mixin.call({
+                            buf: buf
+                        }, self.getStudents(), i, 3);
+                        buf.push("</TR>");
+                    }
+                }
+            } else {
+                var $$l = 0;
+                for (var i in $$obj) {
+                    $$l++;
+                    var student = $$obj[i];
+                    if (i % 4 == 0) {
+                        buf.push("<TR>");
+                        IfBlock__mixin.call({
+                            buf: buf
+                        }, self.getStudents(), i, 0);
+                        IfBlock__mixin.call({
+                            buf: buf
+                        }, self.getStudents(), i, 1);
+                        IfBlock__mixin.call({
+                            buf: buf
+                        }, self.getStudents(), i, 2);
+                        IfBlock__mixin.call({
+                            buf: buf
+                        }, self.getStudents(), i, 3);
+                        buf.push("</TR>");
+                    }
+                }
+            }
+        }).call(this);
+        buf.push('</TBODY></TABLE></div></div><div id="student-info-panel"><h1 class="info"><div class="class-icon-container">');
+        jade.globals.ClassImg_mixin.call({
+            buf: buf
+        }, self.getCourse(), 45, 80);
+        buf.push("</div>" + jade.escape(null == (jade.interp = self.getName()) ? "" : jade.interp) + '</h1><h2 class="no-line">');
+        jade.globals.ActionLink_mixin.call({
+            buf: buf
+        }, "teachers", "info", self.getTeacher().getId().valueOf());
+        buf.push("- " + jade.escape((jade.interp = self.getRoom() && self.getRoom().getDescription()) == null ? "" : jade.interp) + '</h2><div class="glance-container">');
+        jade.globals.GlanceBox_mixin.call({
+            buf: buf
+        }, null, null, {
+            value: self.getClassAverageBox().getTitle(),
+            title: Msg.Class_average,
+            items: self.getClassAverageBox().getHover()
+        });
+        jade.globals.GlanceBox_mixin.call({
+            buf: buf
+        }, null, null, {
+            value: self.getClassAttendanceBox().getTitle(),
+            title: Msg.Attendance_count,
+            items: self.getClassAttendanceBox().getHover()
+        });
+        jade.globals.GlanceBox_mixin.call({
+            buf: buf
+        }, null, null, {
+            value: self.getClassDisciplineBox().getTitle(),
+            title: Msg.Discipline_count,
+            items: self.getClassDisciplineBox().getHover()
+        });
+        jade.globals.GlanceBox_mixin.call({
+            buf: buf
+        }, null, null, {
+            value: self.getClassSize(),
+            title: Msg.Class_size
+        }, "brown");
+        buf.push('</div></div></div><div class="today-work-panel"><h2>' + jade.escape(null == (jade.interp = Msg.Upcoming_assignments) ? "" : jade.interp) + '</h2><div class="period-toolbar">');
+        jade.globals.LeftRightToolbar_mixin.call({
+            buf: buf,
+            attributes: {
+                hideArrows: true
+            },
+            escaped: {}
+        }, self.getAnnouncementsByDate(), chlk.templates.announcement.AnnouncementsByDate);
+        buf.push('</div></div><div class="today-work-panel"><h2 class="stats">' + jade.escape(null == (jade.interp = Msg.Stats_and_facts) ? "" : jade.interp) + "</h2></div></div></div>");
+        return buf.join("");
+    };
+    "chlk.templates.JadeTemplate";
+    "chlk.models.class.ClassSummary";
+    (function() {
+        ((chlk = chlk || {}).templates = chlk.templates || {}).class = chlk.templates.class || {};
+        (function() {
+            chlk.templates.class.ClassSummary = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.templates.class." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }([ ria.templates.TemplateBind("_n6ulzaw9pe3ik9") ], [ ria.templates.ModelBind(chlk.models.class.ClassSummary) ], "ClassSummary", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.class.Room, "room", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.people.User), "students", [ ria.templates.ModelPropertyBind ], Number, "classSize", [ ria.templates.ModelPropertyBind ], chlk.models.common.HoverBox, "classAttendanceBox", [ ria.templates.ModelPropertyBind ], chlk.models.common.HoverBox, "classDisciplineBox", [ ria.templates.ModelPropertyBind ], chlk.models.common.HoverBox, "classAverageBox", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.announcement.AnnouncementsByDate), "announcementsByDate", [ ria.templates.ModelPropertyBind ], chlk.models.id.ClassId, "id", [ ria.templates.ModelPropertyBind ], String, "name", [ ria.templates.ModelPropertyBind ], String, "description", [ ria.templates.ModelPropertyBind ], chlk.models.course.Course, "course", [ ria.templates.ModelPropertyBind ], chlk.models.grading.GradeLevel, "gradeLevel", [ ria.templates.ModelPropertyBind ], chlk.models.people.User, "teacher", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.id.MarkingPeriodId), "markingPeriodsId" ]);
+        })();
+    })();
+    __ASSETS._451l920mnd3u9pb9 = function anonymous(locals) {
+        var buf = [];
+        var self = locals || {};
+        buf.push('<a class="periods-link item"><div class="announcement-box">');
+        (function() {
+            var $$obj = self.getAnnouncements();
+            if ("number" == typeof $$obj.length) {
+                for (var i = 0, $$l = $$obj.length; i < $$l; i++) {
+                    var announcement = $$obj[i];
+                    buf.push("<div" + jade.attrs({
+                        style: "bottom: " + i * 4 + "px;left: " + (20 + i * 4) + "px; z-index: " + (97 - i),
+                        "data-tooltip": announcement.getAnnouncementTypeName(),
+                        "class": "announcement-type-" + announcement.getAnnouncementTypeId() + " " + "announcement"
+                    }, {
+                        style: true,
+                        "data-tooltip": true
+                    }) + "></div>");
+                }
+            } else {
+                var $$l = 0;
+                for (var i in $$obj) {
+                    $$l++;
+                    var announcement = $$obj[i];
+                    buf.push("<div" + jade.attrs({
+                        style: "bottom: " + i * 4 + "px;left: " + (20 + i * 4) + "px; z-index: " + (97 - i),
+                        "data-tooltip": announcement.getAnnouncementTypeName(),
+                        "class": "announcement-type-" + announcement.getAnnouncementTypeId() + " " + "announcement"
+                    }, {
+                        style: true,
+                        "data-tooltip": true
+                    }) + "></div>");
+                }
+            }
+        }).call(this);
+        buf.push('</div><div class="period-box">');
+        var dt = new chlk.models.common.ChlkDate(getDate());
+        var dayText = self.getDate().isSameDay(dt) ? Msg.Today : self.getDate().format("D");
+        buf.push('<div class="day">' + jade.escape(null == (jade.interp = dayText) ? "" : jade.interp) + "</div></div></a>");
+        return buf.join("");
+    };
+    "chlk.templates.JadeTemplate";
+    "chlk.models.announcement.AnnouncementsByDate";
+    (function() {
+        ((chlk = chlk || {}).templates = chlk.templates || {}).announcement = chlk.templates.announcement || {};
+        (function() {
+            chlk.templates.announcement.AnnouncementsByDate = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.templates.announcement." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }([ ria.templates.TemplateBind("_451l920mnd3u9pb9") ], [ ria.templates.ModelBind(chlk.models.announcement.AnnouncementsByDate) ], "AnnouncementsByDate", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.announcement.Announcement), "announcements", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "date", [ ria.templates.ModelPropertyBind ], Number, "day" ]);
+        })();
+    })();
+    "chlk.activities.lib.TemplatePage";
+    "chlk.templates.class.ClassSummary";
+    "chlk.templates.announcement.AnnouncementsByDate";
+    (function() {
+        ((chlk = chlk || {}).activities = chlk.activities || {}).class = chlk.activities.class || {};
+        (function() {
+            chlk.activities.class.SummaryPage = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.activities.class." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }([ ria.mvc.DomAppendTo("#main") ], [ chlk.activities.lib.PageClass("profile") ], [ ria.mvc.TemplateBind(chlk.templates.class.ClassSummary) ], "SummaryPage", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePage), []);
+        })();
+    })();
+    "chlk.controllers.BaseController";
+    "chlk.services.ClassService";
+    "chlk.models.id.ClassId";
+    "chlk.activities.class.SummaryPage";
+    (function() {
+        (chlk = chlk || {}).controllers = chlk.controllers || {};
+        (function() {
+            chlk.controllers.ClassController = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.controllers." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("ClassController", ria.__SYNTAX.EXTENDS(chlk.controllers.BaseController), [ [ ria.mvc.Inject ], chlk.services.ClassService, "classService", [ [ chlk.models.id.ClassId ] ], function detailsAction(classId) {
+                var result = this.classService.getSummary(classId).attach(this.validateResponse_());
+                return this.PushView(chlk.activities.class.SummaryPage, result);
+            } ]);
+        })();
+    })();
+    __ASSETS._xpgpt9azy2rl766r = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="settings"><div class="row"><div class="item">');
@@ -11577,7 +12461,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.settings." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_mxecjw9kopfrbe29") ], [ ria.templates.ModelBind(chlk.models.settings.Dashboard) ], "Dashboard", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], Boolean, "departmentsVisible", [ ria.templates.ModelPropertyBind ], Boolean, "appCategoriesVisible", [ ria.templates.ModelPropertyBind ], Boolean, "storageMonitorVisible", [ ria.templates.ModelPropertyBind ], Boolean, "preferencesVisible", [ ria.templates.ModelPropertyBind ], Boolean, "backgroundTaskMonitorVisible", [ ria.templates.ModelPropertyBind ], Boolean, "dbMaintenanceVisible" ]);
+            }([ ria.templates.TemplateBind("_xpgpt9azy2rl766r") ], [ ria.templates.ModelBind(chlk.models.settings.Dashboard) ], "Dashboard", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], Boolean, "departmentsVisible", [ ria.templates.ModelPropertyBind ], Boolean, "appCategoriesVisible", [ ria.templates.ModelPropertyBind ], Boolean, "storageMonitorVisible", [ ria.templates.ModelPropertyBind ], Boolean, "preferencesVisible", [ ria.templates.ModelPropertyBind ], Boolean, "backgroundTaskMonitorVisible", [ ria.templates.ModelPropertyBind ], Boolean, "dbMaintenanceVisible" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -11593,7 +12477,7 @@ exports.globals = {};
             }([ ria.mvc.DomAppendTo("#main") ], [ ria.mvc.TemplateBind(chlk.templates.settings.Dashboard) ], "DashboardPage", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePage), []);
         })();
     })();
-    __ASSETS._54aj4u9tn0xav2t9 = function anonymous(locals) {
+    __ASSETS._u50j4aeilfw53ik9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="settings"><div class="action-bar not-transparent buttons"><div class="container panel-bg"><div class="left">');
@@ -11704,7 +12588,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.settings." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_54aj4u9tn0xav2t9") ], [ ria.templates.ModelBind(chlk.models.settings.TeacherSettings) ], "TeacherSettings", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], Boolean, "annoucementNotificationsViaSms", [ ria.templates.ModelPropertyBind ], Boolean, "messagesNotificationsViaSms", [ ria.templates.ModelPropertyBind ], Boolean, "notificationsViaSms", [ ria.templates.ModelPropertyBind ], Boolean, "annoucementNotificationsViaEmail", [ ria.templates.ModelPropertyBind ], Boolean, "messagesNotificationsViaEmail", [ ria.templates.ModelPropertyBind ], Boolean, "notificationsViaEmail" ]);
+            }([ ria.templates.TemplateBind("_u50j4aeilfw53ik9") ], [ ria.templates.ModelBind(chlk.models.settings.TeacherSettings) ], "TeacherSettings", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], Boolean, "annoucementNotificationsViaSms", [ ria.templates.ModelPropertyBind ], Boolean, "messagesNotificationsViaSms", [ ria.templates.ModelPropertyBind ], Boolean, "notificationsViaSms", [ ria.templates.ModelPropertyBind ], Boolean, "annoucementNotificationsViaEmail", [ ria.templates.ModelPropertyBind ], Boolean, "messagesNotificationsViaEmail", [ ria.templates.ModelPropertyBind ], Boolean, "notificationsViaEmail" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -11730,7 +12614,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._bt2dh3qwyer0be29 = function anonymous(locals) {
+    __ASSETS._416lv305haes714i = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="settings"><h2>Preferences</h2><div class="preferences grid"><div class="loader"></div><div class="scroller"><div class="container"><div class="body"><div class="row header"><div class="col">Key</div><div class="col">Value</div><div class="col">Hint</div><div class="col">Is public</div><div class="col"></div></div>');
@@ -11877,7 +12761,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.settings." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_bt2dh3qwyer0be29") ], [ ria.templates.ModelBind(chlk.models.settings.PreferencesList) ], "Preferences", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.settings.Preference), "items" ]);
+            }([ ria.templates.TemplateBind("_416lv305haes714i") ], [ ria.templates.ModelBind(chlk.models.settings.PreferencesList) ], "Preferences", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.settings.Preference), "items" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -11893,7 +12777,7 @@ exports.globals = {};
             }([ ria.mvc.DomAppendTo("#main") ], [ chlk.activities.lib.PageClass("settings") ], [ ria.mvc.TemplateBind(chlk.templates.settings.Preferences) ], "PreferencesPage", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePage), []);
         })();
     })();
-    __ASSETS._7a2x6jho4g8n0zfr = function anonymous(locals) {
+    __ASSETS._xu7g7mn21si9hpvi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="settings"><div class="developer"></div><div class="search-wrapper"><div id="search-bar"></div></div><div class="wrapper"><div class="row">');
@@ -11963,7 +12847,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.settings." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_7a2x6jho4g8n0zfr") ], [ ria.templates.ModelBind(chlk.models.settings.DeveloperSettings) ], "DeveloperSettings", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolPersonId, "developerId", [ ria.templates.ModelPropertyBind ], chlk.models.id.AppId, "currentAppId" ]);
+            }([ ria.templates.TemplateBind("_xu7g7mn21si9hpvi") ], [ ria.templates.ModelBind(chlk.models.settings.DeveloperSettings) ], "DeveloperSettings", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolPersonId, "developerId", [ ria.templates.ModelPropertyBind ], chlk.models.id.AppId, "currentAppId" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -12230,7 +13114,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._jnfm264nsy30udi = function anonymous(locals) {
+    __ASSETS._k5e3obomeu3di = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="setup-page setup-hello loader-container"><div class="loader"></div><h1 class="title">Confirm your info</h1>');
@@ -12326,7 +13210,7 @@ exports.globals = {};
         buf.push("</div>");
         return buf.join("");
     };
-    __ASSETS._xvrtoehzmlutmx6r = function anonymous(locals) {
+    __ASSETS._ngespy13hyjbgldi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         addresses = self.getAddresses() || [];
@@ -12613,7 +13497,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.people." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_xvrtoehzmlutmx6r") ], [ ria.templates.ModelBind(chlk.models.people.User) ], "User", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], Boolean, "active", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.people.Address), "addresses", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "birthDate", [ ria.templates.ModelPropertyBind ], String, "birthDateText", [ ria.templates.ModelPropertyBind ], String, "displayName", [ ria.templates.ModelPropertyBind ], String, "email", [ ria.templates.ModelPropertyBind ], String, "firstName", [ ria.templates.ModelPropertyBind ], String, "fullName", [ ria.templates.ModelPropertyBind ], String, "gender", [ ria.templates.ModelPropertyBind ], String, "genderFullText", [ ria.templates.ModelPropertyBind ], String, "grade", [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolPersonId, "id", [ ria.templates.ModelPropertyBind ], String, "lastName", [ ria.templates.ModelPropertyBind ], String, "localId", [ ria.templates.ModelPropertyBind ], String, "password", [ ria.templates.ModelPropertyBind ], String, "pictureUrl", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.people.Phone), "phones", [ ria.templates.ModelPropertyBind ], chlk.models.people.Role, "role", [ ria.templates.ModelPropertyBind ], String, "salutation", [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolId, "schoolId", [ ria.templates.ModelPropertyBind ], chlk.models.people.Phone, "primaryPhone", [ ria.templates.ModelPropertyBind ], chlk.models.people.Phone, "homePhone", [ ria.templates.ModelPropertyBind ], String, "addressesValue", [ ria.templates.ModelPropertyBind ], String, "phonesValue", [ ria.templates.ModelPropertyBind ], Number, "index", [ ria.templates.ModelPropertyBind ], Boolean, "selected" ]);
+            }([ ria.templates.TemplateBind("_ngespy13hyjbgldi") ], [ ria.templates.ModelBind(chlk.models.people.User) ], "User", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], Boolean, "active", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.people.Address), "addresses", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "birthDate", [ ria.templates.ModelPropertyBind ], String, "birthDateText", [ ria.templates.ModelPropertyBind ], String, "displayName", [ ria.templates.ModelPropertyBind ], String, "email", [ ria.templates.ModelPropertyBind ], String, "firstName", [ ria.templates.ModelPropertyBind ], String, "fullName", [ ria.templates.ModelPropertyBind ], String, "gender", [ ria.templates.ModelPropertyBind ], String, "genderFullText", [ ria.templates.ModelPropertyBind ], String, "grade", [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolPersonId, "id", [ ria.templates.ModelPropertyBind ], String, "lastName", [ ria.templates.ModelPropertyBind ], String, "localId", [ ria.templates.ModelPropertyBind ], String, "password", [ ria.templates.ModelPropertyBind ], String, "pictureUrl", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.people.Phone), "phones", [ ria.templates.ModelPropertyBind ], chlk.models.people.Role, "role", [ ria.templates.ModelPropertyBind ], String, "salutation", [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolId, "schoolId", [ ria.templates.ModelPropertyBind ], chlk.models.people.Phone, "primaryPhone", [ ria.templates.ModelPropertyBind ], chlk.models.people.Phone, "homePhone", [ ria.templates.ModelPropertyBind ], String, "addressesValue", [ ria.templates.ModelPropertyBind ], String, "phonesValue", [ ria.templates.ModelPropertyBind ], Number, "index", [ ria.templates.ModelPropertyBind ], Boolean, "selected" ]);
         })();
     })();
     "chlk.templates.JadeTemplate";
@@ -12627,7 +13511,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.setup." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_jnfm264nsy30udi") ], [ ria.templates.ModelBind(chlk.models.people.User) ], "Hello", ria.__SYNTAX.EXTENDS(chlk.templates.people.User), []);
+            }([ ria.templates.TemplateBind("_k5e3obomeu3di") ], [ ria.templates.ModelBind(chlk.models.people.User) ], "Hello", ria.__SYNTAX.EXTENDS(chlk.templates.people.User), []);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -12655,7 +13539,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._eacds7yik0a1nhfr = function anonymous(locals) {
+    __ASSETS._amifh98lvs5x9a4i = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="setup-page video loader-container"><div class="loader"></div><div class="action-bar not-transparent buttons"><div class="container panel-bg"><div class="right">');
@@ -12695,7 +13579,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.setup." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_eacds7yik0a1nhfr") ], [ ria.templates.ModelBind(chlk.models.settings.Preference) ], "Video", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], String, "value", [ ria.templates.ModelPropertyBind ], Number, "type" ]);
+            }([ ria.templates.TemplateBind("_amifh98lvs5x9a4i") ], [ ria.templates.ModelBind(chlk.models.settings.Preference) ], "Video", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], String, "value", [ ria.templates.ModelPropertyBind ], Number, "type" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -12711,7 +13595,7 @@ exports.globals = {};
             }([ ria.mvc.DomAppendTo("#main") ], [ ria.mvc.TemplateBind(chlk.templates.setup.Video) ], "VideoPage", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePage), []);
         })();
     })();
-    __ASSETS._trfriswfn8doyldi = function anonymous(locals) {
+    __ASSETS._xxpgsvh7mujcq5mi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="setup-page start loader-container"><div class="loader"></div><div class="action-bar not-transparent buttons"><div class="container panel-bg"><div class="left">');
@@ -12737,7 +13621,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.setup." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_trfriswfn8doyldi") ], [ ria.templates.ModelBind(chlk.models.settings.Preference) ], "Start", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], Number, "type" ]);
+            }([ ria.templates.TemplateBind("_xxpgsvh7mujcq5mi") ], [ ria.templates.ModelBind(chlk.models.settings.Preference) ], "Start", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], Number, "type" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -12753,7 +13637,7 @@ exports.globals = {};
             }([ ria.mvc.DomAppendTo("#main") ], [ ria.mvc.TemplateBind(chlk.templates.setup.Start) ], "StartPage", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplatePage), []);
         })();
     })();
-    __ASSETS._os8r93okvsnpzaor = function anonymous(locals) {
+    __ASSETS._tcj0mdv1ngwj0pb9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="setup-page teacher-settings loader-container">');
@@ -12987,10 +13871,10 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.setup." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_os8r93okvsnpzaor") ], [ ria.templates.ModelBind(chlk.models.setup.TeacherSettings) ], "TeacherSettings", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.class.ClassesForTopBar, "topData", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.calendar.TeacherSettingsCalendarDay), "calendarInfo", [ ria.templates.ModelPropertyBind ], chlk.models.grading.Final, "gradingInfo", [ ria.templates.ModelPropertyBind ], Number, "percentsSum" ]);
+            }([ ria.templates.TemplateBind("_tcj0mdv1ngwj0pb9") ], [ ria.templates.ModelBind(chlk.models.setup.TeacherSettings) ], "TeacherSettings", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.class.ClassesForTopBar, "topData", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.calendar.TeacherSettingsCalendarDay), "calendarInfo", [ ria.templates.ModelPropertyBind ], chlk.models.grading.Final, "gradingInfo", [ ria.templates.ModelPropertyBind ], Number, "percentsSum" ]);
         })();
     })();
-    __ASSETS._fci8flfdgc766r = function anonymous(locals) {
+    __ASSETS._btwvqo1mbp96yldi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div id="new-items-data" class="grid-container not-transparent items-container relative">');
@@ -13116,7 +14000,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.grading." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_fci8flfdgc766r") ], [ ria.templates.ModelBind(chlk.models.grading.Final) ], "Final", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.FinalGradeId, "id", [ ria.templates.ModelPropertyBind ], Number, "state", [ ria.templates.ModelPropertyBind ], chlk.models.class.Class, "clazz", [ ria.templates.ModelPropertyBind ], Number, "gradedStudentCount", [ ria.templates.ModelPropertyBind ], Number, "participation", [ ria.templates.ModelPropertyBind ], Number, "discipline", [ ria.templates.ModelPropertyBind ], Number, "dropLowestDiscipline", [ ria.templates.ModelPropertyBind ], Number, "attendance", [ ria.templates.ModelPropertyBind ], Number, "dropLowestAttendance", [ ria.templates.ModelPropertyBind ], Number, "gradingStyle", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.grading.AnnouncementTypeGrading), "finalGradeAnnType", ria.__API.ArrayOf(chlk.models.grading.AnnouncementTypeFinal), "finalGradeAnnTypeSend", [ ria.templates.ModelPropertyBind ], String, "finalGradeAnnouncementTypeIds", [ ria.templates.ModelPropertyBind ], String, "percents", [ ria.templates.ModelPropertyBind ], Boolean, "changed", [ ria.templates.ModelPropertyBind ], String, "submitType", [ ria.templates.ModelPropertyBind ], String, "dropLowest", [ ria.templates.ModelPropertyBind ], String, "gradingStyleByType", [ ria.templates.ModelPropertyBind ], Boolean, "needsTypesForClasses", [ ria.templates.ModelPropertyBind ], Number, "nextClassNumber" ]);
+            }([ ria.templates.TemplateBind("_btwvqo1mbp96yldi") ], [ ria.templates.ModelBind(chlk.models.grading.Final) ], "Final", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.FinalGradeId, "id", [ ria.templates.ModelPropertyBind ], Number, "state", [ ria.templates.ModelPropertyBind ], chlk.models.class.Class, "clazz", [ ria.templates.ModelPropertyBind ], Number, "gradedStudentCount", [ ria.templates.ModelPropertyBind ], Number, "participation", [ ria.templates.ModelPropertyBind ], Number, "discipline", [ ria.templates.ModelPropertyBind ], Number, "dropLowestDiscipline", [ ria.templates.ModelPropertyBind ], Number, "attendance", [ ria.templates.ModelPropertyBind ], Number, "dropLowestAttendance", [ ria.templates.ModelPropertyBind ], Number, "gradingStyle", [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.grading.AnnouncementTypeGrading), "finalGradeAnnType", ria.__API.ArrayOf(chlk.models.grading.AnnouncementTypeFinal), "finalGradeAnnTypeSend", [ ria.templates.ModelPropertyBind ], String, "finalGradeAnnouncementTypeIds", [ ria.templates.ModelPropertyBind ], String, "percents", [ ria.templates.ModelPropertyBind ], Boolean, "changed", [ ria.templates.ModelPropertyBind ], String, "submitType", [ ria.templates.ModelPropertyBind ], String, "dropLowest", [ ria.templates.ModelPropertyBind ], String, "gradingStyleByType", [ ria.templates.ModelPropertyBind ], Boolean, "needsTypesForClasses", [ ria.templates.ModelPropertyBind ], Number, "nextClassNumber" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -13404,6 +14288,75 @@ exports.globals = {};
             } ]);
         })();
     })();
+    "chlk.controllers.BaseController";
+    "chlk.services.PersonService";
+    "chlk.models.people.User";
+    (function() {
+        (chlk = chlk || {}).controllers = chlk.controllers || {};
+        (function() {
+            chlk.controllers.UserController = function ClassCompilerImpl() {
+                var def = ria.__SYNTAX.parseClassDef(new ria.__SYNTAX.Tokenizer([].slice.call(arguments)));
+                ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
+                var name = "chlk.controllers." + def.name;
+                return ria.__SYNTAX.compileClass(name, def);
+            }("UserController", ria.__SYNTAX.EXTENDS(chlk.controllers.BaseController), [ [ ria.mvc.Inject ], chlk.services.PersonService, "personService", [ [ chlk.models.people.User ] ], function prepareProfileData(model) {
+                var bDate = model.getBirthDate(), res = "";
+                if (bDate) {
+                    var day = parseInt(bDate.format("d"), 10), str;
+                    switch (day) {
+                      case 1:
+                        str = "st";
+                        break;
+
+                      case 2:
+                        str = "n&#100;";
+                        break;
+
+                      case 3:
+                        str = "r&#100;";
+                        break;
+
+                      default:
+                        str = "st";
+                    }
+                    res = "M d" + str + " y";
+                }
+                var phones = model.getPhones(), addresses = model.getAddresses(), phonesValue = [], addressesValue = [];
+                phones.forEach(function(item) {
+                    var values = {
+                        id: item.getId().valueOf(),
+                        type: item.getType(),
+                        isPrimary: item.isIsPrimary(),
+                        value: item.getValue()
+                    };
+                    phonesValue.push(values);
+                    if (item.isIsPrimary() && !model.getPrimaryPhone()) {
+                        model.setPrimaryPhone(item);
+                    } else {
+                        if (!model.getHomePhone()) model.setHomePhone(item);
+                    }
+                });
+                addresses.forEach(function(item) {
+                    var values = {
+                        id: item.getId().valueOf(),
+                        type: item.getType(),
+                        value: item.getValue()
+                    };
+                    addressesValue.push(values);
+                });
+                model.setPhonesValue(JSON.stringify(phonesValue));
+                model.setAddressesValue(JSON.stringify(addressesValue));
+                var roleName = model.getRole().getName(), roles = chlk.models.common.RoleEnum;
+                var currentPerson = this.getContext().getSession().get("currentPerson");
+                model.setAbleEdit(roleName != roles.STUDENT.valueOf() && model.getId() == currentPerson.getId() || roleName == roles.ADMINEDIT.valueOf() || roleName == roles.ADMINGRADE.valueOf());
+                bDate && model.setBirthDateText(bDate.toString(res).replace(/&#100;/g, "d"));
+                var gt = model.getGender() ? model.getGender().toLowerCase() == "m" ? "Male" : "Female" : "";
+                model.setGenderFullText(gt);
+                model.setPictureUrl(this.personService.getPictureURL(model.getId(), 128));
+                return model;
+            } ]);
+        })();
+    })();
     "chlk.services.BaseService";
     "ria.async.Future";
     "chlk.models.id.ClassId";
@@ -13445,7 +14398,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._32u82zj56k73nmi = function anonymous(locals) {
+    __ASSETS._4ionxqe3es3gzaor = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         users = self.getUsers();
@@ -13506,10 +14459,10 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.people." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_32u82zj56k73nmi") ], [ ria.templates.ModelBind(chlk.models.people.UsersList) ], "UsersList", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.common.PaginatedList, "users", [ ria.templates.ModelPropertyBind ], Number, "selectedIndex", [ ria.templates.ModelPropertyBind ], Boolean, "byLastName", [ ria.templates.ModelPropertyBind ], String, "filter", [ ria.templates.ModelPropertyBind ], Number, "start" ]);
+            }([ ria.templates.TemplateBind("_4ionxqe3es3gzaor") ], [ ria.templates.ModelBind(chlk.models.people.UsersList) ], "UsersList", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.common.PaginatedList, "users", [ ria.templates.ModelPropertyBind ], Number, "selectedIndex", [ ria.templates.ModelPropertyBind ], Boolean, "byLastName", [ ria.templates.ModelPropertyBind ], String, "filter", [ ria.templates.ModelPropertyBind ], Number, "start" ]);
         })();
     })();
-    __ASSETS._tecdw4kface1xlxr = function anonymous(locals) {
+    __ASSETS._l6kfo1nyguakmx6r = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         (function() {
@@ -13528,13 +14481,9 @@ exports.globals = {};
                     jade.globals.ActionLink_mixin.call({
                         buf: buf,
                         block: function() {
-                            buf.push("<img" + jade.attrs({
-                                src: item.getPictureUrl(),
-                                "class": "avatar" + " " + "avatar47" + " " + item.getGender()
-                            }, {
-                                "class": true,
-                                src: true
-                            }) + "/>");
+                            jade.globals.PersonImg_mixin.call({
+                                buf: buf
+                            }, item, 47);
                         },
                         attributes: {
                             "class": "left" + " " + "image-container" + " " + "white" + " " + "shadow"
@@ -13570,13 +14519,9 @@ exports.globals = {};
                     jade.globals.ActionLink_mixin.call({
                         buf: buf,
                         block: function() {
-                            buf.push("<img" + jade.attrs({
-                                src: item.getPictureUrl(),
-                                "class": "avatar" + " " + "avatar47" + " " + item.getGender()
-                            }, {
-                                "class": true,
-                                src: true
-                            }) + "/>");
+                            jade.globals.PersonImg_mixin.call({
+                                buf: buf
+                            }, item, 47);
                         },
                         attributes: {
                             "class": "left" + " " + "image-container" + " " + "white" + " " + "shadow"
@@ -13610,10 +14555,10 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.people." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_tecdw4kface1xlxr") ], [ ria.templates.ModelBind(chlk.models.common.PaginatedList) ], "UsersForGrid", ria.__SYNTAX.EXTENDS(chlk.templates.PaginatedList), []);
+            }([ ria.templates.TemplateBind("_l6kfo1nyguakmx6r") ], [ ria.templates.ModelBind(chlk.models.common.PaginatedList) ], "UsersForGrid", ria.__SYNTAX.EXTENDS(chlk.templates.PaginatedList), []);
         })();
     })();
-    __ASSETS._f21a6zhhej7tlnmi = function anonymous(locals) {
+    __ASSETS._tw1go83d5wb3xr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="loader"></div><input' + jade.attrs({
@@ -13653,7 +14598,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.people." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_f21a6zhhej7tlnmi") ], [ ria.templates.ModelBind(chlk.models.people.UsersList) ], "UsersGrid", ria.__SYNTAX.EXTENDS(chlk.templates.people.UsersList), []);
+            }([ ria.templates.TemplateBind("_tw1go83d5wb3xr") ], [ ria.templates.ModelBind(chlk.models.people.UsersList) ], "UsersGrid", ria.__SYNTAX.EXTENDS(chlk.templates.people.UsersList), []);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -13708,7 +14653,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._kaf49n1ohkf0f6r = function anonymous(locals) {
+    __ASSETS._mz22j1rtba1qbyb9 = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="students-list">');
@@ -13822,7 +14767,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.teacher." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_kaf49n1ohkf0f6r") ], [ ria.templates.ModelBind(chlk.models.teacher.StudentsList) ], "StudentsList", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.people.UsersList, "usersPart", [ ria.templates.ModelPropertyBind ], chlk.models.class.ClassesForTopBar, "topData", [ ria.templates.ModelPropertyBind ], Boolean, "my" ]);
+            }([ ria.templates.TemplateBind("_mz22j1rtba1qbyb9") ], [ ria.templates.ModelBind(chlk.models.teacher.StudentsList) ], "StudentsList", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.people.UsersList, "usersPart", [ ria.templates.ModelPropertyBind ], chlk.models.class.ClassesForTopBar, "topData", [ ria.templates.ModelPropertyBind ], Boolean, "my" ]);
         })();
     })();
     "chlk.activities.person.PersonGrid";
@@ -13838,7 +14783,7 @@ exports.globals = {};
             }([ ria.mvc.DomAppendTo("#main") ], [ ria.mvc.TemplateBind(chlk.templates.teacher.StudentsList) ], [ ria.mvc.PartialUpdateRule(chlk.templates.people.UsersGrid, "", ".grid-container", ria.mvc.PartialUpdateRuleActions.Replace) ], [ ria.mvc.PartialUpdateRule(chlk.templates.people.UsersForGrid, window.noLoadingMsg, ".people-list", ria.mvc.PartialUpdateRuleActions.Append) ], "ListPage", ria.__SYNTAX.EXTENDS(chlk.activities.person.PersonGrid), []);
         })();
     })();
-    "chlk.controllers.BaseController";
+    "chlk.controllers.UserController";
     "chlk.services.StudentService";
     "chlk.services.PersonService";
     "chlk.services.ClassService";
@@ -13853,7 +14798,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.controllers." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }("StudentsController", ria.__SYNTAX.EXTENDS(chlk.controllers.BaseController), [ [ ria.mvc.Inject ], chlk.services.StudentService, "studentService", [ ria.mvc.Inject ], chlk.services.PersonService, "personService", [ ria.mvc.Inject ], chlk.services.ClassService, "classService", [ [ chlk.models.common.PaginatedList, Number, Boolean, String ] ], chlk.models.people.UsersList, function prepareUsersModel(users, selectedIndex, byLastName, filter_) {
+            }("StudentsController", ria.__SYNTAX.EXTENDS(chlk.controllers.UserController), [ [ ria.mvc.Inject ], chlk.services.StudentService, "studentService", [ ria.mvc.Inject ], chlk.services.ClassService, "classService", [ [ chlk.models.common.PaginatedList, Number, Boolean, String ] ], chlk.models.people.UsersList, function prepareUsersModel(users, selectedIndex, byLastName, filter_) {
                 users = this.prepareUsers(users);
                 var usersModel = new chlk.models.people.UsersList();
                 usersModel.setSelectedIndex(selectedIndex);
@@ -13900,7 +14845,14 @@ exports.globals = {};
                     }
                 }.bind(this));
                 return this.UpdateView(chlk.activities.person.ListPage, result, isScroll ? window.noLoadingMsg : "");
-            }, [ [ chlk.models.id.SchoolPersonId ] ], function infoAction(personId) {} ]);
+            }, [ [ chlk.models.id.SchoolPersonId ] ], function infoAction(personId) {
+                var result = this.studentService.getInfo(personId).attach(this.validateResponse_()).then(function(model) {
+                    var res = this.prepareProfileData(model);
+                    this.getContext().getSession().set("userModel", res);
+                    return res;
+                }.bind(this));
+                return this.PushView(chlk.activities.profile.InfoViewPage, result);
+            } ]);
         })();
     })();
     "chlk.templates.JadeTemplate";
@@ -13914,10 +14866,10 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.profile." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_xvrtoehzmlutmx6r") ], [ ria.templates.ModelBind(chlk.models.people.User) ], "InfoView", ria.__SYNTAX.EXTENDS(chlk.templates.people.User), [ [ ria.templates.ModelPropertyBind ], Boolean, "ableEdit" ]);
+            }([ ria.templates.TemplateBind("_ngespy13hyjbgldi") ], [ ria.templates.ModelBind(chlk.models.people.User) ], "InfoView", ria.__SYNTAX.EXTENDS(chlk.templates.people.User), [ [ ria.templates.ModelPropertyBind ], Boolean, "ableEdit" ]);
         })();
     })();
-    __ASSETS._1mqbjxjh908jjor = function anonymous(locals) {
+    __ASSETS._l5a5839c545cdi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         (function() {
@@ -13977,7 +14929,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.people." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_1mqbjxjh908jjor") ], [ ria.templates.ModelBind(chlk.models.people.Addresses) ], "Addresses", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.people.Address), "items" ]);
+            }([ ria.templates.TemplateBind("_l5a5839c545cdi") ], [ ria.templates.ModelBind(chlk.models.people.Addresses) ], "Addresses", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], ria.__API.ArrayOf(chlk.models.people.Address), "items" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -14044,9 +14996,8 @@ exports.globals = {};
             } ]);
         })();
     })();
-    "chlk.controllers.BaseController";
+    "chlk.controllers.UserController";
     "chlk.services.TeacherService";
-    "chlk.services.PersonService";
     "chlk.activities.profile.InfoViewPage";
     "chlk.models.id.SchoolPersonId";
     "chlk.models.people.User";
@@ -14058,62 +15009,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.controllers." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }("TeachersController", ria.__SYNTAX.EXTENDS(chlk.controllers.BaseController), [ [ ria.mvc.Inject ], chlk.services.TeacherService, "teacherService", [ ria.mvc.Inject ], chlk.services.PersonService, "personService", [ [ chlk.models.people.User ] ], function prepareProfileData(model) {
-                var bDate = model.getBirthDate(), res = "";
-                if (bDate) {
-                    var day = parseInt(bDate.format("d"), 10), str;
-                    switch (day) {
-                      case 1:
-                        str = "st";
-                        break;
-
-                      case 2:
-                        str = "n&#100;";
-                        break;
-
-                      case 3:
-                        str = "r&#100;";
-                        break;
-
-                      default:
-                        str = "st";
-                    }
-                    res = "M d" + str + " y";
-                }
-                var phones = model.getPhones(), addresses = model.getAddresses(), phonesValue = [], addressesValue = [];
-                phones.forEach(function(item) {
-                    var values = {
-                        id: item.getId().valueOf(),
-                        type: item.getType(),
-                        isPrimary: item.isIsPrimary(),
-                        value: item.getValue()
-                    };
-                    phonesValue.push(values);
-                    if (item.isIsPrimary() && !model.getPrimaryPhone()) {
-                        model.setPrimaryPhone(item);
-                    } else {
-                        if (!model.getHomePhone()) model.setHomePhone(item);
-                    }
-                });
-                addresses.forEach(function(item) {
-                    var values = {
-                        id: item.getId().valueOf(),
-                        type: item.getType(),
-                        value: item.getValue()
-                    };
-                    addressesValue.push(values);
-                });
-                model.setPhonesValue(JSON.stringify(phonesValue));
-                model.setAddressesValue(JSON.stringify(addressesValue));
-                var roleName = model.getRole().getName(), roles = chlk.models.common.RoleEnum;
-                var currentPerson = this.getContext().getSession().get("currentPerson");
-                model.setAbleEdit(roleName != roles.STUDENT.valueOf() && model.getId() == currentPerson.getId() || roleName == roles.ADMINEDIT.valueOf() || roleName == roles.ADMINGRADE.valueOf());
-                bDate && model.setBirthDateText(bDate.toString(res).replace(/&#100;/g, "d"));
-                var gt = model.getGender() ? model.getGender().toLowerCase() == "m" ? "Male" : "Female" : "";
-                model.setGenderFullText(gt);
-                model.setPictureUrl(this.personService.getPictureURL(model.getId(), 128));
-                return model;
-            }, [ [ chlk.models.id.SchoolPersonId ] ], function infoAction(personId) {
+            }("TeachersController", ria.__SYNTAX.EXTENDS(chlk.controllers.UserController), [ [ ria.mvc.Inject ], chlk.services.TeacherService, "teacherService", [ [ chlk.models.id.SchoolPersonId ] ], function infoAction(personId) {
                 var result = this.teacherService.getInfo(personId).attach(this.validateResponse_()).then(function(model) {
                     var res = this.prepareProfileData(model);
                     this.getContext().getSession().set("userModel", res);
@@ -14219,7 +15115,7 @@ exports.globals = {};
             }("MessageList", [ chlk.models.common.PaginatedList, "messages", Boolean, "inbox", String, "role", String, "keyword", String, "selectedIds", String, "submitType" ]);
         })();
     })();
-    __ASSETS._ug51na493mzpvi = function anonymous(locals) {
+    __ASSETS._dhpm1odijw09t3xr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="dialog gray"><div class="x-window-header"><span>Send Message</span></div><div class="x-window-body"><div class="general-info">');
@@ -14289,7 +15185,7 @@ exports.globals = {};
         buf.push("</div></div></div>");
         return buf.join("");
     };
-    __ASSETS._mrjis57ouco3l3di = function anonymous(locals) {
+    __ASSETS._wayr7xqkrs51xlxr = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push("<li" + jade.attrs({
@@ -14319,7 +15215,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.messages." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_mrjis57ouco3l3di") ], [ ria.templates.ModelBind(chlk.models.people.User) ], "RecipientAutoComplete", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], String, "displayName", [ ria.templates.ModelPropertyBind ], String, "email", [ ria.templates.ModelPropertyBind ], String, "firstName", [ ria.templates.ModelPropertyBind ], String, "fullName", [ ria.templates.ModelPropertyBind ], String, "gender", [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolPersonId, "id", [ ria.templates.ModelPropertyBind ], String, "lastName", [ ria.templates.ModelPropertyBind ], String, "salutation" ]);
+            }([ ria.templates.TemplateBind("_wayr7xqkrs51xlxr") ], [ ria.templates.ModelBind(chlk.models.people.User) ], "RecipientAutoComplete", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], String, "displayName", [ ria.templates.ModelPropertyBind ], String, "email", [ ria.templates.ModelPropertyBind ], String, "firstName", [ ria.templates.ModelPropertyBind ], String, "fullName", [ ria.templates.ModelPropertyBind ], String, "gender", [ ria.templates.ModelPropertyBind ], chlk.models.id.SchoolPersonId, "id", [ ria.templates.ModelPropertyBind ], String, "lastName", [ ria.templates.ModelPropertyBind ], String, "salutation" ]);
         })();
     })();
     "chlk.templates.JadeTemplate";
@@ -14334,7 +15230,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.messages." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_ug51na493mzpvi") ], [ ria.templates.ModelBind(chlk.models.messages.Message) ], "AddDialog", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.MessageId, "id", [ ria.templates.ModelPropertyBind ], String, "subject", [ ria.templates.ModelPropertyBind ], String, "body", [ ria.templates.ModelPropertyBind ], chlk.models.people.Person, "sender", [ ria.templates.ModelPropertyBind ], chlk.models.people.Person, "recipient", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "sent" ]);
+            }([ ria.templates.TemplateBind("_dhpm1odijw09t3xr") ], [ ria.templates.ModelBind(chlk.models.messages.Message) ], "AddDialog", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.MessageId, "id", [ ria.templates.ModelPropertyBind ], String, "subject", [ ria.templates.ModelPropertyBind ], String, "body", [ ria.templates.ModelPropertyBind ], chlk.models.people.Person, "sender", [ ria.templates.ModelPropertyBind ], chlk.models.people.Person, "recipient", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "sent" ]);
         })();
     })();
     "chlk.activities.lib.TemplateDialog";
@@ -14350,7 +15246,7 @@ exports.globals = {};
             }([ ria.mvc.DomAppendTo("#chlk-dialogs") ], [ ria.mvc.ActivityGroup("MessagePopup") ], [ ria.mvc.TemplateBind(chlk.templates.messages.AddDialog) ], "AddDialog", ria.__SYNTAX.EXTENDS(chlk.activities.lib.TemplateDialog), []);
         })();
     })();
-    __ASSETS._mzp7xdar9tacerk9 = function anonymous(locals) {
+    __ASSETS._irshtukk4pvcayvi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push('<div class="dialog gray"><div class="x-window-header"><span>' + jade.escape(null == (jade.interp = self.getSender().getFirstName() + self.getSender().getLastName()) ? "" : jade.interp) + '</span></div><div class="x-window-body"><div class="general-info"><div>' + jade.escape(null == (jade.interp = self.subject) ? "" : jade.interp) + "</div><div>" + jade.escape(null == (jade.interp = self.body) ? "" : jade.interp) + "</div>");
@@ -14386,7 +15282,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.messages." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_mzp7xdar9tacerk9") ], [ ria.templates.ModelBind(chlk.models.messages.Message) ], "ViewDialog", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.MessageId, "id", [ ria.templates.ModelPropertyBind ], String, "subject", [ ria.templates.ModelPropertyBind ], String, "body", [ ria.templates.ModelPropertyBind ], chlk.models.people.Person, "sender", [ ria.templates.ModelPropertyBind ], chlk.models.people.Person, "recipient", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "sent" ]);
+            }([ ria.templates.TemplateBind("_irshtukk4pvcayvi") ], [ ria.templates.ModelBind(chlk.models.messages.Message) ], "ViewDialog", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.id.MessageId, "id", [ ria.templates.ModelPropertyBind ], String, "subject", [ ria.templates.ModelPropertyBind ], String, "body", [ ria.templates.ModelPropertyBind ], chlk.models.people.Person, "sender", [ ria.templates.ModelPropertyBind ], chlk.models.people.Person, "recipient", [ ria.templates.ModelPropertyBind ], chlk.models.common.ChlkDate, "sent" ]);
         })();
     })();
     "chlk.activities.lib.TemplateDialog";
@@ -14443,7 +15339,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._xxgdyeknk3ohto6r = function anonymous(locals) {
+    __ASSETS._pvo2ughbcv6g8pvi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         jade.globals.ActionForm_mixin.call({
@@ -14818,7 +15714,7 @@ exports.globals = {};
                         "class": "not-transparent"
                     },
                     escaped: {}
-                }, "message", "page", self.getMessages(), [ true ]);
+                }, "message", "page", self.getMessages(), [ true, self.isInbox(), self.getRole(), self.getKeyword() ]);
             }
         }, "message", "do");
         return buf.join("");
@@ -14833,7 +15729,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.messages." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_xxgdyeknk3ohto6r") ], [ ria.templates.ModelBind(chlk.models.messages.MessageList) ], "MessageList", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.common.PaginatedList, "messages", [ ria.templates.ModelPropertyBind ], Boolean, "inbox", [ ria.templates.ModelPropertyBind ], String, "role", [ ria.templates.ModelPropertyBind ], String, "keyword" ]);
+            }([ ria.templates.TemplateBind("_pvo2ughbcv6g8pvi") ], [ ria.templates.ModelBind(chlk.models.messages.MessageList) ], "MessageList", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], chlk.models.common.PaginatedList, "messages", [ ria.templates.ModelPropertyBind ], Boolean, "inbox", [ ria.templates.ModelPropertyBind ], String, "role", [ ria.templates.ModelPropertyBind ], String, "keyword" ]);
         })();
     })();
     "chlk.activities.lib.TemplatePage";
@@ -14964,7 +15860,7 @@ exports.globals = {};
             } ]);
         })();
     })();
-    __ASSETS._1wpomd4zzspaxlxr = function anonymous(locals) {
+    __ASSETS._iwgh5ydtyz3kgldi = function anonymous(locals) {
         var buf = [];
         var self = locals || {};
         buf.push("<li" + jade.attrs({
@@ -15029,7 +15925,7 @@ exports.globals = {};
                 ria.__SYNTAX.validateClassDecl(def, ria.__API.Class);
                 var name = "chlk.templates.search." + def.name;
                 return ria.__SYNTAX.compileClass(name, def);
-            }([ ria.templates.TemplateBind("_1wpomd4zzspaxlxr") ], [ ria.templates.ModelBind(chlk.models.search.SearchItem) ], "SiteSearch", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], String, "id", [ ria.templates.ModelPropertyBind ], String, "description", [ ria.templates.ModelPropertyBind ], Number, "searchType", [ ria.templates.ModelPropertyBind ], Number, "roleId", [ ria.templates.ModelPropertyBind ], String, "gender" ]);
+            }([ ria.templates.TemplateBind("_iwgh5ydtyz3kgldi") ], [ ria.templates.ModelBind(chlk.models.search.SearchItem) ], "SiteSearch", ria.__SYNTAX.EXTENDS(chlk.templates.JadeTemplate), [ [ ria.templates.ModelPropertyBind ], String, "id", [ ria.templates.ModelPropertyBind ], String, "description", [ ria.templates.ModelPropertyBind ], Number, "searchType", [ ria.templates.ModelPropertyBind ], Number, "roleId", [ ria.templates.ModelPropertyBind ], String, "gender" ]);
         })();
     })();
     "chlk.BaseApp";
@@ -15037,6 +15933,7 @@ exports.globals = {};
     "chlk.controllers.FeedController";
     "chlk.controllers.AccountController";
     "chlk.controllers.CalendarController";
+    "chlk.controllers.ClassController";
     "chlk.controllers.SettingsController";
     "chlk.controllers.SetupController";
     "chlk.controllers.StudentsController";
@@ -15063,7 +15960,7 @@ exports.globals = {};
                 return session;
             }, ria.__SYNTAX.Modifiers.OVERRIDE, ria.async.Future, function onStart_() {
                 return BASE().then(function(data) {
-                    new ria.dom.Dom().fromHTML(ASSET("_ihgenbsa8l6ry66r")()).appendTo("#sidebar");
+                    new ria.dom.Dom().fromHTML(ASSET("_2pnt1wcpwwjnhfr")()).appendTo("#sidebar");
                     return data;
                 });
             } ]);
