@@ -15,7 +15,7 @@
     .info-view
         .title
             .avatar-container.with-border
-                img(src=self.getPictureUrl()).avatar-128.avatar
+                +PersonImg(self, 128)
             h1=self.getFullName()
         .sections
             .sections-info
@@ -53,7 +53,7 @@
             .title
                 .avatar-block
                     .avatar-container.with-border
-                        img(src=self.getPictureUrl()).avatar-128.avatar
+                        +PersonImg(self, 128)
                     button(type="button").simple-gray-button.file Upload
                         +FileUpload('teachers', 'uploadPicture', [self.getId().valueOf()])#add-attachment.simple-gray-button
                 .name-block

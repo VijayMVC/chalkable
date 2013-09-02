@@ -39,7 +39,15 @@ NAMESPACE('chlk.controls', function () {
 
             [[Object, Object]],
             VOID, function prepareData(data,configs_) {
-                var configs = this.getDefaultConfigs();
+                var configs = {
+                    selectedIndex:null,
+                    infiniteScroll: false,
+                    itemsName: 'Items',
+                    start: 0,
+                    totalCount: null,
+                    pageSize: 10,
+                    interval: 250
+                };
                 if(configs_){
                     if(data.getTotalCount){
                         configs_.totalCount = data.getTotalCount();

@@ -4,7 +4,7 @@ mixin Image()
 
 mixin PersonImg(person, size)
     if(person.getGender())
-        src = chlk.templates.JadeTemplate.prototype.getPictureURL(person.getId, size, size);
+        src = chlk.templates.JadeTemplate.prototype.getPictureURL(person.getId(), size, size);
         isWoman = person.getGender().toLowerCase() == 'f';
         alternativeHref = joinUrls(window.scriptsRoot, 'Content/avatars/' + size + '/.no-avatar');
         if isWoman

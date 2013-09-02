@@ -173,11 +173,6 @@ NAMESPACE('chlk.controllers', function (){
 
                     this.prepareAttachments(attachments);
                     model.setExpiresDateColor('blue');
-                    model.getOwner().setPictureUrl(this.personService.getPictureURL(model.getOwner().getId(), 24));
-                    model.getStudentAnnouncements() && model.getStudentAnnouncements().getItems().forEach(function(item){
-                        var student = item.getStudentInfo();
-                        student.setPictureUrl(this.personService.getPictureURL(student.getId(), 24));
-                    }.bind(this));
                     if(formatDate(now, 'dd-mm-yy') == expires.format('dd-mm-yy')){
                         model.setExpiresDateColor('blue');
                         model.setExpiresDateText(Msg.Due_today);

@@ -60,7 +60,6 @@ NAMESPACE('chlk.controllers', function (){
                 bDate && model.setBirthDateText(bDate.toString(res).replace(/&#100;/g, 'd'));
                 var gt = model.getGender() ? (model.getGender().toLowerCase() == 'm' ? 'Male' : 'Female') : '';
                 model.setGenderFullText(gt);
-                model.setPictureUrl(this.personService.getPictureURL(model.getId(), 128));
                 return model;
             }
         ])
