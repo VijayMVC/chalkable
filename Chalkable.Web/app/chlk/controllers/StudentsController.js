@@ -4,6 +4,7 @@ REQUIRE('chlk.services.PersonService');
 REQUIRE('chlk.services.ClassService');
 
 REQUIRE('chlk.activities.person.ListPage');
+REQUIRE('chlk.activities.student.SummaryPage');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.teacher.StudentsList');
@@ -100,6 +101,14 @@ NAMESPACE('chlk.controllers', function (){
                         return res;
                     }.bind(this));
                 return this.PushView(chlk.activities.profile.InfoViewPage, result);
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
+            function detailsAction(personId){
+                var result = this.studentService
+                    .getSummary(personId)
+                    .attach(this.validateResponse_());
+                return this.PushView(chlk.activities.student.SummaryPage, result);
             }
         ])
 });

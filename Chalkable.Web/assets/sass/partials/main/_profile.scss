@@ -28,6 +28,70 @@ BODY {
           .summary-page{
             margin: 0 -28px;
             padding: 16px 11px 0 13px;
+            font-family: Pacifico;
+
+            #avatar-photo-conainer{
+              width: 268px;
+
+              .img-container{
+                background: url(images/profile/avatar-frame.png) no-repeat;
+                height: 252px;
+                width: 202px;
+                padding: 21px 18px 0px;
+                position: relative;
+
+                IMG{
+                  border-width: 0px;
+                  background: none;
+                  width: 201px;
+                  height: 167px;
+                }
+
+                .grades-container{
+                  &:hover{
+                    P{
+                      opacity: 0;
+                    }
+
+                    .grade{
+                      opacity: 1;
+                    }
+                  }
+
+                  P, DIV{
+                    margin-top: 3px;
+                    font-size: 29px;
+                    color: #D8D5CA !important;
+                    text-shadow: 0 -2px 0px #B1AFA6, 0 2px 0px white;
+                    font-weight: normal;
+                    word-spacing: -4px;
+                    letter-spacing: 1px;
+                    text-align: center;
+                    opacity: 1;
+                    @include transition-property("all");
+                    @include transition-duration("0.8s");
+
+                    &.grade{
+                      position: absolute;
+                      word-spacing: 0px;
+                      top: 198px;
+                      left: 0;
+                      right: 0;
+                      opacity: 0;
+                      width: 238px;
+                      font-size: 25px;
+                    }
+
+                    SPAN{
+                      font-size: 33px;
+                      letter-spacing: 3px;
+                      display: inline-block;
+                      margin-left: 12px;
+                    }
+                  }
+                }
+              }
+            }
           }
 
           .lr-toolbar {
@@ -36,7 +100,15 @@ BODY {
             width: 671px;
           }
 
-          .periods-link {
+          .class-link:hover{
+            color: #2F7790 !important;
+
+            IMG{
+              margin-top: -45px;
+            }
+          }
+
+          .periods-link, .class-link {
             display: inline-block;
             text-align: center;
             color: #957633;
@@ -79,15 +151,55 @@ BODY {
               z-index: 100;
               background: url(images/profile/course-container.png) 0 0 no-repeat;
 
+              .number{
+                font: bold 14px Arial;
+                margin-right: 2px;
+                color: #be8145;
+              }
+
+              .number, .name, .day{
+                display: inline-block;
+                vertical-align: middle;
+              }
+
+              .name{
+                font: normal 8px Arial;
+                width: 43px;
+                overflow: hidden;
+                color: #3989a1;
+              }
+
               .day{
                 font: normal 12px Arial;
                 text-align: center;
                 width: 43px;
                 text-shadow: 0 1px 0 white;
-                display: inline-block;
-                vertical-align: middle;
                 color: #3989a1;
               }
+            }
+
+            .class-img{
+              height: 35px;
+              margin: 11px 17px 0;
+              width: 45px;
+              overflow: hidden;
+
+              IMG{
+                @include transition-property("all");
+                @include transition-duration("0.2s");
+              }
+            }
+
+            SPAN{
+              text-align: center;
+              display: inline-block;
+              width: 67px;
+              overflow: hidden;
+              font-family: Georgia;
+              font-size: 12px;
+              font-style: italic;
+              text-shadow: 0 1px 1px #f2e6c0;
+              white-space: nowrap;
             }
           }
 
@@ -203,20 +315,20 @@ BODY {
                 }
               }
             }
+          }
 
-            #student-info-panel, #avatar-photo-conainer{
-              display: inline-block;
-              vertical-align: top;
-            }
+          #student-info-panel, #avatar-photo-conainer{
+            display: inline-block;
+            vertical-align: top;
+          }
 
-            #student-info-panel{
-              width: 426px;
-              overflow: visible;
+          #student-info-panel{
+            width: 426px;
+            overflow: visible;
 
-              .glance-container {
-                margin-left: -14px;
-                margin-top: 25px;
-              }
+            .glance-container {
+              margin-left: -14px;
+              margin-top: 25px;
             }
           }
 
@@ -225,6 +337,8 @@ BODY {
           }
 
           .info-page{
+
+
             h1{
               font-size: 30px;
             }
@@ -486,10 +600,64 @@ BODY {
           }
 
           .status{
+            font-size: 24px;
+            padding: 0;
+
             #show-buttons-popup{
               margin-left: 10px;
               font-size: 10px;
               display: inline-block;
+            }
+
+            >DIV{
+              display: inline-block;
+              height: 10px;
+              width: 10px;
+              vertical-align: middle;
+              @include border-radius(5px);
+              margin: 0 13px 5px 8px;
+              position: relative;
+
+              .tooltip-announcement{
+                top: -30px;
+                left: -43px;
+                min-width: 93px;
+              }
+
+              &:hover{
+                .tooltip-announcement{
+                  display: block;
+                }
+              }
+
+              &.absent, &.present, &.late, &.excused{
+                border: none;
+                border-top: 1px solid white;
+              }
+
+              border: 1px solid #c9b47a;
+              @include box-shadow(0 0 2px 1px #c9b47a);
+
+              &.absent{
+                @include background(linear-gradient(top, #ea4433, #ac170f));
+                @include box-shadow(0 0 6px 1px #ac170f);
+              }
+
+              &.present{
+                @include background(linear-gradient(top, #40e900, #21a906));
+                @include box-shadow(0 0 6px 1px #21a906);
+              }
+
+              &.excused{
+                background: #79c9f1;
+                @include box-shadow(0 0 6px 1px #79c9f1);
+              }
+
+              &.late{
+                @include background(linear-gradient(top, #f3f006, #b6b11f));
+                @include box-shadow(0 0 6px 1px #f3f006);
+              }
+
             }
           }
 

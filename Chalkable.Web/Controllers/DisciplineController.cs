@@ -27,7 +27,7 @@ namespace Chalkable.Web.Controllers
             return Json(new PaginatedList<StudentDisciplineSummaryViewData>(list, start.Value / count.Value, count.Value));
         }
 
-        [RequireRequestValue("schoolYearId")]
+        //[RequireRequestValue("schoolYearId")]
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST_STUDENT_DISCIPLINE, true, CallType.Get, new[] { AppPermissionType.Discipline })]
         public ActionResult ListStudentDiscipline(Guid? schoolYearId, Guid schoolPersonId, DateTime? date)
         {

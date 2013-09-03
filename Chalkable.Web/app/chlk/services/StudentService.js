@@ -19,11 +19,25 @@ NAMESPACE('chlk.services', function () {
                     count: count_
                 });
             },
+            [[String]],
+            ria.async.Future, function getStudentsByFilter(filter_) {
+                return this.getStudents(null, filter_, true, true)
+                           .then(function(model){return model.getItems();});
+            },
+
+
 
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function getInfo(personId) {
                 return this.get('Student/Info.json', chlk.models.people.User, {
                     personId: personId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
+            ria.async.Future, function getSummary(personId) {
+                return this.get('Student/Summary.json', chlk.models.student.Summary, {
+                    schoolPersonId: personId.valueOf()
                 });
             },
 

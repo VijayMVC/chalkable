@@ -139,7 +139,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(id){
                     var pictureUrl = this.pictureService.getPictureUrl(id, width, height);
                     return new chlk.models.apps.AppPicture(id, pictureUrl, width, height, msg, true);
-                }.bind(this));
+                }, this);
             return this.UpdateView(chlk.activities.apps.AppInfoPage, result, msg.toLowerCase());
         },
 

@@ -7,6 +7,12 @@
   overflow: hidden;
   height: 101px;
 
+  &.centered{
+    .second-container{
+      text-align: center;
+    }
+  }
+
   .arrow{
     position: absolute;
     top: 2px;

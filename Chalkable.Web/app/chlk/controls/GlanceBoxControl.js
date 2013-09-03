@@ -19,7 +19,7 @@ NAMESPACE('chlk.controls', function () {
             [[Number, String]],
             String, function getShortText(value1, value2){
                 var res = value1 + ' ' + value2;
-                if (value1 !== undefined && value2 !== undefined){
+                if (value1 !== undefined && value1 !== null && value2 !== undefined && value2 !== null){
                     if(value1.length + value2.length > 9){
                         res = value1 + ' ' +  value2.slice(0, 8 - value1.length) + '...';
                     }
