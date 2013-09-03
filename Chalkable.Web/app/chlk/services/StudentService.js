@@ -19,6 +19,13 @@ NAMESPACE('chlk.services', function () {
                     count: count_
                 });
             },
+            [[String]],
+            ria.async.Future, function getStudentsByFilter(filter_) {
+                return this.getStudents(null, filter_, true, true)
+                           .then(function(model){return model.getItems();});
+            },
+
+
 
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function getInfo(personId) {
