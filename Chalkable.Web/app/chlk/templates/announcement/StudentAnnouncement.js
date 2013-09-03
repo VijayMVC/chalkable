@@ -32,7 +32,8 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.people.User, 'studentInfo',
 
-            String, 'ownerPictureUrl',
+            [ria.templates.ModelPropertyBind],
+            chlk.models.people.User, 'owner',
 
             Boolean, 'notAnnouncement',
 

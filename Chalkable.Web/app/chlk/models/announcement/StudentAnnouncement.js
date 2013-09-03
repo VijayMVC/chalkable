@@ -26,6 +26,8 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'state',
 
             [ria.serialize.SerializeProperty('studentinfo')],
-            chlk.models.people.User, 'studentInfo'
+            chlk.models.people.User, 'studentInfo',
+
+            chlk.models.people.User, 'owner'
         ]);
 });

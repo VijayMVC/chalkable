@@ -15,6 +15,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             chlk.models.grading.Mapping, 'mapping',
             Array, 'applicationsInGradeView',
+            chlk.models.people.User, 'owner',
 
             [ria.mvc.DomEventBind('keypress', '.grade-input')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -99,6 +100,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
                 model.getStudentAnnouncements() && this.setMapping(model.getStudentAnnouncements().getMapping());
+                this.setOwner(model.getOwner());
                 this.setApplicationsInGradeView(model.getApplications().filter(function(item){return item.applicationviewdata.showingradeview}));
                 var that = this;
                 jQuery(this.dom.valueOf()).on('change', '.grade-select', function(){
@@ -117,10 +119,10 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.StudentAnnouncement)],
             VOID, function doUpdateItem(tpl, model, msg_) {
+                tpl.setOwner(this.getOwner());
                 tpl.options({
                     gradingMapping: this.getMapping(),
                     applicationsInGradeView: this.getApplicationsInGradeView(),
-                    ownerPictureUrl: this.dom.find('[name=ownerPictureUrl]').getValue(),
                     notAnnouncement: !!this.dom.find('[name=notAnnouncement]').getValue(),
                     readonly: !!this.dom.find('[name=readonly]').getValue(),
                     gradingStyle: parseInt(this.dom.find('[name=gradingStyle]').getValue(), 10)

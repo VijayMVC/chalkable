@@ -8,6 +8,7 @@ lbl = 'A - F';
 itemCls = (isDrop ? 'dropped' :'');
 selectedCls = (!self.isReadonly() ? 'not-selected' : '');
 student = self.getStudentInfo();
+owner = self.getOwner();
 +ActionForm('announcement', 'updateAnnouncementGrade')
     input(type="submit").x-hidden
     +Hidden('id', self.getId())
@@ -24,7 +25,7 @@ student = self.getStudentInfo();
                             .triangle
                             div
                                 div
-                                    +PersonImg(self.getOwner(), 24)
+                                    +PersonImg(owner, 24)
                                 div
                                     +TextArea(name="comment").comment-input=self.getComment()
                                     span.enter=Msg.Enter_when_done

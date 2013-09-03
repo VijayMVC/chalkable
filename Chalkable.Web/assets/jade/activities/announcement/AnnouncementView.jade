@@ -38,7 +38,6 @@
                 .left-block
                     +ActionLink('feed', 'list').image-container
                         +PersonImg(self.getOwner(), 47)
-                        img(src=self.getOwner().getPictureUrl()).avatar.avatar-47
                 .right-block
                     h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
                     p=self.getContent()
@@ -66,15 +65,13 @@
                     selectedIndex = selectedIndex).grades-individual.people-list
                     each item, i in studentAnnouncements
                         .row(class=(i == selectedIndex ? 'selected' : ''), index=i)
-                            ownerPictureUrl = self.getOwner().getPictureUrl();
                             notAnnouncement = self.getAnnouncementTypeId() != chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf();
-                            +Hidden('ownerPictureUrl', ownerPictureUrl)
                             +Hidden('notAnnouncement', notAnnouncement)
                             +Hidden('readonly', isReadonly)
                             +Hidden('gradingStyle', gradingStyle)
                             .top-content(id = "top-content-" + item.getId())
+                                -item.setOwner(self.getOwner());
                                 +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
-                                    ownerPictureUrl = ownerPictureUrl,
                                     notAnnouncement = notAnnouncement,
                                     readonly = isReadonly,
                                     applicationsInGradeView = applications.filter(function(item){return item.applicationviewdata.showingradeview}),
