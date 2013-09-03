@@ -1,0 +1,53 @@
+.chlk-calendar
+    .header
+        .header-container
+            .buttons-container
+                .buttons
+                    .calendar-today-container
+                        +ActionLink('calendar', 'day').calendar-today.week
+                    .prev-month-container
+                        if self.getPrevDate()
+                            +ActionLink('calendar', 'day', self.getPrevDate().format('mm-dd-yy')).prev-month.week.teacher
+                        else
+                            A.prev-month.week.teacher
+                    .current-month-container.week
+                        label.current-month=self.getCurrentTitle()
+                    .next-month-container
+                        if self.getNextDate()
+                            +ActionLink('calendar', 'day', self.getNextDate().format('mm-dd-yy')).next-month.week
+                        else
+                            A.next-month.week
+                    .calendar-day-container
+                        +ActionLink('calendar', 'day').calendar-day.week.pressed
+                            span.tooltip
+                    .calendar-week-container
+                        +ActionLink('calendar', 'week').calendar-week.week
+                            span.tooltip
+                    .calendar-month-container
+                        +ActionLink('calendar', 'month').calendar-month.week
+                            span.tooltip
+    .day-names.day
+        each item,i in self.getItems()
+            div(class=item.getTodayClassName()).day
+                if(item.getDate().getDate().getDay())
+                    p=item.getDate().format('DD')
+    .items
+        each item in self.getItems()
+            div(class = item.getTodayClassName()).gradient-cnt.item.week-day.day
+                ul
+                    items = item.getCalendarDayItems() || [];
+                    each calendarDayItem,i in items
+                        +ActionLink('calendar', 'showDayPopUp', item.getDate().format('mm-dd-yy'), i).period-item.day
+                            if(item.getDate().getDate().getDay() == 0)
+                                .period-info=(i+1)
+                                span.time #{calendarDayItem.getPeriod().getStartTime()} - #{calendarDayItem.getPeriod().getEndTime()}
+                            else
+                                li
+                                    .course-icon
+                                        .img
+                                    .p-container
+                                        p.title.day-title
+                                            period = calendarDayItem.getAnnouncementClassPeriods()[0];
+                                            if(period)
+                                                span=period.getClassPeriod().getClazz().getName()
+
