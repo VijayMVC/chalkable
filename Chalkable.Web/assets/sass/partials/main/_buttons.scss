@@ -67,6 +67,33 @@
   }
 }
 
+.plain-button{
+  width: auto;
+  display: inline-block;
+  background-repeat: no-repeat;
+
+  &.upper-case{
+    >SPAN{
+      >SPAN{
+        >BUTTON{
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+
+  > SPAN {
+    > SPAN {
+      display: block;
+      > BUTTON {
+        background: none;
+        border: 0 none;
+        background-color: transparent;
+      }
+    }
+  }
+}
+
 .special-button{
 
   padding-left: 21px;

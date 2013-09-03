@@ -182,9 +182,8 @@ ol, ul {
   position: absolute;
   min-width: 55px;
   display: none;
-  z-index: 99999;
 }
-/* line 203, ../assets/sass/screen.scss */
+/* line 202, ../assets/sass/screen.scss */
 .chlk-tooltip .tooltip-content {
   background: rgba(0, 0, 0, 0.8);
   color: white;
@@ -199,13 +198,13 @@ ol, ul {
   padding: 3px 5px;
   line-height: 15px;
 }
-/* line 214, ../assets/sass/screen.scss */
+/* line 213, ../assets/sass/screen.scss */
 .chlk-tooltip .tooltip-triangle {
   height: 7px;
   background: url(images/feed/triangle.png) center 0 no-repeat;
 }
 
-/* line 221, ../assets/sass/screen.scss */
+/* line 220, ../assets/sass/screen.scss */
 .gradient {
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
@@ -221,18 +220,18 @@ ol, ul {
   border-bottom-width: 2px;
 }
 
-/* line 229, ../assets/sass/screen.scss */
+/* line 228, ../assets/sass/screen.scss */
 a:not(.not-blue), a:visited:not(.not-blue), a:link:not(.not-blue) {
   color: #155c97;
   outline: none !important;
 }
 
-/* line 234, ../assets/sass/screen.scss */
+/* line 233, ../assets/sass/screen.scss */
 .x-hidden {
   display: none !important;
 }
 
-/* line 237, ../assets/sass/screen.scss */
+/* line 236, ../assets/sass/screen.scss */
 .x-zero {
   position: absolute;
   z-index: 0;
@@ -241,18 +240,18 @@ a:not(.not-blue), a:visited:not(.not-blue), a:link:not(.not-blue) {
   opacity: 0;
 }
 
-/* line 245, ../assets/sass/screen.scss */
+/* line 244, ../assets/sass/screen.scss */
 input {
   resize: none !important;
 }
 
-/* line 250, ../assets/sass/screen.scss */
+/* line 249, ../assets/sass/screen.scss */
 a:active:not(.not-blue), a:hover:not(.not-blue) {
   color: #1b77c4;
   outline: none !important;
 }
 
-/* line 256, ../assets/sass/screen.scss */
+/* line 255, ../assets/sass/screen.scss */
 a.grey-link, .grey-link {
   font: normal 13px "Helvetica Neue";
   font-style: italic;
@@ -260,13 +259,13 @@ a.grey-link, .grey-link {
   color: #797979;
 }
 
-/* line 263, ../assets/sass/screen.scss */
+/* line 262, ../assets/sass/screen.scss */
 HTML {
   background: url(images/common/page-bg.gif);
   height: 100%;
 }
 
-/* line 268, ../assets/sass/screen.scss */
+/* line 267, ../assets/sass/screen.scss */
 BODY {
   background: url(images/common/body-bg.gif) 300px 0 repeat-y;
   color: #51595d;
@@ -276,40 +275,40 @@ BODY {
   position: relative;
   margin: 0;
 }
-/* line 279, ../assets/sass/screen.scss */
+/* line 278, ../assets/sass/screen.scss */
 BODY.demo > DIV.application-preview-window {
   bottom: 93px !important;
 }
-/* line 284, ../assets/sass/screen.scss */
+/* line 283, ../assets/sass/screen.scss */
 BODY #logout-block {
   position: absolute;
   right: 0;
   z-index: 100000;
 }
-/* line 289, ../assets/sass/screen.scss */
+/* line 288, ../assets/sass/screen.scss */
 BODY #logout-block .logout-area {
   cursor: pointer;
 }
-/* line 293, ../assets/sass/screen.scss */
+/* line 292, ../assets/sass/screen.scss */
 BODY #logout-block > DIV, BODY #logout-block > A {
   margin-right: 1px;
   padding-left: 9px;
   padding-right: 13px;
 }
-/* line 299, ../assets/sass/screen.scss */
+/* line 298, ../assets/sass/screen.scss */
 BODY #logout-block > SPAN {
   background: url(images/common/logout-arrow.png) center 10px no-repeat, rgba(255, 255, 255, 0.6);
   width: 19px;
 }
-/* line 303, ../assets/sass/screen.scss */
+/* line 302, ../assets/sass/screen.scss */
 BODY #logout-block > SPAN:hover {
   background: url(images/common/logout-arrow.png) center 10px no-repeat, rgba(255, 255, 255, 0.75);
 }
-/* line 307, ../assets/sass/screen.scss */
+/* line 306, ../assets/sass/screen.scss */
 BODY #logout-block > SPAN:active {
   background: url(images/common/logout-arrow.png) center 10px no-repeat, rgba(255, 255, 255, 0.9);
 }
-/* line 312, ../assets/sass/screen.scss */
+/* line 311, ../assets/sass/screen.scss */
 BODY #logout-block > * {
   padding-top: 5px;
   background: rgba(255, 255, 255, 0.6);
@@ -320,12 +319,12 @@ BODY #logout-block > * {
   color: #1c5166;
   text-decoration: none;
 }
-/* line 323, ../assets/sass/screen.scss */
+/* line 322, ../assets/sass/screen.scss */
 BODY #logout-block > DIV, BODY #logout-block > SPAN {
   display: inline-block;
   vertical-align: top;
 }
-/* line 328, ../assets/sass/screen.scss */
+/* line 327, ../assets/sass/screen.scss */
 BODY #logout-block > SPAN, BODY #logout-block > A {
   display: inline-block;
   -webkit-transition-property: all;
@@ -337,7 +336,7 @@ BODY #logout-block > SPAN, BODY #logout-block > A {
   -o-transition-duration: 0.2s;
   transition-duration: 0.2s;
 }
-/* line 334, ../assets/sass/screen.scss */
+/* line 333, ../assets/sass/screen.scss */
 BODY #logout-block > A.logout {
   margin-top: 1px;
   opacity: 0;
@@ -345,15 +344,15 @@ BODY #logout-block > A.logout {
   visibility: hidden;
   text-transform: capitalize;
 }
-/* line 341, ../assets/sass/screen.scss */
+/* line 340, ../assets/sass/screen.scss */
 BODY #logout-block > A.logout:hover {
   background: rgba(255, 255, 255, 0.75);
 }
-/* line 345, ../assets/sass/screen.scss */
+/* line 344, ../assets/sass/screen.scss */
 BODY #logout-block > A.logout:active {
   background: rgba(255, 255, 255, 0.9);
 }
-/* line 351, ../assets/sass/screen.scss */
+/* line 350, ../assets/sass/screen.scss */
 BODY #page-header {
   text-align: right;
   color: #333;
@@ -377,7 +376,7 @@ BODY #page-header {
   top: 0;
   z-index: 5;
 }
-/* line 372, ../assets/sass/screen.scss */
+/* line 371, ../assets/sass/screen.scss */
 BODY DIV.page {
   background: url(images/common/sidebar-bg.gif) 0 0 repeat-y;
   height: 100%;
@@ -385,62 +384,62 @@ BODY DIV.page {
   text-align: left;
   width: 100%;
 }
-/* line 382, ../assets/sass/screen.scss */
+/* line 381, ../assets/sass/screen.scss */
 BODY DIV.page.demo > DIV#content, BODY DIV.page.demo > DIV#sidebar {
   margin-bottom: 90px;
 }
-/* line 387, ../assets/sass/screen.scss */
+/* line 386, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content {
   padding-left: 315px;
   padding-top: 11px;
 }
-/* line 392, ../assets/sass/screen.scss */
+/* line 391, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content .new-item #main-top {
   background: url(images/common/paper-bg-top.gif) 1px 0 no-repeat;
 }
-/* line 396, ../assets/sass/screen.scss */
+/* line 395, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content .new-item #main-wrapper {
   background: url(images/common/paper-bg-new.gif) 0 0 repeat-y;
 }
-/* line 400, ../assets/sass/screen.scss */
+/* line 399, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content .new-item #footer {
   background: url(images/common/paper-bg-bottom.gif) 0 0 no-repeat;
 }
-/* line 406, ../assets/sass/screen.scss */
+/* line 405, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content .attendance #main-top {
   background: url(images/attendance/paper-top-bg.png) 0 0 no-repeat;
 }
-/* line 410, ../assets/sass/screen.scss */
+/* line 409, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content .attendance #main-wrapper {
   background: url(images/attendance/paper-bg.png) 0 0 repeat-y;
 }
-/* line 414, ../assets/sass/screen.scss */
+/* line 413, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content .attendance #footer {
   background: url(images/attendance/paper-bottom-bg.png) 0 0 no-repeat;
 }
-/* line 419, ../assets/sass/screen.scss */
+/* line 418, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content > DIV {
   text-align: left;
   width: 802px;
 }
-/* line 423, ../assets/sass/screen.scss */
+/* line 422, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content > DIV #main-top {
   height: 11px;
   background: url(images/common/paper-top-bg.png) 0 0 no-repeat;
 }
-/* line 428, ../assets/sass/screen.scss */
+/* line 427, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content > DIV #main-wrapper {
   background: url(images/common/paper-bg.gif) 0 0 repeat-y;
   position: relative;
 }
-/* line 432, ../assets/sass/screen.scss */
+/* line 431, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content > DIV #main-wrapper #main {
   background: url(images/common/paper-pin.png) 0 0 repeat-y;
   min-height: 700px;
   padding: 32px 74px 32px 61px;
   position: relative;
 }
-/* line 440, ../assets/sass/screen.scss */
+/* line 439, ../assets/sass/screen.scss */
 BODY DIV.page > DIV#content > DIV #footer {
   -moz-border-radius-bottomleft: 10px;
   -webkit-border-bottom-left-radius: 10px;
@@ -1478,8 +1477,41 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.settings
 DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled, DIV#content-wrapper.profile .action-bar.buttons .container .action-link[disabled], DIV#content-wrapper.profile .action-bar.buttons .container .action-button.disabled, DIV#content-wrapper.profile .action-bar.buttons .container .action-button[disabled] {
   opacity: 0.6;
 }
-
 /* line 42, ../assets/sass/partials/controls/_action-bar.scss */
+DIV#content-wrapper.messages .action-bar.buttons .container .action-link:not(.disabled), DIV#content-wrapper.messages .action-bar.buttons .container .action-button:not(.disabled) {
+  color: #957633;
+  text-shadow: 0 1px 0 white;
+}
+/* line 46, ../assets/sass/partials/controls/_action-bar.scss */
+DIV#content-wrapper.messages .action-bar.buttons .container .action-link:not(.disabled):hover, DIV#content-wrapper.messages .action-bar.buttons .container .action-link:not(.disabled).pressed, DIV#content-wrapper.messages .action-bar.buttons .container .action-button:not(.disabled):hover, DIV#content-wrapper.messages .action-bar.buttons .container .action-button:not(.disabled).pressed {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f5ead6), color-stop(100%, #dac6a5));
+  background: -webkit-linear-gradient(top, #f5ead6, #dac6a5);
+  background: -moz-linear-gradient(top, #f5ead6, #dac6a5);
+  background: -o-linear-gradient(top, #f5ead6, #dac6a5);
+  background: linear-gradient(top, #f5ead6, #dac6a5);
+}
+/* line 49, ../assets/sass/partials/controls/_action-bar.scss */
+DIV#content-wrapper.messages .action-bar.buttons .container .action-link:not(.disabled):hover.back, DIV#content-wrapper.messages .action-bar.buttons .container .action-link:not(.disabled).pressed.back, DIV#content-wrapper.messages .action-bar.buttons .container .action-button:not(.disabled):hover.back, DIV#content-wrapper.messages .action-bar.buttons .container .action-button:not(.disabled).pressed.back {
+  background: url(images/profile/back.png) 3px center no-repeat, -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f3eedf), color-stop(100%, #e1d3a6));
+  background: url(images/profile/back.png) 3px center no-repeat, -webkit-linear-gradient(top, #f3eedf, #e1d3a6);
+  background: url(images/profile/back.png) 3px center no-repeat, -moz-linear-gradient(top, #f3eedf, #e1d3a6);
+  background: url(images/profile/back.png) 3px center no-repeat, -o-linear-gradient(top, #f3eedf, #e1d3a6);
+  background: url(images/profile/back.png) 3px center no-repeat, linear-gradient(top, #f3eedf, #e1d3a6);
+}
+/* line 55, ../assets/sass/partials/controls/_action-bar.scss */
+DIV#content-wrapper.messages .action-bar.buttons .container .action-link.settings:hover, DIV#content-wrapper.messages .action-bar.buttons .container .action-button.settings:hover {
+  background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat, -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f3eedf), color-stop(100%, #e1d3a6));
+  background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat, -webkit-linear-gradient(top, #f3eedf, #e1d3a6);
+  background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat, -moz-linear-gradient(top, #f3eedf, #e1d3a6);
+  background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat, -o-linear-gradient(top, #f3eedf, #e1d3a6);
+  background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat, linear-gradient(top, #f3eedf, #e1d3a6);
+}
+/* line 59, ../assets/sass/partials/controls/_action-bar.scss */
+DIV#content-wrapper.messages .action-bar.buttons .container .action-link.disabled, DIV#content-wrapper.messages .action-bar.buttons .container .action-link[disabled], DIV#content-wrapper.messages .action-bar.buttons .container .action-button.disabled, DIV#content-wrapper.messages .action-bar.buttons .container .action-button[disabled] {
+  opacity: 0.6;
+}
+
+/* line 72, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container .action-link, .action-bar.buttons .container .action-button {
   padding: 0 10px;
   border-left: 1px solid white;
@@ -1493,7 +1525,7 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   border-width: 0 1px 0 1px;
   text-align: center;
 }
-/* line 55, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 85, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container .action-link:hover, .action-bar.buttons .container .action-link.pressed, .action-bar.buttons .container .action-button:hover, .action-bar.buttons .container .action-button.pressed {
   color: #2f7790;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f6f6f6), color-stop(100%, #d8d8d8));
@@ -1502,12 +1534,12 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   background: -o-linear-gradient(top, #f6f6f6, #d8d8d8);
   background: linear-gradient(top, #f6f6f6, #d8d8d8);
 }
-/* line 60, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 90, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container .action-link.back, .action-bar.buttons .container .action-button.back {
   background: url(images/profile/back.png) 3px center no-repeat;
   padding-left: 26px !important;
 }
-/* line 64, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 94, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container .action-link.back:hover, .action-bar.buttons .container .action-link.back.pressed, .action-bar.buttons .container .action-button.back:hover, .action-bar.buttons .container .action-button.back.pressed {
   background: url(images/profile/back.png) 3px center no-repeat, -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f6f6f6), color-stop(100%, #d8d8d8));
   background: url(images/profile/back.png) 3px center no-repeat, -webkit-linear-gradient(top, #f6f6f6, #d8d8d8);
@@ -1515,17 +1547,17 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   background: url(images/profile/back.png) 3px center no-repeat, -o-linear-gradient(top, #f6f6f6, #d8d8d8);
   background: url(images/profile/back.png) 3px center no-repeat, linear-gradient(top, #f6f6f6, #d8d8d8);
 }
-/* line 69, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 99, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container .action-link.settings, .action-bar.buttons .container .action-button.settings {
   background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat;
   padding-left: 19px;
   width: 65px;
 }
-/* line 76, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 106, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container > .left:not(.no-border) {
   border-right: 1px solid white;
 }
-/* line 79, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 109, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container > .left:not(.no-border) > .action-link:first-child, .action-bar.buttons .container > .left:not(.no-border) > .action-button:first-child {
   border-left: none;
   -webkit-border-radius: 5px 0 0 5px;
@@ -1534,11 +1566,11 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   -o-border-radius: 5px 0 0 5px;
   border-radius: 5px 0 0 5px;
 }
-/* line 85, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 115, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container > .right:not(.no-border) {
   border-left: 1px solid #d0d0d0;
 }
-/* line 88, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 118, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container > .right:not(.no-border) > .action-link:last-child, .action-bar.buttons .container > .right:not(.no-border) > .action-button:last-child {
   border-right: none;
   -webkit-border-radius: 0 5px 5px 0;
@@ -1547,7 +1579,7 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   -o-border-radius: 0 5px 5px 0;
   border-radius: 0 5px 5px 0;
 }
-/* line 97, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 127, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.not-transparent .container {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -1555,7 +1587,7 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   -o-border-radius: 5px;
   border-radius: 5px;
 }
-/* line 102, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 132, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar .container {
   height: 34px;
   border-bottom: 1px solid #a1a1a1;
@@ -1563,7 +1595,7 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   white-space: nowrap;
   overflow: hidden;
 }
-/* line 109, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 139, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar .container .action-link, .action-bar .container .action-button {
   text-decoration: none;
   font: normal 11px/34px arial, tahoma, verdana, helvetica;
@@ -2142,11 +2174,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .chlk-grid .row.selected
   overflow: hidden;
   height: 101px;
 }
-/* line 11, ../assets/sass/partials/controls/_left-right-toolbar.scss */
-.lr-toolbar.centered .second-container {
-  text-align: center;
-}
-/* line 16, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 10, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .arrow {
   position: absolute;
   top: 2px;
@@ -2156,30 +2184,30 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .chlk-grid .row.selected
   margin: 4px 0;
   cursor: pointer;
 }
-/* line 25, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 19, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .arrow.disabled {
   opacity: 0.5;
 }
-/* line 29, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 23, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .arrow.prev-button {
   background: url(images/common/classes-left.png) center center no-repeat;
   left: 3px;
 }
-/* line 34, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 28, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .arrow.next-button {
   background: url(images/common/classes-right.png) center center no-repeat;
   right: 3px;
 }
-/* line 41, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 35, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar.classes-bar .first-container {
   margin-left: 17px;
   width: 633px;
 }
-/* line 45, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 39, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar.classes-bar .first-container .class-button {
   cursor: pointer;
 }
-/* line 51, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 45, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .paginator {
   z-index: 10;
   display: block;
@@ -2191,7 +2219,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .chlk-grid .row.selected
   right: 0;
   list-style: none;
 }
-/* line 62, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 56, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .paginator A {
   display: inline-block;
   cursor: pointer;
@@ -2205,16 +2233,16 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .chlk-grid .row.selected
   -o-border-radius: 2px;
   border-radius: 2px;
 }
-/* line 71, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 65, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .paginator A.current {
   background: #233036;
 }
-/* line 77, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 71, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container {
   white-space: nowrap;
   overflow: hidden;
 }
-/* line 81, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 75, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container {
   position: relative;
   -webkit-transition-property: all;
@@ -2226,13 +2254,13 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .chlk-grid .row.selected
   -o-transition-duration: 0.5s;
   transition-duration: 0.5s;
 }
-/* line 86, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 80, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item {
   height: 82px;
   display: inline-block;
   width: 73px;
 }
-/* line 91, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 85, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button {
   background-position: center top;
   color: #b6b6b6;
@@ -2246,27 +2274,27 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .chlk-grid .row.selected
   background-color: #C9C9C9;
   vertical-align: top;
 }
-/* line 104, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 98, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button.pressed, .lr-toolbar .first-container .second-container .item.class-button:active {
   background-position: center bottom;
 }
-/* line 107, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 101, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button.pressed .img-wrapper, .lr-toolbar .first-container .second-container .item.class-button:active .img-wrapper {
   top: 13px;
 }
-/* line 110, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 104, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button.pressed .img-wrapper IMG, .lr-toolbar .first-container .second-container .item.class-button:active .img-wrapper IMG {
   margin-top: -45px;
 }
-/* line 115, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 109, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button.pressed .text-container, .lr-toolbar .first-container .second-container .item.class-button:active .text-container {
   color: #2f7790;
 }
-/* line 120, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 114, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button:hover {
   background-position: center center;
 }
-/* line 124, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 118, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button .img-wrapper {
   background-repeat: no-repeat;
   height: 35px;
@@ -2276,13 +2304,13 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .chlk-grid .row.selected
   width: 45px;
   overflow: hidden;
 }
-/* line 133, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 127, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button .img-wrapper IMG {
   margin-top: -45px;
   width: 45px;
   height: 80px;
 }
-/* line 140, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 134, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button .text-container {
   text-align: center;
   display: inline-block;
@@ -2293,18 +2321,18 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .chlk-grid .row.selected
   font-family: Arial Narrow, Arial, serif;
   white-space: nowrap;
 }
-/* line 152, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 146, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.action-link, .lr-toolbar .first-container .second-container .item.button-link {
   height: 76px;
   width: 67px;
   overflow: hidden;
 }
-/* line 157, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 151, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.action-link .text-container, .lr-toolbar .first-container .second-container .item.button-link .text-container {
   padding-top: 49px;
 }
 
-/* line 173, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 167, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile .lr-toolbar .first-container .second-container .item.class-button {
   border-color: #baa76e;
   background-image: url(images/profile/classes.png);
@@ -2313,12 +2341,12 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .lr-toolbar .first-conta
   font-style: italic;
   text-shadow: 1px 1px 0 white;
 }
-/* line 181, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 175, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile .lr-toolbar .first-container .second-container .item.class-button:hover {
   background-position: center bottom;
 }
 
-/* line 200, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 194, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.calendar .lr-toolbar .first-container .second-container .item.class-button {
   border-color: #4398ae;
   background-color: #4398ae;
@@ -2755,17 +2783,38 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
 }
 
 /* line 70, ../assets/sass/partials/main/_buttons.scss */
+.plain-button {
+  width: auto;
+  display: inline-block;
+  background-repeat: no-repeat;
+}
+/* line 78, ../assets/sass/partials/main/_buttons.scss */
+.plain-button.upper-case > SPAN > SPAN > BUTTON {
+  text-transform: uppercase;
+}
+/* line 86, ../assets/sass/partials/main/_buttons.scss */
+.plain-button > SPAN > SPAN {
+  display: block;
+}
+/* line 88, ../assets/sass/partials/main/_buttons.scss */
+.plain-button > SPAN > SPAN > BUTTON {
+  background: none;
+  border: 0 none;
+  background-color: transparent;
+}
+
+/* line 97, ../assets/sass/partials/main/_buttons.scss */
 .special-button {
   padding-left: 21px;
   width: auto;
   display: inline-block;
   background-repeat: no-repeat;
 }
-/* line 80, ../assets/sass/partials/main/_buttons.scss */
+/* line 107, ../assets/sass/partials/main/_buttons.scss */
 .special-button.upper-case > SPAN > SPAN > BUTTON {
   text-transform: uppercase;
 }
-/* line 87, ../assets/sass/partials/main/_buttons.scss */
+/* line 114, ../assets/sass/partials/main/_buttons.scss */
 .special-button > SPAN {
   min-height: 54px;
   padding-right: 21px;
@@ -2773,13 +2822,13 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   background-repeat: no-repeat;
   background-position: right 0px;
 }
-/* line 93, ../assets/sass/partials/main/_buttons.scss */
+/* line 120, ../assets/sass/partials/main/_buttons.scss */
 .special-button > SPAN > SPAN {
   display: block;
   background-repeat: repeat-x;
   height: 54px;
 }
-/* line 97, ../assets/sass/partials/main/_buttons.scss */
+/* line 124, ../assets/sass/partials/main/_buttons.scss */
 .special-button > SPAN > SPAN > BUTTON {
   height: 47px;
   background: none;
@@ -2795,99 +2844,99 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   font-weight: bold;
   font-family: Arial;
 }
-/* line 117, ../assets/sass/partials/main/_buttons.scss */
+/* line 144, ../assets/sass/partials/main/_buttons.scss */
 .special-button.blue-button {
   background-image: url(images/buttons/xbutton-blue-left.png);
 }
-/* line 119, ../assets/sass/partials/main/_buttons.scss */
+/* line 146, ../assets/sass/partials/main/_buttons.scss */
 .special-button.blue-button > SPAN {
   background-image: url(images/buttons/xbutton-blue-right.png);
 }
-/* line 121, ../assets/sass/partials/main/_buttons.scss */
+/* line 148, ../assets/sass/partials/main/_buttons.scss */
 .special-button.blue-button > SPAN > SPAN {
   background-image: url(images/buttons/xbutton-blue-center.png);
 }
-/* line 123, ../assets/sass/partials/main/_buttons.scss */
+/* line 150, ../assets/sass/partials/main/_buttons.scss */
 .special-button.blue-button > SPAN > SPAN > BUTTON {
   color: white;
 }
-/* line 128, ../assets/sass/partials/main/_buttons.scss */
+/* line 155, ../assets/sass/partials/main/_buttons.scss */
 .special-button.blue-button:hover {
   background-position: 0px -113px !important;
   background-size: auto 169px;
 }
-/* line 131, ../assets/sass/partials/main/_buttons.scss */
+/* line 158, ../assets/sass/partials/main/_buttons.scss */
 .special-button.blue-button:hover > SPAN {
   background-position: right -57px !important;
   background-size: auto 170px;
 }
-/* line 134, ../assets/sass/partials/main/_buttons.scss */
+/* line 161, ../assets/sass/partials/main/_buttons.scss */
 .special-button.blue-button:hover > SPAN > SPAN {
   background-position: 0px -57px;
   background-size: auto 170px;
 }
-/* line 144, ../assets/sass/partials/main/_buttons.scss */
+/* line 171, ../assets/sass/partials/main/_buttons.scss */
 .special-button.green-button {
   background-image: url(images/buttons/xbutton-green-left.png);
 }
-/* line 146, ../assets/sass/partials/main/_buttons.scss */
+/* line 173, ../assets/sass/partials/main/_buttons.scss */
 .special-button.green-button > SPAN {
   background-image: url(images/buttons/xbutton-green-right.png);
   background-position: right -112px;
 }
-/* line 149, ../assets/sass/partials/main/_buttons.scss */
+/* line 176, ../assets/sass/partials/main/_buttons.scss */
 .special-button.green-button > SPAN > SPAN {
   background-image: url(images/buttons/xbutton-green-center.png);
 }
-/* line 151, ../assets/sass/partials/main/_buttons.scss */
+/* line 178, ../assets/sass/partials/main/_buttons.scss */
 .special-button.green-button > SPAN > SPAN > BUTTON {
   color: #126100;
 }
-/* line 157, ../assets/sass/partials/main/_buttons.scss */
+/* line 184, ../assets/sass/partials/main/_buttons.scss */
 .special-button.green-button:hover {
   background-position: 0px -56px !important;
   background-size: auto 169px;
 }
-/* line 160, ../assets/sass/partials/main/_buttons.scss */
+/* line 187, ../assets/sass/partials/main/_buttons.scss */
 .special-button.green-button:hover > SPAN {
   background-position: right -57px !important;
   background-size: auto 170px;
 }
-/* line 163, ../assets/sass/partials/main/_buttons.scss */
+/* line 190, ../assets/sass/partials/main/_buttons.scss */
 .special-button.green-button:hover > SPAN > SPAN {
   background-position: 0px -57px;
   background-size: auto 170px;
 }
-/* line 166, ../assets/sass/partials/main/_buttons.scss */
+/* line 193, ../assets/sass/partials/main/_buttons.scss */
 .special-button.green-button:hover > SPAN > SPAN > BUTTON {
   color: white;
 }
-/* line 173, ../assets/sass/partials/main/_buttons.scss */
+/* line 200, ../assets/sass/partials/main/_buttons.scss */
 .special-button.red-button {
   background-image: url(images/buttons/xbutton-red-left.png);
 }
-/* line 175, ../assets/sass/partials/main/_buttons.scss */
+/* line 202, ../assets/sass/partials/main/_buttons.scss */
 .special-button.red-button > SPAN {
   background-image: url(images/buttons/xbutton-red-right.png);
 }
-/* line 177, ../assets/sass/partials/main/_buttons.scss */
+/* line 204, ../assets/sass/partials/main/_buttons.scss */
 .special-button.red-button > SPAN > SPAN {
   background-image: url(images/buttons/xbutton-red-center.png);
 }
-/* line 179, ../assets/sass/partials/main/_buttons.scss */
+/* line 206, ../assets/sass/partials/main/_buttons.scss */
 .special-button.red-button > SPAN > SPAN > BUTTON {
   color: white;
 }
-/* line 185, ../assets/sass/partials/main/_buttons.scss */
+/* line 212, ../assets/sass/partials/main/_buttons.scss */
 .special-button.red-button:hover {
   opacity: 0.9;
 }
-/* line 189, ../assets/sass/partials/main/_buttons.scss */
+/* line 216, ../assets/sass/partials/main/_buttons.scss */
 .special-button.red-button:active {
   opacity: 0.8;
 }
 
-/* line 194, ../assets/sass/partials/main/_buttons.scss */
+/* line 221, ../assets/sass/partials/main/_buttons.scss */
 .special-button2 {
   min-height: 33px;
   padding-left: 9px;
@@ -2897,20 +2946,20 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   font-size: 18px;
   font-family: Arial;
 }
-/* line 204, ../assets/sass/partials/main/_buttons.scss */
+/* line 231, ../assets/sass/partials/main/_buttons.scss */
 .special-button2 > SPAN {
   min-height: 33px;
   padding-right: 9px;
   display: block;
   background-repeat: no-repeat;
 }
-/* line 209, ../assets/sass/partials/main/_buttons.scss */
+/* line 236, ../assets/sass/partials/main/_buttons.scss */
 .special-button2 > SPAN > SPAN {
   min-height: 33px;
   display: block;
   background-repeat: repeat-x;
 }
-/* line 213, ../assets/sass/partials/main/_buttons.scss */
+/* line 240, ../assets/sass/partials/main/_buttons.scss */
 .special-button2 > SPAN > SPAN > BUTTON {
   height: 30px;
   color: white;
@@ -2925,68 +2974,68 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   font-size: 18px;
   font-family: Arial;
 }
-/* line 233, ../assets/sass/partials/main/_buttons.scss */
+/* line 260, ../assets/sass/partials/main/_buttons.scss */
 .special-button2:hover:not(.disabled) {
   background-position: 0px -42px;
 }
-/* line 235, ../assets/sass/partials/main/_buttons.scss */
+/* line 262, ../assets/sass/partials/main/_buttons.scss */
 .special-button2:hover:not(.disabled) > SPAN {
   background-position: right -42px;
 }
-/* line 237, ../assets/sass/partials/main/_buttons.scss */
+/* line 264, ../assets/sass/partials/main/_buttons.scss */
 .special-button2:hover:not(.disabled) > SPAN > SPAN {
   background-position: 0px -42px;
 }
-/* line 244, ../assets/sass/partials/main/_buttons.scss */
+/* line 271, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.blue {
   background-image: url(images/buttons/xbutton-blue2-left.png);
 }
-/* line 246, ../assets/sass/partials/main/_buttons.scss */
+/* line 273, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.blue > SPAN {
   background: url(images/buttons/xbutton-blue2-right.png) right 0 no-repeat;
 }
-/* line 248, ../assets/sass/partials/main/_buttons.scss */
+/* line 275, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.blue > SPAN > SPAN {
   background-image: url(images/buttons/xbutton-blue2-center.png);
 }
-/* line 253, ../assets/sass/partials/main/_buttons.scss */
+/* line 280, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.grey {
   background-image: url(images/buttons/xbutton-grey2-left.png);
 }
-/* line 255, ../assets/sass/partials/main/_buttons.scss */
+/* line 282, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.grey > SPAN {
   background: url(images/buttons/xbutton-grey2-right.png) right 0 no-repeat;
 }
-/* line 257, ../assets/sass/partials/main/_buttons.scss */
+/* line 284, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.grey > SPAN > SPAN {
   background-image: url(images/buttons/xbutton-grey2-center.png);
 }
-/* line 262, ../assets/sass/partials/main/_buttons.scss */
+/* line 289, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.red {
   background-image: url(images/buttons/xbutton-red2-left.png);
 }
-/* line 264, ../assets/sass/partials/main/_buttons.scss */
+/* line 291, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.red > SPAN {
   background: url(images/buttons/xbutton-red2-right.png) right 0 no-repeat;
 }
-/* line 266, ../assets/sass/partials/main/_buttons.scss */
+/* line 293, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.red > SPAN > SPAN {
   background-image: url(images/buttons/xbutton-red2-center.png);
 }
-/* line 271, ../assets/sass/partials/main/_buttons.scss */
+/* line 298, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.green {
   background-image: url(images/buttons/xbutton-green2-left.png);
 }
-/* line 273, ../assets/sass/partials/main/_buttons.scss */
+/* line 300, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.green > SPAN {
   background: url(images/buttons/xbutton-green2-right.png) right 0 no-repeat;
 }
-/* line 275, ../assets/sass/partials/main/_buttons.scss */
+/* line 302, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.green > SPAN > SPAN {
   background-image: url(images/buttons/xbutton-green2-center.png);
 }
 
-/* line 283, ../assets/sass/partials/main/_buttons.scss */
+/* line 310, ../assets/sass/partials/main/_buttons.scss */
 .blue-gradient-btn {
   color: white;
   text-align: center;
@@ -3009,13 +3058,13 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   box-shadow: inset 0 1px 0 #9abbcb;
   cursor: pointer;
 }
-/* line 290, ../assets/sass/partials/main/_buttons.scss */
+/* line 317, ../assets/sass/partials/main/_buttons.scss */
 .blue-gradient-btn BUTTON {
   background: transparent;
   border: 0;
   color: white;
 }
-/* line 302, ../assets/sass/partials/main/_buttons.scss */
+/* line 329, ../assets/sass/partials/main/_buttons.scss */
 .blue-gradient-btn:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #467d97), color-stop(100%, #1f566d));
   background: -webkit-linear-gradient(top, #467d97, #1f566d);
@@ -3024,7 +3073,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   background: linear-gradient(top, #467d97, #1f566d);
 }
 
-/* line 307, ../assets/sass/partials/main/_buttons.scss */
+/* line 334, ../assets/sass/partials/main/_buttons.scss */
 .blue-tb-right-button {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5d9cbb), color-stop(100%, #246382));
   background: -webkit-linear-gradient(top, #5d9cbb, #246382);
@@ -3040,12 +3089,12 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   box-shadow: inset 0 1px 0 #9dc3d6;
   display: inline-block;
 }
-/* line 318, ../assets/sass/partials/main/_buttons.scss */
+/* line 345, ../assets/sass/partials/main/_buttons.scss */
 .blue-tb-right-button SPAN, .blue-tb-right-button BUTTON {
   background: transparent;
   border: none;
 }
-/* line 326, ../assets/sass/partials/main/_buttons.scss */
+/* line 353, ../assets/sass/partials/main/_buttons.scss */
 .blue-tb-right-button:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6ea6c2), color-stop(100%, #3a738f));
   background: -webkit-linear-gradient(top, #6ea6c2, #3a738f);
@@ -3053,7 +3102,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   background: -o-linear-gradient(top, #6ea6c2, #3a738f);
   background: linear-gradient(top, #6ea6c2, #3a738f);
 }
-/* line 330, ../assets/sass/partials/main/_buttons.scss */
+/* line 357, ../assets/sass/partials/main/_buttons.scss */
 .blue-tb-right-button.x-item-disabled {
   opacity: 1;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(93, 156, 187, 0.6)), color-stop(100%, rgba(36, 99, 130, 0.6)));
@@ -3063,11 +3112,11 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   background: linear-gradient(top, rgba(93, 156, 187, 0.6), rgba(36, 99, 130, 0.6));
   border-color: rgba(26, 66, 86, 0.6);
 }
-/* line 335, ../assets/sass/partials/main/_buttons.scss */
+/* line 362, ../assets/sass/partials/main/_buttons.scss */
 .blue-tb-right-button.x-item-disabled > SPAN {
   opacity: 0.6;
 }
-/* line 340, ../assets/sass/partials/main/_buttons.scss */
+/* line 367, ../assets/sass/partials/main/_buttons.scss */
 .blue-tb-right-button BUTTON {
   font: bold 14px Arial;
   height: 34px;
@@ -3310,89 +3359,15 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main {
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .summary-page {
   margin: 0 -28px;
   padding: 16px 11px 0 13px;
-  font-family: Pacifico;
 }
 /* line 33, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .summary-page #avatar-photo-conainer {
-  width: 268px;
-}
-/* line 36, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .summary-page #avatar-photo-conainer .img-container {
-  background: url(images/profile/avatar-frame.png) no-repeat;
-  height: 252px;
-  width: 202px;
-  padding: 21px 18px 0px;
-  position: relative;
-}
-/* line 43, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .summary-page #avatar-photo-conainer .img-container IMG {
-  border-width: 0px;
-  background: none;
-  width: 201px;
-  height: 167px;
-}
-/* line 52, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .summary-page #avatar-photo-conainer .img-container .grades-container:hover P {
-  opacity: 0;
-}
-/* line 56, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .summary-page #avatar-photo-conainer .img-container .grades-container:hover .grade {
-  opacity: 1;
-}
-/* line 61, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .summary-page #avatar-photo-conainer .img-container .grades-container P, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .summary-page #avatar-photo-conainer .img-container .grades-container DIV {
-  margin-top: 3px;
-  font-size: 29px;
-  color: #D8D5CA !important;
-  text-shadow: 0 -2px 0px #b1afa6, 0 2px 0px white;
-  font-weight: normal;
-  word-spacing: -4px;
-  letter-spacing: 1px;
-  text-align: center;
-  opacity: 1;
-  -webkit-transition-property: all;
-  -moz-transition-property: all;
-  -o-transition-property: all;
-  transition-property: all;
-  -webkit-transition-duration: 0.8s;
-  -moz-transition-duration: 0.8s;
-  -o-transition-duration: 0.8s;
-  transition-duration: 0.8s;
-}
-/* line 74, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .summary-page #avatar-photo-conainer .img-container .grades-container P.grade, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .summary-page #avatar-photo-conainer .img-container .grades-container DIV.grade {
-  position: absolute;
-  word-spacing: 0px;
-  top: 198px;
-  left: 0;
-  right: 0;
-  opacity: 0;
-  width: 238px;
-  font-size: 25px;
-}
-/* line 85, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .summary-page #avatar-photo-conainer .img-container .grades-container P SPAN, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .summary-page #avatar-photo-conainer .img-container .grades-container DIV SPAN {
-  font-size: 33px;
-  letter-spacing: 3px;
-  display: inline-block;
-  margin-left: 12px;
-}
-/* line 97, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .lr-toolbar {
   margin-bottom: 40px;
   margin-left: 14px;
   width: 671px;
 }
-/* line 103, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-link:hover {
-  color: #2F7790 !important;
-}
-/* line 106, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-link:hover IMG {
-  margin-top: -45px;
-}
-/* line 111, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-link {
+/* line 39, ../assets/sass/partials/main/_profile.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link {
   display: inline-block;
   text-align: center;
   color: #957633;
@@ -3403,26 +3378,26 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link, BOD
   width: 75px;
   height: 82px;
 }
-/* line 122, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link:not(:last-child), BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-link:not(:last-child) {
+/* line 50, ../assets/sass/partials/main/_profile.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link:not(:last-child) {
   margin-right: 10px;
 }
-/* line 126, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .announcement-box, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-link .announcement-box {
+/* line 54, ../assets/sass/partials/main/_profile.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .announcement-box {
   position: relative;
   z-index: 98;
   width: 55px;
   padding-left: 20px;
   height: 67px;
 }
-/* line 133, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .announcement-box .announcement, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-link .announcement-box .announcement {
+/* line 61, ../assets/sass/partials/main/_profile.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .announcement-box .announcement {
   position: absolute;
   height: 48px;
   width: 48px;
 }
-/* line 140, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .period-box, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-link .period-box {
+/* line 68, ../assets/sass/partials/main/_profile.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .period-box {
   padding: 6px 2px 2px 2px;
   width: 66px;
   text-align: center;
@@ -3436,63 +3411,17 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .per
   z-index: 100;
   background: url(images/profile/course-container.png) 0 0 no-repeat;
 }
-/* line 154, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .period-box .number, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-link .period-box .number {
-  font: bold 14px Arial;
-  margin-right: 2px;
-  color: #be8145;
-}
-/* line 160, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .period-box .number, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .period-box .name, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .period-box .day, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-link .period-box .number, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-link .period-box .name, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-link .period-box .day {
-  display: inline-block;
-  vertical-align: middle;
-}
-/* line 165, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .period-box .name, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-link .period-box .name {
-  font: normal 8px Arial;
-  width: 43px;
-  overflow: hidden;
-  color: #3989a1;
-}
-/* line 172, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .period-box .day, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-link .period-box .day {
+/* line 82, ../assets/sass/partials/main/_profile.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .period-box .day {
   font: normal 12px Arial;
   text-align: center;
   width: 43px;
   text-shadow: 0 1px 0 white;
+  display: inline-block;
+  vertical-align: middle;
   color: #3989a1;
 }
-/* line 181, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .class-img, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-link .class-img {
-  height: 35px;
-  margin: 11px 17px 0;
-  width: 45px;
-  overflow: hidden;
-}
-/* line 187, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link .class-img IMG, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-link .class-img IMG {
-  -webkit-transition-property: all;
-  -moz-transition-property: all;
-  -o-transition-property: all;
-  transition-property: all;
-  -webkit-transition-duration: 0.2s;
-  -moz-transition-duration: 0.2s;
-  -o-transition-duration: 0.2s;
-  transition-duration: 0.2s;
-}
-/* line 193, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .periods-link SPAN, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-link SPAN {
-  text-align: center;
-  display: inline-block;
-  width: 67px;
-  overflow: hidden;
-  font-family: Georgia;
-  font-size: 12px;
-  font-style: italic;
-  text-shadow: 0 1px 1px #f2e6c0;
-  white-space: nowrap;
-}
-/* line 206, ../assets/sass/partials/main/_profile.scss */
+/* line 94, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .gradient {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f3eee0), color-stop(100%, #ece1c1));
   background: -webkit-linear-gradient(top, #f3eee0, #ece1c1);
@@ -3502,125 +3431,125 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .gradient {
   border-top: 1px solid #fff;
   border-bottom: 1px solid #8c6c0d;
 }
-/* line 214, ../assets/sass/partials/main/_profile.scss */
+/* line 102, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .pacifico {
   font-family: Pacifico;
   font-weight: normal;
 }
-/* line 221, ../assets/sass/partials/main/_profile.scss */
+/* line 109, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile .second-container {
   text-align: center;
 }
-/* line 226, ../assets/sass/partials/main/_profile.scss */
+/* line 114, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile .glance-container .glance-box {
   height: 119px;
   cursor: pointer;
 }
-/* line 230, ../assets/sass/partials/main/_profile.scss */
+/* line 118, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile .glance-container .glance-box P {
   font: bold 14px Arial;
   white-space: normal;
   margin-top: 6px;
 }
-/* line 238, ../assets/sass/partials/main/_profile.scss */
+/* line 126, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #top-summary-panel {
   margin-top: 22px;
   margin-bottom: 61px;
 }
-/* line 243, ../assets/sass/partials/main/_profile.scss */
+/* line 131, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile .class-icon-container {
   display: inline-block;
   height: 35px;
   overflow: hidden;
 }
-/* line 249, ../assets/sass/partials/main/_profile.scss */
+/* line 137, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile h2 {
   font-family: Jrhand;
   font-weight: normal;
 }
-/* line 253, ../assets/sass/partials/main/_profile.scss */
+/* line 141, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile h2:not(.no-line) {
   padding-bottom: 2px;
   background-position: 0 bottom;
   margin-bottom: 6px;
 }
-/* line 259, ../assets/sass/partials/main/_profile.scss */
+/* line 147, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile h2 a {
   text-decoration: none;
   color: #957633;
 }
-/* line 265, ../assets/sass/partials/main/_profile.scss */
+/* line 153, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile h2.stats {
   margin-top: 83px;
 }
-/* line 269, ../assets/sass/partials/main/_profile.scss */
+/* line 157, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile h1 {
   font: bold 36px Arial;
 }
-/* line 273, ../assets/sass/partials/main/_profile.scss */
+/* line 161, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile h1.info {
   font-size: 34px;
   margin-top: 5px;
   margin-bottom: 18px;
 }
-/* line 278, ../assets/sass/partials/main/_profile.scss */
+/* line 166, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile h1.info .class-icon-container {
   margin-right: 10px;
 }
-/* line 281, ../assets/sass/partials/main/_profile.scss */
+/* line 169, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile h1.info .class-icon-container IMG {
   width: 45px;
 }
-/* line 287, ../assets/sass/partials/main/_profile.scss */
+/* line 175, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #avatar-photo-conainer {
   width: 272px;
 }
-/* line 290, ../assets/sass/partials/main/_profile.scss */
+/* line 178, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #avatar-photo-conainer .images-wrapper {
   background: url(images/profile/students-box.png) 0 0 no-repeat;
   height: 237px;
   width: 213px;
   margin: 0 0 0 20px;
 }
-/* line 299, ../assets/sass/partials/main/_profile.scss */
+/* line 187, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #avatar-photo-conainer .images-wrapper TABLE TBODY TR TD {
   border-color: #757474;
 }
-/* line 302, ../assets/sass/partials/main/_profile.scss */
+/* line 190, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #avatar-photo-conainer .images-wrapper TABLE TBODY TR TD .image-container {
   width: 52px;
   height: 58px;
 }
-/* line 306, ../assets/sass/partials/main/_profile.scss */
+/* line 194, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #avatar-photo-conainer .images-wrapper TABLE TBODY TR TD .image-container IMG {
   width: 58px;
   height: 58px;
   margin-left: -3px;
 }
-/* line 320, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main #student-info-panel, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main #avatar-photo-conainer {
+/* line 207, ../assets/sass/partials/main/_profile.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #student-info-panel, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #avatar-photo-conainer {
   display: inline-block;
   vertical-align: top;
 }
-/* line 325, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main #student-info-panel {
+/* line 212, ../assets/sass/partials/main/_profile.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #student-info-panel {
   width: 426px;
   overflow: visible;
 }
-/* line 329, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main #student-info-panel .glance-container {
+/* line 216, ../assets/sass/partials/main/_profile.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .class-profile #student-info-panel .glance-container {
   margin-left: -14px;
   margin-top: 25px;
 }
-/* line 335, ../assets/sass/partials/main/_profile.scss */
+/* line 223, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main #avatar-photo-conainer {
   padding-top: 7px;
 }
-/* line 342, ../assets/sass/partials/main/_profile.scss */
+/* line 228, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page h1 {
   font-size: 30px;
 }
-/* line 346, ../assets/sass/partials/main/_profile.scss */
+/* line 232, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page input {
   color: #acacac;
   height: 21px;
@@ -3630,66 +3559,66 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page input {
   border: none;
   margin-top: 2px;
 }
-/* line 356, ../assets/sass/partials/main/_profile.scss */
+/* line 242, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page textarea {
   background-color: #fff;
   border-color: #9e9e9e transparent transparent transparent;
 }
-/* line 361, ../assets/sass/partials/main/_profile.scss */
+/* line 247, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page input, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page textarea {
   width: 196px;
 }
-/* line 366, ../assets/sass/partials/main/_profile.scss */
+/* line 252, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .title .avatar-block {
   width: 150px;
 }
-/* line 370, ../assets/sass/partials/main/_profile.scss */
+/* line 256, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .title .avatar-block, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .title .name-block {
   display: inline-block;
   vertical-align: top;
 }
-/* line 375, ../assets/sass/partials/main/_profile.scss */
+/* line 261, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .title .name-block {
   margin-top: 20px;
 }
-/* line 379, ../assets/sass/partials/main/_profile.scss */
+/* line 265, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .title input {
   width: 120px;
   margin: 2px;
 }
-/* line 386, ../assets/sass/partials/main/_profile.scss */
+/* line 272, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page.edit-mode .title {
   margin: 38px 0 0 14px;
 }
-/* line 389, ../assets/sass/partials/main/_profile.scss */
+/* line 275, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page.edit-mode .title .name-block {
   margin: 21px 15px;
 }
-/* line 394, ../assets/sass/partials/main/_profile.scss */
+/* line 280, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page.edit-mode .sections {
   margin: 0 0 0 10px;
 }
-/* line 398, ../assets/sass/partials/main/_profile.scss */
+/* line 284, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page.edit-mode .info-view {
   display: none;
 }
-/* line 404, ../assets/sass/partials/main/_profile.scss */
+/* line 290, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page.view-mode .info-edit {
   display: none;
 }
-/* line 410, ../assets/sass/partials/main/_profile.scss */
+/* line 296, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page.teacher-info h1 {
   display: inline-block;
 }
-/* line 416, ../assets/sass/partials/main/_profile.scss */
+/* line 302, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .section-title {
   background-position: 0 28px !important;
 }
-/* line 420, ../assets/sass/partials/main/_profile.scss */
+/* line 306, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .section-title, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .info-title {
   color: #808080 !important;
 }
-/* line 424, ../assets/sass/partials/main/_profile.scss */
+/* line 310, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit BUTTON.file {
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
@@ -3700,45 +3629,45 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-e
   width: 125px;
   cursor: pointer;
 }
-/* line 432, ../assets/sass/partials/main/_profile.scss */
+/* line 318, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .section-buttons .chlk-button {
   margin: 100px 5px 0 0;
 }
-/* line 435, ../assets/sass/partials/main/_profile.scss */
+/* line 321, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .section-buttons .chlk-button BUTTON {
   width: 100px;
 }
-/* line 441, ../assets/sass/partials/main/_profile.scss */
+/* line 327, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .info-title {
   color: #be8145;
   padding-left: 5px;
   font: bold 14px Arial;
 }
-/* line 447, ../assets/sass/partials/main/_profile.scss */
+/* line 333, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit #cellService {
   width: 213px;
 }
-/* line 451, ../assets/sass/partials/main/_profile.scss */
+/* line 337, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit #genderSelect {
   width: 80px;
 }
-/* line 455, ../assets/sass/partials/main/_profile.scss */
+/* line 341, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .chzn-container {
   font-weight: normal;
 }
-/* line 460, ../assets/sass/partials/main/_profile.scss */
+/* line 346, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .grey-combo-container .month-combo {
   width: 80px;
 }
-/* line 464, ../assets/sass/partials/main/_profile.scss */
+/* line 350, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .grey-combo-container .day-combo {
   width: 47px;
 }
-/* line 468, ../assets/sass/partials/main/_profile.scss */
+/* line 354, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .grey-combo-container .year-combo {
   width: 78px;
 }
-/* line 473, ../assets/sass/partials/main/_profile.scss */
+/* line 359, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .add-button {
   cursor: pointer;
   color: #64a5d2;
@@ -3746,40 +3675,40 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-e
   font-size: 14px;
   font-weight: normal;
 }
-/* line 480, ../assets/sass/partials/main/_profile.scss */
+/* line 366, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .info-edit .add-button.add-address {
   margin-left: 60px;
 }
-/* line 486, ../assets/sass/partials/main/_profile.scss */
+/* line 372, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections {
   margin-top: 30px;
 }
-/* line 489, ../assets/sass/partials/main/_profile.scss */
+/* line 375, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections .sections-info {
   width: 213px;
   overflow: visible;
 }
-/* line 493, ../assets/sass/partials/main/_profile.scss */
+/* line 379, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections .sections-info .section-data {
   margin-top: 11px;
 }
-/* line 496, ../assets/sass/partials/main/_profile.scss */
+/* line 382, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections .sections-info .section-data .primary-phone {
   margin-bottom: 12px;
 }
-/* line 501, ../assets/sass/partials/main/_profile.scss */
+/* line 387, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections .sections-info .bd-select {
   margin-bottom: 12px;
 }
-/* line 504, ../assets/sass/partials/main/_profile.scss */
+/* line 390, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections .sections-info .bd-select .chzn-container:not(:last-child) {
   margin-right: 4px;
 }
-/* line 511, ../assets/sass/partials/main/_profile.scss */
+/* line 397, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .other-section {
   width: 100%;
 }
-/* line 515, ../assets/sass/partials/main/_profile.scss */
+/* line 401, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info {
   display: inline-block;
   vertical-align: top;
@@ -3788,41 +3717,41 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sectio
   text-shadow: 0 1px 0 white;
   word-wrap: break-word;
 }
-/* line 523, ../assets/sass/partials/main/_profile.scss */
+/* line 409, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info:not(:first-child) {
   margin-left: 7px;
 }
-/* line 527, ../assets/sass/partials/main/_profile.scss */
+/* line 413, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .info-title {
   color: #be8145;
 }
-/* line 531, ../assets/sass/partials/main/_profile.scss */
+/* line 417, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .big-font-size {
   font-size: 20px;
 }
-/* line 535, ../assets/sass/partials/main/_profile.scss */
+/* line 421, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .low-font-size {
   font-size: 14px;
 }
-/* line 538, ../assets/sass/partials/main/_profile.scss */
+/* line 424, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .low-font-size input {
   color: #957633;
   background: transparent;
   padding: 0;
   font-weight: bold;
 }
-/* line 544, ../assets/sass/partials/main/_profile.scss */
+/* line 430, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .low-font-size input:focus {
   border: none !important;
 }
-/* line 550, ../assets/sass/partials/main/_profile.scss */
+/* line 436, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .section-title {
   width: 100%;
   display: inline-block;
   background: url(images/profile/header-line.png) 0 35px no-repeat;
   font-size: 24px;
 }
-/* line 557, ../assets/sass/partials/main/_profile.scss */
+/* line 443, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .gender-box {
   color: #957633;
   display: inline-block;
@@ -3847,146 +3776,68 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sectio
   font-family: Pacifico;
   font-weight: normal;
 }
-/* line 566, ../assets/sass/partials/main/_profile.scss */
+/* line 452, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .gender-box .gender-img-box {
   display: block;
   height: 71%;
 }
-/* line 570, ../assets/sass/partials/main/_profile.scss */
+/* line 456, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .gender-box .gender-img-box.m {
   background: url(images/profile/gender-img.png) center center no-repeat;
 }
-/* line 574, ../assets/sass/partials/main/_profile.scss */
+/* line 460, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .gender-box .gender-img-box.f {
   background: url(images/profile/gender-female-img.png) center center no-repeat;
 }
-/* line 579, ../assets/sass/partials/main/_profile.scss */
+/* line 465, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page .sections-info .gender-box > P {
   position: relative;
   top: -6px;
 }
-/* line 587, ../assets/sass/partials/main/_profile.scss */
+/* line 473, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page #edit-info-button {
   margin-top: 180px;
 }
-/* line 590, ../assets/sass/partials/main/_profile.scss */
+/* line 476, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .info-page #edit-info-button BUTTON {
   width: 100px;
 }
-/* line 596, ../assets/sass/partials/main/_profile.scss */
+/* line 482, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main h1, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main h2, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status {
   font-family: Pacifico;
   font-weight: normal;
   color: #957633;
 }
-/* line 602, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status {
-  font-size: 24px;
-  padding: 0;
-}
-/* line 606, ../assets/sass/partials/main/_profile.scss */
+/* line 489, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status #show-buttons-popup {
   margin-left: 10px;
   font-size: 10px;
   display: inline-block;
 }
-/* line 612, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status > DIV {
-  display: inline-block;
-  height: 10px;
-  width: 10px;
-  vertical-align: middle;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  border-radius: 5px;
-  margin: 0 13px 5px 8px;
-  position: relative;
-  border: 1px solid #c9b47a;
-  -webkit-box-shadow: 0 0 2px 1px #c9b47a;
-  -moz-box-shadow: 0 0 2px 1px #c9b47a;
-  box-shadow: 0 0 2px 1px #c9b47a;
-}
-/* line 621, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status > DIV .tooltip-announcement {
-  top: -30px;
-  left: -43px;
-  min-width: 93px;
-}
-/* line 628, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status > DIV:hover .tooltip-announcement {
-  display: block;
-}
-/* line 633, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status > DIV.absent, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status > DIV.present, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status > DIV.late, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status > DIV.excused {
-  border: none;
-  border-top: 1px solid white;
-}
-/* line 641, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status > DIV.absent {
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ea4433), color-stop(100%, #ac170f));
-  background: -webkit-linear-gradient(top, #ea4433, #ac170f);
-  background: -moz-linear-gradient(top, #ea4433, #ac170f);
-  background: -o-linear-gradient(top, #ea4433, #ac170f);
-  background: linear-gradient(top, #ea4433, #ac170f);
-  -webkit-box-shadow: 0 0 6px 1px #ac170f;
-  -moz-box-shadow: 0 0 6px 1px #ac170f;
-  box-shadow: 0 0 6px 1px #ac170f;
-}
-/* line 646, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status > DIV.present {
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #40e900), color-stop(100%, #21a906));
-  background: -webkit-linear-gradient(top, #40e900, #21a906);
-  background: -moz-linear-gradient(top, #40e900, #21a906);
-  background: -o-linear-gradient(top, #40e900, #21a906);
-  background: linear-gradient(top, #40e900, #21a906);
-  -webkit-box-shadow: 0 0 6px 1px #21a906;
-  -moz-box-shadow: 0 0 6px 1px #21a906;
-  box-shadow: 0 0 6px 1px #21a906;
-}
-/* line 651, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status > DIV.excused {
-  background: #79c9f1;
-  -webkit-box-shadow: 0 0 6px 1px #79c9f1;
-  -moz-box-shadow: 0 0 6px 1px #79c9f1;
-  box-shadow: 0 0 6px 1px #79c9f1;
-}
-/* line 656, ../assets/sass/partials/main/_profile.scss */
-BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status > DIV.late {
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f3f006), color-stop(100%, #b6b11f));
-  background: -webkit-linear-gradient(top, #f3f006, #b6b11f);
-  background: -moz-linear-gradient(top, #f3f006, #b6b11f);
-  background: -o-linear-gradient(top, #f3f006, #b6b11f);
-  background: linear-gradient(top, #f3f006, #b6b11f);
-  -webkit-box-shadow: 0 0 6px 1px #f3f006;
-  -moz-box-shadow: 0 0 6px 1px #f3f006;
-  box-shadow: 0 0 6px 1px #f3f006;
-}
-/* line 664, ../assets/sass/partials/main/_profile.scss */
+/* line 496, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main h2, BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .status {
   font-size: 24px;
 }
-/* line 668, ../assets/sass/partials/main/_profile.scss */
+/* line 500, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main h2:not(.no-line) {
   background: url(images/profile/header-line.png) 0 36px no-repeat;
 }
-/* line 672, ../assets/sass/partials/main/_profile.scss */
+/* line 504, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main h1 {
   font-size: 48px;
   margin: 0 0 -11px;
   white-space: nowrap;
 }
-/* line 678, ../assets/sass/partials/main/_profile.scss */
+/* line 510, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .line {
   background: url(images/profile/header-line.png) 0 28px no-repeat !important;
   height: 36px;
 }
-/* line 684, ../assets/sass/partials/main/_profile.scss */
+/* line 516, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .profile-page-margin {
   margin: 31px -17px 0 -15px;
 }
-/* line 688, ../assets/sass/partials/main/_profile.scss */
+/* line 520, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-small-img-container {
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
@@ -4001,49 +3852,49 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-small-img-
   display: inline-block;
   background: white;
 }
-/* line 696, ../assets/sass/partials/main/_profile.scss */
+/* line 528, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-small-img-container IMG {
   margin: 5px;
   float: left;
   width: 64px;
   height: 64px;
 }
-/* line 705, ../assets/sass/partials/main/_profile.scss */
+/* line 537, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-people h1 {
   font-size: 42px;
   margin: 19px 10px 0;
 }
-/* line 712, ../assets/sass/partials/main/_profile.scss */
+/* line 544, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-people .people-tb .right .chzn-container {
   margin: 4px;
 }
-/* line 716, ../assets/sass/partials/main/_profile.scss */
+/* line 548, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-people .people-tb .right select {
   width: 150px;
 }
-/* line 726, ../assets/sass/partials/main/_profile.scss */
+/* line 558, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-sis .sis-user-info .x-form-field LABEL {
   width: 90px;
   display: inline-block;
 }
-/* line 732, ../assets/sass/partials/main/_profile.scss */
+/* line 564, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-sis .sis-sync-info {
   margin-top: 20px;
 }
-/* line 734, ../assets/sass/partials/main/_profile.scss */
+/* line 566, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-sis .sis-sync-info .x-form-field {
   height: 60px;
 }
-/* line 736, ../assets/sass/partials/main/_profile.scss */
+/* line 568, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-sis .sis-sync-info .x-form-field LABEL {
   width: 140px;
   display: inline-block;
 }
-/* line 747, ../assets/sass/partials/main/_profile.scss */
+/* line 579, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .school-details .school-info {
   margin-left: 34px;
 }
-/* line 753, ../assets/sass/partials/main/_profile.scss */
+/* line 585, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .settings .header {
   text-align: left !important;
   font: bold 16px Arial;
@@ -4051,11 +3902,11 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .settings .header 
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
 }
-/* line 760, ../assets/sass/partials/main/_profile.scss */
+/* line 592, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .settings .general {
   margin-left: 18px;
 }
-/* line 761, ../assets/sass/partials/main/_profile.scss */
+/* line 593, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .settings .general .block {
   padding: 10px;
   height: 123px;
@@ -4063,32 +3914,32 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .settings .general
   float: left;
   margin-left: 8px;
 }
-/* line 769, ../assets/sass/partials/main/_profile.scss */
+/* line 601, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .settings .general .block .fields {
   margin-top: 10px;
 }
-/* line 773, ../assets/sass/partials/main/_profile.scss */
+/* line 605, ../assets/sass/partials/main/_profile.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .settings .general .block .fields .field label {
   line-height: 30px;
 }
 
-/* line 790, ../assets/sass/partials/main/_profile.scss */
+/* line 622, ../assets/sass/partials/main/_profile.scss */
 .action-buttons-popup .buttons {
   width: 381px;
 }
-/* line 793, ../assets/sass/partials/main/_profile.scss */
+/* line 625, ../assets/sass/partials/main/_profile.scss */
 .action-buttons-popup .buttons .chlk-button {
   margin-bottom: 5px;
 }
-/* line 796, ../assets/sass/partials/main/_profile.scss */
+/* line 628, ../assets/sass/partials/main/_profile.scss */
 .action-buttons-popup .buttons .chlk-button:nth-child(2n-1) {
   margin-right: 5px;
 }
-/* line 800, ../assets/sass/partials/main/_profile.scss */
+/* line 632, ../assets/sass/partials/main/_profile.scss */
 .action-buttons-popup .buttons .chlk-button BUTTON {
   width: 170px;
 }
-/* line 806, ../assets/sass/partials/main/_profile.scss */
+/* line 638, ../assets/sass/partials/main/_profile.scss */
 .action-buttons-popup #admin-emails {
   width: 200px;
 }
@@ -7189,11 +7040,216 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.apps-list .td .app-icon {
   border-radius: 5px;
 }
 
-/* line 8, ../assets/sass/partials/main/messages/_list.scss */
+/* line 2, ../assets/sass/partials/main/messages/_list.scss */
+#search-message-btn SPAN {
+  display: inline-block;
+}
+/* line 4, ../assets/sass/partials/main/messages/_list.scss */
+#search-message-btn SPAN SPAN {
+  display: inline-block;
+}
+/* line 6, ../assets/sass/partials/main/messages/_list.scss */
 #search-message-btn SPAN SPAN BUTTON {
   background: url(images/icons/search.png) 0% 50% no-repeat;
-  width: 24px;
+  width: 32px;
   height: 24px;
+  vertical-align: middle;
+  margin-right: 5px;
+  border: 0;
+}
+
+/* line 18, ../assets/sass/partials/main/messages/_list.scss */
+#keyword {
+  height: 20px;
+  vertical-align: middle;
+  border-color: #C9C9C9;
+  -moz-border-radius: 6px 0 0 6px;
+  -webkit-border-radius: 6px 0 0 6px;
+  -o-border-radius: 6px 0 0 6px;
+  -ms-border-radius: 6px 0 0 6px;
+  -khtml-border-radius: 6px 0 0 6px;
+  border-radius: 6px 0 0 6px;
+  padding: 1px 0px 2px 1px;
+  margin: 0 0 0 10px;
+}
+
+/* line 32, ../assets/sass/partials/main/messages/_list.scss */
+#new-message-link {
+  padding: 0;
+}
+/* line 34, ../assets/sass/partials/main/messages/_list.scss */
+#new-message-link > span {
+  background: url(images/icons/pm-add.png) 7px 50% no-repeat;
+  padding: 0 4px 0 26px;
+  display: inline-block;
+}
+
+/* line 46, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-top, BODY DIV.page > DIV#content DIV#content-wrapper.messages #footer {
+  background-image: url(images/private-messages/paper-top-bottom.jpg);
+}
+/* line 50, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #footer {
+  background-position: 0 -50px;
+}
+/* line 54, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper {
+  background-image: url(images/private-messages/paper-bg.jpg);
+}
+/* line 58, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .not-transparent {
+  background: #baa76e;
+}
+/* line 62, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .panel-bg {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f5ebd7), color-stop(100%, #eadac1));
+  background: -webkit-linear-gradient(top, #f5ebd7, #eadac1);
+  background: -moz-linear-gradient(top, #f5ebd7, #eadac1);
+  background: -o-linear-gradient(top, #f5ebd7, #eadac1);
+  background: linear-gradient(top, #f5ebd7, #eadac1);
+}
+/* line 68, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container {
+  border-color: #a08d6d #f3efe6 #f3efe6 #a08d6d;
+  border: 1px solid;
+  color: #815d38;
+  border-radius: 9px;
+  background-color: #c8b088;
+  display: block;
+  width: 665px;
+}
+/* line 77, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar {
+  font-size: 11px;
+}
+/* line 80, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar .left > *, BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar .right > * {
+  vertical-align: middle;
+}
+/* line 84, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar .action-link {
+  padding: 0 5px;
+  text-shadow: none;
+}
+/* line 88, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar .container {
+  heigh: 24px;
+  border-radius: 9px;
+  background: transparent;
+  border-bottom-width: 1px;
+  border-top-width: 1px;
+  border-letf-width: 0;
+  border-right-width: 0;
+}
+/* line 96, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar .container .plain-button {
+  padding-left: 10px;
+}
+/* line 99, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar .container #checkboxall {
+  margin: 7px 8px 8px 8px;
+}
+/* line 103, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar #delete-button {
+  background: url(images/icons/pm-delete.png) 0% 50% no-repeat;
+}
+/* line 106, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar #mark-read-button {
+  background: url(images/icons/pm-read.png) 0% 50% no-repeat;
+  margin-left: 3px;
+}
+/* line 110, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar #mark-unread-button {
+  background: url(images/icons/pm-unread.png) 0% 50% no-repeat;
+}
+/* line 115, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row {
+  color: #815d38;
+  background: transparent;
+}
+/* line 119, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ded5c3), color-stop(100%, #d4c6af));
+  background: -webkit-linear-gradient(top, #ded5c3, #d4c6af);
+  background: -moz-linear-gradient(top, #ded5c3, #d4c6af);
+  background: -o-linear-gradient(top, #ded5c3, #d4c6af);
+  background: linear-gradient(top, #ded5c3, #d4c6af);
+  border-bottom: 1px solid #968466;
+  -moz-box-shadow: 0 1px 0 #88785d;
+  -webkit-box-shadow: 0 1px 0 #88785d;
+  -o-box-shadow: 0 1px 0 #88785d;
+  box-shadow: 0 1px 0 #88785d;
+  height: 82px;
+  display: table;
+  position: relative;
+  -moz-border-radius: 7px;
+  -webkit-border-radius: 7px;
+  -o-border-radius: 7px;
+  -ms-border-radius: 7px;
+  -khtml-border-radius: 7px;
+  border-radius: 7px;
+}
+/* line 137, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read > DIV.chk {
+  display: table-cell;
+  vertical-align: middle;
+  width: 15px;
+  padding-left: 23px;
+}
+/* line 143, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read > DIV.av {
+  display: table-cell;
+  vertical-align: middle;
+  width: 57px;
+  padding: 0 19px;
+}
+/* line 149, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read > DIV.item {
+  display: table-cell;
+  vertical-align: middle;
+  position: relative;
+  cursor: pointer;
+}
+/* line 154, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read > DIV.item A {
+  text-decoration: none;
+  color: #2f424b;
+}
+/* line 157, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read > DIV.item A h2 {
+  font-size: 18px;
+}
+/* line 159, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read > DIV.item A h2 small {
+  font-style: italic;
+  font-weight: normal;
+}
+/* line 164, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read > DIV.item A p {
+  font-size: 12pt;
+  word-wrap: break-word;
+  width: 531px;
+  overflow: hidden;
+}
+/* line 170, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read > DIV.item A .sent {
+  background: url(images/private-messages/clock.png) 0 2px no-repeat;
+  padding-left: 15px;
+  position: absolute;
+  bottom: 7px;
+  right: 7px;
+  font-size: 11px;
+}
+/* line 188, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .paginator-container {
+  margin-top: 24px;
+  -webkit-border-radius: 7px;
+  -o-border-radius: 7px;
+  -ms-border-radius: 7px;
+  -khtml-border-radius: 7px;
+  border-radius: 7px;
+  background-color: #c8b088;
+  padding: 3px;
 }
 
 /* line 44, ../assets/sass/partials/_main.scss */

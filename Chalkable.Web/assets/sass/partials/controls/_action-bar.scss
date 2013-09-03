@@ -34,6 +34,36 @@ DIV#content-wrapper{
       }
     }
   }
+  &.messages{
+    .action-bar{
+      &.buttons{
+        .container{
+          .action-link, .action-button{
+            &:not(.disabled){
+              color: #957633;
+              text-shadow: 0 1px 0 white;
+
+              &:hover, &.pressed{
+                @include background(linear-gradient(top, #f5ead6,#dac6a5));
+
+                &.back{
+                  @include background(url(images/profile/back.png) 3px center no-repeat, linear-gradient(top, #f3eedf, #e1d3a6));
+                }
+              }
+            }
+
+            &.settings:hover{
+              @include background(url(images/common/settings-bar-icon.png) 5px 9px no-repeat, linear-gradient(top, #f3eedf, #e1d3a6));
+            }
+
+            &.disabled, &[disabled]{
+              opacity: 0.6;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 .action-bar{
