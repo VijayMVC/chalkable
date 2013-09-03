@@ -31,7 +31,7 @@ NAMESPACE('chlk.controllers', function (){
     var SIDEBAR_CONTROLS_ID = '#sidebar-controls';
 
     /** @class chlk.controllers.BaseController */
-   ABSTRACT, CLASS(
+   CLASS(ABSTRACT,
        'BaseController', EXTENDS(ria.mvc.Controller), [
 
 

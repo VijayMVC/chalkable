@@ -77,8 +77,10 @@ NAMESPACE('ria.mvc', function () {
                             name = controllerNameToUri(name);
 
                         try {
-                            onAppStartFutures.push(controllerRef.instantiate().onAppStart());
-                            this.controllers[name] = controllerRef;
+                            if (!controllerRef.isAbstract()){
+                                onAppStartFutures.push(controllerRef.instantiate().onAppStart());
+                                this.controllers[name] = controllerRef;
+                            }
                         } catch (e) {
                             throw new ria.mvc.MvcException('Error intializing controller ' + controllerRef.getName(), e);
                         }
