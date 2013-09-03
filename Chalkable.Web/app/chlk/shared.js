@@ -170,6 +170,10 @@ var GradingStyler = {
     }
 };
 
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
 function debugPrint(name, obj){
     console.log(name, 'start');
     for (var prop in obj){

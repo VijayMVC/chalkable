@@ -198,6 +198,7 @@ ol, ul {
   position: absolute;
   min-width: 55px;
   display: none;
+  z-index: 99999;
 
   .tooltip-content {
     background: rgba(0, 0, 0, 0.8);
