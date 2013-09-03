@@ -18,7 +18,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public IList<AnnouncementsClassPeriodViewData> PeriodSection { get; set; }
         public IList<ClassViewData> ClassesSection { get; set; } 
         public StudentHoverBoxViewData<StudentAttendanceSummaryViewData> AttendanceBox { get; set; }
-        public StudentHoverBoxViewData<StudentDisciplineSummaryViewData> DiscplineBox { get; set; }
+        public StudentHoverBoxViewData<StudentDisciplineSummaryViewData> DisciplineBox { get; set; }
 
         protected StudentSummaryViewData(Person person, Room room) : base(person, room)
         {
@@ -33,7 +33,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                     PeriodSection = announcementsClassPeriods,
                     ClassesSection = ClassViewData.Create(classes),
                     AttendanceBox = StudentHoverBoxViewData<StudentAttendanceSummaryViewData>.Create(attendanceTotal),
-                    DiscplineBox = StudentHoverBoxViewData<StudentDisciplineSummaryViewData>.Create(disciplineTotal),
+                    DisciplineBox = StudentHoverBoxViewData<StudentDisciplineSummaryViewData>.Create(disciplineTotal),
                     CurrentAttendanceType = (int?)currentAttendanceType,
                     MaxPeriodNumber = maxPeriodNumber
                 };

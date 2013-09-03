@@ -27,6 +27,13 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.SchoolPersonId]],
+            ria.async.Future, function getSummary(personId) {
+                return this.get('Student/Summary.json', chlk.models.student.Summary, {
+                    schoolPersonId: personId.valueOf()
+                });
+            },
+
             [[chlk.models.id.SchoolPersonId, String, String, String, String, String, String, String, chlk.models.common.ChlkDate]],
             ria.async.Future, function updateInfo(personId, addresses, email, firstName, lastName, gender, phones, salutation, birthDate) {
                 return this.post('Student/UpdateInfo.json', chlk.models.people.User, {

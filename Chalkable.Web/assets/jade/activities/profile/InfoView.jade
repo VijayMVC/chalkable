@@ -1,15 +1,18 @@
--addresses = self.getAddresses() || [];
--primaryPhone = self.getPrimaryPhone() ? self.getPrimaryPhone().getValue() : '';
--homePhone = self.getHomePhone() ? self.getHomePhone().getValue() : '';
+addresses = self.getAddresses() || [];
+primaryPhone = self.getPrimaryPhone() ? self.getPrimaryPhone().getValue() : '';
+homePhone = self.getHomePhone() ? self.getHomePhone().getValue() : '';
+controller = self.getRole().getNameLowered() + 's';
+if controller.indexOf('admin') > -1
+    -controller = 'admins';
 .teacher-info.info-page.view-mode.loader-container
     .loader
     .action-bar.not-transparent.buttons
         .container.panel-bg
             .left
-                +ActionLink('teachers', 'info', self.getId()) Now
-                +ActionLink('teachers', 'info', self.getId()).pressed Info
-                +ActionLink('teachers', 'info', self.getId()) Scheduling
-                +ActionLink('teachers', 'info', self.getId()) Apps
+                +ActionLink(controller, 'details', self.getId()) Now
+                +ActionLink(controller, 'info', self.getId()).pressed Info
+                +ActionLink(controller, 'info', self.getId()) Scheduling
+                +ActionLink(controller, 'info', self.getId()) Apps
             .right
                 +ActionLink('settings', 'dashboard').settings Settings
     .info-view
@@ -112,7 +115,7 @@
                                 a.add-address.add-button add
                             input(name="addressesValue", value=self.getAddressesValue(), type="hidden")
                             .adresses
-                                -addressesModel = new chlk.models.people.Addresses()
+                                addressesModel = new chlk.models.people.Addresses()
                                 -addressesModel.setItems(addresses);
                                 +RenderWith(addressesModel, chlk.templates.people.Addresses)
             .section-buttons

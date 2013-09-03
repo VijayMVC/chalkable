@@ -1,0 +1,49 @@
+valuesEnum = chlk.models.attendance.AttendanceTypesValue;
+gradeLevel = self.getGradeLevelNumber();
+dt = getDate();
+classOf = dt.getFullYear() + 12 - gradeLevel;
+attendanceType = self.getCurrentAttendanceType();
+if attendanceType == valuesEnum.NA.valueOf()
+    statusName = self.getAttendanceTypeName();
+    status = statusName && statusName.toLowerCase();
+else
+    statusName = 'No attendance taken';
+    status = 'not-assigned';
+.loader-container
+    .loader
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('students', 'details', self.getId()).pressed Now
+                +ActionLink('students', 'info', self.getId()) Info
+                +ActionLink('students', 'details', self.getId()) Scheduling
+                +ActionLink('students', 'details', self.getId()) Apps
+    .summary-page
+        #top-summary-panel
+            #avatar-photo-conainer
+                .img-container
+                    +PersonImg(self, 256)
+                    .grades-container
+                        p=Msg.Class_Of
+                            span=classOf
+                        .grade #{self.getSerial(gradeLevel)} #{Msg.Grade}
+            #student-info-panel
+                h1.display-name=self.getDisplayName() || self.getFullName()
+                .status
+                    div(class=status, data-tooltip=statusName)
+                    |#{self.getCurrentClassName()}
+                    if(!self.getCurrentClassName() || self.getCurrentClassName().toLowerCase() != 'no class now')
+                        |&nbsp;- #{self.getRoomName()}
+                .glance-container
+                    +GlanceBox(null, null, {value: null, title: Msg.Percentile})
+                    +GlanceBox(null, null, {value: self.getAttendanceBox().getTitle(), title: Msg.Attendance, items: self.getAttendanceBox().getHover()}, null, 'attendanceCount', 'type', chlk.converters.attendance.ClassAttendanceIdToNameConverter.prototype.convert)
+                    +GlanceBox(null, null, {value: self.getDisciplineBox().getTitle(), title: Msg.Discipline, items: self.getDisciplineBox().getHover()}, null, 'attendanceCount', 'type', chlk.converters.attendance.ClassAttendanceIdToNameConverter.prototype.convert)
+                    +GlanceBox(null, null, {value: null, title: Msg.Recent})
+        .today-work-panel
+            h2=Msg.Todays_work
+            .period-toolbar
+                +LeftRightToolbar(self.getPeriodSection(), chlk.templates.announcement.AnnouncementClassPeriod)(hideArrows).centered
+        .today-work-panel
+            h2.stats=Msg.Classes
+            .classes-tb
+                +LeftRightToolbar(self.getClassesSection(), chlk.templates.class.Class).centered
