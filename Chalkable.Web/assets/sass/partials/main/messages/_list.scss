@@ -1,48 +1,48 @@
-#search-message-btn{
-  SPAN{
-    display: inline-block;
-    SPAN{
-      display: inline-block;
-      BUTTON{
-        background: url(images/icons/search.png) 0% 50% no-repeat;
-        width: 32px;
-        height: 24px;
-        vertical-align: middle;
-        margin-right: 5px;
-        border: 0;
-      }
-    }
-  }
-}
-
-#keyword {
-  height: 20px;
-  vertical-align: middle;
-  border-color: #C9C9C9;
-  -moz-border-radius: 6px 0 0 6px;
-  -webkit-border-radius: 6px 0 0 6px;
-  -o-border-radius: 6px 0 0 6px;
-  -ms-border-radius: 6px 0 0 6px;
-  -khtml-border-radius: 6px 0 0 6px;
-  border-radius: 6px 0 0 6px;
-  padding: 1px 0px 2px 1px;
-  margin: 0 0 0 10px;
-}
-
-#new-message-link{
-  padding: 0;
-  >span{
-    background: url(images/icons/pm-add.png) 7px 50% no-repeat;
-    padding: 0 4px 0 26px;
-    display: inline-block;
-  }
-}
-
 BODY {
   DIV.page{
     >DIV#content {
       DIV#content-wrapper{
         &.messages{
+          #search-message-btn{
+            SPAN{
+              display: inline-block;
+              SPAN{
+                display: inline-block;
+                BUTTON{
+                  background: url(images/icons/search.png) 0% 50% no-repeat;
+                  width: 32px;
+                  height: 24px;
+                  vertical-align: middle;
+                  margin-right: 5px;
+                  border: 0;
+                }
+              }
+            }
+          }
+
+          #keyword {
+            height: 20px;
+            vertical-align: middle;
+            border-color: #C9C9C9;
+            -moz-border-radius: 6px 0 0 6px;
+            -webkit-border-radius: 6px 0 0 6px;
+            -o-border-radius: 6px 0 0 6px;
+            -ms-border-radius: 6px 0 0 6px;
+            -khtml-border-radius: 6px 0 0 6px;
+            border-radius: 6px 0 0 6px;
+            padding: 1px 0px 2px 1px;
+            margin: 0 0 0 10px;
+          }
+
+          #new-message-link{
+            padding: 0;
+            >span{
+              background: url(images/icons/pm-add.png) 7px 50% no-repeat;
+              padding: 0 4px 0 26px;
+              display: inline-block;
+            }
+          }
+
           #main-top, #footer {
             background-image: url(images/private-messages/paper-top-bottom.jpg);
           }
