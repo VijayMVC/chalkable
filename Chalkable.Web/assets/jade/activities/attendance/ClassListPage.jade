@@ -1,0 +1,65 @@
+.students-list.loader-container
+    topData = self.getTopData();
+    topItems = topData.getTopItems();
+    selectedId = topData.getSelectedItemId();
+    valuesEnum = chlk.models.attendance.AttendanceTypesValue;
+    +LeftRightToolbar(topItems, chlk.templates.class.TopBar, 'attendance', 'classList')(
+        selectedItemId=selectedId ? selectedId.valueOf() : ""
+    ).classes-bar
+    .loader
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left.no-border
+                +DatePicker('attendanceDate', self.getDate())(
+                    data-options={
+                        showOtherMonths: true,
+                        selectOtherMonths: true
+                    },
+                    data-controller="attendance",
+                    data-action="classList",
+                    data-params=selectedId ? [selectedId.valueOf()] : null
+                )#attendance-date.tb-date-picker
+            .right
+                +ActionLink('attendance', 'classList', []).pressed
+                    =Msg.List
+                +ActionLink('attendance', 'classList', [])
+                    =Msg.Room
+                +ActionLink('attendance', 'classList', [])
+                    =Msg.Card
+    .people-list-container.not-transparent
+        items = self.getItems()
+        .top.panel-bg
+            if(self.getItems().length > 0)
+                +ActionLink('attendance', 'markAll',
+                    [selectedId.valueOf(), self.getItems()[0].getClassPeriodId().valueOf(), self.getDate().format('mm-dd-yy')]
+                )#all-present-link=Msg.Mark_all_Present
+        .action-bar.buttons.filter
+            .container.panel-bg
+                .left
+                    +ActionLink('attendance', 'sortStudents', 'false')(class=self.isByLastName()?"":"pressed").action-button.first-last=Msg.First_name
+                    +ActionLink('attendance', 'sortStudents', true)(class=self.isByLastName()?"pressed":"").action-button.first-last=Msg.Last_name
+        .grid-container.loader-container
+            +ListView(self.getItems())(
+                selectedIndex = 0
+            )#class-attendance-list-panel.people-list
+                needSuggestion = self.getItems().filter(function(item){return item.getType() > valuesEnum.NA.valueOf()}).length == 0;
+                each item, i in self.getItems()
+                    needPresent = (i == 0 && item.getType() == valuesEnum.NA.valueOf());
+                    .row(class=(i == 0 ? 'selected' : ''), index=i)
+                        if needPresent
+                            -item.setType(valuesEnum.PRESENT.valueOf());
+                        student = item.getStudent();
+                        +ActionLink('students', 'info', student.getId().valueOf()).left.image-container.white.shadow
+                            +PersonImg(student, 47)
+                        p.left= student.getFullName()
+                        .right
+                            .student-attendance-container
+                                len = self.getItems().length;
+                                if (needSuggestion && (i== 5 || (i == len - 1 && len < 6 && len > 2)))
+                                    .keyboard-suggestion
+                                div(class="container-" + item.getClassPersonId().valueOf())
+                                    -item.setReasons(self.getReasons());
+                                    +RenderWith(item, chlk.templates.attendance.ClassAttendance)(
+                                        needPresent = needPresent
+                                    )
+                        .clear

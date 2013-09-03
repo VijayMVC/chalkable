@@ -1,0 +1,13 @@
+li(data-title = self.description, data-value = self.id.valueOf() + '|' + self.searchType.valueOf(), style="background: white")
+    div
+        if self.searchType == 0
+            if self.roleId == 2
+                +ActionLink('teachers', 'info', self.id).left.image-container.white.shadow
+                    img.avatar.avatar47(class=self.gender, src=self.getPictureURL(self.id, 47))
+                    div= self.description
+            if self.roleId == 3
+                +ActionLink('students', 'info', self.id).left.image-container.white.shadow
+                    img.avatar.avatar47(class=self.gender, src=self.getPictureURL(self.id, 47))
+                    div= self.description
+        else
+            div= self.description
