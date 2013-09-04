@@ -40,10 +40,20 @@ namespace Chalkable.Web.Controllers
         }
         
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
-        public ActionResult SetClassDiscipline(DisciplineInputModel discipline)
+        public ActionResult SetClassDiscipline(DisciplineListInputModel disciplineList)
         {
-            //SchoolLocator.DisciplineService.SetClassDiscipline()
-            return Json(null);
+            foreach (var discInputModel in disciplineList.Disciplines)
+            {
+                ISet<Guid> discplineTypesSet = new HashSet<Guid>();
+                foreach (var discplineTypeId in discInputModel.DiscplineTypeIds)
+                {
+                    if (discplineTypesSet.Contains(discplineTypeId))
+                        discplineTypesSet.Add(discplineTypeId);
+                }
+                SchoolLocator.DisciplineService.SetClassDiscipline(discInputModel.ClassPersonId, discInputModel.ClassPeriodId, discInputModel.Date,
+                                                                   discplineTypesSet, discInputModel.Description);
+            }
+            return Json(true);
         }
     }
 }
