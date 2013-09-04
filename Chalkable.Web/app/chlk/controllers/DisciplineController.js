@@ -9,7 +9,7 @@ REQUIRE('chlk.activities.discipline.SetDisciplineDialog');
 
 
 NAMESPACE('chlk.controllers', function(){
-    ""
+    "use strict";
     /** @class chlk.controllers.DisciplineController */
 
     CLASS(

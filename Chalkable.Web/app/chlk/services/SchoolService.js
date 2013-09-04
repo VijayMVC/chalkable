@@ -2,7 +2,7 @@ REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 
 REQUIRE('chlk.models.school.School');
-REQUIRE('chlk.models.import.School');
+REQUIRE('chlk.models.schoolImport.School');
 REQUIRE('chlk.models.school.SchoolDetails');
 REQUIRE('chlk.models.school.Timezone');
 REQUIRE('chlk.models.school.SchoolSisInfo');
@@ -29,7 +29,7 @@ NAMESPACE('chlk.services', function () {
             },
             [[chlk.models.id.DistrictId]],
             ria.async.Future, function getSchoolsForImport(districtId) {
-                return this.getPaginatedList('School/GetSchoolsForImport.json', chlk.models.import.School, {
+                return this.getPaginatedList('School/GetSchoolsForImport.json', chlk.models.schoolImport.School, {
                     districtId: districtId.valueOf()
                 });
             },

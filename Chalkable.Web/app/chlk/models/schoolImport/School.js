@@ -1,8 +1,8 @@
-REQUIRE('chlk.models.import.SchoolYear');
+REQUIRE('chlk.models.schoolImport.SchoolYear');
 
-NAMESPACE('chlk.models.import', function () {
+NAMESPACE('chlk.models.schoolImport', function () {
     "use strict";
-    /** @class chlk.models.import.School*/
+    /** @class chlk.models.schoolImport.School*/
     CLASS(
         'School', [
             String, 'address',
@@ -19,6 +19,6 @@ NAMESPACE('chlk.models.import', function () {
             [ria.serialize.SerializeProperty('schoolid')],
             Number, 'sisSchoolId',
             [ria.serialize.SerializeProperty('schoolyears')],
-            ArrayOf(chlk.models.import.SchoolYear), 'schoolYears'
+            ArrayOf(chlk.models.schoolImport.SchoolYear), 'schoolYears'
         ]);
 });

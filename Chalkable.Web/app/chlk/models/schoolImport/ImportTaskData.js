@@ -1,7 +1,7 @@
 REQUIRE('chlk.models.id.DistrictId');
-NAMESPACE('chlk.models.import', function () {
+NAMESPACE('chlk.models.schoolImport', function () {
     "use strict";
-    /** @class chlk.models.import.ImportTaskData*/
+    /** @class chlk.models.schoolImport.ImportTaskData*/
     CLASS(
         'ImportTaskData', [
             Number, 'sisSchoolId',
