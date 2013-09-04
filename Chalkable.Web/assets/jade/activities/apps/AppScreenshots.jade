@@ -1,0 +1,29 @@
+mixin ScreenshotThumbnail(id, url, pictureCls, screenshotIds, readOnly)
+    .thumbnail(class=pictureCls)
+        if !readOnly
+            +ActionLink('apps', 'deleteScreenshot', [screenshotIds, id.valueOf()]).close-btn
+        +LoadingImage(src=url)
+
+
+mixin ScreenshotBox(id, url, pictureCls, screenshotIds, readOnly)
+    if id.valueOf()
+        +ScreenshotThumbnail(id, url, pictureCls, screenshotIds, readOnly)
+
+
+mixin ScreenshotUploadBox(title, dimsX, dimsY, screenshots)
+    .upload-img-block
+        .top=dimsX + "px x " + dimsY + "px"
+        .bottom
+            button.simple-gray-button.file=title
+                +FileUpload('apps', 'uploadScreenshot', [screenshots.ids]).simple-gray-button
+            +ActionLink('apps', 'd', 'b') Download Template
+    +Hidden('appScreenshots', screenshots.ids)
+    each item in self.items
+        +ScreenshotBox(item.getPictureId(), item.getPictureUrl(), item.getPictureClass(), screenshots.ids, !item.isEditable())
+
++ScreenshotUploadBox('Screenshots', 640, 390, self)
+
+
+
+
+

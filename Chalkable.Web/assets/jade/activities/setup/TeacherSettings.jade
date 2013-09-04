@@ -1,0 +1,100 @@
+.setup-page.teacher-settings.loader-container
+    topData = self.getTopData();
+    topItems = topData.getTopItems();
+    selectedIndex = 0;
+    gradingInfo = self.getGradingInfo();
+    .loader
+    +LeftRightToolbar(topItems, chlk.templates.class.TopBar)(
+        selectedItemId=gradingInfo.getClazz().getId().valueOf(),
+        pressAfterClick=false
+    ).classes-bar
+    +ActionForm('setup', 'teacherSettingsEdit')#update-ann-type-submit-form
+        +Hidden('id', gradingInfo.getId())
+        +Hidden('changed')
+        +Hidden('needsTypesForClasses', true)
+        +Hidden('gradingStyleByType'))
+        +Hidden('dropLowest')
+        +Hidden('percents')
+        +Hidden('attendance')
+        +Hidden('discipline')
+        +Hidden('participation')
+        +Hidden('finalGradeAnnouncementTypeIds')
+        +Hidden('nextClassNumber', gradingInfo.getNextClassNumber())
+        +Hidden('gradingStyle', gradingInfo.getGradingStyle())
+        +Hidden('dropLowestAttendance', gradingInfo.getDropLowestAttendance())
+        +Hidden('dropLowestDiscipline', gradingInfo.getDropLowestDiscipline())
+        input(type="submit")#update-ann-type-submit.x-hidden
+        .action-bar.not-transparent.buttons
+            .container.panel-bg
+                .left
+                    -nextClass = gradingInfo.getNextClassNumber();
+                    -action = (nextClass == 1) ? 'video' : 'teacherSettings';
+                    -params = (nextClass == 1) ? [] : [nextClass - 2];
+                    Button(type="submit",
+                        name="submitType",
+                        value="back"
+                    ).action-button.go-back=Msg.Go_Back
+                    label#step=Msg.Step_of(2,2)
+                .right
+                    Button(type="submit", disabled).action-button.next-class=(nextClass == topItems.length ? Msg.Confirm : Msg.Next_Class)
+        #setup-schedule-view.panel-bg
+            -classInfo = gradingInfo.getClazz();
+            -calendarInfo = self.getCalendarInfo();
+            .left-block
+                div
+                    h1
+                        .img-container
+                            img(src="https://localhost:8080/chalkable/Course/GetIcon?courseInfoId=30")
+                        =classInfo.getName()
+                    .bottom
+                        .course-room=classInfo.getCourse().getTitle()
+            .right-block
+                each item in calendarInfo
+                    div
+                       div
+                            h3=item.getDate().format('D')
+                            .bottom
+                                each classPeriod in item.getClassPeriods()
+                                    -period = classPeriod.getPeriod();
+                                    p=period.getStartTime() + ' - ' + period.getEndTime()
+            a(href="mailto:someEmail@gmail.com?Subject=Classes setup mistake")#mistake=Msg.Mistake
+        #settings-step1
+            label#how-grade.blue-arrow.div=Msg.How_do_you_grade_students_in(classInfo.getName())
+            +Button()(
+                type="submit",
+                name="submitType",
+                value="message"
+            )#tell-button.special-button2.blue=Msg.Tell_Chalkable.toUpperCase()
+        #settings-step2.x-hidden
+            label#percents-label.blue-arrow.div=Msg.Student_grades_are_out_of(classInfo.getName())
+                -per = self.getPercentsSum();
+                span(
+                    class=(per == 100 ? "" : "error"),
+                    data-tooltip=(per == 100 ? null : "Add " + (100 - per) + "%")
+                ).percents-count=per + "%"
+        #settings-step3.x-hidden
+            .ann-types-container
+                +RenderWith(gradingInfo, chlk.templates.grading.Final)
+            .hint-text If you don’t use an item type just set it to 0%.
+            #other-data.not-transparent.items-container
+                div(index=0, class=(gradingInfo.getParticipation() ? "active" : "")).announcement-type-item.gradient
+                    div
+                        .left.name=Msg.Participation
+                        .right.relative
+                            input(name="participation", value=(gradingInfo.getParticipation()+"%")).announcement-type-weight#participation-value
+                            .hint.absolute=Msg.Weight
+                div(index=1, class=(gradingInfo.getAttendance() ? "active" : "")).announcement-type-item.gradient
+                    div
+                        .left.name=Msg.Attendance
+                        .right.relative
+                            input(name="attendance", value=(gradingInfo.getAttendance()+"%")).announcement-type-weight#attendance-value
+                            .hint.absolute=Msg.Weight
+                div(index=2, class=(gradingInfo.getDiscipline() ? "active" : "")).announcement-type-item.gradient
+                    div
+                        .left.name=Msg.Discipline
+                        .right.relative
+                            input(name="discipline", value=(gradingInfo.getDiscipline()+"%")).announcement-type-weight#discipline-value
+                            .hint.absolute=Msg.Weight
+
+
+
