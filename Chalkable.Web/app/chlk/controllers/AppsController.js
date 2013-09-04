@@ -361,7 +361,6 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(){
                     return this.forward_('apps', 'details', []);
                 }, this);
-            return result;
         },
 
 
