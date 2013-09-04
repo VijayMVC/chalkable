@@ -29,6 +29,9 @@ namespace Chalkable.BusinessLogic.Services.School
         int PossibleAttendanceCount(Guid markingPeriodId, Guid classId, DateTime? tillDate);
 
         IDictionary<AttendanceTypeEnum, int> CalcAttendanceTypeTotalForStudent(Guid studentId, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate);
+
+        IDictionary<DateTime, int> GetStudentCountAbsentFromDay(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelIds);
+   
     }
 
     public class AttendanceService : SchoolServiceBase, IAttendanceService
@@ -252,6 +255,15 @@ namespace Chalkable.BusinessLogic.Services.School
                     FromDate = date,
                     ToDate = date
                 }).FirstOrDefault();
+        }
+
+
+        public IDictionary<DateTime, int> GetStudentCountAbsentFromDay(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelIds)
+        {
+            using (var uow = Read())
+            {
+                return new  ClassAttendanceDataAccess(uow).GetStudentCountAbsentFromDay(fromDate, toDate, gradeLevelIds);
+            }
         }
     }
 }

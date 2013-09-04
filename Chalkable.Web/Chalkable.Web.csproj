@@ -202,6 +202,7 @@
     <Compile Include="Logic\PersonLogic.cs" />
     <Compile Include="Logic\StudentAnnouncementLogic.cs" />
     <Compile Include="Models\AddressViewData.cs" />
+    <Compile Include="Models\AdminFeedViewData.cs" />
     <Compile Include="Models\AnnouncementAttachmentViewData.cs" />
     <Compile Include="Models\AnnouncementQnAViewData.cs" />
     <Compile Include="Models\AnnouncementReminderViewData.cs" />
@@ -254,6 +255,7 @@
     <Compile Include="Models\CourseViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\CreateAnnouncementViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
+    <Compile Include="Models\DepartmentGradingStatViewData.cs" />
     <Compile Include="Models\DeveloperViewData.cs" />
     <Compile Include="Models\DisciplineTypeViewData.cs" />
     <Compile Include="Models\DisciplineView.cs" />
