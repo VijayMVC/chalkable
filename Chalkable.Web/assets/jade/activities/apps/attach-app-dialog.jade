@@ -8,13 +8,15 @@ mixin AppIconLink(app)
                 .name=app.getName()
                 .shortdesc=app.getShortDescription()
 
+teacherId = self.teacherId.valueOf()
 .dialog.attach-app
     .x-window-header
         a.close.close-btn
     .x-window-body
         .header Attach an App
         .apps
-            each app in self.getItems()
+            each app in self.apps.getItems()
                 +AppIconLink(app)
         .paging
+            +Paginator('app-market', 'listAvailableForAttach', self.apps, [teacherId])
 

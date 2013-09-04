@@ -12,12 +12,30 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'AppMarketService', EXTENDS(chlk.services.BaseService), [
 
-            [[chlk.models.id.SchoolPersonId]],
-            ria.async.Future, function getInstalledApps(personId) {
+            [[chlk.models.id.SchoolPersonId, Number]],
+            ria.async.Future, function getInstalledApps(personId, start_) {
                 //return this.getPaginatedList('Application/List.json', chlk.models.apps.AppMarketApplication, {
-                return this.getPaginatedList('AppMarket/ListInstalled.json', chlk.models.apps.AppMarketApplication, {
-                        personId: personId.valueOf()
-                });
+                return this
+                    .getPaginatedList('AppMarket/ListInstalled.json', chlk.models.apps.AppMarketApplication, {
+                        personId: personId.valueOf(),
+                        start: start_ | 0
+                    })
+                    .then(function(data){
+                        var items = data.getItems();
+
+                        for(var i = 0; i < 9; ++i){
+                            var app =  new chlk.models.apps.AppMarketApplication();
+                            app.setName("App test");
+                            app.setShortDescription("rskldfj;alskdfja;skldjfa;sldkfja;sdfsdfsdfsdfsdfldkfjasl;");
+                            app.setSmallPictureId(new chlk.models.id.PictureId("90e359b7-7199-4296-8148-a072bcd67bb3"));
+                            items.push(app);
+                        }
+                        data.setPageIndex(1);
+                        data.setPageSize(10);
+                        data.setTotalPages(2);
+                        data.setItems(items);
+                        return data;
+                    });
             }
         ])
 });

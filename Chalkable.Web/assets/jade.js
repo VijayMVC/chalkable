@@ -18,7 +18,13 @@ ria.__REQUIRE.addPlugin(
                     .run()
                         .then(function(content) {
                             var fn = jade.compile(content, {self: true, compileDebug: true, filename: src});
-                            callback(fn, null);
+                            callback(function () {
+                                try {
+                                    return fn.apply(this, arguments);
+                                } catch (e) {
+                                    throw new Exception('Error rendering jade "' + src + '"', e);
+                                }
+                            }, null);
                         })
                         .catchError(function (error) {
                             callback(null, error);

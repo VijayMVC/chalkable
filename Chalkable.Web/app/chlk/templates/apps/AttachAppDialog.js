@@ -1,6 +1,7 @@
 REQUIRE('chlk.templates.PaginatedList');
 REQUIRE('chlk.models.common.PaginatedList');
 REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.apps.InstalledAppsViewData');
 
 
 NAMESPACE('chlk.templates.apps', function () {

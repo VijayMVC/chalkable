@@ -164,16 +164,6 @@ NAMESPACE('chlk.controllers', function (){
         function attachAppAction() {
             var userId = this.getCurrentPerson().getId();
             var result = this.appMarketService.getInstalledApps(userId).then(function(data){
-                var items = data.getItems();
-
-                for(var i = 0; i < 9; ++i){
-                    var app =  new chlk.models.apps.AppMarketApplication();
-                    app.setName("App test");
-                    app.setShortDescription("rskldfj;alskdfja;skldjfa;sldkfja;sdfsdfsdfsdfsdfldkfjasl;");
-                    app.setSmallPictureId(new chlk.models.id.PictureId("90e359b7-7199-4296-8148-a072bcd67bb3"));
-                    items.push(app);
-                }
-                data.setItems(items);
                 return new chlk.models.apps.InstalledAppsViewData(userId, data);
             });
             return this.ShadeView(chlk.activities.apps.AttachAppDialog, result);
