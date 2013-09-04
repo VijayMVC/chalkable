@@ -1,5 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplateDialog');
 REQUIRE('chlk.templates.apps.AppWrapperDialog');
+REQUIRE('chlk.AppApiHost');
  
  NAMESPACE('chlk.activities.apps', function () {
      /** @class chlk.activities.apps.AppWrapperDialog*/
@@ -15,7 +16,33 @@ REQUIRE('chlk.templates.apps.AppWrapperDialog');
                   BASE();
               },
 
+              function getInnerDocument(){
+                  var iframe = this.dom.find('iframe');
+                  return jQuery(iframe.valueOf()).get(0).contentWindow;
+              },
 
+              function getFrameUrl(splitBy){
+                  var iframe = this.dom.find('iframe');
+                  return (iframe.getAttr('src') || "").split(splitBy)[0];
+              },
+
+              [ria.mvc.DomEventBind('click', '#add-app')],
+              [[ria.dom.Dom, ria.dom.Event]],
+              VOID, function addApp(node, event){
+
+                  var rUrl = this.getFrameUrl('edit');
+                  var data = {attach: true};
+                  (new chlk.AppApiHost()).addApp(this.getInnerDocument(), rUrl, data);
+              },
+
+              [ria.mvc.DomEventBind('click', '#save-app')],
+              [[ria.dom.Dom, ria.dom.Event]],
+              VOID, function saveApp(node, event){
+
+                  var rUrl = this.getFrameUrl('view');
+                  var data = {attach: false};
+                  (new chlk.AppApiHost()).addApp(this.getInnerDocument(), rUrl, data);
+              },
 
               [[Object]],
               OVERRIDE, VOID, function onRender_(data) {

@@ -30,9 +30,11 @@ NAMESPACE('chlk.models.apps', function () {
         'AppWrapperViewData', [
             chlk.models.apps.AppModes, 'appMode',
             ArrayOf(chlk.models.apps.AppWrapperToolbarButton), 'buttons',
+            chlk.models.apps.Application, 'app',
 
-            [[chlk.models.apps.AppModes, ArrayOf(chlk.models.apps.AppWrapperToolbarButton)]],
-            function $(mode, buttons){
+            [[chlk.models.apps.Application, chlk.models.apps.AppModes, ArrayOf(chlk.models.apps.AppWrapperToolbarButton)]],
+            function $(app, mode, buttons){
+                this.setApp(app);
                 this.setAppMode(mode);
                 this.setButtons(buttons);
             }

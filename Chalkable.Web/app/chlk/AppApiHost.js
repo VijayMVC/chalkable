@@ -13,6 +13,10 @@ NAMESPACE('chlk', function(){
             return singletonInstance || (singletonInstance = new ria.__API.init(instance, Clazz, ctor, args));
         },
 
+        function $(){
+            this.context_ = null;
+        },
+
         [[ria.mvc.IContext]],
         function onStart(context) {
             this.context_ = context;
@@ -21,6 +25,12 @@ NAMESPACE('chlk', function(){
 
         function onStop() {
             CHLK_MESSENGER.removeCallback(this.messengerCallback_);
+        },
+
+
+        [[Object, String, Object]],
+        function addApp(rWindow, rURL, data){
+            CHLK_MESSENGER.addApp(rWindow, rURL, data);
         },
 
         function messengerCallback_(e){
@@ -36,10 +46,10 @@ NAMESPACE('chlk', function(){
             if (e.data.isApp) {
                 if (e.data.action) {
                     switch (e.data.action) {
-                        case ACTION_TYPES.ADD_ME :
-                        case ACTION_TYPES.CLOSE_ME :
-                        case ACTION_TYPES.SAVE_ME :
-                        case ACTION_TYPES.SHOW_PLUS :
+                        case chlk.models.apps.AppActionTypes.ADD_ME.valueOf() :
+                        case chlk.models.apps.AppActionTypes.CLOSE_ME.valueOf()  :
+                        case chlk.models.apps.AppActionTypes.SAVE_ME.valueOf()  :
+                        case chlk.models.apps.AppActionTypes.SHOW_PLUS.valueOf()  :
                             this.doCallApiReactor_(e.data.action, e.data);
                             break;
                     }
@@ -50,7 +60,7 @@ NAMESPACE('chlk', function(){
         [[String, Object]],
         VOID, function doCallApiReactor_(message, data) {
             var state = this.context_.getState();
-            state.setController('app-api-reactor');
+            state.setController('appapireactor');
             state.setAction(message);
             state.setParams([data]);
             state.setPublic(false);
