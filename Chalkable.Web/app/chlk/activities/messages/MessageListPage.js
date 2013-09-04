@@ -6,6 +6,7 @@ NAMESPACE('chlk.activities.messages', function () {
     /** @class chlk.activities.messages.MessageListPage */
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
+        [chlk.activities.lib.PageClass('messages')],
         [ria.mvc.TemplateBind(chlk.templates.messages.MessageList)],
         'MessageListPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
