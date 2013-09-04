@@ -36,7 +36,8 @@ namespace Chalkable.Data.Master.DataAccess
             using (var reader = ExecuteReaderParametrized(sql, ps))
             {
                 reader.Read();
-                return SqlTools.ReadDecimal(reader, Fund.AMOUNT_FIELD);
+                var res = SqlTools.ReadDecimalNull(reader, Fund.AMOUNT_FIELD);
+                return res.HasValue ? res.Value : 0;
             }
         }
     }

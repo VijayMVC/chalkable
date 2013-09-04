@@ -40,7 +40,6 @@ namespace Chalkable.Web.Models
         }
     }
 
-
     public class StudentDisciplineSummaryViewData 
     {
         public PersonViewData Student { get; set; }
@@ -83,5 +82,20 @@ namespace Chalkable.Web.Models
             var dic = disciplineTypes.GroupBy(x => x.DisciplineType.Name).ToDictionary(x => x.Key, x => x.Count());
             return dic.Select(x => string.Format("{0} {1}", x.Key, x.Value)).JoinString(",");
         }
+    }
+
+
+    public class DisciplineInputModel
+    {
+        public Guid ClassPersonId { get; set; }
+        public Guid ClassPeriodId { get; set; }
+        public DateTime Date { get; set; }
+        public GuidList DiscplineTypeIds { get; set; }
+        public string Description { get; set; }
+    }
+
+    public class DisciplineListInputModel
+    {
+        public IList<DisciplineInputModel> Disciplines { get; set; } 
     }
 }

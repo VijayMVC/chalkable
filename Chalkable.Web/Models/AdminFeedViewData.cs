@@ -80,8 +80,8 @@ namespace Chalkable.Web.Models
             var res = new AdminAttendanceBoxViewData { Stat = new List<StudentAttendanceStatViewData>() };
             if(stCountAbsentFromDay.Count > 0)
                 res.DisplayNumber = (int)stCountAbsentFromDay.Average(x => x.Value);
-            var toDate = stCountAbsentFromDay.First().Key;
-            var startDate = stCountAbsentFromDay.Last().Key;
+            var startDate = stCountAbsentFromDay.First().Key;
+            var toDate = stCountAbsentFromDay.Last().Key;
             var currentMonth = 0;
             while (startDate < toDate)
             {

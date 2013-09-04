@@ -38,5 +38,12 @@ namespace Chalkable.Web.Controllers
             var classes = SchoolLocator.Context.Role == CoreRoles.TEACHER_ROLE ? SchoolLocator.ClassService.GetClasses(schoolYearIdv, null, null) : null;
             return Json(DisciplineView.Create(list, classes, canEdit));
         }
+        
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult SetClassDiscipline(DisciplineInputModel discipline)
+        {
+            //SchoolLocator.DisciplineService.SetClassDiscipline()
+            return Json(null);
+        }
     }
 }
