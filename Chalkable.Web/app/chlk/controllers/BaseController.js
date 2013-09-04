@@ -52,11 +52,10 @@ NAMESPACE('chlk.controllers', function (){
                        return data;
                    })
                    .catchException(chlk.services.DataException, function (error) {
-                       ria.async.BREAK; // failed with exception, stop further processing
-
                        console.error(error.toString());
                        // todo: scoping !?
                        //me.view.showAlertBox(error.getMessage());
+                       return ria.async.BREAK; // failed with exception, stop further processing
                    });
 
                return head;
