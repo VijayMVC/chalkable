@@ -123,7 +123,7 @@
         }
     }
 </script>
-    <script type="">
+        <script type="">
         
         function parseJsonToObj(json){
             return json ? JSON.parse(HtmlEncode(json)).data : null;
@@ -153,6 +153,8 @@
         var nextMarkingPeriod = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.NEXT_MARKING_PERIOD)'); 
         var finalizedClassesIds = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.FINALIZED_CLASSES_IDS)'); 
         var attendanceReasons = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ATTENDANCE_REASONS)');
+        var gradeLevels = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.GRADE_LEVELS)');
+
     </script>
     
     @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)

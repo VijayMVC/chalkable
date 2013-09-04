@@ -18,6 +18,7 @@ namespace Chalkable.Web.Common
         public const string FINALIZED_CLASSES_IDS = "FinalizedClassesIds";
         public const string DEFAULT_APPLICATION = "DefaultApplication";
         public const string APPLICATIONS = "Applications";
+        public const string GRADE_LEVELS = "GradeLevels";
 
         public const string STUDENT_ROLE = "StudentRole";
         public const string TEACHER_ROLE = "TeacherRole";

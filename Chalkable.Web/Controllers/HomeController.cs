@@ -81,7 +81,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult Admin(bool? redirectToSetup)
         {
             var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
-            PrepareCommonViewData(null, mp);
+            PrepareAdminJsonData(mp);
             return View();
         }
 
@@ -124,6 +124,17 @@ namespace Chalkable.Web.Controllers
             }
         }
         
+        private void PrepareAdminJsonData(MarkingPeriod mp)
+        {
+            var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.UserId);
+            var personView = PersonViewData.Create(person);
+            personView.DisplayName = person.ShortSalutationName;
+            PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
+            var gradeLevels = SchoolLocator.GradeLevelService.GetGradeLevels();
+            PrepareJsonData(GradeLevelViewData.Create(gradeLevels), ViewConstants.GRADE_LEVELS);
+            PrepareCommonViewData(null, mp);
+        }
+
         private void PrepareTeacherJsonData(MarkingPeriod mp, bool getAllAnnouncementTypes)
         {
             var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.UserId);
