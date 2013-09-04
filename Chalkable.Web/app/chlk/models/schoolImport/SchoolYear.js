@@ -1,7 +1,7 @@
 REQUIRE('chlk.models.common.ChlkDate');
-NAMESPACE('chlk.models.import', function () {
+NAMESPACE('chlk.models.schoolImport', function () {
     "use strict";
-    /** @class chlk.models.import.SchoolYear*/
+    /** @class chlk.models.schoolImport.SchoolYear*/
     CLASS(
         'SchoolYear', [
             String, 'name',

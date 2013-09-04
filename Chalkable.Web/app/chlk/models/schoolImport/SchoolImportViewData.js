@@ -1,14 +1,14 @@
 REQUIRE('chlk.models.id.DistrictId');
-REQUIRE('chlk.models.import.School');
+REQUIRE('chlk.models.schoolImport.School');
 REQUIRE('chlk.models.common.PaginatedList');
-NAMESPACE('chlk.models.import', function () {
+NAMESPACE('chlk.models.schoolImport', function () {
     "use strict";
-    /** @class chlk.models.import.SchoolImportViewData*/
+    /** @class chlk.models.schoolImport.SchoolImportViewData*/
     CLASS(
         'SchoolImportViewData', [
             chlk.models.id.DistrictId, 'districtId',
-            ArrayOf(chlk.models.import.School), 'schools',
-            [[chlk.models.id.DistrictId, ArrayOf(chlk.models.import.School)]],
+            ArrayOf(chlk.models.schoolImport.School), 'schools',
+            [[chlk.models.id.DistrictId, ArrayOf(chlk.models.schoolImport.School)]],
             function $(districtId, schools){
                 this.setDistrictId(districtId);
                 this.setSchools(schools);
