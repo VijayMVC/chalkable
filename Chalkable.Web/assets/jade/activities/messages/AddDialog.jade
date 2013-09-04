@@ -8,11 +8,14 @@
                         label To:
                         +SearchBox(chlk.services.PersonService, "getPersons", chlk.templates.messages.RecipientAutoComplete)#recipientId(
                         name="recipientId",
-                        value=self.sender ? self.sender.getFirstName()+ ' ' + self.sender.getLastName() : ""
-                        default-value=self.sender ? self.sender.getId() : "")
+                        value=self.sender ? self.sender.getFirstName()+ ' ' + self.sender.getLastName() : "",
+                        default-value=self.sender ? self.sender.getId() : "",
+                        class="validate[required]")
+                        //
+                            span#recipient-required-err.x-hidden *recipient not found
                     .x-form-field
                         label Subject:
-                        input(type="text",name="subject", value=self.subject ? "Re: " + self.subject : "")
+                        input(type="text",name="subject", value=self.subject ? "Re: " + self.subject : "", class="validate[required]")
                     .x-form-field
                         label Body:
                         textarea(type="text",name="body")
@@ -24,6 +27,6 @@
                                 =self.body
 
                     .form-buttons
-                        +Button()(type="submit").special-button.blue-button.submit-btn Submit
+                        +Button()(type="submit").special-button.blue-button.submit-btn#submitbtn Submit
                         +Button.special-button.red-button.close Cancel
     .bg-bottom
