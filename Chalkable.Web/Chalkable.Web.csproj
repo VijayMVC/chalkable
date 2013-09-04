@@ -170,6 +170,7 @@
     <Compile Include="Controllers\DistrictController.cs" />
     <Compile Include="Controllers\FeedController.cs" />
     <Compile Include="Controllers\FinalGradeController.cs" />
+    <Compile Include="Controllers\FundController.cs" />
     <Compile Include="Controllers\GradingController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PeriodController.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Models\AnnouncementsViewData\AnnouncementShortViewData.cs" />
     <Compile Include="Models\AnnouncementTypeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementViewData.cs" />
+    <Compile Include="Models\AppBudgetBalanceViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\AnnouncementApplicationViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationAccessViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationPersmissionsViewData.cs" />
