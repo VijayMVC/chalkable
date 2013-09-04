@@ -1,5 +1,8 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.PersonService');
+REQUIRE('chlk.services.CalendarService');
+REQUIRE('chlk.activities.profile.SchedulePage');
+REQUIRE('chlk.models.common.ChlkDate');
 
 REQUIRE('chlk.models.people.User');
 
@@ -11,6 +14,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.PersonService, 'personService',
+
+            [ria.mvc.Inject],
+            chlk.services.CalendarService, 'calendarService',
 
             [[chlk.models.people.User]],
             function prepareProfileData(model){
@@ -61,6 +67,22 @@ NAMESPACE('chlk.controllers', function (){
                 var gt = model.getGender() ? (model.getGender().toLowerCase() == 'm' ? 'Male' : 'Female') : '';
                 model.setGenderFullText(gt);
                 return model;
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate, String]],
+            //function scheduleAction(personId, role){
+            function scheduleByRole(personId, date_, role){
+                var result = ria.async.wait([
+                    this.personService.getSchedule(personId),
+                    this.calendarService.getDayInfo(date_)
+                ]).attach(this.validateResponse_())
+                    .then(function(results){
+                        var schedule = results[0];
+                        schedule.setRoleName(role);
+                        var model = new chlk.models.people.SchedulePage(schedule, results[1]);
+                        return model;
+                    }.bind(this));
+                return this.PushView(chlk.activities.profile.SchedulePage, result);
             }
         ])
 });

@@ -12,13 +12,9 @@ NAMESPACE('chlk.controls', function () {
 
             [[Object]],
             Object, function processAttrs(attributes){
-                if(attributes.disabled)
-                    if(Array.isArray(attributes.class)) {
-                        attributes.class = attributes.class || [];
-                        attributes.class.push('disabled');
-                    }else{
-                        attributes.class = attributes.class + ' disabled';
-                    }
+                attributes['class'] = attributes['class'] || [];
+                if (attributes.disabled)
+                    attributes['class'].push('disabled');
 
                 return attributes;
             }

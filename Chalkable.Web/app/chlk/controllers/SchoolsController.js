@@ -18,7 +18,7 @@ REQUIRE('chlk.activities.school.SchoolsListPage');
 REQUIRE('chlk.activities.school.ImportSchoolDialog');
 REQUIRE('chlk.models.id.DistrictId');
 REQUIRE('chlk.models.id.SchoolId');
-REQUIRE('chlk.models.import.ImportTaskData');
+REQUIRE('chlk.models.schoolImport.ImportTaskData');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -70,12 +70,12 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(data){
                     var schools = data.getItems();
-                    return new ria.async.DeferredData(new chlk.models.import.SchoolImportViewData(districtId, schools));
+                    return new ria.async.DeferredData(new chlk.models.schoolImport.SchoolImportViewData(districtId, schools));
                 });
                 return this.ShadeView(chlk.activities.school.ImportSchoolDialog, result);
         },
 
-        [[chlk.models.import.ImportTaskData]],
+        [[chlk.models.schoolImport.ImportTaskData]],
         VOID, function importSchoolsAction(model) {
             var result = this.schoolService
                 .runSchoolImport(

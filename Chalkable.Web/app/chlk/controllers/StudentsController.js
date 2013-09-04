@@ -109,6 +109,12 @@ NAMESPACE('chlk.controllers', function (){
                     .getSummary(personId)
                     .attach(this.validateResponse_());
                 return this.PushView(chlk.activities.student.SummaryPage, result);
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
+            function scheduleAction(personId, date_){
+                //return BASE(personId, chlk.models.common.RoleNamesEnum.TEACHER);
+                return this.scheduleByRole(personId, date_, chlk.models.common.RoleNamesEnum.STUDENT.valueOf());
             }
         ])
 });

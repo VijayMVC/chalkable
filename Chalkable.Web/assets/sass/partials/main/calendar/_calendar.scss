@@ -30,6 +30,45 @@ BODY {
           }
         }
 
+        &.profile, &.settings{
+          #main-wrapper {
+            #main {
+              DIV.chlk-calendar {
+                DIV.header {
+                  background-size: 660px 100%;
+                  background: url(images/calendar/toolbar-bg-yellow.png) 0 0 no-repeat;
+
+                  .prev-month {
+                    background-image: url(images/calendar/prev-month-yellow.png);
+                  }
+
+                  .next-month, .prev-month{
+                    width: 17px;
+                    height: 17px;
+                  }
+
+                  .next-month {
+                    background-image: url(images/calendar/next-month-yellow.png)
+                  }
+
+                  .header-container{
+                    .buttons-container{
+                      .buttons{
+                        >DIV{
+                          LABEL.current-month {
+                            color: #957633;
+                            text-shadow: 1px 1px 1px #dfcea9;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
         #main-wrapper {
           #main {
             DIV.chlk-calendar {

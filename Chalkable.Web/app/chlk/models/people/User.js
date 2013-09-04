@@ -40,6 +40,8 @@ NAMESPACE('chlk.models.people', function () {
 
             String, 'pictureUrl',
 
+            String, 'roleName',
+
             [ria.serialize.SerializeProperty('role')],
             chlk.models.people.Role, 'role',
 
