@@ -294,6 +294,17 @@ NAMESPACE('chlk.controllers', function (){
 
             */
             //var myAppsViewUrl = url + "&code=" + code;
+
+        },
+
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
+        [[chlk.models.id.AppId]],
+        function tryToAttachTeacherAction(appId) {
+
+            //get app from app market
             var myAppsViewUrl = "#";
             var attachBtn = new chlk.models.apps.AppWrapperToolbarButton('add-app', '+ Attach');
             var saveBtn  = new chlk.models.apps.AppWrapperToolbarButton('save-app', 'Save');
@@ -302,15 +313,6 @@ NAMESPACE('chlk.controllers', function (){
             var btns = [attachBtn, saveBtn, newTabBtn];
             var appWrapperViewData = new chlk.models.apps.AppWrapperViewData(chlk.models.apps.AppModes.EDIT, btns);
             return this.PushView(chlk.activities.apps.AppWrapperDialog, new ria.async.DeferredData(appWrapperViewData));
-        },
-
-
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.SYSADMIN
-        ])],
-        [[chlk.models.id.AppId]],
-        function tryToAttachTeacherAction(appId) {
-            //get app from app market
         },
 
         [chlk.controllers.AccessForRoles([

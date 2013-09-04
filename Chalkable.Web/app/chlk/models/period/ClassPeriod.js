@@ -2,7 +2,7 @@ REQUIRE('chlk.models.id.ClassPeriodId');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.RoomId');
 REQUIRE('chlk.models.period.Period');
-REQUIRE('chlk.models.class.Class');
+REQUIRE('chlk.models.classes.Class');
 
 NAMESPACE('chlk.models.period', function () {
     "use strict";
@@ -24,7 +24,7 @@ NAMESPACE('chlk.models.period', function () {
             chlk.models.id.ClassId, 'classId',
 
             [ria.serialize.SerializeProperty('class')],
-            chlk.models.class.Class, 'clazz',
+            chlk.models.classes.Class, 'clazz',
 
             [ria.serialize.SerializeProperty('studentscount')],
             Number, 'studentsCount'

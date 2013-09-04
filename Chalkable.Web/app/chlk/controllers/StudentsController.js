@@ -50,7 +50,7 @@ NAMESPACE('chlk.controllers', function (){
                         var classes = this.classService.getClassesForTopBar(true);
                         model.setUsersPart(usersModel);
                         model.setMy(isMy);
-                        var topModel = new chlk.models.class.ClassesForTopBar();
+                        var topModel = new chlk.models.classes.ClassesForTopBar();
                         topModel.setTopItems(classes);
                         topModel.setDisabled(false);
                         classId_ && topModel.setSelectedItemId(classId_);

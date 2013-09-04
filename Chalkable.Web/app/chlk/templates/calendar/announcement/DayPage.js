@@ -12,7 +12,7 @@ NAMESPACE('chlk.templates.calendar.announcement', function () {
             ArrayOf(chlk.models.calendar.announcement.DayItem), 'items',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.class.ClassesForTopBar, 'topData',
+            chlk.models.classes.ClassesForTopBar, 'topData',
 
             [ria.templates.ModelPropertyBind],
             Number, 'selectedTypeId',

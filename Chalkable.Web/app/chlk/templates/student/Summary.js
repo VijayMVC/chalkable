@@ -40,7 +40,7 @@ NAMESPACE('chlk.templates.student', function () {
             chlk.models.common.DisciplineHoverBox, 'disciplineBox',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.class.Class), 'classesSection',
+            ArrayOf(chlk.models.classes.Class), 'classesSection',
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.announcement.AnnouncementClassPeriod), 'periodSection'

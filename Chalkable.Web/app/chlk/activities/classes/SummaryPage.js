@@ -1,13 +1,13 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
-REQUIRE('chlk.templates.class.ClassSummary');
+REQUIRE('chlk.templates.classes.ClassSummary');
 REQUIRE('chlk.templates.announcement.AnnouncementsByDate');
 
-NAMESPACE('chlk.activities.class', function () {
+NAMESPACE('chlk.activities.classes', function () {
 
-    /** @class chlk.activities.class.SummaryPage */
+    /** @class chlk.activities.classes.SummaryPage */
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [chlk.activities.lib.PageClass('profile')],
-        [ria.mvc.TemplateBind(chlk.templates.class.ClassSummary)],
+        [ria.mvc.TemplateBind(chlk.templates.classes.ClassSummary)],
         'SummaryPage', EXTENDS(chlk.activities.lib.TemplatePage), [ ]);
 });

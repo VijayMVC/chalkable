@@ -1,9 +1,9 @@
 REQUIRE('chlk.models.id.RoomId');
 
-NAMESPACE('chlk.models.class', function () {
+NAMESPACE('chlk.models.classes', function () {
     "use strict";
 
-    /** @class chlk.models.class.Room*/
+    /** @class chlk.models.classes.Room*/
     CLASS(
         'Room', [
             Object, 'building',

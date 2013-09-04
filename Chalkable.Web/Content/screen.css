@@ -7301,23 +7301,28 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.apps-list .td .app-icon {
   margin-bottom: 15px;
   text-align: center;
 }
-/* line 39, ../assets/sass/partials/main/popups/_attach_app.scss */
+/* line 38, ../assets/sass/partials/main/popups/_attach_app.scss */
+#chlk-dialogs .dialog.attach-app .x-window-body .paging {
+  padding-left: 25px;
+  padding-right: 25px;
+}
+/* line 43, ../assets/sass/partials/main/popups/_attach_app.scss */
 #chlk-dialogs .dialog.attach-app .x-window-body .apps {
   padding: 15px 25px;
   width: 670px;
 }
-/* line 43, ../assets/sass/partials/main/popups/_attach_app.scss */
+/* line 47, ../assets/sass/partials/main/popups/_attach_app.scss */
 #chlk-dialogs .dialog.attach-app .x-window-body .apps .app-icon-link {
   display: inline-block;
   text-decoration: none;
   vertical-align: top;
 }
-/* line 48, ../assets/sass/partials/main/popups/_attach_app.scss */
+/* line 52, ../assets/sass/partials/main/popups/_attach_app.scss */
 #chlk-dialogs .dialog.attach-app .x-window-body .apps .app-icon-link .app-list-item {
   width: 220px;
   height: 106px;
 }
-/* line 52, ../assets/sass/partials/main/popups/_attach_app.scss */
+/* line 56, ../assets/sass/partials/main/popups/_attach_app.scss */
 #chlk-dialogs .dialog.attach-app .x-window-body .apps .app-icon-link .app-list-item .icon {
   width: 80px;
   height: 80px;
@@ -7325,13 +7330,13 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.apps-list .td .app-icon {
   background: url(images/app/photo-store-container.png) 0 0 no-repeat;
   position: relative;
 }
-/* line 59, ../assets/sass/partials/main/popups/_attach_app.scss */
+/* line 63, ../assets/sass/partials/main/popups/_attach_app.scss */
 #chlk-dialogs .dialog.attach-app .x-window-body .apps .app-icon-link .app-list-item .icon > IMG, #chlk-dialogs .dialog.attach-app .x-window-body .apps .app-icon-link .app-list-item .icon > DIV {
   width: 74px;
   height: 74px;
   margin: 3px;
 }
-/* line 66, ../assets/sass/partials/main/popups/_attach_app.scss */
+/* line 70, ../assets/sass/partials/main/popups/_attach_app.scss */
 #chlk-dialogs .dialog.attach-app .x-window-body .apps .app-icon-link .app-list-item .description {
   display: inline-block;
   position: absolute;
@@ -7340,17 +7345,17 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.apps-list .td .app-icon {
   overflow: hidden;
   height: 76px;
 }
-/* line 74, ../assets/sass/partials/main/popups/_attach_app.scss */
+/* line 78, ../assets/sass/partials/main/popups/_attach_app.scss */
 #chlk-dialogs .dialog.attach-app .x-window-body .apps .app-icon-link .app-list-item .description .name {
   font-weight: bold;
   font-size: 16px;
 }
-/* line 79, ../assets/sass/partials/main/popups/_attach_app.scss */
+/* line 83, ../assets/sass/partials/main/popups/_attach_app.scss */
 #chlk-dialogs .dialog.attach-app .x-window-body .apps .app-icon-link .app-list-item .description > DIV {
   word-wrap: break-word;
   color: #5b5b5b;
 }
-/* line 83, ../assets/sass/partials/main/popups/_attach_app.scss */
+/* line 87, ../assets/sass/partials/main/popups/_attach_app.scss */
 #chlk-dialogs .dialog.attach-app .x-window-body .apps .app-icon-link .app-list-item .description > DIV.shortdesc {
   font-weight: bold;
   font-size: 12px;

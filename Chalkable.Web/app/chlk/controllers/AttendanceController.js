@@ -24,7 +24,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(summary){
                     var classes = this.classService.getClassesForTopBar(true);
-                    var topModel = new chlk.models.class.ClassesForTopBar(classes);
+                    var topModel = new chlk.models.classes.ClassesForTopBar(classes);
                     var model = new chlk.models.attendance.SummaryPage(topModel, summary);
                     return model;
                 }, this);
@@ -69,7 +69,7 @@ NAMESPACE('chlk.controllers', function (){
                         }]);
                     this.getContext().getSession().set('attendanceData', items);
                     var classes = this.classService.getClassesForTopBar(true);
-                    var topModel = new chlk.models.class.ClassesForTopBar(classes);
+                    var topModel = new chlk.models.classes.ClassesForTopBar(classes);
                     var model = new chlk.models.attendance.ClassList(topModel, classId, items, date_, true, this.getContext().getSession().get('attendanceReasons', []));
                     this.getContext().getSession().set('attendancePageData', model);
                     return model;

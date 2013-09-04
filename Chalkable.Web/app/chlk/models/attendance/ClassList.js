@@ -26,7 +26,7 @@ NAMESPACE('chlk.models.attendance', function () {
 
             Boolean, 'byLastName',
 
-            [[chlk.models.class.ClassesForTopBar, chlk.models.id.ClassId, ArrayOf(chlk.models.attendance.ClassAttendance), chlk.models.common.ChlkDate,
+            [[chlk.models.classes.ClassesForTopBar, chlk.models.id.ClassId, ArrayOf(chlk.models.attendance.ClassAttendance), chlk.models.common.ChlkDate,
                 Boolean,  ArrayOf(chlk.models.attendance.AttendanceReason)]],
             function $(topData_, selectedId_, items_, date_, byLastName_, reasons_){
                 BASE(topData_, selectedId_);

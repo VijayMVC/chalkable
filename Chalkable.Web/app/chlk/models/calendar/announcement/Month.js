@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.calendar.announcement.MonthItem');
-REQUIRE('chlk.models.class.ClassesForTopBar');
+REQUIRE('chlk.models.classes.ClassesForTopBar');
 REQUIRE('chlk.models.common.ChlkDate');
 
 NAMESPACE('chlk.models.calendar.announcement', function () {
@@ -10,7 +10,7 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
         'Month', [
             ArrayOf(chlk.models.calendar.announcement.MonthItem), 'items',
 
-            chlk.models.class.ClassesForTopBar, 'topData',
+            chlk.models.classes.ClassesForTopBar, 'topData',
 
             Number, 'selectedTypeId',
 

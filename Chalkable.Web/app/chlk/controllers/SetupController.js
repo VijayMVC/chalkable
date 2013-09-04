@@ -120,7 +120,7 @@ NAMESPACE('chlk.controllers', function (){
                     this.calendarService.getTeacherClassWeek(classId)
                 ]).then(function(result){
                     var model = new chlk.models.setup.TeacherSettings();
-                    var topModel = new chlk.models.class.ClassesForTopBar();
+                    var topModel = new chlk.models.classes.ClassesForTopBar();
                     topModel.setTopItems(classes);
                     topModel.setDisabled(true);
                     topModel.setSelectedItemId(classId);

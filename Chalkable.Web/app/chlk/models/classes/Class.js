@@ -5,10 +5,10 @@ REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 
 
-NAMESPACE('chlk.models.class', function () {
+NAMESPACE('chlk.models.classes', function () {
     "use strict";
 
-    /** @class chlk.models.class.Class*/
+    /** @class chlk.models.classes.Class*/
     CLASS(
         'Class', [
             chlk.models.course.Course, 'course',

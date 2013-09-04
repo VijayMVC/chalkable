@@ -15,7 +15,7 @@ NAMESPACE('chlk.templates.grading', function () {
             Number, 'state',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.class.Class, 'clazz',
+            chlk.models.classes.Class, 'clazz',
 
             [ria.templates.ModelPropertyBind],
             Number, 'gradedStudentCount',

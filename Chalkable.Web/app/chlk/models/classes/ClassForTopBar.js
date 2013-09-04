@@ -1,11 +1,11 @@
-REQUIRE('chlk.models.class.Class');
+REQUIRE('chlk.models.classes.Class');
 
-NAMESPACE('chlk.models.class', function () {
+NAMESPACE('chlk.models.classes', function () {
     "use strict";
 
-    /** @class chlk.models.class.ClassForTopBar*/
+    /** @class chlk.models.classes.ClassForTopBar*/
     CLASS(
-        'ClassForTopBar', EXTENDS(chlk.models.class.Class), [
+        'ClassForTopBar', EXTENDS(chlk.models.classes.Class), [
             String, 'controller',
             String, 'action',
             Array, 'params',

@@ -106,7 +106,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.AnnouncementForm, Boolean]],
         function addEditAction(model, isEdit){
             var classes = this.classService.getClassesForTopBar();
-            var topModel = new chlk.models.class.ClassesForTopBar();
+            var topModel = new chlk.models.classes.ClassesForTopBar();
             var announcement = model.getAnnouncement();
             var reminders = announcement.getAnnouncementReminders(), remindersArr=[];
             reminders && reminders.forEach(function(item){
@@ -163,10 +163,27 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         function attachAppAction() {
             var userId = this.getCurrentPerson().getId();
-            var result = this.appMarketService.getInstalledApps(userId).then(function(data){
-                return new chlk.models.apps.InstalledAppsViewData(userId, data);
-            });
+            var result = this.appMarketService.getInstalledApps(userId)
+                .then(function(data){
+                    return new chlk.models.apps.InstalledAppsViewData(userId, data);
+                })
+                .attach(this.validateResponse_());
             return this.ShadeView(chlk.activities.apps.AttachAppDialog, result);
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
+        [[chlk.models.id.SchoolPersonId, Number]],
+        function listAvailableForAttachPageTeacherAction(teacherId, pageIndex_) {
+            var userId = this.getCurrentPerson().getId();
+            var result = this.appMarketService
+                .getInstalledApps(teacherId, pageIndex_)
+                .then(function(data){
+                    return new chlk.models.apps.InstalledAppsViewData(userId, data);
+                })
+                .attach(this.validateResponse_());
+            return this.UpdateView(chlk.activities.apps.AttachAppDialog, result);
         },
 
         [[chlk.models.id.AnnouncementId]],

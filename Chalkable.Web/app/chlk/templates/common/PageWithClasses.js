@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.common', function () {
         [ria.templates.ModelBind(chlk.models.common.PageWithClasses)],
         'PageWithClasses', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.class.ClassesForTopBar, 'topData',
+            chlk.models.classes.ClassesForTopBar, 'topData',
 
             [ria.templates.ModelPropertyBind],
             Number, 'selectedTypeId'

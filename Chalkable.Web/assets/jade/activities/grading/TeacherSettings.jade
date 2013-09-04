@@ -3,7 +3,7 @@
     topItems = topData.getTopItems();
     gradingInfo = self.getGradingInfo();
     .loader
-    +LeftRightToolbar(topItems, chlk.templates.class.TopBar, 'grading', 'teacherSettings')(
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'teacherSettings')(
         selectedItemId=gradingInfo && gradingInfo.getClazz().getId().valueOf(),
     ).classes-bar
     if gradingInfo

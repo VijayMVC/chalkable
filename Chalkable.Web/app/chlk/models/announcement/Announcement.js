@@ -1,6 +1,6 @@
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.common.ChlkDate');
-REQUIRE('chlk.models.class.Class');
+REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.attachment.Attachment');
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.announcement.StudentAnnouncements');

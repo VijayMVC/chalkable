@@ -1,5 +1,5 @@
-REQUIRE('chlk.models.class.ClassesForTopBar');
-REQUIRE('chlk.models.class.ClassForWeekMask');
+REQUIRE('chlk.models.classes.ClassesForTopBar');
+REQUIRE('chlk.models.classes.ClassForWeekMask');
 REQUIRE('chlk.models.announcement.AnnouncementCreate');
 
 NAMESPACE('chlk.models.announcement', function () {
@@ -8,8 +8,8 @@ NAMESPACE('chlk.models.announcement', function () {
     /** @class chlk.models.announcement.AnnouncementForm*/
     CLASS(
         'AnnouncementForm', EXTENDS(chlk.models.announcement.AnnouncementCreate), [
-            chlk.models.class.ClassesForTopBar, 'topData',
-            chlk.models.class.ClassForWeekMask, 'classInfo',
+            chlk.models.classes.ClassesForTopBar, 'topData',
+            chlk.models.classes.ClassForWeekMask, 'classInfo',
             Number, 'selectedTypeId',
             Array, 'reminders'
         ]);

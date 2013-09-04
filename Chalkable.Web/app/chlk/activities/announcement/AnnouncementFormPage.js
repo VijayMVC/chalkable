@@ -3,7 +3,7 @@ REQUIRE('chlk.templates.announcement.AnnouncementForm');
 REQUIRE('chlk.templates.announcement.Announcement');
 REQUIRE('chlk.templates.announcement.AnnouncementReminder');
 REQUIRE('chlk.templates.announcement.LastMessages');
-REQUIRE('chlk.templates.class.TopBar');
+REQUIRE('chlk.templates.classes.TopBar');
 
 NAMESPACE('chlk.activities.announcement', function () {
 

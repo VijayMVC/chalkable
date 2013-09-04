@@ -1,4 +1,4 @@
-REQUIRE('chlk.models.class.ClassesForTopBar');
+REQUIRE('chlk.models.classes.ClassesForTopBar');
 
 NAMESPACE('chlk.models.common', function () {
     "use strict";
@@ -6,10 +6,10 @@ NAMESPACE('chlk.models.common', function () {
     /** @class chlk.models.common.PageWithClasses*/
     CLASS(
         'PageWithClasses', [
-            chlk.models.class.ClassesForTopBar, 'topData',
+            chlk.models.classes.ClassesForTopBar, 'topData',
             Number, 'selectedTypeId',
 
-            [[chlk.models.class.ClassesForTopBar, chlk.models.id.ClassId]],
+            [[chlk.models.classes.ClassesForTopBar, chlk.models.id.ClassId]],
             function $(topData_, selectedId_){
                 BASE();
                 if(topData_)

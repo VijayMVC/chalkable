@@ -3,7 +3,7 @@
     topItems = topData.getTopItems();
     selectedId = topData.getSelectedItemId();
     selectedId = selectedId ? selectedId.valueOf() : "";
-    +LeftRightToolbar(topItems, chlk.templates.class.TopBar, 'calendar', 'month', [self.getCurrentDate().format('mm-dd-yy')])(
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'calendar', 'month', [self.getCurrentDate().format('mm-dd-yy')])(
         selectedItemId=selectedId
     ).classes-bar
     .header

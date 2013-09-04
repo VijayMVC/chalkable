@@ -3,7 +3,7 @@ REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 
 REQUIRE('chlk.models.attachment.Attachment');
-REQUIRE('chlk.models.class.ClassesForTopBar');
+REQUIRE('chlk.models.classes.ClassesForTopBar');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.calendar.announcement.Month');
 

@@ -15,27 +15,23 @@ NAMESPACE('chlk.controls', function () {
             [ria.mvc.DomEventBind('submit', '.paginator-container form')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function onPrevPageClick(node, event) {
-                try{
-                    var state = this.context.getState();
-                    var configs = this.getConfigs();
-                    var action = node.find('.action-name').getAttr('value');
-                    state.setAction(node.find('.action-name').getValue());
-                    var pageNode = node.find('.page-value');
-                    var value = (parseInt(pageNode.getValue(), 10) - 1) * configs.pageSize;
-                    if(value > configs.lastPageStart)
-                        value = configs.lastPageStart;
-                    if(value < 0)
-                        value = 0;
-                    pageNode.setValue(1 + value / configs.pageSize);
-                    var params = this.getLinkParams().slice();
-                    params.push(value);
-                    state.setParams(params);
-                    state.setPublic(false);
-                    this.context.stateUpdated();
-                }catch(e){
-                    console.info(e.getMessage());
-                }
-
+                var state = this.context.getState();
+                var configs = this.getConfigs();
+                var actionNode = node.find('.action-name');
+                var action = actionNode.getAttr('value');
+                state.setAction(actionNode.getValue());
+                var pageNode = node.find('.page-value');
+                var value = (parseInt(pageNode.getValue(), 10) - 1) * configs.pageSize;
+                if(value > configs.lastPageStart)
+                    value = configs.lastPageStart;
+                if(value < 0)
+                    value = 0;
+                pageNode.setValue(1 + value / configs.pageSize);
+                var params = this.getLinkParams().slice();
+                params.push(value);
+                state.setParams(params);
+                state.setPublic(false);
+                this.context.stateUpdated();
                 return false;
             },
 

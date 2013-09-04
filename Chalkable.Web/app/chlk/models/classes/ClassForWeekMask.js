@@ -1,10 +1,10 @@
 REQUIRE('chlk.models.announcement.AnnouncementType');
 REQUIRE('chlk.models.id.ClassId');
 
-NAMESPACE('chlk.models.class', function () {
+NAMESPACE('chlk.models.classes', function () {
     "use strict";
 
-    /** @class chlk.models.class.ClassForWeekMask*/
+    /** @class chlk.models.classes.ClassForWeekMask*/
     CLASS(
         'ClassForWeekMask', [
             [ria.serialize.SerializeProperty('classid')],

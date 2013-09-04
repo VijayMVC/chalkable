@@ -2,7 +2,7 @@
     -topData = self.getTopData();
     -topItems = topData.getTopItems();
     -selectedId = topData.getSelectedItemId();
-    +LeftRightToolbar(topItems, chlk.templates.class.TopBar, 'students', self.isMy() ? "my" : "all", [])(
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'students', self.isMy() ? "my" : "all", [])(
         selectedItemId=selectedId ? selectedId.valueOf() : ""
     ).classes-bar
     .action-bar.not-transparent.buttons

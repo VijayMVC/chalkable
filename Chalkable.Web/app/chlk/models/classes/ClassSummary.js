@@ -1,16 +1,16 @@
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.common.HoverBox');
-REQUIRE('chlk.models.class.Room');
+REQUIRE('chlk.models.classes.Room');
 REQUIRE('chlk.models.announcement.AnnouncementsByDate');
 REQUIRE('chlk.models.id.ClassId');
 
-NAMESPACE('chlk.models.class', function () {
+NAMESPACE('chlk.models.classes', function () {
     "use strict";
 
-    /** @class chlk.models.class.ClassSummary*/
+    /** @class chlk.models.classes.ClassSummary*/
     CLASS(
         'ClassSummary', [
-            chlk.models.class.Room, 'room',
+            chlk.models.classes.Room, 'room',
 
             ArrayOf(chlk.models.people.User), 'students',
 

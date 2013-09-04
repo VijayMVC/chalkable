@@ -22,7 +22,7 @@ NAMESPACE('chlk.controllers', function (){
             function teacherSettingsAction(classId_){
                 var classes = this.classService.getClassesForTopBar();
                 var model = new chlk.models.setup.TeacherSettings();
-                var topModel = new chlk.models.class.ClassesForTopBar();
+                var topModel = new chlk.models.classes.ClassesForTopBar();
                 topModel.setTopItems(classes);
                 topModel.setDisabled(true);
                 classId_ && topModel.setSelectedItemId(classId_);

@@ -9,7 +9,7 @@
     -classes=self.getClassInfo() ? self.getClassInfo().getTypesByClass() : [];
     .loader
     +ActionForm('announcement', 'save')(onlySubmitValidate=true)
-        +LeftRightToolbar(topItems, chlk.templates.class.TopBar)(
+        +LeftRightToolbar(topItems, chlk.templates.classes.TopBar)(
             selectedItemId=topData.getSelectedItemId(),
             pressAfterClick=!announcement.getState()
         ).classes-bar

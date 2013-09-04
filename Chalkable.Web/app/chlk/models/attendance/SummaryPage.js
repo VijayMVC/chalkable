@@ -9,7 +9,7 @@ NAMESPACE('chlk.models.attendance', function () {
         'SummaryPage', EXTENDS(chlk.models.common.PageWithClasses), [
             chlk.models.attendance.AttendanceSummary, 'summary',
 
-            [[chlk.models.class.ClassesForTopBar, chlk.models.attendance.AttendanceSummary]],
+            [[chlk.models.classes.ClassesForTopBar, chlk.models.attendance.AttendanceSummary]],
             function $(topData_, summary_){
                 BASE(topData_);
                 if(summary_)

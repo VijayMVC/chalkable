@@ -1,4 +1,4 @@
-REQUIRE('chlk.models.class.ClassesForTopBar');
+REQUIRE('chlk.models.classes.ClassesForTopBar');
 REQUIRE('chlk.models.calendar.TeacherSettingsCalendarDay');
 REQUIRE('chlk.models.grading.Final');
 
@@ -8,7 +8,7 @@ NAMESPACE('chlk.models.setup', function () {
     /** @class chlk.models.setup.TeacherSettings*/
     CLASS(
         'TeacherSettings', [
-            chlk.models.class.ClassesForTopBar, 'topData',
+            chlk.models.classes.ClassesForTopBar, 'topData',
             ArrayOf(chlk.models.calendar.TeacherSettingsCalendarDay), 'calendarInfo',
             chlk.models.grading.Final, 'gradingInfo',
             Number, 'percentsSum'

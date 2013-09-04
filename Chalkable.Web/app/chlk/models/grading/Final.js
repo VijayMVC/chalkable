@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.id.FinalGradeId');
-REQUIRE('chlk.models.class.Class');
+REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.grading.AnnouncementTypeGrading');
 REQUIRE('chlk.models.grading.AnnouncementTypeFinal');
 
@@ -13,7 +13,7 @@ NAMESPACE('chlk.models.grading', function () {
             Number, 'state',
 
             [ria.serialize.SerializeProperty('class')],
-            chlk.models.class.Class, 'clazz',
+            chlk.models.classes.Class, 'clazz',
 
             [ria.serialize.SerializeProperty('gradedstudentcount')],
             Number, 'gradedStudentCount',

@@ -6,7 +6,7 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
     /** @class chlk.models.calendar.announcement.Day*/
     CLASS(
         'Day',  [
-            chlk.models.class.ClassesForTopBar, 'topData',
+            chlk.models.classes.ClassesForTopBar, 'topData',
 
             Number, 'selectedTypeId',
 

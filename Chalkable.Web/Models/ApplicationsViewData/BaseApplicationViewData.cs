@@ -93,7 +93,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
 
     public class ApplicationDetailsViewData : ApplicationViewData
     {
-        public bool IsInstaledOnlyForMe { get; set; }
+        public bool IsInstalledOnlyForMe { get; set; }
         public IList<InstalledForPersonsGroupViewData> InstalledForPersonsGroup { get; set; } 
 
         protected ApplicationDetailsViewData(Application application,  IList<Category> categories, bool canGetSecretKey) 

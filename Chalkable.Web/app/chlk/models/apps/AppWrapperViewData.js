@@ -32,11 +32,20 @@ NAMESPACE('chlk.models.apps', function () {
             ArrayOf(chlk.models.apps.AppWrapperToolbarButton), 'buttons',
             chlk.models.apps.Application, 'app',
 
+
+
             [[chlk.models.apps.Application, chlk.models.apps.AppModes, ArrayOf(chlk.models.apps.AppWrapperToolbarButton)]],
             function $(app, mode, buttons){
                 this.setApp(app);
                 this.setAppMode(mode);
                 this.setButtons(buttons);
             }
+
+
         ]);
+
+    chlk.models.apps.AppWrapperViewData$createAppAttach = function(){
+
+    };
+
 });

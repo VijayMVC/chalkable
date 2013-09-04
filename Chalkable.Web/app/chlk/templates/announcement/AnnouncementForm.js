@@ -1,6 +1,6 @@
 REQUIRE('chlk.templates.JadeTemplate');
 REQUIRE('chlk.models.announcement.AnnouncementForm');
-REQUIRE('chlk.models.class.ClassesForTopBar');
+REQUIRE('chlk.models.classes.ClassesForTopBar');
 
 NAMESPACE('chlk.templates.announcement', function () {
 
@@ -13,10 +13,10 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.announcement.Announcement, 'announcement',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.class.ClassesForTopBar, 'topData',
+            chlk.models.classes.ClassesForTopBar, 'topData',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.class.ClassForWeekMask, 'classInfo',
+            chlk.models.classes.ClassForWeekMask, 'classInfo',
 
             [ria.templates.ModelPropertyBind],
             Number, 'selectedTypeId',

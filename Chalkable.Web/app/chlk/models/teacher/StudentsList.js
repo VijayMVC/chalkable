@@ -9,7 +9,7 @@ NAMESPACE('chlk.models.teacher', function () {
     CLASS(
         'StudentsList', EXTENDS(chlk.models.people.UsersListSubmit), [
             chlk.models.people.UsersList, 'usersPart',
-            chlk.models.class.ClassesForTopBar, 'topData',
+            chlk.models.classes.ClassesForTopBar, 'topData',
             Boolean, 'my',
             chlk.models.id.ClassId, 'classId'
         ]);

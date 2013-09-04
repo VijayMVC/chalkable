@@ -1,17 +1,17 @@
-REQUIRE('chlk.models.class.Class');
+REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.id.ClassId');
 
-NAMESPACE('chlk.models.class', function () {
+NAMESPACE('chlk.models.classes', function () {
     "use strict";
 
-    /** @class chlk.models.class.ClassesForTopBar*/
+    /** @class chlk.models.classes.ClassesForTopBar*/
     CLASS(
         'ClassesForTopBar', [
-            ArrayOf(chlk.models.class.Class), 'topItems',
+            ArrayOf(chlk.models.classes.Class), 'topItems',
             chlk.models.id.ClassId, 'selectedItemId',
             Boolean, 'disabled',
 
-            [[ArrayOf(chlk.models.class.Class)]],
+            [[ArrayOf(chlk.models.classes.Class)]],
             function $(classes_){
                 BASE();
                 if(classes_)

@@ -11,7 +11,7 @@ REQUIRE('chlk.activities.calendar.announcement.WeekDayPopUp');
 REQUIRE('chlk.activities.calendar.announcement.DayPeriodPopUp');
 
 REQUIRE('chlk.models.calendar.announcement.Month');
-REQUIRE('chlk.models.class.ClassesForTopBar');
+REQUIRE('chlk.models.classes.ClassesForTopBar');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -165,7 +165,7 @@ NAMESPACE('chlk.controllers', function (){
                     }
                     model.setItems(days);
                     var classes = this.classService.getClassesForTopBar(true);
-                    var topModel = new chlk.models.class.ClassesForTopBar();
+                    var topModel = new chlk.models.classes.ClassesForTopBar();
                     topModel.setTopItems(classes);
                     topModel.setDisabled(false);
                     classId_ && topModel.setSelectedItemId(classId_);
@@ -256,7 +256,7 @@ NAMESPACE('chlk.controllers', function (){
                     }.bind(this));
                     model.setItems(days);
                     var classes = this.classService.getClassesForTopBar(true);
-                    var topModel = new chlk.models.class.ClassesForTopBar();
+                    var topModel = new chlk.models.classes.ClassesForTopBar();
                     topModel.setTopItems(classes);
                     topModel.setDisabled(false);
                     classId_ && topModel.setSelectedItemId(classId_);

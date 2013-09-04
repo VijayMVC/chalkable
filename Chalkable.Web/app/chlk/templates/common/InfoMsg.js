@@ -1,5 +1,5 @@
 REQUIRE('chlk.templates.JadeTemplate');
-REQUIRE('chlk.models.class.Class');
+REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.CourseId');
 REQUIRE('chlk.models.common.InfoMsg');

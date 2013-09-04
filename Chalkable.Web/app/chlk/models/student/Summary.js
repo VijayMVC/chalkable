@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.people.User');
-REQUIRE('chlk.models.class.Class');
+REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.common.AttendanceHoverBox');
 REQUIRE('chlk.models.common.DisciplineHoverBox');
 REQUIRE('chlk.models.announcement.AnnouncementClassPeriod');
@@ -38,7 +38,7 @@ NAMESPACE('chlk.models.student', function () {
             chlk.models.common.DisciplineHoverBox, 'disciplineBox',
 
             [ria.serialize.SerializeProperty('classessection')],
-            ArrayOf(chlk.models.class.Class), 'classesSection',
+            ArrayOf(chlk.models.classes.Class), 'classesSection',
 
             [ria.serialize.SerializeProperty('periodsection')],
             ArrayOf(chlk.models.announcement.AnnouncementClassPeriod), 'periodSection'

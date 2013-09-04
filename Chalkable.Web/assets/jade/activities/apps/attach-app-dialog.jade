@@ -1,5 +1,5 @@
 mixin AppIconLink(app)
-   +ActionLink('apps', 'attach').app-icon-link
+   +ActionLink('apps', 'tryToAttach', [app.getId()]).app-icon-link
         .app-list-item
             .icon
                 pictureUrl = self.getPictureURL(app.getSmallPictureId(), 74, 74)
@@ -18,5 +18,5 @@ teacherId = self.teacherId.valueOf()
             each app in self.apps.getItems()
                 +AppIconLink(app)
         .paging
-            +Paginator('app-market', 'listAvailableForAttach', self.apps, [teacherId])
+            +Paginator('announcement', 'listAvailableForAttachPage', self.apps, [teacherId])
 

@@ -1,7 +1,7 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.announcement.AnnouncementView');
 REQUIRE('chlk.templates.announcement.StudentAnnouncement');
-REQUIRE('chlk.templates.class.TopBar');
+REQUIRE('chlk.templates.classes.TopBar');
 REQUIRE('chlk.models.grading.Mapping');
 
 NAMESPACE('chlk.activities.announcement', function () {

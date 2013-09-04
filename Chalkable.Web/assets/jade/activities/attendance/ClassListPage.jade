@@ -3,7 +3,7 @@
     topItems = topData.getTopItems();
     selectedId = topData.getSelectedItemId();
     valuesEnum = chlk.models.attendance.AttendanceTypesValue;
-    +LeftRightToolbar(topItems, chlk.templates.class.TopBar, 'attendance', 'classList')(
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'classList')(
         selectedItemId=selectedId ? selectedId.valueOf() : ""
     ).classes-bar
     .loader

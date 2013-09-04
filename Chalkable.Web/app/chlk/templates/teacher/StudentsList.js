@@ -12,7 +12,7 @@ NAMESPACE('chlk.templates.teacher', function () {
             chlk.models.people.UsersList, 'usersPart',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.class.ClassesForTopBar, 'topData',
+            chlk.models.classes.ClassesForTopBar, 'topData',
 
             [ria.templates.ModelPropertyBind],
             Boolean, 'my'

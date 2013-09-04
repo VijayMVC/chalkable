@@ -9,7 +9,7 @@ NAMESPACE('chlk.templates.setup', function () {
         [ria.templates.ModelBind(chlk.models.setup.TeacherSettings)],
         'TeacherSettings', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.class.ClassesForTopBar, 'topData',
+            chlk.models.classes.ClassesForTopBar, 'topData',
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.calendar.TeacherSettingsCalendarDay), 'calendarInfo',
