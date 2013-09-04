@@ -38,7 +38,7 @@ NAMESPACE('chlk', function (){
                 return BASE()
                     .then(function(data){
                         new ria.dom.Dom()
-                            .fromHTML(ASSET('~/assets/jade/sidebars/DeveloperSidebar.jade')())
+                            .fromHTML(ASSET('~/assets/jade/sidebars/developer-sidebar.jade')())
                             .appendTo("#sidebar");
                         return data;
                     })
