@@ -1478,8 +1478,41 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.settings
 DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled, DIV#content-wrapper.profile .action-bar.buttons .container .action-link[disabled], DIV#content-wrapper.profile .action-bar.buttons .container .action-button.disabled, DIV#content-wrapper.profile .action-bar.buttons .container .action-button[disabled] {
   opacity: 0.6;
 }
-
 /* line 42, ../assets/sass/partials/controls/_action-bar.scss */
+DIV#content-wrapper.messages .action-bar.buttons .container .action-link:not(.disabled), DIV#content-wrapper.messages .action-bar.buttons .container .action-button:not(.disabled) {
+  color: #957633;
+  text-shadow: 0 1px 0 white;
+}
+/* line 46, ../assets/sass/partials/controls/_action-bar.scss */
+DIV#content-wrapper.messages .action-bar.buttons .container .action-link:not(.disabled):hover, DIV#content-wrapper.messages .action-bar.buttons .container .action-link:not(.disabled).pressed, DIV#content-wrapper.messages .action-bar.buttons .container .action-button:not(.disabled):hover, DIV#content-wrapper.messages .action-bar.buttons .container .action-button:not(.disabled).pressed {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f5ead6), color-stop(100%, #dac6a5));
+  background: -webkit-linear-gradient(top, #f5ead6, #dac6a5);
+  background: -moz-linear-gradient(top, #f5ead6, #dac6a5);
+  background: -o-linear-gradient(top, #f5ead6, #dac6a5);
+  background: linear-gradient(top, #f5ead6, #dac6a5);
+}
+/* line 49, ../assets/sass/partials/controls/_action-bar.scss */
+DIV#content-wrapper.messages .action-bar.buttons .container .action-link:not(.disabled):hover.back, DIV#content-wrapper.messages .action-bar.buttons .container .action-link:not(.disabled).pressed.back, DIV#content-wrapper.messages .action-bar.buttons .container .action-button:not(.disabled):hover.back, DIV#content-wrapper.messages .action-bar.buttons .container .action-button:not(.disabled).pressed.back {
+  background: url(images/profile/back.png) 3px center no-repeat, -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f3eedf), color-stop(100%, #e1d3a6));
+  background: url(images/profile/back.png) 3px center no-repeat, -webkit-linear-gradient(top, #f3eedf, #e1d3a6);
+  background: url(images/profile/back.png) 3px center no-repeat, -moz-linear-gradient(top, #f3eedf, #e1d3a6);
+  background: url(images/profile/back.png) 3px center no-repeat, -o-linear-gradient(top, #f3eedf, #e1d3a6);
+  background: url(images/profile/back.png) 3px center no-repeat, linear-gradient(top, #f3eedf, #e1d3a6);
+}
+/* line 55, ../assets/sass/partials/controls/_action-bar.scss */
+DIV#content-wrapper.messages .action-bar.buttons .container .action-link.settings:hover, DIV#content-wrapper.messages .action-bar.buttons .container .action-button.settings:hover {
+  background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat, -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f3eedf), color-stop(100%, #e1d3a6));
+  background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat, -webkit-linear-gradient(top, #f3eedf, #e1d3a6);
+  background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat, -moz-linear-gradient(top, #f3eedf, #e1d3a6);
+  background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat, -o-linear-gradient(top, #f3eedf, #e1d3a6);
+  background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat, linear-gradient(top, #f3eedf, #e1d3a6);
+}
+/* line 59, ../assets/sass/partials/controls/_action-bar.scss */
+DIV#content-wrapper.messages .action-bar.buttons .container .action-link.disabled, DIV#content-wrapper.messages .action-bar.buttons .container .action-link[disabled], DIV#content-wrapper.messages .action-bar.buttons .container .action-button.disabled, DIV#content-wrapper.messages .action-bar.buttons .container .action-button[disabled] {
+  opacity: 0.6;
+}
+
+/* line 72, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container .action-link, .action-bar.buttons .container .action-button {
   padding: 0 10px;
   border-left: 1px solid white;
@@ -1493,7 +1526,7 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   border-width: 0 1px 0 1px;
   text-align: center;
 }
-/* line 55, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 85, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container .action-link:hover, .action-bar.buttons .container .action-link.pressed, .action-bar.buttons .container .action-button:hover, .action-bar.buttons .container .action-button.pressed {
   color: #2f7790;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f6f6f6), color-stop(100%, #d8d8d8));
@@ -1502,12 +1535,12 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   background: -o-linear-gradient(top, #f6f6f6, #d8d8d8);
   background: linear-gradient(top, #f6f6f6, #d8d8d8);
 }
-/* line 60, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 90, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container .action-link.back, .action-bar.buttons .container .action-button.back {
   background: url(images/profile/back.png) 3px center no-repeat;
   padding-left: 26px !important;
 }
-/* line 64, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 94, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container .action-link.back:hover, .action-bar.buttons .container .action-link.back.pressed, .action-bar.buttons .container .action-button.back:hover, .action-bar.buttons .container .action-button.back.pressed {
   background: url(images/profile/back.png) 3px center no-repeat, -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f6f6f6), color-stop(100%, #d8d8d8));
   background: url(images/profile/back.png) 3px center no-repeat, -webkit-linear-gradient(top, #f6f6f6, #d8d8d8);
@@ -1515,17 +1548,17 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   background: url(images/profile/back.png) 3px center no-repeat, -o-linear-gradient(top, #f6f6f6, #d8d8d8);
   background: url(images/profile/back.png) 3px center no-repeat, linear-gradient(top, #f6f6f6, #d8d8d8);
 }
-/* line 69, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 99, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container .action-link.settings, .action-bar.buttons .container .action-button.settings {
   background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat;
   padding-left: 19px;
   width: 65px;
 }
-/* line 76, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 106, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container > .left:not(.no-border) {
   border-right: 1px solid white;
 }
-/* line 79, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 109, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container > .left:not(.no-border) > .action-link:first-child, .action-bar.buttons .container > .left:not(.no-border) > .action-button:first-child {
   border-left: none;
   -webkit-border-radius: 5px 0 0 5px;
@@ -1534,11 +1567,11 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   -o-border-radius: 5px 0 0 5px;
   border-radius: 5px 0 0 5px;
 }
-/* line 85, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 115, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container > .right:not(.no-border) {
   border-left: 1px solid #d0d0d0;
 }
-/* line 88, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 118, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.buttons .container > .right:not(.no-border) > .action-link:last-child, .action-bar.buttons .container > .right:not(.no-border) > .action-button:last-child {
   border-right: none;
   -webkit-border-radius: 0 5px 5px 0;
@@ -1547,7 +1580,7 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   -o-border-radius: 0 5px 5px 0;
   border-radius: 0 5px 5px 0;
 }
-/* line 97, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 127, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar.not-transparent .container {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -1555,7 +1588,7 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   -o-border-radius: 5px;
   border-radius: 5px;
 }
-/* line 102, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 132, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar .container {
   height: 34px;
   border-bottom: 1px solid #a1a1a1;
@@ -1563,7 +1596,7 @@ DIV#content-wrapper.profile .action-bar.buttons .container .action-link.disabled
   white-space: nowrap;
   overflow: hidden;
 }
-/* line 109, ../assets/sass/partials/controls/_action-bar.scss */
+/* line 139, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar .container .action-link, .action-bar .container .action-button {
   text-decoration: none;
   font: normal 11px/34px arial, tahoma, verdana, helvetica;
@@ -2755,17 +2788,38 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
 }
 
 /* line 70, ../assets/sass/partials/main/_buttons.scss */
+.plain-button {
+  width: auto;
+  display: inline-block;
+  background-repeat: no-repeat;
+}
+/* line 78, ../assets/sass/partials/main/_buttons.scss */
+.plain-button.upper-case > SPAN > SPAN > BUTTON {
+  text-transform: uppercase;
+}
+/* line 86, ../assets/sass/partials/main/_buttons.scss */
+.plain-button > SPAN > SPAN {
+  display: block;
+}
+/* line 88, ../assets/sass/partials/main/_buttons.scss */
+.plain-button > SPAN > SPAN > BUTTON {
+  background: none;
+  border: 0 none;
+  background-color: transparent;
+}
+
+/* line 97, ../assets/sass/partials/main/_buttons.scss */
 .special-button {
   padding-left: 21px;
   width: auto;
   display: inline-block;
   background-repeat: no-repeat;
 }
-/* line 80, ../assets/sass/partials/main/_buttons.scss */
+/* line 107, ../assets/sass/partials/main/_buttons.scss */
 .special-button.upper-case > SPAN > SPAN > BUTTON {
   text-transform: uppercase;
 }
-/* line 87, ../assets/sass/partials/main/_buttons.scss */
+/* line 114, ../assets/sass/partials/main/_buttons.scss */
 .special-button > SPAN {
   min-height: 54px;
   padding-right: 21px;
@@ -2773,13 +2827,13 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   background-repeat: no-repeat;
   background-position: right 0px;
 }
-/* line 93, ../assets/sass/partials/main/_buttons.scss */
+/* line 120, ../assets/sass/partials/main/_buttons.scss */
 .special-button > SPAN > SPAN {
   display: block;
   background-repeat: repeat-x;
   height: 54px;
 }
-/* line 97, ../assets/sass/partials/main/_buttons.scss */
+/* line 124, ../assets/sass/partials/main/_buttons.scss */
 .special-button > SPAN > SPAN > BUTTON {
   height: 47px;
   background: none;
@@ -2795,99 +2849,99 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   font-weight: bold;
   font-family: Arial;
 }
-/* line 117, ../assets/sass/partials/main/_buttons.scss */
+/* line 144, ../assets/sass/partials/main/_buttons.scss */
 .special-button.blue-button {
   background-image: url(images/buttons/xbutton-blue-left.png);
 }
-/* line 119, ../assets/sass/partials/main/_buttons.scss */
+/* line 146, ../assets/sass/partials/main/_buttons.scss */
 .special-button.blue-button > SPAN {
   background-image: url(images/buttons/xbutton-blue-right.png);
 }
-/* line 121, ../assets/sass/partials/main/_buttons.scss */
+/* line 148, ../assets/sass/partials/main/_buttons.scss */
 .special-button.blue-button > SPAN > SPAN {
   background-image: url(images/buttons/xbutton-blue-center.png);
 }
-/* line 123, ../assets/sass/partials/main/_buttons.scss */
+/* line 150, ../assets/sass/partials/main/_buttons.scss */
 .special-button.blue-button > SPAN > SPAN > BUTTON {
   color: white;
 }
-/* line 128, ../assets/sass/partials/main/_buttons.scss */
+/* line 155, ../assets/sass/partials/main/_buttons.scss */
 .special-button.blue-button:hover {
   background-position: 0px -113px !important;
   background-size: auto 169px;
 }
-/* line 131, ../assets/sass/partials/main/_buttons.scss */
+/* line 158, ../assets/sass/partials/main/_buttons.scss */
 .special-button.blue-button:hover > SPAN {
   background-position: right -57px !important;
   background-size: auto 170px;
 }
-/* line 134, ../assets/sass/partials/main/_buttons.scss */
+/* line 161, ../assets/sass/partials/main/_buttons.scss */
 .special-button.blue-button:hover > SPAN > SPAN {
   background-position: 0px -57px;
   background-size: auto 170px;
 }
-/* line 144, ../assets/sass/partials/main/_buttons.scss */
+/* line 171, ../assets/sass/partials/main/_buttons.scss */
 .special-button.green-button {
   background-image: url(images/buttons/xbutton-green-left.png);
 }
-/* line 146, ../assets/sass/partials/main/_buttons.scss */
+/* line 173, ../assets/sass/partials/main/_buttons.scss */
 .special-button.green-button > SPAN {
   background-image: url(images/buttons/xbutton-green-right.png);
   background-position: right -112px;
 }
-/* line 149, ../assets/sass/partials/main/_buttons.scss */
+/* line 176, ../assets/sass/partials/main/_buttons.scss */
 .special-button.green-button > SPAN > SPAN {
   background-image: url(images/buttons/xbutton-green-center.png);
 }
-/* line 151, ../assets/sass/partials/main/_buttons.scss */
+/* line 178, ../assets/sass/partials/main/_buttons.scss */
 .special-button.green-button > SPAN > SPAN > BUTTON {
   color: #126100;
 }
-/* line 157, ../assets/sass/partials/main/_buttons.scss */
+/* line 184, ../assets/sass/partials/main/_buttons.scss */
 .special-button.green-button:hover {
   background-position: 0px -56px !important;
   background-size: auto 169px;
 }
-/* line 160, ../assets/sass/partials/main/_buttons.scss */
+/* line 187, ../assets/sass/partials/main/_buttons.scss */
 .special-button.green-button:hover > SPAN {
   background-position: right -57px !important;
   background-size: auto 170px;
 }
-/* line 163, ../assets/sass/partials/main/_buttons.scss */
+/* line 190, ../assets/sass/partials/main/_buttons.scss */
 .special-button.green-button:hover > SPAN > SPAN {
   background-position: 0px -57px;
   background-size: auto 170px;
 }
-/* line 166, ../assets/sass/partials/main/_buttons.scss */
+/* line 193, ../assets/sass/partials/main/_buttons.scss */
 .special-button.green-button:hover > SPAN > SPAN > BUTTON {
   color: white;
 }
-/* line 173, ../assets/sass/partials/main/_buttons.scss */
+/* line 200, ../assets/sass/partials/main/_buttons.scss */
 .special-button.red-button {
   background-image: url(images/buttons/xbutton-red-left.png);
 }
-/* line 175, ../assets/sass/partials/main/_buttons.scss */
+/* line 202, ../assets/sass/partials/main/_buttons.scss */
 .special-button.red-button > SPAN {
   background-image: url(images/buttons/xbutton-red-right.png);
 }
-/* line 177, ../assets/sass/partials/main/_buttons.scss */
+/* line 204, ../assets/sass/partials/main/_buttons.scss */
 .special-button.red-button > SPAN > SPAN {
   background-image: url(images/buttons/xbutton-red-center.png);
 }
-/* line 179, ../assets/sass/partials/main/_buttons.scss */
+/* line 206, ../assets/sass/partials/main/_buttons.scss */
 .special-button.red-button > SPAN > SPAN > BUTTON {
   color: white;
 }
-/* line 185, ../assets/sass/partials/main/_buttons.scss */
+/* line 212, ../assets/sass/partials/main/_buttons.scss */
 .special-button.red-button:hover {
   opacity: 0.9;
 }
-/* line 189, ../assets/sass/partials/main/_buttons.scss */
+/* line 216, ../assets/sass/partials/main/_buttons.scss */
 .special-button.red-button:active {
   opacity: 0.8;
 }
 
-/* line 194, ../assets/sass/partials/main/_buttons.scss */
+/* line 221, ../assets/sass/partials/main/_buttons.scss */
 .special-button2 {
   min-height: 33px;
   padding-left: 9px;
@@ -2897,20 +2951,20 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   font-size: 18px;
   font-family: Arial;
 }
-/* line 204, ../assets/sass/partials/main/_buttons.scss */
+/* line 231, ../assets/sass/partials/main/_buttons.scss */
 .special-button2 > SPAN {
   min-height: 33px;
   padding-right: 9px;
   display: block;
   background-repeat: no-repeat;
 }
-/* line 209, ../assets/sass/partials/main/_buttons.scss */
+/* line 236, ../assets/sass/partials/main/_buttons.scss */
 .special-button2 > SPAN > SPAN {
   min-height: 33px;
   display: block;
   background-repeat: repeat-x;
 }
-/* line 213, ../assets/sass/partials/main/_buttons.scss */
+/* line 240, ../assets/sass/partials/main/_buttons.scss */
 .special-button2 > SPAN > SPAN > BUTTON {
   height: 30px;
   color: white;
@@ -2925,68 +2979,68 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   font-size: 18px;
   font-family: Arial;
 }
-/* line 233, ../assets/sass/partials/main/_buttons.scss */
+/* line 260, ../assets/sass/partials/main/_buttons.scss */
 .special-button2:hover:not(.disabled) {
   background-position: 0px -42px;
 }
-/* line 235, ../assets/sass/partials/main/_buttons.scss */
+/* line 262, ../assets/sass/partials/main/_buttons.scss */
 .special-button2:hover:not(.disabled) > SPAN {
   background-position: right -42px;
 }
-/* line 237, ../assets/sass/partials/main/_buttons.scss */
+/* line 264, ../assets/sass/partials/main/_buttons.scss */
 .special-button2:hover:not(.disabled) > SPAN > SPAN {
   background-position: 0px -42px;
 }
-/* line 244, ../assets/sass/partials/main/_buttons.scss */
+/* line 271, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.blue {
   background-image: url(images/buttons/xbutton-blue2-left.png);
 }
-/* line 246, ../assets/sass/partials/main/_buttons.scss */
+/* line 273, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.blue > SPAN {
   background: url(images/buttons/xbutton-blue2-right.png) right 0 no-repeat;
 }
-/* line 248, ../assets/sass/partials/main/_buttons.scss */
+/* line 275, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.blue > SPAN > SPAN {
   background-image: url(images/buttons/xbutton-blue2-center.png);
 }
-/* line 253, ../assets/sass/partials/main/_buttons.scss */
+/* line 280, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.grey {
   background-image: url(images/buttons/xbutton-grey2-left.png);
 }
-/* line 255, ../assets/sass/partials/main/_buttons.scss */
+/* line 282, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.grey > SPAN {
   background: url(images/buttons/xbutton-grey2-right.png) right 0 no-repeat;
 }
-/* line 257, ../assets/sass/partials/main/_buttons.scss */
+/* line 284, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.grey > SPAN > SPAN {
   background-image: url(images/buttons/xbutton-grey2-center.png);
 }
-/* line 262, ../assets/sass/partials/main/_buttons.scss */
+/* line 289, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.red {
   background-image: url(images/buttons/xbutton-red2-left.png);
 }
-/* line 264, ../assets/sass/partials/main/_buttons.scss */
+/* line 291, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.red > SPAN {
   background: url(images/buttons/xbutton-red2-right.png) right 0 no-repeat;
 }
-/* line 266, ../assets/sass/partials/main/_buttons.scss */
+/* line 293, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.red > SPAN > SPAN {
   background-image: url(images/buttons/xbutton-red2-center.png);
 }
-/* line 271, ../assets/sass/partials/main/_buttons.scss */
+/* line 298, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.green {
   background-image: url(images/buttons/xbutton-green2-left.png);
 }
-/* line 273, ../assets/sass/partials/main/_buttons.scss */
+/* line 300, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.green > SPAN {
   background: url(images/buttons/xbutton-green2-right.png) right 0 no-repeat;
 }
-/* line 275, ../assets/sass/partials/main/_buttons.scss */
+/* line 302, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.green > SPAN > SPAN {
   background-image: url(images/buttons/xbutton-green2-center.png);
 }
 
-/* line 283, ../assets/sass/partials/main/_buttons.scss */
+/* line 310, ../assets/sass/partials/main/_buttons.scss */
 .blue-gradient-btn {
   color: white;
   text-align: center;
@@ -3009,13 +3063,13 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   box-shadow: inset 0 1px 0 #9abbcb;
   cursor: pointer;
 }
-/* line 290, ../assets/sass/partials/main/_buttons.scss */
+/* line 317, ../assets/sass/partials/main/_buttons.scss */
 .blue-gradient-btn BUTTON {
   background: transparent;
   border: 0;
   color: white;
 }
-/* line 302, ../assets/sass/partials/main/_buttons.scss */
+/* line 329, ../assets/sass/partials/main/_buttons.scss */
 .blue-gradient-btn:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #467d97), color-stop(100%, #1f566d));
   background: -webkit-linear-gradient(top, #467d97, #1f566d);
@@ -3024,7 +3078,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   background: linear-gradient(top, #467d97, #1f566d);
 }
 
-/* line 307, ../assets/sass/partials/main/_buttons.scss */
+/* line 334, ../assets/sass/partials/main/_buttons.scss */
 .blue-tb-right-button {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5d9cbb), color-stop(100%, #246382));
   background: -webkit-linear-gradient(top, #5d9cbb, #246382);
@@ -3040,12 +3094,12 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   box-shadow: inset 0 1px 0 #9dc3d6;
   display: inline-block;
 }
-/* line 318, ../assets/sass/partials/main/_buttons.scss */
+/* line 345, ../assets/sass/partials/main/_buttons.scss */
 .blue-tb-right-button SPAN, .blue-tb-right-button BUTTON {
   background: transparent;
   border: none;
 }
-/* line 326, ../assets/sass/partials/main/_buttons.scss */
+/* line 353, ../assets/sass/partials/main/_buttons.scss */
 .blue-tb-right-button:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6ea6c2), color-stop(100%, #3a738f));
   background: -webkit-linear-gradient(top, #6ea6c2, #3a738f);
@@ -3053,7 +3107,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   background: -o-linear-gradient(top, #6ea6c2, #3a738f);
   background: linear-gradient(top, #6ea6c2, #3a738f);
 }
-/* line 330, ../assets/sass/partials/main/_buttons.scss */
+/* line 357, ../assets/sass/partials/main/_buttons.scss */
 .blue-tb-right-button.x-item-disabled {
   opacity: 1;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(93, 156, 187, 0.6)), color-stop(100%, rgba(36, 99, 130, 0.6)));
@@ -3063,11 +3117,11 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
   background: linear-gradient(top, rgba(93, 156, 187, 0.6), rgba(36, 99, 130, 0.6));
   border-color: rgba(26, 66, 86, 0.6);
 }
-/* line 335, ../assets/sass/partials/main/_buttons.scss */
+/* line 362, ../assets/sass/partials/main/_buttons.scss */
 .blue-tb-right-button.x-item-disabled > SPAN {
   opacity: 0.6;
 }
-/* line 340, ../assets/sass/partials/main/_buttons.scss */
+/* line 367, ../assets/sass/partials/main/_buttons.scss */
 .blue-tb-right-button BUTTON {
   font: bold 14px Arial;
   height: 34px;
@@ -7212,30 +7266,298 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.apps-list .td .app-icon {
   border-radius: 5px;
 }
 
-/* line 8, ../assets/sass/partials/main/messages/_list.scss */
-#search-message-btn SPAN SPAN BUTTON {
+/* line 7, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #search-message-btn SPAN {
+  display: inline-block;
+}
+/* line 9, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #search-message-btn SPAN SPAN {
+  display: inline-block;
+}
+/* line 11, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #search-message-btn SPAN SPAN BUTTON {
   background: url(images/icons/search.png) 0% 50% no-repeat;
-  width: 24px;
+  width: 32px;
   height: 24px;
+  vertical-align: middle;
+  margin-right: 5px;
+  border: 0;
+}
+/* line 23, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #keyword {
+  height: 20px;
+  vertical-align: middle;
+  border-color: #C9C9C9;
+  -moz-border-radius: 6px 0 0 6px;
+  -webkit-border-radius: 6px 0 0 6px;
+  -o-border-radius: 6px 0 0 6px;
+  -ms-border-radius: 6px 0 0 6px;
+  -khtml-border-radius: 6px 0 0 6px;
+  border-radius: 6px 0 0 6px;
+  padding: 1px 0px 2px 1px;
+  margin: 0 0 0 10px;
+}
+/* line 37, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #new-message-link {
+  padding: 0;
+}
+/* line 39, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #new-message-link > span {
+  background: url(images/icons/pm-add.png) 7px 50% no-repeat;
+  padding: 0 4px 0 26px;
+  display: inline-block;
+}
+/* line 46, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-top, BODY DIV.page > DIV#content DIV#content-wrapper.messages #footer {
+  background-image: url(images/private-messages/paper-top-bottom.jpg);
+}
+/* line 50, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #footer {
+  background-position: 0 -50px;
+}
+/* line 54, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper {
+  background-image: url(images/private-messages/paper-bg.jpg);
+}
+/* line 58, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .not-transparent {
+  background: #baa76e;
+}
+/* line 62, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .panel-bg {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f5ebd7), color-stop(100%, #eadac1));
+  background: -webkit-linear-gradient(top, #f5ebd7, #eadac1);
+  background: -moz-linear-gradient(top, #f5ebd7, #eadac1);
+  background: -o-linear-gradient(top, #f5ebd7, #eadac1);
+  background: linear-gradient(top, #f5ebd7, #eadac1);
+}
+/* line 68, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container {
+  border-color: #a08d6d #f3efe6 #f3efe6 #a08d6d;
+  border: 1px solid;
+  color: #815d38;
+  border-radius: 9px;
+  background-color: #c8b088;
+  display: block;
+  width: 665px;
+}
+/* line 77, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar {
+  font-size: 11px;
+}
+/* line 80, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar .left > *, BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar .right > * {
+  vertical-align: middle;
+}
+/* line 84, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar .action-link {
+  padding: 0 5px;
+  text-shadow: none;
+}
+/* line 88, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar .container {
+  heigh: 24px;
+  border-radius: 9px;
+  background: transparent;
+  border-bottom-width: 1px;
+  border-top-width: 1px;
+  border-letf-width: 0;
+  border-right-width: 0;
+}
+/* line 96, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar .container .plain-button {
+  padding-left: 10px;
+}
+/* line 99, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar .container #checkboxall {
+  margin: 7px 8px 8px 8px;
+}
+/* line 103, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar #delete-button {
+  background: url(images/icons/pm-delete.png) 0% 50% no-repeat;
+}
+/* line 106, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar #mark-read-button {
+  background: url(images/icons/pm-read.png) 0% 50% no-repeat;
+  margin-left: 3px;
+}
+/* line 110, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .action-bar #mark-unread-button {
+  background: url(images/icons/pm-unread.png) 0% 50% no-repeat;
+}
+/* line 115, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row {
+  color: #815d38;
+  background: transparent;
+}
+/* line 119, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ded5c3), color-stop(100%, #d4c6af));
+  background: -webkit-linear-gradient(top, #ded5c3, #d4c6af);
+  background: -moz-linear-gradient(top, #ded5c3, #d4c6af);
+  background: -o-linear-gradient(top, #ded5c3, #d4c6af);
+  background: linear-gradient(top, #ded5c3, #d4c6af);
+  border-bottom: 1px solid #968466;
+  -moz-box-shadow: 0 1px 0 #88785d;
+  -webkit-box-shadow: 0 1px 0 #88785d;
+  -o-box-shadow: 0 1px 0 #88785d;
+  box-shadow: 0 1px 0 #88785d;
+  height: 82px;
+  display: table;
+  position: relative;
+  -moz-border-radius: 7px;
+  -webkit-border-radius: 7px;
+  -o-border-radius: 7px;
+  -ms-border-radius: 7px;
+  -khtml-border-radius: 7px;
+  border-radius: 7px;
+}
+/* line 137, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read > DIV.chk {
+  display: table-cell;
+  vertical-align: middle;
+  width: 15px;
+  padding-left: 23px;
+}
+/* line 143, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read > DIV.av {
+  display: table-cell;
+  vertical-align: middle;
+  width: 57px;
+  padding: 0 19px;
+}
+/* line 149, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read > DIV.item {
+  display: table-cell;
+  vertical-align: middle;
+  position: relative;
+  cursor: pointer;
+}
+/* line 154, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read > DIV.item A {
+  text-decoration: none;
+  color: #2f424b;
+}
+/* line 157, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read > DIV.item A h2 {
+  font-size: 18px;
+}
+/* line 159, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read > DIV.item A h2 small {
+  font-style: italic;
+  font-weight: normal;
+}
+/* line 164, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read > DIV.item A p {
+  font-size: 12pt;
+  word-wrap: break-word;
+  width: 531px;
+  overflow: hidden;
+}
+/* line 170, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .container .body .row .read > DIV.item A .sent {
+  background: url(images/private-messages/clock.png) 0 2px no-repeat;
+  padding-left: 15px;
+  position: absolute;
+  bottom: 7px;
+  right: 7px;
+  font-size: 11px;
+}
+/* line 185, ../assets/sass/partials/main/messages/_list.scss */
+BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .grid-container .paginator-container {
+  margin-top: 24px;
+  -webkit-border-radius: 7px;
+  -o-border-radius: 7px;
+  -ms-border-radius: 7px;
+  -khtml-border-radius: 7px;
+  border-radius: 7px;
+  background-color: #c8b088;
+  padding: 3px;
 }
 
-/* line 44, ../assets/sass/partials/_main.scss */
+/* line 1, ../assets/sass/partials/main/messages/_add.scss */
+.add-message {
+  padding: 0;
+  border-radius: 0;
+  border: 0;
+  left: 191px;
+  top: 75px;
+  width: 541px;
+  background: #e7e7e7;
+  -webkit-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+/* line 13, ../assets/sass/partials/main/messages/_add.scss */
+.add-message .bg-top {
+  height: 21px;
+  background: url(images/private-messages/top-bg.png) 0 0 no-repeat;
+}
+/* line 18, ../assets/sass/partials/main/messages/_add.scss */
+.add-message .bg-middle {
+  background: url(images/private-messages/center-bg.png) 0 0 repeat-y;
+  padding: 18px 25px 20px 25px;
+  -moz-background-size: 543px auto;
+  -webkit-background-size: 543px auto;
+  -o-background-size: 543px auto;
+  background-size: 543px auto;
+}
+/* line 25, ../assets/sass/partials/main/messages/_add.scss */
+.add-message .bg-middle label {
+  width: 75px;
+  text-align: right;
+  display: inline-block;
+  margin: 2px 16px;
+  font-size: 13px;
+  color: #654a16;
+  vertical-align: top;
+}
+/* line 34, ../assets/sass/partials/main/messages/_add.scss */
+.add-message .bg-middle textarea {
+  height: 60px;
+  width: 320px;
+}
+/* line 38, ../assets/sass/partials/main/messages/_add.scss */
+.add-message .bg-middle input {
+  width: 320px;
+}
+/* line 41, ../assets/sass/partials/main/messages/_add.scss */
+.add-message .bg-middle .x-form-field {
+  margin: 20px 0px;
+}
+/* line 45, ../assets/sass/partials/main/messages/_add.scss */
+.add-message .bg-middle .form-buttons {
+  margin-left: auto;
+  margin-right: auto;
+  width: 42%;
+}
+/* line 51, ../assets/sass/partials/main/messages/_add.scss */
+.add-message .bg-middle .close {
+  margin-left: 20px;
+}
+/* line 56, ../assets/sass/partials/main/messages/_add.scss */
+.add-message .bg-bottom {
+  height: 20px;
+  background: url(images/private-messages/bottom-bg.png) 0 bottom no-repeat;
+}
+
+/* line 45, ../assets/sass/partials/_main.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main-top, BODY DIV.page > DIV#content DIV#content-wrapper.profile #footer {
   background-image: url(images/profile/paper-top-bottom.png);
 }
-/* line 48, ../assets/sass/partials/_main.scss */
+/* line 49, ../assets/sass/partials/_main.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #footer {
   background-position: 0 -50px;
 }
-/* line 52, ../assets/sass/partials/_main.scss */
+/* line 53, ../assets/sass/partials/_main.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main-wrapper {
   background-image: url(images/profile/paper-bg.png);
 }
-/* line 56, ../assets/sass/partials/_main.scss */
+/* line 57, ../assets/sass/partials/_main.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main-wrapper #main .not-transparent {
   background: #baa76e;
 }
-/* line 60, ../assets/sass/partials/_main.scss */
+/* line 61, ../assets/sass/partials/_main.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile #main-wrapper #main .panel-bg {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f3eee0), color-stop(100%, #ece1c1));
   background: -webkit-linear-gradient(top, #f3eee0, #ece1c1);
@@ -7243,7 +7565,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main-wrapper #main .pan
   background: -o-linear-gradient(top, #f3eee0, #ece1c1);
   background: linear-gradient(top, #f3eee0, #ece1c1);
 }
-/* line 68, ../assets/sass/partials/_main.scss */
+/* line 69, ../assets/sass/partials/_main.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper #main .not-transparent {
   background: #c9c9c9;
   border: 1px solid #a1a1a1;
@@ -7257,7 +7579,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main .not-transparent {
   -o-border-radius: 9px;
   border-radius: 9px;
 }
-/* line 78, ../assets/sass/partials/_main.scss */
+/* line 79, ../assets/sass/partials/_main.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper #main .panel-bg {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f5f5f5), color-stop(100%, #e7e7e7));
   background: -webkit-linear-gradient(top, #f5f5f5, #e7e7e7);
@@ -7266,121 +7588,121 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main .panel-bg {
   background: linear-gradient(top, #f5f5f5, #e7e7e7);
 }
 
-/* line 88, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-1 {
   background: url(images/common/announcement-type/1.png) 0 50% no-repeat;
 }
-/* line 91, ../assets/sass/partials/_main.scss */
+/* line 92, ../assets/sass/partials/_main.scss */
 .announcement-type-1.black {
   background: url(images/common/announcement-type/bw/1_bw.png) 0 50% no-repeat;
 }
 
-/* line 88, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-2 {
   background: url(images/common/announcement-type/2.png) 0 50% no-repeat;
 }
-/* line 91, ../assets/sass/partials/_main.scss */
+/* line 92, ../assets/sass/partials/_main.scss */
 .announcement-type-2.black {
   background: url(images/common/announcement-type/bw/2_bw.png) 0 50% no-repeat;
 }
 
-/* line 88, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-3 {
   background: url(images/common/announcement-type/3.png) 0 50% no-repeat;
 }
-/* line 91, ../assets/sass/partials/_main.scss */
+/* line 92, ../assets/sass/partials/_main.scss */
 .announcement-type-3.black {
   background: url(images/common/announcement-type/bw/3_bw.png) 0 50% no-repeat;
 }
 
-/* line 88, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-4 {
   background: url(images/common/announcement-type/4.png) 0 50% no-repeat;
 }
-/* line 91, ../assets/sass/partials/_main.scss */
+/* line 92, ../assets/sass/partials/_main.scss */
 .announcement-type-4.black {
   background: url(images/common/announcement-type/bw/4_bw.png) 0 50% no-repeat;
 }
 
-/* line 88, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-5 {
   background: url(images/common/announcement-type/5.png) 0 50% no-repeat;
 }
-/* line 91, ../assets/sass/partials/_main.scss */
+/* line 92, ../assets/sass/partials/_main.scss */
 .announcement-type-5.black {
   background: url(images/common/announcement-type/bw/5_bw.png) 0 50% no-repeat;
 }
 
-/* line 88, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-6 {
   background: url(images/common/announcement-type/6.png) 0 50% no-repeat;
 }
-/* line 91, ../assets/sass/partials/_main.scss */
+/* line 92, ../assets/sass/partials/_main.scss */
 .announcement-type-6.black {
   background: url(images/common/announcement-type/bw/6_bw.png) 0 50% no-repeat;
 }
 
-/* line 88, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-7 {
   background: url(images/common/announcement-type/7.png) 0 50% no-repeat;
 }
-/* line 91, ../assets/sass/partials/_main.scss */
+/* line 92, ../assets/sass/partials/_main.scss */
 .announcement-type-7.black {
   background: url(images/common/announcement-type/bw/7_bw.png) 0 50% no-repeat;
 }
 
-/* line 88, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-8 {
   background: url(images/common/announcement-type/8.png) 0 50% no-repeat;
 }
-/* line 91, ../assets/sass/partials/_main.scss */
+/* line 92, ../assets/sass/partials/_main.scss */
 .announcement-type-8.black {
   background: url(images/common/announcement-type/bw/8_bw.png) 0 50% no-repeat;
 }
 
-/* line 88, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-9 {
   background: url(images/common/announcement-type/9.png) 0 50% no-repeat;
 }
-/* line 91, ../assets/sass/partials/_main.scss */
+/* line 92, ../assets/sass/partials/_main.scss */
 .announcement-type-9.black {
   background: url(images/common/announcement-type/bw/9_bw.png) 0 50% no-repeat;
 }
 
-/* line 88, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-10 {
   background: url(images/common/announcement-type/10.png) 0 50% no-repeat;
 }
-/* line 91, ../assets/sass/partials/_main.scss */
+/* line 92, ../assets/sass/partials/_main.scss */
 .announcement-type-10.black {
   background: url(images/common/announcement-type/bw/10_bw.png) 0 50% no-repeat;
 }
 
-/* line 88, ../assets/sass/partials/_main.scss */
+/* line 89, ../assets/sass/partials/_main.scss */
 .announcement-type-11 {
   background: url(images/common/announcement-type/11.png) 0 50% no-repeat;
 }
-/* line 91, ../assets/sass/partials/_main.scss */
+/* line 92, ../assets/sass/partials/_main.scss */
 .announcement-type-11.black {
   background: url(images/common/announcement-type/bw/11_bw.png) 0 50% no-repeat;
 }
 
-/* line 99, ../assets/sass/partials/_main.scss */
+/* line 100, ../assets/sass/partials/_main.scss */
 .grey-combo + .chzn-container, .grey-combo-container .chzn-container {
   color: #717171;
 }
-/* line 101, ../assets/sass/partials/_main.scss */
+/* line 102, ../assets/sass/partials/_main.scss */
 .grey-combo + .chzn-container A, .grey-combo-container .chzn-container A {
   color: #717171;
 }
 
-/* line 106, ../assets/sass/partials/_main.scss */
+/* line 107, ../assets/sass/partials/_main.scss */
 .image-container {
   overflow: hidden;
   display: inline-block;
 }
 
-/* line 111, ../assets/sass/partials/_main.scss */
+/* line 112, ../assets/sass/partials/_main.scss */
 INPUT, TEXTAREA {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -7395,12 +7717,12 @@ INPUT, TEXTAREA {
   color: #6e6e6e;
   margin: 0;
 }
-/* line 121, ../assets/sass/partials/_main.scss */
+/* line 122, ../assets/sass/partials/_main.scss */
 INPUT::-webkit-input-placeholder, INPUT:-moz-placeholder, INPUT::-moz-placeholder, TEXTAREA::-webkit-input-placeholder, TEXTAREA:-moz-placeholder, TEXTAREA::-moz-placeholder {
   color: gray;
 }
 
-/* line 126, ../assets/sass/partials/_main.scss */
+/* line 127, ../assets/sass/partials/_main.scss */
 TEXTAREA.animated-textarea {
   -webkit-transition-property: height;
   -moz-transition-property: height;
@@ -7412,7 +7734,7 @@ TEXTAREA.animated-textarea {
   transition-duration: 0.2s;
 }
 
-/* line 131, ../assets/sass/partials/_main.scss */
+/* line 132, ../assets/sass/partials/_main.scss */
 .close-btn {
   background: url(images/ui/close-btn-2.png) 0 0 no-repeat;
   height: 27px;
@@ -7422,12 +7744,12 @@ TEXTAREA.animated-textarea {
   right: -16px;
   cursor: pointer;
 }
-/* line 140, ../assets/sass/partials/_main.scss */
+/* line 141, ../assets/sass/partials/_main.scss */
 .close-btn:hover {
   opacity: 0.7;
 }
 
-/* line 147, ../assets/sass/partials/_main.scss */
+/* line 148, ../assets/sass/partials/_main.scss */
 .horizontal-loader {
   height: 20px;
   position: absolute;
@@ -7437,7 +7759,7 @@ TEXTAREA.animated-textarea {
   bottom: -25px;
 }
 
-/* line 156, ../assets/sass/partials/_main.scss */
+/* line 157, ../assets/sass/partials/_main.scss */
 .loader {
   display: none;
   position: absolute;
@@ -7454,7 +7776,7 @@ TEXTAREA.animated-textarea {
   border-radius: 5px;
 }
 
-/* line 168, ../assets/sass/partials/_main.scss */
+/* line 169, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container {
   position: absolute;
   min-height: 85px;
@@ -7471,22 +7793,22 @@ TEXTAREA.animated-textarea {
   text-shadow: white 0px 1px 1px;
   padding: 7px;
 }
-/* line 178, ../assets/sass/partials/_main.scss */
+/* line 179, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container #pop-up-triangle {
   position: absolute;
   height: 10px;
   background: url(images/common/window-triangle-top.png) center center no-repeat;
 }
-/* line 185, ../assets/sass/partials/_main.scss */
+/* line 186, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container.popup-bottom #pop-up-triangle, #chlk-pop-up-container.popup-top #pop-up-triangle {
   left: 0;
   right: 0;
 }
-/* line 192, ../assets/sass/partials/_main.scss */
+/* line 193, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container.popup-bottom #pop-up-triangle {
   top: -10px;
 }
-/* line 198, ../assets/sass/partials/_main.scss */
+/* line 199, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container.popup-top #pop-up-triangle {
   bottom: -10px;
   -webkit-transform: rotate(180deg);
@@ -7495,12 +7817,12 @@ TEXTAREA.animated-textarea {
   -o-transform: rotate(180deg);
   transform: rotate(180deg);
 }
-/* line 205, ../assets/sass/partials/_main.scss */
+/* line 206, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container.popup-left #pop-up-triangle, #chlk-pop-up-container.popup-right #pop-up-triangle {
   width: 16px;
   top: 30px;
 }
-/* line 212, ../assets/sass/partials/_main.scss */
+/* line 213, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container.popup-left #pop-up-triangle {
   right: -13px;
   -webkit-transform: rotate(90deg);
@@ -7509,7 +7831,7 @@ TEXTAREA.animated-textarea {
   -o-transform: rotate(90deg);
   transform: rotate(90deg);
 }
-/* line 219, ../assets/sass/partials/_main.scss */
+/* line 220, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container.popup-right #pop-up-triangle {
   left: -13px;
   -webkit-transform: rotate(270deg);
@@ -7518,7 +7840,7 @@ TEXTAREA.animated-textarea {
   -o-transform: rotate(270deg);
   transform: rotate(270deg);
 }
-/* line 225, ../assets/sass/partials/_main.scss */
+/* line 226, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container h2 {
   text-align: center;
   font-size: 18px;
@@ -7532,16 +7854,16 @@ TEXTAREA.animated-textarea {
   width: 177px;
   text-shadow: 1px -1px 1px white;
 }
-/* line 240, ../assets/sass/partials/_main.scss */
+/* line 241, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container ul > LI {
   background: url(images/common/dialog-separator.png) bottom no-repeat;
   position: relative;
 }
-/* line 244, ../assets/sass/partials/_main.scss */
+/* line 245, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container ul > LI:hover {
   background: #f8f8f8;
 }
-/* line 248, ../assets/sass/partials/_main.scss */
+/* line 249, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container ul > LI > A, #chlk-pop-up-container ul > LI > SPAN {
   background-position: 13px 7px;
   background-repeat: no-repeat;
@@ -7559,7 +7881,7 @@ TEXTAREA.animated-textarea {
   -o-background-size: auto 36px;
   background-size: auto 36px;
 }
-/* line 262, ../assets/sass/partials/_main.scss */
+/* line 263, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container ul > LI > A P.title, #chlk-pop-up-container ul > LI > A P.item-title, #chlk-pop-up-container ul > LI > SPAN P.title, #chlk-pop-up-container ul > LI > SPAN P.item-title {
   font-size: 18px;
   color: #032633;
@@ -7570,7 +7892,7 @@ TEXTAREA.animated-textarea {
   text-align: left;
   padding-left: 5px;
 }
-/* line 273, ../assets/sass/partials/_main.scss */
+/* line 274, ../assets/sass/partials/_main.scss */
 #chlk-pop-up-container ul > LI > A P.under, #chlk-pop-up-container ul > LI > A P.classname-under, #chlk-pop-up-container ul > LI > SPAN P.under, #chlk-pop-up-container ul > LI > SPAN P.classname-under {
   font-size: 10px;
   color: #7c7c7c;
@@ -7579,21 +7901,21 @@ TEXTAREA.animated-textarea {
   padding-left: 5px;
 }
 
-/* line 288, ../assets/sass/partials/_main.scss */
+/* line 289, ../assets/sass/partials/_main.scss */
 .activity-model-wait .loader, .loadind .loader {
   display: block;
 }
-/* line 291, ../assets/sass/partials/_main.scss */
+/* line 292, ../assets/sass/partials/_main.scss */
 .activity-model-wait .loader .loader, .loadind .loader .loader {
   display: none;
 }
 
-/* line 297, ../assets/sass/partials/_main.scss */
+/* line 298, ../assets/sass/partials/_main.scss */
 .loader-container {
   position: relative;
 }
 
-/* line 301, ../assets/sass/partials/_main.scss */
+/* line 302, ../assets/sass/partials/_main.scss */
 .loading-page {
   background: url(images/loaders/horizontal.gif) center center no-repeat;
   position: absolute;
@@ -7602,12 +7924,12 @@ TEXTAREA.animated-textarea {
   left: 0;
   right: 0;
 }
-/* line 309, ../assets/sass/partials/_main.scss */
+/* line 310, ../assets/sass/partials/_main.scss */
 .loading-page > DIV {
   display: none;
 }
 
-/* line 314, ../assets/sass/partials/_main.scss */
+/* line 315, ../assets/sass/partials/_main.scss */
 .press-enter {
   padding-right: 12px;
   background: url(images/grading/enter.png) right center no-repeat;
@@ -7617,20 +7939,20 @@ TEXTAREA.animated-textarea {
   display: inline-block;
 }
 
-/* line 325, ../assets/sass/partials/_main.scss */
+/* line 326, ../assets/sass/partials/_main.scss */
 BODY .chzn-container-single .chzn-single {
   padding: 0 0 0 4px;
 }
-/* line 328, ../assets/sass/partials/_main.scss */
+/* line 329, ../assets/sass/partials/_main.scss */
 BODY .chzn-container-single .chzn-single SPAN {
   text-align: center;
 }
-/* line 333, ../assets/sass/partials/_main.scss */
+/* line 334, ../assets/sass/partials/_main.scss */
 BODY .chzn-container-single .chzn-results {
   margin: 0;
   padding: 0;
 }
-/* line 337, ../assets/sass/partials/_main.scss */
+/* line 338, ../assets/sass/partials/_main.scss */
 BODY .chzn-container-single .chzn-results LI {
   padding: 5px;
   overflow: hidden;
