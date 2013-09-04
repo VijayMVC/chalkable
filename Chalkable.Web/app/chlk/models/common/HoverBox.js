@@ -6,8 +6,6 @@ NAMESPACE('chlk.models.common', function () {
     /** @class chlk.models.common.HoverBox*/
     CLASS(
         'HoverBox', [
-            Number, 'title',
-
-            ArrayOf(chlk.models.common.HoverBoxItem), 'hover'
+            Number, 'title'
         ]);
 });
