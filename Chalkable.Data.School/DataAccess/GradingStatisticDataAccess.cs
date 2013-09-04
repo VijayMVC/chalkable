@@ -36,7 +36,7 @@ namespace Chalkable.Data.School.DataAccess
             }
             if (query.MarkingPeriodIds != null && query.MarkingPeriodIds.Count > 0)
             {
-                var mpidsStr = query.MarkingPeriodIds.Select(x => "'" + x.ToString() + "'").ToString();
+                var mpidsStr = query.MarkingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
                 sql.AppendFormat(" and [MarkingPeriodClass].[{0}] in ({1})", MarkingPeriodClass.MARKING_PERIOD_REF_FIELD, mpidsStr);
             }
             return new DbQuery (sql, conds);
@@ -64,7 +64,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             var dbQuery = BuildGradeStatisicDbQuery(sql, query);
             var conds = dbQuery.Parameters;
-            var personExistsingQueryTmp = string.Format("and exists(select * from [ClassPerson] where [{1}] = [Class].[{2}] [{0}] =@"
+            var personExistsingQueryTmp = string.Format(" and exists(select * from [ClassPerson] where [{1}] = [Class].[{2}] [{0}] =@"
                               , ClassPerson.PERSON_REF_FIELD, ClassPerson.CLASS_REF_FIELD, Class.ID_FIELD);
             personExistsingQueryTmp += "{3})";
             if (query.StudentId.HasValue)
@@ -151,15 +151,15 @@ namespace Chalkable.Data.School.DataAccess
                                        AVG(dbo.fnCalcClassGradeAvgPerMP(MarkingPeriodClass.Id)) as [Avg]
                                  from Course 
                                  join Class on Class.CourseRef = Course.Id
-                                 join MarkingPeriodClass on MarkingPeriodClass.ClassRef = Class.Id
-                                 group by Course.ChalkableDepartmentRef");
-            dbQuery.Sql.Append(" where Course.ChalkableDepartmentRef is not null");
+                                 join MarkingPeriodClass on MarkingPeriodClass.ClassRef = Class.Id ");
+            dbQuery.Sql.Append(" where Course.ChalkableDepartmentRef is not null ");
             if (gradeLevels != null && gradeLevels.Count > 0)
             {
                 var gradeLevelsStr = gradeLevels.Select(x => "'" + x.ToString() + "'").JoinString(",");
                 dbQuery.Sql.AppendFormat(" and Class.GradeLevelRef in ({0})", gradeLevelsStr);
             }
             dbQuery = BuildClassGradeStatisticQuery(dbQuery.Sql, query);
+            dbQuery.Sql.Append(" group by Course.ChalkableDepartmentRef");
             return ReadMany<DepartmentGradeAvg>(dbQuery);
         } 
 

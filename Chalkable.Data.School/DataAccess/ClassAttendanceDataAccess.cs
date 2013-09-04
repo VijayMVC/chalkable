@@ -148,28 +148,68 @@ namespace Chalkable.Data.School.DataAccess
             return Count(new DbQuery(b, conds));
         }
 
-        private string FN_GET_STUDENT_ABSENT_FROM_DAY = "fnGetStudentsAbsentFromDay({0}, {1})";
+        public IDictionary<Guid, DateTime> GetStudentAbsentFromDay(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelIds)
+        {
+            return  Read(PrepareGetStudentAbsentFromDayQuery(fromDate, toDate, gradeLevelIds), ReadStudentAbsentFromDay);
+        } 
+        public IDictionary<DateTime, int> GetStudentCountAbsentFromDay(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelIds)
+        {
+            var dbQuery = PrepareGetStudentAbsentFromDayQuery(fromDate, toDate, gradeLevelIds);
+            var innerSql = dbQuery.Sql.ToString();
+            dbQuery.Sql = new StringBuilder();
+            dbQuery.Sql.AppendFormat(@"select d.[{5}] as [{1}],
+	                                   case when x.[{1}] is null then 0 else Count(*) end as {2}
+                                       from [Date] d
+                                       left join ({0})x on d.[{5}] = x.[{1}]
+                                       where d.[{6}] = 1 and (d.[{5}] between @{3} and @{4})
+                                       group by d.[{5}], x.[{1}]", innerSql, DATE_RES_FIELD, 
+                                       STUDENT_COUNT_RES_FIELD, FROM_DATE_PARAM, TO_DATE_PARAM
+                                      , Date.DATE_TIME_FIELD, Date.IS_SCHOOL_DAY_FIELD);
+            return Read(dbQuery, ReadStudentCountAbsentFromDay);
+        }
 
-        public IDictionary<Guid, DateTime> GetStudentAbsentFromDay(DateTime fromDate, DateTime toDate)
+        private const string GRADE_LEVELS_IDS_PARAM = "gradeLevelsIds";
+        private const string FN_GET_STUDENT_ABSENT_FROM_DAY = "dbo.fnGetStudentsAbsentFromDay({0}, {1}, {2})";
+        private DbQuery PrepareGetStudentAbsentFromDayQuery(DateTime fromDate, DateTime toDate, IEnumerable<Guid> gradeLevelIds)
         {
             var dbQuery = new DbQuery();
-            dbQuery.Sql.Append("select * from ").AppendFormat(FN_GET_STUDENT_ABSENT_FROM_DAY, "@fromDate", "@toDate");
-            dbQuery.Parameters.Add("@fromDate", fromDate);
-            dbQuery.Parameters.Add("@toDate", toDate);
-            return  Read(dbQuery, ReadStudentAbsentFromDay);
-        } 
+            var glStr = gradeLevelIds != null ? gradeLevelIds.Select(x => x.ToString()).JoinString(",") : null;
+            dbQuery.Sql.Append("select * from ").AppendFormat(FN_GET_STUDENT_ABSENT_FROM_DAY, 
+                "@" + FROM_DATE_PARAM, "@" + TO_DATE_PARAM, "@" + GRADE_LEVELS_IDS_PARAM);
+            dbQuery.Parameters.Add(FROM_DATE_PARAM, fromDate);
+            dbQuery.Parameters.Add(TO_DATE_PARAM, toDate);
+            dbQuery.Parameters.Add(GRADE_LEVELS_IDS_PARAM, glStr);
+            return dbQuery;
+        }
 
+        private const string STUDENT_COUNT_RES_FIELD = "StudentCount";
+        private const string DATE_RES_FIELD = "Date";
+        private const string PERSON_ID_RES_FIELD = "PersonId";
+        private IDictionary<DateTime, int> ReadStudentCountAbsentFromDay(DbDataReader reader)
+        {
+            var res = new Dictionary<DateTime, int>();
+            while (reader.Read())
+            {
+                var studentCount = SqlTools.ReadInt32(reader, STUDENT_COUNT_RES_FIELD);
+                var date = SqlTools.ReadDateTime(reader, DATE_RES_FIELD);
+                res.Add(date, studentCount);
+            }
+            return res;
+        }
         private IDictionary<Guid, DateTime> ReadStudentAbsentFromDay(DbDataReader reader)
         {
                 var res = new Dictionary<Guid, DateTime>();
                 while (reader.Read())
                 {
-                    var personId = SqlTools.ReadGuid(reader, "PersonId");
-                    var date = SqlTools.ReadDateTime(reader, "Date");
+                    var personId = SqlTools.ReadGuid(reader, PERSON_ID_RES_FIELD);
+                    var date = SqlTools.ReadDateTime(reader, DATE_RES_FIELD);
                     res.Add(personId,date);
                 }
                 return res;    
-        } 
+        }
+
+        private const string FN_GET_STUDENT_ABSENT_FROM_PERIOD = "fnGetStudentAbentFromPeriod({0}, {1}, {3})";
+        //public IDictionary<> 
     }
 
     public class AttendanceTotalPerType
