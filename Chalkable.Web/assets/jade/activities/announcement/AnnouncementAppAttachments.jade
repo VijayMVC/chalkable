@@ -1,0 +1,17 @@
+attachments = self.getAnnouncementAttachments() || [];
+isAnnouncement = self.getAnnouncementTypeId() == chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf()
+if self.needButtons
+    #attach-file-area.announcement-item.attach-file-area
+        if !isAnnouncement
+            +ActionLink('announcement', 'attachApp')#add-application.simple-gray-button Attach App
+        button.simple-gray-button.file Attach File
+            +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
+each attachment, i in attachments
+    div(data-id=attachment.getId(), data-url="viewurl").announcement-item.attachment
+        if self.needDeleteButton
+            +ActionLink('announcement', 'deleteAttachment', attachment.getId().valueOf()).close-btn
+        +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + i)
+        .title
+            div=attachment.getName()
+
+
