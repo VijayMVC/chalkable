@@ -11,7 +11,7 @@ NAMESPACE('chlk.templates.common.footers', function () {
         'DeveloperFooter', EXTENDS(chlk.templates.JadeTemplate), [
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.apps.Application, 'currentApp',
+            chlk.models.id.AppId, 'currentAppId',
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.apps.Application), 'developerApps'

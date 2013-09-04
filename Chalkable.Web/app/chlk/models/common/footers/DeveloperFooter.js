@@ -6,12 +6,12 @@ NAMESPACE('chlk.models.common.footers', function () {
     /** @class chlk.models.common.footers.DeveloperFooter*/
     CLASS(
         'DeveloperFooter', [
-            chlk.models.apps.Application, 'currentApp',
+            chlk.models.id.AppId, 'currentAppId',
             ArrayOf(chlk.models.apps.Application), 'developerApps',
 
-            [[chlk.models.apps.Application,  ArrayOf(chlk.models.apps.Application)]],
-            function $(app, devApps){
-                this.setCurrentApp(app);
+            [[chlk.models.id.AppId,  ArrayOf(chlk.models.apps.Application)]],
+            function $(currentAppId, devApps){
+                this.setCurrentAppId(currentAppId);
                 this.setDeveloperApps(devApps);
             }
         ]);

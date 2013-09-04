@@ -35,7 +35,7 @@ NAMESPACE('chlk.controllers', function (){
             [[ArrayOf(chlk.models.apps.Application)]],
             VOID, function refresh_(apps) {
                 var footerTpl = new chlk.templates.common.footers.DeveloperFooter();
-                var model = new chlk.models.common.footers.DeveloperFooter(this.appsService.getCurrentApp(), apps);
+                var model = new chlk.models.common.footers.DeveloperFooter(this.appsService.getCurrentAppId(), apps);
                 footerTpl.assign(model);
 
                 new ria.dom.Dom()
