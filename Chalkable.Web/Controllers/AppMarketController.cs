@@ -26,6 +26,8 @@ namespace Chalkable.Web.Controllers
             return Json(apps.Transform(BaseApplicationViewData.Create));
         }
 
+
+        //TODO: add paginated list
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult ListInstalled(Guid personId)
         {
