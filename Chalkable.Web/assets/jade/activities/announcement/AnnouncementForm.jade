@@ -1,12 +1,10 @@
 .announcement-form.loader-container
-    -topData = self.getTopData();
-    -announcement = self.getAnnouncement();
-    -topItems = topData.getTopItems();
-    -classId = announcement.getClassId() ? announcement.getClassId().valueOf() : null;
-    -typeId = self.getSelectedTypeId();
-    -attachments=[];
-    -announcement.getAnnouncementAttachments().forEach(function(attachment){attachments.push(attachment.__PROTECTED)});
-    -classes=self.getClassInfo() ? self.getClassInfo().getTypesByClass() : [];
+    topData = self.getTopData();
+    announcement = self.getAnnouncement();
+    topItems = topData.getTopItems();
+    classId = announcement.getClassId() ? announcement.getClassId().valueOf() : null;
+    typeId = self.getSelectedTypeId();
+    classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : [];
     .loader
     +ActionForm('announcement', 'save')(onlySubmitValidate=true)
         +LeftRightToolbar(topItems, chlk.templates.classes.TopBar)(

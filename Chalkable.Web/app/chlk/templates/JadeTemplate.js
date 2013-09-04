@@ -29,6 +29,14 @@ NAMESPACE('chlk.templates', function () {
                     case 3: return '3rd';
                     default: return number + 'th';
                 }
+            },
+
+            [[String]],
+            String, function getRoleController(role){
+                var controller = role.toLowerCase() + 's';
+                if (controller.indexOf('admin') > -1)
+                    controller = 'admins';
+                return controller;
             }
         ])
 });

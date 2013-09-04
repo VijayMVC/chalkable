@@ -7,6 +7,8 @@ REQUIRE('chlk.models.calendar.announcement.Week');
 REQUIRE('chlk.models.calendar.announcement.WeekItem');
 REQUIRE('chlk.models.calendar.announcement.CalendarDayItem');
 REQUIRE('chlk.models.calendar.TeacherSettingsCalendarDay');
+REQUIRE('chlk.models.calendar.announcement.DayItem');
+REQUIRE('chlk.models.calendar.announcement.Day');
 
 REQUIRE('chlk.models.id.ClassId');
 
@@ -76,9 +78,28 @@ NAMESPACE('chlk.services', function () {
                     date: date_ && date_.toString('mm-dd-yy')
                 }).then(function(model){
                     this.getContext().getSession().set('dayCalendarData', model);
-                    return model;
+                    return this.prepareDayData(model, date_);
                 }.bind(this));
             },
+
+            [[chlk.models.common.ChlkDate]],
+            ria.async.Future, function getAdminDay(date_) {
+                return this.get('AnnouncementCalendar/AdminDay.json', ArrayOf(chlk.models.calendar.announcement.CalendarDay), {
+                    date: date_ && date_.toString('mm-dd-yy')
+                });
+            },
+
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
+            ria.async.Future, function getWeekInfo(classId_, date_) {
+                return this.get('AnnouncementCalendar/Week.json', ArrayOf(chlk.models.calendar.announcement.WeekItem), {
+                    classId: classId_ && classId_.valueOf(),
+                    date: date_ && date_.toString('mm-dd-yy')
+                }).then(function(data){
+                    return this.prepareWeekData(data, date_);
+                }.bind(this));
+            },
+
+            //PREPARING INFO
 
             [[ArrayOf(chlk.models.calendar.announcement.WeekItem), chlk.models.common.ChlkDate]],
             ArrayOf(chlk.models.calendar.announcement.WeekItem), function prepareWeekData(data, date_){
@@ -162,21 +183,64 @@ NAMESPACE('chlk.services', function () {
                 return res;
             },
 
-            [[chlk.models.common.ChlkDate]],
-            ria.async.Future, function getAdminDay(date_) {
-                return this.get('AnnouncementCalendar/AdminDay.json', ArrayOf(chlk.models.calendar.announcement.CalendarDay), {
-                    date: date_ && date_.toString('mm-dd-yy')
+            [[ArrayOf(chlk.models.calendar.announcement.DayItem), chlk.models.common.ChlkDate]],
+            chlk.models.calendar.announcement.Day, function prepareDayData(days, date_){
+                var markingPeriod = this.getContext().getSession().get('markingPeriod');
+                var today = new chlk.models.common.ChlkDate(new Date());
+                var date = date_ || today;
+                var dayNumber = date.getDate().getDay(), sunday = date, saturday = date;
+                if(dayNumber){
+                    sunday = date.add(chlk.models.common.ChlkDateEnum.DAY, -dayNumber);
+                }
+                if(dayNumber !=6)
+                    saturday = sunday.add(chlk.models.common.ChlkDateEnum.DAY, 6);
+                var title = sunday.format('MM d - ');
+                title = title + (sunday.format('M') == saturday.format('M') ? saturday.format('d') : saturday.format('M d'));
+                var prevDate = sunday.add(chlk.models.common.ChlkDateEnum.DAY, -1);
+                var nextDate = saturday.add(chlk.models.common.ChlkDateEnum.DAY, 1);
+                var max = 0, index = 0, len, item;
+                if(days.length == 6){
+                    sunday = new chlk.models.calendar.announcement.DayItem();
+                    var sunDate = days[0].getDate().add(chlk.models.common.ChlkDateEnum.DAY, -1);
+                    sunday.setDate(sunDate);
+                    sunday.setDay(sunDate.getDate().getDate());
+                    sunday.setCalendarDayItems([]);
+                    days.unshift(sunday);
+                }
+                days.forEach(function(day, i){
+                    day.setTodayClassName(today.isSameDay(day.getDate()) ? 'today' : '');
+                    if(!day.getCalendarDayItems())
+                        day.setCalendarDayItems([]);
+                    len = day.getCalendarDayItems().length;
+                    if(max < len){
+                        max = len;
+                        index = i;
+                    }
                 });
-            },
-
-            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
-            ria.async.Future, function getWeekInfo(classId_, date_) {
-                return this.get('AnnouncementCalendar/Week.json', ArrayOf(chlk.models.calendar.announcement.WeekItem), {
-                    classId: classId_ && classId_.valueOf(),
-                    date: date_ && date_.toString('mm-dd-yy')
-                }).then(function(data){
-                    return this.prepareWeekData(data, date_);
-                }.bind(this));
+                days.forEach(function(day){
+                    len = day.getCalendarDayItems().length;
+                    if(max > len){
+                        for(var i = len; i < max; i++){
+                            item = new chlk.models.calendar.announcement.CalendarDayItem();
+                            item.setPeriod(days[index].getCalendarDayItems()[i].getPeriod());
+                            item.setAnnouncementClassPeriods([]);
+                            day.getCalendarDayItems().push(item);
+                        }
+                    }
+                });
+                var model = new chlk.models.calendar.announcement.Day();
+                model.setCurrentTitle(title);
+                model.setCurrentDate(date);
+                var startDate = markingPeriod.getStartDate();
+                var endDate = markingPeriod.getEndDate();
+                if(prevDate.format('yy-mm-dd') >= startDate.format('yy-mm-dd')){
+                    model.setPrevDate(prevDate);
+                }
+                if(nextDate.format('yy-mm-dd') <= endDate.format('yy-mm-dd')){
+                    model.setNextDate(nextDate);
+                }
+                model.setItems(days);
+                return model;
             }
         ])
 });

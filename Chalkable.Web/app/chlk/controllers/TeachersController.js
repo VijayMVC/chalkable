@@ -47,6 +47,12 @@ NAMESPACE('chlk.controllers', function (){
                         return this.getContext().getSession().get('userModel');
                     }.bind(this));
                 return this.UpdateView(chlk.activities.profile.InfoViewPage, result);
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
+            function scheduleAction(personId, date_){
+                //return BASE(personId, chlk.models.common.RoleNamesEnum.TEACHER);
+                return this.scheduleByRole(personId, date_, chlk.models.common.RoleNamesEnum.STUDENT.valueOf());
             }
         ])
 });

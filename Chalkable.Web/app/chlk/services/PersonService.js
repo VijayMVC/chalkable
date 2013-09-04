@@ -39,6 +39,13 @@ NAMESPACE('chlk.services', function () {
                     filter: filter_
                 })
                 .then(function(model){return model.getItems();});
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
+            ria.async.Future, function getSchedule(personId) {
+                return this.get('Person/Schedule.json', chlk.models.people.Schedule, {
+                    personId: personId.valueOf()
+                });
             }
         ])
 });

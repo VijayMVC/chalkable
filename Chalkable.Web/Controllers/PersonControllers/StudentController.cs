@@ -85,6 +85,17 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(res, 6);
         }
 
+        //ToDo This is only info copy 
+        [RequireRequestValue("personId")]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_INFO, true, CallType.Get, new[] { AppPermissionType.User })]
+        public ActionResult Schedule(Guid personId)
+        {
+            var res = (StudentInfoViewData)GetInfo(personId, StudentInfoViewData.Create);
+            var studentParents = SchoolLocator.StudentParentService.GetParents(personId);
+            res.Parents = StudentParentViewData.Create(studentParents);
+            return Json(res, 6);
+        }
+
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_GET_STUDENTS, true, CallType.Get, new[] { AppPermissionType.User, })]
         public ActionResult GetStudents(string filter, bool? myStudentsOnly, int? start, int? count, Guid? classId, bool? byLastName)
         {
@@ -101,7 +112,8 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_GRADING_STAT, true, CallType.Get, new[] {AppPermissionType.User, AppPermissionType.Grade})]
         public ActionResult Grading(Guid personId, Guid markingPeriodId)
         {
-            if (!BaseSecurity.IsAdminEditorOrCurrentPerson(personId, Context))
+
+            if (!BaseSecurity.IsAdminTeacherOrExactStudent(MasterLocator.UserService.GetById(personId), Context))
                 throw new ChalkableSecurityException(ChlkResources.ERR_VIEW_INFO_INVALID_RIGHTS);
             var student = SchoolLocator.PersonService.GetPerson(personId);
             var gardingStats = SchoolLocator.GradingStatisticService.GetFullGradingStats(markingPeriodId, student.Id);

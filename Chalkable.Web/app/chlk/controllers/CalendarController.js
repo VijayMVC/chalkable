@@ -68,68 +68,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.common.ChlkDate]],
         function dayAction(date_){
-            var markingPeriod = this.getContext().getSession().get('markingPeriod');
-            var today = new chlk.models.common.ChlkDate(new Date());
-            var date = date_ || today;
-            var dayNumber = date.getDate().getDay(), sunday = date, saturday = date;
-            if(dayNumber){
-                sunday = date.add(chlk.models.common.ChlkDateEnum.DAY, -dayNumber);
-            }
-            if(dayNumber !=6)
-                saturday = sunday.add(chlk.models.common.ChlkDateEnum.DAY, 6);
-            var title = sunday.format('MM d - ');
-            title = title + (sunday.format('M') == saturday.format('M') ? saturday.format('d') : saturday.format('M d'));
-            var prevDate = sunday.add(chlk.models.common.ChlkDateEnum.DAY, -1);
-            var nextDate = saturday.add(chlk.models.common.ChlkDateEnum.DAY, 1);
             var result = this.calendarService
                 .getDayInfo(date_)
-                .attach(this.validateResponse_())
-                .then(function(days){
-                    var max = 0, index = 0, len, item;
-                    if(days.length == 6){
-                        var sunday = new chlk.models.calendar.announcement.DayItem();
-                        var sunDate = days[0].getDate().add(chlk.models.common.ChlkDateEnum.DAY, -1);
-                        sunday.setDate(sunDate);
-                        sunday.setDay(sunDate.getDate().getDate());
-                        sunday.setCalendarDayItems([]);
-                        days.unshift(sunday);
-                    }
-                    days.forEach(function(day, i){
-                        day.setTodayClassName(today.isSameDay(day.getDate()) ? 'today' : '');
-                        if(!day.getCalendarDayItems())
-                            day.setCalendarDayItems([]);
-                        len = day.getCalendarDayItems().length;
-                        if(max < len){
-                            max = len;
-                            index = i;
-                        }
-                    });
-                    days.forEach(function(day){
-                        len = day.getCalendarDayItems().length;
-                        if(max > len){
-                            for(var i = len; i < max; i++){
-                                item = new chlk.models.calendar.announcement.CalendarDayItem();
-                                item.setPeriod(days[index].getCalendarDayItems()[i].getPeriod());
-                                item.setAnnouncementClassPeriods([]);
-                                day.getCalendarDayItems().push(item);
-                            }
-                        }
-                    });
-                    var model = new chlk.models.calendar.announcement.Day();
-                    model.setCurrentTitle(title);
-                    model.setCurrentDate(date);
-                    var startDate = markingPeriod.getStartDate();
-                    var endDate = markingPeriod.getEndDate();
-                    if(prevDate.format('yy-mm-dd') >= startDate.format('yy-mm-dd')){
-                        model.setPrevDate(prevDate);
-                    }
-                    if(nextDate.format('yy-mm-dd') <= endDate.format('yy-mm-dd')){
-                        model.setNextDate(nextDate);
-                    }
-                    model.setItems(days);
-                    return new ria.async.DeferredData(model);
-                }.bind(this));
-
+                .attach(this.validateResponse_());
             return this.PushView(chlk.activities.calendar.announcement.DayPage, result);
         },
 

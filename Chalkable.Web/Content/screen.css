@@ -5508,17 +5508,40 @@ BODY DIV.page #content > DIV.calendar #main-top, BODY DIV.page #content > DIV.ca
 BODY DIV.page #content > DIV.calendar #main-wrapper {
   background-image: url(images/calendar/paper-bg.jpg) !important;
 }
-/* line 35, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 37, ../assets/sass/partials/main/calendar/_calendar.scss */
+BODY DIV.page #content > DIV.profile #main-wrapper #main DIV.chlk-calendar DIV.header, BODY DIV.page #content > DIV.settings #main-wrapper #main DIV.chlk-calendar DIV.header {
+  background-size: 660px 100%;
+  background: url(images/calendar/toolbar-bg-yellow.png) 0 0 no-repeat;
+}
+/* line 41, ../assets/sass/partials/main/calendar/_calendar.scss */
+BODY DIV.page #content > DIV.profile #main-wrapper #main DIV.chlk-calendar DIV.header .prev-month, BODY DIV.page #content > DIV.settings #main-wrapper #main DIV.chlk-calendar DIV.header .prev-month {
+  background-image: url(images/calendar/prev-month-yellow.png);
+}
+/* line 45, ../assets/sass/partials/main/calendar/_calendar.scss */
+BODY DIV.page #content > DIV.profile #main-wrapper #main DIV.chlk-calendar DIV.header .next-month, BODY DIV.page #content > DIV.profile #main-wrapper #main DIV.chlk-calendar DIV.header .prev-month, BODY DIV.page #content > DIV.settings #main-wrapper #main DIV.chlk-calendar DIV.header .next-month, BODY DIV.page #content > DIV.settings #main-wrapper #main DIV.chlk-calendar DIV.header .prev-month {
+  width: 17px;
+  height: 17px;
+}
+/* line 50, ../assets/sass/partials/main/calendar/_calendar.scss */
+BODY DIV.page #content > DIV.profile #main-wrapper #main DIV.chlk-calendar DIV.header .next-month, BODY DIV.page #content > DIV.settings #main-wrapper #main DIV.chlk-calendar DIV.header .next-month {
+  background-image: url(images/calendar/next-month-yellow.png);
+}
+/* line 58, ../assets/sass/partials/main/calendar/_calendar.scss */
+BODY DIV.page #content > DIV.profile #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons > DIV LABEL.current-month, BODY DIV.page #content > DIV.settings #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons > DIV LABEL.current-month {
+  color: #957633;
+  text-shadow: 1px 1px 1px #dfcea9;
+}
+/* line 74, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar {
   border: none;
 }
-/* line 39, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 78, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar.attendance .calendar-today-container, BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar.discipline .calendar-today-container, BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar.profile-calendar .calendar-today-container {
   position: absolute;
   top: 42px;
   left: 95px;
 }
-/* line 46, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 85, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header {
   background: url(images/calendar/toolbar-bg.png) 0 0 no-repeat;
   height: 81px;
@@ -5529,50 +5552,50 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header {
   -o-background-size: 660px auto;
   background-size: 660px auto;
 }
-/* line 53, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 92, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container {
   padding-top: 31px;
   text-align: center;
 }
-/* line 57, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 96, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container {
   display: inline-block;
 }
-/* line 60, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 99, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons {
   display: table;
   height: 50px;
 }
-/* line 64, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 103, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons > DIV {
   display: table-cell;
   text-align: center;
   vertical-align: middle;
 }
-/* line 69, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 108, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons > DIV.calendar-today-container {
   width: 90px;
 }
-/* line 71, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 110, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons > DIV.calendar-today-container.admin {
   width: 143px;
   position: relative;
   right: 34px;
 }
-/* line 78, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 117, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons > DIV.prev-month-container, BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons > DIV.next-month-container {
   width: 30px;
 }
-/* line 82, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 121, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons > DIV.calendar-day-container {
   width: 45px;
   text-align: right;
 }
-/* line 87, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 126, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons > DIV.calendar-week-container, BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons > DIV.calendar-month-container {
   width: 29px;
 }
-/* line 92, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 131, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons LABEL.current-month {
   color: #0c4358;
   text-shadow: 1px 1px 1px #87B7C6;
@@ -5582,7 +5605,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .h
   display: block;
   height: 28px;
 }
-/* line 104, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 143, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-day {
   background: url(images/calendar/days-button.png) 0 0 no-repeat;
   height: 28px;
@@ -5591,60 +5614,60 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .h
   display: block;
   float: right;
 }
-/* line 112, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 151, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-day:hover {
   background-position: -90px 0;
 }
-/* line 116, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 155, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-day:active, BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-day.pressed {
   background-position: -180px 0;
 }
-/* line 120, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 159, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-day SPAN.tooltip {
   background: url(images/calendar/day-pop-up.png) 0 0 no-repeat;
   left: -20px;
 }
-/* line 126, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 165, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-week {
   display: block;
   background: url(images/calendar/days-button.png) -30px 0 no-repeat;
   cursor: pointer;
   width: 29px;
 }
-/* line 132, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 171, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-week:hover {
   background-position: -120px 0;
 }
-/* line 136, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 175, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-week:active, BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-week.pressed {
   background-position: -210px 0;
 }
-/* line 140, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 179, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-week SPAN.tooltip {
   background: url(images/calendar/week-pop-up.png) 0 0 no-repeat;
   left: -6px;
 }
-/* line 146, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 185, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-month {
   display: block;
   background: url(images/calendar/days-button.png) -59px 0 no-repeat;
   cursor: pointer;
   width: 31px;
 }
-/* line 152, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 191, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-month:hover {
   background-position: -149px 0;
 }
-/* line 156, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 195, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-month:active, BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-month.pressed {
   background-position: -239px 0;
 }
-/* line 160, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 199, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-month SPAN.tooltip {
   background: url(images/calendar/month-pop-up.png) 0 0 no-repeat;
   left: 10px;
 }
-/* line 166, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 205, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-today {
   background: url(images/calendar/today-button3.png) 0 0 no-repeat;
   width: 63px;
@@ -5653,32 +5676,32 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .h
   cursor: pointer;
   display: inline-block;
 }
-/* line 175, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 214, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-today:hover {
   background-position: -63px 0;
 }
-/* line 179, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 218, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-today:active {
   background-position: -126px 0;
 }
-/* line 184, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 223, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.header .header-container .buttons-container .buttons .calendar-today.week {
   left: 127px;
 }
-/* line 195, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 234, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar .calendar-day,
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar .calendar-week,
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar .calendar-month {
   position: relative;
   height: 27px;
 }
-/* line 199, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 238, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar .calendar-day:hover SPAN.tooltip,
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar .calendar-week:hover SPAN.tooltip,
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar .calendar-month:hover SPAN.tooltip {
   display: block;
 }
-/* line 204, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 243, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar .calendar-day SPAN.tooltip,
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar .calendar-week SPAN.tooltip,
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar .calendar-month SPAN.tooltip {
@@ -5689,11 +5712,11 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar .calendar-mon
   display: none;
   border: none;
 }
-/* line 214, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 253, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar .prev-month {
   background-image: url(images/calendar/prev-month.png);
 }
-/* line 219, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 258, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar .prev-month,
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar .next-month {
   height: 16px;
@@ -5701,18 +5724,18 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar .next-month {
   cursor: pointer;
   display: inline-block;
 }
-/* line 226, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 265, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar .next-month {
   background-image: url(images/calendar/next-month.png);
 }
-/* line 230, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 269, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.day-names {
   display: table;
   border-right: 1px solid #114d64;
   border-left: 1px solid #114d64;
   width: 658px;
 }
-/* line 237, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 276, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.day-names.day {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e9e9e9), color-stop(100%, #d9d9d9));
   background: -webkit-linear-gradient(top, #e9e9e9, #d9d9d9);
@@ -5720,17 +5743,17 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.day-names
   background: -o-linear-gradient(top, #e9e9e9, #d9d9d9);
   background: linear-gradient(top, #e9e9e9, #d9d9d9);
 }
-/* line 240, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 279, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.day-names.day > DIV {
   border-bottom: 1px solid #a9a9a9;
   border-top: 1px solid white;
   width: 92px !important;
 }
-/* line 247, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 286, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.day-names.day > P {
   margin: 0;
 }
-/* line 252, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 291, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.day-names > DIV {
   background: url(images/calendar/item-bg.png) 0 top repeat;
   height: 28px;
@@ -5751,13 +5774,13 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.day-names
   padding-left: 1px;
   padding-right: 1px;
 }
-/* line 273, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 312, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.day-names > DIV.week {
   background: url(images/common/week-header-bg.png) repeat-x;
   padding-top: 6px;
   height: 34px;
 }
-/* line 279, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 318, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.day-names > DIV.day {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e9e9e9), color-stop(100%, #d9d9d9));
   background: -webkit-linear-gradient(top, #e9e9e9, #d9d9d9);
@@ -5767,7 +5790,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.day-names
   border-left: none;
   border-right: none;
 }
-/* line 284, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 323, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.day-names > DIV.day.today {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f5f5f5), color-stop(100%, #e5e5e5));
   background: -webkit-linear-gradient(top, #f5f5f5, #e5e5e5);
@@ -5775,18 +5798,18 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.day-names
   background: -o-linear-gradient(top, #f5f5f5, #e5e5e5);
   background: linear-gradient(top, #f5f5f5, #e5e5e5);
 }
-/* line 289, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 328, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.day-names > DIV.today {
   color: #7bb7d5;
 }
-/* line 295, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 334, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.tb-announcements {
   display: table;
   border-right: 1px solid #114d64;
   border-left: 1px solid #114d64;
   width: 658px;
 }
-/* line 301, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 340, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.tb-announcements > DIV {
   background-color: #dcdcdc;
   height: 26px;
@@ -5798,7 +5821,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.tb-announ
   border-top: 1px solid #ffffff;
   border-bottom: 1px solid #cbcbcb;
 }
-/* line 312, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 351, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.tb-announcements > DIV > .bar-item {
   display: block;
   height: 24px;
@@ -5807,7 +5830,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.tb-announ
   cursor: pointer;
   background: url(images/calendar/tb-announcements-icon.png) no-repeat;
 }
-/* line 323, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 362, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items {
   border: 1px solid #114d64;
   border-top: none;
@@ -5816,12 +5839,12 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items {
   width: 658px;
   text-shadow: white 0px 1px 1px;
 }
-/* line 331, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 370, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items > DIV, BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items > A {
   display: inline-block;
   vertical-align: top;
 }
-/* line 336, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 375, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item {
   cursor: pointer;
   text-decoration: none;
@@ -5834,38 +5857,38 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   width: 92px;
   height: 93px;
 }
-/* line 353, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 392, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.not-current-month > DIV > H2 {
   color: #ccc !important;
 }
-/* line 357, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 396, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.not-current-month > DIV * {
   color: #999 !important;
 }
-/* line 363, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 402, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.today {
   background-position: 0 bottom;
 }
-/* line 366, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 405, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.today > DIV > H2 {
   color: #3c95c3 !important;
 }
-/* line 370, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 409, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.today > DIV * {
   color: #3c95c3 !important;
 }
-/* line 384, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 423, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item > DIV {
   width: 92px;
   height: 93px;
   position: relative;
   overflow: hidden;
 }
-/* line 391, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 430, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item > DIV * {
   color: #333;
 }
-/* line 395, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 434, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item > DIV > H2 {
   position: absolute;
   top: 5px;
@@ -5873,19 +5896,19 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   color: #666;
   font-size: 16px;
 }
-/* line 403, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 442, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item > DIV > DIV.space {
   height: 9px;
 }
-/* line 407, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 446, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item > DIV > UL.day-announcements {
   padding: 0px 3px 5px 3px;
 }
-/* line 410, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 449, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item > DIV > UL.day-announcements.no-admin {
   background: url(images/calendar/month-day-separator.png) bottom no-repeat;
 }
-/* line 414, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 453, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item > DIV > UL.day-announcements > LI.items {
   padding-left: 11px;
   height: 11px;
@@ -5894,23 +5917,23 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-/* line 424, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 463, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item > DIV > UL.day-items {
   padding: 0px 3px;
 }
-/* line 428, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 467, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item > DIV > UL {
   margin: 0;
   display: block;
 }
-/* line 433, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 472, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item > DIV > UL > LI {
   font-size: 11px;
   padding: 0;
   margin: 0 3px 0 0;
   letter-spacing: -1px;
 }
-/* line 442, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 481, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day {
   display: table-cell;
   overflow: visible;
@@ -5921,7 +5944,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   background: -o-linear-gradient(top, #f4f4f4, #e5e5e5);
   background: linear-gradient(top, #f4f4f4, #e5e5e5);
 }
-/* line 444, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 483, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day.day {
   display: table-cell;
   border: none;
@@ -5931,7 +5954,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   font-family: Arial;
   font-weight: bold;
 }
-/* line 454, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 493, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day.day.today .period-item {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #eeeeee), color-stop(100%, #e5e5e5));
   background: -webkit-linear-gradient(top, #eeeeee, #e5e5e5);
@@ -5939,7 +5962,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   background: -o-linear-gradient(top, #eeeeee, #e5e5e5);
   background: linear-gradient(top, #eeeeee, #e5e5e5);
 }
-/* line 459, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 498, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day.day .period-item {
   border-bottom: 1px solid #a9a9a9;
   height: 50px;
@@ -5950,11 +5973,11 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   background: -o-linear-gradient(top, #e2e2e2, #d9d9d9);
   background: linear-gradient(top, #e2e2e2, #d9d9d9);
 }
-/* line 466, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 505, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day.day .period-item > DIV.period-info {
   top: 17px;
 }
-/* line 470, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 509, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day.day .period-item > SPAN.time {
   font-size: 8pt;
   color: #aaa;
@@ -5962,26 +5985,26 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   position: absolute;
   left: 7px;
 }
-/* line 478, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 517, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day.day .period-item > LI {
   padding-top: 16px;
   position: relative;
 }
-/* line 482, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 521, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day.day .period-item > LI > DIV {
   position: absolute;
   display: inline-block;
   overflow: hidden;
   background: transparent;
 }
-/* line 488, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 527, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day.day .period-item > LI > DIV.p-container {
   top: 0;
   right: 0;
   width: 63px;
   padding-right: 3px;
 }
-/* line 494, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 533, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day.day .period-item > LI > DIV.p-container P.title {
   color: black !important;
   text-shadow: white 0px 1px 1px;
@@ -5992,7 +6015,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   vertical-align: middle;
   height: 48px;
 }
-/* line 504, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 543, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day.day .period-item > LI > DIV.p-container P.title SPAN {
   word-wrap: break-word;
   width: 62px;
@@ -6001,19 +6024,19 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   overflow: hidden;
   text-overflow: ellipsis;
 }
-/* line 515, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 554, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day.day .period-item > LI > DIV.course-icon {
   width: 30px;
   height: 30px;
   left: 0;
   top: 5px;
 }
-/* line 521, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 560, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day.day .period-item > LI > DIV.course-icon IMG {
   width: 24px;
   margin: 7px 0 0 4px;
 }
-/* line 536, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 575, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day.week.today {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #eaeaea), color-stop(100%, #e5e5e5));
   background: -webkit-linear-gradient(top, #eaeaea, #e5e5e5);
@@ -6021,22 +6044,22 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   background: -o-linear-gradient(top, #eaeaea, #e5e5e5);
   background: linear-gradient(top, #eaeaea, #e5e5e5);
 }
-/* line 540, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 579, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day > H2.number {
   height: 20px;
 }
-/* line 544, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 583, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day > DIV {
   min-height: 450px;
 }
-/* line 548, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 587, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day .period-item {
   padding-top: 3px;
   height: 61px;
   position: relative;
   display: block;
 }
-/* line 554, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 593, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day .period-item > DIV.period-info {
   position: absolute;
   left: -10px;
@@ -6050,7 +6073,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   text-align: center;
   padding-top: 1px;
 }
-/* line 570, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 609, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day .period-item > LI > DIV {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -6064,20 +6087,20 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   position: relative;
   text-shadow: #415a67 1px 1px 1px;
 }
-/* line 579, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 618, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day .period-item > LI > DIV P {
   display: block;
   height: 15px;
   white-space: nowrap;
 }
-/* line 585, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 624, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day .period-item > LI > DIV P.title {
   color: white !important;
   text-align: center;
   font-family: Arial;
   font-size: 8.67px;
 }
-/* line 592, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 631, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day .period-item > LI > DIV P.typename {
   color: white !important;
   text-align: center;
@@ -6085,52 +6108,52 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   font-weight: bold;
   font-size: 12px;
 }
-/* line 600, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 639, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day .period-item > LI > DIV > DIV {
   display: inline-block;
   position: absolute;
 }
-/* line 604, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 643, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day .period-item > LI > DIV > DIV.course-icon {
   width: 32px;
   height: 30px;
   overflow: hidden;
   display: inline-block;
 }
-/* line 610, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 649, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day .period-item > LI > DIV > DIV.course-icon IMG {
   width: 26px;
   margin: 4px 0 0 6px;
 }
-/* line 616, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 655, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day .period-item > LI > DIV > DIV.text-container {
   overflow: hidden;
   right: 9px;
   top: 5px;
   width: 48px;
 }
-/* line 626, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 665, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day .period-item .title {
   color: #009;
   font-size: 14px;
 }
-/* line 631, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 670, ../assets/sass/partials/main/calendar/_calendar.scss */
 BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .item.week-day .period-item .more {
   color: #000;
   font-size: 12px;
 }
 
-/* line 648, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 687, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup {
   width: 177px;
   margin: 0 -7px;
 }
-/* line 652, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 691, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .items-list {
   position: relative;
   top: 7px;
 }
-/* line 657, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 696, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup > DIV.class-name {
   font-size: 18px;
   color: #959595;
@@ -6139,7 +6162,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   font-style: italic;
   padding-bottom: 8px;
 }
-/* line 666, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 705, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup H3.day-day {
   text-align: center;
   height: 40px;
@@ -6147,7 +6170,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   display: table-cell;
   width: 177px;
 }
-/* line 673, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 712, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup H3.day-day > A {
   cursor: pointer;
   text-decoration: none !important;
@@ -6157,7 +6180,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   font-style: normal !important;
   text-shadow: 1px -1px 1px white;
 }
-/* line 682, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 721, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup H3.day-day > A:hover {
   color: #0c4358;
   -webkit-transition-property: all;
@@ -6169,11 +6192,11 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   -o-transition-duration: 0.5s;
   transition-duration: 0.5s;
 }
-/* line 690, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 729, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup > DIV.info, .calendar-popup > DIV.class-name {
   background: url(images/common/dialog-separator.png) bottom no-repeat;
 }
-/* line 694, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 733, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info {
   font-weight: normal;
   background: none;
@@ -6182,23 +6205,23 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   padding: 5px 5px 15px 5px;
   position: relative;
 }
-/* line 700, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 739, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info > P.up {
   font-size: 12px;
 }
-/* line 703, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 742, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info > P.down {
   font-size: 10px;
 }
-/* line 708, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 747, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info.month {
   cursor: pointer;
 }
-/* line 711, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 750, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info.month:hover {
   background: url(images/calendar/popup-select-triangle.png) 167px center no-repeat, #f8f8f8;
 }
-/* line 716, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 755, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info H2.student-day, .calendar-popup .info H3.day-day {
   text-align: center;
   background: url(images/common/dialog-separator.png) bottom no-repeat;
@@ -6207,7 +6230,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   display: table-cell;
   width: 177px;
 }
-/* line 724, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 763, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info H2.student-day > A, .calendar-popup .info H3.day-day > A {
   cursor: pointer;
   text-decoration: none;
@@ -6217,7 +6240,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   font-style: normal;
   text-shadow: 1px -1px 1px white;
 }
-/* line 733, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 772, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info H2.student-day > A:hover, .calendar-popup .info H3.day-day > A:hover {
   color: #0c4358;
   -webkit-transition-property: all;
@@ -6229,18 +6252,18 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   -o-transition-duration: 0.5s;
   transition-duration: 0.5s;
 }
-/* line 744, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 783, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info > DIV > UL > LI {
   background: url(images/common/dialog-separator.png) bottom no-repeat;
   position: relative;
   padding: 6px;
   height: 44px;
 }
-/* line 750, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 789, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info > DIV > UL > LI > DIV {
   text-align: center;
 }
-/* line 754, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 793, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info > DIV > UL > LI > DIV > .img-box {
   padding: 0px 5px;
   position: absolute;
@@ -6248,7 +6271,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   max-width: 36px;
   max-height: 44px;
 }
-/* line 763, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 802, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info > DIV > UL > LI > DIV > .img-box A IMG {
   float: left;
   display: inline-block;
@@ -6256,19 +6279,19 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   -moz-box-shadow: 0 1px 1px 0px #989897;
   box-shadow: 0 1px 1px 0px #989897;
 }
-/* line 771, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 810, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info > DIV > UL > LI > DIV > .title-holder {
   display: inline-block;
   position: relative;
 }
-/* line 775, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 814, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info > DIV > UL > LI > DIV > .title-holder > P.title {
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-/* line 781, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 820, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info > DIV > UL > LI > DIV > .title-holder > P.title > A {
   text-decoration: none !important;
   font-size: 16px;
@@ -6277,7 +6300,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   font-style: normal;
   cursor: pointer;
 }
-/* line 788, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 827, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info > DIV > UL > LI > DIV > .title-holder > P.title > A:hover {
   -webkit-transition-property: all;
   -moz-transition-property: all;
@@ -6289,7 +6312,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   transition-duration: 0.5s;
   color: #0c4358;
 }
-/* line 795, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 834, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info > DIV > UL > LI > DIV > .title-holder > P.under {
   display: inline-block;
   width: 53px;
@@ -6299,7 +6322,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   position: relative;
   top: 7px;
 }
-/* line 804, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 843, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info > DIV > UL > LI > DIV > .title-holder > P.under > A {
   text-decoration: none !important;
   font-size: 12px;
@@ -6308,7 +6331,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   font-style: italic;
   cursor: pointer;
 }
-/* line 811, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 850, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info > DIV > UL > LI > DIV > .title-holder > P.under > A:hover {
   color: #0c4358;
   -webkit-transition-property: all;
@@ -6320,11 +6343,11 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   -o-transition-duration: 0.5s;
   transition-duration: 0.5s;
 }
-/* line 821, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 860, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info > DIV > UL DIV {
   text-align: center;
 }
-/* line 824, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 863, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info > DIV > UL DIV > P.count {
   font-size: 12px;
   color: #7c7c7c;
@@ -6334,7 +6357,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   height: 24px;
   padding-top: 6px;
 }
-/* line 833, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 872, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info > DIV > UL DIV > P.count > A {
   text-decoration: none !important;
   font-size: 12px;
@@ -6343,7 +6366,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   font-style: italic;
   cursor: pointer;
 }
-/* line 840, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 879, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info > DIV > UL DIV > P.count > A:hover {
   color: #0c4358;
   -webkit-transition-property: all;
@@ -6355,7 +6378,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   -o-transition-duration: 0.5s;
   transition-duration: 0.5s;
 }
-/* line 851, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 890, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info .up {
   padding-bottom: 8px;
   font-size: 18px !important;
@@ -6363,7 +6386,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   font-style: italic;
   background: url(images/common/dialog-separator.png) bottom no-repeat;
 }
-/* line 858, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 897, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info .day-down {
   display: inline-block;
   text-overflow: ellipsis;
@@ -6372,13 +6395,13 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   position: relative;
   top: 7px;
 }
-/* line 866, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 905, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info .day-down.low {
   background: url(images/common/dialog-separator.png) bottom no-repeat;
   padding-bottom: 8px;
   width: 100%;
 }
-/* line 872, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 911, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info .day-down > A {
   text-decoration: none !important;
   font-size: 12px;
@@ -6388,7 +6411,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   cursor: pointer;
   line-height: 18px;
 }
-/* line 880, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 919, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .info .day-down > A:hover {
   color: #0c4358;
   -webkit-transition-property: all;
@@ -6400,7 +6423,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   -o-transition-duration: 0.5s;
   transition-duration: 0.5s;
 }
-/* line 889, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 928, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .ann-button {
   width: 129px;
   line-height: 35px;
@@ -6427,7 +6450,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   padding: 9px 0;
   margin: 12px auto;
 }
-/* line 905, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 944, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .ann-button:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e5e5e5), color-stop(100%, #d0d0d0));
   background: -webkit-linear-gradient(top, #e5e5e5, #d0d0d0);
@@ -6435,7 +6458,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   background: -o-linear-gradient(top, #e5e5e5, #d0d0d0);
   background: linear-gradient(top, #e5e5e5, #d0d0d0);
 }
-/* line 909, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 948, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .ann-button.plus-ann {
   margin-top: 28px;
   background: url(images/grading/plus.png) center center no-repeat, -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f5f5f5), color-stop(100%, #e0e0e0));
@@ -6445,7 +6468,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.chlk-calendar DIV.items .it
   background: url(images/grading/plus.png) center center no-repeat, linear-gradient(top, #f5f5f5, #e0e0e0);
   height: 14px;
 }
-/* line 914, ../assets/sass/partials/main/calendar/_calendar.scss */
+/* line 953, ../assets/sass/partials/main/calendar/_calendar.scss */
 .calendar-popup .ann-button.plus-ann:hover {
   background: url(images/grading/plus.png) center center no-repeat, -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e5e5e5), color-stop(100%, #d0d0d0));
   background: url(images/grading/plus.png) center center no-repeat, -webkit-linear-gradient(top, #e5e5e5, #d0d0d0);

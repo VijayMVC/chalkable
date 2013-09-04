@@ -28,5 +28,14 @@ NAMESPACE('chlk.templates.calendar.announcement', function () {
 
             [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'currentDate'
+            
+            Boolean, 'notMainCalendar',
+
+            String, 'controllerName',
+
+            String, 'actionName',
+
+            Array, 'params'
+
         ])
 });
