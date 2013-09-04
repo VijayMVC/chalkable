@@ -16,6 +16,7 @@ REQUIRE('chlk.models.announcement.Reminder');
 REQUIRE('chlk.models.announcement.LastMessages');
 REQUIRE('chlk.models.attachment.Attachment');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
+REQUIRE('chlk.models.apps.InstalledAppsViewData');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.AnnouncementId');
@@ -155,11 +156,16 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.announcement.AnnouncementFormPage, result);
         },
 
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
         [chlk.controllers.SidebarButton('add-new')],
         function attachAppAction() {
             var userId = this.getCurrentPerson().getId();
             var result = this.appMarketService.getInstalledApps(userId).then(function(data){
                 var items = data.getItems();
+
                 for(var i = 0; i < 9; ++i){
                     var app =  new chlk.models.apps.AppMarketApplication();
                     app.setName("App test");
@@ -168,7 +174,7 @@ NAMESPACE('chlk.controllers', function (){
                     items.push(app);
                 }
                 data.setItems(items);
-                return data;
+                return new chlk.models.apps.InstalledAppsViewData(userId, data);
             });
             return this.ShadeView(chlk.activities.apps.AttachAppDialog, result);
         },
