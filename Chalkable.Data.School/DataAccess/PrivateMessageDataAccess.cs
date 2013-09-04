@@ -121,7 +121,7 @@ namespace Chalkable.Data.School.DataAccess
 
         private PaginatedList<PrivateMessageDetails> ReadPaginatedPrivateMessage(DbQuery query, int start, int count)
         {
-            var orderBy = "PrivateMessage_Id";
+            var orderBy = "PrivateMessage_Sent";
             query = Orm.PaginationSelect(query, orderBy, Orm.OrderType.Desc, start, count);
             return ReadPaginatedResult(query, start, count, ReadListPrivateMessageDetails);
         }
