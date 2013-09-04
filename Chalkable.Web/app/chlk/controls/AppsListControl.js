@@ -1,5 +1,6 @@
 REQUIRE('chlk.controls.Base');
 
+
 NAMESPACE('chlk.controls', function () {
 
     /** @class chlk.controls.AppsListControl*/
@@ -10,22 +11,39 @@ NAMESPACE('chlk.controls', function () {
                 ASSET('~/assets/jade/controls/apps-list.jade')(this);
             },
 
+            [[Object]],
+            VOID, function update(node){
+                var that = this;
+                node.chosen({disable_search_threshold: 1000}).change(function(){
+                    var node = jQuery(this);
+                    var selected = node.find('option:selected');
+                    var controller = selected.data('controller');
 
-            [ria.mvc.DomEventBind('click', '.app-list-combobox')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function onClicked($target, node){
-                var selected = $target.find('option:selected');
-                var controller = selected.getData('controller');
-                if(controller){
-                     var action = selected.getData('action');
-                     var params = selected.getData('params') || [];
-                     var state = this.context.getState();
-                     state.setController(controller);
-                     state.setAction(action);
-                     state.setParams(params);
-                     state.setPublic(false);
-                     this.context.stateUpdated();
-                }
+                    node.find('option[selected]').attr('selected', false);
+                    node.find('option[value=' + node.val() + ']').attr('selected', true);
+
+                    if(controller){
+                        var action = selected.data('action');
+                        var params = selected.data('params') || [];
+                        var state = that.context.getState();
+                        state.setController(controller);
+                        state.setAction(action);
+                        state.setParams(params);
+                        state.setPublic(false);
+                        that.context.stateUpdated();
+                    }
+
+                });
+            },
+
+            [[Object]],
+            Object, function processAttrs(attributes) {
+                attributes.id = attributes.id || ria.dom.NewGID();
+                this.context.getDefaultView()
+                    .onActivityRefreshed(function (activity, model) {
+                        this.update(jQuery('#'+attributes.id));
+                    }.bind(this));
+                return attributes;
             }
         ]);
 });

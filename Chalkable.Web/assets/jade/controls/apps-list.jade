@@ -1,12 +1,10 @@
 mixin AppsList(name, apps, currentApp)
     -attributes.name = name
-    -apps = apps || []
-    -selectedApp = {}
-    if currentApp
-        -selectedAppId = currentApp.getId()
-    else
-        -selectedAppId = null
-    select(attributes).app-list-combobox
+    -attributes = self.processAttrs(attributes);
+    apps = apps || []
+    selectedApp = {}
+    selectedAppId = currentAppId ? currentAppId : null
+    select(attributes)#dev-apps-list.app-list-combobox
         each item in apps
             -isSelected = selectedAppId == item.getId()
             +AppOption(item.getName(), 'apps', 'details', [item.getId().valueOf()], isSelected)
