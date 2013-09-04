@@ -260,8 +260,6 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AppId]],
         function wrapperTestAction() {
             /*
-            var IWindow = jQuery(this.getWindow().el.dom);
-
             if (mode === APP_MODES.EDIT){
                 buttons.push({
                     buttonText: '+ Attach',
@@ -285,7 +283,6 @@ NAMESPACE('chlk.controllers', function (){
                     CHLK_MESSENGER.addApp(frame.get(0).contentWindow, frame.attr('src').split('view')[0], {attach: false});
                 });
             }
-
             if(mode === APP_MODES.MYAPPSVIEW){
                 buttons.push({
                     url: ,
@@ -308,6 +305,13 @@ NAMESPACE('chlk.controllers', function (){
         },
 
 
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.SYSADMIN
+        ])],
+        [[chlk.models.id.AppId]],
+        function tryToAttachTeacherAction(appId) {
+            //get app from app market
+        },
 
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.SYSADMIN

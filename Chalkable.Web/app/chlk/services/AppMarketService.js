@@ -1,24 +1,23 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 
-REQUIRE('chlk.models.apps.Application');
+REQUIRE('chlk.models.apps.AppMarketApplication');
+REQUIRE('chlk.models.id.SchoolPersonId');
+
 NAMESPACE('chlk.services', function () {
     "use strict";
 
 
-    /** @class chlk.services.ApplicationService */
+    /** @class chlk.services.AppMarketService */
     CLASS(
         'AppMarketService', EXTENDS(chlk.services.BaseService), [
 
-            function $() {
-                BASE();
-            },
-
-            [[Number]],
-            ria.async.Future, function getApps(pageIndex_) {
-                return this.getPaginatedList('Application/List.json', chlk.models.apps.Application, {
-                        start: pageIndex_
-                    })
+            [[chlk.models.id.SchoolPersonId]],
+            ria.async.Future, function getInstalledApps(personId) {
+                //return this.getPaginatedList('Application/List.json', chlk.models.apps.AppMarketApplication, {
+                return this.getPaginatedList('AppMarket/ListInstalled.json', chlk.models.apps.AppMarketApplication, {
+                        personId: personId.valueOf()
+                });
             }
         ])
 });

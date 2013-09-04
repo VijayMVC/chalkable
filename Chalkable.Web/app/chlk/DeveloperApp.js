@@ -25,6 +25,10 @@ NAMESPACE('chlk', function (){
                 var session = BASE();
                 session.set('role', new chlk.models.common.Role(chlk.models.common.RoleEnum.DEVELOPER, 'Developer'));
                 this.saveInSession(session, 'application', chlk.models.apps.Application, 'currentApp');
+
+
+                var appId = session.get('currentApp').getId();
+                session.set('currentAppId', appId);
                 this.saveInSession(session, 'applications', ArrayOf(chlk.models.apps.Application), 'dev-apps');
                 return session;
             },

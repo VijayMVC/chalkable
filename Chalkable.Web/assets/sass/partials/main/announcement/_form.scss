@@ -6,6 +6,16 @@
 .attachments-and-applications {
   width: 600px;
 
+  #add-application{
+    display: block;
+    position: relative;
+    margin-left: 24px;
+
+    text-decoration: none;
+    color: gray;
+    line-height: 30px;
+  }
+
   .announcement-item{
     display: inline-block;
     height: 110px;

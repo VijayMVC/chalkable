@@ -5,13 +5,18 @@ REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.PersonService');
 REQUIRE('chlk.services.GradingService');
 REQUIRE('chlk.services.AnnouncementReminderService');
+REQUIRE('chlk.services.AppMarketService');
+
 REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.AnnouncementViewPage');
+REQUIRE('chlk.activities.apps.AttachAppDialog');
+
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.Reminder');
 REQUIRE('chlk.models.announcement.LastMessages');
 REQUIRE('chlk.models.attachment.Attachment');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
+
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.ReminderId');
@@ -20,6 +25,7 @@ REQUIRE('chlk.models.id.MarkingPeriodId');
 
 NAMESPACE('chlk.controllers', function (){
 
+    //todo:wtf
     var announcementAttachments;
 
     /** @class chlk.controllers.AttachmentTypeEnum */
@@ -47,7 +53,11 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.GradingService, 'gradingService',
 
+        [ria.mvc.Inject],
+        chlk.services.AppMarketService, 'appMarketService',
+
         ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
+
 
         [[chlk.models.announcement.Reminder]],
         function editAddReminderAction(model) {
@@ -143,6 +153,24 @@ NAMESPACE('chlk.controllers', function (){
                     return this.addEditAction(model, false);
                 }.bind(this));
             return this.PushView(chlk.activities.announcement.AnnouncementFormPage, result);
+        },
+
+        [chlk.controllers.SidebarButton('add-new')],
+        function attachAppAction() {
+            var userId = this.getCurrentPerson().getId();
+            var result = this.appMarketService.getInstalledApps(userId).then(function(data){
+                var items = data.getItems();
+                for(var i = 0; i < 9; ++i){
+                    var app =  new chlk.models.apps.AppMarketApplication();
+                    app.setName("App test");
+                    app.setShortDescription("rskldfj;alskdfja;skldjfa;sldkfja;sdfsdfsdfsdfsdfldkfjasl;");
+                    app.setSmallPictureId(new chlk.models.id.PictureId("90e359b7-7199-4296-8148-a072bcd67bb3"));
+                    items.push(app);
+                }
+                data.setItems(items);
+                return data;
+            });
+            return this.ShadeView(chlk.activities.apps.AttachAppDialog, result);
         },
 
         [[chlk.models.id.AnnouncementId]],

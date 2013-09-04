@@ -43,6 +43,14 @@ NAMESPACE('chlk.services', function () {
                 return this.resolveUri(uri) + '?' +  r.join('&');
             },
 
+            Array, function arrayToIds(obj){
+                return obj ? obj.map(function(item){ return item.valueOf();}) : [];
+            },
+
+            String, function arrayToCsv(obj){
+                return obj ? obj.map(function(item){ return item.valueOf();}).join(',') : "";
+            },
+
             [[String, Object, Object]],
             ria.async.Future, function get(uri, clazz_, gParams_) {
 

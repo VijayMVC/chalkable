@@ -38,16 +38,6 @@ NAMESPACE('chlk.services', function () {
                     })
             },
 
-            [[chlk.models.apps.Application]],
-            function switchApp(app){
-                this.getContext().getSession().set('currentApp', app);
-                return app;
-            },
-
-            function getCurrentApp(){
-                return this.getContext().getSession().get('currentApp') || new chlk.models.apps.Application();
-            },
-
             [[Boolean]],
             ria.async.Future, function getDevApps(refresh_) {
                 var apps = this.getContext().getSession().get('dev-apps') || [];
@@ -61,34 +51,32 @@ NAMESPACE('chlk.services', function () {
                     : new ria.async.DeferredData(apps);
             },
 
-
-            Array, function arrayToIds(obj){
-                return obj ? obj.map(function(item){ return item.valueOf();}) : [];
+            [[chlk.models.apps.Application]],
+            function switchApp(app){
+                this.getContext().getSession().set('currentAppId', app.getId());
+                return app;
             },
 
-            String, function arrayToCsv(obj){
-                return obj ? obj.map(function(item){ return item.valueOf();}).join(',') : "";
+            function getCurrentAppId(){
+                return this.getContext().getSession().get('currentAppId');
             },
 
             [[chlk.models.id.AppId, Boolean]],
             ria.async.Future, function getInfo(appId_, switchApp_) {
                 var mustSwitch = switchApp_ ? switchApp_ : true;
-                return appId_
-                    ? this
+                var appId_ = appId_ ? appId_ : this.getCurrentAppId();
+                return this
                         .get('Application/GetInfo.json', chlk.models.apps.Application, {applicationId: appId_.valueOf()})
                         .then(function(app){
-                            return new ria.async.DeferredData(mustSwitch ? this.switchApp(app) : app);
-                        }, this)
-                    : ria.async.DeferredData(this.getCurrentApp());
-
+                                return new ria.async.DeferredData(mustSwitch ? this.switchApp(app) : app);
+                        }, this);
             },
 
             [[chlk.models.id.AppId]],
             ria.async.Future, function getLiveAppInfo() {
-                var currentApp = this.getCurrentApp();
                 var liveAppId = null;
-                liveAppId = currentApp.getLiveAppId() ? currentApp.getLiveAppId() : null;
-                return this.getInfo(liveAppId, false);
+                //liveAppId = currentApp.getLiveAppId() ? currentApp.getLiveAppId() : null;
+                return this.getInfo(liveAppId);
             },
 
 
@@ -119,8 +107,8 @@ NAMESPACE('chlk.services', function () {
                 return this
                     .post('Application/GoLive.json', Boolean, {applicationId: appId.valueOf()})
                     .then(function(data){
-                        var currentApp = this.getCurrentApp();
-                        return this.getInfo(currentApp.getId());
+                        var currentAppId = this.getCurrentAppId();
+                        return this.getInfo(currentAppId);
                     }, this)
             },
 

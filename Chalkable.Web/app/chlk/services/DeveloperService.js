@@ -15,7 +15,7 @@ NAMESPACE('chlk.services', function () {
                     developerId: id.valueOf()
                 });
             },
-            [[chlk.models.id.SchoolPersonId, String, String ,String, String]],
+            [[chlk.models.id.SchoolPersonId, String, String ,String]],
             ria.async.Future, function saveInfo(id, name, webSite, email) {
                 return this
                     .post('Developer/UpdateInfo.json', chlk.models.developer.DeveloperInfo, {
