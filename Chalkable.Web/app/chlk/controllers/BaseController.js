@@ -13,7 +13,6 @@ NAMESPACE('chlk.controllers', function (){
         [[String]],
         function SidebarButton(clazz) {});
 
-
     ANNOTATION(
         [[ArrayOf(chlk.models.common.RoleEnum)]],
         function AccessForRoles(roles){});
@@ -23,8 +22,6 @@ NAMESPACE('chlk.controllers', function (){
             return $1.substring(1).toUpperCase();
         });
     }
-
-
 
     var PRESSED_CLS = 'pressed';
     var ACTION_SUFFIX = 'Action';
@@ -75,9 +72,7 @@ NAMESPACE('chlk.controllers', function (){
                        buttons.push(serializer.deserialize(item, chlk.models.common.Button));
                    })
                }else{
-                   var button = new chlk.models.common.Button();
-                   button.setText('Ok');
-                   buttons.push(button);
+                   buttons.push(new chlk.models.common.Button('Ok'));
                }
                var model = new chlk.models.common.InfoMsg(text_, header_, buttons, clazz_);
                this.view.shadeD(instance, ria.async.DeferredData(model));
