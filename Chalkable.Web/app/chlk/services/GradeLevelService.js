@@ -24,6 +24,25 @@ NAMESPACE('chlk.services', function () {
                      new chlk.models.apps.AppGradeLevel(new chlk.models.id.AppGradeLevelId(11), '11th'),
                      new chlk.models.apps.AppGradeLevel(new chlk.models.id.AppGradeLevelId(12), '12th')
                  ].reverse();
+            },
+
+            ArrayOf(chlk.models.classes.ClassForTopBar), 'gradesToFilter',
+            ArrayOf(chlk.models.classes.ClassForTopBar), 'gradesToFilterWithAll',
+
+            [[Boolean]],
+            Array, function getGradeLevelsForTopBar(withAll_) {
+                var res = this.getGradesToFilter(), res1 = this.getGradesToFilterWithAll();
+                if(res)
+                    return withAll_ ? res1 : res;
+                res = new ria.serialize.JsonSerializer().deserialize(window.gradeLevels, ArrayOf(chlk.models.classes.ClassForTopBar));
+                this.setClassesToFilter(res);
+                var gradesToFilterWithAll = window.gradeLevels.slice();
+                gradesToFilterWithAll.unshift({
+                    name: 'All'
+                });
+                res1 = new ria.serialize.JsonSerializer().deserialize(gradesToFilterWithAll, ArrayOf(chlk.models.classes.ClassForTopBar));
+                this.setClassesToFilterWithAll(res1);
+                return withAll_ ? res1 : res;
             }
         ])
 });

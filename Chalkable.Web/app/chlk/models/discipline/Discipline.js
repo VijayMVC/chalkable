@@ -6,6 +6,7 @@ REQUIRE('chlk.models.id.ClassPersonId');
 
 NAMESPACE('chlk.models.discipline', function(){
 
+    /** @class chlk.models.discipline.Discipline*/
     CLASS('Discipline', [
 
         [ria.serialize.SerializeProperty('studentid')],

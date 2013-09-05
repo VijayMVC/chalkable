@@ -13,6 +13,10 @@ NAMESPACE('chlk.services', function () {
                 return this.getPaginatedList('chalkable2/app/data/funds.json', chlk.models.funds.Fund, {
                     start: pageIndex_
                 });
+            },
+
+            ria.async.Future, function getBalance() {
+                return this.get('Fund/GetAppBugetBalance.json', chlk.models.funds.BudgetBalance, {});
             }
         ])
 });

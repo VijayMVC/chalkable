@@ -19,9 +19,8 @@ li(data-title = self.description, data-value = self.id.valueOf() + '|' + self.se
                     div= self.description
         else if self.searchType == 3
             +ActionLink('announcement', 'view', self.announcementId).left.image-container.white.shadow
-                div.site-search-class
-                    .img-wrapper
-                        +ClassImg(self.course, 45, 80).avatar
-                    div= self.description
+                div.site-search-attachment
+                    .image
+                    div.title= self.description
         else
             div= self.description

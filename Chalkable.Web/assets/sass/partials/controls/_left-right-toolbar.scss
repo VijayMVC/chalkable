@@ -101,6 +101,21 @@
           background-color: #C9C9C9;
           vertical-align: top;
 
+          >SPAN.admin{
+            font: bold 38px Arial;
+            padding-top: 17px;
+            letter-spacing: -3px;
+
+            >SPAN{
+              font: normal 20px Pacifico;
+              display: inline-block;
+              vertical-align: top;
+              padding-top: 6px;
+              padding-left: 3px;
+              letter-spacing: 0;
+            }
+          }
+
           &.pressed, &:active{
             background-position: center bottom;
 

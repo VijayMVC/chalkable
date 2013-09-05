@@ -1,5 +1,7 @@
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.common.HoverBox');
+REQUIRE('chlk.models.common.CommonHoverBox');
+REQUIRE('chlk.models.common.DisciplineHoverBox');
 REQUIRE('chlk.models.classes.Room');
 REQUIRE('chlk.models.announcement.AnnouncementsByDate');
 REQUIRE('chlk.models.id.ClassId');
@@ -18,13 +20,13 @@ NAMESPACE('chlk.models.classes', function () {
             Number, 'classSize',
 
             [ria.serialize.SerializeProperty('classattendancebox')],
-            chlk.models.common.HoverBox, 'classAttendanceBox',
+            chlk.models.common.CommonHoverBox, 'classAttendanceBox',
 
             [ria.serialize.SerializeProperty('classdisciplinebox')],
-            chlk.models.common.HoverBox, 'classDisciplineBox',
+            chlk.models.common.DisciplineHoverBox, 'classDisciplineBox',
 
             [ria.serialize.SerializeProperty('classaveragebox')],
-            chlk.models.common.HoverBox, 'classAverageBox',
+            chlk.models.common.CommonHoverBox, 'classAverageBox',
 
             [ria.serialize.SerializeProperty('announcementsbydate')],
             ArrayOf(chlk.models.announcement.AnnouncementsByDate), 'announcementsByDate',

@@ -27,7 +27,9 @@ REQUIRE('chlk.controls.LogoutControl');
 REQUIRE('chlk.controls.TextAreaControl');
 REQUIRE('chlk.controls.SearchBoxControl');
 REQUIRE('chlk.controls.ImageControl');
+REQUIRE('chlk.controls.ChartControl');
 
+REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.Role');
 REQUIRE('chlk.models.schoolYear.MarkingPeriod');
 REQUIRE('chlk.models.attendance.AttendanceReason');
@@ -67,6 +69,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, 'WEB_SITE_ROOT', null, 'webSiteRoot');
                 this.saveInSession(session, 'azurePictureUrl');
                 this.saveInSession(session, 'attendanceReasons', ArrayOf(chlk.models.attendance.AttendanceReason));
+                this.saveInSession(session, 'gradeLevels', ArrayOf(chlk.models.grading.GradeLevel));
 
                 var siteRoot = window.location.toString().split(window.location.pathname).shift();
                 var serviceRoot = "/";

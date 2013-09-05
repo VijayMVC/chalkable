@@ -475,7 +475,7 @@ BODY DIV.page #sidebar #sidebar-controls .wrapper A .title, BODY DIV.page #sideb
   text-align: center;
   bottom: 5px;
   color: #5d4d39;
-  text-shadow: 1px -1px 0 #eeeeee;
+  text-shadow: 1px -1px 0 #eee;
 }
 /* line 46, ../assets/sass/partials/sidebar/_controls.scss */
 BODY DIV.page #sidebar #sidebar-controls .wrapper .fullwidth-button.add-new {
@@ -1603,7 +1603,7 @@ DIV#content-wrapper.messages .action-bar.buttons .container .action-link.disable
 /* line 139, ../assets/sass/partials/controls/_action-bar.scss */
 .action-bar .container .action-link, .action-bar .container .action-button {
   text-decoration: none;
-  font: normal 11px/34px arial, tahoma, verdana, helvetica;
+  font: normal 11px/34px arial,tahoma,verdana,helvetica;
   color: #333;
   height: 34px;
   font-style: italic;
@@ -2284,26 +2284,41 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .chlk-grid .row.selected
   vertical-align: top;
 }
 /* line 104, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+.lr-toolbar .first-container .second-container .item.class-button > SPAN.admin {
+  font: bold 38px Arial;
+  padding-top: 17px;
+  letter-spacing: -3px;
+}
+/* line 109, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+.lr-toolbar .first-container .second-container .item.class-button > SPAN.admin > SPAN {
+  font: normal 20px Pacifico;
+  display: inline-block;
+  vertical-align: top;
+  padding-top: 6px;
+  padding-left: 3px;
+  letter-spacing: 0;
+}
+/* line 119, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button.pressed, .lr-toolbar .first-container .second-container .item.class-button:active {
   background-position: center bottom;
 }
-/* line 107, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 122, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button.pressed .img-wrapper, .lr-toolbar .first-container .second-container .item.class-button:active .img-wrapper {
   top: 13px;
 }
-/* line 110, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 125, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button.pressed .img-wrapper IMG, .lr-toolbar .first-container .second-container .item.class-button:active .img-wrapper IMG {
   margin-top: -45px;
 }
-/* line 115, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 130, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button.pressed .text-container, .lr-toolbar .first-container .second-container .item.class-button:active .text-container {
   color: #2f7790;
 }
-/* line 120, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 135, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button:hover {
   background-position: center center;
 }
-/* line 124, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 139, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button .img-wrapper {
   background-repeat: no-repeat;
   height: 35px;
@@ -2313,13 +2328,13 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .chlk-grid .row.selected
   width: 45px;
   overflow: hidden;
 }
-/* line 133, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 148, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button .img-wrapper IMG {
   margin-top: -45px;
   width: 45px;
   height: 80px;
 }
-/* line 140, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 155, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button .text-container {
   text-align: center;
   display: inline-block;
@@ -2330,18 +2345,18 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .chlk-grid .row.selected
   font-family: Arial Narrow, Arial, serif;
   white-space: nowrap;
 }
-/* line 152, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 167, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.action-link, .lr-toolbar .first-container .second-container .item.button-link {
   height: 76px;
   width: 67px;
   overflow: hidden;
 }
-/* line 157, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 172, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.action-link .text-container, .lr-toolbar .first-container .second-container .item.button-link .text-container {
   padding-top: 49px;
 }
 
-/* line 173, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 188, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile .lr-toolbar .first-container .second-container .item.class-button {
   border-color: #baa76e;
   background-image: url(images/profile/classes.png);
@@ -2350,12 +2365,12 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .lr-toolbar .first-conta
   font-style: italic;
   text-shadow: 1px 1px 0 white;
 }
-/* line 181, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 196, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile .lr-toolbar .first-container .second-container .item.class-button:hover {
   background-position: center bottom;
 }
 
-/* line 200, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 215, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.calendar .lr-toolbar .first-container .second-container .item.class-button {
   border-color: #4398ae;
   background-color: #4398ae;
@@ -2450,7 +2465,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper.calendar .lr-toolbar .first-cont
 /* line 6, ../assets/sass/partials/controls/_select.scss */
 .chzn-container.chzn-container-single .chzn-single {
   height: 25px;
-  font: normal 14px/25px "Myriad Pro";
+  font: normal 14px/25px 'Myriad Pro';
   text-shadow: 1px 1px 1px white;
   color: #9D9D9D;
   border: 1px solid #c9c9c9;
@@ -2985,7 +3000,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
 }
 /* line 260, ../assets/sass/partials/main/_buttons.scss */
 .special-button2:hover:not(.disabled) {
-  background-position: 0px -42px;
+  background-position: -0px -42px;
 }
 /* line 262, ../assets/sass/partials/main/_buttons.scss */
 .special-button2:hover:not(.disabled) > SPAN {
@@ -2993,7 +3008,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper #main #class-attendance-list-pan
 }
 /* line 264, ../assets/sass/partials/main/_buttons.scss */
 .special-button2:hover:not(.disabled) > SPAN > SPAN {
-  background-position: 0px -42px;
+  background-position: -0px -42px;
 }
 /* line 271, ../assets/sass/partials/main/_buttons.scss */
 .special-button2.blue {
@@ -3402,7 +3417,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile #main .summary-page #ava
   margin-top: 3px;
   font-size: 29px;
   color: #D8D5CA !important;
-  text-shadow: 0 -2px 0px #b1afa6, 0 2px 0px white;
+  text-shadow: 0 -2px 0px #B1AFA6, 0 2px 0px white;
   font-weight: normal;
   word-spacing: -4px;
   letter-spacing: 1px;
@@ -4250,7 +4265,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper .setup-page.start .bottom-text {
 BODY DIV.page > DIV#content DIV#content-wrapper .setup-page label#step {
   position: absolute;
   color: #51595d;
-  font: normal 11px/34px arial, tahoma;
+  font: normal 11px/34px arial,tahoma;
   margin-left: 230px;
 }
 /* line 109, ../assets/sass/partials/main/_setup.scss */
@@ -4763,7 +4778,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper .db-maintenance .db-update-form 
   padding: 20px 0 0px;
   font-size: 24px;
   font-weight: bold;
-  text-shadow: 1px -1px 0px white;
+  text-shadow: 1px -1px 0px #fff;
   color: #525252;
   position: relative;
   -webkit-transition-property: all;
@@ -5375,7 +5390,7 @@ BODY DIV.page > DIV#content DIV#content-wrapper .db-maintenance .db-update-form 
 }
 /* line 322, ../assets/sass/partials/main/announcement/_view.scss */
 .announcement-view .announcement-details-panel .grades-individual .row .grade-block .selected DIV.chzn-container {
-  width: 65px!important;
+  width: 65px !important;
 }
 /* line 325, ../assets/sass/partials/main/announcement/_view.scss */
 .announcement-view .announcement-details-panel .grades-individual .row .grade-block .selected DIV.chzn-container .chzn-results LI {
@@ -7716,6 +7731,29 @@ ul.ui-autocomplete > li > div.site-search > a > div.site-search-class > div.img-
 }
 /* line 47, ../assets/sass/partials/main/search/_common.scss */
 ul.ui-autocomplete > li > div.site-search > a > div.site-search-class > div {
+  margin-left: 10px;
+  display: inline-block;
+  vertical-align: middle;
+  color: #2f424b;
+  font-size: 11px;
+  font-weight: bold;
+}
+/* line 57, ../assets/sass/partials/main/search/_common.scss */
+ul.ui-autocomplete > li > div.site-search > a > div.site-search-attachment {
+  margin-top: 20px;
+  padding-left: 15px;
+}
+/* line 60, ../assets/sass/partials/main/search/_common.scss */
+ul.ui-autocomplete > li > div.site-search > a > div.site-search-attachment > div.image {
+  display: inline-block;
+  vertical-align: middle;
+  background: url("images/feed/doc-icon.png");
+  background-size: 100% 100%;
+  width: 24px;
+  height: 36px;
+}
+/* line 68, ../assets/sass/partials/main/search/_common.scss */
+ul.ui-autocomplete > li > div.site-search > a > div.site-search-attachment > div.title {
   margin-left: 10px;
   display: inline-block;
   vertical-align: middle;

@@ -15,7 +15,7 @@ namespace Chalkable.Web.Models
         public IList<DepartmentGradingStatViewData> GradingStats { get; set; }
         public AdminAttendanceBoxViewData NotInClassBox { get; set; }
         public AdminAttendanceBoxViewData AbsentForDay { get; set; }
-        public AdminAttendanceBoxViewData AdbsentForMp { get; set; }
+        public AdminAttendanceBoxViewData AbsentForMp { get; set; }
 
 
         public static AdminFeedViewData Create(IList<DepartmentGradingStatViewData> gradingStats, IDictionary<DateTime, int> stAbsentForDayStats
@@ -26,7 +26,7 @@ namespace Chalkable.Web.Models
             if (stAbsentForDayStats != null)
             {
                 res.AbsentForDay = PrepareAbsentForDay(stAbsentForDayStats, currentDate);
-                res.AdbsentForMp = PrepareAbsentForMp(stAbsentForDayStats);
+                res.AbsentForMp = PrepareAbsentForMp(stAbsentForDayStats);
             }
             if (stCountAbsentFromPeriods != null)
                 res.NotInClassBox = PrepareAbsentFromPeriods(stCountAbsentFromPeriods);

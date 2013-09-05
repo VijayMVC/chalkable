@@ -18,13 +18,13 @@ NAMESPACE('chlk.templates.classes', function () {
             Number, 'classSize',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.HoverBox, 'classAttendanceBox',
+            chlk.models.common.CommonHoverBox, 'classAttendanceBox',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.HoverBox, 'classDisciplineBox',
+            chlk.models.common.DisciplineHoverBox, 'classDisciplineBox',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.HoverBox, 'classAverageBox',
+            chlk.models.common.CommonHoverBox, 'classAverageBox',
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.announcement.AnnouncementsByDate), 'announcementsByDate',
