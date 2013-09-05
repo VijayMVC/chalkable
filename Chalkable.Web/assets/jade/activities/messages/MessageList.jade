@@ -42,9 +42,13 @@
                             .av
                                 .avatar-container
                                     if self.isInbox()
-                                        img.avatar.avatar47(class=item.getSender().getGender(), src=self.getPictureURL(item.getSender().getId(), 47))
+                                        +PersonImg(item.getSender(), 47)
+                                        //
+                                            img.avatar.avatar47(class=item.getSender().getGender(), src=self.getPictureURL(item.getSender().getId(), 47))
                                     else
-                                        img.avatar.avatar47(class=item.getRecipient().getGender(), src=self.getPictureURL(item.getRecipient().getId(), 47))
+                                        +PersonImg(item.getRecipient(), 47)
+                                        //
+                                            img.avatar.avatar47(class=item.getRecipient().getGender(), src=self.getPictureURL(item.getRecipient().getId(), 47))
 
                             .item
                                 +ActionLink('message', 'viewPage', item.getId().valueOf())
