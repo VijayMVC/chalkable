@@ -1,6 +1,7 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('chlk.models.id.GradeLevelId');
 REQUIRE('chlk.models.apps.AppGradeLevel');
+REQUIRE('chlk.models.classes.ClassForTopBar');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -29,6 +30,8 @@ NAMESPACE('chlk.services', function () {
             ArrayOf(chlk.models.classes.ClassForTopBar), 'gradesToFilter',
             ArrayOf(chlk.models.classes.ClassForTopBar), 'gradesToFilterWithAll',
 
+
+            //todo:fix
             [[Boolean]],
             Array, function getGradeLevelsForTopBar(withAll_) {
                 var res = this.getGradesToFilter(), res1 = this.getGradesToFilterWithAll();
