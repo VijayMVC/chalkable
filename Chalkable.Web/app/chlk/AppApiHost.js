@@ -40,6 +40,9 @@ NAMESPACE('chlk', function(){
                 if (domain == rDomain && e.data.action == 'requestOrigin'){
                     e.source.postMessage({action: 'updateOrigin'}, e.origin);
                 }
+                else{
+                    throw new Exception('post-message-api domains differ. Please check your include path.');
+                }
             }
 
             // TODO: check if following is secure

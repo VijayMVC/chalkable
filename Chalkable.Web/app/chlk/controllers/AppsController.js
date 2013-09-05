@@ -3,6 +3,7 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.ApplicationService');
 REQUIRE('chlk.services.AppCategoryService');
 REQUIRE('chlk.services.GradeLevelService');
+REQUIRE('chlk.services.AppMarketService');
 REQUIRE('chlk.services.PictureService');
 
 REQUIRE('chlk.activities.apps.AppsListPage');
@@ -33,6 +34,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.ApplicationService, 'appsService',
+
+        [ria.mvc.Inject],
+        chlk.services.AppMarketService, 'appMarketService',
 
         [ria.mvc.Inject],
         chlk.services.AppCategoryService, 'categoryService',
@@ -301,18 +305,18 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER
         ])],
-        [[chlk.models.id.AppId]],
-        function tryToAttachTeacherAction(appId) {
-
-            //get app from app market
-            var myAppsViewUrl = "#";
-            var attachBtn = new chlk.models.apps.AppWrapperToolbarButton('add-app', '+ Attach');
-            var saveBtn  = new chlk.models.apps.AppWrapperToolbarButton('save-app', 'Save');
-            var newTabBtn = new chlk.models.apps.AppWrapperToolbarButton('new-tab-id', 'New Tab', myAppsViewUrl, true);
-
-            var btns = [attachBtn, saveBtn, newTabBtn];
-            var appWrapperViewData = new chlk.models.apps.AppWrapperViewData(chlk.models.apps.AppModes.EDIT, btns);
-            return this.PushView(chlk.activities.apps.AppWrapperDialog, new ria.async.DeferredData(appWrapperViewData));
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId]],
+        function tryToAttachTeacherAction(announcementId, appId) {
+            //var myAppsViewUrl = "#";
+            //var saveBtn  = new chlk.models.apps.AppWrapperToolbarButton('save-app', 'Save');
+            //var newTabBtn = new chlk.models.apps.AppWrapperToolbarButton('new-tab-id', 'New Tab', myAppsViewUrl, true);
+            var result = this.appMarketService
+                .getInfo(appId)
+                .then(function(app){
+                    return chlk.models.apps.AppWrapperViewData$createAppAttach(announcementId, app);
+                })
+                .attach(this.validateResponse_());
+            return this.PushView(chlk.activities.apps.AppWrapperDialog, result);
         },
 
         [chlk.controllers.AccessForRoles([

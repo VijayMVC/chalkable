@@ -114,8 +114,10 @@ var CHLK_MESSENGER = (function () {
                 if (e.data.action === ChlkActionTypes.ADD_YOURSELF) {
                     var attach = !!e.data.attach;
                     var result = fn(e.data);
-                    attach === true ? CHLK_MESSENGER.addMe({appReady: result})
-                                    : CHLK_MESSENGER.saveMe({appReady: result});
+                    var data = e.data;
+                    data.appReady = attach;
+                    attach === true ? CHLK_MESSENGER.addMe(data)
+                                    : CHLK_MESSENGER.saveMe(data);
                 }
                 if (e.data.action === ChlkActionTypes.UPDATE_ORIGIN){
                     that.updateOrigin(e.origin);

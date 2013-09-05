@@ -2,6 +2,7 @@ REQUIRE('chlk.templates.JadeTemplate');
 REQUIRE('chlk.models.apps.AppWrapperViewData');
 REQUIRE('chlk.models.apps.AppModes');
 REQUIRE('chlk.models.apps.Application');
+REQUIRE('chlk.models.id.AnnouncementId');
 
 NAMESPACE('chlk.templates.apps', function () {
     /** @class chlk.templates.apps.AppWrapperDialog*/
@@ -14,6 +15,8 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.apps.Application, 'app',
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.apps.AppWrapperToolbarButton), 'buttons'
+            ArrayOf(chlk.models.apps.AppWrapperToolbarButton), 'buttons',
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.AnnouncementId, 'announcementId'
         ])
 });

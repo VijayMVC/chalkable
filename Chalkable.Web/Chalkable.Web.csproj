@@ -453,7 +453,7 @@
   <PropertyGroup>
     <PreBuildEvent>if NOT  $(ConfigurationName) == Debug (
 cd..
-jsbuild.cmd
+jsbuild3.cmd
 )</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

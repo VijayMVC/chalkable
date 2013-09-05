@@ -13,14 +13,16 @@ NAMESPACE('chlk.activities.profile', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.people.Addresses, '', '.adresses', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.profile.InfoView, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.TemplateBind(chlk.templates.profile.InfoView)],
+
         'InfoViewPage', EXTENDS(chlk.activities.lib.TemplatePage), [
+
             [ria.mvc.DomEventBind('click', '.add-button')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function addAddressClick(node, event){
                 var addressesValue = this.getAddresses();
                 addressesValue.push({
-                    id:null,
-                    type:0,
+                    id: null,
+                    type: 0,
                     value: ''
                 });
                 var addressesModel = serializer.deserialize({items : addressesValue}, chlk.models.people.Addresses);
@@ -29,8 +31,11 @@ NAMESPACE('chlk.activities.profile', function () {
 
             Array, function getAddresses(){
                 var addressesNodes = this.dom.find('.home-address').valueOf();
-                var len = addressesNodes.length, i, addressesValue=[],node;
-                for(i=0;i<len;i++){
+                var len = addressesNodes.length;
+                var addressesValue = [];
+                var node;
+
+                for(var i = 0; i < len; i++){
                     node = new ria.dom.Dom(addressesNodes[i]);
                     addressesValue.push({
                         id: node.getData('id'),
@@ -45,6 +50,7 @@ NAMESPACE('chlk.activities.profile', function () {
                 var primaryNode = this.dom.find('.primary-phone');
                 var homeNode = this.dom.find('.home-phone');
                 var res = [];
+
                 res.push({
                     id : primaryNode.getData('id'),
                     value: primaryNode.getValue(),

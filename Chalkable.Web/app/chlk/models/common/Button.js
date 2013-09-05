@@ -16,6 +16,11 @@ NAMESPACE('chlk.models.common', function () {
             Array, 'params',
             chlk.models.common.ButtonColor, 'color',
             Object, 'attributes',
-            String, 'text'
+            String, 'text',
+            [[String]],
+            function $(title_){
+                if (title_)
+                    this.setText(title_);
+            }
         ]);
 });
