@@ -1,0 +1,60 @@
+.settings
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('settings', 'generalTeacher').pressed General
+                +ActionLink('grading', 'teacherSettings') Grading
+            .right
+                +ActionLink('teachers', 'info', currentChlkPerson.id) Profile
+
+    .general
+        .block
+            .header SMS
+            .fields
+                .field
+                    +Checkbox('ch1', false)
+                    label Announcements
+
+                .field
+                    +Checkbox('ch1', false)
+                    label Private messages
+
+                .field
+                    +Checkbox('ch1', false)
+                    label Notifications
+
+        .block
+            .header Email
+            .fields
+                .field
+                    +Checkbox('ch1', false)
+                    label Announcements
+
+                .field
+                    +Checkbox('ch1', false)
+                    label Private messages
+
+                .field
+                    +Checkbox('ch1', false)
+                    label Notifications
+        .block
+            .header Password
+            .fields
+                a#changePasswordLink(href='javascript:')
+                    |Reset Password
+            div.x-hidden#changePasswordForm
+                +ActionForm('account', 'teacherChangePassword')#info-edit-form.with-ok
+                    .title
+                        .name-block
+                            .info-title=Msg.Old_Password
+                            input(name="oldPassword", type="password", class="validate[required]")
+                            .info-title=Msg.New_Password
+                            input(name="newPassword", id="newPassword", type="password", class="validate[required]")
+                            .info-title=Msg.New_Password_Confirm
+                            input(name="newPasswordConfirmation", id="newPasswordConfirmation", type="password", class="validate[required, equals[newPassword]]")
+                    br
+                    .section-buttons
+                        +Button()(type="submit").special-button.blue-button#submit-pwd-button=Msg.Save
+                        +Button()(type="button").special-button.blue-button#cancell-edit-pwd-button=Msg.Cancel
+
+
