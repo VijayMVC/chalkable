@@ -51,13 +51,11 @@ NAMESPACE('chlk.controls', function () {
                         var li = jQuery(event.toElement).closest('li');
                         ria.dom.Dom('#' + id + '-hidden').setValue(li.data('value'));
                         node.setValue(li.data('title'));
-                        console.log("1");
                         return false;
                     },
                     change: function( event, ui ) {
                         if (!ria.dom.Dom('#' + id + '-hidden').getValue())
                             ria.dom.Dom('#' + id).setValue(null);
-                        console.log("2");
                     }
                 }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
                     var fixedInstance = ria.__API.inheritFrom(item.constructor);

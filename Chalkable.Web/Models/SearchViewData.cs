@@ -108,14 +108,16 @@ namespace Chalkable.Web.Models
     public class ClassSearchViewData : SearchViewData
     {
         public Guid CourseId { get; set; }
-        public static SearchViewData Create(Class cClass)
+        public CourseViewData Course { get; set; }
+        public static SearchViewData Create(ClassDetails cClass)
         {
             return new ClassSearchViewData
             {
                 Id = cClass.Id,
                 Description = cClass.Name,
                 CourseId = cClass.CourseRef,
-                SearchType = (int)SearchTypeEnum.Classes
+                SearchType = (int)SearchTypeEnum.Classes,
+                Course = CourseViewData.Create(cClass.Course)
             };
         }
     }

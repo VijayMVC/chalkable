@@ -1,5 +1,5 @@
 mixin IfBlock_(items, i, index)
-    if index == 0 || i + index < items.length
+    if items != null && (index == 0 || i + index < items.length)
         TD
             .image-container
                 +PersonImg(items[i+index], 64)
@@ -35,13 +35,18 @@ mixin IfBlock_(items, i, index)
                     +ActionLink('teachers', 'info', self.getTeacher().getId().valueOf())=self.getTeacher().getDisplayName()
                     | - #{self.getRoom() && self.getRoom().getDescription()}
                 .glance-container
-                    +GlanceBox(null, null, {value: self.getClassAverageBox().getTitle(), title: Msg.Class_average, items: self.getClassAverageBox().getHover()})
-                    +GlanceBox(null, null, {value: self.getClassAttendanceBox().getTitle(), title: Msg.Attendance_count, items: self.getClassAttendanceBox().getHover()})
-                    +GlanceBox(null, null, {value: self.getClassDisciplineBox().getTitle(), title: Msg.Discipline_count, items: self.getClassDisciplineBox().getHover()})
-                    +GlanceBox(null, null, {value: self.getClassSize(), title: Msg.Class_size}, 'brown')
+                    if (self.getClassAverageBox())
+                        +GlanceBox(null, null, {value: self.getClassAverageBox().getTotal(), title: Msg.Class_average, items: self.getClassAverageBox().getHover()})
+                    if (self.getClassAttendanceBox())
+                        +GlanceBox(null, null, {value: self.getClassAttendanceBox().getTotal(), title: Msg.Attendance_count, items: self.getClassAttendanceBox().getHover()})
+                    if (self.getClassDisciplineBox())
+                        +GlanceBox(null, null, {value: self.getClassDisciplineBox().getTotal(), title: Msg.Discipline_count, items: self.getClassDisciplineBox().getHover()})
+                    if (self.getClassSize())
+                        +GlanceBox(null, null, {value: self.getClassSize(), title: Msg.Class_size}, 'brown')
         .today-work-panel
             h2=Msg.Upcoming_assignments
             .period-toolbar
-                +LeftRightToolbar(self.getAnnouncementsByDate(), chlk.templates.announcement.AnnouncementsByDate)(hideArrows)
+                if (self.getAnnouncementsByDate())
+                    +LeftRightToolbar(self.getAnnouncementsByDate(), chlk.templates.announcement.AnnouncementsByDate)(hideArrows)
         .today-work-panel
             h2.stats=Msg.Stats_and_facts
