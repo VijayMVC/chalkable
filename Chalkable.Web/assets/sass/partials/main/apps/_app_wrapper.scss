@@ -8,12 +8,11 @@
 
       background: transparent;
 
-      top: 50px !important;
-      left: 90px !important;
-      right: 90px !important;
-      position: fixed !important;
+      top: 50px;
+      left: 90px;
+      right: 90px;
+      position: fixed;
       bottom: 0;
-      z-index: 100001 !important;
 
       .window-error-message{
         font-size: 40px;
@@ -39,7 +38,7 @@
       }
 
       &.app-install{
-        width: 620px !important;
+        width: 620px;
       }
 
 

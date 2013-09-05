@@ -1,5 +1,6 @@
 REQUIRE('chlk.controllers.BaseController');
-REQUIRE('chlk.services.');
+REQUIRE('chlk.services.ApplicationService');
+REQUIRE('chlk.models.common.Button');
 
 
 NAMESPACE('chlk.controllers', function (){
@@ -8,30 +9,29 @@ NAMESPACE('chlk.controllers', function (){
     CLASS(
         'AppApiReactorController', EXTENDS(chlk.controllers.BaseController), [
 
+
+            [ria.mvc.Inject],
+            chlk.services.ApplicationService, 'appsService',
+
             [[Object]],
             function addMeAction(data){
                 console.info('addMe', data);
                 if (data.appReady) {
+                    var announcementId = new chlk.models.id.AnnouncementId(data.announcementId);
+                    var appId = new chlk.models.id.AppId(data.appId);
 
-
-
-                    /*that.handlers.attachAction(data.id);
+                    //close wrapper, close attach dialog, update announcement attachments
+                    var result = this.appsService.addAppToAnnouncement(appId ,announcementId);
                 }
                 else {
-                    alert("App is not ready");
-                    /*
-                    addMessage({
-                        html: String.format('<h2>Error</h2><p>Application is not ready for attaching.</p>'),
-                        cls: 'new-style',
-                        newStyle: true,
-                        zIndex: 100002,
-                        buttons: [
-                            {
-                                text: Msg.OK,
-                                cls: 'rounded-state-button green2 x-btn'
-                            }
-                        ]
-                    })*/;
+                     return this.ShowMsgBox(
+                         'App is not ready for closing',
+                         'Sorry',[{
+                            text: 'Ok',
+                            color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                         }],
+                         'app-wrapper-error centered'
+                     );
                 }
             },
 

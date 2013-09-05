@@ -32,8 +32,10 @@ REQUIRE('chlk.AppApiHost');
 
                   var rUrl = this.getFrameUrl('edit');
                   var announcementId = node.getData('announcement-id');
+                  var appId = node.getData('app-id');
                   var data = {
                       attach: true,
+                      appId: appId,
                       announcementId : announcementId
                   };
                   (new chlk.AppApiHost()).addApp(this.getInnerDocument(), rUrl, data);
