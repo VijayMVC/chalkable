@@ -1,0 +1,17 @@
+.calendar-popup
+    announcements = self.getAnnouncements();
+    if announcements.length > 0
+        .announcements-list
+            h2=Msg.Announcement(true)
+            ul.day-announcements
+                each item in announcements
+                    li.items
+                        //A(href="#announcement/view/" + item.getId().valueOf()).pop-up-announcement
+                        +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getAnnouncementTypeId()).pop-up-announcement
+                            div
+                                p.title=item.getTitle()
+                                p.classname-under=item.getClassName() || item.getPersonName()
+    +ActionLink('announcement', 'add').ann-button.plus-ann
+
+
+
