@@ -1,5 +1,6 @@
 REQUIRE('chlk.templates.JadeTemplate');
 REQUIRE('chlk.models.search.SearchItem');
+REQUIRE('chlk.models.course.Course');
 
 NAMESPACE('chlk.templates.search', function () {
 
@@ -13,6 +14,9 @@ NAMESPACE('chlk.templates.search', function () {
             String, 'id',
 
             [ria.templates.ModelPropertyBind],
+            String, 'announcementId',
+
+            [ria.templates.ModelPropertyBind],
             String, 'description',
 
             [ria.templates.ModelPropertyBind],
@@ -22,7 +26,10 @@ NAMESPACE('chlk.templates.search', function () {
             Number, 'roleId',
 
             [ria.templates.ModelPropertyBind],
-            String, 'gender'
+            String, 'gender',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.course.Course, 'course'
         ])
 });
 

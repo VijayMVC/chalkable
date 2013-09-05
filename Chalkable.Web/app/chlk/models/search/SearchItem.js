@@ -1,4 +1,5 @@
 REQUIRE('chlk.models.common.ChlkDate');
+REQUIRE('chlk.models.course.Course');
 
 
 NAMESPACE('chlk.models.search', function () {
@@ -13,7 +14,10 @@ NAMESPACE('chlk.models.search', function () {
             [ria.serialize.SerializeProperty('searchtype')],
             Number, 'searchType',
             [ria.serialize.SerializeProperty('roleid')],
-            Number, 'roleId'
+            Number, 'roleId',
+            chlk.models.course.Course, 'course',
+            [ria.serialize.SerializeProperty('announcementid')],
+            String, 'announcementId'
         ]);
 });
 

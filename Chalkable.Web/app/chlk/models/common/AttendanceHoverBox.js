@@ -7,6 +7,6 @@ NAMESPACE('chlk.models.common', function () {
     /** @class chlk.models.common.AttendanceHoverBox*/
     CLASS(
         'AttendanceHoverBox', EXTENDS(chlk.models.common.HoverBox), [
-            ArrayOf(chlk.models.common.AttendanceHoverBoxItem), 'hover'
+            //ArrayOf(chlk.models.common.AttendanceHoverBoxItem), 'hover'
         ]);
 });
