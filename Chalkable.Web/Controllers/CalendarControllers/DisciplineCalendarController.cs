@@ -17,9 +17,8 @@ namespace Chalkable.Web.Controllers.CalendarControllers
             DateTime start, end;
             MonthCalendar(ref date, out start, out end);
             var currentSchoolYearId = GetCurrentSchoolYearId();
-            var classes = SchoolLocator.ClassService.GetClasses(currentSchoolYearId, null, null);
             var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineDetails(currentSchoolYearId, studentId, start, end);
-            var res = PrepareMonthCalendar(start, end, date.Value, (time, b) => DisciplineMonthCalendarViewData.Create(time, b, classes,disciplines));
+            var res = PrepareMonthCalendar(start, end, date.Value, (time, b) => DisciplineMonthCalendarViewData.Create(time, b, Context.UserId, disciplines));
             return Json(res, 6);
         }
     }
