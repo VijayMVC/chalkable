@@ -17,7 +17,7 @@ namespace Chalkable.Data.Master.Model
         public Guid? FromUserRef { get; set; }
         public const string TO_USER_REF_FIELD = "ToUserRef";
         public Guid? ToUserRef { get; set; }
-        public const string APP_INSTALL_ACTION_REF_FIELD = "APP_INSTALL_ACTION_REF_FIELD";
+        public const string APP_INSTALL_ACTION_REF_FIELD = "AppInstallActionRef";
         public Guid? AppInstallActionRef { get; set; }
         public const string IS_PRIVATE_FIELD = "IsPrivate";
         public bool IsPrivate { get; set; }

@@ -49,7 +49,7 @@ namespace Chalkable.Web.Models
             {
                 res.Stat.Add(new StudentAttendanceStatViewData
                 {
-                    StundetnCount = stCountAbsentFromPeriods[i].StudentCount,
+                    StudentCount = stCountAbsentFromPeriods[i].StudentCount,
                     Summary = StringTools.NumberToStr(stCountAbsentFromPeriods[i].PeriodOrder)
                 });   
             }
@@ -65,7 +65,7 @@ namespace Chalkable.Web.Models
             {
                 res.Stat.Add(new StudentAttendanceStatViewData
                     {
-                        StundetnCount = stAbsentForDayStats[d],
+                        StudentCount = stAbsentForDayStats[d],
                         Summary = d.ToString(DAY_FORMAT)
                     });
             }
@@ -80,8 +80,8 @@ namespace Chalkable.Web.Models
             var res = new AdminAttendanceBoxViewData { Stat = new List<StudentAttendanceStatViewData>() };
             if(stCountAbsentFromDay.Count > 0)
                 res.DisplayNumber = (int)stCountAbsentFromDay.Average(x => x.Value);
-            var toDate = stCountAbsentFromDay.First().Key;
-            var startDate = stCountAbsentFromDay.Last().Key;
+            var startDate = stCountAbsentFromDay.First().Key;
+            var toDate = stCountAbsentFromDay.Last().Key;
             var currentMonth = 0;
             while (startDate < toDate)
             {
@@ -95,7 +95,7 @@ namespace Chalkable.Web.Models
                     }
                     res.Stat.Add(new StudentAttendanceStatViewData
                     {
-                        StundetnCount = stCountAbsentFromDay[startDate],
+                        StudentCount = stCountAbsentFromDay[startDate],
                         Summary = summary,
                     });
                 }
@@ -114,7 +114,7 @@ namespace Chalkable.Web.Models
 
     public class StudentAttendanceStatViewData
     {
-        public int StundetnCount { get; set; }
+        public int StudentCount { get; set; }
         public string Summary { get; set; }
     }
 }

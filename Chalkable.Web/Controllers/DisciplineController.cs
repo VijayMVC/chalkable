@@ -38,5 +38,22 @@ namespace Chalkable.Web.Controllers
             var classes = SchoolLocator.Context.Role == CoreRoles.TEACHER_ROLE ? SchoolLocator.ClassService.GetClasses(schoolYearIdv, null, null) : null;
             return Json(DisciplineView.Create(list, classes, canEdit));
         }
+        
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult SetClassDiscipline(DisciplineListInputModel disciplineList)
+        {
+            foreach (var discInputModel in disciplineList.Disciplines)
+            {
+                ISet<Guid> discplineTypesSet = new HashSet<Guid>();
+                foreach (var discplineTypeId in discInputModel.DiscplineTypeIds)
+                {
+                    if (discplineTypesSet.Contains(discplineTypeId))
+                        discplineTypesSet.Add(discplineTypeId);
+                }
+                SchoolLocator.DisciplineService.SetClassDiscipline(discInputModel.ClassPersonId, discInputModel.ClassPeriodId, discInputModel.Date,
+                                                                   discplineTypesSet, discInputModel.Description);
+            }
+            return Json(true);
+        }
     }
 }

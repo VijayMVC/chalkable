@@ -40,12 +40,11 @@ namespace Chalkable.Web.Models
         }
     }
 
-
     public class StudentDisciplineSummaryViewData 
     {
         public PersonViewData Student { get; set; }
         public int Total { get; set; }
-        public int DiscplineRecordsNumber { get; set; }
+        public int DisciplineRecordsNumber { get; set; }
         public string Summary { get; set; }
 
         private StudentDisciplineSummaryViewData(Person student)
@@ -68,7 +67,7 @@ namespace Chalkable.Web.Models
                     {
                         disciplineView.Summary = BuildSummary(disciplineTypes);
                         disciplineView.Total = disciplineTypes.Sum(x => x.DisciplineType.Score);
-                        disciplineView.DiscplineRecordsNumber = disciplineTypes.Count;
+                        disciplineView.DisciplineRecordsNumber = disciplineTypes.Count;
                         res.Add(disciplineView);
                     }
                     disciplineView = new StudentDisciplineSummaryViewData(discipline.Student);
@@ -83,5 +82,20 @@ namespace Chalkable.Web.Models
             var dic = disciplineTypes.GroupBy(x => x.DisciplineType.Name).ToDictionary(x => x.Key, x => x.Count());
             return dic.Select(x => string.Format("{0} {1}", x.Key, x.Value)).JoinString(",");
         }
+    }
+
+
+    public class DisciplineInputModel
+    {
+        public Guid ClassPersonId { get; set; }
+        public Guid ClassPeriodId { get; set; }
+        public DateTime Date { get; set; }
+        public GuidList DiscplineTypeIds { get; set; }
+        public string Description { get; set; }
+    }
+
+    public class DisciplineListInputModel
+    {
+        public IList<DisciplineInputModel> Disciplines { get; set; } 
     }
 }
