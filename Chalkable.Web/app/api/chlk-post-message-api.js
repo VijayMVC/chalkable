@@ -19,14 +19,9 @@ var chlkRequestSiteRoot = function () {
 var chlkGetDomain = function(url){
     var result = "";
     if (url !== undefined){
-        var parts = url.split(".");
-
-
-        var index = parts.length >= 2 ? parts.length - 2 : 0;
-        result = parts[index].replace(/(http[s]?:\/\/)?(www.)?/i, '');
-        if (parts.length >= 2){
-            result += "." + parts[parts.length - 1];
-        }
+        url = url.replace(/(:\d+)\//, '/');
+        var parts = url.split("app");
+        result = parts[0].replace(/(http[s]?:\/\/)?(www.)?/i, '');
     }
     return result;
 }
@@ -41,7 +36,7 @@ var CHLK_MESSENGER = (function () {
         SHOW_PLUS: 'showPlus',
         ADD_YOURSELF: 'addYourself',
         UPDATE_ORIGIN: 'updateOrigin',
-        REQUEST_ORIGIN: 'requestOrigin',
+        REQUEST_ORIGIN: 'requestOrigin'
     };
     var messenger = {
         parentURL: chlkRequestSiteRoot(),
