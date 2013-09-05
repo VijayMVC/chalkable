@@ -146,6 +146,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.ClassId, Number]],
         function addAction(classId_, announcementTypeId_) {
+            this.disableAnnouncementSaving(false);
             this.getView().reset();
             var result = this.announcementService
                 .addAnnouncement(classId_, announcementTypeId_)
