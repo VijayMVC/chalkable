@@ -372,14 +372,16 @@ NAMESPACE('ria.dom', function () {
             [[String]],
             SELF, function triggerEvent(event) {
                 var node = this.valueOf()[0];
-                if ( document.createEvent ) {
-                    var evt = document.createEvent('Event');
-                    evt.initEvent(event, true, false);
-                    node.dispatchEvent(evt);
-                } else if( document.createEventObject ) {
-                    node.fireEvent('on' + event) ;
-                } else if (typeof node.onsubmit == 'function' ) {
-                    node.onsubmit();
+                if(node){
+                    if ( document.createEvent ) {
+                        var evt = document.createEvent('Event');
+                        evt.initEvent(event, true, false);
+                        node.dispatchEvent(evt);
+                    } else if( document.createEventObject ) {
+                        node.fireEvent('on' + event) ;
+                    } else if (typeof node.onsubmit == 'function' ) {
+                        node.onsubmit();
+                    }
                 }
                 return this;
             },

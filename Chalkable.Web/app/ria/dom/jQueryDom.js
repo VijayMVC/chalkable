@@ -367,7 +367,7 @@ NAMESPACE('ria.dom', function () {
             },
 
             Boolean, function checked() {
-                return this.parent().find('.hidden-checkbox').getData('value') || false;
+                return !!(this.parent().find('.hidden-checkbox').getData('value')) || false;
             },
 
             /* Form */
