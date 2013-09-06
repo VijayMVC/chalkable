@@ -24,10 +24,9 @@ namespace Chalkable.Web.Models.CalendarsViewData
         {
         }
 
-        public static DisciplineMonthCalendarViewData Create(DateTime date, bool isCurrentMonth, IList<ClassDetails> classes
-                                                      , IList<ClassDisciplineDetails> disciplines)
+        public static DisciplineMonthCalendarViewData Create(DateTime date, bool isCurrentMonth, Guid currentPersonId, IList<ClassDisciplineDetails> disciplines)
         {
-            var dscViewDataList = DisciplineView.Create(disciplines, classes);
+            var dscViewDataList = DisciplineView.Create(disciplines, currentPersonId);
             var dscTypesList = new List<DisciplineTypeViewData>();
             var moreCount = 0;
             foreach (var discipline in dscViewDataList)

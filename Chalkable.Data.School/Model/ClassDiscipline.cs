@@ -22,10 +22,32 @@ namespace Chalkable.Data.School.Model
     public class ClassDisciplineDetails : ClassDiscipline
     {
         public Person Student { get; set; }
+
+        private ClassPerson classPerson;
         [DataEntityAttr]
-        public ClassPerson ClassPerson { get; set; }
+        public ClassPerson ClassPerson
+        {
+            get { return classPerson; }
+            set
+            {
+                classPerson = value;
+                if (value != null && value.Id != Guid.Empty)
+                    ClassPersonRef = value.Id;
+            }
+        }
+
+        private ClassPeriod classPeriod;
         [DataEntityAttr]
-        public ClassPeriod ClassPeriod { get; set; }
+        public ClassPeriod ClassPeriod
+        {
+            get { return classPeriod; }
+            set
+            {
+                classPeriod = value;
+                if (value != null && value.Id != Guid.Empty)
+                    ClassPeriodRef = value.Id;
+            }
+        }
         [DataEntityAttr]
         public Class Class { get; set; }
 

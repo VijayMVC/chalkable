@@ -1,5 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.admin.HomePage');
+REQUIRE('chlk.templates.grading.GradeLevelForTopBar');
 
 NAMESPACE('chlk.activities.admin', function () {
 

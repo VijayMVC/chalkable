@@ -14,6 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IDisciplineService
     {
         ClassDiscipline SetClassDiscipline(Guid classPersonId, Guid classPeriodId, DateTime date, ISet<Guid> disciplineTypes, string description);
+        void DeleteClassDiscipline(Guid classPersonId, Guid classPeriodId, DateTime date);
         IList<ClassDisciplineDetails> GetClassDisciplineDetails(ClassDisciplineQuery query, IList<Guid> gradeLevelIds = null);
         IList<ClassDisciplineDetails> GetClassDisciplineDetails(Guid schoolYearId, Guid personId, DateTime start, DateTime end, bool needsAllData = false);
         IList<ClassDisciplineDetails> GetClassDisciplineDetails(Guid schoolYearId, DateTime date);
@@ -84,6 +85,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 else disciplineDa.Update(discipline);
 
                 var cDisciplineTypes = new List<ClassDisciplineType>();
+                var clDiscTypeDa = new ClassDisciplineTypeDataAccess(uow);
+                clDiscTypeDa.Delete(discipline.Id);
                 foreach (var disciplineType in disciplineTypes)
                 {
                     cDisciplineTypes.Add(new ClassDisciplineType 
@@ -93,12 +96,38 @@ namespace Chalkable.BusinessLogic.Services.School
                                     DisciplineTypeRef = disciplineType
                                 });
                 }
-                new ClassDisciplineTypeDataAccess(uow).Insert(cDisciplineTypes);
-
+                clDiscTypeDa.Insert(cDisciplineTypes);
                 uow.Commit();
                 return discipline;
             }
         }
+
+        public void DeleteClassDiscipline(Guid classPersonId, Guid classPeriodId, DateTime date)
+        {
+            using (var uow = Update())
+            {
+                var cPeriodDa = new ClassPeriodDataAccess(uow);
+                var cPeriod = cPeriodDa.GetClassPeriods(new ClassPeriodQuery { Id = classPeriodId }).First();
+                var c = new ClassDataAccess(uow).GetById(cPeriod.ClassRef);
+                if (!BaseSecurity.IsAdminEditorOrClassTeacher(c, Context))
+                    throw new ChalkableSecurityException();
+                
+                var dateDa = new DateDataAccess(uow);
+                if (!dateDa.Exists(new DateQuery { ToDate = date, FromDate = date, SectionRef = cPeriod.Period.SectionRef }))
+                    throw new ChalkableException(ChlkResources.ERR_CLASS_IS_NOT_SCHEDULED_FOR_DAY);
+
+                var disciplineDa = new ClassDisciplineDataAccess(uow);
+                var discipline = disciplineDa.GetClassDiscipline(classPeriodId, classPersonId, date);
+                if (discipline != null)
+                {
+                    var classDiscTypeDa = new ClassDisciplineTypeDataAccess(uow);
+                    classDiscTypeDa.Delete(discipline.Id, null);
+                    disciplineDa.Delete(discipline.Id);
+                }
+                uow.Commit();
+            }
+        }
+
         public IList<ClassDisciplineDetails> GetClassDisciplineDetails(Guid schoolYearId, DateTime date)
         {
             return GetClassDisciplineDetails(new ClassDisciplineQuery
@@ -128,5 +157,8 @@ namespace Chalkable.BusinessLogic.Services.School
             var res = CalcDisciplineTypeTotal(null, markingPeriodId, schoolYearId, fromDate, toDate);
             return res.Where(x=>studentIds.Contains(x.PersonId)).ToList();
         }
+
+
+        
     }
 }

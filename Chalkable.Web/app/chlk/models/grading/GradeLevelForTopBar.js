@@ -8,6 +8,7 @@ NAMESPACE('chlk.models.grading', function () {
             String, 'controller',
             String, 'action',
             Array, 'params',
+            Number, 'index',
             Boolean, 'pressed'
         ]);
 });

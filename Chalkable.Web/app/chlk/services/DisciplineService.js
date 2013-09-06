@@ -3,8 +3,11 @@ REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.discipline.DisciplineSummary');
 REQUIRE('chlk.models.discipline.Discipline');
+REQUIRE('chlk.models.discipline.SetDisciplineListModel');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.SchoolYearId');
+REQUIRE('chlk.models.id.ClassPeriodId');
+REQUIRE('chlk.models.id.ClassPersonId');
 //REQUIRE('chlk.models.developer.DeveloperInfo');
 
 NAMESPACE('chlk.services', function(){
@@ -27,6 +30,13 @@ NAMESPACE('chlk.services', function(){
                     schoolYearId: schoolYearId_ ? schoolYearId_.valueOf() : null,
                     schoolPersonId: schoolPersonId.valueOf(),
                     date: date_ ? date_.valueOf() : null
+                });
+            },
+
+            [[chlk.models.discipline.SetDisciplineListModel]],
+            ria.async.Future, function setDisciplines(disciplines){
+                return this.post('Discipline/SetClassDiscipline.json', Boolean,{
+                    disciplines: disciplines.getPostData()
                 });
             }
         ]

@@ -4,6 +4,7 @@ REQUIRE('chlk.services.DisciplineTypeService');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.discipline.DisciplineList');
 REQUIRE('chlk.models.discipline.DisciplineInputModel');
+REQUIRE('chlk.models.discipline.SetDisciplineListModel');
 REQUIRE('chlk.activities.discipline.DisciplineSummaryPage');
 REQUIRE('chlk.activities.discipline.SetDisciplineDialog');
 
@@ -23,14 +24,14 @@ NAMESPACE('chlk.controllers', function(){
 
             [[Number, chlk.models.common.ChlkDate]],
             function listAction(start_, date_){
-                var res = this.disciplineService.list(date_, start_|0)
+                var res = this.disciplineService.list(date_, start_ || 0)
                               .attach(this.validateResponse_());
                 return this.PushView(chlk.activities.discipline.DisciplineSummaryPage, res);
             },
 
             [[Number, chlk.models.common.ChlkDate]],
             function pageAction(start, date_){
-                var res = this.disciplineService.list(date_ | null, start)
+                var res = this.disciplineService.list(date_ || null, start)
                               .attach(this.validateResponse_());
                 return this.UpdateView(chlk.activities.discipline.DisciplineSummaryPage, res);
             },
@@ -48,6 +49,12 @@ NAMESPACE('chlk.controllers', function(){
                         return new chlk.models.discipline.DisciplineList(result[1], result[0], date);
                   }, this);
                 return this.ShadeView(chlk.activities.discipline.SetDisciplineDialog, res); //todo create activities
+            },
+
+            [[chlk.models.discipline.SetDisciplineListModel]],
+            function setDisciplinesAction(model){
+               var res = this.disciplineService.setDisciplines(model).attach(this.validateResponse_());
+               this.Redirect('discipline', 'list', []);
             }
         ])
 });

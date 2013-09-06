@@ -21,7 +21,7 @@ namespace Chalkable.Web.Models
         public string Summary { get; set; }
         public bool Editable { get; set; }
 
-        protected DisciplineView(ClassDisciplineDetails discipline, IList<ClassDetails> classes, bool canEdit)
+        protected DisciplineView(ClassDisciplineDetails discipline, Guid currentPersonId,  bool canEdit)
         {
             StudentId = discipline.Student.Id;
             Period = PeriodViewData.Create(discipline.ClassPeriod.Period);
@@ -30,13 +30,13 @@ namespace Chalkable.Web.Models
             TeacherId = discipline.Class.TeacherRef;
             ClassPeriodId = discipline.ClassPeriodRef;
             ClassPersonId = discipline.ClassPersonRef;
-            Editable = canEdit || (classes != null && classes.Any(t => t.Name == ClassName));
+            Editable = canEdit || currentPersonId == TeacherId;
         }
 
-        public static IList<DisciplineView> Create(IList<ClassDisciplineDetails> disciplines, IList<ClassDetails> classes,
+        public static IList<DisciplineView> Create(IList<ClassDisciplineDetails> disciplines, Guid currentPersonId,
                                             bool canEdit = false)
         {
-            return disciplines.Select(x => new DisciplineView(x, classes, canEdit)).ToList();
+            return disciplines.Select(x => new DisciplineView(x, currentPersonId, canEdit)).ToList();
         }
     }
 
@@ -54,27 +54,24 @@ namespace Chalkable.Web.Models
 
         public static IList<StudentDisciplineSummaryViewData> Create(IList<ClassDisciplineDetails> disciplines)
         {
-            ISet<Guid> studentIds = new HashSet<Guid>();
-            var res = new List<StudentDisciplineSummaryViewData>();
-            StudentDisciplineSummaryViewData disciplineView = null;
-            var disciplineTypes = new List<ClassDisciplineTypeDetails>();
+            IDictionary<Guid, List<ClassDisciplineTypeDetails>> stDiscTypeDic = new Dictionary<Guid, List<ClassDisciplineTypeDetails>>(); 
+            IDictionary<Guid, Person> stDic = new Dictionary<Guid, Person>();
             foreach (var discipline in disciplines)
             {
-                if (!studentIds.Contains(discipline.Student.Id))
+                if (!stDiscTypeDic.ContainsKey(discipline.Student.Id))
                 {
-                    studentIds.Add(discipline.Id);
-                    if (disciplineView != null)
-                    {
-                        disciplineView.Summary = BuildSummary(disciplineTypes);
-                        disciplineView.Total = disciplineTypes.Sum(x => x.DisciplineType.Score);
-                        disciplineView.DisciplineRecordsNumber = disciplineTypes.Count;
-                        res.Add(disciplineView);
-                    }
-                    disciplineView = new StudentDisciplineSummaryViewData(discipline.Student);
+                    stDic.Add(discipline.Student.Id, discipline.Student);
+                    stDiscTypeDic.Add(discipline.Student.Id, new List<ClassDisciplineTypeDetails>());
                 }
-                disciplineTypes.AddRange(discipline.DisciplineTypes);           
+                stDiscTypeDic[discipline.Student.Id].AddRange(discipline.DisciplineTypes);
+
             }
-            return res;
+            return stDiscTypeDic.Select(x => new StudentDisciplineSummaryViewData(stDic[x.Key])
+                {
+                    Summary = BuildSummary(x.Value),
+                    Total = x.Value.Sum(y => y.DisciplineType.Score),
+                    DisciplineRecordsNumber = x.Value.Count
+                }).ToList();
         }
 
         private static string BuildSummary(IEnumerable<ClassDisciplineTypeDetails> disciplineTypes)
@@ -90,7 +87,7 @@ namespace Chalkable.Web.Models
         public Guid ClassPersonId { get; set; }
         public Guid ClassPeriodId { get; set; }
         public DateTime Date { get; set; }
-        public GuidList DiscplineTypeIds { get; set; }
+        public GuidList DisciplineTypeIds { get; set; }
         public string Description { get; set; }
     }
 

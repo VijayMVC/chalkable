@@ -3,13 +3,14 @@ REQUIRE('chlk.models.discipline.StudentDisciplines');
 REQUIRE('chlk.models.grading.GradingStat');
 REQUIRE('chlk.models.attendance.AttendanceStatBox');
 REQUIRE('chlk.models.funds.BudgetBalance');
+REQUIRE('chlk.models.common.PageWithGrades');
 
 NAMESPACE('chlk.models.admin', function () {
     "use strict";
 
     /** @class chlk.models.admin.Home*/
     CLASS(
-        'Home', [
+        'Home', EXTENDS(chlk.models.common.PageWithGrades), [
             ArrayOf(chlk.models.attendance.StudentAttendances), 'attendances',
 
             ArrayOf(chlk.models.discipline.StudentDisciplines), 'disciplines',

@@ -5,6 +5,7 @@ REQUIRE('chlk.models.id.ClassPeriodId');
 REQUIRE('chlk.models.id.ClassPersonId');
 
 NAMESPACE('chlk.models.discipline', function(){
+    "use strict";
 
     /** @class chlk.models.discipline.Discipline*/
     CLASS('Discipline', [
@@ -24,8 +25,8 @@ NAMESPACE('chlk.models.discipline', function(){
         [ria.serialize.SerializeProperty('classname')],
         String, 'className',
 
-        [ria.serialize.SerializeProperty('disciplinetype')],
-        ArrayOf(chlk.models.discipline.DisciplineType), 'disciplineType',
+        [ria.serialize.SerializeProperty('disciplinetypes')],
+        ArrayOf(chlk.models.discipline.DisciplineType), 'disciplineTypes',
 
         chlk.models.common.ChlkDate, 'date',
 

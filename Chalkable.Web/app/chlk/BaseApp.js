@@ -96,7 +96,7 @@ NAMESPACE('chlk', function (){
 
             OVERRIDE, ria.async.Future, function onStart_() {
 
-                ria.templates.ConverterFactories.register(new chlk.ConvertersFactory());
+                ria.templates.ConverterFactories().register(new chlk.ConvertersFactory());
 
                 //TODO Remove jQuery
                 jQuery(document).on('mouseover', '[data-tooltip]', function(){

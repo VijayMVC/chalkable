@@ -4,6 +4,7 @@ REQUIRE('chlk.services.FeedService');
 REQUIRE('chlk.services.FundsService');
 REQUIRE('chlk.activities.feed.FeedListPage');
 REQUIRE('chlk.activities.admin.HomePage');
+REQUIRE('chlk.services.GradeLevelService');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -19,6 +20,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.FundsService, 'fundsService',
+
+        [ria.mvc.Inject],
+        chlk.services.GradeLevelService, 'gradeLevelService',
 
         [[Number]],
         function listAction(pageIndex_) {
@@ -39,10 +43,14 @@ NAMESPACE('chlk.controllers', function (){
         [[String]],
         function adminAction(gradeLevels_) {
             var res = ria.async.wait([
-                    this.feedService.getAdminFeed(),
+                    this.feedService.getAdminFeed(gradeLevels_),
                     this.fundsService.getBalance()
                 ]).then(function(result){
+                    var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);
+                    var topModel = new chlk.models.grading.GradeLevelsForTopBar();
+                    topModel.setTopItems(gradeLevels);
                     var model = result[0];
+                    model.setTopData(topModel);
                     var markingPeriod = this.getContext().getSession().get('markingPeriod', null);
                     model.setMarkingPeriodName(markingPeriod.getName());
                     model.setBudgetBalance(result[1]);
