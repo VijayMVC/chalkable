@@ -1,0 +1,33 @@
+li(data-title = self.description, data-value = self.id.valueOf() + '|' + self.searchType.valueOf(), style="background: white")
+    div.site-search
+        if self.searchType == 0
+            if self.roleId == 2
+                +ActionLink('teachers', 'info', self.id).left.image-container.white.shadow
+                    div.site-search-person
+                        +PersonImg(self, 47)
+                        //
+                            img.avatar.avatar47(class=self.gender, src=self.getPictureURL(self.id, 47))
+                        div.title= self.description
+            if self.roleId == 3
+                +ActionLink('students', 'info', self.id).left.image-container.white.shadow
+                    div.site-search-person
+                        img.avatar.avatar47(class=self.gender, src=self.getPictureURL(self.id, 47))
+                        div.title= self.description
+        else if self.searchType == 4
+            +ActionLink('class', 'details', self.id).left.image-container.white.shadow
+                div.site-search-class
+                    .img-wrapper
+                        +ClassImg(self.course, 45, 80).avatar
+                    div.title= self.description
+        else if self.searchType == 3
+            +ActionLink('announcement', 'view', self.announcementId).left.image-container.white.shadow
+                div.site-search-attachment
+                    .image
+                    div.title= self.description
+        else if self.searchType == 2
+            +ActionLink('announcement', 'view', self.announcementId).left.image-container.white.shadow
+                div.site-search-announcement
+                    div(class="announcement-type-" + self.announcementType).icon.blue.image
+                    div.title= self.description
+        else
+            div= self.description

@@ -1,0 +1,24 @@
+mixin AppIconLink(announcementId, app)
+   appId = app.getId().valueOf()
+   +ActionLink('apps', 'tryToAttach', [announcementId, appId]).app-icon-link
+        .app-list-item
+            .icon
+                pictureUrl = self.getPictureURL(app.getSmallPictureId(), 74, 74)
+                img(src=pictureUrl)
+            .description
+                .name=app.getName()
+                .shortdesc=app.getShortDescription()
+
+teacherId = self.teacherId.valueOf()
+announcementId = self.announcementId.valueOf()
+.dialog.attach-app
+    .x-window-header
+        a.close.close-btn
+    .x-window-body
+        .header Attach an App
+        .apps
+            each app in self.apps.getItems()
+                +AppIconLink(announcementId, app)
+        .paging
+            +Paginator('announcement', 'listAvailableForAttachPage', self.apps, [teacherId, announcementId])
+
