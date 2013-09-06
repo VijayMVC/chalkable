@@ -29,7 +29,10 @@ NAMESPACE('chlk.templates.search', function () {
             String, 'gender',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.course.Course, 'course'
+            chlk.models.course.Course, 'course',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'announcementType'
         ])
 });
 
