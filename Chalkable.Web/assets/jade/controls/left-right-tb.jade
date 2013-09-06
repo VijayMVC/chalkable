@@ -1,5 +1,3 @@
-//For multiple toolbar params should be Array of objects with properties "name" and "value" for creating hidden inputs
-
 mixin LeftRightToolbar(data, tplClass, controller, action, params)
     configs = self.prepareData(data, attributes, controller, action, params)
     .lr-toolbar(attributes)
@@ -7,19 +5,17 @@ mixin LeftRightToolbar(data, tplClass, controller, action, params)
         .first-container
             .second-container
                 each item,i in data
-                    id = item.getId().valueOf();
-                    -item.setPressed && item.setPressed(configs.selectedIds ? ((!id && !configs.selectedIds.length) || configs.selectedIds.indexOf(id) > -1) : configs.selectedItemId == id);
+                    if item.setPressed && item.getId
+                        id = item.getId().valueOf();
+                        if configs.multiple
+                            -item.setPressed(!id && !configs.selectedIds.length || configs.selectedIds.indexOf(id) > -1);
+                        -item.setPressed(configs.selectedItemId == id);
                     -item.setDisabled && item.setDisabled(!configs.pressAfterClick);
                     -item.setIndex && item.setIndex(i);
                     if controller
                         -item.setController(controller);
                         -item.setAction(action);
                         -item.setParams(params || []);
-                    //if configs.multiple && controller
-                        +ActionForm(controller, action)
-                            each param in params
-                                +Hidden(param.name, param.value)
-
                     +RenderWith(item, tplClass)
         .A(class=configs.disableNextButton ? configs.disabledClass : "").next-button.arrow
         if(configs.needDots)

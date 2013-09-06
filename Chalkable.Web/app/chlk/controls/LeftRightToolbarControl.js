@@ -82,12 +82,13 @@ NAMESPACE('chlk.controls', function () {
                                 var params = configs.params;
                                 var ids = Array.isArray(configs.selectedIds) ? configs.selectedIds : configs.selectedIds.split(',');
                                 var currentId = node.getData('id');
-                                if(node.hasClass('pressed')){
-                                    ids.splice(ids.indexOf(currentId), 1);
-                                }else{
-                                    ids.push(currentId);
+                                if(currentId){
+                                    if(node.hasClass('pressed'))
+                                        ids.splice(ids.indexOf(currentId), 1);
+                                    else
+                                        ids.push(currentId);
+                                    params.push(ids.join(','));
                                 }
-                                params.push(ids.join(','));
                                 state.setParams(params);
                                 state.setPublic(false);
                                 that.context.stateUpdated();
