@@ -1,0 +1,66 @@
+.setup-page.teacher-settings.loader-container
+    topData = self.getTopData();
+    topItems = topData.getTopItems();
+    gradingInfo = self.getGradingInfo();
+    .loader
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'teacherSettings')(
+        selectedItemId=gradingInfo && gradingInfo.getClazz().getId().valueOf(),
+    ).classes-bar
+    if gradingInfo
+        classInfo = gradingInfo.getClazz();
+        +ActionForm('grading', 'teacherSettingsEdit')#update-ann-type-submit-form
+            +Hidden('id', gradingInfo.getId())
+            +Hidden('changed')
+            +Hidden('needsTypesForClasses', true)
+            +Hidden('gradingStyleByType'))
+            +Hidden('dropLowest')
+            +Hidden('percents')
+            +Hidden('attendance')
+            +Hidden('discipline')
+            +Hidden('participation')
+            +Hidden('finalGradeAnnouncementTypeIds')
+            +Hidden('nextClassNumber', gradingInfo.getNextClassNumber())
+            +Hidden('gradingStyle', gradingInfo.getGradingStyle())
+            +Hidden('dropLowestAttendance', gradingInfo.getDropLowestAttendance())
+            +Hidden('dropLowestDiscipline', gradingInfo.getDropLowestDiscipline())
+            input(type="submit")#update-ann-type-submit.x-hidden
+            .action-bar.not-transparent.buttons
+                .container.panel-bg
+                    .left
+                        +ActionLink('settings', 'dashboardTeacher', [])=Msg.Settings
+                    .right
+                        +ActionLink('grading', 'teacherSettings', [])=Msg.Cancel
+                        Button(type="submit", disabled).action-button.next-class=Msg.Save
+            #settings-step2
+                label#percents-label.blue-arrow.div=Msg.Student_grades_are_out_of(classInfo.getName())
+                    per = self.getPercentsSum();
+                    span(
+                        class=(per == 100 ? "" : "error"),
+                        data-tooltip=(per == 100 ? null : "Add " + (100 - per) + "%")
+                    ).percents-count=per + "%"
+            #settings-step3
+                .ann-types-container
+                    +RenderWith(gradingInfo, chlk.templates.grading.Final)
+                .hint-text If you don’t use an item type just set it to 0%.
+                #other-data.not-transparent.items-container
+                    div(index=0, class=(gradingInfo.getParticipation() ? "active" : "")).announcement-type-item.gradient
+                        div
+                            .left.name=Msg.Participation
+                            .right.relative
+                                input(name="participation", value=(gradingInfo.getParticipation()+"%")).announcement-type-weight#participation-value
+                                .hint.absolute=Msg.Weight
+                    div(index=1, class=(gradingInfo.getAttendance() ? "active" : "")).announcement-type-item.gradient
+                        div
+                            .left.name=Msg.Attendance
+                            .right.relative
+                                input(name="attendance", value=(gradingInfo.getAttendance()+"%")).announcement-type-weight#attendance-value
+                                .hint.absolute=Msg.Weight
+                    div(index=2, class=(gradingInfo.getDiscipline() ? "active" : "")).announcement-type-item.gradient
+                        div
+                            .left.name=Msg.Discipline
+                            .right.relative
+                                input(name="discipline", value=(gradingInfo.getDiscipline()+"%")).announcement-type-weight#discipline-value
+                                .hint.absolute=Msg.Weight
+    else
+        .choose-class
+

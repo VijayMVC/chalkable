@@ -1,0 +1,19 @@
++ActionLink('feed', 'admin')#home-logo
+#sidebar-controls
+    .search-wrapper
+        #search-bar
+            +SearchBox(chlk.services.SearchService, "search", chlk.templates.search.SiteSearch)#siteSearch(name="siteSearch")
+
+    .wrapper
+        +ActionLink('announcement','add').fullwidth-button.add-new
+        .buttons-row
+            +ActionLink('calendar', 'month').one-third-button.calendar(title="View Calendar") Calendar
+            +ActionLink('message', 'page').one-third-button.messages(title="View Messages") Messages
+            +ActionLink('students', 'all').one-third-button.people(title="View People") People
+        .buttons-row
+            +ActionLink('grading', '').one-third-button.statistic(title="View Grades") Grades
+            +ActionLink('app-market', 'list').one-third-button.apps(title="View Apps") Apps
+            +ActionLink('settings', 'dashboard').one-third-button.settings(title="View Settings") Settings
+        .buttons-row
+            +ActionLink('attendance', 'summary').one-third-button.attendance(title="View Attendance") Attendance
+            +ActionLink('discipline', 'list').one-third-button.discipline(title="View Discipline") Discipline
