@@ -22,7 +22,7 @@ ria.__REQUIRE.addPlugin(
                                 try {
                                     return fn.apply(this, arguments);
                                 } catch (e) {
-                                    throw new Exception('Error rendering jade "' + src + '"', e);
+                                    throw new Exception('Error rendering jade "' + src + '"', new Exception(e.message, e));
                                 }
                             }, null);
                         })
