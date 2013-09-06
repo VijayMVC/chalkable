@@ -95,15 +95,15 @@ mixin StudentsBlock_(data, header, controller, action)
                                     +If3Block_(data, i, 1)
                                     +If3Block_(data, i, 2)
 
--topData = self.getTopData();
--topItems = topData.getTopItems();
--selectedId = topData.getSelectedItemId();
--console.info(topItems);
-+LeftRightToolbar(topItems, chlk.templates.grading.GradeLevelForTopBar, 'feed', 'admin', [])(
-    selectedItemId=selectedId ? selectedId.valueOf() : ""
-).classes-bar
+topData = self.getTopData();
+topItems = topData.getTopItems();
+selectedIds = topData.getSelectedIds();
 .admin-home.loader-container
     .loader
+    +LeftRightToolbar(topItems, chlk.templates.grading.GradeLevelForTopBar, 'feed', 'admin', [true])(
+        selectedIds=selectedIds,
+        multiple
+    ).classes-bar
     #admin-home-charts.third-blocks-container
         +SmallChart(self.getNotInClassBox(), Msg.Not_In_Class_Now, 'now-chart').first-block
         +SmallChart(self.getAbsentForDay(), Msg.Absent_Today, 'today-chart').second-block

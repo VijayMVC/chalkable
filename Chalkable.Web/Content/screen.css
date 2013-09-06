@@ -7865,17 +7865,22 @@ BODY DIV.page > DIV#content DIV#content-wrapper.messages #main-wrapper #main .gr
   background: url(images/private-messages/bottom-bg.png) 0 bottom no-repeat;
 }
 
-/* line 2, ../assets/sass/partials/main/search/_common.scss */
+/* line 1, ../assets/sass/partials/main/search/_common.scss */
+input#siteSearch {
+  outline: none;
+}
+
+/* line 7, ../assets/sass/partials/main/search/_common.scss */
 ul.ui-autocomplete > li {
   display: table;
   width: auto;
 }
-/* line 6, ../assets/sass/partials/main/search/_common.scss */
+/* line 11, ../assets/sass/partials/main/search/_common.scss */
 ul.ui-autocomplete > li > div.site-search {
   width: 160px;
   height: 60px;
 }
-/* line 9, ../assets/sass/partials/main/search/_common.scss */
+/* line 14, ../assets/sass/partials/main/search/_common.scss */
 ul.ui-autocomplete > li > div.site-search > a {
   text-decoration: none;
   display: block;
@@ -7886,17 +7891,17 @@ ul.ui-autocomplete > li > div.site-search > a {
   height: 70px;
   padding: 0;
 }
-/* line 19, ../assets/sass/partials/main/search/_common.scss */
+/* line 24, ../assets/sass/partials/main/search/_common.scss */
 ul.ui-autocomplete > li > div.site-search > a > div.site-search-person {
   margin-top: 20px;
   padding-left: 15px;
 }
-/* line 22, ../assets/sass/partials/main/search/_common.scss */
+/* line 27, ../assets/sass/partials/main/search/_common.scss */
 ul.ui-autocomplete > li > div.site-search > a > div.site-search-person > img {
   display: inline-block;
   vertical-align: middle;
 }
-/* line 26, ../assets/sass/partials/main/search/_common.scss */
+/* line 31, ../assets/sass/partials/main/search/_common.scss */
 ul.ui-autocomplete > li > div.site-search > a > div.site-search-person > div {
   margin-left: 10px;
   display: inline-block;
@@ -7905,22 +7910,22 @@ ul.ui-autocomplete > li > div.site-search > a > div.site-search-person > div {
   font-size: 11px;
   font-weight: bold;
 }
-/* line 36, ../assets/sass/partials/main/search/_common.scss */
+/* line 41, ../assets/sass/partials/main/search/_common.scss */
 ul.ui-autocomplete > li > div.site-search > a > div.site-search-class {
   margin-top: 20px;
   padding-left: 15px;
 }
-/* line 39, ../assets/sass/partials/main/search/_common.scss */
+/* line 44, ../assets/sass/partials/main/search/_common.scss */
 ul.ui-autocomplete > li > div.site-search > a > div.site-search-class > div.img-wrapper {
   overflow: hidden;
   height: 25px;
 }
-/* line 42, ../assets/sass/partials/main/search/_common.scss */
+/* line 47, ../assets/sass/partials/main/search/_common.scss */
 ul.ui-autocomplete > li > div.site-search > a > div.site-search-class > div.img-wrapper > img {
   display: inline-block;
   vertical-align: middle;
 }
-/* line 47, ../assets/sass/partials/main/search/_common.scss */
+/* line 52, ../assets/sass/partials/main/search/_common.scss */
 ul.ui-autocomplete > li > div.site-search > a > div.site-search-class > div {
   margin-left: 10px;
   display: inline-block;
@@ -7929,12 +7934,12 @@ ul.ui-autocomplete > li > div.site-search > a > div.site-search-class > div {
   font-size: 11px;
   font-weight: bold;
 }
-/* line 57, ../assets/sass/partials/main/search/_common.scss */
+/* line 62, ../assets/sass/partials/main/search/_common.scss */
 ul.ui-autocomplete > li > div.site-search > a > div.site-search-attachment {
   margin-top: 20px;
   padding-left: 15px;
 }
-/* line 60, ../assets/sass/partials/main/search/_common.scss */
+/* line 65, ../assets/sass/partials/main/search/_common.scss */
 ul.ui-autocomplete > li > div.site-search > a > div.site-search-attachment > div.image {
   display: inline-block;
   vertical-align: middle;
@@ -7943,7 +7948,7 @@ ul.ui-autocomplete > li > div.site-search > a > div.site-search-attachment > div
   width: 24px;
   height: 36px;
 }
-/* line 68, ../assets/sass/partials/main/search/_common.scss */
+/* line 73, ../assets/sass/partials/main/search/_common.scss */
 ul.ui-autocomplete > li > div.site-search > a > div.site-search-attachment > div.title {
   margin-left: 10px;
   display: inline-block;

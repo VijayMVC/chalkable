@@ -40,8 +40,8 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.feed.FeedListPage, result);
         },
 
-        [[String]],
-        function adminAction(gradeLevels_) {
+        [[Boolean, String]],
+        function adminAction(update_, gradeLevels_) {
             var res = ria.async.wait([
                     this.feedService.getAdminFeed(gradeLevels_),
                     this.fundsService.getBalance()
@@ -49,6 +49,7 @@ NAMESPACE('chlk.controllers', function (){
                     var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);
                     var topModel = new chlk.models.grading.GradeLevelsForTopBar();
                     topModel.setTopItems(gradeLevels);
+                    topModel.setSelectedIds(gradeLevels_ ? gradeLevels_.split(',') : []);
                     var model = result[0];
                     model.setTopData(topModel);
                     var markingPeriod = this.getContext().getSession().get('markingPeriod', null);
@@ -57,7 +58,7 @@ NAMESPACE('chlk.controllers', function (){
                     gradeLevels_ && model.setForGradeLevels(true);
                     return model;
                 }, this);
-            return this.PushView(chlk.activities.admin.HomePage, res);
+            return this[update_ ? 'UpdateView' : 'PushView'](chlk.activities.admin.HomePage, res);
         }
 
 

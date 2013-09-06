@@ -8,6 +8,7 @@ NAMESPACE('chlk.models.grading', function () {
             ArrayOf(chlk.models.grading.GradeLevelForTopBar), 'topItems',
             chlk.models.id.GradeLevelId, 'selectedItemId',
             Boolean, 'disabled',
+            Array, 'selectedIds',
 
             [[ArrayOf(chlk.models.grading.GradeLevelForTopBar)]],
             function $(gradeLevels_){
