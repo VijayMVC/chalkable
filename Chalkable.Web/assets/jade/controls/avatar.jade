@@ -1,4 +1,4 @@
 mixin Avatar(link, cls, border)
     div.avatar-container(attributes, class="#{border ? 'with-border' : ''}")
-        img.avatar(src=link)(class=cls)
+        img.avatar(src=link, class=cls)
             block

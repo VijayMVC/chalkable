@@ -113,7 +113,7 @@ NAMESPACE('chlk.controls', function () {
 
             [ria.mvc.DomEventBind('click', 'FORM [type=submit]')],
             [[ria.dom.Dom, ria.dom.Event]],
-            Boolean, function submitClicked_($target, event) {
+            Boolean, function submitClicked($target, event) {
                 var $form = $target.parent('FORM');
 
                 $form.setData('submit-name', $target.getAttr('name'));
@@ -123,7 +123,7 @@ NAMESPACE('chlk.controls', function () {
 
             [ria.mvc.DomEventBind('submit', 'FORM')],
             [[ria.dom.Dom, ria.dom.Event]],
-            Boolean, function submit_($target, event) {
+            Boolean, function submit($target, event) {
                 if ($target.hasClass('disabled'))
                     return false;
                 var controller = $target.getData('controller');
