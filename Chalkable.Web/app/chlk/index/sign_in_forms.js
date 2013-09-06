@@ -68,7 +68,8 @@ $(document).ready(function () {
                     if(text != '') $('div.the-password').validationEngine('showPrompt',text, 'red','topRight', false);
                 } else {
                     form.off('submit.logon');
-                    window.location.href = WEB_SITE_ROOT + 'Home/' + response.data.Role + '.aspx';
+                    var role = response.data.Role.toLowerCase().indexOf('admin') != -1 ? 'Admin' : response.data.Role;
+                    window.location.href = WEB_SITE_ROOT + 'Home/' + role + '.aspx';
                 }
             } .bind(this)
          };
