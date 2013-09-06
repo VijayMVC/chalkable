@@ -29,7 +29,7 @@ namespace Chalkable.BusinessLogic.Services.School
         PaginatedList<AnnouncementComplex> GetAnnouncements(int start, int count, bool onlyOwners = false);
         PaginatedList<AnnouncementComplex> GetAnnouncements(bool starredOnly, int start, int count, Guid? classId, Guid? markingPeriodId = null, bool ownerOnly = false);
         IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, IList<Guid> gradeLevelsIds = null, Guid? classId = null);
-
+        IList<AnnouncementComplex> GetAnnouncements(string filter);
         Announcement GetLastDraft();
 
         void UpdateAnnouncementGradingStyle(Guid announcementId, GradingStyleEnum gradingStyle);
@@ -111,6 +111,39 @@ namespace Chalkable.BusinessLogic.Services.School
                     ClassId = classId
                 };
             return GetAnnouncements(q).Announcements; 
+        }
+
+
+        public IList<AnnouncementComplex> GetAnnouncements(string filter)
+        {
+            //TODO : rewrite impl for better performance
+            var anns = GetAnnouncements(new AnnouncementsQuery()).Announcements;
+            IList<AnnouncementComplex> res = new List<AnnouncementComplex>();
+            const int adminAnnType = (int)SystemAnnouncementType.Admin;
+            if (!string.IsNullOrEmpty(filter))
+            {
+                string[] words = filter.Split(new[] { ' ', '.', ',' }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < words.Count(); i++)
+                {
+                    string word = words[i];
+                    int annOrder;
+                    IList<AnnouncementComplex> curretnAnns = new List<AnnouncementComplex>();
+                    if (int.TryParse(words[i], out annOrder))
+                    {
+                        curretnAnns = anns.Where(x => x.Order == annOrder).ToList();
+                    }
+                    else
+                    {
+                        curretnAnns = anns.Where(x =>
+                                         (x.AnnouncementTypeRef == adminAnnType && x.Subject.ToLower().Contains(word))
+                                         || (x.MarkingPeriodClassRef.HasValue && x.ClassName.ToLower().Contains(word))
+                                         || (!x.MarkingPeriodClassRef.HasValue && "all".Contains(word))
+                                         || x.AnnouncementTypeName.ToLower().Contains(word)).ToList();
+                    }
+                    res = res.Union(curretnAnns).ToList();
+                }
+            }
+            return res;
         }
 
 
@@ -425,8 +458,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 return CreateAnnoucnementDataAccess(uow).GetLastFieldValues(personId, classId, announcementType, 10);
             }
         }
-
-
 
     }
 }
