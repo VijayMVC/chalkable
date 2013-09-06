@@ -15,7 +15,6 @@ namespace Chalkable.Web.Models
         public string Description { get; set; }
         public int SearchType { get; set; }
 
-
         public static IList<SearchViewData> Create(IDictionary<SearchTypeEnum, Object> searchResult)
         {
             IDictionary<SearchTypeEnum, BaseSearchResultBuilder> mapper = new Dictionary<SearchTypeEnum, BaseSearchResultBuilder>();
@@ -35,7 +34,6 @@ namespace Chalkable.Web.Models
             mapper.Add(SearchTypeEnum.Announcements, new SearchAnnouncementBuilder(SearchTypeEnum.Announcements));
             mapper.Add(SearchTypeEnum.Attachments, new SearchAttachmentBuilder(SearchTypeEnum.Attachments));
             mapper.Add(SearchTypeEnum.Classes, new SearchClassBuilder(SearchTypeEnum.Classes));
-
         }
     }
 

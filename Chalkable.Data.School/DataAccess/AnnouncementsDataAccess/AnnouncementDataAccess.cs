@@ -72,6 +72,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             parameters.Add("now", query.Now);
             parameters.Add("ownedOnly", query.OwnedOnly);
             parameters.Add("staredOnly", query.StarredOnly);
+            //parameters.Add();
             using (var reader = ExecuteStoredProcedureReader(procedureName, parameters))
             {
                 return ReadAnnouncementsQueryResult(reader, query);
@@ -87,7 +88,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 res.Announcements.Add(reader.Read<AnnouncementComplex>());
                 if (first)
                 {
-                    res.SourceCount = SqlTools.ReadInt32(reader, "AllCount");
+                    res.SourceCount = SqlTools.ReadInt32(reader, AnnouncementQueryResult.ALL_COUNT);
                     first = false;
                 }
             }
@@ -258,6 +259,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
     public class AnnouncementQueryResult
     {
         public List<AnnouncementComplex> Announcements { get; set; }
+        public const string ALL_COUNT = "AllCount";
         public int SourceCount { get; set; }
         public AnnouncementsQuery Query { get; set; }
 

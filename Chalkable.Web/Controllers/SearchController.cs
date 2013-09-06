@@ -18,14 +18,10 @@ namespace Chalkable.Web.Controllers
             query = query.ToLower();
             searchRes.Add(SearchTypeEnum.Persons, SchoolLocator.PersonService.GetPaginatedPersons(new PersonQuery {Filter = query}));
             searchRes.Add(SearchTypeEnum.Applications, MasterLocator.ApplicationService.GetApplications(null, null, query, null, null));
-            
-            //TODO: search by announcement
-            //searchRes.Add(SearchTypeEnum.Announcements, SchoolLocator.AnnouncementService.SearchAnnouncments(query));
+            searchRes.Add(SearchTypeEnum.Announcements, SchoolLocator.AnnouncementService.GetAnnouncements(query));
             searchRes.Add(SearchTypeEnum.Attachments, SchoolLocator.AnnouncementAttachmentService.GetAttachments(query));
             searchRes.Add(SearchTypeEnum.Classes, SchoolLocator.ClassService.GetClasses(query));
-          
-            var res = SearchViewData.Create(searchRes);
-            return Json(res);
+            return Json(SearchViewData.Create(searchRes));
         }
     }
 }
