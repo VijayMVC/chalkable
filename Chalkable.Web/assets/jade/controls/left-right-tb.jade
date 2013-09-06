@@ -1,0 +1,26 @@
+mixin LeftRightToolbar(data, tplClass, controller, action, params)
+    configs = self.prepareData(data, attributes, controller, action, params)
+    .lr-toolbar(attributes)
+        .A(class=configs.disablePrevButton ? configs.disabledClass : "").prev-button.arrow
+        .first-container
+            .second-container
+                each item,i in data
+                    if item.setPressed && item.getId
+                        id = item.getId().valueOf();
+                        if configs.multiple
+                            -item.setPressed(!id && !configs.selectedIds.length || configs.selectedIds.indexOf(id) > -1);
+                        else
+                            -item.setPressed(configs.selectedItemId == id);
+                    -item.setDisabled && item.setDisabled(!configs.pressAfterClick);
+                    -item.setIndex && item.setIndex(i);
+                    if controller
+                        -item.setController(controller);
+                        -item.setAction(action);
+                        -item.setParams(params || []);
+                    +RenderWith(item, tplClass)
+        .A(class=configs.disableNextButton ? configs.disabledClass : "").next-button.arrow
+        if(configs.needDots)
+            .paginator
+                each dot,i in configs.dots
+                    A(index=i, class=dot ? "current" : "")
+
