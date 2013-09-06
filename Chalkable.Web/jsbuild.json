@@ -62,5 +62,19 @@
             "jQuery",
             "jade"
         ]
+    },{
+        "name": "AdminApp",
+        "app": "chlk.AdminApp",
+        "out": "app/AdminApp.compiled.js",
+
+        "prepend": [
+            "lib/stacktrace.js",
+            "lib/jade.runtime.js"
+        ],
+
+        "globals": [
+            "jQuery",
+            "jade"
+        ]
     }]
 }
