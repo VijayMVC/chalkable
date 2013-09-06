@@ -1,5 +1,6 @@
 li(data-title = self.firstName + ' ' + self.lastName, data-value = self.id.valueOf(), style="background: white")
-    a
+    a= self.firstName + " " + self.lastName
+    //
         img.avatar.avatar47(class=self.gender, src=self.getPictureURL(self.id, 47))
         div= self.firstName
         div= self.lastName
