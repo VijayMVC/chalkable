@@ -17,7 +17,9 @@ NAMESPACE('chlk.models.search', function () {
             Number, 'roleId',
             chlk.models.course.Course, 'course',
             [ria.serialize.SerializeProperty('announcementid')],
-            String, 'announcementId'
+            String, 'announcementId',
+            [ria.serialize.SerializeProperty('announcementtype')],
+            Number, 'announcementType'
         ]);
 });
 

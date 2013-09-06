@@ -1,6 +1,8 @@
-REQUIRE('chlk.templates.PaginatedList');
+REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.models.common.ChlkDate');
+REQUIRE('chlk.models.common.PaginatedList');
 REQUIRE('chlk.models.discipline.DisciplineSummary');
-REQUIRE('chlk.templates.messages.RecipientAutoComplete');
+REQUIRE('chlk.models.discipline.PaginatedListByDateModel');
 
 NAMESPACE('chlk.templates.discipline', function(){
 
@@ -8,11 +10,13 @@ NAMESPACE('chlk.templates.discipline', function(){
 
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/discipline/disciplines-summary.jade')],
-        [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
-        'DisciplinesSummary', EXTENDS(chlk.templates.PaginatedList), [
+        [ria.templates.ModelBind(chlk.models.discipline.PaginatedListByDateModel)],
+        'DisciplinesSummary', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.discipline.DisciplineSummary), 'items'
+            chlk.models.common.PaginatedList, 'items',
 
+            [ria.templates.ModelPropertyBind],
+            chlk.models.common.ChlkDate, 'date'
 
         ]);
 });

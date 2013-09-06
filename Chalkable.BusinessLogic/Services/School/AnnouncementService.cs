@@ -138,7 +138,10 @@ namespace Chalkable.BusinessLogic.Services.School
                                          (x.AnnouncementTypeRef == adminAnnType && x.Subject.ToLower().Contains(word))
                                          || (x.MarkingPeriodClassRef.HasValue && x.ClassName.ToLower().Contains(word))
                                          || (!x.MarkingPeriodClassRef.HasValue && "all".Contains(word))
-                                         || x.AnnouncementTypeName.ToLower().Contains(word)).ToList();
+                                         || x.AnnouncementTypeName.ToLower().Contains(word)
+                                         || x.Title != null && x.Title.ToLower().Contains(word)
+                                         || x.Content != null && x.Content.ToLower().Contains(word)
+                                         ).ToList();
                     }
                     res = res.Union(curretnAnns).ToList();
                 }

@@ -27,4 +27,5 @@ mixin ClassImg(course, width, height)
         -attributes.defaultSrc = defaultSrc;
     else
         -attributes.src = defaultSrc;
+    -console.info(course, attributes);
     +Image()(attributes)

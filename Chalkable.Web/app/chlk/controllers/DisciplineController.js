@@ -5,6 +5,7 @@ REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.discipline.DisciplineList');
 REQUIRE('chlk.models.discipline.DisciplineInputModel');
 REQUIRE('chlk.models.discipline.SetDisciplineListModel');
+REQUIRE('chlk.models.discipline.PaginatedListByDateModel');
 REQUIRE('chlk.activities.discipline.DisciplineSummaryPage');
 REQUIRE('chlk.activities.discipline.SetDisciplineDialog');
 
@@ -22,18 +23,31 @@ NAMESPACE('chlk.controllers', function(){
             [ria.mvc.Inject],
             chlk.services.DisciplineTypeService, 'disciplineTypeService',
 
-            [[Number, chlk.models.common.ChlkDate]],
-            function listAction(start_, date_){
-                var res = this.disciplineService.list(date_, start_ || 0)
-                              .attach(this.validateResponse_());
+            [chlk.controllers.SidebarButton('discipline')],
+            [[chlk.models.common.ChlkDate, Number, Number]],
+            function listAction(date_, pageSize_, pageIndex_){
+                var res = this.disciplineList_(pageIndex_, pageSize_, date_);
                 return this.PushView(chlk.activities.discipline.DisciplineSummaryPage, res);
             },
 
-            [[Number, chlk.models.common.ChlkDate]],
-            function pageAction(start, date_){
-                var res = this.disciplineService.list(date_ || null, start)
-                              .attach(this.validateResponse_());
+            [chlk.controllers.SidebarButton('discipline')],
+            [[chlk.models.common.ChlkDate, Number, Number]],
+            function pageAction(date_, pageSize, pageIndex){
+                var res = this.disciplineList_(pageIndex, pageSize, date_);
                 return this.UpdateView(chlk.activities.discipline.DisciplineSummaryPage, res);
+            },
+
+            [[Number, Number, chlk.models.common.ChlkDate]],
+            ria.async.Future, function disciplineList_(pageIndex_, pageSize_, date_){
+                var start = 0;
+                if(pageIndex_ && pageSize_)
+                    start = pageIndex_ * pageSize_;
+                return this.disciplineService.list(date_, start)
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        date_ = date_ || new chlk.models.common.ChlkDate(getDate());
+                        return new ria.async.DeferredData(new chlk.models.discipline.PaginatedListByDateModel(data, date_));
+                    });
             },
 
             [[chlk.models.discipline.DisciplineInputModel]],

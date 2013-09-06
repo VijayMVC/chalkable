@@ -30,8 +30,8 @@ NAMESPACE('chlk.controls', function () {
 
             Object, 'currentIndex',
 
-            [[Object, Object]],
-            Object, function prepareData(data, attributes_) {
+            [[Object, Object, String, String, Object]],
+            Object, function prepareData(data, attributes_, controller_, action_, params_) {
                 var configs = this.getDefaultConfigs();
                 if(attributes_){
                     configs = Object.extend(configs, attributes_);
@@ -51,6 +51,12 @@ NAMESPACE('chlk.controls', function () {
                     configs.needDots=false
                 }
 
+                if(configs.multiple){
+                    configs.controller = controller_;
+                    configs.action = action_;
+                    configs.params = params_ || [];
+                }
+
                 this.setConfigs(configs);
                 this.setCurrentIndex(0);
                 var that = this;
@@ -63,8 +69,28 @@ NAMESPACE('chlk.controls', function () {
                             var pageIndex = Math.floor(pressedIndex / configs.itemsCount);
                             that.setPageByCurrentDot(toolbar.find('.paginator A[index="' + pageIndex + '"]'), toolbar);
                             toolbar.on('click', '.second-container>*:not(.pressed)', function(node, event){
-                                toolbar.find('.second-container>.pressed').removeClass('pressed');
+                                if(!configs.multiple)
+                                    toolbar.find('.second-container>.pressed').removeClass('pressed');
                                 setTimeout(function() {node.addClass('pressed');}, 1);
+                            });
+                        }
+                        if(configs.multiple){
+                            toolbar.on('click', '.second-container>*', function(node, event){
+                                var state = that.context.getState();
+                                state.setController(configs.controller);
+                                state.setAction(configs.action);
+                                var params = configs.params;
+                                var ids = Array.isArray(configs.selectedIds) ? configs.selectedIds : configs.selectedIds.split(',');
+                                var currentId = node.getData('id');
+                                if(node.hasClass('pressed')){
+                                    ids.splice(ids.indexOf(currentId), 1);
+                                }else{
+                                    ids.push(currentId);
+                                }
+                                params.push(ids.join(','));
+                                state.setParams(params);
+                                state.setPublic(false);
+                                that.context.stateUpdated();
                             });
                         }
                         toolbar.on('click', '.arrow:not(.disabled)', function(node, event){

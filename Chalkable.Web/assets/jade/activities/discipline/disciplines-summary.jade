@@ -3,11 +3,13 @@
         .container.panel-bg
             +ActionForm('discipline', 'listStudentDiscipline')
                 .left
-                    +DatePicker('disciplineDate', null)(
+                    +DatePicker('disciplineDate', self.date)(
                         data-options={
                           showOtherMonths: true,
                           selectOtherMonths: true
-                        }
+                        },
+                        data-controller="discipline",
+                        data-action="list"
                     )#discipline-date
                     lable Search Students
                     +SearchBox(chlk.services.StudentService, "getStudentsByFilter", chlk.templates.messages.RecipientAutoComplete)#personId(
@@ -16,14 +18,14 @@
                         default-value="")
                     +Button()(type="submit")  GO
 
-    +Grid('discipline', 'page', self).not-transparent
+    +Grid('discipline', 'page', self.items, [self.date, self.items.getPageSize()]).not-transparent
         +GridHead()
             .th First
             .th Last
             .th Total
             .th Summary
         +GridBody()
-            each item in self.items
+            each item in self.items.getItems()
                 +GridRow()
                     .td= item.getStudent().getFirstName()
                     .td= item.getStudent().getLastName()
