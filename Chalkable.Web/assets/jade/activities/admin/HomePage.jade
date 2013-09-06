@@ -95,6 +95,13 @@ mixin StudentsBlock_(data, header, controller, action)
                                     +If3Block_(data, i, 1)
                                     +If3Block_(data, i, 2)
 
+-topData = self.getTopData();
+-topItems = topData.getTopItems();
+-selectedId = topData.getSelectedItemId();
+-console.info(topItems);
++LeftRightToolbar(topItems, chlk.templates.grading.GradeLevelForTopBar, 'feed', 'admin', [])(
+    selectedItemId=selectedId ? selectedId.valueOf() : ""
+).classes-bar
 .admin-home.loader-container
     .loader
     #admin-home-charts.third-blocks-container

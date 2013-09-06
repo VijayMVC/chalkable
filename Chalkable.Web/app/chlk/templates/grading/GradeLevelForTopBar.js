@@ -18,6 +18,9 @@ NAMESPACE('chlk.templates.grading', function () {
             Array, 'params',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'pressed'
+            Boolean, 'pressed',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'index'
         ]);
 });

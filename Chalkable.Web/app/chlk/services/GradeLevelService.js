@@ -1,7 +1,7 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('chlk.models.id.GradeLevelId');
 REQUIRE('chlk.models.apps.AppGradeLevel');
-REQUIRE('chlk.models.classes.ClassForTopBar');
+REQUIRE('chlk.models.grading.GradeLevelForTopBar');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -27,8 +27,8 @@ NAMESPACE('chlk.services', function () {
                  ].reverse();
             },
 
-            ArrayOf(chlk.models.classes.ClassForTopBar), 'gradesToFilter',
-            ArrayOf(chlk.models.classes.ClassForTopBar), 'gradesToFilterWithAll',
+            ArrayOf(chlk.models.grading.GradeLevelForTopBar), 'gradesToFilter',
+            ArrayOf(chlk.models.grading.GradeLevelForTopBar), 'gradesToFilterWithAll',
 
 
             //todo:fix
@@ -37,14 +37,15 @@ NAMESPACE('chlk.services', function () {
                 var res = this.getGradesToFilter(), res1 = this.getGradesToFilterWithAll();
                 if(res)
                     return withAll_ ? res1 : res;
-                res = new ria.serialize.JsonSerializer().deserialize(window.gradeLevels, ArrayOf(chlk.models.classes.ClassForTopBar));
-                this.setClassesToFilter(res);
+                res = new ria.serialize.JsonSerializer().deserialize(window.gradeLevels, ArrayOf(chlk.models.grading.GradeLevelForTopBar));
+                this.setGradesToFilter(res);
                 var gradesToFilterWithAll = window.gradeLevels.slice();
                 gradesToFilterWithAll.unshift({
-                    name: 'All'
+                    name: 'All',
+                    id: ''
                 });
-                res1 = new ria.serialize.JsonSerializer().deserialize(gradesToFilterWithAll, ArrayOf(chlk.models.classes.ClassForTopBar));
-                this.setClassesToFilterWithAll(res1);
+                res1 = new ria.serialize.JsonSerializer().deserialize(gradesToFilterWithAll, ArrayOf(chlk.models.grading.GradeLevelForTopBar));
+                this.setGradesToFilterWithAll(res1);
                 return withAll_ ? res1 : res;
             }
         ])

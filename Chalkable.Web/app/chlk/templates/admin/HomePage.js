@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.common.PageWithGrades');
 REQUIRE('chlk.models.admin.Home');
 
 NAMESPACE('chlk.templates.admin', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.admin', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/admin/HomePage.jade')],
         [ria.templates.ModelBind(chlk.models.admin.Home)],
-        'HomePage', EXTENDS(chlk.templates.JadeTemplate), [
+        'HomePage', EXTENDS(chlk.templates.common.PageWithGrades), [
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.attendance.StudentAttendances), 'attendances',
 

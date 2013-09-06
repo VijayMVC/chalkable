@@ -2288,8 +2288,9 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .chlk-grid .row.selected
   font: bold 38px Arial;
   padding-top: 17px;
   letter-spacing: -3px;
+  display: inline-block;
 }
-/* line 109, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 110, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button > SPAN.admin > SPAN {
   font: normal 20px Pacifico;
   display: inline-block;
@@ -2298,27 +2299,31 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .chlk-grid .row.selected
   padding-left: 3px;
   letter-spacing: 0;
 }
-/* line 119, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 120, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button.pressed, .lr-toolbar .first-container .second-container .item.class-button:active {
   background-position: center bottom;
 }
-/* line 122, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 123, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button.pressed .img-wrapper, .lr-toolbar .first-container .second-container .item.class-button:active .img-wrapper {
   top: 13px;
 }
-/* line 125, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 126, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button.pressed .img-wrapper IMG, .lr-toolbar .first-container .second-container .item.class-button:active .img-wrapper IMG {
   margin-top: -45px;
 }
-/* line 130, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 131, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button.pressed .text-container, .lr-toolbar .first-container .second-container .item.class-button:active .text-container {
   color: #2f7790;
 }
 /* line 135, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+.lr-toolbar .first-container .second-container .item.class-button.pressed > SPAN.admin, .lr-toolbar .first-container .second-container .item.class-button:active > SPAN.admin {
+  color: #2f7790;
+}
+/* line 140, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button:hover {
   background-position: center center;
 }
-/* line 139, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 144, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button .img-wrapper {
   background-repeat: no-repeat;
   height: 35px;
@@ -2328,13 +2333,13 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .chlk-grid .row.selected
   width: 45px;
   overflow: hidden;
 }
-/* line 148, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 153, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button .img-wrapper IMG {
   margin-top: -45px;
   width: 45px;
   height: 80px;
 }
-/* line 155, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 160, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.class-button .text-container {
   text-align: center;
   display: inline-block;
@@ -2345,18 +2350,18 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .chlk-grid .row.selected
   font-family: Arial Narrow, Arial, serif;
   white-space: nowrap;
 }
-/* line 167, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 172, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.action-link, .lr-toolbar .first-container .second-container .item.button-link {
   height: 76px;
   width: 67px;
   overflow: hidden;
 }
-/* line 172, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 177, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 .lr-toolbar .first-container .second-container .item.action-link .text-container, .lr-toolbar .first-container .second-container .item.button-link .text-container {
   padding-top: 49px;
 }
 
-/* line 188, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 193, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile .lr-toolbar .first-container .second-container .item.class-button {
   border-color: #baa76e;
   background-image: url(images/profile/classes.png);
@@ -2365,12 +2370,12 @@ BODY DIV.page > DIV#content DIV#content-wrapper.profile .lr-toolbar .first-conta
   font-style: italic;
   text-shadow: 1px 1px 0 white;
 }
-/* line 196, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 201, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.profile .lr-toolbar .first-container .second-container .item.class-button:hover {
   background-position: center bottom;
 }
 
-/* line 215, ../assets/sass/partials/controls/_left-right-toolbar.scss */
+/* line 220, ../assets/sass/partials/controls/_left-right-toolbar.scss */
 BODY DIV.page > DIV#content DIV#content-wrapper.calendar .lr-toolbar .first-container .second-container .item.class-button {
   border-color: #4398ae;
   background-color: #4398ae;
@@ -7091,43 +7096,42 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.app-general-info .app-heade
   -o-border-radius: 0;
   border-radius: 0;
   background: transparent;
-  top: 50px !important;
-  left: 90px !important;
-  right: 90px !important;
-  position: fixed !important;
+  top: 50px;
+  left: 90px;
+  right: 90px;
+  position: fixed;
   bottom: 0;
-  z-index: 100001 !important;
 }
-/* line 18, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+/* line 17, ../assets/sass/partials/main/apps/_app_wrapper.scss */
 #chlk-dialogs .app-wrapper .window-error-message {
   font-size: 40px;
   position: relative;
   top: 300px;
   text-align: center;
 }
-/* line 23, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+/* line 22, ../assets/sass/partials/main/apps/_app_wrapper.scss */
 #chlk-dialogs .app-wrapper .window-error-message .error-title {
   font-family: Arial;
   color: #ffffff;
 }
-/* line 27, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+/* line 26, ../assets/sass/partials/main/apps/_app_wrapper.scss */
 #chlk-dialogs .app-wrapper .window-error-message .error-text {
   font-size: 25px;
   font-family: Pacifico;
   color: #ffffff;
 }
-/* line 34, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+/* line 33, ../assets/sass/partials/main/apps/_app_wrapper.scss */
 #chlk-dialogs .app-wrapper h1 {
   text-align: center;
   font: bold 18px Arial;
   color: #434343;
   margin-bottom: 29px;
 }
-/* line 41, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+/* line 40, ../assets/sass/partials/main/apps/_app_wrapper.scss */
 #chlk-dialogs .app-wrapper.app-install {
-  width: 620px !important;
+  width: 620px;
 }
-/* line 47, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+/* line 46, ../assets/sass/partials/main/apps/_app_wrapper.scss */
 #chlk-dialogs .app-wrapper .x-window-header .x-close-btn {
   background: url(images/ui/white-close-btn.png) 0 0 no-repeat !important;
   display: inline-block;
@@ -7136,17 +7140,17 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.app-general-info .app-heade
   float: right;
   cursor: pointer;
 }
-/* line 55, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+/* line 54, ../assets/sass/partials/main/apps/_app_wrapper.scss */
 #chlk-dialogs .app-wrapper .x-window-header .x-close-btn:hover {
   opacity: 0.8;
 }
-/* line 60, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+/* line 59, ../assets/sass/partials/main/apps/_app_wrapper.scss */
 #chlk-dialogs .app-wrapper .x-window-header .toolbar {
   position: absolute;
   left: 0;
   top: -16px;
 }
-/* line 65, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+/* line 64, ../assets/sass/partials/main/apps/_app_wrapper.scss */
 #chlk-dialogs .app-wrapper .x-window-header .toolbar > DIV, #chlk-dialogs .app-wrapper .x-window-header .toolbar > A {
   display: inline-block;
   padding: 11px 15px 12px 11px;
@@ -7161,11 +7165,11 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.app-general-info .app-heade
   text-decoration: none;
   cursor: pointer;
 }
-/* line 82, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+/* line 81, ../assets/sass/partials/main/apps/_app_wrapper.scss */
 #chlk-dialogs .app-wrapper .x-window-header .toolbar > DIV:hover, #chlk-dialogs .app-wrapper .x-window-header .toolbar > A:hover {
   opacity: 0.7;
 }
-/* line 89, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+/* line 88, ../assets/sass/partials/main/apps/_app_wrapper.scss */
 #chlk-dialogs .app-wrapper .iframe-wrap {
   background: url(images/app/debut_dark.png);
   border: 1px solid black;
@@ -7174,7 +7178,7 @@ BODY DIV.page #content > DIV #main-wrapper #main DIV.app-general-info .app-heade
   height: 100% !important;
   width: 100%;
 }
-/* line 97, ../assets/sass/partials/main/apps/_app_wrapper.scss */
+/* line 96, ../assets/sass/partials/main/apps/_app_wrapper.scss */
 #chlk-dialogs .app-wrapper .iframe-wrap iframe {
   border: 0;
   width: 100% !important;
