@@ -1,0 +1,15 @@
+mixin MyAppsIconLink(app)
+    appId = app.getId().valueOf()
+    +ActionLink('apps', 'viewApp', [appId]).my-app-icon-link
+        .app-list-item
+            .icon
+                pictureUrl = self.getPictureURL(app.getSmallPictureId(), 74, 74)
+                img(src=pictureUrl)
+.my-apps
+    .action-bar.not-transparent
+        .container.panel-bg
+            +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
+            +ActionLink('appmarket', 'myapps').my-apps.toolbar-btn My Apps
+    .apps
+        each app in self.items
+            +MyAppsIconLink(app)
