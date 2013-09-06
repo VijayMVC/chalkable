@@ -16,7 +16,7 @@
                         name="personId",
                         value=""
                         default-value="")
-                    +Button()(type="submit")  GO
+                    +Button()(type="submit").action-link   GO
 
     +Grid('discipline', 'page', self.items, [self.date, self.items.getPageSize()]).not-transparent
         +GridHead()

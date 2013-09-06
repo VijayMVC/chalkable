@@ -1,9 +1,9 @@
 REQUIRE('ria.ajax.Task');
 
-NAMESPACE('ria.ajax', function () {
+NAMESPACE('chlk.lib.ajax', function () {
     "use strict";
 
-    /** @class ria.ajax.UploadFileTask */
+    /** @class chlk.lib.ajax.UploadFileTask */
     CLASS(
         'UploadFileTask', EXTENDS(ria.ajax.Task), [
             [[String, Object]],

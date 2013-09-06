@@ -20,22 +20,23 @@ mixin SetDisciplineRow(item, disciplineTypes)
                         each checkedDiscType in item.getDisciplineTypes()
                             if checkedDiscType.getId() == discType.getId()
                                 -isCheckedDiscType = true
-                        currentDiscTypeId = discType.getId().valueOf()
-                        +Checkbox(currentDiscTypeId, isCheckedDiscType, !item.isEditable())
+                        .discipline-type
+                            +Checkbox(discType.getId().valueOf(), isCheckedDiscType, !item.isEditable())
+                            span=discType.getName()
             .td
                 +TextArea(name='description')(attributes)=item.getDescription()
 
 
 
-.dialog.gray
-    .set-discipline-dialog
-        .x-window-header
-            span= self.date
-            span.close.close-btn
+.dialog.gray.set-discipline-dialog
+    .x-window-header
+        span= self.date
+        span.close.close-btn
 
-        .x-window-body
-            .general-info
-                +ActionForm('discipline', 'setDisciplines')#set-discipline-form
+    .x-window-body
+        .general-info
+            +ActionForm('discipline', 'setDisciplines')#set-discipline-form.set-discipline-form
+                .grid
                     +GridHead()
                         .th Period
                         .th Class
@@ -45,5 +46,6 @@ mixin SetDisciplineRow(item, disciplineTypes)
                         input(name="disciplinesJson", type="hidden")
                         each item in self.disciplines
                             +SetDisciplineRow(item, self.disciplineTypes)
+                .submit-btn
                     +Button()(type="submit").special-button.blue-button#submit-discipline-button=Msg.Save
 
