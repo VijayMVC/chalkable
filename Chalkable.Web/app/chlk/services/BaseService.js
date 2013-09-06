@@ -1,7 +1,10 @@
 REQUIRE('ria.serialize.JsonSerializer');
+
+REQUIRE('chlk.lib.ajax.ChlkJsonPostTask');
 REQUIRE('ria.ajax.JsonGetTask');
-REQUIRE('ria.ajax.JsonPostTask');
-REQUIRE('ria.ajax.UploadFileTask');
+REQUIRE('chlk.lib.ajax.UploadFileTask');
+
+
 
 REQUIRE('chlk.models.common.PaginatedList');
 
@@ -71,7 +74,7 @@ NAMESPACE('chlk.services', function () {
             [[String, Object, Object, Object]],
             ria.async.Future, function uploadFiles(uri, files, clazz_, gParams_) {
 
-                return new ria.ajax.UploadFileTask(this.resolveUri(uri), files)
+                return new chlk.lib.ajax.UploadFileTask(this.resolveUri(uri), files)
                     .params(gParams_ || {})
                     .run()
                     .then(function (data) {
@@ -89,8 +92,9 @@ NAMESPACE('chlk.services', function () {
             [[String, Object, Object]],
             ria.async.Future, function post(uri, clazz, gParams) {
 
-                return new ria.ajax.JsonPostTask(this.resolveUri(uri))
+                return new chlk.lib.ajax.ChlkJsonPostTask(this.resolveUri(uri))
                     .params(gParams)
+                    .requestHeaders({"Content-Type": "application/json; charset=utf-8"})
                     .run()
                     .then(function (data) {
                         if(!data.success)
@@ -103,11 +107,11 @@ NAMESPACE('chlk.services', function () {
             [[String, Object, Object]],
             ria.async.Future, function postArray(uri, clazz, gParams) {
 
-                return new ria.ajax.JsonPostTask(this.resolveUri(uri))
+                return new chlk.lib.ajax.ChlkJsonPostTask(this.resolveUri(uri))
                     .params(gParams)
+                    .requestHeaders({"Content-Type": "application/json; charset=utf-8"})
                     .run()
                     .then(function (data) {
-
                         if(!data.success)
                             throw chlk.services.DataException('Server error', Error(data.message));
 
