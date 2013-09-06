@@ -2,7 +2,7 @@ needSerial = self.getId() && self.getId().valueOf() && parseInt(self.getName(), 
 text = needSerial ? parseInt(self.getName(), 10) : self.getName();
 if needSerial
     serialPart = self.getSerial(text).slice(text.toString().length)
-+ActionLink(self.getController(), self.getAction(), self.getParams(), self.getId())(class=self.isPressed() ? "pressed " : "", index=self.getIndex()).item.class-button.button-link
+A(data-id=self.getId().valueOf(), class=self.isPressed() ? "pressed " : "", index=self.getIndex()).item.class-button.button-link
     SPAN.admin=text
         if needSerial
             SPAN=serialPart
