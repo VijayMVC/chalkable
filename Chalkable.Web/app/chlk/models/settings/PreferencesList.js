@@ -8,6 +8,7 @@ NAMESPACE('chlk.models.settings', function () {
 
             [[ArrayOf(chlk.models.settings.Preference)]],
             function $(items){
+                BASE();
                 this.setItems(items);
             }
         ]);

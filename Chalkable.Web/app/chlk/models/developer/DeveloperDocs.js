@@ -9,6 +9,7 @@ NAMESPACE('chlk.models.developer', function () {
 
             [[String]],
             function $(url){
+                BASE();
                 this.setDocsUrl(url);
             }
 

@@ -7,6 +7,7 @@ NAMESPACE('chlk.models.common', function () {
             String, 'name',
 
             function $(name){
+                BASE();
                 this.setName(name);
             }
 

@@ -8,8 +8,5 @@ NAMESPACE('chlk.activities.apps', function () {
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.apps.AppMarketDetails)],
         'AppMarketDetailsPage', EXTENDS(chlk.activities.lib.TemplatePage), [
-            function $(){
-                BASE();
-            }
         ]);
 });

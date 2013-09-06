@@ -35,6 +35,7 @@ NAMESPACE('chlk.models.common', function () {
             String, 'roleName',
             [[chlk.models.common.RoleEnum, String]],
             function $(roleId, roleName){
+                BASE();
                 this.setRoleId(roleId);
                 this.setRoleName(roleName);
             }

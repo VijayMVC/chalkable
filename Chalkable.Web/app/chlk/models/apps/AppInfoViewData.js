@@ -19,6 +19,7 @@ NAMESPACE('chlk.models.apps', function () {
 
             [[chlk.models.apps.Application, Boolean, ArrayOf(chlk.models.apps.AppCategory), ArrayOf(chlk.models.apps.AppGradeLevel), ArrayOf(chlk.models.apps.AppPermission), Boolean]],
             function $(app_, isReadonly, categories, gradeLevels, permissions, isDraft){
+                BASE();
                 if (app_)
                     this.setApp(app_);
                 this.setEmpty(!!app_);

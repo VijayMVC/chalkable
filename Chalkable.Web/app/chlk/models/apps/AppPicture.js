@@ -15,6 +15,7 @@ NAMESPACE('chlk.models.apps', function () {
 
             [[chlk.models.id.PictureId, String, Number, Number, String, Boolean]],
             function $(pictureId_, pictureUrl_, width_, height_, title_, editable_){
+                BASE();
                 if (pictureId_)
                     this.setPictureId(pictureId_);
                 if (pictureUrl_)

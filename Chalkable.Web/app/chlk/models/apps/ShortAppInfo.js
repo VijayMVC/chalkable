@@ -18,6 +18,7 @@ NAMESPACE('chlk.models.apps', function () {
 
             [[String, String, String, String, String, chlk.models.id.PictureId, chlk.models.id.PictureId]],
             function $(name, url, videoDemoUrl, shortDescr, descr, smallPictureId_, bigPictureId_){
+                BASE();
                 this.setName(name);
                 this.setUrl(url);
                 this.setVideoDemoUrl(videoDemoUrl);

@@ -8,6 +8,7 @@ NAMESPACE('chlk.models.common', function () {
 
             [[Number, String]],
             function $(id_, name_){
+                BASE();
                 if (id_)
                     this.setId(id_);
                 if (name_)

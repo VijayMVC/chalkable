@@ -11,6 +11,7 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'appThumbnail',
             [[chlk.models.apps.Application, chlk.models.apps.Application, String]],
             function $(app, liveApp, appThumbnail){
+                BASE();
                 this.setApp(app);
                 this.setLiveApp(liveApp);
                 this.setAppThumbnail(appThumbnail);

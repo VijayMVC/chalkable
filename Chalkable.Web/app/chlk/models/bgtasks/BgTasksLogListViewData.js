@@ -13,6 +13,7 @@ NAMESPACE('chlk.models.bgtasks', function () {
 
             [[chlk.models.id.BgTaskId, chlk.models.common.PaginatedList]],
             function $(bgTaskId, items){
+                BASE();
                 this.setBgTaskId(bgTaskId);
                 this.setItems(items);
             }

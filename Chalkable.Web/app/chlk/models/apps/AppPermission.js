@@ -12,6 +12,7 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'name',
             [[chlk.models.id.AppPermissionId, String, Number]],
             function $(id_, name_, type_){
+                BASE();
                 if (id_)
                     this.setId(id_);
                 if (name_)

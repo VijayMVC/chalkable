@@ -19,10 +19,6 @@ NAMESPACE('chlk.activities.apps', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppInfo, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
 
         'AppInfoPage', EXTENDS(chlk.activities.lib.TemplatePage), [
-            function $(){
-                BASE();
-            },
-
 
             [ria.mvc.DomEventBind('click', 'input.price-checkbox')],
             [[ria.dom.Dom, ria.dom.Event]],

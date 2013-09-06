@@ -11,6 +11,7 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'name',
             [[chlk.models.id.AppGradeLevelId, String]],
             function $(id_, name_){
+                BASE();
                 if (id_)
                     this.setId(id_);
                 if (name_)

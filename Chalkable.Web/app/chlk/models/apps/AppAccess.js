@@ -31,6 +31,7 @@ NAMESPACE('chlk.models.apps', function () {
 
             [[Boolean, Boolean, Boolean, Boolean, Boolean, Boolean]],
             function $(hasStudentMyApps_, hasTeacherMyApps_, hasAdminMyApps_, hasParentMyApps_, canAttach_, showInGradeView_){
+                BASE();
                 if (hasStudentMyApps_)
                     this.setStudentMyAppsEnabled(hasStudentMyApps_);
                 if (hasStudentMyApps_)

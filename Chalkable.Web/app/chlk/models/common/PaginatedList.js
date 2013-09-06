@@ -6,6 +6,7 @@ NAMESPACE('chlk.models.common', function () {
         'PaginatedList', [
             [[Function]],
             function $(itemClass) {
+                BASE();
                 this.itemClass = itemClass;
             },
 

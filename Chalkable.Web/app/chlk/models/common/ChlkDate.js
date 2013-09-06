@@ -55,6 +55,7 @@ NAMESPACE('chlk.models.common', function () {
 
             [[Date]],
             function $(date_){
+                BASE();
                 date_ && this.setDate(date_);
             },
 

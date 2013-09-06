@@ -10,6 +10,7 @@ NAMESPACE('chlk.models.schoolImport', function () {
             ArrayOf(chlk.models.schoolImport.School), 'schools',
             [[chlk.models.id.DistrictId, ArrayOf(chlk.models.schoolImport.School)]],
             function $(districtId, schools){
+                BASE();
                 this.setDistrictId(districtId);
                 this.setSchools(schools);
             }

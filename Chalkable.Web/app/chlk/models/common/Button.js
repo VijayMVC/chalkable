@@ -19,6 +19,7 @@ NAMESPACE('chlk.models.common', function () {
             String, 'text',
             [[String]],
             function $(title_){
+                BASE();
                 if (title_)
                     this.setText(title_);
             }

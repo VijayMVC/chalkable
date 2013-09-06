@@ -17,6 +17,7 @@ NAMESPACE('chlk.models.bgtasks', function () {
         'BgTaskState', IMPLEMENTS(ria.serialize.IDeserializable),  [
             chlk.models.bgtasks.BgTaskStateEnum, 'typeId',
             function $(){
+                BASE();
                 this._types = {};
                 this._types[chlk.models.bgtasks.BgTaskStateEnum.CREATED] = "Created";
                 this._types[chlk.models.bgtasks.BgTaskStateEnum.PROCESSING] = "Processing";

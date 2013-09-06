@@ -8,6 +8,7 @@ NAMESPACE('chlk.models.common', function () {
         'InfoMsg', [
             [[String, String, ArrayOf(chlk.models.common.Button), String]],
             function $(text_, header_, buttons_, clazz_){
+                BASE();
                 text_ && this.setText(text_);
                 clazz_ && this.setClazz(clazz_ );
                 header_ && this.setHeader(header_);

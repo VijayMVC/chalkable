@@ -12,6 +12,7 @@ NAMESPACE('chlk.models.people', function () {
 
             [[chlk.models.people.Schedule, chlk.models.calendar.announcement.Day]],
             function $(schedule_, calendar_){
+                BASE();
                 if(schedule_)
                     this.setSchedule(schedule_);
                 if(calendar_)

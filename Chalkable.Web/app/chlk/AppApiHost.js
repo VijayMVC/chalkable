@@ -14,6 +14,7 @@ NAMESPACE('chlk', function(){
         },
 
         function $(){
+            BASE();
             this.context_ = null;
         },
 

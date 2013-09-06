@@ -15,6 +15,7 @@ NAMESPACE('chlk.models.apps', function () {
 
             [[String, String, String, Boolean]],
             function $(id, title, url_, targetBlank_){
+                BASE();
                 this.setId(id);
                 this.setTitle(title);
                 if (url_)
@@ -38,6 +39,7 @@ NAMESPACE('chlk.models.apps', function () {
                 ArrayOf(chlk.models.apps.AppWrapperToolbarButton),
                 chlk.models.id.AnnouncementId]],
             function $(app, mode, buttons, announcementId){
+                BASE();
                 this.setApp(app);
                 this.setAppMode(mode);
                 this.setButtons(buttons);

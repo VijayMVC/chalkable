@@ -14,6 +14,7 @@ NAMESPACE('chlk.models.apps', function () {
 
             [[chlk.models.id.SchoolPersonId, chlk.models.id.AnnouncementId, chlk.models.common.PaginatedList]],
             function $(teacherId, announcementId, apps){
+                BASE();
                 this.setTeacherId(teacherId);
                 this.setAnnouncementId(announcementId);
                 this.setApps(apps);

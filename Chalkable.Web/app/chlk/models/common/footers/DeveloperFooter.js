@@ -11,6 +11,7 @@ NAMESPACE('chlk.models.common.footers', function () {
 
             [[chlk.models.id.AppId,  ArrayOf(chlk.models.apps.Application)]],
             function $(currentAppId, devApps){
+                BASE();
                 this.setCurrentAppId(currentAppId);
                 this.setDeveloperApps(devApps);
             }

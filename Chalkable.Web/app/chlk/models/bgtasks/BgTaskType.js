@@ -20,6 +20,7 @@ NAMESPACE('chlk.models.bgtasks', function () {
         'BgTaskType', IMPLEMENTS(ria.serialize.IDeserializable),  [
             chlk.models.bgtasks.BgTaskTypeEnum, 'typeId',
             function $(){
+              BASE();
               this._types = {};
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.CREATE_EMPTY_SCHOOL] = "Create empty school";
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.SIS_DATA_IMPORT] = "SIS data import";

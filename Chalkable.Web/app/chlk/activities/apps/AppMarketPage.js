@@ -9,8 +9,5 @@ NAMESPACE('chlk.activities.apps', function () {
         [ria.mvc.TemplateBind(chlk.templates.apps.AppMarket)],
 
         'AppMarketPage', EXTENDS(chlk.activities.lib.TemplatePage), [
-            function $(){
-                BASE();
-            }
         ]);
 });

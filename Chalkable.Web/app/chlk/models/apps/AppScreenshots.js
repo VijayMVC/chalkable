@@ -13,6 +13,7 @@ NAMESPACE('chlk.models.apps', function () {
 
             [[ArrayOf(chlk.models.apps.AppPicture)]],
             function $(screenshots){
+                BASE();
                 this.setItems(screenshots);
 
                 var scrIds = screenshots.map(function(item){

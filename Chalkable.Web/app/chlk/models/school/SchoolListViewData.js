@@ -12,6 +12,7 @@ REQUIRE('chlk.models.id.DistrictId');
 
             [[chlk.models.id.DistrictId, chlk.models.common.PaginatedList]],
             function $(districtId, items){
+                BASE();
                 this.setItems(items);
                 this.setDistrictId(districtId);
             }

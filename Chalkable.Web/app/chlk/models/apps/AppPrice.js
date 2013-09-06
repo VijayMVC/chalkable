@@ -12,6 +12,7 @@ NAMESPACE('chlk.models.apps', function () {
 
 
             function $(price_, pricePerClass_, pricePerSchool_){
+                BASE();
                 if (price_)
                     this.setPrice(price_);
                 if (pricePerClass_){

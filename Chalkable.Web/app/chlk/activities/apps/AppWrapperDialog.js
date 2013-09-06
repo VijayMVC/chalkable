@@ -12,9 +12,6 @@ REQUIRE('chlk.AppApiHost');
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.apps.AppWrapperDialog)],
         'AppWrapperDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
-              function $() {
-                  BASE();
-              },
 
               function getInnerDocument(){
                   var iframe = this.dom.find('iframe');
