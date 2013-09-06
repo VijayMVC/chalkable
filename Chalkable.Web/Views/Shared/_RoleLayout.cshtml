@@ -183,7 +183,9 @@
     else
     {
         <script type="text/javascript">
-            var roleAppScript = '@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot' + '/app/' + currentChlkPerson.role.name + 'App.compiled.js';
+            var role = currentChlkPerson.role.name;
+            role = role.toLowerCase().indexOf('admin') > -1 ? 'Admin' : role;
+            var roleAppScript = '@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot' + '/app/' + role + 'App.compiled.js';
             (function(appUrl) {
                 var scr = document.createElement('script');
                 scr.setAttribute('type', 'text/javascript');
