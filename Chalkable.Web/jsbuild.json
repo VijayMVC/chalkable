@@ -1,0 +1,66 @@
+{
+    "appDir": "app",
+    "assetsDir": "assets",
+
+    "options": {
+        "uglifyjs": {
+            "mangle": false,
+            "mangle_options_": {},
+            "squeeze": false,
+            "squeeze_options_": {
+                "make_seqs": true,
+                "dead_code": true,
+                "no_warnings": false,
+                "extra": false
+            },
+            "beautify": true
+        },
+        "gcc": {
+          "cmd": "goog-cc.cmd --compilation_level SIMPLE_OPTIMIZATIONS"
+        }
+    },
+
+    "modules": [{
+        "name": "SysAdmin",
+        "app": "chlk.SysAdminApp",
+        "out": "app/SysAdminApp.compiled.js",
+
+        "prepend": [
+            "lib/stacktrace.js",
+            "lib/jade.runtime.js"
+        ],
+
+        "globals": [
+            "jQuery",
+            "jade"
+        ]
+    }, {
+        "name": "TeacherApp",
+        "app": "chlk.TeacherApp",
+        "out": "app/TeacherApp.compiled.js",
+
+        "prepend": [
+            "lib/stacktrace.js",
+            "lib/jade.runtime.js"
+        ],
+
+        "globals": [
+            "jQuery",
+            "jade"
+        ]
+    }, {
+        "name": "DeveloperApp",
+        "app": "chlk.DeveloperApp",
+        "out": "app/DeveloperApp.compiled.js",
+
+        "prepend": [
+            "lib/stacktrace.js",
+            "lib/jade.runtime.js"
+        ],
+
+        "globals": [
+            "jQuery",
+            "jade"
+        ]
+    }]
+}

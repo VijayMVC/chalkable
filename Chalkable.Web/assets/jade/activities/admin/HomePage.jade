@@ -1,0 +1,223 @@
+mixin SmallChart(data, header, chartId)
+    configs = self.getChartData(data);
+    .block(attributes)
+        .panel-header=header
+        .chart-block.relative
+            .chart-bg.button-block=(data.getStat() ? data.getDisplayNumber() || "0" : "0")
+            +Chart()(
+                data-showmarkeronhover = true,
+                data-options = {
+                    backgroundColor: 'transparent',
+                    chart: {
+                        type: 'area',
+                        backgroundColor: 'transparent',
+                        width: 206,
+                        height: 181,
+                        style: {
+                            fontFamily: 'Arial',
+                            fontSize: '10px',
+                            color: '#a6a6a6'
+                        }
+
+                    },
+                    labels: {
+                        style: {
+                            color: '#a6a6a6',
+                            textOverflow: 'ellipsis',
+                            fontSize: '9px'
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    title: {
+                        text: ''
+                    },
+                    xAxis: {
+                        categories: configs.categories
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                        lineWidth:0,
+                        showFirstLabel: false,
+                        showLastLabel: false,
+                        gridLineDashStyle: 'dot',
+                        tickInterval: Math.floor((configs.max + 10) / 30) * 10,
+                        max: configs.max + 10
+                    },
+                    legend:{
+                        enabled: false
+                    },
+                    tooltip: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        area: {
+                            marker: {
+                                enabled: false,
+                                states: {
+                                    hover: {
+                                        enabled: false
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    colors: ['#d8d8d8'],
+
+                    series: [{
+                        name: '',
+                        lineWidth: 0,
+                        data: configs.data
+                    }]
+                }
+            )(id = chartId)
+
+mixin If3Block_(items, i, index)
+    if index == 0 || i + index < items.length
+        TD
+            .image-container
+                +PersonImg(items[i+index].getStudent(), 64)
+
+mixin StudentsBlock_(data, header, controller, action)
+    .block(attributes)
+        .panel-header=header
+        .button-block
+            +ActionLink(controller, action).images-wrapper
+                TABLE
+                    TBODY
+                        each item,i in data
+                            if i % 3 == 0
+                                TR
+                                    +If3Block_(data, i, 0)
+                                    +If3Block_(data, i, 1)
+                                    +If3Block_(data, i, 2)
+
+-topData = self.getTopData();
+-topItems = topData.getTopItems();
+-selectedId = topData.getSelectedItemId();
+-console.info(topItems);
++LeftRightToolbar(topItems, chlk.templates.grading.GradeLevelForTopBar, 'feed', 'admin', [])(
+    selectedItemId=selectedId ? selectedId.valueOf() : ""
+).classes-bar
+.admin-home.loader-container
+    .loader
+    #admin-home-charts.third-blocks-container
+        +SmallChart(self.getNotInClassBox(), Msg.Not_In_Class_Now, 'now-chart').first-block
+        +SmallChart(self.getAbsentForDay(), Msg.Absent_Today, 'today-chart').second-block
+        +SmallChart(self.getAbsentForMp(), Msg.Absent_Average_MP(self.getMarkingPeriodName()), 'mp-chart').third-block
+    #admin-second-block.third-blocks-container
+        +StudentsBlock_(self.getDisciplines(), Msg.Discipline, 'feed', 'admin').discipline-block
+        .block.budget-block.relative
+            budget = self.getBudgetBalance();
+            .absolute
+                .panel-header=Msg.App_budget
+                .budget-chart-container.relative
+                    .inside
+                        .big $#{budget.getCurrentBalance()}
+                        .small $#{budget.getStartSchoolBalance()}
+                    .outside
+                    +ActionLink('feed', 'admin').hover-area.button-block
+            +Chart()(
+                data-options = {
+                    chart: {
+                        type: 'pie',
+                        backgroundColor: 'transparent',
+                        width: 250,
+                        height: 250
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    title: {
+                        text: ''
+                    },
+                    yAxis: {
+                        lineWidth:0,
+                        title: {
+                            text: Msg.Total_percent_market_share
+                        }
+                    },
+                    plotOptions: {
+                        pie: {
+                            shadow: false,
+                            dataLabels: {
+                                enabled: false
+                            }
+                        }
+                    },
+                    tooltip: {
+                        valueSuffix: '%'
+                    },
+                    series: [{
+                        name: '',
+                        data: self.getBudgetChartData(budget),
+                        innerSize: '59%'
+                    }]
+                }
+            )#budget-chart
+        +StudentsBlock_(self.getAttendances(), Msg.Attendance, 'feed', 'admin').attendance-block
+    #grades-chart-container
+        .panel-header=Msg.Grade(true)
+        .chart-block.relative
+            .chart-bg.button-block
+            configs = self.getGradingChartData();
+            +Chart()(
+                data-options = {
+                    backgroundColor: 'transparent',
+                    chart: {
+                        type: 'column',
+                        backgroundColor: 'transparent',
+                        width: 630,
+                        height: 216,
+                        plotBorderWidth: 0
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    title: {
+                        text: ''
+                    },
+                    xAxis: {
+                        categories: configs.names,
+                        lineWidth:0
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                        showFirstLabel: false,
+                        showLastLabel: false,
+                        gridLineDashStyle: 'dot',
+                        tickInterval: 20
+                    },
+                    legend:{
+                         enabled: false
+                    },
+                    tooltip: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        area: {
+                            marker: {
+                                enabled: false,
+                                states: {
+                                    hover: {
+                                        enabled: false
+                                    }
+                                }
+                            }
+                        },
+                        series:{
+                            lineWidth: 0
+                        }
+                    },
+                    colors: ['#2f7790', '#d8d8d8'],
+
+                    series: configs.series
+                }
+            )#grading-chart
+
+

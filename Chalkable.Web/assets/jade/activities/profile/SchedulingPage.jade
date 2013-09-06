@@ -1,0 +1,17 @@
+schedule = self.getSchedule()
+.loader-container
+    .loader
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                cotroller = self.getRoleController(schedule.getRoleName());
+                +ActionLink(cotroller, 'details', schedule.getId()) Now
+                +ActionLink(cotroller, 'info', schedule.getId()) Info
+                +ActionLink(cotroller, 'schedule', schedule.getId()).pressed Scheduling
+                +ActionLink(cotroller, 'details', schedule.getId()) Apps
+    +RenderWith(self.getCalendar(), chlk.templates.calendar.announcement.DayPage)(
+        notMainCalendar = true,
+        controllerName = cotroller,
+        actionName = 'schedule',
+        params = [schedule.getId().valueOf()]
+    )

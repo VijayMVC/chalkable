@@ -1,0 +1,48 @@
+
+isCheckedDiscType = false
+
+mixin SetDisciplineRow(item, disciplineTypes)
+    if(!item.isEditable())
+        -attributes.disabled=!item.isEditable()
+    div(
+    name="discipline",
+    data-class-person-id=item.getClassPersonId().valueOf(),
+    data-class-period-id=item.getClassPeriodId().valueOf(),
+    data-date=self.date.getDate(),
+    )(attributes).discipline-info
+        +GridRow()
+            .td= item.getPeriod().getStartTime().toString() + ' - ' + item.getPeriod().getEndTime().toString()
+            .td= item.getClassName()
+            .td
+                +CheckboxList('disciplineTypes', 'disciplineTypes', null)(attributes)
+                    each discType in self.disciplineTypes
+                        -isCheckedDiscType = false
+                        each checkedDiscType in item.getDisciplineTypes()
+                            if checkedDiscType.getId() == discType.getId()
+                                -isCheckedDiscType = true
+                        currentDiscTypeId = discType.getId().valueOf()
+                        +Checkbox(currentDiscTypeId, isCheckedDiscType, !item.isEditable())
+            .td
+                +TextArea(name='description')(attributes)=item.getDescription()
+
+
+
+.dialog.gray
+    .x-window-header
+        span= self.date
+        span.close.close-btn
+
+    .x-window-body
+        .general-info
+            +ActionForm('discipline', 'setDisciplines')#set-discipline-form
+                +GridHead()
+                    .th Period
+                    .th Class
+                    .th Discipline
+                    .th Comments
+                +GridBody()
+                    input(name="disciplinesJson", type="hidden")
+                    each item in self.disciplines
+                        +SetDisciplineRow(item, self.disciplineTypes)
+                +Button()(type="submit").special-button.blue-button#submit-discipline-button=Msg.Save
+

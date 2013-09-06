@@ -1,0 +1,21 @@
+mixin AppIconLink(app)
+    appId = app.getId().valueOf()
+    +ActionLink('appmarket', 'details', [appId]).app-icon-link
+        .app-list-item
+            .icon
+                pictureUrl = self.getPictureURL(app.getSmallPictureId(), 74, 74)
+                img(src=pictureUrl)
+            .description
+                .name=app.getName()
+                .shortdesc=app.getShortDescription()
+
+.app-market
+    .action-bar.not-transparent
+        .container.panel-bg
+            +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
+            +ActionLink('appmarket', 'myapps').my-apps.toolbar-btn My Apps
+    .app-screenshots-panel
+        +Carousel()
+    .apps
+        each app in self.items
+            +AppIconLink(app)
