@@ -11,7 +11,7 @@ li(data-title = self.description, data-value = self.id.valueOf() + '|' + self.se
             if self.roleId == 3
                 +ActionLink('students', 'info', self.id).left.image-container.white.shadow
                     div.site-search-person
-                        img.avatar.avatar47(class=self.gender, src=self.getPictureURL(self.id, 47))
+                        +PersonImg(self, 47)
                         div.title= self.description
         else if self.searchType == 4
             +ActionLink('class', 'details', self.id).left.image-container.white.shadow
@@ -25,7 +25,7 @@ li(data-title = self.description, data-value = self.id.valueOf() + '|' + self.se
                     .image
                     div.title= self.description
         else if self.searchType == 2
-            +ActionLink('announcement', 'view', self.announcementId).left.image-container.white.shadow
+            +ActionLink('announcement', 'view', self.id).left.image-container.white.shadow
                 div.site-search-announcement
                     div(class="announcement-type-" + self.announcementType).icon.blue.image
                     div.title= self.description
