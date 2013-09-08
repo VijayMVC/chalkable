@@ -1,21 +1,29 @@
-REQUIRE('chlk.models.apps.Application');
+REQUIRE('chlk.models.id.AppId');
 
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
     /** @class chlk.models.apps.AppGeneralInfoViewData*/
     CLASS(
         'AppGeneralInfoViewData', [
-            chlk.models.apps.Application, 'app',
-            chlk.models.apps.Application, 'liveApp',
-            Boolean, 'isLiveApp',
+            chlk.models.id.AppId, 'draftAppId',
+            chlk.models.id.AppId, 'liveAppId',
+            Boolean, 'appLive',
+            Boolean, 'approved',
             String, 'appThumbnail',
-            [[chlk.models.apps.Application, chlk.models.apps.Application, String]],
-            function $(app, liveApp, appThumbnail){
+            String, 'appStatus',
+            String, 'appName',
+
+            [[String, chlk.models.id.AppId, chlk.models.id.AppId, String, Boolean, String]],
+            function $(appName, draftId, liveId_, appStatus, isApproved, appThumbnail){
                 BASE();
-                this.setApp(app);
-                this.setLiveApp(liveApp);
+                this.setAppName(appName);
+                this.setDraftAppId(draftId);
+                if (liveId_)
+                    this.setLiveAppId(liveId_);
                 this.setAppThumbnail(appThumbnail);
-                this.setIsLiveApp(app.getId() != liveApp.getId());
+                this.setAppLive(liveId_ && liveId_.valueOf() != null);
+                this.setAppStatus(appStatus);
+                this.setApproved(isApproved);
             }
         ]);
 });

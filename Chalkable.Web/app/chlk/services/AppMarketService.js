@@ -2,6 +2,7 @@ REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 
 REQUIRE('chlk.models.apps.AppGradeLevel');
+REQUIRE('chlk.models.developer.DeveloperInfo');
 REQUIRE('chlk.models.apps.AppCategory');
 REQUIRE('chlk.models.apps.AppMarketApplication');
 REQUIRE('chlk.models.id.SchoolPersonId');
@@ -98,6 +99,9 @@ NAMESPACE('chlk.services', function () {
                 app.setId(new chlk.models.id.AppId('dab27768-6a5d-41d5-82b1-d943ef002eae'));
                 app.setShortDescription("rskldfj;alskdfja;skldjfa;sldkfja;sdfsdfsdfsdfsdfldkfjasl;");
                 app.setSmallPictureId(new chlk.models.id.PictureId("90e359b7-7199-4296-8148-a072bcd67bb3"));
+                var devInfo = new chlk.models.developer.DeveloperInfo();
+                devInfo.setName('Developerovich');
+                app.setDeveloperInfo(devInfo);
                 return new ria.async.DeferredData(app);
             }
         ])

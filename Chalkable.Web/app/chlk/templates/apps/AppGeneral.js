@@ -9,11 +9,23 @@ NAMESPACE('chlk.templates.apps', function () {
         [ria.templates.ModelBind(chlk.models.apps.AppGeneralInfoViewData)],
         'AppGeneral', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.apps.Application, 'app',
+            chlk.models.id.AppId, 'draftAppId',
+
             [ria.templates.ModelPropertyBind],
-            chlk.models.apps.Application, 'liveApp',
+            chlk.models.id.AppId, 'liveAppId',
+
             [ria.templates.ModelPropertyBind],
-            Boolean, 'isLiveApp',
+            String, 'appStatus',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'appName',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'appLive',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'approved',
+
             [ria.templates.ModelPropertyBind],
             String, 'appThumbnail'
         ])

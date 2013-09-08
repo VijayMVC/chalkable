@@ -28,14 +28,26 @@ NAMESPACE('chlk.models.apps', function () {
             },
 
             [[Boolean]],
-            String, function toString(hasLiveCopy_){
-                var prefix = "";
+            String, function toString(isLive_){
+                var status = this._states[this.getStateId()];
                 var currentStateId = this.getStateId();
-                if (hasLiveCopy_){
-                    if (currentStateId != chlk.models.apps.AppStateEnum.DRAFT && currentStateId != chlk.models.apps.AppStateEnum.LIVE)
-                        prefix = "Live - ";
+                if (isLive_){
+                    switch (currentStateId.valueOf()){
+                        case chlk.models.apps.AppStateEnum.SUBMIT_FOR_APPROVE:
+                            status = 'Live - Update awaiting approval';
+                            break;
+                        case chlk.models.apps.AppStateEnum.APPROVED:
+                            status = 'Live - Update approved';
+                            break;
+                        case chlk.models.apps.AppStateEnum.REJECTED:
+                            status = 'Live - Update approved';
+                            break;
+                        default :
+                            status = 'Live';
+                            break;
+                    }
                 }
-                return prefix + this._states[this.getStateId()];
+                return status;
             },
             [[Number]],
             VOID, function deserialize(raw) {

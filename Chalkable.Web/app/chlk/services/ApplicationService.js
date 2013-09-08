@@ -74,14 +74,6 @@ NAMESPACE('chlk.services', function () {
                         }, this);
             },
 
-            [[chlk.models.id.AppId]],
-            ria.async.Future, function getLiveAppInfo() {
-                var liveAppId = null;
-                //liveAppId = currentApp.getLiveAppId() ? currentApp.getLiveAppId() : null;
-                return this.getInfo(liveAppId);
-            },
-
-
             [[Object, Number, Number]],
             ria.async.Future, function uploadPicture(file, width_, height_) {
                 return this.uploadFiles('Application/UploadPicture', file, chlk.models.id.PictureId, {

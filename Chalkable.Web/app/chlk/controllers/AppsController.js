@@ -248,59 +248,13 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
         [[chlk.models.id.AppId, chlk.models.id.AppId]],
-        function unlistDeveloperAction(liveAppId, appId) {
+        function unlistDeveloperAction(liveAppId) {
             return this.appsService
-                .unlist(appId)
+                .unlist(liveAppId)
                 .then(function(data){
                     return this.redirect_('apps', 'general', []);
                 }, this);
         },
-
-
-
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.DEVELOPER
-        ])],
-        [[chlk.models.id.AppId]],
-        function wrapperTestAction() {
-            /*
-            if (mode === APP_MODES.EDIT){
-                buttons.push({
-                    buttonText: '+ Attach',
-                    id: 'add-app',
-                    cls: 'chalkable-app-action-button'
-                });
-                IWindow.off('click', '#add-app');
-                IWindow.on('click', '#add-app', function(){
-                    var frame = IWindow.find('iframe');
-                    CHLK_MESSENGER.addApp(frame.get(0).contentWindow, frame.attr('src').split('edit')[0], {attach: true});
-                });
-            }else if (mode === APP_MODES.VIEW){
-                buttons.push({
-                    buttonText: 'Save',
-                    id: 'save-app',
-                    cls: 'chalkable-app-action-button'
-                });
-                IWindow.off('click', '#save-app');
-                IWindow.on('click', '#save-app', function(){
-                    var frame = IWindow.find('iframe');
-                    CHLK_MESSENGER.addApp(frame.get(0).contentWindow, frame.attr('src').split('view')[0], {attach: false});
-                });
-            }
-            if(mode === APP_MODES.MYAPPSVIEW){
-                buttons.push({
-                    url: ,
-                    id: 'new-tab-id',
-                    buttonText: 'New Tab',
-                    targetBlank: true
-                });
-            }
-
-            */
-            //var myAppsViewUrl = url + "&code=" + code;
-
-        },
-
 
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER
@@ -477,17 +431,26 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AppId]],
         function generalDeveloperAction(){
 
-            var currentApp = this.appsService.getCurrentApp();
             var app = this.appsService
-                .getLiveAppInfo()
+                .getInfo()
                 .then(function(data){
                     if (!data.getId()){
                         return this.forward_('apps', 'add', []);
                     }
                     else{
                         var pictureUrl = this.pictureService.getPictureUrl(data.getSmallPictureId(), 74);
+                        var isAppLive = data.getLiveAppId() != null && data.getLiveAppId().valueOf() != "";
+                        var isApproved = data.getState().getStateId() == chlk.models.apps.AppStateEnum.APPROVED;
+                        var appInfo = new chlk.models.apps.AppGeneralInfoViewData(
+                            data.getName(),
+                            data.getId(),
+                            data.getLiveAppId(),
+                            data.getState().toString(isAppLive),
+                            isApproved,
+                            pictureUrl
+                        );
                         return this.PushView(chlk.activities.apps.AppGeneralInfoPage,
-                            new ria.async.DeferredData(new chlk.models.apps.AppGeneralInfoViewData(currentApp, data, pictureUrl))
+                            new ria.async.DeferredData(appInfo)
                         );
                     }
                 }, this)
