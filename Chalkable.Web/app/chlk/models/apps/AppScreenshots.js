@@ -9,10 +9,11 @@ NAMESPACE('chlk.models.apps', function () {
 
 
             String, 'ids',
+            Boolean, 'readOnly',
 
 
             [[ArrayOf(chlk.models.apps.AppPicture)]],
-            function $(screenshots){
+            function $(screenshots, isReadOnly){
                 BASE();
                 this.setItems(screenshots);
 
@@ -21,6 +22,7 @@ NAMESPACE('chlk.models.apps', function () {
                 }).join(",");
 
                 this.setIds(scrIds);
+                this.setReadOnly(isReadOnly);
             }
 
         ]);
