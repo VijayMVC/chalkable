@@ -1,0 +1,18 @@
+.app-general-info
+    .action-bar.not-transparent.dev-app-info
+        .container.panel-bg
+    .app-header
+        .app-icon
+            img(src=self.appThumbnail, width=100, height=80)
+        .app-description
+            .title=self.appName
+                .app-status=self.appStatus
+                if self.isAppLive()
+                    liveAppId = self.liveAppId ? self.liveAppId.valueOf() : null
+                    if self.isApproved()
+                        +ActionLink('apps', 'goLive', self.draftAppId.valueOf()) Live
+                    else
+                        +ActionLink('apps', 'unlist', liveAppId) Unlist
+                else
+                    if self.isApproved()
+                        +ActionLink('apps', 'goLive', self.draftAppId.valueOf()) Live

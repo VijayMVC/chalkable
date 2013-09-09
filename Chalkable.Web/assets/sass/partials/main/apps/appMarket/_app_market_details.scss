@@ -1,0 +1,49 @@
+DIV.page {
+  #content {
+    > DIV {
+      #main-wrapper {
+        #main {
+          DIV.app-market-details{
+             .app-price-info{
+               margin: 26px 0 30px 0;
+
+               .app-title{
+                 display: inline-block;
+                 width: 538px;
+               }
+
+               .app-description{
+                 padding: 0;
+                 font-size: 15px;
+                 color: #383838;
+                 background: none;
+                 border: none;
+                 height: 60px;
+                 width : 100%;
+               }
+               .app-buy{
+                 width: 122px;
+                 display: inline-block;
+                 vertical-align: middle;
+
+                 .special-button{
+                   width: 110px;
+                   button{
+                     font-size: 18px;
+                     text-transform: uppercase;
+                     font-weight: normal;
+                   }
+
+                 }
+               }
+               h1{
+                 font-size: 26px;
+               }
+             }
+          }
+        }
+      }
+    }
+  }
+}
+

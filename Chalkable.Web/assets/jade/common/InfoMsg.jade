@@ -1,0 +1,13 @@
+div(class=(self.getClazz() || "")).dialog.info-msg.gray
+    if(self.getHeader())
+        h1=self.getHeader()
+    pre=self.getText()
+    .buttons-container.center
+        each button in self.getButtons()
+            -attrs = button.getAttributes() || {};
+            -attrs.clazz = (attrs.clazz || '') + ' ' + (button.getColor() ? button.getColor().valueOf() : 'blue');
+            if(button.getController())
+                +ActionLink(button.getController(), button.getAction(), button.getParams() || []).button.defer
+                    +Button()(id=attrs.id, class=attrs.clazz).special-button2=button.getText()
+            else
+                +Button()(id=attrs.id, class=attrs.clazz).special-button2.button=button.getText()
