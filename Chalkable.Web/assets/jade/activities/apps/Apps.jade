@@ -1,11 +1,17 @@
 mixin AppManagementControls(id, state, liveId)
+    -console.log(state.getStateId().valueOf())
     if (liveId && liveId.valueOf())
-        span Live
-    else if state.getStateId() != chlk.models.apps.AppStateEnum.SUBMIT_FOR_APPROVE
-        span=state.toString()
+        if state.getStateId() != chlk.models.apps.AppStateEnum.SUBMIT_FOR_APPROVE
+            span=state.toString(true)
+        else
+            +ActionLink('apps', 'approve', id).btn Approve
+            +ActionLink('apps', 'decline', id).btn Decline
     else
-        +ActionLink('apps', 'approve', id).btn Approve
-        +ActionLink('apps', 'decline', id).btn Decline
+        if state.getStateId() != chlk.models.apps.AppStateEnum.SUBMIT_FOR_APPROVE
+            span=state.toString(false)
+        else
+            +ActionLink('apps', 'approve', id).btn Approve
+            +ActionLink('apps', 'decline', id).btn Decline
 
 .apps-list
     +Grid('apps', 'page', self).not-transparent

@@ -27,6 +27,7 @@
 @import "partials/main/apps/appMarket/_app_market_details";
 
 @import "partials/main/apps/_app_wrapper";
+@import "partials/main/apps/_my_apps";
 //@import "partials/main/developer/_docs";
 @import "partials/main/sysadmin/_apps";
 @import "partials/main/popups/_popups";
@@ -69,6 +70,9 @@ BODY {
 
               .panel-bg{
                 @include background(linear-gradient(top, #f3eee0, #ece1c1));
+
+
+
               }
             }
           }

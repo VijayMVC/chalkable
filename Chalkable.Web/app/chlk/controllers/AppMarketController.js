@@ -6,6 +6,7 @@ REQUIRE('chlk.services.GradeLevelService');
 
 REQUIRE('chlk.activities.apps.AppMarketPage');
 REQUIRE('chlk.activities.apps.AppMarketDetailsPage');
+REQUIRE('chlk.activities.apps.MyAppsPage');
 REQUIRE('chlk.activities.apps.AttachAppDialog');
 REQUIRE('chlk.models.id.AppId');
 
@@ -43,6 +44,24 @@ NAMESPACE('chlk.controllers', function (){
                 }, this)
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.apps.AppMarketPage, result);
+        },
+
+        function myAppsAction() {
+            var result = this.appCategoryService
+                .getCategories()
+                .then(function(data){
+                    return data.getItems();
+                })
+                .then(function(categories){
+                    return this.appMarketService
+                        .getApps(
+                            categories,
+                            this.gradeLevelService.getGradeLevels(),
+                            ""
+                        );
+                }, this)
+                .attach(this.validateResponse_());
+            return this.PushView(chlk.activities.apps.MyAppsPage, result);
         },
 
         [chlk.controllers.SidebarButton('apps')],

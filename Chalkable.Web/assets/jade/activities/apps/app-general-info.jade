@@ -9,7 +9,10 @@
                 .app-status=self.appStatus
                 if self.isAppLive()
                     liveAppId = self.liveAppId ? self.liveAppId.valueOf() : null
-                    +ActionLink('apps', 'unlist', liveAppId) Unlist
+                    if self.isApproved()
+                        +ActionLink('apps', 'goLive', self.draftAppId.valueOf()) Live
+                    else
+                        +ActionLink('apps', 'unlist', liveAppId) Unlist
                 else
                     if self.isApproved()
                         +ActionLink('apps', 'goLive', self.draftAppId.valueOf()) Live

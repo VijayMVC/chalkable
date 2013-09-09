@@ -273,6 +273,14 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.apps.AppWrapperDialog, result);
         },
 
+
+        [[chlk.models.id.AppId]],
+        function viewAppAction(appId) {
+        },
+
+
+
+
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.SYSADMIN
         ])],
