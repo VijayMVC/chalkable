@@ -24,6 +24,12 @@ NAMESPACE('chlk.services', function(){
                 });
             },
 
+            [[chlk.models.id.DisciplineTypeId]],
+            ria.async.Future, function getDisciplineTypeInfo(id){
+                return this.get('DisciplineType/Info.json', chlk.models.discipline.DisciplineType, {
+                    disciplineTypeId: id.valueOf()
+                });
+            },
 
             [[String, Number]],
             ria.async.Future, function addDisciplineType(name, score){
@@ -35,18 +41,28 @@ NAMESPACE('chlk.services', function(){
 
             [[chlk.models.id.DisciplineTypeId, String, Number]],
             ria.async.Future, function updateDisciplineType(id, name, score){
-                return this.post('DisciplineType/Create.json', chlk.models.discipline.DisciplineType,{
-                    id: id,
+                return this.post('DisciplineType/Update.json', chlk.models.discipline.DisciplineType,{
+                    disciplineTypeId: id.valueOf(),
                     name: name,
                     score: score
                 });
             },
 
+            [[chlk.models.id.DisciplineTypeId, String, Number]],
+            ria.async.Future, function saveDisciplineType(id_, name, score) {
+                if (id_ && id_.valueOf())
+                    return this.updateDisciplineType(id_, name, score);
+                return this.addDisciplineType(name, score);
+            },
+
+
             [[chlk.models.id.DisciplineTypeId]],
             ria.async.Future, function removeDisciplineType(id){
                 return this.post('DisciplineType/Delete.json', chlk.models.discipline.DisciplineType, {
-                    disciplineTypeId: id
+                    disciplineTypeId: id.valueOf()
                 });
             }
+
+
     ]);
 });

@@ -40,5 +40,12 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.DisciplineTypeService.Delete(disciplineTypeId);
             return Json(true);
         }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        public ActionResult Info(Guid disciplineTypeId)
+        {
+            var res = SchoolLocator.DisciplineTypeService.GetDisciplineTypeById(disciplineTypeId);
+            return Json(DisciplineTypeViewData.Create(res));
+        }
     }
 }
