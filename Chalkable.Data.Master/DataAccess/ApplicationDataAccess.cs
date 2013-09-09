@@ -208,7 +208,7 @@ namespace Chalkable.Data.Master.DataAccess
 
         public IList<ApplicationPicture> UpdatePictures(Guid id, IList<Guid> picturesId)
         {
-            SimpleDelete<ApplicationPicture>(new AndQueryCondition { { ApplicationCategory.APPLICATION_REF_FIELD, id } });
+            SimpleDelete<ApplicationPicture>(new AndQueryCondition { { ApplicationPicture.APPLICATION_REF_FIELD, id } });
             IList<ApplicationPicture> appPictures = new List<ApplicationPicture>();
             if (picturesId != null)
             {
