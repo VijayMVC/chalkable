@@ -31,7 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
         bool CanInstall(Guid applicationId, Guid? schoolPersonId, IList<int> roleIds, IList<Guid> classIds, IList<Guid> gradelevelIds, IList<Guid> departmentIds);
 
         IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, Guid? personId, IList<int> roleIds, IList<Guid> classIds, IList<Guid> departmentIds, IList<Guid> gradeLevelIds);
-        IList<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(Guid applicationId, Guid schoolYearId);
+        IList<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(Guid schoolYearId, Guid applicationId);
         
 
         ApplicationTotalPriceInfo GetApplicationTotalPrice(Guid applicationId, Guid? schoolPerson, IList<int> roleids, IList<Guid> classids, IList<Guid> gradelevelids, IList<Guid> departmentids);
@@ -299,7 +299,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return (bugetBalance - priceData.TotalPrice >= 0 || priceData.TotalPrice == 0) && cnt > 0;
         }
 
-        public IList<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(Guid applicationId, Guid schoolYearId)
+        public IList<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(Guid schoolYearId, Guid applicationId)
         {
             if (!BaseSecurity.IsAdminOrTeacher(Context))
                 throw new ChalkableSecurityException();

@@ -112,5 +112,36 @@
         top: 50%;
       }
     }
+
+
+    &.default-add-dialog{
+      min-height: 200px !important;
+      min-width: 150px !important;
+      .x-window-body{
+
+        .form-btn-conteiner{
+          text-align: right;
+          .chlk-button{
+            margin: 5px;
+          }
+        }
+        .x-form-field{
+          margin-bottom: 4px;
+          label{
+            text-align: center;
+            display: inline-block;
+            text-align: right;
+            height: 18px;
+            color: #808080;
+            font: normal 14px tahoma, arial, helvetica, sans-serif;
+            padding: 10px;
+          }
+          input{
+            width: 300px;
+            border-radius: 5px;
+          }
+        }
+      }
+    }
   }
 }

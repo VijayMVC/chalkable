@@ -1,13 +1,16 @@
 REQUIRE('chlk.templates.JadeTemplate');
-REQUIRE('chlk.models.settings.TeacherSettings');
+REQUIRE('chlk.models.settings.SchoolPersonSettings');
+REQUIRE('chlk.models.id.SchoolPersonId');
 
 NAMESPACE('chlk.templates.settings', function () {
+    "use strict";
 
-    /** @class chlk.templates.settings.TeacherSettings*/
+
+    ASSET('~/assets/jade/activities/settings/school-person-settings-page.jade')();
+    /** @class chlk.templates.settings.SchoolPersonSettingsTpl*/
     CLASS(
-        [ria.templates.TemplateBind('~/assets/jade/activities/settings/TeacherSettings.jade')],
-        [ria.templates.ModelBind(chlk.models.settings.TeacherSettings)],
-        'TeacherSettings', EXTENDS(chlk.templates.JadeTemplate), [
+        [ria.templates.ModelBind(chlk.models.settings.SchoolPersonSettings)],
+        'SchoolPersonSettingsTpl', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
             Boolean, 'annoucementNotificationsViaSms',
             [ria.templates.ModelPropertyBind],
@@ -19,6 +22,8 @@ NAMESPACE('chlk.templates.settings', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'messagesNotificationsViaEmail',
             [ria.templates.ModelPropertyBind],
-            Boolean, 'notificationsViaEmail'
-        ])
+            Boolean, 'notificationsViaEmail',
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.SchoolPersonId, 'personId'
+        ]);
 });
