@@ -378,12 +378,12 @@ NAMESPACE('chlk.controllers', function (){
              );
 
              var appAccess = new chlk.models.apps.AppAccess(
-                 model.isHasStudentMyApps(),
-                 model.isHasTeacherMyApps(),
-                 model.isHasAdminMyApps(),
-                 model.isHasParentMyApps(),
-                 model.isCanAttach(),
-                 model.isShowInGradingView()
+                 model.isStudentMyAppsEnabled(),
+                 model.isTeacherMyAppsEnabled(),
+                 model.isAdminMyAppsEnabled(),
+                 model.isParentMyAppsEnabled(),
+                 model.isAttachEnabled(),
+                 model.isShowInGradingViewEnabled()
              );
 
 

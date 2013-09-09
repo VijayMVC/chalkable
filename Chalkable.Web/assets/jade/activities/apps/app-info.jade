@@ -124,29 +124,29 @@ appPermissions = appPermissions.join(',')
                 .my-apps
                     .permission
                         +MyAppsPermission("Can Teachers Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("hasTeacherMyApps", myAppsAccess.isTeacherMyAppsEnabled(), self.isReadOnly())
+                        +SlideCheckbox("teacherMyAppsEnabled", myAppsAccess.isTeacherMyAppsEnabled(), self.isReadOnly())
                     .permission
                         +MyAppsPermission("Can Students Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("hasStudentMyApps", myAppsAccess.isStudentMyAppsEnabled(), self.isReadOnly())
+                        +SlideCheckbox("studentMyAppsEnabled", myAppsAccess.isStudentMyAppsEnabled(), self.isReadOnly())
                     .permission
                         +MyAppsPermission("Can Admins Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("hasAdminMyApps", myAppsAccess.isAdminMyAppsEnabled(), self.isReadOnly())
+                        +SlideCheckbox("adminMyAppsEnabled", myAppsAccess.isAdminMyAppsEnabled(), self.isReadOnly())
                     .permission
                         +MyAppsPermission("Can Parents Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("hasParentMyApps", myAppsAccess.isParentMyAppsEnabled(), self.isReadOnly())
+                        +SlideCheckbox("parentMyAppsEnabled", myAppsAccess.isParentMyAppsEnabled(), self.isReadOnly())
         .section.small
             .elem.first
                 label.hint New Item:
                 .my-apps
                     .permission
                         +MyAppsPermission("Can Teachers Attach", app.getName(), "in New Items?")
-                        +SlideCheckbox("canAttach", myAppsAccess.isAttachEnabled(), self.isReadOnly())
+                        +SlideCheckbox("attachEnabled", myAppsAccess.isAttachEnabled(), self.isReadOnly())
             .elem
                 label.hint Grading View:
                 .my-apps
                     .permission
                         +MyAppsPermission("Will be Teachers", '', 'viewing student output')
-                        +SlideCheckbox("showInGradingView", myAppsAccess.isVisibleInGradingView(), self.isReadOnly())
+                        +SlideCheckbox("showInGradingViewEnabled", myAppsAccess.isVisibleInGradingView(), self.isReadOnly())
         .section
             .elem
                 label.hint API Access:

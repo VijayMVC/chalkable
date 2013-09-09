@@ -34,8 +34,8 @@ NAMESPACE('chlk.models.apps', function () {
                 BASE();
                 if (hasStudentMyApps_)
                     this.setStudentMyAppsEnabled(hasStudentMyApps_);
-                if (hasStudentMyApps_)
-                    this.setTeacherMyAppsEnabled(hasStudentMyApps_);
+                if (hasTeacherMyApps_)
+                    this.setTeacherMyAppsEnabled(hasTeacherMyApps_);
                 if (hasAdminMyApps_)
                     this.setAdminMyAppsEnabled(hasAdminMyApps_);
                 if (hasParentMyApps_)

@@ -16,12 +16,12 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'shortDescription',
             String, 'longDescription',
 
-            Boolean, 'hasTeacherMyApps',
-            Boolean, 'hasAdminMyApps',
-            Boolean, 'hasStudentMyApps',
-            Boolean, 'hasParentMyApps',
-            Boolean, 'canAttach',
-            Boolean, 'showInGradingView',
+            Boolean, 'teacherMyAppsEnabled',
+            Boolean, 'adminMyAppsEnabled',
+            Boolean, 'studentMyAppsEnabled',
+            Boolean, 'parentMyAppsEnabled',
+            Boolean, 'attachEnabled',
+            Boolean, 'showInGradingViewEnabled',
 
             Number, 'costPerUser',
             Number, 'costPerSchool',

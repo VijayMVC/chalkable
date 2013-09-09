@@ -33,13 +33,13 @@ NAMESPACE('chlk.models.apps', function () {
                 var currentStateId = this.getStateId();
                 if (isLive_){
                     switch (currentStateId.valueOf()){
-                        case chlk.models.apps.AppStateEnum.SUBMIT_FOR_APPROVE:
+                        case chlk.models.apps.AppStateEnum.SUBMIT_FOR_APPROVE.valueOf():
                             status = 'Live - Update awaiting approval';
                             break;
-                        case chlk.models.apps.AppStateEnum.APPROVED:
+                        case chlk.models.apps.AppStateEnum.APPROVED.valueOf():
                             status = 'Live - Update approved';
                             break;
-                        case chlk.models.apps.AppStateEnum.REJECTED:
+                        case chlk.models.apps.AppStateEnum.REJECTED.valueOf():
                             status = 'Live - Update approved';
                             break;
                         default :

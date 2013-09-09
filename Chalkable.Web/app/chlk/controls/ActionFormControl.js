@@ -145,9 +145,6 @@ NAMESPACE('chlk.controls', function () {
                         var params = {};
                         p.forEach(function (o) { params[o.name] = o.value; });
 
-                        /*var dataNames = $target.getData('names');
-                        dataNames.forEach(function (name) { params[name] = $target.getData(name)});*/
-
                         var name = $target.getData('submit-name');
                         var value = $target.getData('submit-value');
 
