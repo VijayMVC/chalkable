@@ -98,8 +98,6 @@ NAMESPACE('chlk.controllers', function (){
                         var schedule = results[0];
                         schedule.setRoleName(role);
                         return new chlk.models.people.SchedulePage(schedule, results[1]);
-                        var model = new chlk.models.people.SchedulePage(schedule, results[1]);
-                        return model;
                     }.bind(this));
                 return this.PushView(chlk.activities.profile.SchedulePage, result);
             }
