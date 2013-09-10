@@ -416,6 +416,18 @@ BODY {
         }
       }
 
+      .app-market{
+        #main-top {
+          background: url(images/app/paper-top-bottom.jpg) 0 0 no-repeat;
+        }
+
+        #main-wrapper {
+          background: url(images/app/paper-bg.jpg) 0 0 repeat-y;
+        }
+      }
+
+
+
       > DIV {
         text-align: left;
         width: $column-width;

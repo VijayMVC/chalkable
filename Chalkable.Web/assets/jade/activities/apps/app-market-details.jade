@@ -1,13 +1,14 @@
 .app-market-details
     .action-bar.not-transparent
-        .container.panel-bg
+        .container.panel-bg.buttons-toolbar
             +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
             +ActionLink('appmarket', 'myapps').my-apps.toolbar-btn My Apps
     .app-screenshots-panel
-        +Carousel()
+        +Carousel(self.getScreenshotPictures().getItems())
     .app-price-info
         .app-title
             h1=self.name
             span="By " + self.developerInfo.getName()
         .app-buy
-            +Button().special-button.blue-button Free
+            +ActionLink('appmarket', 'install', [self.getId().valueOf()]).special-button.blue-button  Free
+        textarea(name = "app-description", class = "app-description")=self.description

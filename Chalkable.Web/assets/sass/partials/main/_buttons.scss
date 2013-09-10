@@ -372,3 +372,22 @@
     padding: 0 15px;
   }
 }
+
+
+.buttons-toolbar{
+  .toolbar-btn{
+    padding: 0 7px;
+    color: #828282;
+    font-size: 12px;
+    margin: 0;
+    display: inline-block;
+    font-style: normal !important;
+    border-left: 1px solid white;
+    border-right: 1px solid #cfcfcf;
+    @include background(linear, 50% 0%, 50% 100%, color-stop(0%, #f6f6f6), color-stop(100%, #d8d8d8));
+
+    &:hover{
+      @include background(linear-gradient(top, #f6f6f6,#d8d8d8));
+    }
+  }
+}

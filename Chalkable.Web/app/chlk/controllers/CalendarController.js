@@ -74,6 +74,10 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.calendar.announcement.DayPage, result);
         },
 
+
+
+
+        //TODO: refactor
         [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
         function weekAction(date_, classId_){
             var markingPeriod = this.getContext().getSession().get('markingPeriod');
