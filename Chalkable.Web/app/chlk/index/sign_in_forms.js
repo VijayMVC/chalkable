@@ -68,7 +68,9 @@ $(document).ready(function () {
                     if(text != '') $('div.the-password').validationEngine('showPrompt',text, 'red','topRight', false);
                 } else {
                     form.off('submit.logon');
-                    var role = response.data.Role.toLowerCase().indexOf('admin') != -1 ? 'Admin' : response.data.Role;
+                    var role = response.data.Role.toLowerCase();
+                    if (role == "admingrade" || role == "adminview" || role == "adminedit")
+                        role = "admin";
                     window.location.href = WEB_SITE_ROOT + 'Home/' + role + '.aspx';
                 }
             } .bind(this)
