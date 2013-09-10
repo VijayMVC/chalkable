@@ -84,6 +84,12 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.AppId]],
+            ria.async.Future, function installApp(appId) {
+                return this
+                    .post('Application/Install.json', Boolean, {applicationId: appId.valueOf()});
+            },
+
+            [[chlk.models.id.AppId]],
             ria.async.Future, function approveApp(appId) {
                     return this
                         .post('Application/Approve.json', Boolean, {applicationId: appId.valueOf()});

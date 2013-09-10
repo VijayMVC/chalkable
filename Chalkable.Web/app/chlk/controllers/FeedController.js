@@ -40,6 +40,9 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.feed.FeedListPage, result);
         },
 
+
+
+        //TODO: refactor
         [[Boolean, String]],
         function adminAction(update_, gradeLevels_) {
             var res = ria.async.wait([

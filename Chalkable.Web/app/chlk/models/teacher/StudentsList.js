@@ -8,8 +8,8 @@ NAMESPACE('chlk.models.teacher', function () {
     /** @class chlk.models.teacher.StudentsList*/
     CLASS(
         'StudentsList', EXTENDS(chlk.models.people.UsersListSubmit), [
-            chlk.models.people.UsersList, 'usersPart',
-            chlk.models.classes.ClassesForTopBar, 'topData',
+            chlk.models.people.UsersList, 'usersPart', //todo: rename
+            chlk.models.classes.ClassesForTopBar, 'topData',//todo: rename
             Boolean, 'my',
             chlk.models.id.ClassId, 'classId'
         ]);

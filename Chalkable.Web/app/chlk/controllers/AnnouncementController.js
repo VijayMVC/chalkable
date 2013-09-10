@@ -312,6 +312,9 @@ NAMESPACE('chlk.controllers', function (){
             this.getContext().getSession().set('noSave', val);
         },
 
+
+
+        //TODO refactor
         [[chlk.models.announcement.Announcement]],
         function saveAction(model) {
             if(!this.isAnnouncementSavingDisabled()){

@@ -8,7 +8,7 @@ NAMESPACE('chlk.models.announcement', function () {
     /** @class chlk.models.announcement.AnnouncementForm*/
     CLASS(
         'AnnouncementForm', EXTENDS(chlk.models.announcement.AnnouncementCreate), [
-            chlk.models.classes.ClassesForTopBar, 'topData',
+            chlk.models.classes.ClassesForTopBar, 'topData', //todo: rename
             chlk.models.classes.ClassForWeekMask, 'classInfo',
             Number, 'selectedTypeId',
             Array, 'reminders'

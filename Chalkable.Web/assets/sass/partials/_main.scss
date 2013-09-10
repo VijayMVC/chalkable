@@ -25,6 +25,7 @@
 
 @import "partials/main/apps/appMarket/_app_market";
 @import "partials/main/apps/appMarket/_app_market_details";
+@import "partials/main/apps/appMarket/_app_market_install";
 
 @import "partials/main/apps/_app_wrapper";
 @import "partials/main/apps/_my_apps";
@@ -153,6 +154,10 @@ TEXTAREA.animated-textarea{
 
   &:hover{
     opacity: 0.7;
+  }
+
+  &.dark{
+    background: url(images/ui/close-btn-dark.png) 0 0 no-repeat;
   }
 }
 

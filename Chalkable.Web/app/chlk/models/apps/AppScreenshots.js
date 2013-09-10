@@ -12,7 +12,7 @@ NAMESPACE('chlk.models.apps', function () {
             Boolean, 'readOnly',
 
 
-            [[ArrayOf(chlk.models.apps.AppPicture)]],
+            [[ArrayOf(chlk.models.apps.AppPicture), Boolean]],
             function $(screenshots, isReadOnly){
                 BASE();
                 this.setItems(screenshots);

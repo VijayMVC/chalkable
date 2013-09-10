@@ -11,11 +11,11 @@ mixin AppIconLink(app)
 
 .app-market
     .action-bar.not-transparent
-        .container.panel-bg
+        .container.panel-bg.buttons-toolbar
             +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
             +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn My Apps
     .app-screenshots-panel
-        +Carousel()
+        +Carousel(self.firstApp.getScreenshotPictures().getItems())
     .apps
-        each app in self.items
+        each app in self.apps.getItems()
             +AppIconLink(app)
