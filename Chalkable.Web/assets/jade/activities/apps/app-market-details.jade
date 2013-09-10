@@ -1,0 +1,13 @@
+.app-market-details
+    .action-bar.not-transparent
+        .container.panel-bg
+            +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
+            +ActionLink('appmarket', 'myapps').my-apps.toolbar-btn My Apps
+    .app-screenshots-panel
+        +Carousel()
+    .app-price-info
+        .app-title
+            h1=self.name
+            span="By " + self.developerInfo.getName()
+        .app-buy
+            +Button().special-button.blue-button Free
