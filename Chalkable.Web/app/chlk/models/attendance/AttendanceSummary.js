@@ -12,6 +12,6 @@ NAMESPACE('chlk.models.attendance', function () {
             ArrayOf(chlk.models.people.User), 'well',
 
             [ria.serialize.SerializeProperty('absentstat')],
-            ArrayOf(chlk.models.attendance.AbsentMonthStat), 'absentStat' //todo: rename
+            ArrayOf(chlk.models.attendance.AbsentMonthStat), 'absentStat'
         ]);
 });

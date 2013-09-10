@@ -9,6 +9,6 @@ NAMESPACE('chlk.models.attendance', function () {
             [ria.serialize.SerializeProperty('displaynumber')],
             Number, 'displayNumber',
 
-            ArrayOf(chlk.models.attendance.AttendanceStatItem), 'stat'    //todo: rename
+            ArrayOf(chlk.models.attendance.AttendanceStatItem), 'stat'
         ]);
 });

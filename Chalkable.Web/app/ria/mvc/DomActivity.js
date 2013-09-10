@@ -93,12 +93,10 @@ NAMESPACE('ria.mvc', function () {
                 this._domAppendTo.remove(this.dom.empty());
             },
 
-            ///TODO: WTF?????
             OVERRIDE, VOID, function startLoading() {
                 this.dom.addClass(MODEL_WAIT_CLASS);
             },
 
-            ///TODO: WTF?????
             OVERRIDE, VOID, function stopLoading() {
                 this.dom.removeClass(MODEL_WAIT_CLASS);
             },

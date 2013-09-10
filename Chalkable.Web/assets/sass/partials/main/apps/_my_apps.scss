@@ -6,7 +6,16 @@ DIV.page {
         #main {
           DIV.my-apps{
 
-
+            .panel-bg{
+              .toolbar-btn{
+                padding: 0 7px;
+                color: #828282;
+                font-size: 12px;
+                margin: 0;
+                display: inline-block;
+                @include background(linear-gradient(top, #f6f6f6,#d8d8d8));
+              }
+            }
 
             .apps{
               width: 670px;

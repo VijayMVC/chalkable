@@ -36,9 +36,6 @@ NAMESPACE('chlk.controls', function () {
                 });
             },
 
-
-
-            //TODO: move to base control
             [[Object]],
             Object, function processAttrs(attributes) {
                 attributes.id = attributes.id || ria.dom.NewGID();

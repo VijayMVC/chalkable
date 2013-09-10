@@ -7,7 +7,7 @@ NAMESPACE('chlk.models.school', function () {
     /** @class chlk.models.school.SchoolPeople*/
     CLASS(
         'SchoolPeople', [
-            chlk.models.people.UsersList, 'usersPart', //todo: rename
+            chlk.models.people.UsersList, 'usersPart',
             ArrayOf(chlk.models.common.NameId), 'roles',
             ArrayOf(chlk.models.common.NameId), 'gradeLevels',
             chlk.models.school.SchoolPeopleSummary, 'schoolInfo'

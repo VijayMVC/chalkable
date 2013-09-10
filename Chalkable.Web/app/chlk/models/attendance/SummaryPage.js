@@ -9,8 +9,6 @@ NAMESPACE('chlk.models.attendance', function () {
         'SummaryPage', EXTENDS(chlk.models.common.PageWithClasses), [
             chlk.models.attendance.AttendanceSummary, 'summary',
 
-
-            //todo: rename
             [[chlk.models.classes.ClassesForTopBar, chlk.models.attendance.AttendanceSummary]],
             function $(topData_, summary_){
                 BASE(topData_);

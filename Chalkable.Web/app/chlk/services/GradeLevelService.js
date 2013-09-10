@@ -27,8 +27,6 @@ NAMESPACE('chlk.services', function () {
                  ].reverse();
             },
 
-
-            //TODO: move to methods
             ArrayOf(chlk.models.grading.GradeLevelForTopBar), 'gradesToFilter',
             ArrayOf(chlk.models.grading.GradeLevelForTopBar), 'gradesToFilterWithAll',
 

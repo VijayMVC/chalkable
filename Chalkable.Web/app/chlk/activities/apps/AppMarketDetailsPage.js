@@ -6,7 +6,7 @@ NAMESPACE('chlk.activities.apps', function () {
     /** @class chlk.activities.apps.AppMarketDetailsPage*/
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
-        [chlk.activities.lib.PageClass('app-market')],
+        [chlk.activities.lib.PageClass('people')],
         [ria.mvc.TemplateBind(chlk.templates.apps.AppMarketDetails)],
         'AppMarketDetailsPage', EXTENDS(chlk.activities.lib.TemplatePage), [
         ]);

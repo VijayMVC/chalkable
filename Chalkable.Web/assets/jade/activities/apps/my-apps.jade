@@ -7,9 +7,9 @@ mixin MyAppsIconLink(app)
                 img(src=pictureUrl)
 .my-apps
     .action-bar.not-transparent
-        .container.panel-bg.buttons-toolbar
+        .container.panel-bg
             +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
-            +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn My Apps
+            +ActionLink('appmarket', 'myapps').my-apps.toolbar-btn My Apps
     .apps
         each app in self.items
             +MyAppsIconLink(app)

@@ -88,11 +88,11 @@ NAMESPACE('chlk.services', function () {
             },
             [[chlk.models.id.AppId]],
             ria.async.Future, function getDetails(appId) {
-                return this
+                /*return this
                     .get('AppMarket/Read.json', chlk.models.apps.AppMarketApplication, {
                         applicationId: appId.valueOf()
                     });
-                /*
+                    */
                 var app  =  new chlk.models.apps.AppMarketApplication();
                 app.setName("App test");
                 app.setUrl('https://localhost/apptest');
@@ -103,7 +103,6 @@ NAMESPACE('chlk.services', function () {
                 devInfo.setName('Developerovich');
                 app.setDeveloperInfo(devInfo);
                 return new ria.async.DeferredData(app);
-                */
             }
         ])
 });

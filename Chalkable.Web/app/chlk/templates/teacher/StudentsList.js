@@ -9,10 +9,10 @@ NAMESPACE('chlk.templates.teacher', function () {
         [ria.templates.ModelBind(chlk.models.teacher.StudentsList)],
         'StudentsList', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.people.UsersList, 'usersPart', //todo: rename
+            chlk.models.people.UsersList, 'usersPart',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.classes.ClassesForTopBar, 'topData', //todo: rename
+            chlk.models.classes.ClassesForTopBar, 'topData',
 
             [ria.templates.ModelPropertyBind],
             Boolean, 'my'

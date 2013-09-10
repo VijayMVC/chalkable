@@ -7,7 +7,7 @@ NAMESPACE('chlk.models.common', function () {
     /** @class chlk.models.common.PageWithGrades*/
     CLASS(
         'PageWithGrades', [
-            chlk.models.grading.GradeLevelsForTopBar, 'topData',  //todo: rename
+            chlk.models.grading.GradeLevelsForTopBar, 'topData',
             Number, 'selectedTypeId',
             Array, 'selectedIds',
 

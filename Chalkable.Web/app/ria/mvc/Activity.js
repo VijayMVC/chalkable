@@ -116,14 +116,10 @@ NAMESPACE('ria.mvc', function () {
                     .then(function (model) { me.onPartialRefresh_(model, msg); return model; })
             },
 
-
-            ///TODO: WTF?????
             VOID, function startLoading() {},
 
-            ///TODO: WTF?????
             VOID, function startFullLoading() {},
 
-            ///TODO: WTF?????
             VOID, function stopLoading() {},
 
             /** @deprecated */

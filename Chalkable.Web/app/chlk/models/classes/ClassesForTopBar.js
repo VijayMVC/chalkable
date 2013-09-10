@@ -7,7 +7,7 @@ NAMESPACE('chlk.models.classes', function () {
     /** @class chlk.models.classes.ClassesForTopBar*/
     CLASS(
         'ClassesForTopBar', [
-            ArrayOf(chlk.models.classes.Class), 'topItems', //todo: rename
+            ArrayOf(chlk.models.classes.Class), 'topItems',
             chlk.models.id.ClassId, 'selectedItemId',
             Boolean, 'disabled',
 
