@@ -16,6 +16,21 @@ NAMESPACE('chlk.services', function () {
                     suffix =  height_ ? "-" + width_ + "x" + height_ : "-" + width_ + "x" + width_;
                 }
                 return id && id.valueOf() ? prefix + id.valueOf() + suffix: '#';
+            },
+
+            [[ArrayOf(chlk.models.id.PictureId), Number, Number]],
+            ArrayOf(chlk.models.apps.AppPicture), function getAppPicturesByIds(ids, dimsX, dimsY, picType_){
+
+                if (!picType_){
+                    picType_ = 'picture';
+                }
+                ids = ids || [];
+                var pics = ids.map(function(pictureId){
+                    var pictureUrl = this.getPictureUrl(pictureId, dimsX, dimsY);
+                    return new chlk.models.apps.AppPicture(pictureId, pictureUrl, dimsX, dimsY, picType_);
+                }, this);
+                return pics;
+
             }
         ])
 });

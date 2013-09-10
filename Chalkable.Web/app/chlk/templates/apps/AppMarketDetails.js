@@ -1,5 +1,7 @@
 REQUIRE('chlk.models.apps.Application');
+REQUIRE('chlk.models.id.PictureId');
 REQUIRE('chlk.models.developer.DeveloperInfo');
+REQUIRE('chlk.models.apps.AppScreenshots');
 
 
 NAMESPACE('chlk.templates.apps', function () {
@@ -17,6 +19,9 @@ NAMESPACE('chlk.templates.apps', function () {
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AppId, 'id',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.apps.AppScreenshots, 'screenshotPictures',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.developer.DeveloperInfo, 'developerInfo'
