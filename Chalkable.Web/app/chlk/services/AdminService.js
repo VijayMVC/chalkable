@@ -1,0 +1,46 @@
+REQUIRE('chlk.services.BaseService');
+REQUIRE('ria.async.Future');
+REQUIRE('chlk.models.id.SchoolId');
+
+REQUIRE('chlk.models.people.User');
+
+NAMESPACE('chlk.services', function () {
+    "use strict";
+
+    /** @class chlk.services.AdminService */
+    CLASS(
+        'AdminService', EXTENDS(chlk.services.BaseService), [
+            [[chlk.models.id.SchoolId, Number, Number, Boolean, Number]],
+            ria.async.Future, function getUsers(schoolId, roleId, gradeLevelId, byLastName, start) {
+                return this.getPaginatedList('Admin/GetPersons.json', chlk.models.people.User, {
+                    schoolId: schoolId.valueOf(),
+                    start: start,
+                    roleId: roleId,
+                    gradeLevelId: gradeLevelId,
+                    byLastName: byLastName
+                });
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
+            ria.async.Future, function getInfo(personId) {
+                return this.get('Admin/Info.json', chlk.models.people.User, {
+                    personId: personId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.SchoolPersonId, String, String, String, String, String, String, String, chlk.models.common.ChlkDate]],
+            ria.async.Future, function updateInfo(personId, addresses, email, firstName, lastName, gender, phones, salutation, birthDate) {
+                return this.post('Admin/UpdateInfo.json', chlk.models.people.User, {
+                    personId: personId.valueOf(),
+                    addresses: addresses && JSON.parse(addresses),
+                    email: email,
+                    firstName: firstName,
+                    lastName: lastName,
+                    gender: gender,
+                    phones: phones && JSON.parse(phones),
+                    salutation: salutation,
+                    birthdayDate: birthDate && JSON.stringify(birthDate.getDate()).slice(1,-1)
+                });
+            }
+        ])
+});

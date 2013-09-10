@@ -1,0 +1,15 @@
+.settings
+    .developer
+    .search-wrapper
+        #search-bar
+    .wrapper
+        .row
+            +ActionLink('account', 'profile', self.developerId.valueOf()) Profile
+        .row
+            -id = self.currentAppId ? self.currentAppId.valueOf() : null
+            if id
+                +ActionLink('apps', 'tryDeleteApplication', id) Delete application
+
+
+
+
