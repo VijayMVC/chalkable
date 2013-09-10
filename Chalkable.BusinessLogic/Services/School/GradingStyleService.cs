@@ -53,8 +53,6 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<GradingStyle> GetGradingStyles()
         {
-            if (!BaseSecurity.IsAdminOrTeacher(Context))
-                throw new ChalkableSecurityException();
             using (var uow = Read())
             {
                 return new GradingStyleDataAccess(uow).GetAll();
