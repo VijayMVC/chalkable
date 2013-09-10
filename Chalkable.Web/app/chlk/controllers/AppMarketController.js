@@ -8,6 +8,11 @@ REQUIRE('chlk.activities.apps.AppMarketPage');
 REQUIRE('chlk.activities.apps.AppMarketDetailsPage');
 REQUIRE('chlk.activities.apps.MyAppsPage');
 REQUIRE('chlk.activities.apps.AttachAppDialog');
+REQUIRE('chlk.activities.apps.InstallAppDialog');
+
+
+REQUIRE('chlk.models.apps.AppMarketInstallViewData');
+
 REQUIRE('chlk.models.id.AppId');
 
 NAMESPACE('chlk.controllers', function (){
@@ -80,6 +85,23 @@ NAMESPACE('chlk.controllers', function (){
                 .getApps(pageIndex_ | 0)
                 .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.apps.AppMarketPage, result);
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.ADMINEDIT,
+            chlk.models.common.RoleEnum.ADMINGRADE
+        ])],
+        [[chlk.models.id.AppId]],
+        function installAction(appId) {
+            var appInfo = this.appMarketService
+                .getDetails(appId)
+                .then(function(data){
+                    return new chlk.models.apps.AppMarketInstallViewData(data);
+                })
+                .attach(this.validateResponse_())
+
+            return this.ShadeView(chlk.activities.apps.InstallAppDialog, appInfo);
         }
     ])
 });

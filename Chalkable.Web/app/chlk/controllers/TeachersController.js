@@ -20,7 +20,8 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(model){
                         var res = this.prepareProfileData(model);
-                        this.getContext().getSession().set('userModel', res);
+
+                        this.getContext().getSession().set('userModel', res); //todo use currentchlkperson
                         return res;
                     }.bind(this));
                 return this.PushView(chlk.activities.profile.InfoViewPage, result);

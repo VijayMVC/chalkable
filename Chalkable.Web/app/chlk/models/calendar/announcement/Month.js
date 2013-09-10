@@ -10,7 +10,7 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
         'Month', [
             ArrayOf(chlk.models.calendar.announcement.MonthItem), 'items',
 
-            chlk.models.classes.ClassesForTopBar, 'topData',
+            chlk.models.classes.ClassesForTopBar, 'topData', //todo: rename
 
             Number, 'selectedTypeId',
 

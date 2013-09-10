@@ -17,6 +17,8 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.ClassService, 'classService',
 
+
+            //TODO: refactor
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
             function teacherSettingsAction(classId_){
@@ -67,8 +69,16 @@ NAMESPACE('chlk.controllers', function (){
                     finalGradeAnnouncementTypes.push(item)
                 });
 
-                this.finalGradeService.update(model.getId(), model.getParticipation(), model.getAttendance(), model.getDropLowestAttendance(),
-                    model.getDiscipline(), model.getDropLowestDiscipline(), model.getGradingStyle(), finalGradeAnnouncementTypes, model.isNeedsTypesForClasses())
+                this.finalGradeService.update(
+                        model.getId(),
+                        model.getParticipation(),
+                        model.getAttendance(),
+                        model.getDropLowestAttendance(),
+                        model.getDiscipline(),
+                        model.getDropLowestDiscipline(),
+                        model.getGradingStyle(),
+                        finalGradeAnnouncementTypes,
+                        model.isNeedsTypesForClasses())
                     .then(function(model){
                         this.Redirect('grading', 'teacherSettings', []);
                     }.bind(this));

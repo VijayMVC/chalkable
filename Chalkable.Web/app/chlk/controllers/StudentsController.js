@@ -21,6 +21,9 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.ClassService, 'classService',
 
+
+
+            //TODO: refactor
             [[chlk.models.common.PaginatedList, Number, Boolean, String]],
             chlk.models.people.UsersList, function prepareUsersModel(users, selectedIndex, byLastName, filter_){
                 users = this.prepareUsers(users);
@@ -41,6 +44,7 @@ NAMESPACE('chlk.controllers', function (){
                 return usersData;
             },
 
+            //TODO: refactor
             [[Boolean, chlk.models.id.ClassId]],
             function showStudentsList(isMy, classId_){
                 var result = this.studentService.getStudents(classId_, null, isMy, true, 0, 10)
@@ -72,6 +76,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.showStudentsList(false, classId_);
             },
 
+            //TODO: refactor
             [[chlk.models.teacher.StudentsList]],
             function updateListAction(model){
                 var submitType = model.getSubmitType();

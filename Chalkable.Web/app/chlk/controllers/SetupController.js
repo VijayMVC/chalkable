@@ -110,6 +110,9 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.setup.StartPage, result);
             },
 
+
+
+            //TODO: refactor
             [[Number]],
             function teacherSettingsAction(index){
                 var classes = this.classService.getClassesForTopBar();
@@ -146,6 +149,9 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.setup.TeacherSettingsPage, result);
             },
 
+
+
+            //TODO: refactor
             [[chlk.models.grading.Final]],
             function teacherSettingsEditAction(model){
                 var index = model.getNextClassNumber();
@@ -207,7 +213,7 @@ NAMESPACE('chlk.controllers', function (){
                     }
                 }
             },
-
+            //TODO: refactor
             [[chlk.models.people.User]],
             function infoEditAction(model){
                 this.personService.changePassword(model.getId(), model.getPassword())

@@ -214,11 +214,14 @@ NAMESPACE('ria.mvc', function () {
                 this.view.updateD(clazz, data, msg_ || '');
             },
 
+
+            ///TODO: WTF?????
             [[ImplementerOf(ria.mvc.IActivity)]],
             function StartLoading(clazz) {
                 this.view.startLoading(clazz);
             },
 
+            ///TODO: WTF?????
             [[ImplementerOf(ria.mvc.IActivity)]],
             function StopLoading(clazz) {
                 this.view.stopLoading(clazz);

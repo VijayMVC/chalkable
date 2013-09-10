@@ -106,6 +106,9 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.school.SchoolSisPage, result);
         },
 
+
+
+        //TODO:refactor
         [[chlk.models.id.SchoolId]],
         function peopleAction(id) {
             var newGradeLevels = this.gradeLevelService.getGradeLevels().slice();
@@ -133,35 +136,18 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.school.SchoolPeoplePage, result);
         },
 
-        /*[[Number, Boolean]],
-        function updatePeopleAction(id, byLastName) {
-            var serializer = new ria.serialize.JsonSerializer();
-            var model = new chlk.models.school.SchoolPeoplePart();
-            model.setByLastName(byLastName);
-            model.setSchoolId(id);
-            this.forward_('schools', 'set-people-filter', [model]);
-        },
 
-        [[Number, Number, Number, Boolean, Boolean]],
-        function setPeopleFilterAction(schoolId, roleId, gradeLevelId, byLastName,blockSelects){
-            var result = ria.async.wait([
-                this.adminService.getUsers(schoolId,roleId, gradeLevelId, byLastName,0)
-            ]).then(function(result){
-                var serializer = new ria.serialize.JsonSerializer();
-                var model = new chlk.models.school.SchoolPeoplePart();
-                model.setUsers(result[0]);
-                model.setByLastName(byLastName);
-                model.setSelectedIndex(0);
-                model.setSchoolId(schoolId);
-                return model;
-            });
-            return this.UpdateView(chlk.activities.school.SchoolPeoplePage, result);
-        },*/
 
         [[chlk.models.people.UsersList]],
         VOID, function setPeopleFilterAction(model_) {
             var result = ria.async.wait([
-                this.adminService.getUsers(model_.getSchoolId(),model_.getRoleId() || null, model_.getGradeLevelId() || null, model_.isByLastName(),0)
+                this.adminService.getUsers(
+                    model_.getSchoolId(),
+                    model_.getRoleId() || null,
+                    model_.getGradeLevelId() || null,
+                    model_.isByLastName(),
+                    0
+                )
             ]).then(function(result){
                 model_.setUsers(result[0]);
                 model_.setSelectedIndex(0);
@@ -170,6 +156,9 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.school.SchoolPeoplePage, result);
         },
 
+
+
+        //TODO:refactor
         [[chlk.models.id.SchoolId]],
         VOID, function actionButtonsAction(id) {
             var result = ria.async.wait([
