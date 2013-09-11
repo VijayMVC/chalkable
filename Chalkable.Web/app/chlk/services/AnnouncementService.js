@@ -128,6 +128,13 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Announcement/Read.json', chlk.models.announcement.Announcement, {
                     announcementId: id.valueOf()
                 });
+            },
+
+            [[chlk.models.id.AnnouncementId]],
+            ria.async.Future, function star(announcementId) {
+                return this.post('Announcement/Star', chlk.models.announcement.Announcement, {
+                    announcementId: announcementId.valueOf()
+                });
             }
         ])
 });

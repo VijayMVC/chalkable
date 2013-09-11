@@ -12,7 +12,7 @@
     +Grid('feed', 'list', self, [true, selectedId ? selectedId.valueOf() : null]).not-transparent
         +GridBody()
             each item in self.items
-                .feed-item
+                div(class=item.isStarred() ? "feed-item starred" : "feed-item")
                     if isNotStudent
                         .grades
                     .bullet

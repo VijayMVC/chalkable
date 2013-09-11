@@ -399,6 +399,14 @@ NAMESPACE('chlk.controllers', function (){
             ).then(function(){
                 this.redirect_('feed', 'list', []);
             }.bind(this));
+        },
+
+        [[chlk.models.id.AnnouncementId]],
+        function starAction(id)
+        {
+            console.log(id.valueOf());
+            this.announcementService.star(id);
+            return;
         }
     ])
 });

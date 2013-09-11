@@ -105,6 +105,18 @@ namespace Chalkable.Web.Controllers
             return Json(res, 7);
         }
 
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult Star(Guid announcementId, bool? star)
+        {
+            if (!star.HasValue)
+            {
+                var prev = SchoolLocator.AnnouncementService.GetAnnouncementDetails(announcementId).Starred ?? false;
+                star = !prev;
+            }
+            SchoolLocator.AnnouncementService.Star(announcementId, star.Value);
+            return Json(true);
+        }
+
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult SaveAnnouncement(AnnouncementInfo announcementInfo, Guid markingPeriodId, Guid? classId)
         {
