@@ -1,0 +1,46 @@
+
+DIV.page {
+  #content {
+    > DIV {
+      #main-wrapper {
+        #main {
+          DIV.my-apps{
+
+
+
+            .apps{
+              width: 670px;
+              margin-left: 70px;
+
+              .my-app-icon-link{
+                display: inline-block;
+                text-decoration: none;
+                vertical-align: top;
+
+                .app-list-item{
+                  width: 220px;
+                  height: 106px;
+
+                  .icon{
+                    width: 80px;
+                    height: 80px;
+                    display: inline-block;
+                    background: url(images/app/photo-store-container.png) 0 0 no-repeat;
+                    position: relative;
+
+                    >IMG, >DIV{
+                      width: 74px;
+                      height: 74px;
+                      margin: 3px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

@@ -1,0 +1,25 @@
+.app-market-details
+    .action-bar.not-transparent
+        .container.panel-bg.buttons-toolbar
+            +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
+            +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn My Apps
+    .app-screenshots-panel
+        +Carousel(self.getScreenshotPictures().getItems())
+    .app-price-info
+        .app-title
+            h1=self.name
+            span="By " + self.developerInfo.getName()
+        .app-buy
+            appPrice = self.getApplicationPrice().getPrice() > 0 ? "$" + self.getApplicationPrice().getPrice() : "Free"
+            +ActionLinkButton('appmarket', 'install', [self.getId().valueOf()]).special-button.blue-button=appPrice
+
+        textarea(name = "app-description", class ="app-description", readonly)=self.description
+        .app-general-info
+            .reviews
+            .permissions
+                .permissions-group
+                    .group-header This app is for:
+                .permissions-group
+                    .group-header Info this app uses:
+
+
