@@ -24,13 +24,13 @@ NAMESPACE('chlk.controls', function () {
             [[Object]],
             VOID, function update(node){
                 node.jcarousel({
+                    itemFallbackDimension: 640,
                     // Configuration goes here
                     buttonNextHTML: '<div class="picture-button picture-right"></div>',
                     buttonPrevHTML: '<div class="picture-button picture-left"></div>'
                 });
-                /*node.find('.pagination').jcarouselPagination({
-                    carousel: node
-                });*/
+                //jQuery('.carousel-pagination').jcarouselPagination();
+
             }
         ]);
 });

@@ -11,10 +11,15 @@
             span="By " + self.developerInfo.getName()
         .app-buy
             appPrice = self.getApplicationPrice().getPrice() > 0 ? "$" + self.getApplicationPrice().getPrice() : "Free"
+            +ActionLinkButton('appmarket', 'install', [self.getId().valueOf()]).special-button.blue-button=appPrice
 
-        span.chlk-button.special-button.blue-button
-            span
-                span
-                    +ActionLink('appmarket', 'install', [self.getId().valueOf()])=appPrice
+        textarea(name = "app-description", class ="app-description", readonly)=self.description
+        .app-general-info
+            .reviews
+            .permissions
+                .permissions-group
+                    .group-header This app is for:
+                .permissions-group
+                    .group-header Info this app uses:
 
-        textarea(name = "app-description", class ="app-description")=self.description
+
