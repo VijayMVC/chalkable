@@ -185,7 +185,8 @@
     {
         <script type="text/javascript">
             var role = currentChlkPerson.role.name;
-            role = role.toLowerCase().indexOf('admin') > -1 ? 'Admin' : role;
+            if (role == "admingrade" || role == "adminview" || role == "adminedit")
+                role = "admin";
             var roleAppScript = '@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot' + '/app/' + role + 'App.compiled.js';
             (function(appUrl) {
                 var scr = document.createElement('script');
