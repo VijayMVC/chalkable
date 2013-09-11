@@ -4,27 +4,35 @@ REQUIRE('chlk.models.id.AppPermissionId');
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
 
+    /** @class chlk.model.apps.AppPermissionTypeEnum*/
+    ENUM('AppPermissionTypeEnum',{
+        USER: 0,
+        MESSAGE: 1,
+        GRADE: 2,
+        ATTENDANCE: 3,
+        ANNOUNCEMENT: 4,
+        CLAZZ: 5,
+        SCHEDULE: 6,
+        DISCIPLINE: 7,
+        UNKNOWN: -1
+    });
+
     /** @class chlk.model.apps.AppPermission*/
     CLASS(
         'AppPermission', IMPLEMENTS(ria.serialize.IDeserializable),  [
-            chlk.models.id.AppPermissionId, 'id',
-            Number, 'type',
+            chlk.models.apps.AppPermissionTypeEnum, 'id',
             String, 'name',
-            [[chlk.models.id.AppPermissionId, String, Number]],
-            function $(id_, name_, type_){
+            [[chlk.models.apps.AppPermissionTypeEnum, String]],
+            function $(id_, name_){
                 BASE();
                 if (id_)
                     this.setId(id_);
                 if (name_)
                     this.setName(name_);
-                if (type_)
-                    this.setType(type_);
             },
 
-
             VOID, function deserialize(raw){
-                this.setId(new chlk.models.id.AppPermissionId(raw.id));
-                this.setType(Number(raw.type));
+                this.setId(new chlk.models.apps.AppPermissionTypeEnum(raw.type));
                 this.setName(raw.name);
             }
         ]);

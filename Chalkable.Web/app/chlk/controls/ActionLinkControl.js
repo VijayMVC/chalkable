@@ -38,8 +38,6 @@ NAMESPACE('chlk.controls', function () {
                 var controller = args.shift(),
                     action = args.shift();
 
-
-
                 if(node.hasClass('defer')){
                     setTimeout(function(){
                         this.updateState(controller, action, args);
