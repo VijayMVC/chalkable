@@ -1,6 +1,9 @@
-mixin Carousel()
+mixin Carousel(pictures)
+    -attributes = self.processAttrs(attributes);
     .carousel(attributes)
-        .picture-container
-            .picture-button.picture-left
-            .picture-button.picture-right
-        .dots-container
+        ul.picture-container
+            each picture in pictures
+                li.img
+                    img(src=picture.getPictureUrl())
+        .carousel-pagination
+

@@ -202,7 +202,7 @@ NAMESPACE('chlk.controllers', function (){
                     var pictureUrl = this.pictureService.getPictureUrl(pictureId, width, height);
                     return new chlk.models.apps.AppPicture(pictureId, pictureUrl, width, height, msg, true);
                 }, this);
-            var result= new ria.async.DeferredData(new chlk.models.apps.AppScreenshots(screenshots, true));
+            var result= new ria.async.DeferredData(new chlk.models.apps.AppScreenshots(screenshots, false));
             return this.UpdateView(chlk.activities.apps.AppInfoPage, result, msg.toLowerCase());
         },
 

@@ -6,7 +6,8 @@ NAMESPACE('chlk.models.common', function () {
     /** @class chlk.models.common.PageWithClasses*/
     CLASS(
         'PageWithClasses', [
-            chlk.models.classes.ClassesForTopBar, 'topData',
+            chlk.models.classes.ClassesForTopBar, 'topData', //todo: rename
+
             Number, 'selectedTypeId',
 
             [[chlk.models.classes.ClassesForTopBar, chlk.models.id.ClassId]],

@@ -9,7 +9,7 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
         'Week', [
             ArrayOf(chlk.models.calendar.announcement.WeekItem), 'items',
 
-            chlk.models.classes.ClassesForTopBar, 'topData',
+            chlk.models.classes.ClassesForTopBar, 'topData',  //todo: rename
 
             Number, 'selectedTypeId',
 

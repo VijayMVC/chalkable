@@ -148,7 +148,9 @@ BODY {
                             width: 170px;
                             height: 104px;
                             display: inline-block;
-                            float: right;
+                            float: left;
+                            margin-bottom: 30px;
+                            margin-right: 19px;
 
                             img{
                               width: 170px;
@@ -208,11 +210,19 @@ BODY {
 
                     .screenshots{
                       margin-top: 0px;
+
+
                     }
 
+                    .screenshot-pictures{
+                      margin-left: 190px;
+                      margin-top: -15px;
 
+                      .upload-img-block{
+                        float: left;
+                      }
 
-
+                    }
 
                     .price-checkbox{
                       &.slide-checkbox{

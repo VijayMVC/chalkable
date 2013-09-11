@@ -1,0 +1,30 @@
+#chlk-dialogs{
+
+  .dialog{
+    &.app-market-install{
+        width: 480px;
+        min-height: 332px;
+
+        left: 90px;
+        top: 75px;
+        background: #e7e7e7;
+        border: 1px solid #adadad;
+        border-radius: 4px;
+        @include box-shadow(0 10px 25px rgba(0, 0, 0, 0.5));
+
+
+        padding: 23px 64px;
+
+
+        .x-window-header{
+          h1{
+            text-transform: uppercase;
+            text-align: center;
+            font: bold 18px Arial;
+            color: #434343;
+            margin-bottom: 29px;
+          }
+        }
+    }
+  }
+}

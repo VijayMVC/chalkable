@@ -10,9 +10,9 @@
                 if self.isAppLive()
                     liveAppId = self.liveAppId ? self.liveAppId.valueOf() : null
                     if self.isApproved()
-                        +ActionLink('apps', 'goLive', self.draftAppId.valueOf()) Live
+                        +ActionLinkButton('apps', 'goLive', self.draftAppId.valueOf()).special-button.blue-button Live
                     else
-                        +ActionLink('apps', 'unlist', liveAppId) Unlist
+                        +ActionLinkButton('apps', 'unlist', liveAppId).special-button.blue-button Unlist
                 else
                     if self.isApproved()
-                        +ActionLink('apps', 'goLive', self.draftAppId.valueOf()) Live
+                        +ActionLinkButton('apps', 'goLive', self.draftAppId.valueOf()).special-button.blue-button Live
