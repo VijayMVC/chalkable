@@ -136,6 +136,17 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(container.parent('.row').hasClass('selected'))
                         jQuery(container.find('.grade-input').valueOf()).focus();
                 },1);*/
+            },
+
+            //TODO: the same logic as on the feed
+            [ria.mvc.DomEventBind('click', 'a.star')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function starAnnouncement(node, event){
+                if (node.parent().parent().getAttr("class").indexOf("starred") != -1)
+                    node.parent().parent().removeClass("starred");
+                else
+                    node.parent().parent().addClass("starred");
+                return true;
             }
         ]
     );

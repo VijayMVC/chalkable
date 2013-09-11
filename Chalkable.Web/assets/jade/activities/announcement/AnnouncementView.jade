@@ -12,7 +12,7 @@
         gradingMapping = studentAnnouncementsInfo.getMapping();
         getGrade = function(value){return GradingStyler.getLetterByGrade(value, gradingMapping, gradingStyle)};
         getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, gradingMapping, gradingStyle)};
-    .feed-item
+    div(class=self.starred ? "feed-item starred" : "feed-item")
         if isNotStudent
             .grades
         .bullet
