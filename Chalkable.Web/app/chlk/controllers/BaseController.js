@@ -92,6 +92,10 @@ NAMESPACE('chlk.controllers', function (){
            chlk.models.people.User, function getCurrentPerson(){
                return this.getContext().getSession().get('currentPerson');
            },
+           [chlk.models.people.User],
+           VOID, function updateCurrentPerson(user){
+               this.getContext().getSession().set('currentPerson', user);
+           },
 
            OVERRIDE, ria.reflection.ReflectionMethod, function resolveRoleAction_(state){
                var ref = new ria.reflection.ReflectionClass(this.getClass());

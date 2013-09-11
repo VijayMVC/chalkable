@@ -7,6 +7,9 @@ REQUIRE('chlk.activities.profile.SchedulePage');
 
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.people.User');
+REQUIRE('chlk.models.common.ActionLinkModel');
+REQUIRE('chlk.models.people.UserProfileModel');
+
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -86,8 +89,21 @@ NAMESPACE('chlk.controllers', function (){
                 return model;
             },
 
-            [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate, String]],
+            ArrayOf(chlk.models.common.ActionLinkModel), function prepareActionLinksData_(){
+                return [];
+            },
 
+            chlk.models.people.UserProfileModel, function prepareUserProfileModel_(user){
+                return new chlk.models.people.UserProfileModel(this.prepareProfileData(user)
+                    , this.prepareActionLinksData_());
+            },
+
+//            []
+//            function setUserIntoSession_(user){
+//                this.getContext().getSession().set('userData', user);
+//            }
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate, String]],
             function scheduleByRole(personId, date_, role){
                 var result = ria.async.wait([
                         this.personService.getSchedule(personId),

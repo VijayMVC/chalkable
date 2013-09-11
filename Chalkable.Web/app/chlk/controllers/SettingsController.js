@@ -4,6 +4,7 @@ REQUIRE('chlk.activities.settings.TeacherPage');
 REQUIRE('chlk.activities.settings.AdminPage');
 REQUIRE('chlk.activities.settings.PreferencesPage');
 REQUIRE('chlk.activities.settings.DeveloperPage');
+REQUIRE('chlk.activities.settings.StudentPage');
 REQUIRE('chlk.models.settings.Dashboard');
 REQUIRE('chlk.models.settings.Preference');
 REQUIRE('chlk.services.SettingsService');
@@ -75,6 +76,15 @@ NAMESPACE('chlk.controllers', function (){
             function dashboardAdminAction() {
                 var adminSettings = new chlk.models.settings.SchoolPersonSettings(this.getCurrentPerson().getId());
                 return this.PushView(chlk.activities.settings.AdminPage, ria.async.DeferredData(adminSettings));
+            },
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.STUDENT
+            ])],
+            [chlk.controllers.SidebarButton('settings')],
+            function dashboardStudentAction() {
+                var studentSettings = new chlk.models.settings.SchoolPersonSettings(this.getCurrentPerson().getId());
+                return this.PushView(chlk.activities.settings.StudentPage, ria.async.DeferredData(studentSettings));
             },
 
             function getCurrentApp() {

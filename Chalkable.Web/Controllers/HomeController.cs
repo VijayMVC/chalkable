@@ -80,15 +80,15 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
         public ActionResult Admin(bool? redirectToSetup)
         {
-            var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
-            PrepareAdminJsonData(mp);
+            PrepareAdminJsonData();
             return View();
         }
 
         [AuthorizationFilter("Student")]
         public ActionResult Student(bool? redirectToSetup)
         {
-            throw new NotImplementedException();
+            PrepareStudentJsonData();
+            return View();
         }
 
         private void PrepareCommonViewData(string prefixDemoSchool = null, MarkingPeriod markingPeriod = null)
@@ -124,8 +124,21 @@ namespace Chalkable.Web.Controllers
             }
         }
         
-        private void PrepareAdminJsonData(MarkingPeriod mp)
+        private void PrepareStudentJsonData()
         {
+            var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
+            var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.UserId);
+            var personView = PersonViewData.Create(person);
+            personView.DisplayName = person.FullName;
+            PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
+            var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, SchoolLocator.Context.UserId);
+            PrepareJsonData(ClassViewData.Create(classes), ViewConstants.CLASSES);
+            PrepareCommonViewData(null, mp);
+        }           
+
+        private void PrepareAdminJsonData()
+        {
+            var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
             var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.UserId);
             var personView = PersonViewData.Create(person);
             personView.DisplayName = person.ShortSalutationName;

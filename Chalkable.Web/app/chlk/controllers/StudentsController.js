@@ -5,12 +5,13 @@ REQUIRE('chlk.services.ClassService');
 
 REQUIRE('chlk.activities.person.ListPage');
 REQUIRE('chlk.activities.student.SummaryPage');
+REQUIRE('chlk.activities.profile.StudentInfoPage');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.teacher.StudentsList');
 
 NAMESPACE('chlk.controllers', function (){
-
+    "use strict";
     /** @class chlk.controllers.StudentsController */
     CLASS(
         'StudentsController', EXTENDS(chlk.controllers.UserController), [
@@ -20,6 +21,18 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.ClassService, 'classService',
+
+            OVERRIDE,  ArrayOf(chlk.models.common.ActionLinkModel), function prepareActionLinksData_(){
+                var controller = 'students';
+                var actionLinksData = [];
+                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'details', 'Now', true));
+                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'info', 'Info'));
+                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'schedule', 'Schedule'));
+                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'attendance', 'Attendance'));
+                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'discipline', 'Discipline'));
+                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'apps', 'Apps'));
+                return actionLinksData;
+            },
 
             [[chlk.models.common.PaginatedList, Number, Boolean, String]],
             chlk.models.people.UsersList, function prepareUsersModel(users, selectedIndex, byLastName, filter_){
@@ -96,11 +109,11 @@ NAMESPACE('chlk.controllers', function (){
                     .getInfo(personId)
                     .attach(this.validateResponse_())
                     .then(function(model){
-                        var res = this.prepareProfileData(model);
-                        this.getContext().getSession().set('userModel', res);
+                        var res = this.prepareUserProfileModel_(model);
+                        this.getContext().getSession().set('userModel', res.getUser());
                         return res;
                     }.bind(this));
-                return this.PushView(chlk.activities.profile.InfoViewPage, result);
+                return this.PushView(chlk.activities.profile.StudentInfoPage, result);
             },
 
             [[chlk.models.id.SchoolPersonId]],

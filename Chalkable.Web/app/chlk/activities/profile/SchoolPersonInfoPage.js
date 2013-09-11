@@ -1,20 +1,23 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
-REQUIRE('chlk.templates.profile.InfoView');
+REQUIRE('chlk.templates.profile.SchoolPersonInfoPageTpl');
 REQUIRE('chlk.templates.people.Addresses');
 
 NAMESPACE('chlk.activities.profile', function () {
 
-    var serializer = new ria.serialize.JsonSerializer();
-
-    /** @class chlk.activities.profile.InfoViewPage */
+    /** @class chlk.activities.profile.SchoolPersonInfoPage */
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [chlk.activities.lib.PageClass('profile')],
         [ria.mvc.PartialUpdateRule(chlk.templates.people.Addresses, '', '.adresses', ria.mvc.PartialUpdateRuleActions.Replace)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.profile.InfoView, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
-        [ria.mvc.TemplateBind(chlk.templates.profile.InfoView)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.profile.SchoolPersonInfoPageTpl, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.TemplateBind(chlk.templates.profile.SchoolPersonInfoPageTpl)],
 
-        'InfoViewPage', EXTENDS(chlk.activities.lib.TemplatePage), [
+        'SchoolPersonInfoPage', EXTENDS(chlk.activities.lib.TemplatePage), [
+
+            function $(){
+                BASE();
+                this._serializer = new ria.serialize.JsonSerializer();
+            },
 
             [ria.mvc.DomEventBind('click', '.add-button')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -25,7 +28,7 @@ NAMESPACE('chlk.activities.profile', function () {
                     type: 0,
                     value: ''
                 });
-                var addressesModel = serializer.deserialize({items : addressesValue}, chlk.models.people.Addresses);
+                var addressesModel = this._serializer.deserialize({items : addressesValue}, chlk.models.people.Addresses);
                 this.onPartialRender_(addressesModel);
             },
 

@@ -14,7 +14,6 @@ REQUIRE('chlk.controllers.StudentsController');
 REQUIRE('chlk.controllers.TeachersController');
 REQUIRE('chlk.controllers.MessageController');
 REQUIRE('chlk.controllers.DisciplineController');
-REQUIRE('chlk.controllers.DisciplineTypeController');
 REQUIRE('chlk.controllers.AdminsController');
 
 REQUIRE('chlk.services.SearchService');
@@ -22,21 +21,20 @@ REQUIRE('chlk.templates.search.SiteSearch');
 
 NAMESPACE('chlk', function (){
 
-    /** @class chlk.AdminApp */
+    /** @class chlk.StudentApp */
     CLASS(
-        'AdminApp', EXTENDS(chlk.BaseApp), [
+        'StudentApp', EXTENDS(chlk.BaseApp), [
             OVERRIDE, ria.mvc.Dispatcher, function initDispatcher_() {
                 var dispatcher = BASE();
 
                 dispatcher.setDefaultControllerId('feed');
-                dispatcher.setDefaultControllerAction('admin');
+                dispatcher.setDefaultControllerAction('list');
                 return dispatcher;
             },
 
             OVERRIDE, ria.mvc.ISession, function initSession_() {
                 var session = BASE();
-               // var currentPerson = this.getCurrentPerson();
-                session.set('role', new chlk.models.common.Role(chlk.models.common.RoleEnum.ADMINGRADE, 'Admin'));
+                session.set('role', new chlk.models.common.Role(chlk.models.common.RoleEnum.STUDENT, 'Student'));
                 return session;
             },
 
@@ -44,7 +42,7 @@ NAMESPACE('chlk', function (){
                 return BASE()
                     .then(function(data){
                         new ria.dom.Dom()
-                            .fromHTML(ASSET('~/assets/jade/sidebars/AdminSidebar.jade')())
+                            .fromHTML(ASSET('~/assets/jade/sidebars/StudentSidebar.jade')())
                             .appendTo("#sidebar");
                         return data;
                     });
