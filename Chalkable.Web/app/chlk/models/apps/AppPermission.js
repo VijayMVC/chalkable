@@ -14,7 +14,7 @@ NAMESPACE('chlk.models.apps', function () {
         CLAZZ: 5,
         SCHEDULE: 6,
         DISCIPLINE: 7,
-        UNKNOWN: -1
+        UNKNOWN: 999
     });
 
     /** @class chlk.model.apps.AppPermission*/
