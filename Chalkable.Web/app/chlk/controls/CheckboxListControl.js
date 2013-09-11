@@ -13,7 +13,7 @@ NAMESPACE('chlk.controls', function () {
             [ria.mvc.DomEventBind('click', '.checkbox-list')],
             [[ria.dom.Dom, ria.dom.Event]],
             function onClicked($target, node){
-                var checkboxes = $target.find('input[type=checkbox]');
+                var checkboxes = $target.find('input[type=checkbox]:not(:disabled)');
                 var res = [];
                 var prefix = $target.getData('prefix');
                 var name = $target.getData('name');

@@ -155,6 +155,13 @@ NAMESPACE('chlk.controllers', function (){
                             "Just me"
                         ));
                     }
+
+                    installedForGroups = installedForGroups.map(function(item){
+                        if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.ALL
+                            && this.userInRole(chlk.models.common.RoleEnum.TEACHER))
+                            item.setDescription('Whole School');
+                        return item;
+                    }, this);
                     app.setInstalledForGroups(installedForGroups);
                     return new chlk.models.apps.AppMarketInstallViewData(app);
                 }, this)
