@@ -410,7 +410,7 @@ NAMESPACE('chlk.controllers', function (){
                                             );
             var cats = this.getIdsList(model.getCategories(), chlk.models.id.AppCategoryId);
             var gradeLevels = this.getIdsList(model.getGradeLevels(), chlk.models.id.GradeLevelId);
-            var appPermissions = this.getIdsList(model.getPermissions(), chlk.models.id.AppPermissionId);
+            var appPermissions = this.getIdsList(model.getPermissions(), chlk.models.apps.AppPermissionTypeEnum);
             var appScreenShots = this.getIdsList(model.getAppScreenshots(), chlk.models.id.PictureId);
 
              var result = this.appsService

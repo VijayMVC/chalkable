@@ -78,14 +78,15 @@ DIV.page {
                     height: 44px;
                     cursor: default;
 
-                    margin: 0 !important;
-                    color: #032633;
+                    margin: 0;
                     font-size: 15px;
-                    text-shadow: 0 0 1px #9da3a6;
                     padding-left: 46px;
                     background: url(images/app/info-for.png) 14px -42px no-repeat;
                     text-transform: capitalize;
                     height: 18px;
+
+                    color: #9d9d9d;
+                    text-shadow: 1px -1px 1px #fff;
 
                     &.role-2 {
                       background-position: 14px -21px;

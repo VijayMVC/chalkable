@@ -14,6 +14,7 @@ REQUIRE('chlk.activities.apps.InstallAppDialog');
 
 REQUIRE('chlk.models.apps.AppMarketInstallViewData');
 REQUIRE('chlk.models.apps.AppMarketViewData');
+REQUIRE('chlk.models.apps.AppInstallGroup');
 
 REQUIRE('chlk.models.id.AppId');
 
@@ -92,6 +93,31 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(app){
                     var screenshots = this.pictureService.getAppPicturesByIds(app.getScreenshotIds(), 640, 390);
                     app.setScreenshotPictures(new chlk.models.apps.AppScreenshots(screenshots, false));
+
+                    var appPermissions = app.getPermissions() || [];
+
+                    appPermissions = appPermissions.map(function(permission){
+                         switch(permission.getId().valueOf()){
+                             case chlk.models.apps.AppPermissionTypeEnum.MESSAGE.valueOf() : permission.setName("Messaging");
+                                 break;
+                             case chlk.models.apps.AppPermissionTypeEnum.GRADE.valueOf(): permission.setName("Grading");
+                                 break;
+                         }
+                         return permission;
+                    });
+
+                    var filteredPermissions = appPermissions.filter(function(permission){
+                        return permission.getId() != chlk.models.apps.AppPermissionTypeEnum.USER
+                            && permission.getId() != chlk.models.apps.AppPermissionTypeEnum.ANNOUNCEMENT
+                            && permission.getId() != chlk.models.apps.AppPermissionTypeEnum.CLAZZ;
+                    });
+
+                     if (appPermissions.length > filteredPermissions.length){
+                         filteredPermissions.unshift(new chlk.models.apps.AppPermission(
+                             chlk.models.apps.AppPermissionTypeEnum.UNKNOWN, 'Basic info'));
+                     }
+
+                    app.setPermissions(filteredPermissions);
                     return app;
                 }, this)
                 .attach(this.validateResponse_());
@@ -107,6 +133,43 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.apps.AppMarketPage, result);
         },
 
+
+
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.ADMINEDIT,
+            chlk.models.common.RoleEnum.ADMINGRADE
+        ])],
+        [[chlk.models.id.AppId]],
+        function tryToInstallAction(appId) {
+            var appInfo = this.appMarketService
+                .getDetails(appId)
+                .then(function(app){
+                    var installedForGroups = app.getInstalledForGroups() || [];
+                    if (!this.userInRole(chlk.models.common.RoleEnum.STUDENT)){
+                        installedForGroups.unshift(new chlk.models.apps.AppInstallGroup(
+                            new chlk.models.id.AppInstallGroupId(this.getCurrentPerson().getId().valueOf()),
+                            chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER,
+                            app.isInstalledOnlyForCurrentUser(),
+                            "Just me"
+                        ));
+                    }
+
+                    installedForGroups = installedForGroups.map(function(item){
+                        if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.ALL
+                            && this.userInRole(chlk.models.common.RoleEnum.TEACHER))
+                            item.setDescription('Whole School');
+                        return item;
+                    }, this);
+                    app.setInstalledForGroups(installedForGroups);
+                    return new chlk.models.apps.AppMarketInstallViewData(app);
+                }, this)
+                .attach(this.validateResponse_())
+
+            return this.ShadeView(chlk.activities.apps.InstallAppDialog, appInfo);
+        },
+
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER,
             chlk.models.common.RoleEnum.ADMINEDIT,
@@ -114,14 +177,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AppId]],
         function installAction(appId) {
-            var appInfo = this.appMarketService
-                .getDetails(appId)
-                .then(function(data){
-                    return new chlk.models.apps.AppMarketInstallViewData(data);
-                })
-                .attach(this.validateResponse_())
 
-            return this.ShadeView(chlk.activities.apps.InstallAppDialog, appInfo);
         }
     ])
 });

@@ -153,7 +153,7 @@ NAMESPACE('chlk.services', function () {
             [[
                 chlk.models.id.AppId,
                 chlk.models.apps.ShortAppInfo,
-                ArrayOf(chlk.models.id.AppPermissionId),
+                ArrayOf(chlk.models.apps.AppPermissionTypeEnum),
                 chlk.models.apps.AppPrice,
                 chlk.models.id.SchoolPersonId,
                 chlk.models.apps.AppAccess,
@@ -185,14 +185,14 @@ NAMESPACE('chlk.services', function () {
 
             ArrayOf(chlk.models.apps.AppPermission), function getAppPermissions(){
                 return  [
-                    new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(0), "User"),
-                    new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(1), "Message"),
-                    new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(2), "Grade"),
-                    new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(3), "Attendance"),
-                    new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(4), "Announcement"),
-                    new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(5), "Class"),
-                    new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(6), "Schedule"),
-                    new chlk.models.apps.AppPermission(new chlk.models.id.AppPermissionId(7), "Discipline")
+                    new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.USER, "User"),
+                    new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.MESSAGE, "Message"),
+                    new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.GRADE, "Grade"),
+                    new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.ATTENDANCE, "Attendance"),
+                    new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.ANNOUNCEMENT, "Announcement"),
+                    new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.CLAZZ, "Class"),
+                    new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.SCHEDULE, "Schedule"),
+                    new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.DISCIPLINE, "Discipline")
                 ];
             },
 

@@ -92,8 +92,8 @@ each item in actAppCategories
     -appCategories.push(item.getId().valueOf())
 
 each item in actAppPermissions
-    -selectedAppPermissions[item.getType()] = true
-    -appPermissions.push(item.getType())
+    -selectedAppPermissions[item.getId()] = true
+    -appPermissions.push(item.getId().valueOf())
 
 appGradeLvls = appGradeLvls.join(',')
 appCategories = appCategories.join(',')
@@ -153,7 +153,7 @@ appPermissions = appPermissions.join(',')
                 .permissions
                     +CheckboxList('permissions', 'app-permission', appPermissions)
                         each item in self.getPermissions()
-                            -isChecked = !!selectedAppPermissions[item.getId().valueOf()]
+                            -isChecked = !!selectedAppPermissions[item.getId()]
                             +LabeledCheckbox(item.getName(), 'app-permission'+ item.getId(), isChecked, self.isReadOnly())
         .section
             .elem
