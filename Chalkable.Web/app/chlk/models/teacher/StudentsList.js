@@ -11,6 +11,18 @@ NAMESPACE('chlk.models.teacher', function () {
             chlk.models.people.UsersList, 'usersPart', //todo: rename
             chlk.models.classes.ClassesForTopBar, 'topData',//todo: rename
             Boolean, 'my',
-            chlk.models.id.ClassId, 'classId'
+            chlk.models.id.ClassId, 'classId',
+
+            [[chlk.models.people.UsersList, chlk.models.classes.ClassesForTopBar, Boolean, chlk.models.id.ClassId]],
+            function $(usersList_, classes_, isMy_, classId_){
+                BASE();
+                if(usersList_)
+                    this.setUsersPart(usersList_);
+                if(classes_)
+                    this.setTopData(classes_);
+                this.setMy(isMy_ || false);
+                if(classId_)
+                    this.setClassId(classId_);
+            }
         ]);
 });

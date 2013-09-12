@@ -58,10 +58,11 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin")]
-        public ActionResult GetPersons(Guid schoolId, string roleName, GuidList gradeLevelIds, int? start, int? count, bool? byLastName)
+        public ActionResult GetPersons(Guid schoolId, int? roleId, GuidList gradeLevelIds, int? start, int? count, bool? byLastName)
         {
             if (SchoolLocator.Context.SchoolId != schoolId)
                 SchoolLocator = MasterLocator.SchoolServiceLocator(schoolId);
+            var roleName = roleId.HasValue ? CoreRoles.GetById(roleId.Value).LoweredName : null;
             return Json(PersonLogic.GetPersons(SchoolLocator, start, count, byLastName, null, roleName, null, gradeLevelIds));
         }
 

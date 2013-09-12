@@ -64,6 +64,18 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.SchoolId, Number, String, Number, Number, Boolean]],
+            ria.async.Future, function getUsers(schoolId, roleId, gradeLevelsIds, start, count, byLastName){
+                return this.getPaginatedList('School/GetPersons.json', chlk.models.people.User, {
+                    schoolId: schoolId.valueOf(),
+                    start: start,
+                    count: count,
+                    roleId: roleId,
+                    gradeLevelId: gradeLevelsIds,
+                    byLastName: byLastName
+                });
+            },
+
             [[chlk.models.id.SchoolId]],
             ria.async.Future, function del(schoolId) {
                 return this.post('School/delete.json', chlk.models.Success, {

@@ -6,6 +6,13 @@ NAMESPACE('chlk.models.school', function () {
     CLASS(
         'ActionButtons', EXTENDS(chlk.models.Popup), [
             ArrayOf(Number), 'buttons',
-            ArrayOf(String), 'emails'
+            ArrayOf(String), 'emails',
+
+            [[ArrayOf(Number), ArrayOf(String), ria.dom.Dom, ria.dom.Dom]],
+            function $(buttrons, emails, target, container_){
+                BASE(target, container_);
+                this.setButtons(buttrons);
+                this.setEmails(emails);
+            }
         ]);
 });
