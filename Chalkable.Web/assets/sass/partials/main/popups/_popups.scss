@@ -1,0 +1,147 @@
+#chlk-overlay{
+  display: block;
+  background-color: #000;
+  @include opacity(0.7);
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 9999;
+
+  &.x-hidden{
+    display: none;
+  }
+
+
+  &.black{
+    opacity: .85;
+  }
+}
+
+
+#chlk-dialogs{
+  min-width: 800px;
+  min-height: 700px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -12px;
+  bottom: -12px;
+  z-index: 10000;
+
+  &.x-hidden{
+    display: none;
+  }
+
+  .dialog{
+    position: absolute;
+    visibility: visible;
+    z-index: 9003;
+
+    .x-window-header{
+      color: #5d6d75;
+      font-size: 18px;
+      margin-left: 25px;
+      padding: 5px 0 4px 0;
+      font: bold 24px Arial;
+    }
+
+    .x-window-body{
+      padding: 5px 15px 0px 0px;
+
+
+      .x-fieldset-header-text{
+        font: bold 11px tahoma, arial, helvetica, sans-serif;
+        color: #15428b;
+        margin-left: 20px;
+        text-align: left;
+        margin-bottom: 15px;
+        display: inline-block;
+      }
+    }
+
+    &.gray{
+      left: 191px;
+      top: 75px;
+      background: #e7e7e7;
+      border: 1px solid #adadad;
+      border-radius: 15px;
+      @include box-shadow(0 10px 25px rgba(0, 0, 0, 0.5));
+
+      &:not(.info-msg){
+        min-height: 500px;
+        min-width: 390px;
+      }
+
+      &.info-msg{
+        padding: 22px;
+        color: #6F6F6F;
+        font-weight: bold;
+        font-size: 16px;
+        min-width: 300px;
+
+        h1{
+          font-size: 24px;
+          color: #6F6F6F;
+        }
+
+        PRE{
+          margin: 20px 0;
+          min-height: 1px;
+          font-family: Arial;
+        }
+
+        .buttons-container{
+          .button{
+            display: inline-block;
+
+            BUTTON{
+              min-width: 100px;
+            }
+
+            &:not(:last-child) {
+              margin-right: 20px;
+            }
+          }
+        }
+      }
+
+      &.centered{
+        left: 50%;
+        top: 50%;
+      }
+    }
+
+
+    &.default-add-dialog{
+      min-height: 200px !important;
+      min-width: 150px !important;
+      .x-window-body{
+
+        .form-btn-conteiner{
+          text-align: right;
+          .chlk-button{
+            margin: 5px;
+          }
+        }
+        .x-form-field{
+          margin-bottom: 4px;
+          label{
+            text-align: center;
+            display: inline-block;
+            text-align: right;
+            height: 18px;
+            color: #808080;
+            font: normal 14px tahoma, arial, helvetica, sans-serif;
+            padding: 10px;
+          }
+          input{
+            width: 300px;
+            border-radius: 5px;
+          }
+        }
+      }
+    }
+  }
+}
