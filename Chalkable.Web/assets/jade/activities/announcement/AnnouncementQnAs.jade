@@ -1,0 +1,33 @@
+each item, i in self.getAnnouncementQnAs()
+    +ActionForm('announcement', 'answerQuestion')
+        input(type="hidden",name="id", value=item.getId())
+        .row
+            .avatar-container.left
+                +PersonImg(item.getQuestion().getPerson(), 47)
+            p.left= item.getQuestion().getPerson().getFullName()
+            .left= item.getQuestion().getMessage()
+            input(type="text",name="question", value=item.getQuestion().getMessage()).x-hidden
+            +Button()(type="submit").special-button.blue-button.submit-btn.x-hidden Update
+            if self.isOwner
+                a(href='javascript:', name='edit-question-link') edit
+            .clear
+
+        .row
+            answered = (item.getState() == chlk.models.announcement.QnAState.ANSWERED)
+        .avatar-container.left
+            +PersonImg(item.getAnswer().getPerson(), 47)
+        p.left= item.getAnswer().getPerson().getFullName()
+        if answered || !self.isOwner
+            .left= item.getAnswer().getMessage()
+            if self.isOwner
+                a(href='javascript:', name='edit-answer-link') edit
+        else
+            input(type="text",name="answer", value=item.getAnswer().getMessage())
+            +Button()(type="submit").special-button.blue-button.submit-btn Update
+        .clear
+    if !self.isOwner
+        +ActionForm('announcement', 'askQuestion')
+            label Question:
+            input(type="text",name="question")
+            input(type="hidden",name="announcementId", value=self.getId())
+            +Button()(type="submit").special-button.blue-button.submit-btn Ask

@@ -1,0 +1,23 @@
+app = self.getApp()
+
+.dialog.app-market-install
+    .x-window-header
+        a.close.close-btn.dark
+        h1=app.getName()
+    .x-window-body
+        +ActionForm('appmarket', 'install')
+            .install-for
+                +CheckboxList('installFor', 'install-group-', "")
+                    each column in self.getInstallGroupColumns()
+                        .column(style="width:" + self.getInstallGroupColumnWidth())
+                            each item in column
+                                +LabeledCheckbox(item.getDescription(), 'install-group-'+ item.getId(), item.isInstalled(), item.isInstalled())
+                //+ActionLinkButton('appmarket', 'install', [self.getId().valueOf()]).special-button.blue-button=appPrice
+            .install-info
+                .install-btn
+                    +Button().special-button.green-button Install App
+                .paycheck
+                    .container
+                        .top
+                            .middle
+                                .bottom
