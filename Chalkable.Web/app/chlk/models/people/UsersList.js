@@ -8,7 +8,6 @@ NAMESPACE('chlk.models.people', function () {
     CLASS(
         'UsersList', EXTENDS(chlk.models.people.UsersListSubmit),[
             chlk.models.common.PaginatedList, 'users',
-            Number, 'roleId',
             String, 'gradeLevelsIds',
 
             [[chlk.models.common.PaginatedList, Boolean, Number,  String, Number]],

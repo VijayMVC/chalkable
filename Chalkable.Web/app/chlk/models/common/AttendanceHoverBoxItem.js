@@ -1,4 +1,4 @@
-REQUIRE('chlk.converters.attendance.ClassAttendanceIdToNameConverter');
+REQUIRE('chlk.converters.attendance.AttendanceTypeToNameConverter');
 
 NAMESPACE('chlk.models.common', function () {
     "use strict";
