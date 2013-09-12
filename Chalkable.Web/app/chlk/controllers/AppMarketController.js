@@ -13,6 +13,7 @@ REQUIRE('chlk.activities.apps.InstallAppDialog');
 
 
 REQUIRE('chlk.models.apps.AppMarketInstallViewData');
+REQUIRE('chlk.models.apps.AppMarketDetailsViewData');
 REQUIRE('chlk.models.apps.AppMarketViewData');
 REQUIRE('chlk.models.apps.AppInstallGroup');
 REQUIRE('chlk.models.apps.AppInstallPostData');
@@ -119,7 +120,15 @@ NAMESPACE('chlk.controllers', function (){
                      }
 
                     app.setPermissions(filteredPermissions);
-                    return app;
+
+                    var installBtnTitle ='';
+
+                    if (this.userInRole(chlk.models.common.RoleEnum.STUDENT) && app.isInstalledOnlyForCurrentUser()){
+                        installBtnTitle = 'Installed';
+                    }else{
+                        installBtnTitle = app.getApplicationPrice().getPrice() > 0 ? "$" + app.getApplicationPrice().getPrice() : "Free";
+                    }
+                    return new chlk.models.apps.AppMarketDetailsViewData(app, installBtnTitle);
                 }, this)
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.apps.AppMarketDetailsPage, result);
