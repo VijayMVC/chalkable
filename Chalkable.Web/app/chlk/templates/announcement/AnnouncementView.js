@@ -1,5 +1,7 @@
 REQUIRE('chlk.templates.announcement.Announcement');
 REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.templates.announcement.AnnouncementQnAs');
+
 
 NAMESPACE('chlk.templates.announcement', function () {
 
