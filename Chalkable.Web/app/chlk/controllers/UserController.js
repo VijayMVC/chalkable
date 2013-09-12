@@ -14,6 +14,7 @@ REQUIRE('chlk.models.people.UserProfileModel');
 
 
 NAMESPACE('chlk.controllers', function (){
+    "use strict";
 
     /** @class chlk.controllers.UserController */
     CLASS(
@@ -115,10 +116,25 @@ NAMESPACE('chlk.controllers', function (){
                     , this.prepareActionLinksData_());
             },
 
-//            []
-//            function setUserIntoSession_(user){
-//                this.getContext().getSession().set('userData', user);
-//            }
+            Boolean, function isAdminRoleName_(roleName){
+                return roleName === chlk.models.common.RoleNamesEnum.ADMINGRADE.valueOf()
+                    || roleName === chlk.models.common.RoleNamesEnum.ADMINEDIT.valueOf()
+                    || roleName === chlk.models.common.RoleNamesEnum.ADMINVIEW.valueOf();
+            },
+
+            [[chlk.models.id.SchoolPersonId, String]],
+            function infoByRoleAction(personId, roleName){
+                var action = "info",
+                    controller = null,
+                    loweredRoleName = roleName.toLowerCase();
+                if(this.isAdminRoleName_(loweredRoleName))
+                    controller = "admins";
+                if(loweredRoleName == chlk.models.common.RoleNamesEnum.TEACHER.valueOf())
+                    controller = "teachers";
+                if(loweredRoleName == chlk.models.common.RoleNamesEnum.STUDENT.valueOf())
+                    controller = "students";
+                return this.Redirect(controller, action, [personId.valueOf()]);
+            },
 
             [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate, String]],
             function scheduleByRole(personId, date_, role){

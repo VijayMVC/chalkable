@@ -65,7 +65,6 @@ NAMESPACE('chlk.controllers', function (){
             function scheduleAction(personId, date_){
                 //return BASE(personId, chlk.models.common.RoleNamesEnum.TEACHER);
                 return this.scheduleByRole(personId, date_, chlk.models.common.RoleNamesEnum.TEACHER.valueOf());
-            },
-
+            }
         ])
 });

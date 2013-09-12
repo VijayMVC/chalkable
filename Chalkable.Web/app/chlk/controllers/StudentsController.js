@@ -37,7 +37,6 @@ NAMESPACE('chlk.controllers', function (){
                 return actionLinksData;
             },
 
-
             //TODO: refactor
             [[Boolean, chlk.models.id.ClassId]],
             function showStudentsList(isMy, classId_){
