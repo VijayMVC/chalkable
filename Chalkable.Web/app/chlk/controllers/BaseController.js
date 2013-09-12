@@ -58,6 +58,14 @@ NAMESPACE('chlk.controllers', function (){
                return head;
            },
 
+           [[String, Function]],
+           function getIdsList(ids, idClass){
+               var result = ids ? ids.split(',').map(function(item){
+                   return new idClass(item)
+               }) : [];
+               return result;
+           },
+
            chlk.models.common.Role, function getCurrentRole(){
                return this.getContext().getSession().get('role');
            },

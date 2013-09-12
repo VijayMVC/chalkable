@@ -6,6 +6,7 @@ REQUIRE('chlk.models.developer.DeveloperInfo');
 REQUIRE('chlk.models.apps.AppCategory');
 REQUIRE('chlk.models.apps.AppMarketApplication');
 REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.apps.AppInstallPostData');
 
 
 
@@ -92,18 +93,26 @@ NAMESPACE('chlk.services', function () {
                     .get('AppMarket/Read.json', chlk.models.apps.AppMarketApplication, {
                         applicationId: appId.valueOf()
                     });
-                /*
-                var app  =  new chlk.models.apps.AppMarketApplication();
-                app.setName("App test");
-                app.setUrl('https://localhost/apptest');
-                app.setId(new chlk.models.id.AppId('dab27768-6a5d-41d5-82b1-d943ef002eae'));
-                app.setShortDescription("rskldfj;alskdfja;skldjfa;sldkfja;sdfsdfsdfsdfsdfldkfjasl;");
-                app.setSmallPictureId(new chlk.models.id.PictureId("90e359b7-7199-4296-8148-a072bcd67bb3"));
-                var devInfo = new chlk.models.developer.DeveloperInfo();
-                devInfo.setName('Developerovich');
-                app.setDeveloperInfo(devInfo);
-                return new ria.async.DeferredData(app);
-                */
+            },
+
+            [[
+                chlk.models.id.AppId,
+                ArrayOf(chlk.models.id.AppInstallGroupId),
+                ArrayOf(chlk.models.id.AppInstallGroupId),
+                ArrayOf(chlk.models.id.AppInstallGroupId),
+                ArrayOf(chlk.models.id.AppInstallGroupId),
+                chlk.models.id.AppInstallGroupId
+            ]],
+            ria.async.Future, function installApp(appId, departments, classes, roles, gradeLevels, currentPerson_) {
+                return this
+                    .post('AppMarket/Install.json', Boolean, {
+                        applicationId: appId.valueOf(),
+                        personId: currentPerson_ && currentPerson_.valueOf(),
+                        departmentids: this.arrayToCsv(departments),
+                        classids: this.arrayToCsv(classes),
+                        roleIds: this.arrayToCsv(roles),
+                        gradelevelids: this.arrayToCsv(gradeLevels)
+                    });
             }
         ])
 });

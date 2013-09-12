@@ -10,14 +10,14 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.AdminService */
     CLASS(
         'AdminService', EXTENDS(chlk.services.BaseService), [
-            [[chlk.models.id.SchoolId, Number, Number, Boolean, Number]],
-            ria.async.Future, function getUsers(schoolId, roleId, gradeLevelId, byLastName, start) {
+            [[Number, String, Boolean, Number, String]],
+            ria.async.Future, function getUsers(roleId, gradeLevelIds, byLastName, start, filter) {
                 return this.getPaginatedList('Admin/GetPersons.json', chlk.models.people.User, {
-                    schoolId: schoolId.valueOf(),
                     start: start,
-                    roleId: roleId,
-                    gradeLevelId: gradeLevelId,
-                    byLastName: byLastName
+                    roleId: roleId || null,
+                    gradeLevelIds: gradeLevelIds,
+                    byLastName: byLastName,
+                    filter: filter
                 });
             },
 

@@ -359,13 +359,7 @@ NAMESPACE('chlk.controllers', function (){
 
 
 
-        [[String, Function]],
-        function getIdsList(ids, idClass){
-            var result = ids ? ids.split(',').map(function(item){
-                return new idClass(item)
-            }) : [];
-            return result;
-        },
+
 
 
         [chlk.controllers.AccessForRoles([

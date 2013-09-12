@@ -24,10 +24,5 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(GetInfo(teacher.Id, TeacherInfoViewData.Create));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult GetPersons(string roleName, GuidList gradeLevelIds, int? start, int? count, bool? byLastName)
-        {
-            return Json(PersonLogic.GetPersons(SchoolLocator, start, count, byLastName, null, roleName, null, gradeLevelIds));
-        }
     }
 }

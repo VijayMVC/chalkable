@@ -13,8 +13,10 @@ REQUIRE('chlk.activities.apps.InstallAppDialog');
 
 
 REQUIRE('chlk.models.apps.AppMarketInstallViewData');
+REQUIRE('chlk.models.apps.AppMarketDetailsViewData');
 REQUIRE('chlk.models.apps.AppMarketViewData');
 REQUIRE('chlk.models.apps.AppInstallGroup');
+REQUIRE('chlk.models.apps.AppInstallPostData');
 
 REQUIRE('chlk.models.id.AppId');
 
@@ -118,7 +120,15 @@ NAMESPACE('chlk.controllers', function (){
                      }
 
                     app.setPermissions(filteredPermissions);
-                    return app;
+
+                    var installBtnTitle ='';
+
+                    if (this.userInRole(chlk.models.common.RoleEnum.STUDENT) && app.isInstalledOnlyForCurrentUser()){
+                        installBtnTitle = 'Installed';
+                    }else{
+                        installBtnTitle = app.getApplicationPrice().getPrice() > 0 ? "$" + app.getApplicationPrice().getPrice() : "Free";
+                    }
+                    return new chlk.models.apps.AppMarketDetailsViewData(app, installBtnTitle);
                 }, this)
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.apps.AppMarketDetailsPage, result);
@@ -175,9 +185,26 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.ADMINEDIT,
             chlk.models.common.RoleEnum.ADMINGRADE
         ])],
-        [[chlk.models.id.AppId]],
-        function installAction(appId) {
-
+        [[chlk.models.apps.AppInstallPostData]],
+        function installAction(appInstallData) {
+            return this.appMarketService
+                .installApp(
+                    appInstallData.getAppId(),
+                    this.getIdsList(appInstallData.getDepartments(), chlk.models.id.AppInstallGroupId),
+                    this.getIdsList(appInstallData.getClasses(), chlk.models.id.AppInstallGroupId),
+                    this.getIdsList(appInstallData.getRoles(), chlk.models.id.AppInstallGroupId),
+                    this.getIdsList(appInstallData.getGradeLevels(), chlk.models.id.AppInstallGroupId),
+                    appInstallData.getCurrentPerson()
+                )
+                .then(function(result){
+                   //todo: msgbox
+                   if (result) {
+                       alert("Installation successful");
+                       this.view.getCurrent().close();
+                   } else
+                       alert("Error while installing app");
+                }, this)
+                .attach(this.validateResponse_());
         }
     ])
 });

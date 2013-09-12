@@ -7,12 +7,21 @@ app = self.getApp()
     .x-window-body
         +ActionForm('appmarket', 'install')
             .install-for
-                +CheckboxList('installFor', 'install-group-', "")
-                    each column in self.getInstallGroupColumns()
-                        .column(style="width:" + self.getInstallGroupColumnWidth())
-                            each item in column
-                                +LabeledCheckbox(item.getDescription(), 'install-group-'+ item.getId(), item.isInstalled(), item.isInstalled())
-                //+ActionLinkButton('appmarket', 'install', [self.getId().valueOf()]).special-button.blue-button=appPrice
+                +Hidden('appId', app.getId().valueOf())
+                +Hidden('classes', "")
+                +Hidden('gradeLevels', "")
+                +Hidden('departments', "")
+                +Hidden('roles', "")
+                +Hidden('currentPerson', "")
+
+                each column in self.getInstallGroupColumns()
+                    .column(style="width:" + self.getInstallGroupColumnWidth())
+                        each item in column
+                            +LabeledCheckbox(
+                                item.getDescription(),
+                                'chk-' + item.getId(),
+                                item.isInstalled(),
+                                item.isInstalled())(install-group="#{item.getGroupType().valueOf()}")
             .install-info
                 .install-btn
                     +Button().special-button.green-button Install App
