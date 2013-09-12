@@ -8,6 +8,10 @@ NAMESPACE('chlk.models.people', function () {
             Boolean, 'byLastName',
             String, 'filter',
             Number, 'start',
-            String, 'submitType'
+            String, 'submitType',
+
+            Boolean, function isScroll(){
+                return this.getSubmitType() == 'scroll';
+            }
         ]);
 });

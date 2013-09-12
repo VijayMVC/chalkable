@@ -104,3 +104,40 @@
     padding-top: 20px;
   }
 }
+
+.school-person-list{
+  .action-bar.people-top-bar{
+    .container{
+      overflow: visible;
+      .action-button{
+        &.select-btn{
+          padding: 0px;
+          &:hover, &.pressed{
+            background: none;
+          }
+        }
+      }
+      .export-btn{
+        width: 16px;
+        display: block;
+        background: url(images/buttons/export.png) no-repeat 4px center !important;
+      }
+
+      .chzn-container{
+        width: 100px;
+        height: 33px;
+        border: none;
+        .chzn-single{
+          border-radius: 0px;
+          height: 30px;
+          padding-top: 3px;
+          border: none;
+          background: none;
+          margin: 0px;
+          box-shadow: none;
+        }
+      }
+    }
+  }
+
+}

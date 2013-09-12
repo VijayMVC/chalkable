@@ -1,15 +1,22 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.common.SimpleResult');
+REQUIRE('chlk.models.common.Role');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
 
-    /** @class chlk.services.Account */
+    /** @class chlk.services.AccountService */
     CLASS(
         'AccountService', EXTENDS(chlk.services.BaseService), [
-            ria.async.Future, function getRoles() {
-                return this.get('chalkable2/app/data/roles.json', ArrayOf(chlk.models.common.NameId), {});
+            ArrayOf(chlk.models.common.Role), function getSchoolRoles() {
+                return [
+                    new chlk.models.common.Role(chlk.models.common.RoleEnum.ADMINGRADE, chlk.models.common.RoleNamesEnum.ADMINGRADE.valueOf()),
+                    new chlk.models.common.Role(chlk.models.common.RoleEnum.ADMINEDIT, chlk.models.common.RoleNamesEnum.ADMINEDIT.valueOf()),
+                    new chlk.models.common.Role(chlk.models.common.RoleEnum.ADMINVIEW, chlk.models.common.RoleNamesEnum.ADMINVIEW.valueOf()),
+                    new chlk.models.common.Role(chlk.models.common.RoleEnum.TEACHER, chlk.models.common.RoleNamesEnum.TEACHER.valueOf()),
+                    new chlk.models.common.Role(chlk.models.common.RoleEnum.STUDENT, chlk.models.common.RoleNamesEnum.STUDENT.valueOf())
+                ];
             },
 
             ria.async.Future, function logOut() {

@@ -10,6 +10,16 @@ NAMESPACE('chlk.models.school', function () {
             chlk.models.people.UsersList, 'usersPart', //todo: rename
             ArrayOf(chlk.models.common.NameId), 'roles',
             ArrayOf(chlk.models.common.NameId), 'gradeLevels',
-            chlk.models.school.SchoolPeopleSummary, 'schoolInfo'
+            chlk.models.school.SchoolPeopleSummary, 'schoolInfo',
+
+            [[chlk.models.people.UsersList, ArrayOf(chlk.models.common.NameId),
+                ArrayOf(chlk.models.common.NameId), chlk.models.school.SchoolPeopleSummary]],
+            function $(usersList, roles, gradeLevels, schoolInfo){
+                BASE();
+                this.setUsersPart(usersList);
+                this.setRoles(roles);
+                this.setGradeLevels(gradeLevels);
+                this.setSchoolInfo(schoolInfo);
+            }
         ]);
 });

@@ -1,6 +1,13 @@
 REQUIRE('chlk.controllers.UserController');
+
 REQUIRE('chlk.services.AdminService');
+REQUIRE('chlk.services.GradeLevelService');
+REQUIRE('chlk.services.AccountService');
+
 REQUIRE('chlk.activities.profile.SchoolPersonInfoPage');
+REQUIRE('chlk.activities.admin.PeoplePage');
+
+
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.people.User');
 
@@ -13,6 +20,13 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.AdminService, 'adminService',
 
+            [ria.mvc.Inject],
+            chlk.services.GradeLevelService, 'gradeLevelService',
+
+            [ria.mvc.Inject],
+            chlk.services.AccountService, 'accountService',
+
+
             OVERRIDE, ArrayOf(chlk.models.common.ActionLinkModel), function prepareActionLinksData_(){
                 var controller = 'admins';
                 var actionLinksData = [];
@@ -21,6 +35,39 @@ NAMESPACE('chlk.controllers', function (){
                 actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'apps', 'Apps'));
                 return actionLinksData;
             },
+
+            [chlk.controllers.SidebarButton('people')],
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.ADMINGRADE,
+                chlk.models.common.RoleEnum.ADMINEDIT,
+                chlk.models.common.RoleEnum.ADMINVIEW
+            ])],
+
+            function peopleAction(){
+                var gradeLevels = this.getContext().getSession().get('gradeLevels');
+                var roles = this.accountService.getSchoolRoles();
+                var res = this.adminService
+                    .getUsers(null, null, true, 0, null)
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        var users = this.prepareUsersModel(data, 0, true);
+                        return new chlk.models.admin.PersonsForAdmin(users, roles, gradeLevels);
+                    }, this);
+                return this.PushView(chlk.activities.admin.PeoplePage, res);
+            },
+
+            [[chlk.models.people.UsersList]],
+            function updateListAction(model){
+                var isScroll = model.isScroll(), start = model.getStart();
+                var res = this.adminService
+                    .getUsers(model.getRoleId(), model.getGradeLevelsIds(), model.isByLastName(), start, model.getFilter())
+                    .then(function(usersData){
+                        if(isScroll)  return this.prepareUsers(usersData, start);
+                        return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter());
+                }.bind(this));
+                return this.UpdateView(chlk.activities.admin.PeoplePage, res, isScroll ? window.noLoadingMsg : '');
+            },
+
 
             [[chlk.models.id.SchoolPersonId]],
             function infoAction(personId){

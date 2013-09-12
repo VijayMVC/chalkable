@@ -1,24 +1,24 @@
 REQUIRE('chlk.controllers.BaseController');
 
 REQUIRE('chlk.services.SchoolService');
-REQUIRE('chlk.services.AdminService');
 REQUIRE('chlk.services.AccountService');
 REQUIRE('chlk.services.GradeLevelService');
 
-REQUIRE('chlk.models.school.SchoolPeople');
-REQUIRE('chlk.models.district.District');
 
 REQUIRE('chlk.activities.school.SchoolDetailsPage');
 REQUIRE('chlk.activities.school.SchoolPeoplePage');
 REQUIRE('chlk.activities.school.ActionButtonsPopup');
-REQUIRE('chlk.models.school.SchoolPeople');
 REQUIRE('chlk.controls.ActionLinkControl');
 REQUIRE('chlk.activities.school.SchoolSisPage');
 REQUIRE('chlk.activities.school.SchoolsListPage');
 REQUIRE('chlk.activities.school.ImportSchoolDialog');
+
+REQUIRE('chlk.models.school.SchoolPeople');
+REQUIRE('chlk.models.district.District');
 REQUIRE('chlk.models.id.DistrictId');
 REQUIRE('chlk.models.id.SchoolId');
 REQUIRE('chlk.models.schoolImport.ImportTaskData');
+REQUIRE('chlk.models.common.NameId');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -28,9 +28,6 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.SchoolService, 'schoolService',
-
-        [ria.mvc.Inject],
-        chlk.services.AdminService, 'adminService',
 
         [ria.mvc.Inject],
         chlk.services.AccountService, 'accountService',
@@ -107,31 +104,36 @@ NAMESPACE('chlk.controllers', function (){
         },
 
 
+        ArrayOf(chlk.models.common.NameId),  function convertRolesToNameIds_(roles){
+            var res = [];
+            for(var i =0; i < roles.length; i++){
+                res.push(new chlk.models.common.NameId(roles[i].getRoleId().valueOf(), roles[i].getRole));
+            }
+            return res;
+        },
+        ArrayOf(chlk.models.common.NameId), function convertGradeLevelsToNameIds_(gradeLevels){
+            var res = [];
+            for(var i = 0; i < gradeLevels.length; i++){
+                res.push(new chlk.models.common.NameId(gradeLevels[i].getId().valueOf(), gradeLevels[i].getName()));
+            }
+            return res;
+        },
 
         //TODO:refactor
         [[chlk.models.id.SchoolId]],
         function peopleAction(id) {
-            var newGradeLevels = this.gradeLevelService.getGradeLevels().slice();
+            var serializer = new ria.serialize.JsonSerializer();
+            var newGradeLevels = this.convertGradeLevelsToNameIds_(this.gradeLevelService.getGradeLevels());
+            newGradeLevels.unshift(serializer.deserialize({name: 'All Grades', id: null}, chlk.models.common.NameId));
+            var roles =  this.convertRolesToNameIds_(this.accountService.getSchoolRoles());
+            roles.push(serializer.deserialize({name: 'All Roles', id: null}, chlk.models.common.NameId));
 
             var result = ria.async.wait([
                 this.schoolService.getPeopleSummary(id),
-                this.adminService.getUsers(id,null,null,null,0),
-                this.accountService.getRoles()
+                this.schoolService.getUsers(id, null, null,0, null, false)
             ]).then(function(result){
-                var serializer = new ria.serialize.JsonSerializer();
-                var model = new chlk.models.school.SchoolPeople();
-                model.setSchoolInfo(result[0]);
-                var usersModel = new chlk.models.school.UsersList();
-                usersModel.setSelectedIndex(0);
-                usersModel.setByLastName(true);
-                usersModel.setUsers(result[1]);
-                model.setUsersPart(usersModel);
-                var roles = result[2];
-                newGradeLevels.unshift(serializer.deserialize({name: 'All Grades', id: null}, chlk.models.common.NameId));
-                roles.unshift(serializer.deserialize({name: 'All Roles', id: null}, chlk.models.common.NameId));
-                model.setGradeLevels(newGradeLevels);
-                model.setRoles(roles);
-                return model;
+                var users = new chlk.models.people.UsersList(result[1], true);
+                return new chlk.models.school.SchoolPeople(users, roles, newGradeLevels, result[0]);
             });
             return this.PushView(chlk.activities.school.SchoolPeoplePage, result);
         },
@@ -140,20 +142,20 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.people.UsersList]],
         VOID, function setPeopleFilterAction(model_) {
-            var result = ria.async.wait([
-                this.adminService.getUsers(
-                    model_.getSchoolId(),
-                    model_.getRoleId() || null,
-                    model_.getGradeLevelId() || null,
-                    model_.isByLastName(),
-                    0
-                )
-            ]).then(function(result){
-                model_.setUsers(result[0]);
-                model_.setSelectedIndex(0);
-                return model_;
-            });
-            return this.UpdateView(chlk.activities.school.SchoolPeoplePage, result);
+//            var result = ria.async.wait([
+//                this.schoolService.getUsers(
+//                    model_.getSchoolId(),
+//                    model_.getRoleId() || null,
+//                    model_.getGradeLevelId() || null,
+//                    model_.isByLastName(),
+//                    0
+//                )
+//            ]).then(function(result){
+//                model_.setUsers(result[0]);
+//                model_.setSelectedIndex(0);
+//                return model_;
+//            });
+//            return this.UpdateView(chlk.activities.school.SchoolPeoplePage, result);
         },
 
 
@@ -161,16 +163,16 @@ NAMESPACE('chlk.controllers', function (){
         //TODO:refactor
         [[chlk.models.id.SchoolId]],
         VOID, function actionButtonsAction(id) {
-            var result = ria.async.wait([
-                this.schoolService.getDetails(id)
-            ]).then(function(result){
-                var model = new chlk.models.school.ActionButtons();
-                model.setTarget(chlk.controls.getActionLinkControlLastNode());
-                model.setButtons(result[0].getButtons());
-                model.setEmails(result[0].getEmails());
-                return model;
-            });
-
+            var result =  this.schoolService
+                .getDetails(id)
+                .then(function(data){
+                        return new chlk.models.school.ActionButtons(
+                            data.getButtons(),
+                            data.getEmails(),
+                            chlk.controls.getActionLinkControlLastNode()
+                        );
+                })
+                .attach(this.validateResponse_());
             return this.ShadeView(chlk.activities.school.ActionButtonsPopup, result);
         },
 

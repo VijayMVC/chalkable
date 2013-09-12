@@ -37,42 +37,16 @@ NAMESPACE('chlk.controllers', function (){
                 return actionLinksData;
             },
 
-            [[chlk.models.common.PaginatedList, Number, Boolean, String]],
-            chlk.models.people.UsersList, function prepareUsersModel(users, selectedIndex, byLastName, filter_){
-                users = this.prepareUsers(users);
-                var usersModel = new chlk.models.people.UsersList();
-                usersModel.setSelectedIndex(selectedIndex);
-                usersModel.setByLastName(byLastName);
-                filter_ && usersModel.setFilter(filter_);
-                usersModel.setUsers(users);
-                return usersModel;
-            },
-
-            [[chlk.models.common.PaginatedList, Number]],
-            chlk.models.common.PaginatedList, function prepareUsers(usersData, start_){
-                var start = start_ || 0;
-                usersData.getItems().forEach(function(item, index){
-                    item.setIndex(start_ + index);
-                }.bind(this));
-                return usersData;
-            },
 
             //TODO: refactor
             [[Boolean, chlk.models.id.ClassId]],
             function showStudentsList(isMy, classId_){
                 var result = this.studentService.getStudents(classId_, null, isMy, true, 0, 10)
                     .then(function(users){
-                        var model = new chlk.models.teacher.StudentsList();
                         var usersModel = this.prepareUsersModel(users, 0, true);
                         var classes = this.classService.getClassesForTopBar(true);
-                        model.setUsersPart(usersModel);
-                        model.setMy(isMy);
-                        var topModel = new chlk.models.classes.ClassesForTopBar();
-                        topModel.setTopItems(classes);
-                        topModel.setDisabled(false);
-                        classId_ && topModel.setSelectedItemId(classId_);
-                        model.setTopData(topModel);
-                        return model;
+                        var topModel = new chlk.models.classes.ClassesForTopBar(classes, classId_);
+                        return new chlk.models.teacher.StudentsList(usersModel, topModel, isMy);
                     }.bind(this));
                 return this.PushView(chlk.activities.person.ListPage, result);
             },
@@ -92,18 +66,11 @@ NAMESPACE('chlk.controllers', function (){
             //TODO: refactor
             [[chlk.models.teacher.StudentsList]],
             function updateListAction(model){
-                var submitType = model.getSubmitType();
-                var isScroll = submitType == "scroll", start = model.getStart();
+                var isScroll = model.isScroll(), start = model.getStart();
                 var result = this.studentService.getStudents(model.getClassId(), model.getFilter(), model.isMy(), model.isByLastName(), start, 10)
                     .then(function(usersData){
-                        if(isScroll){
-                            usersData = this.prepareUsers(usersData, start);
-                            return usersData;
-                        }else{
-                            var usersModel = this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter());
-                            return usersModel;
-                        }
-
+                        if(isScroll)  return this.prepareUsers(usersData, start);
+                        return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter());
                     }.bind(this));
                 return this.UpdateView(chlk.activities.person.ListPage, result, isScroll ? window.noLoadingMsg : '');
             },

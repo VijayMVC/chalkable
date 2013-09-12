@@ -6,13 +6,14 @@ NAMESPACE('chlk.models.common', function () {
     ENUM(
         'RoleEnum', {
             SYSADMIN: 1,
-            ADMINVIEW: 2,
-            ADMINGRADE: 3,
-            ADMINEDIT: 4,
-            TEACHER: 5,
-            STUDENT: 6,
-            PARENT: 7,
-            DEVELOPER: 8
+            ADMINVIEW: 8,
+            ADMINGRADE: 5,
+            ADMINEDIT: 7,
+            TEACHER: 2,
+            STUDENT: 3,
+            PARENT: 4,
+            DEVELOPER: 9,
+            CHECKIN: 6
         });
 
     /** @class chlk.models.common.RoleNamesEnum*/
@@ -25,7 +26,8 @@ NAMESPACE('chlk.models.common', function () {
             TEACHER: 'teacher',
             STUDENT: 'student',
             PARENT: 'parent',
-            DEVELOPER: 'developer'
+            DEVELOPER: 'developer',
+            CHECKIN: 'checkin'
         });
 
     /** @class chlk.models.common.Role*/

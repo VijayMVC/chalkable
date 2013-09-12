@@ -1,8 +1,8 @@
 REQUIRE('chlk.templates.people.UsersList');
 
 NAMESPACE('chlk.templates.people', function () {
-
-    /** @class chlk.templates.people.UsersList*/
+    "use strict";
+    /** @class chlk.templates.people.UsersGrid*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/people/UsersGrid.jade')],
         [ria.templates.ModelBind(chlk.models.people.UsersList)],
