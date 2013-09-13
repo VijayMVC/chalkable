@@ -109,7 +109,10 @@ NAMESPACE('ria.mvc', function () {
                 msg_ != window.noLoadingMsg && this.startLoading();
             },
             [[Object, String]],
-            OVERRIDE, VOID, function onModelError_(data, msg_) { BASE(data, msg_);this.stopLoading(); },
+            OVERRIDE, VOID, function onModelError_(data, msg_) {
+                BASE(data, msg_);
+                this.stopLoading();
+            },
             [[Object]],
             OVERRIDE, VOID, function onRefresh_(data) {
                 BASE(data);

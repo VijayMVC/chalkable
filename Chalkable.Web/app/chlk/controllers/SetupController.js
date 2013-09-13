@@ -209,25 +209,26 @@ NAMESPACE('chlk.controllers', function (){
                                 }
 
                             }.bind(this));
-                        return this.StartLoading(chlk.activities.setup.TeacherSettingsPage);
+                        return this.ShadeLoader();
                     }
                 }
             },
             //TODO: refactor
             [[chlk.models.people.User]],
             function infoEditAction(model){
-                this.personService.changePassword(model.getId(), model.getPassword())
+                this.personService
+                    .changePassword(model.getId(), model.getPassword())
                     .then(function(changed){
-                        this.teacherService
+                        return this.teacherService
                             .updateInfo(model.getId(), model.getAddressesValue(), model.getEmail(), model.getFirstName(),
-                                model.getLastName(), model.getGender(), model.getPhonesValue(), model.getSalutation(), model.getBirthDate())
-                            .attach(this.validateResponse_())
-                            .then(function(model){
-                                this.StopLoading(chlk.activities.setup.HelloPage);
-                                return this.redirect_('setup', 'video', [model.getId().valueOf()]);
-                            }.bind(this));
-                    }.bind(this));
-                return this.StartLoading(chlk.activities.setup.HelloPage);
+                                model.getLastName(), model.getGender(), model.getPhonesValue(), model.getSalutation(),
+                                model.getBirthDate());
+                    }, this)
+                    .attach(this.validateResponse_())
+                    .then(function(model){
+                        return this.redirect_('setup', 'video', [model.getId().valueOf()]);
+                    }, this);
+                return this.ShadeLoader();
             }
         ])
 });

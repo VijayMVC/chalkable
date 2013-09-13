@@ -367,11 +367,11 @@ NAMESPACE('chlk.controllers', function (){
                                     var nextMp = model.setMarkingPeriodId(session.get('nextMarkingPeriod'));
                                     if(nextMp){
                                         this.submitAnnouncement(model);
-                                        this.StartLoading(chlk.activities.announcement.AnnouncementFormPage);
+                                        return this.ShadeLoader();
                                     }
                             }else{
                                 this.submitAnnouncement(model);
-                                this.StartLoading(this.getAnnouncementFormPageType_());
+                                return this.ShadeLoader();
                             }
                         }
                     }

@@ -146,9 +146,7 @@ NAMESPACE('ria.mvc', function () {
             [[Object, String]],
             VOID, function onModelProgress_(data, msg_) {},
             [[Object, String]],
-            VOID, function onModelError_(data, msg_) {
-                this.stopLoading();
-            },
+            VOID, function onModelError_(data, msg_) {},
             [[Object, String]],
             VOID, function onModelReady_(data, msg_) {},
             [[String]],

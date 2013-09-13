@@ -82,7 +82,7 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(model){
                         this.Redirect('grading', 'teacherSettings', []);
                     }.bind(this));
-                return this.StartLoading(chlk.activities.grading.TeacherSettingsPage);
+                return this.ShadeLoader();
             }
         ])
 });

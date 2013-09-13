@@ -3,6 +3,8 @@ REQUIRE('chlk.models.common.Role');
 REQUIRE('chlk.models.people.User');
 
 REQUIRE('chlk.activities.common.InfoMsgDialog');
+REQUIRE('chlk.activities.lib.PendingActionDialog');
+
 REQUIRE('chlk.models.common.InfoMsg');
 REQUIRE('chlk.models.common.Button');
 
@@ -68,6 +70,10 @@ NAMESPACE('chlk.controllers', function (){
 
            chlk.models.common.Role, function getCurrentRole(){
                return this.getContext().getSession().get('role');
+           },
+
+           function ShadeLoader(){
+               this.ShadeView(chlk.activities.lib.PendingActionDialog, new ria.async.DeferredData(new Class()));
            },
 
            [[String, String, Array, String]],

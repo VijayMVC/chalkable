@@ -38,7 +38,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(success){
                     this.classListAction(classId, date);
                 }, this);
-            this.StartLoading(chlk.activities.attendance.ClassListPage);
+            return this.ShadeLoader();
         },
 
         [[Boolean]],
