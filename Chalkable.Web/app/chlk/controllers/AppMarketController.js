@@ -17,6 +17,7 @@ REQUIRE('chlk.models.apps.AppMarketDetailsViewData');
 REQUIRE('chlk.models.apps.AppMarketViewData');
 REQUIRE('chlk.models.apps.AppInstallGroup');
 REQUIRE('chlk.models.apps.AppInstallPostData');
+REQUIRE('chlk.models.apps.AppDeletePostData');
 
 REQUIRE('chlk.models.id.AppId');
 
@@ -39,7 +40,6 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.PictureService, 'pictureService',
 
         [chlk.controllers.SidebarButton('apps')],
-
         [[Number]],
         function listAction(pageIndex_) {
             var result = this.appCategoryService
@@ -69,23 +69,76 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.apps.AppMarketPage, result);
         },
 
+        [chlk.controllers.SidebarButton('apps')],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.ADMINEDIT,
+            chlk.models.common.RoleEnum.ADMINGRADE
+        ])],
+        [chlk.controllers.SidebarButton('apps')],
         function myAppsAction() {
-            var result = this.appCategoryService
-                .getCategories()
-                .then(function(data){
-                    return data.getItems();
+            var result = this.appMarketService
+                .getInstalledApps(this.getCurrentPerson().getId())
+                .then(function(apps){
+                    return new chlk.models.apps.MyAppsViewData(apps, false);
                 })
-                .then(function(categories){
-                    return this.appMarketService
-                        .getApps(
-                            categories,
-                            this.gradeLevelService.getGradeLevels(),
-                            ""
-                        );
-                }, this)
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.apps.MyAppsPage, result);
         },
+
+
+
+        [chlk.controllers.SidebarButton('apps')],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.ADMINEDIT,
+            chlk.models.common.RoleEnum.ADMINGRADE
+        ])],
+        [chlk.controllers.SidebarButton('apps')],
+        [[Boolean]],
+        function updateMyAppsAction(isEdit) {
+            var result = this.appMarketService
+                .getInstalledApps(this.getCurrentPerson().getId())
+                .then(function(data){
+
+                    var apps = data.getItems() || [];
+
+                    apps = apps.map(function(app){
+                        var appInstalls = app.getApplicationInstalls() || [];
+                        app.setSelfInstalled(false);
+
+                        var currentPersonId = this.getCurrentPerson().getId();
+                        var uninstallAppIds = [];
+
+                        appInstalls.forEach(function(appInstall){
+                            if (appInstall.isOwner() && isEdit){
+                                uninstallAppIds.push(appInstall.getAppInstallId());
+                                if(appInstall.getPersonId() == appInstall.getInstallationOwnerId()){
+                                    app.setSelfInstalled(true);
+                                }
+                            }
+                            if (appInstall.getPersonId() == currentPersonId){
+                                app.setPersonal(true);
+                            }
+
+                        });
+                        app.setUninstallable(isEdit && uninstallAppIds.length > 0);
+                        var ids = uninstallAppIds.map(function(item){
+                            return item.valueOf()
+                        }).join(',');
+                        app.setApplicationInstallIds(ids);
+                        return app;
+                    }, this);
+
+
+                    data.setItems(apps);
+
+                    return new chlk.models.apps.MyAppsViewData(data, isEdit);
+                }, this)
+                .attach(this.validateResponse_());
+            return this.UpdateView(chlk.activities.apps.MyAppsPage, result);
+        },
+
 
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.id.AppId]],
@@ -134,7 +187,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.apps.AppMarketDetailsPage, result);
         },
 
-
+        [chlk.controllers.SidebarButton('apps')],
         [[Number]],
         function pageAction(pageIndex_) {
             var result = this.appMarketService
@@ -145,7 +198,7 @@ NAMESPACE('chlk.controllers', function (){
 
 
 
-
+        [chlk.controllers.SidebarButton('apps')],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER,
             chlk.models.common.RoleEnum.ADMINEDIT,
@@ -180,6 +233,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.apps.InstallAppDialog, appInfo);
         },
 
+        [chlk.controllers.SidebarButton('apps')],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER,
             chlk.models.common.RoleEnum.ADMINEDIT,
@@ -205,6 +259,46 @@ NAMESPACE('chlk.controllers', function (){
                        alert("Error while installing app");
                 }, this)
                 .attach(this.validateResponse_());
+        },
+
+        [chlk.controllers.SidebarButton('apps')],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.ADMINEDIT,
+            chlk.models.common.RoleEnum.ADMINGRADE
+        ])],
+
+        [[chlk.models.apps.AppDeletePostData]],
+        function tryToUninstallAction(data){
+            if(!data.isUninstallable()){
+                this.ShowMsgBox(
+                    'Sorry you can\'t uninstall app. You are not owner of this app.',
+                    'Oops.', [{
+                        text: 'Ok',
+                        color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                    }]
+                );
+            }
+            else{
+                var additionalMsg = ''
+                if(!data.isSelfInstalled()){
+                    additionalMsg = 'NOTE: This app is not self installed.';
+                }
+                var appUninstallIds = this.getIdsList(data.getApplicationInstallIds(), chlk.models.id.ApplicationInstallId);
+                var msgTitle = 'Uninstall the ' + data.getAppName() + ' app?' + additionalMsg;
+
+                return this.ShowMsgBox(msgTitle, 'just checking.', [{
+                    text: 'CANCEL',
+                    color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                }, {
+                    text: 'UNINSTALL',
+                    controller: 'appmarket',
+                    action: 'uninstall',
+                    params: appUninstallIds,
+                    color: chlk.models.common.ButtonColor.RED.valueOf()
+                }], 'center');
+
+            }
         }
     ])
 });

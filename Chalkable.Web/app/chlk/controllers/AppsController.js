@@ -264,7 +264,7 @@ NAMESPACE('chlk.controllers', function (){
             //var myAppsViewUrl = "#";
             //var saveBtn  = new chlk.models.apps.AppWrapperToolbarButton('save-app', 'Save');
             //var newTabBtn = new chlk.models.apps.AppWrapperToolbarButton('new-tab-id', 'New Tab', myAppsViewUrl, true);
-            var result = this.appMarketService
+            var result = this.appsService
                 .getInfo(appId)
                 .then(function(app){
                     return chlk.models.apps.AppWrapperViewData$createAppAttach(announcementId, app);
