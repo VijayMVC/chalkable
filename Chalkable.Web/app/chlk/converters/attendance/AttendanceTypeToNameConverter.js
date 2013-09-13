@@ -7,6 +7,7 @@
  */
 
 REQUIRE('ria.templates.IConverter');
+REQUIRE('chlk.models.attendance.ClassAttendance');
 
 NAMESPACE('chlk.converters.attendance', function () {
 
@@ -15,12 +16,13 @@ NAMESPACE('chlk.converters.attendance', function () {
         'AttendanceTypeToNameConverter', IMPLEMENTS(ria.templates.IConverter), [
             [[Number]],
             String, function convert(id) {
+                var enums = chlk.models.attendance.AttendanceTypeEnum;
                 switch (id) {
-                    case 2: return Msg.Present;
-                    case 4: return Msg.Excused;
-                    case 8: return Msg.Absent;
-                    case 16: return Msg.Late;
-                    case 1: return Msg.NA;
+                    case enums.PRESENT: return Msg.Present;
+                    case enums.EXCUSED: return Msg.Excused;
+                    case enums.ABSENT: return Msg.Absent;
+                    case enums.LATE: return Msg.Late;
+                    case enums.NA: return Msg.NA;
                     default: return 'Unknown value ' + id;
                 }
             }
