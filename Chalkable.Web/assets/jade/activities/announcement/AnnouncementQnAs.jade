@@ -1,0 +1,34 @@
+each item, i in self.getAnnouncementQnAs()
+    +ActionForm('announcement', 'answerQuestion')
+        input(type="hidden",name="id", value=item.getId())
+        .row
+            .avatar-container.left
+                +PersonImg(item.getQuestion().getPerson(), 47)
+            p.left= item.getQuestion().getPerson().getFullName()
+            .left#edit-question-text= item.getQuestion().getMessage()
+            input(type="text",name="question", value=item.getQuestion().getMessage())#edit-question-input.x-hidden
+            +Button()(type="submit").special-button.blue-button.submit-btn.x-hidden#edit-question-btn Update
+            if self.isOwner
+                a(href='javascript:', name='edit-question-link')#edit-question-link edit
+            .clear
+
+        .row
+            answered = (item.getState() == chlk.models.announcement.QnAState.ANSWERED)
+            hideEdit = answered || !self.isOwner
+            .avatar-container.left
+                +PersonImg(item.getAnswer().getPerson(), 47)
+            p.left= item.getAnswer().getPerson().getFullName()
+            dev(class = hideEdit ? "left" : "left x-hidden")#edit-answer-text= item.getAnswer().getMessage()
+            if answered && self.isOwner
+                a(href='javascript:', name='edit-answer-link')#edit-answer-link edit
+
+            input(type="text",name="answer", value=item.getAnswer().getMessage(), class=hideEdit ? "x-hidden" : "")#edit-answer-input
+            +Button()(type="submit"
+                , class=hideEdit ? "special-button blue-button submit-btn x-hidden" : "special-button blue-button submit-btn")#edit-answer-btn Update
+            .clear
+if !self.isOwner
+    +ActionForm('announcement', 'askQuestion')
+        label Question:
+        input(type="text",name="question")
+        input(type="hidden",name="announcementId", value=self.getId())
+        +Button()(type="submit").special-button.blue-button.submit-btn Ask
