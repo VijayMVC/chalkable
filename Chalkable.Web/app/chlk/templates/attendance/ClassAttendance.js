@@ -1,6 +1,6 @@
 REQUIRE('chlk.templates.JadeTemplate');
 REQUIRE('chlk.models.attendance.ClassAttendance');
-REQUIRE('chlk.converters.attendance.ClassAttendanceIdToNameConverter');
+REQUIRE('chlk.converters.attendance.AttendanceTypeToNameConverter');
 
 NAMESPACE('chlk.templates.attendance', function () {
 
@@ -24,7 +24,7 @@ NAMESPACE('chlk.templates.attendance', function () {
             [ria.templates.ModelPropertyBind],
             Number, 'type',
 
-            [ria.templates.ModelPropertyBind('type', chlk.converters.attendance.ClassAttendanceIdToNameConverter)],
+            [ria.templates.ModelPropertyBind('type', chlk.converters.attendance.AttendanceTypeToNameConverter)],
             String, 'typeName',
 
             [ria.templates.ModelPropertyBind],

@@ -10,17 +10,17 @@ REQUIRE('ria.templates.IConverter');
 
 NAMESPACE('chlk.converters.attendance', function () {
 
-    /** @class chlk.converters.attendance.ClassAttendanceIdToNameConverter */
+    /** @class chlk.converters.attendance.AttendanceTypeToNameConverter */
     CLASS(
-        'ClassAttendanceIdToNameConverter', IMPLEMENTS(ria.templates.IConverter), [
+        'AttendanceTypeToNameConverter', IMPLEMENTS(ria.templates.IConverter), [
             [[Number]],
             String, function convert(id) {
                 switch (id) {
-                    case 2: return 'Present';
-                    case 4: return 'Excused';
-                    case 8: return 'Absent';
-                    case 16: return 'Late';
-                    case 1: return 'N/A';
+                    case 2: return Msg.Present;
+                    case 4: return Msg.Excused;
+                    case 8: return Msg.Absent;
+                    case 16: return Msg.Late;
+                    case 1: return Msg.NA;
                     default: return 'Unknown value ' + id;
                 }
             }

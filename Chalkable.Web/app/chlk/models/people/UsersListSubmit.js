@@ -9,6 +9,8 @@ NAMESPACE('chlk.models.people', function () {
             String, 'filter',
             Number, 'start',
             String, 'submitType',
+            Number, 'roleId',
+            chlk.models.id.ClassId, 'classId',
 
             Boolean, function isScroll(){
                 return this.getSubmitType() == 'scroll';

@@ -1,5 +1,5 @@
 REQUIRE('chlk.templates.people.User');
-REQUIRE('chlk.converters.attendance.ClassAttendanceIdToNameConverter');
+REQUIRE('chlk.converters.attendance.AttendanceTypeToNameConverter');
 REQUIRE('chlk.models.student.Summary');
 
 NAMESPACE('chlk.templates.student', function () {
@@ -18,7 +18,7 @@ NAMESPACE('chlk.templates.student', function () {
             [ria.templates.ModelPropertyBind],
             Number, 'currentAttendanceType',
 
-            [ria.templates.ModelPropertyBind('currentAttendanceType', chlk.converters.attendance.ClassAttendanceIdToNameConverter)],
+            [ria.templates.ModelPropertyBind('currentAttendanceType', chlk.converters.attendance.AttendanceTypeToNameConverter)],
             String, 'attendanceTypeName',
 
             [ria.templates.ModelPropertyBind],

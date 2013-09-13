@@ -7,7 +7,7 @@ NAMESPACE('chlk.models.school', function () {
     /** @class chlk.models.school.SchoolPeople*/
     CLASS(
         'SchoolPeople', [
-            chlk.models.people.UsersList, 'usersPart', //todo: rename
+            chlk.models.people.UsersList, 'usersList',
             ArrayOf(chlk.models.common.NameId), 'roles',
             ArrayOf(chlk.models.common.NameId), 'gradeLevels',
             chlk.models.school.SchoolPeopleSummary, 'schoolInfo',
@@ -16,7 +16,7 @@ NAMESPACE('chlk.models.school', function () {
                 ArrayOf(chlk.models.common.NameId), chlk.models.school.SchoolPeopleSummary]],
             function $(usersList, roles, gradeLevels, schoolInfo){
                 BASE();
-                this.setUsersPart(usersList);
+                this.setUsersList(usersList);
                 this.setRoles(roles);
                 this.setGradeLevels(gradeLevels);
                 this.setSchoolInfo(schoolInfo);

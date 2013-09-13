@@ -28,6 +28,16 @@ NAMESPACE('chlk.services', function () {
                     salutation: salutation,
                     birthdayDate: birthDate && JSON.stringify(birthDate.getDate()).slice(1,-1)
                 });
+            },
+
+            [[String, chlk.models.id.ClassId, Boolean, Number]],
+            ria.async.Future, function getTeacher(filter, classId, byLastName, start){
+                return this.PaginatedList('Teacher/GetTeacher.json', chlk.models.people.User, {
+                    filter: filter,
+                    classId: classId.valueOf(),
+                    byLastName: byLastName,
+                    start: start
+                });
             }
         ])
 });
