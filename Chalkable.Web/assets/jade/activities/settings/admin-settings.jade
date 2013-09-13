@@ -1,0 +1,10 @@
++SchoolPersonSettings()
+    .left
+        //todo Schedule , AttendanceStyle, Apps pages
+        +ActionLink('settings', 'generalAdmin').pressed General
+        +ActionLink('attendance', 'attendanceStyleList') Attendance Style
+        +ActionLink('disciplinetype', 'list', []) Discipline Type
+        +ActionLink('schedule', 'list') Schedule
+        +ActionLink('fund', 'info') Apps
+    .right
+        +ActionLink('admins', 'info', self.personId) Profile

@@ -1,0 +1,76 @@
+mixin AddEditReminderForm(announcement, reminders)
+    +ActionForm('announcement', 'editAddReminder')(data-reminders=reminders)#add-edit-reminder
+        +Hidden('id')
+        +Hidden('announcementId', announcement.getId())
+        +Hidden('before')
+        +Hidden('duplicate', false)
+
+
+//TODO refactor
+mixin BaseAnnouncementFormContainer(announcement, classId)
+    +Hidden('id', announcement.getId().valueOf())
+    +Hidden('announcementtypeid', announcement.getAnnouncementTypeId())
+    +Hidden('statetyped', announcement.getStateTyped())
+    +Hidden('systemtype', announcement.getSystemType())
+    +Hidden('personid', announcement.getPersonId().valueOf())
+    +Hidden('gradingstyle', announcement.getGradingStyle())
+    +Hidden('attachments', announcement.getAttachments())
+    +Hidden('markingperiodid', announcement.getCreated())
+    +Hidden('state', announcement.getState())
+    +Hidden('classid', classId)
+    +Hidden('announcementtypename', announcement.getAnnouncementTypeName())
+
+    //+AnnouncementFormDescriptionBlock(announcement)
+    -typesEnum = chlk.models.announcement.AnnouncementTypeEnum;
+    -isAnnouncement = announcement.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf();
+    .left-block
+        if isAnnouncement
+            TEXTAREA(id="subject",name="subject",placeholder="Subject")=announcement.getSubject()
+        +TextArea(id="content",name="content",placeholder=isAnnouncement ? "Message" : "Assignment")=announcement.getContent()
+        .drop-down-container
+        input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
+        input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
+    .right-block
+        .date-picker-container
+            +DatePicker('expiresdate', announcement.getExpiresDate())(
+            data-options={
+            showOtherMonths: true,
+            selectOtherMonths: true
+            },
+            class="validate[required]"
+            )#expiresdate
+        SPAN#reminders-button.small-gray-link=Msg.Reminder(true)
+        .reminders-container.x-hidden
+            .reminders
+                reminders = announcement.getAnnouncementReminders() || [];
+                each reminder in reminders
+                    +RenderWith(reminder, chlk.templates.announcement.AnnouncementReminder)
+            .reminder.new-reminder.x-hidden
+                input.reminder-input
+                +Select().reminder-select
+                    +Option(7, Msg.Week(true))
+                    +Option(1, Msg.Day(true), true)
+                SPAN.remove-btn.remove-reminder
+            .chlk-add#add-reminder.opacity-button=Msg.Add_reminder
+    .attachments-and-applications
+        ann = announcement
+        -ann.setNeedButtons(true);
+        -ann.setNeedDeleteButton(true);
+            +RenderWith(ann, chlk.templates.announcement.Announcement)
+    .bottom-block
+        +Button()(
+        type="submit",
+        name="submitType",
+        value="submit"
+        ).special-button.blue-button.submit-btn
+            =(announcement.getState() ? Msg.Save : Msg.Submit)
+        if announcement.getState()
+            +ActionLink('announcement', 'delete', announcement.getId().valueOf(), announcement.getAnnouncementTypeName())
+                +Button()(
+                type="submit",
+                name="submitType",
+                value="submit"
+                ).special-button.red-button.submit-btn
+                    =Msg.Delete
+        else
+            +ActionLink('announcement', 'discard', announcement.getPersonId().valueOf()).grey-link.not-blue=Msg.Discard

@@ -1,0 +1,143 @@
+DIV.page {
+  #content {
+    > DIV {
+      #main-wrapper {
+        #main {
+          DIV.app-market-details {
+            .app-price-info {
+              margin: 26px 0 30px 0;
+
+              .app-title {
+                display: inline-block;
+                width: 538px;
+              }
+
+              .app-description {
+                padding: 0;
+                font-size: 15px;
+                color: #383838;
+                resize: none;
+                background: none;
+                border: none;
+                height: 60px;
+                width: 100%;
+                outline: none;
+              }
+              .app-buy {
+                width: 122px;
+                display: inline-block;
+                vertical-align: top;
+
+                .action-link{
+                  min-width: 90px;
+                  padding: 0;
+                  font-size: 19px;
+                  text-decoration: none;
+                  text-transform: uppercase;
+                  font-weight: bold;
+                  color: white;
+                  background: none;
+                  line-height: 45px;
+
+                }
+              }
+              h1 {
+                font-size: 26px;
+              }
+
+            }
+
+            .app-general-info {
+              border-top: 1px solid #f3f3f3;
+
+              .permissions {
+                vertical-align: top;
+                margin-top: 32px;
+                width: 179px;
+                display: inline-block;
+                min-height: 85px;
+                border-radius: 6px;
+                background: #EEE;
+                border-color: #B7B7B7;
+                @include box-shadow(0 2px 6px 0px #989897);
+                text-shadow: white 0px 1px 1px;
+
+                .permissions-group {
+                  .group-header {
+                    color: #959595;
+                    font-family: Georgia;
+                    text-align: center;
+                    font-style: italic;
+                    padding: 8px 0 15px;
+                    font-size: 12px;
+                    text-shadow: 0 1px 0 white;
+                    background: url(images/common/dialog-separator.png) bottom no-repeat;
+                  }
+
+                  .permission {
+                    height: 44px;
+                    cursor: default;
+
+                    margin: 0;
+                    font-size: 15px;
+                    padding-left: 46px;
+                    background: url(images/app/info-for.png) 14px -42px no-repeat;
+                    text-transform: capitalize;
+                    height: 18px;
+
+                    color: #9d9d9d;
+                    text-shadow: 1px -1px 1px #fff;
+
+                    &.role-2 {
+                      background-position: 14px -21px;
+                    }
+
+                    &.role-3 {
+                      background-position: 14px 1px;
+                    }
+
+                    &.permission--1 {
+                      background-position: 14px -107px;
+                    }
+
+                    &.permission-2 {
+                      background-position: 14px -64px;
+                    }
+
+                    &.permission-3 {
+                      background-position: 14px -133px;
+                    }
+
+                    &.permission-6 {
+                      background-position: 14px -159px;
+                    }
+
+                    &.permission-7 {
+                      background-position: 14px -85px;
+                    }
+
+                    &.permission-1 {
+                      background-position: 14px -182px;
+                    }
+                  }
+                }
+
+
+              }
+
+              .reviews{
+                display: inline-block;
+                width: 480px;
+                margin-right: 8px;
+                min-height: 110px;
+              }
+
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
