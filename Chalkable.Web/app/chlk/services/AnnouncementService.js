@@ -17,8 +17,6 @@ REQUIRE('chlk.models.announcement.AnnouncementQnA');
 REQUIRE('chlk.models.id.AnnouncementQnAId');
 
 
-
-
 NAMESPACE('chlk.services', function () {
     "use strict";
 

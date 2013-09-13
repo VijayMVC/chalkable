@@ -6,15 +6,6 @@ REQUIRE('chlk.models.attendance.AttendanceReason');
 NAMESPACE('chlk.models.attendance', function () {
     "use strict";
 
-    /** @class chlk.models.attendance.AttendanceTypesValue*/
-    ENUM('AttendanceTypesValue', {
-        PRESENT: 2,
-        EXCUSED: 4,
-        ABSENT: 8,
-        LATE: 16,
-        NA: 1
-    });
-
     /** @class chlk.models.attendance.ClassList*/
     CLASS(
         'ClassList', EXTENDS(chlk.models.common.PageWithClasses), [

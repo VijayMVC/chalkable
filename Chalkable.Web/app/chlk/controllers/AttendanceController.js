@@ -77,6 +77,7 @@ NAMESPACE('chlk.controllers', function (){
             return this[date_ ? 'UpdateView' : 'PushView'](chlk.activities.attendance.ClassListPage, result);
         },
 
+        //todo refactor this
         [[chlk.models.attendance.ClassAttendance]],
         function setAttendanceAction(model){
             var type = model.getType();

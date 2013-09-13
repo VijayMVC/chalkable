@@ -4,7 +4,7 @@ REQUIRE('chlk.templates.attendance.ClassList');
 
 NAMESPACE('chlk.activities.attendance', function () {
     var comboTimer;
-    var typesEnum = chlk.models.attendance.AttendanceTypesValue;
+    var typesEnum = chlk.models.attendance.AttendanceTypeEnum;
     var gridEvents = chlk.controls.GridEvents;
 
     /** @class chlk.activities.attendance.ClassListPage */

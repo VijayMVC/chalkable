@@ -1,4 +1,4 @@
-valuesEnum = chlk.models.attendance.AttendanceTypesValue;
+valuesEnum = chlk.models.attendance.AttendanceTypeEnum;
 value = self.getType();
 reasons = self.getReasons().filter(function(item){return item.getAttendanceType() == value});
 needDropdown = (value > valuesEnum.PRESENT.valueOf()) && reasons.length;
@@ -19,7 +19,7 @@ student = self.getStudent();
     .attendance-combo
         BUTTON(href="javascript:", name="submitType", value="leftArrow", type="submit").left-arrow
             span
-        div(class=needDropdown ? "with-dropdown" : '').current-attendance=self.getTypeName().valueOf()
+        div(class=needDropdown ? "with-dropdown" : '').current-attendance=name
         BUTTON(href="javascript:", name="submitType", value="rightArrow", type="submit").right-arrow
             span
         if value > valuesEnum.PRESENT.valueOf()

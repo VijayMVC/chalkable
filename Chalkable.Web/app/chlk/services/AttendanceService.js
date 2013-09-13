@@ -40,7 +40,7 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function markAllPresent(classPeriodId, date) {
                 return this.get('Attendance/SetAttendanceForClass.json', Boolean, {
                     classPeriodId: classPeriodId.valueOf(),
-                    type: chlk.models.attendance.AttendanceTypesValue.PRESENT.valueOf(),
+                    type: chlk.models.attendance.AttendanceTypeEnum.PRESENT.valueOf(),
                     date: date && date.toString('mm-dd-yy')
                 });
             }

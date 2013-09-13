@@ -18,11 +18,11 @@ NAMESPACE('chlk.converters.attendance', function () {
             String, function convert(id) {
                 var enums = chlk.models.attendance.AttendanceTypeEnum;
                 switch (id) {
-                    case enums.PRESENT: return Msg.Present;
-                    case enums.EXCUSED: return Msg.Excused;
-                    case enums.ABSENT: return Msg.Absent;
-                    case enums.LATE: return Msg.Late;
-                    case enums.NA: return Msg.NA;
+                    case enums.PRESENT.valueOf(): return Msg.Present;
+                    case enums.EXCUSED.valueOf(): return Msg.Excused;
+                    case enums.ABSENT.valueOf(): return Msg.Absent;
+                    case enums.LATE.valueOf(): return Msg.Late;
+                    case enums.NA.valueOf(): return Msg.NA;
                     default: return 'Unknown value ' + id;
                 }
             }
