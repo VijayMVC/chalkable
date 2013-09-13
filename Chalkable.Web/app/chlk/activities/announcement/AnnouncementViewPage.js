@@ -60,6 +60,26 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
+            [ria.mvc.DomEventBind('click', '#edit-question-link')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function editQuestionClick(node, event){
+                var row = node.parent('.row');
+                row.find('#edit-question-input').removeClass('x-hidden');
+                row.find('#edit-question-btn').removeClass('x-hidden');
+                row.find('#edit-question-link').addClass('x-hidden');
+                row.find('#edit-question-text').addClass('x-hidden');
+            },
+
+            [ria.mvc.DomEventBind('click', '#edit-answer-link')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function editAnswerClick(node, event){
+                var row = node.parent('.row');
+                row.find('#edit-answer-input').removeClass('x-hidden');
+                row.find('#edit-answer-btn').removeClass('x-hidden');
+                row.find('#edit-answer-link').addClass('x-hidden');
+                row.find('#edit-answer-text').addClass('x-hidden');
+            },
+
             [ria.mvc.DomEventBind('click', '.comment-grade')],
             [[ria.dom.Dom, ria.dom.Event]],
             function commentClick(node, event){
