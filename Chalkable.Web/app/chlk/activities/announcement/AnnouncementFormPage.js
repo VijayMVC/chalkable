@@ -7,7 +7,6 @@ REQUIRE('chlk.templates.classes.TopBar');
 
 NAMESPACE('chlk.activities.announcement', function () {
 
-    var handler;
 
     /** @class chlk.activities.announcement.AnnouncementFormPage*/
     CLASS(
@@ -19,6 +18,7 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LastMessages, '', '.drop-down-container', ria.mvc.PartialUpdateRuleActions.Replace)],
         [chlk.activities.lib.PageClass('new-item')],
         'AnnouncementFormPage', EXTENDS(chlk.activities.announcement.BaseAnnouncementFormPage), [
+
             [ria.mvc.DomEventBind('click', '.class-button')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function classClick(node, event){

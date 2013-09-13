@@ -33,9 +33,11 @@ NAMESPACE('chlk.services', function () {
                 return withAll_ ? res1 : res;
             },
 
+            //TODO: refactor
             [[chlk.models.id.ClassId]],
             chlk.models.classes.ClassForWeekMask, function getClassAnnouncementInfo(id){
                 var res = window.classesInfo[id.valueOf()];
+                res.classId = id.valueOf();
                 res = new ria.serialize.JsonSerializer().deserialize(res, chlk.models.classes.ClassForWeekMask);
                 return res;
             },
