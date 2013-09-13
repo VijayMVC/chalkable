@@ -1,0 +1,127 @@
+mixin ProfileTopBar(model)
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                each item in model.actionLinksData
+                    +ActionLink(item.getControllerName(), item.getActionName(),
+                        model.user.getId())(class = item.isPressed() ? ".pressed" : undefined)=item.getTitle()
+            .right
+                +ActionLink('settings', 'dashboard').settings Settings
+
+mixin ProfileInfoView(model)
+    addresses = model.getAddresses() || [];
+    primaryPhone = model.getPrimaryPhone() ? model.getPrimaryPhone().getValue() : '';
+    homePhone = model.getHomePhone() ? model.getHomePhone().getValue() : '';
+    .info-view
+        .title
+            .avatar-container.with-border
+                +PersonImg(model, 128)
+            h1=model.getFullName()
+        .sections
+            .sections-info
+                .section-title.pacifico=model.getRole().getName()
+                div
+                    .section-data
+                        .info-title=Msg.Email
+                        .data-info.low-font-size
+                            input(type="text", value=model.getEmail())
+                    .section-data
+                        .info-title=Msg.Cell
+                        .data-info.big-font-size=primaryPhone
+                    .section-data
+                        .info-title=Msg.Birthday
+                        .data-info.low-font-size=model.getBirthDateText()
+                    .section-data.gender-box
+                        div(class=model.getGender() ? model.getGender().toLowerCase() : '').gender-img-box
+                        p=model.getGenderFullText()
+            .sections-info
+                .section-title.pacifico=Msg.Home
+                div
+                    .section-data
+                        .info-title=Msg.Home_Phone
+                        .data-info.big-font-size=homePhone
+                    .section-data
+                        .info-title=Msg.Home_Address
+                        each address in addresses
+                            .data-info.low-font-size=address.getValue()
+            block
+        .sections-info.other-section
+            .section-title.pacifico=Msg.Other(true)
+        if model.isAbleEdit()
+            +Button().special-button.blue-button#edit-info-button=Msg.Edit
+
+mixin ProfileInfoForm(controller, model)
+    addresses = model.getAddresses() || [];
+    primaryPhone = model.getPrimaryPhone() ? model.getPrimaryPhone().getValue() : '';
+    homePhone = model.getHomePhone() ? model.getHomePhone().getValue() : '';
+    .info-edit
+        +ActionForm(controller, 'infoEdit')#info-edit-form.with-ok
+            .title
+                .avatar-block
+                    .avatar-container.with-border
+                        +PersonImg(model, 128)
+                    button(type="button").simple-gray-button.file Upload
+                        +FileUpload(controller, 'uploadPicture', [model.getId().valueOf()])#add-attachment.simple-gray-button
+                .name-block
+                    input(name="firstname", value=model.getFirstName(), class="validate[required]")
+                    input(name="lastname", value=model.getLastName(), class="validate[required]")
+                    input(type="hidden", name="id", value=model.getId())
+                    input(type="hidden", name="salutation", value=model.getSalutation())
+            .sections
+                .sections-info
+                    .section-title=model.getRole().getName()
+                    div
+                        .section-data
+                            .info-title=Msg.Email
+                            input(name="email", value=model.getEmail(), class="validate[custom[email], required]")
+                        .section-data
+                            .info-title=Msg.Cell
+                            input(
+                            data-id=primaryPhone && model.getPrimaryPhone().getId().valueOf(),
+                            data-type=2,
+                            data-isPrimary=true,
+                            value=primaryPhone,
+                            class="validate[custom[phone], required] primary-phone"
+                            )
+                            input(name="phonesValue", value=model.getPhonesValue(), type="hidden")
+                            +Select('cellService')(data-placeholder="*Cell Service*", value="")#cellService.grey-combo
+                                option AT&T
+                                option Verizon
+                                option Sprint
+                                option T-mobile
+                                option Boost Mobile
+                                option Other
+                        .section-data
+                            .info-title=Msg.Birthday
+                            +DateSelect().grey-combo-container(
+                            value=model.getBirthDate() ? model.getBirthDate().getDate() : null,
+                            name='birthdate'
+                            ).bd-select
+                            .gender-part
+                                +Select('gender')(data-placeholder="Gender")#genderSelect.grey-combo
+                                    +Option('m', 'Male', model.getGender() && model.getGender().toLowerCase() == 'm')
+                                    +Option('f', 'Female', model.getGender() && model.getGender().toLowerCase() == 'f')
+                .sections-info
+                    .section-title=Msg.Home
+                    div
+                        .section-data
+                            .info-title=Msg.Home_Phone
+                            input(
+                            value=homePhone,
+                            class="validate[custom[phone], required] home-phone",
+                            data-id=homePhone && model.getHomePhone().getId().valueOf(),
+                            data-type=0,
+                            data-isPrimary=false,
+                            )
+                        .section-data
+                            .info-title=Msg.Home_Address
+                                a.add-address.add-button add
+                            input(name="addressesValue", value=model.getAddressesValue(), type="hidden")
+                            .adresses
+                                addressesModel = new chlk.models.people.Addresses()
+                            -addressesModel.setItems(addresses);
+                            +RenderWith(addressesModel, chlk.templates.people.Addresses)
+                block
+            .section-buttons
+                +Button()(type="submit").special-button.blue-button#submit-info-button=Msg.Save
+                +Button()(type="button").special-button.blue-button#cancell-edit-info-button=Msg.Cancel
