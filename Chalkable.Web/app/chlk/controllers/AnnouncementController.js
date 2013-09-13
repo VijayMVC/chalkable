@@ -7,6 +7,7 @@ REQUIRE('chlk.services.GradingService');
 REQUIRE('chlk.services.AnnouncementReminderService');
 REQUIRE('chlk.services.AppMarketService');
 
+REQUIRE('chlk.activities.announcement.AdminAnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.AnnouncementViewPage');
 REQUIRE('chlk.activities.apps.AttachAppDialog');
@@ -62,6 +63,12 @@ NAMESPACE('chlk.controllers', function (){
 
         ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
 
+        function getAnnouncementFormPageType_(){
+            if(this.userIsAdmin())
+                return chlk.activities.announcement.AdminAnnouncementFormPage;
+            if(this.userInRole(chlk.models.common.RoleEnum.TEACHER))
+                return chlk.activities.announcement.AnnouncementFormPage;
+        },
 
         [[chlk.models.announcement.Reminder]],
         function editAddReminderAction(model) {
@@ -82,7 +89,7 @@ NAMESPACE('chlk.controllers', function (){
                             });
                             return res[0];
                         });
-                    return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result, window.noLoadingMsg);
+                    return this.UpdateView(this.getAnnouncementFormPageType_(), result, window.noLoadingMsg);
                 }
             }
         },
@@ -157,7 +164,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(model){
                     return this.addEditAction(model, false);
                 }.bind(this));
-            return this.PushView(chlk.activities.announcement.AnnouncementFormPage, result);
+            return this.PushView(this.getAnnouncementFormPageType_(), result);
         },
 
 
@@ -199,7 +206,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(model){
                     return this.addEditAction(model, true);
                 }.bind(this));
-            return this.PushView(chlk.activities.announcement.AnnouncementFormPage, result);
+            return this.PushView(this.getAnnouncementFormPageType_(), result);
         },
 
         [[chlk.models.id.AnnouncementId]],
@@ -250,7 +257,7 @@ NAMESPACE('chlk.controllers', function (){
                     this.prepareAttachments(attachments);
                     return model;
                 }.bind(this));
-            return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result);
+            return this.UpdateView(this.getAnnouncementFormPageType_(), result);
         },
 
         [[chlk.models.id.AnnouncementId, String]],
@@ -302,7 +309,7 @@ NAMESPACE('chlk.controllers', function (){
                     announcementForm.setAnnouncement(model);
                     return this.addEditAction(announcementForm, true);
                 }.bind(this));
-            return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result);
+            return this.UpdateView(this.getAnnouncementFormPageType_(), result);
         },
 
 
@@ -340,7 +347,7 @@ NAMESPACE('chlk.controllers', function (){
                             model.setAnnouncementTypeName(announcementTypeName);
                             return new ria.async.DeferredData(model);
                         }.bind(this));
-                    return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result, window.noLoadingMsg);
+                    return this.UpdateView(this.getAnnouncementFormPageType_(), result, window.noLoadingMsg);
                 }else{
                     if(submitType == 'save'){
                         model.setAnnouncementAttachments(this.getContext().getSession().get('AnnouncementAttachments'));
@@ -348,7 +355,7 @@ NAMESPACE('chlk.controllers', function (){
                         announcementForm.setAnnouncement(model);
                         result = this.addEditAction(announcementForm, false);
                         this.saveAnnouncement(model);
-                        return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result);
+                        return this.UpdateView(this.getAnnouncementFormPageType_(), result);
                     }else{
                         if(submitType == 'saveNoUpdate'){
                             this.saveAnnouncement(model);
@@ -364,7 +371,7 @@ NAMESPACE('chlk.controllers', function (){
                                     }
                             }else{
                                 this.submitAnnouncement(model);
-                                this.StartLoading(chlk.activities.announcement.AnnouncementFormPage);
+                                this.StartLoading(this.getAnnouncementFormPageType_());
                             }
                         }
                     }
