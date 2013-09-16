@@ -68,7 +68,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
                     AbsentStudents = PrepareStudentsByAttendanceType(AttendanceTypeEnum.Absent, groupedSts),
                     ExcusedStudents = PrepareStudentsByAttendanceType(AttendanceTypeEnum.Excused, groupedSts),
                     LateStudents = PrepareStudentsByAttendanceType(AttendanceTypeEnum.Late, groupedSts),
-                    AttendancesStats = AttendanceStatsViewData.Create(lastAttendances, "ddd")
+                    AttendancesStats = AttendanceStatsViewData.BuildStatsPerDate(lastAttendances, "ddd")
                 };
         }
 
@@ -96,6 +96,22 @@ namespace Chalkable.Web.Models.AttendancesViewData
 
     public class AttendanceByMpViewData
     {
-        
+        public IList<ShortPersonViewData> AbsentAndLateStudents { get; set; }
+        public int AbsentStudentsCountAvg { get; set; }
+
+        public IList<AttendanceStatsViewData> AttendanceStats { get; set; }
+
+        public static AttendanceByMpViewData Create(IList<Person> allStudents, IList<Guid> absentAndLateStudentsIds, int absentStsCountAvg)
+        {
+            var res = new AttendanceByMpViewData();
+            res.AbsentStudentsCountAvg = absentStsCountAvg;
+            res.AbsentAndLateStudents = new List<ShortPersonViewData>();
+            foreach (var absentAndLateStudentsId in absentAndLateStudentsIds)
+            {
+                var st = allStudents.First(x => absentAndLateStudentsId == x.Id);
+                res.AbsentAndLateStudents.Add(ShortPersonViewData.Create(st));
+            }
+            return res;
+        }
     }
 }

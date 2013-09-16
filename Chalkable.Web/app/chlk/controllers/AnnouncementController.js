@@ -228,6 +228,7 @@ NAMESPACE('chlk.controllers', function (){
                     announcement.prepareExpiresDateText();
                     return new ria.async.DeferredData(announcement);
                 }, this);
+                    model.setCurrentUser(this.getCurrentPerson());
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
         },
 

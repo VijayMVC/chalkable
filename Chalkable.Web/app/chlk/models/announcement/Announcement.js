@@ -2,7 +2,6 @@ REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.attachment.Attachment');
-REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.announcement.StudentAnnouncements');
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.ClassId');
@@ -111,6 +110,8 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'ownerAttachmentsCount',
 
             chlk.models.people.User, 'owner',
+
+            chlk.models.people.User, 'currentUser',
 
             [ria.serialize.SerializeProperty('qnacount')],
             Number, 'qnaCount',
