@@ -5,7 +5,7 @@ using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 
-namespace Chalkable.Web.Models
+namespace Chalkable.Web.Models.AttendancesViewData
 {
     public class AttendanceSummaryViewData
     {

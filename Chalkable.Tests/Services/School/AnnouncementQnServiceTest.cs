@@ -53,7 +53,7 @@ namespace Chalkable.Tests.Services.School
             
             Assert.AreEqual(annQuestion.Answer, "answer");
             Assert.AreEqual(annQuestion.State, AnnouncementQnAState.Answered);
-            Assert.AreEqual(annQuestion.AnsweredTime.Date, SchoolTestContext.NowDate);
+            Assert.AreEqual(annQuestion.AnsweredTime.Value.Date, SchoolTestContext.NowDate);
 
             AssertAreEqual(annQuestion, SchoolTestContext.FirstStudentSl.AnnouncementQnAService.GetAnnouncementQnA(annQuestion.Id));
             Assert.AreEqual(SchoolTestContext.FirstStudentSl.AnnouncementQnAService.GetAnnouncementQnAs(announcement.Id).Count, 1);

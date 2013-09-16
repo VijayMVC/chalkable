@@ -41,10 +41,10 @@
                 .right-block
                     h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
                     p=self.getContent()
-                    .questions-and-answers
-                        +RenderWith(self._model, chlk.templates.announcement.AnnouncementQnAs)
                     .attachments-and-applications
                         +RenderWith(self._model, chlk.templates.announcement.Announcement)
+            .questions-and-answers.silver-panel
+                +RenderWith(self._model, chlk.templates.announcement.AnnouncementQnAs)
             if studentAnnouncements && studentAnnouncements.length
                 .silver-panel
                     .auto-grade-buttons.right

@@ -4,13 +4,15 @@ each item, i in self.getAnnouncementQnAs()
         .row
             .avatar-container.left
                 +PersonImg(item.getQuestion().getPerson(), 47)
-            p.left= item.getQuestion().getPerson().getFullName()
-            .left#edit-question-text= item.getQuestion().getMessage()
-            input(type="text",name="question", value=item.getQuestion().getMessage())#edit-question-input.x-hidden
-            +Button()(type="submit").special-button.blue-button.submit-btn.x-hidden#edit-question-btn Update
-            if self.isOwner
-                a(href='javascript:', name='edit-question-link')#edit-question-link edit
-                a(href='javascript:', name='cancel-question-link')#cancel-question-link.x-hidden cancel
+            .qna.left
+                h2= item.getQuestion().getPerson().getFullName()
+                p#edit-question-text= item.getQuestion().getMessage()
+                input(type="text",name="question", value=item.getQuestion().getMessage())#edit-question-input.x-hidden
+                +Button()(type="submit").special-button.blue-button.submit-btn.x-hidden#edit-question-btn Update
+                span= self.convertWith(item.getQuestion().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
+                if self.isOwner
+                    a(href='javascript:', name='edit-question-link')#edit-question-link Edit
+                    a(href='javascript:', name='cancel-question-link')#cancel-question-link.x-hidden cancel
             .clear
 
         .row
@@ -18,14 +20,16 @@ each item, i in self.getAnnouncementQnAs()
             hideEdit = answered || !self.isOwner
             .avatar-container.left
                 +PersonImg(item.getAnswer().getPerson(), 47)
-            p.left= item.getAnswer().getPerson().getFullName()
-            div(class = hideEdit ? "left" : "left x-hidden")#edit-answer-text= item.getAnswer().getMessage()
-            input(type="text",name="answer", value=item.getAnswer().getMessage(), class=hideEdit ? "x-hidden" : "")#edit-answer-input
-            +Button()(type="submit"
-                , class=hideEdit ? "special-button blue-button submit-btn x-hidden" : "special-button blue-button submit-btn")#edit-answer-btn Update
-            if answered && self.isOwner
-                a(href='javascript:', name='edit-answer-link')#edit-answer-link edit
-                a(href='javascript:', name='cancel-answer-link')#cancel-answer-link.x-hidden cancel
+            .qna.left
+                h2= item.getAnswer().getPerson().getFullName()
+                p(class = hideEdit ? "" : "x-hidden")#edit-answer-text= item.getAnswer().getMessage()
+                input(type="text",name="answer", value=item.getAnswer().getMessage(), class=hideEdit ? "x-hidden" : "")#edit-answer-input
+                +Button()(type="submit"
+                    , class=hideEdit ? "special-button blue-button submit-btn x-hidden" : "special-button blue-button submit-btn")#edit-answer-btn Update
+                span= self.convertWith(item.getAnswer().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
+                if answered && self.isOwner
+                    a(href='javascript:', name='edit-answer-link')#edit-answer-link Edit
+                    a(href='javascript:', name='cancel-answer-link')#cancel-answer-link.x-hidden cancel
             .clear
 if !self.isOwner
     +ActionForm('announcement', 'askQuestion')

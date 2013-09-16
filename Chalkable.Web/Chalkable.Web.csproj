@@ -223,8 +223,10 @@
     <Compile Include="Models\ApplicationsViewData\ApplicationTotalPriceViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationUpdateInputModel.cs" />
     <Compile Include="Models\ApplicationsViewData\InstalledApplicationViewData.cs" />
-    <Compile Include="Models\AttendanceReasonViewData.cs" />
-    <Compile Include="Models\AttendanceSummaryViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\AdminAttendanceSummaryViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\AttendanceReasonViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\AttendanceStatsViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\AttendanceSummaryViewData.cs" />
     <Compile Include="Models\BackgroundTaskLogViewData.cs" />
     <Compile Include="Models\BackgroundTaskViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\BaseApplicationViewData.cs" />
@@ -245,7 +247,7 @@
     <Compile Include="Models\ChalkableApiExplorerViewData\ParamViewData.cs" />
     <Compile Include="Models\ChalkableApiItemDescription.cs" />
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
-    <Compile Include="Models\ClassAttendanceViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\ClassAttendanceViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassAppsViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassGradingViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassInfoViewData.cs" />
@@ -309,8 +311,8 @@
     <Compile Include="Models\StorageMonitorViewData.cs" />
     <Compile Include="Models\StudentAnnouncementViewData.cs" />
     <Compile Include="Models\HoverBoxesViewData.cs" />
-    <Compile Include="Models\StudentAttendanceSummaryViewData.cs" />
-    <Compile Include="Models\StudentAttendanceViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\StudentAttendanceSummaryViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\StudentAttendanceViewData.cs" />
     <Compile Include="Models\SysAdminViewData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\CompilerHelper.cs" />

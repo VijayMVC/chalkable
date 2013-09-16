@@ -15,6 +15,7 @@ using Chalkable.Web.Common;
 using Chalkable.Web.Controllers.PersonControllers;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.ApplicationsViewData;
+using Chalkable.Web.Models.AttendancesViewData;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 using Chalkable.Web.Models.SchoolsViewData;

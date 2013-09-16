@@ -148,7 +148,7 @@ namespace Chalkable.Data.School.DataAccess
             return Count(new DbQuery(b, conds));
         }
 
-        public IDictionary<Guid, DateTime> GetStudentAbsentFromDay(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelIds)
+        public IDictionary<DateTime, IList<Guid>> GetStudentAbsentFromDay(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelIds)
         {
             return  Read(PrepareGetStudentAbsentFromDayQuery(fromDate, toDate, gradeLevelIds), ReadStudentAbsentFromDay);
         } 
@@ -187,14 +187,16 @@ namespace Chalkable.Data.School.DataAccess
             }
             return res;
         }
-        private IDictionary<Guid, DateTime> ReadStudentAbsentFromDay(DbDataReader reader)
+        private IDictionary<DateTime, IList<Guid>> ReadStudentAbsentFromDay(DbDataReader reader)
         {
-                var res = new Dictionary<Guid, DateTime>();
+            var res = new Dictionary<DateTime, IList<Guid>>();
                 while (reader.Read())
                 {
                     var personId = SqlTools.ReadGuid(reader, PERSON_ID_RES_FIELD);
                     var date = SqlTools.ReadDateTime(reader, DATE_RES_FIELD);
-                    res.Add(personId,date);
+                    if(!res.ContainsKey(date))
+                        res.Add(date, new List<Guid>());
+                    res[date].Add(personId);
                 }
                 return res;    
         }
@@ -256,8 +258,17 @@ namespace Chalkable.Data.School.DataAccess
             }
             return ReadMany<StudentCountAbsentFromPeriod>(dbQuery);
         }
-
-        //public IDictionary<> 
+        
+        public IList<StudentAbsentFromPeriod> GetStudentAbsentFromPeriod(DateTime date, IList<Guid> gradeLevelsIds, int periodOrder)
+        {
+            var dbQuery = PrepareGetStudentAbsentFromPeriodQuery(periodOrder, "periodOrder", date, date, gradeLevelsIds);
+            var res = ReadMany<StudentAbsentFromPeriod>(dbQuery);
+            foreach (var studentAbsentFromPeriod in res)
+            {
+                studentAbsentFromPeriod.PeriodOrder = periodOrder;
+            }
+            return res;
+        }  
     }
 
     public class AttendanceTotalPerType
@@ -266,7 +277,12 @@ namespace Chalkable.Data.School.DataAccess
         public int Total { get; set; }
         public AttendanceTypeEnum AttendanceType { get; set; }
     }
-
+    public class StudentAbsentFromPeriod
+    {
+        public DateTime Date { get; set; }
+        public Guid PersonId { get; set; }
+        public int PeriodOrder { get; set; }
+    }
     public class StudentCountAbsentFromPeriod
     {
         public DateTime Date { get; set; }

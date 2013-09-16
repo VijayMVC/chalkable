@@ -15,7 +15,7 @@ namespace Chalkable.Data.School.Model
         public string Question { get; set; }
         public string Answer { get; set; }
         public AnnouncementQnAState State { get; set; }
-        public DateTime AnsweredTime { get; set; }
+        public DateTime? AnsweredTime { get; set; }
         public DateTime QuestionTime { get; set; }
 
         //[NotDbFieldAttr]
