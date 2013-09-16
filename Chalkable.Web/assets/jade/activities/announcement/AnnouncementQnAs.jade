@@ -5,7 +5,7 @@ each item, i in self.getAnnouncementQnAs()
             .avatar-container.left
                 +PersonImg(item.getQuestion().getPerson(), 47)
             .qna.left
-                h2= item.getQuestion().getPerson().getFullName()
+                h2= item.getQuestion().getPerson().getFirstName()
                 p#edit-question-text= item.getQuestion().getMessage()
                 input(type="text",name="question", value=item.getQuestion().getMessage())#edit-question-input.x-hidden
                 +Button()(type="submit").special-button.blue-button.submit-btn.x-hidden#edit-question-btn Update
@@ -21,7 +21,7 @@ each item, i in self.getAnnouncementQnAs()
             .avatar-container.left
                 +PersonImg(item.getAnswer().getPerson(), 47)
             .qna.left
-                h2= item.getAnswer().getPerson().getFullName()
+                h2= item.getAnswer().getPerson().getFirstName()
                 p(class = hideEdit ? "" : "x-hidden")#edit-answer-text= item.getAnswer().getMessage()
                 input(type="text",name="answer", value=item.getAnswer().getMessage(), class=hideEdit ? "x-hidden" : "")#edit-answer-input
                 +Button()(type="submit"
@@ -33,7 +33,11 @@ each item, i in self.getAnnouncementQnAs()
             .clear
 if !self.isOwner
     +ActionForm('announcement', 'askQuestion')
-        label Question:
-        input(type="text",name="question")
-        input(type="hidden",name="announcementId", value=self.getId())
-        +Button()(type="submit").special-button.blue-button.submit-btn Ask
+        .avatar-container.left
+            +PersonImg(self.getCurrentUser(), 47)
+        .qna.left
+            h2= self.getCurrentUser().getFirstName()
+            input(type="text",name="question")
+            input(type="hidden",name="announcementId", value=self.getId())
+            +Button()(type="submit").special-button.blue-button.submit-btn Ask
+        .clear

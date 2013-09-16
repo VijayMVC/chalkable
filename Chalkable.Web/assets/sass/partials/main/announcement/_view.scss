@@ -166,10 +166,17 @@ $red-color: #842727;
     .questions-and-answers{
       form{
         margin-bottom: 30px;
-      }
-      .row{
-        margin-top: 15px;
-        margin-bottom: 15px;
+        .chlk-button{
+          display: block;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          width: 80px;
+        }
+        .row{
+          margin-top: 15px;
+          margin-bottom: 15px;
+        }
+
         .qna{
           margin-left: 15px;
           h2{
@@ -184,12 +191,6 @@ $red-color: #842727;
           }
           a{
             margin-left: 10px;
-          }
-          .chlk-button{
-            display: block;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            width: 80px;
           }
           >INPUT{
             border-color: "#9e9e9e";
