@@ -79,6 +79,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         Order = ServiceLocator.AnnouncementService.GetNewAnnouncementItemOrder(ann)
                     };
                 new AnnouncementApplicationDataAccess(uow).Insert(aa);
+                uow.Commit();
                 return aa;
             }
         }
