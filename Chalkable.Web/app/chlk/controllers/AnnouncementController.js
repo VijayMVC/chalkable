@@ -324,6 +324,22 @@ NAMESPACE('chlk.controllers', function (){
 
 
 
+        [[chlk.models.announcement.Announcement, Array]],
+        function saveAdminAction(model, recipients_){
+            var res = this.announcementService
+                .saveAdminAnnouncement(
+                    model.getId(),
+                    recipients_,
+                    model.getSubject(),
+                    model.getContent(),
+                    model.getExpiresDate(),
+                    model.getAttachments()
+                )
+                .attach(this.validateResponse_());
+
+        },
+
+
         //TODO refactor
         [[chlk.models.announcement.Announcement]],
         function saveAction(model) {

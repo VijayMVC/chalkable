@@ -7,18 +7,14 @@ REQUIRE('chlk.templates.announcement.LastMessages');
 NAMESPACE('chlk.activities.announcement', function () {
     "use strict";
 
-    var handler; // todo refactor this
-
     /** @class chlk.activities.announcement.BaseAnnouncementFormPage*/
     CLASS(
-//        [ria.mvc.DomAppendTo('#main')],
-//        [ria.mvc.TemplateBind(chlk.templates.announcement.BaseAnnouncementFormTpl)],
-//        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementReminder, '', '.reminders', ria.mvc.PartialUpdateRuleActions.Append)],
-//        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, '', '.attachments-and-applications', ria.mvc.PartialUpdateRuleActions.Replace)],
-////        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementForm, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
-//        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LastMessages, '', '.drop-down-container', ria.mvc.PartialUpdateRuleActions.Replace)],
-//        [chlk.activities.lib.PageClass('new-item')],
         'BaseAnnouncementFormPage', EXTENDS(chlk.activities.lib.TemplatePage), [
+
+            function $(){
+                BASE();
+                this._handler = null;
+            },
 
             [ria.mvc.DomEventBind('click', '#add-reminder')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -118,7 +114,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             OVERRIDE, VOID, function onStart_() {
                 BASE();
                 var that = this;
-                handler = function(event, node){
+                this._handler = function(event, node){
                     var target = new ria.dom.Dom(event.target);
                     if(!target.parent('.drop-down-container').exists() && target.getAttr('name') != 'content')
                         that.dom.find('.new-item-dropdown').addClass('x-hidden');
@@ -126,12 +122,12 @@ NAMESPACE('chlk.activities.announcement', function () {
                 jQuery(this.dom.valueOf()).on('change', '.reminder-select', function(){
                     that.addEditReminder(new ria.dom.Dom(this));
                 });
-                new ria.dom.Dom().on('click.dropdown', handler);
+                new ria.dom.Dom().on('click.dropdown', this._handler);
             },
 
             OVERRIDE, VOID, function onStop_() {
                 new ria.dom.Dom('#save-form-button').triggerEvent('click');
-                new ria.dom.Dom().off('click.dropdown', handler);
+                new ria.dom.Dom().off('click.dropdown', this._handler);
                 BASE();
             },
 

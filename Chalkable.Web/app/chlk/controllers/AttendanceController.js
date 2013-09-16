@@ -77,44 +77,34 @@ NAMESPACE('chlk.controllers', function (){
             return this[date_ ? 'UpdateView' : 'PushView'](chlk.activities.attendance.ClassListPage, result);
         },
 
+
         //todo refactor this
         [[chlk.models.attendance.ClassAttendance]],
         function setAttendanceAction(model){
-            var type = model.getType();
-            if(model.getSubmitType() == 'leftArrow'){
-                if(type > 2)
-                    type = type/2;
-                else
-                    type = 16;
-            }
-            if(model.getSubmitType() == 'rightArrow'){
-                if(type < 16)
-                    type = type*2;
-                else
-                    type = 2;
-            }
+            var type = this.changeAttendanceType_(model.getSubmitType(), model.getType());
             var items = this.getContext().getSession().get('attendanceData');
             var item = items.filter(function(item){
                 return item.getClassPersonId() == model.getClassPersonId()
             })[0];
             item.setType(type);
+            var attReasonId = model.getAttendanceReasonId();
             try{
-                if(model.getAttendanceReasonId() && model.getAttendanceReasonId().valueOf() && item.getReasons().filter(function(item){
-                    return item.getAttendanceType() == type && item.getId() == model.getAttendanceReasonId();
+                if(attReasonId && attReasonId.valueOf() && item.getReasons().filter(function(item){
+                    return item.getAttendanceType() == type && item.getId() == attReasonId;
                 }).length == 0)
-                    console.info('WARNING setAttendance: type = ' + type + ', reasonId = ' + model.getAttendanceReasonId());
+                    console.info('WARNING setAttendance: type = ' + type + ', reasonId = ' + attReasonId);
                 else
-                    this.attendanceService.setAttendance(model.getClassPersonId(), model.getClassPeriodId(), type, model.getAttendanceReasonId(), model.getDate());
+                    this.attendanceService.setAttendance(model.getClassPersonId(), model.getClassPeriodId(), type, attReasonId, model.getDate());
 
             }catch(e){
-                console.info('ERROR setAttendance: type = ' + type + ', reasonId = ' + model.getAttendanceReasonId());
+                console.info('ERROR setAttendance: type = ' + type + ', reasonId = ' + attReasonId);
             }
-            if(model.getAttendanceReasonId() && model.getAttendanceReasonId().valueOf()){
+            if(attReasonId && attReasonId.valueOf()){
                 if(item.getAttendanceReason()){
-                    item.getAttendanceReason().setId(model.getAttendanceReasonId());
+                    item.getAttendanceReason().setId(attReasonId);
                     item.getAttendanceReason().setDescription(model.getAttendanceReasonDescription());
                 }else{
-                    var reason = new chlk.models.attendance.AttendanceReason(model.getAttendanceReasonId(), model.getAttendanceReasonDescription());
+                    var reason = new chlk.models.attendance.AttendanceReason(attReasonId, model.getAttendanceReasonDescription());
                     item.setAttendanceReason(reason);
                 }
             }else{
@@ -122,6 +112,25 @@ NAMESPACE('chlk.controllers', function (){
             }
             var result = new ria.async.DeferredData(item);
             return this.UpdateView(chlk.activities.attendance.ClassListPage, result, window.noLoadingMsg);
-        }
+        },
+
+
+        Number,  function changeAttendanceType_(submitType, currentType){
+            var attTypeEnum = chlk.models.attendance.AttendanceTypeEnum;
+            var types = [
+                attTypeEnum.PRESENT.valueOf(),
+                attTypeEnum.ABSENT.valueOf(),
+                attTypeEnum.EXCUSED.valueOf(),
+                attTypeEnum.LATE.valueOf()
+            ];
+            var index = types.indexOf(currentType);
+            var increment = submitType == 'leftArrow' ? -1 : submitType == 'rightArrow' ? 1 : 0;
+            if(increment == -1 && index == 0)
+                index = types.length;
+            else if(increment == 1 && index == types.length - 1)
+                index = -1;
+            index += increment
+            return types[index];
+        },
     ])
 });
