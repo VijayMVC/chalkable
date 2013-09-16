@@ -264,21 +264,20 @@ NAMESPACE('chlk.controllers', function (){
             //var myAppsViewUrl = "#";
             //var saveBtn  = new chlk.models.apps.AppWrapperToolbarButton('save-app', 'Save');
             //var newTabBtn = new chlk.models.apps.AppWrapperToolbarButton('new-tab-id', 'New Tab', myAppsViewUrl, true);
+//
             var result = this.appsService
-                .getInfo(appId)
+                .addToAnnouncement(appId, announcementId)
                 .then(function(app){
-                    return chlk.models.apps.AppWrapperViewData$createAppAttach(announcementId, app);
+                    return chlk.models.apps.AppWrapperViewData$createAppAttach(app);
                 })
                 .attach(this.validateResponse_());
-            return this.PushView(chlk.activities.apps.AppWrapperDialog, result);
+            return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
 
 
         [[chlk.models.id.AppId]],
         function viewAppAction(appId) {
         },
-
-
 
 
         [chlk.controllers.AccessForRoles([

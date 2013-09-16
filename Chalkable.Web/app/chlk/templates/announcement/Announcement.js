@@ -33,7 +33,10 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'announcementTypeName',
 
             [ria.templates.ModelPropertyBind],
-            Array, 'applications',
+            ArrayOf(chlk.models.apps.AppAttachment), 'applications',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.apps.AppAttachment), 'gradeViewApps',
 
             [ria.templates.ModelPropertyBind],
             String, 'applicationName',

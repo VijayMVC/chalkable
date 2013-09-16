@@ -147,7 +147,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 BASE(model);
                 model.getStudentAnnouncements() && this.setMapping(model.getStudentAnnouncements().getMapping());
                 this.setOwner(model.getOwner());
-                this.setApplicationsInGradeView(model.getApplications().filter(function(item){return item.applicationviewdata.showingradeview}));
+                this.setApplicationsInGradeView(model.getGradeViewApps());
                 var that = this;
                 jQuery(this.dom.valueOf()).on('change', '.grade-select', function(){
                     var node = new ria.dom.Dom(this);

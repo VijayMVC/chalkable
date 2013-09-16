@@ -120,8 +120,36 @@ NAMESPACE('chlk.services', function () {
 
             },
 
+            [[chlk.models.id.AppId, chlk.models.id.AnnouncementId]],
+            ria.async.Future, function addToAnnouncement(appId, announcementId) {
+                return this
+                    .post('Application/AddToAnnouncement.json', chlk.models.apps.AppAttachment, {
+                        applicationId: appId.valueOf(),
+                        announcementId: announcementId.valueOf()
+                    })
+                    .then(function(attachment){
+                        return this.getOauthCode(attachment.getUrl())
+                            .then(function(code){
+                                attachment.setOauthCode(code);
+                                return attachment;
+                            });
+                    }, this);
+            },
 
+            [[chlk.models.id.AnnouncementApplicationId]],
+            ria.async.Future, function attachApp(appAnnouncementId) {
+              return this
+                  .post('Application/Attach.json', Boolean, {
+                      announcementApplicationId: appAnnouncementId.valueOf()
+                  });
+            },
 
+            [[String]],
+            ria.async.Future, function getOauthCode(appUrl){
+                return this.get('Application/GetOauthCode.json', String, {
+                    applicationUrl: appUrl
+                });
+            },
 
             [[chlk.models.id.SchoolPersonId, String]],
             ria.async.Future, function createApp(devId, name) {

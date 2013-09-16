@@ -1,4 +1,4 @@
-REQUIRE('chlk.models.apps.Application');
+REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.apps.AppModes');
 REQUIRE('chlk.models.id.AnnouncementId');
 
@@ -30,30 +30,26 @@ NAMESPACE('chlk.models.apps', function () {
         'AppWrapperViewData', [
             chlk.models.apps.AppModes, 'appMode',
             ArrayOf(chlk.models.apps.AppWrapperToolbarButton), 'buttons',
-            chlk.models.apps.Application, 'app',
-            chlk.models.id.AnnouncementId, 'announcementId',
-
+            chlk.models.apps.AppAttachment, 'app',
 
             [[chlk.models.apps.Application,
                 chlk.models.apps.AppModes,
-                ArrayOf(chlk.models.apps.AppWrapperToolbarButton),
-                chlk.models.id.AnnouncementId]],
-            function $(app, mode, buttons, announcementId){
+                ArrayOf(chlk.models.apps.AppWrapperToolbarButton)]],
+            function $(app, mode, buttons){
                 BASE();
+
                 this.setApp(app);
                 this.setAppMode(mode);
                 this.setButtons(buttons);
-                this.setAnnouncementId(announcementId);
-
             }
 
 
         ]);
 
-    chlk.models.apps.AppWrapperViewData$createAppAttach = function(announcementId, app){
+    chlk.models.apps.AppWrapperViewData$createAppAttach = function(app){
         var attachBtn = new chlk.models.apps.AppWrapperToolbarButton('add-app', '+ Attach');
-        var appWrapperViewData = new chlk.models.apps.AppWrapperViewData(app,
-            chlk.models.apps.AppModes.EDIT, [attachBtn], announcementId);
+        app.setCurrentModeUrl(app.getEditUrl());
+        var appWrapperViewData = new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.EDIT, [attachBtn]);
         return new ria.async.DeferredData(appWrapperViewData);
     };
 

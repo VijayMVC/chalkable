@@ -15,13 +15,23 @@ NAMESPACE('chlk.controllers', function (){
 
             [[Object]],
             function addMeAction(data){
-                console.info('addMe', data);
                 if (data.appReady) {
-                    var announcementId = new chlk.models.id.AnnouncementId(data.announcementId);
-                    var appId = new chlk.models.id.AppId(data.appId);
+                    var announcementAppId = new chlk.models.id.AnnouncementApplicationId(data.announcementAppId);
 
                     //close wrapper, close attach dialog, update announcement attachments
-                    var result = this.appsService.addAppToAnnouncement(appId ,announcementId);
+                    var result = this.appsService
+                        .attachApp(announcementAppId)
+                        .then(function(result){
+                            this.view.pop();  //close wrapper
+                            this.view.pop();  //close attach app dialog
+
+                            //get currentApps from sessions
+//                            var applications = this.form.getAnnValues().applications || [];
+//                applications.push(applicationInstance);
+//                this.form.setAnnValues({applications : applications});
+//                this.form.updateAttachments(this.form.getAnnValues());
+
+                        }, this);
                 }
                 else {
                      return this.ShowMsgBox(

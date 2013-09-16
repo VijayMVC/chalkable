@@ -226,7 +226,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ApplicationInstall> GetInstallations(Guid applicationId, Guid personId, bool owners = true)
         {
-            if (!(BaseSecurity.IsAdminViewer(Context) || Context.UserId != personId))
+            if (!BaseSecurity.IsAdminViewer(Context) && Context.UserId != personId)
                 throw new ChalkableSecurityException();
             using (var uow = Read())
             {

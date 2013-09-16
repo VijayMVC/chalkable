@@ -1,7 +1,7 @@
 REQUIRE('chlk.templates.JadeTemplate');
 REQUIRE('chlk.models.apps.AppWrapperViewData');
 REQUIRE('chlk.models.apps.AppModes');
-REQUIRE('chlk.models.apps.Application');
+REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.id.AnnouncementId');
 
 NAMESPACE('chlk.templates.apps', function () {
@@ -13,10 +13,9 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.apps.AppModes, 'appMode',
             [ria.templates.ModelPropertyBind],
-            chlk.models.apps.Application, 'app',
+            chlk.models.apps.AppAttachment, 'app',
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.apps.AppWrapperToolbarButton), 'buttons',
-            [ria.templates.ModelPropertyBind],
-            chlk.models.id.AnnouncementId, 'announcementId'
+            ArrayOf(chlk.models.apps.AppWrapperToolbarButton), 'buttons'
+
         ])
 });

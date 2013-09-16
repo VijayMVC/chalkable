@@ -30,9 +30,6 @@ REQUIRE('chlk.models.announcement.QnAForm');
 
 NAMESPACE('chlk.controllers', function (){
 
-    //todo:wtf
-    var announcementAttachments;
-
     /** @class chlk.controllers.AttachmentTypeEnum */
     ENUM('AttachmentTypeEnum', {
         DOCUMENT: 0,
@@ -104,7 +101,7 @@ NAMESPACE('chlk.controllers', function (){
             attachments.forEach(function(item){
                 if(item.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf())
                     item.setThumbnailUrl(this.announcementService.getAttachmentUri(item.getId(), false, 170, 110));
-            }.bind(this));
+            }, this);
         },
 
         [[chlk.models.announcement.StudentAnnouncement]],
@@ -117,16 +114,22 @@ NAMESPACE('chlk.controllers', function (){
         function addEditAction(model, isEdit){
             var classes = this.classService.getClassesForTopBar();
             var topModel = new chlk.models.classes.ClassesForTopBar();
+
             var announcement = model.getAnnouncement();
-            var reminders = announcement.getAnnouncementReminders(), remindersArr=[];
-            reminders && reminders.forEach(function(item){
+            var reminders = announcement.getAnnouncementReminders() || [];
+            var remindersArr=[];
+
+            reminders.forEach(function(item){
                 remindersArr.push(item.getBefore());
             });
             model.setReminders(remindersArr);
+
             var attachments = announcement.getAnnouncementAttachments();
             this.prepareAttachments(attachments);
             this.getContext().getSession().set('AnnouncementAttachments', attachments);
+
             announcement.setAttachments(attachments.map(function(item){return item.id}).join(','));
+
             topModel.setTopItems(classes);
             topModel.setDisabled(isEdit);
             var classId_ = announcement.getClassId();
@@ -147,7 +150,6 @@ NAMESPACE('chlk.controllers', function (){
                 }
             }
             model.setTopData(topModel);
-
             return new ria.async.DeferredData(model);
         },
 
@@ -215,34 +217,17 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.announcementService
                 .getAnnouncement(announcementId)
                 .attach(this.validateResponse_())
-                .then(function(model){
-                    var now = getDate();
-                    var days = 0;
-                    var expTxt = "";
-                    var expires = model.getExpiresDate();
-                    var expiresDate = expires.getDate();
-                    var date = expires.format('(D m/d)');
-                    var attachments = model.getAnnouncementAttachments();
-
+                .then(function(announcement){
+                    var attachments = announcement.getAnnouncementAttachments();
                     this.prepareAttachments(attachments);
-                    model.setExpiresDateColor('blue');
-                    if(formatDate(now, 'dd-mm-yy') == expires.format('dd-mm-yy')){
-                        model.setExpiresDateColor('blue');
-                        model.setExpiresDateText(Msg.Due_today);
-                    }else{
-                        if(now > expires.getDate()){
-                            model.setExpiresDateColor('red');
-                            days = getDateDiffInDays(expiresDate, now);
-                            expTxt = days == 1 ? Msg.Due_yesterday + " " + date : Msg.Due_days_ago(days) + " " + date;
-
-                        }else{
-                            days = getDateDiffInDays(now, expiresDate);
-                            expTxt = days == 1 ? Msg.Due_tomorrow + " " + date : Msg.Due_in_days(days) + " " + date;
-                        }
-                        model.setExpiresDateText(expTxt);
-                    }
-                    return new ria.async.DeferredData(model);
-                }.bind(this));
+                    var apps = announcement.getApplications() || [];
+                    var gradeViewApps = apps.filter(function(app){
+                        return app.getAppAccess().isVisibleInGradingView();
+                    }) || [];
+                    announcement.setGradeViewApps(gradeViewApps);
+                    announcement.prepareExpiresDateText();
+                    return new ria.async.DeferredData(announcement);
+                }, this);
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
         },
 

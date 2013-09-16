@@ -7,10 +7,9 @@
                 a(id=btn.getId(),
                 target = btnTarget,
                 href = url,
-                data-announcement-id=self.announcementId.valueOf(),
-                data-app-id=self.app.getId().valueOf())=btn.getTitle()
+                data-announcement-app-id=self.app.getAnnouncementApplicationId().valueOf())=btn.getTitle()
         .x-close-btn.close
     .iframe-wrap
-        iframe(src=self.app.getUrl())
+        iframe(src=self.app.getCurrentModeUrl())
 
 
