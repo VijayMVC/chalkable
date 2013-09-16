@@ -17,5 +17,8 @@ namespace Chalkable.Data.School.Model
         public int? RoleRef { get; set; }
         public Guid? GradeLevelRef { get; set; }
         public Guid? PersonRef { get; set; }
+
+        [DataEntityAttr]
+        public Person Person { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
     {
         public bool ToAll { get; set; }
         public Guid? GradeLevelId { get; set; }
-        public IdNameViewData SchoolPerson { get; set; }
+        public IdNameViewData Person { get; set; }
         public int? RoleId { get; set; }
 
         public static AnnouncementRecipientViewData Create(AnnouncementRecipient announcementRecipient)
@@ -25,9 +25,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                 ToAll = announcementRecipient.ToAll,
                 GradeLevelId = announcementRecipient.GradeLevelRef,
                 RoleId = announcementRecipient.RoleRef,
-                //TODO : get person Data
-                //SchoolPerson = !announcementRecipient.PersonRef.HasValue ? null
-                //               : IdNameViewData.Create(announcementRecipient.PersonRef.Value, announcementRecipient.Person.DisplayName)
+               Person = !announcementRecipient.PersonRef.HasValue ? null
+                              : IdNameViewData.Create(announcementRecipient.PersonRef.Value, announcementRecipient.Person.FullName)
             };
         }
     }
