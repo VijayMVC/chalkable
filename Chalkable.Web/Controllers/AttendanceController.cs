@@ -201,10 +201,27 @@ namespace Chalkable.Web.Controllers
             }
             return new NowAttendanceViewData();
         }
+
         private AttendanceByDayViewData GetAdminAttendanceByDate(GuidList gradeLevelsIds, MarkingPeriod markingPeriod, DateTime date, IList<Person> students)
         {
+            if (markingPeriod != null)
+            {
+                var stsIdsAbsentFromDay = SchoolLocator.AttendanceService.GetStudentsAbsentFromDay(date, gradeLevelsIds);
+                var stsAttTotalPerType = SchoolLocator.AttendanceService.CalcAttendanceTotalPerTypeForStudents(students.Select(x=>x.Id).ToList()
+                    , null, markingPeriod.Id, date, date);
 
-            throw new NotImplementedException();
+                var days = SchoolLocator.CalendarDateService.GetLastDays(markingPeriod.SchoolYearRef, true, null, date, 7);
+                var atts = SchoolLocator.AttendanceService.GetClassAttendanceDetails(new ClassAttendanceQuery
+                    {
+                        FromDate = days.First().DateTime,
+                        ToDate = days.Last().DateTime,
+                        MarkingPeriodId = markingPeriod.Id,
+                        Type = AttendanceTypeEnum.Absent | AttendanceTypeEnum.Late | AttendanceTypeEnum.Excused
+                    }, gradeLevelsIds);
+
+                return AttendanceByDayViewData.Create(students, stsAttTotalPerType, stsIdsAbsentFromDay, atts);
+            }
+            return new AttendanceByDayViewData();
         }
         private AttendanceByMpViewData GetAdminAttendanceByMp(GuidList gradeLevelsIds, Guid? fromMarkingPeriodId, Guid? toMarkingPeriodId, 
             DateTime? startDate, DateTime? endDate, IList<Person> students)

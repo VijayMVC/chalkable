@@ -33,6 +33,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IDictionary<Guid, int> CalcAttendanceTotalForStudents(IList<Guid> studentsIds, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate, AttendanceTypeEnum type); 
         
         IDictionary<DateTime, int> GetStudentCountAbsentFromDay(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelIds);
+        IList<Guid> GetStudentsAbsentFromDay(DateTime date, IList<Guid> gradeLevelsIds); 
         IList<StudentCountAbsentFromPeriod> GetStudentCountAbsentFromPeriod(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelsIds, int fromPeriodOrder, int toPeriodOrder);
         IList<StudentAbsentFromPeriod> GetStudentsAbsentFromPeriod(DateTime date, IList<Guid> gradeLevelsIds, int periodOrder);
     }
@@ -282,6 +283,15 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
+        public IList<Guid> GetStudentsAbsentFromDay(DateTime date, IList<Guid> gradeLevelsIds) 
+       {
+            using (var uow = Read())
+            {
+                var res = new ClassAttendanceDataAccess(uow).GetStudentAbsentFromDay(date, date, gradeLevelsIds);
+                return res.ContainsKey(date) ? res[date] : new List<Guid>();
+            }
+        }
+
         public IList<StudentCountAbsentFromPeriod> GetStudentCountAbsentFromPeriod(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelsIds, int fromPeriodOrder, int toPeriodOrder)
         {
             using (var uow = Read())
@@ -297,7 +307,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 return new ClassAttendanceDataAccess(uow).GetStudentAbsentFromPeriod(date, gradeLevelsIds, periodOrder);
             }
         }
-
-
+        
     }
 }

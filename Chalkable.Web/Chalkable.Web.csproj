@@ -225,6 +225,7 @@
     <Compile Include="Models\ApplicationsViewData\InstalledApplicationViewData.cs" />
     <Compile Include="Models\AttendancesViewData\AdminAttendanceSummaryViewData.cs" />
     <Compile Include="Models\AttendancesViewData\AttendanceReasonViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\AttendanceStatsViewData.cs" />
     <Compile Include="Models\AttendancesViewData\AttendanceSummaryViewData.cs" />
     <Compile Include="Models\BackgroundTaskLogViewData.cs" />
     <Compile Include="Models\BackgroundTaskViewData.cs" />
