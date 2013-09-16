@@ -72,6 +72,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableSecurityException();
                 var aa = new AnnouncementApplication
                     {
+                        Id = Guid.NewGuid(),
                         AnnouncementRef = announcementId,
                         ApplicationRef = applicationId,
                         Active = false,
