@@ -15,13 +15,23 @@ NAMESPACE('chlk.controllers', function (){
 
             [[Object]],
             function addMeAction(data){
-                console.info('addMe', data);
                 if (data.appReady) {
-                    var announcementId = new chlk.models.id.AnnouncementId(data.announcementId);
-                    var appId = new chlk.models.id.AppId(data.appId);
+                    var announcementAppId = new chlk.models.id.AnnouncementApplicationId(data.announcementAppId);
 
                     //close wrapper, close attach dialog, update announcement attachments
-                    var result = this.appsService.addAppToAnnouncement(appId ,announcementId);
+                    var result = this.appsService
+                        .attachApp(announcementAppId)
+                        .then(function(result){
+                            this.view.pop();  //close wrapper
+                            this.view.pop();  //close attach app dialog
+
+                            //get currentApps from sessions
+//                            var applications = this.form.getAnnValues().applications || [];
+//                applications.push(applicationInstance);
+//                this.form.setAnnValues({applications : applications});
+//                this.form.updateAttachments(this.form.getAnnValues());
+
+                        }, this);
                 }
                 else {
                      return this.ShowMsgBox(
@@ -37,7 +47,6 @@ NAMESPACE('chlk.controllers', function (){
 
             [[Object]],
             function closeMeAction(data){
-                console.info('addMe', data);
                 /*
                  that.handlers.closeAction(null, {id: data.applicationid});
                  that.cantStop = false;
@@ -47,33 +56,24 @@ NAMESPACE('chlk.controllers', function (){
 
             [[Object]],
             function saveMeAction(data){
-                console.info('saveMe', data);
-                /*
-                 if (e.data.appReady) {
-                 that.cantStop = false;
-                 !that.stopped_ && that.getWindow().close();
-                 if (USER_ROLE === UserRoles.STUDENT && that.appMode === APP_MODES.VIEW) {
-                 window.location.reload();
-                 }
-                 } else {
-                 addMessage({
-                 html: '<h2>Error</h2>' +
-                 '<p>Application is not ready for saving.</p>',
-                 cls: 'new-style',
-                 newStyle: true,
-                 zIndex: 100002,
-                 buttons: [
-                 {
-                 text: 'OK',
-                 cls: 'rounded-state-button green2 x-btn'
-                 }
-                 ]
-                 });
-                 }
-                 */
+                if (data.appReady) {
+                    this.view.pop();  //close wrapper
+                    //if it's student update announcement view for grade
+                }
+                else {
+                    return this.ShowMsgBox(
+                        'App is not ready for closing',
+                        'Sorry',[{
+                            text: 'Ok',
+                            color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                        }],
+                        'app-wrapper-error centered'
+                    );
+                }
             },
             [[Object]],
             function showPlusAction(data){
+                //do partial update and show buttons
                 console.info('addMe', data);
                 /*
                  IWindow.find('.chalkable-app-action-button').fadeIn();

@@ -24,7 +24,8 @@ NAMESPACE('chlk.models.feed', function () {
                 this.setHasPreviousPage(list.isHasPreviousPage());
             },
 
-            chlk.models.classes.ClassesForTopBar, 'topData'
+            chlk.models.classes.ClassesForTopBar, 'topData',
+            Boolean, 'starredOnly'
         ]);
 });
 

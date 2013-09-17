@@ -2,7 +2,7 @@ REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.attachment.Attachment');
-REQUIRE('chlk.models.people.User');
+
 REQUIRE('chlk.models.announcement.StudentAnnouncements');
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.ClassId');
@@ -11,6 +11,7 @@ REQUIRE('chlk.models.id.StudentAnnouncementId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.announcement.Reminder');
 REQUIRE('chlk.models.announcement.AnnouncementQnA');
+REQUIRE('chlk.models.apps.AppAttachment');
 
 
 
@@ -40,7 +41,8 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('announcementtypename')],
             String, 'announcementTypeName',
 
-            Array, 'applications',
+            ArrayOf(chlk.models.apps.AppAttachment), 'applications',
+            ArrayOf(chlk.models.apps.AppAttachment), 'gradeViewApps',
 
             [ria.serialize.SerializeProperty('applicationname')],
             String, 'applicationName',
@@ -109,6 +111,8 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'ownerAttachmentsCount',
 
             chlk.models.people.User, 'owner',
+
+            chlk.models.people.User, 'currentUser',
 
             [ria.serialize.SerializeProperty('qnacount')],
             Number, 'qnaCount',
@@ -179,6 +183,34 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('announcementqnas')],
             ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
 
-            String, 'annRecipients'
+String, 'annRecipients',
+
+            function prepareExpiresDateText(){
+                var now = getDate();
+                var days = 0;
+                var expTxt = "";
+                var expires = this.getExpiresDate();
+                var expiresDate = expires.getDate();
+                var date = expires.format('(D m/d)');
+                this.setExpiresDateColor('blue');
+
+                if(formatDate(now, 'dd-mm-yy') == expires.format('dd-mm-yy')){
+                    this.setExpiresDateColor('blue');
+                    this.setExpiresDateText(Msg.Due_today);
+                }else{
+                    if(now > expires.getDate()){
+                        this.setExpiresDateColor('red');
+                        days = getDateDiffInDays(expiresDate, now);
+                        expTxt = days == 1 ? Msg.Due_yesterday + " " + date : Msg.Due_days_ago(days) + " " + date;
+
+                    }else{
+                        days = getDateDiffInDays(now, expiresDate);
+                        expTxt = days == 1 ? Msg.Due_tomorrow + " " + date : Msg.Due_in_days(days) + " " + date;
+                    }
+                    this.setExpiresDateText(expTxt);
+                }
+            }
+
+
         ]);
 });

@@ -34,10 +34,19 @@
     display: none;
   }
 
+  .under-overlay{
+      z-index: 100;
+      opacity: 0.7;
+  }
+
   .dialog{
     position: absolute;
     visibility: visible;
-    z-index: 9003;
+
+    >DIV{
+      z-index: 9003;
+    }
+
 
     .x-window-header{
       color: #5d6d75;
@@ -119,6 +128,7 @@
       min-width: 150px !important;
       .x-window-body{
 
+        //todo: fix misprint    container !!!!
         .form-btn-conteiner{
           text-align: right;
           .chlk-button{

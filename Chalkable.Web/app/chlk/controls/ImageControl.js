@@ -26,6 +26,9 @@ NAMESPACE('chlk.controls', function () {
 
             String, 'defaultSrc',
 
+
+
+            //todo: make base method
             [[Object]],
             Object, function processAttrs(attributes){
                 attributes.id = attributes.id || ria.dom.NewGID();

@@ -1,5 +1,6 @@
 REQUIRE('chlk.templates.announcement.Announcement');
 REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.converters.dateTime.DateTimeTextConverter');
 
 NAMESPACE('chlk.templates.announcement', function () {
 

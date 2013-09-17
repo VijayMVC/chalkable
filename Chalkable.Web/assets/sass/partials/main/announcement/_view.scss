@@ -163,6 +163,46 @@ $red-color: #842727;
       }
     }
 
+    .questions-and-answers{
+      form{
+        margin-bottom: 30px;
+        .avatar-container{
+          vertical-align: top;
+        }
+        .chlk-button{
+          display: block;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          width: 80px;
+        }
+        .row{
+          margin-top: 15px;
+          margin-bottom: 15px;
+        }
+
+        .qna{
+          margin-left: 15px;
+          h2{
+            font-size: 14px;
+          }
+          p{
+            font-size: 14px;
+          }
+          span, a{
+            font-size: 10px;
+            color: #a5a5a5;
+          }
+          a{
+            margin-left: 10px;
+          }
+          >INPUT{
+            border-color: "#9e9e9e";
+            width: 300px;
+          }
+        }
+      }
+    }
+
     .grades-individual{
       .row{
         .top-content{

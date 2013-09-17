@@ -1,6 +1,8 @@
-attachments = self.getAnnouncementAttachments() || [];
-typesEnum = chlk.models.announcement.AnnouncementTypeEnum;
-isAnnouncement = (self.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf() || self.getAnnouncementTypeId() == typesEnum.ADMIN.valueOf());
+attachments = self.getAnnouncementAttachments() || []
+applications = self.getApplications() || []
+typesEnum = chlk.models.announcement.AnnouncementTypeEnum
+isAnnouncement = (self.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf() || self.getAnnouncementTypeId() == typesEnum.ADMIN.valueOf())
+
 if self.needButtons
     #attach-file-area.announcement-item.attach-file-area
         if !isAnnouncement
@@ -15,4 +17,9 @@ each attachment, i in attachments
         .title
             div=attachment.getName()
 
-
+each app, i in applications
+    viewUrl = self.isGradable() && !self.needDeleteButton ? app.getGradingViewUrl() : app.getViewUrl()
+    +ActionLink('apps', 'viewApp', [app.getAnnouncementApplicationId().valueOf(), viewUrl]).announcement-item.application
+        +LoadingImage(src=self.getPictureURL(app.getSmallPictureId(), 74, 74), id="loading-image-" + i)
+        .title
+            div=app.getName()

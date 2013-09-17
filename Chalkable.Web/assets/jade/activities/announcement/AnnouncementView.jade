@@ -1,17 +1,17 @@
 .announcement-view.not-transparent
-    isNotStudent = true;
-    isReadonly = false;
-    studentAnnouncements = false;
-    studentAnnouncementsInfo = self.getStudentAnnouncements();
-    selectedIndex = studentAnnouncementsInfo ? studentAnnouncementsInfo.getSelectedIndex() : 0;
-    applications = self.getApplications();
-    applicationsInGradeView = applications.filter(function(item){return item.applicationviewdata.showingradeview});
+    isNotStudent = true
+    isReadonly = false
+    studentAnnouncements = false
+    studentAnnouncementsInfo = self.getStudentAnnouncements()
+    selectedIndex = studentAnnouncementsInfo ? studentAnnouncementsInfo.getSelectedIndex() : 0
+    applications = self.getApplications()
+    gradeViewApps = self.getGradeViewApps()
     if studentAnnouncementsInfo
-        studentAnnouncements = studentAnnouncementsInfo.getItems();
-        gradingStyle = studentAnnouncementsInfo.getGradingStyle();
-        gradingMapping = studentAnnouncementsInfo.getMapping();
-        getGrade = function(value){return GradingStyler.getLetterByGrade(value, gradingMapping, gradingStyle)};
-        getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, gradingMapping, gradingStyle)};
+        studentAnnouncements = studentAnnouncementsInfo.getItems()
+        gradingStyle = studentAnnouncementsInfo.getGradingStyle()
+        gradingMapping = studentAnnouncementsInfo.getMapping()
+        getGrade = function(value){return GradingStyler.getLetterByGrade(value, gradingMapping, gradingStyle)}
+        getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, gradingMapping, gradingStyle)}
     div(class=self.starred ? "feed-item starred" : "feed-item")
         if isNotStudent
             .grades
@@ -41,10 +41,10 @@
                 .right-block
                     h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
                     p=self.getContent()
-                    .questions-and-answers
-                        +RenderWith(self._model, chlk.templates.announcement.AnnouncementQnAs)
                     .attachments-and-applications
                         +RenderWith(self._model, chlk.templates.announcement.Announcement)
+            .questions-and-answers.silver-panel
+                +RenderWith(self._model, chlk.templates.announcement.AnnouncementQnAs)
             if studentAnnouncements && studentAnnouncements.length
                 .silver-panel
                     .auto-grade-buttons.right
@@ -76,7 +76,7 @@
                                 +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
                                     notAnnouncement = notAnnouncement,
                                     readonly = isReadonly,
-                                    applicationsInGradeView = applications.filter(function(item){return item.applicationviewdata.showingradeview}),
+                                    applicationsInGradeView = gradeViewApps,
                                     gradingStyle = gradingStyle,
                                     gradingMapping = studentAnnouncementsInfo.getMapping()
                                 )

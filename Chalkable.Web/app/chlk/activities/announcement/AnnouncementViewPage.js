@@ -60,6 +60,16 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
+            [ria.mvc.DomEventBind('keyup', '#edit-question-input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function editQnASubmitClick(node, event){
+                var f = node.parent('.row').parent('form');
+                if (!node.getValue())
+                    f.find('#edit-answer-input').removeClass('validate[required]');
+                else
+                    f.find('#edit-answer-input').addClass('validate[required]');
+            },
+
             [ria.mvc.DomEventBind('click', '#edit-question-link')],
             [[ria.dom.Dom, ria.dom.Event]],
             function editQuestionClick(node, event){
@@ -147,7 +157,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 BASE(model);
                 model.getStudentAnnouncements() && this.setMapping(model.getStudentAnnouncements().getMapping());
                 this.setOwner(model.getOwner());
-                this.setApplicationsInGradeView(model.getApplications().filter(function(item){return item.applicationviewdata.showingradeview}));
+                this.setApplicationsInGradeView(model.getGradeViewApps());
                 var that = this;
                 jQuery(this.dom.valueOf()).on('change', '.grade-select', function(){
                     var node = new ria.dom.Dom(this);

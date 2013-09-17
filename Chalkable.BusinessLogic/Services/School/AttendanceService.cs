@@ -29,11 +29,16 @@ namespace Chalkable.BusinessLogic.Services.School
         int PossibleAttendanceCount(Guid markingPeriodId, Guid classId, DateTime? tillDate);
 
         IDictionary<AttendanceTypeEnum, int> CalcAttendanceTotalPerTypeForStudent(Guid studentId, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate);
-        IList<AttendanceTotalPerType> CalcAttendanceTotalPerTypeForStudents(IList<Guid> studentsIds, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate);
-
-
+        IList<PersonAttendanceTotalPerType> CalcAttendanceTotalPerTypeForStudents(IList<Guid> studentsIds, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate);
+        IDictionary<Guid, int> CalcAttendanceTotalForStudents(IList<Guid> studentsIds, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate, AttendanceTypeEnum type); 
+        
         IDictionary<DateTime, int> GetStudentCountAbsentFromDay(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelIds);
+        IList<Guid> GetStudentsAbsentFromDay(DateTime date, IList<Guid> gradeLevelsIds); 
         IList<StudentCountAbsentFromPeriod> GetStudentCountAbsentFromPeriod(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelsIds, int fromPeriodOrder, int toPeriodOrder);
+        IList<StudentAbsentFromPeriod> GetStudentsAbsentFromPeriod(DateTime date, IList<Guid> gradeLevelsIds, int periodOrder);
+
+        IDictionary<int, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerPeriod(DateTime fromDate, DateTime toDate, int fromPeriodOrder, int toPeriodOrder, AttendanceTypeEnum type, IList<Guid> gradeLevelsIds);
+        IDictionary<DateTime, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerDate(DateTime fromDate, DateTime toDate, AttendanceTypeEnum type, IList<Guid> gradeLevelsIds);
     }
 
     public class AttendanceService : SchoolServiceBase, IAttendanceService
@@ -232,7 +237,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
         //TODO: needs test
-        private IEnumerable<AttendanceTotalPerType> CalcAttendanceTotalPerType(Guid? schoolYearId, Guid? markingPeriodId, Guid? studentId, DateTime? fromDate, DateTime? toDate)
+        private IEnumerable<PersonAttendanceTotalPerType> CalcAttendanceTotalPerType(Guid? schoolYearId, Guid? markingPeriodId, Guid? studentId, DateTime? fromDate, DateTime? toDate)
         {
             using (var uow = Read())
             {
@@ -247,12 +252,19 @@ namespace Chalkable.BusinessLogic.Services.School
             return res.GroupBy(x => x.AttendanceType).ToDictionary(x => x.Key, x => x.Sum(y => y.Total));
         }
 
-        public IList<AttendanceTotalPerType> CalcAttendanceTotalPerTypeForStudents(IList<Guid> studentsIds, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate)
+        public IList<PersonAttendanceTotalPerType> CalcAttendanceTotalPerTypeForStudents(IList<Guid> studentsIds, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate)
         {
             var res = CalcAttendanceTotalPerType(schoolYearId, markingPeriodId, null, fromDate, toDate);
             return res.Where(x => studentsIds.Contains(x.PersonId)).ToList();
         }
 
+
+        public IDictionary<Guid, int> CalcAttendanceTotalForStudents(IList<Guid> studentsIds, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate, AttendanceTypeEnum type)
+        {
+            var res = CalcAttendanceTotalPerTypeForStudents(studentsIds, schoolYearId, markingPeriodId, fromDate, toDate);
+            res = res.Where(x => (x.AttendanceType & type) != 0).ToList(); //TODO move it to stored procedure
+            return res.GroupBy(x => x.PersonId).ToDictionary(x => x.Key, x => x.Sum(y => y.Total));
+        }
 
         public ClassAttendanceDetails GetClassAttendanceDetails(Guid studentId, Guid classPeriodId, DateTime date)
         {
@@ -274,6 +286,15 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
+        public IList<Guid> GetStudentsAbsentFromDay(DateTime date, IList<Guid> gradeLevelsIds) 
+       {
+            using (var uow = Read())
+            {
+                var res = new ClassAttendanceDataAccess(uow).GetStudentAbsentFromDay(date, date, gradeLevelsIds);
+                return res.ContainsKey(date) ? res[date] : new List<Guid>();
+            }
+        }
+
         public IList<StudentCountAbsentFromPeriod> GetStudentCountAbsentFromPeriod(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelsIds, int fromPeriodOrder, int toPeriodOrder)
         {
             using (var uow = Read())
@@ -282,7 +303,31 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
+        public IList<StudentAbsentFromPeriod> GetStudentsAbsentFromPeriod(DateTime date, IList<Guid> gradeLevelsIds, int periodOrder)
+        {
+            using (var uow = Read())
+            {
+                return new ClassAttendanceDataAccess(uow).GetStudentAbsentFromPeriod(date, gradeLevelsIds, periodOrder);
+            }
+        }
 
+        public IDictionary<int, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerPeriod(DateTime fromDate, DateTime toDate,
+            int fromPeriodOrder, int toPeriodOrder, AttendanceTypeEnum type, IList<Guid> gradeLevelsIds)
+        {
+            using (var uow = Read())
+            {
+                var res = new ClassAttendanceDataAccess(uow).CalcAttendanceTotalPerPeriod(fromDate, toDate, fromPeriodOrder, toPeriodOrder, type, gradeLevelsIds);
+                return res;
+            }
+        }
 
+        public IDictionary<DateTime, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerDate(DateTime fromDate, DateTime toDate
+            , AttendanceTypeEnum type, IList<Guid> gradeLevelsIds)
+        {
+            using (var uow = Read())
+            {
+                return new ClassAttendanceDataAccess(uow).CalcAttendanceTotalPerDate(fromDate, toDate, type, gradeLevelsIds);
+            }
+        }
     }
 }

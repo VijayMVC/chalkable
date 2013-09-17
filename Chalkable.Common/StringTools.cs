@@ -83,7 +83,7 @@ namespace Chalkable.Common
 
         public static string BuildShortText(string description, int shortLength)
         {
-            if (string.IsNullOrEmpty(description))  return null;
+            if (string.IsNullOrEmpty(description))  return description;
 
             if (description.Length <= shortLength) return description;
 

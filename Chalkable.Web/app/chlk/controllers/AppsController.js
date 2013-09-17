@@ -264,22 +264,28 @@ NAMESPACE('chlk.controllers', function (){
             //var myAppsViewUrl = "#";
             //var saveBtn  = new chlk.models.apps.AppWrapperToolbarButton('save-app', 'Save');
             //var newTabBtn = new chlk.models.apps.AppWrapperToolbarButton('new-tab-id', 'New Tab', myAppsViewUrl, true);
+//
             var result = this.appsService
-                .getInfo(appId)
+                .addToAnnouncement(appId, announcementId)
                 .then(function(app){
-                    return chlk.models.apps.AppWrapperViewData$createAppAttach(announcementId, app);
+                    return chlk.models.apps.AppWrapperViewData$createAppAttach(app);
                 })
                 .attach(this.validateResponse_());
-            return this.PushView(chlk.activities.apps.AppWrapperDialog, result);
+            return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
 
-
-        [[chlk.models.id.AppId]],
-        function viewAppAction(appId) {
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.STUDENT
+        ])],
+        [[chlk.models.id.AnnouncementApplicationId, String]],
+        function viewAppAction(announcementAppId, viewUrl) {
+            var app = new chlk.models.apps.AppAttachment();
+            app.setAnnouncementApplicationId(announcementAppId);
+            app.setViewUrl(viewUrl);
+            var result = chlk.models.apps.AppWrapperViewData$createAppView(app);
+            return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
-
-
-
 
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.SYSADMIN

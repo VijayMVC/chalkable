@@ -42,24 +42,26 @@ NAMESPACE('chlk', function(){
                     if (e.data.action == 'requestOrigin'){
                         e.source.postMessage({action: 'updateOrigin'}, e.origin);
                     }
+                }
+            }
                     // TODO: check if following is secure
                     if (e.data.isApp) {
                         if (e.data.action) {
                             switch (e.data.action) {
-                                case chlk.models.apps.AppActionTypes.ADD_ME.valueOf() :
-                                case chlk.models.apps.AppActionTypes.CLOSE_ME.valueOf()  :
-                                case chlk.models.apps.AppActionTypes.SAVE_ME.valueOf()  :
-                                case chlk.models.apps.AppActionTypes.SHOW_PLUS.valueOf()  :
+                                case chlk.models.apps.AppActionTypes.ADD_ME.valueOf():
+                                case chlk.models.apps.AppActionTypes.CLOSE_ME.valueOf():
+                                case chlk.models.apps.AppActionTypes.SAVE_ME.valueOf():
+                                case chlk.models.apps.AppActionTypes.SHOW_PLUS.valueOf():{
                                     this.doCallApiReactor_(e.data.action, e.data);
                                     break;
+                                }
+
                             }
                         }
                     }
-                }
-                else{
+                    /*else{
                     throw new Exception('post-message-api domains differ. Please check your include path.');
-                }
-            }
+                }*/
         },
 
         [[String, Object]],

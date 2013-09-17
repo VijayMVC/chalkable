@@ -10,6 +10,7 @@ using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
+using Chalkable.Web.Models.AttendancesViewData;
 
 namespace Chalkable.Web.Controllers
 {
@@ -157,6 +158,125 @@ namespace Chalkable.Web.Controllers
             }
             
             return Json(AttendanceSummaryViewData.Create(trouble, well, all, markingPeriod), 5);
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
+        public ActionResult AdminAttendanceSummary(bool renderNow, bool renderDay, bool renderMp, GuidList gradeLevelsIds, 
+            DateTime? nowDateTime, Guid? fromMarkingPeriodId, Guid? toMarkingPeriodId, DateTime? startDate, DateTime? endDate)
+        {
+            var date = (nowDateTime ?? Context.NowSchoolTime).Date;
+            var res = new AdminAttendanceSummaryViewData();
+            
+            var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(date.Date);
+            renderNow = renderNow && markingPeriod != null;
+            IList<Person> allStudents = SchoolLocator.PersonService.GetPaginatedPersons(new PersonQuery {RoleId = CoreRoles.STUDENT_ROLE.Id});
+
+            if (renderNow)
+                res.NowAttendanceData = GetNowAttendanceData(gradeLevelsIds, allStudents);
+            if (renderDay)
+                res.AttendanceByDayData = GetAdminAttendanceByDate(gradeLevelsIds, markingPeriod, date, allStudents);
+            if (renderMp)
+                res.AttendanceByMpData = GetAdminAttendanceByMp(gradeLevelsIds, fromMarkingPeriodId, toMarkingPeriodId, startDate, endDate, allStudents);
+            return Json(res, 8);
+        }
+        
+        private NowAttendanceViewData GetNowAttendanceData(GuidList gradeLevelsIds, IList<Person> students)
+        {
+            var date = Context.NowSchoolTime.Date;
+            var period = SchoolLocator.PeriodService.GetPeriod(NowTimeInMinutes, date);
+            var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
+            if (period != null)
+            {
+               var absentCountFromPeriodInYear = SchoolLocator.AttendanceService.GetStudentCountAbsentFromPeriod(sy.StartDate, sy.EndDate
+                   , gradeLevelsIds, period.Order, period.Order);
+
+               var usuallyAbsent = absentCountFromPeriodInYear.Average(x => x.StudentCount);
+               var absentNow = SchoolLocator.AttendanceService.GetStudentsAbsentFromPeriod(date, gradeLevelsIds, period.Order);
+               var studentAbsentNow = students.Where(x => absentNow.Any(y => y.PersonId == x.Id)).ToList();
+               var dicTotalAbsentPerSt = SchoolLocator.AttendanceService.CalcAttendanceTotalForStudents(
+                        studentAbsentNow.Select(x => x.Id).ToList(), sy.Id, null, sy.StartDate, sy.EndDate, AttendanceTypeEnum.Absent);
+                
+               var type = AttendanceTypeEnum.Absent | AttendanceTypeEnum.Excused | AttendanceTypeEnum.Late;
+               var attStats = SchoolLocator.AttendanceService.CalcAttendanceTotalPerPeriod(date, date, 1, period.Order, type, gradeLevelsIds);
+               var attStatsView = AttendanceStatsViewData.BuildStatsPerPeriod(attStats, period.Order);
+               return NowAttendanceViewData.Create(studentAbsentNow, dicTotalAbsentPerSt, (int)usuallyAbsent, attStatsView);
+            }
+            return new NowAttendanceViewData();
+        }
+
+        private AttendanceByDayViewData GetAdminAttendanceByDate(GuidList gradeLevelsIds, MarkingPeriod markingPeriod, DateTime date, IList<Person> students)
+        {
+            if (markingPeriod != null)
+            {
+                var stsIdsAbsentFromDay = SchoolLocator.AttendanceService.GetStudentsAbsentFromDay(date, gradeLevelsIds);
+                var stsAttTotalPerType = SchoolLocator.AttendanceService.CalcAttendanceTotalPerTypeForStudents(students.Select(x=>x.Id).ToList()
+                    , null, markingPeriod.Id, date, date);
+
+                var type = AttendanceTypeEnum.Present | AttendanceTypeEnum.NotAssigned;
+                stsAttTotalPerType = stsAttTotalPerType.Where(x => x.Total > 0 && (x.AttendanceType & (type)) == 0).ToList();
+                var days = SchoolLocator.CalendarDateService.GetLastDays(markingPeriod.SchoolYearRef, true, null, date, 7);
+
+                type = AttendanceTypeEnum.Absent | AttendanceTypeEnum.Excused | AttendanceTypeEnum.Late;
+                var attsStatsPerDate = SchoolLocator.AttendanceService.CalcAttendanceTotalPerDate(days.First().DateTime, days.Last().DateTime, type, gradeLevelsIds);
+                var attsStatsView = AttendanceStatsViewData.BuildStatsPerDate(attsStatsPerDate, days, "ddd");
+                return AttendanceByDayViewData.Create(students, stsAttTotalPerType, stsIdsAbsentFromDay, attsStatsView);
+            }
+            return new AttendanceByDayViewData();
+        }
+        private AttendanceByMpViewData GetAdminAttendanceByMp(GuidList gradeLevelsIds, Guid? fromMarkingPeriodId, Guid? toMarkingPeriodId, 
+            DateTime? startDate, DateTime? endDate, IList<Person> students)
+        {
+
+            MarkingPeriod fromMp, toMp;
+            DateTime fromDate, toDate;
+            var currentDate = Context.NowSchoolTime.Date;
+            if (startDate.HasValue && endDate.HasValue)
+            {
+                if (startDate.Value > endDate.Value)
+                    throw new ChalkableException(ChlkResources.ERR_INCCORRECT_REQUEST_DATE_PARAMS_START_DATE);
+
+                fromMp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod(startDate);
+                toMp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod(endDate);
+                fromDate = startDate.Value;
+                toDate = endDate.Value;
+                if (startDate.Value > toMp.EndDate || endDate.Value < fromMp.StartDate)
+                    throw new NoMarkingPeriodException();
+            }
+            else if (fromMarkingPeriodId.HasValue && toMarkingPeriodId.HasValue)
+            {
+                fromMp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodById(fromMarkingPeriodId.Value);
+                toMp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodById(toMarkingPeriodId.Value);
+                fromDate = fromMp.StartDate;
+                toDate = toMp.EndDate;
+            }
+            else throw new ChalkableException(ChlkResources.ERR_INCCORRECT_REQUEST_DATE_PARAMS);
+
+            var currentSchoolYear = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
+            if (currentSchoolYear.Id != fromMp.SchoolYearRef || currentSchoolYear.Id != toMp.SchoolYearRef)
+                throw new ChalkableException(ChlkResources.ERR_MARKING_PERIODS_DONT_BELONG_TO_CURRENT_SCHOOL_YEAR);
+
+            IList<DateTime> dates = null;
+            if (toDate.Date > currentDate.Date)
+                toDate = currentDate;
+            if (fromDate.Date <= toDate.Date)
+                dates = SchoolLocator.CalendarDateService.GetLastDays(currentSchoolYear.Id, true, fromDate.Date, toDate.Date).Select(x => x.DateTime).ToList();
+            
+            if (dates != null && dates.Count > 0)
+            {
+                var type = AttendanceTypeEnum.Absent | AttendanceTypeEnum.Late;
+                var dicStsAttTotal = SchoolLocator.AttendanceService.CalcAttendanceTotalForStudents(students.Select(x => x.Id).ToList(),
+                                      currentSchoolYear.Id, null, fromDate, toDate, type);
+                IList<Guid> absentLateStsIds = dicStsAttTotal.Where(x => x.Value > 0).OrderByDescending(x => x.Value).Select(x => x.Key).ToList();
+                var stsAbsentCountAvg = SchoolLocator.AttendanceService.GetStudentCountAbsentFromDay(fromDate, toDate, gradeLevelsIds)
+                                                                       .Average(x => x.Value);
+                
+                int maxPeriodOrder = 10; //TODO : get max periodOrder from db
+                type = type | AttendanceTypeEnum.Excused;
+                var attStatsPerPeriod = SchoolLocator.AttendanceService.CalcAttendanceTotalPerPeriod(fromDate, toDate, 1, maxPeriodOrder, type, gradeLevelsIds);
+                var attStatsView = AttendanceStatsViewData.BuildStatsPerPeriod(attStatsPerPeriod, maxPeriodOrder);
+                return AttendanceByMpViewData.Create(students, absentLateStsIds, (int)stsAbsentCountAvg, attStatsView);
+            }
+            return new AttendanceByMpViewData();
         }
     }
 }

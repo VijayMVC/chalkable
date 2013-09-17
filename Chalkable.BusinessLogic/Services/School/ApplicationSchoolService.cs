@@ -72,12 +72,14 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableSecurityException();
                 var aa = new AnnouncementApplication
                     {
+                        Id = Guid.NewGuid(),
                         AnnouncementRef = announcementId,
                         ApplicationRef = applicationId,
                         Active = false,
                         Order = ServiceLocator.AnnouncementService.GetNewAnnouncementItemOrder(ann)
                     };
                 new AnnouncementApplicationDataAccess(uow).Insert(aa);
+                uow.Commit();
                 return aa;
             }
         }

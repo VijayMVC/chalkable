@@ -20,6 +20,7 @@ namespace Chalkable.Data.School.Model
         public const string SECTION_REF = "SectionRef";
         public Guid SectionRef { get; set; }
         public int? SisId { get; set; }
+        public const string ORDER_FIELD = "Order";
         public int Order { get; set; }
         public int? SisId2 { get; set; }
 

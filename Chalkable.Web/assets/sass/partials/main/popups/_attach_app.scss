@@ -5,7 +5,7 @@
     margin:0;
     &.attach-app{
       min-width: 703px;
-      min-height: 500px;
+      min-height: 570px;
       @include box-shadow(0 10px 25px rgba(0, 0, 0, 0.5));
       border: 1px solid #adadad;
       border-radius: 8px;
@@ -24,6 +24,7 @@
       }
       .x-window-body{
         background: url(images/app/bg2.png);
+        min-height: 570px;
         .header{
           font: bold 28px 'Saginaw Bold';
           color: #626262;
@@ -31,7 +32,6 @@
           text-align: center;
         }
 
-        height: 500px;
         border-bottom-left-radius: 7px;
         border-bottom-right-radius: 7px;
 
