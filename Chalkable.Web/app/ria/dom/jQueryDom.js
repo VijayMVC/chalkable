@@ -263,7 +263,7 @@ NAMESPACE('ria.dom', function () {
 
 
             [[String]],
-            SELF, function removeAttr(name) {
+            OVERRIDE, SELF, function removeAttr(name) {
                 this._dom.removeAttr(name);
                 return this;
             },

@@ -81,24 +81,18 @@ NAMESPACE('ria.mvc', function () {
                     .handleProgress(function(progress) {
                         me.onModelProgress_(progress, msg_);
                     })
-                    .complete(function () {
-                        me.onModelComplete_(msg_);
-                    })
+                    .complete(function () { me.onModelComplete_(msg_); })
                     .catchError(function (error) {
                         me.onModelError_(error, msg_);
                         throw error;
                     })
-                    .then(function (model) {
-                        me.onModelReady_(model, msg_);
-                        return model
-                    })
+                    .then(function (model) { me.onModelReady_(model, msg_); return model })
 
                 return head;
             },
 
             [[ria.async.Future]],
             ria.async.Future, function refreshD(future) {
-                this.startFullLoading();
                 var me = this;
                 return future
                     .attach(this.getModelEvents_())
@@ -115,16 +109,6 @@ NAMESPACE('ria.mvc', function () {
                     .then(function (model) { me.onPartialRender_(model, msg); return model; })
                     .then(function (model) { me.onPartialRefresh_(model, msg); return model; })
             },
-
-
-            ///TODO: WTF?????
-            VOID, function startLoading() {},
-
-            ///TODO: WTF?????
-            VOID, function startFullLoading() {},
-
-            ///TODO: WTF?????
-            VOID, function stopLoading() {},
 
             /** @deprecated */
             [[Object]],
@@ -150,23 +134,20 @@ NAMESPACE('ria.mvc', function () {
             [[Object, String]],
             VOID, function onModelReady_(data, msg_) {},
             [[String]],
-            VOID, function onModelComplete_(msg_) {
-            },
+            VOID, function onModelComplete_(msg_) {},
             [[Object]],
             VOID, function onRender_(data) {},
             [[Object, String]],
             VOID, function onPartialRender_(data, msg_) {
-
+                this.dom.removeClass('loading');
             },
             [[Object]],
             VOID, function onRefresh_(data) {
-                this.stopLoading();
                 this._onRefresh.notify([this, data]);
             },
             [[Object, String]],
             VOID, function onPartialRefresh_(data, msg_) {
                 this._onRefresh.notify([this, data, msg_]);
-                this.dom.removeClass('loading');
             },
 
             VOID, function onDispose_() {

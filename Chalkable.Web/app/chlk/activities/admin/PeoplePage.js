@@ -16,13 +16,13 @@ NAMESPACE('chlk.activities.admin', function (){
             [ria.mvc.DomEventBind('change', '#roleId')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function roleSelect(node, event, arg) {
-                this.dom.find('#people-list-form').triggerEvent('submit');
+                this.dom.find('#people-list-form').trigger('submit');
             },
 
             [ria.mvc.DomEventBind('change', '#gradeLevelId')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function gradeLevelSelect(node, event, arg) {
-                this.dom.find('#people-list-form').triggerEvent('submit');
+                this.dom.find('#people-list-form').trigger('submit');
             }
     ]);
 });

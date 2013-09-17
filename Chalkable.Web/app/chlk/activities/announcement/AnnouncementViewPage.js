@@ -140,7 +140,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 container.addClass('loading');
                 //this.setCurrentContainer(container.addClass('loading'));
                 var form = row.find('form');
-                form.triggerEvent('submit');
+                form.trigger('submit');
                 if(selectNext_){
                     setTimeout(function(){
                         var next = row.next();
