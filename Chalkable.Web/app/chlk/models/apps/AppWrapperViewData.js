@@ -46,6 +46,9 @@ NAMESPACE('chlk.models.apps', function () {
 
         ]);
 
+
+    //join in one method
+
     chlk.models.apps.AppWrapperViewData$createAppAttach = function(app){
         var attachBtn = new chlk.models.apps.AppWrapperToolbarButton('add-app', '+ Attach');
         app.setCurrentModeUrl(app.getEditUrl());
@@ -57,6 +60,13 @@ NAMESPACE('chlk.models.apps', function () {
         var saveBtn = new chlk.models.apps.AppWrapperToolbarButton('save-app', 'Save');
         app.setCurrentModeUrl(app.getViewUrl());
         var appWrapperViewData = new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.VIEW, [saveBtn]);
+        return new ria.async.DeferredData(appWrapperViewData);
+    };
+
+    chlk.models.apps.AppWrapperViewData$createMyAppView = function(app){
+        var newTabBtn = new chlk.models.apps.AppWrapperToolbarButton('new-tab-id', 'New Tab', app.getMyAppsUrl(), true);
+        app.setCurrentModeUrl(app.getMyAppsUrl());
+        var appWrapperViewData = new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.VIEW, [newTabBtn]);
         return new ria.async.DeferredData(appWrapperViewData);
     };
 });

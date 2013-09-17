@@ -240,7 +240,6 @@ NAMESPACE('chlk.controllers', function (){
                     announcement.setCurrentUser(this.getCurrentPerson());
                     return new ria.async.DeferredData(announcement);
                 }, this);
-
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
         },
 

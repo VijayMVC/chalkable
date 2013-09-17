@@ -1,3 +1,4 @@
+announcementAppId = self.app.getAnnouncementApplicationId() ? self.app.getAnnouncementApplicationId().valueOf() : ""
 .app-wrapper
     .x-window-header
         .toolbar
@@ -7,7 +8,7 @@
                 a(id=btn.getId(),
                 target = btnTarget,
                 href = url,
-                data-announcement-app-id=self.app.getAnnouncementApplicationId().valueOf())=btn.getTitle()
+                data-announcement-app-id=announcementAppId)=btn.getTitle()
         .x-close-btn.close
     .iframe-wrap
         iframe(src=self.app.getCurrentModeUrl())

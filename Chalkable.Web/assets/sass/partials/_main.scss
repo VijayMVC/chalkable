@@ -164,13 +164,14 @@ TEXTAREA.animated-textarea{
 //LOADERS
 
 .pending-action{
-  background: #EDEDED;
-  vertical-align: middle;
-  display: inline-block;
-  height: 690px;
+  height: 100%;
   text-align: center;
-  width: 100%;
-  position: relative;
+  width: 98%;
+  position: absolute;
+  top: 0;
+  left: 0px;
+  background: url(images/common/paper-bg.gif) 0 0 repeat-y;
+
   .horizontal-loader{
     height: 20px;
     position: absolute;

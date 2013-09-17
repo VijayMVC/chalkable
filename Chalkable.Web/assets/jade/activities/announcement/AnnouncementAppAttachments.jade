@@ -21,7 +21,7 @@ each app, i in applications
     div.announcement-item.application
         if self.needDeleteButton
             +ActionLink('announcement', 'deleteApp', app.getAnnouncementApplicationId().valueOf()).close-btn
-        +ActionLink('apps', 'viewApp', [app.getAnnouncementApplicationId().valueOf(), viewUrl])
+        +ActionLink('apps', 'viewApp', [viewUrl, app.getAnnouncementApplicationId().valueOf()])
             +LoadingImage(src=self.getPictureURL(app.getSmallPictureId(), 74, 74), id="loading-image-" + i)
             .title
                 div=app.getName()
