@@ -343,7 +343,7 @@ NAMESPACE('chlk.controllers', function (){
 
 
 
-        [[chlk.models.announcement.Announcement, Array]],
+        /*[[chlk.models.announcement.Announcement, Array]],
         function saveAdminAction(model, recipients_){
             var res = this.announcementService
                 .saveAdminAnnouncement(
@@ -356,7 +356,7 @@ NAMESPACE('chlk.controllers', function (){
                 )
                 .attach(this.validateResponse_());
 
-        },
+        },*/
 
 
         //TODO refactor
