@@ -1,0 +1,16 @@
+announcementAppId = self.app.getAnnouncementApplicationId() ? self.app.getAnnouncementApplicationId().valueOf() : ""
+.app-wrapper
+    .x-window-header
+        .toolbar
+            each btn in self.buttons
+                btnTarget = btn.isTargetBlank() ? "_blank" : undefined
+                url = btn.getUrl() ? btn.getUrl() : "javascript:void(0)"
+                a(id=btn.getId(),
+                target = btnTarget,
+                href = url,
+                data-announcement-app-id=announcementAppId)=btn.getTitle()
+        .x-close-btn.close
+    .iframe-wrap
+        iframe(src=self.app.getCurrentModeUrl())
+
+

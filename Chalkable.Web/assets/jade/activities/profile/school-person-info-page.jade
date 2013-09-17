@@ -1,0 +1,6 @@
+.teacher-info.info-page.view-mode.loader-container
+    .loader
+    +ProfileTopBar(self)
+    +ProfileInfoView(self.user)
+        //todo rewrite this
+    +ProfileInfoForm(self.actionLinksData[0].getControllerName(), self.user)

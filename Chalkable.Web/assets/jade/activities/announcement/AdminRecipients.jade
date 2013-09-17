@@ -1,0 +1,21 @@
+buttons = self.getRecipientButtonsInfo();
+recipientsData = self.getRecipientsData();
+annRecipients = [];
+each button, i in buttons
+    -annRecipients.push(button.getId());
+    li.super-selectbox-li
+        input(data-index=i).super-selectbox-focus
+        if button.getRoleId() && recipientsData[button.getRoleId()]
+            items = recipientsData[button.getRoleId()];
+            +Select('superSelectboxSelect')(data-index=i).super-selectbox-select.new-select.super-selectbox-item
+                each item in items
+                    +Option(item.getId(), item.getName(), item.getId() == button.getId())
+        else
+            input(data-index=i, value=button.getText(), data-value=button.getId(), readonly).super-selectbox-input.new-input.super-selectbox-item
++SearchBox(chlk.services.AdminService, "getUsers", chlk.templates.announcement.AdminUserSearch)(
+    textValue = 'displayName',
+    idValue = 'id',
+    style = buttons.length ? "" : "margin-left: 40px;",
+    target = ".superboxselect"
+).super-selectbox-search#super-selectbox-autocomplete
++Hidden('annRecipients', annRecipients.join(','))(class="validate[required]")
