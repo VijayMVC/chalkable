@@ -33,10 +33,10 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.GradeLevelService, 'gradeLevelService',
 
-        [[Boolean, chlk.models.id.ClassId, Number]],
-        function listAction(postback_, classId_, pageIndex_) {
+        [[Boolean, Boolean, chlk.models.id.ClassId, Number]],
+        function listAction(postback_, starredOnly_, classId_, pageIndex_) {
             var result = this.announcementService
-                .getAnnouncements(pageIndex_ | 0, classId_)
+                .getAnnouncements(pageIndex_ | 0, classId_, starredOnly_)
                 .then(function(model){
                     var feedModel = new chlk.models.feed.Feed(model);
                     var classes = this.classService.getClassesForTopBar(true);
@@ -45,6 +45,7 @@ NAMESPACE('chlk.controllers', function (){
                     topModel.setDisabled(false);
                     classId_ && topModel.setSelectedItemId(classId_);
                     feedModel.setTopData(topModel);
+                    feedModel.setStarredOnly(starredOnly_ ? starredOnly_ : false);
                     return feedModel;
                 }.bind(this))
                 .attach(this.validateResponse_());
