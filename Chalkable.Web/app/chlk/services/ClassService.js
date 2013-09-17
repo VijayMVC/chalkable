@@ -15,6 +15,8 @@ NAMESPACE('chlk.services', function () {
             ArrayOf(chlk.models.classes.ClassForTopBar), 'classesToFilter',
             ArrayOf(chlk.models.classes.ClassForTopBar), 'classesToFilterWithAll',
 
+
+            //TODO: refactor
             [[Boolean]],
             Array, function getClassesForTopBar(withAll_) {
                 var res = this.getClassesToFilter(), res1 = this.getClassesToFilterWithAll();

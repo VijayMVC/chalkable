@@ -17,8 +17,8 @@ each attachment, i in attachments
             div=attachment.getName()
 
 each app, i in applications
-
-    +ActionLink('apps', 'viewApp', [app.getAnnouncementApplicationId().valueOf(), app.getViewUrl()]).announcement-item.application
+    viewUrl = self.isGradable() && !self.needDeleteButton ? app.getGradingViewUrl() : app.getViewUrl()
+    +ActionLink('apps', 'viewApp', [app.getAnnouncementApplicationId().valueOf(), viewUrl]).announcement-item.application
         +LoadingImage(src=self.getPictureURL(app.getSmallPictureId(), 74, 74), id="loading-image-" + i)
         .title
             div=app.getName()
