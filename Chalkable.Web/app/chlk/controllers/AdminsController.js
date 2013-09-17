@@ -47,7 +47,7 @@ NAMESPACE('chlk.controllers', function (){
                 var gradeLevels = this.getContext().getSession().get('gradeLevels');
                 var roles = this.accountService.getSchoolRoles();
                 var res = this.adminService
-                    .getUsers(null, null, true, 0, null)
+                    .getUsers(null, null, null, true, 0)
                     .attach(this.validateResponse_())
                     .then(function(data){
                         var users = this.prepareUsersModel(data, 0, true);
@@ -60,7 +60,7 @@ NAMESPACE('chlk.controllers', function (){
             function updateListAction(model){
                 var isScroll = model.isScroll(), start = model.getStart();
                 var res = this.adminService
-                    .getUsers(model.getRoleId(), model.getGradeLevelsIds(), model.isByLastName(), start, model.getFilter())
+                    .getUsers(model.getFilter(), model.getRoleId(), model.getGradeLevelsIds(), model.isByLastName(), start)
                     .then(function(usersData){
                         if(isScroll)  return this.prepareUsers(usersData, start);
                         return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter());

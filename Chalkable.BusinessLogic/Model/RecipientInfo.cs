@@ -31,8 +31,8 @@ namespace Chalkable.BusinessLogic.Model
             {
                 ToAll = int.Parse(recipient[0]) == 1,
                 RoleId = int.Parse(recipient[1]) == -1 ? (int?)null : int.Parse(recipient[1]),
-                GradeLevelId = string.IsNullOrEmpty(recipient[2]) ? (Guid?) null : new Guid(recipient[2]),
-                PersonId = string.IsNullOrEmpty(recipient[3]) ? (Guid?)null : new Guid(recipient[3])
+                GradeLevelId = (string.IsNullOrEmpty(recipient[2]) || recipient[2] == "-1")  ? (Guid?) null : new Guid(recipient[2]),
+                PersonId = (string.IsNullOrEmpty(recipient[3]) || recipient[3] == "-1") ? (Guid?)null : new Guid(recipient[3])
             };
             return res;
         }

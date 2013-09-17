@@ -13,6 +13,12 @@ NAMESPACE('chlk.templates.announcement', function(){
         'AdminAnnouncementFormTpl', EXTENDS(chlk.templates.announcement.BaseAnnouncementFormTpl),[
 
             [ria.templates.ModelPropertyBind],
-            Array, 'recipients'
+            Array, 'recipients',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.AdminRecipients, 'adminRecipients',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'adminRecipientId'
         ]);
 });

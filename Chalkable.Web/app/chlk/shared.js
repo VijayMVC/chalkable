@@ -68,6 +68,15 @@ function daysInMonth(month,year) {
     return new Date(year, month, 0).getDate();
 }
 
+function getSerial(number){
+    switch(number){
+        case 1: return '1st';
+        case 2: return '2nd';
+        case 3: return '3rd';
+        default: return number + 'th';
+    }
+}
+
 var GradingStyler = {
 
     gradeLettersReverse: ['A+', 'A', 'A-','B+', 'B', 'B-','C+', 'C', 'C-','D+', 'D', 'D-','F' ],

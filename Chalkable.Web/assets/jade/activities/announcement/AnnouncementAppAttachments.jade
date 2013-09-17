@@ -1,5 +1,6 @@
 attachments = self.getAnnouncementAttachments() || [];
-isAnnouncement = self.getAnnouncementTypeId() == chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf()
+typesEnum = chlk.models.announcement.AnnouncementTypeEnum;
+isAnnouncement = (self.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf() || self.getAnnouncementTypeId() == typesEnum.ADMIN.valueOf());
 if self.needButtons
     #attach-file-area.announcement-item.attach-file-area
         if !isAnnouncement

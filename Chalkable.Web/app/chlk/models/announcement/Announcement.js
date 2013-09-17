@@ -177,6 +177,8 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'needDeleteButton',
 
             [ria.serialize.SerializeProperty('announcementqnas')],
-            ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs'
+            ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
+
+            String, 'annRecipients'
         ]);
 });

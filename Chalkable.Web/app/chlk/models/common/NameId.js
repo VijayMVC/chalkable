@@ -3,10 +3,10 @@ NAMESPACE('chlk.models.common', function () {
     /** @class chlk.models.common.NameId*/
     CLASS(
         'NameId', [
-            Number, 'id',
+            Object, 'id',
             String, 'name',
 
-            [[Number, String]],
+            [[Object, String]],
             function $(id_, name_){
                 BASE();
                 if (id_)

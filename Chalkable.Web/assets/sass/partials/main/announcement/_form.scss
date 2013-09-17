@@ -87,132 +87,246 @@
   }
 }
 
-.announcement-form{
+BODY {
+  DIV.page{
+    >DIV#content {
+      DIV#content-wrapper{
+        #main {
+          .announcement-form{
+            .buttons-container{
+              text-align: center;
+              width: 413px;
+              position: absolute;
+              top: 6px;
 
-  .ann-form-container{
-    padding: 31px 0 0 4px;
+              button{
+                height: 24px;
+                padding: 0 5px;
+                cursor: pointer;
+                @include border-radius(4px);
+                border: 1px solid #b9b9b9;
+                margin: 0 4px;
+                @include box-shadow(0 1px 1px #ccc);
 
-    .attachments-and-applications {
-      padding: 41px 0 30px;
-    }
+                &:hover{
+                  @include background(linear-gradient(top, #f9f9f9, #d0d0d0));
+                }
+              }
+            }
 
-    .reminders-container{
-      background: url(images/announcement/reminder-bg.png) -11px 20px no-repeat;
-      padding-top: 50px;
+            &.admin-announcement-form{
+              TEXTAREA, .text-field{
+                width: 405px;
+              }
 
-      .reminder{
-        margin-bottom: 10px;
+              .ann-form-container{
+                padding-top: 41px;
 
-        INPUT, SELECT{
-          color: #787878;
-        }
+                .left-block {
+                  width: 449px;
+                }
+              }
+            }
 
-        INPUT{
-          width: 20px;
-          border-radius: 0;
-          margin-right: 5px;
-          vertical-align: middle;
-          padding: 0;
-        }
+            .superboxselect{
+              ul.super-selectbox-list{
+                cursor: text;
+                position: relative;
 
-        SELECT{
-          width: 72px;
-        }
+                &:before {
+                  position: absolute;
+                  left: 3px;
+                  top: 5px;
+                  content: 'To';
+                  font: bold 16px Arial;
+                  color: #9D9D9D;
+                }
 
-        .chzn-container{
-          >A{
-            height: 20px;
-            font: normal 14px/20px "Myriad Pro";
+                li.super-selectbox-li{
+                  position: relative;
+                  padding: 1px 15px 1px 0px;
+                  display: inline-block;
+                  margin: 1px 1px 2px 1px;
+                  vertical-align: middle;
+
+                  &:first-child{
+                    padding-left: 30px;
+                  }
+
+                  .super-selectbox-focus{
+                    position: absolute;
+                    width: 15px;
+                    right: 0;
+                    height: 100%;
+                    border: none;
+                    padding: 0;
+                  }
+
+                  .super-selectbox-input.new-input{
+                    width: 92px;
+                    font: normal 13px Arial;
+                  }
+
+                  .super-selectbox-select{
+                    width: 125px;
+                    height: 25px;
+                  }
+
+                  .chzn-container.chzn-container-single .chzn-single {
+                    height: 23px;
+
+                    SPAN {
+                      line-height: 24px;
+                    }
+                  }
+
+                  .chzn-container.chzn-container-single .chzn-single{
+                    font: normal 13px Arial;
+                  }
+                }
+
+                INPUT.super-selectbox-search{
+                  width: 48px;
+                  display: inline-block;
+                  margin: 1px 1px 2px 1px;
+                  padding: 0;
+                  line-height: 18px;
+                  border: none;
+                  vertical-align: middle;
+                }
+              }
+            }
+
+            .ann-form-container{
+              padding: 31px 0 0 4px;
+
+              .attachments-and-applications {
+                padding: 41px 0 30px;
+              }
+
+              .reminders-container{
+                background: url(images/announcement/reminder-bg.png) -11px 20px no-repeat;
+                padding-top: 50px;
+
+                .reminder{
+                  margin-bottom: 10px;
+
+                  INPUT, SELECT{
+                    color: #787878;
+                  }
+
+                  INPUT{
+                    width: 20px;
+                    border-radius: 0;
+                    margin-right: 5px;
+                    vertical-align: middle;
+                    padding: 0;
+                  }
+
+                  SELECT{
+                    width: 72px;
+                  }
+
+                  .chzn-container{
+                    >A{
+                      height: 20px;
+                      font: normal 14px/20px "Myriad Pro";
+                    }
+                  }
+
+                  .remove-btn{
+                    margin-left: 5px;
+                    display: inline-block;
+                    vertical-align: middle;
+                  }
+                }
+
+              }
+
+              .left-block, .right-block{
+                display: inline-block;
+                vertical-align: top;
+              }
+
+              #reminders-button{
+                margin-top: 10px;
+                display: inline-block;
+              }
+
+              .left-block{
+                width: 416px;
+                margin-bottom: 49px;
+              }
+
+              .bottom-block{
+                .submit-btn{
+                  margin-right: 20px;
+                }
+
+                BUTTON{
+                  text-transform: uppercase;
+                }
+              }
+
+              .submit-btn{
+                BUTTON{
+                  width: 100px;
+                }
+              }
+            }
+
+            TEXTAREA, .text-field{
+              padding: 4px 4px 8px;
+              width: 370px;
+              font-size: 14px;
+              margin-bottom: 15px;
+
+              &#subject{
+                height: 17px;
+              }
+
+              &#content{
+                height: 133px;
+              }
+            }
+
+            .new-item-dropdown{
+              position: absolute;
+              background: white;
+              width: 240px;
+              z-index: 999;
+              border-left: 1px solid #a9a9a9;
+              border-right: 1px solid #a9a9a9;
+              border-bottom: 1px solid #a9a9a9;
+              font-size: 14px;
+              font-family: "Arial Narrow", Arial;
+              color: #000;
+
+              >DIV{
+                height: 20px;
+                padding:0 4px;
+                overflow: hidden;
+                word-wrap: break-word;
+              }
+
+              H1{
+                background: #e1e2e2;
+                margin: 0;
+                color: #888;
+                padding: 3px;
+                color: #8b8b8b;
+                height: 20px;
+                font-size: 16px;
+                font-weight: normal;
+              }
+
+              .current{
+                background: #eedd68;
+              }
+            }
           }
         }
-
-        .remove-btn{
-          margin-left: 5px;
-          display: inline-block;
-          vertical-align: middle;
-        }
       }
-
-    }
-
-    .left-block, .right-block{
-      display: inline-block;
-      vertical-align: top;
-    }
-
-    #reminders-button{
-      margin-top: 10px;
-      display: inline-block;
-    }
-
-    .left-block{
-      width: 416px;
-      margin-bottom: 49px;
-    }
-
-    .bottom-block{
-      .submit-btn{
-        margin-right: 20px;
-      }
-
-      BUTTON{
-        text-transform: uppercase;
-      }
-    }
-
-    .submit-btn{
-      BUTTON{
-        width: 100px;
-      }
-    }
-  }
-
-  TEXTAREA{
-    padding: 4px 4px 8px;
-    width: 370px;
-    font-size: 14px;
-
-    &#subject{
-      height: 17px;
-    }
-
-    &#content{
-      height: 133px;
-    }
-  }
-
-  .new-item-dropdown{
-    position: absolute;
-    background: white;
-    width: 240px;
-    z-index: 999;
-    border-left: 1px solid #a9a9a9;
-    border-right: 1px solid #a9a9a9;
-    border-bottom: 1px solid #a9a9a9;
-    font-size: 14px;
-    font-family: "Arial Narrow", Arial;
-    color: #000;
-
-    >DIV{
-      height: 20px;
-      padding:0 4px;
-      overflow: hidden;
-      word-wrap: break-word;
-    }
-
-    H1{
-      background: #e1e2e2;
-      margin: 0;
-      color: #888;
-      padding: 3px;
-      color: #8b8b8b;
-      height: 20px;
-      font-size: 16px;
-      font-weight: normal;
-    }
-
-    .current{
-      background: #eedd68;
     }
   }
 }

@@ -16,7 +16,7 @@ NAMESPACE('chlk.controls', function () {
                 node.chosen({disable_search_threshold: 1000}).change(function(){
                     var node = jQuery(this);
                     node.find('option[selected]').attr('selected', false);
-                    node.find('option[value=' + node.val() + ']').attr('selected', true);
+                    node.find('option[value="' + node.val() + '"]').attr('selected', true);
                     var controller = node.data('controller');
                     if(controller){
                         var action = node.data('action');

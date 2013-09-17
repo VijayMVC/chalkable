@@ -70,6 +70,12 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, 'WEB_SITE_ROOT', null, 'webSiteRoot');
                 this.saveInSession(session, 'azurePictureUrl');
                 this.saveInSession(session, 'attendanceReasons', ArrayOf(chlk.models.attendance.AttendanceReason));
+                window.gradeLevels.forEach(function(item){
+                    var numberPart = parseInt(item.name, 10);
+                    if(numberPart)
+                        item.serialPart = getSerial(item.name).slice(item.name.length);
+                    item.fullText = numberPart ? item.name + item.serialPart : item.name;
+                });
                 this.saveInSession(session, 'gradeLevels', ArrayOf(chlk.models.grading.GradeLevel));
 
                 var siteRoot = window.location.toString().split(window.location.pathname).shift();

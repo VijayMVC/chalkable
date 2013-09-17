@@ -7,6 +7,8 @@ NAMESPACE('chlk.models.grading', function () {
         'GradeLevel', [
             chlk.models.id.GradeLevelId, 'id',
             String, 'name',
-            Number, 'number'
+            Number, 'number',
+            String, 'serialPart',
+            String, 'fullText'
         ]);
 });

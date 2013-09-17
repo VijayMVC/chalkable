@@ -114,7 +114,7 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, Array,String, String, chlk.models.common.ChlkDate,  String]],
+            [[chlk.models.id.AnnouncementId, String,String, String, chlk.models.common.ChlkDate,  String]],
             ria.async.Future, function submitAdminAnnouncement(id, recipients,subject_, content_, expiresdate_, attachments_) {
                 return this.get('Announcement/SubmitForAdmin.json', chlk.models.announcement.AnnouncementForm, {
                     announcementId:id.valueOf(),

@@ -41,6 +41,11 @@ NAMESPACE('chlk.controls', function () {
                 jQuery(node.valueOf()).autocomplete({
                     source: function( request, response ) {
                         serviceF(request.term)
+                            .then(function(data){
+                                if(data instanceof chlk.models.common.PaginatedList)
+                                    return data.getItems();
+                                return data;
+                            })
                             .then(response);
                     },
                     focus: function() {
