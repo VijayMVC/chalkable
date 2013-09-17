@@ -21,21 +21,21 @@ NAMESPACE('chlk.controls', function () {
                 var ref = ria.reflection.ReflectionClass(service);
                 var methodRef = ref.getMethodReflector(method);
                 var stub = function () { return methodRef.invokeOn(serviceIns, ria.__API.clone(arguments)); };
-                this.queueReanimation_(attrs.id, attrs["default-value"] ? attrs["default-value"].valueOf() : null, stub, tpl);
+                this.queueReanimation_(attrs.id, attrs["default-value"] ? attrs["default-value"].valueOf() : null, stub, tpl, attrs.textValue, attrs.idValue);
             },
 
             [[String, String, Function, ClassOf(ria.templates.Template)]],
-            VOID, function queueReanimation_(id, defaultValue_, serviceF, tpl) {
+            VOID, function queueReanimation_(id, defaultValue_, serviceF, tpl, textValue_, idValue_) {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         if (defaultValue_)
                             ria.dom.Dom('#' + id + '-hidden').setValue(defaultValue_);
-                        this.reanimate_(ria.dom.Dom('#' + id), serviceF, tpl, activity, model)
+                        this.reanimate_(ria.dom.Dom('#' + id), serviceF, tpl, textValue_, idValue_, activity, model)
                     }.bind(this));
             },
 
-            [[ria.dom.Dom, Function, ClassOf(ria.templates.Template), ria.mvc.IActivity, Object]],
-            VOID, function reanimate_(node, serviceF, tplClass, activity, model) {
+            [[ria.dom.Dom, Function, ClassOf(ria.templates.Template), String, String, ria.mvc.IActivity, Object]],
+            VOID, function reanimate_(node, serviceF, tplClass, textValue_, idValue_, activity, model) {
                 var id = node.getAttr("id");
                 var tpl = new tplClass();
                 jQuery(node.valueOf()).autocomplete({
@@ -53,9 +53,11 @@ NAMESPACE('chlk.controls', function () {
                         return false;
                     },
                     select: function( event, ui ) {
+                        var item = ui.item;
                         var li = jQuery(event.toElement).closest('li');
-                        ria.dom.Dom('#' + id + '-hidden').setValue(li.data('value'));
-                        node.setValue(li.data('title'));
+                        ria.dom.Dom('#' + id + '-hidden').setValue(idValue_ ? item['get' + idValue_.capitalize()]().valueOf() : li.data('value'));
+                        node.setValue(textValue_ ? item['get' + textValue_.capitalize()]() : li.data('title'));
+                        node.trigger('change');
                         return false;
                     },
                     change: function( event, ui ) {

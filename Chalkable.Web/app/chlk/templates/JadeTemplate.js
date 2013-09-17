@@ -23,7 +23,7 @@ NAMESPACE('chlk.templates', function () {
 
             [[Number]],
             String, function getSerial(number){
-                return getSerial(number);
+                return window.getSerial(number);
             },
 
             [[String]],

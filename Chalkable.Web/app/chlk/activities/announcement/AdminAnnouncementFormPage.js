@@ -30,16 +30,34 @@ NAMESPACE('chlk.activities.announcement', function(){
             [ria.mvc.DomEventBind('click', '.admin-gray')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function recipientButtonClick(node, event){
-                var adminRecipients = this.getAdminRecipients();
-                var recipients = adminRecipients.getRecipientButtonsInfo() || [];
                 var roleId = node.getData('roleid');
                 var id = node.getData('id');
                 var text = node.getValue();
+                this.addRecipient(id, roleId, text);
+            },
+
+            function addRecipient(id, roleId, text){
+                var adminRecipients = this.getAdminRecipients();
+                var recipients = adminRecipients.getRecipientButtonsInfo() || [];
                 var index = recipients.length;
                 recipients.push(new chlk.models.announcement.AdminRecipientButton(id, roleId, text, index));
                 adminRecipients.setRecipientButtonsInfo(recipients);
                 this.setAdminRecipients(adminRecipients);
                 this.renderRecipients();
+            },
+
+            [ria.mvc.DomEventBind('keydown', '#super-selectbox-autocomplete')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function recipientEnterClick(node, event){
+                if(event.keyCode == ria.dom.Keys.ENTER.valueOf()) {
+                    event.preventDefault();
+                }
+            },
+
+            [ria.mvc.DomEventBind('change', '#super-selectbox-autocomplete')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function autoCompleteChange(node, event, selected_){
+                this.addRecipient('0|-1|-1|' + this.dom.find('#super-selectbox-autocomplete-hidden').getValue(), null, node.getValue());
             },
 
             [ria.mvc.DomEventBind('change', '.super-selectbox-select')],

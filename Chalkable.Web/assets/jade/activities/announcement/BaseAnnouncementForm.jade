@@ -7,7 +7,7 @@ mixin AddEditReminderForm(announcement, reminders)
 
 
 //TODO refactor
-mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId)
+mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adminRecipients)
     +Hidden('id', announcement.getId().valueOf())
     +Hidden('announcementtypeid', announcement.getAnnouncementTypeId())
     +Hidden('statetyped', announcement.getStateTyped())
@@ -43,7 +43,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId)
                     ).admin-gray.new-input=text
             .superboxselect.text-field
                 ul.super-selectbox-list
-                    +SearchBox(chlk.services.AdminService, "getUsers", chlk.templates.announcement.AdminUserSearch).super-selectbox-search
+                    +RenderWith(adminRecipients, chlk.templates.announcement.AdminRecipients)
             TEXTAREA.recipients-text.x-hidden
         if isAnnouncement
             TEXTAREA(id="subject",name="subject",placeholder="Subject")=announcement.getSubject()

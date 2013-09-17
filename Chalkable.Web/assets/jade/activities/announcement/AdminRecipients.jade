@@ -11,6 +11,10 @@ each button, i in buttons
                 each item in items
                     +Option(item.getId(), item.getName(), item.getId() == button.getId())
         else
-            input(data-index=i, value=button.getText(), data-value=button.getId()).super-selectbox-input.new-input.super-selectbox-item
-+SearchBox(chlk.services.AdminService, "getUsers", chlk.templates.announcement.AdminUserSearch).super-selectbox-search#super-selectbox-autocomplete
+            input(data-index=i, value=button.getText(), data-value=button.getId(), readonly=).super-selectbox-input.new-input.super-selectbox-item
++SearchBox(chlk.services.AdminService, "getUsers", chlk.templates.announcement.AdminUserSearch)(
+    textValue = 'displayName',
+    idValue = 'id',
+    style = buttons.length ? "" : "margin-left: 40px;"
+).super-selectbox-search#super-selectbox-autocomplete
 +Hidden('annRecipients', annRecipients.join(',')).validate[required]

@@ -2,5 +2,5 @@
     .loader
     +ActionForm('announcement', 'save')(onlySubmitValidate=true)
         .ann-form-container
-            +BaseAnnouncementFormContainer(self.getAnnouncement(), null, self.getAdminRecipientId())
+            +BaseAnnouncementFormContainer(self.getAnnouncement(), null, self.getAdminRecipientId(), self.getAdminRecipients())
     +AddEditReminderForm(self.getAnnouncement(), self.reminders)
