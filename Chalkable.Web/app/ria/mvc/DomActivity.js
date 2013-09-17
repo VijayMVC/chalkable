@@ -8,21 +8,14 @@ REQUIRE('ria.reflection.ReflectionClass');
 window.noLoadingMsg = 'no-loading';
 
 NAMESPACE('ria.mvc', function () {
+    "use strict";
 
     var MODEL_WAIT_CLASS = 'activity-model-wait';
 
     function camel2dashed(_) {
         return _.replace(/[a-z][A-Z]/g, function(str, offset) {
            return str[0] + '-' + str[1].toLowerCase();
-        });
-    }
-
-    var MODEL_WAIT_CLASS = 'activity-model-wait';
-
-    function camel2dashed(_) {
-        return _.replace(/[a-z][A-Z]/g, function(str, offset) {
-           return str[0] + '-' + str[1].toLowerCase();
-        });
+        }).toLowerCase();
     }
 
     /** @class ria.mvc.DomAppendTo */
@@ -38,10 +31,17 @@ NAMESPACE('ria.mvc', function () {
             function $() {
                 BASE();
 
-                this._actitivyClass = null;
+                this._activityClass = null;
                 this._domAppendTo = null;
                 this._domEvents = [];
                 this.processAnnotations_(new ria.reflection.ReflectionClass(this.getClass()));
+
+                this._loaderTimer = null;
+            },
+
+            [[String]],
+            ria.dom.Dom, function find(selector) {
+                return this.dom.find(selector);
             },
 
             [[ria.reflection.ReflectionClass]],
@@ -68,12 +68,33 @@ NAMESPACE('ria.mvc', function () {
                     })
             },
 
+            [[ria.async.Future]],
+            OVERRIDE, ria.async.Future, function refreshD(future) {
+
+                // TODO: change to ria.async.Timer.$once
+                this._loaderTimer = new ria.async.Timer(300, function (timer, lag) {
+                    this.dom.addClass(MODEL_WAIT_CLASS);
+                    this._loaderTimer = null;
+                    timer.cancel();
+                }.bind(this));
+
+                return BASE(future);
+            },
+
+            [[String]],
+            OVERRIDE, VOID, function onModelComplete_(msg_) {
+                this.dom.removeClass(MODEL_WAIT_CLASS);
+                BASE(msg_);
+
+                if (this._loaderTimer)
+                    this._loaderTimer.cancel();
+            },
             ABSTRACT, ria.dom.Dom, function onDomCreate_() {},
 
             OVERRIDE, VOID, function onCreate_() {
                 BASE();
 
-                var dom = this.dom = this.onDomCreate_().addClass(this._actitivyClass);
+                var dom = this.dom = this.onDomCreate_().addClass(this._activityClass);
 
                 var instance = this;
                 this._domEvents.forEach(function (_) {
@@ -91,36 +112,7 @@ NAMESPACE('ria.mvc', function () {
             OVERRIDE, VOID, function onStop_(){
                 BASE();
                 this._domAppendTo.remove(this.dom.empty());
-            },
-
-            ///TODO: WTF?????
-            OVERRIDE, VOID, function startLoading() {
-                this.dom.addClass(MODEL_WAIT_CLASS);
-            },
-
-            ///TODO: WTF?????
-            OVERRIDE, VOID, function stopLoading() {
-                this.dom.removeClass(MODEL_WAIT_CLASS);
-            },
-
-            [[String]],
-            OVERRIDE, VOID, function onModelWait_(msg_) {
-                BASE(msg_);
-                msg_ != window.noLoadingMsg && this.startLoading();
-            },
-            [[Object, String]],
-            OVERRIDE, VOID, function onModelError_(data, msg_) {
-                BASE(data, msg_);
-                this.stopLoading();
-            },
-            [[Object]],
-            OVERRIDE, VOID, function onRefresh_(data) {
-                BASE(data);
-                this.stopLoading();
-            },
-            OVERRIDE, VOID, function onPartialRefresh_(data, msg_) {
-                BASE(data, msg_);
-                this.stopLoading();
             }
+
         ]);
 });

@@ -26,7 +26,7 @@ NAMESPACE('chlk.activities.person', function () {
             VOID, function submitFormWithStart(node){
                 var form = node.parent('form');
                 form.find('[name=start]').setValue(0);
-                form.triggerEvent('submit');
+                form.trigger('submit');
             },
 
             VOID, function clearSearch(){

@@ -14,8 +14,6 @@ NAMESPACE('chlk.activities.lib', function () {
 
     /** @class chlk.activities.lib.TemplatePage*/
 
-    var LOADING_CLASS = 'loading-page';
-
     CLASS(
         'TemplatePage', EXTENDS(ria.mvc.TemplateActivity), [
             function $() {
@@ -47,20 +45,14 @@ NAMESPACE('chlk.activities.lib', function () {
                 this._bodyClass && this._body.addClass(this._bodyClass);
             },
 
-            OVERRIDE, VOID, function startFullLoading() {
-                BASE();
-                this.dom.addClass(LOADING_CLASS);
-            },
-
-            OVERRIDE, VOID, function stopLoading() {
-                BASE();
-                this.dom.removeClass(LOADING_CLASS);
-            },
-
             OVERRIDE, VOID, function onStop_() {
                 BASE();
                 this._pageClass && this._wrapper.removeClass(this._pageClass);
                 this._bodyClass && this._body.removeClass(this._bodyClass);
-            }
+            },
+
+            OVERRIDE, ria.dom.Dom, function onDomCreate_() {
+                return new ria.dom.Dom().fromHTML('<div></div>');
+            },
         ]);
 });

@@ -367,7 +367,7 @@ TEXTAREA.animated-textarea{
   position: relative;
 }
 
-.loading-page{
+.loading-page, .activity-model-wait{
   background: url(images/loaders/horizontal.gif) center center no-repeat;
   position: absolute;
   top: 0;

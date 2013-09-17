@@ -65,7 +65,7 @@ NAMESPACE('chlk.activities.setup', function () {
                         .setAttr('data-tooltip', text)
                         .setData('tooltip', text)
                         .setHTML(sum + '%')
-                        .triggerEvent('mouseover');
+                        .trigger('mouseover');
                 }
             },
 
