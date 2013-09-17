@@ -113,43 +113,50 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.AnnouncementForm, Boolean]],
         function addEditAction(model, isEdit){
             var classes = this.classService.getClassesForTopBar();
-            var topModel = new chlk.models.classes.ClassesForTopBar();
-
             var announcement = model.getAnnouncement();
-            var reminders = announcement.getAnnouncementReminders() || [];
-            var remindersArr=[];
+            var classId_ = announcement.getClassId();
 
+            var classesBarData = new chlk.models.classes.ClassesForTopBar(
+                classes,
+                classId_,
+                isEdit
+            );
+
+            var reminders = announcement.getAnnouncementReminders() || [];
+            var remindersArray = [];
             reminders.forEach(function(item){
-                remindersArr.push(item.getBefore());
+                remindersArray.push(item.getBefore());
             });
-            model.setReminders(remindersArr);
+            model.setReminders(remindersArray);
 
             var attachments = announcement.getAnnouncementAttachments();
             this.prepareAttachments(attachments);
             this.getContext().getSession().set('AnnouncementAttachments', attachments);
 
-            announcement.setAttachments(attachments.map(function(item){return item.id}).join(','));
+            var attachmentsIds = attachments.map(function(item){
+                return item.id
+            }).join(',');
+            announcement.setAttachments(attachmentsIds);
 
-            topModel.setTopItems(classes);
-            topModel.setDisabled(isEdit);
-            var classId_ = announcement.getClassId();
             if(classId_){
-                topModel.setSelectedItemId(classId_);
                 var classInfo = this.classService.getClassAnnouncementInfo(classId_);
                 model.setClassInfo(classInfo);
             }
             var announcementTypeId_ = announcement.getAnnouncementTypeId();
             if(announcementTypeId_){
                 if(classId_ && classInfo){
-                    var types = classInfo.getTypesByClass(), typeId = null;
+                    var types = classInfo.getTypesByClass();
+                    var typeId = null;
+
                     types.forEach(function(item){
                         if(item.getId() == announcementTypeId_)
                             typeId = announcementTypeId_;
                     });
-                    typeId && model.setSelectedTypeId(typeId);
+                    if (typeId)
+                        model.setSelectedTypeId(typeId);
                 }
             }
-            model.setTopData(topModel);
+            model.setTopData(classesBarData);
             return new ria.async.DeferredData(model);
         },
 
