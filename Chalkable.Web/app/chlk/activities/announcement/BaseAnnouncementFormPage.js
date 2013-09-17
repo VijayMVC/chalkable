@@ -61,7 +61,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 if(this.dom.find('[name=announcementtypeid]').getValue() != chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf()){
                     var dropDown = this.dom.find('.new-item-dropdown');
                     if(!node.getValue() && !dropDown.is(':visible')){
-                        this.dom.find('#list-last-button').triggerEvent('click');
+                        this.dom.find('#list-last-button').trigger('click');
                     }else{
                         if(event.type == 'keydown'){
                             var isUp = event.keyCode == ria.dom.Keys.UP.valueOf(),
@@ -94,7 +94,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             OVERRIDE, VOID, function onPartialRender_(model, msg_) {
                 BASE(model, msg_);
                 if(model.getClass() == chlk.models.announcement.LastMessages){
-                    this.dom.find('#content').triggerEvent('focus');
+                    this.dom.find('#content').trigger('focus');
                 }
 
                 if(model.getClass() == chlk.models.announcement.Reminder){
@@ -126,7 +126,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             },
 
             OVERRIDE, VOID, function onStop_() {
-                new ria.dom.Dom('#save-form-button').triggerEvent('click');
+                new ria.dom.Dom('#save-form-button').trigger('click');
                 new ria.dom.Dom().off('click.dropdown', this._handler);
                 BASE();
             },
@@ -157,7 +157,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     form.find('[name=duplicate]').setValue(isDuplicate);
                     form.find('[name=id]').setValue(id || '');
                     form.find('[name=before]').setValue(before);
-                    form.triggerEvent('submit');
+                    form.trigger('submit');
                 }
 
             }

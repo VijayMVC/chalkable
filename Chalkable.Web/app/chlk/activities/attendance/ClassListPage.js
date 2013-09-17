@@ -30,8 +30,8 @@ NAMESPACE('chlk.activities.attendance', function () {
             VOID, function gridKeyDownSelect(node, event, key_) {
                 switch(key_){
                     case ria.dom.Keys.ENTER.valueOf(): node.trigger(gridEvents.SELECT_NEXT_ROW.valueOf());break;
-                    case ria.dom.Keys.LEFT.valueOf(): node.find('.row.selected').find('.left-arrow').triggerEvent('click');break;
-                    case ria.dom.Keys.RIGHT.valueOf(): node.find('.row.selected').find('.right-arrow').triggerEvent('click');break;
+                    case ria.dom.Keys.LEFT.valueOf(): node.find('.row.selected').find('.left-arrow').trigger('click');break;
+                    case ria.dom.Keys.RIGHT.valueOf(): node.find('.row.selected').find('.right-arrow').trigger('click');break;
                 }
             },
 
@@ -65,7 +65,7 @@ NAMESPACE('chlk.activities.attendance', function () {
             VOID, function rowSelect(node, event, row_, index_) {
                 if(row_ && row_.find('input[name=type]').getValue() == typesEnum.NA.valueOf()){
                     row_.find('input[name=type]').setValue(typesEnum.PRESENT.valueOf());
-                    row_.find('form').triggerEvent('submit');
+                    row_.find('form').trigger('submit');
                 }else{
                     this.showDropDown();
                 }
@@ -112,8 +112,8 @@ NAMESPACE('chlk.activities.attendance', function () {
                         }; break;
                     case ria.dom.Keys.ENTER.valueOf():
                         this.updateReasons();break;
-                    case ria.dom.Keys.LEFT.valueOf(): node.parent('.row.selected').find('.left-arrow').triggerEvent('click');break;
-                    case ria.dom.Keys.RIGHT.valueOf(): node.parent('.row.selected').find('.right-arrow').triggerEvent('click');break;
+                    case ria.dom.Keys.LEFT.valueOf(): node.parent('.row.selected').find('.left-arrow').trigger('click');break;
+                    case ria.dom.Keys.RIGHT.valueOf(): node.parent('.row.selected').find('.right-arrow').trigger('click');break;
                 }
             },
 
@@ -141,7 +141,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 var row = option.parent('.row');
                 form.find('input[name=attendancereasonid]').setValue(id);
                 id && form.find('input[name=attendanceReasonDescription]').setValue(option.getHTML());
-                form.triggerEvent('submit');
+                form.trigger('submit');
                 grid.trigger(gridEvents.SELECT_NEXT_ROW.valueOf());
             },
 
@@ -150,7 +150,7 @@ NAMESPACE('chlk.activities.attendance', function () {
             VOID, function onStudentDeselect(grid, event, row, index){
                 var form = row.find('.student-attendance-form');
                 if(form.hasClass('need-present'))
-                    form.triggerEvent('submit');
+                    form.trigger('submit');
             },
 
             [[Object]],

@@ -14,13 +14,13 @@ NAMESPACE('chlk.activities.school', function () {
             [ria.mvc.DomEventBind('change', '#roleId')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function roleSelect(node, event) {
-                this.dom.find('#people-form').triggerEvent('submit');
+                this.dom.find('#people-form').trigger('submit');
             },
 
             [ria.mvc.DomEventBind('change', '#gradeLevelId')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function gradeLevelSelect(node, event) {
-                this.dom.find('#people-form').triggerEvent('submit');
+                this.dom.find('#people-form').trigger('submit');
             },
 
             [ria.mvc.DomEventBind('click', '.action-button')],
@@ -28,7 +28,7 @@ NAMESPACE('chlk.activities.school', function () {
             VOID, function actionButtonClick(node, event) {
                 var value = node.getData('value');
                 this.dom.find('input[name="byLastName"]').setValue(value || '');
-                this.dom.find('#people-form').triggerEvent('submit');
+                this.dom.find('#people-form').trigger('submit');
             }
         ]);
 });
