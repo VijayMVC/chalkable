@@ -18,6 +18,7 @@ namespace Chalkable.Data.School.Model
         public Guid CourseRef { get; set; }
         public const string TEACHER_REF_FIELD = "TeacherRef";
         public Guid TeacherRef { get; set; }
+        public const string GRADE_LEVEL_REF_FIELD = "GradeLevelRef";
         public Guid GradeLevelRef { get; set; }
         public int? SisId { get; set; }
     }

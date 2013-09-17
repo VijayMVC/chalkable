@@ -196,8 +196,10 @@ namespace Chalkable.Web.Controllers
                var dicTotalAbsentPerSt = SchoolLocator.AttendanceService.CalcAttendanceTotalForStudents(
                         studentAbsentNow.Select(x => x.Id).ToList(), sy.Id, null, sy.StartDate, sy.EndDate, AttendanceTypeEnum.Absent);
                 
-                //TODO: get data for chart
-                return NowAttendanceViewData.Create(studentAbsentNow, dicTotalAbsentPerSt, (int) usuallyAbsent);
+               var type = AttendanceTypeEnum.Absent | AttendanceTypeEnum.Excused | AttendanceTypeEnum.Late;
+               var attStats = SchoolLocator.AttendanceService.CalcAttendanceTotalPerPeriod(date, date, 1, period.Order, type, gradeLevelsIds);
+               var attStatsView = AttendanceStatsViewData.BuildStatsPerPeriod(attStats, period.Order);
+               return NowAttendanceViewData.Create(studentAbsentNow, dicTotalAbsentPerSt, (int)usuallyAbsent, attStatsView);
             }
             return new NowAttendanceViewData();
         }
@@ -213,15 +215,11 @@ namespace Chalkable.Web.Controllers
                 var type = AttendanceTypeEnum.Present | AttendanceTypeEnum.NotAssigned;
                 stsAttTotalPerType = stsAttTotalPerType.Where(x => x.Total > 0 && (x.AttendanceType & (type)) == 0).ToList();
                 var days = SchoolLocator.CalendarDateService.GetLastDays(markingPeriod.SchoolYearRef, true, null, date, 7);
-                var atts = SchoolLocator.AttendanceService.GetClassAttendanceDetails(new ClassAttendanceQuery
-                    {
-                        FromDate = days.First().DateTime,
-                        ToDate = days.Last().DateTime,
-                        MarkingPeriodId = markingPeriod.Id,
-                        Type = AttendanceTypeEnum.Absent | AttendanceTypeEnum.Late | AttendanceTypeEnum.Excused
-                    }, gradeLevelsIds);
 
-                return AttendanceByDayViewData.Create(students, stsAttTotalPerType, stsIdsAbsentFromDay, atts);
+                type = AttendanceTypeEnum.Absent | AttendanceTypeEnum.Excused | AttendanceTypeEnum.Late;
+                var attsStatsPerDate = SchoolLocator.AttendanceService.CalcAttendanceTotalPerDate(days.First().DateTime, days.Last().DateTime, type, gradeLevelsIds);
+                var attsStatsView = AttendanceStatsViewData.BuildStatsPerDate(attsStatsPerDate, days, "ddd");
+                return AttendanceByDayViewData.Create(students, stsAttTotalPerType, stsIdsAbsentFromDay, attsStatsView);
             }
             return new AttendanceByDayViewData();
         }
@@ -271,19 +269,12 @@ namespace Chalkable.Web.Controllers
                 IList<Guid> absentLateStsIds = dicStsAttTotal.Where(x => x.Value > 0).OrderByDescending(x => x.Value).Select(x => x.Key).ToList();
                 var stsAbsentCountAvg = SchoolLocator.AttendanceService.GetStudentCountAbsentFromDay(fromDate, toDate, gradeLevelsIds)
                                                                        .Average(x => x.Value);
-
-                //TODO: think how to rewrite for better performance 
-                var atts = SchoolLocator.AttendanceService.GetClassAttendanceDetails(new ClassAttendanceQuery
-                    {
-                        SchoolYearId = currentSchoolYear.Id,
-                        FromDate = fromDate,
-                        ToDate = toDate,
-                        Type = AttendanceTypeEnum.Absent | AttendanceTypeEnum.Excused | AttendanceTypeEnum.Late
-                    });
-
-                var res = AttendanceByMpViewData.Create(students, absentLateStsIds, (int)stsAbsentCountAvg);
-                res.AttendanceStats = AttendanceStatsViewData.BuildStatsPerPeriod(atts);
-                return res;
+                
+                int maxPeriodOrder = 10; //TODO : get max periodOrder from db
+                type = type | AttendanceTypeEnum.Excused;
+                var attStatsPerPeriod = SchoolLocator.AttendanceService.CalcAttendanceTotalPerPeriod(fromDate, toDate, 1, maxPeriodOrder, type, gradeLevelsIds);
+                var attStatsView = AttendanceStatsViewData.BuildStatsPerPeriod(attStatsPerPeriod, maxPeriodOrder);
+                return AttendanceByMpViewData.Create(students, absentLateStsIds, (int)stsAbsentCountAvg, attStatsView);
             }
             return new AttendanceByMpViewData();
         }

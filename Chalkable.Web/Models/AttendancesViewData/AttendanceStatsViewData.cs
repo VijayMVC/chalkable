@@ -27,15 +27,41 @@ namespace Chalkable.Web.Models.AttendancesViewData
             };
         }
 
-        public static IList<AttendanceStatsViewData> BuildStatsPerDate(IList<ClassAttendanceDetails> attendances, string dateFormat)
+        public static AttendanceStatsViewData Create(IList<AttendanceTotalPerType> attTotalPerType, DateTime? date, string summary)
         {
-            return attendances.GroupBy(x => x.Date).Select(x => Create(x.ToList(), x.Key, x.Key.ToString(dateFormat))).ToList();
+            var res = new AttendanceStatsViewData {Date = date, Summary = summary};
+            if (attTotalPerType != null && attTotalPerType.Count > 0)
+            {
+                var dic = attTotalPerType.GroupBy(x => x.AttendanceType).ToDictionary(x => x.Key, x => x.Sum(y => y.Total));
+                res.AbsencesCount = dic.ContainsKey(AttendanceTypeEnum.Absent) ? dic[AttendanceTypeEnum.Absent] : 0;
+                res.ExcusedCount = dic.ContainsKey(AttendanceTypeEnum.Excused) ? dic[AttendanceTypeEnum.Excused] : 0;
+                res.LatesCount = dic.ContainsKey(AttendanceTypeEnum.Late) ? dic[AttendanceTypeEnum.Late] : 0;
+            }
+            return res;
         }
 
-        public static IList<AttendanceStatsViewData> BuildStatsPerPeriod(IList<ClassAttendanceDetails> attendances)
+        public static IList<AttendanceStatsViewData> BuildStatsPerDate(IDictionary<DateTime, IList<AttendanceTotalPerType>> attsTotalPerDate
+            , IList<DateDetails> dates, string dateFormat)
         {
-            var periodRecords = attendances.GroupBy(x => x.ClassPeriod.Period.Order).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.ToList());
-            return periodRecords.Select(periodRecord => Create(periodRecord.Value, null, StringTools.NumberToStr(periodRecord.Key))).ToList();
+            var res = new List<AttendanceStatsViewData>();
+            foreach (var date in dates)
+            {
+                var attsTotal = attsTotalPerDate.ContainsKey(date.DateTime) ? attsTotalPerDate[date.DateTime] : null;
+                res.Add(Create(attsTotal, date.DateTime, date.DateTime.ToString(dateFormat)));
+            }
+            return res;
+        }
+
+        public static IList<AttendanceStatsViewData> BuildStatsPerPeriod(IDictionary<int, IList<AttendanceTotalPerType>> attsTotalPerPeriod
+            , int toPeriodOrder)
+        {
+            var res = new List<AttendanceStatsViewData>();
+            for (var i = 1; i <= toPeriodOrder; i++)
+            {
+                var attsTotal = attsTotalPerPeriod.ContainsKey(i) ? attsTotalPerPeriod[i] : null;
+                res.Add(Create(attsTotal, null, StringTools.NumberToStr(i)));
+            }
+            return res;
         }
     }
 }
