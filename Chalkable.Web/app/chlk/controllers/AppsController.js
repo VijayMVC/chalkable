@@ -261,10 +261,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AnnouncementId, chlk.models.id.AppId]],
         function tryToAttachTeacherAction(announcementId, appId) {
-            //var myAppsViewUrl = "#";
-            //var saveBtn  = new chlk.models.apps.AppWrapperToolbarButton('save-app', 'Save');
-            //var newTabBtn = new chlk.models.apps.AppWrapperToolbarButton('new-tab-id', 'New Tab', myAppsViewUrl, true);
-//
+
             var result = this.appsService
                 .addToAnnouncement(appId, announcementId)
                 .then(function(app){
@@ -278,12 +275,22 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER,
             chlk.models.common.RoleEnum.STUDENT
         ])],
-        [[chlk.models.id.AnnouncementApplicationId, String]],
-        function viewAppAction(announcementAppId, viewUrl) {
+        [[String, chlk.models.id.AnnouncementApplicationId]],
+        function viewAppAction(url, announcementAppId_) {
             var app = new chlk.models.apps.AppAttachment();
-            app.setAnnouncementApplicationId(announcementAppId);
+            var result = null;
+            //todo: fix this check if its grading mode setGradingViewUrl()
+
             app.setViewUrl(viewUrl);
-            var result = chlk.models.apps.AppWrapperViewData$createAppView(app);
+            if (announcementAppId_) {
+
+
+                app.setAnnouncementApplicationId(announcementAppId_);
+                result = chlk.models.apps.AppWrapperViewData$createAppView(app);
+            }
+            else {
+                result = chlk.models.apps.AppWrapperViewData$createMyAppView(app);
+            }
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
 

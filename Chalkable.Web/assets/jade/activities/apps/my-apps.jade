@@ -15,10 +15,8 @@ mixin MyAppsIconLink(app, editable)
             +Hidden('selfInstalled', app.isSelfInstalled())
             +Hidden('uninstallable', app.isUninstallable())
     else
-        +ActionLink('apps', 'viewApp', [appId]).my-app-icon-link
+        +ActionLink('apps', 'viewApp', app.getMyAppsUrl()).my-app-icon-link
             .app-list-item
-                //if editable
-                    +ActionLink('appmarket',  'uninstall', [app.getId().valueOf()]).close-btn
                 .icon(class=editable ? "jiggly" : undefined)
                     pictureUrl = self.getPictureURL(app.getSmallPictureId(), 74, 74)
                     img(src=pictureUrl)

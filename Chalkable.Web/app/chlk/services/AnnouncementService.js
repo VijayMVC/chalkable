@@ -65,6 +65,13 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.AnnouncementApplicationId]],
+            ria.async.Future, function deleteApp(announcementAppId) {
+                return this.get('Application/RemoveFromAnnouncement.json', chlk.models.announcement.Announcement, {
+                    announcementApplicationId: announcementAppId.valueOf()
+                });
+            },
+
             [[chlk.models.id.ClassId, Number]],
             ria.async.Future, function addAnnouncement(classId_, announcementTypeId_) {
                 return this.get('Announcement/Create.json', chlk.models.announcement.AnnouncementForm, {

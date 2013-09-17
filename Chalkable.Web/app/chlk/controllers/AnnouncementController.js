@@ -116,7 +116,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.AnnouncementForm, Boolean]],
         function addEditAction(model, isEdit){
+ 
             var announcement = model.getAnnouncement();
+            
             var reminders = announcement.getAnnouncementReminders() || [];
             var remindersArray = [];
             reminders.forEach(function(item){
@@ -130,6 +132,7 @@ NAMESPACE('chlk.controllers', function (){
             else{
                 var classes = this.classService.getClassesForTopBar();
                 var classId_ = announcement.getClassId();
+            this.getContext().getSession().set('AnnouncementApplications', applications);
 
                 var classesBarData = new chlk.models.classes.ClassesForTopBar(
                     classes,
@@ -315,6 +318,19 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(this.getAnnouncementFormPageType_(), result);
         },
 
+        [[chlk.models.id.AnnouncementApplicationId]],
+        function deleteAppAction(announcementAppId) {
+            var result = this.announcementService
+                .deleteApp(announcementAppId)
+                .attach(this.validateResponse_())
+                .then(function(model){
+                    var announcementForm = new chlk.models.announcement.AnnouncementForm();
+                    announcementForm.setAnnouncement(model);
+                    return this.addEditAction(announcementForm, true);
+                }.bind(this));
+            return this.UpdateView(this.getAnnouncementFormPageType_(), result);
+        },
+
 
         Boolean, function isAnnouncementSavingDisabled(){
             return this.getContext().getSession().get('noSave', false);
@@ -372,6 +388,7 @@ NAMESPACE('chlk.controllers', function (){
                 }else{
                     if(submitType == 'save'){
                         model.setAnnouncementAttachments(this.getContext().getSession().get('AnnouncementAttachments'));
+                        model.setApplications(this.getContext().getSession().get('AnnoucementApplications'));
                         var announcementForm = new chlk.models.announcement.AnnouncementForm();
                         announcementForm.setAnnouncement(model);
                         result = this.addEditAction(announcementForm, false);

@@ -17,20 +17,12 @@ NAMESPACE('chlk.controllers', function (){
             function addMeAction(data){
                 if (data.appReady) {
                     var announcementAppId = new chlk.models.id.AnnouncementApplicationId(data.announcementAppId);
-
-                    //close wrapper, close attach dialog, update announcement attachments
                     var result = this.appsService
                         .attachApp(announcementAppId)
                         .then(function(result){
                             this.view.pop();  //close wrapper
                             this.view.pop();  //close attach app dialog
-
-                            //get currentApps from sessions
-//                            var applications = this.form.getAnnValues().applications || [];
-//                applications.push(applicationInstance);
-//                this.form.setAnnValues({applications : applications});
-//                this.form.updateAttachments(this.form.getAnnValues());
-
+                            return this.Redirect('announcement', 'edit', [true]);
                         }, this);
                 }
                 else {
@@ -43,15 +35,6 @@ NAMESPACE('chlk.controllers', function (){
                          'app-wrapper-error centered'
                      );
                 }
-            },
-
-            [[Object]],
-            function closeMeAction(data){
-                /*
-                 that.handlers.closeAction(null, {id: data.applicationid});
-                 that.cantStop = false;
-                 !that.stopped_ && that.getWindow().close();
-                 */
             },
 
             [[Object]],

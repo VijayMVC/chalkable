@@ -196,6 +196,23 @@ TEXTAREA.animated-textarea{
 
 //LOADERS
 
+.pending-action{
+  height: 100%;
+  text-align: center;
+  width: 98%;
+  position: absolute;
+  top: 0;
+  left: 0px;
+  background: url(images/common/paper-bg.gif) 0 0 repeat-y;
+
+  .horizontal-loader{
+    height: 20px;
+    position: absolute;
+    top: 50%;
+    background: url(images/loaders/horizontal.gif) center center no-repeat;
+  }
+}
+
 .horizontal-loader{
   height: 20px;
   position: absolute;
