@@ -18,6 +18,9 @@ NAMESPACE('chlk.templates.feed', function () {
             chlk.models.classes.ClassesForTopBar, 'topData',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'starredOnly',
+
+            [ria.templates.ModelPropertyBind],
             Number, 'pageIndex',
             [ria.templates.ModelPropertyBind],
             Number, 'pageSize',

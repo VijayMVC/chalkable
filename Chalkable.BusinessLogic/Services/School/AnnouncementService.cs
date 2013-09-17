@@ -245,10 +245,13 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 res.Content = announcement.Content;
                 res.Subject = announcement.Subject;
-                res.AnnouncementTypeRef = announcement.AnnouncementTypeId;
+                if (Context.Role == CoreRoles.TEACHER_ROLE)
+                    res.AnnouncementTypeRef = announcement.AnnouncementTypeId;
+                if (BaseSecurity.IsAdminViewer(Context))
+                    res.AnnouncementTypeRef = (int) SystemAnnouncementType.Admin;
+
                 if(announcement.ExpiresDate.HasValue)
                    res.Expires = announcement.ExpiresDate.Value;
-
                 res = SetMarkingPeriodToAnnouncement(res, classId, markingPeriodId);
                 res = PreperingReminderData(uow, res);
                 res = ReCreateRecipients(uow, res, recipients);

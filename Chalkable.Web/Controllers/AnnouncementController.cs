@@ -31,11 +31,13 @@ namespace Chalkable.Web.Controllers
 
             if (!announcementTypeId.HasValue)
             {
-                var lastAnnouncement = SchoolLocator.AnnouncementService.GetAnnouncements(0, 1, true).FirstOrDefault();
                 if (SchoolLocator.Context.Role.Id == CoreRoles.TEACHER_ROLE.Id)
-                    announcementTypeId = lastAnnouncement != null ? lastAnnouncement.AnnouncementTypeRef : (int) SystemAnnouncementType.HW;
-                else
-                    announcementTypeId = lastAnnouncement != null ? lastAnnouncement.AnnouncementTypeRef : (int)SystemAnnouncementType.Admin;
+                {
+                    var lastAnnouncement = SchoolLocator.AnnouncementService.GetAnnouncements(0, 1, true).FirstOrDefault();
+                    announcementTypeId = lastAnnouncement != null ? lastAnnouncement.AnnouncementTypeRef : (int)SystemAnnouncementType.HW;   
+                }
+                if (BaseSecurity.IsAdminViewer(SchoolLocator.Context))
+                    announcementTypeId = (int)SystemAnnouncementType.Admin;
             }
             else
             {

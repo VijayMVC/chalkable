@@ -3,13 +3,19 @@
     topData = self.getTopData();
     topItems = topData.getTopItems();
     selectedId = topData.getSelectedItemId();
-    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'feed', 'list', [true])(
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'feed', 'list', [true, self.starredOnly])(
         selectedItemId=selectedId
         ).classes-bar
     .action-bar.not-transparent
         .container.panel-bg
+            .i-b
+                +ActionLink('feed', 'list', [true, !self.starredOnly, selectedId, 0])
+                    if self.starredOnly
+                        |Show All
+                    else
+                        |Show Starred
             .feed-notifications Notifications
-    +Grid('feed', 'list', self, [true, selectedId ? selectedId.valueOf() : null]).not-transparent
+    +Grid('feed', 'list', self, [true, self.starredOnly, selectedId ? selectedId.valueOf() : null]).not-transparent
         +GridBody()
             each item in self.items
                 div(class=item.isStarred() ? "feed-item starred" : "feed-item")

@@ -95,7 +95,7 @@ namespace Chalkable.Data.School.DataAccess
             }
         } 
         
-        public IList<AttendanceTotalPerType> CalcAttendanceTypeTotal(Guid? markingPeriodId, Guid? schoolYearId,
+        public IList<PersonAttendanceTotalPerType> CalcAttendanceTypeTotal(Guid? markingPeriodId, Guid? schoolYearId,
                Guid? studentId, DateTime? fromDate, DateTime? toDate)
         {
             var parameters = new Dictionary<string, object>
@@ -108,7 +108,7 @@ namespace Chalkable.Data.School.DataAccess
                 };
             using (var reader = ExecuteStoredProcedureReader("spCalcAttendanceTypeTotal", parameters))
             {
-               return reader.ReadList<AttendanceTotalPerType>();
+               return reader.ReadList<PersonAttendanceTotalPerType>();
             }
         } 
 
@@ -176,6 +176,7 @@ namespace Chalkable.Data.School.DataAccess
         private const string STUDENT_COUNT_RES_FIELD = "StudentCount";
         private const string DATE_RES_FIELD = "Date";
         private const string PERSON_ID_RES_FIELD = "PersonId";
+
         private IDictionary<DateTime, int> ReadStudentCountAbsentFromDay(DbDataReader reader)
         {
             var res = new Dictionary<DateTime, int>();
@@ -268,28 +269,120 @@ namespace Chalkable.Data.School.DataAccess
                 studentAbsentFromPeriod.PeriodOrder = periodOrder;
             }
             return res;
-        }  
+        } 
+ 
+        
+        public IDictionary<int, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerPeriod(DateTime fromDate, DateTime toDate
+               , int fromPeriodOrder, int toPeriodOrder, AttendanceTypeEnum type, IList<Guid> gradeLevelsIds)
+        {
+            var innerDbQuery = PrepareAttendanceTotalPerPeriodInnerQuery(fromDate, toDate, fromPeriodOrder, toPeriodOrder, gradeLevelsIds);
+            var sql = string.Format("select x.* from ({0}) x where (x.[{1}] & @type) <> 0", innerDbQuery.Sql, AttendanceTotalPerType.ATTENDANCE_TYPE_FIELD);
+            var dbQuery = new DbQuery(sql, innerDbQuery.Parameters);
+            dbQuery.Parameters.Add("type", type);
+            return Read(dbQuery, ReadAttendanceTotalPerPeriodRes);
+        } 
+
+        public IDictionary<DateTime, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerDate(DateTime fromDate, DateTime toDate
+            , AttendanceTypeEnum type, IList<Guid> gradeLevelsIds)
+        {
+            //TODO: think about this ... dublicate code 
+            var innerDbQuery = PrepareAttendanceTotalPerDateInnerQuery(fromDate, toDate, gradeLevelsIds);
+            var sql = string.Format("select x.* from ({0}) x where (x.[{1}] & @type) <> 0", innerDbQuery.Sql, AttendanceTotalPerType.ATTENDANCE_TYPE_FIELD);
+            var dbQuery = new DbQuery(sql, innerDbQuery.Parameters);
+            dbQuery.Parameters.Add("type", type);
+            return Read(dbQuery, ReadAttendanceTotalPerDateRes);
+        } 
+
+        private DbQuery PrepareAttendanceTotalPerPeriodInnerQuery(DateTime fromDate, DateTime toDate, 
+            int fromPeriodOrder, int toPeriodOrder, IList<Guid> gradeLevelsIds)
+        {
+            var res = new DbQuery();
+
+            res.Sql.AppendFormat(@"select 
+			                          COUNT(*) as [{0}],
+			                          ClassAttendance.[Type] as [{1}],
+			                          Period.[Order] as PeriodOrder  
+		                        from ClassAttendance 
+		                        join ClassPeriod  on ClassPeriod.Id = ClassAttendance.ClassPeriodRef
+                                join Class on Class.Id = ClassPeriod.ClassRef
+		                        join Period  on Period.Id = ClassPeriod.PeriodRef ",
+                          AttendanceTotalPerType.TOTAL_FIELD, AttendanceTotalPerType.ATTENDANCE_TYPE_FIELD);
+            
+            var conds = new AndQueryCondition();
+            conds.Add(ClassAttendance.DATE_FIELD, "date1", fromDate, ConditionRelation.GreaterEqual);
+            conds.Add(ClassAttendance.DATE_FIELD, "date2", toDate, ConditionRelation.LessEqual);
+            conds.BuildSqlWhere(res, "ClassAttendance");
+            res.Sql.Append(" AND ");
+            conds = new AndQueryCondition();
+            conds.Add(Period.ORDER_FIELD, "fromPeriodOrder", fromPeriodOrder, ConditionRelation.GreaterEqual);
+            conds.Add(Period.ORDER_FIELD, "toPeriodOrder", toPeriodOrder, ConditionRelation.LessEqual);
+            conds.BuildSqlWhere(res, "Period", false);
+
+            if (gradeLevelsIds != null && gradeLevelsIds.Count > 0)
+            {
+                var strGls = gradeLevelsIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
+                res.Sql.AppendFormat(" AND Class.[{0}] in ({1})", Class.GRADE_LEVEL_REF_FIELD, strGls);
+            }
+            res.Sql.AppendFormat(" group by Period.[{0}], ClassAttendance.[{1}]", Period.ORDER_FIELD, ClassAttendance.TYPE_FIELD);
+            return res;
+        }
+
+        private DbQuery PrepareAttendanceTotalPerDateInnerQuery(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelsIds)
+        {
+            var res = new DbQuery();
+            res.Sql.AppendFormat(@"select 
+			                          COUNT(*) as [{0}],
+			                          ClassAttendance.[Type] as [{1}],
+			                          ClassAttendance.[Date] as [Date]  
+		                        from ClassAttendance ", AttendanceTotalPerType.TOTAL_FIELD
+                                 , AttendanceTotalPerType.ATTENDANCE_TYPE_FIELD);
+            var conds = new AndQueryCondition
+                {
+                    {ClassAttendance.DATE_FIELD, "fromDate", fromDate, ConditionRelation.GreaterEqual},
+                    {ClassAttendance.DATE_FIELD, "toDate", toDate, ConditionRelation.LessEqual}
+                };
+            conds.BuildSqlWhere(res, "ClassAttendance");
+            if (gradeLevelsIds != null && gradeLevelsIds.Count > 0)
+            {
+                var strGls = gradeLevelsIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
+                res.Sql.AppendFormat(@" AND ClassAttendance.[{0}] in (select * from ClassPeriod
+                                                                      join Class on Class.Id = ClassPeriod.ClassRef
+                                                                      where Class.[{1}] in ({2}))"
+                    , ClassAttendance.CLASS_PERIOD_REF_FIELD, Class.GRADE_LEVEL_REF_FIELD, strGls);     
+            }
+            res.Sql.AppendFormat(" group by ClassAttendance.[{0}], ClassAttendance.[{1}]"
+                                 , ClassAttendance.DATE_FIELD, ClassAttendance.TYPE_FIELD);
+            return res;
+        }
+
+        private IDictionary<int, IList<AttendanceTotalPerType>> ReadAttendanceTotalPerPeriodRes(DbDataReader reader)
+        {
+            var res = new Dictionary<int, IList<AttendanceTotalPerType>>();
+            while (reader.Read())
+            {
+                var periodOrder = SqlTools.ReadInt32(reader, "PeriodOrder");
+                if(!res.ContainsKey(periodOrder))
+                    res.Add(periodOrder, new List<AttendanceTotalPerType>());
+                res[periodOrder].Add(reader.Read<AttendanceTotalPerType>());
+            }
+            return res;
+        }
+        private IDictionary<DateTime, IList<AttendanceTotalPerType>> ReadAttendanceTotalPerDateRes(DbDataReader reader)
+        {
+            var res = new Dictionary<DateTime, IList<AttendanceTotalPerType>>();
+            while (reader.Read())
+            {
+                var date = SqlTools.ReadDateTime(reader, "Date");
+                if (!res.ContainsKey(date))
+                    res.Add(date, new List<AttendanceTotalPerType>());
+                res[date].Add(reader.Read<AttendanceTotalPerType>());
+            }
+            return res;
+        }
+
     }
 
-    public class AttendanceTotalPerType
-    {
-        public Guid PersonId { get; set; }
-        public int Total { get; set; }
-        public AttendanceTypeEnum AttendanceType { get; set; }
-    }
-    public class StudentAbsentFromPeriod
-    {
-        public DateTime Date { get; set; }
-        public Guid PersonId { get; set; }
-        public int PeriodOrder { get; set; }
-    }
-    public class StudentCountAbsentFromPeriod
-    {
-        public DateTime Date { get; set; }
-        public int StudentCount { get; set; }
-        public int PeriodOrder { get; set; }
-    }
-
+    
     public class ClassAttendanceQuery
     {
         public Guid? Id { get; set; }

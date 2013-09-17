@@ -15,7 +15,9 @@ namespace Chalkable.Data.School.Model
         public Guid ClassPeriodRef { get; set; }
         public Guid? AttendanceReasonRef { get; set; }
         public string Description { get; set; }
+        public const string TYPE_FIELD = "Type";
         public AttendanceTypeEnum Type { get; set; }
+        public const string DATE_FIELD = "Date";
         public DateTime Date { get; set; }
         public DateTime LastModified { get; set; }
         public int? SisId { get; set; }
@@ -56,6 +58,31 @@ namespace Chalkable.Data.School.Model
         public Class Class { get; set; }
         
     }
+
+    public class AttendanceTotalPerType
+    {
+        public const string TOTAL_FIELD = "Total";
+        public int Total { get; set; }
+        public const string ATTENDANCE_TYPE_FIELD = "AttendanceType";
+        public AttendanceTypeEnum AttendanceType { get; set; }     
+    }
+    public class PersonAttendanceTotalPerType : AttendanceTotalPerType
+    {
+        public Guid PersonId { get; set; }
+    }
+    public class StudentAbsentFromPeriod
+    {
+        public DateTime Date { get; set; }
+        public Guid PersonId { get; set; }
+        public int PeriodOrder { get; set; }
+    }
+    public class StudentCountAbsentFromPeriod
+    {
+        public DateTime Date { get; set; }
+        public int StudentCount { get; set; }
+        public int PeriodOrder { get; set; }
+    }
+
 
     [Flags]
     public enum AttendanceTypeEnum

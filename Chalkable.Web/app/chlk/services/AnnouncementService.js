@@ -32,11 +32,12 @@ NAMESPACE('chlk.services', function () {
 
             Object, 'cache',
 
-            [[Number, chlk.models.id.ClassId]],
-            ria.async.Future, function getAnnouncements(pageIndex_, classId_) {
+            [[Number, chlk.models.id.ClassId, Boolean]],
+            ria.async.Future, function getAnnouncements(pageIndex_, classId_, starredOnly_) {
                 return this.getPaginatedList('Feed/List.json', chlk.models.announcement.Announcement, {
                     start: pageIndex_|0,
-                    classId: classId_ ? classId_.valueOf() : null
+                    classId: classId_ ? classId_.valueOf() : null,
+                    starredOnly: starredOnly_
                 });
             },
 
