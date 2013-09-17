@@ -16,7 +16,7 @@ using Chalkable.Web.Models.ApplicationsViewData;
 namespace Chalkable.Web.Controllers
 {
     [RequireHttps, TraceControllerFilter]
-    public class ApplicationController : ChalkableController
+    public class ApplicationController : AnnouncementBaseController //TODO: think about this
     {
         [AuthorizationFilter("SysAdmin, Developer")]
         public ActionResult List(int? start, int? count)
@@ -143,6 +143,14 @@ namespace Chalkable.Web.Controllers
             var app = MasterLocator.ApplicationService.GetApplicationById(applicationId);
             return Json(AnnouncementApplicationViewData.Create(res, app, appInstalls, Context.UserId));
         }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        public ActionResult RemoveFromAnnouncement(Guid announcementApplicationId)
+        {
+            var ann = SchoolLocator.ApplicationSchoolService.RemoveFromAnnouncement(announcementApplicationId);
+            return Json(PrepareFullAnnouncementViewData(ann.Id), 6);
+        }
+
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult Attach(Guid announcementApplicationId)
