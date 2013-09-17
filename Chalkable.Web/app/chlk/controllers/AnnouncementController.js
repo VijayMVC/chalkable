@@ -226,9 +226,10 @@ NAMESPACE('chlk.controllers', function (){
                     }) || [];
                     announcement.setGradeViewApps(gradeViewApps);
                     announcement.prepareExpiresDateText();
+                    announcement.setCurrentUser(this.getCurrentPerson());
                     return new ria.async.DeferredData(announcement);
                 }, this);
-                    model.setCurrentUser(this.getCurrentPerson());
+
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
         },
 
