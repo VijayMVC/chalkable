@@ -1,5 +1,7 @@
-attachments = self.getAnnouncementAttachments() || [];
+attachments = self.getAnnouncementAttachments() || []
+applications = self.getApplications() || []
 isAnnouncement = self.getAnnouncementTypeId() == chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf()
+
 if self.needButtons
     #attach-file-area.announcement-item.attach-file-area
         if !isAnnouncement
@@ -14,4 +16,9 @@ each attachment, i in attachments
         .title
             div=attachment.getName()
 
+each app, i in applications
 
+    +ActionLink('apps', 'viewApp', [app.getAnnouncementApplicationId().valueOf(), app.getViewUrl()]).announcement-item.application
+        +LoadingImage(src=self.getPictureURL(app.getSmallPictureId(), 74, 74), id="loading-image-" + i)
+        .title
+            div=app.getName()

@@ -5,11 +5,11 @@ REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.id.AnnouncementId');
 
 NAMESPACE('chlk.templates.apps', function () {
-    /** @class chlk.templates.apps.AppWrapperDialog*/
+    /** @class chlk.templates.apps.AppWrapperDialogTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/apps/app-wrapper-dialog.jade')],
         [ria.templates.ModelBind(chlk.models.apps.AppWrapperViewData)],
-        'AppWrapperDialog', EXTENDS(chlk.templates.JadeTemplate), [
+        'AppWrapperDialogTpl', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.apps.AppModes, 'appMode',
             [ria.templates.ModelPropertyBind],

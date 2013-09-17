@@ -110,7 +110,7 @@ var CHLK_MESSENGER = (function () {
                     var attach = !!e.data.attach;
                     var result = fn(e.data);
                     var data = e.data;
-                    data.appReady = attach;
+                    data.appReady = result;
                     attach === true ? CHLK_MESSENGER.addMe(data)
                                     : CHLK_MESSENGER.saveMe(data);
                 }

@@ -1,5 +1,5 @@
 REQUIRE('chlk.activities.lib.TemplateDialog');
-REQUIRE('chlk.templates.apps.AppWrapperDialog');
+REQUIRE('chlk.templates.apps.AppWrapperDialogTpl');
 REQUIRE('chlk.AppApiHost');
  
  NAMESPACE('chlk.activities.apps', function () {
@@ -10,7 +10,7 @@ REQUIRE('chlk.AppApiHost');
       CLASS(
         [ria.mvc.ActivityGroup('AppWrapperDialog')],
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
-        [ria.mvc.TemplateBind(chlk.templates.apps.AppWrapperDialog)],
+        [ria.mvc.TemplateBind(chlk.templates.apps.AppWrapperDialogTpl)],
         'AppWrapperDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
 
               function getInnerDocument(){
@@ -45,11 +45,6 @@ REQUIRE('chlk.AppApiHost');
                   (new chlk.AppApiHost()).addApp(this.getInnerDocument(), rUrl, data);
               },
 
-              [[Object]],
-              OVERRIDE, VOID, function onRender_(data) {
-                  BASE(data);
-              },
-
               OVERRIDE, VOID, function onResume_() {
                   BASE();
                   this._overlay.addClass(BLACK_CLASS);
@@ -57,12 +52,12 @@ REQUIRE('chlk.AppApiHost');
 
               OVERRIDE, VOID, function onPause_() {
                   BASE();
-                  this._overlay.removeClass(BLACK_CLASS);
+
               },
 
               OVERRIDE, VOID, function onStop_() {
                   BASE();
-
+                  this._overlay.removeClass(BLACK_CLASS);
                   /*
                    setTimeout(function(){
                    jQuery('.grade-input:visible').focus().select();

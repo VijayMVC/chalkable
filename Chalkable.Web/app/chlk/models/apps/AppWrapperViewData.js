@@ -53,4 +53,10 @@ NAMESPACE('chlk.models.apps', function () {
         return new ria.async.DeferredData(appWrapperViewData);
     };
 
+    chlk.models.apps.AppWrapperViewData$createAppView = function(app){
+        var saveBtn = new chlk.models.apps.AppWrapperToolbarButton('save-app', 'Save');
+        app.setCurrentModeUrl(app.getViewUrl());
+        var appWrapperViewData = new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.VIEW, [saveBtn]);
+        return new ria.async.DeferredData(appWrapperViewData);
+    };
 });

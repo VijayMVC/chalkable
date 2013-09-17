@@ -99,6 +99,18 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.AnnouncementId, Array,String, String, chlk.models.common.ChlkDate,  String]],
+            ria.async.Future, function submitAdminAnnouncement(id, recipients,subject_, content_, expiresdate_, attachments_) {
+                return this.get('Announcement/SubmitForAdmin.json', chlk.models.announcement.AnnouncementForm, {
+                    announcementId:id.valueOf(),
+                    subject: subject_,
+                    content: content_,
+                    attachments: attachments_,
+                    expiresdate: expiresdate_,
+                    annRecipients: recipients
+                });
+            },
+
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number, String, String, chlk.models.common.ChlkDate, String, String, chlk.models.id.MarkingPeriodId]],
             ria.async.Future, function submitAnnouncement(id, classId_, announcementTypeId_, subject_, content_, expiresdate_, attachments_, applications_, markingPeriodId_) {
                 return this.get('Announcement/SubmitAnnouncement.json', chlk.models.announcement.AnnouncementForm, {
@@ -114,17 +126,7 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, Array,String, String, chlk.models.common.ChlkDate,  String]],
-            ria.async.Future, function submitAdminAnnouncement(id, recipients,subject_, content_, expiresdate_, attachments_) {
-                return this.get('Announcement/SubmitForAdmin.json', chlk.models.announcement.AnnouncementForm, {
-                    announcementId:id.valueOf(),
-                    subject: subject_,
-                    content: content_,
-                    attachments: attachments_,
-                    expiresdate: expiresdate_,
-                    annRecipients: recipients
-                });
-            },
+
 
 
             [[chlk.models.id.ClassId, Number, chlk.models.id.SchoolPersonId]],
