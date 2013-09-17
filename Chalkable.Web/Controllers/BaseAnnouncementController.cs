@@ -18,12 +18,12 @@ namespace Chalkable.Web.Controllers
             var annDetails = SchoolLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var attInfo = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments);
             var annViewData = AnnouncementDetailedViewData.Create(annDetails, SchoolLocator.GradingStyleService.GetMapper(), SchoolLocator.Context.UserId, attInfo);
+            var applications = MasterLocator.ApplicationService.GetApplications();
+            var annApps = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(announcementId, true);
+            var installs = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.UserId);
+            annViewData.Applications = AnnouncementApplicationViewData.Create(annApps, applications, installs, Context.UserId); 
             if (isRead && annDetails.State == AnnouncementState.Created)
             {
-                var applications = MasterLocator.ApplicationService.GetApplications();
-                var annApps = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(announcementId, true);
-                var installs = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.UserId);
-                annViewData.Applications = AnnouncementApplicationViewData.Create(annApps, applications, installs, Context.UserId);
                 var ids = new HashSet<Guid>();
                 IList<string> appNames = new List<string>();              
                 foreach (var sa in annDetails.StudentAnnouncements)
