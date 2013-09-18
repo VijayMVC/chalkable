@@ -53,7 +53,8 @@ namespace Chalkable.Web.Models.AttendancesViewData
 
     public class AttendanceByDayViewData
     {
-        public IList<ShortPersonViewData> StudentsAbsentFromDay { get; set; }
+        public int StudentsCountAbsentWholeDay { get; set; }
+        public IList<ShortPersonViewData> StudentsAbsentWholeDay { get; set; }
         public IList<ShortPersonViewData> AbsentStudents { get; set; }
         public IList<ShortPersonViewData> ExcusedStudents { get; set; }
         public IList<ShortPersonViewData> LateStudents { get; set; }
@@ -68,7 +69,8 @@ namespace Chalkable.Web.Models.AttendancesViewData
             var groupedSts = GroupStudentsByType(stsAttendanceTotalPerType, allStudents);
             return new AttendanceByDayViewData
                 {
-                    StudentsAbsentFromDay = ShortPersonViewData.Create(allStudents.Where(x => stsIdsAbsentFromDay.Contains(x.Id)).ToList()),
+                    StudentsAbsentWholeDay = ShortPersonViewData.Create(allStudents.Where(x => stsIdsAbsentFromDay.Contains(x.Id)).ToList()),
+                    StudentsCountAbsentWholeDay = stsIdsAbsentFromDay.Count,
                     AbsentStudents = PrepareStudentsByAttendanceType(AttendanceTypeEnum.Absent, groupedSts),
                     ExcusedStudents = PrepareStudentsByAttendanceType(AttendanceTypeEnum.Excused, groupedSts),
                     LateStudents = PrepareStudentsByAttendanceType(AttendanceTypeEnum.Late, groupedSts),
