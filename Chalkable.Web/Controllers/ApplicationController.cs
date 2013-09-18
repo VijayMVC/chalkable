@@ -156,7 +156,8 @@ namespace Chalkable.Web.Controllers
         public ActionResult Attach(Guid announcementApplicationId)
         {
             SchoolLocator.ApplicationSchoolService.AttachAppToAnnouncement(announcementApplicationId);
-            return Json(true);
+            var aa = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
+            return Json(PrepareFullAnnouncementViewData(aa.Id));
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GET_APP_ANNOUNCEMENT_APPLICATION, true, CallType.Post, new[] { AppPermissionType.Announcement })]
