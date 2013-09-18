@@ -31,6 +31,7 @@ NAMESPACE('chlk.services', function () {
             },
 
             Object, 'cache',
+            Number, 'importantCount',
 
             [[Number, chlk.models.id.ClassId, Boolean]],
             ria.async.Future, function getAnnouncements(pageIndex_, classId_, starredOnly_) {
@@ -38,7 +39,14 @@ NAMESPACE('chlk.services', function () {
                     start: pageIndex_|0,
                     classId: classId_ ? classId_.valueOf() : null,
                     starredOnly: starredOnly_
-                });
+                })
+                .then(function(announcements){
+                       if (starredOnly_)
+                        this.setImportantCount(announcements.getTotalCount());
+                       return announcements;
+                    }.bind(this)
+                );
+
             },
 
             [[chlk.models.id.AnnouncementId, Object]],
@@ -180,8 +188,10 @@ NAMESPACE('chlk.services', function () {
                 );
             },
 
-            [[chlk.models.id.AnnouncementId]],
-            ria.async.Future, function star(announcementId) {
+            [[chlk.models.id.AnnouncementId, Boolean]],
+            ria.async.Future, function star(announcementId, starred_) {
+
+                this.setImportantCount(this.getImportantCount() + (starred_ ? 1 : -1));
                 return this.post('Announcement/Star', chlk.models.announcement.Announcement, {
                     announcementId: announcementId.valueOf()
                 });

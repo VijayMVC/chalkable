@@ -35,6 +35,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[Boolean, Boolean, chlk.models.id.ClassId, Number]],
         function listAction(postback_, starredOnly_, classId_, pageIndex_) {
+            starredOnly_ = starredOnly_ != false;
             var result = this.announcementService
                 .getAnnouncements(pageIndex_ | 0, classId_, starredOnly_)
                 .then(function(model){
@@ -45,7 +46,8 @@ NAMESPACE('chlk.controllers', function (){
                     topModel.setDisabled(false);
                     classId_ && topModel.setSelectedItemId(classId_);
                     feedModel.setTopData(topModel);
-                    feedModel.setStarredOnly(starredOnly_ ? starredOnly_ : false);
+                    feedModel.setStarredOnly(starredOnly_);
+                    feedModel.setImportantCount(this.announcementService.getImportantCount());
                     return feedModel;
                 }.bind(this))
                 .attach(this.validateResponse_());

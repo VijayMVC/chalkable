@@ -9,11 +9,8 @@
     .action-bar.not-transparent
         .container.panel-bg
             .i-b
-                +ActionLink('feed', 'list', [true, !self.starredOnly, selectedId, 0])
-                    if self.starredOnly
-                        |Show All
-                    else
-                        |Show Starred
+                +ActionLink('feed', 'list', [true, !self.starredOnly, selectedId, 0])(class=self.starredOnly ? 'pr' : 'unpr')
+                    span#importan-count= self.importantCount
             .feed-notifications Notifications
     +Grid('feed', 'list', self, [true, self.starredOnly, selectedId ? selectedId.valueOf() : null]).not-transparent
         +GridBody()
@@ -22,7 +19,7 @@
                     if isNotStudent
                         .grades
                     .bullet
-                        +ActionLink('announcement', 'star', item.getId()).star
+                        +ActionLink('announcement', 'star', [item.getId().valueOf(), !item.isStarred()]).star
                         +ActionLink('announcement', 'view', item.getId()).d-b.t-d.not-blue
                             .item-type
                                 .tooltip-announcement.ann-type
