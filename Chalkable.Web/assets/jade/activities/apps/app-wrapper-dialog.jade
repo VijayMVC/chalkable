@@ -1,4 +1,5 @@
 announcementAppId = self.app.getAnnouncementApplicationId() ? self.app.getAnnouncementApplicationId().valueOf() : ""
+announcementId = self.app.getAnnouncementId() ? self.app.getAnnouncementId().valueOf() : ""
 .app-wrapper
     .x-window-header
         .toolbar
@@ -8,7 +9,8 @@ announcementAppId = self.app.getAnnouncementApplicationId() ? self.app.getAnnoun
                 a(id=btn.getId(),
                 target = btnTarget,
                 href = url,
-                data-announcement-app-id=announcementAppId)=btn.getTitle()
+                data-announcement-app-id=announcementAppId,
+                data-announcement-id=announcementId)=btn.getTitle()
         .x-close-btn.close
     .iframe-wrap
         iframe(src=self.app.getCurrentModeUrl())

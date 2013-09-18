@@ -118,9 +118,9 @@ NAMESPACE('chlk.controllers', function (){
         function addEditAction(model, isEdit){
  
             var announcement = model.getAnnouncement();
-            
             var reminders = announcement.getAnnouncementReminders() || [];
             var remindersArray = [];
+
             reminders.forEach(function(item){
                 remindersArray.push(item.getBefore());
             });
@@ -132,7 +132,6 @@ NAMESPACE('chlk.controllers', function (){
             else{
                 var classes = this.classService.getClassesForTopBar();
                 var classId_ = announcement.getClassId();
-            this.getContext().getSession().set('AnnouncementApplications', applications);
 
                 var classesBarData = new chlk.models.classes.ClassesForTopBar(
                     classes,
@@ -161,9 +160,12 @@ NAMESPACE('chlk.controllers', function (){
                 model.setTopData(classesBarData);
             }
 
-            var attachments = announcement.getAnnouncementAttachments();
+            var attachments = announcement.getAnnouncementAttachments() || [];
             this.prepareAttachments(attachments);
             this.getContext().getSession().set('AnnouncementAttachments', attachments);
+
+            var applications = announcement.getApplications() || [];
+            this.getContext().getSession().set('AnnouncementApplications', applications);
 
             var attachmentsIds = attachments.map(function(item){
                 return item.id
@@ -264,6 +266,15 @@ NAMESPACE('chlk.controllers', function (){
                     return model;
                 }.bind(this));
             return this.UpdateView(this.getAnnouncementFormPageType_(), result);
+        },
+
+        [[chlk.models.announcement.Announcement]],
+        function addAppAttachmentAction(announcement) {
+            announcement.setNeedButtons(true);
+            announcement.setNeedDeleteButton(true);
+            var attachments = announcement.getAnnouncementAttachments() || [];
+            this.prepareAttachments(attachments);
+            return this.UpdateView(this.getAnnouncementFormPageType_(), new ria.async.DeferredData(announcement));
         },
 
         [[chlk.models.id.AnnouncementId, String]],

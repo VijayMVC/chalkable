@@ -139,7 +139,7 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.AnnouncementApplicationId]],
             ria.async.Future, function attachApp(appAnnouncementId) {
               return this
-                  .post('Application/Attach.json', Boolean, {
+                  .post('Application/Attach.json', chlk.models.announcement.Announcement, {
                       announcementApplicationId: appAnnouncementId.valueOf()
                   });
             },

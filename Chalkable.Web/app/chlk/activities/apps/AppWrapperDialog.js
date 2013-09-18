@@ -29,9 +29,11 @@ REQUIRE('chlk.AppApiHost');
 
                   var rUrl = this.getFrameUrl('edit');
                   var announcementAppId = node.getData('announcement-app-id');
+                  var announcementId = node.getData('announcement-id');
                   var data = {
                       attach: true,
-                      announcementAppId: announcementAppId
+                      announcementAppId: announcementAppId,
+                      announcementId: announcementId
                   };
                   (new chlk.AppApiHost()).addApp(this.getInnerDocument(), rUrl, data);
               },

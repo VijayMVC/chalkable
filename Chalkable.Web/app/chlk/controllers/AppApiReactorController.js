@@ -17,12 +17,14 @@ NAMESPACE('chlk.controllers', function (){
             function addMeAction(data){
                 if (data.appReady) {
                     var announcementAppId = new chlk.models.id.AnnouncementApplicationId(data.announcementAppId);
+                    var announcementId = new chlk.models.id.AnnouncementId(data.announcementId);
                     var result = this.appsService
                         .attachApp(announcementAppId)
                         .then(function(result){
                             this.view.pop();  //close wrapper
                             this.view.pop();  //close attach app dialog
-                            return this.Redirect('announcement', 'edit', [true]);
+                            result
+                            return this.Redirect('announcement', 'addAppAttachment', [result]);
                         }, this);
                 }
                 else {
