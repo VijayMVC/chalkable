@@ -117,7 +117,7 @@ NAMESPACE('ria.dom', function () {
             },
 
             OVERRIDE, SELF, function off(event, selector_, handler_) {
-                VALIDATE_ARGS(['event', 'selector', 'handler_'], [String, [String, ria.dom.DomEventHandler], ria.dom.DomEventHandler], arguments);
+                VALIDATE_ARGS(['event', 'selector_', 'handler_'], [String, [String, ria.dom.DomEventHandler], ria.dom.DomEventHandler], arguments);
                 this._dom.off(event, selector_, handler_ && handler_.__wrapper__);
                 return this;
             },

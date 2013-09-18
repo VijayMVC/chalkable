@@ -290,7 +290,7 @@ NAMESPACE('chlk.controllers', function (){
                 .deleteAnnouncement(announcementId)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    return this.redirect_('feed', 'list', []);
+                    return this.redirect_('feed', this.userIsAdmin() ? 'admin' : 'list', []);
                 }.bind(this));
         },
 
@@ -301,7 +301,7 @@ NAMESPACE('chlk.controllers', function (){
                 .deleteDrafts(schoolPersonId)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    return this.redirect_('feed', 'list', []);
+                    return this.redirect_('feed', this.userIsAdmin() ? 'admin' : 'list', []);
                 }.bind(this));
         },
 
@@ -467,7 +467,7 @@ NAMESPACE('chlk.controllers', function (){
                     model.getMarkingPeriodId()
                 );
             res.then(function(){
-                this.redirect_('feed', 'list', []);
+                this.redirect_('feed', this.userIsAdmin() ? 'admin' : 'list', []);
             }.bind(this));
         },
 
