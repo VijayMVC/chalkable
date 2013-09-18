@@ -471,11 +471,10 @@ NAMESPACE('chlk.controllers', function (){
             }.bind(this));
         },
 
-        [[chlk.models.id.AnnouncementId]],
-        function starAction(id)
+        [[chlk.models.id.AnnouncementId, Boolean]],
+        function starAction(id, starred_)
         {
-            console.log(id.valueOf());
-            this.announcementService.star(id);
+            this.announcementService.star(id, starred_);
             return;
         },
 

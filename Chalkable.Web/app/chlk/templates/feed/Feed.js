@@ -21,6 +21,9 @@ NAMESPACE('chlk.templates.feed', function () {
             Boolean, 'starredOnly',
 
             [ria.templates.ModelPropertyBind],
+            Number, 'importantCount',
+
+            [ria.templates.ModelPropertyBind],
             Number, 'pageIndex',
             [ria.templates.ModelPropertyBind],
             Number, 'pageSize',

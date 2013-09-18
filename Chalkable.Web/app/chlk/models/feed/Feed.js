@@ -25,7 +25,8 @@ NAMESPACE('chlk.models.feed', function () {
             },
 
             chlk.models.classes.ClassesForTopBar, 'topData',
-            Boolean, 'starredOnly'
+            Boolean, 'starredOnly',
+            Number, 'importantCount'
         ]);
 });
 
