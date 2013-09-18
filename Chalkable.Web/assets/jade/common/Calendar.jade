@@ -3,17 +3,17 @@
             .buttons-container
                 .buttons
                     .calendar-today-container
-                        +ActionLink('calendar', 'month', [null], selectedId).calendar-today
+                        +ActionLink('calendar', 'month', null, selectedId).calendar-today
                     .prev-month-container
                         if self.getPrevDate()
-                            +ActionLink('calendar', 'month', [self.getPrevDate().format('mm-dd-yy'), selectedId]).prev-month
+                            +ActionLink('calendar', 'month', self.getPrevDate().format('mm-dd-yy'), selectedId).prev-month
                         else
                             A.prev-month
                     .current-month-container
                         label.current-month=self.getCurrentTitle()
                     .next-month-container
                         if self.getNextDate()
-                            +ActionLink('calendar', 'month', [self.getNextDate().format('mm-dd-yy'), selectedId]).next-month
+                            +ActionLink('calendar', 'month', self.getNextDate().format('mm-dd-yy'), selectedId).next-month
                         else
                             A.next-month
                     .calendar-day-container

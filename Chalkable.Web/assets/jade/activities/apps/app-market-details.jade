@@ -12,7 +12,7 @@ devName = app.getDeveloperInfo().getName()
             h1=self.name
             span="By " + devName
         .app-buy
-            +ActionLinkButton('appmarket', 'tryToInstall', [app.getId().valueOf()]).special-button.blue-button=self.installBtnTitle
+            +ActionLinkButton('appmarket', 'tryToInstall', app.getId()).special-button.blue-button=self.installBtnTitle
 
         textarea(name = "app-description", class ="app-description", readonly)=self.description
         .app-general-info

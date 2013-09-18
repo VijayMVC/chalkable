@@ -4,7 +4,7 @@
         #search-bar
     .wrapper
         .row
-            +ActionLink('account', 'profile', self.developerId.valueOf()) Profile
+            +ActionLink('account', 'profile', self.developerId) Profile
         .row
             -id = self.currentAppId ? self.currentAppId.valueOf() : null
             if id

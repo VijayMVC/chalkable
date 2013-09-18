@@ -5,7 +5,7 @@
             .left
                 -action = (self.getType() > 0 ? 'teacherSettings' : 'video');
                 -params = (self.getType() > 0 ? [self.getType() - 1] : []);
-                +ActionLink('setup', action, params)=Msg.Go_Back
+                +ActionLinkWithPrepend('setup', action, params)=Msg.Go_Back
             .right
                 +ActionLink('feed', 'list')=Msg.Done
     .blue-arrow.right-up-arrow=Msg.Click.toLowerCase()

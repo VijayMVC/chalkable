@@ -25,9 +25,9 @@ mixin MyAppsIconLink(app, editable)
     .action-bar.not-transparent
         .container.panel-bg.buttons-toolbar
             if self.isEditable()
-                +ActionLink('appmarket', 'updateMyApps', [false]).edit.toolbar-btn Save
+                +ActionLink('appmarket', 'updateMyApps', false).edit.toolbar-btn Save
             else
-                +ActionLink('appmarket', 'updateMyApps', [true]).edit.toolbar-btn Edit
+                +ActionLink('appmarket', 'updateMyApps', true).edit.toolbar-btn Edit
             +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
             +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn My Apps
     .apps

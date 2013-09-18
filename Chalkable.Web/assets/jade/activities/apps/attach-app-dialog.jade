@@ -1,6 +1,6 @@
 mixin AppIconLink(announcementId, app)
    appId = app.getId().valueOf()
-   +ActionLink('apps', 'tryToAttach', [announcementId, appId]).app-icon-link
+   +ActionLink('apps', 'tryToAttach', announcementId, appId).app-icon-link
         .app-list-item
             .icon
                 pictureUrl = self.getPictureURL(app.getSmallPictureId(), 74, 74)

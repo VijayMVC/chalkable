@@ -1,7 +1,7 @@
 mixin Thumbnail(url, title, dimsX, dimsY, pictureCls, readOnly)
     .thumbnail(class=pictureCls)
         if !readOnly
-            +ActionLink('apps', 'deletePicture', [title, dimsX, dimsY]).close-btn
+            +ActionLink('apps', 'deletePicture', title, dimsX, dimsY).close-btn
         +LoadingImage(src=url)
 
 

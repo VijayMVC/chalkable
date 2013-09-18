@@ -1,7 +1,7 @@
 mixin ScreenshotThumbnail(id, url, pictureCls, screenshotIds, readOnly)
     .thumbnail(class=pictureCls)
         if !readOnly
-            +ActionLink('apps', 'deleteScreenshot', [screenshotIds, id.valueOf()]).close-btn
+            +ActionLink('apps', 'deleteScreenshot', screenshotIds, id).close-btn
         +LoadingImage(src=url)
 
 

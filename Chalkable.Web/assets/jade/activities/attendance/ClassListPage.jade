@@ -20,11 +20,11 @@
                     data-params=selectedId ? [selectedId.valueOf()] : null
                 )#attendance-date.tb-date-picker
             .right
-                +ActionLink('attendance', 'classList', []).pressed
+                +ActionLink('attendance', 'classList').pressed
                     =Msg.List
-                +ActionLink('attendance', 'classList', [])
+                +ActionLink('attendance', 'classList')
                     =Msg.Room
-                +ActionLink('attendance', 'classList', [])
+                +ActionLink('attendance', 'classList')
                     =Msg.Card
     .people-list-container.not-transparent
         items = self.getItems()
@@ -49,7 +49,7 @@
                         if needPresent
                             -item.setType(valuesEnum.PRESENT.valueOf());
                         student = item.getStudent();
-                        +ActionLink('students', 'info', student.getId().valueOf()).left.image-container.white.shadow
+                        +ActionLink('students', 'info', student.getId()).left.image-container.white.shadow
                             +PersonImg(student, 47)
                         p.left= student.getFullName()
                         .right

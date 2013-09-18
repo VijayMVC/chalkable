@@ -16,7 +16,7 @@
         if isNotStudent
             .grades
         .bullet
-            +ActionLink('announcement', 'star', [self.getId().valueOf(), !self.isStarred()]).star
+            +ActionLink('announcement', 'star', self.getId(), !self.isStarred()).star
             .item-type
                 .attachment
                     div(class="announcement-type-" + self.getAnnouncementTypeId()).icon.blue.icon

@@ -6,13 +6,13 @@ isAnnouncement = (self.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf
 if self.needButtons
     #attach-file-area.announcement-item.attach-file-area
         if !isAnnouncement
-            +ActionLink('announcement', 'attachApp', [self.getId().valueOf()])#add-application.simple-gray-button Attach App
+            +ActionLink('announcement', 'attachApp', self.getId())#add-application.simple-gray-button Attach App
         button.simple-gray-button.file Attach File
             +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
 each attachment, i in attachments
     div(data-id=attachment.getId(), data-url="viewurl").announcement-item.attachment
         if self.needDeleteButton
-            +ActionLink('announcement', 'deleteAttachment', attachment.getId().valueOf()).close-btn
+            +ActionLink('announcement', 'deleteAttachment', attachment.getId()).close-btn
         +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + i)
         .title
             div=attachment.getName()
@@ -21,8 +21,8 @@ each app, i in applications
     viewUrl = self.isGradable() && !self.needDeleteButton ? app.getGradingViewUrl() : app.getViewUrl()
     div.announcement-item.application
         if self.needDeleteButton
-            +ActionLink('announcement', 'deleteApp', app.getAnnouncementApplicationId().valueOf()).close-btn
-        +ActionLink('apps', 'viewApp', [viewUrl, app.getAnnouncementApplicationId().valueOf()])
+            +ActionLink('announcement', 'deleteApp', app.getAnnouncementApplicationId()).close-btn
+        +ActionLink('apps', 'viewApp', viewUrl, app.getAnnouncementApplicationId())
             +LoadingImage(src=self.getPictureURL(app.getSmallPictureId(), 74, 74), id="loading-image-" + i)
             .title
                 div=app.getName()

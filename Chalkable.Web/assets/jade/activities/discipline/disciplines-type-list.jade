@@ -2,10 +2,10 @@
     .action-bar.not-transparent.buttons
         .container.panel-bg
             .left
-                +ActionLink('disciplinetype', 'add', [])#new-message-link
+                +ActionLink('disciplinetype', 'add')#new-message-link
                     span Add Discipline Type
 
-    +Grid('disciplinetype', 'list', self, [true, self.pageSize]).not-transparent
+    +Grid('disciplinetype', 'list', self, true, self.pageSize).not-transparent
         +GridHead()
             .th Name
             .th Score

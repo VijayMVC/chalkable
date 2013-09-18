@@ -5,11 +5,16 @@ mixin ActionLink(controller, action)
     A.action-link(attributes)
         block
 
-
+mixin ActionLinkWithPrepend(controller, action, prependParams)
+    args = ria.__API.clone(arguments)
+    - [].splice.apply(args, [2, 1].concat(prependParams || []))
+    link = self.getLink(args)
+    -attributes.href=attributes.href || 'javascript:'
+    -attributes['data-link'] = link
+    A.action-link(attributes)
+        block
 
 mixin  ActionLinkButton(controller, action)
-
-
     span.chlk-button.action-button(attributes)
         span
             span

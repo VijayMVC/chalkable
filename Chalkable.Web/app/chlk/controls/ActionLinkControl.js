@@ -6,6 +6,19 @@ NAMESPACE('chlk.controls', function () {
 
     chlk.controls.getActionLinkControlLastNode = function () { return lastClickedNode; };
 
+    function s (x) {
+        if (x === undefined || x === null)
+            return "null";
+
+        if (Array.isArray(x))
+            return JSON.stringify(x.map(s));
+
+        if (x.hasOwnProperty("valueOf"))
+            return s(x.valueOf());
+
+        return JSON.stringify(x);
+    }
+
     /** @class chlk.controls.ActionLinkControl */
     CLASS(
         'ActionLinkControl', EXTENDS(chlk.controls.Base), [
@@ -16,11 +29,7 @@ NAMESPACE('chlk.controls', function () {
 
             [[Array]],
             String, function getLink(values) {
-                if(!values[2] || Array.isArray(values[2]) && !values[2].length)
-                    values.splice(2,1);
-                return encodeURIComponent(values.map(function(_) { return Array.isArray(_)
-                    ? _.map(function(x){return JSON.stringify(x)}).join(',')
-                    : JSON.stringify(_.valueOf ? _.valueOf() : _) }).join(','));
+                return encodeURIComponent(values.map(s).join(','));
             },
 
             [[String]],

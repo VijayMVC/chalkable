@@ -7,7 +7,7 @@ div(class=(self.getClazz() || "")).dialog.info-msg.gray
             -attrs = button.getAttributes() || {};
             -attrs.clazz = (attrs.clazz || '') + ' ' + (button.getColor() ? button.getColor().valueOf() : 'blue');
             if(button.getController())
-                +ActionLink(button.getController(), button.getAction(), button.getParams() || []).button.defer
+                +ActionLinkWithPrepend(button.getController(), button.getAction(), button.getParams() || []).button.defer
                     +Button()(id=attrs.id, class=attrs.clazz).special-button2=button.getText()
             else
                 +Button()(id=attrs.id, class=attrs.clazz).special-button2.button=button.getText()

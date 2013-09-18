@@ -5,7 +5,7 @@
             .right
                 -action = (self.getType() > 0 ? 'teacherSettings' : 'start');
                 -params = (self.getType() > 0 ? [0] : []);
-                +ActionLink('setup', action, params)#lets-do-it=Msg.Lets_do_it.toUpperCase()
+                +ActionLinkWithPrepend('setup', action, params)#lets-do-it=Msg.Lets_do_it.toUpperCase()
     .blue-arrow.right-up-arrow=Msg.Click.toLowerCase()
     .video-chalkable.center
         +Video(true)(src=self.getValue() || '', width="610", height="400")

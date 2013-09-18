@@ -6,7 +6,7 @@
     .class-name
         h3.day-day
             clazz = announcementclassperiod.getClassPeriod().getClazz();
-            +ActionLink('class', 'details', clazz.getId().valueOf())=clazz.getName()
+            +ActionLink('class', 'details', clazz.getId())=clazz.getName()
     .info
         if roomNumber
             p.day-down

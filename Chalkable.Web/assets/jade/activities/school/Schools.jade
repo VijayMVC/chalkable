@@ -19,6 +19,6 @@
                     .td= item.getSchoolType()
                     .td= item.getSchoolUrl()
                     .td.action-links
-                        +ActionLink('schools', 'details', item.getId().valueOf()).profile
-                        +ActionLink('schools', 'delete', [item.getId().valueOf(), districtId.valueOf()]).remove
+                        +ActionLink('schools', 'details', item.getId()).profile
+                        +ActionLink('schools', 'delete', item.getId(), districtId).remove
 

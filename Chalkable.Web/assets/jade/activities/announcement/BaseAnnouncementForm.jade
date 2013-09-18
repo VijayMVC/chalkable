@@ -85,7 +85,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
         ).special-button.blue-button.submit-btn
             =(announcement.getState() ? Msg.Save : Msg.Submit)
         if announcement.getState()
-            +ActionLink('announcement', 'delete', announcement.getId().valueOf(), announcement.getAnnouncementTypeName())
+            +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName())
                 +Button()(
                 type="submit",
                 name="submitType",
@@ -93,4 +93,4 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                 ).special-button.red-button.submit-btn
                     =Msg.Delete
         else
-            +ActionLink('announcement', 'discard', announcement.getPersonId().valueOf()).grey-link.not-blue=Msg.Discard
+            +ActionLink('announcement', 'discard', announcement.getPersonId()).grey-link.not-blue=Msg.Discard

@@ -11,10 +11,10 @@
             .buttons-container
                 .buttons
                     .calendar-today-container
-                        +ActionLink('calendar', 'week', [null], selectedId).calendar-today.week
+                        +ActionLink('calendar', 'week', null, selectedId).calendar-today.week
                     .prev-month-container
                         if self.getPrevDate()
-                            +ActionLink('calendar', 'week', [self.getPrevDate().format('mm-dd-yy'), selectedId]).prev-month.week.teacher
+                            +ActionLink('calendar', 'week', self.getPrevDate().format('mm-dd-yy'), selectedId).prev-month.week.teacher
                         else
                             A.prev-month.week.teacher
                     .current-month-container.week

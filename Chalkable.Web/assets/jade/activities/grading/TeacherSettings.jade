@@ -27,9 +27,9 @@
             .action-bar.not-transparent.buttons
                 .container.panel-bg
                     .left
-                        +ActionLink('settings', 'dashboardTeacher', [])=Msg.Settings
+                        +ActionLink('settings', 'dashboardTeacher')=Msg.Settings
                     .right
-                        +ActionLink('grading', 'teacherSettings', [])=Msg.Cancel
+                        +ActionLink('grading', 'teacherSettings')=Msg.Cancel
                         Button(type="submit", disabled).action-button.next-class=Msg.Save
             #settings-step2
                 label#percents-label.blue-arrow.div=Msg.Student_grades_are_out_of(classInfo.getName())
