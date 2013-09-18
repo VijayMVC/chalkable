@@ -1,6 +1,6 @@
 if self.getController()
     //params = (params && params.length ? params.join('/') + '/' : '');
-    +ActionLink(self.getController(), self.getAction(), self.getParams(), self.getId())(class=self.isPressed() ? "pressed " : "", index=self.getIndex()).item.class-button.button-link
+    +ActionLinkWithPrepend(self.getController(), self.getAction(), self.getParams(), self.getId())(class=self.isPressed() ? "pressed " : "", index=self.getIndex()).item.class-button.button-link
         .img-wrapper
             +ClassImg(self.getCourse(), 45, 80)
         SPAN.text-container= self.getName()
