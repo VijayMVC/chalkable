@@ -28,8 +28,8 @@ NAMESPACE('chlk.controllers', function (){
             OVERRIDE,  ArrayOf(chlk.models.common.ActionLinkModel), function prepareActionLinksData_(){
                 var controller = 'students';
                 var actionLinksData = [];
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'details', 'Now', true));
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'info', 'Info'));
+                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'details', 'Now'));
+                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'info', 'Info', true));
                 actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'schedule', 'Schedule'));
                 actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'attendance', 'Attendance'));
                 actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'discipline', 'Discipline'));
