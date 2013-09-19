@@ -10,7 +10,7 @@ NAMESPACE('chlk.activities.admin', function (){
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.admin.SchoolPersonListTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.people.UsersGrid, '', '.grid-container', ria.mvc.PartialUpdateRuleActions.Replace)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.people.UsersForGrid, window.noLoadingMsg, '.people-list', ria.mvc.PartialUpdateRuleActions.Append)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.people.UsersForGrid, chlk.activities.lib.DontShowLoader(), '.people-list', ria.mvc.PartialUpdateRuleActions.Append)],
         'PeoplePage', EXTENDS(chlk.activities.person.PersonGrid), [
 
             [ria.mvc.DomEventBind('change', '#roleId')],

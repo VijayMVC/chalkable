@@ -68,7 +68,7 @@ NAMESPACE('chlk.controllers', function (){
                         if(isScroll)  return this.prepareUsers(usersData, start);
                         return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter());
                 }.bind(this));
-                return this.UpdateView(chlk.activities.admin.PeoplePage, res, isScroll ? window.noLoadingMsg : '');
+                return this.UpdateView(chlk.activities.admin.PeoplePage, res, isScroll ? chlk.activities.lib.DontShowLoader() : '');
             },
 
 
