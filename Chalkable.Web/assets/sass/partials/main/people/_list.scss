@@ -1,0 +1,143 @@
+.people-list-container{
+  padding-bottom: 5px;
+
+  .action-bar.buttons .container > .right{
+    border: none;
+  }
+
+  .people-search{
+    background: transparent;
+    border: none;
+    width: 410px;
+    height: 28px !important;
+    text-align: right;
+    padding-bottom: 3px;
+    font: normal 12px Arial italic;
+    color: #919191;
+    @include transition-property("all");
+    @include transition-duration("0.3s");
+    outline: none;
+    @include border-radius(5px);
+
+    &:hover{
+      background: rgb(248, 248, 248) !important;
+      @include transition-property("all");
+      @include transition-duration("0.3s");
+    }
+
+    &.hovered{
+      background: rgb(248, 248, 248) !important;
+      @include transition-property("all");
+      @include transition-duration("0.3s");
+    }
+  }
+
+
+
+  .people-search-imgs{
+    position: relative;
+    display: inline-block;
+    width: 29px;
+    text-align: left;
+
+    .people-search-close, .people-search-img{
+      @include transition-property("all");
+      @include transition-duration("0.5s");
+    }
+
+    .people-search-close{
+      position: absolute;
+      right: 15px;
+      background: url(images/people/close-search.png) center center no-repeat;
+      height: 16px;
+      width: 16px;
+      margin-top: 1px;
+      cursor: pointer;
+    }
+
+    .people-search-img{
+      background: url(images/people/search.png) center center no-repeat;
+      height: 14px;
+      width: 14px;
+      display: inline-block;
+      cursor: pointer;
+      margin-top: 3px;
+    }
+  }
+
+
+  .top{
+    height: 61px;
+    @include border-radius(5px 5px 0 0);
+
+    >span, >A{
+      color: #5d5d5d;
+      text-shadow: 1px 1px 0 white;
+      font: bold 12px Arial;
+      margin: 21px 45px;
+      float: right;
+    }
+  }
+}
+
+.people-list{
+  .message-button{
+    display: none;
+  }
+
+  .row.selected{
+    .message-button{
+      display: inline-block;
+      margin-top: 12px;
+    }
+  }
+
+  .image-container{
+    margin: 8px;
+  }
+
+  P{
+    font-size: 20px;
+    width: 438px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-top: 20px;
+  }
+}
+
+.school-person-list{
+  .action-bar.people-top-bar{
+    .container{
+      overflow: visible;
+      .action-button{
+        &.select-btn{
+          padding: 0px;
+          &:hover, &.pressed{
+            background: none;
+          }
+        }
+      }
+      .export-btn{
+        width: 16px;
+        display: block;
+        background: url(images/buttons/export.png) no-repeat 4px center !important;
+      }
+
+      .chzn-container{
+        width: 100px;
+        height: 33px;
+        border: none;
+        .chzn-single{
+          border-radius: 0px;
+          height: 30px;
+          padding-top: 3px;
+          border: none;
+          background: none;
+          margin: 0px;
+          box-shadow: none;
+        }
+      }
+    }
+  }
+
+}

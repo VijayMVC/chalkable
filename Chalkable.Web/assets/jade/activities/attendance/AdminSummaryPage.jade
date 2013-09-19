@@ -1,0 +1,97 @@
+mixin StudentsTpl(students, header, needPlus)
+    preparedStudents = self.getPreparedStudents(students, needPlus);
+    h2 #{students.length} - #{header}
+    div(attributes).all-students
+        each student,i in students
+            clazz = (i>=18 ? "hidden" : "");
+            if !student.getId()
+                if i == 0
+                    div(index="0", class=clazz).student.grey.plus
+                        .plus-container.for-plus +
+                        .name.for-plus= Msg.Add_student
+                        .small-pop-up.for-plus
+                            .container
+                                .triangle
+                                .student-search-container
+                                    input.student-search-input
+                                SPAN.enter= Msg.Enter_when_done
+                else
+                    div(index=i, class=clazz).student.grey
+                        .name
+            else
+                div(index=i, data-id=student.getId().valueOf(), class=clazz).student
+                    .img-container
+                        +PersonImg(student, 64)
+                    +ActionLink('students', 'details', student.getId()).name=student.getDisplayName()
+    if students.length > 18
+        .more-container
+            a=Msg.More_students
+
+topData = self.getTopData();
+topItems = topData.getTopItems();
+selectedIds = topData.getSelectedIds();
+nowData = self.getNowAttendanceData();
+dayData = self.getAttendanceByDayData();
+mpData = self.getAttendanceByMpData();
+valuesEnum = chlk.models.attendance.AttendanceTypeEnum;
+.admin-attendance.loader-container
+    .loader
+    +LeftRightToolbar(topItems, chlk.templates.grading.GradeLevelForTopBar, 'attendance', 'summary', [true])(
+        selectedIds=selectedIds,
+        multiple
+    ).classes-bar
+    .attendance-boxes-admin
+        .boxes-container
+            div(left="0", text=Msg.Now).attendance-box.now-box.active
+                .number=self.getNowAttendanceData().getAbsentNowCount()
+                .title=Msg.Not_in_class_right_now
+            div(left="192", text=Msg.Today).attendance-box.day-box
+                .number=self.getAttendanceByDayData().getStudentsCountAbsentWholeDay()
+                .title=Msg.Attendance_today
+            div(left="381", text=Msg.Marking_Period_shortcut).attendance-box.mp-box
+                .number=self.getAttendanceByMpData().getAbsentStudentsCountAvg()
+                .title=Msg.Attendance_MP
+        .slider-line-container
+            .slider-left
+            .slider-line
+            .slider-right
+            .slider-container
+                .slider
+                .active=Msg.Now
+    .attendance-content
+        .attendance-now
+            if nowData.getAbsentNowStudents().length
+                .top-container
+                    .stats.i-b
+                        .attendance-box.rightnow-usually
+                            .box-container
+                                .number=nowData.getAbsentNowCount()
+                                .title=Msg.Right_now
+                            .box-container
+                                .number=nowData.getAbsentUsually()
+                                .title=Msg.Usually
+                    .now-chart-block.i-b
+                .attendance-students
+                    +StudentsTpl(nowData.getAbsentNowStudents(), Msg.Absent + " " + Msg.Right_now.toLowerCase(), true)(
+                        class = 'attendance-' + valuesEnum.ABSENT.valueOf()
+                    )
+        .attendance-day
+            .attendance-students
+                +StudentsTpl(dayData.getStudentsAbsentWholeDay(), Msg.Absent_from_school, true).absent-from-school
+            div(index="1", type=valuesEnum.EXCUSED.valueOf()).attendance-students.bytype
+                +StudentsTpl(dayData.getExcusedStudents(), Msg.Excused_from_a_class, true)(
+                    class = 'attendance-' + valuesEnum.EXCUSED.valueOf()
+                )
+            div(index="2", type=valuesEnum.ABSENT.valueOf()).attendance-students.bytype
+                +StudentsTpl(dayData.getAbsentStudents(), Msg.Absent_from_a_class, true)(
+                    class = 'attendance-' + valuesEnum.ABSENT.valueOf()
+                )
+            div(index="3", type=valuesEnum.LATE.valueOf()).attendance-students.bytype
+                +StudentsTpl(dayData.getLateStudents(), Msg.Late_to_a_class, true)(
+                    class = 'attendance-' + valuesEnum.LATE.valueOf()
+                )
+        .attendance-mp
+            .attendance-students.mp-students
+                +StudentsTpl(mpData.getAbsentAndLateStudents(), Msg.Students_with_attendance_issues).attendance-mp
+
+
