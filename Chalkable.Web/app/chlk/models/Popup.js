@@ -7,10 +7,13 @@ NAMESPACE('chlk.models', function () {
             ria.dom.Dom, 'container',
 
             [[ria.dom.Dom, ria.dom.Dom]],
-            function $(target, container){
+            function $(target_, container_){
                 BASE();
-                this.setTarget(target);
-                this.setContainer(container);
+                if(target_)
+                    this.setTarget(target_);
+                if(container_)
+                    this.setContainer(container_);
+
             }
         ]);
 });

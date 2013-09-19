@@ -28,7 +28,7 @@
                                 .attachment
                                     div(class="announcement-type-" + item.getAnnouncementTypeId()).icon.blue
                                     .icon.black
-                                    h2.animated-header=item.getSubject()
+                                    h2.animated-header=item.getTitle()
                                     p.animated=item.getShortContent()
                                     .animated=item.getExpiresDate().toString('d/m/y')
                                     .attachment-icon

@@ -8,7 +8,7 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
 
     /** @class chlk.models.calendar.announcement.MonthItem*/
     CLASS(
-        'MonthItem', [
+        'MonthItem', EXTENDS(chlk.models.Popup), [
             Number, 'day',
             [ria.serialize.SerializeProperty('iscurrentmonth')],
             Boolean, 'currentMonth',
