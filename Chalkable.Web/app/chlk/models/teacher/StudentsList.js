@@ -10,7 +10,7 @@ NAMESPACE('chlk.models.teacher', function () {
         'StudentsList', EXTENDS(chlk.models.people.UsersListSubmit), [
             chlk.models.people.UsersList, 'usersList', //todo: rename
             chlk.models.classes.ClassesForTopBar, 'topData',//todo: rename
-            Boolean, 'my',
+            Boolean, 'my', //todo: rename
 
             [[chlk.models.people.UsersList, chlk.models.classes.ClassesForTopBar, Boolean, chlk.models.id.ClassId]],
             function $(usersList_, classes_, isMy_, classId_){

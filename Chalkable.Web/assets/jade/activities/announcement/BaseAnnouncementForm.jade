@@ -21,18 +21,18 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
     +Hidden('announcementtypename', announcement.getAnnouncementTypeName())
 
     //+AnnouncementFormDescriptionBlock(announcement)
-    typesEnum = chlk.models.announcement.AnnouncementTypeEnum;
-    isAdminAnnouncement = announcement.getAnnouncementTypeId() == typesEnum.ADMIN.valueOf();
-    isAnnouncement = (announcement.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf() || isAdminAnnouncement);
+    typesEnum = chlk.models.announcement.AnnouncementTypeEnum
+    isAdminAnnouncement = announcement.getAnnouncementTypeId() == typesEnum.ADMIN.valueOf()
+    isAnnouncement = (announcement.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf() || isAdminAnnouncement)
     .left-block
         if isAdminAnnouncement
             .buttons-container
-                rolesEnum = chlk.models.common.RoleEnum;
-                buttons = ['Student', 'Teacher', 'Parent', 'Admin'];
+                rolesEnum = chlk.models.common.RoleEnum
+                buttons = ['Student', 'Teacher', 'Parent', 'Admin']
                 each button in buttons
                     roleName = button.toUpperCase();
-                    roleId = rolesEnum[roleName] ? rolesEnum[roleName].valueOf() : null;
-                    text = Msg[button](true).toLowerCase().capitalize();
+                    roleId = rolesEnum[roleName] ? rolesEnum[roleName].valueOf() : null
+                    text = Msg[button](true).toLowerCase().capitalize()
                     Button(
                         type="button",
                         data-roleId = roleId,
