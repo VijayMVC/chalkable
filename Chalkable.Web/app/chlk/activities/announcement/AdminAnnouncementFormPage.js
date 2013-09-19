@@ -176,8 +176,8 @@ NAMESPACE('chlk.activities.announcement', function(){
             },
 
             function renderRecipients(){
-                this.onPartialRender_(this.getAdminRecipients(), window.noLoadingMsg);
-                this.onPartialRefresh_(this.getAdminRecipients(), window.noLoadingMsg);
+                this.onPartialRender_(this.getAdminRecipients(), chlk.activities.lib.DontShowLoader());
+                this.onPartialRefresh_(this.getAdminRecipients(), chlk.activities.lib.DontShowLoader());
                 setTimeout(function(){
                     this.dom.find('#super-selectbox-autocomplete').trigger('focus')
                 }.bind(this), 1);
