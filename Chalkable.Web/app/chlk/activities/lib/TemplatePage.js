@@ -1,21 +1,10 @@
-REQUIRE('ria.mvc.TemplateActivity');
+REQUIRE('chlk.activities.lib.ChlkTemplateActivity');
 
 NAMESPACE('chlk.activities.lib', function () {
-
-    /** @class chlk.activities.lib.PageClass */
-    ANNOTATION(
-        [[String]],
-        function PageClass(clazz) {});
-
-    /** @class chlk.activities.lib.BodyClass*/
-    ANNOTATION(
-        [[String]],
-        function BodyClass(clazz) {});
-
     /** @class chlk.activities.lib.TemplatePage*/
 
     CLASS(
-        'TemplatePage', EXTENDS(ria.mvc.TemplateActivity), [
+        'TemplatePage', EXTENDS(chlk.activities.lib.ChlkTemplateActivity), [
             function $() {
                 BASE();
                 this._wrapper = new ria.dom.Dom('#content-wrapper');

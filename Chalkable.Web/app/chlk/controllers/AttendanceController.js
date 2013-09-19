@@ -111,7 +111,7 @@ NAMESPACE('chlk.controllers', function (){
                 item.setAttendanceReason(null);
             }
             var result = new ria.async.DeferredData(item);
-            return this.UpdateView(chlk.activities.attendance.ClassListPage, result, window.noLoadingMsg);
+            return this.UpdateView(chlk.activities.attendance.ClassListPage, result, chlk.activities.lib.DontShowLoader());
         },
 
 

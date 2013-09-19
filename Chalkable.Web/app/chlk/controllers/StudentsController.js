@@ -71,7 +71,7 @@ NAMESPACE('chlk.controllers', function (){
                         if(isScroll)  return this.prepareUsers(usersData, start);
                         return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter());
                     }.bind(this));
-                return this.UpdateView(chlk.activities.person.ListPage, result, isScroll ? window.noLoadingMsg : '');
+                return this.UpdateView(chlk.activities.person.ListPage, result, isScroll ? chlk.activities.lib.DontShowLoader() : '');
             },
 
             [[chlk.models.id.SchoolPersonId]],

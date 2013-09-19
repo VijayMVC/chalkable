@@ -90,7 +90,7 @@ NAMESPACE('chlk.controllers', function (){
                             });
                             return res[0];
                         });
-                    return this.UpdateView(this.getAnnouncementFormPageType_(), result, window.noLoadingMsg);
+                    return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());
                 }
             }
         },
@@ -394,7 +394,8 @@ NAMESPACE('chlk.controllers', function (){
                                 model.setAnnouncementTypeName(announcementTypeName);
                                 return new ria.async.DeferredData(model);
                             }.bind(this));
-                        return this.UpdateView(this.getAnnouncementFormPageType_(), result, window.noLoadingMsg);
+                        ////todo: fix noloading
+                        return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());
                     }
                 }else{
                     if(submitType == 'save'){

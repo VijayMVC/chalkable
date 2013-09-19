@@ -1,4 +1,4 @@
-REQUIRE('ria.mvc.TemplateActivity');
+REQUIRE('chlk.activities.lib.ChlkTemplateActivity');
 
 NAMESPACE('chlk.activities.lib', function () {
 
@@ -25,7 +25,7 @@ NAMESPACE('chlk.activities.lib', function () {
     /** @class chlk.activities.lib.TemplatePopup*/
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-pop-up-container')],
-        'TemplatePopup', EXTENDS(ria.mvc.TemplateActivity), [
+        'TemplatePopup', EXTENDS(chlk.activities.lib.ChlkTemplateActivity), [
             function $() {
                 BASE();
                 this._body = new ria.dom.Dom('body');
