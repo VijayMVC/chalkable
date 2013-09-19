@@ -18,3 +18,4 @@ Chalkable.Web/assets/sass/partials/controls/*.css
 Chalkable.Web/Content/*.css
 Chalkable.Web/Scripts/*.compiled.js
 _ReSharper.Chalkable
+Chalkable.Web/app/*.compiled.js

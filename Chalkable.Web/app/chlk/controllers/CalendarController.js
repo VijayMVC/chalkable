@@ -9,6 +9,7 @@ REQUIRE('chlk.activities.calendar.announcement.MonthDayPopUp');
 REQUIRE('chlk.activities.calendar.announcement.WeekBarPopUp');
 REQUIRE('chlk.activities.calendar.announcement.WeekDayPopUp');
 REQUIRE('chlk.activities.calendar.announcement.DayPeriodPopUp');
+REQUIRE('chlk.activities.calendar.announcement.AdminDayCalendarPage');
 
 REQUIRE('chlk.models.calendar.announcement.Month');
 REQUIRE('chlk.models.classes.ClassesForTopBar');
@@ -26,6 +27,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.ClassService, 'classService',
+
+        [ria.mvc.Inject],
+        chlk.services.GradeLevelService, 'gradeLevelService',
 
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER
@@ -74,89 +78,49 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.calendar.announcement.DayPage, result);
         },
 
+        [[chlk.models.common.ChlkDate, String]],
+        function dayAdminAction(date_, gradeLevels_){
+            var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);
+            var result = this.calendarService
+                .getAdminDay(date_, gradeLevels_)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    var glsInputData = new chlk.models.grading.GradeLevelsForTopBar(gradeLevels, gradeLevels_);
+                    data.setGradeLevelsInputData(glsInputData);
+                    return data;
+                }, this);
+            return this.PushView(chlk.activities.calendar.announcement.AdminDayCalendarPage, result);
+        },
 
-
-
-        //TODO: refactor
         [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
         function weekAction(date_, classId_){
             var markingPeriod = this.getContext().getSession().get('markingPeriod');
-            var today = new chlk.models.common.ChlkDate(new Date());
-            var date = date_ || today;
-            var dayNumber = date.getDate().getDay(), sunday = date, saturday = date;
-            if(dayNumber){
-                sunday = date.add(chlk.models.common.ChlkDateEnum.DAY, -dayNumber);
-            }
-            if(dayNumber !=6)
-                saturday = sunday.add(chlk.models.common.ChlkDateEnum.DAY, 6);
-            var title = sunday.format('MM d - ');
-            title = title + (sunday.format('M') == saturday.format('M') ? saturday.format('d') : saturday.format('M d'));
-            var prevDate = sunday.add(chlk.models.common.ChlkDateEnum.DAY, -1);
-            var nextDate = saturday.add(chlk.models.common.ChlkDateEnum.DAY, 1);
             var result = this.calendarService
                 .getWeekInfo(classId_, date_)
                 .attach(this.validateResponse_())
                 .then(function(days){
-                    var model = new chlk.models.calendar.announcement.Week();
-                    model.setCurrentTitle(title);
-                    model.setCurrentDate(date);
                     var startDate = markingPeriod.getStartDate();
                     var endDate = markingPeriod.getEndDate();
-                    if(prevDate.format('yy-mm-dd') >= startDate.format('yy-mm-dd')){
-                        model.setPrevDate(prevDate);
-                    }
-                    if(nextDate.format('yy-mm-dd') <= endDate.format('yy-mm-dd')){
-                        model.setNextDate(nextDate);
-                    }
-                    model.setItems(days);
                     var classes = this.classService.getClassesForTopBar(true);
-                    var topModel = new chlk.models.classes.ClassesForTopBar();
-                    topModel.setTopItems(classes);
-                    topModel.setDisabled(false);
-                    classId_ && topModel.setSelectedItemId(classId_);
-                    model.setTopData(topModel);
+                    var topModel = new chlk.models.classes.ClassesForTopBar(classes, classId_);
+                    var model = new chlk.models.calendar.announcement.Week(date_, startDate, endDate, days, topModel);
                     return new ria.async.DeferredData(model);
                 }.bind(this));
 
             return this.PushView(chlk.activities.calendar.announcement.WeekPage, result);
         },
 
+        //TODO: refactor
         [chlk.controllers.SidebarButton('calendar')],
         [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
         function monthAction(date_, classId_){
             var markingPeriod = this.getContext().getSession().get('markingPeriod');
-            var today = new chlk.models.common.ChlkDate(new Date());
-            var date = date_ || today;
-            var year = date.getDate().getFullYear();
-            var month = date.getDate().getMonth();
-            var day = date.getDate().getDate();
-            var prevMonth = month ? month - 1 : 11;
-            var prevYear = month ? year : year - 1;
-            var prevDate = new Date(prevYear, prevMonth, day);
-            var nextMonth = month == 11 ? 0 : month + 1;
-            var nextYear = month == 11 ? year + 1 : year;
-            var nextDate = new Date(nextYear, nextMonth, day);
             var result = this.calendarService
                 .listForMonth(classId_, date_)
                 .attach(this.validateResponse_())
                 .then(function(days){
-                    var model = new chlk.models.calendar.announcement.Month();
-                    model.setCurrentTitle(date.format('MM'));
-                    model.setCurrentDate(date);
-                    var startDate = markingPeriod.getStartDate().getDate();
-                    var endDate = markingPeriod.getEndDate().getDate();
-                    if(prevDate >= startDate){
-                        model.setPrevDate(new chlk.models.common.ChlkDate(prevDate));
-                    }else{
-                        if(startDate.getMonth() != date.getDate().getMonth())
-                            model.setPrevDate(markingPeriod.getStartDate());
-                    }
-                    if(nextDate <= endDate){
-                        model.setNextDate(new chlk.models.common.ChlkDate(nextDate));
-                    }else{
-                        if(nextDate.getMonth() != date.getDate().getMonth())
-                            model.setNextDate(markingPeriod.getEndDate());
-                    }
+                    var mpStartDate = markingPeriod.getStartDate();
+                    var mpEndDate = markingPeriod.getEndDate();
                     days.forEach(function(day){
                         var itemsArray = [], itemsObject = {};
                         var items = day.getItems();
@@ -192,20 +156,16 @@ NAMESPACE('chlk.controllers', function (){
 
 
                         var date = day.getDate().getDate();
-
+                        var today = new chlk.models.common.ChlkDate(new Date());
                         day.setTodayClassName((today.format('mm-dd-yy') == day.getDate().format('mm-dd-yy')) ? 'today' : '');
                         day.setRole(this.userIsAdmin() ? 'admin' : 'no-admin');
                         day.setAnnLimit(this.userIsAdmin() ? 7 : 3);
-                        day.setClassName((day.isCurrentMonth() && date >= markingPeriod.getStartDate().getDate() &&
-                            date <= markingPeriod.getEndDate().getDate()) ? '' : 'not-current-month');
+                        day.setClassName((day.isCurrentMonth() && date >= mpStartDate.getDate() &&
+                            date <= mpEndDate.getDate()) ? '' : 'not-current-month');
                     }.bind(this));
-                    model.setItems(days);
                     var classes = this.classService.getClassesForTopBar(true);
-                    var topModel = new chlk.models.classes.ClassesForTopBar();
-                    topModel.setTopItems(classes);
-                    topModel.setDisabled(false);
-                    classId_ && topModel.setSelectedItemId(classId_);
-                    model.setTopData(topModel);
+                    var topModel = new chlk.models.classes.ClassesForTopBar(classes, classId_);
+                    var model = new chlk.models.calendar.announcement.Month(date_, mpStartDate, mpEndDate, days, topModel);
                     return new ria.async.DeferredData(model);
                 }.bind(this));
 

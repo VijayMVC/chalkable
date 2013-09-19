@@ -29,7 +29,7 @@ NAMESPACE('chlk.services', function () {
                 }).then(function(model){
                     this.getContext().getSession().set('monthCalendarData', model);
                     return model;
-                }.bind(this));
+                }, this);
             },
 
             [[chlk.models.common.ChlkDate]],
@@ -84,10 +84,11 @@ NAMESPACE('chlk.services', function () {
                 }.bind(this));
             },
 
-            [[chlk.models.common.ChlkDate]],
-            ria.async.Future, function getAdminDay(date_) {
-                return this.get('AnnouncementCalendar/AdminDay.json', ArrayOf(chlk.models.calendar.announcement.CalendarDay), {
-                    date: date_ && date_.toString('mm-dd-yy')
+            [[chlk.models.common.ChlkDate, String]],
+            ria.async.Future, function getAdminDay(date_, gradeLevelsIds_) {
+                return this.get('AnnouncementCalendar/AdminDay.json', chlk.models.calendar.announcement.AdminDayCalendar, {
+                    date: date_ && date_.toString('mm-dd-yy'),
+                    gradeLevelsIds: gradeLevelsIds_
                 });
             },
 

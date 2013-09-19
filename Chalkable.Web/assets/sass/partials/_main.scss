@@ -15,8 +15,12 @@
 @import "partials/main/feed/_list";
 @import "partials/main/announcement/_form";
 @import "partials/main/announcement/_view";
+@import "partials/main/calendar/_base_calendar";
 @import "partials/main/calendar/_calendar";
 @import "partials/main/calendar/_announcement";
+@import "partials/main/calendar/_admin_day_calendar";
+
+
 @import "partials/main/settings/_settings";
 @import "partials/main/developer/_info";
 

@@ -52,7 +52,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
                      gradeLevels = gradeLevels.Where(x => gradeLevelIds.Contains(x.Id)).ToList();
                  var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, mp.Id, null);
                  var rooms = SchoolLocator.RoomService.GetRooms();
-                 return Json(AdminDayCalendarViewData.Create(periods, gradeLevels, classPeriods, classes, rooms, currentDay), 5);
+                 return Json(AdminDayCalendarViewData.Create(periods, gradeLevels, classPeriods, classes, rooms, currentDay), 8);
              }
              throw new NoMarkingPeriodException();
          }

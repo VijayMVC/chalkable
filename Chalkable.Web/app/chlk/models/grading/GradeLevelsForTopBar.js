@@ -10,11 +10,14 @@ NAMESPACE('chlk.models.grading', function () {
             Boolean, 'disabled',
             Array, 'selectedIds',
 
-            [[ArrayOf(chlk.models.grading.GradeLevelForTopBar)]],
-            function $(gradeLevels_){
+            [[ArrayOf(chlk.models.grading.GradeLevelForTopBar), String]],
+            function $(gradeLevels_, selectedGradeLevelsIds_){
                 BASE();
                 if(gradeLevels_)
                     this.setTopItems(gradeLevels_);
+                var slGlIdsArray = selectedGradeLevelsIds_ && selectedGradeLevelsIds_ != ''
+                                     ? selectedGradeLevelsIds_.split(',') : [];
+                this.setSelectedIds(slGlIdsArray);
             }
         ]);
 });

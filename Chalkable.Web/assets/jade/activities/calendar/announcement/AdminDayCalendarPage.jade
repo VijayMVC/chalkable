@@ -1,0 +1,59 @@
+.chlk-calendar.admin-day-calendar
+    topData = self.gradeLevelsInputData;
+    topItems = topData.getTopItems();
+    selectedIds = topData.getSelectedIds();
+    calendarItems = self.getCalendarDayItems();
+    gls = self.getGradeLevels();
+    +LeftRightToolbar(topItems, chlk.templates.grading.GradeLevelForTopBar, 'calendar', 'day', [self.getCurrentDate().format('mm-dd-yy')])(
+        selectedIds=selectedIds,
+        multiple
+    ).classes-bar
+    .header
+        .header-container
+            .buttons-container
+                .buttons
+                    .calendar-today-container.admin
+                        A.admin-day-classes.pressed
+                        A.admin-day-teachers
+                    .prev-month-container
+                        if self.getPrevDate()
+                            +ActionLink('calendar', 'day', [self.getPrevDate().format('mm-dd-yy')]).prev-month.week.teacher
+                        else
+                            A.prev-month.week.teacher
+                    .current-month-container.week
+                        label.current-month=self.getCurrentTitle()
+                    .next-month-container
+                        if self.getNextDate()
+                            +ActionLink('calendar', 'day', [self.getNextDate().format('mm-dd-yy')]).next-month.week
+                        else
+                            A.next-month.week
+                    .calendar-day-container
+                        +ActionLink('calendar', 'day').calendar-day.week.pressed
+                            span.tooltip
+                    .calendar-week-container
+                        +ActionLink('calendar', 'week').calendar-week.week
+                            span.tooltip
+                    .calendar-month-container
+                        +ActionLink('calendar', 'month').calendar-month.week
+                            span.tooltip
+
+    .calendar-body
+        .inner-conteiner
+            .day-names
+                 each item in gls
+                    .week
+                        div=item.getName()
+            .items
+                groupedItems = self.getGroupedCalendarItems();
+                each rowItems in groupedItems
+                    .calendar-day-row
+                        each item,i in rowItems
+                            .calendar-day-item
+                                .calendar-day-item-info
+                                    if i == 0
+                                        .period-info=item.getPeriod().getOrder()
+                                    if item.getClassPeriods()
+                                        each classPeriod in item.getClassPeriods()
+                                            .class-info(data-tooltip = self.getToolTip(classPeriod))
+                                                p.class-name=classPeriod.getClazz().getName()
+                                                p.teacher-name.x-hidden=classPeriod.getClazz().getTeacher().getDisplayName()
