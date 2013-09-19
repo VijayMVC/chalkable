@@ -33,6 +33,11 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.storage.DatabaseUpdate]],
             function runSqlAction(model){
                 this.dbMaintenanceService.databaseUpdate(model.getMasterSql(), model.getSchoolSql());
+                this.ShowMsgBox('Db update task is started.', 'fyi.', [{
+                    text: Msg.GOT_IT.toUpperCase(),
+                    controller: "settings",
+                    action: "dashboard"
+                }]);
             },
 
             function backupAction(){
