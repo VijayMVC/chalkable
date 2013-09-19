@@ -62,6 +62,8 @@ BODY {
                   font-size: 48px;
                   line-height: 75px;
                   height: 75px;
+                  @include transition-duration("0.5s");
+                  @include transition-property("all");
                 }
 
                 .title{
@@ -113,6 +115,8 @@ BODY {
                 height: 36px;
                 width: 150px;
                 text-align: center;
+                @include transition-duration("0.5s");
+                @include transition-property("all");
 
                 .slider{
                   margin: 1px 1px 0 1px;
@@ -131,6 +135,14 @@ BODY {
               }
 
               .attendance-content{
+                .students-statistic{
+                  display: none;
+
+                  &.active{
+                    display: block;
+                  }
+                }
+
                 H2 {
                   color: #6c6c6c;
                   font-weight: normal;
@@ -151,6 +163,12 @@ BODY {
                 }
 
                 .all-students{
+                  .hidden-students-block{
+                    height: 0;
+                    overflow: hidden;
+                    @include transition-duration("0.5s");
+                    @include transition-property("all");
+                  }
 
                   &.absent-from-school{
                     .student{
