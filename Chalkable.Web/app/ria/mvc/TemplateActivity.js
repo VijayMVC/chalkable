@@ -16,6 +16,8 @@ NAMESPACE('ria.mvc', function () {
         Append: 'append'
     });
 
+
+
     /** @class ria.mvc.PartialUpdateRule */
     ANNOTATION(
         [[ClassOf(ria.templates.Template), String, String, ria.mvc.PartialUpdateRuleActions]],
@@ -122,6 +124,8 @@ NAMESPACE('ria.mvc', function () {
                 tpl.assign(model);
                 tpl.renderTo(this.dom.empty());
             },
+
+
 
             Object, function doFindTemplateForPartialModel_(model, msg) {
                 var matches = this._partialUpdateRules.filter(function (_) {

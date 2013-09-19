@@ -202,8 +202,7 @@ TEXTAREA.animated-textarea{
   width: 100%;
   position: absolute;
   top: -2px;
-  left: -2px;
-  background: url(images/common/paper-bg.gif) 0 0 repeat-y;
+  left: -2px; background: url(images/common/paper-bg.gif) 0 0 repeat-y;
 
   .horizontal-loader{
     height: 20px;
@@ -232,6 +231,22 @@ TEXTAREA.animated-textarea{
   background: url(../content/images/loaders/circular-grey.gif) center center no-repeat, rgba(0,0,0,0.3);
   z-index: 999;
   @include border-radius(5px);
+}
+
+.partial-update{
+  position: relative;
+
+  &:after {
+    content: ' ';
+    position: absolute;
+    top: 0px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: url(../content/images/loaders/circular-grey.gif) center center no-repeat, rgba(0,0,0,0.3);
+    z-index: 999;
+    @include border-radius(5px);
+  }
 }
 
 #chlk-pop-up-container{

@@ -11,6 +11,7 @@ NAMESPACE('ria.mvc', function () {
     "use strict";
 
     var MODEL_WAIT_CLASS = 'activity-model-wait';
+    var PARTIAL_UPDATE_CLASS = 'partial-update';
 
     function camel2dashed(_) {
         return _.replace(/[a-z][A-Z]/g, function(str, offset) {
@@ -84,12 +85,22 @@ NAMESPACE('ria.mvc', function () {
             [[String]],
             OVERRIDE, VOID, function onModelComplete_(msg_) {
                 this.dom.removeClass(MODEL_WAIT_CLASS);
+                this.dom.removeClass(PARTIAL_UPDATE_CLASS);
                 BASE(msg_);
 
                 if (this._loaderTimer)
                     this._loaderTimer.cancel();
             },
             ABSTRACT, ria.dom.Dom, function onDomCreate_() {},
+
+
+
+
+            [[ria.async.Future, String]],
+            OVERRIDE, ria.async.Future, function partialRefreshD(future, msg_) {
+                this.dom.addClass(PARTIAL_UPDATE_CLASS);
+                return BASE(future, msg_);
+            },
 
             OVERRIDE, VOID, function onCreate_() {
                 BASE();
