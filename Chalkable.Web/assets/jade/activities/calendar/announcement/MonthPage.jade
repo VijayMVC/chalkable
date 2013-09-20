@@ -1,0 +1,75 @@
+.chlk-calendar
+    topData = self.getTopData();
+    topItems = topData.getTopItems();
+    selectedId = topData.getSelectedItemId();
+    selectedId = selectedId ? selectedId.valueOf() : "";
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'calendar', 'month', [self.getCurrentDate().format('mm-dd-yy')])(
+        selectedItemId=selectedId
+    ).classes-bar
+    .header
+        .header-container
+            .buttons-container
+                .buttons
+                    .calendar-today-container
+                        +ActionLink('calendar', 'month', null, selectedId).calendar-today
+                    .prev-month-container
+                        if self.getPrevDate()
+                            +ActionLink('calendar', 'month', self.getPrevDate().format('mm-dd-yy'), selectedId).prev-month
+                        else
+                            A.prev-month
+                    .current-month-container
+                        label.current-month=self.getCurrentTitle()
+                    .next-month-container
+                        if self.getNextDate()
+                            +ActionLink('calendar', 'month', self.getNextDate().format('mm-dd-yy'), selectedId).next-month
+                        else
+                            A.next-month
+                    .calendar-day-container
+                        +ActionLink('calendar', 'day').calendar-day
+                            span.tooltip
+                    .calendar-week-container
+                        +ActionLink('calendar', 'week').calendar-week
+                            span.tooltip
+                    .calendar-month-container
+                        +ActionLink('calendar', 'month').calendar-month.pressed
+                            span.tooltip
+    .day-names
+        div
+            p=Msg.Sunday
+        div
+            p=Msg.Monday
+        div
+            p=Msg.Tuesday
+        div
+            p=Msg.Wednesday
+        div
+            p=Msg.Thursday
+        div
+            p=Msg.Friday
+        div
+            p=Msg.Saturday
+    .items
+        each item in self.getItems()
+            +ActionLink('calendar', 'showMonthDayPopUp', item.getDate().format('mm-dd-yy'))(class = ((item.isSunday() ? 'sunday ' : ' ') + item.getClassName() + ' ' + item.getTodayClassName())).gradient-cnt.item
+                div
+                    h2.number=item.getDay()
+                    .space
+                    announcements = item.getAnnouncements();
+                    max = 7;
+                    if announcements.length > 0
+                        ul(class=item.getRole()).day-announcements
+                            each announcement,i in announcements
+                                if i < item.getAnnLimit() || announcements.length <= item.getAnnLimit()
+                                    li.items=announcement.getTitle()
+                            if announcements.length > item.getAnnLimit()
+                                li +#{announcements.length - item.getAnnLimit() + 1} more
+                    ul.day-items
+                        announcementsLen = announcements.length > 3 ? 3 : announcements.length;
+                        maxLen = max - announcementsLen;
+                        itemsArr = item.getItemsArray();
+                        each annItem,i in itemsArr
+                            if i < maxLen || itemsArr.length <= maxLen
+                                li=annItem.title
+                            if itemsArr.length > maxLen
+                                li +#{itemsArr.length - maxLen + 1} more
+

@@ -1,0 +1,106 @@
+mixin StudentsTpl(students, header, needPlus)
+    preparedStudents = self.getPreparedStudents(students, needPlus)
+    length = students.length
+    blockCount = 18
+    h2 #{length} - #{header}
+    div(attributes).all-students
+        count = Math.ceil(length/blockCount)
+        -for (var i = 0; i < count; i++) {
+            max = length - i * blockCount
+            maxIndex = max < blockCount ? max : blockCount
+            div(class=(((i == count - 1) ? "last-block " : "") + ((i == 0) ? "" : "hidden-students-block no-used")))
+                div.hidden-students-block-2
+                    -for (var j = 0; j < maxIndex; j++) {
+                        index = i*blockCount + j
+                        student = students[index]
+                        if !student.getId()
+                            if i == 0 && j == 0
+                                div(index="0").student.grey.plus
+                                    .plus-container.for-plus +
+                                    .name.for-plus= Msg.Add_student
+                                    .small-pop-up.for-plus
+                                        .container
+                                            .triangle
+                                            .student-search-container
+                                                input.student-search-input
+                                            SPAN.enter= Msg.Enter_when_done
+                            else
+                                div(index=index).student.grey
+                                    .name
+                        else
+                            div(index=index, data-id=student.getId().valueOf()).student
+                                .img-container
+                                    +PersonImg(student, 64)
+                                +ActionLink('students', 'details', student.getId()).name=student.getDisplayName()
+                    -}
+        -}
+    if students.length > blockCount
+        .more-container
+            a.more-students=Msg.More_students
+
+topData = self.getTopData()
+topItems = topData.getTopItems()
+selectedIds = topData.getSelectedIds()
+nowData = self.getNowAttendanceData()
+dayData = self.getAttendanceByDayData()
+mpData = self.getAttendanceByMpData()
+valuesEnum = chlk.models.attendance.AttendanceTypeEnum
+.admin-attendance.loader-container
+    .loader
+    +LeftRightToolbar(topItems, chlk.templates.grading.GradeLevelForTopBar, 'attendance', 'summary', [true])(
+        selectedIds=selectedIds,
+        multiple
+    ).classes-bar
+    .action-bar.not-transparent.buttons.page-1.active-part
+        .container.panel-bg
+            .left
+                .action-button
+                    .export-btn
+    .action-bar.not-transparent.buttons.page-2
+        .container.panel-bg
+            .left
+                .action-button
+                    .export-btn
+            .right
+                +ActionForm('attendance', 'updateSummary').update-summary.day
+                    +DatePicker('nowDateTime', self.getNowDateTime())(
+                        data-options={
+                          showOtherMonths: true,
+                          selectOtherMonths: true
+                        },
+                        name="nowDateTime"
+                    )#nowDateTime.tb-date-picker
+                    +Hidden('gradeLevelsIds', self.getGradeLevelsIds())
+                    +Hidden('renderDay', 'true')
+    .action-bar.not-transparent.buttons.page-3
+        .container.panel-bg
+            .left
+                .action-button
+                    .export-btn
+    .attendance-boxes-admin
+        .boxes-container
+            div(left="0px", text=Msg.Now, data-index="1").attendance-box.attendance-top-box.now-box.active-part
+                .number=self.getNowAttendanceData().getAbsentNowCount()
+                .title=Msg.Not_in_class_right_now
+            div(left="192px", text=Msg.Today, data-index="2").attendance-box.attendance-top-box.day-box
+                .number=self.getAttendanceByDayData().getStudentsCountAbsentWholeDay()
+                .title=Msg.Attendance_today
+            div(left="381px", text=Msg.Marking_Period_shortcut, data-index="3").attendance-box.attendance-top-box.mp-box
+                .number=self.getAttendanceByMpData().getAbsentStudentsCountAvg()
+                .title=Msg.Attendance_MP
+        .slider-line-container
+            .slider-left
+            .slider-line
+            .slider-right
+            .slider-container
+                .slider
+                .active=Msg.Now
+    .attendance-content
+        .attendance-now.students-statistic.page-1.active-part
+            +RenderWith(nowData, chlk.templates.attendance.AdminAttendanceNowTpl)
+        .attendance-day.students-statistic.page-2
+            +RenderWith(dayData, chlk.templates.attendance.AdminAttendanceDayTpl)
+        .attendance-mp.students-statistic.page-3
+            +RenderWith(mpData, chlk.templates.attendance.AdminAttendanceMpTpl)
+
+

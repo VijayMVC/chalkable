@@ -1,0 +1,15 @@
+valuesEnum = chlk.models.attendance.AttendanceTypeEnum
+.attendance-students
+    +StudentsTpl(self.getStudentsAbsentWholeDay(), Msg.Absent_from_school, true).absent-from-school
+div(index="1", type=valuesEnum.EXCUSED.valueOf()).attendance-students.bytype
+    +StudentsTpl(self.getExcusedStudents(), Msg.Excused_from_a_class, true)(
+        class = 'attendance-' + valuesEnum.EXCUSED.valueOf()
+    )
+div(index="2", type=valuesEnum.ABSENT.valueOf()).attendance-students.bytype
+    +StudentsTpl(self.getAbsentStudents(), Msg.Absent_from_a_class, true)(
+        class = 'attendance-' + valuesEnum.ABSENT.valueOf()
+    )
+div(index="3", type=valuesEnum.LATE.valueOf()).attendance-students.bytype
+    +StudentsTpl(self.getLateStudents(), Msg.Late_to_a_class, true)(
+        class = 'attendance-' + valuesEnum.LATE.valueOf()
+    )
