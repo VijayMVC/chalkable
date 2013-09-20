@@ -29,7 +29,9 @@ NAMESPACE('ria.serialize', function () {
 			}
 
             if (clazz === Boolean) {
-                return raw === 'true' || raw === 'on' || raw === true;
+                var intVal = Number(raw);
+                var isNum = !isNaN(intVal) && intVal > 0;
+                return raw === 'true' || raw === 'on' || raw === true || isNum;
             }
 
 			if(clazz === Number && (raw === '' || raw === null)) {

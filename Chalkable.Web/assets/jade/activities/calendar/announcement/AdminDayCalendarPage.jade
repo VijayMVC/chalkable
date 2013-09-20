@@ -54,6 +54,6 @@
                                         .period-info=item.getPeriod().getOrder()
                                     if item.getClassPeriods()
                                         each classPeriod in item.getClassPeriods()
-                                            .class-info(data-tooltip = self.getToolTip(classPeriod))
+                                            .class-info(data-tool-tip = self.getToolTip(classPeriod))
                                                 p.class-name=classPeriod.getClazz().getName()
                                                 p.teacher-name.x-hidden=classPeriod.getClazz().getTeacher().getDisplayName()

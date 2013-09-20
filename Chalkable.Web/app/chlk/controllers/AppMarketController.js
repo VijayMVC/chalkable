@@ -254,12 +254,30 @@ NAMESPACE('chlk.controllers', function (){
                     appInstallData.getCurrentPerson()
                 )
                 .then(function(result){
-                   //todo: msgbox
-                   if (result) {
-                       alert("Installation successful");
-                       this.view.getCurrent().close();
-                   } else
-                       alert("Error while installing app");
+                    var title = result ? "Installation successful" : "Error while installing app.";
+                       return this.ShowMsgBox(title, '', [{
+                           text: 'Ok',
+                           controller: 'appmarket',
+                           action: 'list',
+                           params: [],
+                           color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                       }], 'center');
+                }, this)
+                .attach(this.validateResponse_());
+        },
+
+        [chlk.controllers.SidebarButton('apps')],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.ADMINEDIT,
+            chlk.models.common.RoleEnum.ADMINGRADE
+        ])],
+        [[String]],
+        function uninstallAction(ids) {
+            return this.appMarketService
+                .uninstallApps(ids)
+                .then(function(result){
+                    return this.Redirect('appmarket', 'updateMyApps', [false]);
                 }, this)
                 .attach(this.validateResponse_());
         },
@@ -287,7 +305,6 @@ NAMESPACE('chlk.controllers', function (){
                 if(!data.isSelfInstalled()){
                     additionalMsg = 'NOTE: This app is not self installed.';
                 }
-                var appUninstallIds = this.getIdsList(data.getApplicationInstallIds(), chlk.models.id.ApplicationInstallId);
                 var msgTitle = 'Uninstall the ' + data.getAppName() + ' app?' + additionalMsg;
 
                 return this.ShowMsgBox(msgTitle, 'just checking.', [{
@@ -297,7 +314,7 @@ NAMESPACE('chlk.controllers', function (){
                     text: 'UNINSTALL',
                     controller: 'appmarket',
                     action: 'uninstall',
-                    params: appUninstallIds,
+                    params: [data.getApplicationInstallIds()],
                     color: chlk.models.common.ButtonColor.RED.valueOf()
                 }], 'center');
 

@@ -113,6 +113,14 @@ NAMESPACE('chlk.services', function () {
                         roleIds: this.arrayToCsv(roles),
                         gradelevelids: this.arrayToCsv(gradeLevels)
                     });
+            },
+
+            [[String]],
+            ria.async.Future, function uninstallApps(ids) {
+                return this
+                    .post('AppMarket/Uninstall.json', Boolean, {
+                        applicationInstallIds: ids
+                    });
             }
         ])
 });

@@ -433,6 +433,7 @@ NAMESPACE('chlk.controllers', function (){
                      gradeLevels,
                      !model.isDraft()
                  )
+                 .attach(this.validateResponse_())
                  .then(function(newApp){
                      return this.updateApp(newApp);
                  }, this);

@@ -1,10 +1,22 @@
-.calendar-popup
-    .class-name
-        p=self.getClazz().getName()
-    .info
-        lable.teacher-name=self.getClazz().getTeacher().getDisplayName()
-        div
-           lable="RM " + self.getRoomNumber()
-           lable="Period " + self.getPeriod().getOrder()
-    .popup-footer
-        lable= self.getStudentsCount() + " students"
+clazz = self.getClazz()
+teacher = clazz.getTeacher()
+.admin-day-calendar-popup
+    .calendar-popup
+        .class-name
+            h3.day-day
+                +ActionLink('class', 'details', clazz.getId())=clazz.getName()
+        .info
+            .img-box
+                +ActionLink('teacher', 'info', teacher.getId())
+                    +PersonImg(teacher, 40)
+            .title-holder
+                p.day-down.teacher-name
+                    +ActionLink('teacher', 'info', teacher.getId())=teacher.getDisplayName()
+                div
+                    p.day-down
+                        +ActionLink('class', 'details', clazz.getId())="RM " + self.getRoomNumber()
+                    p.day-down
+                        +ActionLink('class', 'details', clazz.getId())="Period " + self.getPeriod().getOrder()
+        div.popup-footer
+            p.day-down
+                +ActionLink('class', 'details', clazz.getId())= self.getStudentsCount() + " students"

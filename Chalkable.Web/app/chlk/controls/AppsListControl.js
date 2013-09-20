@@ -14,7 +14,8 @@ NAMESPACE('chlk.controls', function () {
             [[Object]],
             VOID, function update(node){
                 var that = this;
-                node.chosen({disable_search_threshold: 1000}).change(function(){
+                //node.chosen({disable_search_threshold: 1000}).change(function(){
+                node.change(function(){
                     var node = jQuery(this);
                     var selected = node.find('option:selected');
                     var controller = selected.data('controller');

@@ -135,7 +135,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     else
                     {
                         curretnAnns = anns.Where(x =>
-                                         (x.AnnouncementTypeRef == adminAnnType && x.Subject.ToLower().Contains(word))
+                                         (x.AnnouncementTypeRef == adminAnnType && x.Subject != null && x.Subject.ToLower().Contains(word))
                                          || (x.MarkingPeriodClassRef.HasValue && x.ClassName.ToLower().Contains(word))
                                          || (!x.MarkingPeriodClassRef.HasValue && "all".Contains(word))
                                          || x.AnnouncementTypeName.ToLower().Contains(word)
