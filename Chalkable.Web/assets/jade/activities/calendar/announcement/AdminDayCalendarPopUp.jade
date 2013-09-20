@@ -1,0 +1,10 @@
+.calendar-popup
+    .class-name
+        p=self.getClazz().getName()
+    .info
+        lable.teacher-name=self.getClazz().getTeacher().getDisplayName()
+        div
+           lable="RM " + self.getRoomNumber()
+           lable="Period " + self.getPeriod().getOrder()
+    .popup-footer
+        lable= self.getStudentsCount() + " students"
