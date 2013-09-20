@@ -265,7 +265,8 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.appsService
                 .addToAnnouncement(appId, announcementId)
                 .then(function(app){
-                    return chlk.models.apps.AppWrapperViewData$createAppAttach(app);
+                    app.setCurrentModeUrl(app.getEditUrl());
+                    return new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.EDIT);
                 })
                 .attach(this.validateResponse_());
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
@@ -275,22 +276,22 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER,
             chlk.models.common.RoleEnum.STUDENT
         ])],
-        [[String, chlk.models.id.AnnouncementApplicationId]],
-        function viewAppAction(url, announcementAppId_) {
-            var app = new chlk.models.apps.AppAttachment();
-            var result = null;
-            //todo: fix this check if its grading mode setGradingViewUrl()
+        [[String, String, chlk.models.apps.AppModes, chlk.models.id.AnnouncementApplicationId]],
+        function viewAppAction(url, viewUrl, mode, announcementAppId_) {
 
-            app.setViewUrl(viewUrl);
-            if (announcementAppId_) {
+            //todo: check if user has my apps view
 
-
-                app.setAnnouncementApplicationId(announcementAppId_);
-                result = chlk.models.apps.AppWrapperViewData$createAppView(app);
-            }
-            else {
-                result = chlk.models.apps.AppWrapperViewData$createMyAppView(app);
-            }
+            var result = this.appsService
+                .getOauthCode(url)
+                .then(function(code){
+                    var app = new chlk.models.apps.AppAttachment();
+                    app.setCurrentModeUrl(viewUrl);
+                    app.setOauthCode(code);
+                    if (announcementAppId_) {
+                        app.setAnnouncementApplicationId(announcementAppId_);
+                    }
+                    return new chlk.models.apps.AppWrapperViewData(app, mode);
+                });
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
 
@@ -342,7 +343,6 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
         },
 
-
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
@@ -368,19 +368,11 @@ NAMESPACE('chlk.controllers', function (){
             }], 'center');
         },
 
-
-
-
-
-
-
-
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
         [[chlk.models.apps.AppPostData]],
         function updateDeveloperAction(model){
-
 
              var shortAppData = new chlk.models.apps.ShortAppInfo(
                 model.getName(),
@@ -401,9 +393,7 @@ NAMESPACE('chlk.controllers', function (){
                  model.isShowInGradingViewEnabled()
              );
 
-
              var isFreeApp = model.isFree();
-
 
              var isSchoolFlatRateEnabled = model.isSchoolFlatRateEnabled();
              var isClassFlatRateEnabled = model.isSchoolFlatRateEnabled();

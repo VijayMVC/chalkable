@@ -29,44 +29,42 @@ NAMESPACE('chlk.models.apps', function () {
     CLASS(
         'AppWrapperViewData', [
             chlk.models.apps.AppModes, 'appMode',
-            ArrayOf(chlk.models.apps.AppWrapperToolbarButton), 'buttons',
+            ArrayOf(chlk.models.apps.AppWrapperToolbarButton), 'toolbarButtons',
             chlk.models.apps.AppAttachment, 'app',
 
-            [[chlk.models.apps.Application,
-                chlk.models.apps.AppModes,
-                ArrayOf(chlk.models.apps.AppWrapperToolbarButton)]],
-            function $(app, mode, buttons){
+            [[chlk.models.apps.Application, chlk.models.apps.AppModes]],
+            function $(app, mode){
                 BASE();
 
+
+
+                var fullUrl = app.getCurrentModeUrl() + "&code=" + app.getOauthCode();
+                app.setCurrentModeUrl(fullUrl);
                 this.setApp(app);
                 this.setAppMode(mode);
-                this.setButtons(buttons);
-            }
 
+                var buttons = [];
+                switch(mode){
+                    case chlk.models.apps.AppModes.EDIT:{
+                        buttons.push(new chlk.models.apps.AppWrapperToolbarButton('add-app', '+ Attach'));
+                    }break;
+
+                    case chlk.models.apps.AppModes.VIEW:
+                    case chlk.models.apps.AppModes.GRADINGVIEW:{
+                        buttons.push(new chlk.models.apps.AppWrapperToolbarButton('save-app', 'Save'));
+                    }break;
+
+                    case chlk.models.apps.AppModes.MYAPPSVIEW:{
+                        buttons.push(new chlk.models.apps.AppWrapperToolbarButton('new-tab-id', 'New Tab', app.getCurrentModeUrl(), true));
+                    }break;
+                }
+
+                this.setToolbarButtons(buttons);
+
+            }
 
         ]);
 
 
-    //join in one method
 
-    chlk.models.apps.AppWrapperViewData$createAppAttach = function(app){
-        var attachBtn = new chlk.models.apps.AppWrapperToolbarButton('add-app', '+ Attach');
-        app.setCurrentModeUrl(app.getEditUrl());
-        var appWrapperViewData = new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.EDIT, [attachBtn]);
-        return new ria.async.DeferredData(appWrapperViewData);
-    };
-
-    chlk.models.apps.AppWrapperViewData$createAppView = function(app){
-        var saveBtn = new chlk.models.apps.AppWrapperToolbarButton('save-app', 'Save');
-        app.setCurrentModeUrl(app.getViewUrl());
-        var appWrapperViewData = new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.VIEW, [saveBtn]);
-        return new ria.async.DeferredData(appWrapperViewData);
-    };
-
-    chlk.models.apps.AppWrapperViewData$createMyAppView = function(app){
-        var newTabBtn = new chlk.models.apps.AppWrapperToolbarButton('new-tab-id', 'New Tab', app.getMyAppsUrl(), true);
-        app.setCurrentModeUrl(app.getMyAppsUrl());
-        var appWrapperViewData = new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.VIEW, [newTabBtn]);
-        return new ria.async.DeferredData(appWrapperViewData);
-    };
 });
