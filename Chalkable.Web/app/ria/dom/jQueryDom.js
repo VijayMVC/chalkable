@@ -204,7 +204,7 @@ NAMESPACE('ria.dom', function () {
 
             [[SELF]],
             OVERRIDE, SELF, function remove(node_) {
-                node_ ? node_._dom.remove() : this._dom.remove();
+                node_ ? node_.remove() : this._dom.remove();
                 return this;
             },
 

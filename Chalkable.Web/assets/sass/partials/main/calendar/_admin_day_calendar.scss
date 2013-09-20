@@ -102,6 +102,7 @@ BODY {
                       display: table-row;
 
                       .calendar-day-item{
+                        text-align: center;
                         display: table-cell;
                         border-left: 1px solid #ffffff;
                         border-right: 1px solid #cbcbcb;
@@ -138,6 +139,67 @@ BODY {
                 }
               }
             }
+          }
+        }
+      }
+    }
+  }
+}
+
+#chlk-pop-up-container{
+  .admin-day-calendar-popup{
+    .calendar-popup{
+      text-shadow: 1px -1px 1px #fff;
+      .class-name{
+        padding: 0px;
+        .day-day{
+          padding: 0px;
+          margin: 0px;
+          height: auto;
+          padding-bottom: 2px;
+        }
+      }
+      .info{
+        .img-box{
+          max-width: 44px;
+          max-height: 44px;
+          display: inline-block;
+          position: absolute;
+          left: 4px;
+        }
+        .title-holder{
+          left: 16px;
+          position: relative;
+          .day-down{
+            padding-left: 5px;
+            padding-right: 5px;
+            A{
+              white-space: nowrap;
+            }
+            &.teacher-name{
+              top: 0px;
+              A{
+                font-size: 16px;
+                color: #474747;
+                font-family: Arial;
+                font-style: normal;
+              }
+            }
+          }
+
+        }
+      }
+      .popup-footer{
+        .day-down{
+          text-align: center;
+          A{
+            text-decoration: none !important;
+            font-size: 12px;
+            color: #7c7c7c;
+            font-family: Georgia;
+            font-style: italic;
+            cursor: pointer;
+            line-height: 18px;
           }
         }
       }
