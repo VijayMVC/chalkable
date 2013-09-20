@@ -4,14 +4,11 @@ mixin Image()
 
 mixin PersonImg(person, size)
     if(person && person.getGender())
-        src = chlk.templates.JadeTemplate.prototype.getPictureURL(person.getId(), size, size);
+        src = chlk.templates.JadeTemplate.prototype.getPictureURL(person.getId(), size, size)
         isWoman = person.getGender().toLowerCase() == 'f';
         alternativeHref = joinUrls(window.scriptsRoot, 'Content/avatars/' + size + '/.no-avatar') + (isWoman ? '-female' : '') + '.png';
-        -attributes.src = src;
-        -attributes.alternativeSrc = alternativeHref;
-        -attributes['class'] = attributes['class'] || [];
-        -attributes['class'].push('avatar', 'avatar-' + size);
-        +Image()(attributes)
+        div.person-avatar-wrapper
+            div(attributes)(class="person-avatar-" + (isWoman ? "w" : "m") + "-" + size, style = "background-image: url(" + src + ")")
 
 mixin ClassImg(course, width, height)
     -defaultSrc =joinUrls(window.scriptsRoot, 'Content/images/common/course-icons/all.png');
