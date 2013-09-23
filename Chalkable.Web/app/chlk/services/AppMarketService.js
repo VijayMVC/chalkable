@@ -7,6 +7,7 @@ REQUIRE('chlk.models.apps.AppCategory');
 REQUIRE('chlk.models.apps.AppMarketApplication');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.apps.AppInstallPostData');
+REQUIRE('chlk.models.people.Role');
 
 
 
@@ -17,6 +18,15 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.AppMarketService */
     CLASS(
         'AppMarketService', EXTENDS(chlk.services.BaseService), [
+
+
+
+
+            [[String]],
+            ria.async.Future, function getAppsByFilter(filter_) {
+                return this.getApps(null, filter_, true, true)
+                    .then(function(model){return model.getItems();});
+            },
 
 
             [[ArrayOf(chlk.models.apps.AppCategory), ArrayOf(chlk.models.apps.AppGradeLevel),
@@ -92,6 +102,29 @@ NAMESPACE('chlk.services', function () {
                 return this
                     .get('AppMarket/Read.json', chlk.models.apps.AppMarketApplication, {
                         applicationId: appId.valueOf()
+                    })
+                    .then(function(app){
+                        //todo:remove this later
+                        var roles = [];
+
+                        var studentRole = new chlk.models.people.Role();
+                        studentRole.setName('Student');
+                        studentRole.setId(3);
+
+                        var teacherRole = new chlk.models.people.Role();
+                        teacherRole.setName('Teacher');
+                        teacherRole.setId(2);
+
+                        var adminRole = new chlk.models.people.Role();
+                        adminRole.setName('Admin');
+                        adminRole.setId(7);
+
+                        roles.push(studentRole);
+                        roles.push(adminRole);
+                        roles.push(teacherRole);
+
+                        app.setValidRoles(roles);
+                        return app;
                     });
             },
 

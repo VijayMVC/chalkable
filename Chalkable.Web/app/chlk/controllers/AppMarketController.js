@@ -41,6 +41,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('apps')],
         [[Number]],
+            //todo: add sort mode and other options
         function listAction(pageIndex_) {
             var result = this.appCategoryService
                 .getCategories()
@@ -63,7 +64,8 @@ NAMESPACE('chlk.controllers', function (){
                         return app;
                     }, this);
                     apps.setItems(items);
-                    return new chlk.models.apps.AppMarketViewData(apps);
+                    //TODO: get current balance
+                    return new chlk.models.apps.AppMarketViewData(apps, 0);
                 }, this)
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.apps.AppMarketPage, result);

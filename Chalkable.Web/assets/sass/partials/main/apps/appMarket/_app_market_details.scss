@@ -75,49 +75,68 @@ DIV.page {
                   }
 
                   .permission {
-                    height: 44px;
-                    cursor: default;
-
+                    padding: 10px 0 10px 20px;
+                    height: 25px;
                     margin: 0;
                     font-size: 15px;
-                    padding-left: 46px;
-                    background: url(images/app/info-for.png) 14px -42px no-repeat;
-                    text-transform: capitalize;
-                    height: 18px;
+                    text-align: left;
 
-                    color: #9d9d9d;
-                    text-shadow: 1px -1px 1px #fff;
+                    background: url(images/common/dialog-separator.png) bottom no-repeat;
 
-                    &.role-2 {
-                      background-position: 14px -21px;
+                    .icon{
+                      vertical-align: middle;
+                      display: inline-block;
+                      width: 18px;
+                      height: 18px;
+                      margin-right: 35px;
+
+                      background: url(images/app/info-for.png) 0px -42px no-repeat;
+
+
+                      //todo change to names
+                      &.permission-role-teacher {
+                        background-position: 0px -21px;
+                      }
+
+                      &.permission-role-student{
+                        background-position: 0px 1px;
+                      }
+
+                      &.permission-none {
+                        background-position: 0px -107px;
+                      }
+
+                      &.permission-grade{
+                        background-position: 0px -64px;
+                      }
+
+                      &.permission-attendance {
+                        background-position: 0px -133px;
+                      }
+
+                      &.permission-schedule {
+                        background-position: 0px -159px;
+                      }
+
+                      &.permission-discipline {
+                        background-position: 0px -85px;
+                      }
+
+                      &.permission-message {
+                        background-position: 0px -182px;
+                      }
                     }
-
-                    &.role-3 {
-                      background-position: 14px 1px;
-                    }
-
-                    &.permission--1 {
-                      background-position: 14px -107px;
-                    }
-
-                    &.permission-2 {
-                      background-position: 14px -64px;
-                    }
-
-                    &.permission-3 {
-                      background-position: 14px -133px;
-                    }
-
-                    &.permission-6 {
-                      background-position: 14px -159px;
-                    }
-
-                    &.permission-7 {
-                      background-position: 14px -85px;
-                    }
-
-                    &.permission-1 {
-                      background-position: 14px -182px;
+                    .description{
+                      vertical-align: middle;
+                      display: inline-block;
+                      text-overflow: ellipsis;
+                      font-family: Arial;
+                      color: #9d9d9d;
+                      text-shadow: 1px -1px 1px #fff;
+                      text-transform: capitalize;
+                      font-style: normal;
+                      width: 95px;
+                      overflow: hidden;
                     }
                   }
                 }

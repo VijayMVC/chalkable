@@ -27,9 +27,7 @@
 @import "partials/main/developer/_app";
 @import "partials/main/developer/_app_general";
 
-@import "partials/main/apps/appMarket/_app_market";
-@import "partials/main/apps/appMarket/_app_market_details";
-@import "partials/main/apps/appMarket/_app_market_install";
+@import "partials/main/apps/_market_pages";
 
 @import "partials/main/apps/_app_wrapper";
 @import "partials/main/apps/_my_apps";
@@ -44,7 +42,7 @@
 @import "partials/main/popups/_attach_app";
 @import "partials/main/popups/_set_discipline";
 
-@import "partials/main/disciplines/discipline_list";
+@import "partials/main/disciplines/_discipline_list";
 
 @import "partials/main/messages/_list";
 @import "partials/main/messages/_add";

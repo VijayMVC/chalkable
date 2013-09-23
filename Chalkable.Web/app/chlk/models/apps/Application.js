@@ -57,6 +57,9 @@ NAMESPACE('chlk.models.apps', function () {
             [ria.serialize.SerializeProperty('applicationaccess')],
             chlk.models.apps.AppAccess, 'appAccess',
             ArrayOf(chlk.models.apps.AppPermission), 'permissions',
+            [ria.serialize.SerializeProperty('canlaunchroles')],
+            ArrayOf(chlk.models.people.Role), 'validRoles',
+
             ArrayOf(chlk.models.apps.AppCategory), 'categories',
             [ria.serialize.SerializeProperty('gradelevels')],
             ArrayOf(chlk.models.id.AppGradeLevelId), 'gradeLevels'
