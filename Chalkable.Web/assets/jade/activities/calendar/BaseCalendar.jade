@@ -1,0 +1,36 @@
+mixin Calendar(data, bodyTpl, bodyModel, controller, actions, params)
+    .chlk-calendar
+        .header
+            .header-container
+                .buttons-container
+                    .buttons
+                        block
+                        +CalendarHeader(data, controller, actions, params)
+        .calendar-body
+            +RenderWith(bodyModel, bodyTpl)
+
+
+mixin CalendarHeader(data, controller, actions, params)
+    currentAction = actions.currentAction
+        .prev-month-container
+            if data.getPrevDate()
+                +ActionLink(controller, currentAction, data.getPrevDate().format('mm-dd-yy')).prev-month.week.teacher
+            else
+                A.prev-month.week.teacher
+        .current-month-container.week
+            label.current-month=data.getCurrentTitle()
+        .next-month-container
+            if data.getNextDate()
+                +ActionLink(controller, currentAction, data.getNextDate().format('mm-dd-yy')).next-month.week
+            else
+                A.next-month.week
+        if actions.day && actions.week && actions.month
+            .calendar-day-container
+                +ActionLink(controller, actions.day)(class= actions.day == currentAction ? 'pressed' : '' ).calendar-day.week
+                    span.tooltip
+            .calendar-week-container
+                +ActionLink(controller, actions.week)(class= actions.week == currentAction ? 'pressed' : '' ).calendar-week.week
+                    span.tooltip
+            .calendar-month-container
+                +ActionLink(controller, actions.month)(class= actions.month == currentAction ? 'pressed' : '' ).calendar-month.week
+                    span.tooltip

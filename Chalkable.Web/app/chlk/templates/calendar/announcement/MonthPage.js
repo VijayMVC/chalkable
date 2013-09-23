@@ -1,5 +1,6 @@
 REQUIRE('chlk.templates.calendar.BaseCalendarTpl');
 REQUIRE('chlk.models.calendar.announcement.Month');
+REQUIRE('chlk.templates.calendar.announcement.MonthCalendarBodyTpl');
 
 NAMESPACE('chlk.templates.calendar.announcement', function () {
     "use strict";
@@ -15,5 +16,9 @@ NAMESPACE('chlk.templates.calendar.announcement', function () {
 
             [ria.templates.ModelPropertyBind],
             chlk.models.classes.ClassesForTopBar, 'topData'
+//            ,
+//            Object, function getDataForToolBar(){
+//
+//            }
         ]);
 });
