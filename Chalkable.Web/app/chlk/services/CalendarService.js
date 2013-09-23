@@ -26,7 +26,7 @@ NAMESPACE('chlk.services', function () {
                 return this.get('AnnouncementCalendar/List.json', ArrayOf(chlk.models.calendar.announcement.MonthItem), {
                     classId: classId_ && classId_.valueOf(),
                     date: date_ && date_.toString('mm-dd-yy'),
-                    gradeLevelIds : gradeLevels_
+                    gradeLevelIds : gradeLevels_ && gradeLevels_.toString()
                 }).then(function(model){
                     this.getContext().getSession().set('monthCalendarData', model);
                     return model;

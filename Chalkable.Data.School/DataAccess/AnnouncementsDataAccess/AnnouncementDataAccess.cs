@@ -248,7 +248,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public bool GradedOnly { get; set; }
         public bool AllSchoolItems { get; set; }
 
-        public IEnumerable<Guid> GradeLevelIds { get; set; }
+        public IList<Guid> GradeLevelIds { get; set; }
 
         public AnnouncementsQuery()
         {
