@@ -32,7 +32,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.district.DistrictListPage, result);
         },
 
-
+        //TODO: join with list
         [[Number]],
         function pageAction(pageIndex) {
             var result = this.districtService
