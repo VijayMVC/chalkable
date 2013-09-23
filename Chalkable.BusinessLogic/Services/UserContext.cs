@@ -31,6 +31,9 @@ namespace Chalkable.BusinessLogic.Services
         public bool IsOAuthUser { get; set; }
         public IList<AppPermissionType> AppPermissions { get; set; }
 
+        public bool IsInternalApp{ get; set; }
+        public string OAuthApplication{ get; set; }
+
         public UserContext(Guid id, Guid? schoolId, string login, string schoolName, string schoolTimeZoneId, string schoolServerUrl, CoreRole role, Guid? developerId)
         {
             SchoolServerUrl = schoolServerUrl;

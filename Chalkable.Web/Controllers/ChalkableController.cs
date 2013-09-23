@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Mime;
-using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
@@ -15,6 +14,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
 using Chalkable.Web.ActionResults;
 using Chalkable.Web.Authentication;
+using Microsoft.IdentityModel.Claims;
 
 namespace Chalkable.Web.Controllers
 {
@@ -22,6 +22,7 @@ namespace Chalkable.Web.Controllers
     {
 
         protected const int DEFAULT_PAGE_SIZE = 10;
+        private const string ACTOR_SUFFIX = "actor";
 
         public new ActionResult Json(object data, int serializationDepth = 10)
         {
@@ -66,25 +67,21 @@ namespace Chalkable.Web.Controllers
             base.Initialize(requestContext);
             var chalkablePrincipal = User as ChalkablePrincipal;
             UserContext context = null;
-            
-            //TODO: authenticateByToken
-            //bool isAuthenticatedByToken = OauthAuthenticate.Instance.TryAuthenticateByToken(requestContext);
-            //if (isAuthenticatedByToken)
-            //{
-            //    if ()
-            //    {
-            //        SchoolLocator = LocatorFactory.Create(User.Identity.Name);
-            //        var claims = (User.Identity as ClaimsIdentity).Claims;
-            //        var actor = claims.First(x => x.ClaimType.EndsWith(ACTOR_SUFFIX)).Value;
 
-            //        SchoolLocator.Context.IsOAuthUser = true;
-            //        var app = ServiceLocator.ApplicationService.GetApplicationByUrl(actor);
-            //        SchoolLocator.Context.IsInternalApp = app != null && app.IsInternal;
-            //        SchoolLocator.Context.OAuthApplication = actor;
-            //        SchoolLocator.Context.AppPermissions = ServiceLocator.ApplicationService.GetPermisions(actor);
-            //        return;
-            //    }
-            //}
+            bool isAuthenticatedByToken = OauthAuthenticate.Instance.TryAuthenticateByToken(requestContext);
+            if (isAuthenticatedByToken)
+            {
+                InitServiceLocators(User.Identity.Name);
+                var claims = (User.Identity as ClaimsIdentity).Claims;
+                var actor = claims.First(x => x.ClaimType.EndsWith(ACTOR_SUFFIX)).Value;
+
+                SchoolLocator.Context.IsOAuthUser = true;
+                var app = MasterLocator.ApplicationService.GetApplicationByUrl(actor);
+                SchoolLocator.Context.IsInternalApp = app != null && app.IsInternal;
+                SchoolLocator.Context.OAuthApplication = actor;
+                SchoolLocator.Context.AppPermissions = MasterLocator.ApplicationService.GetPermisions(actor);
+                return;
+            }
 
             if (chalkablePrincipal != null && chalkablePrincipal.Identity.IsAuthenticated
                 && !string.IsNullOrEmpty(chalkablePrincipal.Identity.Name))
@@ -92,6 +89,16 @@ namespace Chalkable.Web.Controllers
                 context = chalkablePrincipal.Context;
             }
             InitServiceLocators(context);
+        }
+
+        private void InitServiceLocators(string userName)
+        {
+            var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
+            var user = serviceLocator.UserService.GetByLogin(userName);
+            if(user.SchoolUsers == null || user.SchoolUsers.Count == 0)
+                throw new ChalkableException(ChlkResources.ERR_USER_IS_NOT_ASSIGNED_TO_SCHOOL);
+            SchoolLocator = ServiceLocatorFactory.CreateSchoolLocator(user.SchoolUsers.First());
+            MasterLocator = SchoolLocator.ServiceLocatorMaster;
         }
 
         protected void InitServiceLocators(UserContext context)
