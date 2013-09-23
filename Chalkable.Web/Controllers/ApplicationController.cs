@@ -39,7 +39,7 @@ namespace Chalkable.Web.Controllers
             //{
             //    MixPanelService.CreatedApp(SchoolLocator.Context.UserName, application.Name);
             //}
-            return PrepareAppInfo(application);
+            return PrepareAppInfo(application, true, true);
         }
 
         [AuthorizationFilter("SysAdmin, Developer")]
@@ -72,7 +72,7 @@ namespace Chalkable.Web.Controllers
             //                                          subjects, appPrices.Price, appPrices.PricePerSchool, appPrices.PricePerClass);
             //}
 
-            return PrepareAppInfo(app);
+            return PrepareAppInfo(app, true, true);
         }
 
         [AuthorizationFilter("SysAdmin, Developer")]
@@ -85,7 +85,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult GetInfo(Guid applicationId)
         {
             var res = MasterLocator.ApplicationService.GetApplicationById(applicationId);
-            return PrepareAppInfo(res, true);
+            return PrepareAppInfo(res, true, true);
         }
 
         [AuthorizationFilter("SysAdmin, Developer")]
@@ -179,9 +179,9 @@ namespace Chalkable.Web.Controllers
         }
 
         private const string contentType = "text/html";
-        private ActionResult PrepareAppInfo(Application application, bool needsliveApp = false)
+        private ActionResult PrepareAppInfo(Application application, bool needsliveApp = false, bool needsSecretKey = false)
         {
-            return Json(PrepareAppInfo(MasterLocator, application, needsliveApp), contentType);
+            return Json(PrepareAppInfo(MasterLocator, application, needsliveApp, needsSecretKey), contentType);
         }
         public static ApplicationViewData PrepareAppInfo(IServiceLocatorMaster locator, Application application, 
             bool needsliveApp = false, bool needsSecretKey = false)

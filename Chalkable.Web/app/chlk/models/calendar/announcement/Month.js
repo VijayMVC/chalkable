@@ -1,7 +1,7 @@
 REQUIRE('chlk.models.calendar.announcement.MonthItem');
 REQUIRE('chlk.models.classes.ClassesForTopBar');
 REQUIRE('chlk.models.calendar.BaseCalendar');
-
+REQUIRE('chlk.models.grading.GradeLevelsForTopBar');
 
 NAMESPACE('chlk.models.calendar.announcement', function () {
     "use strict";
@@ -13,11 +13,16 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
 
             chlk.models.classes.ClassesForTopBar, 'topData', //todo: rename
 
+            chlk.models.grading.GradeLevelsForTopBar, 'gradeLevelsForToolBar',
+
+            Boolean, 'admin',
 
             [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate
-                , ArrayOf(chlk.models.calendar.announcement.MonthItem), chlk.models.classes.ClassesForTopBar
+                , ArrayOf(chlk.models.calendar.announcement.MonthItem)
+                , chlk.models.classes.ClassesForTopBar
+                , chlk.models.grading.GradeLevelsForTopBar
             ]],
-            function $(date_, minDate_, maxDate_, monthItems_, classes_){
+            function $(date_, minDate_, maxDate_, monthItems_, classes_, gradeLevels_){
                 BASE();
                 if(minDate_ && maxDate_)
                     this.setBaseCalendarData(date_ || null, minDate_, maxDate_);
@@ -25,6 +30,8 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
                     this.setItems(monthItems_);
                 if(classes_)
                     this.setTopData(classes_);
+                if(gradeLevels_)
+                    this.setGradeLevelsForToolBar(gradeLevels_);
             },
 
             [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],

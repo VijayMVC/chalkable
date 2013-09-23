@@ -19,10 +19,13 @@ each attachment, i in attachments
 
 each app, i in applications
     viewUrl = self.isGradable() && !self.needDeleteButton ? app.getGradingViewUrl() : app.getViewUrl()
+    appMode = self.isGradable() && !self.needDeleteButton ? chlk.models.apps.AppModes.GRADINGVIEW : chlk.models.apps.AppModes.VIEW
+    appUrl = app.getUrl()
+    -console.log(appUrl)
     div.announcement-item.application
         if self.needDeleteButton
             +ActionLink('announcement', 'deleteApp', app.getAnnouncementApplicationId()).close-btn
-        +ActionLink('apps', 'viewApp', viewUrl, app.getAnnouncementApplicationId())
+        +ActionLink('apps', 'viewApp', appUrl, viewUrl, appMode, app.getAnnouncementApplicationId())
             +LoadingImage(src=self.getPictureURL(app.getSmallPictureId(), 74, 74), id="loading-image-" + i)
             .title
                 div=app.getName()

@@ -345,7 +345,7 @@ namespace Chalkable.Data.School.DataAccess
             if (gradeLevelsIds != null && gradeLevelsIds.Count > 0)
             {
                 var strGls = gradeLevelsIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
-                res.Sql.AppendFormat(@" AND ClassAttendance.[{0}] in (select * from ClassPeriod
+                res.Sql.AppendFormat(@" AND ClassAttendance.[{0}] in (select ClassPeriod.Id from ClassPeriod
                                                                       join Class on Class.Id = ClassPeriod.ClassRef
                                                                       where Class.[{1}] in ({2}))"
                     , ClassAttendance.CLASS_PERIOD_REF_FIELD, Class.GRADE_LEVEL_REF_FIELD, strGls);     

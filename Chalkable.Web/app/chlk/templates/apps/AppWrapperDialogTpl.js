@@ -15,7 +15,7 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.apps.AppAttachment, 'app',
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.apps.AppWrapperToolbarButton), 'buttons'
+            ArrayOf(chlk.models.apps.AppWrapperToolbarButton), 'toolbarButtons'
 
         ])
 });

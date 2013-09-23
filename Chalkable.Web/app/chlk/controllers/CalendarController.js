@@ -92,18 +92,22 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.calendar.announcement.AdminDayCalendarPage, result);
         },
 
-        [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
-        function weekAction(date_, classId_){
+        [[chlk.models.common.ChlkDate, chlk.models.id.ClassId, String]],
+        function weekAction(date_, classId_, gradeLevels_){
             var markingPeriod = this.getContext().getSession().get('markingPeriod');
+            var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);
+            var glsInputData = new chlk.models.grading.GradeLevelsForTopBar(gradeLevels, gradeLevels_);
+
             var result = this.calendarService
-                .getWeekInfo(classId_, date_)
+                .getWeekInfo(classId_, date_, gradeLevels_)
                 .attach(this.validateResponse_())
                 .then(function(days){
                     var startDate = markingPeriod.getStartDate();
                     var endDate = markingPeriod.getEndDate();
                     var classes = this.classService.getClassesForTopBar(true);
                     var topModel = new chlk.models.classes.ClassesForTopBar(classes, classId_);
-                    var model = new chlk.models.calendar.announcement.Week(date_, startDate, endDate, days, topModel);
+                    var model = new chlk.models.calendar.announcement.Week(date_, startDate, endDate, days, topModel, glsInputData);
+                    model.setAdmin(this.userIsAdmin());
                     return new ria.async.DeferredData(model);
                 }.bind(this));
 
@@ -112,11 +116,13 @@ NAMESPACE('chlk.controllers', function (){
 
         //TODO: refactor
         [chlk.controllers.SidebarButton('calendar')],
-        [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
-        function monthAction(date_, classId_){
+        [[chlk.models.common.ChlkDate, chlk.models.id.ClassId, String]],
+        function monthAction(date_, classId_, gradeLevels_){
             var markingPeriod = this.getContext().getSession().get('markingPeriod');
+            var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);
+            var glsInputData = new chlk.models.grading.GradeLevelsForTopBar(gradeLevels, gradeLevels_);
             var result = this.calendarService
-                .listForMonth(classId_, date_)
+                .listForMonth(classId_, date_, gradeLevels_)
                 .attach(this.validateResponse_())
                 .then(function(days){
                     var mpStartDate = markingPeriod.getStartDate();
@@ -165,7 +171,8 @@ NAMESPACE('chlk.controllers', function (){
                     }.bind(this));
                     var classes = this.classService.getClassesForTopBar(true);
                     var topModel = new chlk.models.classes.ClassesForTopBar(classes, classId_);
-                    var model = new chlk.models.calendar.announcement.Month(date_, mpStartDate, mpEndDate, days, topModel);
+                    var model = new chlk.models.calendar.announcement.Month(date_, mpStartDate, mpEndDate, days, topModel, glsInputData);
+                    model.setAdmin(this.userIsAdmin());
                     return new ria.async.DeferredData(model);
                 }.bind(this));
 
