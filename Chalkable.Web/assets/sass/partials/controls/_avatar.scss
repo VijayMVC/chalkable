@@ -1,0 +1,189 @@
+@import "compass/css3/border-radius";
+@import "compass/css3/images";
+@import "compass/css3/background-size";
+@import "compass/css3/box-shadow";
+
+.avatar-container{
+
+  overflow: hidden;
+  &.with-border{
+    border-radius: 6px;
+    border: 2px solid #888;
+    @include box-shadow(0 2px 2px #777);
+  }
+  display: inline-block;
+  background: white;
+
+  &.white{
+    border-top: 1px solid #adadad;
+    display: inline-block;
+  }
+
+}
+
+.avatar {
+  overflow: hidden;
+  display: block;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  &.white{
+    border: 2px solid #fff;
+  }
+
+  &.gray{
+    border: 2px solid #f4f4f4;
+  }
+
+  &.avatar-24 {
+    width: 24px;
+    height: 24px;
+  }
+
+  &.avatar-40 {
+    width: 40px;
+    height: 40px;
+  }
+
+  &.avatar-47 {
+    width: 47px;
+    height: 47px;
+
+    &.size-41{
+      width: 41px;
+      height: 41px;
+    }
+  }
+
+  &.avatar-64 {
+    width: 64px;
+    height: 64px;
+  }
+
+  &.avatar-128 {
+    width: 128px;
+    height: 128px;
+  }
+
+  &.avatar-256 {
+    width: 256px;
+    height: 256px;
+  }
+
+  &.blank{
+    margin: 5px;
+    float: left;
+    width: 64px;
+    height: 64px;
+  }
+
+}
+
+.photo-conainer{
+  padding-top: 7px;
+
+  .photo-avatar{
+    background: url(images/profile/avatar-frame.png) no-repeat;
+    height: 252px;
+    width: 202px;
+    padding: 21px 18px 0px;
+    .avatar{
+      border-width: 0px;
+      background: none;
+      width: 201px;
+      height: 167px;
+    }
+  }
+}
+
+.person-avatar-wrapper {
+  position: relative;
+  z-index: 0;
+}
+
+.person-avatar-m-40, .person-avatar-w-40, .person-avatar-m-47, .person-avatar-w-47, .person-avatar-m-64, .person-avatar-w-64, .person-avatar-m-128, .person-avatar-w-128{
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+  &:before{
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+    content: " ";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+  }
+}
+
+.person-avatar-m-40, .person-avatar-w-40{
+  height: 40px;
+  width: 40px;
+}
+
+.person-avatar-m-40{
+  &:before{
+    background-image: url(avatars/40/.no-avatar.png);
+  }
+}
+
+.person-avatar-w-40{
+  &:before{
+    background-image: url(avatars/40/.no-avatar-female.png);
+  }
+}
+
+.person-avatar-m-47, .person-avatar-w-47{
+  height: 47px;
+  width: 47px;
+}
+
+.person-avatar-m-47{
+  &:before{
+    background-image: url(avatars/47/.no-avatar.png);
+  }
+}
+
+.person-avatar-w-47{
+  &:before{
+    background-image: url(avatars/47/.no-avatar-female.png);
+  }
+}
+
+.person-avatar-m-64, .person-avatar-w-64{
+  height: 64px;
+  width: 64px;
+}
+
+.person-avatar-m-64{
+  &:before{
+    background-image: url(avatars/64/.no-avatar.png);
+  }
+}
+
+.person-avatar-w-64{
+  &:before{
+    background-image: url(avatars/64/.no-avatar-female.png);
+  }
+}
+
+.person-avatar-m-128, .person-avatar-w-128{
+  height: 128px;
+  width: 128px;
+}
+
+.person-avatar-m-128{
+  &:before{
+    background-image: url(avatars/128/.no-avatar.png);
+  }
+}
+
+.person-avatar-w-128{
+  &:before{
+    background-image: url(avatars/128/.no-avatar-female.png);
+  }
+}

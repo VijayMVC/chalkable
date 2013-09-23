@@ -1,0 +1,35 @@
+@import "compass/css3/border-radius";
+@import "compass/css3/images";
+
+.chzn-container{
+  &.chzn-container-single {
+    .chzn-single{
+      height: 25px;
+      font: normal 14px/25px 'Myriad Pro';
+      text-shadow: 1px 1px 1px white;
+      color: #9D9D9D;
+      border: 1px solid #c9c9c9;
+      @include background(linear-gradient(top, #ffffff, #dadada));
+
+      div{
+        b {
+          background: url(images/common/select-arrows.png) no-repeat 9px center;
+        }
+      }
+
+      SPAN{
+        line-height: 26px;
+      }
+    }
+  }
+
+  &.white{
+    .chzn-single{
+      background: white;
+
+      div{
+        @include background(linear-gradient(top, #ffffff, #dadada));
+      }
+    }
+  }
+}

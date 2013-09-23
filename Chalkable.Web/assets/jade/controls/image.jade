@@ -1,0 +1,27 @@
+mixin Image()
+    -attributes = self.processAttrs(attributes);
+    img(attributes)
+
+mixin PersonImg(person, size)
+    if(person && person.getGender())
+        src = chlk.templates.JadeTemplate.prototype.getPictureURL(person.getId(), size, size)
+        isWoman = person.getGender().toLowerCase() == 'f';
+        alternativeHref = joinUrls(window.scriptsRoot, 'Content/avatars/' + size + '/.no-avatar') + (isWoman ? '-female' : '') + '.png';
+        div.person-avatar-wrapper
+            div(attributes)(class="person-avatar-" + (isWoman ? "w" : "m") + "-" + size, style = "background-image: url(" + src + ")")
+
+mixin ClassImg(course, width, height)
+    -defaultSrc =joinUrls(window.scriptsRoot, 'Content/images/common/course-icons/all.png');
+    if course
+        srcId = course.getDepartmentId();
+        alternativeSrcId = course.getId();
+        -if(!srcId){srcId = alternativeSrcId; alternativeSrcId = null};
+        src = chlk.templates.JadeTemplate.prototype.getPictureURL(srcId, height, width);
+        alternativeSrc = null;
+        -if(alternativeSrcId){alternativeSrc = chlk.templates.JadeTemplate.prototype.getPictureURL(alternativeSrcId, height, width)};
+        -attributes.src = src;
+        -attributes.alternativeSrc = alternativeSrc;
+        -attributes.defaultSrc = defaultSrc;
+    else
+        -attributes.src = defaultSrc;
+    +Image()(attributes)
