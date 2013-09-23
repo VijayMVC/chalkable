@@ -1,0 +1,9 @@
+mixin Carousel(pictures)
+    -attributes = self.processAttrs(attributes);
+    .carousel(attributes)
+        ul.picture-container
+            each picture in pictures
+                li.img
+                    img(src=picture.getPictureUrl())
+        .carousel-pagination
+
