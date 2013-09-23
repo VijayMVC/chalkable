@@ -21,11 +21,12 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.CalendarService */
     CLASS(
         'CalendarService', EXTENDS(chlk.services.BaseService), [
-            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
-            ria.async.Future, function listForMonth(classId_, date_) {
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, String]],
+            ria.async.Future, function listForMonth(classId_, date_, gradeLevels_) {
                 return this.get('AnnouncementCalendar/List.json', ArrayOf(chlk.models.calendar.announcement.MonthItem), {
                     classId: classId_ && classId_.valueOf(),
-                    date: date_ && date_.toString('mm-dd-yy')
+                    date: date_ && date_.toString('mm-dd-yy'),
+                    gradeLevelIds : gradeLevels_
                 }).then(function(model){
                     this.getContext().getSession().set('monthCalendarData', model);
                     return model;
@@ -92,11 +93,12 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
-            ria.async.Future, function getWeekInfo(classId_, date_) {
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, String]],
+            ria.async.Future, function getWeekInfo(classId_, date_, gradeLevels_) {
                 return this.get('AnnouncementCalendar/Week.json', ArrayOf(chlk.models.calendar.announcement.WeekItem), {
                     classId: classId_ && classId_.valueOf(),
-                    date: date_ && date_.toString('mm-dd-yy')
+                    date: date_ && date_.toString('mm-dd-yy'),
+                    gradeLevelIds : gradeLevels_
                 }).then(function(data){
                     return this.prepareWeekData(data, date_);
                 }.bind(this));

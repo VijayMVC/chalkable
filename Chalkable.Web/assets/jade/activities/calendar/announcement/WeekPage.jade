@@ -1,9 +1,10 @@
 div
-    topData = self.getTopData()
-    topItems = topData.getTopItems()
-    selectedId = topData.getSelectedItemId()
     actions = {currentAction: 'week', day: 'day', week: 'week', month: 'month'}
-    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'calendar', 'week', [self.getCurrentDate().format('mm-dd-yy')])(
-        selectedItemId=selectedId
+    obj = self.getDataForToolBar()
+    params = obj.selectedItemId || obj.selectedIds
+    +LeftRightToolbar(obj.data, obj.tpl, 'calendar', 'week', [self.getCurrentDate().format('mm-dd-yy')])(
+        selectedItemId=obj.selectedItemId,
+        selectedIds=obj.selectedIds
+        multiple=obj.multiple
     ).classes-bar
-    +Calendar(self, chlk.templates.calendar.announcement.WeekCalendarBodyTpl, self.getModel(), 'calendar', actions, selectedId)
+    +Calendar(self, chlk.templates.calendar.announcement.WeekCalendarBodyTpl, self.getModel(), 'calendar', actions, params)
