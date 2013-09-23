@@ -17,7 +17,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
                 {
                     Student = ShortPersonViewData.Create(student),
                     Attendances = ClassAttendanceViewData.Create(attendances),
-                    DailyAttendance = ShortDailyAttendanceViewData.Create(dailyAttendance)
+                    DailyAttendance = dailyAttendance != null ? ShortDailyAttendanceViewData.Create(dailyAttendance) : null
                 };
         }
     }
