@@ -78,31 +78,6 @@ NAMESPACE('chlk.controls', function () {
         return toString.call(obj) === "[object Array]";
     }
 
-    function serializeForm(form) {
-        var elements = form.elements || [];
-
-        return ria.__API.clone(elements)
-            .filter(function(_) {
-                var type = _.type;
-                // Use .is(":disabled") so that fieldset[disabled] works
-                return _.name && !ria.dom.Dom(_).is( ":disabled" ) &&
-                    rsubmittable.test( _.nodeName ) && !rsubmitterTypes.test( type ) &&
-                    ( _.checked || !manipulation_rcheckableType.test( type ) );
-            })
-            .map(function(elem) {
-                if (elem.type.toLowerCase() == 'file')
-                    return { name: elem.name, value: elem.files };
-                var val = valueOfElement(elem);
-                return val == null ?
-                    null :
-                    isArray( val ) ?
-                        val.map(function(val){
-                            return { name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
-                        }) :
-                    { name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
-            });
-    }
-
     /** @class chlk.controls.ActionFormControl */
     CLASS(
         'ActionFormControl', EXTENDS(chlk.controls.Base), [
@@ -141,7 +116,7 @@ NAMESPACE('chlk.controls', function () {
 
                     if($form.validationEngine('validate')) {
                         var action = $target.getData('action');
-                        var p = serializeForm($target.valueOf().shift());
+                        var p = jQuery($form.valueOf()).serializeArray();
                         var params = {};
                         p.forEach(function (o) { params[o.name] = o.value; });
 

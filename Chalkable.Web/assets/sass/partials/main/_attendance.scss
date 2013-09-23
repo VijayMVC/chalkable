@@ -14,12 +14,63 @@ BODY {
               .action-bar{
                 display: none;
 
+                .start-end-picker{
+                  opacity: 0;
+                  position: absolute;
+                  max-width: 0;
+                  padding: 0 !important;
+                  z-index: -5;
+                }
+
+                &.page-2{
+                  .choose-date-icon{
+                    cursor: pointer;
+                  }
+                }
+
+                .choose-date-icon{
+                  vertical-align: middle;
+                }
+
+                SELECT{
+                  width: 90px;
+                }
+
+                .chzn-container.chzn-container-single {
+                  margin: 3px;
+
+                  &:not(:hover){
+                    overflow: hidden;
+
+                    .chzn-single{
+                      background: transparent;
+                      border: none;
+                      box-shadow: none;
+                      height: 27px;
+                      margin-top: 1px;
+
+                      div{
+                        background: transparent;
+                        b{
+                          background: transparent;
+                        }
+                      }
+                    }
+                  }
+                }
+
                 &.active-part{
                   display: block;
                 }
 
                 .hasDatepicker{
                   width: 77px;
+                  vertical-align: middle;
+                  padding: 3px 3px 1px;
+                  font: normal 11px arial, tahoma, helvetica, sans-serif;
+                  color: black;
+                  margin: 7px 3px;
+                  border: 1px solid #7eadd9;
                 }
               }
 
@@ -316,7 +367,7 @@ BODY {
                       margin-top: 1px;
                       background-size: 67px 73px;
 
-                      .avatar.avatar-64{
+                      .person-avatar-wrapper >div{
                         height: 73px;
                         width: 73px;
                         margin-left: -3px;

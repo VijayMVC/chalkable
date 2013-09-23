@@ -9,11 +9,11 @@ classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
     .loader
     +ActionForm('announcement', 'save')(onlySubmitValidate=true)
         +LeftRightToolbar(topItems, chlk.templates.classes.TopBar)(
-        selectedItemId=topData.getSelectedItemId(),
-        pressAfterClick=!announcement.getState()
+            selectedItemId=topData.getSelectedItemId(),
+            pressAfterClick=!announcement.getState()
         ).classes-bar
         .action-bar.not-transparent.buttons(class=(classId ? '' : 'x-hidden'))
-            .container.panel-bg
+            .container.panel-bg.overflow-hidden
                 each item in classes
                     BUTTON(
                     class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),

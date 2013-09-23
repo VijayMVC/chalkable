@@ -1,3 +1,4 @@
 valuesEnum = chlk.models.attendance.AttendanceTypeEnum
 .attendance-students.mp-students
-    +StudentsTpl(self.getAbsentAndLateStudents(), Msg.Students_with_attendance_issues).attendance-mp
+    if self.getAbsentAndLateStudents()
+        +StudentsTpl(self.getAbsentAndLateStudents(), Msg.Students_with_attendance_issues).attendance-mp

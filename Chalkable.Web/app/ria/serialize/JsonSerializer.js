@@ -76,7 +76,7 @@ NAMESPACE('ria.serialize', function () {
             }
 
             if (ria.__API.isClassConstructor(clazz)) {
-                if (raw === null || raw === undefined)
+                if (raw === null || raw === undefined || raw == '' && chlk.models.common.ChlkDate == clazz)
                     return null;
 
                 var ref = new ria.reflection.ReflectionClass(clazz);

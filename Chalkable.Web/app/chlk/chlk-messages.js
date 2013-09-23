@@ -271,6 +271,7 @@ var Msg = {
     Basic_info: 'Basic info',
     Best_Class: 'Best Class',
     Biggest_improvement: 'Biggest improvement',
+    Choose_date: 'Choose date',
     Choose_picture: 'Choose picture',
     Class_Avg: 'Class Avg',
     Class_average: 'Class average',

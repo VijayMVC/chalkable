@@ -139,6 +139,7 @@
         var azurePictureUrl = '@ViewData.GetValueOrNull(ViewConstants.AZURE_PICTURE_URL)';
 
         var USER_ROLE_EXT = '@ViewData.GetValueOrNull("Rolename")';
+        var currentSchoolYearId = '@ViewData.GetValueOrNull("CurrentSchoolYearId")';
         var currentChlkPerson = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.CURRENT_PERSON)');
         var classesToFilter = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.CLASSES)');
         var classesAdvancedData = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.CLASSES_ADV_DATA)');

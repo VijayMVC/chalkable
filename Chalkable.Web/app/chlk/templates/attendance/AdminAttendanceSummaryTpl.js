@@ -18,6 +18,9 @@ NAMESPACE('chlk.templates.attendance', function () {
             chlk.models.attendance.AttendanceMpSummary, 'attendanceByMpData',
 
             [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.schoolYear.MarkingPeriod), 'markingPeriods',
+
+            [ria.templates.ModelPropertyBind],
             Boolean, 'renderNow',
 
             [ria.templates.ModelPropertyBind],

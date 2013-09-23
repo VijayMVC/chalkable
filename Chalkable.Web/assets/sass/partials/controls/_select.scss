@@ -22,4 +22,14 @@
       }
     }
   }
+
+  &.white{
+    .chzn-single{
+      background: white;
+
+      div{
+        @include background(linear-gradient(top, #ffffff, #dadada));
+      }
+    }
+  }
 }

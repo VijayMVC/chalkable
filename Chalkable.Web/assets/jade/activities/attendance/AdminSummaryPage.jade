@@ -30,7 +30,7 @@ mixin StudentsTpl(students, header, needPlus)
                         else
                             div(index=index, data-id=student.getId().valueOf()).student
                                 .img-container
-                                    +PersonImg(student, 64)
+                                    +PersonImg(student, 128)
                                 +ActionLink('students', 'details', student.getId()).name=student.getDisplayName()
                     -}
         -}
@@ -61,15 +61,16 @@ valuesEnum = chlk.models.attendance.AttendanceTypeEnum
             .left
                 .action-button
                     .export-btn
-            .right
+            .right.no-border
                 +ActionForm('attendance', 'updateSummary').update-summary.day
                     +DatePicker('nowDateTime', self.getNowDateTime())(
                         data-options={
                           showOtherMonths: true,
                           selectOtherMonths: true
-                        },
-                        name="nowDateTime"
-                    )#nowDateTime.tb-date-picker
+                        }
+                        readonly="readonly"
+                    )#nowDateTime.no-marker
+                    label.choose-date-icon.for-date-picker
                     +Hidden('gradeLevelsIds', self.getGradeLevelsIds())
                     +Hidden('renderDay', 'true')
     .action-bar.not-transparent.buttons.page-3
@@ -77,6 +78,35 @@ valuesEnum = chlk.models.attendance.AttendanceTypeEnum
             .left
                 .action-button
                     .export-btn
+            .right.no-border
+                +ActionForm('attendance', 'updateSummary').update-summary.mp
+                    markingPeriods = self.getMarkingPeriods()
+                    +Select('fromMarkingPeriodId')#fromMarkingPeriodId.mp-select
+                        each mp in markingPeriods
+                            +Option(mp.getId().valueOf(), mp.getName(), mp.getId() == self.getFromMarkingPeriodId())
+                        +Option('', Msg.Choose_date)(data-picker-id="start-date-picker").choose-date-option
+                    +DatePicker('startDate', self.getStartDate() || '')(
+                        data-options={
+                          showOtherMonths: true,
+                          selectOtherMonths: true
+                        },
+                        data-select-id="fromMarkingPeriodId_chzn"
+                    )#start-date-picker.startDate.start-end-picker
+                    label -
+                    +Select('toMarkingPeriodId')#toMarkingPeriodId.mp-select
+                        each mp in markingPeriods
+                            +Option(mp.getId().valueOf(), mp.getName(), mp.getId() == self.getToMarkingPeriodId())
+                        +Option('', Msg.Choose_date)(data-picker-id="end-date-picker").choose-date-option
+                    +DatePicker('endDate', self.getEndDate())(
+                        data-options={
+                          showOtherMonths: true,
+                          selectOtherMonths: true
+                        },
+                        data-select-id="toMarkingPeriodId_chzn"
+                    )#end-date-picker.endDate.start-end-picker
+                    label.choose-date-icon
+                    +Hidden('gradeLevelsIds', self.getGradeLevelsIds())
+                    +Hidden('renderMp', 'true')
     .attendance-boxes-admin
         .boxes-container
             div(left="0px", text=Msg.Now, data-index="1").attendance-box.attendance-top-box.now-box.active-part

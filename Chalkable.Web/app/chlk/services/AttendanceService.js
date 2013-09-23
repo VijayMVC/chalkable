@@ -55,7 +55,7 @@ NAMESPACE('chlk.services', function () {
                         renderNow: renderNow || false,
                         renderDay: renderDay || false,
                         renderMp: renderMp || false,
-                        gradeLevelsIds_: gradeLevelsIds_,
+                        gradeLevelsIds: gradeLevelsIds_,
                         fromMarkingPeriodId: fromMarkingPeriodId.valueOf(),
                         toMarkingPeriodId: toMarkingPeriodId.valueOf(),
                         nowDateTime: nowDateTime_ && nowDateTime_.toString('mm-dd-yy'),

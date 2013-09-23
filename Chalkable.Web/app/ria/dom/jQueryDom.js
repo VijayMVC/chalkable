@@ -382,6 +382,10 @@ NAMESPACE('ria.dom', function () {
                 return !!(this.parent().find('.hidden-checkbox').getData('value')) || false;
             },
 
+            Number, function index() {
+                return this._dom.index();
+            },
+
             /* Form */
 
             Object, function serialize(){

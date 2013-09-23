@@ -3,6 +3,7 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.AttendanceService');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.GradeLevelService');
+REQUIRE('chlk.services.MarkingPeriodService');
 
 REQUIRE('chlk.activities.attendance.SummaryPage');
 REQUIRE('chlk.activities.attendance.ClassListPage');
@@ -25,6 +26,9 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.ClassService, 'classService',
 
+        [ria.mvc.Inject],
+        chlk.services.MarkingPeriodService, 'markingPeriodService',
+
         [chlk.controllers.SidebarButton('attendance')],
         function summaryAction() {
             var result = this.attendanceService
@@ -43,12 +47,17 @@ NAMESPACE('chlk.controllers', function (){
         [[Boolean, String]],
         function summaryAdminAction(update_, gradeLevels_) {
             var markingPeriod = this.getContext().getSession().get('markingPeriod', null),
+                currentSchoolYearId = this.getContext().getSession().get('currentSchoolYearId', null),
                 fromMarkingPeriodId = markingPeriod.getId(),
                 toMarkingPeriodId = markingPeriod.getId();
-            var res = this.attendanceService
-                .getAdminAttendanceSummary(true, true, true, gradeLevels_, null, fromMarkingPeriodId, toMarkingPeriodId)
+            var res = ria.async.wait([
+                    this.attendanceService.getAdminAttendanceSummary(true, true, true, gradeLevels_, null, fromMarkingPeriodId, toMarkingPeriodId),
+                    this.markingPeriodService.list(currentSchoolYearId)
+                ])
                 .attach(this.validateResponse_())
-                .then(function(model){
+                .then(function(result){
+                    var model = result[0];
+                    model.setMarkingPeriods(result[1]);
                     return this.prepareAttendanceSummaryModel(model, gradeLevels_, null, fromMarkingPeriodId, toMarkingPeriodId);
                 }, this);
             return (update_ ? this.UpdateView : this.PushView)(chlk.activities.attendance.AdminAttendanceSummaryPage, res);

@@ -103,6 +103,10 @@ DIV#content-wrapper{
         }
       }
 
+      >.left, >.right{
+        height: 34px;
+      }
+
       >.left:not(.no-border){
         border-right: 1px solid white;
 
@@ -134,7 +138,6 @@ DIV#content-wrapper{
     border-bottom: 1px solid $border-color;
     border-top: 1px solid white;
     white-space: nowrap;
-    overflow: hidden;
 
     .action-link, .action-button{
       text-decoration: none;

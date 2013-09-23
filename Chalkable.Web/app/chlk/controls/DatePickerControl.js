@@ -37,16 +37,19 @@ NAMESPACE('chlk.controls', function () {
                         that.context.stateUpdated();
                     }
                 }
-                this.queueReanimation_(attrs.id, options);
+                this.queueReanimation_(attrs.id, options, value);
                 value && this.setValue(value.getDate());
 
                 return attrs;
             },
 
-            VOID, function queueReanimation_(id, options) {
+            VOID, function queueReanimation_(id, options, value) {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
-                        this.reanimate_(ria.dom.Dom('#' + id), options, activity, model)
+                        var node = ria.dom.Dom('#' + id);
+                        this.reanimate_(node, options, activity, model)
+                        if(!value)
+                            node.setValue('');
                     }.bind(this));
             },
 

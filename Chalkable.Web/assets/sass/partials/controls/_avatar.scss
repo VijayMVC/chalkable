@@ -107,6 +107,9 @@
   background-position: center center;
   background-size: 100% 100%;
   &:before{
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
     content: " ";
     position: absolute;
     top: 0;
@@ -124,13 +127,13 @@
 
 .person-avatar-m-40{
   &:before{
-    background: url(avatars/40/.no-avatar.png);
+    background-image: url(avatars/40/.no-avatar.png);
   }
 }
 
 .person-avatar-w-40{
   &:before{
-    background: url(avatars/40/.no-avatar-female.png);
+    background-image: url(avatars/40/.no-avatar-female.png);
   }
 }
 
@@ -141,13 +144,13 @@
 
 .person-avatar-m-47{
   &:before{
-    background: url(avatars/47/.no-avatar.png);
+    background-image: url(avatars/47/.no-avatar.png);
   }
 }
 
 .person-avatar-w-47{
   &:before{
-    background: url(avatars/47/.no-avatar-female.png);
+    background-image: url(avatars/47/.no-avatar-female.png);
   }
 }
 
@@ -158,13 +161,13 @@
 
 .person-avatar-m-64{
   &:before{
-    background: url(avatars/64/.no-avatar.png);
+    background-image: url(avatars/64/.no-avatar.png);
   }
 }
 
 .person-avatar-w-64{
   &:before{
-    background: url(avatars/64/.no-avatar-female.png);
+    background-image: url(avatars/64/.no-avatar-female.png);
   }
 }
 
@@ -175,12 +178,12 @@
 
 .person-avatar-m-128{
   &:before{
-    background: url(avatars/128/.no-avatar.png);
+    background-image: url(avatars/128/.no-avatar.png);
   }
 }
 
 .person-avatar-w-128{
   &:before{
-    background: url(avatars/128/.no-avatar-female.png);
+    background-image: url(avatars/128/.no-avatar-female.png);
   }
 }

@@ -34,6 +34,7 @@ REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.Role');
 REQUIRE('chlk.models.schoolYear.MarkingPeriod');
 REQUIRE('chlk.models.attendance.AttendanceReason');
+REQUIRE('chlk.models.id.SchoolYearId');
 
 REQUIRE('chlk.AppApiHost');
 
@@ -69,6 +70,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, 'currentChlkPerson', chlk.models.people.User, 'currentPerson');
                 this.saveInSession(session, 'WEB_SITE_ROOT', null, 'webSiteRoot');
                 this.saveInSession(session, 'azurePictureUrl');
+                this.saveInSession(session, 'currentSchoolYearId', chlk.models.id.SchoolYearId);
                 this.saveInSession(session, 'attendanceReasons', ArrayOf(chlk.models.attendance.AttendanceReason));
                 window.gradeLevels.forEach(function(item){
                     var numberPart = parseInt(item.name, 10);

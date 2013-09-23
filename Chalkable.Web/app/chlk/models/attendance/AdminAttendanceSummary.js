@@ -20,6 +20,8 @@ NAMESPACE('chlk.models.attendance', function () {
             [ria.serialize.SerializeProperty('attendancebympdata')],
             chlk.models.attendance.AttendanceMpSummary, 'attendanceByMpData',
 
+            ArrayOf(chlk.models.schoolYear.MarkingPeriod), 'markingPeriods',
+
             Boolean, 'renderNow',
 
             Boolean, 'renderDay',

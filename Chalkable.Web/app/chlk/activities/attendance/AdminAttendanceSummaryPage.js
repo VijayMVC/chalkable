@@ -30,6 +30,83 @@ NAMESPACE('chlk.activities.attendance', function () {
                     slider.find('.active').setHTML(text);
             },
 
+            [ria.mvc.DomEventBind('click', '.for-date-picker')],
+                [[ria.dom.Dom, ria.dom.Event]],
+                VOID, function forDatePickerClick(node, event) {
+                    this.dom.find('#nowDateTime').trigger('focus');
+            },
+
+            [ria.mvc.DomEventBind('change', '.mp-select')],
+                [[ria.dom.Dom, ria.dom.Event, Object]],
+                VOID, function mpSelectChange(node, event, option) {
+                    var value = node.getValue();
+                    if(value){
+                        node.next().removeClass('white');
+                        this.dom.find('.endDate, .startDate').setValue('');
+                        var whiteChosen = this.dom.find('.chzn-container.white');
+                        if(whiteChosen.exists()){
+                            whiteChosen
+                                .find('.chzn-single')
+                                .find('>span')
+                                .setHTML(node.find('option:selected').text());
+                            whiteChosen
+                                .removeClass('white')
+                                .previous()
+                                .setValue(value);
+                        }else{
+                            var from = this.dom.find('#fromMarkingPeriodId');
+                            var to = this.dom.find('#toMarkingPeriodId');
+                            var fromIndex = from.find('option:selected').index();
+                            var toIndex = to.find('option:selected').index();
+                            if(fromIndex > toIndex){
+                                var target;
+                                if(node.getAttr('id') == 'fromMarkingPeriodId')
+                                    target = to;
+                                else
+                                    target = from;
+                                if(target)
+                                    target.setValue(value)
+                                        .next()
+                                        .find('.chzn-single')
+                                        .find('>span')
+                                        .setHTML(node.find('option:selected').text());
+                            }
+                        }
+                        node.parent('form').trigger('submit');
+                    }
+            },
+
+            [ria.mvc.DomEventBind('click', '.choose-date-option')],
+                [[ria.dom.Dom, ria.dom.Event]],
+                VOID, function mpChooseDayClick(node, event) {
+                    var chosen = node.parent('.chzn-container');
+                    var select = this.dom.find('#' + chosen.getAttr('id').split('_')[0]);
+                    var pickerId = select.find('option:selected').getData('picker-id');
+                    this.dom.find('#' + pickerId).trigger('focus');
+            },
+
+            [ria.mvc.DomEventBind('change', '.endDate, .startDate')],
+                [[ria.dom.Dom, ria.dom.Event]],
+                VOID, function mpDateChange(node, event) {
+                    if(node.getValue()){
+                        var isStart = node.hasClass('startDate');
+                        var otherDom = isStart ? this.dom.find('.endDate') : this.dom.find('.startDate');
+                        var chosenId = node.getData('select-id');
+                        this.dom.find('#' + chosenId)
+                            .addClass('white')
+                            .find('.chzn-single')
+                            .find('>span')
+                            .setHTML(node.getValue());
+                        var incorrectParams = isStart && getDate(otherDom.getValue()) < getDate(node.getValue()) || !isStart && getDate(otherDom.getValue()) > getDate(node.getValue());
+                        if(!otherDom.getValue() || incorrectParams){
+                            otherDom.setValue(node.getValue());
+                            otherDom.trigger('change');
+                        }else{
+                            node.parent('form').trigger('submit');
+                        }
+                    }
+            },
+
             [ria.mvc.DomEventBind('click', '.more-students')],
                 [[ria.dom.Dom, ria.dom.Event]],
                 VOID, function moreStudentsClick(node, event) {
