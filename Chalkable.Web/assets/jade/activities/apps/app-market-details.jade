@@ -19,17 +19,17 @@ devName = app.getDeveloperInfo().getName()
             .reviews
             .permissions
                 .permissions-group
-                    .group-header This app is for:
+                    .group-header.first This app is for:
                     each validRole in app.getValidRoles()
                         .permission
                             .icon(class=self.getRoleTypeClass(validRole.getId()))
                             .description=validRole.getName()
-                .permissions-group
+                .permissions-group.last
                     .group-header Info this app uses:
-                        each permission in app.getPermissions()
-                            .permission
-                                .icon(class=self.getPermissionTypeClass(permission.getId().valueOf()))
-                                .description=permission.getName()
+                    each permission in app.getPermissions()
+                        .permission
+                            .icon(class=self.getPermissionTypeClass(permission.getId().valueOf()))
+                            .description=permission.getName()
 
 
 

@@ -63,7 +63,22 @@ DIV.page {
                 text-shadow: white 0px 1px 1px;
 
                 .permissions-group {
+
+
+                  &.last{
+                    .permission{
+                      &:last-child{
+                        background: none;
+                      }
+                    }
+                  }
                   .group-header {
+
+
+                    &.first{
+                      margin-top: 7px;
+                    }
+
                     color: #959595;
                     font-family: Georgia;
                     text-align: center;
