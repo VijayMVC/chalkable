@@ -36,8 +36,8 @@ else
                         |&nbsp;- #{self.getRoomName()}
                 .glance-container
                     +GlanceBox(null, null, {value: null, title: Msg.Percentile})
-                    +GlanceBox(null, null, {value: self.getAttendanceBox().getTitle(), title: Msg.Attendance, items: self.getAttendanceBox().getHover()}, null, 'attendanceCount', 'type', chlk.converters.attendance.AttendanceTypeToNameConverter.prototype.convert)
-                    +GlanceBox(null, null, {value: self.getDisciplineBox().getTitle(), title: Msg.Discipline, items: self.getDisciplineBox().getHover()}, null, 'attendanceCount', 'type', chlk.converters.attendance.AttendanceTypeToNameConverter.prototype.convert)
+                    +GlanceBox(null, null, self.buildAttendanceGlanceBoxData(), null, chlk.converters.attendance.AttendanceTypeToNameConverter.prototype.convert)
+                    +GlanceBox(null, null, self.buildDisciplineGlanceBoxData(), null, null)
                     +GlanceBox(null, null, {value: null, title: Msg.Recent})
         .today-work-panel
             h2=Msg.Todays_work

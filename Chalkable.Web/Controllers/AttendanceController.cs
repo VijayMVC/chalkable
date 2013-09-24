@@ -105,6 +105,28 @@ namespace Chalkable.Web.Controllers
             return Json(DailyAttendanceViewData.Create(dailyAttendace, att.Student));
         }
 
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ATTENDANCE_STUDENT_ATTENDANCE_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User, AppPermissionType.Attendance })]
+        public ActionResult StudentAttendanceSummary(Guid personId, Guid markingPeriodId)
+        {
+            if (!Context.SchoolId.HasValue)
+                throw new UnassignedUserException();
+            var currentDateTime = Context.NowSchoolTime;
+            var student = SchoolLocator.PersonService.GetPersonDetails(personId);
+            var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId);
+            var attendances = SchoolLocator.AttendanceService.GetClassAttendanceDetails(new ClassAttendanceQuery
+                {
+                    MarkingPeriodId = mp.Id,
+                    StudentId = student.Id,
+                    FromDate = mp.StartDate,
+                    ToDate = currentDateTime
+                });
+            var res = StudentAttendanceDetailedViewData.Create(student, attendances, mp);
+            return Json(res, 6);
+        }
+
+
+
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult GetAttendanceForStudent(DateTime? datetime, Guid studentId)
         {

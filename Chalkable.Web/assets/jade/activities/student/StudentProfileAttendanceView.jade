@@ -1,0 +1,43 @@
+mixin MarkingPeriodSelect(markingPeriods, studentId)
+    +Select('markingPeriodSelect', 'students', 'attendance', studentId)
+        each mp,i in markingPeriods
+            +Option(mp.getId(), mp.getName(), i==0)
+
+
+mixin AttendanceSection(data)
+    boxesData = data.buildGlanceBoxesData()
+    .glance-container
+        each boxData in boxesData
+            -console.log(boxData)
+            +GlanceBox(null, null, boxData, null, null)
+
+summaryInfo = self.getSummaryInfo()
+personId = summaryInfo.getId()
+actions = {currentAction: 'attendanceMonth'}
+calendar = self.getAttendanceCalendar()
+.student-attendance-view
+    .loader-container
+        .loader
+        .action-bar.not-transparent.buttons
+            .container.panel-bg
+                //todo move this to some base profile control
+                .left
+                    +ActionLink('students', 'details', personId) Now
+                    +ActionLink('students', 'info', personId) Info
+                    +ActionLink('students', 'schedule', personId) Scheduling
+                    +ActionLink('students', 'attendance', personId).pressed Attendance
+                    +ActionLink('students', 'discipline', personId) Discipline
+                    +ActionLink('students', 'details', personId) Apps
+        .attendance-view
+            .summary-info
+                .avarar-container
+                    .img-container
+                        +PersonImg(summaryInfo, 64)
+                h1.profile-person-name=summaryInfo.getDisplayName()
+                .attendance-mp-conteiner
+                    +MarkingPeriodSelect(self.getMarkingPeriods(), personId)
+                .attendance-info
+                    +AttendanceSection(self)
+            #attendance-calendar-info.calendar-info
+                +Calendar(calendar, chlk.templates.calendar.attendance.StudentAttendanceCalendarBodyTpl, calendar, 'students', actions, null).student-attendance-calendar
+
