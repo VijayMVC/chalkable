@@ -1,0 +1,69 @@
+mixin MarkingPeriodSelect(markingPeriods, studentId)
+    +Select('markingPeriodSelect', 'students', 'attendance', studentId)
+        each mp,i in markingPeriods
+            +Option(mp.getId(), mp.getName(), i==0)
+
+
+mixin AttendanceSection(data)
+    boxesData = data.buildGlanceBoxesData()
+    .glance-container
+        each boxData in boxesData
+            -console.log(boxData)
+            +GlanceBox(null, null, boxData, null, null)
+
+summaryInfo = self.getSummaryInfo()
+personId = summaryInfo.getId()
+.student-attendance-view
+    .loader-container
+        .loader
+        .action-bar.not-transparent.buttons
+            .container.panel-bg
+                //todo move this to some base profile control
+                .left
+                    +ActionLink('students', 'details', personId) Now
+                    +ActionLink('students', 'info', personId) Info
+                    +ActionLink('students', 'schedule', personId) Scheduling
+                    +ActionLink('students', 'attendance', personId).pressed Attendance
+                    +ActionLink('students', 'details', personId) Apps
+
+        .attendance-view
+            .summary-info
+                .avarar-container
+                    .img-container
+                        +PersonImg(summaryInfo, 64)
+                h1.profile-person-name=summaryInfo.getDisplayName()
+                .attendance-mp-conteiner
+                    +MarkingPeriodSelect(self.getMarkingPeriods(), personId)
+                .attendance-info
+                    +AttendanceSection(self)
+            .calendar-info
+
+
+//        #top-summary-panel
+//            #avatar-photo-conainer
+//                .img-container
+//                    +PersonImg(self, 256)
+//                    .grades-container
+//                        p=Msg.Class_Of
+//                            span=classOf
+//                        .grade #{self.getSerial(gradeLevel)} #{Msg.Grade}
+//            #student-info-panel
+//                h1.display-name=self.getDisplayName() || self.getFullName()
+//                .status
+//                    div(class=status, data-tooltip=statusName)
+//                    |#{self.getCurrentClassName()}
+//                    if(!self.getCurrentClassName() || self.getCurrentClassName().toLowerCase() != 'no class now')
+//                        |&nbsp;- #{self.getRoomName()}
+//                .glance-container
+//                    +GlanceBox(null, null, {value: null, title: Msg.Percentile})
+//                    +GlanceBox(null, null, {value: self.getAttendanceBox().getTitle(), title: Msg.Attendance, items: self.getAttendanceBox().getHover()}, null, 'attendanceCount', 'type', chlk.converters.attendance.AttendanceTypeToNameConverter.prototype.convert)
+//                    +GlanceBox(null, null, {value: self.getDisciplineBox().getTitle(), title: Msg.Discipline, items: self.getDisciplineBox().getHover()}, null, 'attendanceCount', 'type', chlk.converters.attendance.AttendanceTypeToNameConverter.prototype.convert)
+//                    +GlanceBox(null, null, {value: null, title: Msg.Recent})
+//                    .today-work-panel
+//                    h2=Msg.Todays_work
+//                    .period-toolbar
+//                    +LeftRightToolbar(self.getPeriodSection(), chlk.templates.announcement.AnnouncementClassPeriod)(hideArrows).centered
+//        .today-work-panel
+//            h2.stats=Msg.Classes
+//            .classes-tb
+//                +LeftRightToolbar(self.getClassesSection(), chlk.templates.classes.Class).centered

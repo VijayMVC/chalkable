@@ -2,13 +2,19 @@ REQUIRE('chlk.controllers.UserController');
 REQUIRE('chlk.services.StudentService');
 REQUIRE('chlk.services.PersonService');
 REQUIRE('chlk.services.ClassService');
+REQUIRE('chlk.services.AttendanceCalendarService');
+REQUIRE('chlk.services.AttendanceService');
+REQUIRE('chlk.services.MarkingPeriodService');
 
 REQUIRE('chlk.activities.person.ListPage');
 REQUIRE('chlk.activities.student.SummaryPage');
 REQUIRE('chlk.activities.profile.StudentInfoPage');
+REQUIRE('chlk.activities.student.StudentProfileAttendancePage');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.teacher.StudentsList');
+REQUIRE('chlk.models.calendar.attendance.StudentAttendanceMonthCalendar');
+REQUIRE('chlk.models.student.StudentProfileAttendanceViewData');
 
 NAMESPACE('chlk.controllers', function (){
     "use strict";
@@ -21,6 +27,16 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.ClassService, 'classService',
+
+            [ria.mvc.Inject],
+            chlk.services.AttendanceCalendarService, 'attendanceCalendarService',
+
+            [ria.mvc.Inject],
+            chlk.services.AttendanceService, 'attendanceService',
+
+            [ria.mvc.Inject],
+            chlk.services.MarkingPeriodService, 'markingPeriodService',
+
 
             function getInfoPageClass(){
                 return chlk.activities.profile.StudentInfoPage;
@@ -101,6 +117,30 @@ NAMESPACE('chlk.controllers', function (){
             function scheduleAction(personId, date_){
                 //return BASE(personId, chlk.models.common.RoleNamesEnum.TEACHER);
                 return this.scheduleByRole(personId, date_, chlk.models.common.RoleNamesEnum.STUDENT.valueOf());
+            },
+
+
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.MarkingPeriodId, chlk.models.common.ChlkDate]],
+            function attendanceAction(personId, markingPeriodId_, date_){
+                var schoolYearId = this.getContext().getSession().get('currentSchoolYearId');
+                var markingPeriod = this.getContext().getSession().get('markingPeriod');
+                var markingPeriodId = markingPeriodId_ || markingPeriod.getId();
+                var res = ria.async.wait([
+                            this.attendanceService.getStudentAttendanceSummary(personId, markingPeriodId),
+                            this.attendanceCalendarService.getStudentAttendancePerMonth(personId, date_),
+                            this.markingPeriodService.list(schoolYearId) // todo get markingPeriods from session
+                        ])
+                        .attach(this.validateResponse_())
+                        .then(function(result){
+                            var currentMp = markingPeriod;
+                            result[2].forEach(function(mp){ if(mp.getId() == markingPeriodId) currentMp = mp; });
+                            var endDate = currentMp.getEndDate();
+                            var startDate = currentMp.getStartDate();
+                            var calendarModel = new chlk.models.calendar.attendance.StudentAttendanceMonthCalendar(date_, endDate, startDate, result[1]);
+                            return new chlk.models.student.StudentProfileAttendanceViewData(result[0], calendarModel, result[2]);
+                        });
+                return this.PushView(chlk.activities.student.StudentProfileAttendancePage, res);
             }
         ])
 });

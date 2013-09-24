@@ -91,8 +91,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
         public ActionResult Schedule(Guid personId)
         {
             var res = (StudentInfoViewData)GetInfo(personId, StudentInfoViewData.Create);
-            var studentParents = SchoolLocator.StudentParentService.GetParents(personId);
-            res.Parents = StudentParentViewData.Create(studentParents);
             return Json(res, 6);
         }
 

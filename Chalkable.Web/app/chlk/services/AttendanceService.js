@@ -62,6 +62,14 @@ NAMESPACE('chlk.services', function () {
                         startDate: startDate_ && startDate_.toString('mm-dd-yy'),
                         endDate: endDate_ && endDate_.toString('mm-dd-yy')
                     });
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.MarkingPeriodId]],
+            ria.async.Future, function getStudentAttendanceSummary(studentId, markingPeriodId){
+                return this.get('Attendance/StudentAttendanceSummary.json', chlk.models.attendance.StudentAttendanceSummary,{
+                    personId: studentId && studentId.valueOf(),
+                    markingPeriodId: markingPeriodId && markingPeriodId.valueOf()
+                });
             }
         ])
 });
