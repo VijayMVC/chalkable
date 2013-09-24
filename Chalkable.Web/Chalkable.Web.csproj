@@ -273,6 +273,7 @@
     <Compile Include="Models\DisciplinesViewData\DisciplineInputModel.cs" />
     <Compile Include="Models\DisciplinesViewData\DisciplineTypeViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\DisciplineView.cs" />
+    <Compile Include="Models\DisciplinesViewData\StudentDisciplineDetailedViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\StudentDisciplineSummaryViewData.cs" />
     <Compile Include="Models\DistrictViewData.cs" />
     <Compile Include="Models\FinalGradesViewData\FinalGradeAnnouncementTypeViewData.cs" />

@@ -38,6 +38,6 @@ calendar = self.getAttendanceCalendar()
                     +MarkingPeriodSelect(self.getMarkingPeriods(), personId)
                 .attendance-info
                     +AttendanceSection(self)
-            .calendar-info
+            #attendance-calendar-info.calendar-info
                 +Calendar(calendar, chlk.templates.calendar.attendance.StudentAttendanceCalendarBodyTpl, calendar, 'students', actions, null).student-attendance-calendar
 
