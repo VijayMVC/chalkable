@@ -1,11 +1,12 @@
 REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.calendar.attendance.StudentAttendanceCalendarBodyTpl');
 REQUIRE('chlk.models.student.StudentProfileAttendanceViewData');
 
 NAMESPACE('chlk.templates.student', function(){
    "use strict";
 
     /**@class chlk.templates.student.StudentProfileAttendanceTpl*/
-
+    ASSET('~/assets/jade/activities/calendar/BaseCalendar.jade')();
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/student/StudentProfileAttendanceView.jade')],
         [ria.templates.ModelBind(chlk.models.student.StudentProfileAttendanceViewData)],

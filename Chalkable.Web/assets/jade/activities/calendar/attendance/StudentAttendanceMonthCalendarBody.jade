@@ -1,0 +1,36 @@
+.month-calendar-body
+    .day-names
+        div
+            p=Msg.Sunday
+        div
+            p=Msg.Monday
+        div
+            p=Msg.Tuesday
+        div
+            p=Msg.Wednesday
+        div
+            p=Msg.Thursday
+        div
+            p=Msg.Friday
+        div
+            p=Msg.Saturday
+    .items
+        each item in self.getCalendarItems()
+            +ActionLink(null, null, item.getDate().format('mm-dd-yy'))(class = (item.isSunday() ? 'sunday ' : ' ')).gradient-cnt.item
+                div
+                    h2.number=item.getDay()
+                    .space
+                    ul
+                        if !item.isExcused() && !item.isAbsent()
+                            if !item.isShowGroupedData()
+                                each att in item.getAttendances()
+                                    li=att.getCount() + " " + att.getAttendanceType()
+                            else
+                                each att in item.getAttendances()
+                                    li=att.getClassName()
+                            if item.getMoreCount() != 0
+                                li=item.getMoreCount() + "More"
+                        if item.isAbsent()
+                            li(style = "color: red !important;") ABSENT
+                        if item.isExcused()
+                            li(style = "color: blue !important;") EXCUSED
