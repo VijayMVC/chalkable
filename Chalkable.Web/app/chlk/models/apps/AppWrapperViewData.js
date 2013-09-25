@@ -5,6 +5,9 @@ REQUIRE('chlk.models.id.AnnouncementId');
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
 
+
+
+    var HIDDEN_CLS = "x-hidden";
     /** @class chlk.models.apps.AppWrapperToolbarButton*/
     CLASS(
         'AppWrapperToolbarButton', [
@@ -12,12 +15,14 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'id',
             String, 'url',
             Boolean, 'targetBlank',
+            String, 'cls',
 
             [[String, String, String, Boolean]],
             function $(id, title, url_, targetBlank_){
                 BASE();
                 this.setId(id);
                 this.setTitle(title);
+                //this.setCls(HIDDEN_CLS);
                 if (url_)
                     this.setUrl(url_);
                 if (targetBlank_)

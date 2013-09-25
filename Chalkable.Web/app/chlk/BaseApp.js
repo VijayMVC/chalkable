@@ -91,7 +91,14 @@ NAMESPACE('chlk', function (){
             [[ria.mvc.ISession, String, Object, String]],
             function saveInSession(session, key, cls_, destKey_){
                var serializer = new ria.serialize.JsonSerializer();
-               var value = window[key] || (cls_ && (ria.__API.isArrayOfDescriptor(cls_) || cls_ == Array) ? [] : {});
+
+               var defaultValue = {};
+               if (cls_ && (ria.__API.isArrayOfDescriptor(cls_) || cls_ == Array))
+                   defaultValue = [];
+               if (cls_ && (ria.__API.isIdentifier(cls_)))
+                   defaultValue = "";
+
+               var value = window[key] || defaultValue;
 
                var destK = destKey_ ?  destKey_ : key;
                if (value){

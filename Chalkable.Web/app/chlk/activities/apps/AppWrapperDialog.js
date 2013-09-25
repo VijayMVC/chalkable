@@ -1,5 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplateDialog');
 REQUIRE('chlk.templates.apps.AppWrapperDialogTpl');
+REQUIRE('chlk.templates.apps.AppWrapperDialogToolbarTpl');
 REQUIRE('chlk.AppApiHost');
  
  NAMESPACE('chlk.activities.apps', function () {

@@ -9,7 +9,7 @@ devName = app.getDeveloperInfo().getName()
         +Carousel(app.getScreenshotPictures().getItems())
     .app-price-info
         .app-title
-            h1=self.name
+            h1=app.getName()
             span="By " + devName
         .app-buy
             +ActionLinkButton('appmarket', 'tryToInstall', app.getId()).special-button.blue-button=self.installBtnTitle

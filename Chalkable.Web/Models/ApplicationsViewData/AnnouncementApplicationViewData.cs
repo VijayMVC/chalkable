@@ -33,9 +33,9 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                     AnnouncementApplicationId = announcementApplication.Id,
                     Active = announcementApplication.Active,
                     AnnouncementId = announcementApplication.AnnouncementRef,
-                    EditUrl = AppTools.BuildAppUrl(application, null, installs.First().Id, AppMode.Edit),
-                    ViewUrl = AppTools.BuildAppUrl(application, null, installs.First().Id, AppMode.View),
-                    GradingViewUrl = AppTools.BuildAppUrl(application, null, installs.First().Id, AppMode.GradingView),
+                    EditUrl = AppTools.BuildAppUrl(application, announcementApplication.Id, installs.First().Id, AppMode.Edit),
+                    ViewUrl = AppTools.BuildAppUrl(application, announcementApplication.Id, installs.First().Id, AppMode.View),
+                    GradingViewUrl = AppTools.BuildAppUrl(application, announcementApplication.Id, installs.First().Id, AppMode.GradingView),
                     CurrentPersonId = currentPersonId,
                     Order = announcementApplication.Order
                 };
