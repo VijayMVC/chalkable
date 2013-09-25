@@ -30,12 +30,12 @@ NAMESPACE('chlk.controllers', function (){
                 return chlk.activities.profile.SchoolPersonInfoPage;
             },
 
-            OVERRIDE, ArrayOf(chlk.models.common.ActionLinkModel), function prepareActionLinksData_(){
+            OVERRIDE, ArrayOf(chlk.models.common.ActionLinkModel), function prepareActionLinksData_(user){
                 var controller = 'admins';
                 var actionLinksData = [];
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'details', 'Now'));
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'info', 'Info', true));
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'apps', 'Apps'));
+                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'details', 'Now', false, [user.getId()]));
+                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'info', 'Info', true, [user.getId()]));
+                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'apps', 'Apps', false, [user.getId()]));
                 return actionLinksData;
             },
 

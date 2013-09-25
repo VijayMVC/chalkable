@@ -3,8 +3,8 @@ mixin ProfileTopBar(model)
         .container.panel-bg
             .left
                 each item in model.actionLinksData
-                    +ActionLink(item.getControllerName(), item.getActionName(),
-                        model.user.getId())(class = item.isPressed() ? "pressed" : undefined)=item.getTitle()
+                    +ActionLinkWithPrepend(item.getControllerName(), item.getActionName(),
+                        item.getArgs())(class = item.isPressed() ? "pressed" : undefined)=item.getTitle()
             .right
                 +ActionLink('settings', 'dashboard').settings Settings
 

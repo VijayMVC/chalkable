@@ -106,13 +106,13 @@ NAMESPACE('chlk.controllers', function (){
                 return model;
             },
 
-            ArrayOf(chlk.models.common.ActionLinkModel), function prepareActionLinksData_(){
+            ArrayOf(chlk.models.common.ActionLinkModel), function prepareActionLinksData_(user){
                 return [];
             },
 
             chlk.models.people.UserProfileModel, function prepareUserProfileModel_(user){
                 return new chlk.models.people.UserProfileModel(this.prepareProfileData(user)
-                    , this.prepareActionLinksData_());
+                    , this.prepareActionLinksData_(user));
             },
 
             Boolean, function isAdminRoleName_(roleName){

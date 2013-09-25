@@ -8,6 +8,7 @@ REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.SchoolYearId');
 REQUIRE('chlk.models.id.ClassPeriodId');
 REQUIRE('chlk.models.id.ClassPersonId');
+REQUIRE('chlk.models.discipline.StudentDisciplineSummary');
 //REQUIRE('chlk.models.developer.DeveloperInfo');
 
 NAMESPACE('chlk.services', function(){
@@ -38,7 +39,16 @@ NAMESPACE('chlk.services', function(){
                 return this.post('Discipline/SetClassDiscipline.json', Boolean,{
                     disciplines: disciplines.getPostData()
                 });
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.MarkingPeriodId]],
+            ria.async.Future, function getStudentDisciplineSummary(personId, markingPeriodId){
+                return this.get('Discipline/StudentDisciplineSummary.json', chlk.models.discipline.StudentDisciplineSummary ,{
+                    personId: personId && personId.valueOf(),
+                    markingPeriodId: markingPeriodId && markingPeriodId.valueOf()
+                });
             }
+
         ]
     );
 });

@@ -10,7 +10,7 @@ namespace Chalkable.Web.Models.DisciplinesViewData
     public class StudentDisciplineDetailedViewData : ShortPersonViewData
     {
         public IList<StudentDisciplineBoxViewData> DisciplineBoxes { get; set; }
-        public string MarkingPeriodName { get; set; }
+        public MarkingPeriodViewData MarkingPeriod { get; set; }
         public string Summary { get; set; }
 
         protected StudentDisciplineDetailedViewData(PersonDetails student) : base(student) { }
@@ -46,7 +46,7 @@ namespace Chalkable.Web.Models.DisciplinesViewData
             }
             var res = new StudentDisciplineDetailedViewData(student)
                           {
-                              MarkingPeriodName = markingPeriod.Name,
+                              MarkingPeriod = MarkingPeriodViewData.Create(markingPeriod),
                               Summary = summary,
                               DisciplineBoxes = disciplineBoxes
                           };

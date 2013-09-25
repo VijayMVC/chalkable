@@ -1,6 +1,6 @@
 REQUIRE('chlk.models.people.ShortUserInfo');
 REQUIRE('chlk.models.attendance.StudentAttendanceHoverBox');
-
+REQUIRE('chlk.models.schoolYear.MarkingPeriod');
 
 NAMESPACE('chlk.models.attendance', function(){
    "use strict";
@@ -9,7 +9,7 @@ NAMESPACE('chlk.models.attendance', function(){
     CLASS('StudentAttendanceSummary', EXTENDS(chlk.models.people.ShortUserInfo),[
 
         [ria.serialize.SerializeProperty('markingperiodname')],
-        String, 'markingPeriodName',
+        chlk.models.schoolYear.MarkingPeriod, 'markingPeriodName',
 
         [ria.serialize.SerializeProperty('absentsection')],
         chlk.models.attendance.StudentAttendanceHoverBox, 'absentSection',

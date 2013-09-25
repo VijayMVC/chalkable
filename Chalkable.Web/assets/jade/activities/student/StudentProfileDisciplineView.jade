@@ -1,21 +1,21 @@
+//duplicate code
+//todo: mode this to some control
 mixin MarkingPeriodSelect(markingPeriods, studentId, currentMp)
     +Select('markingPeriodSelect', 'students', 'attendance', studentId.valueOf())
-        +Option(currentMp.getId().valueOf(), mp.getName(), true)
         each mp,i in markingPeriods
-            +Option(mp.getId().valueOf(), mp.getName(), false)
+            +Option(mp.getId().valueOf(), mp.getName(), mp.getId()== currentMp.getId())
 
 
-mixin AttendanceSection(data)
+mixin DisciplineSection(data)
     boxesData = data.buildGlanceBoxesData()
     .glance-container
         each boxData in boxesData
             +GlanceBox(null, null, boxData, null, null)
 
+
 summaryInfo = self.getSummaryInfo()
 personId = summaryInfo.getId()
-actions = {currentAction: 'attendanceMonth'}
-calendar = self.getAttendanceCalendar()
-.student-attendance-view
+.student-discipline-view
     .loader-container
         .loader
         .action-bar.not-transparent.buttons
@@ -25,20 +25,20 @@ calendar = self.getAttendanceCalendar()
                     +ActionLink('students', 'details', personId) Now
                     +ActionLink('students', 'info', personId) Info
                     +ActionLink('students', 'schedule', personId) Scheduling
-                    +ActionLink('students', 'attendance', [null, personId]).pressed Attendance
-                    +ActionLink('students', 'discipline', [null, personId]) Discipline
+                    +ActionLink('students', 'attendance', personId) Attendance
+                    +ActionLink('students', 'discipline', personId).pressed Discipline
                     +ActionLink('students', 'details', personId) Apps
-        .attendance-view
+        .discipline-view
             .summary-info
                 .avarar-container
                     .img-container
                         +PersonImg(summaryInfo, 64)
                 h1.profile-person-name=summaryInfo.getDisplayName()
+                lable=summaryInfo.getSummary()
+                .mp-conteiner
+                    +MarkingPeriodSelect(self.getMarkingPeriods(), personId, summaryInfo.getMarkingPeriod())
                 h2
-                    .attendance-mp-conteiner
-                        +MarkingPeriodSelect(self.getMarkingPeriods(), personId, summaryInfo.getMarkingPeriod())
-                .attendance-info
-                    +AttendanceSection(self)
-            #attendance-calendar-info.calendar-info
-                +Calendar(calendar, chlk.templates.calendar.attendance.StudentAttendanceCalendarBodyTpl, calendar, 'students', actions, null).student-attendance-calendar
-
+                .discipline-info
+                    +DisciplineSection(self)
+            #discipline-calendar-info.calendar-section
+                +RenderWith(self.getDisciplineCalendar(), chlk.templates.calendar.discipline.StudentDisciplineMonthCalendarTpl)

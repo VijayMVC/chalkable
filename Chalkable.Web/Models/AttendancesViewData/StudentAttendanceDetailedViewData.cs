@@ -14,7 +14,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public StudentAttendanceBoxViewData LateSection { get; set; }
         public StudentAttendanceBoxViewData ExcusedSection { get; set; }
         public StudentAttendanceBoxViewData PresentSection { get; set; }
-        public string MarkingPeriodName { get; set; }
+        public MarkingPeriodViewData MarkingPeriod { get; set; }
 
 
         protected StudentAttendanceDetailedViewData(Person person) : base(person)
@@ -27,7 +27,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
             var attendancesDictionary = studentAttendnaces.OrderBy(x => x.Class.Name).GroupBy(x => x.Class.Id).ToDictionary(x => x.Key, x => x.ToList());
             var res = new StudentAttendanceDetailedViewData(student)
             {
-                MarkingPeriodName = markingPeriod.Name,
+                MarkingPeriod = MarkingPeriodViewData.Create(markingPeriod),
                 AbsentSection = StudentAttendanceBoxViewData.Create(studentAttendnaces, attendancesDictionary, AttendanceTypeEnum.Absent),
                 LateSection = StudentAttendanceBoxViewData.Create(studentAttendnaces, attendancesDictionary, AttendanceTypeEnum.Late),
                 ExcusedSection = StudentAttendanceBoxViewData.Create(studentAttendnaces, attendancesDictionary, AttendanceTypeEnum.Excused),

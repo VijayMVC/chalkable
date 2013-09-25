@@ -12,7 +12,7 @@ mixin ProfileTopBar(actionLinksData, model)
         .container.panel-bg
             .left
                 each item in actionLinksData
-                    +ActionLink(item.controller, item.action, model.getId())(class = item.isPressed() ? 'pressed' : '').aasdasd item.title
+                    +ActionLinkWithPrepend(item.controller, item.action, item.getArgs())(class = item.isPressed() ? 'pressed' : '').aasdasd item.title
             .right
                 +ActionLink('settings', 'dashboard').settings Settings
 
