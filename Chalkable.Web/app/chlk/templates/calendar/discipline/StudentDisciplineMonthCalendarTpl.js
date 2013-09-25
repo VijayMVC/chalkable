@@ -13,6 +13,13 @@ NAMESPACE('chlk.templates.calendar.discipline', function () {
         'StudentDisciplineMonthCalendarTpl', EXTENDS(chlk.templates.calendar.BaseCalendarTpl), [
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.calendar.discipline.StudentDisciplineCalendarMonthItem), 'calendarItems'
+            ArrayOf(chlk.models.calendar.discipline.StudentDisciplineCalendarMonthItem), 'calendarItems',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.SchoolPersonId, 'studentId',
+            [ria.templates.ModelPropertyBind],
+            chlk.models.common.ChlkDate, 'minDate',
+            [ria.templates.ModelPropertyBind],
+            chlk.models.common.ChlkDate, 'maxDate'
         ]);
 });

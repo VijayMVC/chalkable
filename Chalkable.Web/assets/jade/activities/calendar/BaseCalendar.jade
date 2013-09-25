@@ -14,14 +14,17 @@ mixin CalendarHeader(data, controller, actions, params)
     currentAction = actions.currentAction
         .prev-month-container
             if data.getPrevDate()
-                +ActionLink(controller, currentAction, data.getPrevDate().format('mm-dd-yy')).prev-month.week.teacher
+                -params.unshift(data.getPrevDate().format('mm-dd-yy'))
+                +ActionLinkWithPrepend(controller, currentAction, params).prev-month.week.teacher
+                -params.shift()
             else
                 A.prev-month.week.teacher
         .current-month-container.week
             label.current-month=data.getCurrentTitle()
         .next-month-container
             if data.getNextDate()
-                +ActionLink(controller, currentAction, data.getNextDate().format('mm-dd-yy')).next-month.week
+                -params.unshift(data.getNextDate().format('mm-dd-yy'))
+                +ActionLinkWithPrepend(controller, currentAction, params).next-month.week
             else
                 A.next-month.week
         if actions.day && actions.week && actions.month

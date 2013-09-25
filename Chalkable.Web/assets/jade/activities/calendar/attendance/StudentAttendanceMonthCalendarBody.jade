@@ -24,7 +24,7 @@
                         if !item.isExcused() && !item.isAbsent()
                             if !item.isShowGroupedData()
                                 each att in item.getAttendances()
-                                    li=att.getCount() + " " + att.getAttendanceType()
+                                    li=att.getCount() + " " + att.getAttendanceTypeName()
                             else
                                 each att in item.getAttendances()
                                     li=att.getClassName()

@@ -1,7 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.student.StudentProfileAttendanceTpl');
-//REQUIRE('chlk.templates.classes.Class');
-//REQUIRE('chlk.templates.announcement.AnnouncementClassPeriod');
+REQUIRE('chlk.templates.calendar.attendance.StudentAttendanceMonthCalendarTpl');
 
 NAMESPACE('chlk.activities.student', function () {
 
@@ -10,5 +9,6 @@ NAMESPACE('chlk.activities.student', function () {
         [ria.mvc.DomAppendTo('#main')],
         [chlk.activities.lib.PageClass('profile')],
         [ria.mvc.TemplateBind(chlk.templates.student.StudentProfileAttendanceTpl)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.calendar.attendance.StudentAttendanceMonthCalendarTpl, '', '#attendance-calendar-info', ria.mvc.PartialUpdateRuleActions.Replace)],
         'StudentProfileAttendancePage', EXTENDS(chlk.activities.lib.TemplatePage), []);
 });

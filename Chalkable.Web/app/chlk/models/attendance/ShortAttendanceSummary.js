@@ -12,6 +12,13 @@ NAMESPACE('chlk.models.attendance', function () {
         [ria.serialize.SerializeProperty('attendancetype')],
         Number, 'attendanceType',
 
+        String, function getAttendanceTypeName(){
+            var attType = this.getAttendanceType();
+            if(attType == null) return null;
+            var converter = new  chlk.converters.attendance.AttendanceTypeToNameConverter();
+            return converter.convert(attType);
+        },
+
         [ria.serialize.SerializeProperty('personid')],
         chlk.models.id.SchoolPersonId, 'personId',
 

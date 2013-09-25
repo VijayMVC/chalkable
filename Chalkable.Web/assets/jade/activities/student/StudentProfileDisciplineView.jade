@@ -25,8 +25,8 @@ personId = summaryInfo.getId()
                     +ActionLink('students', 'details', personId) Now
                     +ActionLink('students', 'info', personId) Info
                     +ActionLink('students', 'schedule', personId) Scheduling
-                    +ActionLink('students', 'attendance', personId) Attendance
-                    +ActionLink('students', 'discipline', personId).pressed Discipline
+                    +ActionLink('students', 'attendance', null, personId) Attendance
+                    +ActionLink('students', 'discipline', null, personId).pressed Discipline
                     +ActionLink('students', 'details', personId) Apps
         .discipline-view
             .summary-info
@@ -35,9 +35,8 @@ personId = summaryInfo.getId()
                         +PersonImg(summaryInfo, 64)
                 h1.profile-person-name=summaryInfo.getDisplayName()
                 lable=summaryInfo.getSummary()
-                .mp-conteiner
+                h2.mp-conteiner
                     +MarkingPeriodSelect(self.getMarkingPeriods(), personId, summaryInfo.getMarkingPeriod())
-                h2
                 .discipline-info
                     +DisciplineSection(self)
             #discipline-calendar-info.calendar-section

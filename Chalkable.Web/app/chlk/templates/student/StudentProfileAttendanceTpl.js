@@ -1,5 +1,5 @@
 REQUIRE('chlk.templates.JadeTemplate');
-REQUIRE('chlk.templates.calendar.attendance.StudentAttendanceCalendarBodyTpl');
+REQUIRE('chlk.templates.calendar.attendance.StudentAttendanceMonthCalendarTpl');
 REQUIRE('chlk.models.student.StudentProfileAttendanceViewData');
 
 NAMESPACE('chlk.templates.student', function(){

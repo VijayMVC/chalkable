@@ -135,11 +135,10 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.MarkingPeriodId, chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
             function attendanceAction(markingPeriodId_, personId, date_){
+                markingPeriodId_ = this.prepareMarkingPeriodId(markingPeriodId_);
                 var schoolYearId = this.getContext().getSession().get('currentSchoolYearId');
-                var markingPeriod = this.getContext().getSession().get('markingPeriod');
-                var markingPeriodId = markingPeriodId_ || markingPeriod.getId();
                 var res = ria.async.wait([
-                            this.attendanceService.getStudentAttendanceSummary(personId, markingPeriodId),
+                            this.attendanceService.getStudentAttendanceSummary(personId, markingPeriodId_),
                             this.attendanceCalendarService.getStudentAttendancePerMonth(personId, date_),
                             this.markingPeriodService.list(schoolYearId) // todo get markingPeriods from session
                         ])
@@ -148,7 +147,7 @@ NAMESPACE('chlk.controllers', function (){
                             var currentMp = result[0].getMarkingPeriod();
                             var endDate = currentMp.getEndDate();
                             var startDate = currentMp.getStartDate();
-                            var calendarModel = new chlk.models.calendar.attendance.StudentAttendanceMonthCalendar(date_, startDate, endDate, result[1]);
+                            var calendarModel = new chlk.models.calendar.attendance.StudentAttendanceMonthCalendar(date_, startDate, endDate, result[1], personId);
                             return new chlk.models.student.StudentProfileAttendanceViewData(result[0], calendarModel, result[2]);
                         });
                 return this.PushView(chlk.activities.student.StudentProfileAttendancePage, res);
@@ -156,12 +155,10 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.MarkingPeriodId, chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
             function disciplineAction(markingPeriodId_, personId, date_){
+                markingPeriodId_ = this.prepareMarkingPeriodId(markingPeriodId_);
                 var schoolYearId = this.getContext().getSession().get('currentSchoolYearId');
-                var markingPeriod = this.getContext().getSession().get('markingPeriod');
-                var markingPeriodId = markingPeriodId_ || markingPeriod.getId();
-
                 var res = ria.async.wait([
-                        this.disciplineService.getStudentDisciplineSummary(personId, markingPeriodId),
+                        this.disciplineService.getStudentDisciplineSummary(personId, markingPeriodId_),
                         this.disciplineCalendarService.getStudentDisciplinePerMonth(personId, date_),
                         this.markingPeriodService.list(schoolYearId)  // todo get markingPeriods from session
                     ])
@@ -170,28 +167,33 @@ NAMESPACE('chlk.controllers', function (){
                         var currentMp = result[0].getMarkingPeriod();
                         var endDate = currentMp.getEndDate();
                         var startDate = currentMp.getStartDate();
-                        var calendarModel = new chlk.models.calendar.discipline.StudentDisciplineMonthCalendar(date_, startDate, endDate, result[1]);
+                        var calendarModel = new chlk.models.calendar.discipline.StudentDisciplineMonthCalendar(date_, startDate, endDate, result[1], personId);
                         return new chlk.models.student.StudentProfileDisciplineViewData(result[0], calendarModel, result[2]);
                     });
                 return this.PushView(chlk.activities.student.StudentProfileDisciplinePage, res);
             },
 
-            [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
-            function attendanceMonthAction(personId, date_, minDate_, maxDate_){
-                var res = this.attendanceCalendarService.getStudentAttendanceSummary(personId, date_)
-                    .attach(this.validateResponse_())
-                    .then(function(data){
-                        new chlk.models.calendar.attendance.StudentAttendanceMonthCalendar(date_, minDate_, maxDate_, data)
-                    });
-                return this.UpdateView(chlk.activities.student.StudentProfileDisciplinePage, res);
+            chlk.models.id.MarkingPeriodId, function prepareMarkingPeriodId(markingPeriodId_){
+                var markingPeriod = this.getContext().getSession().get('markingPeriod');
+                return markingPeriodId_ || markingPeriod.getId();
             },
 
-            [[chlk.models.id.SchoolPersonId,  chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
-            function disciplineMonthAction(personId, date_, minDate_, maxDate_){
+            [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
+            function attendanceMonthAction(date_, minDate_, maxDate_, personId){
+                var res = this.attendanceCalendarService.getStudentAttendancePerMonth(personId, date_)
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        new chlk.models.calendar.attendance.StudentAttendanceMonthCalendar(date_, minDate_, maxDate_, data, personId)
+                    });
+                return this.UpdateView(chlk.activities.student.StudentProfileAttendancePage, res);
+            },
+
+            [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
+            function disciplineMonthAction(date_, minDate_, maxDate_, personId){
                 var res = this.disciplineCalendarService.getStudentDisciplinePerMonth(personId, date_)
                     .attach(this.validateResponse_())
                     .then(function (data){
-                        return new chlk.models.calendar.discipline.StudentDisciplineMonthCalendar(date_, minDate_, maxDate_, data);
+                        return new chlk.models.calendar.discipline.StudentDisciplineMonthCalendar(date_, minDate_, maxDate_, data, personId);
                     });
                 return this.UpdateView(chlk.activities.student.StudentProfileDisciplinePage, res);
             }

@@ -8,6 +8,12 @@ NAMESPACE('chlk.models.discipline', function(){
         Number, 'count',
 
         [ria.serialize.SerializeProperty('periodorder')],
-        Number, 'periodOrder'
+        Number, 'periodOrder',
+
+        String, function getPeriodName(){
+            var order = this.getPeriodOrder();
+            if(!order) return null;
+            return getSerial(order);
+        }
     ]);
 });

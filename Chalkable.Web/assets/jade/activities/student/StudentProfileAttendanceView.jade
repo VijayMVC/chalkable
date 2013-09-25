@@ -1,8 +1,7 @@
 mixin MarkingPeriodSelect(markingPeriods, studentId, currentMp)
     +Select('markingPeriodSelect', 'students', 'attendance', studentId.valueOf())
-        +Option(currentMp.getId().valueOf(), mp.getName(), true)
         each mp,i in markingPeriods
-            +Option(mp.getId().valueOf(), mp.getName(), false)
+            +Option(mp.getId().valueOf(), mp.getName(), mp.getId() == currentMp.getId())
 
 
 mixin AttendanceSection(data)
@@ -25,8 +24,8 @@ calendar = self.getAttendanceCalendar()
                     +ActionLink('students', 'details', personId) Now
                     +ActionLink('students', 'info', personId) Info
                     +ActionLink('students', 'schedule', personId) Scheduling
-                    +ActionLink('students', 'attendance', [null, personId]).pressed Attendance
-                    +ActionLink('students', 'discipline', [null, personId]) Discipline
+                    +ActionLink('students', 'attendance', null, personId).pressed Attendance
+                    +ActionLink('students', 'discipline', null, personId) Discipline
                     +ActionLink('students', 'details', personId) Apps
         .attendance-view
             .summary-info
@@ -34,11 +33,10 @@ calendar = self.getAttendanceCalendar()
                     .img-container
                         +PersonImg(summaryInfo, 64)
                 h1.profile-person-name=summaryInfo.getDisplayName()
-                h2
-                    .attendance-mp-conteiner
-                        +MarkingPeriodSelect(self.getMarkingPeriods(), personId, summaryInfo.getMarkingPeriod())
+                h2.mp-conteiner
+                    +MarkingPeriodSelect(self.getMarkingPeriods(), personId, summaryInfo.getMarkingPeriod())
                 .attendance-info
                     +AttendanceSection(self)
             #attendance-calendar-info.calendar-info
-                +Calendar(calendar, chlk.templates.calendar.attendance.StudentAttendanceCalendarBodyTpl, calendar, 'students', actions, null).student-attendance-calendar
+                +RenderWith(self.getAttendanceCalendar(), chlk.templates.calendar.attendance.StudentAttendanceMonthCalendarTpl)
 

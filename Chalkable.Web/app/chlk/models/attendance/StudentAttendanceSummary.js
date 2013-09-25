@@ -8,8 +8,8 @@ NAMESPACE('chlk.models.attendance', function(){
     /**@class chlk.models.attendance.StudentAttendanceSummary*/
     CLASS('StudentAttendanceSummary', EXTENDS(chlk.models.people.ShortUserInfo),[
 
-        [ria.serialize.SerializeProperty('markingperiodname')],
-        chlk.models.schoolYear.MarkingPeriod, 'markingPeriodName',
+        [ria.serialize.SerializeProperty('markingperiod')],
+        chlk.models.schoolYear.MarkingPeriod, 'markingPeriod',
 
         [ria.serialize.SerializeProperty('absentsection')],
         chlk.models.attendance.StudentAttendanceHoverBox, 'absentSection',
