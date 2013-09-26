@@ -38,6 +38,11 @@ BODY {
           #main-wrapper {
             #main {
               DIV.chlk-calendar {
+                font-family: Arial, serif;
+                H2{
+                  font-family: Arial, serif;
+                  font-weight: bolder;
+                }
                 DIV.header {
                   background-size: 660px 100%;
                   background: url(images/calendar/toolbar-bg-yellow.png) 0 0 no-repeat;
@@ -203,6 +208,11 @@ BODY {
                           SPAN.tooltip{
                             background: url(images/calendar/month-pop-up.png) 0 0 no-repeat;
                             left: 10px;
+                          }
+                          items{
+                            li{
+                              font-size: 12px;
+                            }
                           }
                         }
 
@@ -395,6 +405,7 @@ BODY {
                     > DIV {
                       > H2 {
                         color: #ccc !important;
+                        font-family: Arial, serif;
                       }
 
                       * {
