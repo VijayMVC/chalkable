@@ -5,8 +5,10 @@ using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.DisciplinesViewData;
@@ -61,6 +63,27 @@ namespace Chalkable.Web.Controllers
                 }
             }
             return Json(true);
+        }
+
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_CLASS_DISCIPLINE_STUDENT_DISCIPLINE_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User, AppPermissionType.Discipline })]
+        public ActionResult StudentDisciplineSummary(Guid personId, Guid markingPeriodId)
+        {
+            if (!Context.SchoolId.HasValue)
+                throw new UnassignedUserException();
+            var currentDateTime = Context.NowSchoolTime.Date;
+            var student = SchoolLocator.PersonService.GetPersonDetails(personId);
+            var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId);
+            var query = new ClassDisciplineQuery
+            {
+                MarkingPeriodId = mp.Id,
+                PersonId = student.Id,
+                FromDate = mp.StartDate,
+                ToDate = currentDateTime,
+            };
+            var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineDetails(query);
+            var res = StudentDisciplineDetailedViewData.Create(student, disciplines, mp);
+            return Json(res, 6);
         }
     }
 }

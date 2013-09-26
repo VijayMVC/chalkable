@@ -2,6 +2,8 @@ REQUIRE('chlk.models.id.SchoolPersonId');
 NAMESPACE('chlk.models.people', function () {
     "use strict";
 
+
+    //todo: join with chlk.models.common.role
     /** @class chlk.models.people.Role*/
     CLASS(
         'Role', [

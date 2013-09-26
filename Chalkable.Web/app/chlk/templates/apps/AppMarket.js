@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.common.PaginatedList');
 REQUIRE('chlk.models.apps.AppMarketViewData');
+REQUIRE('chlk.models.apps.AppSortingMode');
 REQUIRE('chlk.models.apps.AppMarketApplication');
 
 
@@ -15,7 +16,10 @@ NAMESPACE('chlk.templates.apps', function () {
             chlk.models.common.PaginatedList, 'apps',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.apps.AppMarketApplication, 'firstApp'
+            chlk.models.apps.AppMarketApplication, 'firstApp',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'currentBalance'
 
         ])
 });

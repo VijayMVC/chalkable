@@ -16,7 +16,7 @@ NAMESPACE('chlk.services', function () {
             },
 
             ria.async.Future, function getBalance() {
-                return this.get('Fund/GetAppBugetBalance.json', chlk.models.funds.BudgetBalance, {});
+                return this.get('Fund/GetAppBudgetBalance.json', chlk.models.funds.BudgetBalance, {});
             }
         ])
 });

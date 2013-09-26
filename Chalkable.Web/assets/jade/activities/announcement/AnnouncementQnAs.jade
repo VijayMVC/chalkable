@@ -11,14 +11,14 @@ each item, i in self.getAnnouncementQnAs()
                 input(type="text",name="question", value=item.getQuestion().getMessage())#edit-question-input.x-hidden
                 +Button()(type="submit").special-button.blue-button.submit-btn.x-hidden#edit-question-btn Update
                 span= self.convertWith(item.getQuestion().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
-                if self.isOwner
+                if self.annOwner
                     a(href='javascript:', name='edit-question-link')#edit-question-link Edit
                     a(href='javascript:', name='cancel-question-link')#cancel-question-link.x-hidden cancel
 
 
         .row
             answered = (item.getState() == chlk.models.announcement.QnAState.ANSWERED)
-            hideEdit = answered || !self.isOwner
+            hideEdit = answered || !self.annOwner
             .avatar-container.i-b
                 +PersonImg(item.getAnswer().getPerson(), 47)
             .qna.i-b
@@ -29,11 +29,11 @@ each item, i in self.getAnnouncementQnAs()
                 +Button()(type="submit"
                     , class=hideEdit ? "special-button blue-button submit-btn x-hidden" : "special-button blue-button submit-btn")#edit-answer-btn Update
                 span= self.convertWith(item.getAnswer().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
-                if answered && self.isOwner
+                if answered && self.annOwner
                     a(href='javascript:', name='edit-answer-link')#edit-answer-link Edit
                     a(href='javascript:', name='cancel-answer-link')#cancel-answer-link.x-hidden cancel
 
-if !self.isOwner
+if !self.annOwner
     +ActionForm('announcement', 'askQuestion')
         .avatar-container.i-b
             +PersonImg(self.getCurrentUser(), 47)

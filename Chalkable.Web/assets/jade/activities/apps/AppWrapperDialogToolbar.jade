@@ -1,0 +1,16 @@
+announcementAppId = self.app.getAnnouncementApplicationId() ? self.app.getAnnouncementApplicationId().valueOf() : ""
+announcementId = self.app.getAnnouncementId() ? self.app.getAnnouncementId().valueOf() : ""
+.toolbar
+    each btn in self.toolbarButtons
+        btnTarget = btn.isTargetBlank() ? "_blank" : undefined
+        url = btn.getUrl() ? btn.getUrl() : "javascript:void(0)"
+        cls = btn.getCls()
+        a(id=btn.getId(),
+        target = btnTarget,
+        class = cls,
+        href = url,
+        data-announcement-app-id=announcementAppId,
+        data-announcement-id=announcementId)=btn.getTitle()
+.x-close-btn.close
+
+

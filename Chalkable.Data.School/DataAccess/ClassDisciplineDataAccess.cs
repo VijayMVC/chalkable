@@ -59,8 +59,13 @@ namespace Chalkable.Data.School.DataAccess
                     {
                         classDiscipline.DisciplineTypes = new List<ClassDisciplineTypeDetails> {classDisciplineType};
                         res.Add(classDiscipline);
+                        classDisciplineType.ClassDiscipline = classDiscipline;
                     }
-                    else discipline.DisciplineTypes.Add(classDisciplineType);
+                    else
+                    {
+                        discipline.DisciplineTypes.Add(classDisciplineType);
+                        classDisciplineType.ClassDiscipline = discipline;
+                    }
                 }
                 return res;
             }

@@ -206,6 +206,10 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.apps.AttachAppDialog, result);
         },
 
+
+
+
+        //todo: join with attachAppAction
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER
         ])],
@@ -394,7 +398,6 @@ NAMESPACE('chlk.controllers', function (){
                                 model.setAnnouncementTypeName(announcementTypeName);
                                 return new ria.async.DeferredData(model);
                             }.bind(this));
-                        ////todo: fix noloading
                         return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());
                     }
                 }else{
@@ -506,6 +509,9 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, ann, 'update-qna');
         },
 
+
+
+        //TODO: refactor
         [[chlk.models.announcement.AnnouncementForm]],
         function prepareRecipientsData(model){
             var rolesEnum = chlk.models.common.RoleEnum,

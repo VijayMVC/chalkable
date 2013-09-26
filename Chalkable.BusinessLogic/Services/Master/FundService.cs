@@ -27,8 +27,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         decimal GetClassBalance(Guid classId);
         Fund AppInstallPersonPayment(Guid appInstallId, decimal amount, DateTime performedDateTime, string descrption);
         IList<ApplicationInstallAction> GetSchoolPersonHistory(Guid userId);
-        decimal GetToSchoolPeyment(Guid schoolId);
-        decimal GetPeymentForApps(Guid schoolId);
+        decimal GetToSchoolPayment(Guid schoolId);
+        decimal GetPaymentForApps(Guid schoolId);
         bool ApproveReject(Guid fundRequestId, bool isApprove);   
     }
 
@@ -402,7 +402,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public decimal GetToSchoolPeyment(Guid schoolId)
+        public decimal GetToSchoolPayment(Guid schoolId)
         {
             if (!BaseSecurity.IsAdminOrTeacher(Context))
                 throw new ChalkableSecurityException();
@@ -414,7 +414,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public decimal GetPeymentForApps(Guid schoolId)
+        public decimal GetPaymentForApps(Guid schoolId)
         {
             if (!BaseSecurity.IsAdminOrTeacher(Context))
                 throw new ChalkableSecurityException(ChlkResources.ERR_FUND_PERSON_BALANCE_INVALID_PERMISSION);

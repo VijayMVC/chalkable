@@ -38,13 +38,12 @@ NAMESPACE('chlk.controllers', function (){
             starredOnly_ = starredOnly_ != false;
             var result = this.announcementService
                 .getAnnouncements(pageIndex_ | 0, classId_, starredOnly_)
-                .then(function(model){
-                    var feedModel = new chlk.models.feed.Feed(model);
+                .then(function(feedItems){
+
                     var classes = this.classService.getClassesForTopBar(true);
-                    var topModel = new chlk.models.classes.ClassesForTopBar();
-                    topModel.setTopItems(classes);
-                    topModel.setDisabled(false);
-                    classId_ && topModel.setSelectedItemId(classId_);
+                    var topModel = new chlk.models.classes.ClassesForTopBar(classes, classId_);
+
+                    var feedModel = new chlk.models.feed.Feed(feedItems);
                     feedModel.setTopData(topModel);
                     feedModel.setStarredOnly(starredOnly_);
                     feedModel.setImportantCount(this.announcementService.getImportantCount());
@@ -56,6 +55,9 @@ NAMESPACE('chlk.controllers', function (){
                     : this.PushView(chlk.activities.feed.FeedListPage, result);
         },
 
+
+
+        //TODO: refactor
         [[Boolean, String]],
         function adminAction(update_, gradeLevels_) {
             var res = ria.async.wait([

@@ -6,6 +6,18 @@ DIV.page {
         #main {
           DIV.my-apps{
 
+
+            .toolbar-btn{
+              &.app-store{
+                margin-left: 207px;
+              }
+
+              &.edit{
+                width: 35px;
+              }
+            }
+
+
             .apps{
               width: 670px;
 

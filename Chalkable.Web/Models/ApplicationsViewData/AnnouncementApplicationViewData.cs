@@ -28,14 +28,15 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public static AnnouncementApplicationViewData Create(AnnouncementApplication announcementApplication, 
             Application application, IList<ApplicationInstall> installs, Guid? currentPersonId)
         {
+            var appInstallId = installs != null ? installs.First().Id : (Guid?)null;
             var res = new AnnouncementApplicationViewData(application)
                 {
                     AnnouncementApplicationId = announcementApplication.Id,
                     Active = announcementApplication.Active,
                     AnnouncementId = announcementApplication.AnnouncementRef,
-                    EditUrl = AppTools.BuildAppUrl(application, null, installs.First().Id, AppMode.Edit),
-                    ViewUrl = AppTools.BuildAppUrl(application, null, installs.First().Id, AppMode.View),
-                    GradingViewUrl = AppTools.BuildAppUrl(application, null, installs.First().Id, AppMode.GradingView),
+                    EditUrl = AppTools.BuildAppUrl(application, announcementApplication.Id, appInstallId, AppMode.Edit),
+                    ViewUrl = AppTools.BuildAppUrl(application, announcementApplication.Id, appInstallId, AppMode.View),
+                    GradingViewUrl = AppTools.BuildAppUrl(application, announcementApplication.Id, appInstallId, AppMode.GradingView),
                     CurrentPersonId = currentPersonId,
                     Order = announcementApplication.Order
                 };

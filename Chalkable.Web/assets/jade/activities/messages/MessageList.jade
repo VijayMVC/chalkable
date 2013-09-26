@@ -14,7 +14,7 @@
                 +Button()(type="submit", submitType="search")#search-message-btn
 
     .grid-container
-
+        input(name="inbox", type="hidden", value=self.isInbox().toString())
         input(name="selectedIds", type="hidden")#selectedIds
         +Grid('message', 'page', self.getMessages(), [true, self.isInbox(), self.getRole(), self.getKeyword()])
             +GridBody()
@@ -22,11 +22,11 @@
                     .container.panel-bg
                         .left
                             +Checkbox('checkboxall', false)
-                            +Button()(type="submit", , name="submitType", value="delete").plain-button.action-button#delete-button Delete
+                            +Button()(type="submit", , name="submitType", value="delete").plain-button#delete-button Delete
                             if self.isInbox()
                                 |Mark:
-                                +Button()(type="submit", name="submitType", value="markAsRead").plain-button.action-button#mark-read-button Read
-                                +Button()(type="submit", name="submitType", value="markAsUnread").plain-button.action-button#mark-unread-button Unread
+                                +Button()(type="submit", name="submitType", value="markAsRead").plain-button#mark-read-button Read
+                                +Button()(type="submit", name="submitType", value="markAsUnread").plain-button#mark-unread-button Unread
                         .right
                             |View:
                             +ActionLink('message', 'page', true, self.isInbox(), '', self.getKeyword()) All

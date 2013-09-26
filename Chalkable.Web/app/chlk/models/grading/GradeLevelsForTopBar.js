@@ -3,9 +3,12 @@ REQUIRE('chlk.models.grading.GradeLevelForTopBar');
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
     /** @class chlk.models.grading.GradeLevelsForTopBar*/
+
+
+    //TODO: refactor
     CLASS(
         'GradeLevelsForTopBar', [
-            ArrayOf(chlk.models.grading.GradeLevelForTopBar), 'topItems',
+            ArrayOf(chlk.models.grading.GradeLevelForTopBar), 'topItems', //TODO: rename
             chlk.models.id.GradeLevelId, 'selectedItemId',
             Boolean, 'disabled',
             Array, 'selectedIds',

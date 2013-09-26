@@ -9,7 +9,7 @@ using Chalkable.Web.Models.CalendarsViewData;
 namespace Chalkable.Web.Controllers.CalendarControllers
 {
     [RequireHttps, TraceControllerFilter]
-    public class DiscilineCalendarController : CalendarController
+    public class DisciplineCalendarController : CalendarController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult MonthForStudent(Guid studentId, DateTime? date)

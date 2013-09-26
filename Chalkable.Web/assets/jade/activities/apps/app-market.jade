@@ -12,10 +12,31 @@ mixin AppIconLink(app)
 .app-market
     .action-bar.not-transparent
         .container.panel-bg.buttons-toolbar
+            .user-balance= "$" + self.currentBalance
             +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
             +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn My Apps
+
     .app-screenshots-panel
         +Carousel(self.firstApp.getScreenshotPictures().getItems())
+    +ActionForm('appmarket', 'list')
+        .app-filter
+            .subject
+                .subject-filter
+                    .title.btn Subject
+                    .items
+
+            .price
+                .price-type.all.btn.pressed All
+                .price-type.paid.btn Paid
+                .price-type.free.btn Free
+
+            .sort
+                span Sorted By:
+                +Select('sortType')#app-sort-type
+                    +Option(chlk.models.apps.AppSortingMode.POPULAR.valueOf(), 'Popular', true)
+                    +Option(chlk.models.apps.AppSortingMode.NEWEST.valueOf(), 'Newest')
+                    +Option(chlk.models.apps.AppSortingMode.HIGHEST_RATED.valueOf(), 'Highest Rated')
+            .grade-levels
     .apps
         each app in self.apps.getItems()
             +AppIconLink(app)

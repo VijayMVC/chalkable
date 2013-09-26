@@ -13,14 +13,14 @@ namespace Chalkable.Web.Controllers
     public class FundController : ChalkableController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
-        public ActionResult GetAppBugetBalance()
+        public ActionResult GetAppBudgetBalance()
         {
             if (!Context.SchoolId.HasValue)
                 throw new UnassignedUserException();
             var schoolId = Context.SchoolId.Value;
-            var toSchoolPeyment = (double)MasterLocator.FundService.GetToSchoolPeyment(schoolId);
-            var paymentforApp = (double)MasterLocator.FundService.GetPeymentForApps(schoolId);
-            return Json(AppBudgetBalanceViewData.Craete(toSchoolPeyment, paymentforApp));
+            var toSchoolPayment = (double)MasterLocator.FundService.GetToSchoolPayment(schoolId);
+            var paymentforApp = (double)MasterLocator.FundService.GetPaymentForApps(schoolId);
+            return Json(AppBudgetBalanceViewData.Craete(toSchoolPayment, paymentforApp));
         }
     }
 }
