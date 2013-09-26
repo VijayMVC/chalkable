@@ -15,7 +15,6 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         ClassAttendance SetClassAttendance(Guid classPersonId, Guid classPeriodId, DateTime date, AttendanceTypeEnum type, Guid? attendanceReasonId = null, int? sisId = null);
         IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, AttendanceTypeEnum type, Guid? attendanceReasonId = null, int? sisId = null);
-  
         StudentDailyAttendance SetDailyAttendance(DateTime date, Guid personId,  int? timeIn, int? timeOut);
         StudentDailyAttendance GetDailyAttendance(DateTime date, Guid personId);
         IList<StudentDailyAttendance> GetDailyAttendances(DateTime date); 
