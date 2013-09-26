@@ -14,6 +14,12 @@ NAMESPACE('chlk.models.attendance', function () {
 
             String, 'attReasons',
 
+            String, 'controller',
+
+            String, 'action',
+
+            String, 'params',
+
             chlk.models.common.ChlkDate, 'date'
         ]);
 });

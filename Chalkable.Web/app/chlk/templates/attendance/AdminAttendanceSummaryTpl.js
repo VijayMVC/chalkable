@@ -24,6 +24,9 @@ NAMESPACE('chlk.templates.attendance', function () {
             Boolean, 'renderNow',
 
             [ria.templates.ModelPropertyBind],
+            Number, 'currentPage',
+
+            [ria.templates.ModelPropertyBind],
             Boolean, 'renderDay',
 
             [ria.templates.ModelPropertyBind],

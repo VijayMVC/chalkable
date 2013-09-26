@@ -3,18 +3,24 @@ REQUIRE('chlk.templates.JadeTemplate');
 
 NAMESPACE('chlk.templates.attendance', function () {
 
-    /** @class chlk.templates.attendance.AttendanceStudentBoxTpl.js*/
+    /** @class chlk.templates.attendance.AttendanceStudentBoxTpl*/
     CLASS(
-        [ria.templates.TemplateBind('~/assets/jade/activities/attendance/AttendanceStudentBox.jade')],
+        [ria.templates.TemplateBind('~/assets/jade/activities/attendance/AdminStudentBox.jade')],
         [ria.templates.ModelBind(chlk.models.attendance.AttendanceStudentBox)],
-        'AttendanceStudentInfoTpl', EXTENDS(chlk.templates.JadeTemplate), [
+        'AttendanceStudentBoxTpl', EXTENDS(chlk.templates.JadeTemplate), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.SchoolPersonId, 'id',
+            Object, 'student',
 
             [ria.templates.ModelPropertyBind],
-            String, 'name',
+            chlk.models.common.ChlkDate, 'date',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.ChlkDate, 'date'
+            Number, 'top',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'currentPage',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'gradeLevelsIds'
         ])
 });

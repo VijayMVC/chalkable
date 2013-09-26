@@ -64,7 +64,6 @@ NAMESPACE('chlk.activities.attendance', function () {
             OVERRIDE, VOID, function onStop_() {
                 var changed = this.dom.find('.row.changed');
                 if(changed.count()){
-                    var base = BASE;
                     var classPersonIds = [];
                     var classPeriodIds = [];
                     var attendanceTypes = [];
@@ -80,12 +79,8 @@ NAMESPACE('chlk.activities.attendance', function () {
                     this.dom.find('[name="attendanceTypes"]').setValue(attendanceTypes.join(','));
                     this.dom.find('[name="attReasons"]').setValue(attReasons.join(','));
                     this.dom.find('form').trigger('submit');
-                    setTimeout(function(){
-                        base();
-                    }, 10)
-                }else{
-                    BASE();
                 }
+                BASE();
             }
         ]);
 });

@@ -10,6 +10,7 @@ REQUIRE('chlk.activities.attendance.ClassListPage');
 REQUIRE('chlk.activities.attendance.AdminAttendanceSummaryPage');
 REQUIRE('chlk.activities.attendance.StudentDayAttendancePopup');
 REQUIRE('chlk.models.attendance.AttendanceList');
+REQUIRE('chlk.models.attendance.AttendanceStudentBox');
 
 REQUIRE('chlk.models.common.ChlkDate');
 
@@ -46,20 +47,22 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('attendance')],
-        [[Boolean, String]],
-        function summaryAdminAction(update_, gradeLevels_) {
+        [[Boolean, String, Number, chlk.models.common.ChlkDate]],
+        function summaryAdminAction(update_, gradeLevels_, currentPage_, date_) {
             var markingPeriod = this.getContext().getSession().get('markingPeriod', null),
                 currentSchoolYearId = this.getContext().getSession().get('currentSchoolYearId', null),
                 fromMarkingPeriodId = markingPeriod.getId(),
                 toMarkingPeriodId = markingPeriod.getId();
             var res = ria.async.wait([
-                    this.attendanceService.getAdminAttendanceSummary(true, true, true, gradeLevels_, null, fromMarkingPeriodId, toMarkingPeriodId),
+                    this.attendanceService.getAdminAttendanceSummary(true, true, true, gradeLevels_, date_, fromMarkingPeriodId, toMarkingPeriodId),
                     this.markingPeriodService.list(currentSchoolYearId)
                 ])
                 .attach(this.validateResponse_())
                 .then(function(result){
                     var model = result[0];
                     model.setMarkingPeriods(result[1]);
+                    if(currentPage_)
+                        model.setCurrentPage(currentPage_);
                     return this.prepareAttendanceSummaryModel(model, gradeLevels_, null, fromMarkingPeriodId, toMarkingPeriodId);
                 }, this);
             return (update_ ? this.UpdateView : this.PushView)(chlk.activities.attendance.AdminAttendanceSummaryPage, res);
@@ -92,6 +95,12 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.attendance.AttendanceList]],
         function setAttendanceForListAction(model){
             this.attendanceService.setAttendanceForList(model.getClassPersonIds(), model.getClassPeriodIds(), model.getAttendanceTypes(), model.getAttReasons(), model.getDate());
+            var controller = model.getController();
+            if(controller){
+                var action = model.getAction();
+                var params = JSON.parse(model.getParams());
+                this.Redirect(controller, action, params);
+            }
         },
 
         [[chlk.models.attendance.AdminAttendanceSummary, String, chlk.models.common.ChlkDate, chlk.models.id.MarkingPeriodId,
@@ -115,22 +124,28 @@ NAMESPACE('chlk.controllers', function (){
                 return model;
         },
 
-        [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
-        VOID, function showStudentAttendanceAction(studentId, date_) {
+        [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate, String, String, String]],
+        VOID, function showStudentAttendanceAction(studentId, date_, controller_, action_, params_) {
             var result = this.attendanceService.getStudentAttendance(studentId, date_)
                 .then(function(model){
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
                     model.setReasons(this.getContext().getSession().get('attendanceReasons', []));
                     model.setAbleEdit(this.userIsAdmin() || this.userInRole(chlk.models.common.RoleEnum.TEACHER));
+                    if(controller_)
+                        model.setController(controller_);
+                    if(action_)
+                        model.setAction(action_);
+                    if(params_)
+                        model.setParams(params_);
                     return model;
                 }, this);
             return this.ShadeView(chlk.activities.attendance.StudentDayAttendancePopup, result);
         },
 
-        [[chlk.models.attendance.AttendanceStudentBox]],
+        /*[[chlk.models.attendance.AttendanceStudentBox]],
         VOID, function showStudentBoxAction(model) {
             return this.UpdateView(chlk.activities.attendance.AdminAttendanceSummaryPage, ria.async.DeferredData(model));
-        },
+        },*/
 
         [[chlk.models.id.ClassId, chlk.models.id.ClassPeriodId, chlk.models.common.ChlkDate]],
         function markAllAction(classId, classPeriodId, date){
@@ -230,8 +245,8 @@ NAMESPACE('chlk.controllers', function (){
                 index = types.length;
             else if(increment == 1 && index == types.length - 1)
                 index = -1;
-            index += increment
+            index += increment;
             return types[index];
-        },
+        }
     ])
 });

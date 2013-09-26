@@ -1,4 +1,4 @@
-mixin StudentsTpl(students, header, needPlus, isDay)
+mixin StudentsTpl(students, header, needPlus, isDay, currentPage)
     preparedStudents = self.getPreparedStudents(students, needPlus)
     length = students.length
     blockCount = 18
@@ -29,7 +29,8 @@ mixin StudentsTpl(students, header, needPlus, isDay)
                                                 ).plus-user-search.student-search-input
                                                 +ActionForm('attendance', 'showStudentBox').show-student-form
                                                     +Hidden('id')
-                                                    +Hidden('name')
+                                                    +Hidden('gradeLevelsIds', self.getGradeLevelsIds())
+                                                    +Hidden('currentPage', currentPage)
                                                     +Hidden('date', date)
                                             SPAN.enter= Msg.Enter_when_done
                             else
@@ -37,7 +38,8 @@ mixin StudentsTpl(students, header, needPlus, isDay)
                                     .name
                         else
                             div(index=index, data-id=student.getId().valueOf()).student
-                                +ActionLink('attendance', 'showStudentAttendance', student.getId(), date).img-container
+                                +ActionLink('attendance', 'showStudentAttendance', student.getId(),
+                                        date, 'attendance', 'summary', JSON.stringify([true, self.getGradeLevelsIds(), currentPage, date])).img-container
                                     +PersonImg(student, 128)
                                 +ActionLink('students', 'details', student.getId()).name=student.getDisplayName()
                     -}
@@ -53,6 +55,7 @@ nowData = self.getNowAttendanceData()
 dayData = self.getAttendanceByDayData()
 mpData = self.getAttendanceByMpData()
 valuesEnum = chlk.models.attendance.AttendanceTypeEnum
+currentPage = self.getCurrentPage() || 1
 .admin-attendance.loader-container
     .loader
     +LeftRightToolbar(topItems, chlk.templates.grading.GradeLevelForTopBar, 'attendance', 'summary', [true])(
@@ -117,28 +120,28 @@ valuesEnum = chlk.models.attendance.AttendanceTypeEnum
                     +Hidden('renderMp', 'true')
     .attendance-boxes-admin
         .boxes-container
-            div(left="0px", text=Msg.Now, data-index="1").attendance-box.attendance-top-box.now-box.active-part
+            div(left="0px", text=Msg.Now, data-index="1", class=currentPage == 1 ? "active-part" : "").attendance-box.attendance-top-box.now-box
                 .number=self.getNowAttendanceData().getAbsentNowCount()
                 .title=Msg.Not_in_class_right_now
-            div(left="192px", text=Msg.Today, data-index="2").attendance-box.attendance-top-box.day-box
+            div(left="192px", text=Msg.Today, data-index="2", class=currentPage == 2 ? "active-part" : "").attendance-box.attendance-top-box.day-box
                 .number=self.getAttendanceByDayData().getStudentsCountAbsentWholeDay()
                 .title=Msg.Attendance_today
-            div(left="381px", text=Msg.Marking_Period_shortcut, data-index="3").attendance-box.attendance-top-box.mp-box
+            div(left="381px", text=Msg.Marking_Period_shortcut, data-index="3", class=currentPage == 3 ? "active-part" : "").attendance-box.attendance-top-box.mp-box
                 .number=self.getAttendanceByMpData().getAbsentStudentsCountAvg()
                 .title=Msg.Attendance_MP
         .slider-line-container
             .slider-left
             .slider-line
             .slider-right
-            .slider-container
+            div(style="left:" + (currentPage == 1 ? "0px" : (currentPage == 2 ? "192px" : "381px"))).slider-container
                 .slider
-                .active=Msg.Now
+                .active=(currentPage == 1 ? Msg.Now : (currentPage == 2 ? Msg.Today : Msg.Marking_Period_shortcut))
     .attendance-content
-        .attendance-now.students-statistic.page-1.active-part
+        div(class=currentPage == 1 ? "active-part" : "").attendance-now.students-statistic.page-1
             +RenderWith(nowData, chlk.templates.attendance.AdminAttendanceNowTpl)
-        .attendance-day.students-statistic.page-2
+        div(class=currentPage == 2 ? "active-part" : "").attendance-day.students-statistic.page-2
             +RenderWith(dayData, chlk.templates.attendance.AdminAttendanceDayTpl)
-        .attendance-mp.students-statistic.page-3
+        div(class=currentPage == 3 ? "active-part" : "").attendance-mp.students-statistic.page-3
             +RenderWith(mpData, chlk.templates.attendance.AdminAttendanceMpTpl)
 
 

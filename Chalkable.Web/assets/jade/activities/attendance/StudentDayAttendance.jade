@@ -15,6 +15,9 @@ typesEnum = chlk.models.attendance.AttendanceTypeEnum
             +Hidden('classPeriodIds', '')
             +Hidden('attendanceTypes', '')
             +Hidden('attReasons', '')
+            +Hidden('controller', self.getController())
+            +Hidden('action', self.getAction())
+            +Hidden('params', self.getParams())
         h2.popup-title=Msg.Attendance
         .row.time
             div #{Msg.Arrival}: #{dailyAttendance ? dailyAttendance.getArrival() : ''}
@@ -30,7 +33,7 @@ typesEnum = chlk.models.attendance.AttendanceTypeEnum
                 div(
                     class=(i%2 ? 'even ' : 'odd ') + (i == currentReasons.length - 1 ? 'last' : ''),
                     data-classPeriodId = item.getClassPeriodId().valueOf(),
-                    data-classPersonId = item.getStudent().getId().valueOf()
+                    data-classPersonId = item.getClassPersonId().valueOf()
                 ).row.wide
                     .centered=self.getSerial(item.getPeriod().getOrder())
                     div=item.getClassName()

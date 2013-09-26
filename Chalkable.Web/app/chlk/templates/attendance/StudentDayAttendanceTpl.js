@@ -19,6 +19,15 @@ NAMESPACE('chlk.templates.attendance', function () {
             chlk.models.attendance.DailyAttendance, 'dailyAttendance',
 
             [ria.templates.ModelPropertyBind],
+            String, 'action',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'controller',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'params',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 
             [ria.templates.ModelPropertyBind],

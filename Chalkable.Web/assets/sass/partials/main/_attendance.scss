@@ -10,6 +10,105 @@ BODY {
 
         &.attendance{
           #main{
+            .admin-attendance-summary-page{
+              position: relative;
+
+              .student{
+                display: inline-block;
+                background: rgba(202, 139, 139, 0.8);
+                border-radius: 7px;
+                height: 75px;
+                width: 86px;
+                vertical-align: top;
+                text-align: center;
+                position: relative;
+                margin-bottom: 14px;
+                @include transition-property("all");
+                @include transition-duration("0.2s");
+                overflow: hidden;
+
+                &.absolute{
+                  position: absolute;
+                }
+
+                &.plus{
+                  cursor: pointer;
+                  overflow: visible;
+
+                  .small-pop-up{
+                    top: 83px;
+
+                    .container .triangle{
+                      left: 36px;
+                    }
+
+                    .student-search-input{
+                      width: 173px;
+                    }
+                  }
+                }
+
+                &:not(.grey){
+                  cursor: pointer;
+                }
+
+                .plus-container{
+                  font-size: 38px;
+                  margin-top: 6px;
+                  color: #A8A8A8;
+                  text-shadow: 0 1px 0 white, 0 -1px 0 gray;
+                }
+
+                &.grey{
+                  background: rgba(173, 173, 173, 0.55);
+
+                  .name{
+                    background: rgba(173, 173, 173, 0.75);
+                  }
+                }
+
+                &.hidden{
+                  //height: 0;
+                  display: none;
+                }
+
+                &:not(:nth-child(6n)){
+                  margin-right: 26px;
+                }
+
+                .img-container{
+                  height: 73px;
+                  width: 67px;
+                  display: inline-block;
+                  overflow: hidden;
+                  margin-top: 1px;
+                  background-size: 67px 73px;
+
+                  .person-avatar-wrapper >div{
+                    height: 73px;
+                    width: 73px;
+                    margin-left: -3px;
+                  }
+                }
+
+                .name{
+                  position: absolute;
+                  bottom: 7px;
+                  white-space: nowrap;
+                  left: 0;
+                  right: 0;
+                  overflow: hidden;
+                  background: rgba(154, 52, 52, 0.8);
+                  border-radius: 2px;
+                  height: 19px;
+                  line-height: 19px;
+                  color: white;
+                  font-size: 12px;
+                  text-decoration: none;
+                }
+              }
+            }
+
             .admin-attendance{
               .action-bar{
                 display: none;
@@ -242,16 +341,17 @@ BODY {
                   }
 
                   &.absent-from-school{
-                    .student{
+                    .student:not(.grey){
                       background: #ab9090;
-                    }
-                    .name{
-                      background: rgba(90, 29, 29, 0.8);
+
+                      .name{
+                        background: rgba(90, 29, 29, 0.8);
+                      }
                     }
                   }
 
                   &.attendance-mp{
-                    .student{
+                    .student:not(.grey){
                       background: rgba(131, 86, 86, 0.55);
 
                       .name{
@@ -261,7 +361,7 @@ BODY {
                   }
                   //excused
                   &.attendance-4{
-                    .student{
+                    .student:not(.grey){
                       background: #a0c8d4;
 
                       .name{
@@ -271,7 +371,7 @@ BODY {
                   }
                   //absent
                   &.attendance-8{
-                    .student{
+                    .student:not(.grey){
                       background:  #835656;
 
                       .name{
@@ -281,7 +381,7 @@ BODY {
                   }
                   //late
                   &.attendance-16{
-                    .student{
+                    .student:not(.grey){
                       background: #f3d5aa;
 
                       .name{
@@ -291,103 +391,12 @@ BODY {
                   }
 
                   &.attendance-1{
-                    .student{
+                    .student:not(.grey){
                       background: rgba(182, 182, 171, 0.6);
 
                       .name{
                         background: rgba(116, 115, 115, 0.8);
                       }
-                    }
-                  }
-
-                  .student{
-                    display: inline-block;
-                    background: rgba(202, 139, 139, 0.8);
-                    border-radius: 7px;
-                    height: 75px;
-                    width: 86px;
-                    vertical-align: top;
-                    text-align: center;
-                    position: relative;
-                    margin-bottom: 14px;
-                    @include transition-property("all");
-                    @include transition-duration("0.2s");
-                    overflow: hidden;
-
-                    &.plus{
-                      cursor: pointer;
-                      overflow: visible;
-
-                      .small-pop-up{
-                        top: 83px;
-
-                        .container .triangle{
-                          left: 36px;
-                        }
-
-                        .student-search-input{
-                          width: 173px;
-                        }
-                      }
-                    }
-
-                    &:not(.grey){
-                      cursor: pointer;
-                    }
-
-                    .plus-container{
-                      font-size: 38px;
-                      margin-top: 6px;
-                      color: #A8A8A8;
-                      text-shadow: 0 1px 0 white, 0 -1px 0 gray;
-                    }
-
-                    &.grey{
-                      background: rgba(173, 173, 173, 0.55);
-
-                      .name{
-                        background: rgba(173, 173, 173, 0.75);
-                      }
-                    }
-
-                    &.hidden{
-                      //height: 0;
-                      display: none;
-                    }
-
-                    &:not(:nth-child(6n)){
-                      margin-right: 26px;
-                    }
-
-                    .img-container{
-                      height: 73px;
-                      width: 67px;
-                      display: inline-block;
-                      overflow: hidden;
-                      margin-top: 1px;
-                      background-size: 67px 73px;
-
-                      .person-avatar-wrapper >div{
-                        height: 73px;
-                        width: 73px;
-                        margin-left: -3px;
-                      }
-                    }
-
-                    .name{
-                      position: absolute;
-                      bottom: 7px;
-                      white-space: nowrap;
-                      left: 0;
-                      right: 0;
-                      overflow: hidden;
-                      background: rgba(154, 52, 52, 0.8);
-                      border-radius: 2px;
-                      height: 19px;
-                      line-height: 19px;
-                      color: white;
-                      font-size: 12px;
-                      text-decoration: none;
                     }
                   }
                 }

@@ -19,6 +19,12 @@ NAMESPACE('chlk.models.attendance', function () {
 
             ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 
+            String, 'action',
+
+            String, 'controller',
+
+            String, 'params',
+
             Boolean, 'ableEdit'
         ]);
 });
