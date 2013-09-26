@@ -1,0 +1,4 @@
+div(index=0, data-id=self.getId().valueOf()).student
+    +ActionLink('attendance', 'showStudentAttendance', self.getId(), self.getDate() ? self.getDate().format('mm/dd/yy') : null).img-container
+        +PersonImg(student, 128)
+    +ActionLink('students', 'details', self.getId()).name=self.getName()

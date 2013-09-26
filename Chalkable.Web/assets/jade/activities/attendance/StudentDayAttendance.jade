@@ -1,0 +1,57 @@
+mixin TypeOption(typeId, item)
+    -console.info(typeId);
+    +Option(typeId, self.getTypeName(typeId), item.getType() == typeId)(class="attendance-" + typeId)
+
+dailyAttendance = self.getDailyAttendance()
+attendances = self.getAttendances()
+reasons = self.getReasons()
+canEdit = self.isAbleEdit()
+typesEnum = chlk.models.attendance.AttendanceTypeEnum
+.daily-pop-up
+    +ActionForm('attendance', 'setAttendanceForList')
+        if attendances.length
+            +Hidden('date', attendances[0].getDate().format('mm-dd-yy'))
+            +Hidden('classPersonIds', '')
+            +Hidden('classPeriodIds', '')
+            +Hidden('attendanceTypes', '')
+            +Hidden('attReasons', '')
+        h2.popup-title=Msg.Attendance
+        .row.time
+            div #{Msg.Arrival}: #{dailyAttendance ? dailyAttendance.getArrival() : ''}
+            div #{Msg.CheckIn}: #{dailyAttendance ? dailyAttendance.getTimeIn() : Msg.No_check_in}
+        .attendance-popup-table
+            .row.wide.header
+                .popup-header-column.border-right=Msg.Period
+                .popup-header-column.border-left.border-right=Msg.Class
+                .popup-header-column.border-left.border-right=Msg.Attendance
+                .popup-header-column.border-left=Msg.Reason
+            each item,i in attendances
+                currentReasons = self.getReasonsForType(item.getType())
+                div(
+                    class=(i%2 ? 'even ' : 'odd ') + (i == currentReasons.length - 1 ? 'last' : ''),
+                    data-classPeriodId = item.getClassPeriodId().valueOf(),
+                    data-classPersonId = item.getStudent().getId().valueOf()
+                ).row.wide
+                    .centered=self.getSerial(item.getPeriod().getOrder())
+                    div=item.getClassName()
+                    div(class=self.getTypeName(item.getType()).toLowerCase()).attendance-column.wide
+                        if(canEdit)
+                            +Select('attendanceTypes').attendance-type-select.grey-select
+                                +TypeOption(typesEnum.ABSENT.valueOf(), item)
+                                +TypeOption(typesEnum.LATE.valueOf(), item)
+                                +TypeOption(typesEnum.EXCUSED.valueOf(), item)
+                                +TypeOption(typesEnum.PRESENT.valueOf(), item)
+                                +TypeOption(typesEnum.NA.valueOf(), item)
+                        else
+                            |#{self.getTypeName(item.getType())}
+                    div.attendance-column.wide.reasons
+                        if(canEdit)
+                            +RenderWith(self._model, chlk.templates.attendance.StudentReasonsComboTpl)(
+                                currentId = item.getAttendanceReasonId(),
+                                currentReasons = currentReasons
+                            )
+                            //+Select('attendanceReadons')(disabled=!currentReasons.length).attendance-reason-select.grey-select
+                                each reason in currentReasons
+                                    +Option(reason.getId(), reason.getDescription(), item.getAttendanceReasonId() == reason.getId())
+                        else
+                            |#{item.getAttendanceReason() ? item.getAttendanceReason().getDescription() : ''}
