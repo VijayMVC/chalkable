@@ -16,7 +16,7 @@ NAMESPACE('chlk.templates.profile', function(){
                     classId_ = this.getModel().getId();
                 }
                 return [
-                    this.buildActionLinkModelForClass('summary', 'Now', pressedActionName, classId_),
+                    this.buildActionLinkModelForClass('details', 'Now', pressedActionName, classId_),
                     this.buildActionLinkModelForClass('info', 'Info', pressedActionName, classId_),
                     this.buildActionLinkModelForClass('schedule', 'Schedule', pressedActionName, classId_),
                     this.buildActionLinkModelForClass('grading', 'Grading', pressedActionName, classId_),

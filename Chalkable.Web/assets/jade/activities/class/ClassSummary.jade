@@ -6,14 +6,7 @@ mixin IfBlock_(items, i, index)
 
 .class-info.class-profile.loader-container
     .loader
-    .action-bar.not-transparent.buttons
-        .container.panel-bg
-            .left
-                +ActionLink('class', 'details', self.getId()).pressed Now
-                +ActionLink('class', 'info', self.getId()) Info
-                +ActionLink('class', 'grading', self.getId()) Grading
-                +ActionLink('class', 'schedule', self.getId()) Scheduling
-                +ActionLink('class', 'apps', self.getId()) Apps
+    +ProfileTopBar(self.buildActionLinkModels('details'))
     .info-view.summary-view
         #top-summary-panel
             #avatar-photo-conainer

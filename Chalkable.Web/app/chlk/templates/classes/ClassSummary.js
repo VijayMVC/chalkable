@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.profile.ClassProfileTpl');
 REQUIRE('chlk.models.classes.ClassSummary');
 
 NAMESPACE('chlk.templates.classes', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.classes', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/class/ClassSummary.jade')],
         [ria.templates.ModelBind(chlk.models.classes.ClassSummary)],
-        'ClassSummary', EXTENDS(chlk.templates.JadeTemplate), [
+        'ClassSummary', EXTENDS(chlk.templates.profile.ClassProfileTpl), [
             [ria.templates.ModelPropertyBind],
             chlk.models.classes.Room, 'room',
 

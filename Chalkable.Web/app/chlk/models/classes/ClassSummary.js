@@ -1,17 +1,17 @@
-REQUIRE('chlk.models.people.User');
+REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.common.HoverBox');
 REQUIRE('chlk.models.common.CommonHoverBox');
 REQUIRE('chlk.models.common.DisciplineHoverBox');
 REQUIRE('chlk.models.classes.Room');
 REQUIRE('chlk.models.announcement.AnnouncementsByDate');
-REQUIRE('chlk.models.id.ClassId');
+
 
 NAMESPACE('chlk.models.classes', function () {
     "use strict";
 
     /** @class chlk.models.classes.ClassSummary*/
     CLASS(
-        'ClassSummary', [
+        'ClassSummary', EXTENDS(chlk.models.classes.Class), [
             chlk.models.classes.Room, 'room',
 
             ArrayOf(chlk.models.people.User), 'students',
@@ -31,20 +31,5 @@ NAMESPACE('chlk.models.classes', function () {
             [ria.serialize.SerializeProperty('announcementsbydate')],
             ArrayOf(chlk.models.announcement.AnnouncementsByDate), 'announcementsByDate',
 
-            chlk.models.id.ClassId, 'id',
-
-            String, 'name',
-
-            String, 'description',
-
-            chlk.models.course.Course, 'course',
-
-            [ria.serialize.SerializeProperty('gradelevel')],
-            chlk.models.grading.GradeLevel, 'gradeLevel',
-
-            chlk.models.people.User, 'teacher',
-
-            [ria.serialize.SerializeProperty('markingperiodsid')],
-            ArrayOf(chlk.models.id.MarkingPeriodId), 'markingPeriodsId'
         ]);
 });
