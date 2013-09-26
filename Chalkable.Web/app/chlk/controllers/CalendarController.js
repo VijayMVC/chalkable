@@ -92,8 +92,18 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.calendar.announcement.AdminDayCalendarPage, result);
         },
 
+        [[chlk.models.common.ChlkDate, String]],
+        function weekAdminAction(date_, gradeLevels_){
+            return this.week(date_, null, gradeLevels_);
+        },
+
+        [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
+        function weekAction(date_, classId_){
+            return this.week(date_, classId_);
+        },
+
         [[chlk.models.common.ChlkDate, chlk.models.id.ClassId, String]],
-        function weekAction(date_, classId_, gradeLevels_){
+        function week(date_, classId_, gradeLevels_){
             var markingPeriod = this.getContext().getSession().get('markingPeriod');
             var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);
             var glsInputData = new chlk.models.grading.GradeLevelsForTopBar(gradeLevels, gradeLevels_);
@@ -114,10 +124,22 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.calendar.announcement.WeekPage, result);
         },
 
+        [chlk.controllers.SidebarButton('calendar')],
+        [[chlk.models.common.ChlkDate, String]],
+        function monthAdminAction(date_, gradeLevels_){
+            return this.month(date_, null, gradeLevels_);
+        },
+
+        [chlk.controllers.SidebarButton('calendar')],
+        [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
+        function monthAction(date_, classId_){
+            return this.month(date_, classId_);
+        },
+
         //TODO: refactor
         [chlk.controllers.SidebarButton('calendar')],
         [[chlk.models.common.ChlkDate, chlk.models.id.ClassId, String]],
-        function monthAction(date_, classId_, gradeLevels_){
+        function month(date_, classId_, gradeLevels_){
             var markingPeriod = this.getContext().getSession().get('markingPeriod');
             var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);
             var glsInputData = new chlk.models.grading.GradeLevelsForTopBar(gradeLevels, gradeLevels_);
