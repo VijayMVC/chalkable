@@ -33,12 +33,10 @@ namespace Chalkable.Web.Controllers
                 var classPersonId = classPersonIds[i];
                 var attendanceType = attendanceTypes[i];
                 Guid reason;
-                if (Guid.TryParse(attReasons[i], out reason))
-                {
-                    reason = Guid.Parse(attReasons[i]);
-                }
+                bool hasReason = Guid.TryParse(attReasons[i], out reason);
                 var periodId = classPeriodIds[i];
-                SchoolLocator.AttendanceService.SetClassAttendance(classPersonId, periodId, date, (AttendanceTypeEnum)attendanceType, reason);
+                SchoolLocator.AttendanceService.SetClassAttendance(classPersonId, periodId, date
+                    , (AttendanceTypeEnum)attendanceType, hasReason  && reason != Guid.Empty ? reason : (Guid?)null);
             }
             return Json(true);
         }
