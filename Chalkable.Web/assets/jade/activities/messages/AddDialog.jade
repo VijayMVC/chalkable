@@ -11,8 +11,6 @@
                         value=self.sender ? self.sender.getFirstName()+ ' ' + self.sender.getLastName() : "",
                         default-value=self.sender ? self.sender.getId() : "",
                         class="validate[required]")
-                        //
-                            span#recipient-required-err.x-hidden *recipient not found
                     .x-form-field
                         label Subject:
                         input(type="text",name="subject", value=self.subject ? "Re: " + self.subject : "", class="validate[required]")

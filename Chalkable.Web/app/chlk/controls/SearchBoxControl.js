@@ -38,6 +38,17 @@ NAMESPACE('chlk.controls', function () {
             VOID, function reanimate_(node, serviceF, tplClass, attrs, activity, model) {
                 var id = node.getAttr("id");
                 var tpl = new tplClass();
+
+                var selectHandler = function( event, ui, triggerChange) {
+                    var item = ui.item;
+                    var li = jQuery(event.currentTarget).find("[data-id=" + item.dataId + "]");
+                    ria.dom.Dom('#' + id + '-hidden').setValue(attrs.idValue ? item['get' + attrs.idValue.capitalize()]().valueOf() : li.data('value'));
+                    node.setValue(attrs.textValue ? item['get' + attrs.textValue.capitalize()]() : li.data('title'));
+                    if (triggerChange)
+                        node.trigger('change', {selected: item});
+                    return false;
+                };
+
                 jQuery(node.valueOf()).autocomplete({
                     source: function( request, response ) {
                         serviceF(request.term)
@@ -48,17 +59,11 @@ NAMESPACE('chlk.controls', function () {
                             })
                             .then(response);
                     },
-                    focus: function() {
-                        // prevent value inserted on focus
-                        return false;
+                    focus: function( event, ui ){
+                        return selectHandler(event, ui, false);
                     },
-                    select: function( event, ui ) {
-                        var item = ui.item;
-                        var li = jQuery(event.toElement).closest('li');
-                        ria.dom.Dom('#' + id + '-hidden').setValue(attrs.idValue ? item['get' + attrs.idValue.capitalize()]().valueOf() : li.data('value'));
-                        node.setValue(attrs.textValue ? item['get' + attrs.textValue.capitalize()]() : li.data('title'));
-                        node.trigger('change', {selected: item});
-                        return false;
+                    select: function( event, ui ){
+                        return selectHandler(event, ui, true);
                     },
                     change: function( event, ui ) {
                         if (!ria.dom.Dom('#' + id + '-hidden').getValue())
@@ -84,7 +89,11 @@ NAMESPACE('chlk.controls', function () {
                     for(var k in item) if (item.hasOwnProperty(k))
                         fixedInstance[k] = item[k];
                     tpl.assign(fixedInstance);
-                    return jQuery(jQuery.parseHTML(tpl.render())).appendTo(ul);
+                    var li = jQuery.parseHTML(tpl.render());
+                    var id = ria.dom.NewGID();
+                    jQuery(li).attr("data-id", id);
+                    item.dataId = id;
+                    return jQuery(li).appendTo(ul);
                 };
             }
 
