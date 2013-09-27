@@ -36,15 +36,15 @@ namespace Chalkable.Web.Models
     {
         public AnnouncementTypeViewData Type { get; set; }
         public IList<AnnouncementShortGradeViewData> Announcements { get; set; }
-        public int Persent { get; set; }
+        public int Percent { get; set; }
         public int? Avg { get; set; }
 
         public static GradingClassSummaryItemViewData Create(IList<AnnouncementComplex> announcements,
-                       AnnouncementType announcementType, int typePersent, IGradingStyleMapper mapper)
+                       AnnouncementType announcementType, int typePercent, IGradingStyleMapper mapper)
         {
             var res = new GradingClassSummaryItemViewData()
                 {
-                    Persent = typePersent,
+                    Percent = typePercent,
                     Type = AnnouncementTypeViewData.Create(announcementType),
                     Announcements = AnnouncementShortGradeViewData.Create(announcements, mapper)
                 };
