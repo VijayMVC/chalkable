@@ -1,0 +1,22 @@
+clazz = self.getClazz()
+-console.log(clazz.getName())
+-console.log(clazz.getCourse().getId())
+
+.class-schedule.class-profile.loader-container
+    .loader
+    +ProfileTopBar(self.buildActionLinkModels('schedule', clazz.getId()))
+    .info-view
+        .top-panel
+            h1.info.with-line
+                .class-icon-container
+                    +ClassImg(clazz.getCourse(), 45, 80)
+                =clazz.getName()
+            h2
+                div
+            .calendar-section
+                +RenderWith(self.getScheduleCalendar(), chlk.templates.calendar.announcement.DayPage)(
+                    notMainCalendar = true,
+                    controllerName = 'class',
+                    actionName = 'scheduleUpdate',
+                    params = [clazz.getId().valueOf()]
+                )
