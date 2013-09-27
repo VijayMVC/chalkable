@@ -24,6 +24,8 @@ NAMESPACE('chlk.models.attendance', function () {
 
             Boolean, 'renderNow',
 
+            Number, 'currentPage',
+
             Boolean, 'renderDay',
 
             Boolean, 'renderMp',

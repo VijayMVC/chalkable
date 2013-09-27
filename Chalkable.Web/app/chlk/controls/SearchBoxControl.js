@@ -57,7 +57,7 @@ NAMESPACE('chlk.controls', function () {
                         var li = jQuery(event.toElement).closest('li');
                         ria.dom.Dom('#' + id + '-hidden').setValue(attrs.idValue ? item['get' + attrs.idValue.capitalize()]().valueOf() : li.data('value'));
                         node.setValue(attrs.textValue ? item['get' + attrs.textValue.capitalize()]() : li.data('title'));
-                        node.trigger('change');
+                        node.trigger('change', {selected: item});
                         return false;
                     },
                     change: function( event, ui ) {

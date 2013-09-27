@@ -7,7 +7,10 @@ REQUIRE('chlk.models.id.ClassPersonId');
 REQUIRE('chlk.models.id.ClassPeriodId');
 REQUIRE('chlk.models.id.AttendanceReasonId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
+REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.common.ChlkDate');
+REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.attendance.StudentDayAttendances');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -23,6 +26,25 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function getClassList(classId, date_) {
                 return this.get('Attendance/ClassList.json', ArrayOf(chlk.models.attendance.ClassAttendance), {
                     classId: classId.valueOf(),
+                    date: date_ && date_.toString('mm-dd-yy')
+                });
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
+            ria.async.Future, function getStudentAttendance(studentId, datetime_) {
+                return this.get('Attendance/GetAttendanceForStudent.json', chlk.models.attendance.StudentDayAttendances, {
+                    studentId: studentId.valueOf(),
+                    datetime: datetime_ && datetime_.toString('mm-dd-yy')
+                });
+            },
+
+            [[String, String, String, String, chlk.models.common.ChlkDate]],
+            ria.async.Future, function setAttendanceForList(classPersonIds, classPeriodIds, attendanceTypes, attReasons, date_) {
+                return this.get('Attendance/SetAttendanceForList.json', Boolean, {
+                    classPersonIds: classPersonIds,
+                    classPeriodIds: classPeriodIds,
+                    attendanceTypes: attendanceTypes,
+                    attReasons: attReasons,
                     date: date_ && date_.toString('mm-dd-yy')
                 });
             },

@@ -10,6 +10,110 @@ BODY {
 
         &.attendance{
           #main{
+            .admin-attendance-summary-page{
+              position: relative;
+
+              .now-chart-block{
+                width: 550px;
+                margin-left: 20px;
+              }
+
+              .student{
+                display: inline-block;
+                background: rgba(202, 139, 139, 0.8);
+                border-radius: 7px;
+                height: 75px;
+                width: 86px;
+                vertical-align: top;
+                text-align: center;
+                position: relative;
+                margin-bottom: 14px;
+                @include transition-property("all");
+                @include transition-duration("0.2s");
+                overflow: hidden;
+
+                &.absolute{
+                  position: absolute;
+                }
+
+                &.plus{
+                  cursor: pointer;
+                  overflow: visible;
+
+                  .small-pop-up{
+                    top: 83px;
+
+                    .container .triangle{
+                      left: 36px;
+                    }
+
+                    .student-search-input{
+                      width: 173px;
+                    }
+                  }
+                }
+
+                &:not(.grey){
+                  cursor: pointer;
+                }
+
+                .plus-container{
+                  font-size: 38px;
+                  margin-top: 6px;
+                  color: #A8A8A8;
+                  text-shadow: 0 1px 0 white, 0 -1px 0 gray;
+                }
+
+                &.grey{
+                  background: rgba(173, 173, 173, 0.55);
+
+                  .name{
+                    background: rgba(173, 173, 173, 0.75);
+                  }
+                }
+
+                &.hidden{
+                  //height: 0;
+                  display: none;
+                }
+
+                &:not(:nth-child(6n)){
+                  margin-right: 26px;
+                }
+
+                .img-container{
+                  height: 73px;
+                  width: 67px;
+                  display: inline-block;
+                  overflow: hidden;
+                  margin-top: 1px;
+                  background-size: 67px 73px;
+
+                  .person-avatar-wrapper >div{
+                    height: 73px;
+                    width: 73px;
+                    margin-left: -3px;
+                  }
+                }
+
+                .name{
+                  position: absolute;
+                  bottom: 7px;
+                  white-space: nowrap;
+                  left: 0;
+                  right: 0;
+                  overflow: hidden;
+                  background: rgba(154, 52, 52, 0.8);
+                  border-radius: 2px;
+                  height: 19px;
+                  line-height: 19px;
+                  color: white;
+                  font-size: 12px;
+                  text-decoration: none;
+                }
+              }
+            }
+
             .admin-attendance{
               .action-bar{
                 display: none;
@@ -242,16 +346,17 @@ BODY {
                   }
 
                   &.absent-from-school{
-                    .student{
+                    .student:not(.grey){
                       background: #ab9090;
-                    }
-                    .name{
-                      background: rgba(90, 29, 29, 0.8);
+
+                      .name{
+                        background: rgba(90, 29, 29, 0.8);
+                      }
                     }
                   }
 
                   &.attendance-mp{
-                    .student{
+                    .student:not(.grey){
                       background: rgba(131, 86, 86, 0.55);
 
                       .name{
@@ -261,7 +366,7 @@ BODY {
                   }
                   //excused
                   &.attendance-4{
-                    .student{
+                    .student:not(.grey){
                       background: #a0c8d4;
 
                       .name{
@@ -271,7 +376,7 @@ BODY {
                   }
                   //absent
                   &.attendance-8{
-                    .student{
+                    .student:not(.grey){
                       background:  #835656;
 
                       .name{
@@ -281,7 +386,7 @@ BODY {
                   }
                   //late
                   &.attendance-16{
-                    .student{
+                    .student:not(.grey){
                       background: #f3d5aa;
 
                       .name{
@@ -291,103 +396,12 @@ BODY {
                   }
 
                   &.attendance-1{
-                    .student{
+                    .student:not(.grey){
                       background: rgba(182, 182, 171, 0.6);
 
                       .name{
                         background: rgba(116, 115, 115, 0.8);
                       }
-                    }
-                  }
-
-                  .student{
-                    display: inline-block;
-                    background: rgba(202, 139, 139, 0.8);
-                    border-radius: 7px;
-                    height: 75px;
-                    width: 86px;
-                    vertical-align: top;
-                    text-align: center;
-                    position: relative;
-                    margin-bottom: 14px;
-                    @include transition-property("all");
-                    @include transition-duration("0.2s");
-                    overflow: hidden;
-
-                    &.plus{
-                      cursor: pointer;
-                      overflow: visible;
-
-                      .small-pop-up{
-                        top: 83px;
-
-                        .container .triangle{
-                          left: 36px;
-                        }
-
-                        .student-search-input{
-                          width: 173px;
-                        }
-                      }
-                    }
-
-                    &:not(.grey){
-                      cursor: pointer;
-                    }
-
-                    .plus-container{
-                      font-size: 38px;
-                      margin-top: 6px;
-                      color: #A8A8A8;
-                      text-shadow: 0 1px 0 white, 0 -1px 0 gray;
-                    }
-
-                    &.grey{
-                      background: rgba(173, 173, 173, 0.55);
-
-                      .name{
-                        background: rgba(173, 173, 173, 0.75);
-                      }
-                    }
-
-                    &.hidden{
-                      //height: 0;
-                      display: none;
-                    }
-
-                    &:not(:nth-child(6n)){
-                      margin-right: 26px;
-                    }
-
-                    .img-container{
-                      height: 73px;
-                      width: 67px;
-                      display: inline-block;
-                      overflow: hidden;
-                      margin-top: 1px;
-                      background-size: 67px 73px;
-
-                      .person-avatar-wrapper >div{
-                        height: 73px;
-                        width: 73px;
-                        margin-left: -3px;
-                      }
-                    }
-
-                    .name{
-                      position: absolute;
-                      bottom: 7px;
-                      white-space: nowrap;
-                      left: 0;
-                      right: 0;
-                      overflow: hidden;
-                      background: rgba(154, 52, 52, 0.8);
-                      border-radius: 2px;
-                      height: 19px;
-                      line-height: 19px;
-                      color: white;
-                      font-size: 12px;
-                      text-decoration: none;
                     }
                   }
                 }
@@ -613,6 +627,211 @@ BODY {
                 }
               }
             }
+          }
+        }
+      }
+    }
+  }
+}
+
+#chlk-pop-up-container{
+  .daily-pop-up{
+    text-align: center;
+    margin: 0 -7px;
+
+    h2.popup-title{
+      width: 325px;
+    }
+
+    .row.time {
+      height: 17px;
+      border-top: 1px solid white;
+      border-bottom: 1px solid #d7d7d7;
+      font: normal 13px/15px Arial;
+
+      div {
+        width: 108px;
+        font-size: 10px;
+        text-align: left;
+        display: inline-block;
+      }
+    }
+
+    .attendance-popup-table{
+      .row {
+        SELECT{
+          opacity: 0;
+        }
+
+        .chzn-container{
+          width: 75px !important;
+
+          .chzn-drop{
+            @include border-radius(2px);
+            font-size: 11px;
+
+            .chzn-results{
+              >LI{
+                background: transparent;
+                padding: 0;
+
+                &.highlighted{
+                  border-radius: 5px;
+                  border: 1px solid #c9c9c9 !important;
+                  @include background(linear-gradient(top, #ffffff, #dadada));
+
+                  &:not([class*="attendance"]){
+                    color: #957633;
+                  }
+                }
+              }
+            }
+          }
+
+          .chzn-single{
+            padding: 0;
+            height: 13px;
+            overflow: visible;
+            @include border-radius(3px);
+
+            >SPAN{
+              border: 1px solid #afafaf;
+              margin: -1px 13px -1px -1px;
+              border-top-left-radius: 3px;
+              border-bottom-left-radius: 3px;
+              font-size: 10px;
+              text-align: left;
+              padding-left: 5px;
+              height: 13px;
+              line-height: 13px;
+            }
+
+            >DIV{
+              width: 13px;
+
+              >B{
+                background: url(images/profile/attendance-right-arrow.png) center center no-repeat;
+                width: 13px;
+                margin: 0;
+              }
+            }
+          }
+
+          .chzn-drop{
+            ul{
+              li{
+                &.attendance-1 {
+                  color: gray;
+                }
+                &.attendance-2 {
+                  color: #276435;
+                }
+                &.attendance-4 {
+                  color:  #3989a1;
+                }
+                &.attendance-8 {
+                  color: #860f0f;
+                }
+                &.attendance-16 {
+                  color: #c97d11;
+                }
+              }
+            }
+          }
+        }
+
+        >div{
+          display: inline-block;
+          word-break: break-word;
+          width: 30%;
+          min-height: 21px;
+          color: #7c7c7c;
+          font-size: 12px;
+          text-align: left;
+          vertical-align: top;
+
+
+          &.centered{
+            text-align: center;
+          }
+        }
+
+        &.wide{
+          >div{
+              width: 24%;
+          }
+
+        }
+
+        &.header{
+          border-bottom: 1px solid #d7d7d7;
+          border-top: 1px solid white;
+          font-size: 13px;
+
+          .popup-header-column{
+            padding: 0;
+            text-align: center;
+            &.border-right{
+              border-right: 1px solid #d7d7d7;
+            }
+            &.border-left{
+              border-left: 1px solid white;
+            }
+
+          }
+        }
+
+
+
+        &.odd{
+          border-top: 1px solid white;
+          border-bottom: 1px solid #d7d7d7;
+        }
+        &.even{
+          border-bottom: 1px solid #d7d7d7;
+          border-top: 1px solid white;
+        }
+        &.last{
+          border-bottom: 0;
+        }
+
+        .attendance-column{
+          padding: 0;
+          vertical-align: top;
+          text-align: center;
+          font-size: 12px;
+
+
+
+
+          &.wide{
+            input{
+              margin-left: -26px;
+            }
+          }
+
+          input{
+              margin-left: -16px;
+              border-top-left-radius: 3px;
+              border-bottom-left-radius: 3px;
+              font-family: Arial;
+              width: 49px !important;
+          }
+
+           &.absent{
+            color:  #860f0f;
+          }
+
+          &.excused{
+            color: #3989a1;
+          }
+
+          &.late{
+            color: #c97d11;
+          }
+
+          &.present{
+             color: #276435;
           }
         }
       }

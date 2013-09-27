@@ -1,6 +1,7 @@
 REQUIRE('chlk.models.id.ClassAttendanceId');
 REQUIRE('chlk.models.id.ClassPersonId');
 REQUIRE('chlk.models.id.ClassPeriodId');
+REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.id.AttendanceReasonId');
 REQUIRE('chlk.models.people.User');
@@ -44,6 +45,12 @@ NAMESPACE('chlk.models.attendance', function () {
 
             [ria.serialize.SerializeProperty('attendancereason')],
             chlk.models.attendance.AttendanceReason, 'attendanceReason',
+
+            [ria.serialize.SerializeProperty('classname')],
+            String, 'className',
+
+            [ria.serialize.SerializeProperty('classid')],
+            chlk.models.id.ClassId, 'classId',
 
             ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 

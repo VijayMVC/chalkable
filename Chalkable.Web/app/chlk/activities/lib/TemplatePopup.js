@@ -31,7 +31,8 @@ NAMESPACE('chlk.activities.lib', function () {
                 this._body = new ria.dom.Dom('body');
                 this.setContainer(this._body);
                 this._popupHolder = new ria.dom.Dom('#chlk-pop-up-container');
-                this._clickMeHandler = function(target, event){
+                this._clickMeHandler = function(node, event){
+                    var target = new ria.dom.Dom(event.target);
                     if(!this._popupHolder.areEquals(target) && !this._popupHolder.contains(target))
                         this.close();
                 }.bind(this)

@@ -3,6 +3,7 @@ REQUIRE('chlk.templates.attendance.AdminAttendanceSummaryTpl');
 REQUIRE('chlk.templates.attendance.AdminAttendanceNowTpl');
 REQUIRE('chlk.templates.attendance.AdminAttendanceDayTpl');
 REQUIRE('chlk.templates.attendance.AdminAttendanceMpTpl');
+REQUIRE('chlk.templates.attendance.AttendanceStudentBoxTpl');
 
 NAMESPACE('chlk.activities.attendance', function () {
 
@@ -10,11 +11,34 @@ NAMESPACE('chlk.activities.attendance', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [chlk.activities.lib.PageClass('attendance')],
+        [ria.mvc.PartialUpdateRule(chlk.templates.attendance.AdminAttendanceSummaryTpl, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.attendance.AdminAttendanceNowTpl, '', '.attendance-now', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.attendance.AdminAttendanceDayTpl, '', '.attendance-day', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.attendance.AdminAttendanceMpTpl, '', '.attendance-mp', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.TemplateBind(chlk.templates.attendance.AdminAttendanceSummaryTpl)],
         'AdminAttendanceSummaryPage', EXTENDS(chlk.activities.lib.TemplatePage), [
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.attendance.AttendanceStudentBoxTpl)],
+            VOID, function addStudentBox(tpl, model, msg_) {
+                tpl.renderTo(this.dom);
+            },
+
+            [ria.mvc.DomEventBind('change', '.student-search-input')],
+                [[ria.dom.Dom, ria.dom.Event, Object]],
+                VOID, function selectStudent(node, event, o) {
+                    var form = node.parent().find('.show-student-form');
+                    var student = o.selected;
+                    var date = new Date(form.find('[name="date"]').getValue());
+                    var gradeLevelsIds = form.find('[name="gradeLevelsIds"]').getValue();
+                    var currentPage = parseInt(form.find('[name="currentPage"]').getValue(), 10) || 1;
+                    var target = node.parent('.student');
+                    var top = target.offset().top - this.dom.offset().top;
+                    var model = new chlk.models.attendance.AttendanceStudentBox(student,
+                        new chlk.models.common.ChlkDate(date), top, currentPage, gradeLevelsIds);
+                    node.parent('.small-pop-up').hide();
+                    this.onPartialRender_(model);
+                    this.onPartialRefresh_(model);
+            },
 
             [ria.mvc.DomEventBind('click', '.attendance-top-box:not(.active-part)')],
                 [[ria.dom.Dom, ria.dom.Event]],
@@ -34,6 +58,15 @@ NAMESPACE('chlk.activities.attendance', function () {
                 [[ria.dom.Dom, ria.dom.Event]],
                 VOID, function forDatePickerClick(node, event) {
                     this.dom.find('#nowDateTime').trigger('focus');
+            },
+
+            [ria.mvc.DomEventBind('click', '.plus')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function plusClick(node, event){
+                node.find('.for-plus').show();
+                setTimeout(function(){
+                    node.find('.student-search-input').trigger('focus');
+                }, 1);
             },
 
             [ria.mvc.DomEventBind('change', '.mp-select')],
@@ -123,6 +156,12 @@ NAMESPACE('chlk.activities.attendance', function () {
                 [[ria.dom.Dom, ria.dom.Event]],
                 VOID, function selectedDayChange(node, event) {
                     node.parent('form').trigger('submit');
+            },
+
+            [ria.mvc.DomEventBind('click', '.admin-attendance')],
+                [[ria.dom.Dom, ria.dom.Event]],
+                VOID, function domClick(node, event) {
+                    this.dom.find('.student.absolute').remove();
             }
         ]);
 });

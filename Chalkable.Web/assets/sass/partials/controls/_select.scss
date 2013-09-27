@@ -21,6 +21,11 @@
         line-height: 26px;
       }
     }
+
+    .chzn-drop{
+      border: 1px solid #c9c9c9;
+      @include background(linear-gradient(top, #ffffff, #efefef));
+    }
   }
 
   &.white{

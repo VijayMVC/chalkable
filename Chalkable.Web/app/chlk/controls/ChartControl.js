@@ -67,6 +67,7 @@ NAMESPACE('chlk.controls', function () {
             VOID, function reanimate_(node, id, options, activity, model) {
                 options.chart.renderTo = node.valueOf()[0];
                 charts[id] = new Highcharts.Chart(options);
+                node.setData('chart', charts[id]);
             }
         ]);
 });

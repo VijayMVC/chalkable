@@ -380,6 +380,7 @@ var Msg = {
     No_class_scheduled: function(date){
         return String.format('No class scheduled on {0}', date);
     },
+    No_check_in : 'No check-in',
     No_data: 'No data',
     No_items_marked_important: 'No items marked important.',
     No_new_notifications: 'No new notifications',
