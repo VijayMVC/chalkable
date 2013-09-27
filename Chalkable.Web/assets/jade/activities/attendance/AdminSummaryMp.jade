@@ -1,4 +1,8 @@
 valuesEnum = chlk.models.attendance.AttendanceTypeEnum
+.big-chart-containner
+    +AdminAtteddanceChart(self.getAttendanceStats())
+.big-chart-containner
+    +AdminAtteddanceMpChart(self.getAttendanceStats())
 .attendance-students.mp-students
     if self.getAbsentAndLateStudents()
         +StudentsTpl(self.getAbsentAndLateStudents(), Msg.Students_with_attendance_issues, false, false, 3).attendance-mp

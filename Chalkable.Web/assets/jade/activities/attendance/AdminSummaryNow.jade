@@ -10,6 +10,7 @@ if self.getAbsentNowStudents()
                     .number=self.getAbsentUsually()
                     .title=Msg.Usually
         .now-chart-block.i-b
+            +AdminAtteddanceChart(self.getAttendanceStats(), 550)
     .attendance-students
         +StudentsTpl(self.getAbsentNowStudents(), Msg.Absent + " " + Msg.Right_now.toLowerCase(), true, false, 1)(
             class = 'attendance-' + valuesEnum.ABSENT.valueOf()

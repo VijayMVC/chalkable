@@ -13,6 +13,11 @@ BODY {
             .admin-attendance-summary-page{
               position: relative;
 
+              .now-chart-block{
+                width: 550px;
+                margin-left: 20px;
+              }
+
               .student{
                 display: inline-block;
                 background: rgba(202, 139, 139, 0.8);

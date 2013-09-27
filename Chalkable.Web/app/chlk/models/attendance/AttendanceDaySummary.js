@@ -7,7 +7,7 @@ NAMESPACE('chlk.models.attendance', function () {
     /** @class chlk.models.attendance.AttendanceDaySummary*/
     CLASS(
         'AttendanceDaySummary', [
-            [ria.serialize.SerializeProperty('attendancestats')],
+            [ria.serialize.SerializeProperty('attendancesstats')],
             ArrayOf(chlk.models.attendance.AdminAttendanceStatItem), 'attendancesStats',
 
             [ria.serialize.SerializeProperty('studentsabsentwholeday')],

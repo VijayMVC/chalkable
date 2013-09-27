@@ -60,6 +60,31 @@ NAMESPACE('chlk.templates.attendance', function () {
                 if(!len || count)
                     for(var i = count; i < lineSize; i++)
                         students.push(new chlk.models.people.User);
+            },
+
+            [[ArrayOf(chlk.models.attendance.AdminAttendanceStatItem)]],
+            function getMainChartInfo(attendancestats){
+                var categories = [], series = [], absent=[], excused=[], late=[];
+                attendancestats.forEach(function(item){
+                    categories.push(item.getSummary());
+                    absent.push(item.getAbsentCount());
+                    excused.push(item.getExcusedCount());
+                    late.push(item.getLateCount());
+                });
+                series = [{
+                    name: Msg.Absent,
+                    data: absent
+                }, {
+                    name: Msg.Excused,
+                    data: excused
+                }, {
+                    name: Msg.Late,
+                    data: late
+                }];
+                return {
+                    categories: categories,
+                    series: series
+                }
             }
         ])
 });

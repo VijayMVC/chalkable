@@ -1,3 +1,115 @@
+mixin AdminAtteddanceChart(attendancestats, width)
+    if attendancestats && attendancestats.length
+        configs = self.getMainChartInfo(attendancestats)
+        +Chart()(
+            data-options = {
+                backgroundColor: 'transparent',
+                chart: {
+                    backgroundColor: 'transparent',
+                    width: width || 660,
+                    height: 200,
+                    style: {
+                        fontFamily: 'Arial',
+                        fontSize: '10px',
+                        color: '#a6a6a6'
+                    }
+
+                },
+                labels: {
+                    style: {
+                        color: '#a6a6a6',
+                        textOverflow: 'ellipsis',
+                        fontSize: '9px'
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: configs.categories
+                },
+                yAxis: {
+                    title: {
+                        text: ''
+                    },
+
+                },
+                legend:{
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                },
+                colors: ['red', 'blue', 'yellow'],
+
+                series: configs.series
+            }
+        )
+
+mixin AdminAtteddanceMpChart(attendancestats)
+    configs = self.getMainChartInfo(attendancestats)
+    -configs.series[1].visible=false;
+    -configs.series[2].visible=false;
+    +Chart()(
+        data-options = {
+            backgroundColor: 'transparent',
+            chart: {
+                backgroundColor: 'transparent',
+                width: 660,
+                type: 'column',
+                height: 200,
+                style: {
+                    fontFamily: 'Arial',
+                    fontSize: '10px',
+                    color: '#a6a6a6'
+                }
+
+            },
+            labels: {
+                style: {
+                    color: '#a6a6a6',
+                    textOverflow: 'ellipsis',
+                    fontSize: '9px'
+                }
+            },
+            plotOptions: {
+                series: {
+                    events: {
+                        legendItemClick: function(event) {
+                            if(this.visible)
+                                return false;
+                            var index = this.index;
+                            this.chart.series.forEach(function(item){
+                                if(item.index != index)
+                                    item.hide();
+                            });
+                        }
+                    }
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            title: {
+                text: ''
+            },
+            xAxis: {
+                categories: configs.categories
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                },
+
+            },
+            colors: ['red', 'blue', 'yellow'],
+
+            series: configs.series
+        }
+    )
+
 mixin StudentsTpl(students, header, needPlus, isDay, currentPage)
     preparedStudents = self.getPreparedStudents(students, needPlus)
     length = students.length

@@ -1,5 +1,6 @@
 valuesEnum = chlk.models.attendance.AttendanceTypeEnum
--console.info(self);
+.big-chart-containner
+    +AdminAtteddanceChart(self.getAttendancesStats())
 .attendance-students
     +StudentsTpl(self.getStudentsAbsentWholeDay(), Msg.Absent_from_school, true).absent-from-school
 div(index="1", type=valuesEnum.EXCUSED.valueOf()).attendance-students.bytype
