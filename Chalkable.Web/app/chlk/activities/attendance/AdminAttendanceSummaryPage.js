@@ -38,6 +38,9 @@ NAMESPACE('chlk.activities.attendance', function () {
                     node.parent('.small-pop-up').hide();
                     this.onPartialRender_(model);
                     this.onPartialRefresh_(model);
+                    setTimeout(function(){
+                        new ria.dom.Dom('.student.absolute').find('a.img-container').trigger('click');
+                    }, 1);
             },
 
             [ria.mvc.DomEventBind('click', '.attendance-top-box:not(.active-part)')],

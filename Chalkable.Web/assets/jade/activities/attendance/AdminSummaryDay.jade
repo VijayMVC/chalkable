@@ -2,7 +2,7 @@ valuesEnum = chlk.models.attendance.AttendanceTypeEnum
 .big-chart-containner
     +AdminAtteddanceChart(self.getAttendancesStats())
 .attendance-students
-    +StudentsTpl(self.getStudentsAbsentWholeDay(), Msg.Absent_from_school, true).absent-from-school
+    +StudentsTpl(self.getStudentsAbsentWholeDay(), Msg.Absent_from_school, true, true, 2).absent-from-school
 div(index="1", type=valuesEnum.EXCUSED.valueOf()).attendance-students.bytype
     +StudentsTpl(self.getExcusedStudents(), Msg.Excused_from_a_class, true, true, 2)(
         class = 'attendance-' + valuesEnum.EXCUSED.valueOf()

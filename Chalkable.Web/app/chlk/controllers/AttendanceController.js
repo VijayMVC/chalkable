@@ -94,13 +94,15 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.attendance.AttendanceList]],
         function setAttendanceForListAction(model){
-            this.attendanceService.setAttendanceForList(model.getClassPersonIds(), model.getClassPeriodIds(), model.getAttendanceTypes(), model.getAttReasons(), model.getDate());
-            var controller = model.getController();
-            if(controller){
-                var action = model.getAction();
-                var params = JSON.parse(model.getParams());
-                this.Redirect(controller, action, params);
-            }
+            this.attendanceService.setAttendanceForList(model.getClassPersonIds(), model.getClassPeriodIds(), model.getAttendanceTypes(), model.getAttReasons(), model.getDate())
+                .then(function(){
+                    var controller = model.getController();
+                    if(controller){
+                        var action = model.getAction();
+                        var params = JSON.parse(model.getParams());
+                        this.Redirect(controller, action, params);
+                    }
+                }, this);
         },
 
         [[chlk.models.attendance.AdminAttendanceSummary, String, chlk.models.common.ChlkDate, chlk.models.id.MarkingPeriodId,
