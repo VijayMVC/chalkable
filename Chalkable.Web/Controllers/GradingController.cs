@@ -33,7 +33,7 @@ namespace Chalkable.Web.Controllers
         {
             if (!SchoolLocator.Context.SchoolId.HasValue)
                 throw new UnassignedUserException();
-            var teacherId = SchoolLocator.Context.UserId;
+            var teacherId = Context.UserId;
             return Json(ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), teacherId), 7);
         }
 

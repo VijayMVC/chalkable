@@ -126,7 +126,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<MarkingPeriodClassGradeAvg> CalcClassGradingPerMp(GradingStatisticQuery query)
         {
-            var types = new List<Type> {typeof (Class), typeof(MarkingPeriod)};
+            var types = new List<Type> {typeof (Class), typeof(MarkingPeriod), typeof(MarkingPeriodClass)};
             var sql = new StringBuilder();
             sql.AppendFormat(@"select {0}, dbo.fnCalcClassGradeAvgPerMP(MarkingPeriodClass.Id) as [Avg] 
                                from Class 

@@ -20,7 +20,8 @@ namespace Chalkable.Web.Models
             var res = new GradingClassSummaryViewData
                     {
                         MarkingPeriod = MarkingPeriodViewData.Create(classGradingStats.MarkingPeriod),
-                        Avg = classGradingStats.Avg
+                        Avg = classGradingStats.Avg,
+                        ByAnnouncementTypes = new List<GradingClassSummaryItemViewData>()
                     };
             foreach (var fgAnnouncementType in fgAnnouncementTypes)
             {
