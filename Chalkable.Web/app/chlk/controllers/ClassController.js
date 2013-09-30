@@ -1,11 +1,16 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.ClassService');
+REQUIRE('chlk.services.AttendanceCalendarService');
+REQUIRE
+
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.classes.ClassScheduleViewData');
+REQUIRE('chlk.models.classes.ClassProfileAttendanceViewData');
 
 REQUIRE('chlk.activities.classes.SummaryPage');
 REQUIRE('chlk.activities.classes.ClassInfoPage');
 REQUIRE('chlk.activities.classes.ClassSchedulePage');
+REQUIRE('chlk.activities.classes.ClassProfileAttendancePage');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -15,6 +20,13 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.ClassService, 'classService',
+
+            [ria.mvc.Inject],
+            chlk.services.AttendanceCalendarService, 'attendanceCalendarService',
+
+            [ria.mvc.Inject],
+            chlk.services.AttendanceService, 'attendanceService',
+
 
             [[chlk.models.id.ClassId]],
             function detailsAction(classId){
@@ -54,6 +66,43 @@ NAMESPACE('chlk.controllers', function (){
                         return new chlk.models.classes.ClassScheduleViewData(data.getClazz(), scheduleCalendar);
                     });
                 return res;
+            },
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function attendanceAction(classId){
+                var res =
+                    ria.async.wait(
+                        this.classService.getAttendance(classId),
+                        this.attendanceCalendarService.getClassAttendancePerMonth(classId, null)
+                    )
+                    .attach(this.validateResponse_())
+                    .then(function(result){
+                        var mp = this.getCurrentMarkingPeriod();
+                        var attCalendar = new chlk.models.calendar.attendance.ClassAttendanceMonthCalendar(null
+                            , mp.getStartDate(), mp.getEndDate(), result[1], classId);
+                        return new chlk.models.classes.ClassProfileAttendanceViewData(result[0], attCalendar);
+                    }, this);
+                return this.PushView(chlk.activities.classes.ClassProfileAttendancePage, res);
+            },
+            [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
+            ria.async.Future, function attendanceMonthAction(date, classId){
+                var res =  this.attendanceCalendarService.getClassAttendancePerMonth(classId, date)
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        var mp = this.getCurrentMarkingPeriod();
+                        return new chlk.models.calendar.attendance.ClassAttendanceMonthCalendar(date
+                            , mp.getStartDate(), mp.getEndDate(), data, classId);
+                    }, this);
+                return this.UpdateView(chlk.activities.classes.ClassProfileAttendancePage, res);
             }
+//            ,
+//            [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
+//            ria.async.Future, function attendanceListAction(date, classId){
+//                var res = this.attendanceService.getClassList(classId, date)
+//                    .attach(this.validateResponse_())
+//                    .then(function(data){
+//
+//                    });
+//                return this.PushView(chlk.activities.classes.ClassProfileAttendanceListPage, res);
+//            }
         ]);
 });

@@ -13,6 +13,15 @@ NAMESPACE('chlk.templates.calendar.attendance', function (){
         'StudentAttendanceCalendarBodyTpl', EXTENDS(chlk.templates.JadeTemplate),[
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.id.SchoolPersonId, 'studentId',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.common.ChlkDate, 'maxDate',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.common.ChlkDate, 'minDate',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.calendar.attendance.StudentAttendanceCalendarMonthItem), 'calendarItems'
 
         ]);

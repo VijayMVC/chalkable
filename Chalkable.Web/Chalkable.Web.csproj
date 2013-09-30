@@ -258,6 +258,7 @@
     <Compile Include="Models\ChalkableDepartmentViewData.cs" />
     <Compile Include="Models\AttendancesViewData\ClassAttendanceViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassAppsViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassAttendanceSummaryViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassGradingViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassInfoViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassScheduleViewData.cs" />

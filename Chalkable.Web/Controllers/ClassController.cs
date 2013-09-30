@@ -130,6 +130,12 @@ namespace Chalkable.Web.Controllers
             return Json(ClassAppsViewData.Create(c, reserve, balance, appInstallactions, applications), 5);
         }
 
+        [AuthorizationFilter("System Admin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult ClassAttendance(Guid classId)
+        {
+            var c = SchoolLocator.ClassService.GetClassById(classId);
+            return Json(ClassAttendanceSummaryViewData.Create(c)); //TODO: create ClassAttendanceSummaryViewData 
+        }
 
         public static IDictionary<Guid, IList<int>> BuildClassesUsageMask(IServiceLocatorSchool locator, Guid markingPeriodId, string timeZoneId)
         {

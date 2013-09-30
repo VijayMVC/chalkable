@@ -115,7 +115,7 @@ NAMESPACE('chlk.controllers', function (){
                return this.getContext().getSession().get('markingPeriod');
            },
            chlk.models.id.SchoolYearId, function getCurrentSchoolYearId(){
-               return this.getContent().getSession().get('currentSchoolYearId');
+               return this.getContext().getSession().get('currentSchoolYearId');
            },
 
            OVERRIDE, ria.reflection.ReflectionMethod, function resolveRoleAction_(state){

@@ -245,8 +245,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 res.Content = announcement.Content;
                 res.Subject = announcement.Subject;
-                if (Context.Role == CoreRoles.TEACHER_ROLE)
-                    res.AnnouncementTypeRef = announcement.AnnouncementTypeId;
+                if (Context.Role == CoreRoles.TEACHER_ROLE && announcement.AnnouncementTypeId.HasValue)
+                    res.AnnouncementTypeRef = announcement.AnnouncementTypeId.Value;
                 if (BaseSecurity.IsAdminViewer(Context))
                     res.AnnouncementTypeRef = (int) SystemAnnouncementType.Admin;
 

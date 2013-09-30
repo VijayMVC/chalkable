@@ -80,6 +80,13 @@ NAMESPACE('chlk.services', function () {
                         .saveDayCalendarDataInSession(data.getCalendarDayItems());
                     return data;
                 }, this);
+            },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getAttendance(classId){
+                return this.get('Class/ClassAttendance.json', chlk.models.classes.ClassAttendanceSummary,{
+                    classId: classId && classId.valueOf()
+                })
             }
         ])
 });

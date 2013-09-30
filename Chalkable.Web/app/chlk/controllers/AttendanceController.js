@@ -110,9 +110,7 @@ NAMESPACE('chlk.controllers', function (){
         chlk.models.attendance.AdminAttendanceSummary,
             function prepareAttendanceSummaryModel(model, gradeLevelsIds_, nowDateTime_, fromMarkingPeriodId, toMarkingPeriodId, startDate_, endDate_){
                 var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);
-                var topModel = new chlk.models.grading.GradeLevelsForTopBar();
-                topModel.setTopItems(gradeLevels);
-                topModel.setSelectedIds(gradeLevelsIds_ ? gradeLevelsIds_.split(',') : []);
+                var topModel = new chlk.models.grading.GradeLevelsForTopBar(gradeLevels, gradeLevelsIds_);
                 model.setNowDateTime(nowDateTime_ ? nowDateTime_ : new chlk.models.common.ChlkDate(getDate()));
                 model.setTopData(topModel);
                 model.setFromMarkingPeriodId(fromMarkingPeriodId);
@@ -149,12 +147,12 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.attendance.AdminAttendanceSummaryPage, ria.async.DeferredData(model));
         },*/
 
-        [[chlk.models.id.ClassId, chlk.models.id.ClassPeriodId, chlk.models.common.ChlkDate]],
-        function markAllAction(classId, classPeriodId, date){
+        [[chlk.models.id.ClassId, chlk.models.id.ClassPeriodId, chlk.models.common.ChlkDate, Boolean]],
+        function markAllAction(classId, classPeriodId, date, isProfile_){
             this.attendanceService
                 .markAllPresent(classPeriodId, date)
                 .then(function(success){
-                    this.classListAction(classId, date);
+                    this.classListAction(classId, date, true, isProfile_);
                 }, this);
             return this.ShadeLoader();
         },
@@ -163,6 +161,7 @@ NAMESPACE('chlk.controllers', function (){
         function sortStudentsAction(byLastName){
             var model = this.getContext().getSession().get('attendancePageData');
             model.getItems().sort(function(item1, item2){
+                //todo : change this... it will not work on production
                 var method = byLastName ? 'getLastName' : 'getFirstName';
                 return item1.getStudent()[method]() > item2.getStudent()[method]();
             });
@@ -172,8 +171,8 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('attendance')],
-        [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
-        function classListAction(classId, date_) {
+        [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean, Boolean]],
+        function classListAction(classId, date_, isUpdate_, isProfile_) {
             if(!classId.valueOf())
                 return this.Redirect('attendance', 'summary', []);
             var result = this.attendanceService
@@ -192,8 +191,9 @@ NAMESPACE('chlk.controllers', function (){
                     this.getContext().getSession().set('attendancePageData', model);
                     return model;
                 }, this);
-            //todo : change this... it will not work on production
-            return this[date_ ? 'UpdateView' : 'PushView'](chlk.activities.attendance.ClassListPage, result);
+            if(!(date_ && isUpdate_))
+                return this.PushView(chlk.activities.attendance.ClassListPage, result);
+            return this.UpdateView(chlk.activities.attendance.ClassListPage, result);
         },
 
 
