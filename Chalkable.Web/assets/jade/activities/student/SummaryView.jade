@@ -1,0 +1,49 @@
+valuesEnum = chlk.models.attendance.AttendanceTypeEnum;
+gradeLevel = self.getGradeLevelNumber();
+dt = getDate();
+classOf = dt.getFullYear() + 12 - gradeLevel;
+attendanceType = self.getCurrentAttendanceType();
+if attendanceType == valuesEnum.NA.valueOf()
+    statusName = 'No attendance taken';
+    status = 'not-assigned';
+else
+    statusName = self.getAttendanceTypeName();
+    status = statusName && statusName.toLowerCase();
+.loader-container
+    .loader
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('students', 'details', self.getId()).pressed Now
+                +ActionLink('students', 'info', self.getId()) Info
+                +ActionLink('students', 'schedule', self.getId()) Scheduling
+                +ActionLink('students', 'details', self.getId()) Apps
+    .summary-view
+        #top-summary-panel
+            #avatar-photo-conainer
+                .img-container
+                    +PersonImg(self, 256)
+                    .grades-container
+                        p=Msg.Class_Of
+                            span=classOf
+                        .grade #{self.getSerial(gradeLevel)} #{Msg.Grade}
+            #student-info-panel
+                h1.display-name=self.getDisplayName() || self.getFullName()
+                .status
+                    div(class=status, data-tooltip=statusName)
+                    |#{self.getCurrentClassName()}
+                    if(!self.getCurrentClassName() || self.getCurrentClassName().toLowerCase() != 'no class now')
+                        |&nbsp;- #{self.getRoomName()}
+                .glance-container
+                    +GlanceBox(null, null, {value: null, title: Msg.Percentile})
+                    +GlanceBox(null, null, self.buildAttendanceGlanceBoxData(), null, chlk.converters.attendance.AttendanceTypeToNameConverter.prototype.convert)
+                    +GlanceBox(null, null, self.buildDisciplineGlanceBoxData(), null, null)
+                    +GlanceBox(null, null, {value: null, title: Msg.Recent})
+        .today-work-panel
+            h2=Msg.Todays_work
+            .period-toolbar
+                +LeftRightToolbar(self.getPeriodSection(), chlk.templates.announcement.AnnouncementClassPeriod)(hideArrows).centered
+        .today-work-panel
+            h2.stats=Msg.Classes
+            .classes-tb
+                +LeftRightToolbar(self.getClassesSection(), chlk.templates.classes.Class).centered

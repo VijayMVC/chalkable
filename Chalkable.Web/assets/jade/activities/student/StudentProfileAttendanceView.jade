@@ -1,0 +1,43 @@
+mixin MarkingPeriodSelect(markingPeriods, studentId, currentMp)
+    +Select('markingPeriodSelect', 'students', 'attendance', studentId.valueOf())
+        each mp,i in markingPeriods
+            +Option(mp.getId().valueOf(), mp.getName(), mp.getId() == currentMp.getId())
+
+
+mixin AttendanceSection(data)
+    boxesData = data.buildGlanceBoxesData()
+    .glance-container
+        each boxData in boxesData
+            +GlanceBox(null, null, boxData, null, null)
+
+summaryInfo = self.getSummaryInfo()
+personId = summaryInfo.getId()
+actions = {currentAction: 'attendanceMonth'}
+calendar = self.getAttendanceCalendar()
+.profile-calendar.student-attendance-view
+    .loader-container
+        .loader
+        .action-bar.not-transparent.buttons
+            .container.panel-bg
+                //todo move this to some base profile control
+                .left
+                    +ActionLink('students', 'details', personId) Now
+                    +ActionLink('students', 'info', personId) Info
+                    +ActionLink('students', 'schedule', personId) Scheduling
+                    +ActionLink('students', 'attendance', null, personId).pressed Attendance
+                    +ActionLink('students', 'discipline', null, personId) Discipline
+                    +ActionLink('students', 'details', personId) Apps
+        .profile-info.attendance-view
+            .summary-info
+                .person-info
+                    .avarar-container
+                        .img-container
+                            +PersonImg(summaryInfo, 64)
+                    h1.profile-person-name=summaryInfo.getDisplayName()
+                h2.mp-conteiner.profile-drop-down-container
+                    +MarkingPeriodSelect(self.getMarkingPeriods(), personId, summaryInfo.getMarkingPeriod())
+                .glance-section.attendance-info
+                    +AttendanceSection(self)
+            #attendance-calendar-info.calendar-info
+                +RenderWith(self.getAttendanceCalendar(), chlk.templates.calendar.attendance.StudentAttendanceMonthCalendarTpl)
+
