@@ -1,0 +1,17 @@
+sectionsInfo  = self.prepareDetailedInfo()
+.class-info.class-profile.loader-container
+    .loader
+    +ProfileTopBar(self.buildActionLinkModels('info'))
+    .info-view
+        .top-panel
+            h1.info.with-line
+                .class-icon-container
+                    +ClassImg(self.getCourse(), 45, 80)
+                =self.getName()
+            h2
+                div
+        .detail-info
+            each item in sectionsInfo
+                .section
+                    .title=item.title
+                    .value=item.value

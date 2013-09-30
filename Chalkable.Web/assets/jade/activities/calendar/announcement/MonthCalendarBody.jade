@@ -1,0 +1,40 @@
+.month-calendar-body
+    .day-names
+        div
+            p=Msg.Sunday
+        div
+            p=Msg.Monday
+        div
+            p=Msg.Tuesday
+        div
+            p=Msg.Wednesday
+        div
+            p=Msg.Thursday
+        div
+            p=Msg.Friday
+        div
+            p=Msg.Saturday
+    .items
+        each item in self.getItems()
+            +ActionLink('calendar', 'showMonthDayPopUp', item.getDate().format('mm-dd-yy'))(class = ((item.isSunday() ? 'sunday ' : ' ') + item.getClassName() + ' ' + item.getTodayClassName())).gradient-cnt.item
+                div
+                    h2.number=item.getDay()
+                    .space
+                    announcements = item.getAnnouncements();
+                    max = 7;
+                    if announcements.length > 0
+                        ul(class=item.getRole()).day-announcements
+                            each announcement,i in announcements
+                                if i < item.getAnnLimit() || announcements.length <= item.getAnnLimit()
+                                    li.items=announcement.getTitle()
+                            if announcements.length > item.getAnnLimit()
+                                li +#{announcements.length - item.getAnnLimit() + 1} more
+                    ul.day-items
+                        announcementsLen = announcements.length > 3 ? 3 : announcements.length;
+                        maxLen = max - announcementsLen;
+                        itemsArr = item.getItemsArray();
+                        each annItem,i in itemsArr
+                            if i < maxLen || itemsArr.length <= maxLen
+                                li=annItem.title
+                            if itemsArr.length > maxLen
+                                li +#{itemsArr.length - maxLen + 1} more

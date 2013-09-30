@@ -1,0 +1,100 @@
+#chlk-dialogs{
+
+  .dialog{
+    padding:0;
+    margin:0;
+    &.attach-app{
+      min-width: 703px;
+      min-height: 570px;
+      @include box-shadow(0 10px 25px rgba(0, 0, 0, 0.5));
+      border: 1px solid #adadad;
+      border-radius: 8px;
+      left: 25px;
+      top: 90px;
+
+
+      .x-window-header{
+        height: 40px;
+        margin: 0;
+        border-bottom: 1px solid #A9B0B6;
+        @include background(linear-gradient(top, #eaeaea,#d7d6d6));
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+
+      }
+      .x-window-body{
+        background: url(images/app/bg2.png);
+        min-height: 570px;
+        .header{
+          font: bold 28px 'Saginaw Bold';
+          color: #626262;
+          margin-bottom: 15px;
+          text-align: center;
+        }
+
+        border-bottom-left-radius: 7px;
+        border-bottom-right-radius: 7px;
+
+        .paging{
+          padding-left: 25px;
+          padding-right: 25px;
+        }
+
+        .apps{
+          padding: 15px 25px;
+          width: 670px;
+
+          .app-icon-link{
+            display: inline-block;
+            text-decoration: none;
+            vertical-align: top;
+
+            .app-list-item{
+              width: 220px;
+              height: 106px;
+
+              .icon{
+                width: 80px;
+                height: 80px;
+                display: inline-block;
+                background: url(images/app/photo-store-container.png) 0 0 no-repeat;
+                position: relative;
+
+                >IMG, >DIV{
+                  width: 74px;
+                  height: 74px;
+                  margin: 3px;
+                }
+              }
+
+              .description{
+                display: inline-block;
+                position: absolute;
+                padding: 3px 7px;
+                width: 126px;
+                overflow: hidden;
+                height: 76px;
+
+                .name{
+                  font-weight: bold;
+                  font-size: 16px;
+                }
+
+                >DIV{
+                  word-wrap: break-word;
+                  color: #5b5b5b;
+
+                  &.shortdesc{
+                    font-weight: bold;
+                    font-size: 12px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+  }
+}
