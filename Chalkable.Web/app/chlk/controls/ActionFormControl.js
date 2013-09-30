@@ -119,7 +119,7 @@ NAMESPACE('chlk.controls', function () {
                         var p = jQuery($form.valueOf()).serializeArray();
                         var params = {};
                         p.forEach(function (o) { params[o.name] = o.value; });
-                        $form.find('[type=file]').forEach(function(item){
+                        $target.find('[type=file]').forEach(function(item){
                             params[item.getAttr('name')] = item.valueOf()[0].files;
                         });
 

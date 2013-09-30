@@ -26,7 +26,7 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.DepartmentId, String, String, FileList]],
             ria.async.Future, function updateDepartment(id, name, keywords, files) {
 
-                return this.uploadFiles('ChalkableDepartment/create.json', files, chlk.models.departments.Department, {
+                return this.uploadFiles('ChalkableDepartment/update.json', files, chlk.models.departments.Department, {
                     chalkableDepartmentId: id.valueOf(),
                     name: name,
                     keywords: keywords

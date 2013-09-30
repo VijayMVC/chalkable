@@ -1,7 +1,6 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.AttendanceCalendarService');
-REQUIRE
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.classes.ClassScheduleViewData');

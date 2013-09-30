@@ -47,7 +47,7 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
             if(!BaseSecurity.HasChalkableRole(Context))
                 throw new ChalkableSecurityException();
             if (height.HasValue && width.HasValue)
-                content = ImageUtils.Scale(content, height.Value, width.Value);
+                content = ImageUtils.Scale(content, width.Value, height.Value);
 
             ServiceLocator.StorageBlobService.AddBlob(PICTURE_CONTAINER_NAME, PictureName(id, height, width), content);
         }
