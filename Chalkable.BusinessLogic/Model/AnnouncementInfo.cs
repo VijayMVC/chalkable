@@ -12,7 +12,7 @@ namespace Chalkable.BusinessLogic.Model
         public string Subject { get; set; }
         public string Content { get; set; }
         public DateTime? ExpiresDate { get; set; }
-        public int AnnouncementTypeId { get; set; }
+        public int? AnnouncementTypeId { get; set; }
 
         public static AnnouncementInfo Create(Announcement announcement)
         {
