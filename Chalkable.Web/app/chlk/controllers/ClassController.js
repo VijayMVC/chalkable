@@ -93,15 +93,5 @@ NAMESPACE('chlk.controllers', function (){
                     }, this);
                 return this.UpdateView(chlk.activities.classes.ClassProfileAttendancePage, res);
             }
-//            ,
-//            [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
-//            ria.async.Future, function attendanceListAction(date, classId){
-//                var res = this.attendanceService.getClassList(classId, date)
-//                    .attach(this.validateResponse_())
-//                    .then(function(data){
-//
-//                    });
-//                return this.PushView(chlk.activities.classes.ClassProfileAttendanceListPage, res);
-//            }
         ]);
 });

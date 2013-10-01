@@ -1,0 +1,29 @@
+BODY {
+  DIV.page{
+    >DIV#content{
+      DIV#content-wrapper.profile{
+        #main{
+          .class-profile-attendance-list-page{
+            .action-bar{
+              .container{
+                .left{
+                  .tb-date-picker{
+                    left: 200px;
+                    position: relative;
+                  }
+                }
+              }
+            }
+          }
+          .container{
+            .left{
+              .back-btn{
+                background: url(images/announcement/due-icon.png) 8px center no-repeat;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

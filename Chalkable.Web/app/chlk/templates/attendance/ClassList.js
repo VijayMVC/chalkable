@@ -1,5 +1,6 @@
 REQUIRE('chlk.templates.common.PageWithClasses');
 REQUIRE('chlk.models.attendance.ClassList');
+REQUIRE('chlk.models.common.ActionLinkModel');
 
 NAMESPACE('chlk.templates.attendance', function () {
 
@@ -18,6 +19,33 @@ NAMESPACE('chlk.templates.attendance', function () {
             chlk.models.common.ChlkDate, 'date',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'byLastName'
-        ])
+            Boolean, 'byLastName',
+
+            Boolean, function hasLeftRightToolBar(){
+                return true;
+            },
+
+            chlk.models.common.ActionLinkModel, function createActionLinkModel_(action, title, isPressed_, args_){
+                return new chlk.models.common.ActionLinkModel('attendance', action, title, isPressed_, args_);
+            },
+
+            ArrayOf(chlk.models.common.ActionLinkModel), function getLinksDataForLeftSide_(){
+                return [];
+            },
+
+            chlk.models.common.ActionLinkModel, function getDataForDatePicker_(){
+                var topData = this.getModel().getTopData();
+                var selectedId = topData ? topData.getSelectedItemId() : null;
+                return this.createActionLinkModel_('classList', null, null
+                    , selectedId ? [selectedId.valueOf()] : null)
+            },
+
+            ArrayOf(chlk.models.common.ActionLinkModel), function getLinksDataForRightSide_(){
+                return [
+                    new this.createActionLinkModel_('classList', Msg.List, true),
+                    new this.createActionLinkModel_('classList', Msg.Room),
+                    new this.createActionLinkModel_('classList', Msg.Card)
+                ];
+            }
+        ]);
 });

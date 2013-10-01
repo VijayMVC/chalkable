@@ -1,15 +1,17 @@
 .students-list.loader-container
-    topData = self.getTopData();
-    topItems = topData.getTopItems();
-    selectedId = topData.getSelectedItemId();
-    valuesEnum = chlk.models.attendance.AttendanceTypeEnum;
-    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'classList')(
-        selectedItemId=selectedId ? selectedId.valueOf() : ""
-    ).classes-bar
+    topData = self.getTopData()
+    topItems = topData.getTopItems()
+    selectedId = topData.getSelectedItemId()
+    valuesEnum = chlk.models.attendance.AttendanceTypeEnum
+    if(self.hasLeftRightToolBar())
+        +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'classList')(
+            selectedItemId=selectedId ? selectedId.valueOf() : ""
+        ).classes-bar
     .loader
     .action-bar.not-transparent.buttons
         .container.panel-bg
             .left.no-border
+                +ActionLinkList(self.getLinksDataForLeftSide())
                 +DatePicker('attendanceDate', self.getDate())(
                     data-options={
                         showOtherMonths: true,
@@ -19,19 +21,15 @@
                     data-action="classList",
                     data-params=selectedId ? [selectedId.valueOf()] : null
                 )#attendance-date.tb-date-picker
+                -console.log('tests')
             .right
-                +ActionLink('attendance', 'classList').pressed
-                    =Msg.List
-                +ActionLink('attendance', 'classList')
-                    =Msg.Room
-                +ActionLink('attendance', 'classList')
-                    =Msg.Card
+                +ActionLinkList(self.getLinksDataForRightSide())
     .people-list-container.not-transparent
         items = self.getItems()
         .top.panel-bg
             if(self.getItems().length > 0)
-                +ActionLink('attendance', 'markAll',
-                    [selectedId.valueOf(), self.getItems()[0].getClassPeriodId().valueOf(), self.getDate().format('mm-dd-yy')]
+                +ActionLinkWithPrepend('attendance', 'markAll',
+                    [selectedId.valueOf(), self.getItems()[0].getClassPeriodId().valueOf(), self.getDate().toStandardFormat()]
                 )#all-present-link=Msg.Mark_all_Present
         .action-bar.buttons.filter
             .container.panel-bg
@@ -44,6 +42,7 @@
             )#class-attendance-list-panel.people-list
                 needSuggestion = self.getItems().filter(function(item){return item.getType() > valuesEnum.NA.valueOf()}).length == 0;
                 each item, i in self.getItems()
+                    -console.log(i)
                     needPresent = (i == 0 && item.getType() == valuesEnum.NA.valueOf());
                     .row(class=(i == 0 ? 'selected' : ''), index=i)
                         if needPresent

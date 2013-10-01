@@ -9,8 +9,10 @@ NAMESPACE('chlk.models.common', function(){
         ArrayOf(Object), 'args',
         String, 'title',
 
-        [[String, String, String, Boolean, ArrayOf(Object)]],
-        function $(controllerName, actionName, title_, isPressed_, args_){
+        ArrayOf(String), 'classesNames',
+
+        [[String, String, String, Boolean, ArrayOf(Object), ArrayOf(String)]],
+        function $(controllerName, actionName, title_, isPressed_, args_, classesNames_){
             BASE();
             this.setControllerName(controllerName);
             this.setActionName(actionName);
@@ -20,6 +22,8 @@ NAMESPACE('chlk.models.common', function(){
                 this.setArgs(args_);
             if(title_)
                 this.setTitle(title_);
+            if(classesNames_)
+                this.setClassesNames(classesNames_);
         }
     ]);
 });
