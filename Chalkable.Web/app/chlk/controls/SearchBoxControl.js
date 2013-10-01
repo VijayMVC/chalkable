@@ -13,14 +13,14 @@ NAMESPACE('chlk.controls', function () {
                 ASSET('~/assets/jade/controls/SearchBox.jade')(this);
             },
 
-            [[Object, ClassOf(chlk.services.BaseService), String, ClassOf(ria.templates.Template)]],
-            VOID, function initialize(attrs, service, method, tpl)
+            [[Object, ClassOf(chlk.services.BaseService), String, ClassOf(ria.templates.Template), Array]],
+            VOID, function initialize(attrs, service, method, tpl, prependArgs)
             {
                 attrs.id = attrs.id || ria.dom.NewGID();
                 var serviceIns = this.getContext().getService(service);
                 var ref = ria.reflection.ReflectionClass(service);
                 var methodRef = ref.getMethodReflector(method);
-                var stub = function () { return methodRef.invokeOn(serviceIns, ria.__API.clone(arguments)); };
+                var stub = function () { return methodRef.invokeOn(serviceIns, [].concat(prependArgs, ria.__API.clone(arguments))); };
                 this.queueReanimation_(attrs.id, attrs["default-value"] ? attrs["default-value"].valueOf() : null, stub, tpl, attrs);
             },
 
