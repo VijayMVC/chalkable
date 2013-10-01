@@ -14,7 +14,7 @@ NAMESPACE('chlk.templates.classes', function(){
 
             OVERRIDE, ArrayOf(chlk.models.common.ActionLinkModel), function getLinksDataForLeftSide(){
                 return [
-                    new chlk.models.common.ActionLinkModel('classes', 'attendance', 'Back', false, [], ['back-btn'])
+                    new chlk.models.common.ActionLinkModel('class', 'attendance', 'Back', false, [], ['back-btn'])
                 ];
             },
 

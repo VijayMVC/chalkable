@@ -14,11 +14,35 @@ BODY {
                 }
               }
             }
+            .people-list-container{
+              #all-present-link{
+                color: #957633 !important;
+              }
+              .attendance-combo{
+                .left-arrow, .current-attendance, .right-arrow, .combo-list{
+                  color: #957633 !important;
+                  background: #ECE3C6 !important;
+
+                  .connector{
+                    background: #ECE3C6 !important;
+                  }
+                  .option:not(.selected){
+                    color: #957633 !important;
+                  }
+                  .option.selected{
+                    background: #F8F3E4 !important;
+                  }
+                }
+              }
+            }
           }
           .container{
             .left{
               .back-btn{
-                background: url(images/announcement/due-icon.png) 8px center no-repeat;
+                text-align: right;
+                border-left: none;
+                width: 50px;
+                background: url(images/buttons/back-br.png) 8px 10px no-repeat;
               }
             }
           }
