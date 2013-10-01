@@ -1,0 +1,46 @@
+mixin IfBlock_(items, i, index)
+    if items && (index == 0 || i + index < items.length)
+        TD
+            .image-container
+                +PersonImg(items[i+index], 64)
+
+.class-info.class-profile.loader-container
+    .loader
+    +ProfileTopBar(self.buildActionLinkModels('details'))
+    .info-view.summary-view
+        #top-summary-panel
+            #avatar-photo-conainer
+                .images-wrapper
+                    TABLE
+                        TBODY
+                            each student,i in self.getStudents()
+                                if i % 4 == 0
+                                    TR
+                                        +IfBlock_(self.getStudents(), i, 0)
+                                        +IfBlock_(self.getStudents(), i, 1)
+                                        +IfBlock_(self.getStudents(), i, 2)
+                                        +IfBlock_(self.getStudents(), i, 3)
+            #student-info-panel
+                h1.info
+                    .class-icon-container
+                        +ClassImg(self.getCourse(), 45, 80)
+                    =self.getName()
+                h2.no-line
+                    +ActionLink('teachers', 'info', self.getTeacher().getId().valueOf())=self.getTeacher().getDisplayName()
+                    | - #{self.getRoom() && self.getRoom().getDescription()}
+                .glance-container
+                    if(self.getClassAverageBox())
+                        +GlanceBox(null, null, self.buildCommonGlanceBoxData(self.getClassAverageBox(), Msg.Class_average))
+                    if(self.getClassAttendanceBox())
+                        +GlanceBox(null, null, self.buildCommonGlanceBoxData(self.getClassAttendanceBox(), Msg.Attendance_count))
+                    if(self.getClassDisciplineBox())
+                        +GlanceBox(null, null, self.buildDisciplineGlanceBoxData(), null)
+                    if(self.getClassSize())
+                        +GlanceBox(null, null, {value: self.getClassSize(), title: Msg.Class_size}, 'brown')
+        .today-work-panelf
+            h2=Msg.Upcoming_assignments
+            .period-toolbar
+                if self.getAnnouncementsByDate()
+                    +LeftRightToolbar(self.getAnnouncementsByDate(), chlk.templates.announcement.AnnouncementsByDate)(hideArrows)
+        .today-work-panel
+            h2.stats=Msg.Stats_and_facts

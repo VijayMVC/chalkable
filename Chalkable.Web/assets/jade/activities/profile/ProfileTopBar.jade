@@ -1,0 +1,9 @@
+mixin ProfileTopBar(actionLinksData)
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                each item in actionLinksData
+                    +ActionLinkWithPrepend(item.getControllerName(), item.getActionName(),
+                        item.getArgs())(class = item.isPressed() ? "pressed" : undefined)=item.getTitle()
+            .right
+                +ActionLink('settings', 'dashboard').settings Settings
