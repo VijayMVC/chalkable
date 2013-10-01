@@ -1,5 +1,6 @@
 REQUIRE('chlk.templates.attendance.ClassList');
 REQUIRE('chlk.models.attendance.ClassList');
+REQUIRE('chlk.templates.classes.ClassProfileAttendanceListItemTpl');
 
 NAMESPACE('chlk.templates.classes', function(){
    "use strict";
@@ -13,8 +14,9 @@ NAMESPACE('chlk.templates.classes', function(){
             OVERRIDE, Boolean, function hasLeftRightToolBar(){return false;},
 
             OVERRIDE, ArrayOf(chlk.models.common.ActionLinkModel), function getLinksDataForLeftSide(){
+                var classId = this.getModel().getTopData().getSelectedItemId();
                 return [
-                    new chlk.models.common.ActionLinkModel('class', 'attendance', 'Back', false, [], ['back-btn'])
+                    new chlk.models.common.ActionLinkModel('class', 'attendance', 'Back', false, [classId], ['back-btn'])
                 ];
             },
 
@@ -22,6 +24,10 @@ NAMESPACE('chlk.templates.classes', function(){
                 var res = BASE();
                 res.getArgs().push(false);
                 return res;
+            },
+
+            OVERRIDE, Object, function getItemClassType(){
+                return chlk.templates.classes.ClassProfileAttendanceListItemTpl;
             },
 
             OVERRIDE, ArrayOf(chlk.models.common.ActionLinkModel), function getLinksDataForRightSide(){

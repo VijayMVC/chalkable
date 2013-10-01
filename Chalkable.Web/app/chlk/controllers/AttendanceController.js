@@ -205,9 +205,20 @@ NAMESPACE('chlk.controllers', function (){
             return chlk.activities.attendance.ClassListPage;
         },
 
+        [[chlk.models.attendance.ClassAttendance]],
+        function setAttendanceProfileAction(model){
+            return this.UpdateView(chlk.activities.classes.ClassProfileAttendanceListPage
+                , this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
+        },
+
         //todo refactor this
-        [[chlk.models.attendance.ClassAttendance, Boolean]],
-        function setAttendanceAction(model, isProfile_){
+        [[chlk.models.attendance.ClassAttendance]],
+        function setAttendanceAction(model){
+            return this.UpdateView(chlk.activities.attendance.ClassListPage
+                , this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
+        },
+
+        ria.async.Future, function setAttendance_(model){
             var type = this.changeAttendanceType_(model.getSubmitType(), model.getType());
             var items = this.getContext().getSession().get('attendanceData');
             var item = items.filter(function(item){
@@ -237,10 +248,8 @@ NAMESPACE('chlk.controllers', function (){
             }else{
                 item.setAttendanceReason(null);
             }
-            var result = new ria.async.DeferredData(item);
-            return this.UpdateView(this.getActivityClass_(isProfile_), result, chlk.activities.lib.DontShowLoader());
+            return new ria.async.DeferredData(item);
         },
-
 
         Number,  function changeAttendanceType_(submitType, currentType){
             var attTypeEnum = chlk.models.attendance.AttendanceTypeEnum;

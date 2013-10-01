@@ -3,6 +3,7 @@
     topItems = topData.getTopItems()
     selectedId = topData.getSelectedItemId()
     valuesEnum = chlk.models.attendance.AttendanceTypeEnum
+    additionalParams = self.getAdditionalParams
     if(self.hasLeftRightToolBar())
         +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'classList')(
             selectedItemId=selectedId ? selectedId.valueOf() : ""
@@ -17,9 +18,9 @@
                         showOtherMonths: true,
                         selectOtherMonths: true
                     },
-                    data-controller="attendance",
+                    data-controller= "attendance",
                     data-action="classList",
-                    data-params=selectedId ? [selectedId.valueOf()] : null
+                    data-params=selectedId ? [selectedId.valueOf()].concat(additionalParams) : null
                 )#attendance-date.tb-date-picker
                 -console.log('tests')
             .right
@@ -29,13 +30,13 @@
         .top.panel-bg
             if(self.getItems().length > 0)
                 +ActionLinkWithPrepend('attendance', 'markAll',
-                    [selectedId.valueOf(), self.getItems()[0].getClassPeriodId().valueOf(), self.getDate().toStandardFormat()]
+                    [selectedId.valueOf(), self.getItems()[0].getClassPeriodId().valueOf(), self.getDate().toStandardFormat()].concat(additionalParams)
                 )#all-present-link=Msg.Mark_all_Present
         .action-bar.buttons.filter
             .container.panel-bg
                 .left
-                    +ActionLink('attendance', 'sortStudents', 'false')(class=self.isByLastName()?"":"pressed").action-button.first-last=Msg.First_name
-                    +ActionLink('attendance', 'sortStudents', true)(class=self.isByLastName()?"pressed":"").action-button.first-last=Msg.Last_name
+                    +ActionLinkWithPrepend('attendance', 'sortStudents', ['false'].concat(additionalParams))(class=self.isByLastName()?"":"pressed").action-button.first-last=Msg.First_name
+                    +ActionLinkWithPrepend('attendance', 'sortStudents', [true].concat(additionalParams))(class=self.isByLastName()?"pressed":"").action-button.first-last=Msg.Last_name
         .grid-container.loader-container
             +ListView(self.getItems())(
                 selectedIndex = 0
@@ -58,7 +59,7 @@
                                     .keyboard-suggestion
                                 div(class="container-" + item.getClassPersonId().valueOf())
                                     -item.setReasons(self.getReasons());
-                                    +RenderWith(item, chlk.templates.attendance.ClassAttendance)(
-                                        needPresent = needPresent
+                                    +RenderWith(item, self.getItemClassType())(
+                                        needPresent = needPresent,
                                     )
                         .clear
