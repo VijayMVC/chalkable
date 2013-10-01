@@ -49,23 +49,24 @@ NAMESPACE('chlk.controllers', function (){
                     return data.getItems();
                 })
                 .then(function(categories){
+                    var gradeLevels = this.gradeLevelService.getGradeLevels();
                     return this.appMarketService
                         .getApps(
                             categories,
-                            this.gradeLevelService.getGradeLevels(),
+                            gradeLevels,
                             ""
-                        );
-                }, this)
-                .then(function(apps){
-                    var items = apps.getItems();
-                    items = items.map(function(app){
-                        var screenshots = this.pictureService.getAppPicturesByIds(app.getScreenshotIds(), 640, 390);
-                        app.setScreenshotPictures(new chlk.models.apps.AppScreenshots(screenshots, false));
-                        return app;
-                    }, this);
-                    apps.setItems(items);
-                    //TODO: get current balance
-                    return new chlk.models.apps.AppMarketViewData(apps, 0);
+                        )
+                        .then(function(apps){
+                            var items = apps.getItems();
+                            items = items.map(function(app){
+                                var screenshots = this.pictureService.getAppPicturesByIds(app.getScreenshotIds(), 640, 390);
+                                app.setScreenshotPictures(new chlk.models.apps.AppScreenshots(screenshots, false));
+                                return app;
+                            }, this);
+                            apps.setItems(items);
+                            //TODO: get current balance
+                            return new chlk.models.apps.AppMarketViewData(apps, categories, gradeLevels, 0);
+                        }, this)
                 }, this)
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.apps.AppMarketPage, result);
@@ -183,7 +184,33 @@ NAMESPACE('chlk.controllers', function (){
                     }else{
                         installBtnTitle = app.getApplicationPrice().getPrice() > 0 ? "$" + app.getApplicationPrice().getPrice() : "Free";
                     }
-                    return new chlk.models.apps.AppMarketDetailsViewData(app, installBtnTitle);
+
+
+                    /*
+                     if(data.videodemourl){
+                         max++;
+                         var ifrm = document.createElement("embed");
+                         ifrm.setAttribute("src", getVideoUrl(data.videodemourl));
+                         ifrm.setAttribute("id", "app-img");
+                         ifrm.setAttribute("wmode", "transparent");
+                         ifrm.setAttribute("width", "100%");
+                         ifrm.setAttribute("height", "387px");
+                         images.push(ifrm);
+                     }
+
+                     */
+                    return this.appCategoryService
+                        .getCategories()
+                        .then(function(categories){
+                            return new chlk.models.apps.AppMarketDetailsViewData(
+                                app,
+                                installBtnTitle,
+                                categories.getItems(),
+                                this.gradeLevelService.getGradeLevels(),
+                                0
+                                ); //todo: add real balance
+                        }, this)
+
                 }, this)
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.apps.AppMarketDetailsPage, result);

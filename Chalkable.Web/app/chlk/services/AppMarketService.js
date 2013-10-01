@@ -19,15 +19,13 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'AppMarketService', EXTENDS(chlk.services.BaseService), [
 
-
-
-
-            [[String]],
-            ria.async.Future, function getAppsByFilter(filter_) {
-                return this.getApps(null, filter_, true, true)
-                    .then(function(model){return model.getItems();});
+            [[ArrayOf(chlk.models.apps.AppCategory), ArrayOf(chlk.models.apps.AppGradeLevel), String]],
+            ria.async.Future, function getAppsByFilter(categories, gradeLevels, filter) {
+                return this.getApps(categories, gradeLevels, filter)
+                    .then(function(result){
+                        return result.getItems();
+                    });
             },
-
 
             [[ArrayOf(chlk.models.apps.AppCategory), ArrayOf(chlk.models.apps.AppGradeLevel),
                 String, Number, Number, Number, Number]],

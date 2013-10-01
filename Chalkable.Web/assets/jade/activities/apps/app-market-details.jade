@@ -1,10 +1,7 @@
 app = self.getApp()
 devName = app.getDeveloperInfo().getName()
 .app-market-details
-    .action-bar.not-transparent
-        .container.panel-bg.buttons-toolbar
-            +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
-            +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn My Apps
+    +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels)
     .app-screenshots-panel
         +Carousel(app.getScreenshotPictures().getItems())
     .app-price-info
@@ -17,6 +14,7 @@ devName = app.getDeveloperInfo().getName()
         textarea(name = "app-description", class ="app-description", readonly)=self.description
         .app-general-info
             .reviews
+                +ActionLink('a', 'b').review-link User Ratings
             .permissions
                 .permissions-group
                     .group-header.first This app is for:

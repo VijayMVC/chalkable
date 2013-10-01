@@ -1,4 +1,4 @@
-REQUIRE('chlk.models.apps.AppMarketApplication');
+REQUIRE('chlk.models.apps.AppMarketBaseViewData');
 REQUIRE('chlk.models.apps.AppSortingMode');
 
 NAMESPACE('chlk.models.apps', function () {
@@ -7,16 +7,18 @@ NAMESPACE('chlk.models.apps', function () {
 
     /** @class chlk.models.apps.AppMarketViewData*/
     CLASS(
-        'AppMarketViewData', [
+        'AppMarketViewData', EXTENDS(chlk.models.apps.AppMarketBaseViewData), [
             chlk.models.apps.AppMarketApplication, 'firstApp',
             chlk.models.common.PaginatedList, 'apps',
-            Number, 'currentBalance',
 
-            [[chlk.models.common.PaginatedList, Number]],
-            function $(apps, balance){
-                BASE();
-
-
+            [[
+                chlk.models.common.PaginatedList,
+                ArrayOf(chlk.models.apps.AppCategory),
+                ArrayOf(chlk.models.apps.AppGradeLevel),
+                Number
+            ]],
+            function $(apps, categories, gradelelevels, balance){
+                BASE(categories, gradelelevels, balance);
 
                 var items = apps.getItems();
                 if (items.length > 0){
@@ -28,7 +30,6 @@ NAMESPACE('chlk.models.apps', function () {
                     firstApp.setScreenshotIds([]);
                     this.setFirstApp(firstApp);
                 }
-                this.setCurrentBalance(balance);
                 this.setApps(apps);
             }
 
