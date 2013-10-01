@@ -29,7 +29,6 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         
         public int? Grade { get; set; }
         public Guid? StudentAnnouncementId { get; set; }
-        public bool? Dropped { get; set; }
         public int StudentsCount { get; set; }
         public int StudentsCountWithAttachments { get; set; }
         public int StudentsCountWithoutAttachments { get; set; }
