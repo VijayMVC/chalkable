@@ -29,18 +29,18 @@ NAMESPACE('chlk.templates.attendance', function () {
                 return new chlk.models.common.ActionLinkModel('attendance', action, title, isPressed_, args_);
             },
 
-            ArrayOf(chlk.models.common.ActionLinkModel), function getLinksDataForLeftSide_(){
+            ArrayOf(chlk.models.common.ActionLinkModel), function getLinksDataForLeftSide(){
                 return [];
             },
 
-            chlk.models.common.ActionLinkModel, function getDataForDatePicker_(){
+            chlk.models.common.ActionLinkModel, function getDataForDatePicker(){
                 var topData = this.getModel().getTopData();
                 var selectedId = topData ? topData.getSelectedItemId() : null;
                 return this.createActionLinkModel_('classList', null, null
                     , selectedId ? [selectedId.valueOf()] : null)
             },
 
-            ArrayOf(chlk.models.common.ActionLinkModel), function getLinksDataForRightSide_(){
+            ArrayOf(chlk.models.common.ActionLinkModel), function getLinksDataForRightSide(){
                 return [
                     new this.createActionLinkModel_('classList', Msg.List, true),
                     new this.createActionLinkModel_('classList', Msg.Room),
