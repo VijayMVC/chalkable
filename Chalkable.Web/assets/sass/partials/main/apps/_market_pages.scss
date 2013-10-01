@@ -1,0 +1,26 @@
+@import "partials/main/apps/appMarket/_app_market";
+@import "partials/main/apps/appMarket/_app_market_details";
+@import "partials/main/apps/appMarket/_app_market_install";
+
+
+
+.app-market, .my-apps, .app-market-details{
+  .buttons-toolbar{
+    .toolbar-btn{
+      padding: 0 7px;
+      color: #828282;
+      font-size: 12px;
+      margin: 0;
+      display: inline-block;
+      font-style: normal !important;
+      border-left: 1px solid white;
+      text-align: center;
+      border-right: 1px solid #cfcfcf;
+      @include background(linear, 50% 0%, 50% 100%, color-stop(0%, #f6f6f6), color-stop(100%, #d8d8d8));
+
+      &:hover{
+        @include background(linear-gradient(top, #f6f6f6,#d8d8d8));
+      }
+    }
+  }
+}

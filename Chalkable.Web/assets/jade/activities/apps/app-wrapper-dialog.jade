@@ -1,0 +1,8 @@
+
+.app-wrapper
+    .x-window-header
+        +RenderWith(self.getModel(), chlk.templates.apps.AppWrapperDialogToolbarTpl)
+    .iframe-wrap
+        iframe(src=self.app.getCurrentModeUrl())
+
+
