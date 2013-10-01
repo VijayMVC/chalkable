@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.apps.AppMarketDetailsViewData');
-
+REQUIRE('chlk.templates.apps.AppMarketBaseTpl');
 
 NAMESPACE('chlk.templates.apps', function () {
 
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.apps', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/apps/app-market-details.jade')],
         [ria.templates.ModelBind(chlk.models.apps.AppMarketDetailsViewData)],
-        'AppMarketDetails', EXTENDS(chlk.templates.JadeTemplate), [
+        'AppMarketDetails', EXTENDS(chlk.templates.apps.AppMarketBaseTpl), [
 
             [ria.templates.ModelPropertyBind],
             chlk.models.apps.AppMarketApplication, 'app',

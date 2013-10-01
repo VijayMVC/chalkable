@@ -22,5 +22,25 @@
         @include background(linear-gradient(top, #f6f6f6,#d8d8d8));
       }
     }
+
+    .user-balance{
+      width: 250px;
+      display: inline-block;
+      color: #868686;
+      font-size: 18px;
+      padding-left: 10px;
+      height: 36px;
+      border-right: 1px solid #cfcfcf;
+      line-height: 30px;
+    }
+  }
+
+
+  #app-market-searchbox{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    vertical-align: middle;
+    margin-left: 105px;
+    width: 115px;
   }
 }
