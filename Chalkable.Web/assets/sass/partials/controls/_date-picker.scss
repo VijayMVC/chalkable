@@ -1,0 +1,149 @@
+@import "compass/css3/border-radius";
+@import "compass/css3/images";
+@import "compass/css3/box-shadow";
+
+.hasDatepicker:not(.no-marker){
+  font: bold 16px Arial;
+  padding-left: 6px;
+  color: #808080;
+  background: url(images/announcement/due-icon.png) 145px center no-repeat, white;
+  resize: none;
+  width: 159px;
+
+  &.tb-date-picker{
+    font: normal 13px/9px Arial;
+    color: #5d5d5d;
+    text-shadow: 0 0 1px #b7b7b7;
+    height: 21px;
+    border: none;
+    background: url(images/announcement/due-icon.png) 8px center no-repeat;
+    padding-left: 28px;
+    cursor: pointer;
+
+    &:focus{
+      outline: none;
+    }
+  }
+}
+
+.ui-datepicker.ui-widget{
+  width: 210px;
+  overflow: hidden;
+  padding: 0;
+  z-index: 10 !important;
+  @include box-shadow(0 0 5px gray);
+
+  TABLE{
+    margin: 0;
+  }
+
+  .ui-datepicker-header{
+    background: url(images/mini-calendar/header-bg.png) no-repeat;
+    height: 24px;
+    padding-top: 8px;
+
+    .ui-datepicker-title{
+      color: white;
+      font: bold 14px 'Helvetica';
+    }
+
+    .ui-corner-all{
+      top:0;
+
+      >SPAN{
+        width: 8px;
+        height: 8px;
+        cursor: pointer;
+        opacity: 0.6;
+        top: 75%;
+      }
+
+      &.ui-datepicker-next{
+        right:0;
+        >SPAN{
+          background: url(images/mini-calendar/arrow-right.png) center center no-repeat;
+        }
+      }
+
+      &.ui-datepicker-prev{
+        left: 0;
+        >SPAN{
+          background: url(images/mini-calendar/arrow-left.png) center center no-repeat;
+        }
+      }
+
+      &.ui-state-hover{
+        >SPAN{
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .ui-datepicker-calendar{
+    thead{
+      th{
+        background: #F4F4F4;
+        height: 19px;
+        color: #666;
+        padding: 0;
+        font: normal 10px arial, helvetica,tahoma,sans-serif;
+      }
+    }
+
+    tbody{
+      tr{
+        td{
+          border: 1px solid #a5a4a4;
+          padding: 0;
+          height: 29px;
+          width: 29px;
+          background-image: url(images/mini-calendar/active-day.png);
+          font: bold 11px Arial;
+
+          A{
+            text-align: center;
+            color: #666;
+          }
+
+          &.ui-datepicker-other-month{
+            background-image: url(images/mini-calendar/passive-day.png);
+
+            A{
+              color: #b4b3b3;
+            }
+          }
+
+          &.ui-datepicker-today{
+            background: #FFA;
+          }
+
+          &:hover{
+            background: #ddecfe;
+          }
+
+          &.ui-datepicker-current-day{
+            background-image: url(images/mini-calendar/current.png);
+            a{
+              color: #e0e0e0;
+            }
+          }
+
+          &:first-child{
+            border-left-width: 0;
+          }
+
+          &:last-child{
+            border-right-width: 0;
+          }
+        }
+
+        &:last-child{
+          td{
+            border-bottom-width: 0;
+          }
+        }
+      }
+    }
+  }
+}

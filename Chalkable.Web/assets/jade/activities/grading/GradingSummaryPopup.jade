@@ -1,0 +1,12 @@
+#chlk-pop-up-container.popup-right.ann-grade-pop-up
+    .pop-up-triangle
+        .grading-pop-up
+            .separator.big-text=self.getAnnouncementTypeName()+self.getOrder()
+            .separator.small-text #{Msg.Due}: #{self.getExpiresDate().format('mm/dd/yy')}
+            .separator.small-text #{Msg.Class_average}: #{self.getAvg()}
+            .chart-container
+            if self.isAnnOwner()
+                if self.isDropped()
+                    +ActionLink('announcement', 'undropFromPopup').dropped.grey-button=Msg.Undrop
+                else
+                    +ActionLink('announcement', 'dropFromPopup').grey-button=Msg.Drop

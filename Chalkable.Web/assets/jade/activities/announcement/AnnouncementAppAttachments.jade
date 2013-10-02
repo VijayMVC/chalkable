@@ -1,0 +1,31 @@
+attachments = self.getAnnouncementAttachments() || []
+applications = self.getApplications() || []
+typesEnum = chlk.models.announcement.AnnouncementTypeEnum
+isAnnouncement = (self.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf() || self.getAnnouncementTypeId() == typesEnum.ADMIN.valueOf())
+
+if self.needButtons
+    #attach-file-area.announcement-item.attach-file-area
+        if !isAnnouncement
+            +ActionLink('announcement', 'attachApp', self.getId())#add-application.simple-gray-button Attach App
+        button.simple-gray-button.file Attach File
+            +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
+each attachment, i in attachments
+    div(data-id=attachment.getId(), data-url="viewurl").announcement-item.attachment
+        if self.needDeleteButton
+            +ActionLink('announcement', 'deleteAttachment', attachment.getId()).close-btn
+        +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + i)
+        .title
+            div=attachment.getName()
+
+each app, i in applications
+    viewUrl = self.isGradable() && !self.needDeleteButton ? app.getGradingViewUrl() : app.getViewUrl()
+    appMode = self.isGradable() && !self.needDeleteButton ? chlk.models.apps.AppModes.GRADINGVIEW : chlk.models.apps.AppModes.VIEW
+    appUrl = app.getUrl()
+    -console.log(appUrl)
+    div.announcement-item.application
+        if self.needDeleteButton
+            +ActionLink('announcement', 'deleteApp', app.getAnnouncementApplicationId()).close-btn
+        +ActionLink('apps', 'viewApp', appUrl, viewUrl, appMode, app.getAnnouncementApplicationId())
+            +LoadingImage(src=self.getPictureURL(app.getSmallPictureId(), 74, 74), id="loading-image-" + i)
+            .title
+                div=app.getName()
