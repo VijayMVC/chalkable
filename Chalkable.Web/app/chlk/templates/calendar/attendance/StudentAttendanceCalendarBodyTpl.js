@@ -22,7 +22,18 @@ NAMESPACE('chlk.templates.calendar.attendance', function (){
             chlk.models.common.ChlkDate, 'minDate',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.calendar.attendance.StudentAttendanceCalendarMonthItem), 'calendarItems'
+            ArrayOf(chlk.models.calendar.attendance.StudentAttendanceCalendarMonthItem), 'calendarItems',
 
+            [[Number]],
+            String, function getColorByAttendanceType(attendanceType){
+                var attTypeEnums = chlk.models.attendance.AttendanceTypeEnum;
+                switch (attendanceType){
+                    case attTypeEnums.PRESENT.valueOf() : return 'green';
+                    case attTypeEnums.ABSENT.valueOf() : return 'red';
+                    case attTypeEnums.EXCUSED.valueOf() : return 'blue';
+                    case attTypeEnums.LATE.valueOf() : return 'darkOrange';
+                    default : return 'black';
+                }
+            }
         ]);
 });
