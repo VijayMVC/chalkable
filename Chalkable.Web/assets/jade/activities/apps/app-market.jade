@@ -18,7 +18,10 @@ mixin AppIconLink(app)
             .subject
                 .subject-filter
                     .title.btn Subject
-                    .items
+                    .items.x-hidden
+                        +LabeledCheckbox("All categories", 'subject-all', true, false)
+                        each subject in self.categories
+                           +LabeledCheckbox(subject.getName(), 'subject', false, false)
 
             .price
                 .price-type.all.btn.pressed All

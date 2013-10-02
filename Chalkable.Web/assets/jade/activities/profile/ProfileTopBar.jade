@@ -1,9 +1,13 @@
-mixin ProfileTopBar(actionLinksData)
+//requires: tplObj instanceOf chlk.templates.profile.BaseProfileTpl
+mixin ProfileTopBar(tplObj, pressedActionName)
     .action-bar.not-transparent.buttons
         .container.panel-bg
             .left
-                each item in actionLinksData
-                    +ActionLinkWithPrepend(item.getControllerName(), item.getActionName(),
-                        item.getArgs())(class = item.isPressed() ? "pressed" : undefined)=item.getTitle()
-            .right
-                +ActionLink('settings', 'dashboard').settings Settings
+                +ActionLinkList(tplObj.buildActionLinkModels(pressedActionName))
+            block
+
+//requires: tplObj instanceOf chlk.templates.profile.BaseProfileTpl
+mixin UserProfileTopBar(tplObj, pressedActionName)
+    +ProfileTopBar(tplObj, pressedActionName)
+        .right
+            +ActionLink('settings', 'dashboard').settings Settings

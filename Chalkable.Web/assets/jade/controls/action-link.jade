@@ -17,8 +17,6 @@ mixin ActionLinkWithPrepend(controller, action, prependParams)
 // requires: actionLinkModel instanceOf chlk.models.common.ActionLinkModel
 mixin ActionLinkWithModel(actionLinkModel)
     classesNames = actionLinkModel.getClassesNames() || []
-    if actionLinkModel.isPressed()
-        -classesNames.push('pressed')
     +ActionLinkWithPrepend(actionLinkModel.getControllerName(), actionLinkModel.getActionName(), actionLinkModel.getArgs()
     )(class = classesNames && classesNames.length > 0 ? classesNames.join(' ') : '')(attributes)=actionLinkModel.getTitle()
 

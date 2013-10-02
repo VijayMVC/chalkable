@@ -15,7 +15,12 @@ NAMESPACE('chlk.activities.apps', function () {
             VOID, function togglePriceType(node, event){
                 this.dom.find('.price-type').removeClass('pressed');
                 node.addClass('pressed');
-            }
+            },
 
+            [ria.mvc.DomEventBind('click', '.title.btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function toggleSubjects(node, event){
+                this.dom.find('.subject-filter .items').toggleClass('x-hidden');
+            }
         ]);
 });
