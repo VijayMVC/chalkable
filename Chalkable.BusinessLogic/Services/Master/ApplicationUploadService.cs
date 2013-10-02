@@ -274,7 +274,10 @@ namespace Chalkable.BusinessLogic.Services.Master
 
                 if (application.OriginalRef.HasValue)
                 {
-                    da.Delete(application.OriginalRef.Value);
+                    var orginalAppId = application.OriginalRef.Value;
+                    application.OriginalRef = null;
+                    da.Update(application);
+                    da.Delete(orginalAppId);
                 }
                 else
                 {
