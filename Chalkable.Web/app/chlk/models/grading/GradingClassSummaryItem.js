@@ -10,6 +10,7 @@ NAMESPACE('chlk.models.grading', function () {
             ArrayOf(chlk.models.announcement.Announcement), 'announcements',
             Number, 'percent',
             Number, 'avg',
+            Number, 'index',
             chlk.models.id.ClassId, 'classId'
         ]);
 });

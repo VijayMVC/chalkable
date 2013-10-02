@@ -99,52 +99,56 @@ BODY {
                       position: relative;
                     }
 
-                    .ann-button{
-                      width: 76px;
-                      line-height: 35px;
-                      border: 1px solid #b3b3b3;
-                      @include border-radius(4px);
-                      @include background(linear-gradient(top, #f5f5f5, #e0e0e0));
-                      @include box-shadow(0 1px 0 0 #fff inset, 0 1px 2px 0px #999);
-                      text-align: center;
-                      font: bold 12px Arial;
-                      display: block;
-                      text-decoration: none;
-                      color: #3d3d3d;
-                      text-shadow: 1px 1px 0 white;
-                      padding: 9px 0;
-                      margin: 7px auto;
+                    .announcements-type-item{
+                      position: relative;
 
-                      &:hover{
-                        @include background(linear-gradient(top, #e5e5e5, #d0d0d0));
-                      }
-
-                      &.plus-ann{
-                        @include background(url(images/grading/plus.png) center center no-repeat,linear-gradient(top, #f5f5f5, #e0e0e0));
-                        height: 14px;
+                      .ann-button{
+                        width: 76px;
+                        line-height: 35px;
+                        border: 1px solid #b3b3b3;
+                        @include border-radius(4px);
+                        @include background(linear-gradient(top, #f5f5f5, #e0e0e0));
+                        @include box-shadow(0 1px 0 0 #fff inset, 0 1px 2px 0px #999);
+                        text-align: center;
+                        font: bold 12px Arial;
+                        display: block;
+                        text-decoration: none;
+                        color: #3d3d3d;
+                        text-shadow: 1px 1px 0 white;
+                        padding: 9px 0;
+                        margin: 7px auto;
 
                         &:hover{
-                          @include background(url(images/grading/plus.png) center center no-repeat,linear-gradient(top, #e5e5e5, #d0d0d0));
+                          @include background(linear-gradient(top, #e5e5e5, #d0d0d0));
                         }
-                      }
 
-                      &.dropped{
-                        @include box-shadow(0 1px 0 0 #ddaaaa inset, 0 1px 2px 0px #999);
-                        @include background(linear-gradient(top, #c57272, #a64e4e));
-                        border: 1px solid #8e3e3e;
-                        text-shadow: none;
-                        color: white;
+                        &.plus-ann{
+                          @include background(url(images/grading/plus.png) center center no-repeat,linear-gradient(top, #f5f5f5, #e0e0e0));
+                          height: 14px;
 
-                        &:hover{
-                          @include background(linear-gradient(top, #b56262, #963e3e));
+                          &:hover{
+                            @include background(url(images/grading/plus.png) center center no-repeat,linear-gradient(top, #e5e5e5, #d0d0d0));
+                          }
                         }
-                      }
 
-                      &.absolute{
-                        position: absolute;
-                        z-index: -1;
-                        margin: 0 25px;
-                        height: 16px;
+                        &.dropped{
+                          @include box-shadow(0 1px 0 0 #ddaaaa inset, 0 1px 2px 0px #999);
+                          @include background(linear-gradient(top, #c57272, #a64e4e));
+                          border: 1px solid #8e3e3e;
+                          text-shadow: none;
+                          color: white;
+
+                          &:hover{
+                            @include background(linear-gradient(top, #b56262, #963e3e));
+                          }
+                        }
+
+                        &.absolute{
+                          position: absolute;
+                          z-index: -1;
+                          margin: 0 25px;
+                          height: 16px;
+                        }
                       }
                     }
                   }
@@ -154,6 +158,23 @@ BODY {
           }
         }
       }
+    }
+  }
+}
+
+.ann-grade-pop-up{
+  z-index: 10;
+  //top: -17px;
+  //left: 110px;
+  width: 200px;
+  padding-left: 0;
+
+  .chart-container{
+    height: 100px;
+    background: url(images/grading/small-chart.png) 26px 8px no-repeat;
+
+    &.small{
+      background: url(images/grading/small-chart.png) 20px 8px no-repeat;
     }
   }
 }

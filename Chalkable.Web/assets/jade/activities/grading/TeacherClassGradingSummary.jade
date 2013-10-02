@@ -7,7 +7,7 @@
     ).classes-bar
     .mps-container
         each item,i in self.getItems()
-            div(class=(i==0) ? "open" : "").marking-period-container
+            div(class=(i==0) ? "open" : "", data-index=i).marking-period-container
                 div(data-tooltip=Msg.Avg + " " + item.getAvg()).mp-title=item.getMarkingPeriod().getName()
                     .collapse
                 .mp-data

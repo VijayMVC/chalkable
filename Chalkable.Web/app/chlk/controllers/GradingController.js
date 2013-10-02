@@ -84,6 +84,12 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.grading.GradingClassSummaryPage, result);
             },
 
+            [[chlk.models.id.AnnouncementId]],
+            function showChartAction(announcementId){
+                var result = this.gradingService.getItemGradingStat(announcementId);
+                return this.UpdateView(chlk.activities.grading.GradingClassSummaryPage, result, chlk.activities.lib.DontShowLoader());
+            },
+
             [[chlk.models.grading.Final]],
             function teacherSettingsEditAction(model){
                 var finalGradeAnnouncementTypes = [], item, ids = model.getFinalGradeAnnouncementTypeIds().split(','),

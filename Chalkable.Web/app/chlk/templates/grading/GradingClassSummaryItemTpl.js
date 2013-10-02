@@ -18,6 +18,8 @@ NAMESPACE('chlk.templates.grading', function () {
             [ria.templates.ModelPropertyBind],
             Number, 'avg',
             [ria.templates.ModelPropertyBind],
+            Number, 'index',
+            [ria.templates.ModelPropertyBind],
             chlk.models.id.ClassId, 'classId'
         ]);
 });
