@@ -5,12 +5,12 @@ needDropdown = (value > valuesEnum.PRESENT.valueOf()) && reasons.length;
 reason = needDropdown ? self.getAttendanceReason() : '';
 name = self.getTypeName();
 student = self.getStudent();
-+ActionForm('attendance', 'setAttendance')(class= self.isNeedPresent && self.isNeedPresent() ? 'need-present' : '').student-attendance-form
++ActionForm('attendance', self.getSubmitFormActionName())(class= self.isNeedPresent && self.isNeedPresent() ? 'need-present' : '').student-attendance-form
     +Hidden('classpersonid', self.getClassPersonId().valueOf())
     +Hidden('type', value)
     +Hidden('classperiodid', self.getClassPeriodId().valueOf())
     +Hidden('attendancereasonid', reason && reason.getId().valueOf())
-    +Hidden('date', self.getDate().format('mm-dd-yy'))
+    +Hidden('date', self.getDate().toStandardFormat())
     +Hidden('attendanceReasonDescription', reason && reason.getDescription())
     .attendance-option
         =(reason ? reason.getDescription() : '')

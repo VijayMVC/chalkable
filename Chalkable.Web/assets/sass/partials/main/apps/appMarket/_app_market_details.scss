@@ -164,6 +164,14 @@ DIV.page {
                 width: 480px;
                 margin-right: 8px;
                 min-height: 110px;
+                margin-top: 32px;
+
+                .review-link{
+                  font-weight: bold;
+                  color: #383838;
+                  text-decoration: none;
+                  font-size: 22px;
+                }
               }
 
             }

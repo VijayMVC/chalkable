@@ -47,7 +47,8 @@ namespace Chalkable.Data.Common.Orm
             return Fields(t);
         }
 
-        private const string COMPLEX_RESULT_SET_FORMAT = " [{0}].[{1}] as {0}_{1}";
+        private const string FULL_FIELD_NAME_FORMAT = "[{0}].[{1}]";
+        private const string COMPLEX_RESULT_FORMAT = " [{0}].[{1}] as {0}_{1}";
         private const string ID_FIELD = "Id";
 
         public static IList<string> FullFieldsNames(Type t)
@@ -65,7 +66,7 @@ namespace Chalkable.Data.Common.Orm
         }
         public static string FullFieldName(Type t, string prefix, string field)
         {
-            return string.Format(COMPLEX_RESULT_SET_FORMAT, prefix, field);
+            return string.Format(COMPLEX_RESULT_FORMAT, prefix, field);
         }
 
         public static string ComplexResultSetQuery(IList<Type> types)

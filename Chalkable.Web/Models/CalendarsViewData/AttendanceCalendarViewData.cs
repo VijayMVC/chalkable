@@ -100,8 +100,8 @@ namespace Chalkable.Web.Models.CalendarsViewData
             }
             var res = new AttendanceForStudentCalendarViewData(date, isCurrentMonth)
             {
-                IsAbsent = attendances.All(x => x.Type == AttendanceTypeEnum.Absent),
-                IsExcused = attendances.All(x => x.Type == AttendanceTypeEnum.Excused),
+                IsAbsent = attendances.Count > 0 && attendances.All(x => x.Type == AttendanceTypeEnum.Absent),
+                IsExcused = attendances.Count > 0 && attendances.All(x => x.Type == AttendanceTypeEnum.Excused),
                 Attendances = itemAttendances,
                 MoreCount = moreCount,
                 ShowGroupedData = showGroupedData,

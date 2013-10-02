@@ -1,3 +1,4 @@
+itemColor = null
 .month-calendar-body
     .day-names
         div
@@ -25,12 +26,12 @@
                     .space
                     ul
                         if !item.isExcused() && !item.isAbsent()
-                            if !item.isShowGroupedData()
+                            if item.isShowGroupedData()
                                 each att in item.getAttendances()
-                                    li=att.getCount() + " " + att.getAttendanceTypeName()
+                                    li(style ="color: " + self.getColorByAttendanceType(att.getAttendanceType()) + " !important;")=att.getCount() + " " + att.getAttendanceTypeName()
                             else
                                 each att in item.getAttendances()
-                                    li=att.getClassName()
+                                    li(style ="color: " + self.getColorByAttendanceType(att.getAttendanceType()) + " !important;")=att.getClassName()
                             if item.getMoreCount() != 0
                                 li=item.getMoreCount() + "More"
                         if item.isAbsent()

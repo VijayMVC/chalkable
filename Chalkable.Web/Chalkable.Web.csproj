@@ -288,6 +288,7 @@
     <Compile Include="Models\GradingStudentSummaryViewData.cs" />
     <Compile Include="Models\GradingStyleViewData.cs" />
     <Compile Include="Models\GradingTeacherSummaryViewData.cs" />
+    <Compile Include="Models\ItemGradigStatViewData.cs" />
     <Compile Include="Models\NotificationsByDateViewData.cs" />
     <Compile Include="Models\NotificationViewData.cs" />
     <Compile Include="Models\PeriodViewData.cs" />

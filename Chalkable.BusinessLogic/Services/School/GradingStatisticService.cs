@@ -26,6 +26,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             query.CallerId = Context.UserId;
             query.Role = Context.Role.Id;
+            query.Date = Context.NowSchoolTime.Date;
             return query;
         }
 

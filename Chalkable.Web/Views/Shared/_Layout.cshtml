@@ -36,7 +36,7 @@
         <div class="tooltip-triangle"></div>
     </div>
 
-    <script type="text/javascript" src='https://platform.twitter.com/anywhere.js?id=@ViewData["TwitterApplicationId"]&v=1' ></script>
+    
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-2.0.2.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.menu-aim.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.maskedinput-1.3.min.js")"></script>
@@ -75,5 +75,6 @@
    @ChlkHelpers.WebKitAutofill()
    @RenderSection("BottomScripts", false)
    @RenderSection("MixPanelTracking", false)
+   <script type="text/javascript" src='https://platform.twitter.com/anywhere.js?id=@ViewData["TwitterApplicationId"]&v=1' ></script>
 </body>
 </html>

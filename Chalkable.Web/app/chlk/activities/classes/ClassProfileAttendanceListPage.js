@@ -1,14 +1,15 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.attendance.ClassAttendance');
-REQUIRE('chlk.templates.attendance.ClassList');
+REQUIRE('chlk.templates.classes.ClassProfileAttendanceListTpl');
 
 NAMESPACE('chlk.activities.classes', function () {
 
     /** @class chlk.activities.classes.ClassProfileAttendanceListPage */
     CLASS(
-        [ria.mvc.DomAppendTo('#profile')],
-        [ria.mvc.TemplateBind(chlk.templates.attendance.ClassProfileAttendanceListTpl)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.attendance.ClassProfileAttendanceListTpl, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.DomAppendTo('#main')],
+        [chlk.activities.lib.PageClass('profile')],
+        [ria.mvc.TemplateBind(chlk.templates.classes.ClassProfileAttendanceListTpl)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.classes.ClassProfileAttendanceListTpl, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         'ClassProfileAttendanceListPage', EXTENDS(chlk.activities.attendance.ClassListPage),[
     ]);
 });

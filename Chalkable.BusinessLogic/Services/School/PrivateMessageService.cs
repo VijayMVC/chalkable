@@ -107,8 +107,10 @@ namespace Chalkable.BusinessLogic.Services.School
                         if (!PrivateMessageSecurity.CanDeleteMessage(message, Context))
                             throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_DELETE_INVALID_RIGHTS);
 
-                        message.DeletedByRecipient = message.ToPersonRef == Context.UserId;
-                        message.DeletedBySender = message.FromPersonRef == Context.UserId;
+                        if(message.ToPersonRef == Context.UserId)
+                            message.DeletedByRecipient = true;
+                        if(message.FromPersonRef == Context.UserId)
+                            message.DeletedBySender = true;
                     }
                     da.Update(messages);
                     uow.Commit();

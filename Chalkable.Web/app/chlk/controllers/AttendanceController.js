@@ -9,6 +9,8 @@ REQUIRE('chlk.activities.attendance.SummaryPage');
 REQUIRE('chlk.activities.attendance.ClassListPage');
 REQUIRE('chlk.activities.attendance.AdminAttendanceSummaryPage');
 REQUIRE('chlk.activities.attendance.StudentDayAttendancePopup');
+REQUIRE('chlk.activities.classes.ClassProfileAttendanceListPage');
+
 REQUIRE('chlk.models.attendance.AttendanceList');
 REQUIRE('chlk.models.attendance.AttendanceStudentBox');
 
@@ -157,8 +159,8 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeLoader();
         },
 
-        [[Boolean]],
-        function sortStudentsAction(byLastName){
+        [[Boolean, Boolean]],
+        function sortStudentsAction(byLastName, isProfile_){
             var model = this.getContext().getSession().get('attendancePageData');
             model.getItems().sort(function(item1, item2){
                 //todo : change this... it will not work on production
@@ -167,7 +169,7 @@ NAMESPACE('chlk.controllers', function (){
             });
             model.setByLastName(byLastName);
             var result = new ria.async.DeferredData(model);
-            return this.UpdateView(chlk.activities.attendance.ClassListPage, result);
+            return this.UpdateView(this.getActivityClass_(isProfile_), result);
         },
 
         [chlk.controllers.SidebarButton('attendance')],
@@ -191,15 +193,32 @@ NAMESPACE('chlk.controllers', function (){
                     this.getContext().getSession().set('attendancePageData', model);
                     return model;
                 }, this);
+
             if(!(date_ && isUpdate_))
-                return this.PushView(chlk.activities.attendance.ClassListPage, result);
-            return this.UpdateView(chlk.activities.attendance.ClassListPage, result);
+                return this.PushView(this.getActivityClass_(isProfile_), result);
+            return this.UpdateView(this.getActivityClass_(isProfile_), result);
         },
 
+        Object, function getActivityClass_(isProfile_){
+            if(isProfile_ === true)
+                return chlk.activities.classes.ClassProfileAttendanceListPage;
+            return chlk.activities.attendance.ClassListPage;
+        },
+
+        [[chlk.models.attendance.ClassAttendance]],
+        function setAttendanceProfileAction(model){
+            return this.UpdateView(chlk.activities.classes.ClassProfileAttendanceListPage
+                , this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
+        },
 
         //todo refactor this
         [[chlk.models.attendance.ClassAttendance]],
         function setAttendanceAction(model){
+            return this.UpdateView(chlk.activities.attendance.ClassListPage
+                , this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
+        },
+
+        ria.async.Future, function setAttendance_(model){
             var type = this.changeAttendanceType_(model.getSubmitType(), model.getType());
             var items = this.getContext().getSession().get('attendanceData');
             var item = items.filter(function(item){
@@ -229,10 +248,8 @@ NAMESPACE('chlk.controllers', function (){
             }else{
                 item.setAttendanceReason(null);
             }
-            var result = new ria.async.DeferredData(item);
-            return this.UpdateView(chlk.activities.attendance.ClassListPage, result, chlk.activities.lib.DontShowLoader());
+            return new ria.async.DeferredData(item);
         },
-
 
         Number,  function changeAttendanceType_(submitType, currentType){
             var attTypeEnum = chlk.models.attendance.AttendanceTypeEnum;

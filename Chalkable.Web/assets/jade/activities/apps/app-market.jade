@@ -10,12 +10,7 @@ mixin AppIconLink(app)
                 .shortdesc=app.getShortDescription()
 
 .app-market
-    .action-bar.not-transparent
-        .container.panel-bg.buttons-toolbar
-            .user-balance= "$" + self.currentBalance
-            +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
-            +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn My Apps
-
+    +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels)
     .app-screenshots-panel
         +Carousel(self.firstApp.getScreenshotPictures().getItems())
     +ActionForm('appmarket', 'list')

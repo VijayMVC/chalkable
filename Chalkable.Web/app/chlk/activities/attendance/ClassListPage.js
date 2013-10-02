@@ -3,9 +3,7 @@ REQUIRE('chlk.templates.attendance.ClassAttendance');
 REQUIRE('chlk.templates.attendance.ClassList');
 
 NAMESPACE('chlk.activities.attendance', function () {
-    var comboTimer;
-    var typesEnum = chlk.models.attendance.AttendanceTypeEnum;
-    var gridEvents = chlk.controls.GridEvents;
+    "use strict";
 
     /** @class chlk.activities.attendance.ClassListPage */
     CLASS(
@@ -13,6 +11,14 @@ NAMESPACE('chlk.activities.attendance', function () {
         [ria.mvc.TemplateBind(chlk.templates.attendance.ClassList)],
         [ria.mvc.PartialUpdateRule(chlk.templates.attendance.ClassList, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         'ClassListPage', EXTENDS(chlk.activities.lib.TemplatePage), [
+
+            function $(){
+                BASE();
+                this._typesEnum = chlk.models.attendance.AttendanceTypeEnum;
+                this._comboTimer = null;
+                this._gridEvents = chlk.controls.GridEvents;
+            },
+
             [ria.mvc.PartialUpdateRule(chlk.templates.attendance.ClassAttendance)],
             VOID, function doUpdateItem(tpl, model, msg_) {
                 this.dom.find('.keyboard-suggestion').hide();
@@ -25,11 +31,11 @@ NAMESPACE('chlk.activities.attendance', function () {
                     this.showDropDown();
             },
 
-            [ria.mvc.DomEventBind(gridEvents.KEY_DOWN.valueOf(), '.chlk-grid')],
+            [ria.mvc.DomEventBind(chlk.controls.GridEvents.KEY_DOWN.valueOf(), '.chlk-grid')],
             [[ria.dom.Dom, ria.dom.Event, Number]],
             VOID, function gridKeyDownSelect(node, event, key_) {
                 switch(key_){
-                    case ria.dom.Keys.ENTER.valueOf(): node.trigger(gridEvents.SELECT_NEXT_ROW.valueOf());break;
+                    case ria.dom.Keys.ENTER.valueOf(): node.trigger(this._gridEvents.SELECT_NEXT_ROW.valueOf());break;
                     case ria.dom.Keys.LEFT.valueOf(): node.find('.row.selected').find('.left-arrow').trigger('click');break;
                     case ria.dom.Keys.RIGHT.valueOf(): node.find('.row.selected').find('.right-arrow').trigger('click');break;
                 }
@@ -43,7 +49,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind(gridEvents.FOCUS.valueOf(), '.chlk-grid')],
+            [ria.mvc.DomEventBind(chlk.controls.GridEvents.FOCUS.valueOf(), '.chlk-grid')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function gridFocus(node, event) {
                 this.hideDropDown();
@@ -60,11 +66,11 @@ NAMESPACE('chlk.activities.attendance', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind(gridEvents.AFTER_ROW_SELECT.valueOf(), '.chlk-grid')],
+            [ria.mvc.DomEventBind(chlk.controls.GridEvents.AFTER_ROW_SELECT.valueOf(), '.chlk-grid')],
             [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number]],
             VOID, function rowSelect(node, event, row_, index_) {
-                if(row_ && row_.find('input[name=type]').getValue() == typesEnum.NA.valueOf()){
-                    row_.find('input[name=type]').setValue(typesEnum.PRESENT.valueOf());
+                if(row_ && row_.find('input[name=type]').getValue() == this._typesEnum.NA.valueOf()){
+                    row_.find('input[name=type]').setValue(this._typesEnum.PRESENT.valueOf());
                     row_.find('form').trigger('submit');
                 }else{
                     this.showDropDown();
@@ -78,9 +84,9 @@ NAMESPACE('chlk.activities.attendance', function () {
             },
 
             VOID, function showDropDown(){
-                clearTimeout(comboTimer);
+                clearTimeout(this._comboTimer);
                 var row = this.dom.find('#class-attendance-list-panel').find('.row.selected');
-                comboTimer = setTimeout(function(){
+                this._comboTimer = setTimeout(function(){
                     var list = row.find('.combo-list:hidden');
                     if(row.hasClass('selected') && list.exists()){
                         row.find('.combo-list').show();
@@ -108,7 +114,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                             selected.removeClass('selected');
                             prev.addClass('selected');
                         }else{
-                            this.dom.find('.chlk-grid').trigger(chlk.controls.GridEvents.SELECT_PREV_ROW.valueOf());
+                            this.dom.find('.chlk-grid').trigger(this._gridEvents.SELECT_PREV_ROW.valueOf());
                         }; break;
                     case ria.dom.Keys.ENTER.valueOf():
                         this.updateReasons();break;
@@ -142,10 +148,10 @@ NAMESPACE('chlk.activities.attendance', function () {
                 form.find('input[name=attendancereasonid]').setValue(id);
                 id && form.find('input[name=attendanceReasonDescription]').setValue(option.getHTML());
                 form.trigger('submit');
-                grid.trigger(gridEvents.SELECT_NEXT_ROW.valueOf());
+                grid.trigger(this._gridEvents.SELECT_NEXT_ROW.valueOf());
             },
 
-            [ria.mvc.DomEventBind(gridEvents.DESELECT_ROW.valueOf(), '#class-attendance-list-panel')],
+            [ria.mvc.DomEventBind(chlk.controls.GridEvents.DESELECT_ROW.valueOf(), '#class-attendance-list-panel')],
             [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number]],
             VOID, function onStudentDeselect(grid, event, row, index){
                 var form = row.find('.student-attendance-form');
@@ -170,8 +176,8 @@ NAMESPACE('chlk.activities.attendance', function () {
             VOID, function afterRefresh(model){
                 //this.showDropDown();
                 if(model.getItems().filter(function(item){
-                    return item.getType() != typesEnum.NA.valueOf()
-                }).length == 0)
+                    return item.getType() != this._typesEnum.NA.valueOf()
+                }.bind(this)).length == 0)
                     this.dom.find('.keyboard-suggestion').show();
             }/*,
 

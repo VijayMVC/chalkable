@@ -42,6 +42,10 @@ NAMESPACE('chlk.templates.attendance', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 
-            Boolean, 'needPresent'
+            Boolean, 'needPresent',
+
+            String, function getSubmitFormActionName(){
+                return 'setAttendanceProfile';
+            }
         ])
 });

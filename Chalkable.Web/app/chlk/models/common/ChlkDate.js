@@ -57,11 +57,13 @@ NAMESPACE('chlk.models.common', function () {
             function $(date_){
                 BASE();
                 date_ && this.setDate(date_);
+                this._STANDART_FORMAT = 'mm-dd-yy'
+                this._DEFAULT_FORMAT = 'm-dd-yy';
             },
 
             [[String]],
             String, function toString(format_){
-                return this.format(format_ || 'm-dd-yy');
+                return this.format(format_ || this._DEFAULT_FORMAT);
             },
 
             [[chlk.models.common.ChlkDateEnum, Number]],
@@ -93,10 +95,14 @@ NAMESPACE('chlk.models.common', function () {
                 return res;
             },
 
+            String, function toStandardFormat(){
+                return this.format(this._STANDART_FORMAT);
+            },
+
             [[SELF]],
             Boolean, function isSameDay(date){
                 //VALIDATE_ARG('date', [SELF], date);
-                return this.format('mm-dd-yy') == date.format('mm-dd-yy');
+                return this.toStandardFormat() == date.toStandardFormat();
             },
 
             VOID, function deserialize(raw) {
