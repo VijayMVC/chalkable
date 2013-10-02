@@ -1,7 +1,7 @@
 clazz = self.getClassAttendanceSummary()
 .class-attendance.class-profile.loader-container
     .loader
-    +ProfileTopBar(self.buildActionLinkModels('attendance', clazz.getId()))
+    +ProfileTopBar(self, 'attendance')
     .info-view
         .top-panel
             h1.info.with-line

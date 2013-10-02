@@ -31,15 +31,21 @@ NAMESPACE('chlk.controllers', function (){
             function detailsAction(classId){
                 var result = this.classService
                     .getSummary(classId)
-                    .attach(this.validateResponse_());
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        return new chlk.models.classes.ClassProfileSummaryViewData(this.getCurrentRole(), data);
+                    }, this);
                 return this.PushView(chlk.activities.classes.SummaryPage, result);
             },
 
             [[chlk.models.id.ClassId]],
             function infoAction(classId){
                 var res = this.classService
-                    .getInfo(classId).
-                    attach(this.validateResponse_());
+                    .getInfo(classId)
+                    .attach(this.validateResponse_())
+                    .then(function (data){
+                        return new chlk.models.classes.ClassProfileInfoViewData(this.getCurrentRole(), data);
+                    }, this);
                 return this.PushView(chlk.activities.classes.ClassInfoPage, res);
             },
 
@@ -62,8 +68,8 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function (data){
                         var scheduleCalendar = new chlk.models.calendar.announcement.Day(date_, mp.getStartDate()
                             , mp.getEndDate(), data.getCalendarDayItems());
-                        return new chlk.models.classes.ClassScheduleViewData(data.getClazz(), scheduleCalendar);
-                    });
+                        return new chlk.models.classes.ClassScheduleViewData(this.getCurrentRole(), data.getClazz(), scheduleCalendar);
+                    }, this);
                 return res;
             },
             [[chlk.models.id.ClassId]],
@@ -78,7 +84,7 @@ NAMESPACE('chlk.controllers', function (){
                         var mp = this.getCurrentMarkingPeriod();
                         var attCalendar = new chlk.models.calendar.attendance.ClassAttendanceMonthCalendar(null
                             , mp.getStartDate(), mp.getEndDate(), result[1], classId);
-                        return new chlk.models.classes.ClassProfileAttendanceViewData(result[0], attCalendar);
+                        return new chlk.models.classes.ClassProfileAttendanceViewData(this.getCurrentRole(), result[0], attCalendar);
                     }, this);
                 return this.PushView(chlk.activities.classes.ClassProfileAttendancePage, res);
             },

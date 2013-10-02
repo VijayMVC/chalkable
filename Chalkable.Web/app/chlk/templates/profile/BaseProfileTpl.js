@@ -6,11 +6,16 @@ NAMESPACE('chlk.templates.profile', function(){
 
     ASSET('~/assets/jade/activities/profile/ProfileTopBar.jade')();
     /**@class chlk.templates.profile.BaseProfileTpl*/
-    CLASS('BaseProfileTpl', EXTENDS(chlk.templates.JadeTemplate),[
+    CLASS(
+        [ria.templates.ModelBind(chlk.models.profile.BaseProfileViewData)],
+        'BaseProfileTpl', EXTENDS(chlk.templates.JadeTemplate),[
 
-        [[String]],
-        ArrayOf(chlk.models.common.ActionLinkModel), function buildActionLinkModels(pressedLinkName){
-            return [];
-        }
+            [ria.templates.ModelPropertyBind],
+            chlk.models.common.RoleEnum, 'currentRoleId',
+
+            Boolean, function isAdmin(){return this.getModel().isAdmin();},
+
+            [[String]],
+            ArrayOf(chlk.models.common.ActionLinkModel), function buildActionLinkModels(pressedLinkName){ return []; }
     ]);
 });
