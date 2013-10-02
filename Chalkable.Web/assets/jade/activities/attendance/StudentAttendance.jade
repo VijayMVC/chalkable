@@ -1,0 +1,36 @@
+valuesEnum = chlk.models.attendance.AttendanceTypeEnum;
+value = self.getType();
+reasons = self.getReasons().filter(function(item){return item.getAttendanceType() == value});
+needDropdown = (value > valuesEnum.PRESENT.valueOf()) && reasons.length;
+reason = needDropdown ? self.getAttendanceReason() : '';
+name = self.getTypeName();
+student = self.getStudent();
++ActionForm('attendance', self.getSubmitFormActionName())(class= self.isNeedPresent && self.isNeedPresent() ? 'need-present' : '').student-attendance-form
+    +Hidden('classpersonid', self.getClassPersonId().valueOf())
+    +Hidden('type', value)
+    +Hidden('classperiodid', self.getClassPeriodId().valueOf())
+    +Hidden('attendancereasonid', reason && reason.getId().valueOf())
+    +Hidden('date', self.getDate().toStandardFormat())
+    +Hidden('attendanceReasonDescription', reason && reason.getDescription())
+    .attendance-option
+        =(reason ? reason.getDescription() : '')
+    div(class=name.toLowerCase().replace(/\//g, '-')).attendance-text
+        =(value == valuesEnum.NA.valueOf() ? '_______' : name)
+    .attendance-combo
+        BUTTON(href="javascript:", name="submitType", value="leftArrow", type="submit").left-arrow
+            span
+        div(class=needDropdown ? "with-dropdown" : '').current-attendance=name
+        BUTTON(href="javascript:", name="submitType", value="rightArrow", type="submit").right-arrow
+            span
+        if value > valuesEnum.PRESENT.valueOf()
+            .combo-list.no-row-click
+                input.combo-input.x-zero
+                .connector
+                firstSelected = !reason || reasons.filter(function(item){return item.getId() == reason.getId()}).length == 0;
+                div(class=(firstSelected ? "selected" : "")).option=name
+                each reasonItem in reasons
+                    div(
+                        class=(reason && reasonItem.getId() == reason.getId() ? "selected" : ""),
+                        data-id=reasonItem.getId().valueOf()
+                    ).option=reasonItem.getDescription()
+                .press-enter=Msg.Press_enter

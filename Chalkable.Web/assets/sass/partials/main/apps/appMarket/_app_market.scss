@@ -1,0 +1,167 @@
+
+DIV.page {
+  #content {
+    > DIV {
+      #main-wrapper {
+        #main {
+          DIV.app-market{
+             .app-screenshots-panel{
+
+             }
+
+            .app-filter{
+              margin-bottom: 30px;
+              > DIV{
+                display:inline-block;
+              }
+
+
+              .btn{
+                border-radius: 4px;
+                border: 1px solid #a4a4a4;
+                @include box-shadow(inset 1px 1px 1px #ffffff);
+                color: #393939;
+                @include background(linear-gradient(top, #ffffff,#dadada));
+                font: normal 14px 'Myriad Pro';
+                text-shadow: 1px 1px 1px white;
+                z-index: 2;
+                padding-bottom: 7px;
+                padding-top: 7px;
+                padding-left: 0px;
+                padding-right: 2px;
+                width: 82px;
+                text-align: center;
+                cursor: pointer;
+
+                &.pressed{
+                  background: #adadad;
+                  color: #ffffff;
+                  text-shadow: 1px 1px 1px #a4a4a4;
+                  box-shadow: none;
+                }
+              }
+
+              .subject{
+                margin-right: 10px;
+                .subject-filter{
+                  position: relative;
+                  .title{
+
+                  }
+                  .items{
+                    position: absolute;
+                    z-index: 10;
+                    border-radius: 0px 4px 4px 4px;
+                    padding: 10px 10px 10px 10px;
+                    background: none;
+                    background-color: #eaeaea;
+                    border-top-style: outset;
+                    display: inline-block;
+                    border: 1px solid #a4a4a4;
+                    @include box-shadow(0 1px 7px #a4a4a4,inset 0 1px 1px 0 #fff);
+                    color: #393939;
+                    font: normal 14px 'Myriad Pro';
+                    text-shadow: 1px 1px 1px white;
+                    margin-top: -3px;
+                    min-height: 89px;
+                    min-width: 300px;
+                    max-width: 300px;
+                  }
+
+
+
+                }
+              }
+              .price{
+                .price-type{
+                  display: inline-block;
+                  width: 45px;
+                  &.all{
+                    width: 30px;
+                    border-radius: 4px 0px 0px 4px;
+                  }
+                  &.paid{
+                    border-radius: 0;
+                  }
+
+                  &.free{
+                    border-radius: 0px 4px 4px 0px;
+                  }
+
+
+
+
+
+                }
+              }
+
+              .sort{
+                span{
+                  color: #8f8f8f;
+                  font-size: 14px;
+                  display: inline-block;
+                  margin-left: 25px;
+                  margin-right: 10px;
+                }
+              }
+            }
+
+            .apps{
+              width: 670px;
+
+              .app-icon-link{
+                display: inline-block;
+                text-decoration: none;
+                vertical-align: top;
+
+                .app-list-item{
+                  width: 220px;
+                  height: 106px;
+
+                  .icon{
+                    width: 80px;
+                    height: 80px;
+                    display: inline-block;
+                    background: url(images/app/photo-store-container.png) 0 0 no-repeat;
+                    position: relative;
+
+                    >IMG, >DIV{
+                      width: 74px;
+                      height: 74px;
+                      margin: 3px;
+                    }
+                  }
+
+                  .description{
+                    display: inline-block;
+                    position: absolute;
+                    padding: 3px 7px;
+                    width: 126px;
+                    overflow: hidden;
+                    height: 76px;
+
+                    .name{
+                      font-weight: bold;
+                      font-size: 16px;
+                    }
+
+                    >DIV{
+                      word-wrap: break-word;
+                      color: #5b5b5b;
+
+                      &.shortdesc{
+                        font-weight: bold;
+                        font-size: 12px;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
