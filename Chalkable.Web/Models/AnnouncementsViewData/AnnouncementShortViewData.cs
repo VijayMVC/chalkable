@@ -19,6 +19,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public Guid? ClassId { get; set; }
         public string ClassName { get; set; }
         public bool Dropped { get; set; }
+        public DateTime? ExpiresDate { get; set; }
+        public int Order { get; set; }
 
         protected AnnouncementShortViewData(AnnouncementComplex announcement)
         {
@@ -33,6 +35,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             ClassName = announcement.ClassName;
             CourseId = announcement.CourseId;
             Dropped = announcement.Dropped;
+            ExpiresDate = announcement.Expires;
+            Order = announcement.Order;
         }
 
         public static AnnouncementShortViewData Create(AnnouncementComplex announcement)
