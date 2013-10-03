@@ -17,16 +17,7 @@ calendar = self.getAttendanceCalendar()
 .profile-calendar.student-attendance-view
     .loader-container
         .loader
-        .action-bar.not-transparent.buttons
-            .container.panel-bg
-                //todo move this to some base profile control
-                .left
-                    +ActionLink('students', 'details', personId) Now
-                    +ActionLink('students', 'info', personId) Info
-                    +ActionLink('students', 'schedule', personId) Scheduling
-                    +ActionLink('students', 'attendance', null, personId).pressed Attendance
-                    +ActionLink('students', 'discipline', null, personId) Discipline
-                    +ActionLink('students', 'details', personId) Apps
+        +UserProfileTopBar(self, 'attendance')
         .profile-info.attendance-view
             .summary-info
                 .person-info

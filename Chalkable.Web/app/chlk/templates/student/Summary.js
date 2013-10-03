@@ -1,52 +1,64 @@
-REQUIRE('chlk.templates.people.User');
+REQUIRE('chlk.templates.profile.SchoolPersonProfileTpl');
 REQUIRE('chlk.converters.attendance.AttendanceTypeToNameConverter');
-REQUIRE('chlk.models.student.Summary');
+REQUIRE('chlk.models.student.StudentProfileSummaryViewData');
 
 NAMESPACE('chlk.templates.student', function () {
 
     /** @class chlk.templates.student.Summary*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/student/SummaryView.jade')],
-        [ria.templates.ModelBind(chlk.models.student.Summary)],
-        'Summary', EXTENDS(chlk.templates.people.User), [
-            [ria.templates.ModelPropertyBind],
-            Number, 'gradeLevelNumber',
+        [ria.templates.ModelBind(chlk.models.student.StudentProfileSummaryViewData)],
+        'Summary', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl), [
 
-            [ria.templates.ModelPropertyBind],
-            String, 'currentClassName',
+            function $(){
+                BASE();
+                this._converter = new chlk.converters.attendance.AttendanceTypeToNameConverter();
+            },
 
-            [ria.templates.ModelPropertyBind],
-            Number, 'currentAttendanceType',
+//            [ria.templates.ModelPropertyBind],
+//            Number, 'gradeLevelNumber',
+//
+//            [ria.templates.ModelPropertyBind],
+//            String, 'currentClassName',
+//
+//            [ria.templates.ModelPropertyBind],
+//            Number, 'currentAttendanceType',
+//
+//            [ria.templates.ModelPropertyBind('currentAttendanceType', chlk.converters.attendance.AttendanceTypeToNameConverter)],
+//            String, 'attendanceTypeName',
+//
+//            [ria.templates.ModelPropertyBind],
+//            Number, 'maxPeriodNumber',
+//
+//            [ria.templates.ModelPropertyBind],
+//            chlk.models.id.RoomId, 'roomId',
+//
+//            [ria.templates.ModelPropertyBind],
+//            String, 'roomName',
+//
+//            [ria.templates.ModelPropertyBind],
+//            Number, 'roomNumber',
+//
+//            [ria.templates.ModelPropertyBind],
+//            chlk.models.common.AttendanceHoverBox, 'attendanceBox',
+//
+//            [ria.templates.ModelPropertyBind],
+//            chlk.models.common.DisciplineHoverBox, 'disciplineBox',
+//
+//            [ria.templates.ModelPropertyBind],
+//            ArrayOf(chlk.models.classes.Class), 'classesSection',
+//
+//            [ria.templates.ModelPropertyBind],
+//            ArrayOf(chlk.models.announcement.AnnouncementClassPeriod), 'periodSection',
 
-            [ria.templates.ModelPropertyBind('currentAttendanceType', chlk.converters.attendance.AttendanceTypeToNameConverter)],
-            String, 'attendanceTypeName',
 
-            [ria.templates.ModelPropertyBind],
-            Number, 'maxPeriodNumber',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.id.RoomId, 'roomId',
-
-            [ria.templates.ModelPropertyBind],
-            String, 'roomName',
-
-            [ria.templates.ModelPropertyBind],
-            Number, 'roomNumber',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.common.AttendanceHoverBox, 'attendanceBox',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.common.DisciplineHoverBox, 'disciplineBox',
-
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.classes.Class), 'classesSection',
-
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.AnnouncementClassPeriod), 'periodSection',
+            Number, function getCurrentAttendanceType(){return this.getUser().getCurrentAttendanceType();},
+            String, function getAttendanceTypeName(){
+                return this._converter.convert(this.getCurrentAttendanceType());
+            },
 
             Object, function buildAttendanceGlanceBoxData(){
-                var attBox = this.getModel().getAttendanceBox();
+                var attBox = this.getUser().getAttendanceBox();
                 var items = [];
                 var hoverItems = attBox.getHover();
                 for(var i = 0; i < hoverItems.length; i++){
@@ -64,7 +76,7 @@ NAMESPACE('chlk.templates.student', function () {
             },
 
             Object, function buildDisciplineGlanceBoxData(){
-                var attBox = this.getModel().getDisciplineBox();
+                var attBox = this.getUser().getDisciplineBox();
                 var items = [];
                 var hoverItems = attBox.getHover();
                 for(var i = 0; i < hoverItems.length; i++){

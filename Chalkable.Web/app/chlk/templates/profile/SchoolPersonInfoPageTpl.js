@@ -1,6 +1,5 @@
 REQUIRE('chlk.templates.profile.SchoolPersonProfileTpl');
-REQUIRE('chlk.models.people.UserProfileModel');
-REQUIRE('chlk.models.common.ActionLinkModel');
+REQUIRE('chlk.models.people.UserProfileInfoViewData');
 
 NAMESPACE('chlk.templates.profile', function () {
     "use strict";
@@ -9,12 +8,8 @@ NAMESPACE('chlk.templates.profile', function () {
 
     CLASS(
          [ria.templates.TemplateBind('~/assets/jade/activities/profile/school-person-info-page.jade')],
-         [ria.templates.ModelBind(chlk.models.people.UserProfileModel)],
+         [ria.templates.ModelBind(chlk.models.people.UserProfileInfoViewData)],
         'SchoolPersonInfoPageTpl', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl), [
-            [ria.templates.ModelPropertyBind],
-            chlk.models.people.User, 'user',
 
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.common.ActionLinkModel), 'actionLinksData'
         ]);
 });

@@ -21,6 +21,8 @@ REQUIRE('chlk.models.calendar.attendance.StudentAttendanceMonthCalendar');
 REQUIRE('chlk.models.calendar.discipline.StudentDisciplineMonthCalendar');
 REQUIRE('chlk.models.student.StudentProfileAttendanceViewData');
 REQUIRE('chlk.models.student.StudentProfileDisciplineViewData');
+REQUIRE('chlk.models.student.StudentProfileSummaryViewData');
+REQUIRE('chlk.models.student.StudentProfileInfoViewData');
 
 NAMESPACE('chlk.controllers', function (){
     "use strict";
@@ -52,19 +54,6 @@ NAMESPACE('chlk.controllers', function (){
 
             function getInfoPageClass(){
                 return chlk.activities.profile.StudentInfoPage;
-            },
-
-            //TODO: refactor
-            OVERRIDE,  ArrayOf(chlk.models.common.ActionLinkModel), function prepareActionLinksData_(user){
-                var controller = 'students';
-                var actionLinksData = [];
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'details', 'Now', false, [user.getId()]));
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'info', 'Info', true, [user.getId()]));
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'schedule', 'Schedule', false, [user.getId()]));
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'attendance', 'Attendance', false, [null, user.getId()]));
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'discipline', 'Discipline', false, [null, user.getId()]));
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'apps', 'Apps', false, [user.getId()]));
-                return actionLinksData;
             },
 
             //TODO: refactor
@@ -110,8 +99,9 @@ NAMESPACE('chlk.controllers', function (){
                     .getInfo(personId)
                     .attach(this.validateResponse_())
                     .then(function(model){
-                        var res = this.prepareUserProfileModel_(model);
-                        this.getContext().getSession().set('userModel', res.getUser());
+                        var userData = this.prepareProfileData(model);
+                        var res = new chlk.models.student.StudentProfileInfoViewData(this.getCurrentRole(), userData);
+                        this.setUserToSession(res);
                         return res;
                     }.bind(this));
                 return this.PushView(chlk.activities.profile.StudentInfoPage, result);
@@ -121,7 +111,13 @@ NAMESPACE('chlk.controllers', function (){
             function detailsAction(personId){
                 var result = this.studentService
                     .getSummary(personId)
-                    .attach(this.validateResponse_());
+                    .attach(this.validateResponse_())
+                    .then(function (data){
+                        var role = new chlk.models.people.Role();
+                        role.setId(chlk.models.common.RoleEnum.STUDENT.valueOf());
+                        data.setRole(role);
+                        return new chlk.models.student.StudentProfileSummaryViewData(this.getCurrentRole(), data);
+                    }, this);
                 return this.PushView(chlk.activities.student.SummaryPage, result);
             },
 
@@ -130,8 +126,6 @@ NAMESPACE('chlk.controllers', function (){
                 //return BASE(personId, chlk.models.common.RoleNamesEnum.TEACHER);
                 return this.scheduleByRole(personId, date_, chlk.models.common.RoleNamesEnum.STUDENT.valueOf());
             },
-
-
 
             [[chlk.models.id.MarkingPeriodId, chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
             function attendanceAction(markingPeriodId_, personId, date_){
@@ -147,8 +141,8 @@ NAMESPACE('chlk.controllers', function (){
                             var endDate = currentMp.getEndDate();
                             var startDate = currentMp.getStartDate();
                             var calendarModel = new chlk.models.calendar.attendance.StudentAttendanceMonthCalendar(date_, startDate, endDate, result[1], personId);
-                            return new chlk.models.student.StudentProfileAttendanceViewData(result[0], calendarModel, result[2]);
-                        });
+                            return new chlk.models.student.StudentProfileAttendanceViewData(this.getCurrentRole(), result[0], calendarModel, result[2]);
+                        }, this);
                 return this.PushView(chlk.activities.student.StudentProfileAttendancePage, res);
             },
 
@@ -166,8 +160,8 @@ NAMESPACE('chlk.controllers', function (){
                         var endDate = currentMp.getEndDate();
                         var startDate = currentMp.getStartDate();
                         var calendarModel = new chlk.models.calendar.discipline.StudentDisciplineMonthCalendar(date_, startDate, endDate, result[1], personId);
-                        return new chlk.models.student.StudentProfileDisciplineViewData(result[0], calendarModel, result[2]);
-                    });
+                        return new chlk.models.student.StudentProfileDisciplineViewData(this.getCurrentRole(), result[0], calendarModel, result[2]);
+                    }, this);
                 return this.PushView(chlk.activities.student.StudentProfileDisciplinePage, res);
             },
 

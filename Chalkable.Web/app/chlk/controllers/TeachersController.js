@@ -3,6 +3,7 @@ REQUIRE('chlk.services.TeacherService');
 REQUIRE('chlk.activities.profile.SchoolPersonInfoPage');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.people.User');
+REQUIRE('chlk.models.people.UserProfileInfoViewData');
 
 NAMESPACE('chlk.controllers', function (){
     "use strict";
@@ -12,16 +13,6 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.TeacherService, 'teacherService',
-
-            OVERRIDE,  ArrayOf(chlk.models.common.ActionLinkModel), function prepareActionLinksData_(user){
-                var controller = 'teachers';
-                var actionLinksData = [];
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'details', 'Now', false, [user.getId()]));
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'info', 'Info', true, [user.getId()]));
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'schedule', 'Schedule', false, [user.getId()]));
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'apps', 'Apps', false, [user.getId()]));
-                return actionLinksData;
-            },
 
             function getInfoPageClass(){
                 return chlk.activities.profile.SchoolPersonInfoPage;
@@ -33,8 +24,9 @@ NAMESPACE('chlk.controllers', function (){
                     .getInfo(personId)
                     .attach(this.validateResponse_())
                     .then(function(model){
-                        var res = this.prepareUserProfileModel_(model);
-                        this.getContext().getSession().set('userModel', res.getUser());
+                        var userData = this.prepareProfileData(model);
+                        var res = new chlk.models.people.UserProfileInfoViewData(this.getCurrentRole(), userData);
+                        this.setUserToSession(res);
                         return res;
                     }.bind(this));
                 return this.PushView(chlk.activities.profile.SchoolPersonInfoPage, result);

@@ -23,7 +23,7 @@ mixin LeftRightToolbar(data, tplClass, controller, action, params)
                     +RenderWith(item, tplClass)
         .A(class=configs.disableNextButton ? configs.disabledClass : "").next-button.arrow
         if(configs.needDots)
-            .paginator
+            div(class=attributes.roundedDots ? "rounded" : "").paginator
                 each dot,i in configs.dots
                     A(index=i, class=dot ? "current" : "")
 

@@ -1,13 +1,13 @@
-REQUIRE('chlk.templates.JadeTemplate');
-REQUIRE('chlk.models.people.SchedulePage');
+REQUIRE('chlk.templates.profile.SchoolPersonProfileTpl');
+REQUIRE('chlk.models.people.UserProfileScheduleViewData');
 
 NAMESPACE('chlk.templates.people', function () {
 
     /** @class chlk.templates.people.SchedulePage*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/profile/SchedulingPage.jade')],
-        [ria.templates.ModelBind(chlk.models.people.SchedulePage)],
-        'SchedulePage', EXTENDS(chlk.templates.JadeTemplate), [
+        [ria.templates.ModelBind(chlk.models.people.UserProfileScheduleViewData)],
+        'SchedulePage', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl), [
             [ria.templates.ModelPropertyBind],
             chlk.models.people.Schedule, 'schedule',
 

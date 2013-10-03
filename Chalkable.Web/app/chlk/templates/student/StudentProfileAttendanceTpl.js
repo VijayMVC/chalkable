@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.profile.SchoolPersonProfileTpl');
 REQUIRE('chlk.templates.calendar.attendance.StudentAttendanceMonthCalendarTpl');
 REQUIRE('chlk.models.student.StudentProfileAttendanceViewData');
 
@@ -10,10 +10,11 @@ NAMESPACE('chlk.templates.student', function(){
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/student/StudentProfileAttendanceView.jade')],
         [ria.templates.ModelBind(chlk.models.student.StudentProfileAttendanceViewData)],
-        'StudentProfileAttendanceTpl', EXTENDS(chlk.templates.JadeTemplate),[
+        'StudentProfileAttendanceTpl', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl),[
 
-            [ria.templates.ModelPropertyBind],
-            chlk.models.attendance.StudentAttendanceSummary, 'summaryInfo',
+            chlk.models.attendance.StudentAttendanceSummary, function getSummaryInfo(){
+                return this.getUser();
+            },
 
             [ria.templates.ModelPropertyBind],
             chlk.models.calendar.attendance.StudentAttendanceMonthCalendar, 'attendanceCalendar',

@@ -13,7 +13,6 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public string Salutation { get; set; }
         public bool Active { get; set; }
         public string Email { get; set; }
-        public RoleViewData Role { get; set; }
 
         protected PersonViewData(Person person): base(person)
         {
@@ -21,7 +20,6 @@ namespace Chalkable.Web.Models.PersonViewDatas
             Salutation = person.Salutation;
             Active = person.Active;
             Email = person.Email;
-            Role = RoleViewData.Create(CoreRoles.GetById(person.RoleRef));
         }
 
         public static new PersonViewData Create(Person person)

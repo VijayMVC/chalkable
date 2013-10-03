@@ -1,5 +1,5 @@
 REQUIRE('chlk.templates.profile.SchoolPersonInfoPageTpl');
-REQUIRE('chlk.models.people.UserProfileModel');
+REQUIRE('chlk.models.student.StudentProfileInfoViewData');
 
 NAMESPACE('chlk.templates.profile', function () {
     "use strict";
@@ -7,6 +7,6 @@ NAMESPACE('chlk.templates.profile', function () {
 
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/profile/student-info-page.jade')],
-        [ria.templates.ModelBind(chlk.models.people.UserProfileModel)],
+        [ria.templates.ModelBind(chlk.models.student.StudentProfileInfoViewData)],
         'StudentInfoPageTpl', EXTENDS(chlk.templates.profile.SchoolPersonInfoPageTpl), [])
 });

@@ -15,6 +15,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Gender { get; set; }
+        public RoleViewData Role { get; set; }
 
         protected ShortPersonViewData(Person person)
         {
@@ -24,6 +25,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
             FirstName = person.FirstName;
             LastName = person.LastName;
             Gender = person.Gender;
+            if(person.RoleRef > 0)
+               Role = RoleViewData.Create(CoreRoles.GetById(person.RoleRef));
         }
         public static ShortPersonViewData Create(Person person)
         {

@@ -1,5 +1,6 @@
 valuesEnum = chlk.models.attendance.AttendanceTypeEnum;
-gradeLevel = self.getGradeLevelNumber();
+user = self.getUser()
+gradeLevel = user.getGradeLevelNumber();
 dt = getDate();
 classOf = dt.getFullYear() + 12 - gradeLevel;
 attendanceType = self.getCurrentAttendanceType();
@@ -11,29 +12,25 @@ else
     status = statusName && statusName.toLowerCase();
 .loader-container
     .loader
-    .action-bar.not-transparent.buttons
-        .container.panel-bg
-            .left
-                +ActionLink('students', 'details', self.getId()).pressed Now
-                +ActionLink('students', 'info', self.getId()) Info
-                +ActionLink('students', 'schedule', self.getId()) Scheduling
-                +ActionLink('students', 'details', self.getId()) Apps
+    -console.log('1')
+    +UserProfileTopBar(self, 'details')
+    -console.log('2')
     .summary-view
         #top-summary-panel
             #avatar-photo-conainer
                 .img-container
-                    +PersonImg(self, 256)
+                    +PersonImg(user, 256)
                     .grades-container
                         p=Msg.Class_Of
                             span=classOf
-                        .grade #{self.getSerial(gradeLevel)} #{Msg.Grade}
+                        .grade #{getSerial(gradeLevel)} #{Msg.Grade}
             #student-info-panel
-                h1.display-name=self.getDisplayName() || self.getFullName()
+                h1.display-name=user.getDisplayName() || user.getFullName()
                 .status
                     div(class=status, data-tooltip=statusName)
-                    |#{self.getCurrentClassName()}
-                    if(!self.getCurrentClassName() || self.getCurrentClassName().toLowerCase() != 'no class now')
-                        |&nbsp;- #{self.getRoomName()}
+                    |#{user.getCurrentClassName()}
+                    if(!user.getCurrentClassName() || user.getCurrentClassName().toLowerCase() != 'no class now')
+                        |&nbsp;- #{user.getRoomName()}
                 .glance-container
                     +GlanceBox(null, null, {value: null, title: Msg.Percentile})
                     +GlanceBox(null, null, self.buildAttendanceGlanceBoxData(), null, chlk.converters.attendance.AttendanceTypeToNameConverter.prototype.convert)
@@ -42,8 +39,8 @@ else
         .today-work-panel
             h2=Msg.Todays_work
             .period-toolbar
-                +LeftRightToolbar(self.getPeriodSection(), chlk.templates.announcement.AnnouncementClassPeriod)(hideArrows).centered
+                +LeftRightToolbar(user.getPeriodSection(), chlk.templates.announcement.AnnouncementClassPeriod)(hideArrows).centered
         .today-work-panel
             h2.stats=Msg.Classes
             .classes-tb
-                +LeftRightToolbar(self.getClassesSection(), chlk.templates.classes.Class).centered
+                +LeftRightToolbar(user.getClassesSection(), chlk.templates.classes.Class).centered
