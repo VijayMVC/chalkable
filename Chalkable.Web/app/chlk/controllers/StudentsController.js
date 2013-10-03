@@ -194,12 +194,16 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.SchoolPersonId, chlk.models.id.MarkingPeriodId]],
             function gradingAction(studentId, markingPeriodId_){
-                var mp = this.getCurrentMarkingPeriod();
-                markingPeriodId_ = markingPeriodId_ || mp.getId();
-                var res = this.studentService.getGradingInfo(studentId, markingPeriodId_)
+                var currentMp = this.getCurrentMarkingPeriod();
+                markingPeriodId_ = markingPeriodId_ || currentMp.getId();
+                var res = ria.async.wait([
+                        this.studentService.getGradingInfo(studentId, markingPeriodId_),
+                        this.markingPeriodService.list(this.getCurrentSchoolYearId())
+                    ])
                     .attach(this.validateResponse_())
-                    .then(function(data){
-                        return new chlk.models.student.StudentProfileGradingViewData(this.getCurrentRole(), data);
+                    .then(function(result){
+                        var mp = result[1].filter(function (el){return el.getId() == markingPeriodId_})[0];
+                        return new chlk.models.student.StudentProfileGradingViewData(this.getCurrentRole(), result[0], mp);
                     }, this);
                 return this.PushView(chlk.activities.student.StudentProfileGradingPage, res);
             }

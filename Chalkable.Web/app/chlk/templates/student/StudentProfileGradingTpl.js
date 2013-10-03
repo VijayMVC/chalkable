@@ -10,5 +10,7 @@ NAMESPACE('chlk.templates.student', function(){
         [ria.templates.ModelBind(chlk.models.student.StudentProfileGradingViewData)],
         'StudentProfileGradingTpl', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl),[
 
+            [ria.templates.ModelPropertyBind],
+            chlk.models.schoolYear.MarkingPeriod, 'markingPeriod'
         ]);
 });
