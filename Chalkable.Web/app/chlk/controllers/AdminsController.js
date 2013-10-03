@@ -30,15 +30,6 @@ NAMESPACE('chlk.controllers', function (){
                 return chlk.activities.profile.SchoolPersonInfoPage;
             },
 
-            OVERRIDE, ArrayOf(chlk.models.common.ActionLinkModel), function prepareActionLinksData_(user){
-                var controller = 'admins';
-                var actionLinksData = [];
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'details', 'Now', false, [user.getId()]));
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'info', 'Info', true, [user.getId()]));
-                actionLinksData.push(new chlk.models.common.ActionLinkModel(controller, 'apps', 'Apps', false, [user.getId()]));
-                return actionLinksData;
-            },
-
             [chlk.controllers.SidebarButton('people')],
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.ADMINGRADE,
@@ -78,10 +69,11 @@ NAMESPACE('chlk.controllers', function (){
                     .getInfo(personId)
                     .attach(this.validateResponse_())
                     .then(function(model){
-                    var res = this.prepareUserProfileModel_(model);
-                    this.getContext().getSession().set('userModel', res.getUser());
-                    return res;
-                }.bind(this));
+                        var userData = this.prepareProfileData(model);
+                        var res = new chlk.models.student.UserProfileInfoViewData(this.getCurrentRole(), userData);
+                        this.setUserToSession(res);
+                        return res;
+                    }.bind(this));
                 return this.PushView(chlk.activities.profile.SchoolPersonInfoPage, result);
             },
 

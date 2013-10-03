@@ -9,18 +9,6 @@ NAMESPACE('chlk.templates.classes', function () {
         [ria.templates.ModelBind(chlk.models.classes.ClassProfileInfoViewData)],
         'ClassInfoTpl', EXTENDS(chlk.templates.profile.ClassProfileTpl), [
 
-//            [ria.templates.ModelPropertyBind],
-//            String, 'name',
-//
-//            [ria.templates.ModelPropertyBind],
-//            chlk.models.course.Course, 'course',
-//
-//            [ria.templates.ModelPropertyBind],
-//            chlk.models.classes.Room, 'room',
-//
-//            [ria.templates.ModelPropertyBind],
-//            chlk.models.departments.Department, 'department',
-
             chlk.models.classes.ClassInfo, function getClassInfo(){return this.getClazz();},
 
             Object, function prepareDetailedInfo(){

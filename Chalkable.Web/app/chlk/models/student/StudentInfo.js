@@ -7,6 +7,6 @@ NAMESPACE('chlk.models.student', function(){
 
     CLASS('StudentInfo', EXTENDS(chlk.models.people.User),[
 
-        ArrayOf(chlk.models.User), 'parents'
+        ArrayOf(chlk.models.people.User), 'parents'
     ]);
 });

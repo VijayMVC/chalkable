@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.profile.SchoolPersonProfileTpl');
 REQUIRE('chlk.models.student.StudentProfileDisciplineViewData');
 REQUIRE('chlk.templates.calendar.discipline.StudentDisciplineMonthCalendarTpl');
 
@@ -9,10 +9,11 @@ NAMESPACE('chlk.templates.student', function(){
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/student/StudentProfileDisciplineView.jade')],
         [ria.templates.ModelBind(chlk.models.student.StudentProfileDisciplineViewData)],
-        'StudentProfileDisciplineTpl', EXTENDS(chlk.templates.JadeTemplate),[
+        'StudentProfileDisciplineTpl', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl),[
 
-            [ria.templates.ModelPropertyBind],
-            chlk.models.discipline.StudentDisciplineSummary, 'summaryInfo',
+            chlk.models.discipline.StudentDisciplineSummary, function getSummaryInfo(){
+                return this.getUser();
+            },
 
             [ria.templates.ModelPropertyBind],
             chlk.models.calendar.discipline.StudentDisciplineMonthCalendar, 'disciplineCalendar',
@@ -41,7 +42,7 @@ NAMESPACE('chlk.templates.student', function(){
             },
 
             ArrayOf(Object), function buildGlanceBoxesData(){
-                var discBoxes = this.getModel().getSummaryInfo().getDisciplineBoxes();
+                var discBoxes = this.getSummaryInfo().getDisciplineBoxes();
                 var res = [];
                 for(var i = 0; i < discBoxes.length; i++){
                     res.push(this.buildDisciplineGlanceBoxData(discBoxes[i]));

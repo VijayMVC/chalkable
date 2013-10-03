@@ -2,6 +2,7 @@ REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.student.StudentInfo');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -27,7 +28,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function getInfo(personId) {
-                return this.get('Student/Info.json', chlk.models.people.User, {
+                return this.get('Student/Info.json', chlk.models.student.StudentInfo, {
                     personId: personId.valueOf()
                 });
             },

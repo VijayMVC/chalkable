@@ -18,16 +18,7 @@ personId = summaryInfo.getId()
 .profile-calendar.student-discipline-view
     .loader-container
         .loader
-        .action-bar.not-transparent.buttons
-            .container.panel-bg
-                //todo move this to some base profile control
-                .left
-                    +ActionLink('students', 'details', personId) Now
-                    +ActionLink('students', 'info', personId) Info
-                    +ActionLink('students', 'schedule', personId) Scheduling
-                    +ActionLink('students', 'attendance', null, personId) Attendance
-                    +ActionLink('students', 'discipline', null, personId).pressed Discipline
-                    +ActionLink('students', 'details', personId) Apps
+        +UserProfileTopBar(self, 'discipline')
         .profile-info.discipline-view
             .summary-info
                 .person-info

@@ -9,9 +9,8 @@ REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.people.UsersList');
 
-REQUIRE('chlk.models.common.ActionLinkModel');
-REQUIRE('chlk.models.people.UserProfileModel');
-
+REQUIRE('chlk.models.people.UserProfileViewData');
+REQUIRE('chlk.models.people.UserProfileScheduleViewData');
 
 NAMESPACE('chlk.controllers', function (){
     "use strict";
@@ -106,13 +105,8 @@ NAMESPACE('chlk.controllers', function (){
                 return model;
             },
 
-            ArrayOf(chlk.models.common.ActionLinkModel), function prepareActionLinksData_(user){
-                return [];
-            },
-
-            chlk.models.people.UserProfileModel, function prepareUserProfileModel_(user){
-                return new chlk.models.people.UserProfileModel(this.getCurrentRole(), this.prepareProfileData(user)
-                    , this.prepareActionLinksData_(user));
+            chlk.models.people.UserProfileViewData, function prepareUserProfileModel_(user){
+                return new chlk.models.people.UserProfileViewData(this.getCurrentRole(), this.prepareProfileData(user));
             },
 
             Boolean, function isAdminRoleName_(roleName){
@@ -145,9 +139,18 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(results){
                         var schedule = results[0];
                         schedule.setRoleName(role);
-                        return new chlk.models.people.SchedulePage(schedule, results[1]);
+                        return new chlk.models.people.UserProfileScheduleViewData(this.getCurrentRole(), schedule, results[1]);
                     }.bind(this));
                 return this.PushView(chlk.activities.profile.SchedulePage, result);
+            },
+
+            [[chlk.models.people.UserProfileViewData]],
+            VOID, function setUserToSession(userProfileData){
+                this.getContext().getSession().set('userModel', userProfileData.getUser());
+            },
+
+            chlk.models.people.UserProfileViewData,  function getUserFromSession(){
+                return this.getContext().getSession().get('userModel');
             },
 
             [[chlk.models.id.SchoolPersonId, Object]],
@@ -155,8 +158,8 @@ NAMESPACE('chlk.controllers', function (){
                 var result = this.personService
                     .uploadPicture(personId, files)
                     .then(function(loaded){
-                        var res = this.getContext().getSession().get('userModel');
-                        return new chlk.models.people.UserProfileModel(res, this.prepareActionLinksData_());
+                        var res = this.getUserFromSession();
+                        return new chlk.models.people.UserProfileViewData(this.getCurrentRole(), res);
                     }.bind(this));
                 return this.UpdateView(this.getInfoPageClass(), result);
             }

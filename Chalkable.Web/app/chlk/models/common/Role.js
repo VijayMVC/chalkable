@@ -36,10 +36,20 @@ NAMESPACE('chlk.models.common', function () {
             chlk.models.common.RoleEnum, 'roleId',
             String, 'roleName',
             [[chlk.models.common.RoleEnum, String]],
-            function $(roleId, roleName){
+            function $(roleId_, roleName_){
                 BASE();
-                this.setRoleId(roleId);
-                this.setRoleName(roleName);
+                if(roleId_)
+                    this.setRoleId(roleId_);
+                if(roleName_)
+                    this.setRoleName(roleName_);
+            },
+
+            Boolean, function isAdmin(){
+                var roleEnums = chlk.models.common.RoleEnum;
+                var roleId = this.getRoleId();
+                return roleId == roleEnums.ADMINGRADE
+                    || roleId == roleEnums.ADMINEDIT
+                    || roleId == roleEnums.ADMINVIEW
             }
         ]);
 });

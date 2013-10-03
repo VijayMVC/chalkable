@@ -16,6 +16,12 @@ NAMESPACE('chlk.templates.profile', function(){
             Boolean, function isAdmin(){return this.getModel().isAdmin();},
 
             [[String]],
-            ArrayOf(chlk.models.common.ActionLinkModel), function buildActionLinkModels(pressedLinkName){ return []; }
+            ArrayOf(chlk.models.common.ActionLinkModel), function buildActionLinkModels(pressedLinkName){ return []; },
+
+            chlk.models.common.ActionLinkModel, function createActionLinkModel_(controller, action, title
+                , pressedAction_, args_, disabled_){
+                return new chlk.models.common.ActionLinkModel(controller, action, title
+                    , pressedAction_ && pressedAction_ == action, args_, null, disabled_);
+            }
     ]);
 });
