@@ -93,7 +93,7 @@ namespace Chalkable.Web.Controllers
         }
         
         [AuthorizationFilter("SysAdmin, Developer, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult GetAppcalitionTotalPrice(Guid applicationid, Guid? personId, GuidList classids, IntList roleids, GuidList departments, GuidList gradelevelids)
+        public ActionResult GetApplicationTotalPrice(Guid applicationid, Guid? personId, GuidList classids, IntList roleids, GuidList departments, GuidList gradelevelids)
         {
             var app = MasterLocator.ApplicationService.GetApplicationById(applicationid);
             var totalPrice = SchoolLocator.AppMarketService.GetApplicationTotalPrice(applicationid, personId, roleids, classids, gradelevelids, departments);
