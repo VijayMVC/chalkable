@@ -25,9 +25,9 @@ mixin AppIconLink(app)
                            +LabeledCheckbox(subject.getName(), 'app-category-' + subject.getId().valueOf(), false, false)
 
             .price
-                .price-type.all.btn.pressed All
-                .price-type.paid.btn Paid
-                .price-type.free.btn Free
+                .price-type.all.btn.pressed(data-price-type="0") All
+                .price-type.paid.btn(data-price-type="1") Paid
+                .price-type.free.btn(data-price-type="2") Free
 
             .sort
                 span Sorted By:
