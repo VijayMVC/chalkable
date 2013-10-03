@@ -30,6 +30,12 @@ BODY {
             padding: 16px 11px 0 13px;
             font-family: Pacifico;
 
+            .lr-toolbar {
+              margin-bottom: 40px;
+              margin-left: 14px;
+              width: 671px;
+            }
+
             #avatar-photo-conainer{
               width: 268px;
 
@@ -92,12 +98,6 @@ BODY {
                 }
               }
             }
-          }
-
-          .lr-toolbar {
-            margin-bottom: 40px;
-            margin-left: 14px;
-            width: 671px;
           }
 
           .class-link:hover{

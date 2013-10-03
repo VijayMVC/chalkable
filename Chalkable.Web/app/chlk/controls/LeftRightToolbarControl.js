@@ -10,18 +10,6 @@ NAMESPACE('chlk.controls', function () {
             OVERRIDE, VOID, function onCreate_() {
                 BASE();
                 ASSET('~/assets/jade/controls/left-right-tb.jade')(this);
-                this.setDefaultConfigs({
-                    //width: 630,
-                    itemsCount:8,
-                    fixedPadding:false,
-                    hideArrows: false,
-                    disabledClass: 'disabled',
-                    disablePrevButton: true,
-                    disableNextButton: true,
-                    needDots: true,
-                    pressedClass: 'pressed',
-                    pressAfterClick: true
-                })
             },
 
             //Object, 'configs',
@@ -32,7 +20,18 @@ NAMESPACE('chlk.controls', function () {
 
             [[Object, Object, String, String, Object]],
             Object, function prepareData(data, attributes_, controller_, action_, params_) {
-                var configs = this.getDefaultConfigs();
+                var configs = {
+                    //width: 630,
+                    itemsCount:8,
+                    fixedPadding:false,
+                    hideArrows: false,
+                    disabledClass: 'disabled',
+                    disablePrevButton: true,
+                    disableNextButton: true,
+                    needDots: true,
+                    pressedClass: 'pressed',
+                    pressAfterClick: true
+                };
                 if(attributes_){
                     configs = Object.extend(configs, attributes_);
                 }
@@ -128,12 +127,12 @@ NAMESPACE('chlk.controls', function () {
                 index_ = (index_ || index_ >= 0) ? index_ : parseInt(node_.getAttr('index'),10);
                 if(configs.needDots){
                     node = node_ || toolbar.find('.paginator A[index="' + index_ + '"]');
+                    toolbar.find('.paginator .current').removeClass('current');
                     node.addClass('current');
                 }
                 toolbar.setData('currentIndex', index_);
                 var nextButton = toolbar.find('.next-button');
                 var prevButton = toolbar.find('.prev-button');
-                toolbar.find('.paginator .current').removeClass('current');
                 var width = toolbar.find('.first-container').width();
                 var secondContainer = toolbar.find('.second-container');
                 secondContainer.setCss('left', -width * index_);
