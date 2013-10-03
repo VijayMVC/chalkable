@@ -1,0 +1,42 @@
+mixin AppIconLink(app)
+    appId = app.getId().valueOf()
+    +ActionLink('appmarket', 'details', appId).app-icon-link
+        .app-list-item
+            .icon
+                pictureUrl = self.getPictureURL(app.getSmallPictureId(), 74, 74)
+                img(src=pictureUrl)
+            .description
+                .name=app.getName()
+                .shortdesc=app.getShortDescription()
+
+.app-market
+    +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels)
+    .app-screenshots-panel
+        +Carousel(self.firstApp.getScreenshotPictures().getItems())
+    +ActionForm('appmarket', 'list')
+        .app-filter
+            .subject
+                .subject-filter
+                    .title.btn Subject
+                    .items.x-hidden
+                        +Hidden('selectedCategories', self.getAllCategoriesIds(self.categories))
+                        +LabeledCheckbox('All Categories', 'app-category-all', true, false)
+                        each subject in self.categories
+                           +LabeledCheckbox(subject.getName(), 'app-category-' + subject.getId().valueOf(), false, false)
+
+            .price
+                .price-type.all.btn.pressed All
+                .price-type.paid.btn Paid
+                .price-type.free.btn Free
+
+            .sort
+                span Sorted By:
+                +Select('sortType')#app-sort-type
+                    +Option(chlk.models.apps.AppSortingMode.POPULAR.valueOf(), 'Popular', true)
+                    +Option(chlk.models.apps.AppSortingMode.NEWEST.valueOf(), 'Newest')
+                    +Option(chlk.models.apps.AppSortingMode.HIGHEST_RATED.valueOf(), 'Highest Rated')
+            .app-grade-levels
+                +RangeSlider("grade-levels", "selectedGradeLevels", 1, 12)
+    .apps
+        each app in self.apps.getItems()
+            +AppIconLink(app)
