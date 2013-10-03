@@ -5,13 +5,4 @@
     +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summary')(
         selectedItemId=selectedId
     ).classes-bar
-    .mps-container
-        each item,i in self.getItems()
-            div(class=(i==0) ? "open" : "", data-index=i).marking-period-container
-                div(data-tooltip=Msg.Avg + " " + item.getAvg()).mp-title=item.getMarkingPeriod().getName()
-                    .collapse
-                .mp-data
-                    .ann-types-container
-                        +LeftRightToolbar(item.getByAnnouncementTypes(), chlk.templates.grading.GradingClassSummaryItemTpl)(
-                            needDots = true
-                        )
+    +RenderWith(self.getSummaryPart(), chlk.templates.grading.GradingClassSummaryPartTpl)

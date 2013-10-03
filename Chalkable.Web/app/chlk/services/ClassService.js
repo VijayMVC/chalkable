@@ -6,8 +6,8 @@ REQUIRE('chlk.models.classes.ClassForWeekMask');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.classes.ClassSummary');
 REQUIRE('chlk.models.classes.ClassInfo');
-REQUIRE('chlk.models.classes.ClassGrading');
 REQUIRE('chlk.models.classes.ClassSchedule');
+REQUIRE('chlk.models.classes.ClassGradingViewData');
 
 REQUIRE('chlk.models.common.ChlkDate');
 
@@ -62,9 +62,10 @@ NAMESPACE('chlk.services', function () {
                     classId: classId && classId.valueOf()
                 });
             },
+
             [[chlk.models.id.ClassId]],
             ria.async.Future, function getGrading(classId){
-                return this.get('Class/ClassGrading.json', chlk.models.classes.ClassGrading,{
+                return this.get('Class/ClassGrading.json', chlk.models.classes.ClassGradingViewData,{
                     classId: classId && classId.valueOf()
                 })
             },

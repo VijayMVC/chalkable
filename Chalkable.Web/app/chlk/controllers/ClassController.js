@@ -10,6 +10,7 @@ REQUIRE('chlk.activities.classes.SummaryPage');
 REQUIRE('chlk.activities.classes.ClassInfoPage');
 REQUIRE('chlk.activities.classes.ClassSchedulePage');
 REQUIRE('chlk.activities.classes.ClassProfileAttendancePage');
+REQUIRE('chlk.activities.classes.ClassProfileGradingPage');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -88,6 +89,24 @@ NAMESPACE('chlk.controllers', function (){
                     }, this);
                 return this.PushView(chlk.activities.classes.ClassProfileAttendancePage, res);
             },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function gradingAction(classId){
+                var res =
+                    this.classService
+                        .getGrading(classId)
+                        .attach(this.validateResponse_())
+                        .then(function(model){
+                            model.getGradingPerMp().forEach(function(mpData){
+                                mpData.getByAnnouncementTypes().forEach(function(item){
+                                    item.setClassId(classId);
+                                });
+                            });
+                            return new chlk.models.classes.ClassProfileGradingViewData(this.getCurrentRole(), model);
+                        }, this);
+                return this.PushView(chlk.activities.classes.ClassProfileGradingPage, res);
+            },
+
             [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
             ria.async.Future, function attendanceMonthAction(date, classId){
                 var res =  this.attendanceCalendarService.getClassAttendancePerMonth(classId, date)

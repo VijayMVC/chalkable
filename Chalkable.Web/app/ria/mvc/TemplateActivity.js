@@ -59,7 +59,7 @@ NAMESPACE('ria.mvc', function () {
                         var tplRef = new ria.reflection.ReflectionClass(annotation.tpl);
                         return {
                             tpl: tplRef.instantiate(),
-                            msg: _.msg_ || null,
+                            msg: annotation.msg_ || null,
                             methodRef: _
                         }
                     });

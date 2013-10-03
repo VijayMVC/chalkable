@@ -75,7 +75,7 @@ NAMESPACE('chlk.controllers', function (){
                                     item.setClassId(classId_);
                                 });
                             });
-                            model.setItems(result);
+                            model.setSummaryPart(new chlk.models.grading.GradingClassSummaryPart(result));
                             return model;
                         }.bind(this));
                 }else{
@@ -85,9 +85,23 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [[chlk.models.id.AnnouncementId]],
+            function unDropFromPopupAction(announcementId){
+                var result = new ria.async.DeferredData(new chlk.models.announcement.Announcement());
+                return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
+            },
+
+
+            [[chlk.models.id.AnnouncementId]],
+            function dropFromPopupAction(announcementId){
+                var result = new ria.async.DeferredData(new chlk.models.announcement.Announcement());
+                return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
+            },
+
+
+            [[chlk.models.id.AnnouncementId]],
             function showChartAction(announcementId){
                 var result = this.gradingService.getItemGradingStat(announcementId);
-                return this.UpdateView(chlk.activities.grading.GradingClassSummaryPage, result, chlk.activities.lib.DontShowLoader());
+                return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
             },
 
             [[chlk.models.grading.Final]],
