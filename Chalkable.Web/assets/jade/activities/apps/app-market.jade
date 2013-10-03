@@ -36,7 +36,7 @@ mixin AppIconLink(app)
                     +Option(chlk.models.apps.AppSortingMode.NEWEST.valueOf(), 'Newest')
                     +Option(chlk.models.apps.AppSortingMode.HIGHEST_RATED.valueOf(), 'Highest Rated')
             .app-grade-levels
-                +RangeSlider("grade-levels", "selectedGradeLevels", 1, 12)
+                +RangeSlider("grade-levels", "gradeLevels", 1, 12)
     .apps
         each app in self.apps.getItems()
             +AppIconLink(app)

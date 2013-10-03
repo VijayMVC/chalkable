@@ -16,6 +16,7 @@ NAMESPACE('chlk.controls', function () {
             Number, 'startRange',
             Number, 'endRange',
             Number, 'separatorWidth',
+            String, 'name',
 
             [[Object]],
             VOID, function update(node){
@@ -34,43 +35,32 @@ NAMESPACE('chlk.controls', function () {
                     slide: function(event, ui){
                         node.find(".start-range").text(that.getDisplayFieldValue(ui.values[0]));
                         node.find(".end-range").text(that.getDisplayFieldValue(ui.values[1]));
-
-                        that.onAfterSlide(event, ui);
                     },
                     stop : function (event, ui){
-                        that.onStop(event, ui);
-                        that.onAfterStop(event, ui);
+                        that.onStop(node, event, ui);
                     }
                 }).each(function() {
-                        var opt = jQuery(this).data()['ui-slider'].options;
+                    var opt = jQuery(this).data()['ui-slider'].options;
+                    var vals = opt.max - opt.min;
+                    for (var i = 0; i <= vals; i++) {
+                        var el = jQuery('<label>'+(i+opt.min)+'</label>').css('left',(i/vals*100)+'%');
+                        node.append(el);
+                        var notch = jQuery('<label class="notch">|</label>').css('left',(i/vals*100)+'%');
+                        node.append(notch);
+                    }
+                    var elLeft = jQuery('<div class="start-range">'+(that.getDisplayFieldValue(opt.min))+'</div>');
+                    var elRight = jQuery('<div class="end-range">'+(that.getDisplayFieldValue(opt.max))+'</div>');
 
-                        // Get the number of possible values
-                        var vals = opt.max - opt.min;
+                    node.append(elLeft);
+                    node.append(elRight);
 
-                        // Position the labels
-                        for (var i = 0; i <= vals; i++) {
-
-                            // Create a new element and position it with percentages
-                            var el = jQuery('<label>'+(i+opt.min)+'</label>').css('left',(i/vals*100)+'%');
-                            // Add the element inside #slider
-                            node.append(el);
-
-                            var notch = jQuery('<label class="notch">|</label>').css('left',(i/vals*100)+'%');
-                            node.append(notch);
-                        }
-
-                        var elLeft = jQuery('<div class="start-range">'+(that.getDisplayFieldValue(opt.min))+'</div>');
-                        var elRight = jQuery('<div class="end-range">'+(that.getDisplayFieldValue(opt.max))+'</div>');
-
-                        node.append(elLeft);
-                        node.append(elRight);
-
-                    });
+                });
             },
 
             [[Object]],
             Object, function processAttrs(attributes) {
                 attributes.id = attributes.id || ria.dom.NewGID();
+                this.setName(attributes.name + 'SelectedValues');
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         this.update(jQuery('#'+attributes.id));
@@ -78,7 +68,7 @@ NAMESPACE('chlk.controls', function () {
                 return attributes;
             },
 
-            function onStop(event, ui){
+            function onStop(node, event, ui){
                 var arr = [];
                 var el = ui.values[0];
                 while(el <= ui.values[1]){
@@ -86,23 +76,18 @@ NAMESPACE('chlk.controls', function () {
                     el++;
                 }
                 this.setSliderItems(arr);
+                jQuery('input[name=' + this.getName() + ']').val(arr.join(','));
             },
 
             function onAfterStop(event, ui){},
 
-            function onAfterSlide(event, ui){},
-
             function prepareData(start, end){
-
                 this.setStartRange(start);
                 this.setEndRange(end);
-
                 var items = [];
-
                 for (var i = start; i <= end; ++i){
                     items.push(i);
                 }
-
                 this.setSliderItems(items);
             },
 

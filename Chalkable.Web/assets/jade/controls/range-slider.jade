@@ -1,7 +1,8 @@
-mixin RangeSlider(id, name, start, end, controller, action, params)
-    -attributes.name = name
+mixin RangeSlider(id, name, start, end, value)
     -attributes.id = id
+    -attributes.name = name
     -attributes = self.processAttrs(attributes);
     -self.prepareData(start, end)
     .slider-wrapper
         div(id=id)
+        +Hidden(name + 'SelectedValues', value)
