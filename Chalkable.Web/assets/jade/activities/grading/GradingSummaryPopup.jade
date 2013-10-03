@@ -4,9 +4,13 @@ div(class="announcement-popup-" + self.getId().valueOf())#chlk-pop-up-container.
         .separator.big-text=self.getAnnouncementTypeName()+self.getOrder()
         .separator.small-text #{Msg.Due}: #{self.getExpiresDate().format('mm/dd/yy')}
         .separator.small-text #{Msg.Class_average}: #{self.getAvg()}
-        .chart-container
+        .chart-container.small
         if self.isAnnOwner()
-            if self.isDropped()
-                +ActionLink('announcement', 'undropFromPopup').dropped.grey-button=Msg.Undrop
-            else
-                +ActionLink('announcement', 'dropFromPopup').grey-button=Msg.Drop
+            +ActionLink('grading', 'unDropFromPopup', self.getId())(
+                class=self.isDropped() ? "" : "x-hidden",
+                data-announcementId = self.getId().valueOf()
+            ).dropped.grey-button=Msg.Undrop
+            +ActionLink('grading', 'dropFromPopup', self.getId())(
+                class=self.isDropped() ? "x-hidden" : "",
+                data-announcementId = self.getId().valueOf()
+            ).grey-button=Msg.Drop

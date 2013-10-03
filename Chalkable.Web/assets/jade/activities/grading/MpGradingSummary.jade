@@ -6,7 +6,6 @@ div(data-index=self.getIndex()).ann-type-container
         div(data-index=i).announcements-type-item
             +ActionLink('announcement', 'view', announcement.getId())(
                 annId = announcement.getId().valueOf(),
-                //data-values = JSON.stringify(announcement),
                 class = announcement.isDropped() ? "dropped" : ""
             ).ann-button
                 |#{announcement.getAnnouncementTypeName()} #{announcement.getOrder()}

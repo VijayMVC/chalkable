@@ -1,4 +1,4 @@
-REQUIRE('chlk.models.grading.GradingClassSummaryItems');
+REQUIRE('chlk.models.grading.GradingClassSummaryPart');
 REQUIRE('chlk.models.announcement.Announcement');
 
 NAMESPACE('chlk.models.grading', function () {
@@ -6,6 +6,13 @@ NAMESPACE('chlk.models.grading', function () {
     /** @class chlk.models.grading.GradingClassSummary*/
     CLASS(
         'GradingClassSummary', EXTENDS(chlk.models.common.PageWithClasses), [
-            ArrayOf(chlk.models.grading.GradingClassSummaryItems), 'items'
+            chlk.models.grading.GradingClassSummaryPart, 'summaryPart',
+
+            [[chlk.models.classes.ClassesForTopBar, chlk.models.id.ClassId, chlk.models.grading.GradingClassSummaryPart]],
+            function $(topData_, selectedId_, summaryPart_){
+                BASE(topData_, selectedId_);
+                if(summaryPart_)
+                    this.setSummaryPart(summaryPart_);
+            }
         ]);
 });

@@ -19,6 +19,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public Guid? ClassId { get; set; }
         public string ClassName { get; set; }
         public bool Dropped { get; set; }
+        public bool IsOwner { get; set; }
         public DateTime? ExpiresDate { get; set; }
         public int Order { get; set; }
 
@@ -37,6 +38,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             Dropped = announcement.Dropped;
             ExpiresDate = announcement.Expires;
             Order = announcement.Order;
+            IsOwner = announcement.IsOwner;
         }
 
         public static AnnouncementShortViewData Create(AnnouncementComplex announcement)
