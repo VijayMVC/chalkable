@@ -11,7 +11,7 @@
                             div
                                 p.title=item.getTitle()
                                 p.classname-under=item.getClassName() || item.getPersonName()
-    +ActionLink('announcement', 'add').ann-button.plus-ann
+    +ActionLink('announcement', 'add', null, chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT, self.getDate().format('mm/dd/yy'), true).ann-button.plus-ann
 
 
 

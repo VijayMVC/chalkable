@@ -13,10 +13,11 @@ NAMESPACE('chlk.models.common', function () {
             [[chlk.models.classes.ClassesForTopBar, chlk.models.id.ClassId]],
             function $(topData_, selectedId_){
                 BASE();
-                if(topData_)
+                if(topData_){
                     if(selectedId_)
                         topData_.setSelectedItemId(selectedId_);
                     this.setTopData(topData_);
+                }
             }
         ]);
 });

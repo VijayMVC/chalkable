@@ -1,7 +1,11 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
+REQUIRE('chlk.models.grading.GradingClassSummaryItems');
+REQUIRE('chlk.models.grading.ItemGradingStat');
 REQUIRE('chlk.models.id.StudentAnnouncementId');
+REQUIRE('chlk.models.id.ClassId');
+REQUIRE('chlk.models.id.AnnouncementId');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -16,6 +20,20 @@ NAMESPACE('chlk.services', function () {
                     gradeValue: gradeValue,
                     comment: comment,
                     dropped: dropped
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getClassSummary(classId) {
+                return this.get('Grading/ClassSummary', ArrayOf(chlk.models.grading.GradingClassSummaryItems), {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.AnnouncementId]],
+            ria.async.Future, function getItemGradingStat(announcementId) {
+                return this.get('Grading/ItemGradingStat', chlk.models.grading.ItemGradingStat, {
+                    announcementId: announcementId.valueOf()
                 });
             }
         ])

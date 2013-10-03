@@ -75,7 +75,7 @@ NAMESPACE('chlk.models.announcement', function () {
             String, 'comment',
             String, 'content',
             chlk.models.common.ChlkDate, 'created',
-            Number, 'dropped',
+            Boolean, 'dropped',
 
             [ria.serialize.SerializeProperty('expiresdate')],
             chlk.models.common.ChlkDate, 'expiresDate',

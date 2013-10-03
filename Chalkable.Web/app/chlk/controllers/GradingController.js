@@ -2,8 +2,10 @@ REQUIRE('chlk.controllers.BaseController');
 
 REQUIRE('chlk.services.FinalGradeService');
 REQUIRE('chlk.services.ClassService');
+REQUIRE('chlk.services.GradingService');
 
 REQUIRE('chlk.activities.grading.TeacherSettingsPage');
+REQUIRE('chlk.activities.grading.GradingClassSummaryPage');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -17,6 +19,8 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.ClassService, 'classService',
 
+            [ria.mvc.Inject],
+            chlk.services.GradingService, 'gradingService',
 
             //TODO: refactor
             [chlk.controllers.SidebarButton('statistic')],
@@ -29,7 +33,7 @@ NAMESPACE('chlk.controllers', function (){
                 topModel.setDisabled(true);
                 classId_ && topModel.setSelectedItemId(classId_);
                 model.setTopData(topModel);
-                var result
+                var result;
                 if(classId_){
                     result = this.finalGradeService
                         .getFinalGrades(classId_, false).then(function(result){
@@ -52,6 +56,38 @@ NAMESPACE('chlk.controllers', function (){
                     result = new ria.async.DeferredData(model);
                 }
                 return this.PushView(chlk.activities.grading.TeacherSettingsPage, result);
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.id.ClassId]],
+            function summaryTeacherAction(classId_){
+                var classes = this.classService.getClassesForTopBar();
+                classId_ = classId_ || classes[0].getId();
+                var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_ || null);
+                var model = new chlk.models.grading.GradingClassSummary();
+                model.setTopData(topData);
+                var result;
+                if(classId_){
+                    result = this.gradingService
+                        .getClassSummary(classId_).then(function(result){
+                            result.forEach(function(mpData){
+                                mpData.getByAnnouncementTypes().forEach(function(item){
+                                    item.setClassId(classId_);
+                                });
+                            });
+                            model.setItems(result);
+                            return model;
+                        }.bind(this));
+                }else{
+                    result = new ria.async.DeferredData(model);
+                }
+                return this.PushView(chlk.activities.grading.GradingClassSummaryPage, result);
+            },
+
+            [[chlk.models.id.AnnouncementId]],
+            function showChartAction(announcementId){
+                var result = this.gradingService.getItemGradingStat(announcementId);
+                return this.UpdateView(chlk.activities.grading.GradingClassSummaryPage, result, chlk.activities.lib.DontShowLoader());
             },
 
             [[chlk.models.grading.Final]],

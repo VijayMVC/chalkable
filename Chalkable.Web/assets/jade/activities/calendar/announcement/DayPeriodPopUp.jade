@@ -3,9 +3,10 @@
     announcements = announcementclassperiod.getAnnouncements()
     period = self.getPeriod()
     roomNumber = announcementclassperiod.getClassPeriod().getRoomNumber()
+    clazz = announcementclassperiod.getClassPeriod().getClazz()
+    date = self.getDate()
     .class-name
         h3.day-day
-            clazz = announcementclassperiod.getClassPeriod().getClazz();
             +ActionLink('class', 'details', clazz.getId())=clazz.getName()
     .info
         if roomNumber
@@ -16,7 +17,7 @@
             a #{period.getStartTime()} #{period.getEndTime()}
         br
         p.day-down
-            a=self.getDate().format('DD, MM d')
+            a=date.format('DD, MM d')
         br
     if announcements.length > 0
         .announcements-list
@@ -26,7 +27,7 @@
                         +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getAnnouncementTypeId()).pop-up-announcement
                             div
                                 p.item-title #{item.getAnnouncementTypeName()} #{item.getOrder()}
-    +ActionLink('announcement', 'add').ann-button.plus-ann
+    +ActionLink('announcement', 'add', clazz.getId(), chlk.models.announcement.AnnouncementTypeEnum.HW, date.format('mm/dd/yy'), true).ann-button.plus-ann
 
 
 

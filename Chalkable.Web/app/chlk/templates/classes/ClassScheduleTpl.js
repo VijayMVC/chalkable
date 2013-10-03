@@ -9,8 +9,10 @@ NAMESPACE('chlk.templates.classes', function () {
         [ria.templates.ModelBind(chlk.models.classes.ClassScheduleViewData)],
         'ClassScheduleTpl', EXTENDS(chlk.templates.profile.ClassProfileTpl), [
 
-            [ria.templates.ModelPropertyBind],
-            chlk.models.classes.Class, 'clazz',
+//            [ria.templates.ModelPropertyBind],
+//            chlk.models.classes.Class, 'clazz',
+
+
 
             [ria.templates.ModelPropertyBind],
             chlk.models.calendar.announcement.Day, 'scheduleCalendar'

@@ -155,6 +155,12 @@ NAMESPACE('chlk.controllers', function (){
                         });
                         if (typeId)
                             model.setSelectedTypeId(typeId);
+                        else
+                            if(announcementTypeId_){
+                                announcementTypeId_ = types[0].getId();
+                                announcement.setAnnouncementTypeId(announcementTypeId_);
+                                model.setSelectedTypeId(announcementTypeId_);
+                            }
                     }
                 }
                 model.setTopData(classesBarData);
@@ -174,22 +180,39 @@ NAMESPACE('chlk.controllers', function (){
             return new ria.async.DeferredData(model);
         },
 
-
-        //TODO date, useDraft
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.ClassId, Number]],
-        function addAction(classId_, announcementTypeId_) {
+        [[chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate, Boolean]],
+        function addAction(classId_, announcementTypeId_, date_, noDraft_) {
             this.disableAnnouncementSaving(false);
             this.getView().reset();
+            if(classId_ && announcementTypeId_){
+                var classInfo = this.classService.getClassAnnouncementInfo(classId_);
+                var types = classInfo.getTypesByClass();
+                var typeId = null;
+
+                types.forEach(function(item){
+                    if(item.getId() == announcementTypeId_)
+                        typeId = announcementTypeId_;
+                });
+                if (!typeId)
+                    announcementTypeId_ = types[0].getId();
+            }
             var result = this.announcementService
                 .addAnnouncement(classId_, announcementTypeId_)
                 .attach(this.validateResponse_())
                 .then(function(model){
+                    var announcement = model.getAnnouncement();
+                    if(noDraft_){
+                        announcement.setClassId(classId_ || null);
+                        announcement.setAnnouncementTypeId(announcementTypeId_ || null);
+                    }
+                    if(date_){
+                        announcement.setExpiresDate(date_);
+                    }
                     return this.addEditAction(model, false);
                 }.bind(this));
             return this.PushView(this.getAnnouncementFormPageType_(), result);
         },
-
 
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER

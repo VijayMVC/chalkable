@@ -24,11 +24,11 @@ NAMESPACE('chlk.controls', function () {
                 })
             },
 
-            Object, 'configs',
+            //Object, 'configs',
 
             Object, 'defaultConfigs',
 
-            Object, 'currentIndex',
+            //Object, 'currentIndex',
 
             [[Object, Object, String, String, Object]],
             Object, function prepareData(data, attributes_, controller_, action_, params_) {
@@ -51,23 +51,34 @@ NAMESPACE('chlk.controls', function () {
                     configs.needDots=false
                 }
 
+                configs.pagesCount = Math.ceil(data.length/configs.itemsCount);
+
                 if(configs.multiple){
                     configs.controller = controller_;
                     configs.action = action_;
                     configs.params = params_ || [];
                 }
 
-                this.setConfigs(configs);
-                this.setCurrentIndex(0);
-                var that = this;
+                //this.setConfigs(configs);
+                //this.setCurrentIndex(0);
 
+                return configs;
+            },
+            
+            [[Object, Object]],
+            Object, function processAttrs(attributes, configs) {
+                attributes.id = attributes.id || ria.dom.NewGID();
+                attributes['data-configs'] = configs;
+                var that = this;
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
-                        var toolbar = activity.getDom().find('.lr-toolbar');
+                        var toolbar = activity.getDom().find('#'+attributes.id);
+                        //toolbar.setData('configs', configs);
+                        toolbar.setData('currentIndex', 0);
                         if(configs.pressAfterClick){
                             var pressedIndex = parseInt(toolbar.find('.pressed').getAttr('index'), 10);
-                            var pageIndex = Math.floor(pressedIndex / configs.itemsCount);
-                            that.setPageByCurrentDot(toolbar.find('.paginator A[index="' + pageIndex + '"]'), toolbar);
+                            var pageIndex = Math.floor(pressedIndex / configs.itemsCount) || 0;
+                            that.setPageByCurrentDot(null, toolbar, pageIndex);
                             toolbar.on('click', '.second-container>*:not(.pressed)', function(node, event){
                                 if(!configs.multiple)
                                     toolbar.find('.second-container>.pressed').removeClass('pressed');
@@ -95,54 +106,46 @@ NAMESPACE('chlk.controls', function () {
                             });
                         }
                         toolbar.on('click', '.arrow:not(.disabled)', function(node, event){
-                            var index = that.getCurrentIndex();
+                            var index = toolbar.getData('currentIndex');
                             if(node.hasClass('prev-button')){
-                                that.setCurrentIndex(--index);
-                                if(configs.fixedPadding){
-                                    that.setPageByCurrentDot(toolbar.find('.paginator A[index="' + index + '"]'), toolbar);
-                                }else{
-                                    that.setPageByCurrentDot(toolbar.find('.paginator A[index="' + index + '"]'), toolbar);
-                                }
+                                toolbar.setData('currentIndex', --index);
                             }else{
-                                that.setCurrentIndex(++index);
-                                if(configs.fixedPadding){
-                                    that.setPageByCurrentDot(toolbar.find('.paginator A[index="' + index + '"]'), toolbar);
-                                }else{
-                                    that.setPageByCurrentDot(toolbar.find('.paginator A[index="' + index + '"]'), toolbar);
-                                }
+                                toolbar.setData('currentIndex', ++index);
                             }
+                            that.setPageByCurrentDot(null, toolbar, index);
                         });
                         toolbar.find('.paginator').on('click', 'a:not(.current)', function(node, event){
                             that.setPageByCurrentDot(node, toolbar);
                             return false;
                         })
                     }.bind(this));
-
-                return configs;
+                return attributes;
             },
 
-            [[ria.dom.Dom, ria.dom.Dom]],
-            VOID, function setPageByCurrentDot(node, toolbar){
-                if(this.getConfigs().needDots){
-                    var index = parseInt(node.getAttr('index'),10);
-                    this.setCurrentIndex(index);
-                    var nextButton = toolbar.find('.next-button');
-                    var prevButton = toolbar.find('.prev-button');
-                    toolbar.find('.paginator .current').removeClass('current');
+            [[ria.dom.Dom, ria.dom.Dom, Number]],
+            VOID, function setPageByCurrentDot(node_, toolbar, index_){
+                var configs = toolbar.getData('configs'), node;
+                index_ = (index_ || index_ >= 0) ? index_ : parseInt(node_.getAttr('index'),10);
+                if(configs.needDots){
+                    node = node_ || toolbar.find('.paginator A[index="' + index_ + '"]');
                     node.addClass('current');
-                    var width = toolbar.find('.first-container').width();
-                    var secondContainer = toolbar.find('.second-container');
-                    secondContainer.setCss('left', -width * index);
-                    if(index == 0){
-                        prevButton.addClass('disabled');
-                    }else{
-                        prevButton.removeClass('disabled');
-                    }
-                    if(index == this.getConfigs().dots.length - 1){
-                        nextButton.addClass('disabled');
-                    }else{
-                        nextButton.removeClass('disabled');
-                    }
+                }
+                toolbar.setData('currentIndex', index_);
+                var nextButton = toolbar.find('.next-button');
+                var prevButton = toolbar.find('.prev-button');
+                toolbar.find('.paginator .current').removeClass('current');
+                var width = toolbar.find('.first-container').width();
+                var secondContainer = toolbar.find('.second-container');
+                secondContainer.setCss('left', -width * index_);
+                if(index_ == 0){
+                    prevButton.addClass('disabled');
+                }else{
+                    prevButton.removeClass('disabled');
+                }
+                if(index_ == configs.pagesCount - 1){
+                    nextButton.addClass('disabled');
+                }else{
+                    nextButton.removeClass('disabled');
                 }
             }
         ]);

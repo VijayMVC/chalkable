@@ -25,7 +25,7 @@
                         +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getAnnouncementTypeId()).pop-up-announcement
                             div
                                 p.item-title #{item.getAnnouncementTypeName()} #{item.getOrder()}
-    +ActionLink('announcement', 'add').ann-button.plus-ann
+    +ActionLink('announcement', 'add', null, null, self.getDate().format('mm/dd/yy'), true).ann-button.plus-ann
 
 
 

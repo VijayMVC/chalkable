@@ -1,5 +1,6 @@
 mixin LeftRightToolbar(data, tplClass, controller, action, params)
     configs = self.prepareData(data, attributes, controller, action, params)
+    attributes = self.processAttrs(attributes, configs)
     .lr-toolbar(attributes)
         .A(class=configs.disablePrevButton ? configs.disabledClass : "").prev-button.arrow
         .first-container

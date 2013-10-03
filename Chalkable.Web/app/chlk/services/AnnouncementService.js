@@ -84,7 +84,7 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function addAnnouncement(classId_, announcementTypeId_) {
                 return this.get('Announcement/Create.json', chlk.models.announcement.AnnouncementForm, {
                     classId: classId_ ? classId_.valueOf() : null,
-                    announcementTypeRef: announcementTypeId_
+                    announcementTypeId: announcementTypeId_
                 });
             },
 

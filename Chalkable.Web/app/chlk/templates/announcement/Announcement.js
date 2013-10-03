@@ -72,7 +72,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.id.ClassId, 'classId',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'dropped',
+            Boolean, 'dropped',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'expiresDate',

@@ -111,7 +111,7 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             chlk.models.people.UserProfileModel, function prepareUserProfileModel_(user){
-                return new chlk.models.people.UserProfileModel(this.prepareProfileData(user)
+                return new chlk.models.people.UserProfileModel(this.getCurrentRole(), this.prepareProfileData(user)
                     , this.prepareActionLinksData_(user));
             },
 

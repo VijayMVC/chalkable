@@ -22,7 +22,7 @@
                             div
                                 p.item-title=item.getTitle()
                                 p.classname-under=item.getClassName()
-    +ActionLink('announcement', 'add').ann-button.plus-ann
+    +ActionLink('announcement', 'add', null, null, self.getDate().format('mm/dd/yy'), true).ann-button.plus-ann
 
 
 
