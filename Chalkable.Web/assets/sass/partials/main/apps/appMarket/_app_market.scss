@@ -109,95 +109,59 @@ DIV.page {
               }
 
 
-              .grade-levels{
-                  LABEL, .new-slider, .slider-ld{
-                    display: inline-block;
-                  }
-                  .slider-lb{
-                    color: #3E3E3E !important;
-                    text-shadow: 0 1px 0 white;
-                  }
-                  .slider-lb.end-slider-range{
-                    margin-left: 7px;
-                    margin-right: 0px !important;
-                  }
-                  .slider-lb.start-slider-range{
-                    margin-left: 0px !important;
-                    margin-right: 10px;
-                  }
+              .slider-wrapper{
 
-                .new-slider{
+                margin-left: 40px;
+                vertical-align: middle;
+                margin-top: 3px;
+                display: inline-block;
+                width: 150px;
 
-                  &:hover{
-                    .slider-scale{
-                      display: block !important;
-                    }
-                  }
-                  .slider-scale{
-                    display: none;
-                    position: absolute;
-                    .scale-el{
-                      display: inline-block;
-                      position: absolute;
-                      .scale-notches{
-                        top: 1px;
-                        font-size: 6px;
-                        position: relative;
-                        top: -20px;
-                        color: #8f8f8f;
-                        left: -1px;
-                      }
-                      .scale-numbers{
-                        font-size: 10px;
-                        top: 6px;
-                        position: relative;
-                        color: #8f8f8f;
-                        text-shadow: 0 1px 0 white;
-                        left: -6px;
-                      }
-                    }
-                  }
+                .ui-slider{
+                  background: none;
+                  outline: none;
+                  border: 0;
 
-                  .ui-slider{
+                  &.ui-slider-horizontal{
+                    background: red;
+                    border-radius: 10px;
+                    height: 0.6em;
 
-                    background-image: none !important;
-                    background-color: #adadad !important;
-                    @include border-radius(4px);
-                    height: 8px !important;
-                    border-top: 1px inset #adadad !important;
-                    border-bottom: 1px solid #ffffff !important;
-
-                    >DIV{
-                      background: none !important;
-                    }
-                    .ui-state-default, .ui-state-hover, .ui-state-focus{
-                      background-color: rgb(71, 130, 150) !important;
-                      background-image: none !important;
-                      @include border-radius(8px);
-                      border: 1px outset #1e596e !important;
-                      @include box-shadow(0.5px 2px 4px #838383, inset 0 1px 1px #ffffff);
-                      cursor: pointer !important;
-                      height: 15px !important;
-                      width: 15px !important;
-                    }
-                  }
-
-                  .x-slider-end{
                     background-image: none;
-                    top: -8px;
-                    position: relative;
-                    .x-slider-inner{
-                      background-image: none;
+                    background-color: #adadad;
+                    border-top: 1px inset #adadad;
+                    border-bottom: 1px solid #ffffff;
+                  }
 
-                      .x-slider-thumb{
-                        background-color: rgb(71, 130, 150);
-                        background-image: none;
-                        @include border-radius(8px);
-                        border: 1px outset #1e596e;
-                        @include box-shadow(0.5px 2px 4px #838383, inset 0 1px 1px #ffffff);
-                        cursor: pointer;
-                      }
-                    }
+                  .ui-widget-header{
+                    background: none;
+                  }
+
+                  .ui-slider-handle{
+                    position: absolute;
+                    z-index: 2;
+                    width: 1.0em;
+                    height: 1.0em;
+                    background-color: #478296;
+                    background-image: none;
+                    border-radius: 12px;
+                    border: 1px outset #1e596e !important;
+                    @include box-shadow(0.5px 2px 4px #838383,inset 0 1px 1px #fff);
+                    cursor: pointer;
+                  }
+                }
+
+                label{
+                  position: absolute;
+                  width: 20px;
+                  margin-top: 20px;
+                  margin-left: -10px;
+                  text-align: center;
+                  font-size: 10px;
+
+                  &.notch{
+                    margin-top: -15px;
+                    font-size: 6px;
                   }
                 }
               }

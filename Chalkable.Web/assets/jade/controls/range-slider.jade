@@ -3,12 +3,5 @@ mixin RangeSlider(id, name, start, end)
     -attributes.id = id
     -attributes = self.processAttrs(attributes);
     -self.prepareData(start, end)
-    label.slider-lb.start-slider-range=self.getStartRange()
-    .new-slider(style="width: " + self.getSliderWidth()+ "px")
-        .slider-scale
-            each item, index in self.getSliderItems()
-                .scale-el(style="left: " + self.getScaleLeftPosition(index, self.getSeparatorWidth()) + "px")
-                    span.scale-notches |
-                    span.scale-numbers=item
+    .slider-wrapper
         div(id=id)
-    label.slider-lb.end-slider-range=self.getEndRange()

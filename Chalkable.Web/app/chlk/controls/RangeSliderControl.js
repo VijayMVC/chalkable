@@ -35,14 +35,6 @@ NAMESPACE('chlk.controls', function () {
             Number, 'endRange',
             Number, 'separatorWidth',
 
-            function getScaleLeftPosition(index, sWidth){
-                return parseInt(index* sWidth);
-            },
-
-            function getSliderWidth(){
-                return 150;
-            },
-
             [[Object]],
             VOID, function update(node){
                 var that = this;
@@ -55,17 +47,37 @@ NAMESPACE('chlk.controls', function () {
                     range: true,
                     min: minVal,
                     max: maxVal,
-                    values: [ that.getStartRange(), that.getEndRange()],
+                    values: [ minVal, maxVal],
                     animate: true,
                     slide: function(event, ui){
-                        that.onSlide(event, ui);
+                        node.find(".slider-lb.start-slider-range").text(that.getDisplayFieldValue(ui.values[0]));
+                        node.find(".slider-lb.end-slider-range").text(that.getDisplayFieldValue(ui.values[1]));
+
                         that.onAfterSlide(event, ui);
                     },
                     stop : function (event, ui){
                         that.onStop(event, ui);
                         that.onAfterStop(event, ui);
                     }
-                });
+                }).each(function() {
+                        var opt = jQuery(this).data()['ui-slider'].options;
+
+                        // Get the number of possible values
+                        var vals = opt.max - opt.min;
+
+                        // Position the labels
+                        for (var i = 0; i <= vals; i++) {
+
+                            // Create a new element and position it with percentages
+                            var el = jQuery('<label>'+(i+opt.min)+'</label>').css('left',(i/vals*100)+'%');
+                            // Add the element inside #slider
+                            node.append(el);
+
+                            var notch = jQuery('<label class="notch">|</label>').css('left',(i/vals*100)+'%');
+                            node.append(notch);
+                        }
+
+                    });
             },
 
             [[Object]],
@@ -88,12 +100,6 @@ NAMESPACE('chlk.controls', function () {
                 this.setSliderItems(arr);
             },
 
-            function onSlide(event, ui){
-                var node = jQuery(this.el.dom);
-                node.find(".slider-lb.start-slider-range").text(this.getDisplayFieldValue(ui.values[0]));
-                node.find(".slider-lb.end-slider-range").text(this.getDisplayFieldValue(ui.values[1]));
-            },
-
             function onAfterStop(event, ui){},
 
             function onAfterSlide(event, ui){},
@@ -111,12 +117,6 @@ NAMESPACE('chlk.controls', function () {
 
                 this.setSliderItems(items);
                 //todo: set start and end label
-
-                var itemsLength = items.length;
-                if (itemsLength == 0)
-                    itemsLength = 1;
-
-                this.setSeparatorWidth(this.getSliderWidth() / itemsLength);
             },
 
             function getDisplayFieldValue(value){
