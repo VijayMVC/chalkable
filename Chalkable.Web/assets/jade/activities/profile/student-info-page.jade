@@ -1,0 +1,6 @@
+.teacher-info.info-page.view-mode.loader-container
+    .loader
+    +ProfileTopBar(self, 'info')
+    +ProfileInfoView(self.user)
+        //todo parent section
+    +ProfileInfoForm('students', self.user)

@@ -1,0 +1,18 @@
+div(data-index=self.getIndex()).ann-type-container
+    type = self.getType()
+    div(data-tooltip="Avg " + (self.avg ? self.avg : 0) + "  Worth " + (self.percent ? self.percent : 0) + "%").type-name=type.getName()
+    announcements = self.getAnnouncements()
+    each announcement, i in announcements
+        div(data-index=i).announcements-type-item
+            +ActionLink('announcement', 'view', announcement.getId())(
+                annId = announcement.getId().valueOf(),
+                //data-values = JSON.stringify(announcement),
+                class = announcement.isDropped() ? "dropped" : ""
+            ).ann-button
+                |#{announcement.getAnnouncementTypeName()} #{announcement.getOrder()}
+            +ActionLink('grading', 'showChart', announcement.getId()).x-hidden.show-popup
+            if i == announcements.length - 1 && type.isCanCreate()
+                +ActionLink('announcement', 'add', self.getClassId(), type.getId(), null, true).ann-button.plus-ann
+    if announcements.length == 0 && type.isCanCreate()
+        .announcements-type-item
+            +ActionLink('announcement', 'add', self.getClassId(), type.getId(), null, true).ann-button.plus-ann
