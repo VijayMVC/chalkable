@@ -12,6 +12,7 @@ REQUIRE('chlk.activities.announcement.AdminAnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.AnnouncementViewPage');
 REQUIRE('chlk.activities.apps.AttachAppDialog');
+REQUIRE('chlk.activities.common.attachments.AttachmentDialog');
 
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.Reminder');
@@ -26,6 +27,7 @@ REQUIRE('chlk.models.id.ReminderId');
 REQUIRE('chlk.models.id.AttachmentId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.announcement.QnAForm');
+REQUIRE('chlk.models.common.attachments.BaseAttachmentViewData');
 
 
 
@@ -265,6 +267,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(announcement){
                     var attachments = announcement.getAnnouncementAttachments();
                     this.prepareAttachments(attachments);
+                    this.getContext().getSession().set('AnnouncementAttachments', attachments);
                     var apps = announcement.getApplications() || [];
                     var gradeViewApps = apps.filter(function(app){
                         return app.getAppAccess().isVisibleInGradingView();
@@ -290,6 +293,26 @@ NAMESPACE('chlk.controllers', function (){
                     return model;
                 }.bind(this));
             return this.UpdateView(this.getAnnouncementFormPageType_(), result);
+        },
+
+
+        [[chlk.models.id.AnnouncementAttachmentId]],
+        function viewAttachmentAction(attachmentId){
+            var attachments = this.getContext().getSession().get('AnnouncementAttachments') || [];
+            attachments = attachments.filter(function(item){
+                return item.getId() == attachmentId;
+            });
+
+            if (attachments.length == 1){
+                var attachmentUrl = attachments[0].getUrl();
+                var downloadAttachmentButton = new chlk.models.common.attachments.ToolbarButton(
+                    "download-attachment",
+                    "Download Attachment",
+                    "/AnnouncementAttachment/DownloadAttachment.json?needsDownload=true&announcementAttachmentId=" + attachments[0].getId().valueOf()
+                );
+                var attachmentViewData = new chlk.models.common.attachments.BaseAttachmentViewData(attachmentUrl, [downloadAttachmentButton]);
+                return this.ShadeView(chlk.activities.common.attachments.AttachmentDialog, new ria.async.DeferredData(attachmentViewData));
+            }
         },
 
         [[chlk.models.announcement.Announcement]],

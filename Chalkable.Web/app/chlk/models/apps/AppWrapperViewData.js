@@ -17,7 +17,7 @@ NAMESPACE('chlk.models.apps', function () {
                 BASE();
 
                 var fullUrl = app.getCurrentModeUrl() + "&code=" + app.getOauthCode();
-                this.setUrl(fullUrl);
+
                 this.setApp(app);
                 this.setAppMode(mode);
 
@@ -37,7 +37,7 @@ NAMESPACE('chlk.models.apps', function () {
                     }break;
                 }
 
-                this.setToolbarButtons(buttons);
+                BASE(fullUrl, buttons);
             }
 
         ]);

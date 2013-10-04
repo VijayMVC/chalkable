@@ -7,6 +7,7 @@ NAMESPACE('chlk.templates.common.attachments', function () {
     ASSET('~/assets/jade/common/attachments/attachments-shared.jade')();
 
     CLASS(
+        [ria.templates.TemplateBind('~/assets/jade/common/attachments/AttachmentDialog.jade')],
         [ria.templates.ModelBind(chlk.models.common.attachments.BaseAttachmentViewData)],
         'AttachmentDialogTpl', EXTENDS(chlk.templates.JadeTemplate), [
 
