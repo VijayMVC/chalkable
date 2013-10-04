@@ -1,0 +1,29 @@
+BODY {
+  DIV.page{
+    >DIV#content{
+      DIV#content-wrapper.profile{
+        #main{
+
+          .profile-info.grading-view{
+            .grading-info{
+
+              .lr-toolbar{
+                height: auto;
+                .class-grading-view{
+                  display: inline-block;
+                  margin-left: 13px;
+                  margin-top: 10px;
+                  margin-bottom: 10px;
+                }
+                .prev-button, .next-button{
+                  z-index: 2;
+                  top: 20px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+user = self.getUser()
+.loader-container
+    .loader
+    +UserProfileTopBar(self, 'grading')
+    .profile-info.grading-view
+        .summary-info
+            .person-info.standard-short-info
+                .avarar-container.standard-small-container
+                    .img-container
+                        +PersonImg(user, 64)
+                h1.profile-person-name=user.getDisplayName()
+            h2.mp-conteiner
+                lable=self.getMarkingPeriod().getName()
+            .grading-info
+                -console.log(user)
+                -console.log(user.getStudentGradings())
+                -console.log(chlk.templates.student.StudentClassGradingTpl)
+
+                +LeftRightToolbar(user.getStudentGradings(), chlk.templates.student.StudentClassGradingTpl)(
+                    itemsCount = 6,
+                    disablePrevButton = true,
+                    needDots = false,
+                    fixedPadding = true
+                )
+            h2
+                lable Stats & facts

@@ -1,0 +1,8 @@
+.class-grading
+    topData = self.getTopData()
+    topItems = topData.getTopItems()
+    selectedId = topData.getSelectedItemId()
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summary')(
+        selectedItemId=selectedId
+    ).classes-bar
+    +RenderWith(self.getSummaryPart(), chlk.templates.grading.GradingClassSummaryPartTpl)
