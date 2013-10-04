@@ -1,0 +1,10 @@
+schedule = self.getSchedule()
+.loader-container
+    .loader
+    +UserProfileTopBar(self, 'schedule')
+    +RenderWith(self.getCalendar(), chlk.templates.calendar.announcement.DayPage)(
+        notMainCalendar = true,
+        controllerName = self.getControllerName(),
+        actionName = 'schedule',
+        params = [schedule.getId().valueOf()]
+    )
