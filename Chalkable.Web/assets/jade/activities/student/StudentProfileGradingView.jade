@@ -12,3 +12,15 @@ user = self.getUser()
             h2.mp-conteiner
                 lable=self.getMarkingPeriod().getName()
             .grading-info
+                -console.log(user)
+                -console.log(user.getStudentGradings())
+                -console.log(chlk.templates.student.StudentClassGradingTpl)
+
+                +LeftRightToolbar(user.getStudentGradings(), chlk.templates.student.StudentClassGradingTpl)(
+                    itemsCount = 6,
+                    disablePrevButton = true,
+                    needDots = false,
+                    fixedPadding = true
+                )
+            h2
+                lable Stats & facts

@@ -1,11 +1,15 @@
 mixin LeftRightToolbar(data, tplClass, controller, action, params)
+    -console.log('+1')
     configs = self.prepareData(data, attributes, controller, action, params)
+    -console.log('+2')
     attributes = self.processAttrs(attributes, configs)
+    -console.log('+3')
     .lr-toolbar(attributes)
         .A(class=configs.disablePrevButton ? configs.disabledClass : "").prev-button.arrow
         .first-container
             .second-container
                 each item,i in data
+                    -console.log('+4')
                     if item.setPressed && item.getId
                         id = item.getId().valueOf();
                         if configs.multiple
@@ -20,6 +24,8 @@ mixin LeftRightToolbar(data, tplClass, controller, action, params)
                         -item.setParams(params || []);
                     else
                         -item.setController && item.setController(null);
+                    -console.log('test left right tool bar')
+                    -console.log(item)
                     +RenderWith(item, tplClass)
         .A(class=configs.disableNextButton ? configs.disabledClass : "").next-button.arrow
         if(configs.needDots)

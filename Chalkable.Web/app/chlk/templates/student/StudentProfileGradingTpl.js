@@ -1,4 +1,5 @@
 REQUIRE('chlk.templates.profile.SchoolPersonProfileTpl');
+REQUIRE('chlk.templates.student.StudentClassGradingTpl');
 REQUIRE('chlk.models.student.StudentProfileGradingViewData');
 
 NAMESPACE('chlk.templates.student', function(){

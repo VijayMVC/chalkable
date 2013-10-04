@@ -205,17 +205,11 @@ NAMESPACE('chlk.controllers', function (){
             return chlk.activities.attendance.ClassListPage;
         },
 
-        [[chlk.models.attendance.ClassAttendance]],
-        function setAttendanceProfileAction(model){
-            return this.UpdateView(chlk.activities.classes.ClassProfileAttendanceListPage
-                , this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
-        },
 
-        //todo refactor this
         [[chlk.models.attendance.ClassAttendance]],
         function setAttendanceAction(model){
-            return this.UpdateView(chlk.activities.attendance.ClassListPage
-                , this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
+            var activityClass = this.getView().getCurrent().getClass();
+            return this.UpdateView(activityClass, this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
         },
 
         ria.async.Future, function setAttendance_(model){
