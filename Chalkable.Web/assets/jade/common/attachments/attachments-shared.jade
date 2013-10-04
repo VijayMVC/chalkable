@@ -17,7 +17,7 @@ mixin Toolbar(buttons, announcementAppId, announcementId)
             +ToolbarButton(btn, announcementAppId, announcementId)
     .x-close-btn.close
 
-mixin AttachmentDialog(url, buttons, announcementAppId, announcementId)
+mixin AttachmentDialog(url, buttons, announcementId, announcementAppId)
     .base-attachment-dialog
         .x-window-header
             +Toolbar(buttons, announcementAppId, announcementId)
