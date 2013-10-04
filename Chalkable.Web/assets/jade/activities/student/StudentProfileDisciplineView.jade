@@ -1,0 +1,35 @@
+//duplicate code
+//todo: mode this to some control
+mixin MarkingPeriodSelect(markingPeriods, studentId, currentMp)
+    +Select('markingPeriodSelect', 'students', 'attendance', studentId.valueOf())
+        each mp,i in markingPeriods
+            +Option(mp.getId().valueOf(), mp.getName(), mp.getId()== currentMp.getId())
+
+
+mixin DisciplineSection(data)
+    boxesData = data.buildGlanceBoxesData()
+    .glance-container
+        each boxData in boxesData
+            +GlanceBox(null, null, boxData, null, null)
+
+
+summaryInfo = self.getSummaryInfo()
+personId = summaryInfo.getId()
+.profile-calendar.student-discipline-view
+    .loader-container
+        .loader
+        +UserProfileTopBar(self, 'discipline')
+        .profile-info.discipline-view
+            .summary-info
+                .person-info
+                    .avarar-container
+                        .img-container
+                            +PersonImg(summaryInfo, 64)
+                    h1.profile-person-name=summaryInfo.getDisplayName()
+                    lable=summaryInfo.getSummary()
+                h2.mp-conteiner.profile-drop-down-container
+                    +MarkingPeriodSelect(self.getMarkingPeriods(), personId, summaryInfo.getMarkingPeriod())
+                .glance-section.discipline-info
+                    +DisciplineSection(self)
+            #discipline-calendar-info.calendar-section
+                +RenderWith(self.getDisciplineCalendar(), chlk.templates.calendar.discipline.StudentDisciplineMonthCalendarTpl)
