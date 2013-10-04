@@ -36,27 +36,29 @@ namespace Chalkable.Web.Models.PersonViewDatas
                         StudentAvg = gSt.StudentAvg,
                         ItemTypesStats = new List<AnnouncementTypeGradingStatsViewData>()
                     };
+                    studentGradings.Add(stGrading);
                 }
-                var annTypeStats = stGrading.ItemTypesStats.FirstOrDefault(x => x.Id == gSt.AnnouncementTypeId);
-                if (annTypeStats == null)
+                foreach (var gByAnnType in gSt.GradingsByAnnType)
                 {
-                    var annType = new AnnouncementType {Id = gSt.AnnouncementTypeId, Name = gSt.AnnouncementTypeName};
-                    annTypeStats = AnnouncementTypeGradingStatsViewData.Create(annType, gSt.StudentItemTypeAvg, gSt.ClassItemTypeAvg);
-                    annTypeStats.Items = new List<AnnouncementShortGradeViewData>();
-                    stGrading.ItemTypesStats.Add(annTypeStats);
-                }
-                if (annTypeStats.Items.Any(x=>x.Id == gSt.AnnouncementId))
-                {
+                    var annTypeStats = stGrading.ItemTypesStats.FirstOrDefault(x => x.Id == gByAnnType.AnnouncementTypeId);
+                    if (annTypeStats == null)
+                    {
+                        var annType = new AnnouncementType { Id = gByAnnType.AnnouncementTypeId, Name = gByAnnType.AnnouncementTypeName };
+                        annTypeStats = AnnouncementTypeGradingStatsViewData.Create(annType, gByAnnType.StudentItemTypeAvg, gByAnnType.ClassItemTypeAvg);
+                        annTypeStats.Items = new List<AnnouncementShortGradeViewData>();
+                        stGrading.ItemTypesStats.Add(annTypeStats);
+                    }
                     var annComplex = new AnnouncementComplex
-                        {
-                            Id = gSt.AnnouncementId,
-                            Order = gSt.AnnouncementOrder,
-                            Dropped = gSt.AnnouncementDropped,
-                            Avg = gSt.ItemAvg
-                        };
-                   annTypeStats.Items.Add(AnnouncementShortGradeViewData.Create(annComplex, mapper));
+                    {
+                        Id = gByAnnType.AnnouncementId,
+                        Order = gByAnnType.AnnouncementOrder,
+                        Dropped = gByAnnType.AnnouncementDropped,
+                        Avg = gByAnnType.ItemAvg
+                    };
+                    annTypeStats.Items.Add(AnnouncementShortGradeViewData.Create(annComplex, mapper));
                 }
             }
+            res.StudentGradings = studentGradings;
             return res;
         }
     }
@@ -66,7 +68,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public Guid ClassPersonId { get; set; }
         public Guid PersonId { get; set; }
         public Guid ClassId { get; set; }
-        public Guid ClassName { get; set; }
+        public string ClassName { get; set; }
         public Guid CourseId { get; set; }
         public int? ClassAvg { get; set; }
         public int? StudentAvg { get; set; }

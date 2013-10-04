@@ -232,11 +232,22 @@ namespace Chalkable.Data.School.DataAccess
                     {"studentId", studentId},
                     {"markingPeriodId", markingPeriodId},
                     {"callerId", callerId},
-                    {"role", role},
+                    {"roleId", role},
                 };
             using (var reader = ExecuteStoredProcedureReader("spCalcGradingStats", parameters))
             {
-                return reader.ReadList<ClassPersonGradingStats>();
+                var res = reader.ReadList<ClassPersonGradingStats>();
+                reader.NextResult();
+
+                while (reader.Read())
+                {
+                    var attTypeGrading = reader.Read<AnnouncementTypeGrading>();
+                    var cp = res.First(x => x.Id == attTypeGrading.ClassPersonId);
+                    if(cp.GradingsByAnnType == null)
+                        cp.GradingsByAnnType = new List<AnnouncementTypeGrading>();
+                    cp.GradingsByAnnType.Add(attTypeGrading);
+                }
+                return res;
             }
         }
     }

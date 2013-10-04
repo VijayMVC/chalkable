@@ -20,8 +20,8 @@ calendar = self.getAttendanceCalendar()
         +UserProfileTopBar(self, 'attendance')
         .profile-info.attendance-view
             .summary-info
-                .person-info
-                    .avarar-container
+                .person-info.standard-short-info
+                    .avarar-container.standard-small-container
                         .img-container
                             +PersonImg(summaryInfo, 64)
                     h1.profile-person-name=summaryInfo.getDisplayName()

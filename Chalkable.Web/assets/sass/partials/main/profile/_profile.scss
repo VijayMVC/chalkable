@@ -25,6 +25,33 @@ BODY {
     >DIV#content {
       DIV#content-wrapper.profile{
         #main{
+
+
+          .person-info.standard-short-info{
+            margin-left: 15px;
+            padding: 5px;
+            margin-top: 15px;
+            display: inline-block;
+
+            .profile-person-name{
+              display: inline-block;
+              font-size: 36px;
+              vertical-align: top;
+            }
+          }
+
+          .avarar-container.standard-small-container{
+            padding: 5px;
+            display: inline-block !important;
+            @include border-radius(6px);
+            @include box-shadow(0 2px 2px #777);
+            overflow: hidden;
+            border: 2px solid #888;
+            box-shadow: 0 2px 2px #777;
+            display: inline-block;
+            background: white;
+          }
+
           .summary-view{
             margin: 0 -28px;
             padding: 16px 11px 0 13px;

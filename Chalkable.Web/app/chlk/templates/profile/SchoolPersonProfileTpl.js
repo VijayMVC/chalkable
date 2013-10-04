@@ -17,7 +17,6 @@ NAMESPACE('chlk.templates.profile', function(){
             },
 
             Object, function getUser(){
-                console.log(this.getModel().getUser());
                 return this.getModel().getUser();},
 
             String, function getControllerName(){
@@ -37,12 +36,14 @@ NAMESPACE('chlk.templates.profile', function(){
             [[String]],
             OVERRIDE, ArrayOf(chlk.models.common.ActionLinkModel), function buildActionLinkModels(pressedLinkName){
                 var controller = this.getControllerName();
-                console.log(this.getUser());
                 var userId = this.getUser().getId().valueOf();
                 var res = [
                     this.createActionLinkModel_(controller, 'details', 'Now', pressedLinkName, [userId]),
                     this.createActionLinkModel_(controller, 'info', 'Info', pressedLinkName, [userId])
                 ];
+                if(controller == this._studentControllerName){
+                    res.push(this.createActionLinkModel_(controller, 'grading', 'Grading', pressedLinkName, [userId]));
+                }
                 if(controller == this._teacherControllerName || controller == this._studentControllerName){
                     res.push(this.createActionLinkModel_(controller, 'schedule', 'Schedule', pressedLinkName, [userId]));
                 }

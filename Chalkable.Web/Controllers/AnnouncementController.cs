@@ -48,7 +48,7 @@ namespace Chalkable.Web.Controllers
                     draft.AnnouncementTypeRef = announcementTypeId.Value;
                     Guid? markingPeriodId = null;
                     if (draft.MarkingPeriodClassRef.HasValue)
-                        markingPeriodId = SchoolLocator.MarkingPeriodService.GetMarkingPeriodClass(draft.MarkingPeriodClassRef.Value).Id;
+                        markingPeriodId = SchoolLocator.MarkingPeriodService.GetMarkingPeriodClass(draft.MarkingPeriodClassRef.Value).MarkingPeriodRef;
                     SchoolLocator.AnnouncementService.EditAnnouncement(AnnouncementInfo.Create(draft), markingPeriodId, classId);
                 }
             }

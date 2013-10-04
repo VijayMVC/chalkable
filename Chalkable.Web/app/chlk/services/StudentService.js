@@ -2,7 +2,10 @@ REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.student.StudentInfo');
+REQUIRE('chlk.models.student.StudentGradingInfo');
+
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -52,6 +55,14 @@ NAMESPACE('chlk.services', function () {
                     phones: phones && JSON.parse(phones),
                     salutation: salutation,
                     birthdayDate: birthDate && JSON.stringify(birthDate.getDate()).slice(1,-1)
+                });
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.MarkingPeriodId]],
+            ria.async.Future, function getGradingInfo(studentId, markingPeriodId){
+                return this.get('Student/Grading.json', chlk.models.student.StudentGradingInfo, {
+                    personId: studentId && studentId.valueOf(),
+                    markingPeriodId: markingPeriodId && markingPeriodId.valueOf()
                 });
             }
         ])

@@ -8,9 +8,8 @@ NAMESPACE('chlk.models.classes', function(){
         [[chlk.models.common.Role, chlk.models.classes.Class]],
         function $(role_, clazz_){
             BASE(role_);
-            if(clazz_ && !(clazz_ instanceof chlk.models.classes.Class))
-                throw new Exception('clazz should be instance of chlk.models.classes.Class');
-            this._clazz = clazz_;
+            if(clazz_)
+                this._clazz = clazz_;
         },
         Object, function getClazz(){return this._clazz;}
     ])

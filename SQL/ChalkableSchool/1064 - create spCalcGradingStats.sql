@@ -18,7 +18,7 @@ begin
 	return (@avg)
 end
 GO
-create procedure [dbo].[spCalcGradingStats] @callerId uniqueidentifier, @roleId int, @studentId uniqueidentifier, @markingPeriodId uniqueidentifier
+alter procedure [dbo].[spCalcGradingStats] @callerId uniqueidentifier, @roleId int, @studentId uniqueidentifier, @markingPeriodId uniqueidentifier
 as
 -- calc avg per class 
 declare @classPerson table
@@ -41,7 +41,7 @@ select cp.Id, cp.PersonRef, cp.ClassRef,
 from ClassPerson cp 
 join MarkingPeriodClass mpc on mpc.ClassRef = cp.ClassRef
 join Class on Class.Id = cp.ClassRef
-where cp.PersonRef = @studentId
+where cp.PersonRef = @studentId and mpc.MarkingPeriodRef = @markingPeriodId
 	  and (@roleId = 1 or @roleId = 2 or @roleId = 5 or @roleId = 7 or @roleId = 8 
 	        or (@roleId = 3 and cp.PersonRef  = @callerId))
 
@@ -55,7 +55,6 @@ declare @annType table
 	[ClassItemTypeAvg] int,
 	MarkingPeriodClassId uniqueidentifier
 ) 
-
 insert into @annType
 select
 		cp.Id,
@@ -71,8 +70,10 @@ join AnnouncementType at on at.Id = fgat.AnnouncementTypeRef
 where mpc.MarkingPeriodRef = @markingPeriodId 
 
 -- result 
+select * from @classPerson
+
 select 
-	cp.*,
+	at.ClassPersonId,
 	at.AnnouncementTypeId,
 	at.AnnouncementTypeName,
 	at.MarkingPeriodClassId,
@@ -89,7 +90,7 @@ join @annType at on at.MarkingPeriodClassId = a.MarkingPeriodClassRef
 				and at.AnnouncementTypeId = a.AnnouncementTypeRef
 				and at.ClassPersonId = sa.ClassPersonRef
 join @classPerson cp on cp.Id = at.ClassPersonId 
-where sa.GradeValue is not null and sa.[State] = 2 and a.[State] = 1
+where a.[State] = 1
 
 GO
 

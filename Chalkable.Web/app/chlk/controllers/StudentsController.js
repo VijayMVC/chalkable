@@ -8,12 +8,12 @@ REQUIRE('chlk.services.MarkingPeriodService');
 REQUIRE('chlk.services.DisciplineService');
 REQUIRE('chlk.services.DisciplineCalendarService');
 
-
 REQUIRE('chlk.activities.person.ListPage');
 REQUIRE('chlk.activities.student.SummaryPage');
 REQUIRE('chlk.activities.profile.StudentInfoPage');
 REQUIRE('chlk.activities.student.StudentProfileAttendancePage');
 REQUIRE('chlk.activities.student.StudentProfileDisciplinePage');
+REQUIRE('chlk.activities.student.StudentProfileGradingPage');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.teacher.StudentsList');
@@ -23,6 +23,7 @@ REQUIRE('chlk.models.student.StudentProfileAttendanceViewData');
 REQUIRE('chlk.models.student.StudentProfileDisciplineViewData');
 REQUIRE('chlk.models.student.StudentProfileSummaryViewData');
 REQUIRE('chlk.models.student.StudentProfileInfoViewData');
+REQUIRE('chlk.models.student.StudentProfileGradingViewData');
 
 NAMESPACE('chlk.controllers', function (){
     "use strict";
@@ -188,6 +189,23 @@ NAMESPACE('chlk.controllers', function (){
                         return new chlk.models.calendar.discipline.StudentDisciplineMonthCalendar(date_, minDate_, maxDate_, data, personId);
                     });
                 return this.UpdateView(chlk.activities.student.StudentProfileDisciplinePage, res);
+            },
+
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.MarkingPeriodId]],
+            function gradingAction(studentId, markingPeriodId_){
+                var currentMp = this.getCurrentMarkingPeriod();
+                markingPeriodId_ = markingPeriodId_ || currentMp.getId();
+                var res = ria.async.wait([
+                        this.studentService.getGradingInfo(studentId, markingPeriodId_),
+                        this.markingPeriodService.list(this.getCurrentSchoolYearId())
+                    ])
+                    .attach(this.validateResponse_())
+                    .then(function(result){
+                        var mp = result[1].filter(function (el){return el.getId() == markingPeriodId_})[0];
+                        return new chlk.models.student.StudentProfileGradingViewData(this.getCurrentRole(), result[0], mp);
+                    }, this);
+                return this.PushView(chlk.activities.student.StudentProfileGradingPage, res);
             }
         ])
 });
