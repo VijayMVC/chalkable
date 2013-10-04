@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.people.ShortUserInfo');
-REQUIRE('chlk.models.student.ClassPersonGradingInfo');
+REQUIRE('chlk.models.grading.ClassPersonGradingInfo');
 
 NAMESPACE('chlk.models.student', function(){
     "use strict";
@@ -8,7 +8,7 @@ NAMESPACE('chlk.models.student', function(){
     CLASS('StudentGradingInfo', EXTENDS(chlk.models.people.ShortUserInfo),[
 
         [ria.serialize.SerializeProperty('studentgradings')],
-        ArrayOf(chlk.models.student.ClassPersonGradingInfo), 'studentGradings'
+        ArrayOf(chlk.models.grading.ClassPersonGradingInfo), 'studentGradings'
 
     ]);
 });

@@ -2,12 +2,12 @@ REQUIRE('chlk.models.id.ClassPersonId');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.CourseId');
+REQUIRE('chlk.models.grading.ClassPersonGradingItem');
 
-
-NAMESPACE('chlk.models.student', function (){
+NAMESPACE('chlk.models.grading', function (){
    "use strict";
 
-    /**@class chlk.models.student.ClassPersonGradingInfo*/
+    /**@class chlk.models.grading.ClassPersonGradingInfo*/
     CLASS('ClassPersonGradingInfo',  [
 
         [ria.serialize.SerializeProperty('classpersonid')],
@@ -29,6 +29,9 @@ NAMESPACE('chlk.models.student', function (){
         Number, 'classAvg',
 
         [ria.serialize.SerializeProperty('studentavg')],
-        Number, 'studentAvg'
+        Number, 'studentAvg',
+
+        [ria.serialize.SerializeProperty('itemtypesstats')],
+        ArrayOf(chlk.models.grading.ClassPersonGradingItem), 'gradingByAnnouncementTypes'
     ]);
 });
