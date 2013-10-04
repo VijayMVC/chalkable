@@ -6,8 +6,8 @@
     .action-bar.buttons.filter
         .container.panel-bg
             .left
-                A(class=self.isByLastName()?"":"pressed", data-value=false).action-button.first-last First name
-                A(class=self.isByLastName()?"pressed":"", data-value=true).action-button.first-last Last name
+                A(class=self.isByLastName()?"":"pressed", data-value="false").action-button.first-last First name
+                A(class=self.isByLastName()?"pressed":"", data-value="true").action-button.first-last Last name
                 input(type="hidden", name="byLastName", value=self.isByLastName()))
             .right
                 input(placeholder='Filter list...', name="filter", value=self.getFilter()).people-search

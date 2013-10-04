@@ -197,6 +197,7 @@ NAMESPACE('chlk.controls', function () {
 
             [[ria.dom.Dom]],
             VOID, function focusGrid() {
+                if(!new ria.dom.Dom(':focus').exists())
                 var node = this.getGrid();
                 var row = node.find('.row.selected');
                 if(row.exists()){
