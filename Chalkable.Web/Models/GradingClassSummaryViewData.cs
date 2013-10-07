@@ -23,10 +23,10 @@ namespace Chalkable.Web.Models
                         Avg = classGradingStats.Avg,
                         ByAnnouncementTypes = new List<GradingClassSummaryItemViewData>()
                     };
+            announcements = announcements.Where(x => x.MarkingPeriodClassRef == classGradingStats.Id).ToList();
             foreach (var fgAnnouncementType in fgAnnouncementTypes)
             {
-                var annPerMp = announcements.Where(x => x.MarkingPeriodClassRef == fgAnnouncementType.FinalGradeRef 
-                                                      && x.AnnouncementTypeRef == fgAnnouncementType.AnnouncementTypeRef).ToList();
+                var annPerMp = announcements.Where(x => x.AnnouncementTypeRef == fgAnnouncementType.AnnouncementTypeRef).ToList();
                 res.ByAnnouncementTypes.Add(GradingClassSummaryItemViewData.Create(annPerMp, fgAnnouncementType.AnnouncementType, fgAnnouncementType.PercentValue, mapper));
             }
             return res;
