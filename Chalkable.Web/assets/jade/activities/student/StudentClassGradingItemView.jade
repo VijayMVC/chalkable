@@ -1,0 +1,28 @@
+itemStyleInfo = {}
+.class-grading-view
+    div
+        .class-img
+            +ClassImg(self.getCourse(), 20, 35)(width=20, height=35)
+        +GlanceBox(null, null, self.prepareGlanceBoxData())
+    .announcement-types.section-info
+        each itemType in self.getGradingByAnnouncementTypes()
+            .item-type.new-grading-box
+                .avg-section.x-hidden
+                    .new-grading-box.avg-box-left
+                        span.pacifico Avg.
+                        span=itemType.getStudentItemTypeAvg() || 0
+                    .new-grading-box.avg-box-right
+                        span.pacifico Class
+                        span=itemType.getClassItemTypeAvg() || 0
+                .item-type-title=itemType.getName()
+                .item-type-details.x-hidden
+                    each item in itemType.getAnnouncements()
+                        itemStyleInfo = self.prepareItemStyleInfo(item)
+                        +ActionLink('announcement', 'view', item.getId()).new-grading-box.item
+                            div(class = itemStyleInfo.droppedItemClass).avg-section.x-hidden
+                                .new-grading-box.avg-box-left.dropped-box Dropped
+                                div(class= itemStyleInfo.emptyBoxClass).new-grading-box.avg-box-right
+                                    span.pacifico Class
+                                    span= item.getAvg()
+                            .item-title=itemType.getName() + " " + item.getOrder() + " : "
+                    .close-hover-bt
