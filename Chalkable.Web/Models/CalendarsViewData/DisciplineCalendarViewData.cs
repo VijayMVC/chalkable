@@ -44,7 +44,6 @@ namespace Chalkable.Web.Models.CalendarsViewData
                         Id = x.Key,
                         Name = x.Value.First().Name,
                         Count = x.Value.Count,
-                        PeriodOrder = x.Value.First()
                     }).ToList();
 
             if (sortedDisciplineTypes.Count > DISCIPLINE_COUNT)
