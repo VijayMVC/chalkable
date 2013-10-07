@@ -15,6 +15,10 @@ devName = app.getDeveloperInfo().getName()
         .app-general-info
             .reviews
                 +ActionLink('a', 'b').review-link User Ratings
+                a.write-review-btn Write a review
+                .add-review
+                    textarea.review-text(placeholder="Write a review")
+                    +Button().special-button.blue-button Submit
             .permissions
                 .permissions-group
                     .group-header.first This app is for:
