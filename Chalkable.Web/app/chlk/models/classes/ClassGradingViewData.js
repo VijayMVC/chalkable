@@ -10,24 +10,8 @@ NAMESPACE('chlk.models.classes', function () {
 
     /** @class chlk.models.classes.ClassGradingViewData*/
     CLASS(
-        'ClassGradingViewData', [
+        'ClassGradingViewData', EXTENDS(chlk.models.classes.Class), [
             [ria.serialize.SerializeProperty('gradingpermp')],
-            ArrayOf(chlk.models.grading.GradingClassSummaryItems), 'gradingPerMp',
-
-            chlk.models.id.ClassId, 'id',
-
-            String, 'name',
-
-            String, 'description',
-
-            chlk.models.course.Course, 'course',
-
-            [ria.serialize.SerializeProperty('gradelevel')],
-            chlk.models.grading.GradeLevel, 'gradeLevel',
-
-            chlk.models.people.User, 'teacher',
-
-            [ria.serialize.SerializeProperty('markingperiodsid')],
-            ArrayOf(chlk.models.id.MarkingPeriodId), 'markingPeriodsId'
+            ArrayOf(chlk.models.grading.GradingClassSummaryItems), 'gradingPerMp'
         ]);
 });
