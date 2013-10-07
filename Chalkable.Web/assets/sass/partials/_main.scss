@@ -55,6 +55,8 @@
 
 @import "partials/main/search/_common";
 
+@import "partials/main/notification/_list-new";
+
 INPUT, TEXTAREA, .text-field{
   @include border-radius(5px);
   background: #fff;

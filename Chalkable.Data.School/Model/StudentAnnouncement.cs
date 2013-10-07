@@ -18,7 +18,9 @@ namespace Chalkable.Data.School.Model
         public int? GradeValue { get; set; }
         public string Comment { get; set; }
         public string ExtraCredit { get; set; }
+        public const string DROPPED_FIELD = "dropped"; 
         public bool Dropped { get; set; }
+        public const string STATE_FIELD = "state";
         public StudentAnnouncementStateEnum State { get; set; }
         public Guid? ApplicationRef { get; set; }
 

@@ -57,6 +57,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public int? Avg { get; set; }
         public int? MappedAvg { get; set; }
         public int GradedStudentCount { get; set; }
+        public int? Grade { get; set; } //TODO: think about this
 
         protected AnnouncementShortGradeViewData(AnnouncementComplex announcement, IGradingStyleMapper mapper)
             : base(announcement)
@@ -65,9 +66,9 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             MappedAvg = mapper.Map(announcement.GradingStyle, announcement.Avg);
             GradedStudentCount = announcement.GradingsStudentsCount;
         }
-        public static AnnouncementShortGradeViewData Create(AnnouncementComplex announcement, IGradingStyleMapper mapper)
+        public static AnnouncementShortGradeViewData Create(AnnouncementComplex announcement, IGradingStyleMapper mapper, int? studentGrade = null)
         {
-            return new AnnouncementShortGradeViewData(announcement, mapper);
+            return new AnnouncementShortGradeViewData(announcement, mapper) {Grade = studentGrade};
         }
         public static IList<AnnouncementShortGradeViewData> Create(IList<AnnouncementComplex> announcements, IGradingStyleMapper mapper)
         {

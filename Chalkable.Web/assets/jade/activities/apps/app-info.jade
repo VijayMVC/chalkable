@@ -111,6 +111,8 @@ appPermissions = appPermissions.join(',')
             +Button()(disabled = self.isDraft(), name="submit-btn", class = self.isDraft() ? "x-item-disabled" : "").blue-tb-right-button.submit-btn  Submit App
         +Hidden('draft', self.isDraft())
         +Hidden('id', app.getId())
+        +Hidden('developerName', app.getDeveloperInfo().getName())
+        +Hidden('developerWebSite', app.getDeveloperInfo().getWebSite())
         .section.first
             .elem
                 label.hint App Name:

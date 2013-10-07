@@ -14,9 +14,10 @@ user = self.getUser()
             .grading-info
                 +LeftRightToolbar(user.getStudentGradings(), chlk.templates.student.StudentClassGradingTpl)(
                     itemsCount = 6,
-                    disablePrevButton = true,
+                    disablePrevButton = false,
                     needDots = false,
-                    fixedPadding = true
+                    hideArrows = true,
+                    fixedPadding = true,
                 )
             h2
                 lable Stats & facts

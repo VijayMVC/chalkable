@@ -37,7 +37,7 @@ NAMESPACE('chlk.models.apps', function () {
 
 
             //for check
-            String, 'developerWebsite',
+            String, 'developerWebSite',
             String, 'developerName'
         ]);
 });

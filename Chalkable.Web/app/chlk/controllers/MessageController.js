@@ -76,17 +76,16 @@ NAMESPACE('chlk.controllers', function (){
                 return new ria.async.DeferredData(result);
             },
 
-            [[String]],
+            [[chlk.models.id.MessageId]],
             function sendPageAction(replayOnId_)
             {
-                var message;
+                var model;
                 if (replayOnId_)
                 {
-                    message = this.getMessageFromSession(replayOnId_);
+                    model = this.getMessageFromSession(replayOnId_);
                 }
                 else
-                    message = new chlk.models.messages.Message();
-                model = ria.async.DeferredData(message);
+                    model = new ria.async.DeferredData(new chlk.models.messages.Message());
                 return this.ShadeView(chlk.activities.messages.AddDialog, model);
             },
 
@@ -100,20 +99,22 @@ NAMESPACE('chlk.controllers', function (){
                     }.bind(this));
             },
 
-            [[String]],
+            [[chlk.models.id.MessageId]],
             function viewPageAction(id)
             {
-                var message = this.getMessageFromSession(id);
-                var model = ria.async.DeferredData(message);
+                var model = this.getMessageFromSession(id);
                 return this.ShadeView(chlk.activities.messages.ViewDialog, model);
             },
 
             function getMessageFromSession(id)
             {
-                return this.getContext().getSession().get('currentMessages', []).
+                var res = this.getContext().getSession().get('currentMessages', []).
                     filter(function(message){
-                        return message.getId().valueOf() == id;
+                        return message.getId() == id;
                     })[0];
+                if (res)
+                    return new ria.async.DeferredData(res);
+                return this.messageService.getMessage(id);
             }
         ])
 });

@@ -115,5 +115,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 return new AnnouncementAttachmentDataAccess(uow).GetList(Context.UserId, Context.Role.Id, filter);
             }
         }
+        public static string GetAttachmentRelativeAddress()
+        {
+            return (new BlobHelper()).GetBlobsRelativeAddress(ATTACHMENT_CONTAINER_ADDRESS);
+        }
     }
 }

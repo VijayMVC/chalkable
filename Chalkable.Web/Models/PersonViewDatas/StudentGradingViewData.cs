@@ -53,9 +53,10 @@ namespace Chalkable.Web.Models.PersonViewDatas
                         Id = gByAnnType.AnnouncementId,
                         Order = gByAnnType.AnnouncementOrder,
                         Dropped = gByAnnType.AnnouncementDropped,
-                        Avg = gByAnnType.ItemAvg
+                        Avg = gByAnnType.ItemAvg,
+                        
                     };
-                    annTypeStats.Items.Add(AnnouncementShortGradeViewData.Create(annComplex, mapper));
+                    annTypeStats.Items.Add(AnnouncementShortGradeViewData.Create(annComplex, mapper, gByAnnType.StudentGrade));
                 }
             }
             res.StudentGradings = studentGradings;

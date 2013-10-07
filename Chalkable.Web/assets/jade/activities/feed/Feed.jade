@@ -12,6 +12,7 @@
                 +ActionLink('feed', 'list', true, !self.starredOnly, selectedId, 0)(class=self.starredOnly ? 'pr' : 'unpr')
                     span#importan-count= self.importantCount
             .feed-notifications Notifications
+                +ActionLink('notification', 'listNew')
     +Grid('feed', 'list', self, [true, self.starredOnly, selectedId]).not-transparent
         +GridBody()
             each item in self.items

@@ -9,10 +9,6 @@ NAMESPACE('chlk.templates.classes', function () {
         [ria.templates.ModelBind(chlk.models.classes.ClassProfileGradingViewData)],
         'ClassProfileGradingTpl', EXTENDS(chlk.templates.profile.ClassProfileTpl), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.classes.ClassGradingViewData, 'gradingPart',
-
-            OVERRIDE, function getClazz(){
-                return this.getGradingPart();
-            }
+            chlk.models.classes.ClassGradingViewData, 'gradingPart'
         ]);
 });

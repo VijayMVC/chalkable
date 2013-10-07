@@ -10,7 +10,7 @@ NAMESPACE('chlk.models.classes', function(){
 
         [[chlk.models.common.Role, chlk.models.classes.ClassGradingViewData]],
         function $(role_, gradingPart_){
-            BASE(role_);
+            BASE(role_, gradingPart_);
             if(gradingPart_)
                 this.setGradingPart(gradingPart_);
         }

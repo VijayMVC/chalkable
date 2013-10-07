@@ -55,9 +55,9 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         private IServiceLocatorSchool serviceLocator;
 
-        private const string dataFormat = "MMM dd";
-        private const string teachers = "teachers";
-        private const string students = "students";
+        private const string DATA_FORMAT = "MMM dd";
+        private const string TEACHERS = "teachers";
+        private const string STUDENTS = "students";
 
 
         private const string ROLE_SYSADMIN = "SysAdmin";
@@ -150,9 +150,9 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         private string GetRelativeUrlByRole(Person person)
         {
             if (person.RoleRef == CoreRoles.TEACHER_ROLE.Id)
-                return teachers;            
+                return TEACHERS;            
             if (person.RoleRef == CoreRoles.STUDENT_ROLE.Id)
-                return students;
+                return STUDENTS;
             return null;
         }
 
@@ -235,7 +235,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                         NeedsUrlLink = fromPersonRole == CoreRoles.TEACHER_ROLE
                                         || fromPersonRole == CoreRoles.STUDENT_ROLE,
                         ShortedMessage = StringTools.BuildShortText(privateMessage.Body, 30),
-                        MessageSubject = privateMessage.Subject
+                        MessageSubject = privateMessage.Subject,
+                        MessageSender = privateMessage.Sender
                     };
             return BuildNotificationFromTemplate(NotificationTemplateProvider.PRIVATE_MESSAGE_NOTIFICATION,
                                                     NotificationType.Message, toPerson, null, null, null,
@@ -268,7 +269,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                     {
                         AttendanceType = classAttendance.Type,
                         ClassName = classAttendance.Class.Name,
-                        Date = classAttendance.Date.ToString(dataFormat),
+                        Date = classAttendance.Date.ToString(DATA_FORMAT),
                         Period = classAttendance.ClassPeriod.Period.Order
                     };
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ATTENDANCE_NOTIFICATION_TO_STUDENT,
@@ -280,7 +281,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             var otherModel = new
             {
                 ClassName = className,
-                Date = dateTime.ToString(dataFormat)
+                Date = dateTime.ToString(DATA_FORMAT)
             };
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ATTENDANCE_NOTIFICATION_TO_TEACHER,
                                                  NotificationType.NoTakeAttendance, recipient, null, classPeriod, null, null, null, null, otherModel);

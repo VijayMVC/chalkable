@@ -15,6 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
         PaginatedList<PrivateMessageDetails> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword);
         void MarkAsRead(IList<Guid> ids, bool read);
         void Delete(IList<Guid> id);
+        PrivateMessageDetails GetMessage(Guid id);
     }
 
     public enum PrivateMessageType
@@ -115,6 +116,16 @@ namespace Chalkable.BusinessLogic.Services.School
                     da.Update(messages);
                     uow.Commit();
                 }
+        }
+
+        public PrivateMessageDetails GetMessage(Guid id)
+        {
+            using (var uow = Read())
+            {
+                var da = new PrivateMessageDataAccess(uow);
+                var res = da.GetDetailsById(id, Context.UserId);
+                return res;
+            }
         }
     }
 }

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
@@ -100,7 +99,26 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void ProcessReminders(int? count)
         {
-            throw new NotImplementedException();
+            if (!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+            var now = DateTime.UtcNow;
+            Debug.WriteLine(now);
+
+            using (var uow = Update())
+            {
+                var da = new AnnouncementReminderDataAccess(uow);
+                var toProcess = da.GetRemindersToProcess(Context.NowSchoolTime, count ?? 1);
+
+                var toProcessList = toProcess.ToList();
+                foreach (var announcementReminder in toProcessList)
+                {
+                    var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementReminder.AnnouncementRef);
+                    ServiceLocator.NotificationService.AddAnnouncementReminderNotification(announcementReminder, ann);
+                    announcementReminder.Processed = true;
+                    da.Update(announcementReminder);
+                }
+                uow.Commit();
+            }
         }
     }
 }

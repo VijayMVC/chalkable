@@ -18,6 +18,11 @@ NAMESPACE('chlk.models.period', function () {
             Number, 'order',
 
             [ria.serialize.SerializeProperty('markingperiodid')],
-            chlk.models.id.MarkingPeriodId, 'markingPeriodId'
+            chlk.models.id.MarkingPeriodId, 'markingPeriodId',
+
+            String, function getSerialOrder(){
+                var order = this.getOrder();
+                return order && getSerial(order);
+            }
         ]);
 });

@@ -13,12 +13,10 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
         
-        private const string DROP_PARAM = "drop";
-
         public void Update(Guid announcementId, bool drop)
         {
             var conds = new AndQueryCondition { { StudentAnnouncement.ANNOUNCEMENT_REF_FIELD_NAME, announcementId } };
-            var updateParams = new Dictionary<string, object> {{DROP_PARAM, drop}};
+            var updateParams = new Dictionary<string, object> { { StudentAnnouncement.DROPPED_FIELD, drop } };
             SimpleUpdate<StudentAnnouncement>(updateParams, conds);
         }
 
@@ -60,10 +58,9 @@ namespace Chalkable.Data.School.DataAccess
         {
             var res = new AndQueryCondition();
             if(query.AnnouncementId.HasValue)
-                res.Add("announcementRef", query.AnnouncementId);
-            if(query.State.HasValue)
-                res.Add("state", query.State);
-
+                res.Add(StudentAnnouncement.ANNOUNCEMENT_REF_FIELD_NAME, query.AnnouncementId);
+            if (query.State.HasValue)
+                res.Add(StudentAnnouncement.STATE_FIELD, query.State);
             return res;
         } 
 

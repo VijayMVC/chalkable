@@ -137,14 +137,14 @@ NAMESPACE('chlk.controls', function () {
                 var secondContainer = toolbar.find('.second-container');
                 secondContainer.setCss('left', -width * index_);
                 if(index_ == 0){
-                    prevButton.addClass('disabled');
+                    prevButton.addClass(configs.disabledClass);
                 }else{
-                    prevButton.removeClass('disabled');
+                    prevButton.removeClass(configs.disabledClass);
                 }
                 if(index_ == configs.pagesCount - 1){
-                    nextButton.addClass('disabled');
+                    nextButton.addClass(configs.disabledClass);
                 }else{
-                    nextButton.removeClass('disabled');
+                    nextButton.removeClass(configs.disabledClass);
                 }
             }
         ]);

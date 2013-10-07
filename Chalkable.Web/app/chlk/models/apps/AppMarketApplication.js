@@ -9,9 +9,6 @@ NAMESPACE('chlk.models.apps', function () {
     CLASS(
         'AppMarketApplication', EXTENDS(chlk.models.apps.Application), [
 
-            [ria.serialize.SerializeProperty('developer')],
-            chlk.models.developer.DeveloperInfo, 'developerInfo',
-
             [ria.serialize.SerializeProperty('installedforpersonsgroup')],
             ArrayOf(chlk.models.apps.AppInstallGroup), 'installedForGroups',
 

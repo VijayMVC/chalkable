@@ -26,6 +26,7 @@
                                 li=discType.getCount() + " " + discType.getName()
                             li=item.getMoreCount() + "More"
                         else
-                            each discType in item.getDisciplineTypes()
-                                li=discType.getName() + ", " + discType.getPeriodName()
+                            each disc in item.getDisciplines()
+                                each discType in disc.getDisciplineTypes()
+                                    li=discType.getName() + ", " + disc.getPeriod().getSerialOrder()
 

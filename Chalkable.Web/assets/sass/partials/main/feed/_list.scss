@@ -17,10 +17,17 @@ $star-size: 18px;
       font-size: 12px;
       border: 0 none;
       background-color: transparent;
-      cursor: pointer;
       width: auto;
       outline: 0 none;
       float: right;
+      position: relative;
+      a{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
     }
   }
   .action-bar{

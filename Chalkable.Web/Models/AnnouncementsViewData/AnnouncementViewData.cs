@@ -12,7 +12,6 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
 
         public DateTime Created { get; set; }
 
-        public bool IsOwner { get; set; }
         public bool Gradable { get; set; }
         public bool Starred { get; set; }
         public int State { get; set; }

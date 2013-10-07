@@ -1,5 +1,6 @@
 REQUIRE('chlk.templates.JadeTemplate');
 REQUIRE('chlk.models.grading.ClassPersonGradingInfo');
+REQUIRE('chlk.models.course.Course');
 
 NAMESPACE('chlk.templates.student', function(){
     "use strict";
@@ -34,12 +35,34 @@ NAMESPACE('chlk.templates.student', function(){
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.ClassPersonGradingItem), 'gradingByAnnouncementTypes',
 
+            chlk.models.course.Course, function getCourse(){
+                var res = new chlk.models.course.Course();
+                res.setId(this.getCourseId());
+                return res;
+            },
+
             Object, function prepareGlanceBoxData(){
-                console.log('test')
                 return {
                     value: this.getClassAvg() || 0,
                     title: this.getClassName()
                 }
+            },
+            [[chlk.models.announcement.Announcement]],
+            Object, function prepareItemStyleInfo(item){
+                return {
+                    emptyBoxClass : !item.getAvg() ? 'empty-box' : '',
+                    droppedItemClass : item.isDropped() ? 'dropped-item' : ''
+                }
+            },
+
+            [[chlk.models.grading.ClassPersonGradingItem, chlk.models.announcement.Announcement]],
+            String, function getItemTitle(itemType, announcement){
+                var res = itemType.getName() + " " + announcement.getOrder();
+                if(announcement.getGrade())
+                    res = res + " : " + announcement.getGrade();
+                return res;
             }
+
+
     ]);
 });

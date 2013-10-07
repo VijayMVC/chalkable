@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
@@ -13,12 +12,12 @@ namespace Chalkable.Data.School.DataAccess
         public AnnouncementReminderDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-        
+
         public void Delete(AnnouncementReminder announcementReminder)
         {
             SimpleDelete(announcementReminder);
         }
-        
+
         public void DeleteByAnnouncementId(Guid announcementId)
         {
             var conds = new AndQueryCondition {{AnnouncementReminder.ANNOUNCEMENT_REF_FIELD, announcementId}};
@@ -32,24 +31,20 @@ namespace Chalkable.Data.School.DataAccess
             return res.First();
         }
 
-        private IList<AnnouncementReminder> GetReminders(QueryCondition conds, Guid personId)
+        private DbQuery BuildBasicSelect(int? top = null)
         {
-
-            var annRType = typeof(AnnouncementReminder);
-            var types = new List<Type> { annRType, typeof(Announcement) };
-            var sql = string.Format(@"select {0} 
-                                      from AnnouncementReminder 
+            var types = new List<Type> {typeof (AnnouncementReminder), typeof (Announcement)};
+            var sql = string.Format((top.HasValue ? "select top " + top + " {0} " : "select {0} ") +
+                                      @"from AnnouncementReminder 
                                       join Announcement  on Announcement.Id = AnnouncementReminder.AnnouncementRef "
-                                      , Orm.ComplexResultSetQuery(types));
+                                    , Orm.ComplexResultSetQuery(types));
             var dbQuery = new DbQuery();
             dbQuery.Sql.Append(sql);
-            conds.BuildSqlWhere(dbQuery, annRType.Name);
+            return dbQuery;
+        }
 
-            //var andConds = new AndQueryCondition{{}}
-
-            dbQuery.Sql.Append(@" and ((Announcement.PersonRef = @personId and AnnouncementReminder.PersonRef is null)
-                             or (AnnouncementReminder.PersonRef = @personId))");
-            dbQuery.Parameters.Add("@personId", personId);
+        private IList<AnnouncementReminder> Read(DbQuery dbQuery)
+        {
             using (var reader = ExecuteReaderParametrized(dbQuery.Sql.ToString(), dbQuery.Parameters))
             {
                 var res = new List<AnnouncementReminder>();
@@ -61,6 +56,20 @@ namespace Chalkable.Data.School.DataAccess
                 }
                 return res;
             }
+        }
+
+        private IList<AnnouncementReminder> GetReminders(QueryCondition conds, Guid personId)
+        {
+
+            var annRType = typeof(AnnouncementReminder);
+            var dbQuery = BuildBasicSelect();
+            
+            conds.BuildSqlWhere(dbQuery, annRType.Name);
+            //TODO: use querycondition
+            dbQuery.Sql.Append(@" and ((Announcement.PersonRef = @personId and AnnouncementReminder.PersonRef is null)
+                             or (AnnouncementReminder.PersonRef = @personId))");
+            dbQuery.Parameters.Add("@personId", personId);
+            return Read(dbQuery);
         } 
         
         public IList<AnnouncementReminder> GetList(Guid announcementId, Guid personId)
@@ -69,5 +78,26 @@ namespace Chalkable.Data.School.DataAccess
             return GetReminders(conds, personId);
         }
 
+        public IList<AnnouncementReminder> GetRemindersToProcess(DateTime schoolTimeNow, int count)
+        {
+            var dbQuery = BuildBasicSelect(count);
+
+            var conds = new AndQueryCondition();
+            conds.Add(new SimpleQueryCondition(
+                          string.Format("AnnouncementReminder_{0}", AnnouncementReminder.REMIND_DATE_FIELD),
+                          AnnouncementReminder.REMIND_DATE_FIELD, null, ConditionRelation.NotEqual));
+            conds.Add(new SimpleQueryCondition(
+                          string.Format("AnnouncementReminder_{0}", AnnouncementReminder.REMIND_DATE_FIELD),
+                          AnnouncementReminder.REMIND_DATE_FIELD, schoolTimeNow, ConditionRelation.LessEqual));
+            conds.Add(new SimpleQueryCondition(
+                          string.Format("AnnouncementReminder_{0}", AnnouncementReminder.PROCESSED_FIELD),
+                          AnnouncementReminder.PROCESSED_FIELD, true, ConditionRelation.Equal));
+
+            conds.BuildSqlWhere(dbQuery, "AnnouncementReminder");
+            dbQuery.Sql.Append(" and Announcement.State <> ").Append((int) AnnouncementState.Draft);
+            
+            //TODO: apply count
+            return Read(dbQuery);
+        }
     }
 }

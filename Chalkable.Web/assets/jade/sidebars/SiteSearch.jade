@@ -2,14 +2,8 @@ li(data-title = self.description, data-value = self.id.valueOf() + '|' + self.se
     div.site-search
         if self.searchType == 0
             if self.roleId == 2
-                +ActionLink('teachers', 'info', self.id).left.image-container.white.shadow
-                    div.site-search-person
-                        +PersonImg(self, 47)
-                        //
-                            img.avatar.avatar47(class=self.gender, src=self.getPictureURL(self.id, 47))
-                        div.title= self.description
-            if self.roleId == 3
-                +ActionLink('students', 'info', self.id).left.image-container.white.shadow
+                -cntrl = self.roleId == 2 ? "teacher" : self.roleId == 3 ? "students" : "admin";
+                +ActionLink(cntrl, 'info', self.id).left.image-container.white.shadow
                     div.site-search-person
                         +PersonImg(self, 47)
                         div.title= self.description

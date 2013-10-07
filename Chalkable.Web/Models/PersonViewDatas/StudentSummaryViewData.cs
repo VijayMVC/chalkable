@@ -5,6 +5,7 @@ using System.Web;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.AnnouncementsViewData;
 using Chalkable.Web.Models.ClassesViewData;
+using Chalkable.Web.Models.DisciplinesViewData;
 
 namespace Chalkable.Web.Models.PersonViewDatas
 {
