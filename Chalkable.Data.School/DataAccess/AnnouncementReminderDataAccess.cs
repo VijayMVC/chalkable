@@ -83,14 +83,11 @@ namespace Chalkable.Data.School.DataAccess
             var dbQuery = BuildBasicSelect(count);
 
             var conds = new AndQueryCondition();
-            conds.Add(new SimpleQueryCondition(
-                          string.Format("AnnouncementReminder_{0}", AnnouncementReminder.REMIND_DATE_FIELD),
+            conds.Add(new SimpleQueryCondition(AnnouncementReminder.REMIND_DATE_FIELD,
                           AnnouncementReminder.REMIND_DATE_FIELD, null, ConditionRelation.NotEqual));
-            conds.Add(new SimpleQueryCondition(
-                          string.Format("AnnouncementReminder_{0}", AnnouncementReminder.REMIND_DATE_FIELD),
+            conds.Add(new SimpleQueryCondition(AnnouncementReminder.REMIND_DATE_FIELD,
                           AnnouncementReminder.REMIND_DATE_FIELD, schoolTimeNow, ConditionRelation.LessEqual));
-            conds.Add(new SimpleQueryCondition(
-                          string.Format("AnnouncementReminder_{0}", AnnouncementReminder.PROCESSED_FIELD),
+            conds.Add(new SimpleQueryCondition(AnnouncementReminder.PROCESSED_FIELD,
                           AnnouncementReminder.PROCESSED_FIELD, true, ConditionRelation.Equal));
 
             conds.BuildSqlWhere(dbQuery, "AnnouncementReminder");
