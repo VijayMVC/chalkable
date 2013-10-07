@@ -11,6 +11,7 @@ REQUIRE('chlk.models.apps.AppPicture');
 REQUIRE('chlk.models.apps.AppState');
 REQUIRE('chlk.models.apps.AppScreenshots');
 REQUIRE('chlk.models.common.NameId');
+REQUIRE('chlk.models.developer.DeveloperInfo');
 
 
 NAMESPACE('chlk.models.apps', function () {
@@ -46,8 +47,13 @@ NAMESPACE('chlk.models.apps', function () {
             [ria.serialize.SerializeProperty('secretkey')],
             String, 'secretKey',
             chlk.models.apps.AppState, 'state',
+
             [ria.serialize.SerializeProperty('developerid')],
             chlk.models.id.SchoolPersonId, 'developerId',
+
+            [ria.serialize.SerializeProperty('developer')],
+            chlk.models.developer.DeveloperInfo, 'developerInfo',
+
             [ria.serialize.SerializeProperty('liveappid')],
             chlk.models.id.AppId, 'liveAppId',
             [ria.serialize.SerializeProperty('applicationprice')],

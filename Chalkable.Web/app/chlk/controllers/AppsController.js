@@ -431,6 +431,16 @@ NAMESPACE('chlk.controllers', function (){
                         text: 'Ok'
                     }], 'center');
                 }
+
+                var developerWebsite = model.getDeveloperWebSite();
+                var developerName = model.getDeveloperName();
+
+                if ((developerWebsite == null || developerWebsite == "") ||
+                    (developerName == null || developerName == "")){
+                    return this.ShowMsgBox('We just need you to enter your Developer Name and Website. You can do that in settings, on the left.', null, [{
+                        text: 'Ok'
+                    }], 'center');
+                }
             }
 
              var result = this.appsService
