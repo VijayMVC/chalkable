@@ -11,7 +11,8 @@ NAMESPACE('chlk.models.bgtasks', function () {
             RESTORE_DATABASES: 3,
             DATABASE_UPDATE: 4,
             CREATE_DEMO_SCHOOL: 5,
-            DELETE_SCHOOL: 6
+            DELETE_SCHOOL: 6,
+            PROCESS_REMINDERS: 7
         });
 
 
@@ -29,12 +30,13 @@ NAMESPACE('chlk.models.bgtasks', function () {
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.DATABASE_UPDATE] = "Database Update";
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.CREATE_DEMO_SCHOOL] = "Create Demo School";
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.DELETE_SCHOOL] = "Delete School";
+              this._types[chlk.models.bgtasks.BgTaskTypeEnum.PROCESS_REMINDERS] = "Process Reminders";
             },
             String, function toString(){
-                return this._types[this.getTypeId()] || ('Unknown value: ' + this.getTypeId().toString());
+                return this._types[this.getTypeId()];
             },
             VOID, function deserialize(raw) {
-                this.setTypeId(chlk.models.bgtasks.BgTaskTypeEnum(Number(raw)));
+                this.setTypeId(new chlk.models.bgtasks.BgTaskTypeEnum(Number(raw)));
             }
         ]);
 
