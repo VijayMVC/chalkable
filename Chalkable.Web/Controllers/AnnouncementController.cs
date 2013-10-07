@@ -202,5 +202,18 @@ namespace Chalkable.Web.Controllers
             return Json(res.GroupBy(x => x).Select(x => x.Key));
         }
 
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        public ActionResult DropAnnouncement(Guid announcementId)
+        {
+            SchoolLocator.AnnouncementService.DropUnDropAnnouncement(announcementId, true);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        public ActionResult UndropAnnouncement(Guid announcementId)
+        {
+            SchoolLocator.AnnouncementService.DropUnDropAnnouncement(announcementId, false);
+            return Json(true);
+        }
     }
 }

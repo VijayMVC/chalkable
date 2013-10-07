@@ -18,8 +18,8 @@ itemStyleInfo = {}
                 .item-type-details.x-hidden
                     each item in itemType.getAnnouncements()
                         itemStyleInfo = self.prepareItemStyleInfo(item)
-                        +ActionLink('announcement', 'view', item.getId()).new-grading-box.item
-                            div(class = itemStyleInfo.droppedItemClass).avg-section.x-hidden
+                        +ActionLink('announcement', 'view', item.getId())(class = itemStyleInfo.droppedItemClass).new-grading-box.item
+                            .avg-section.x-hidden
                                 .new-grading-box.avg-box-left.dropped-box Dropped
                                 div(class= itemStyleInfo.emptyBoxClass).new-grading-box.avg-box-right
                                     span.pacifico Class
