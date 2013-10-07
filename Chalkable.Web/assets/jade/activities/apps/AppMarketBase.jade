@@ -4,4 +4,6 @@ mixin AppMarketToolbar(balance, categories, gradelevels)
             .user-balance= "$" + balance
             +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
             +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn My Apps
-            +SearchBox(chlk.services.AppMarketService, "getAppsByFilter", chlk.templates.apps.AppMarketSearchBoxTpl, categories, gradelevels)#app-market-searchbox(name="appMarketSearch")
+            +ActionForm('', '')
+                +SearchBox(chlk.services.AppMarketService, "getAppsByFilter", chlk.templates.apps.AppMarketSearchBoxTpl)#app-market-searchbox(name="appMarketSearch")
+                button(type="submit").search-btn

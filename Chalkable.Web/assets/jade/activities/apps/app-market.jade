@@ -13,7 +13,7 @@ mixin AppIconLink(app)
     +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels)
     .app-screenshots-panel
         +Carousel(self.firstApp.getScreenshotPictures().getItems())
-    +ActionForm('appmarket', 'list')
+    +ActionForm('appmarket', 'list')#app-market-filter
         .app-filter
             .subject
                 .subject-filter
@@ -25,18 +25,18 @@ mixin AppIconLink(app)
                            +LabeledCheckbox(subject.getName(), 'app-category-' + subject.getId().valueOf(), false, false)
 
             .price
-                .price-type.all.btn.pressed(data-price-type="0") All
-                .price-type.paid.btn(data-price-type="1") Paid
-                .price-type.free.btn(data-price-type="2") Free
+                .price-type.all.btn(data-price-type=chlk.models.apps.AppPriceType.ALL.valueOf()).pressed All
+                .price-type.paid.btn(data-price-type=chlk.models.apps.AppPriceType.PAID.valueOf()) Paid
+                .price-type.free.btn(data-price-type=chlk.models.apps.AppPriceType.FREE.valueOf()) Free
+                +Hidden('priceType', chlk.models.apps.AppPriceType.ALL.valueOf())
 
             .sort
                 span Sorted By:
-                +Select('sortType')#app-sort-type
+                +Select('sortingMode')#app-sort-type
                     +Option(chlk.models.apps.AppSortingMode.POPULAR.valueOf(), 'Popular', true)
                     +Option(chlk.models.apps.AppSortingMode.NEWEST.valueOf(), 'Newest')
                     +Option(chlk.models.apps.AppSortingMode.HIGHEST_RATED.valueOf(), 'Highest Rated')
             .app-grade-levels
-                +RangeSlider("grade-levels", "gradeLevels", 1, 12)
+                +RangeSlider("gradeLevels", "gradeLevels", 1, 12)
     .apps
-        each app in self.apps.getItems()
-            +AppIconLink(app)
+        +RenderWith(self.getModel(), chlk.templates.apps.AppMarketAppsTpl)

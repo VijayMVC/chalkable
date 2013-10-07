@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.apps.AppMarketBaseViewData');
 REQUIRE('chlk.models.apps.AppSortingMode');
+REQUIRE('chlk.models.apps.AppPriceType');
 
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
@@ -10,7 +11,6 @@ NAMESPACE('chlk.models.apps', function () {
         'AppMarketViewData', EXTENDS(chlk.models.apps.AppMarketBaseViewData), [
             chlk.models.apps.AppMarketApplication, 'firstApp',
             chlk.models.common.PaginatedList, 'apps',
-
             [[
                 chlk.models.common.PaginatedList,
                 ArrayOf(chlk.models.apps.AppCategory),
@@ -22,8 +22,6 @@ NAMESPACE('chlk.models.apps', function () {
                 BASE(categories, gradelevels, balance);
                 var items = apps.getItems();
                 var firstApp = new chlk.models.apps.AppMarketApplication();
-
-
 
                 //todo take only 3 screenshots
                 var screenshotPictures = [];

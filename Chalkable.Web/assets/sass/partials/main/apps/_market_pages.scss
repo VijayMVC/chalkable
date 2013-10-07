@@ -33,13 +33,30 @@
       border-right: 1px solid #cfcfcf;
       line-height: 30px;
     }
+
+    form{
+      display: inline-block;
+    }
+    .search-btn{
+      border: none;
+      width: 32px;
+      height: 32px;
+      background-image: url(images/app/search-button.png);
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-color: transparent;
+      vertical-align: top;
+      cursor: pointer;
+      outline: none;
+      margin-top: -3px;
+      padding: 0;
+    }
   }
 
 
   #app-market-searchbox{
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    vertical-align: middle;
     margin-left: 105px;
     width: 115px;
   }

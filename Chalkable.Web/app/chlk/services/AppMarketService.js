@@ -1,4 +1,5 @@
 REQUIRE('chlk.services.BaseService');
+REQUIRE('chlk.services.AppCategoryService');
 REQUIRE('ria.async.Future');
 
 REQUIRE('chlk.models.apps.AppGradeLevel');
@@ -10,6 +11,10 @@ REQUIRE('chlk.models.apps.AppInstallPostData');
 REQUIRE('chlk.models.people.Role');
 
 
+REQUIRE('chlk.models.apps.AppPriceType');
+REQUIRE('chlk.models.apps.AppSortingMode');
+
+
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -19,16 +24,31 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'AppMarketService', EXTENDS(chlk.services.BaseService), [
 
-            [[ArrayOf(chlk.models.apps.AppCategory), ArrayOf(chlk.models.apps.AppGradeLevel), String]],
-            ria.async.Future, function getAppsByFilter(categories, gradeLevels, filter) {
-                return this.getApps(categories, gradeLevels, filter)
-                    .then(function(result){
-                        return result.getItems();
-                    });
+            [[String]],
+            ria.async.Future, function getAppsByFilter(filter) {
+                var categoriesService = this.getContext().getService(chlk.services.AppCategoryService);
+                var gradeLevels = this.getContext().getService(chlk.services.GradeLevelService).getGradeLevels();
+                return categoriesService
+                    .getCategories()
+                    .then(function(categories){
+                        return this.getApps(categories.getItems(), gradeLevels, filter)
+                            .then(function(result){
+                                return result.getItems();
+                            });
+                    }, this);
+
+
             },
 
-            [[ArrayOf(chlk.models.apps.AppCategory), ArrayOf(chlk.models.apps.AppGradeLevel),
-                String, Number, Number, Number, Number]],
+            [[
+                ArrayOf(chlk.models.apps.AppCategory),
+                ArrayOf(chlk.models.apps.AppGradeLevel),
+                String,
+                chlk.models.apps.AppPriceType,
+                chlk.models.apps.AppSortingMode,
+                Number,
+                Number
+            ]],
 
             ria.async.Future, function getApps(categories, gradeLevels,
                 filter, filterMode_, sortingMode_, start_, count_) {
@@ -48,8 +68,8 @@ NAMESPACE('chlk.services', function () {
                         categoriesIds:  categoryIds,
                         gradeLevelsIds: gradeLvlsIds,
                         filter: filter,
-                        filterMode: filterMode_,
-                        sortingMode: sortingMode_
+                        filterMode: filterMode_ && filterMode_.valueOf(),
+                        sortingMode: sortingMode_ && sortingMode_.valueOf()
                     })
                     .then(function(data){
                         var items = data.getItems();

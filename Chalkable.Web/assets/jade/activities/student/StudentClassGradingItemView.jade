@@ -1,3 +1,24 @@
 .class-grading-view
-    -console.log('2')
     +GlanceBox(null, null, self.prepareGlanceBoxData())
+    .announcement-types.section-info
+        each itemType in self.getGradingByAnnouncementTypes()
+            .item-type.new-grading-box
+                .avg-section.x-hidden
+                    .new-grading-box.avg-box-left
+                        span.pacifico Avg.
+                        span=itemType.getStudentItemTypeAvg()
+                    .new-grading-box.avg-box-right
+                        span.pacifico Class
+                        span=itemType.getClassItemTypeAvg()
+                .item-type-title=itemType.getName()
+                .item-type-details.x-hidden
+                    each item in itemType.getAnnouncements()
+                        +ActionLink('announcement', 'view', item.getId()).new-grading-box.item
+                            .avg-section.x-hidden
+                                .new-grading-box.avg-box-left Dropped
+                                .new-grading-box.avg-box-right
+                                    span.pacifico Class
+                                    span=item.getAvg()
+                            .item-title=itemType.getName() + " " + item.getOrder() + " : "
+
+                    .close-hover-bt
