@@ -1,5 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.apps.AppMarket');
+REQUIRE('chlk.templates.apps.AppMarketAppsTpl');
 
 NAMESPACE('chlk.activities.apps', function () {
 
@@ -7,6 +8,7 @@ NAMESPACE('chlk.activities.apps', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.apps.AppMarket)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppMarketAppsTpl, 'updateApps', '.apps', ria.mvc.PartialUpdateRuleActions.Replace)],
 
         'AppMarketPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
@@ -15,6 +17,9 @@ NAMESPACE('chlk.activities.apps', function () {
             VOID, function togglePriceType(node, event){
                 this.dom.find('.price-type').removeClass('pressed');
                 node.addClass('pressed');
+
+                this.dom.find('input[name=priceType]').setValue(node.getAttr('data-price-type'));
+                this.dom.find('#app-market-filter').trigger('submit');
             },
 
             [ria.mvc.DomEventBind('click', '.title.btn')],
@@ -22,6 +27,22 @@ NAMESPACE('chlk.activities.apps', function () {
             VOID, function toggleSubjects(node, event){
                 this.dom.find('.subject-filter .items').toggleClass('x-hidden');
             },
+
+            [ria.mvc.DomEventBind('change', '#app-sort-type')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function sortingChanged(node, event, data){
+                this.dom.find('#app-market-filter').trigger('submit');
+            },
+
+
+            [ria.mvc.DomEventBind('sliderChanged', '#gradeLevels')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function gradeLevelsChanged(node, event){
+                this.dom.find('#app-market-filter').trigger('submit');
+            },
+
+
+
 
             [ria.mvc.DomEventBind('click', 'input[type=checkbox]')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -47,7 +68,6 @@ NAMESPACE('chlk.activities.apps', function () {
                 else{
                     this.dom.find('input[name=app-category-all]').setAttr('checked', false);
 
-
                     checkboxes
                         .filter(function(el){
                             return el.is(":checked");
@@ -58,6 +78,9 @@ NAMESPACE('chlk.activities.apps', function () {
                 }
                 res = res.join(',');
                 new ria.dom.Dom("input[name=selectedCategories]").setValue(res);
+                this.dom.find('#app-market-filter').trigger('submit');
+
+
             }
         ]);
 });

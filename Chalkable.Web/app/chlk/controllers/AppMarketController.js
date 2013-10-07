@@ -18,6 +18,7 @@ REQUIRE('chlk.models.apps.AppMarketViewData');
 REQUIRE('chlk.models.apps.AppInstallGroup');
 REQUIRE('chlk.models.apps.AppInstallPostData');
 REQUIRE('chlk.models.apps.AppDeletePostData');
+REQUIRE('chlk.models.apps.AppMarketPostData');
 
 REQUIRE('chlk.models.id.AppId');
 
@@ -40,9 +41,40 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.PictureService, 'pictureService',
 
         [chlk.controllers.SidebarButton('apps')],
-        [[Number]],
+        [[chlk.models.apps.AppMarketPostData]],
             //todo: add sort mode and other options
-        function listAction(pageIndex_) {
+        function listAction(filterData_) {
+
+
+            var selectedPriceType = filterData_ ? new chlk.models.apps.AppPriceType(filterData_.getPriceType())
+                                                : chlk.models.apps.AppPriceType.ALL;
+            var selectedSortingMode = filterData_ ? new chlk.models.apps.AppSortingMode(filterData_.getSortingMode())
+                                                  : chlk.models.apps.AppSortingMode.POPULAR;
+
+
+            var selectedCategories = [];
+            if (filterData_){
+                selectedCategories = this.getIdsList(filterData_.getSelectedCategories(), chlk.models.id.AppCategoryId);
+
+
+                selectedCategories = selectedCategories.map(function(item){
+                    var category = new chlk.models.apps.AppCategory();
+                    category.setId(item);
+                    return category;
+                });
+            }
+
+            var selectedGradeLevels = [];
+            if (filterData_){
+                selectedGradeLevels = this.getIdsList(filterData_.getGradeLevels(), chlk.models.id.AppGradeLevelId);
+                selectedGradeLevels = selectedGradeLevels.map(function(item){
+                    var gradeLvl = new chlk.models.apps.AppGradeLevel();
+                    gradeLvl.setId(item);
+                    return gradeLvl;
+                });
+            }
+
+            //todo: sort if there is filterdata
             var result = this.appCategoryService
                 .getCategories()
                 .then(function(data){
@@ -50,11 +82,16 @@ NAMESPACE('chlk.controllers', function (){
                 })
                 .then(function(categories){
                     var gradeLevels = this.gradeLevelService.getGradeLevels();
+                    var actualGradeLevels = selectedGradeLevels.length > 0 ? selectedGradeLevels : gradeLevels;
+                    var actualCategories = selectedCategories.length > 0  ? selectedCategories : categories;
+
                     return this.appMarketService
                         .getApps(
-                            categories,
-                            gradeLevels,
-                            ""
+                            actualCategories,
+                            actualGradeLevels,
+                            "",
+                            selectedPriceType,
+                            selectedSortingMode
                         )
                         .then(function(apps){
                             var items = apps.getItems();
@@ -69,7 +106,11 @@ NAMESPACE('chlk.controllers', function (){
                         }, this)
                 }, this)
                 .attach(this.validateResponse_());
-            return this.PushView(chlk.activities.apps.AppMarketPage, result);
+
+            if (filterData_)
+                return this.UpdateView(chlk.activities.apps.AppMarketPage, result, 'updateApps');
+            else
+                return this.PushView(chlk.activities.apps.AppMarketPage, result);
         },
 
         [chlk.controllers.SidebarButton('apps')],

@@ -77,9 +77,8 @@ NAMESPACE('chlk.controls', function () {
                 }
                 this.setSliderItems(arr);
                 jQuery('input[name=' + this.getName() + ']').val(arr.join(','));
+                node.trigger('sliderChanged');
             },
-
-            function onAfterStop(event, ui){},
 
             function prepareData(start, end){
                 this.setStartRange(start);

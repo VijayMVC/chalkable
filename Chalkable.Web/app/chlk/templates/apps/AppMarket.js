@@ -1,5 +1,7 @@
 REQUIRE('chlk.templates.apps.AppMarketBaseTpl');
 REQUIRE('chlk.models.apps.AppMarketViewData');
+REQUIRE('chlk.models.apps.AppPriceType');
+REQUIRE('chlk.models.apps.AppSortingMode');
 
 NAMESPACE('chlk.templates.apps', function () {
 
@@ -14,7 +16,6 @@ NAMESPACE('chlk.templates.apps', function () {
 
             [ria.templates.ModelPropertyBind],
             chlk.models.apps.AppMarketApplication, 'firstApp',
-
 
             [[ArrayOf(chlk.models.apps.AppCategory)]],
             function getAllCategoriesIds(categories){
