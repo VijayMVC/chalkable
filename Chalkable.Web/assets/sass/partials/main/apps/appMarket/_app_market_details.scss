@@ -205,6 +205,19 @@ DIV.page {
                   margin-bottom: 15px;
                 }
 
+                .cancel-btn{
+                  color: #878787;
+                  text-shadow: 0 1px 0 white;
+                  cursor: pointer;
+                  height: 18px;
+                  line-height: 18px;
+                  margin-left: 20px;
+                  padding: 0;
+                  text-decoration: underline;
+                  font-size: 12px;
+                  font-weight: bold;
+                }
+
                 button{
                   font-size: 16px;
                 }
