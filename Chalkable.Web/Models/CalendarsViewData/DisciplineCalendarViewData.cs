@@ -27,6 +27,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
 
         public static DisciplineMonthCalendarViewData Create(DateTime date, bool isCurrentMonth, Guid currentPersonId, IList<ClassDisciplineDetails> disciplines)
         {
+            disciplines = disciplines.Where(x => x.Date.Date == date.Date).ToList();
             var dscViewDataList = DisciplineView.Create(disciplines, currentPersonId);
             var dscTypesList = new List<DisciplineTypeViewData>();
             var moreCount = 0;
@@ -43,6 +44,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
                         Id = x.Key,
                         Name = x.Value.First().Name,
                         Count = x.Value.Count,
+                        PeriodOrder = x.Value.First()
                     }).ToList();
 
             if (sortedDisciplineTypes.Count > DISCIPLINE_COUNT)
