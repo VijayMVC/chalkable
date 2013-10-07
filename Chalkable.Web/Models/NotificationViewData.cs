@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
+using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models
 {
@@ -17,8 +17,7 @@ namespace Chalkable.Web.Models
         public Guid? AnnouncementId { get; set; }
         public Guid? PrivateMessageId { get; set; }
         public Guid? MarkingPeriodId { get; set; }
-        public Guid? PersonId { get; set; }
-        public string PersonDisplayName { get; set; }
+        public ShortPersonViewData Person { get; set; }
         public Guid? ApplicationId { get; set; }
         public string ApplcicationName { get; set; }
         public string ApplicationIcon47Url { get; set; }
@@ -120,8 +119,7 @@ namespace Chalkable.Web.Models
                 {
                     AnnouncementType = notification.AnnouncementType.Id,
                     AnnouncementTypeName = notification.AnnouncementType.Name,
-                    PersonId = notification.QuestionPersonRef,
-                    PersonDisplayName = notification.QuestionPerson.FullName
+                    Person = ShortPersonViewData.Create(notification.QuestionPerson)
                 };
             return res;
         }
@@ -135,8 +133,7 @@ namespace Chalkable.Web.Models
                 throw new ChalkableException(ChlkResources.ERR_INVALID_NOTIFICATION_BUILDER_FOR_TYPE);
             var res = new NotificationViewData(notification)
             {
-                PersonId = notification.PrivateMessage.Sender.Id,
-                PersonDisplayName = notification.PrivateMessage.Sender.FullName
+                Person = ShortPersonViewData.Create(notification.PrivateMessage.Sender)
             };
             return res;
         }

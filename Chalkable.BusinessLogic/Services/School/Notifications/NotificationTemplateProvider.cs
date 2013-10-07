@@ -13,7 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         private const string ANNOUNCEMENT_REMINDER_NOTIFICATION_TEMPLATE = "Reminder about announcement: announcement <a href='@0#announcement/view/^.Notification.AnnouncementRef'>^.Other.AnnouncementTitle</a>";
 
         public const string ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR = "ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR";
-        private const string ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR_TEMPLATE = "Student <a href='@0#students/details/^.Notification.PersonRef'>^.Notification.Person.ShortSalutationName</a> " +
+        private const string ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR_TEMPLATE = "Student <a href='@0#students/details/^.Notification.PersonRef'>^.Notification.QuestionPerson.ShortSalutationName</a> " +
                                                                                     "asked question about announcement <a href='@0#announcement/view/^.Notification.AnnouncementRef'>" +
                                                                                    "^.Other.AnnouncementTitle ^.Other.AnnouncementTypeName</a> ^.Other.PersonQuestion";
 
@@ -33,7 +33,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                                  "<a ^[^.Other.NeedsUrlLink=true]{href='@0#@1/details/^.Notification.QuestionSchoolPersonRef'}>^.Other.FromPersonName</a>";
 
         public const string PRIVATE_MESSAGE_NOTIFICATION = "PRIVATE_MESSAGE_NOTIFICATION";
-        private const string PRIVATE_MESSAGE_NOTIFICATION_TEMPLATE = " <a ^[^.Other.NeedsUrlLink=true]{href='@0#@1/details/^.Notification.PersonRef'}>^.Notification.Person.ShortSalutationName</a>" +
+        private const string PRIVATE_MESSAGE_NOTIFICATION_TEMPLATE = " <a ^[^.Other.NeedsUrlLink=true]{href='@0#@1/details/^.Notification.PersonRef'}>^.Other.MessageSender.ShortSalutationName</a>" +
                                                                      " wrote : ^.Other.MessageSubject - ^.Other.ShortedMessage";
 
         public const string END_MARKINGPERIOD_NOTIFICATION_TO_ADMIN = "END_MARKINGPERIOD_NOTIFICATION_TO_ADMIN";

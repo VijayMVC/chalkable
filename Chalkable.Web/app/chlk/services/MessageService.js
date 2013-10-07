@@ -25,6 +25,13 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.MessageId]],
+            ria.async.Future, function getMessage(id) {
+                return this.get('PrivateMessage/Read.json', chlk.models.messages.Message, {
+                    id: id.valueOf()
+                });
+            },
+
             [[String, Boolean]],
             ria.async.Future, function markAs(ids, read) {
                 return this.get('PrivateMessage/MarkAsRead.json', null, {

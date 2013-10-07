@@ -11,7 +11,9 @@ namespace Chalkable.Data.School.Model
     {
         public const string ID_FIELD = "Id";
         public Guid Id { get; set; }
+        public const string REMIND_DATE_FIELD = "RemindDate";
         public DateTime? RemindDate { get; set; }
+        public const string PROCESSED_FIELD = "Processed";
         public bool Processed { get; set; }
         public const string ANNOUNCEMENT_REF_FIELD = "AnnouncementRef";
         public Guid AnnouncementRef { get; set; }

@@ -15,6 +15,7 @@ namespace Chalkable.BackgroundTaskProducer
             cp.AddProducer("Empty school producer", new EmptySchoolTaskProducer());
             cp.AddProducer("Demo school producer", new CreateDemoSchoolTaskProducer());
             cp.AddProducer("Demo school delete producer", new DemoSchoolDeleteTaskProducer());
+            cp.AddProducer("Process Reminders Producer", new ProcessReminderProducer());
             
             while (true)
             {
