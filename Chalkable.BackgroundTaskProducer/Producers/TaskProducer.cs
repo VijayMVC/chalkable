@@ -1,12 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
+using Chalkable.Common;
 
 namespace Chalkable.BackgroundTaskProducer.Producers
 {
     public interface ITaskProducer
     {
         void Produce();
+    }
+
+    public abstract class BaseProducer : ITaskProducer
+    {
+        private DateTime startTime;
+        private long count;
+        private long interval;
+        private long intervalStart, intervalEnd;
+
+        protected BaseProducer(string configSectionName)
+        {
+            var config = ConfigurationManager.GetSection(configSectionName) as ProducerConfigSection;
+            if (config == null)
+                throw new Exception(string.Format(ChlkResources.ERR_BG_PROCESSOR_CANT_FIND_CONFIG_SECTION, configSectionName));
+            startTime = DateTime.UtcNow;
+            count = 0;
+            interval = config.Interval;
+            intervalStart = config.IntervalStart;
+            intervalEnd = config.IntervalEnd;
+        }
+
+        public void Produce()
+        {
+            var now = DateTime.UtcNow;
+            var secondsOfDay = (now - now.Date).TotalSeconds;
+            if (secondsOfDay >= intervalStart && secondsOfDay <= intervalEnd)
+            {
+                var currentTime = startTime.AddSeconds(interval * count);
+                if (currentTime <= now)
+                {
+                    Trace.TraceWarning(string.Format(ChlkResources.BG_PROCESSING_FOR_TIME, currentTime));
+                    ProduceInternal(currentTime);
+                    count++;
+                }
+            }
+        }
+
+        protected abstract void ProduceInternal(DateTime currentTimeUtc);
+
     }
 
     public class CompositeProducer : ITaskProducer

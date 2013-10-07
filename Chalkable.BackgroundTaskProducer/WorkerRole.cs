@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
@@ -19,10 +20,25 @@ namespace Chalkable.BackgroundTaskProducer
             
             while (true)
             {
-                Thread.Sleep(20000);
-                Trace.TraceInformation("Producing cycle is starting");
-                cp.Produce();
-                Trace.TraceInformation("Producing cycle is ended");
+                try
+                {
+                    Thread.Sleep(20000);
+                    Trace.TraceInformation("Producing cycle is starting");
+                    cp.Produce();
+                    Trace.TraceInformation("Producing cycle is ended");
+                }
+                catch (Exception ex)
+                {
+                    while (ex != null)
+                    {
+                        Trace.TraceInformation("Exception during task producing");
+                        Trace.TraceInformation(ex.Message);
+                        Trace.TraceInformation(ex.StackTrace);
+                        ex = ex.InnerException;
+                    }
+                    
+                }
+                
             }
         }
 

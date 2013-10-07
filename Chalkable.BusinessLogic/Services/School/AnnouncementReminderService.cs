@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
         AnnouncementReminder AddReminder(Guid announcementId, int? before);
         Announcement DeleteReminder(Guid reminderId);
         AnnouncementReminder EditReminder(Guid reminderId, int? before);// Append Method
-        void ProcessReminders(int? count);
+        void ProcessReminders(int count);
     }
 
     public class AnnouncementReminderService : SchoolServiceBase, IAnnouncementReminderService
@@ -97,7 +97,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void ProcessReminders(int? count)
+        public void ProcessReminders(int count)
         {
             if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
@@ -107,7 +107,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new AnnouncementReminderDataAccess(uow);
-                var toProcess = da.GetRemindersToProcess(Context.NowSchoolTime, count ?? 1);
+                var toProcess = da.GetRemindersToProcess(Context.NowSchoolTime, count);
 
                 var toProcessList = toProcess.ToList();
                 foreach (var announcementReminder in toProcessList)

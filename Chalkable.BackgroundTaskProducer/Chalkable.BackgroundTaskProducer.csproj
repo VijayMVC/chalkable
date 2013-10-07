@@ -8,8 +8,8 @@
     <ProjectGuid>{6086E0A9-9729-4E4A-A28C-261582F83827}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BackgroundTaskProducer</RootNamespace>
-    <AssemblyName>BackgroundTaskProducer</AssemblyName>
+    <RootNamespace>Chalkable.BackgroundTaskProducer</RootNamespace>
+    <AssemblyName>Chalkable.BackgroundTaskProducer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <RoleType>Worker</RoleType>
@@ -78,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProducerConfigSection.cs" />
     <Compile Include="Producers\CreateDemoSchoolTaskProducer.cs" />
     <Compile Include="Producers\DemoSchoolDeleteTaskProducer.cs" />
     <Compile Include="Producers\EmptySchoolTaskProducer.cs" />
