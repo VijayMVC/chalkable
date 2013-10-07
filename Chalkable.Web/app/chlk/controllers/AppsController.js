@@ -410,6 +410,29 @@ NAMESPACE('chlk.controllers', function (){
             var appPermissions = this.getIdsList(model.getPermissions(), chlk.models.apps.AppPermissionTypeEnum);
             var appScreenShots = this.getIdsList(model.getAppScreenshots(), chlk.models.id.PictureId);
 
+            if (!model.isDraft()){
+                var appIconId = null;
+
+
+                if (model.getAppIconId()){
+                    appIconId = model.getAppIconId().valueOf();
+                    if (appIconId.length == 0) appIconId = null;
+                }
+
+                var appBannerId = null;
+                if (model.getAppBannerId()){
+                    appBannerId = model.getAppBannerId().valueOf();
+
+                    if (appBannerId.length == 0) appBannerId = null;
+                }
+
+                if (appIconId == null || appBannerId == null){
+                    return this.ShowMsgBox('You need to upload icon and banner picture for you app', 'Error', [{
+                        text: 'Ok'
+                    }], 'center');
+                }
+            }
+
              var result = this.appsService
                  .updateApp(
                      model.getId(),
