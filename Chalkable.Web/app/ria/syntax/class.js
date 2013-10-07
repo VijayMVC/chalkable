@@ -4,12 +4,14 @@ ria.__SYNTAX = ria.__SYNTAX || {};
 (function () {
     "use strict";
 
+    var IS_OPTIONAL = /^.+_$/;
+
     ria.__SYNTAX.toAst = function (x) {
         return new Function ('return ' + x)();
     };
 
     function isFactoryCtor(name) {
-        return name !== '$$' && /^\$.+/i.test(name);
+        return name !== '$$' && /^\$.*/i.test(name);
     }
 
     function getDefaultGetter(property, isOverride) {
@@ -197,13 +199,64 @@ ria.__SYNTAX = ria.__SYNTAX || {};
         return true;
     }
 
-    function validateClassCtor(def, ctor) {
+    function validateClassCtor(def, ctor, FakeSelf) {
         if (!ctor.body.hasBaseCall()) {
             throw Error('Class constructor MUST call base class constructor');
         }
     }
 
-    function validateMethodDeclaration(def, method) {
+    function getTypeFromToken(token, FakeSelf, def) {
+        if (token === undefined || token === null)
+            return def || null;
+
+        if (token instanceof ria.__SYNTAX.Tokenizer.RefToken)
+            return token.raw;
+
+        if (token instanceof ria.__SYNTAX.Tokenizer.SelfToken)
+            return FakeSelf;
+
+        if (token instanceof ria.__SYNTAX.Tokenizer.VoidToken)
+            return undefined;
+
+        ria.__API.Assert(true, 'This should never assert this');
+    }
+
+    function validateMethodSignatureOverride(method, parentMethod, FakeSelf) {
+        //check if method accepts at least as much args as may be passed to base method
+        if (method.argsNames.length < parentMethod.argsNames.length)
+            throw Error('Method accepts less arguments then base method. Method: "' + method.name + '"');
+
+        //check if method requires no more args than may be passed to base method
+        method.argsNames.forEach(function (name, index) {
+            if (!IS_OPTIONAL.test(name) && IS_OPTIONAL.test(parentMethod.argsNames[index])) {
+                throw Error('Method required arguments ' + name + ' then base does not have or is optional. Method: "' + method.name + '"');
+            }
+        });
+
+        //validate method return
+        var mrtv = getTypeFromToken(method.retType, FakeSelf, null),
+            brtv = getTypeFromToken(parentMethod.retType, null, null);
+        if (mrtv !== brtv && (mrtv === null || mrtv === undefined || !ria.__SYNTAX.checkTypeHint(mrtv, brtv))) {
+            throw Error('Method "' + method.name + '" returns ' + ria.__API.getIdentifierOfType(mrtv)
+                + ', but base returns ' + ria.__API.getIdentifierOfType(brtv));
+        }
+
+        //validate method args types
+        method.argsNames.forEach(function (name, index) {
+            if (index >= parentMethod.argsNames.length)
+                return ;
+
+            var matv = getTypeFromToken(method.argsTypes[index], FakeSelf, Object),
+                batv = getTypeFromToken(parentMethod.argsTypes[index], null, Object);
+
+            if (!ria.__SYNTAX.checkTypeHint(batv, matv)) {
+                throw Error('Method "' + method.name + '" accepts ' + ria.__API.getIdentifierOfType(matv)
+                    + ' for argument ' + name + ', but base accepts ' + ria.__API.getIdentifierOfType(batv));
+            }
+        });
+    }
+
+    function validateMethodDeclaration(def, method, FakeSelf) {
         var parentMethod = method.__BASE_META;
         if (method.flags.isOverride && !parentMethod) {
             throw Error('There is no ' + method.name + ' method in base classes of ' + def.name + ' class');
@@ -224,9 +277,13 @@ ria.__SYNTAX = ria.__SYNTAX || {};
         if (ria.__SYNTAX.isProtected(method.name) && method.annotations.length) {
             throw Error('Annotations are forbidden for protected methods. Method: "' + method.name + '"');
         }
+
+        if (method.flags.isOverride && parentMethod) {
+            validateMethodSignatureOverride(method, parentMethod, FakeSelf);
+        }
     }
 
-    function validatePropertyDeclaration(property, def, processedMethods) {
+    function validatePropertyDeclaration(property, def, processedMethods, FakeSelf) {
         var getterName = property.getGetterName();
         var setterName = property.getSetterName();
 
@@ -245,7 +302,7 @@ ria.__SYNTAX = ria.__SYNTAX || {};
         processedMethods.push(setterName);
     }
 
-    function validateBaseClassMethodDeclaration(def, baseMethod) {
+    function validateBaseClassMethodDeclaration(def, baseMethod, FakeSelf) {
         var childMethod = def.methods.filter(function (method) { return method.name == baseMethod.name; }).pop();
         if (baseMethod.flags.isFinal) {
             if (childMethod)
@@ -264,7 +321,7 @@ ria.__SYNTAX = ria.__SYNTAX || {};
         }
     }
 
-    function validateBaseClassPropertyDeclaration(baseProperty, childGetter, childSetter, def) {
+    function validateBaseClassPropertyDeclaration(baseProperty, childGetter, childSetter, def, FakeSelf) {
         if (baseProperty.flags.isFinal) {
             if (childGetter || childSetter)
                 throw Error('There is no ability to override getter or setter of final property '
@@ -296,6 +353,10 @@ ria.__SYNTAX = ria.__SYNTAX || {};
         if(!isDescendantOf(def.base, ria.__SYNTAX.Registry.find(rootClassName)))
             throw Error('Base class must be descendant of ' + rootClassName);
 
+        function FakeSelf() {}
+        FakeSelf.__META = new ria.__API.ClassDescriptor(def.name, def.base.raw, [], [], def.flags.isAbstract || false);
+        ria.__API.extend(FakeSelf, def.base.raw);
+
         ria.__SYNTAX.validateVarName(def.name);
 
         // validate class flags
@@ -313,9 +374,6 @@ ria.__SYNTAX = ria.__SYNTAX || {};
             .forEach(function (_) {
                 var name = _.name;
                 ria.__SYNTAX.validateVarName(name);
-
-                if (isFactoryCtor(name))
-                    throw Error('Factory constructors are not supported in this version.');
 
                 if (def.methods.filter(function (_) { return _.name === name}).length > 1)
                     throw Error('Duplicate method declaration "' + name + '"');
@@ -336,15 +394,19 @@ ria.__SYNTAX = ria.__SYNTAX || {};
             throw Error('Can NOT extend final class ' + ria.__SYNTAX.resolveNameFromToken(def.base));
 
         // validate ctor declaration
-        validateClassCtor(def, def.methods.filter(function (_) { return _.name === '$'; }).pop());
-        processedMethods.push('$');
+        def.methods
+            .filter(function (_) { return isFactoryCtor(_.name); })
+            .forEach(function (ctorDef) {
+                validateClassCtor(def, ctorDef, FakeSelf);
+                processedMethods.push(ctorDef.name);
+            });
 
         // validate methods overrides
         baseSyntaxMeta.methods.forEach(function(baseMethod) {
-            if(baseMethod.name == "$")
+            if (isFactoryCtor(baseMethod.name))
                 return;
 
-            validateBaseClassMethodDeclaration(def, baseMethod);
+            validateBaseClassMethodDeclaration(def, baseMethod, FakeSelf);
         });
 
         // validate methods
@@ -358,7 +420,7 @@ ria.__SYNTAX = ria.__SYNTAX || {};
                 if (processedMethods.indexOf(method.name) >= 0)
                     return;
 
-                validateMethodDeclaration(def, method);
+                validateMethodDeclaration(def, method, FakeSelf);
             });
 
         // validate properties overrides
@@ -366,7 +428,7 @@ ria.__SYNTAX = ria.__SYNTAX || {};
             var childGetter = def.methods.filter(function(method){ return method.name == baseProperty.getGetterName() }).pop(),
                 childSetter = def.methods.filter(function(method){ return method.name == baseProperty.getSetterName() }).pop();
 
-            validateBaseClassPropertyDeclaration(baseProperty, childGetter, childSetter, def);
+            validateBaseClassPropertyDeclaration(baseProperty, childGetter, childSetter, def, FakeSelf);
         });
 
         // validate properties
@@ -381,7 +443,7 @@ ria.__SYNTAX = ria.__SYNTAX || {};
                 if(findParentPropertyFixed(def, property.name))
                     throw Error('There is defined property ' + property.name + ' in one of the base classes');
 
-                validatePropertyDeclaration(property, def, processedMethods);
+                validatePropertyDeclaration(property, def, processedMethods, FakeSelf);
             });
     };
 
@@ -449,23 +511,30 @@ ria.__SYNTAX = ria.__SYNTAX || {};
             setter || null);
     }
 
-    function compileCtorDeclaration(def, ClassProxy, processedMethods) {
-        var ctorDef = def.methods.filter(function (_1) { return _1.name == '$'}).pop();
+    function compileCtorsDeclaration(def, ClassProxy, processedMethods) {
+        var ctorDefs = def.methods
+            .filter(function (_) { return processedMethods.indexOf(_.name) < 0; })
+            .filter(function (_) { return isFactoryCtor(_.name) });
 
-        processedMethods.push('$');
 
-        ClassProxy.prototype.$ = ctorDef.body.value;
-        ClassProxy.prototype.$.__BASE_BODY = def.base.value.__META.ctor.impl;
-        ClassProxy.prototype.$.__SELF = ClassProxy;
-        ria.__API.ctor(
-            ClassProxy,
-            ClassProxy.prototype.$,
-            ctorDef.argsTypes.map(function (_) { return _.value }),
-            ctorDef.argsNames,
-            ctorDef.annotations.map(function(item){
-                return item.value
-            })
-        );
+        ctorDefs.forEach(function (ctorDef) {
+            var name = ctorDef.name;
+            processedMethods.push(name);
+
+            var impl = ClassProxy.prototype[name] = ctorDef.body.value;
+            impl.__BASE_BODY = def.base.value.__META.defCtor.impl;
+            impl.__SELF = ClassProxy;
+            ria.__API.ctor(
+                name,
+                ClassProxy,
+                impl,
+                ctorDef.argsTypes.map(function (_) { return _.value }),
+                ctorDef.argsNames,
+                ctorDef.annotations.map(function(item){
+                    return item.value
+                })
+            );
+        });
     }
 
     /**
@@ -507,7 +576,24 @@ ria.__SYNTAX = ria.__SYNTAX || {};
                 compilePropertyDeclaration(property, ClassProxy, processedMethods);
             });
 
-        compileCtorDeclaration(def, ClassProxy, processedMethods);
+        compileCtorsDeclaration(def, ClassProxy, processedMethods);
+
+        def.methods
+            .filter(function (_) { return isFactoryCtor(_.name) && _.name !== '$'; })
+            .forEach(function (ctorDef) {
+                var name = ctorDef.name;
+                ClassProxy[name] = function NamedConstructorProxy() {
+                    var _old_SELF = window.SELF;
+                    try {
+                        window.SELF = ClassProxy;
+                        return $$.call(undefined, this, ClassProxy, ClassProxy.prototype[name], arguments);
+                    } catch (e) {
+                        throw new Exception('Error instantiating class ' + name, e);
+                    } finally {
+                        window.SELF = _old_SELF;
+                    }
+                };
+            });
 
         def.methods
             .forEach(

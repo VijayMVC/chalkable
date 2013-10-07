@@ -166,9 +166,9 @@ NAMESPACE('chlk.activities.attendance', function () {
             },
 
             [[Object, String]],
-            OVERRIDE, VOID, function onPartialRefresh_(model, msg) {
-                BASE(model, msg);
-                if(!msg)
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
+                BASE(model, msg_);
+                if(!msg_)
                     this.afterRefresh(model);
             },
 
