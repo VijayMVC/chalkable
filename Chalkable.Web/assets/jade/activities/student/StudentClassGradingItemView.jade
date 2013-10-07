@@ -24,5 +24,5 @@ itemStyleInfo = {}
                                 div(class= itemStyleInfo.emptyBoxClass).new-grading-box.avg-box-right
                                     span.pacifico Class
                                     span= item.getAvg()
-                            .item-title=itemType.getName() + " " + item.getOrder() + " : "
+                            .item-title=self.getItemTitle(itemType, item)
                     .close-hover-bt

@@ -53,7 +53,16 @@ NAMESPACE('chlk.templates.student', function(){
                     emptyBoxClass : !item.getAvg() ? 'empty-box' : '',
                     droppedItemClass : item.isDropped() ? 'dropped-item' : ''
                 }
+            },
+
+            [[chlk.models.grading.ClassPersonGradingItem, chlk.models.announcement.Announcement]],
+            String, function getItemTitle(itemType, announcement){
+                var res = itemType.getName() + " " + announcement.getOrder();
+                if(announcement.getGrade())
+                    res = res + " : " + announcement.getGrade();
+                return res;
             }
+
 
     ]);
 });
