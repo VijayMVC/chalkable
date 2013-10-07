@@ -53,8 +53,10 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 reader.NextResult();
                 announcement.AnnouncementReminders = reader.ReadList<AnnouncementReminder>();
                 reader.NextResult();
+                announcement.AnnouncementApplications = reader.ReadList<AnnouncementApplication>();
+                reader.NextResult();
                 announcement.Owner = PersonDataAccess.ReadPersonQueryResult(reader).Persons.FirstOrDefault();
-                announcement.AnnouncementApplications = new List<AnnouncementApplication>();
+
             }
             return announcement;
         }
