@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 
 REQUIRE('chlk.models.apps.AppCategory');
 REQUIRE('chlk.models.id.AppCategoryId');
@@ -9,7 +9,7 @@ NAMESPACE('chlk.templates.apps', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/apps/app-category-dialog.jade')],
         [ria.templates.ModelBind(chlk.models.apps.AppCategory)],
-        'CategoryDialog', EXTENDS(chlk.templates.JadeTemplate), [
+        'CategoryDialog', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AppCategoryId, 'id',
             [ria.templates.ModelPropertyBind],

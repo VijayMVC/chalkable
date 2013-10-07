@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.common.footers.DeveloperFooter');
 REQUIRE('chlk.models.apps.Application');
 
@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.common.footers', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/common/footers/developer-footer.jade')],
         [ria.templates.ModelBind(chlk.models.common.footers.DeveloperFooter)],
-        'DeveloperFooter', EXTENDS(chlk.templates.JadeTemplate), [
+        'DeveloperFooter', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AppId, 'currentAppId',

@@ -30,7 +30,7 @@ NAMESPACE('chlk', function (){
                 var dispatcher = BASE();
 
                 dispatcher.setDefaultControllerId('feed');
-                dispatcher.setDefaultControllerAction('admin');
+                dispatcher.setDefaultControllerAction('list');
                 return dispatcher;
             },
 

@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.announcement.ApplicationsAndAttachments');
 REQUIRE('chlk.models.announcement.Announcement');
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.ClassId');
@@ -12,7 +12,7 @@ NAMESPACE('chlk.templates.announcement', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AnnouncementAppAttachments.jade')],
         [ria.templates.ModelBind(chlk.models.announcement.Announcement)],
-        'Announcement', EXTENDS(chlk.templates.JadeTemplate), [
+        'Announcement', EXTENDS(chlk.templates.announcement.ApplicationsAndAttachments), [
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AnnouncementId, 'id',

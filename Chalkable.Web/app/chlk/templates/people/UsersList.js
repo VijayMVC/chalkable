@@ -6,7 +6,7 @@ NAMESPACE('chlk.templates.people', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/people/UsersList.jade')],
         [ria.templates.ModelBind(chlk.models.people.UsersList)],
-        'UsersList', EXTENDS(chlk.templates.JadeTemplate), [
+        'UsersList', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.common.PaginatedList, 'users',
             [ria.templates.ModelPropertyBind],

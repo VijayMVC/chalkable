@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.announcement.LastMessages');
 
 NAMESPACE('chlk.templates.announcement', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.announcement', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/LastMessages.jade')],
         [ria.templates.ModelBind(chlk.models.announcement.LastMessages)],
-        'LastMessages', EXTENDS(chlk.templates.JadeTemplate), [
+        'LastMessages', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             Array, 'items',
 

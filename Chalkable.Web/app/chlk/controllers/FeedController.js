@@ -59,7 +59,7 @@ NAMESPACE('chlk.controllers', function (){
 
         //TODO: refactor
         [[Boolean, String]],
-        function adminAction(update_, gradeLevels_) {
+        function listAdminAction(update_, gradeLevels_) {
             var res = ria.async.wait([
                     this.feedService.getAdminFeed(gradeLevels_),
                     this.fundsService.getBalance()

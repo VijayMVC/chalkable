@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.bgtasks', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/bgtasks/BgTaskLogs.jade')],
         [ria.templates.ModelBind(chlk.models.bgtasks.BgTasksLogListViewData)],
-        'BgTaskLogs', EXTENDS(chlk.templates.JadeTemplate), [
+        'BgTaskLogs', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.common.PaginatedList, 'items',
             [ria.templates.ModelPropertyBind],

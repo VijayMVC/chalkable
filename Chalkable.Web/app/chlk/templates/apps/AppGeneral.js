@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.apps', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/apps/app-general-info.jade')],
         [ria.templates.ModelBind(chlk.models.apps.AppGeneralInfoViewData)],
-        'AppGeneral', EXTENDS(chlk.templates.JadeTemplate), [
+        'AppGeneral', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AppId, 'draftAppId',
 

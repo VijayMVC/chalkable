@@ -31,10 +31,6 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.GradeLevelService, 'gradeLevelService',
 
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER
-        ])],
-
         [[chlk.models.common.ChlkDate]],
         VOID, function showMonthDayPopUpAction(date) {
             var result = this.calendarService.getMonthDayInfo(date)

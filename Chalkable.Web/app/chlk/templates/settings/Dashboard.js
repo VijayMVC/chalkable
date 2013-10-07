@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.settings.Dashboard');
 
 NAMESPACE('chlk.templates.settings', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.settings', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/settings/Dashboard.jade')],
         [ria.templates.ModelBind(chlk.models.settings.Dashboard)],
-        'Dashboard', EXTENDS(chlk.templates.JadeTemplate), [
+        'Dashboard', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             Boolean, 'departmentsVisible',
             [ria.templates.ModelPropertyBind],

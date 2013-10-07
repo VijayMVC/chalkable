@@ -13,7 +13,7 @@ NAMESPACE('chlk.templates.apps', function () {
     CLASS(
 
         [ria.templates.ModelBind(chlk.models.apps.AppMarketBaseViewData)],
-        'AppMarketBaseTpl', EXTENDS(chlk.templates.JadeTemplate), [
+        'AppMarketBaseTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
             Number, 'currentBalance',

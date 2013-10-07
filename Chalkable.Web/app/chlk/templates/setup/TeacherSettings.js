@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.setup.TeacherSettings');
 
 NAMESPACE('chlk.templates.setup', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.setup', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/setup/teacherSettings.jade')],
         [ria.templates.ModelBind(chlk.models.setup.TeacherSettings)],
-        'TeacherSettings', EXTENDS(chlk.templates.JadeTemplate), [
+        'TeacherSettings', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.classes.ClassesForTopBar, 'topData',
 

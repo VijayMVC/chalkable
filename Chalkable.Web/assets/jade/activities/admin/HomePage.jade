@@ -100,7 +100,7 @@ topItems = topData.getTopItems();
 selectedIds = topData.getSelectedIds();
 .admin-home.loader-container
     .loader
-    +LeftRightToolbar(topItems, chlk.templates.grading.GradeLevelForTopBar, 'feed', 'admin', [true])(
+    +LeftRightToolbar(topItems, chlk.templates.grading.GradeLevelForTopBar, 'feed', 'list', [true])(
         selectedIds=selectedIds,
         multiple
     ).classes-bar
@@ -109,7 +109,7 @@ selectedIds = topData.getSelectedIds();
         +SmallChart(self.getAbsentForDay(), Msg.Absent_Today, 'today-chart').second-block
         +SmallChart(self.getAbsentForMp(), Msg.Absent_Average_MP(self.getMarkingPeriodName()), 'mp-chart').third-block
     #admin-second-block.third-blocks-container
-        +StudentsBlock_(self.getDisciplines(), Msg.Discipline, 'feed', 'admin').discipline-block
+        +StudentsBlock_(self.getDisciplines(), Msg.Discipline, 'feed', 'list').discipline-block
         .block.budget-block.relative
             budget = self.getBudgetBalance();
             .absolute
@@ -119,7 +119,7 @@ selectedIds = topData.getSelectedIds();
                         .big $#{budget.getCurrentBalance()}
                         .small $#{budget.getStartSchoolBalance()}
                     .outside
-                    +ActionLink('feed', 'admin').hover-area.button-block
+                    +ActionLink('feed', 'list').hover-area.button-block
             +Chart()(
                 data-options = {
                     chart: {
@@ -158,7 +158,7 @@ selectedIds = topData.getSelectedIds();
                     }]
                 }
             )#budget-chart
-        +StudentsBlock_(self.getAttendances(), Msg.Attendance, 'feed', 'admin').attendance-block
+        +StudentsBlock_(self.getAttendances(), Msg.Attendance, 'feed', 'list').attendance-block
     #grades-chart-container
         .panel-header=Msg.Grade(true)
         .chart-block.relative

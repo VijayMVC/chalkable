@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.storage.DatabaseUpdate');
 
 NAMESPACE('chlk.templates.storage', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.storage', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/storage/DatabaseUpdate.jade')],
         [ria.templates.ModelBind(chlk.models.storage.DatabaseUpdate)],
-        'DatabaseUpdate', EXTENDS(chlk.templates.JadeTemplate), [
+        'DatabaseUpdate', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             String, 'masterSql',
             [ria.templates.ModelPropertyBind],

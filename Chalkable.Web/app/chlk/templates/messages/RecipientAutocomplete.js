@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.people.User');
 
 NAMESPACE('chlk.templates.messages', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.messages', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/messages/RecipientAutoComplete.jade')],
         [ria.templates.ModelBind(chlk.models.people.User)],
-        'RecipientAutoComplete', EXTENDS(chlk.templates.JadeTemplate), [
+        'RecipientAutoComplete', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
             String, 'displayName',

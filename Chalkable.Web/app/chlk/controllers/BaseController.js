@@ -154,6 +154,13 @@ NAMESPACE('chlk.controllers', function (){
                    var buttonCls = methodReflector.findAnnotation(chlk.controllers.SidebarButton)[0].clazz;
                    new ria.dom.Dom(SIDEBAR_CONTROLS_ID + ' .' + buttonCls).addClass(PRESSED_CLS);
                }
+           },
+
+           [[ImplementerOf(ria.mvc.IActivity), ria.async.Future]],
+           OVERRIDE, function PushView(clazz, data) {
+               var instance = new clazz();
+               instance.setRole(this.getCurrentRole());
+               this.view.pushD(instance, data);
            }
 
    ])

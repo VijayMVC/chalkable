@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.grading.GradingClassSummaryItem');
 REQUIRE('chlk.models.id.ClassId');
 
@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.grading', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/grading/MpGradingSummary.jade')],
         [ria.templates.ModelBind(chlk.models.grading.GradingClassSummaryItem)],
-        'GradingClassSummaryItemTpl', EXTENDS(chlk.templates.JadeTemplate), [
+        'GradingClassSummaryItemTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.announcement.AnnouncementType, 'type',
             [ria.templates.ModelPropertyBind],

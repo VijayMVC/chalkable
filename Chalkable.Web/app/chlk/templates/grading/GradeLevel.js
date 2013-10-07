@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.grading.GradeLevel');
 
 NAMESPACE('chlk.templates.grading', function () {
@@ -6,7 +6,7 @@ NAMESPACE('chlk.templates.grading', function () {
     /** @class chlk.templates.grading.GradeLevel*/
     CLASS(
         [ria.templates.ModelBind(chlk.models.grading.GradeLevel)],
-        'GradeLevel', EXTENDS(chlk.templates.JadeTemplate), [
+        'GradeLevel', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.id.GradeLevelId, 'id',
 

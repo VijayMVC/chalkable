@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.attendance.ClassAttendance');
 REQUIRE('chlk.converters.attendance.AttendanceTypeToNameConverter');
 
@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.attendance', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/attendance/StudentAttendance.jade')],
         [ria.templates.ModelBind(chlk.models.attendance.ClassAttendance)],
-        'ClassAttendance', EXTENDS(chlk.templates.JadeTemplate), [
+        'ClassAttendance', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.id.ClassAttendanceId, 'id',
 

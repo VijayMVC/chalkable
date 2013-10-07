@@ -50,6 +50,18 @@ NAMESPACE('chlk.models.common', function () {
                 return roleId == roleEnums.ADMINGRADE
                     || roleId == roleEnums.ADMINEDIT
                     || roleId == roleEnums.ADMINVIEW
+            },
+
+            Boolean, function isTeacher(){
+                var roleEnums = chlk.models.common.RoleEnum;
+                var roleId = this.getRoleId();
+                return roleId == roleEnums.TEACHER;
+            },
+
+            Boolean, function isStudent(){
+                var roleEnums = chlk.models.common.RoleEnum;
+                var roleId = this.getRoleId();
+                return roleId == roleEnums.STUDENT;
             }
         ]);
 });

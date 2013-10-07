@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.grading.ClassPersonGradingInfo');
 REQUIRE('chlk.models.course.Course');
 
@@ -9,7 +9,7 @@ NAMESPACE('chlk.templates.student', function(){
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/student/StudentClassGradingItemView.jade')],
         [ria.templates.ModelBind(chlk.models.grading.ClassPersonGradingInfo)],
-        'StudentClassGradingTpl', EXTENDS(chlk.templates.JadeTemplate),[
+        'StudentClassGradingTpl', EXTENDS(chlk.templates.ChlkTemplate),[
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.ClassPersonId, 'classPersonId',

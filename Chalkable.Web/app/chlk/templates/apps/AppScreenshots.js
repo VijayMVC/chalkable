@@ -6,7 +6,7 @@ NAMESPACE('chlk.templates.apps', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/apps/app-screenshots.jade')],
         [ria.templates.ModelBind(chlk.models.apps.AppScreenshots)],
-        'AppScreenshots', EXTENDS(chlk.templates.JadeTemplate), [
+        'AppScreenshots', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.apps.AppPicture), 'items',
             [ria.templates.ModelPropertyBind],

@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.grading.Final');
 
 NAMESPACE('chlk.templates.grading', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.grading', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/grading/annTypesSettings.jade')],
         [ria.templates.ModelBind(chlk.models.grading.Final)],
-        'Final', EXTENDS(chlk.templates.JadeTemplate), [
+        'Final', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.id.FinalGradeId, 'id',
 

@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.search.SearchItem');
 REQUIRE('chlk.models.course.Course');
 
@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.search', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/sidebars/SiteSearch.jade')],
         [ria.templates.ModelBind(chlk.models.search.SearchItem)],
-        'SiteSearch', EXTENDS(chlk.templates.JadeTemplate), [
+        'SiteSearch', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
             String, 'id',

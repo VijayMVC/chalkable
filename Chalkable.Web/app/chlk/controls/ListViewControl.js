@@ -197,19 +197,20 @@ NAMESPACE('chlk.controls', function () {
 
             [[ria.dom.Dom]],
             VOID, function focusGrid() {
-                if(!new ria.dom.Dom(':focus').exists())
-                var node = this.getGrid();
-                var row = node.find('.row.selected');
-                if(row.exists()){
-                    var focusNode = node.find('.row.selected').find('.' + otherInputWithFocusClass);
-                    if(focusNode.exists()){
-                        focusNode.valueOf()[0].focus()
+                //if(!new ria.dom.Dom(':focus').exists()){
+                    var node = this.getGrid();
+                    var row = node.find('.row.selected');
+                    if(row.exists()){
+                        var focusNode = node.find('.row.selected').find('.' + otherInputWithFocusClass);
+                        if(focusNode.exists()){
+                            focusNode.valueOf()[0].focus()
+                        }else{
+                            node.find('.grid-focus').valueOf()[0].focus();
+                        }
                     }else{
                         node.find('.grid-focus').valueOf()[0].focus();
                     }
-                }else{
-                    node.find('.grid-focus').valueOf()[0].focus();
-                }
+                //}
             },
 
             VOID, function scrollToElement(){

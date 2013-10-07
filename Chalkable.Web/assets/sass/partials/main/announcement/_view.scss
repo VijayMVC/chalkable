@@ -211,7 +211,7 @@ $red-color: #842727;
           }
         }
 
-        &.selected{
+        &.selected:not(.readonly){
           .name-block{
             SPAN.container{
               display: inline;
@@ -239,6 +239,10 @@ $red-color: #842727;
               display: none;
             }
           }
+        }
+
+        .name-block, .grade-block{
+          vertical-align: middle;
         }
 
         .name-block{
@@ -314,10 +318,13 @@ $red-color: #842727;
           font-size: 40px;
           overflow: visible;
           position: relative;
+          width: 170px;
+          padding-right: 49px;
+          margin-top: 5px;
 
           .grade-triangle{
             position: absolute;
-            right: 22px;
+            right: 0;
             top: 5px;
             width: 0;
             height: 0;

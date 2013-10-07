@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.attendance.AttendanceStudentBox');
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 
 NAMESPACE('chlk.templates.attendance', function () {
 
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.attendance', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/attendance/AdminStudentBox.jade')],
         [ria.templates.ModelBind(chlk.models.attendance.AttendanceStudentBox)],
-        'AttendanceStudentBoxTpl', EXTENDS(chlk.templates.JadeTemplate), [
+        'AttendanceStudentBoxTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             Object, 'student',
 

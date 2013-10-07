@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.settings.SchoolPersonSettings');
 REQUIRE('chlk.models.id.SchoolPersonId');
 
@@ -10,7 +10,7 @@ NAMESPACE('chlk.templates.settings', function () {
     /** @class chlk.templates.settings.SchoolPersonSettingsTpl*/
     CLASS(
         [ria.templates.ModelBind(chlk.models.settings.SchoolPersonSettings)],
-        'SchoolPersonSettingsTpl', EXTENDS(chlk.templates.JadeTemplate), [
+        'SchoolPersonSettingsTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             Boolean, 'annoucementNotificationsViaSms',
             [ria.templates.ModelPropertyBind],

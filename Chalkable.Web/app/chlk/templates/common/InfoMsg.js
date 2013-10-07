@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.CourseId');
@@ -10,7 +10,7 @@ NAMESPACE('chlk.templates.common', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/common/InfoMsg.jade')],
         [ria.templates.ModelBind(chlk.models.common.InfoMsg)],
-        'InfoMsg', EXTENDS(chlk.templates.JadeTemplate), [
+        'InfoMsg', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             String, 'text',
             [ria.templates.ModelPropertyBind],

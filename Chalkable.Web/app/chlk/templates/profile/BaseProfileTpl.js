@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.common.ActionLinkModel');
 
 NAMESPACE('chlk.templates.profile', function(){
@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.profile', function(){
     /**@class chlk.templates.profile.BaseProfileTpl*/
     CLASS(
         [ria.templates.ModelBind(chlk.models.profile.BaseProfileViewData)],
-        'BaseProfileTpl', EXTENDS(chlk.templates.JadeTemplate),[
+        'BaseProfileTpl', EXTENDS(chlk.templates.ChlkTemplate),[
 
             [ria.templates.ModelPropertyBind],
             chlk.models.common.RoleEnum, 'currentRoleId',

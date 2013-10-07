@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.messages.Message');
 REQUIRE('chlk.templates.messages.RecipientAutoComplete');
 REQUIRE('chlk.models.common.ChlkDate');
@@ -10,7 +10,7 @@ NAMESPACE('chlk.templates.messages', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/messages/AddDialog.jade')],
         [ria.templates.ModelBind(chlk.models.messages.Message)],
-        'AddDialog', EXTENDS(chlk.templates.JadeTemplate), [
+        'AddDialog', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.id.MessageId, 'id',
 

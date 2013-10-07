@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.attendance.AttendanceMpSummary');
 
 NAMESPACE('chlk.templates.attendance', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.attendance', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/attendance/AdminSummaryMp.jade')],
         [ria.templates.ModelBind(chlk.models.attendance.AttendanceMpSummary)],
-        'AdminAttendanceMpTpl', EXTENDS(chlk.templates.JadeTemplate), [
+        'AdminAttendanceMpTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.attendance.AdminAttendanceStatItem), 'attendanceStats',
 

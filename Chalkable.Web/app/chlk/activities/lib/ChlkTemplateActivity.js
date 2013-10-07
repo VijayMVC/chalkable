@@ -1,4 +1,5 @@
 REQUIRE('ria.mvc.TemplateActivity');
+REQUIRE('chlk.models.common.Role');
 
 NAMESPACE('chlk.activities.lib', function () {
 
@@ -37,10 +38,20 @@ NAMESPACE('chlk.activities.lib', function () {
                 BASE(msg_);
             },
 
+            chlk.models.common.Role, 'role',
+
             [[String]],
             OVERRIDE, VOID, function onModelComplete_(msg_) {
                 this.dom.removeClass(PARTIAL_UPDATE_CLASS);
                 BASE(msg_);
+            },
+
+            [[ria.templates.Template, Object, String]],
+            OVERRIDE, VOID, function onPrepareTemplate_(tpl, model, msg_) {
+                BASE(tpl, model, msg_);
+                tpl.options({
+                    userRole: this.getRole()
+                })
             }
 
             //todo think about moving methods from children to base class

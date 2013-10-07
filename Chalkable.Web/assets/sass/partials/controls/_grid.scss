@@ -52,7 +52,11 @@ BODY {
 
 
     &.selected{
-      @include background(linear-gradient(top, #eaeaea, #c7c7c7));
+
+      &:not(.fixed-bg){
+        @include background(linear-gradient(top, #eaeaea, #c7c7c7));
+      }
+
       color: #276284;
       z-index: 2;
       @include box-shadow(0 0px 7px 1px #999);

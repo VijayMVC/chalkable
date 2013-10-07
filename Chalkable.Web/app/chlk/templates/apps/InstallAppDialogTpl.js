@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.apps.AppMarketInstallViewData');
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 
 NAMESPACE('chlk.templates.apps', function () {
 
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.apps', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/apps/install-app-dialog.jade')],
         [ria.templates.ModelBind(chlk.models.apps.AppMarketInstallViewData)],
-        'InstallAppDialogTpl', EXTENDS(chlk.templates.JadeTemplate), [
+        'InstallAppDialogTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.apps.AppMarketApplication, 'app',
 

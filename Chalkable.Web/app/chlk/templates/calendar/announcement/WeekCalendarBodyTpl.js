@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.calendar.announcement.Week');
 
 
@@ -9,7 +9,7 @@ NAMESPACE('chlk.templates.calendar.announcement', function(){
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/calendar/announcement/WeekCalendarBody.jade')],
         [ria.templates.ModelBind(chlk.models.calendar.announcement.Week)],
-        'WeekCalendarBodyTpl', EXTENDS(chlk.templates.JadeTemplate),[
+        'WeekCalendarBodyTpl', EXTENDS(chlk.templates.ChlkTemplate),[
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.calendar.announcement.WeekItem), 'items'

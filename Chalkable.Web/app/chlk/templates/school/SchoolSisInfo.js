@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.school', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/school/SchoolSis.jade')],
         [ria.templates.ModelBind(chlk.models.school.SchoolSisInfo)],
-        'SchoolSisInfo', EXTENDS(chlk.templates.JadeTemplate), [
+        'SchoolSisInfo', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             Number, 'attendanceSyncFreq',
             [ria.templates.ModelPropertyBind],
