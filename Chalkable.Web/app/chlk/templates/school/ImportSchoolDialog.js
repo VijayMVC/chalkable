@@ -9,7 +9,7 @@ NAMESPACE('chlk.templates.school', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/school/import-school-dialog.jade')],
         [ria.templates.ModelBind(chlk.models.schoolImport.SchoolImportViewData)],
-        'ImportSchoolDialog', EXTENDS(chlk.templates.JadeTemplate), [
+        'ImportSchoolDialog', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.id.DistrictId, 'districtId',
             [ria.templates.ModelPropertyBind],

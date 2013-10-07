@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.messages.Message');
 REQUIRE('chlk.models.id.MessageId');
 REQUIRE('chlk.models.people.Person');
@@ -10,7 +10,7 @@ NAMESPACE('chlk.templates.messages', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/messages/ViewDialog.jade')],
         [ria.templates.ModelBind(chlk.models.messages.Message)],
-        'ViewDialog', EXTENDS(chlk.templates.JadeTemplate), [
+        'ViewDialog', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.id.MessageId, 'id',
 

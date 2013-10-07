@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.grading.ItemGradingStat');
 
 NAMESPACE('chlk.templates.grading', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.grading', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/grading/PopupChart.jade')],
         [ria.templates.ModelBind(chlk.models.grading.ItemGradingStat)],
-        'ItemGradingStatTpl', EXTENDS(chlk.templates.JadeTemplate), [
+        'ItemGradingStatTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AnnouncementId, 'announcementId',
 

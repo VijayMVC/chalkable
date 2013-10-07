@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.teacher.StudentsList');
 
 NAMESPACE('chlk.templates.teacher', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.teacher', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/teacher/StudentsList.jade')],
         [ria.templates.ModelBind(chlk.models.teacher.StudentsList)],
-        'StudentsList', EXTENDS(chlk.templates.JadeTemplate), [
+        'StudentsList', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.people.UsersList, 'usersList', //todo: rename
 

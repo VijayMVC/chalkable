@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.admin.PersonsForAdmin');
 REQUIRE('chlk.models.common.Role');
 REQUIRE('chlk.models.grading.GradeLevel');
@@ -10,7 +10,7 @@ NAMESPACE('chlk.templates.admin', function(){
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/admin/school-person-list.jade')],
         [ria.templates.ModelBind(chlk.models.admin.PersonsForAdmin)],
-        'SchoolPersonListTpl', EXTENDS(chlk.templates.JadeTemplate),[
+        'SchoolPersonListTpl', EXTENDS(chlk.templates.ChlkTemplate),[
 
             [ria.templates.ModelPropertyBind],
             chlk.models.people.UsersList, 'usersList',

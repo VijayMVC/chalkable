@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.classes.Class');
 
 NAMESPACE('chlk.templates.classes', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.classes', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/profile/StudentClassItem.jade')],
         [ria.templates.ModelBind(chlk.models.classes.Class)],
-        'Class', EXTENDS(chlk.templates.JadeTemplate), [
+        'Class', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.course.Course, 'course',
 

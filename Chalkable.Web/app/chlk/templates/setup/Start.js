@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 
 REQUIRE('chlk.models.settings.Preference');
 
@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.setup', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/setup/Start.jade')],
         [ria.templates.ModelBind(chlk.models.settings.Preference)],
-        'Start', EXTENDS(chlk.templates.JadeTemplate), [
+        'Start', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             Number, 'type'
         ])

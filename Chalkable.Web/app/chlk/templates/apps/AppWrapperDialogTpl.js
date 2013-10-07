@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.templates.common.attachments.AttachmentDialogTpl');
 
 REQUIRE('chlk.models.apps.AppWrapperViewData');

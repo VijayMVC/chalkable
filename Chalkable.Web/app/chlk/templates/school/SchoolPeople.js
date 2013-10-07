@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.school', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/school/SchoolPeople.jade')],
         [ria.templates.ModelBind(chlk.models.school.SchoolPeople)],
-        'SchoolPeople', EXTENDS(chlk.templates.JadeTemplate), [
+        'SchoolPeople', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.people.UsersList, 'usersList', //todo: rename
             [ria.templates.ModelPropertyBind],

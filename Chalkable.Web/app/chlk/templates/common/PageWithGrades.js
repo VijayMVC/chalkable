@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.common.PageWithGrades');
 
 NAMESPACE('chlk.templates.common', function () {
@@ -6,7 +6,7 @@ NAMESPACE('chlk.templates.common', function () {
     /** @class chlk.templates.common.PageWithGrades*/
     CLASS(
         [ria.templates.ModelBind(chlk.models.common.PageWithGrades)],
-        'PageWithGrades', EXTENDS(chlk.templates.JadeTemplate), [
+        'PageWithGrades', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.grading.GradeLevelsForTopBar, 'topData',
 

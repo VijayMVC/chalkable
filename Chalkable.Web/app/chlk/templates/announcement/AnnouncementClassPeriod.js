@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.announcement.AnnouncementClassPeriod');
 
 NAMESPACE('chlk.templates.announcement', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.announcement', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/profile/StudentAssignmentsBlock.jade')],
         [ria.templates.ModelBind(chlk.models.announcement.AnnouncementClassPeriod)],
-        'AnnouncementClassPeriod', EXTENDS(chlk.templates.JadeTemplate), [
+        'AnnouncementClassPeriod', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.period.ClassPeriod, 'classPeriod',
 

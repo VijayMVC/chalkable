@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.id.SchoolPersonId');
@@ -10,7 +10,7 @@ NAMESPACE('chlk.templates.people', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/profile/InfoView.jade')],
         [ria.templates.ModelBind(chlk.models.people.User)],
-        'User', EXTENDS(chlk.templates.JadeTemplate), [
+        'User', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             Boolean, 'active',
 

@@ -1,7 +1,7 @@
 REQUIRE('chlk.models.feed.Feed');
 REQUIRE('chlk.models.classes.ClassesForTopBar');
 REQUIRE('chlk.models.announcement.Announcement');
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 
 
 NAMESPACE('chlk.templates.feed', function () {
@@ -10,7 +10,7 @@ NAMESPACE('chlk.templates.feed', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/feed/Feed.jade')],
         [ria.templates.ModelBind(chlk.models.feed.Feed)],
-        'Feed', EXTENDS(chlk.templates.JadeTemplate), [
+        'Feed', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.announcement.Announcement), 'items',
 

@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.apps', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/apps/AppMarketApps.jade')],
         [ria.templates.ModelBind(chlk.models.apps.AppMarketViewData)],
-        'AppMarketAppsTpl', EXTENDS(chlk.templates.JadeTemplate), [
+        'AppMarketAppsTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.common.PaginatedList, 'apps'
         ])

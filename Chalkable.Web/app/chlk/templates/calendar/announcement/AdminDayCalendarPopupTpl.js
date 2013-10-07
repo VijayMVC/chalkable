@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.period.ClassPeriod');
 
 NAMESPACE('chlk.templates.calendar.announcement', function(){
@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.calendar.announcement', function(){
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/calendar/announcement/AdminDayCalendarPopUp.jade')],
         [ria.templates.ModelBind(chlk.models.period.ClassPeriod)],
-        'AdminDayCalendarPopupTpl', EXTENDS(chlk.templates.JadeTemplate),[
+        'AdminDayCalendarPopupTpl', EXTENDS(chlk.templates.ChlkTemplate),[
 
             [ria.templates.ModelPropertyBind],
             chlk.models.period.Period, 'period',

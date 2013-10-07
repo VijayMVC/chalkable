@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.apps.Application');
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 
 NAMESPACE('chlk.templates.apps', function () {
 
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.apps', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/apps/add-app-dialog.jade')],
         [ria.templates.ModelBind(chlk.models.apps.Application)],
-        'AddAppDialog', EXTENDS(chlk.templates.JadeTemplate), [
+        'AddAppDialog', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             String, 'name'
         ])

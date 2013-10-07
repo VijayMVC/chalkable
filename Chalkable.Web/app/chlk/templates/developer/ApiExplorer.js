@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.developer.ApiExplorerViewData');
 
 NAMESPACE('chlk.templates.developer', function () {
@@ -6,5 +6,5 @@ NAMESPACE('chlk.templates.developer', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/developer/api-explorer.jade')],
         [ria.templates.ModelBind(chlk.models.developer.ApiExplorerViewData)],
-        'ApiExplorer', EXTENDS(chlk.templates.JadeTemplate), [])
+        'ApiExplorer', EXTENDS(chlk.templates.ChlkTemplate), [])
 });

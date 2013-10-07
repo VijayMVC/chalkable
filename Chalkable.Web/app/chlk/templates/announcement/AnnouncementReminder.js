@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.announcement.Reminder');
 
 NAMESPACE('chlk.templates.announcement', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.announcement', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AnnouncementReminder.jade')],
         [ria.templates.ModelBind(chlk.models.announcement.Reminder)],
-        'AnnouncementReminder', EXTENDS(chlk.templates.JadeTemplate), [
+        'AnnouncementReminder', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             Number, 'before',
 

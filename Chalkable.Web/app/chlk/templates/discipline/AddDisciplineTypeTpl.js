@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.discipline.DisciplineType');
 REQUIRE('chlk.models.id.DisciplineTypeId');
 
@@ -10,7 +10,7 @@ NAMESPACE('chlk.templates.discipline', function(){
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/discipline/add-discipline-type-dialog.jade')],
         [ria.templates.ModelBind(chlk.models.discipline.DisciplineType)],
-        'AddDisciplineTypeTpl', EXTENDS(chlk.templates.JadeTemplate),[
+        'AddDisciplineTypeTpl', EXTENDS(chlk.templates.ChlkTemplate),[
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.DisciplineTypeId, 'id',

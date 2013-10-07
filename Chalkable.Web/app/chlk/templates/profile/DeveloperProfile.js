@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.developer.DeveloperInfo');
 
 NAMESPACE('chlk.templates.profile', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.profile', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/profile/DeveloperProfile.jade')],
         [ria.templates.ModelBind(chlk.models.developer.DeveloperInfo)],
-        'DeveloperProfile', EXTENDS(chlk.templates.JadeTemplate), [
+        'DeveloperProfile', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.id.SchoolPersonId, 'id',
             [ria.templates.ModelPropertyBind],

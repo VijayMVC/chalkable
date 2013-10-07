@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 
 REQUIRE('chlk.models.common.PaginatedList');
 
@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/controls/paginator.jade')],
         [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
-        'PaginatedList', EXTENDS(chlk.templates.JadeTemplate), [
+        'PaginatedList', EXTENDS(chlk.templates.ChlkTemplate), [
             /*[ria.templates.ModelPropertyBind],
             ArrayOf(Object), 'items',*/
             [ria.templates.ModelPropertyBind],

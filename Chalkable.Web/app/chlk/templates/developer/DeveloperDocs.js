@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.common.footers.DeveloperFooter');
 REQUIRE('chlk.models.developer.DeveloperDocs');
 
@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.developer', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/developer/developer-docs.jade')],
         [ria.templates.ModelBind(chlk.models.developer.DeveloperDocs)],
-        'DeveloperDocs', EXTENDS(chlk.templates.JadeTemplate), [
+        'DeveloperDocs', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             String, 'docsUrl'
         ])

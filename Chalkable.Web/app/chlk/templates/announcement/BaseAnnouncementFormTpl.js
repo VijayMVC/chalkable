@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 
 NAMESPACE('chlk.templates.announcement', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.announcement', function () {
     /** @class chlk.templates.announcement.BaseAnnouncementFormTpl*/
     CLASS(
         [ria.templates.ModelBind(chlk.models.announcement.AnnouncementForm)],
-        'BaseAnnouncementFormTpl', EXTENDS(chlk.templates.JadeTemplate), [
+        'BaseAnnouncementFormTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.announcement.Announcement, 'announcement',
 

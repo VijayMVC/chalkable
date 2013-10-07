@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.classes.ClassesForTopBar');
 
@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.announcement', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AnnouncementForm.jade')],
         [ria.templates.ModelBind(chlk.models.announcement.AnnouncementForm)],
-        'AnnouncementForm', EXTENDS(chlk.templates.JadeTemplate), [
+        'AnnouncementForm', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.announcement.Announcement, 'announcement',
 

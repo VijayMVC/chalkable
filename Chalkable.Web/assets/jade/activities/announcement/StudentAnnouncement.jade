@@ -38,15 +38,16 @@ owner = self.getOwner();
                 .grade-triangle
             div(class=selectedCls + ' ' + itemCls).i-b=isDrop ? Msg.Drop :res
             div(class="selected " + itemCls, rowIndex=i, recId=self.getId()).i-b
-                if self.getGradingStyle()
-                    .select-container
-                        .select-container2
-                            +Select('gradeLetter')(id='grade-select-' + self.getId(), data-placeholder=" ").grade-select
-                                each item in GradingStyler.getGradeLetters()
-                                    -currentValue = getGradeNumber(item);
-                                    if currentValue != -1
-                                        +Option(currentValue, item, res == item)
-                        .letters=lbl
-                .input-container
-                    INPUT(type="text", autofill="off", value=normalValue, name="gradevalue").no-padding.grade-input.with-grid-focus
-                    .letters 100 - 0
+                if !self.isReadonly()
+                    if self.getGradingStyle()
+                        .select-container
+                            .select-container2
+                                +Select('gradeLetter')(id='grade-select-' + self.getId(), data-placeholder=" ").grade-select
+                                    each item in GradingStyler.getGradeLetters()
+                                        -currentValue = getGradeNumber(item);
+                                        if currentValue != -1
+                                            +Option(currentValue, item, res == item)
+                            .letters=lbl
+                    .input-container
+                        INPUT(type="text", autofill="off", value=normalValue, name="gradevalue").no-padding.grade-input.with-grid-focus
+                        .letters 100 - 0

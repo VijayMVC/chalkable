@@ -66,7 +66,7 @@
                 +ListView(studentAnnouncementsInfo)(
                     selectedIndex = selectedIndex).grades-individual.people-list
                     each item, i in studentAnnouncements
-                        .row(class=(i == selectedIndex ? 'selected' : ''), index=i)
+                        .row(class=(i == selectedIndex ? 'selected' : ''), index=i).fixed-bg
                             notAnnouncement = self.getAnnouncementTypeId() != chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf();
                             +Hidden('notAnnouncement', notAnnouncement)
                             +Hidden('readonly', isReadonly)
@@ -80,4 +80,6 @@
                                     gradingStyle = gradingStyle,
                                     gradingMapping = studentAnnouncementsInfo.getMapping()
                                 )
+                        .attachments-container
+                            .attachments-container-2
 

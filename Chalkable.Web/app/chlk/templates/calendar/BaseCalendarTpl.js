@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.calendar.BaseCalendar');
 
 NAMESPACE('chlk.templates.calendar', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.calendar', function () {
     ASSET('~/assets/jade/activities/calendar/BaseCalendar.jade')();
     CLASS(
         [ria.templates.ModelBind(chlk.models.calendar.BaseCalendar)],
-        'BaseCalendarTpl', EXTENDS(chlk.templates.JadeTemplate), [
+        'BaseCalendarTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
             Number, 'selectedTypeId',

@@ -1,24 +1,13 @@
-attachments = self.getAnnouncementAttachments() || []
-applications = self.getApplications() || []
-typesEnum = chlk.models.announcement.AnnouncementTypeEnum
-isAnnouncement = (self.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf() || self.getAnnouncementTypeId() == typesEnum.ADMIN.valueOf())
-
-if self.needButtons
-    #attach-file-area.announcement-item.attach-file-area
-        if !isAnnouncement
-            +ActionLink('announcement', 'attachApp', self.getId())#add-application.simple-gray-button Attach App
-        button.simple-gray-button.file Attach File
-            +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
-each attachment, i in attachments
+mixin AnnouncementFormAttachmentItem(attachment, i)
     .announcement-item.attachment
         if self.needDeleteButton
             +ActionLink('announcement', 'deleteAttachment', attachment.getId()).close-btn
         +ActionLink('announcement', 'viewAttachment', attachment.getId())
-            +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + i)
+            +LoadingImage(src=attachment.getPictureHref(), id="loading-image-" + i)
             .title
                 div=attachment.getName()
 
-each app, i in applications
+mixin AnnouncementFormApplicationItem(app, i)
     viewUrl = self.isGradable() && !self.needDeleteButton ? app.getGradingViewUrl() : app.getViewUrl()
     appMode = self.isGradable() && !self.needDeleteButton ? chlk.models.apps.AppModes.GRADINGVIEW : chlk.models.apps.AppModes.VIEW
     appUrl = app.getUrl()
@@ -26,6 +15,24 @@ each app, i in applications
         if self.needDeleteButton
             +ActionLink('announcement', 'deleteApp', app.getAnnouncementApplicationId()).close-btn
         +ActionLink('apps', 'viewApp', appUrl, viewUrl, appMode, app.getAnnouncementApplicationId())
-            +LoadingImage(src=self.getPictureURL(app.getSmallPictureId(), 74, 74), id="loading-image-" + i)
+            +LoadingImage(src=app.getPictureHref(), id="loading-image-" + i)
             .title
                 div=app.getName()
+
+attachments = self.getAnnouncementAttachments() || []
+applications = self.getApplications() || []
+typesEnum = chlk.models.announcement.AnnouncementTypeEnum
+isAnnouncement = (self.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf() || self.getAnnouncementTypeId() == typesEnum.ADMIN.valueOf())
+items = self.getSortedAppsAndAttachments();
+
+if self.needButtons
+    #attach-file-area.announcement-item.attach-file-area
+        if !isAnnouncement
+            +ActionLink('announcement', 'attachApp', self.getId())#add-application.simple-gray-button Attach App
+        button.simple-gray-button.file Attach File
+            +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
+each item, i in items
+    if item.getType == chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION
+        +AnnouncementFormApplicationItem(item, i)
+    else
+        +AnnouncementFormAttachmentItem(item, i)

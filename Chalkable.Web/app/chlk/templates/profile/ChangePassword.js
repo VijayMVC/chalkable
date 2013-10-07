@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.templates.ChlkTemplate');
 
 NAMESPACE('chlk.templates.profile', function () {
 
@@ -6,7 +6,7 @@ NAMESPACE('chlk.templates.profile', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/profile/ChangePassword.jade')],
         [ria.templates.ModelBind(Class)],
-        'ChangePassword', EXTENDS(chlk.templates.JadeTemplate), [
+        'ChangePassword', EXTENDS(chlk.templates.ChlkTemplate), [
             /*[ria.templates.ModelPropertyBind],
             chlk.models.id.SchoolPersonId, 'id',
             [ria.templates.ModelPropertyBind],
