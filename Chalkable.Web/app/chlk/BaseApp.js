@@ -146,7 +146,7 @@ NAMESPACE('chlk', function (){
                     }, this);
             },
 
-            OVERRIDE, function onStop_() {
+            OVERRIDE, VOID, function onStop_() {
                 this.apiHost_.onStop();
             }
 

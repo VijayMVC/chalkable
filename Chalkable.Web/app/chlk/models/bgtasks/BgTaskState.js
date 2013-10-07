@@ -26,10 +26,10 @@ NAMESPACE('chlk.models.bgtasks', function () {
                 this._types[chlk.models.bgtasks.BgTaskStateEnum.FAILED] = "Failed";
             },
             String, function toString(){
-                return this._types[this.getTypeId()];
+                return this._types[this.getTypeId()]  || ('Unknown value: ' + this.getTypeId().toString());
             },
             VOID, function deserialize(raw) {
-                this.setTypeId(new chlk.models.bgtasks.BgTaskStateEnum(Number(raw)));
+                this.setTypeId(chlk.models.bgtasks.BgTaskStateEnum(Number(raw)));
             }
         ]);
 });

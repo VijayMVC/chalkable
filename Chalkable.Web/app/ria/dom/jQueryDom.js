@@ -202,7 +202,7 @@ NAMESPACE('ria.dom', function () {
                 return this;
             },
 
-            [[SELF]],
+            [[ria.dom.Dom]],
             OVERRIDE, SELF, function remove(node_) {
                 node_ ? node_.remove() : this._dom.remove();
                 return this;
@@ -286,11 +286,11 @@ NAMESPACE('ria.dom', function () {
             },
 
             [[Object]],
-            OVERRIDE, Object, function height(value_) {
+            OVERRIDE, Number, function height(value_) {
                 return value_ ? this._dom.height(value_) : this._dom.height();
             },
             [[Object]],
-            OVERRIDE, Object, function width(value_) {
+            OVERRIDE, Number, function width(value_) {
                 return value_ ? this._dom.width(value_) : this._dom.width();
             },
 

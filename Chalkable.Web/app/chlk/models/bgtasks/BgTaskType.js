@@ -31,10 +31,10 @@ NAMESPACE('chlk.models.bgtasks', function () {
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.DELETE_SCHOOL] = "Delete School";
             },
             String, function toString(){
-                return this._types[this.getTypeId()];
+                return this._types[this.getTypeId()] || ('Unknown value: ' + this.getTypeId().toString());
             },
             VOID, function deserialize(raw) {
-                this.setTypeId(new chlk.models.bgtasks.BgTaskTypeEnum(Number(raw)));
+                this.setTypeId(chlk.models.bgtasks.BgTaskTypeEnum(Number(raw)));
             }
         ]);
 
