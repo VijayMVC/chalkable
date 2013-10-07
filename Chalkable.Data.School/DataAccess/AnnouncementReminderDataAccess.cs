@@ -88,7 +88,7 @@ namespace Chalkable.Data.School.DataAccess
             conds.Add(new SimpleQueryCondition(AnnouncementReminder.REMIND_DATE_FIELD,
                           AnnouncementReminder.REMIND_DATE_FIELD, schoolTimeNow, ConditionRelation.LessEqual));
             conds.Add(new SimpleQueryCondition(AnnouncementReminder.PROCESSED_FIELD,
-                          AnnouncementReminder.PROCESSED_FIELD, true, ConditionRelation.Equal));
+                          AnnouncementReminder.PROCESSED_FIELD, false, ConditionRelation.Equal));
 
             conds.BuildSqlWhere(dbQuery, "AnnouncementReminder");
             dbQuery.Sql.Append(" and Announcement.State <> ").Append((int) AnnouncementState.Draft);

@@ -35,6 +35,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         private const string SCHOOL_YEAR_ID_PARAM = "schoolYearId";
         private const string ID_PARAM = "id";
         private const string CALLER_ID_PARAM = "callerId";
+        private const string CALLER_ROLE_PARAM = "@callerRole";
         private const string ROLE_ID_PARAM = "roleId";
         private const string FROM_DATE_PARAM = "fromDate";
         private const string TO_DATE_PARAM = "toDate";
@@ -146,12 +147,13 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
         }
  
-        public AnnouncementDetails GetDetails(Guid id, Guid callerId)
+        public AnnouncementDetails GetDetails(Guid id, Guid callerId, int? roleId)
         {
             var parameters = new Dictionary<string, object>
                 {
                     {ID_PARAM, id},
-                    {CALLER_ID_PARAM, callerId}
+                    {CALLER_ID_PARAM, callerId},
+                    {CALLER_ROLE_PARAM, roleId}
                 };
             using (var reader = ExecuteStoredProcedureReader(GET_DETAILS_PROCEDURE, parameters))
             {

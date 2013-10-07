@@ -171,7 +171,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                return da.GetDetails(announcementId, Context.UserId);
+                return da.GetDetails(announcementId, Context.UserId, Context.Role.Id);
             }
         }
 
