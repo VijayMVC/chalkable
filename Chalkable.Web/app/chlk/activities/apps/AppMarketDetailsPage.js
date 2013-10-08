@@ -14,20 +14,25 @@ NAMESPACE('chlk.activities.apps', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleReviewArea(node, event){
                 this.dom.find('.add-review').toggleClass('x-hidden');
+                this.dom.find('.rating-hint').hide();
             },
 
             [ria.mvc.DomEventBind('click', '.cancel-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function cancelReview(node, event){
                 this.dom.find('.add-review').addClass('x-hidden');
+                this.dom.find('.rating-hint').hide();
                 //todo: reset ratings here also
             },
 
-            [ria.mvc.DomEventBind('click', '.review-link')],
+            [ria.mvc.DomEventBind('click', '.submit-review-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function toggleRoleReviews(node, event){
-                this.dom.find('.rating-roles').toggleClass('x-hidden');
-                this.dom.find('.add-review').addClass('x-hidden');
+            VOID, function submitReview(node, event){
+                var rating = this.dom.find('[name=new-rating]:checked').getValue();
+                if (!rating){
+                    this.dom.find('.rating-hint').show();
+                    return;
+                }
             }
         ]);
 });

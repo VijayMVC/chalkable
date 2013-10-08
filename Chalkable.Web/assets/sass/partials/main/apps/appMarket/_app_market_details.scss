@@ -192,6 +192,15 @@ DIV.page {
                 .review-container{
                   position: absolute;
                   bottom: 0;
+                  .rating-hint{
+                    background: url(images/app/rating-hint.png) 0 0 no-repeat;
+                    width: image-width('app/rating-hint.png');
+                    height: image-height('app/rating-hint.png');
+                    position: absolute;
+                    left: 130px;
+                    bottom: 10px;
+                    display: none;
+                  }
                 }
 
 

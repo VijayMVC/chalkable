@@ -35,14 +35,16 @@ appRating = app.getApplicationRating()
                 +Rating("app-rating", appRating.getAverage(), false).all
                 a.write-review-btn Write a review
                 .add-review.x-hidden
-
-                    .review-area
-                        textarea.review-text(placeholder="Write a review")
-                        .review-container
-                            +Rating('new-rating', 0, true)
-                    .btns
-                        +Button().special-button.blue-button Submit
-                        span.cancel-btn Cancel
+                    +ActionForm('appmarket', 'writeReview')#submit-review-form
+                        .review-area
+                            textarea.review-text(placeholder="Write a review", name="reviewText")
+                            .review-container
+                                +Rating('newRating', 0, true)
+                                .rating-hint
+                            +Hidden('appRating', 0)
+                        .btns
+                            +Button()(type="button", class="special-button blue-button submit-review-btn") Submit
+                            span.cancel-btn Cancel
 
 
                 .user-reviews
