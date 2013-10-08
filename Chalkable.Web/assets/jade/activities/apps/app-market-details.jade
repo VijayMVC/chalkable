@@ -1,5 +1,6 @@
 app = self.getApp()
 devName = app.getDeveloperInfo().getName()
+webSiteLink = app.getDeveloperInfo().getWebSite()
 .app-market-details
     +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels)
     .app-screenshots-panel
@@ -7,16 +8,17 @@ devName = app.getDeveloperInfo().getName()
     .app-price-info
         .app-title
             h1=app.getName()
-            span="By " + devName
+            span="by "
+            a(href = webSiteLink).dev-web-site=devName
         .app-buy
             +ActionLinkButton('appmarket', 'tryToInstall', app.getId()).special-button.blue-button=self.installBtnTitle
 
-        textarea(name = "app-description", class ="app-description", readonly)=self.description
+        textarea(name = "app-description", class ="app-description", readonly)=app.getDescription()
         .app-general-info
             .reviews
                 +ActionLink('a', 'b').review-link User Ratings
                 a.write-review-btn Write a review
-                .add-review
+                .add-review.x-hidden
                     textarea.review-text(placeholder="Write a review")
                     +Button().special-button.blue-button Submit
                     span.cancel-btn Cancel

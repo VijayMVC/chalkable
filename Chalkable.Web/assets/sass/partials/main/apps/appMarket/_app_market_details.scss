@@ -10,6 +10,17 @@ DIV.page {
               .app-title {
                 display: inline-block;
                 width: 538px;
+                .dev-web-site{
+                  margin-top: 5px;
+                  font-size: 15px;
+                  font-style: italic;
+                  text-decoration: none;
+                  margin-left: 5px;
+                }
+
+                span{
+                  font-style: italic;
+                }
               }
 
               .app-description {
@@ -19,9 +30,9 @@ DIV.page {
                 resize: none;
                 background: none;
                 border: none;
-                height: 60px;
                 width: 100%;
                 outline: none;
+                margin-top: 30px;
               }
               .app-buy {
                 width: 122px;

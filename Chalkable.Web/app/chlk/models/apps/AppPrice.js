@@ -30,6 +30,23 @@ NAMESPACE('chlk.models.apps', function () {
                    priceperclass: this.getPricePerClass(),
                    priceperschool: this.getPricePerSchool()
                }
+            },
+
+            String, function formatPrice(){
+                var result = this.getPrice() > 0 ? "$" + this.formatPrice_(this.getPrice()) : "Free";
+                return result;
+            },
+
+            function formatPrice_(p){
+                var price = p.toString();
+
+                if(price.indexOf('.') > -1){
+                    var second = price.split('.')[1];
+                    if(second.length != 2){
+                        price = price + '0';
+                    }
+                }
+                return price;
             }
         ]);
 });

@@ -223,9 +223,8 @@ NAMESPACE('chlk.controllers', function (){
                     if (this.userInRole(chlk.models.common.RoleEnum.STUDENT) && app.isInstalledOnlyForCurrentUser()){
                         installBtnTitle = 'Installed';
                     }else{
-                        installBtnTitle = app.getApplicationPrice().getPrice() > 0 ? "$" + app.getApplicationPrice().getPrice() : "Free";
+                        installBtnTitle = app.getApplicationPrice().formatPrice();
                     }
-
 
                     /*
                      if(data.videodemourl){
