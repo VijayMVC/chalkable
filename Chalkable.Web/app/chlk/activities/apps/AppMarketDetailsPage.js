@@ -21,6 +21,13 @@ NAMESPACE('chlk.activities.apps', function () {
             VOID, function cancelReview(node, event){
                 this.dom.find('.add-review').addClass('x-hidden');
                 //todo: reset ratings here also
+            },
+
+            [ria.mvc.DomEventBind('click', '.review-link')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function toggleRoleReviews(node, event){
+                this.dom.find('.rating-roles').toggleClass('x-hidden');
+                this.dom.find('.add-review').addClass('x-hidden');
             }
         ]);
 });

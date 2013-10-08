@@ -1,6 +1,21 @@
+mixin Rating(elemId, value, isEditable)
+    fieldset.rating(class = isEditable ? "editable" : undefined)(attributes)
+        items = [5, 4, 3, 2, 1]
+        each item in items
+            input(
+                type = "radio",
+                id = "#{elemId + item}",
+                value = item,
+                disabled = !isEditable ? "disabled" : undefined,
+                checked = value == item ? "checked" : undefined
+                )
+            label(for="#{elemId + item}")
+
 app = self.getApp()
 devName = app.getDeveloperInfo().getName()
 webSiteLink = app.getDeveloperInfo().getWebSite()
+appRating = app.getApplicationRating()
+
 .app-market-details
     +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels)
     .app-screenshots-panel
@@ -16,12 +31,33 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
         textarea(name = "app-description", class ="app-description", readonly)=app.getDescription()
         .app-general-info
             .reviews
-                +ActionLink('a', 'b').review-link User Ratings
+                a.review-link User Ratings
+                +Rating("app-rating", appRating.getAverage(), false).all
                 a.write-review-btn Write a review
                 .add-review.x-hidden
-                    textarea.review-text(placeholder="Write a review")
-                    +Button().special-button.blue-button Submit
-                    span.cancel-btn Cancel
+
+                    .review-area
+                        textarea.review-text(placeholder="Write a review")
+                        .review-container
+                            +Rating('new-rating', 0, true)
+                    .btns
+                        +Button().special-button.blue-button Submit
+                        span.cancel-btn Cancel
+
+
+                .user-reviews
+                    .rating-roles.x-hidden
+                        each role in appRating.getRoleRatings()
+                            .rating-role-item
+                                .rolename=role.getRoleName()
+                                .app-raiting
+                                   +Rating('role-' + role.getRoleName(), role.getRating())
+                                .personcount=role.getPersonCount()
+                    .rating-persons
+                        each person in appRating.getPersonRatings()
+                            .rating-person-item
+                                p=person.getReview() + ' - ' + person.getRoleName()
+                                +Rating('person-rating-' + person.getSchoolPersonId.valueOf(), person.getRating())
             .permissions
                 .permissions-group
                     .group-header.first This app is for:

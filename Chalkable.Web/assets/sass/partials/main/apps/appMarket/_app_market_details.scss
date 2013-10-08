@@ -182,6 +182,25 @@ DIV.page {
                   color: #383838;
                   text-decoration: none;
                   font-size: 22px;
+                  cursor: pointer;
+                }
+
+                .review-area{
+                  position: relative;
+                }
+
+                .review-container{
+                  position: absolute;
+                  bottom: 0;
+                }
+
+
+                .rating{
+
+                  &.all{
+                    margin-left: 25px;
+                  }
+
                 }
 
 
@@ -231,6 +250,10 @@ DIV.page {
 
                 button{
                   font-size: 16px;
+                }
+
+                .user-reviews{
+                  margin-top: 17px;
                 }
               }
 

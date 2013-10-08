@@ -19,6 +19,7 @@ REQUIRE('chlk.models.apps.AppInstallGroup');
 REQUIRE('chlk.models.apps.AppInstallPostData');
 REQUIRE('chlk.models.apps.AppDeletePostData');
 REQUIRE('chlk.models.apps.AppMarketPostData');
+REQUIRE('chlk.models.apps.AppRating');
 
 REQUIRE('chlk.models.id.AppId');
 
@@ -218,6 +219,29 @@ NAMESPACE('chlk.controllers', function (){
 
                     app.setPermissions(filteredPermissions);
 
+
+                    //todo: when ready on server remove this
+
+                    var appRating = new chlk.models.apps.AppRating();
+                    appRating.setAverage(5);
+
+                    var personRating = new chlk.models.apps.PersonRating();
+                    personRating.setReview("Great app");
+                    personRating.setRoleName("Teacher");
+                    personRating.setRoleId(4);
+                    personRating.setRating(5);
+
+                    var roleRating = new chlk.models.apps.RoleRating();
+                    roleRating.setRating(3);
+                    roleRating.setRoleName("Teacher");
+                    roleRating.setRoleId(4);
+                    roleRating.setPersonCount(5);
+
+                    appRating.setPersonRatings([personRating]);
+                    appRating.setRoleRatings([roleRating]);
+
+                    app.setApplicationRating(appRating);
+
                     var installBtnTitle ='';
 
                     if (this.userInRole(chlk.models.common.RoleEnum.STUDENT) && app.isInstalledOnlyForCurrentUser()){
@@ -298,6 +322,8 @@ NAMESPACE('chlk.controllers', function (){
                         return item;
                     }, this);
                     app.setInstalledForGroups(installedForGroups);
+
+
                     return new chlk.models.apps.AppMarketInstallViewData(app, installedCount == installedForGroups.length);
                 }, this)
                 .attach(this.validateResponse_())
