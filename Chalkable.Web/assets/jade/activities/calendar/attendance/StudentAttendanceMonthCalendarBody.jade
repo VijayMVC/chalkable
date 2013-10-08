@@ -1,0 +1,40 @@
+itemColor = null
+.month-calendar-body
+    .day-names
+        div
+            p=Msg.Sunday
+        div
+            p=Msg.Monday
+        div
+            p=Msg.Tuesday
+        div
+            p=Msg.Wednesday
+        div
+            p=Msg.Thursday
+        div
+            p=Msg.Friday
+        div
+            p=Msg.Saturday
+    .items
+        each item in self.getCalendarItems()
+            +ActionLink('attendance', 'showStudentAttendance', self.getStudentId(), item.getDate().format('mm-dd-yy')
+                , 'student', 'attendanceMonthAction', JSON.stringify([item.getDate().format('mm-dd-yy')
+                , self.getMaxDate(), self.getMinDate(), self.getStudentId()])
+            )(class = (item.isSunday() ? 'sunday ' : ' ')).gradient-cnt.item
+                div
+                    h2.number=item.getDay()
+                    .space
+                    ul
+                        if !item.isExcused() && !item.isAbsent()
+                            if item.isShowGroupedData()
+                                each att in item.getAttendances()
+                                    li(style ="color: " + self.getColorByAttendanceType(att.getAttendanceType()) + " !important;")=att.getCount() + " " + att.getAttendanceTypeName()
+                            else
+                                each att in item.getAttendances()
+                                    li(style ="color: " + self.getColorByAttendanceType(att.getAttendanceType()) + " !important;")=att.getClassName()
+                            if item.getMoreCount() != 0
+                                li=item.getMoreCount() + "More"
+                        if item.isAbsent()
+                            li(style = "color: red !important;") ABSENT
+                        if item.isExcused()
+                            li(style = "color: blue !important;") EXCUSED

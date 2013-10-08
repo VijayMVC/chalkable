@@ -1,0 +1,397 @@
+.chlk-add{
+  background: url(images/icons/add-item.png) 5px 50% no-repeat;
+}
+
+.remove-btn, .chlk-add{
+  color: #9b9b9b;
+  font: normal 13px arial italic;
+  cursor: pointer;
+  padding-left: 25px;
+  height: 18px;
+}
+
+.remove-btn{
+  background: url(images/icons/close-item.png) 0% 50% no-repeat;
+}
+
+.opacity-button{
+  &:hover{
+    opacity: 0.8;
+  }
+
+  &:active{
+    opacity: 0.6;
+  }
+}
+
+.back-button{
+  background: url(images/buttons/back.png) center center no-repeat !important;
+  width: 58px;
+}
+
+.simple-gray-button{
+  height: 30px;
+  width: 119px;
+  @include border-radius(24px);
+  border: 1px solid rgb(206, 206, 206);
+  cursor: pointer;
+  @include background(linear-gradient(top, #ffffff, #d8d8d8));
+  @include box-shadow(1px 1px 0px rgba(207, 207, 207, 0.49));
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !important;
+  font-size: 15px;
+  vertical-align: center;
+  text-shadow: 0px 1px white;
+  color: gray;
+
+  &:hover{
+    @include background(linear-gradient(top, #ffffff, #b1b1b1));
+  }
+
+  &.file{
+    position: relative;
+
+    INPUT{
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0;
+    }
+  }
+}
+
+.special-button, .special-button2{
+  &.disabled{
+    opacity: 0.6;
+  }
+}
+
+.plain-button{
+  width: auto;
+  display: inline-block;
+  background-repeat: no-repeat;
+
+  &.upper-case{
+    >SPAN{
+      >SPAN{
+        >BUTTON{
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+
+  > SPAN {
+    > SPAN {
+      display: block;
+      > BUTTON {
+        background: none;
+        border: 0 none;
+        background-color: transparent;
+      }
+    }
+  }
+}
+
+.special-button{
+
+  padding-left: 21px;
+  width: auto;
+  display: inline-block;
+  background-repeat: no-repeat;
+  text-align: center;
+
+  &.upper-case{
+    >SPAN{
+      >SPAN{
+        >BUTTON{
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+
+  > SPAN {
+    min-height: 54px;
+    padding-right: 21px;
+    display: block;
+    background-repeat: no-repeat;
+    background-position: right 0px;
+    > SPAN {
+      display: block;
+      background-repeat: repeat-x;
+      height: 54px;
+      > BUTTON {
+        height: 47px;
+        background: none;
+        outline: none;
+        border: 0 none;
+        background-color: transparent;
+        background-repeat: no-repeat;
+        padding-left: 0px;
+        padding-right: 0px;
+        cursor: pointer;
+        margin: 0;
+        overflow: visible;
+        width: auto;
+        font: {
+          weight: bold;
+          family: Arial;
+        }
+      }
+
+      .action-link{
+        padding: 0;
+        text-decoration: none;
+        color: white;
+        background: none;
+        line-height: 45px;
+      }
+    }
+  }
+
+  &.blue-button{
+    background-image: url(images/buttons/xbutton-blue-left.png);
+    > SPAN {
+      background-image: url(images/buttons/xbutton-blue-right.png);
+      > SPAN {
+        background-image: url(images/buttons/xbutton-blue-center.png);
+        > BUTTON {
+          color: white;
+        }
+      }
+    }
+    &:hover{
+      background-position: 0px -113px !important;
+      background-size: auto 169px;
+      >SPAN {
+        background-position: right -57px !important;
+        background-size: auto 170px;
+        >SPAN{
+          background-position: 0px -57px;
+          background-size: auto 170px;
+        }
+      }
+    }
+
+
+
+  }
+  &.green-button{
+    background-image: url(images/buttons/xbutton-green-left.png);
+    > SPAN {
+      background-image: url(images/buttons/xbutton-green-right.png);
+      background-position: right -112px;
+      > SPAN {
+        background-image: url(images/buttons/xbutton-green-center.png);
+        > BUTTON {
+          color: #126100;
+        }
+      }
+    }
+
+    &:hover{
+      background-position: 0px -56px !important;
+      background-size: auto 169px;
+      >SPAN {
+        background-position: right -57px !important;
+        background-size: auto 170px;
+        >SPAN{
+          background-position: 0px -57px;
+          background-size: auto 170px;
+          > BUTTON{
+            color: white;
+          }
+        }
+      }
+    }
+  }
+  &.red-button{
+    background-image: url(images/buttons/xbutton-red-left.png);
+    > SPAN {
+      background-image: url(images/buttons/xbutton-red-right.png);
+      > SPAN {
+        background-image: url(images/buttons/xbutton-red-center.png);
+        > BUTTON {
+          color: white;
+        }
+      }
+    }
+
+    &:hover{
+      opacity: 0.9;
+    }
+
+    &:active{
+      opacity: 0.8;
+    }
+  }
+}
+.special-button2{
+  min-height: 33px;
+  padding-left:9px;
+  width: auto;
+  display: inline-block;
+  background-repeat: no-repeat;
+  font: {
+    size: 18px;
+    family: Arial;
+  }
+  > SPAN {
+    min-height: 33px;
+    padding-right: 9px;
+    display: block;
+    background-repeat: no-repeat;
+    > SPAN {
+      min-height: 33px;
+      display:block;
+      background-repeat: repeat-x;
+      > BUTTON {
+        height: 30px;
+        color: white;
+        border: 0 none;
+        background-color: transparent;
+        padding-left: 3px;
+        padding-right: 3px;
+        cursor: pointer;
+        margin: 0;
+        overflow: visible;
+        width: auto;
+        font: {
+          size: 18px;
+          family: Arial;
+        }
+      }
+
+
+    }
+  }
+
+  &:hover{
+    &:not(.disabled){
+      background-position: -0px -42px;
+      >SPAN {
+        background-position: right -42px;
+        >SPAN{
+          background-position: -0px -42px;
+        }
+      }
+    }
+  }
+
+  &.blue{
+    background-image: url(images/buttons/xbutton-blue2-left.png);
+    > SPAN {
+      background: url(images/buttons/xbutton-blue2-right.png) right 0 no-repeat;
+      > SPAN {
+        background-image: url(images/buttons/xbutton-blue2-center.png);
+      }
+    }
+  }
+  &.grey{
+    background-image: url(images/buttons/xbutton-grey2-left.png);
+    > SPAN {
+      background: url(images/buttons/xbutton-grey2-right.png) right 0 no-repeat ;
+      > SPAN {
+        background-image: url(images/buttons/xbutton-grey2-center.png);
+      }
+    }
+  }
+  &.red {
+    background-image: url(images/buttons/xbutton-red2-left.png);
+    > SPAN {
+      background: url(images/buttons/xbutton-red2-right.png) right 0 no-repeat;
+      > SPAN {
+        background-image: url(images/buttons/xbutton-red2-center.png);
+      }
+    }
+  }
+  &.green {
+    background-image: url(images/buttons/xbutton-green2-left.png);
+    > SPAN {
+      background: url(images/buttons/xbutton-green2-right.png) right 0 no-repeat;
+      > SPAN {
+        background-image: url(images/buttons/xbutton-green2-center.png);
+      }
+    }
+  }
+}
+
+
+.blue-gradient-btn{
+    color: white;
+    text-align: center;
+    padding: 7px 28px 9px;
+    font: normal 12px Arial;
+    text-shadow: 0 -1px 0 #305263;
+
+    BUTTON{
+      background: transparent;
+      border: 0;
+      color: white;
+    }
+
+    @include background(linear-gradient(top, #568da7, #2f667d));
+    border: 1px solid #29596e;
+    @include border-radius(4px);
+    @include box-shadow(inset 0 1px 0 #9abbcb);
+    cursor: pointer;
+
+    &:hover{
+      @include background(linear-gradient(top, #467d97, #1f566d));
+    }
+}
+
+.blue-tb-right-button{
+  @include background(linear-gradient(top, #5d9cbb, #246382));
+  margin: 0;
+  height: 34px;
+  border-radius: 0 5px 5px 0;
+  border: 1px solid #1a4256;
+  @include box-shadow(inset 0 1px 0 #9dc3d6);
+  display: inline-block;
+
+
+
+  SPAN, BUTTON{
+    background: transparent;
+    border: none;
+
+
+
+  }
+
+  &:hover{
+    @include background(linear-gradient(top, #6ea6c2, #3a738f));
+  }
+
+  &.x-item-disabled{
+    opacity: 1;
+    @include background(linear-gradient(top, rgba(93, 156, 187, 0.6), rgba(36, 99, 130, 0.6)));
+    border-color: rgba(26, 66, 86, 0.6);
+
+    >SPAN{
+      opacity: 0.6;
+    }
+  }
+
+  BUTTON{
+    font: bold 14px Arial;
+    height: 34px;
+    color: white !important;
+    padding: 0 15px;
+  }
+}
+
+.action-button{
+  >SPAN{
+    >SPAN{
+      >a{
+        text-decoration: none;
+        color: white;
+        line-height: 30px;
+      }
+    }
+  }
+}
