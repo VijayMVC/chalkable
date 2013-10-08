@@ -14,8 +14,9 @@ NAMESPACE('chlk.converters.attendance', function () {
     /** @class chlk.converters.attendance.AttendanceTypeToNameConverter */
     CLASS(
         'AttendanceTypeToNameConverter', IMPLEMENTS(ria.templates.IConverter), [
-            [[Number]],
+            [[Object]],
             String, function convert(id) {
+                VALIDATE_ARG('id', Number, id);
                 var enums = chlk.models.attendance.AttendanceTypeEnum;
                 switch (id) {
                     case enums.PRESENT.valueOf(): return Msg.Present;

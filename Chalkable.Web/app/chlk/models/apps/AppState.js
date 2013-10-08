@@ -49,8 +49,9 @@ NAMESPACE('chlk.models.apps', function () {
                 }
                 return status;
             },
-            [[Number]],
+            [[Object]],
             VOID, function deserialize(raw) {
+                VALIDATE_ARG('raw', Number, raw);
                 this.setStateId(new chlk.models.apps.AppStateEnum(Number(raw)));
             }
         ]);

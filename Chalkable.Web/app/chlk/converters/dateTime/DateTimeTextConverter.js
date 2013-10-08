@@ -6,8 +6,9 @@ NAMESPACE('chlk.converters.dateTime', function () {
     /** @class chlk.converters.dateTime.DateTimeTextConverter */
     CLASS(
         'DateTimeTextConverter', IMPLEMENTS(ria.templates.IConverter), [
-            [[chlk.models.common.ChlkDate]],
+            [[Object]],
             String, function convert(time) {
+                VALIDATE_ARG('time', chlk.models.common.ChlkDate, time);
                 if (!time)
                     return "";
                 var nowDate = new Date();
