@@ -1,0 +1,40 @@
+app = self.getApp()
+devName = app.getDeveloperInfo().getName()
+.app-market-details
+    +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels)
+    .app-screenshots-panel
+        +Carousel(app.getScreenshotPictures().getItems())
+    .app-price-info
+        .app-title
+            h1=app.getName()
+            span="By " + devName
+        .app-buy
+            +ActionLinkButton('appmarket', 'tryToInstall', app.getId()).special-button.blue-button=self.installBtnTitle
+
+        textarea(name = "app-description", class ="app-description", readonly)=self.description
+        .app-general-info
+            .reviews
+                +ActionLink('a', 'b').review-link User Ratings
+                a.write-review-btn Write a review
+                .add-review
+                    textarea.review-text(placeholder="Write a review")
+                    +Button().special-button.blue-button Submit
+                    span.cancel-btn Cancel
+            .permissions
+                .permissions-group
+                    .group-header.first This app is for:
+                    each validRole in app.getValidRoles()
+                        .permission
+                            .icon(class=self.getRoleTypeClass(validRole.getId()))
+                            .description=validRole.getName()
+                .permissions-group.last
+                    .group-header Info this app uses:
+                    each permission in app.getPermissions()
+                        .permission
+                            .icon(class=self.getPermissionTypeClass(permission.getId().valueOf()))
+                            .description=permission.getName()
+
+
+
+
+
