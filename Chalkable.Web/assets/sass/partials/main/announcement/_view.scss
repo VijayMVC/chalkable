@@ -11,6 +11,12 @@ $red-color: #842727;
     @include border-radius(7px 7px 0 0);
   }
 
+  .attach-file-area{
+    .file{
+      margin-top: 25px;
+    }
+  }
+
   .silver-panel{
     border-top: 1px solid #fff;
     border-bottom: 1px solid #d0d0d0;
@@ -163,6 +169,10 @@ $red-color: #842727;
       }
     }
 
+    .student-attachments{
+      width: 585px;
+    }
+
     .questions-and-answers{
       form{
         margin-bottom: 30px;
@@ -204,6 +214,22 @@ $red-color: #842727;
     }
 
     .grades-individual{
+      .attachments-container{
+        display: none;
+
+        .announcement-item{
+          margin: 32px 0;
+
+          &:nth-child(3n - 2){
+            margin-left: 39px;
+          }
+
+          &:not(:last-child){
+            margin-right: 32px;
+          }
+        }
+      }
+
       .row{
         .top-content{
           &.loading{
@@ -331,6 +357,12 @@ $red-color: #842727;
             border-top: 9px solid transparent;
             border-left: 10px solid #a5a5a5;
             border-bottom: 9px solid transparent;
+            @include transition-property("all");
+            @include transition-duration("0.5s");
+
+            &.down{
+              @include transform(rotate(90deg));
+            }
           }
 
           .selected{

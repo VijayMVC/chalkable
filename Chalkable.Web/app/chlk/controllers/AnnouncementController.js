@@ -113,12 +113,12 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.StudentAnnouncement]],
         function updateAnnouncementGradeAction(model){
             var result = this.gradingService.updateItem(model.getId(), model.getGradeValue(), model.getComment(), model.isDropped());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, result);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, result, chlk.activities.lib.DontShowLoader());
         },
 
         [[chlk.models.announcement.AnnouncementForm, Boolean]],
         function addEditAction(model, isEdit){
- 
+
             var announcement = model.getAnnouncement();
             var reminders = announcement.getAnnouncementReminders() || [];
             var remindersArray = [];
@@ -292,7 +292,7 @@ NAMESPACE('chlk.controllers', function (){
                     this.prepareAttachments(attachments);
                     return model;
                 }.bind(this));
-            return this.UpdateView(this.getAnnouncementFormPageType_(), result);
+            return this.UpdateView(this.getView().getCurrent().getClass(), result, 'update-attachments');
         },
 
 

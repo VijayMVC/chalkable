@@ -22,20 +22,9 @@ NAMESPACE('chlk.controls', function () {
             OVERRIDE, VOID, function onCreate_() {
                 BASE();
                 ASSET('~/assets/jade/controls/list-view.jade')(this);
-                this.setDefaultConfigs({
-                    selectedIndex:null,
-                    infiniteScroll: false,
-                    itemsName: 'Items',
-                    start: 0,
-                    totalCount: null,
-                    pageSize: 10,
-                    interval: 250
-                })
             },
 
             Object, 'configs',
-
-            Object, 'defaultConfigs',
 
             [[Object, Object]],
             VOID, function prepareData(data,configs_) {
@@ -65,11 +54,11 @@ NAMESPACE('chlk.controls', function () {
                         if(!this.getGrid()){
                             var grid = new ria.dom.Dom('.chlk-grid');
                             this.setGrid(grid);
-                            if(this.getCurrentIndex() !== undefined && !new ria.dom.Dom(':focus').exists())
+                            if((this.getCurrentIndex() || this.getCurrentIndex() == 0)&& !new ria.dom.Dom(':focus').exists())
                                 this.focusGrid();
-                            if(configs.selectedIndex !== undefined){
+                            if(configs.selectedIndex || configs.selectedIndex == 0){
                                 var selectedRow = grid.find('.row:eq(' + configs.selectedIndex  + ')');
-                                grid.trigger(chlk.controls.GridEvents.SELECT_ROW.valueOf(), [selectedRow, parseInt(configs.selectedIndex, 10)]);
+                                grid.trigger(chlk.controls.GridEvents.SELECT_ROW.valueOf(), [selectedRow, parseInt(configs.selectedIndex, 10) || 0]);
                             }
                             if(configs.infiniteScroll && !grid.hasClass('with-scroller'))
                                 this.addInfiniteScroll(grid);
@@ -81,7 +70,9 @@ NAMESPACE('chlk.controls', function () {
             [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number]],
             VOID, function selectRow(node, event, row, index) {
                 if(row.exists()){
-                    node.find('.row.selected').removeClass(selectedRowClass);
+                    var selectedRow = node.find('.row.selected');
+                    if(selectedRow.exists())
+                        node.trigger(chlk.controls.GridEvents.DESELECT_ROW.valueOf(), [selectedRow, parseInt(selectedRow.getAttr('index'), 10)]);
                     row.addClass(selectedRowClass);
                     this.setCurrentIndex(index || parseInt(row.getAttr('index'), 10));
                     this.scrollToElement();
@@ -102,7 +93,6 @@ NAMESPACE('chlk.controls', function () {
                 var selectedRow = node.find('.row.selected');
                 var next = selectedRow.next('.row');
                 if(next.exists()){
-                    node.trigger(chlk.controls.GridEvents.DESELECT_ROW.valueOf(), [selectedRow, parseInt(selectedRow.getAttr('index'), 10)]);
                     node.trigger(chlk.controls.GridEvents.SELECT_ROW.valueOf(), [next, parseInt(next.getAttr('index'), 10)]);
                 }
             },
@@ -113,7 +103,6 @@ NAMESPACE('chlk.controls', function () {
                 var selectedRow = node.find('.row.selected');
                 var prev = selectedRow.previous('.row');
                 if(prev.exists()){
-                    node.trigger(chlk.controls.GridEvents.DESELECT_ROW.valueOf(), [selectedRow, parseInt(selectedRow.getAttr('index'), 10)]);
                     node.trigger(chlk.controls.GridEvents.SELECT_ROW.valueOf(), [prev, parseInt(prev.getAttr('index'), 10)]);
                 }
             },
@@ -166,12 +155,8 @@ NAMESPACE('chlk.controls', function () {
                         this.focusGrid();
                     }else{
                         var grid = this.getGrid();
-                        var selectedRow = grid.find('.row.selected');
-                        if(selectedRow.exists()){
-                            grid.trigger(chlk.controls.GridEvents.DESELECT_ROW.valueOf(), [selectedRow, parseInt(selectedRow.getAttr('index'), 10)]);
-                        }
                         var index = parseInt(node.getAttr('index'), 10);
-                        grid.trigger(chlk.controls.GridEvents.SELECT_ROW.valueOf(), [node, parseInt(selectedRow.getAttr('index'), 10)]);
+                        grid.trigger(chlk.controls.GridEvents.SELECT_ROW.valueOf(), [node, parseInt(node.getAttr('index'), 10)]);
                     }
 
                 }
@@ -183,8 +168,6 @@ NAMESPACE('chlk.controls', function () {
                 var currentIndex = this.getCurrentIndex();
                 var parent = node.parent('.chlk-grid');
                 if((event.which == 38 && currentIndex) || (event.which == 40 && currentIndex < this.getCount() - 1)){
-                    var selectedRow = parent.find('.row.selected');
-                    parent.trigger(chlk.controls.GridEvents.DESELECT_ROW.valueOf(), [selectedRow, parseInt(selectedRow.getAttr('index'), 10)]);
                     if(event.which == 38){
                         currentIndex--;
                     }else{

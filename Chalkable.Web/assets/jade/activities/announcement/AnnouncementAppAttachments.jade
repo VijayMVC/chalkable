@@ -35,4 +35,5 @@ each item, i in items
     if item.getType == chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION
         +AnnouncementFormApplicationItem(item, i)
     else
-        +AnnouncementFormAttachmentItem(item, i)
+        if item.isOwner()
+            +AnnouncementFormAttachmentItem(item, i)

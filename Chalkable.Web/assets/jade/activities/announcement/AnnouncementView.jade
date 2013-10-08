@@ -1,9 +1,14 @@
+mixin AppAttachmentBlock(item, i)
+    +LoadingImage(src=item.getPictureHref(), id="loading-image-" + i)
+        .title
+            div=item.getName()
+
 .announcement-view.not-transparent
     isNotStudent = true
     isReadonly = !self.isAnnOwner()
     studentAnnouncements = false
     studentAnnouncementsInfo = self.getStudentAnnouncements()
-    selectedIndex = studentAnnouncementsInfo ? studentAnnouncementsInfo.getSelectedIndex() : 0
+    selectedIndex = 0
     applications = self.getApplications()
     gradeViewApps = self.getGradeViewApps()
     if studentAnnouncementsInfo
@@ -35,17 +40,35 @@
                     +ActionLink('announcement', 'edit', self.getId())(class = self.isAnnOwner() ? "" : "disabled").edit-button Edit
         .announcement-details-panel
             .details-container.silver-panel
+                if self.getUserRole().isStudent()
+                    .comment-grade-container
+                        .comment-grade
+                            .comment=self.getComment() || Msg.Your_grade + ":"
+                            .grade-value=values.dropped ? Msg.Dropped : (getGrade(self.getGrade()) || '')
+                        .comment-triangle
+                            .white.comment-triangle
+                br
                 .left-block
-                    +ActionLink('feed', 'list').image-container
+                    +ActionLink('teachers', 'info', self.getOwner().getId())(data-tooltip=self.getOwner().getFullName()).image-container
                         +PersonImg(self.getOwner(), 47)
                 .right-block
                     h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
                     p=self.getContent()
                     .attachments-and-applications
-                        +RenderWith(self._model, chlk.templates.announcement.Announcement)
+                        +RenderWith(self.getModel(), chlk.templates.announcement.Announcement)(
+                            userRole = self.getUserRole()
+                        )
+            if self.getUserRole().isStudent()
+                .silver-panel.attachments-panel
+                    .left-block.attachments
+                    .right-block
+                        .student-attachments
+                            +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementForStudentAttachments)(
+                                userRole = self.getUserRole()
+                            )
             .questions-and-answers.silver-panel
-                +RenderWith(self._model, chlk.templates.announcement.AnnouncementQnAs)
-            if studentAnnouncements && studentAnnouncements.length
+                +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementQnAs)
+            if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length
                 .silver-panel
                     .auto-grade-buttons.right
                         +Button()(disabled = true).special-button2.green
@@ -78,8 +101,18 @@
                                     readonly = isReadonly,
                                     applicationsInGradeView = gradeViewApps,
                                     gradingStyle = gradingStyle,
-                                    gradingMapping = studentAnnouncementsInfo.getMapping()
+                                    gradingMapping = studentAnnouncementsInfo.getMapping(),
+                                    userRole = self.getUserRole()
                                 )
                         .attachments-container
                             .attachments-container-2
-
+                                items = self.getSortedAppsAndAttachments(self.getApplications(), self.getAnnouncementAttachments())
+                                each item, i in items
+                                    isApp = item.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION
+                                    if isApp || (self.getUserRole().isTeacher() ? !item.isOwner() : item.isOwner())
+                                        if isApp
+                                            +ActionLink('apps', 'viewApp', item.getUrl(), item.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, item.getId()).announcement-item.application
+                                                +AppAttachmentBlock(item, i)
+                                        else
+                                            +ActionLink('announcement', 'viewAttachment', item.getId()).announcement-item.attachment
+                                                +AppAttachmentBlock(item, i)

@@ -8,9 +8,10 @@ NAMESPACE('chlk.templates.announcement', function () {
         //[ria.templates.TemplateBind('~/assets/jade/activities/announcement/StudentAnnouncement.jade')],
         //[ria.templates.ModelBind(chlk.models.announcement.ApplicationsAndAttachments)],
         'ApplicationsAndAttachments', EXTENDS(chlk.templates.ChlkTemplate), [
-            ArrayOf(chlk.models.announcement.ApplicationOrAttachment), function getSortedAppsAndAttachments(){
-                var attachments = this.getAnnouncementAttachments() || [],
-                    applications = this.getApplications() || [], res=[], that = this;
+            [[ArrayOf(chlk.models.apps.Application), ArrayOf(chlk.models.attachment.Attachment)]],
+            ArrayOf(chlk.models.announcement.ApplicationOrAttachment), function getSortedAppsAndAttachments(applications_, attachments_){
+                var attachments = attachments_ || this.getAnnouncementAttachments() || [],
+                    applications = applications_ || this.getApplications() || [], res=[], that = this;
                 attachments.forEach(function(item){
                     res.push(new chlk.models.announcement.ApplicationOrAttachment(
                         item.getId(),

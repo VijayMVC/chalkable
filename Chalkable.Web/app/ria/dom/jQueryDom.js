@@ -81,6 +81,18 @@ NAMESPACE('ria.dom', function () {
             }, */
 
             [[Number]],
+            SELF, function slideDown(time_){
+                time_ ? this._dom.slideDown(time_) : this.slideDown.show();
+                return this;
+            },
+
+            [[Number]],
+            SELF, function slideUp(time_){
+                time_ ? this._dom.slideUp(time_) : this._dom.slideUp();
+                return this;
+            },
+
+            [[Number]],
             SELF, function show(time_){
                 time_ ? this._dom.show(time_) : this._dom.show();
                 return this;

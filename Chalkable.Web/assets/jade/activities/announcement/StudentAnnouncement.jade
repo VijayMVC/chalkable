@@ -13,7 +13,7 @@ owner = self.getOwner();
     input(type="submit").x-hidden
     +Hidden('id', self.getId())
     +Hidden('dropped', isDrop)
-    +ActionLink('students', 'info', student.getId()).left.image-container.white.shadow
+    +ActionLink('students', 'info', student.getId())(data-tooltip=student.getFullName()).left.image-container.white.shadow
         +PersonImg(student, 47)
     .i-b.name-block
         p= student.getFullName()
