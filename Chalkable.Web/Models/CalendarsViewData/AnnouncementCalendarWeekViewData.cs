@@ -10,6 +10,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
     {
         public int Day { get; set; }
         public DateTime Date { get; set; }
+        public int DayOfWeek { get; set; }
         public IList<AnnouncementShortViewData> Announcements { get; set; }
     
         protected AnnouncementByDateViewData(){}
@@ -17,6 +18,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
         {
             Day = date.Day;
             Date = date.Date;
+            DayOfWeek = (int)date.DayOfWeek;
             Announcements = AnnouncementShortViewData.Create(announcements);
         }
 

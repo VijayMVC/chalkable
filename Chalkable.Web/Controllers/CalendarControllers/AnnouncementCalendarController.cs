@@ -37,6 +37,17 @@ namespace Chalkable.Web.Controllers.CalendarControllers
                  AnnouncementMonthCalendarViewData.Create(dateTime, isCurrentMonth, announcements, days)));
          }
 
+         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+         public ActionResult ListForWeek(DateTime? date)
+         {
+             DateTime start, end;
+             var dates = GetWeekDates(ref date, out start, out end);
+             var anns = SchoolLocator.AnnouncementService.GetAnnouncements(start, end);
+             var listDayAnnouncements = AnnouncementByDateViewData.Create(dates, anns);
+             return Json(listDayAnnouncements);
+         }
+        
+
          [AuthorizationFilter("AdminGrade, AdminEdit, AdminView", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_ANNOUNCEMENT_ADMIN_DAY, true, CallType.Get, new[] { AppPermissionType.Schedule })]
          public ActionResult AdminDay(DateTime? day, GuidList gradeLevelIds)
          {
