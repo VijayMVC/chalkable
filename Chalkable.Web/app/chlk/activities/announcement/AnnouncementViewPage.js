@@ -220,6 +220,16 @@ NAMESPACE('chlk.activities.announcement', function () {
                     row.find('.grade-input').setValue(node.getValue());
                     that.updateItem(node, true);
                 });
+                var moving = new ria.dom.Dom('.moving-wrapper');
+                if(moving.exists()){
+                    this.dom.setCss('display', 'none');
+                    setTimeout(function(){
+                        this.dom.slideDown(500);
+                    }.bind(this), 1);
+                    setTimeout(function(){
+                        moving.remove();
+                    }, 501);
+                }
                 //new ria.dom.Dom().on('click', function(){console.info('aaaa');this.wholeDomClick()}.bind(this));
             },
 

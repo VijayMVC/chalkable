@@ -7,6 +7,11 @@ $blue-color: #2f7790;
 $gray-color: #737373;
 $star-size: 18px;
 
+.feed-list-page{
+  @include transition-property("all");
+  @include transition-duration($duration);
+}
+
 .feed-container{
   .container{
     .feed-notifications {
@@ -73,6 +78,19 @@ $star-size: 18px;
 
 
 
+}
+
+.moving-wrapper{
+  position: absolute;
+  @include transition-property("all");
+  @include transition-duration("0.3s");
+  padding: 3px;
+  @include border-radius(9px);
+  background: #c9c9c9;
+  border: 1px solid #a1a1a1;
+  border-bottom-color: #fbfbfb;
+  border-right-color: #fbfbfb;
+  z-index: 100000;
 }
 
 .feed-item {

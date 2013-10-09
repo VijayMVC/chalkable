@@ -21,11 +21,8 @@
                         .grades
                     .bullet
                         +ActionLink('announcement', 'star', item.getId().valueOf(), !item.isStarred()).star
-                        +ActionLink('announcement', 'view', item.getId()).d-b.t-d.not-blue
+                        +ActionLink('announcement', 'view', item.getId()).d-b.t-d.not-blue.announcement-link.disabled
                             .item-type
-                                .tooltip-announcement.ann-type
-                                    .tooltip-content
-                                        Tooltip
                                 .attachment
                                     div(class="announcement-type-" + item.getAnnouncementTypeId()).icon.blue
                                     .icon.black

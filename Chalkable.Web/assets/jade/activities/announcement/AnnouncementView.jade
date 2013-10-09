@@ -24,11 +24,11 @@ mixin AppAttachmentBlock(item, pictureHref, i)
             +ActionLink('announcement', 'star', self.getId(), !self.isStarred()).star
             .item-type
                 .attachment
-                    div(class="announcement-type-" + self.getAnnouncementTypeId()).icon.blue.icon
+                    div(class="announcement-type-" + self.getAnnouncementTypeId()).icon.blue
                     .icon.black
-                    h2.animated-header=self.getSubject()
+                    h2.animated-header=self.getTitle()
                     p.animated=self.getShortContent()
-                    .animated=self.getExpiresDate().toString()
+                    .animated=self.getExpiresDate().toString('d/m/y')
                     .attachment-icon
                     .apps-icon
     .panel-bg
