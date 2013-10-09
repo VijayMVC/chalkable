@@ -3,6 +3,7 @@ REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
 REQUIRE('chlk.models.grading.GradingClassSummaryItems');
 REQUIRE('chlk.models.grading.ItemGradingStat');
+REQUIRE('chlk.models.announcement.StudentAnnouncements');
 REQUIRE('chlk.models.id.StudentAnnouncementId');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.AnnouncementId');
@@ -20,6 +21,20 @@ NAMESPACE('chlk.services', function () {
                     gradeValue: gradeValue,
                     comment: comment,
                     dropped: dropped
+                });
+            },
+
+            [[chlk.models.id.AnnouncementId]],
+            ria.async.Future, function applyAutoGrade(announcementId) {
+                return this.get('Grading/ApplyAutoGrade', chlk.models.announcement.StudentAnnouncements, {
+                    announcementId: announcementId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.AnnouncementId]],
+            ria.async.Future, function applyManualGrade(announcementId) {
+                return this.get('Grading/ApplyManualGrade', chlk.models.announcement.StudentAnnouncements, {
+                    announcementId: announcementId.valueOf()
                 });
             },
 

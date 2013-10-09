@@ -2,6 +2,8 @@ REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.announcement.AnnouncementView');
 REQUIRE('chlk.templates.announcement.StudentAnnouncement');
 REQUIRE('chlk.templates.announcement.AnnouncementForStudentAttachments');
+REQUIRE('chlk.templates.announcement.AnnouncementGradingPartTpl');
+REQUIRE('chlk.templates.announcement.AnnouncementQnAs');
 REQUIRE('chlk.templates.classes.TopBar');
 REQUIRE('chlk.models.grading.Mapping');
 
@@ -21,7 +23,28 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             chlk.models.grading.Mapping, 'mapping',
             Array, 'applicationsInGradeView',
+            Array, 'applications',
+            Array, 'autoGradeApps',
             chlk.models.people.User, 'owner',
+            chlk.models.id.AnnouncementId, 'announcementId',
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementGradingPartTpl)],
+            VOID, function updateGradingPart(tpl, model, msg_) {
+                tpl.options({
+                    gradeViewApps: this.getApplicationsInGradeView(),
+                    readonly: false,
+                    userRole: this.getRole(),
+                    autoGradeApps: this.getAutoGradeApps(),
+                    applications: this.getApplications(),
+                    owner: this.getOwner(),
+                    announcementId: this.getAnnouncementId()
+                });
+                var container = this.dom.find('.grading-part');
+                container.empty();
+                tpl.renderTo(container.removeClass('loading'));
+                var grid = this.dom.find('.grades-individual');
+                grid.trigger(chlk.controls.GridEvents.SELECT_ROW.valueOf(), [grid.find('.row:eq(0)'), 0]);
+            },
 
             [ria.mvc.DomEventBind('keypress', '.grade-input')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -187,6 +210,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                 model.getStudentAnnouncements() && this.setMapping(model.getStudentAnnouncements().getMapping());
                 this.setOwner(model.getOwner());
                 this.setApplicationsInGradeView(model.getGradeViewApps());
+                this.setApplications(model.getApplications());
+                this.setAutoGradeApps(model.getAutoGradeApps());
+                this.setAnnouncementId(model.getId());
                 var that = this;
                 jQuery(this.dom.valueOf()).on('change', '.grade-select', function(){
                     var node = new ria.dom.Dom(this);
@@ -208,7 +234,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 tpl.options({
                     gradingMapping: this.getMapping(),
                     applicationsInGradeView: this.getApplicationsInGradeView(),
-                    notAnnouncement: !!this.dom.find('[name=notAnnouncement]').getValue(),
                     readonly: false,
                     gradingStyle: parseInt(this.dom.find('[name=gradingStyle]').getValue(), 10)
                 });
@@ -217,10 +242,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 tpl.renderTo(container.removeClass('loading'));
                 var gradedCount = this.dom.find('.grade-input[value]').count();
                 this.dom.find('#graded-count').setHTML(gradedCount.toString());
-                /*setTimeout(function(){
-                    if(container.parent('.row').hasClass('selected'))
-                        jQuery(container.find('.grade-input').valueOf()).focus();
-                },1);*/
             },
 
             //TODO: the same logic as on the feed

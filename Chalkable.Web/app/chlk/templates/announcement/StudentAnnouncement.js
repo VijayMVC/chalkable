@@ -35,8 +35,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.people.User, 'owner',
 
-            Boolean, 'notAnnouncement',
-
             Boolean, 'readonly',
 
             Array, 'applicationsInGradeView',

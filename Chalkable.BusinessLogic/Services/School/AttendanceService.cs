@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -38,6 +36,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         IDictionary<int, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerPeriod(DateTime fromDate, DateTime toDate, int fromPeriodOrder, int toPeriodOrder, AttendanceTypeEnum type, IList<Guid> gradeLevelsIds);
         IDictionary<DateTime, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerDate(DateTime fromDate, DateTime toDate, AttendanceTypeEnum type, IList<Guid> gradeLevelsIds);
+        void ProcessClassAttendance(DateTime date);
     }
 
     public class AttendanceService : SchoolServiceBase, IAttendanceService
@@ -326,6 +325,35 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 return new ClassAttendanceDataAccess(uow).CalcAttendanceTotalPerDate(fromDate, toDate, type, gradeLevelsIds);
+            }
+        }
+
+        public void ProcessClassAttendance(DateTime date)
+        {
+            if (!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+            var mp = ServiceLocator.MarkingPeriodService.GetLastMarkingPeriod();
+            var classAtts = GetClassAttendanceDetails(new ClassAttendanceQuery
+            {
+                MarkingPeriodId = mp.Id,
+                Type = AttendanceTypeEnum.Absent
+            });
+            SendAttendanceNotification(classAtts, 1, date.Date, CoreRoles.ADMIN_GRADE_ROLE.Id, CoreRoles.ADMIN_EDIT_ROLE.Id, CoreRoles.ADMIN_VIEW_ROLE.Id);
+            SendAttendanceNotification(classAtts, 0, date, CoreRoles.TEACHER_ROLE.Id);
+        }
+
+        protected void SendAttendanceNotification(IList<ClassAttendanceDetails> classAttendances, int dayInterval, DateTime toDate, params int[] roleIds)
+        {
+            var all = ServiceLocator.PersonService.GetPersons();
+            var toschoolPersons = all.Where(x => roleIds.Contains(x.RoleRef));
+            var from = toDate.Date.AddDays(-dayInterval);
+
+            var schoolPersons = classAttendances.Where(x => x.Date <= toDate && x.Date >= from)
+                                                .GroupBy(x => x.Student).Select(x => x.Key).ToList();
+            if (schoolPersons.Count <= 0) return;
+            foreach (var toschoolPerson in toschoolPersons)
+            {
+                ServiceLocator.NotificationService.AddAttendanceNotification(toschoolPerson.Id, schoolPersons);
             }
         }
     }

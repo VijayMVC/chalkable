@@ -69,9 +69,11 @@ NAMESPACE('chlk.controls', function () {
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.SELECT_ROW.valueOf(), '.chlk-grid')],
             [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number]],
             VOID, function selectRow(node, event, row, index) {
+                if(!this.getGrid())
+                    this.setGrid(node);
                 if(row.exists()){
                     var selectedRow = node.find('.row.selected');
-                    if(selectedRow.exists())
+                    if(selectedRow.exists() && !row.is('.selected'))
                         node.trigger(chlk.controls.GridEvents.DESELECT_ROW.valueOf(), [selectedRow, parseInt(selectedRow.getAttr('index'), 10)]);
                     row.addClass(selectedRowClass);
                     this.setCurrentIndex(index || parseInt(row.getAttr('index'), 10));

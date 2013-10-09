@@ -1,5 +1,5 @@
-mixin AppAttachmentBlock(item, i)
-    +LoadingImage(src=item.getPictureHref(), id="loading-image-" + i)
+mixin AppAttachmentBlock(item, pictureHref, i)
+    +LoadingImage(src=pictureHref, id="loading-image-" + i)
         .title
             div=item.getName()
 
@@ -8,7 +8,7 @@ mixin AppAttachmentBlock(item, i)
     isReadonly = !self.isAnnOwner()
     studentAnnouncements = false
     studentAnnouncementsInfo = self.getStudentAnnouncements()
-    selectedIndex = 0
+    autoCount = self.getAutoGradeCount()
     applications = self.getApplications()
     gradeViewApps = self.getGradeViewApps()
     if studentAnnouncementsInfo
@@ -68,51 +68,14 @@ mixin AppAttachmentBlock(item, i)
                             )
             .questions-and-answers.silver-panel
                 +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementQnAs)
-            if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length
-                .silver-panel
-                    .auto-grade-buttons.right
-                        +Button()(disabled = true).special-button2.green
-                            =Msg.Auto_grade
-                        +Button()(disabled = true).special-button2.red
-                            =Msg.Grade_manually
-                    .grades-info.right
-                        TABLE
-                            TR
-                                TD
-                                    span#graded-count=studentAnnouncementsInfo.getGradedStudentCount()
-                                    ='/' + studentAnnouncements.length
-                                TD=getGrade(studentAnnouncementsInfo.getClassAvg())
-                            TR
-                                TD.small=Msg.Students_graded(studentAnnouncements.length)
-                                TD.small=Msg.Class_average
-                    .clear-right
-                +ListView(studentAnnouncementsInfo)(
-                    selectedIndex = selectedIndex).grades-individual.people-list
-                    each item, i in studentAnnouncements
-                        .row(class=(i == selectedIndex ? 'selected' : ''), index=i).fixed-bg
-                            notAnnouncement = self.getAnnouncementTypeId() != chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf();
-                            +Hidden('notAnnouncement', notAnnouncement)
-                            +Hidden('readonly', isReadonly)
-                            +Hidden('gradingStyle', gradingStyle)
-                            .top-content(id = "top-content-" + item.getId())
-                                -item.setOwner(self.getOwner());
-                                +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
-                                    notAnnouncement = notAnnouncement,
-                                    readonly = isReadonly,
-                                    applicationsInGradeView = gradeViewApps,
-                                    gradingStyle = gradingStyle,
-                                    gradingMapping = studentAnnouncementsInfo.getMapping(),
-                                    userRole = self.getUserRole()
-                                )
-                        .attachments-container
-                            .attachments-container-2
-                                items = self.getSortedAppsAndAttachments(self.getApplications(), self.getAnnouncementAttachments())
-                                each item, i in items
-                                    isApp = item.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION
-                                    if isApp || (self.getUserRole().isTeacher() ? !item.isOwner() : item.isOwner())
-                                        if isApp
-                                            +ActionLink('apps', 'viewApp', item.getUrl(), item.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, item.getId()).announcement-item.application
-                                                +AppAttachmentBlock(item, i)
-                                        else
-                                            +ActionLink('announcement', 'viewAttachment', item.getId()).announcement-item.attachment
-                                                +AppAttachmentBlock(item, i)
+            .grading-part
+                if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length
+                    +RenderWith(studentAnnouncementsInfo, chlk.templates.announcement.AnnouncementGradingPartTpl)(
+                        autoGradeApps = self.getAutoGradeApps(),
+                        readonly = isReadonly,
+                        gradeViewApps = self.getGradeViewApps(),
+                        applications = self.getApplications(),
+                        userRole = self.getUserRole(),
+                        owner = self.getOwner(),
+                        announcementId = self.getId()
+                    )

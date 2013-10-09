@@ -295,6 +295,31 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(this.getView().getCurrent().getClass(), result, 'update-attachments');
         },
 
+        [[chlk.models.id.AnnouncementId]],
+        function applyAutoGradeAction(announcementId){
+            var result = this.gradingService.applyAutoGrade(announcementId);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, result, 'update-attachments');
+        },
+
+        [[chlk.models.id.AnnouncementId]],
+        function gradeManuallyAction(announcementId){
+            var result = this.gradingService.applyManualGrade(announcementId);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, result, 'update-attachments');
+        },
+
+        [[chlk.models.id.AnnouncementId]],
+        function applyManualGradeAction(announcementId){
+            this.ShowMsgBox(Msg.You_ll_be_grading_by_hand, Msg.Just_checking, [{
+                text: Msg.Grade_manually.toUpperCase(),
+                controller: 'announcement',
+                action: 'gradeManually',
+                params: [announcementId.valueOf()],
+                color: chlk.models.common.ButtonColor.RED.valueOf()
+            }, {
+                text: Msg.Cancel.toUpperCase(),
+                color: chlk.models.common.ButtonColor.GREEN.valueOf()
+            }]);
+        },
 
         [[chlk.models.id.AnnouncementAttachmentId]],
         function viewAttachmentAction(attachmentId){

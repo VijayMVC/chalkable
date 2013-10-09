@@ -383,3 +383,15 @@
     padding: 0 15px;
   }
 }
+
+.action-button{
+  >SPAN{
+    >SPAN{
+      >a{
+        text-decoration: none;
+        color: white;
+        line-height: 30px;
+      }
+    }
+  }
+}

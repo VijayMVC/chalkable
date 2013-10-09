@@ -79,6 +79,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttendanceNotificationTaskHandler.cs" />
     <Compile Include="CreateDemoSchoolTaskHandler.cs" />
     <Compile Include="DeleteSchoolTaskHandler.cs" />
     <Compile Include="Parallel\AllSchoolRunner.cs" />

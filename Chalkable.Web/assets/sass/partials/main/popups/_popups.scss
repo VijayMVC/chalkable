@@ -71,7 +71,9 @@
     }
 
     &.gray{
-      left: 191px;
+      position: fixed;
+      left: 50%;
+      margin-left: -150px;
       top: 75px;
       background: #e7e7e7;
       border: 1px solid #adadad;

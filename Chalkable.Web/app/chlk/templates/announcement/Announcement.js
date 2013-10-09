@@ -54,6 +54,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             Number, 'attachmentsSummary',
 
             [ria.templates.ModelPropertyBind],
+            ArrayOf(String), 'autoGradeApps',
+
+            [ria.templates.ModelPropertyBind],
             Number, 'avg',
 
             [ria.templates.ModelPropertyBind],
