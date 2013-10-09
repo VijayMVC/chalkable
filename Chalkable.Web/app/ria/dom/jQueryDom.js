@@ -104,6 +104,16 @@ NAMESPACE('ria.dom', function () {
                 return this;
             },
 
+            SELF, function clone(){
+                return new SELF(this._dom.clone());
+            },
+
+            [[String]],
+            SELF, function wrap(html){
+                this._dom.wrap(html);
+                return this;
+            },
+
             [[String]],
             Boolean, function isOrInside(selector){
                 return this.is(selector) || this.parent(selector).exists();
