@@ -11,6 +11,10 @@ NAMESPACE('chlk.models.discipline', function(){
 
         String, 'disciplinesJson',
 
+        String, 'controller',
+        String, 'action',
+        String, 'params',
+
         [[String]],
         VOID, function setDisciplinesJson(disciplinesJsonObj){
                 var serializer = new ria.serialize.JsonSerializer();

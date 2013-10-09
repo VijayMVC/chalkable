@@ -16,7 +16,7 @@
             p=Msg.Saturday
     .items
         each item in self.getCalendarItems()
-            +ActionLink(null, null, item.getDate().format('mm-dd-yy'))(class = (item.isSunday() ? 'sunday ' : ' ')).gradient-cnt.item
+            +ActionLinkWithModel(self.prepareActionLinkModel(item))(class = (item.isSunday() ? 'sunday ' : ' ')).gradient-cnt.item
                 div
                     h2.number=item.getDay()
                     .space

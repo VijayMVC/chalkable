@@ -86,7 +86,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 var cDisciplineTypes = new List<ClassDisciplineType>();
                 var clDiscTypeDa = new ClassDisciplineTypeDataAccess(uow);
-                clDiscTypeDa.Delete(discipline.Id);
+                clDiscTypeDa.Delete(discipline.Id, null);
                 foreach (var disciplineType in disciplineTypes)
                 {
                     cDisciplineTypes.Add(new ClassDisciplineType 

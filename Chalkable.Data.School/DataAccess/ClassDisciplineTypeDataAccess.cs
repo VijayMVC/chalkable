@@ -20,7 +20,7 @@ namespace Chalkable.Data.School.DataAccess
             var condition = new AndQueryCondition {{ClassDisciplineType.CLASS_DISCIPLINE_REF, classDisciplineId}};
             if(disciplineType.HasValue)
                 condition.Add(ClassDisciplineType.DISCIPLINE_TYPE_REF, disciplineType);
-            SimpleDelete(condition);
+            SimpleDelete<ClassDisciplineType>(condition);
         }
     }
 }

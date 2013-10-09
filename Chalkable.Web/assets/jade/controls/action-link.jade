@@ -18,7 +18,8 @@ mixin ActionLinkWithPrepend(controller, action, prependParams)
 mixin ActionLinkWithModel(actionLinkModel)
     classesNames = actionLinkModel.getClassesNames() || []
     +ActionLinkWithPrepend(actionLinkModel.getControllerName(), actionLinkModel.getActionName(), actionLinkModel.getArgs()
-    )(class = classesNames && classesNames.length > 0 ? classesNames.join(' ') : '')(attributes)=actionLinkModel.getTitle()
+    )(class = classesNames && classesNames.length > 0 ? classesNames.join(' ') : '')(attributes)=(actionLinkModel.getTitle() || '')
+        block
 
 // requires: actionLinksModel instanceOf ArrayOf(chlk.models.common.ActionLinkModel)
 mixin ActionLinkList(actionLinksModel)

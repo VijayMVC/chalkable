@@ -29,6 +29,7 @@ NAMESPACE('chlk.activities.student', function () {
                 node.find('.item-type-details').toggleClass(this._HIDDEN_CLASS);
             },
 
+            [[ria.dom.Dom]],
             VOID, function hideItemTypeDetails_(node){
                 var itemTypeDetails = node.find('.item-type-details');
                 if(!itemTypeDetails.hasClass(this._HIDDEN_CLASS))

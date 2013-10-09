@@ -18,7 +18,7 @@ itemColor = null
     .items
         each item in self.getCalendarItems()
             +ActionLink('attendance', 'showStudentAttendance', self.getStudentId(), item.getDate().format('mm-dd-yy')
-                , 'student', 'attendanceMonthAction', JSON.stringify([item.getDate().format('mm-dd-yy')
+                , 'students', 'attendanceMonth', JSON.stringify([item.getDate().format('mm-dd-yy')
                 , self.getMaxDate(), self.getMinDate(), self.getStudentId()])
             )(class = (item.isSunday() ? 'sunday ' : ' ')).gradient-cnt.item
                 div

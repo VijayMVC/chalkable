@@ -8,7 +8,7 @@ REQUIRE('chlk.models.discipline.SetDisciplineListModel');
 REQUIRE('chlk.models.discipline.PaginatedListByDateModel');
 REQUIRE('chlk.activities.discipline.DisciplineSummaryPage');
 REQUIRE('chlk.activities.discipline.SetDisciplineDialog');
-
+REQUIRE('chlk.activities.discipline.DayDisciplinePopup');
 
 NAMESPACE('chlk.controllers', function(){
     "use strict";
@@ -52,23 +52,41 @@ NAMESPACE('chlk.controllers', function(){
 
             [[chlk.models.discipline.DisciplineInputModel]],
             function listStudentDisciplineAction(model){
+                var res = this.listStudentDiscipline_(model.getPersonId(), model.getDisciplineDate());
+                return this.ShadeView(chlk.activities.discipline.SetDisciplineDialog, res);
+            },
+            [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate, String, String, String]],
+            function showStudentDayDisciplinesAction(studentId, date, controller_, action_, params_){
+                var res = this.listStudentDiscipline_(studentId, date)
+                    .then(function(data){
+                        var target = chlk.controls.getActionLinkControlLastNode();
+                        return new chlk.models.discipline.DisciplinePopupViewData(target, null, data, controller_, action_, params_);
+                    });
+                return this.ShadeView(chlk.activities.discipline.DayDisciplinePopup, res);
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
+            ria.async.Future, function listStudentDiscipline_(studentId, date){
                 //todo move disciplineTypes to session
-                var date = model.getDisciplineDate();
-                var res = ria.async.wait([
+                return ria.async.wait([
                     this.disciplineTypeService.getDisciplineTypes(),
-                    this.disciplineService.listStudentDiscipline(null, model.getPersonId(), date)
+                    this.disciplineService.listStudentDiscipline(null, studentId, date)
                 ]).attach(this.validateResponse_())
-                  .then(function(result){
+                    .then(function(result){
                         date = date || new chlk.models.common.ChlkDate(getDate());
                         return new chlk.models.discipline.DisciplineList(result[1], result[0], date);
-                  }, this);
-                return this.ShadeView(chlk.activities.discipline.SetDisciplineDialog, res); //todo create activities
+                    }, this);
             },
 
             [[chlk.models.discipline.SetDisciplineListModel]],
             function setDisciplinesAction(model){
-               var res = this.disciplineService.setDisciplines(model).attach(this.validateResponse_());
-               this.Redirect('discipline', 'list', []);
+               return this.disciplineService.setDisciplines(model).attach(this.validateResponse_())
+                   .then(function(data){
+                       var controller = model.getController() || 'discipline';
+                       var action = model.getAction() || 'list';
+                       var params = JSON.parse(model.getParams()) || [];
+                       return this.Redirect(controller, action, params);
+                   }, this);
             }
         ])
 });
