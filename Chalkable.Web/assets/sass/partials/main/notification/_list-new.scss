@@ -1,0 +1,44 @@
+.list-new{
+  .row{
+    cursor: pointer;
+    .image{
+      display: inline-block;
+      vertical-align: middle;
+      >.notification-person, >.notification-announcement{
+        padding: 1px;
+        text-align: center;
+        >a{
+          display: block;
+          padding: 2px;
+          >div{
+            width: 49px;
+            height: 49px;
+          }
+        }
+        span{
+          font: italic 11px Georgia;
+          color: #969696;
+          text-shadow: 1px 1px 1px white;
+        }
+      }
+
+    }
+    .content{
+      display: inline-block;
+      vertical-align: middle;
+      font: 11px Georgia;
+      color: #969696;
+      text-shadow: 1px 1px 1px white;
+
+      width: 250px;
+      margin-left: 10px;
+      vertical-align: middle;
+
+    }
+    .unshown
+    {
+      font-weight: bold;
+      color: #525252;
+    }
+  }
+}
