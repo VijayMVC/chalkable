@@ -1,0 +1,14 @@
+mixin Carousel()
+    -attributes = self.processAttrs(attributes);
+    .carousel-wrapper
+        .carousel(attributes)
+            ul
+                block
+
+            .carousel-pagination
+
+
+
+mixin CarouselItem()
+    li(attributes)
+        block
