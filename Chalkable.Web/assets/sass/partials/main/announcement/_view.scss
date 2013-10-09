@@ -6,6 +6,11 @@
 $blue-color: #276284;
 $red-color: #842727;
 
+.announcement-view-page{
+  @include border-radius(9px);
+  overflow: hidden;
+}
+
 .announcement-view{
   div.feed-item{
     @include border-radius(7px 7px 0 0);

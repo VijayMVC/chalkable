@@ -25,6 +25,25 @@ NAMESPACE('chlk.activities.feed', function () {
                     ic.setHTML("" + (current+1));
                 }
                 return true;
+            },
+
+            [ria.mvc.DomEventBind('click', '.announcement-link')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function announcementClick(node, event){
+                var item = node.parent('.feed-item');
+                var clone = item.clone();
+                clone = clone.wrap('<div class="moving-wrapper"></div>').parent();
+                clone.setCss('left', item.offset().left - 3);
+                clone.setCss('top', item.offset().top);
+                clone.appendTo(new ria.dom.Dom('body'));
+                setTimeout(function(){
+                    clone.setCss('top', 54);
+                    this.dom.addClass('opacity0');
+                }.bind(this), 1);
+                setTimeout(function(){
+                    clone.find('.announcement-link').removeClass('disabled').trigger('click');
+                }, 301);
+                return false;
             }
 
         ]);
