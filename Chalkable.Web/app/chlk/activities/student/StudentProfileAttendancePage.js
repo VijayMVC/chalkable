@@ -8,7 +8,7 @@ NAMESPACE('chlk.activities.student', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [chlk.activities.lib.PageClass('profile')],
-        [ria.mvc.TemplateBind(chlk.templates.student.StudentProfileAttendanceTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.calendar.attendance.StudentAttendanceMonthCalendarTpl, '', '#attendance-calendar-info', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.TemplateBind(chlk.templates.student.StudentProfileAttendanceTpl)],
         'StudentProfileAttendancePage', EXTENDS(chlk.activities.lib.TemplatePage), []);
 });

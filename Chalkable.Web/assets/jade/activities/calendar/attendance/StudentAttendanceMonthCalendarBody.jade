@@ -17,9 +17,9 @@ itemColor = null
             p=Msg.Saturday
     .items
         each item in self.getCalendarItems()
-            +ActionLink('attendance', 'showStudentAttendance', self.getStudentId(), item.getDate().format('mm-dd-yy')
-                , 'students', 'attendanceMonth', JSON.stringify([item.getDate().format('mm-dd-yy')
-                , self.getMaxDate(), self.getMinDate(), self.getStudentId()])
+            +ActionLink('attendance', 'showStudentAttendance', self.getStudentId(), item.getDate().toStandardFormat()
+                , 'students', 'attendanceMonth', JSON.stringify([item.getDate().toStandardFormat()
+                , self.getMaxDate().toStandardFormat(), self.getMinDate().toStandardFormat(), self.getStudentId().valueOf()])
             )(class = (item.isSunday() ? 'sunday ' : ' ')).gradient-cnt.item
                 div
                     h2.number=item.getDay()

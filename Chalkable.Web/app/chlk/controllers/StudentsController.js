@@ -183,7 +183,7 @@ NAMESPACE('chlk.controllers', function (){
                 var res = this.attendanceCalendarService.getStudentAttendancePerMonth(personId, date_)
                     .attach(this.validateResponse_())
                     .then(function(data){
-                        new chlk.models.calendar.attendance.StudentAttendanceMonthCalendar(date_, minDate_, maxDate_, data, personId)
+                       return new chlk.models.calendar.attendance.StudentAttendanceMonthCalendar(date_, minDate_, maxDate_, data, personId)
                     });
                 return this.UpdateView(chlk.activities.student.StudentProfileAttendancePage, res);
             },
