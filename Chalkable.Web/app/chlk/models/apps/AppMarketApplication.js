@@ -2,6 +2,7 @@ REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.developer.DeveloperInfo');
 REQUIRE('chlk.models.apps.AppInstallGroup');
 REQUIRE('chlk.models.apps.AppInstallInfo');
+REQUIRE('chlk.models.apps.AppRating');
 
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
@@ -21,7 +22,10 @@ NAMESPACE('chlk.models.apps', function () {
             Boolean, 'uninstallable',
             Boolean, 'selfInstalled',
             Boolean, 'personal',
-            String,  'applicationInstallIds'
+            String,  'applicationInstallIds',
+
+            [ria.serialize.SerializeProperty('applicationrating')],
+            chlk.models.apps.AppRating, 'applicationRating'
 
         ]);
 

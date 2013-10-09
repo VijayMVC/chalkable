@@ -5,6 +5,7 @@ mixin SmallChart(data, header, chartId)
         .chart-block.relative
             .chart-bg.button-block=(data.getStat() ? data.getDisplayNumber() || "0" : "0")
             +Chart()(
+                id = chartId,
                 data-showmarkeronhover = true,
                 data-options = {
                     backgroundColor: 'transparent',
@@ -72,8 +73,7 @@ mixin SmallChart(data, header, chartId)
                         lineWidth: 0,
                         data: configs.data
                     }]
-                }
-            )(id = chartId)
+                })
 
 mixin If3Block_(items, i, index)
     if index == 0 || i + index < items.length

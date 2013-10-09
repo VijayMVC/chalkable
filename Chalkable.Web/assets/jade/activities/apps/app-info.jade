@@ -7,6 +7,7 @@ mixin Textbox(tName, val, isReadonly, validationRule)
 
 
 mixin TextArea(tName, val, isReadonly, validationRule)
+    //todo: fix duplicate attrs
     rule = validationRule ? "validate[" + validationRule + "]": "validate[required]"
     if isReadonly
         -attributes.disabled = isReadonly

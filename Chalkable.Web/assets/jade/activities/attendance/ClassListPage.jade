@@ -60,6 +60,6 @@
                                 div(class="container-" + item.getClassPersonId().valueOf())
                                     -item.setReasons(self.getReasons());
                                     +RenderWith(item, self.getItemClassType())(
-                                        needPresent = needPresent,
+                                        needPresent = needPresent
                                     )
                         .clear

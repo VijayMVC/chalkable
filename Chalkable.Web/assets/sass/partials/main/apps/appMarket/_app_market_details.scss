@@ -10,6 +10,17 @@ DIV.page {
               .app-title {
                 display: inline-block;
                 width: 538px;
+                .dev-web-site{
+                  margin-top: 5px;
+                  font-size: 15px;
+                  font-style: italic;
+                  text-decoration: none;
+                  margin-left: 5px;
+                }
+
+                span{
+                  font-style: italic;
+                }
               }
 
               .app-description {
@@ -19,9 +30,9 @@ DIV.page {
                 resize: none;
                 background: none;
                 border: none;
-                height: 60px;
                 width: 100%;
                 outline: none;
+                margin-top: 30px;
               }
               .app-buy {
                 width: 122px;
@@ -171,6 +182,34 @@ DIV.page {
                   color: #383838;
                   text-decoration: none;
                   font-size: 22px;
+                  cursor: pointer;
+                }
+
+                .review-area{
+                  position: relative;
+                }
+
+                .review-container{
+                  position: absolute;
+                  bottom: 0;
+                  .rating-hint{
+                    background: url(images/app/rating-hint.png) 0 0 no-repeat;
+                    width: image-width('app/rating-hint.png');
+                    height: image-height('app/rating-hint.png');
+                    position: absolute;
+                    left: 130px;
+                    bottom: 10px;
+                    display: none;
+                  }
+                }
+
+
+                .rating{
+
+                  &.all{
+                    margin-left: 25px;
+                  }
+
                 }
 
 
@@ -220,6 +259,10 @@ DIV.page {
 
                 button{
                   font-size: 16px;
+                }
+
+                .user-reviews{
+                  margin-top: 17px;
                 }
               }
 
