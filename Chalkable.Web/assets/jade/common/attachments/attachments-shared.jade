@@ -1,0 +1,22 @@
+mixin ToolbarButton(btn, announcementAppId, announcementId)
+    btnTarget = btn.isTargetBlank() ? "_blank" : undefined
+    url = btn.getUrl() ? btn.getUrl() : "javascript:void(0)"
+    cls = btn.getCls()
+    -attributes['data-announcement-app-id'] = announcementAppId ? announcementAppId : undefined
+    -attributes['data-announcement-id'] = announcementId ? announcementId: undefined
+    a(class= cls, id= btn.getId(), href= url, target= btnTarget)(attributes)=btn.getTitle()
+
+
+mixin Toolbar(buttons, announcementAppId, announcementId)
+    .toolbar
+        each btn in buttons
+            +ToolbarButton(btn, announcementAppId, announcementId)
+    .x-close-btn.close
+
+mixin AttachmentDialog(url, buttons, announcementId, announcementAppId)
+    .base-attachment-dialog
+        .x-window-header
+            +Toolbar(buttons, announcementAppId, announcementId)
+        .iframe-wrap
+            iframe(src=url)
+                attributes.class

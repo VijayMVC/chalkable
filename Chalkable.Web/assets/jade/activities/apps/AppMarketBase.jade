@@ -1,0 +1,9 @@
+mixin AppMarketToolbar(balance, categories, gradelevels)
+    .action-bar.not-transparent
+        .container.panel-bg.buttons-toolbar
+            .user-balance= "$" + balance
+            +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
+            +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn My Apps
+            +ActionForm('', '')
+                +SearchBox(chlk.services.AppMarketService, "getAppsByFilter", chlk.templates.apps.AppMarketSearchBoxTpl)#app-market-searchbox(name="appMarketSearch")
+                button(type="submit").search-btn
