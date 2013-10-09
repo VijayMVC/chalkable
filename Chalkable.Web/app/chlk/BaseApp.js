@@ -30,6 +30,7 @@ REQUIRE('chlk.controls.ImageControl');
 REQUIRE('chlk.controls.ChartControl');
 REQUIRE('chlk.controls.CarouselControl');
 REQUIRE('chlk.controls.RangeSliderControl');
+REQUIRE('chlk.controls.ListForWeekCalendarControl');
 
 REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.Role');

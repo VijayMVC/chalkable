@@ -1,6 +1,8 @@
 REQUIRE('chlk.models.calendar.announcement.WeekItem');
 REQUIRE('chlk.models.calendar.BaseDayWeekCalendar');
 REQUIRE('chlk.models.grading.GradeLevelsForTopBar');
+REQUIRE('chlk.models.classes.ClassesForTopBar');
+REQUIRE('chlk.models.common.ChlkDate');
 
 NAMESPACE('chlk.models.calendar.announcement', function () {
     "use strict";
