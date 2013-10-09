@@ -1,5 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.apps.AppMarketDetails');
+REQUIRE('chlk.templates.apps.AppMarketReviewsTpl');
 
 NAMESPACE('chlk.activities.apps', function () {
 
@@ -8,6 +9,7 @@ NAMESPACE('chlk.activities.apps', function () {
         [ria.mvc.DomAppendTo('#main')],
         [chlk.activities.lib.PageClass('app-market')],
         [ria.mvc.TemplateBind(chlk.templates.apps.AppMarketDetails)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppMarketReviewsTpl, 'updateReviews', '.reviews', ria.mvc.PartialUpdateRuleActions.Replace)],
         'AppMarketDetailsPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
             [ria.mvc.DomEventBind('click', '.write-review-btn')],
@@ -34,6 +36,10 @@ NAMESPACE('chlk.activities.apps', function () {
                     this.dom.find('.rating-hint').show();
                     return;
                 }
+                var reviewText = this.dom.find('.review-text').getValue() || "";
+                if (reviewText.length == 0)
+                    return;
+                this.dom.find('#submit-review-form').trigger('submit');
                 //todo: disable button and submit form
             }
         ]);

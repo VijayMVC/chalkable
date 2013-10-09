@@ -1,0 +1,46 @@
+mixin Rating(elemId, value, isEditable)
+    fieldset.rating(class = isEditable ? "editable" : undefined)(attributes)
+        items = [5, 4, 3, 2, 1]
+        each item in items
+            input(
+                type = "radio",
+                id = "#{elemId + item}",
+                value = item,
+                name = elemId,
+                disabled = !isEditable ? "disabled" : undefined,
+                checked = value == item ? "checked" : undefined
+                )
+            label(for="#{elemId + item}")
+
+
+
+app = self
+appRating = app.getApplicationRating()
+
+a.review-link User Ratings
++Rating("appRating", appRating.getAverage(), false).all
+a.write-review-btn Write a review
+.add-review.x-hidden
+    +ActionForm('appmarket', 'writeReview')#submit-review-form
+        +Hidden('appId', app.getId().valueOf())
+        .review-area
+            textarea.review-text(placeholder="Write a review", name="reviewText")
+            .review-container
+                +Rating('newRating', 0, true)
+                .rating-hint
+        .btns
+            +Button()(type="button", class="special-button blue-button submit-review-btn") Submit
+            span.cancel-btn Cancel
+.user-reviews
+    .rating-roles.x-hidden
+        each role in appRating.getRoleRatings()
+            .rating-role-item
+                .rolename=role.getRoleName()
+                .app-raiting
+                    +Rating('role-' + role.getRoleName(), role.getRating())
+                    .personcount=role.getPersonCount()
+    .rating-persons
+        each person in appRating.getPersonRatings()
+            .rating-person-item
+                p=person.getReview() + ' - ' + person.getRoleName()
+                    +Rating('person-rating-' + person.getSchoolPersonId.valueOf(), person.getRating())

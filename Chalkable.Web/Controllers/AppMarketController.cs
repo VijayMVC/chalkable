@@ -99,5 +99,11 @@ namespace Chalkable.Web.Controllers
             var totalPrice = SchoolLocator.AppMarketService.GetApplicationTotalPrice(applicationid, personId, roleids, classids, gradelevelids, departments);
             return Json(ApplicationTotalPriceViewData.Create(app, totalPrice));
         }
+
+        public ActionResult WriteReview(Guid applicationId, int rating, string review)
+        {
+            MasterLocator.ApplicationService.WriteReview(applicationId, rating, review);
+            return Read(applicationId);
+        }
     }
 }

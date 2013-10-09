@@ -172,6 +172,16 @@ NAMESPACE('chlk.services', function () {
                     .post('AppMarket/Uninstall.json', Boolean, {
                         applicationInstallIds: ids
                     });
+            },
+
+            [[chlk.models.id.AppId, Number, String]],
+            ria.async.Future, function writeReview(appId, rating, review){
+                return this
+                    .post('AppMarket/WriteReview.json', chlk.models.apps.AppMarketApplication, {
+                        applicationId: appId.valueOf(),
+                        rating: rating,
+                        review: review
+                    });
             }
         ])
 });

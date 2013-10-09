@@ -20,6 +20,7 @@ REQUIRE('chlk.models.apps.AppInstallPostData');
 REQUIRE('chlk.models.apps.AppDeletePostData');
 REQUIRE('chlk.models.apps.AppMarketPostData');
 REQUIRE('chlk.models.apps.AppRating');
+REQUIRE('chlk.models.apps.AppReviewPostData');
 
 REQUIRE('chlk.models.id.AppId');
 
@@ -222,8 +223,19 @@ NAMESPACE('chlk.controllers', function (){
 
                     //todo: when ready on server remove this
 
-                    var appRating = new chlk.models.apps.AppRating();
-                    appRating.setAverage(5);
+
+                    var appRating = app.getApplicationRating();
+
+
+                    if (!appRating)   {
+                        appRating = new chlk.models.apps.AppRating();
+                        appRating.setRoleRatings([]);
+                        appRating.setPersonRatings([]);
+                        app.setApplicationRating(appRating);
+                    }
+
+
+                    /*appRating.setAverage(5);
 
                     var personRating = new chlk.models.apps.PersonRating();
                     personRating.setReview("Great app");
@@ -240,7 +252,7 @@ NAMESPACE('chlk.controllers', function (){
                     appRating.setPersonRatings([personRating]);
                     appRating.setRoleRatings([roleRating]);
 
-                    app.setApplicationRating(appRating);
+                    app.setApplicationRating(appRating);*/
 
                     var installBtnTitle ='';
 
@@ -414,6 +426,28 @@ NAMESPACE('chlk.controllers', function (){
                 }], 'center');
 
             }
+        },
+
+        [[chlk.models.apps.AppReviewPostData]],
+        function writeReviewAction(reviewData){
+            var result = this.appMarketService
+                .writeReview(
+                    reviewData.getAppId(),
+                    reviewData.getRating(),
+                    reviewData.getReview()
+                ).then(function(data){
+                   var appRating = data.getApplicationRating();
+                    if (!appRating)   {
+                        appRating = new chlk.models.apps.AppRating();
+                        appRating.setRoleRatings([]);
+                        appRating.setPersonRatings([]);
+                        data.setApplicationRating(appRating);
+                    }
+                    return data;
+                })
+                .attach(this.validateResponse_());
+            return this.UpdateView(chlk.activities.apps.AppMarketDetailsPage, result, 'updateReviews');
         }
+
     ])
 });
