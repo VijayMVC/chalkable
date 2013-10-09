@@ -14,7 +14,6 @@ NAMESPACE('chlk.models.apps', function () {
 
             [[chlk.models.apps.Application, chlk.models.apps.AppModes]],
             function $(app, mode){
-                BASE();
 
                 var fullUrl = app.getCurrentModeUrl() + "&code=" + app.getOauthCode();
 

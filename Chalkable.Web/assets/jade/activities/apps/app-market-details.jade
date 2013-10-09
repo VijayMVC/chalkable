@@ -6,6 +6,7 @@ mixin Rating(elemId, value, isEditable)
                 type = "radio",
                 id = "#{elemId + item}",
                 value = item,
+                name = elemId,
                 disabled = !isEditable ? "disabled" : undefined,
                 checked = value == item ? "checked" : undefined
                 )
@@ -32,7 +33,7 @@ appRating = app.getApplicationRating()
         .app-general-info
             .reviews
                 a.review-link User Ratings
-                +Rating("app-rating", appRating.getAverage(), false).all
+                +Rating("appRating", appRating.getAverage(), false).all
                 a.write-review-btn Write a review
                 .add-review.x-hidden
                     +ActionForm('appmarket', 'writeReview')#submit-review-form
@@ -41,7 +42,6 @@ appRating = app.getApplicationRating()
                             .review-container
                                 +Rating('newRating', 0, true)
                                 .rating-hint
-                            +Hidden('appRating', 0)
                         .btns
                             +Button()(type="button", class="special-button blue-button submit-review-btn") Submit
                             span.cancel-btn Cancel
