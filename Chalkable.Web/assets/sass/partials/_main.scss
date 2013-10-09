@@ -57,6 +57,9 @@
 @import "partials/main/search/_common";
 
 @import "partials/main/notification/_list-new";
+@import "partials/main/notification/_notifications_by_days";
+
+
 
 INPUT, TEXTAREA, .text-field{
   @include border-radius(5px);

@@ -90,8 +90,10 @@ NAMESPACE('chlk.models.common', function () {
             String, function format(format){
                 format = format.replace(/min/g, this.timepartToStr(this.getDate().getMinutes()));
                 var res =$.datepicker.formatDate(format, this.getDate() || getDate());
-                res = res.replace(/hh/g, this.timepartToStr(this.getDate().getHours()));
+                var hours = this.getDate().getHours();
+                res = res.replace(/hh/g, this.timepartToStr(hours));
                 res = res.replace(/ss/g, this.timepartToStr(this.getDate().getSeconds()));
+                res = res.replace(/tt/g, hours > 11 ? 'pm' : 'am');
                 return res;
             },
 

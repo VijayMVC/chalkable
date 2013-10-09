@@ -414,7 +414,7 @@ var Msg = {
     Searching_text: 'Searching...',
     Sent_today: 'Sent today',
     Sent_in_date: function(date){
-        return String.format('Sent {0}')
+        return String.format('Sent {0}', date)
     },
     Sorted_by: 'Sorted by',
     Source_Name: 'Source Name',

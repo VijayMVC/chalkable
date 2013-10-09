@@ -18,8 +18,13 @@ NAMESPACE('chlk.services', function () {
 
             ria.async.Future, function markAllAsShown() {
                 return this.get('Notification/MarkAllAsShown.json', Boolean, {});
+            },
+            [[Number, Number]],
+            ria.async.Future, function getNotificationsByDays(start_, count_){
+                return this.getPaginatedList('Notification/ListByDays.json',  chlk.models.notification.NotificationsByDate,{
+                    start: start_,
+                    count: count_
+                });
             }
-
-
-        ])
+        ]);
 });
