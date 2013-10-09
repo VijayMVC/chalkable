@@ -1,0 +1,81 @@
+mixin AppAttachmentBlock(item, pictureHref, i)
+    +LoadingImage(src=pictureHref, id="loading-image-" + i)
+        .title
+            div=item.getName()
+
+.announcement-view.not-transparent
+    isNotStudent = true
+    isReadonly = !self.isAnnOwner()
+    studentAnnouncements = false
+    studentAnnouncementsInfo = self.getStudentAnnouncements()
+    autoCount = self.getAutoGradeCount()
+    applications = self.getApplications()
+    gradeViewApps = self.getGradeViewApps()
+    if studentAnnouncementsInfo
+        studentAnnouncements = studentAnnouncementsInfo.getItems()
+        gradingStyle = studentAnnouncementsInfo.getGradingStyle()
+        gradingMapping = studentAnnouncementsInfo.getMapping()
+        getGrade = function(value){return GradingStyler.getLetterByGrade(value, gradingMapping, gradingStyle)}
+        getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, gradingMapping, gradingStyle)}
+    div(class=self.starred ? "feed-item starred" : "feed-item")
+        if isNotStudent
+            .grades
+        .bullet
+            +ActionLink('announcement', 'star', self.getId(), !self.isStarred()).star
+            .item-type
+                .attachment
+                    div(class="announcement-type-" + self.getAnnouncementTypeId()).icon.blue
+                    .icon.black
+                    h2.animated-header=self.getTitle()
+                    p.animated=self.getShortContent()
+                    .animated=self.getExpiresDate().toString('d/m/y')
+                    .attachment-icon
+                    .apps-icon
+    .panel-bg
+        .action-bar.buttons
+            .container
+                .left
+                    +ActionLink('feed', 'list').back-button
+                .right
+                    +ActionLink('announcement', 'edit', self.getId())(class = self.isAnnOwner() ? "" : "disabled").edit-button Edit
+        .announcement-details-panel
+            .details-container.silver-panel
+                if self.getUserRole().isStudent()
+                    .comment-grade-container
+                        .comment-grade
+                            .comment=self.getComment() || Msg.Your_grade + ":"
+                            .grade-value=values.dropped ? Msg.Dropped : (getGrade(self.getGrade()) || '')
+                        .comment-triangle
+                            .white.comment-triangle
+                br
+                .left-block
+                    +ActionLink('teachers', 'info', self.getOwner().getId())(data-tooltip=self.getOwner().getFullName()).image-container
+                        +PersonImg(self.getOwner(), 47)
+                .right-block
+                    h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
+                    p=self.getContent()
+                    .attachments-and-applications
+                        +RenderWith(self.getModel(), chlk.templates.announcement.Announcement)(
+                            userRole = self.getUserRole()
+                        )
+            if self.getUserRole().isStudent()
+                .silver-panel.attachments-panel
+                    .left-block.attachments
+                    .right-block
+                        .student-attachments
+                            +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementForStudentAttachments)(
+                                userRole = self.getUserRole()
+                            )
+            .questions-and-answers.silver-panel
+                +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementQnAs)
+            .grading-part
+                if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length
+                    +RenderWith(studentAnnouncementsInfo, chlk.templates.announcement.AnnouncementGradingPartTpl)(
+                        autoGradeApps = self.getAutoGradeApps(),
+                        readonly = isReadonly,
+                        gradeViewApps = self.getGradeViewApps(),
+                        applications = self.getApplications(),
+                        userRole = self.getUserRole(),
+                        owner = self.getOwner(),
+                        announcementId = self.getId()
+                    )
