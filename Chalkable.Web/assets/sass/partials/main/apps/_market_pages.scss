@@ -1,0 +1,139 @@
+@import "partials/main/apps/appMarket/_app_market";
+@import "partials/main/apps/appMarket/_app_market_details";
+@import "partials/main/apps/appMarket/_app_market_install";
+
+
+
+.app-market, .my-apps, .app-market-details{
+  .buttons-toolbar{
+    .toolbar-btn{
+      padding: 0 7px;
+      color: #828282;
+      font-size: 12px;
+      margin: 0;
+      display: inline-block;
+      font-style: normal !important;
+      border-left: 1px solid white;
+      text-align: center;
+      border-right: 1px solid #cfcfcf;
+      @include background(linear, 50% 0%, 50% 100%, color-stop(0%, #f6f6f6), color-stop(100%, #d8d8d8));
+
+      &:hover{
+        @include background(linear-gradient(top, #f6f6f6,#d8d8d8));
+      }
+    }
+
+    .user-balance{
+      width: 250px;
+      display: inline-block;
+      color: #868686;
+      font-size: 18px;
+      padding-left: 10px;
+      height: 36px;
+      border-right: 1px solid #cfcfcf;
+      line-height: 30px;
+    }
+
+    form{
+      display: inline-block;
+    }
+    .search-btn{
+      border: none;
+      width: 32px;
+      height: 32px;
+      background-image: url(images/app/search-button.png);
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-color: transparent;
+      vertical-align: top;
+      cursor: pointer;
+      outline: none;
+      margin-top: -3px;
+      padding: 0;
+    }
+  }
+
+
+  #app-market-searchbox{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-left: 105px;
+    width: 115px;
+  }
+
+
+  .rating{
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+
+    > input {
+      position:absolute;
+      top:-9999px;
+      clip:rect(0,0,0,0);
+    }
+
+    &.editable > label:hover, &.editable > label:hover ~ label, > input:checked ~ label  {
+      background: url(images/app/new-stars.png) 0 0 no-repeat;
+    }
+
+    > label {
+      float:right;
+      cursor:pointer;
+      width: 20px;
+      height: 20px;
+      background: url(images/app/new-stars.png) -20px 0 no-repeat;
+    }
+
+    &.editable > label:active{
+      position:relative;
+      top:2px;
+      left:2px;
+    }
+  }
+
+
+  .rating-persons{
+    p{
+      margin: 15px 0 5px;
+      word-wrap: break-word;
+      font-size: 15px;
+    }
+
+    .rating-person-item{
+      margin-bottom: 25px;
+
+      p{
+        margin-top: 0 !important;
+      }
+    }
+
+  }
+
+  .rating-roles{
+    display: table;
+    margin-bottom: 15px;
+    padding-left: 20px;
+    font-size: 13px;
+    font-weight: bold;
+
+    .rating-role-item{
+      display: table-row;
+
+      >DIV{
+        display: table-cell;
+        vertical-align: middle;
+        &.rolename{
+          min-width: 100px;
+        }
+
+        &.personcount{
+          width: 50px;
+          text-align: center;
+          font-size: 11px;
+        }
+      }
+    }
+  }
+}
