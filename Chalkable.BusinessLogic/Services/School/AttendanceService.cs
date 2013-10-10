@@ -37,6 +37,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IDictionary<int, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerPeriod(DateTime fromDate, DateTime toDate, int fromPeriodOrder, int toPeriodOrder, AttendanceTypeEnum type, IList<Guid> gradeLevelsIds);
         IDictionary<DateTime, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerDate(DateTime fromDate, DateTime toDate, AttendanceTypeEnum type, IList<Guid> gradeLevelsIds);
         void ProcessClassAttendance(DateTime date);
+        void NotAssignedAttendanceProcess();
     }
 
     public class AttendanceService : SchoolServiceBase, IAttendanceService
@@ -340,6 +341,30 @@ namespace Chalkable.BusinessLogic.Services.School
             });
             SendAttendanceNotification(classAtts, 1, date.Date, CoreRoles.ADMIN_GRADE_ROLE.Id, CoreRoles.ADMIN_EDIT_ROLE.Id, CoreRoles.ADMIN_VIEW_ROLE.Id);
             SendAttendanceNotification(classAtts, 0, date, CoreRoles.TEACHER_ROLE.Id);
+        }
+
+        public void NotAssignedAttendanceProcess()
+        {
+            if (!BaseSecurity.IsSysAdmin(Context) && !BaseSecurity.IsAdminEditor(Context))
+                throw new ChalkableSecurityException();
+            var teachers = ServiceLocator.PersonService.GetPersons().Where(x=>x.RoleRef == CoreRoles.TEACHER_ROLE.Id);
+            var currentDateTime = Context.NowSchoolTime;
+            //TODO: make a stored proc
+            /*foreach (var teacher in teachers)
+            {
+                var cgp = ServiceLocator.ClassPeriodService.GetClassPeriodForSchoolPersonByDate(teacher.Id, currentDateTime);
+
+
+                
+                if (cgp != null && !Entities.Notifications.Any(x => x.ClassGeneralPeriodRef == cgp.Id && x.Type == (int)NotificationType.NoTakeAttendance))
+                {
+                    var classAttendacenes = Entities.ClassAttendances.Where(x => x.ClassGeneralPeriodRef == cgp.Id && x.Date == currentDateTime.Date).ToList();
+                    if (classAttendacenes.Count == 0 || classAttendacenes.All(x => x.TypeTyped == AttendanceTypeEnum.NotAssigned))
+                    {
+                        ServiceLocator.NotificationService.AddAttendanceNotificationToTeacher(teacher.SchoolPersonId, cgp, currentDateTime);
+                    }
+                }
+            }*/
         }
 
         protected void SendAttendanceNotification(IList<ClassAttendanceDetails> classAttendances, int dayInterval, DateTime toDate, params int[] roleIds)
