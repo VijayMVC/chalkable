@@ -111,6 +111,94 @@ $star-size: 18px;
     }
   }
 
+  &.non-gradable {
+    DIV.grades {
+      display: none;
+    }
+  }
+
+  &.no-attachments.non-gradable {
+    DIV.item-type {
+      DIV.attachment {
+        padding-right: 0 !important;
+        background-image: none !important;
+      }
+    }
+  }
+
+  &.no-attachments.is-gradable {
+    DIV.grades {
+      right: 0 !important;
+      width: $notif-width !important;
+    }
+
+    DIV.item-type {
+      DIV.attachment {
+        padding-right: 0 !important;
+        background: none !important;
+      }
+    }
+  }
+
+  &.has-attachments.non-gradable {
+    DIV.item-type {
+      DIV.attachment {
+        padding-right: 78px !important;
+      }
+    }
+  }
+
+
+  &.app-icon.no-attachment-icon {
+    DIV.item-type {
+      DIV.attachment {
+        background-position: 100% 0% !important;
+      }
+    }
+  }
+
+  &.app-icon{
+    DIV.item-type {
+      DIV.attachment {
+        background-position: 100% 100% !important;
+      }
+    }
+  }
+
+  &.app-icon{
+    DIV.item-type {
+      DIV.attachment {
+        DIV.apps-icon{
+          display: inline-block;
+        }
+      }
+    }
+  }
+
+  &.has-attachments-icon{
+    DIV.item-type {
+      DIV.attachment {
+        DIV.attachment-icon{
+          display: inline-block;
+        }
+      }
+    }
+  }
+
+  &.app-icon.has-attachments-icon{
+    DIV.item-type {
+      DIV.attachment {
+        DIV.attachment-icon, DIV.apps-icon{
+          height: 40px;
+
+          &.apps-icon{
+            top: 41px;
+          }
+        }
+      }
+    }
+  }
+
   &.unread {
     background-position: 0 bottom;
 
@@ -119,7 +207,23 @@ $star-size: 18px;
     }
   }
 
+  DIV.grades {
+    background: url(images/feed/grades-progress.png) 0% 50% no-repeat;
+    position: absolute;
+    top: 0;
+    right: $notif-width - 10px;
+    height: $height;
+    width: $notif-width + 10px;
 
+    > A {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      z-index: 20;
+    }
+  }
 
   a.star {
     background: url(images/feed/star.png) 0px bottom no-repeat;

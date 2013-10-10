@@ -1,5 +1,4 @@
 .feed-container
-    isNotStudent = true
     topData = self.getTopData();
     topItems = topData.getTopItems();
     selectedId = topData.getSelectedItemId();
@@ -16,18 +15,4 @@
     +Grid('feed', 'list', self, [true, self.starredOnly, selectedId]).not-transparent
         +GridBody()
             each item in self.items
-                div(class=item.isStarred() ? "feed-item starred" : "feed-item")
-                    if isNotStudent
-                        .grades
-                    .bullet
-                        +ActionLink('announcement', 'star', item.getId().valueOf(), !item.isStarred()).star
-                        +ActionLink('announcement', 'view', item.getId()).d-b.t-d.not-blue.announcement-link.disabled
-                            .item-type
-                                .attachment
-                                    div(class="announcement-type-" + item.getAnnouncementTypeId()).icon.blue
-                                    div(data-tooltip=item.getAnnouncementTypeName()).icon.black
-                                    h2.animated-header=item.getTitle()
-                                    p.animated=item.getShortContent()
-                                    .animated=item.getExpiresDate().toString('d/m/y')
-                                    .attachment-icon
-                                    .apps-icon
+                +FeedItem(item)

@@ -16,20 +16,7 @@ mixin AppAttachmentBlock(item, pictureHref, i)
         gradingMapping = studentAnnouncementsInfo.getMapping()
         getGrade = function(value){return GradingStyler.getLetterByGrade(value, gradingMapping, gradingStyle)}
         getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, gradingMapping, gradingStyle)}
-    div(class=self.starred ? "feed-item starred" : "feed-item")
-        if isNotStudent
-            .grades
-        .bullet
-            +ActionLink('announcement', 'star', self.getId(), !self.isStarred()).star
-            .item-type
-                .attachment
-                    div(class="announcement-type-" + self.getAnnouncementTypeId()).icon.blue
-                    .icon.black
-                    h2.animated-header=self.getTitle()
-                    p.animated=self.getShortContent()
-                    .animated=self.getExpiresDate().toString('d/m/y')
-                    .attachment-icon
-                    .apps-icon
+    +FeedItem(self)
     .panel-bg
         .action-bar.buttons
             .container
