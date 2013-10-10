@@ -63,7 +63,6 @@ namespace Chalkable.Web.Models.ApplicationsViewData
     public class ApplicationViewData : BaseApplicationViewData
     {
         public IList<ApplicationPersmissionsViewData> Permissions { get; set; }
-        public ApplicationRatingViewData ApplicationRating { get; set; }
         public IList<CategoryViewData> Categories { get; set; }
         public IList<int> GradeLevels { get; set; }
         public IList<RoleViewData> CanLaunchRoles { get; set; }
@@ -93,6 +92,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
 
     public class ApplicationDetailsViewData : ApplicationViewData
     {
+        public ApplicationRatingViewData ApplicationRating { get; set; }
         public bool IsInstalledOnlyForMe { get; set; }
         public IList<InstalledForPersonsGroupViewData> InstalledForPersonsGroup { get; set; } 
 
@@ -100,9 +100,13 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             : base(application, categories, canGetSecretKey)
         {
         }
-        public static ApplicationDetailsViewData Create(Application application, IList<CoreRole> roles, IList<Category> categories)
+        public static ApplicationDetailsViewData Create(Application application, IList<CoreRole> roles, IList<Category> categories
+            , IList<ApplicationRating> appRatings, IList<Person> persons)
         {
-            return new ApplicationDetailsViewData(application, categories, false);
+            var res = new ApplicationDetailsViewData(application, categories, false);
+            res.ApplicationRating = ApplicationRatingViewData.Create(appRatings, persons);
+
+            return res;
         }
     }
 
