@@ -1,0 +1,16 @@
+mixin Carousel()
+    -attributes = self.processAttrs(attributes);
+    .carousel-wrapper
+        .carousel(attributes)
+            ul
+                block
+
+
+            .picture-button.picture-left.disabled
+            .picture-button.picture-right
+    .carousel-pagination
+
+
+mixin CarouselItem()
+    li(attributes)
+        block
