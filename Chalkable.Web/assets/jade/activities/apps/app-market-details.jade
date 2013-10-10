@@ -6,8 +6,8 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
     +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels)
     .app-screenshots-panel
         +Carousel()
-            each picture in app.getScreenshotPictures().getItems()
-                +CarouselItem().img
+            each picture, index in app.getScreenshotPictures().getItems()
+                +CarouselItem().img(data-page= index + 1)
                     img(src=picture.getPictureUrl())
 
     .app-price-info
