@@ -252,17 +252,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 tpl.renderTo(container.removeClass('loading'));
                 var gradedCount = this.dom.find('.grade-input[value]').count();
                 this.dom.find('#graded-count').setHTML(gradedCount.toString());
-            },
-
-            //TODO: the same logic as on the feed
-            [ria.mvc.DomEventBind('click', 'a.star')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function starAnnouncement(node, event){
-                if (node.parent().parent().getAttr("class").indexOf("starred") != -1)
-                    node.parent().parent().removeClass("starred");
-                else
-                    node.parent().parent().addClass("starred");
-                return true;
             }
         ]
     );

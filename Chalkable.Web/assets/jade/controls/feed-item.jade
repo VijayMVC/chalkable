@@ -1,8 +1,9 @@
 mixin FeedItem(item)
     itemClasses = []
         -itemClasses.push(item.getOwnerAttachmentsCount() > 0 || item.getApplicationsCount() > 0 ? 'has-attachments' : 'no-attachments')
-        -itemClasses.push(item.isStarred() ? 'starred' : 'unstarred')
         -itemClasses.push(item.isShowGradingIcon() ? 'is-gradable' : 'non-gradable')
+        if item.isStarred()
+            -itemClasses.push('starred')
         if item.getApplicationsCount() > 0
             -itemClasses.push('app-icon')
         -itemClasses.push(item.getOwnerAttachmentsCount() == 0 ? 'no-attachment-icon' : 'has-attachments-icon')
