@@ -264,6 +264,16 @@ DIV.page {
 
                 .user-reviews{
                   margin-top: 17px;
+
+                  .app-rating{
+                    .personcount{
+                      display: inline-block;
+                      float: right;
+                      margin-left: 15px;
+                      vertical-align: middle;
+                      margin-top: 3px;
+                    }
+                  }
                 }
               }
 
