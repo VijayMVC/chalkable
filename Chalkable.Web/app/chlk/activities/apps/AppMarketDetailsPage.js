@@ -41,6 +41,15 @@ NAMESPACE('chlk.activities.apps', function () {
                     return;
                 this.dom.find('#submit-review-form').trigger('submit');
                 //todo: disable button and submit form
+            },
+
+            [ria.mvc.DomEventBind('click', '.review-link')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function toggleRoleReviews(node, event){
+                 this.dom.find('.rating-roles').toggleClass('x-hidden');
             }
+
+
+
         ]);
 });

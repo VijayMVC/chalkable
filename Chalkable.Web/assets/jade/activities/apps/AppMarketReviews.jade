@@ -25,7 +25,7 @@ a.write-review-btn Write a review
             .rating-role-item
                 role = item.getRole()
                 .rolename=role.getName()
-                .app-raiting
+                .app-rating
                     +Rating('role-' + role.getName(), item.getRating())
                     .personcount=item.getPersonCount()
     .rating-persons
