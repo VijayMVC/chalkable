@@ -7,6 +7,7 @@ NAMESPACE('chlk.activities.notification', function(){
     /**@class chlk.activities.notification.NotificationsByDayListPage*/
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
+        [chlk.activities.lib.PageClass('notifications')],
         [ria.mvc.TemplateBind(chlk.templates.notification.NotificationsByDateTpl)],
         'NotificationsByDayListPage', EXTENDS(chlk.activities.lib.TemplatePage),[
 

@@ -22,6 +22,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public bool IsOwner { get; set; }
         public DateTime? ExpiresDate { get; set; }
         public int Order { get; set; }
+        public string Subject { get; set; }
 
         protected AnnouncementShortViewData(AnnouncementComplex announcement)
         {
@@ -39,6 +40,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             ExpiresDate = announcement.Expires;
             Order = announcement.Order;
             IsOwner = announcement.IsOwner;
+            Subject = announcement.Subject;
         }
 
         public static AnnouncementShortViewData Create(AnnouncementComplex announcement)
@@ -64,7 +66,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         {
             Avg = announcement.Avg;
             MappedAvg = mapper.Map(announcement.GradingStyle, announcement.Avg);
-            GradedStudentCount = announcement.GradingsStudentsCount;
+            GradedStudentCount = announcement.GradingStudentsCount;
         }
         public static AnnouncementShortGradeViewData Create(AnnouncementComplex announcement, IGradingStyleMapper mapper, int? studentGrade = null)
         {

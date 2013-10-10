@@ -12,6 +12,13 @@ NAMESPACE('chlk.activities.lib', function () {
         bottom: 'popup-bottom'
     };
 
+
+    /** @class chlk.activities.lib.PopupClass */
+    ANNOTATION(
+        [[String]],
+        function PopupClass(clazz) {});
+
+
     /** @class chlk.activities.lib.IsHorizontalAxis */
     ANNOTATION(
         [[Boolean]],
@@ -52,6 +59,11 @@ NAMESPACE('chlk.activities.lib', function () {
                     throw new ria.mvc.MvcException('There is no chlk.activities.lib.IsHorizontalAxis annotation for Popup activity');
                 }
                 this._isTopLeft = ref.isAnnotatedWith(chlk.activities.lib.isTopLeftPosition) ? ref.findAnnotation(chlk.activities.lib.isTopLeftPosition)[0].isTopLeft : true;
+
+                this._popupClass = null;
+                if(ref.isAnnotatedWith(chlk.activities.lib.PopupClass)){
+                    this._popupClass = ref.findAnnotation(chlk.activities.lib.PopupClass)[0].clazz;
+                }
             },
 
             OVERRIDE, VOID, function onResume_() {
@@ -65,6 +77,7 @@ NAMESPACE('chlk.activities.lib', function () {
                 var target = model.getTarget();
                 var offset = target.offset();
                 this._popupHolder = model.getContainer() || this._popupHolder;
+                this._popupClass && this._popupHolder.addClass(this._popupClass);
                 this._popupHolder.removeClass(HIDDEN_CLASS);
                 if(!target)
                     throw new ria.mvc.MvcException('There is no target for Popup activity');
@@ -95,6 +108,7 @@ NAMESPACE('chlk.activities.lib', function () {
             OVERRIDE, VOID, function onPause_() {
                 this._popupHolder.addClass(HIDDEN_CLASS);
                 this._popupHolder.removeClass(this.getCurrentClass());
+                this._popupClass && this._popupHolder.removeClass(this._popupClass);
                 this._body.off('click.body', this._clickMeHandler);
                 BASE();
             }

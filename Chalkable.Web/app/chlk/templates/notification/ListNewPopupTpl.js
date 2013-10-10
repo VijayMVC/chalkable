@@ -11,7 +11,18 @@ NAMESPACE('chlk.templates.notification', function () {
         [ria.templates.ModelBind(chlk.models.notification.NotificationList)],
         'ListNewPopupTpl', EXTENDS(chlk.templates.Popup), [
 
+            function $(){
+                BASE();
+                this._converter = new chlk.converters.notification.NotificationTypeToStyleNameConverter();
+            },
+
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.PaginatedList, 'notifications'
+            chlk.models.common.PaginatedList, 'notifications',
+
+            [[chlk.models.notification.Notification]],
+            String, function convertNotificationTypeToStyleName(notification){
+                return this._converter.convert(notification.getType());
+            }
+
         ])
 });

@@ -1,3 +1,36 @@
+.notifications{
+  .question-notification{
+    &.small-icon{
+      background-image: url(images/feed/qa.png) !important;
+    }
+  }
+
+  .message-notification{
+    &.small-icon{
+      background-image: url(images/feed/pm.png) !important;
+    }
+  }
+
+  .item-to-grade-notification, .marking-period-ending-notification, .no-take-attendance-notification{
+    &.small-icon{
+      background-image: url(images/feed/grading.png) !important;
+    }
+  }
+
+  .app-budget-notification, .application-notification{
+    .small-icon{
+      background-image: url(images/feed/apps.png) !important;
+    }
+  }
+
+  .attendance-notification {
+    &.small-icon{
+      background-image: url(images/feed/attendance.png) !important;
+    }
+  }
+}
+
+
 BODY {
   DIV.page{
     >DIV#content {
@@ -42,29 +75,6 @@ BODY {
                     @include border-radius(0px 0 5px 5px);
                   }
 
-                  &.question-notification .content{
-                    background-image: url(images/feed/qa.png);
-                  }
-
-                  &.message-notification .content{
-                    background-image: url(images/feed/pm.png);
-                  }
-
-                  &.item-to-grade-notification, &.marking-period-ending-notification, &.no-take-attendance-notification{
-                    .content{
-                      background-image: url(images/feed/grading.png);
-                    }
-                  }
-
-                  &.app-budget-notification, &.application-notification{
-                    .content{
-                      background-image: url(images/feed/apps.png);
-                    }
-                  }
-
-                  &.attendance-notification .content{
-                    background-image: url(images/feed/attendance.png);
-                  }
 
                   .content{
                     background: url(images/icons/time.png) 0 2px no-repeat;

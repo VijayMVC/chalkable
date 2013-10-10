@@ -13,9 +13,11 @@ mixin AppIconLink(app)
     +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels)
     .app-screenshots-panel
         +Carousel()
-            each picture in self.getFirstApp().getScreenshotPictures().getItems()
-                +CarouselItem().img
-                    img(src=picture.getPictureUrl())
+            each picture, index in self.getFirstApp().getScreenshotPictures().getItems()
+                +CarouselItem().img(data-page= index + 1)
+                    +ActionLink('appmarket', 'details', [])(title=picture.getTitle())
+                        img(src=picture.getPictureUrl())
+
     +ActionForm('appmarket', 'list')#app-market-filter
         .app-filter
             .subject

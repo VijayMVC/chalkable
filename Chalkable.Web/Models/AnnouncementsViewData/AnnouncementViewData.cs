@@ -22,7 +22,6 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public Guid? RecipientId { get; set; }
         public string Content { get; set; }
         public string ShortContent { get; set; }
-        public string Subject { get; set; }
         
         public int? Grade { get; set; }
         public Guid? StudentAnnouncementId { get; set; }
@@ -63,7 +62,6 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             Title = announcement.Title;
             RecipientId = announcement.ClassId;
             Content = announcement.Content;
-            Subject = announcement.Subject;
 
             var content = announcement.Content ?? "";
             ShortContent = StringTools.BuildShortText(content, SHORT_LENGHT);
@@ -72,7 +70,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             StudentsCount = announcement.StudentsCount;
             StudentsCountWithAttachments = announcement.StudentsCountWithAttachments;
             StudentsCountWithoutAttachments = StudentsCount - StudentsCountWithAttachments;
-            GradingStudentsCount = announcement.GradingsStudentsCount;
+            GradingStudentsCount = announcement.GradingStudentsCount;
             NonGradingStudentsCount = StudentsCount - GradingStudentsCount;
             ApplicationsCount = announcement.ApplicationCount;
             WasAnnouncementTypeGraded = wasAnnouncementTypeGraded;

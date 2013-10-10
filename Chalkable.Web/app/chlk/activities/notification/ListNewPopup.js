@@ -6,6 +6,7 @@ NAMESPACE('chlk.activities.notification', function () {
     /** @class chlk.activities.notification.ListNewPopup*/
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-pop-up-container')],
+        [chlk.activities.lib.PopupClass('notifications')],
         [chlk.activities.lib.IsHorizontalAxis(false)],
         [chlk.activities.lib.isTopLeftPosition(false)],
         [ria.mvc.ActivityGroup('ListNewPopup')],

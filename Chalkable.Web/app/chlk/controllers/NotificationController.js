@@ -44,7 +44,8 @@ NAMESPACE('chlk.controllers', function (){
 
             [[Object]],
             Boolean, function isPushed_(activityCls){
-                return this.getView().getCurrent().getClass() == activityCls;
+                var currentActivity = this.getView().getCurrent();
+                return currentActivity && currentActivity.getClass() == activityCls;
             }
         ])
 });

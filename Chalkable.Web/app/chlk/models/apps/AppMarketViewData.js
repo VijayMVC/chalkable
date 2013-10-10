@@ -9,7 +9,7 @@ NAMESPACE('chlk.models.apps', function () {
     /** @class chlk.models.apps.AppMarketViewData*/
     CLASS(
         'AppMarketViewData', EXTENDS(chlk.models.apps.AppMarketBaseViewData), [
-            chlk.models.apps.AppMarketApplication, 'firstApp',
+            chlk.models.apps.AppMarketApplication, 'firstApp',   //todo: replace with model
             chlk.models.common.PaginatedList, 'apps',
             [[
                 chlk.models.common.PaginatedList,
@@ -29,6 +29,7 @@ NAMESPACE('chlk.models.apps', function () {
                     items.forEach(function(item){
                         var itemScreenshots = item.getScreenshotPictures().getItems() || [];
                         for(var i = 0; i < itemScreenshots.length; ++i){
+                            itemScreenshots[i].setTitle(item.getName());
                             screenshotPictures.push(itemScreenshots[i]);
                         }
                     })

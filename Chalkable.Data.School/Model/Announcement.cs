@@ -48,7 +48,7 @@ namespace Chalkable.Data.School.Model
         public int AttachmentsCount { get; set; }
         public int OwnerAttachmentsCount { get; set; }
         public int StudentsCountWithAttachments { get; set; }
-        public int GradingsStudentsCount { get; set; }
+        public int GradingStudentsCount { get; set; }
         public int? Avg { get; set; }
         public int ApplicationCount { get; set; }
 

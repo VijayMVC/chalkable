@@ -1,16 +1,4 @@
-mixin Rating(elemId, value, isEditable)
-    fieldset.rating(class = isEditable ? "editable" : undefined)(attributes)
-        items = [5, 4, 3, 2, 1]
-        each item in items
-            input(
-                type = "radio",
-                id = "#{elemId + item}",
-                value = item,
-                name = elemId,
-                disabled = !isEditable ? "disabled" : undefined,
-                checked = value == item ? "checked" : undefined
-                )
-            label(for="#{elemId + item}")
+
 
 
 
@@ -33,14 +21,16 @@ a.write-review-btn Write a review
             span.cancel-btn Cancel
 .user-reviews
     .rating-roles.x-hidden
-        each role in appRating.getRoleRatings()
+        each item in appRating.getRoleRatings()
             .rating-role-item
-                .rolename=role.getRoleName()
+                role = item.getRole()
+                .rolename=role.getName()
                 .app-raiting
-                    +Rating('role-' + role.getRoleName(), role.getRating())
-                    .personcount=role.getPersonCount()
+                    +Rating('role-' + role.getName(), item.getRating())
+                    .personcount=item.getPersonCount()
     .rating-persons
-        each person in appRating.getPersonRatings()
+        each item in appRating.getPersonRatings()
             .rating-person-item
-                p=person.getReview() + ' - ' + person.getRoleName()
-                    +Rating('person-rating-' + person.getSchoolPersonId.valueOf(), person.getRating())
+                person = item.getPerson()
+                p=item.getReview() + ' - ' + person.getFullName()
+                    +Rating('person-rating-' + person.getId().valueOf(), item.getRating())

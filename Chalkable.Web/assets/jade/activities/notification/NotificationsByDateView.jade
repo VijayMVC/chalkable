@@ -12,6 +12,6 @@
                             h2= self.getItemTitle(item)
                             .day-notifications-container
                                 each notification in item.getNotifications()
-                                    div(class=self.convertNotificationTypeToClassName(notification)).notification-item
-                                        .content!=notification.getMessage()
-                                            .time=self.convertToTime(notification.getCreated())
+                                    .notification-item
+                                        div(class=self.convertNotificationTypeToClassName(notification)).small-icon.content!=notification.getMessage()
+                                            .time=notification.getCreatedTime()
