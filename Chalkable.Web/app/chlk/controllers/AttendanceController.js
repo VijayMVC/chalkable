@@ -18,6 +18,8 @@ REQUIRE('chlk.models.common.ChlkDate');
 
 NAMESPACE('chlk.controllers', function (){
 
+    var studentAttendanceTimeout, canUpdateStudentAttendance = true, currentStudentId;
+
     /** @class chlk.controllers.AttendanceController */
     CLASS(
         'AttendanceController', EXTENDS(chlk.controllers.BaseController), [
@@ -211,8 +213,16 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.attendance.ClassAttendance]],
         function setAttendanceAction(model){
-            var activityClass = this.getView().getCurrent().getClass();
-            return this.UpdateView(activityClass, this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
+            if(canUpdateStudentAttendance || currentStudentId != model.getClassPersonId()){
+                currentStudentId = model.getClassPersonId();
+                canUpdateStudentAttendance = false;
+                studentAttendanceTimeout = setTimeout(function(){
+                    canUpdateStudentAttendance = true;
+                },5);
+                var activityClass = this.getView().getCurrent().getClass();
+                return this.UpdateView(activityClass, this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
+            }
+            return null;
         },
 
         ria.async.Future, function setAttendance_(model){

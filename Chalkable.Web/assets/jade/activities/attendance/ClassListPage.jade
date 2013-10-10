@@ -3,7 +3,7 @@
     topItems = topData.getTopItems()
     selectedId = topData.getSelectedItemId()
     valuesEnum = chlk.models.attendance.AttendanceTypeEnum
-    additionalParams = self.getAdditionalParams
+    additionalParams = self.getAdditionalParams()
     if(self.hasLeftRightToolBar())
         +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'classList')(
             selectedItemId=selectedId ? selectedId.valueOf() : ""
