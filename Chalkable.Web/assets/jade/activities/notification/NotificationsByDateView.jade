@@ -1,0 +1,17 @@
+.notifications-by-date-view
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('feed', 'list').back-btn
+    .grid-container.not-transparent
+        +Grid('notification', 'listByDays', self.getModel())
+            +GridBody()
+                each item in self.getItems()
+                    +GridRow()
+                        .notification-day-item
+                            h2= self.getItemTitle(item)
+                            .day-notifications-container
+                                each notification in item.getNotifications()
+                                    div(class=self.convertNotificationTypeToClassName(notification)).notification-item
+                                        .content!=notification.getMessage()
+                                            .time=self.convertToTime(notification.getCreated())
