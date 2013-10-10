@@ -1,4 +1,6 @@
 REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.people.ShortUserInfo');
+REQUIRE('chlk.models.people.Role');
 
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
@@ -9,23 +11,9 @@ NAMESPACE('chlk.models.apps', function () {
     /** @class chlk.models.apps.PersonRating*/
     CLASS(
         'PersonRating', [
-            [ria.serialize.SerializeProperty('firstname')],
-            String, 'firstName',
-
-            [ria.serialize.SerializeProperty('lastname')],
-            String, 'lastName',
-
+            chlk.models.people.ShortUserInfo, 'person',
             Number, 'rating',
-            String, 'review',
-
-            [ria.serialize.SerializeProperty('roleid')],
-            Number, 'roleId',
-
-            [ria.serialize.SerializeProperty('rolename')],
-            String, 'roleName',
-
-            [ria.serialize.SerializeProperty('schoolpersonid')],
-            chlk.models.id.SchoolPersonId, 'schoolPersonId'
+            String, 'review'
     ]);
 
     /** @class chlk.models.apps.RoleRating*/
@@ -38,11 +26,9 @@ NAMESPACE('chlk.models.apps', function () {
             [ria.serialize.SerializeProperty('personcount')],
             Number, 'personCount',
 
-            [ria.serialize.SerializeProperty('roleid')],
-            Number, 'roleId',
+            chlk.models.people.Role, 'role'
 
-            [ria.serialize.SerializeProperty('rolename')],
-            String, 'roleName'
+
     ]);
 
 
@@ -56,7 +42,7 @@ NAMESPACE('chlk.models.apps', function () {
             [ria.serialize.SerializeProperty('ratingbyperson')],
             ArrayOf(chlk.models.apps.PersonRating), 'personRatings',
 
-            [ria.serialize.SerializeProperty('ratingbyrole')],
+            [ria.serialize.SerializeProperty('ratingbyroles')],
             ArrayOf(chlk.models.apps.RoleRating), 'roleRatings'
         ]);
 });

@@ -52,7 +52,7 @@
         background: url(images/app/photo-right.png) 0 0 no-repeat;
       }
 
-      &:hover{
+      &:hover:not(:disabled){
         opacity: 0.85;
       }
 
