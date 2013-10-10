@@ -70,7 +70,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             StudentsCount = announcement.StudentsCount;
             StudentsCountWithAttachments = announcement.StudentsCountWithAttachments;
             StudentsCountWithoutAttachments = StudentsCount - StudentsCountWithAttachments;
-            GradingStudentsCount = announcement.GradingsStudentsCount;
+            GradingStudentsCount = announcement.GradingStudentsCount;
             NonGradingStudentsCount = StudentsCount - GradingStudentsCount;
             ApplicationsCount = announcement.ApplicationCount;
             WasAnnouncementTypeGraded = wasAnnouncementTypeGraded;

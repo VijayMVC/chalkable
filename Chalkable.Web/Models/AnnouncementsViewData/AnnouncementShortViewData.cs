@@ -66,7 +66,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         {
             Avg = announcement.Avg;
             MappedAvg = mapper.Map(announcement.GradingStyle, announcement.Avg);
-            GradedStudentCount = announcement.GradingsStudentsCount;
+            GradedStudentCount = announcement.GradingStudentsCount;
         }
         public static AnnouncementShortGradeViewData Create(AnnouncementComplex announcement, IGradingStyleMapper mapper, int? studentGrade = null)
         {
