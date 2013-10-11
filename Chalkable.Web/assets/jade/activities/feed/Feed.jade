@@ -1,0 +1,18 @@
+.feed-container
+    topData = self.getTopData();
+    topItems = topData.getTopItems();
+    selectedId = topData.getSelectedItemId();
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'feed', 'list', [true, self.starredOnly])(
+        selectedItemId=selectedId
+        ).classes-bar
+    .action-bar.not-transparent
+        .container.panel-bg
+            .i-b
+                +ActionLink('feed', 'list', true, !self.starredOnly, selectedId, 0)(class=self.starredOnly ? 'pr' : 'unpr')
+                    span#importan-count= self.importantCount
+            .feed-notifications Notifications
+                +ActionLink('notification', 'listNew')
+    +Grid('feed', 'list', self, [true, self.starredOnly, selectedId]).not-transparent
+        +GridBody()
+            each item in self.items
+                +FeedItem(item)
