@@ -150,5 +150,34 @@ namespace Chalkable.Tests.Services.School
             
         }
 
+        [Test]
+        public void NotAssignedAttendanceProcessTest()
+        {
+            var adminLocator = SchoolTestContext.AdminGradeSl;
+            var nowDate = adminLocator.Context.NowSchoolTime;
+            var startSyDate = nowDate.Date.AddDays(-7);
+            var mp = MarkingPeriodServiceTest.CreateSchoolYearWithMp(SchoolTestContext, startSyDate, true);
+            var time = (nowDate.Date - nowDate).Minutes;
+            var cDate = adminLocator.CalendarDateService.GetCalendarDateByDate(nowDate.Date);
+            var period = adminLocator.PeriodService.Add(mp.Id, time - 25, time + 25, cDate.ScheduleSectionRef.Value, 1);
+            var c = ClassServiceTest.CreateClass(SchoolTestContext, SchoolTestContext.FirstTeacher
+                                                 , SchoolTestContext.FirstStudent, SchoolTestContext.SecondStudent
+                                                 , "math", mp.SchoolYearRef);
+            var room = adminLocator.RoomService.AddRoom("1", "first room ", "45x45", null, "000000");
+            var classPeriod = adminLocator.ClassPeriodService.Add(period.Id, c.Id, room.Id);
+            
+            AssertForDeny(sl=>sl.AttendanceService.NotAssignedAttendanceProcess(), SchoolTestContext, SchoolContextRoles.AdminEditor
+                | SchoolContextRoles.AdminViewer | SchoolContextRoles.FirstTeacher | SchoolContextRoles.SecondTeacher
+                | SchoolContextRoles.FirstStudent | SchoolContextRoles.SecondStudent | SchoolContextRoles.Developer
+                | SchoolContextRoles.FirstParent);
+
+            adminLocator.AttendanceService.NotAssignedAttendanceProcess();
+            var notifications = SchoolTestContext.FirstTeacherSl.NotificationService.GetNotifications(0, int.MaxValue);
+            Assert.AreEqual(notifications.Count, 1);
+            Assert.AreEqual(notifications[0].Type, NotificationType.NoTakeAttendance);
+            Assert.AreEqual(notifications[0].ClassPeriodRef, classPeriod.Id);
+            Assert.AreEqual(notifications[0].PersonRef, SchoolTestContext.FirstTeacher.Id);
+            
+        }
     }
 }

@@ -182,11 +182,36 @@ overflow-hidden{
   word-spacing: 5px;
   text-shadow: 1px -1px 0 white;
 
+  &.left-arrow{
+    padding-left: 45px !important;
+    background: url(images/arrows/blue-left-arrow.png) left center no-repeat;
+    top: -6px;
+    margin-left: 30px;
+  }
+  &.bottom-arrow{
+    padding-bottom: 58px !important;
+    background: url(images/arrows/blue-bottom-arrow.png) 50px bottom no-repeat;
+    top: -42px;
+    margin-left: 30px;
+  }
+
+  &.right-arrow{
+    padding-right: 52px !important;
+    background: url(images/arrows/blue-right-arrow.png) right center no-repeat;
+    margin-right: 30px;
+  }
+
   &.right-up-arrow {
     padding: 9px 59px 0 0;
     background: url(images/arrows/blue-right-up-arrow.png) right top no-repeat;
     margin-right: 41px;
     min-height: 26px;
+  }
+
+  &.left-up-arrow{
+    padding: 9px 0 0 59px !important;
+	background: url(images/arrows/blue-left-up-arrow.png) left top no-repeat;
+	min-height: 26px;
   }
 
   &.div {
@@ -196,6 +221,12 @@ overflow-hidden{
     font-size: 30px;
     word-spacing: 9px;
     letter-spacing: 2px;
+  }
+
+  &.gray{
+    color: #7D7D7D !important;
+    text-decoration: underline;
+    font-size: 23px !important;
   }
 }
 
@@ -467,6 +498,10 @@ BODY {
       }
     }
   }
+}
+
+:focus {
+  outline: none;
 }
 
 @import "partials/_sidebar";

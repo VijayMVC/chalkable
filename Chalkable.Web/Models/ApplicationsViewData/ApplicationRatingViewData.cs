@@ -31,18 +31,6 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             res.Avg = res.RatingByPerson.Count != 0 ? res.RatingByPerson.Average(x => x.Rating) : 0;
             return res;
         }
-
-        //public static ApplicationRatingViewData Create(IDictionary<CoreRole, IList<ApplicationRating>> ratingsbyrole, IList<ApplicationRating> ratings, IList<CoreRole> roles)
-        //{
-        //    var res = new ApplicationRatingViewData
-        //    {
-        //        RatingByPerson = ApplicationRatingByPersonViewData.Create(ratings),
-        //        RatingByRoles = ApplicationRatingByRoleViewData.Create(ratingsbyrole, roles)
-        //    };
-        //    res.Avg = res.RatingByPerson.Count != 0 ? res.RatingByPerson.Average(x => x.Rating) : 0;
-        //    return res;
-        //}
-
     }
 
 
@@ -96,27 +84,6 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             }
             return res;
         }
-
-        //public static IList<ApplicationRatingByRoleViewData> Create(IDictionary<int, IList<ApplicationRating>> ratingbyrole, IList<CoreRole> roles)
-        //{
-        //    var res = new List<ApplicationRatingByRoleViewData>();
-        //    foreach (var role in roles)
-        //    {
-        //        if (ratingbyrole.ContainsKey(role.Id))
-        //        {
-        //            var ratings = ratingbyrole[role.Id];
-        //            res.Add(new ApplicationRatingByRoleViewData
-        //            {
-        //                RoleId = role.Id,
-        //                RoleName = role.Name,
-        //                PersonCount = ratings.Count,
-        //                AvgRating = ratings.Average(x => x.Rating)
-        //            });
-        //        }
-        //    }
-        //    return res;
-        //}
-
 
         private static double CallsAvgRating(IList<int> ratings)
         {

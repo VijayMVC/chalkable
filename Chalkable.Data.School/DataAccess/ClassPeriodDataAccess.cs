@@ -108,17 +108,6 @@ namespace Chalkable.Data.School.DataAccess
             return ReadMany<ClassPeriod>(res, true);
         } 
 
-//        public IList<ClassPeriodDetails> GetClassPeriodsDetails(ClassPeriodQuery query)
-//        {
-//            var b = new StringBuilder();
-//            var types = new List<Type> { typeof(ClassPeriod), typeof(Period), typeof(Room)};
-//            b.AppendFormat(@"select {0} from ClassPeriod 
-//                             join Period on Period.Id = ClassPeriod.PeriodRef
-//                             join Room on Room.Id = ClassPeriod.RoomRef"
-//                           , Orm.ComplexResultSetQuery(types));
-//            return ReadMany<ClassPeriodDetails>(BuildGetClassPeriodsConditions(b, query),true);
-//        }
-
         public DbQuery BuildGetClassPeriodsQuery(ClassPeriodQuery query)
         {
             var b = new StringBuilder();

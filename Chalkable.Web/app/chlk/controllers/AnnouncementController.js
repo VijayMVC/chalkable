@@ -469,11 +469,11 @@ NAMESPACE('chlk.controllers', function (){
                                 && session.get('finalizedClassesIds').indexOf(classId.valueOf()) > -1){
                                     var nextMp = model.setMarkingPeriodId(session.get('nextMarkingPeriod'));
                                     if(nextMp){
-                                        this.submitAnnouncement(model);
+                                        this.submitAnnouncement(model, submitType == 'submitOnEdit');
                                         return this.ShadeLoader();
                                     }
                             }else{
-                                this.submitAnnouncement(model);
+                                this.submitAnnouncement(model, submitType == 'submitOnEdit');
                                 return this.ShadeLoader();
                             }
                         }
@@ -509,8 +509,8 @@ NAMESPACE('chlk.controllers', function (){
                 );
         },
 
-        [[chlk.models.announcement.Announcement]],
-        function submitAnnouncement(model){
+        [[chlk.models.announcement.Announcement, Boolean]],
+        function submitAnnouncement(model, isEdit){
             var res;
             if(this.userIsAdmin())
                 res = this.announcementService.submitAdminAnnouncement(
@@ -534,7 +534,10 @@ NAMESPACE('chlk.controllers', function (){
                     model.getMarkingPeriodId()
                 );
             res.then(function(){
-                this.redirect_('feed', 'list', []);
+                if(isEdit)
+                    this.redirect_('announcement', 'view', [model.getId()]);
+                else
+                    this.redirect_('feed', 'list', []);
             }.bind(this));
         },
 

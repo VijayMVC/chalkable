@@ -213,6 +213,9 @@ NAMESPACE('ria.mvc', function () {
                 var params = state.getParams().slice();
                 params.unshift(state.getAction());
                 params.unshift(state.getController());
+                params = params.map(function(item){
+                    return item.valueOf().toString();
+                });
                 var href = '#' + params.join('/');
                 if(href != window.location.hash)
                     history.pushState(null, null, href);

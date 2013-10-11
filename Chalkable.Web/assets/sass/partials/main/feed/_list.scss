@@ -13,6 +13,16 @@ $star-size: 18px;
 }
 
 .feed-container{
+  position: relative;
+
+  #feed-arrow{
+    left: 150px;
+  }
+
+  #no-items{
+    margin-top: 150px;
+  }
+
   .container{
     .feed-notifications {
       background: url(images/icons/new-notifications.png) 0% 50% no-repeat;

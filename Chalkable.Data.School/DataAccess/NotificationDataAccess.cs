@@ -15,25 +15,29 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        private AndQueryCondition BuildConditions(NotificationQuery query)
+        private AndQueryCondition BuildShortConditions(NotificationQuery query)
         {
-            var res = new AndQueryCondition { { "PersonRef", query.PersonId } };
+            var res = new AndQueryCondition { { Notification.PERSON_REF_FIELD, query.PersonId } };
             if (query.Id.HasValue)
-                res.Add("Id", query.Id);
+                res.Add(Notification.ID_FIELD, query.Id);
             if(query.Shown.HasValue)
-                res.Add("Shown", query.Shown);
+                res.Add(Notification.SHOWN_FIELD, query.Shown);
+            if(query.Type.HasValue)
+                res.Add(Notification.TYPE_FIELD, query.Type);
+            if(query.ClassPeriodRef.HasValue)
+                res.Add(Notification.CLASS_PERIOD_REF_FIELD, query.ClassPeriodRef);
             return res;
         } 
 
         public IList<Notification> GetNotifications(NotificationQuery query)
         {
-            var conds = BuildConditions(query);
+            var conds = BuildShortConditions(query);
             return SelectMany<Notification>(conds);
         }
 
         private DbQuery BuildGetNotificationDetailsDbQuery(NotificationQuery query)
         {
-            var conds = BuildConditions(query);
+            var conds = BuildShortConditions(query);
             //TODO: think how to rewrtite this
             var sql = @"select {0}, 
                                vwPrivateMessage.*,
@@ -140,6 +144,8 @@ namespace Chalkable.Data.School.DataAccess
         public bool? Shown { get; set; }
         public int Start { get; set; }
         public int Count { get; set; }
+        public NotificationType? Type { get; set; }
+        public Guid? ClassPeriodRef { get; set; }
 
         public NotificationQuery()
         {

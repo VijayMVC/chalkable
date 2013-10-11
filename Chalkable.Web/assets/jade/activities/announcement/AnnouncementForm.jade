@@ -19,7 +19,7 @@ classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
                     class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
                     typeId=item.getId(),
                     typeName=item.getName(),
-                    type = announcement.getState() ? "button" : "submit",
+                    type = "submit",
                     name="submitType",
                     value="save"
                     ).action-button= item.getDescription()

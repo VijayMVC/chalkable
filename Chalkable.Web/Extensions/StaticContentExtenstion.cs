@@ -13,7 +13,8 @@ namespace Chalkable.Web.Extensions
 #if DEBUG
             return helper.Content("~" + url);
 #else
-            return CompilerHelper.ScriptsRoot + url;
+            //return CompilerHelper.ScriptsRoot + url;
+            return helper.Content("~" + url);
 #endif
         }
     }

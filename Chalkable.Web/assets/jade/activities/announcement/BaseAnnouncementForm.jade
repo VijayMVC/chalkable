@@ -81,7 +81,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
         +Button()(
         type="submit",
         name="submitType",
-        value="submit"
+        value=announcement.getState() ? "submitOnEdit" : "submit"
         ).special-button.blue-button.submit-btn
             =(announcement.getState() ? Msg.Save : Msg.Submit)
         if announcement.getState()

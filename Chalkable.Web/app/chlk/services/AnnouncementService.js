@@ -169,6 +169,20 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.AnnouncementId]],
+            ria.async.Future, function dropAnnouncement(id) {
+                return this.post('Announcement/DropAnnouncement.json', chlk.models.announcement.Announcement, {
+                    announcementId: id.valueOf()
+                });
+            },
+
+            [[chlk.models.id.AnnouncementId]],
+            ria.async.Future, function unDropAnnouncement(id) {
+                return this.post('Announcement/UndropAnnouncement.json', chlk.models.announcement.Announcement, {
+                    announcementId: id.valueOf()
+                });
+            },
+
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function deleteDrafts(id) {
                 return this.post('Announcement/DeleteDrafts.json', chlk.models.announcement.Announcement, {

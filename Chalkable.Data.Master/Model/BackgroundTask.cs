@@ -96,7 +96,8 @@ namespace Chalkable.Data.Master.Model
         CreateDemoSchool = 5,
         DeleteSchool = 6,
         ProcessReminder = 7,
-        AttendanceNotification = 8
+        AttendanceNotification = 8,
+        TeacherAttendanceNotification = 9
     }
 
     public enum BackgroundTaskStateEnum

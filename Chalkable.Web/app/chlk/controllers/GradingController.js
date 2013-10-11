@@ -3,6 +3,7 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.FinalGradeService');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.GradingService');
+REQUIRE('chlk.services.AnnouncementService');
 
 REQUIRE('chlk.activities.grading.TeacherSettingsPage');
 REQUIRE('chlk.activities.grading.GradingClassSummaryPage');
@@ -18,6 +19,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.ClassService, 'classService',
+
+            [ria.mvc.Inject],
+            chlk.services.AnnouncementService, 'announcementService',
 
             [ria.mvc.Inject],
             chlk.services.GradingService, 'gradingService',
@@ -86,14 +90,14 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.AnnouncementId]],
             function unDropFromPopupAction(announcementId){
-                var result = new ria.async.DeferredData(new chlk.models.announcement.Announcement());
+                var result = this.announcementService.unDropAnnouncement(announcementId);
                 return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
             },
 
 
             [[chlk.models.id.AnnouncementId]],
             function dropFromPopupAction(announcementId){
-                var result = new ria.async.DeferredData(new chlk.models.announcement.Announcement());
+                var result = this.announcementService.dropAnnouncement(announcementId);
                 return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
             },
 
