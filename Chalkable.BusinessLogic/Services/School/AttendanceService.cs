@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -37,6 +38,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IDictionary<int, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerPeriod(DateTime fromDate, DateTime toDate, int fromPeriodOrder, int toPeriodOrder, AttendanceTypeEnum type, IList<Guid> gradeLevelsIds);
         IDictionary<DateTime, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerDate(DateTime fromDate, DateTime toDate, AttendanceTypeEnum type, IList<Guid> gradeLevelsIds);
         void ProcessClassAttendance(DateTime date);
+        void NotAssignedAttendanceProcess();
     }
 
     public class AttendanceService : SchoolServiceBase, IAttendanceService
@@ -355,6 +357,53 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 ServiceLocator.NotificationService.AddAttendanceNotification(toschoolPerson.Id, schoolPersons);
             }
+        }
+
+        public void NotAssignedAttendanceProcess()
+        {
+            if (!BaseSecurity.IsAdminGrader(Context))
+                throw new SecurityException();
+            
+            var currentDateTime = Context.NowSchoolTime;
+            using (var uow = Read())
+            {
+                var mp = new MarkingPeriodDataAccess(uow).GetMarkingPeriod(currentDateTime.Date);
+                if (mp == null) return;
+
+                var time = (currentDateTime - currentDateTime.Date).Minutes;
+                var classPeriods = ServiceLocator.ClassPeriodService.GetClassPeriods(currentDateTime.Date, null, null, null, null, time);
+                if (classPeriods != null && classPeriods.Count > 0)
+                {
+                    var classes = ServiceLocator.ClassService.GetClasses(null, mp.Id, null);
+                    var attendances = ServiceLocator.AttendanceService.GetClassAttendanceDetails(new ClassAttendanceQuery
+                    {
+                        FromDate = currentDateTime.Date,
+                        ToDate = currentDateTime.Date,
+                        FromTime = time,
+                        ToTime = time
+                    });
+                    var notifications = new NotificationDataAccess(uow).GetNotifications(new NotificationQuery
+                    {
+                        Type = NotificationType.NoTakeAttendance,
+                    });
+                    var teacherClassDic = classes.GroupBy(x => x.TeacherRef).ToDictionary(x => x.Key, x => x.ToList());
+                    foreach (var keyValue in teacherClassDic)
+                    {
+                        var cp = classPeriods.FirstOrDefault(x => keyValue.Value.Any(y => y.Id == x.ClassRef));
+                        if (NeedsAttendanceNotification(attendances, cp, notifications))
+                        {
+                            ServiceLocator.NotificationService.AddAttendanceNotificationToTeacher(keyValue.Key, cp, currentDateTime);
+                        }
+                    }
+                }
+            }
+        }
+
+        private bool NeedsAttendanceNotification(IList<ClassAttendanceDetails> attendances, ClassPeriod cp, IList<Notification> notifications)
+        {
+            var res = cp != null && notifications.All(x => x.ClassPeriodRef != cp.Id);
+            attendances = attendances.Where(x => x.ClassPeriodRef == cp.Id).ToList();
+            return res && (attendances.Count > 0 || attendances.All(x => x.Type == AttendanceTypeEnum.NotAssigned));
         }
     }
 }
