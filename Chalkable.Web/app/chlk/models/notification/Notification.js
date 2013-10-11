@@ -70,6 +70,29 @@ NAMESPACE('chlk.models.notification', function () {
                     else return Msg.hours_ago(Math.floor(mins/60));
                 }
                 return date.toString('hh:mm tt');
+            },
+
+            chlk.models.common.ActionLinkModel, function prepareActionModel(){
+                var notificationTypeEnum = chlk.models.notification.NotificationTypeEnum;
+                switch (this.getType()){
+                    //case notificationTypeEnum.SIMPLE: return new actionModelCl('announcement', 'view', [this.getAnnouncementId().valueOf()]);
+                    case notificationTypeEnum.ANNOUNCEMENT: return new this.createActionModel_('announcement', 'view', [this.getAnnouncementId().valueOf()]);
+                    case notificationTypeEnum.MESSAGE: return new this.createActionModel_('message', 'page', [null, true]);
+                    case notificationTypeEnum.QUESTION: return new this.createActionModel_('announcement', 'view', [this.getAnnouncementId().valueOf()]);
+
+                    case notificationTypeEnum.ITEM_TO_GRADE: return new this.createActionModel_('grades', 'view', [this.getAnnouncementId().valueOf()]);
+                    case notificationTypeEnum.APP_BUDGET_BALANCE: return new this.createActionModel_('appmarket', 'list', []);
+                    case notificationTypeEnum.APPLICATION: return new this.createActionModel_('appmarket', 'details', [this.getApplicationId().valueOf()]);
+                    case notificationTypeEnum.NO_TAKE_ATTENDANCE: return new this.createActionModel_('attendance', 'classList', [this.getClassId().valueOf(), this.getCreated()]);
+
+                    default: return this.createActionModel_(null, null, null, true);
+                }
+            },
+
+            [[String, String, Array, Boolean]],
+            chlk.models.common.ActionLinkModel, function createActionModel_(controller, action, params, disabled_){
+                return new chlk.models.common.ActionLinkModel(controller, action, null, false, params, [], disabled_);
             }
+
         ]);
 });

@@ -12,7 +12,6 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public bool HasTeacherMyApps { get; set; }
         public bool HasAdminMyApps { get; set; }
         public bool HasParentMyApps { get; set; }
-        public bool HasMyAppsView { get; set; }
         public bool CanAttach { get; set; }
         public bool ShowInGradeView { get; set; }
      

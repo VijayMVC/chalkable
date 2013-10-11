@@ -13,5 +13,6 @@
                             .day-notifications-container
                                 each notification in item.getNotifications()
                                     .notification-item
+                                        +ActionLinkWithModel(notification.prepareActionModel()).notification-item-action
                                         div(class=self.convertNotificationTypeToClassName(notification)).small-icon.content!=notification.getMessage()
                                             .time=notification.getCreatedTime()
