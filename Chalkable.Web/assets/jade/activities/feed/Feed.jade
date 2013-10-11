@@ -1,4 +1,5 @@
-.feed-container
+noStarred = self.starredOnly && !self.items.length
+div(class = noStarred ? "no-starred" : "").feed-container
     topData = self.getTopData();
     topItems = topData.getTopItems();
     selectedId = topData.getSelectedItemId();
@@ -12,7 +13,11 @@
                     span#importan-count= self.importantCount
             .feed-notifications Notifications
                 +ActionLink('notification', 'listNew')
-    +Grid('feed', 'list', self, [true, self.starredOnly, selectedId]).not-transparent
-        +GridBody()
-            each item in self.items
-                +FeedItem(item)
+    if noStarred
+        label#feed-arrow.blue-arrow.left-up-arrow=Msg.See_more_items
+        label#no-items.blue-arrow.gray.div=Msg.No_items_marked_important
+    else
+        +Grid('feed', 'list', self, [true, self.starredOnly, selectedId]).not-transparent
+            +GridBody()
+                each item in self.items
+                    +FeedItem(item)
