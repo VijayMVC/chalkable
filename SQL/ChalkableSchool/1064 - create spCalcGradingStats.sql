@@ -1,4 +1,4 @@
-ALTER function [dbo].[fnCaclStudentAvgByAnnType] (@studentId uniqueidentifier, @markingPeriodClassId uniqueidentifier, @annTypeId int, @date datetime2)
+alter function [dbo].[fnCaclStudentAvgByAnnType] (@studentId uniqueidentifier, @markingPeriodClassId uniqueidentifier, @annTypeId int, @date datetime2)
 returns int
 as
 begin
@@ -18,7 +18,7 @@ begin
 	return (@avg)
 end
 GO
-alter procedure [dbo].[spCalcGradingStats] @callerId uniqueidentifier, @roleId int, @studentId uniqueidentifier, @markingPeriodId uniqueidentifier
+Create procedure [dbo].[spCalcGradingStats] @callerId uniqueidentifier, @roleId int, @studentId uniqueidentifier, @markingPeriodId uniqueidentifier
 as
 -- calc avg per class 
 declare @classPerson table

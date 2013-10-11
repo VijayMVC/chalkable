@@ -4,12 +4,13 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BackgroundTaskProducer.Producers
 {
-    public class AttendanceNotificationProducer : BaseProducer
+    public class AllSchoolsProducer : BaseProducer
     {
-        private const string CONFIG_SECTION_NAME = "AttendanceNotificationProducer";
-        public AttendanceNotificationProducer()
-            : base(CONFIG_SECTION_NAME)
+        private BackgroundTaskTypeEnum type;
+        public AllSchoolsProducer(string configSectionName, BackgroundTaskTypeEnum type)
+            : base(configSectionName)
         {
+            this.type = type;
         }
 
         protected override void ProduceInternal(DateTime currentTimeUtc)
@@ -18,7 +19,7 @@ namespace Chalkable.BackgroundTaskProducer.Producers
             var schools = sl.SchoolService.GetSchools(false, false);
             foreach (var school in schools)
             {
-                sl.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.AttendanceNotification, currentTimeUtc, school.Id, string.Empty);
+                sl.BackgroundTaskService.ScheduleTask(type, currentTimeUtc, school.Id, string.Empty);
             }
         }
     }

@@ -99,7 +99,29 @@ namespace Chalkable.Tests
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1059 - create spCaclStuedntClassGradeStatsPerDate.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1060 - Added PK to application install action grade level table.sql"));
             ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1061 - fix vwFinalGradeAnnouncementType.sql"));
-            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1062 - fix in spGetPersonsForApplicationInstallCount.sql"));             
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1062 - fix in spGetPersonsForApplicationInstallCount.sql"));
+
+
+
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1063 - fix in spUpdateAnnouncementRecipientData.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1064 - create spCalcGradingStats.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1065 - added LastModifiedDate to AnnouncementRecipientData.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1066 - create fnGetStudentAbsentFromDay.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1067 - create fnGetStudentAbsentFromPeriod.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1068 - update view class - fixed chalkable department ref field.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1069 - update get classes sp - fixed chalkable department ref field.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1070 - alter procedure spSetClassAttendance.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1070 - Fixed deleting announcement.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1071 - Fix class filter search.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1072 - alter spGetStudentCountToAppInstallByClass.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1073 - fixed spUpdateAnnouncementRecipientData.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1074 - fixed spApplyStarringForTeacher.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1075 - fixed spApplyStarringAnnouncementForStudent.sql"));
+
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1076 - Questions sorting fix.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1077 - fixed spGetAnnouncementDetails.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1078 - added caller role param to get announcement details.sql"));
+            ExecuteFile(schoolDbConnectionString, Path.Combine(schoolSqlRoot, "1079 - fixed create announcement procedure.sql"));             
  
         }
 
@@ -138,8 +160,10 @@ namespace Chalkable.Tests
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1018 - Added Completed column to bg task.sql"));
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1019 - rename column in ApplicationRating.sql"));
             ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1020 - alter columns  in Fund.sql"));
-            
 
+            ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1021 - increase Data column size in background task table.sql"));
+            ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1022 - create multiple primary key  in ApplicationPicture.sql"));
+            
             RunCreateSchoolScripts(chalkableSchoolTemplateConnection);
         }
     }
