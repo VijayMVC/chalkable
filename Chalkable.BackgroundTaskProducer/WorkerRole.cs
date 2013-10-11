@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using Chalkable.BackgroundTaskProducer.Producers;
+using Chalkable.Data.Master.Model;
 using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace Chalkable.BackgroundTaskProducer
@@ -16,8 +17,10 @@ namespace Chalkable.BackgroundTaskProducer
             cp.AddProducer("Empty school producer", new EmptySchoolTaskProducer());
             cp.AddProducer("Demo school producer", new CreateDemoSchoolTaskProducer());
             cp.AddProducer("Demo school delete producer", new DemoSchoolDeleteTaskProducer());
-            cp.AddProducer("Process Reminders Producer", new ProcessReminderProducer());
-            cp.AddProducer("Attendance Notification Producer", new AttendanceNotificationProducer());
+
+            cp.AddProducer("Process Reminders Producer", new AllSchoolsProducer("ProcessReminderProducer", BackgroundTaskTypeEnum.ProcessReminder));
+            cp.AddProducer("Attendance Notification Producer", new AllSchoolsProducer("AttendanceNotificationProducer", BackgroundTaskTypeEnum.AttendanceNotification));
+            cp.AddProducer("Teacher Attendance Notification Producer", new AllSchoolsProducer("TeacherAttendanceNotification", BackgroundTaskTypeEnum.TeacherAttendanceNotification));
             
             while (true)
             {

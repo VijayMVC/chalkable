@@ -22,6 +22,7 @@ namespace Chalkable.BackgroundTaskProcessor
             handlers.Add(BackgroundTaskTypeEnum.DeleteSchool, new DeleteSchoolTaskHandler());
             handlers.Add(BackgroundTaskTypeEnum.ProcessReminder, new ProcessRemindersTaskHandler());
             handlers.Add(BackgroundTaskTypeEnum.AttendanceNotification, new AttendanceNotificationTaskHandler());
+            handlers.Add(BackgroundTaskTypeEnum.TeacherAttendanceNotification, new TeacherAttendanceNotificationTaskHandler());
         }
 
         public void Process()
