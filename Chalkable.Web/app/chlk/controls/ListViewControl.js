@@ -54,8 +54,11 @@ NAMESPACE('chlk.controls', function () {
                         if(!this.getGrid()){
                             var grid = new ria.dom.Dom('.chlk-grid');
                             this.setGrid(grid);
-                            if((this.getCurrentIndex() || this.getCurrentIndex() == 0)&& !new ria.dom.Dom(':focus').exists())
+
+                            if((this.getCurrentIndex() || this.getCurrentIndex() == 0)
+                                && !new ria.dom.Dom(':focus').exists())
                                 this.focusGrid();
+
                             if(configs.selectedIndex || configs.selectedIndex == 0){
                                 var selectedRow = grid.find('.row:eq(' + configs.selectedIndex  + ')');
                                 grid.trigger(chlk.controls.GridEvents.SELECT_ROW.valueOf(), [selectedRow, parseInt(configs.selectedIndex, 10) || 0]);
@@ -75,6 +78,7 @@ NAMESPACE('chlk.controls', function () {
                     var selectedRow = node.find('.row.selected');
                     if(selectedRow.exists() && !row.is('.selected'))
                         node.trigger(chlk.controls.GridEvents.DESELECT_ROW.valueOf(), [selectedRow, parseInt(selectedRow.getAttr('index'), 10)]);
+
                     row.addClass(selectedRowClass);
                     this.setCurrentIndex(index || parseInt(row.getAttr('index'), 10));
                     this.scrollToElement();
@@ -112,10 +116,16 @@ NAMESPACE('chlk.controls', function () {
             [[ria.dom.Dom]],
             VOID, function addInfiniteScroll(grid) {
                 grid.addClass('with-scroller');
-                var baseContentHeight = grid.height(), configs = this.getConfigs();
-                var pageHeight = document.documentElement.clientHeight, scrollPosition,
-                    contentHeight = baseContentHeight + grid.offset().top, interval;
+                var baseContentHeight = grid.height();
+                var configs = this.getConfigs();
+
+                var pageHeight = document.documentElement.clientHeight;
+                var scrollPosition;
+                var contentHeight = baseContentHeight + grid.offset().top;
+                var interval;
+
                 configs.currentStart = configs.start + configs.pageSize;
+
                 interval = setInterval(function(){
                     if(!grid.hasClass('scroll-freezed')){
                         scrollPosition = window.pageYOffset;
@@ -123,14 +133,16 @@ NAMESPACE('chlk.controls', function () {
                             if((contentHeight - pageHeight - scrollPosition) < 400){
                                 var form = grid.parent('form');
                                 form.find('[name=start]').setValue(configs.currentStart);
+
+                                //todo: trigger form submit
                                 jQuery(grid.valueOf()).parents('form').find('.scroll-start-button').click();
+
                                 configs.currentStart += configs.pageSize;
                                 var div = new ria.dom.Dom('<div class="horizontal-loader"></div>');
                                 grid.addClass('scroll-freezed');
                                 grid.appendChild(div);
                                 contentHeight += baseContentHeight;
                             }
-
                         }
                         else{
                             clearInterval(interval);
@@ -169,6 +181,8 @@ NAMESPACE('chlk.controls', function () {
             VOID, function keyArrowsClick(node, event) {
                 var currentIndex = this.getCurrentIndex();
                 var parent = node.parent('.chlk-grid');
+
+                //TODO: replace with constants
                 if((event.which == 38 && currentIndex) || (event.which == 40 && currentIndex < this.getCount() - 1)){
                     if(event.which == 38){
                         currentIndex--;
