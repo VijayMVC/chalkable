@@ -112,9 +112,64 @@ NAMESPACE('chlk.services', function () {
                         data.setPageSize(10);
                         data.setTotalPages(2);
                         data.setItems(items);
+
+
+
                         return data;
-                    });
+                    }, this);
             },
+
+            [[chlk.models.id.SchoolPersonId, Boolean, Number]],
+            ria.async.Future, function getMyApps(personId, forEdit, start_) {
+                return this
+                    .getInstalledApps(personId, start_)
+                    .then(function(data){
+                        var apps = data.getItems() || [];
+
+                        apps = apps.map(function(app){
+                            var appInstalls = app.getApplicationInstalls() || [];
+                            app.setSelfInstalled(false);
+                            var uninstallAppIds = [];
+
+                            appInstalls.forEach(function(appInstall){
+                                if (appInstall.isOwner() && forEdit){
+                                    uninstallAppIds.push(appInstall.getAppInstallId());
+                                    if(appInstall.getPersonId() == appInstall.getInstallationOwnerId()){
+                                        app.setSelfInstalled(true);
+                                    }
+                                }
+                                if (appInstall.getPersonId() == personId){
+                                    app.setPersonal(true);
+                                }
+
+                            });
+                            app.setUninstallable(forEdit && uninstallAppIds.length > 0);
+                            var ids = uninstallAppIds.map(function(item){
+                                return item.valueOf()
+                            }).join(',');
+                            app.setApplicationInstallIds(ids);
+                            return app;
+                        });
+
+                        data.setItems(apps);
+
+                        this.getContext().getSession().set('myAppsCached', apps);
+                        return data;
+                    }, this);
+            },
+
+
+
+
+            [[String]],
+            chlk.models.apps.AppMarketApplication, function getMyAppByUrl(url){
+                var myApps = this.getContext().getSession().get('myAppsCached') || [];
+                var result = myApps.filter(function(item){
+                   return item.getUrl() == url;
+                }) || [];
+                return result.length > 0 ? result[0] : new chlk.models.apps.AppMarketApplication();
+            },
+
             [[chlk.models.id.AppId]],
             ria.async.Future, function getDetails(appId) {
                 return this

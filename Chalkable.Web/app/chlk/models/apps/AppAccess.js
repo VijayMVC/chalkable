@@ -11,12 +11,14 @@ NAMESPACE('chlk.models.apps', function () {
             Boolean, 'adminMyAppsEnabled',
             [ria.serialize.SerializeProperty('hasparentmyapps')],
             Boolean, 'parentMyAppsEnabled',
-            [ria.serialize.SerializeProperty('hasmypappsview')],
-            Boolean, 'myAppsViewVisible',
+
             [ria.serialize.SerializeProperty('canattach')],
             Boolean, 'attachEnabled',
             [ria.serialize.SerializeProperty('showingradeview')],
             Boolean, 'visibleInGradingView',
+
+
+            Boolean, 'myAppsForCurrentRoleEnabled',
 
             Object, function getPostData(){
                 return {
@@ -45,5 +47,6 @@ NAMESPACE('chlk.models.apps', function () {
                 if (showInGradeView_)
                     this.setVisibleInGradingView(showInGradeView_);
             }
+
         ]);
 });

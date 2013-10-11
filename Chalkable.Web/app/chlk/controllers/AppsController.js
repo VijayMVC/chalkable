@@ -86,10 +86,6 @@ NAMESPACE('chlk.controllers', function (){
                     if (!app_.getAppAccess())
                         app_.setAppAccess(new chlk.models.apps.AppAccess());
 
-
-
-
-
                     var appIconId = app_.getSmallPictureId() || new chlk.models.id.PictureId('');
                     var iconUrl = this.pictureService.getPictureUrl(appIconId, 74);
                     app_.setIconPicture(new chlk.models.apps.AppPicture(appIconId, iconUrl, 74, 74, 'Icon', !readOnly));
@@ -278,20 +274,32 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[String, String, chlk.models.apps.AppModes, chlk.models.id.AnnouncementApplicationId]],
         function viewAppAction(url, viewUrl, mode, announcementAppId_) {
-
-            //todo: check if user has my apps view
-
             var result = this.appsService
                 .getOauthCode(url)
                 .then(function(code){
-                    var app = new chlk.models.apps.AppAttachment();
-                    app.setCurrentModeUrl(viewUrl);
-                    app.setOauthCode(code);
-                    if (announcementAppId_) {
-                        app.setAnnouncementApplicationId(announcementAppId_);
+
+                    var appData = null;
+                    if (mode == chlk.models.apps.AppModes.MYAPPSVIEW){
+                        appData =  this.appMarketService.getMyAppByUrl(url);
+
+                        var appAccess = appData.getAppAccess();
+
+                        var hasMyAppsView = appAccess.isStudentMyAppsEnabled() && this.userInRole(chlk.models.common.RoleEnum.STUDENT) ||
+                            appAccess.isTeacherMyAppsEnabled() && this.userInRole(chlk.models.common.RoleEnum.TEACHER) ||
+                            appAccess.isAdminMyAppsEnabled() && this.userIsAdmin() ||
+                            appAccess.isParentMyAppsEnabled() && this.userInRole(chlk.models.common.RoleEnum.PARENT);
+                        appAccess.setMyAppsForCurrentRoleEnabled(hasMyAppsView);
+                        appData.setAppAccess(appAccess);
+
                     }
+                    var app = new chlk.models.apps.AppAttachment.$create(
+                        viewUrl,
+                        code,
+                        announcementAppId_,
+                        appData
+                    );
                     return new chlk.models.apps.AppWrapperViewData(app, mode);
-                });
+                }, this);
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
 

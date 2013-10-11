@@ -19,6 +19,16 @@ NAMESPACE('chlk.templates.apps', function () {
             chlk.models.apps.AppModes, 'appMode',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.apps.AppAttachment, 'app'
+            chlk.models.apps.AppAttachment, 'app',
+
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'myAppsError',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'errorTitle',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'errorMessage'
         ])
 });

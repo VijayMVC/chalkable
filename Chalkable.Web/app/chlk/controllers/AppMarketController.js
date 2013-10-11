@@ -124,7 +124,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('apps')],
         function myAppsAction() {
             var result = this.appMarketService
-                .getInstalledApps(this.getCurrentPerson().getId())
+                .getMyApps(this.getCurrentPerson().getId(), false)
                 .then(function(apps){
                     return new chlk.models.apps.MyAppsViewData(apps, false);
                 })
@@ -144,41 +144,8 @@ NAMESPACE('chlk.controllers', function (){
         [[Boolean]],
         function updateMyAppsAction(isEdit) {
             var result = this.appMarketService
-                .getInstalledApps(this.getCurrentPerson().getId())
+                .getMyApps(this.getCurrentPerson().getId(), isEdit)
                 .then(function(data){
-
-                    var apps = data.getItems() || [];
-
-                    apps = apps.map(function(app){
-                        var appInstalls = app.getApplicationInstalls() || [];
-                        app.setSelfInstalled(false);
-
-                        var currentPersonId = this.getCurrentPerson().getId();
-                        var uninstallAppIds = [];
-
-                        appInstalls.forEach(function(appInstall){
-                            if (appInstall.isOwner() && isEdit){
-                                uninstallAppIds.push(appInstall.getAppInstallId());
-                                if(appInstall.getPersonId() == appInstall.getInstallationOwnerId()){
-                                    app.setSelfInstalled(true);
-                                }
-                            }
-                            if (appInstall.getPersonId() == currentPersonId){
-                                app.setPersonal(true);
-                            }
-
-                        });
-                        app.setUninstallable(isEdit && uninstallAppIds.length > 0);
-                        var ids = uninstallAppIds.map(function(item){
-                            return item.valueOf()
-                        }).join(',');
-                        app.setApplicationInstallIds(ids);
-                        return app;
-                    }, this);
-
-
-                    data.setItems(apps);
-
                     return new chlk.models.apps.MyAppsViewData(data, isEdit);
                 }, this)
                 .attach(this.validateResponse_());

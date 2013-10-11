@@ -11,6 +11,9 @@ NAMESPACE('chlk.models.apps', function () {
         'AppWrapperViewData', EXTENDS(chlk.models.common.attachments.BaseAttachmentViewData), [
             chlk.models.apps.AppModes, 'appMode',
             chlk.models.apps.AppAttachment, 'app',
+            Boolean, 'myAppsError',
+            String, 'errorTitle',
+            String, 'errorMessage',
 
             [[chlk.models.apps.Application, chlk.models.apps.AppModes]],
             function $(app, mode){
@@ -32,10 +35,19 @@ NAMESPACE('chlk.models.apps', function () {
                     }break;
 
                     case chlk.models.apps.AppModes.MYAPPSVIEW:{
-                        buttons.push(chlk.models.common.attachments.ToolbarButton('new-tab-id', 'New Tab', app.getCurrentModeUrl(), true));
+                        var hasMyAppsView = app.getAppAccess().isMyAppsForCurrentRoleEnabled();
+                        var myAppsError = !hasMyAppsView || !app.isPersonal();
+                        if (myAppsError){
+                            this.setMyAppsError(myAppsError);
+                            this.setErrorTitle('oops.');
+                            var msg = !hasMyAppsView ? 'this app does not have a My Apps view for you.' : 'this app is not installed for you.';
+                            this.setErrorMessage(msg);
+                        }
+                        else{
+                            buttons.push(chlk.models.common.attachments.ToolbarButton('new-tab-id', 'New Tab', app.getCurrentModeUrl(), true));
+                        }
                     }break;
                 }
-
                 BASE(fullUrl, buttons);
             }
 

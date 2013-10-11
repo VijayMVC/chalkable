@@ -1,6 +1,13 @@
 announcementAppId = self.app.getAnnouncementApplicationId() ? self.app.getAnnouncementApplicationId().valueOf() : ""
 announcementId = self.app.getAnnouncementId() ? self.app.getAnnouncementId().valueOf() : ""
 
-+AttachmentDialog(self.getUrl(), self.getToolbarButtons(), announcementId, announcementAppId).app-wrapper
+
+
+if self.isMyAppsError()
+    +AttachmentDialogMsg(self.getErrorTitle(), self.getErrorMessage())
+else
+    +AttachmentDialog(self.getUrl(), self.getToolbarButtons(), announcementId, announcementAppId).app-wrapper
+
+
 
 
