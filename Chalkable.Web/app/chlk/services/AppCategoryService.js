@@ -13,41 +13,59 @@ NAMESPACE('chlk.services', function () {
             [[Number]],
             ria.async.Future, function getCategories(pageIndex_) {
 
+                var cachedCategories = this.getContext().getSession().get('cachedCategories');
 
-
-                return this.getPaginatedList('Category/List.json', chlk.models.apps.AppCategory, {
-                    start: pageIndex_|0
-                });
+                return cachedCategories ? ria.async.DeferredData(cachedCategories)
+                                        : this.getPaginatedList('Category/List.json', chlk.models.apps.AppCategory, {
+                                            start: pageIndex_|0
+                                        })
+                                        .then(function(data){
+                                            this.getContext().getSession().set('cachedCategories', data);
+                                        }, this);
             },
 
             [[String, String]],
             ria.async.Future, function addCategory(name, description) {
-                return this.post('Category/Add.json', chlk.models.apps.AppCategory, {
-                    name: name,
-                    description: description
-                });
+                return this
+                    .post('Category/Add.json', chlk.models.apps.AppCategory, {
+                        name: name,
+                        description: description
+                    })
+                    .then(function(data){
+                        this.getContext().getSession().set('cachedCategories', null);
+                    }, this);
             },
 
             [[chlk.models.id.AppCategoryId, String, String]],
             ria.async.Future, function updateCategory(id, name, description) {
-                return this.post('Category/Update.json', chlk.models.apps.AppCategory, {
-                    categoryId: id.valueOf(),
-                    name: name,
-                    description: description
-                });
+                return this
+                    .post('Category/Update.json', chlk.models.apps.AppCategory, {
+                        categoryId: id.valueOf(),
+                        name: name,
+                        description: description
+                    })
+                    .then(function(data){
+                        this.getContext().getSession().set('cachedCategories', null);
+                    }, this);
             },
 
             [[chlk.models.id.AppCategoryId, String, String]],
             ria.async.Future, function saveCategory(id_, name, description) {
-                if (id_ && id_.valueOf()) return this.updateCategory(id_, name, description);
+                if (id_ && id_.valueOf())
+                    return this.updateCategory(id_, name, description);
+
                 return this.addCategory(name, description);
             },
 
             [[chlk.models.id.AppCategoryId]],
             ria.async.Future, function removeCategory(id) {
-                return this.post('Category/Delete.json', chlk.models.apps.AppCategory, {
-                    categoryId: id.valueOf()
-                });
+                return this
+                    .post('Category/Delete.json', chlk.models.apps.AppCategory, {
+                        categoryId: id.valueOf()
+                    })
+                    .then(function(data){
+                        this.getContext().getSession().set('cachedCategories', null);
+                    }, this);
             },
             [[chlk.models.id.AppCategoryId]],
             ria.async.Future, function getCategory(id) {

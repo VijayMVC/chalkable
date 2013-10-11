@@ -85,13 +85,14 @@ NAMESPACE('chlk.services', function () {
                         data.setPageSize(10);
                         data.setTotalPages(2);
                         data.setItems(items);
+
                         return data;
-                    });
+
+                    }, this);
             },
 
             [[chlk.models.id.SchoolPersonId, Number]],
             ria.async.Future, function getInstalledApps(personId, start_) {
-                //return this.getPaginatedList('Application/List.json', chlk.models.apps.AppMarketApplication, {
                 return this
                     .getPaginatedList('AppMarket/ListInstalled.json', chlk.models.apps.AppMarketApplication, {
                         personId: personId.valueOf(),
