@@ -14,6 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<StudentClassGradeStats> GetStudentClassGradeStats(Guid markingPeriodId, Guid classId, Guid? studentId);
         IList<DepartmentGradeAvg> GetDepartmentGradeAvgPerMp(Guid markingPeriodId, IList<Guid> gradeLevelIds);
         IList<ClassPersonGradingStats> GetFullGradingStats(Guid markingPeriodId, Guid studentId);
+        IList<StudentGradingRank> GetStudentGradingRanks(Guid schoolYearId, Guid? studentId, Guid? gradeLevelId, Guid? classId);
     }
     public class GradingStatisticService : SchoolServiceBase, IGradingStatisticService
     {
@@ -102,6 +103,14 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 return new GradingStatisticDataAccess(uow).CalcGradingStats(Context.UserId, Context.Role.Id, studentId, markingPeriodId);
+            }
+        }
+
+        public IList<StudentGradingRank> GetStudentGradingRanks(Guid schoolYearId, Guid? studentId, Guid? gradeLevelId, Guid? classId)
+        {
+            using (var uow = Read())
+            {
+                return new GradingStatisticDataAccess(uow).GetStudentGradingRank(Context.UserId, Context.Role.Id, schoolYearId, gradeLevelId, studentId, classId);
             }
         }
     }

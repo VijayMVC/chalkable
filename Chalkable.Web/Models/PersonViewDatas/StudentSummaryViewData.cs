@@ -22,6 +22,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public StudentHoverBoxViewData<AttendanceTotalPerTypeViewData> AttendanceBox { get; set; }
         public StudentHoverBoxViewData<DisciplineTotalPerTypeViewData> DisciplineBox { get; set; }
         public StudentHoverBoxViewData<StudentSummeryGradeViewData> GradesBox { get; set; }
+        public StudentHoverBoxViewData<StudentSummeryRankViewData> RanksBox { get; set; }
         protected StudentSummaryViewData(Person person, Room room) : base(person, room)
         {
         }
@@ -29,8 +30,9 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public static StudentSummaryViewData Create(Person person, Room room,  ClassDetails currentClass, IList<ClassDetails> classes
             , IList<DisciplineTotalPerType> disciplineTotal, IDictionary<AttendanceTypeEnum, int> attendanceTotal, 
             AttendanceTypeEnum? currentAttendanceType, IList<AnnouncementsClassPeriodViewData> announcementsClassPeriods
-            , int maxPeriodNumber, IList<StudentAnnouncementGrade> lastGrades, IGradingStyleMapper mapper)
+            , int maxPeriodNumber, IList<StudentAnnouncementGrade> lastGrades, IGradingStyleMapper mapper, IList<StudentGradingRank> studentsRanks)
         {
+            var currentStudentRanks = studentsRanks.Where(x => x.StudentId == person.Id).ToList();
             var res = new StudentSummaryViewData(person, room)
                 {
                     PeriodSection = announcementsClassPeriods,
@@ -38,6 +40,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                     AttendanceBox = StudentHoverBoxViewData<AttendanceTotalPerTypeViewData>.Create(attendanceTotal),
                     DisciplineBox = StudentHoverBoxViewData<DisciplineTotalPerTypeViewData>.Create(disciplineTotal),
                     GradesBox = StudentHoverBoxViewData<StudentSummeryGradeViewData>.Create(lastGrades, mapper),
+                    RanksBox = StudentHoverBoxViewData<StudentSummeryRankViewData>.Create(currentStudentRanks, studentsRanks),
                     CurrentAttendanceType = (int?)currentAttendanceType,
                     MaxPeriodNumber = maxPeriodNumber
                 };
@@ -55,7 +58,19 @@ namespace Chalkable.Web.Models.PersonViewDatas
     public class StudentHoverBoxViewData<T> : HoverBoxesViewData<T>
     {
         public bool IsPassing { get; set; }
-        //public static StudentHoverBoxViewData<StudentAttendanceSummaryViewData> Create()
+        
+        public static StudentHoverBoxViewData<StudentSummeryRankViewData> Create(IList<StudentGradingRank> currentStudentRanks, IList<StudentGradingRank> allStudentsRanks)
+        {
+            var res = new StudentHoverBoxViewData<StudentSummeryRankViewData>();
+            res.Hover = StudentSummeryRankViewData.Create(currentStudentRanks, allStudentsRanks);
+            if (res.Hover.Count > 0)
+            {
+                var rank = res.Hover.First().Rank;
+                res.IsPassing = rank > 50;
+                res.Title = rank.HasValue ? rank.ToString() : "";
+            }
+            return res;
+        }
 
         public static StudentHoverBoxViewData<DisciplineTotalPerTypeViewData> Create(IList<DisciplineTotalPerType> disciplineTotalPerTypes)
         {
@@ -93,6 +108,32 @@ namespace Chalkable.Web.Models.PersonViewDatas
         }
     }
 
+
+    public class StudentSummeryRankViewData
+    {
+        public Guid MarkingPeriodId { get; set; }
+        public string MarkingPeiordName { get; set; }
+        public int? Rank { get; set; }
+        public static IList<StudentSummeryRankViewData> Create(IList<StudentGradingRank> currentStudentRanks, IList<StudentGradingRank> allStudentsRanks)
+        {
+            var rankByMps = currentStudentRanks;
+            var res = new List<StudentSummeryRankViewData>();
+            foreach (var rankByMp in rankByMps)
+            {
+                var allStudentsByMp = allStudentsRanks.Where(x => x.MarkingPeriodId == rankByMp.MarkingPeriodId).ToList();
+                var studentSummeryRank = new StudentSummeryRankViewData
+                                        {
+                                            MarkingPeriodId = rankByMp.MarkingPeriodId,
+                                            MarkingPeiordName = rankByMp.MarkingPeriodName,
+                                        };
+                var lowRankStCount = allStudentsByMp.Count(x => x.StudentId != rankByMp.StudentId && x.Rank >= rankByMp.Rank);
+                var allStudentsCount = allStudentsByMp.Count;
+                studentSummeryRank.Rank = allStudentsCount > 0 ? 100 * lowRankStCount / allStudentsCount : default(int?);
+                res.Add(studentSummeryRank);
+            }
+            return res;
+        }
+    }
 
     public class DisciplineTotalPerTypeViewData
     {

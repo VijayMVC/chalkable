@@ -48,6 +48,8 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var lastGrades =  SchoolLocator.StudentAnnouncementService.GetLastGrades(student.Id, 5);
             var mapper = SchoolLocator.GradingStyleService.GetMapper();
             var classes = SchoolLocator.ClassService.GetClasses(null, mp.Id, student.Id);
+
+            var studentsRanks = SchoolLocator.GradingStatisticService.GetStudentGradingRanks(mp.SchoolYearRef, null, student.StudentInfo.GradeLevelRef, null);
             Room currentRoom = null;
             ClassDetails currentClass = null;
             if (markingPeriod != null)
@@ -72,7 +74,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             }
            
             var res = StudentSummaryViewData.Create(student, currentRoom, currentClass, classes, disciplineTotal,
-                            attendanceTotal, currentAttendanceType, announcementPeriod, maxPeriodNumber, lastGrades, mapper);
+                            attendanceTotal, currentAttendanceType, announcementPeriod, maxPeriodNumber, lastGrades, mapper, studentsRanks);
             return Json(res, 7);
         }
         

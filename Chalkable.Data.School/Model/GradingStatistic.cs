@@ -122,4 +122,15 @@ namespace Chalkable.Data.School.Model
             GradingsByAnnType = new List<AnnouncementTypeGrading>();
         }
     }
+
+
+    public class StudentGradingRank
+    {
+        public Guid StudentId { get; set; }
+        public int? Avg { get; set; }
+        public long? Rank { get; set; }
+        public Guid MarkingPeriodId { get; set; }
+        public string MarkingPeriodName { get; set; }
+        public Guid GradeLevelId { get; set; }
+    }
 }
