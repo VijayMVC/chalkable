@@ -21,8 +21,8 @@ NAMESPACE('chlk.controllers', function (){
                     return this.appsService
                         .attachApp(announcementAppId)
                         .then(function(result){
-                            this.view.pop();  //close wrapper
-                            this.view.pop();  //close attach app dialog
+                            this.getView().pop();
+                            this.getView().pop();
                             return this.Redirect('announcement', 'addAppAttachment', [result]);
                         }, this);
                 }
@@ -55,6 +55,26 @@ NAMESPACE('chlk.controllers', function (){
                     );
                 }
             },
+
+
+            function closeCurrentAppAction(){
+                 this.getView().getCurrent().close();
+            },
+
+            [[Object]],
+            function closeMeAction(data){
+                 return this.ShowMsgBox('Close without attaching the app?', 'just checking.', [{
+                    text: 'CANCEL',
+                    color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                }, {
+                    text: 'DON\'T ATTACH',
+                    controller: 'appapireactor',
+                    action: 'closeCurrentApp',
+                    params: [],
+                    color: chlk.models.common.ButtonColor.RED.valueOf()
+                }], 'center');
+            },
+
             [[Object]],
             function showPlusAction(data){
                 //do partial update and show buttons

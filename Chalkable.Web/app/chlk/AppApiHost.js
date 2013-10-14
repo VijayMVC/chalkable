@@ -34,6 +34,11 @@ NAMESPACE('chlk', function(){
             CHLK_MESSENGER.addApp(rWindow, rURL, data);
         },
 
+        [[Object, String, Object]],
+        function closeApp(data){
+            CHLK_MESSENGER.closeMe(data);
+        },
+
         function messengerCallback_(e){
             if (e.data && e.data.url){
                 var domain = chlkGetDomain(e.data.url);
