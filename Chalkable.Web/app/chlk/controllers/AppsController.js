@@ -268,10 +268,6 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
 
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER,
-            chlk.models.common.RoleEnum.STUDENT
-        ])],
         [[String, String, chlk.models.apps.AppModes, chlk.models.id.AnnouncementApplicationId]],
         function viewAppAction(url, viewUrl, mode, announcementAppId_) {
             var result = this.appsService
