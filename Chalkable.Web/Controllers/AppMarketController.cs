@@ -8,6 +8,7 @@ using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
@@ -87,7 +88,7 @@ namespace Chalkable.Web.Controllers
             var categories = MasterLocator.CategoryService.ListCategories();
             
             var appRatings = MasterLocator.ApplicationService.GetRatings(applicationId);
-            var allPersons = SchoolLocator.PersonService.GetPersons();
+            var allPersons = SchoolLocator.PersonService.GetPaginatedPersons(new PersonQuery());
 
             var res = ApplicationDetailsViewData.Create(application, null, categories, appRatings, allPersons);
             var persons = SchoolLocator.AppMarketService.GetPersonsForApplicationInstallCount(application.Id, Context.UserId, null, null, null, null);
