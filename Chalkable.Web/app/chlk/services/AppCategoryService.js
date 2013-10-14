@@ -21,6 +21,7 @@ NAMESPACE('chlk.services', function () {
                                         })
                                         .then(function(data){
                                             this.getContext().getSession().set('cachedCategories', data);
+                                            return data;
                                         }, this);
             },
 
