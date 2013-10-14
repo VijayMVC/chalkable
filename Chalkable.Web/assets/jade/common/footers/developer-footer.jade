@@ -1,9 +1,11 @@
-mixin DemoRoleButton(name)
-    a.demo-role-button(rolename=name)
-        span
+mixin DemoRoleButton(name, notReady)
+    a.demo-role-button(rolename=name)(attributes)
+        span=name
+            if notReady
+                span
             .mark.left
             .mark.right
-            =name
+
 
 
 -apps = self.getDeveloperApps()
@@ -21,5 +23,5 @@ mixin DemoRoleButton(name)
     +DemoRoleButton('Student')
     +DemoRoleButton('Teacher')
     +DemoRoleButton('Admin')
-    +DemoRoleButton('Parent').coming
-    +DemoRoleButton('District').coming
+    +DemoRoleButton('Parent', true).coming
+    +DemoRoleButton('District', true).coming

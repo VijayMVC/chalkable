@@ -32,7 +32,8 @@ REQUIRE('chlk.AppApiHost');
               [ria.mvc.DomEventBind('click', '.close')],
               OVERRIDE, Boolean, function onCloseBtnClick(node, event){
                   var isSave = this.dom.find('#save-app').exists();
-                  if (isSave){
+                  var isAppAttach = this.dom.find('#add-app').exists();
+                  if (isSave || (!isSave && !isAppAttach)){
                       this.close();
                   }
                   else{
