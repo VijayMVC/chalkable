@@ -116,12 +116,6 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('apps')],
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER,
-            chlk.models.common.RoleEnum.ADMINEDIT,
-            chlk.models.common.RoleEnum.ADMINGRADE
-        ])],
-        [chlk.controllers.SidebarButton('apps')],
         function myAppsAction() {
             var result = this.appMarketService
                 .getMyApps(this.getCurrentPerson().getId(), false)
@@ -134,12 +128,6 @@ NAMESPACE('chlk.controllers', function (){
 
 
 
-        [chlk.controllers.SidebarButton('apps')],
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER,
-            chlk.models.common.RoleEnum.ADMINEDIT,
-            chlk.models.common.RoleEnum.ADMINGRADE
-        ])],
         [chlk.controllers.SidebarButton('apps')],
         [[Boolean]],
         function updateMyAppsAction(isEdit) {
@@ -272,11 +260,6 @@ NAMESPACE('chlk.controllers', function (){
 
 
         [chlk.controllers.SidebarButton('apps')],
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER,
-            chlk.models.common.RoleEnum.ADMINEDIT,
-            chlk.models.common.RoleEnum.ADMINGRADE
-        ])],
         [[chlk.models.id.AppId]],
         function tryToInstallAction(appId) {
             var appInfo = this.appMarketService
@@ -312,11 +295,6 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('apps')],
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER,
-            chlk.models.common.RoleEnum.ADMINEDIT,
-            chlk.models.common.RoleEnum.ADMINGRADE
-        ])],
         [[chlk.models.apps.AppInstallPostData]],
         function installAction(appInstallData) {
             return this.appMarketService
@@ -342,11 +320,6 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('apps')],
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER,
-            chlk.models.common.RoleEnum.ADMINEDIT,
-            chlk.models.common.RoleEnum.ADMINGRADE
-        ])],
         [[String]],
         function uninstallAction(ids) {
             return this.appMarketService
@@ -358,12 +331,6 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('apps')],
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER,
-            chlk.models.common.RoleEnum.ADMINEDIT,
-            chlk.models.common.RoleEnum.ADMINGRADE
-        ])],
-
         [[chlk.models.apps.AppDeletePostData]],
         function tryToUninstallAction(data){
             if(!data.isUninstallable()){

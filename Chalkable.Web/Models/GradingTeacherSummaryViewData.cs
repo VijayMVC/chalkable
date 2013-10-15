@@ -37,8 +37,8 @@ namespace Chalkable.Web.Models
             }
             well.Reverse();
             res.AllStudents = ShortStudentGradingViewData.Create(studentClassStats);
-            res.Trouble = ShortStudentGradingViewData.Create(well.Take(DEFAUL_STUDENTS_COUNT));
-            res.Well = ShortStudentGradingViewData.Create(trouble.Take(DEFAUL_STUDENTS_COUNT));
+            res.Trouble = ShortStudentGradingViewData.Create(trouble.Take(DEFAUL_STUDENTS_COUNT));
+            res.Well = ShortStudentGradingViewData.Create(well.Take(DEFAUL_STUDENTS_COUNT));
             return res;
         }
     }

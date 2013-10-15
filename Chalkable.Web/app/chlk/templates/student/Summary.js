@@ -15,83 +15,56 @@ NAMESPACE('chlk.templates.student', function () {
                 this._converter = new chlk.converters.attendance.AttendanceTypeToNameConverter();
             },
 
-//            [ria.templates.ModelPropertyBind],
-//            Number, 'gradeLevelNumber',
-//
-//            [ria.templates.ModelPropertyBind],
-//            String, 'currentClassName',
-//
-//            [ria.templates.ModelPropertyBind],
-//            Number, 'currentAttendanceType',
-//
-//            [ria.templates.ModelPropertyBind('currentAttendanceType', chlk.converters.attendance.AttendanceTypeToNameConverter)],
-//            String, 'attendanceTypeName',
-//
-//            [ria.templates.ModelPropertyBind],
-//            Number, 'maxPeriodNumber',
-//
-//            [ria.templates.ModelPropertyBind],
-//            chlk.models.id.RoomId, 'roomId',
-//
-//            [ria.templates.ModelPropertyBind],
-//            String, 'roomName',
-//
-//            [ria.templates.ModelPropertyBind],
-//            Number, 'roomNumber',
-//
-//            [ria.templates.ModelPropertyBind],
-//            chlk.models.common.AttendanceHoverBox, 'attendanceBox',
-//
-//            [ria.templates.ModelPropertyBind],
-//            chlk.models.common.DisciplineHoverBox, 'disciplineBox',
-//
-//            [ria.templates.ModelPropertyBind],
-//            ArrayOf(chlk.models.classes.Class), 'classesSection',
-//
-//            [ria.templates.ModelPropertyBind],
-//            ArrayOf(chlk.models.announcement.AnnouncementClassPeriod), 'periodSection',
-
-
             Number, function getCurrentAttendanceType(){return this.getUser().getCurrentAttendanceType();},
             String, function getAttendanceTypeName(){
                 return this._converter.convert(this.getCurrentAttendanceType());
             },
 
+
+            Object, function buildRankGlanceBoxData(){
+                return this.buildGlanceBoxData_(this.getUser().getRankBox()
+                    , function(item){console.log(item.getMarkingPeriodName()); return item.getRank; }
+                    , function(item){console.log(item.getRank()); return  item.getMarkingPeriodName; }
+                    , Msg.Recent);
+            },
+
             Object, function buildAttendanceGlanceBoxData(){
-                var attBox = this.getUser().getAttendanceBox();
-                var items = [];
-                var hoverItems = attBox.getHover();
-                for(var i = 0; i < hoverItems.length; i++){
-                    items.push({
-                        data: hoverItems[i],
-                        getTotalMethod: hoverItems[i].getAttendanceCount,
-                        getSummaryMethod: hoverItems[i].getType
-                    });
-                }
-                return {
-                    value: attBox.getTitle(),
-                    items: items,
-                    title: Msg.Attendance
-                };
+                return this.buildGlanceBoxData_(this.getUser().getAttendanceBox()
+                    , function(item){ return item.getAttendanceCount}
+                    , function(item){ return item.getType}
+                    , Msg.Attendance);
             },
 
             Object, function buildDisciplineGlanceBoxData(){
-                var attBox = this.getUser().getDisciplineBox();
+                return this.buildGlanceBoxData_(this.getUser().getDisciplineBox()
+                    , function(item){ return item.getCount}
+                    , function(item){ return item.getDisciplineName}
+                    , Msg.Discipline);
+            },
+
+            Object, function buildGradesGlanceBoxData(){
+                return this.buildGlanceBoxData_(this.getUser().getGradesBox()
+                    , function(item){ return item.getGrade}
+                    , function(item){ return item.getAnnouncementTypeName}
+                    , Msg.Percentile);
+            },
+
+            [[Object, Function, Function, String]],
+            Object, function buildGlanceBoxData_(boxData, getTotalMethod, getSummaryMethod, title){
                 var items = [];
-                var hoverItems = attBox.getHover();
+                var hoverItems = boxData.getHover();
                 for(var i = 0; i < hoverItems.length; i++){
                     items.push({
                         data: hoverItems[i],
-                        getTotalMethod: hoverItems[i].getCount,
-                        getSummaryMethod: hoverItems[i].getDisciplineName
+                        getTotalMethod: getTotalMethod(hoverItems[i]),
+                        getSummaryMethod: getSummaryMethod(hoverItems[i])
                     });
                 }
                 return {
-                    value: attBox.getTitle(),
+                    value: boxData.getTitle(),
                     items: items,
-                    title: Msg.Discipline
+                    title: title
                 };
             }
-
-        ])
+        ]);
 });

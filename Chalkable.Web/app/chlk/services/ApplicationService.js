@@ -67,11 +67,13 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function getInfo(appId_, switchApp_) {
                 var mustSwitch = switchApp_ ? switchApp_ : true;
                 var appId_ = appId_ ? appId_ : this.getCurrentAppId();
-                return this
-                        .get('Application/GetInfo.json', chlk.models.apps.Application, {applicationId: appId_.valueOf()})
-                        .then(function(app){
-                                return new ria.async.DeferredData(mustSwitch ? this.switchApp(app) : app);
-                        }, this);
+
+                return appId_ ? this
+                                    .get('Application/GetInfo.json', chlk.models.apps.Application, {applicationId: appId_.valueOf()})
+                                    .then(function(app){
+                                            return new ria.async.DeferredData(mustSwitch ? this.switchApp(app) : app);
+                                    }, this)
+                              : ria.async.DeferredData(new chlk.models.apps.Application());
             },
 
             [[Object, Number, Number]],
