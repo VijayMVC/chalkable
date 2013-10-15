@@ -9,7 +9,7 @@ REQUIRE('chlk.services.DisciplineService');
 REQUIRE('chlk.services.DisciplineCalendarService');
 
 REQUIRE('chlk.activities.person.ListPage');
-REQUIRE('chlk.activities.student.SummaryPage');
+REQUIRE('chlk.activities.student.StudentProfileSummaryPage');
 REQUIRE('chlk.activities.profile.StudentInfoPage');
 REQUIRE('chlk.activities.student.StudentProfileAttendancePage');
 REQUIRE('chlk.activities.student.StudentProfileDisciplinePage');
@@ -126,7 +126,7 @@ NAMESPACE('chlk.controllers', function (){
                         data.setRole(role);
                         return new chlk.models.student.StudentProfileSummaryViewData(this.getCurrentRole(), data);
                     }, this);
-                return this.PushView(chlk.activities.student.SummaryPage, result);
+                return this.PushView(chlk.activities.student.StudentProfileSummaryPage, result);
             },
 
             [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
