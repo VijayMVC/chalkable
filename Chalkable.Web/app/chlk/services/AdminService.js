@@ -41,6 +41,13 @@ NAMESPACE('chlk.services', function () {
                     salutation: salutation,
                     birthdayDate: birthDate && JSON.stringify(birthDate.getDate()).slice(1,-1)
                 });
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
+            ria.async.Future, function getSummary(personId){
+                return this.get('Admin/Info.json', chlk.models.people.PersonSummary,{
+                    personId: personId && personId.valueOf()
+                });
             }
-        ])
+        ]);
 });

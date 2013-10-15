@@ -38,7 +38,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function getSummary(personId) {
-                return this.get('Student/Summary.json', chlk.models.student.Summary, {
+                return this.get('Student/Summary.json', chlk.models.student.StudentSummary, {
                     schoolPersonId: personId.valueOf()
                 });
             },

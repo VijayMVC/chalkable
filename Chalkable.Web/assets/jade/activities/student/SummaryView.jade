@@ -1,20 +1,9 @@
-valuesEnum = chlk.models.attendance.AttendanceTypeEnum;
 user = self.getUser()
 gradeLevel = user.getGradeLevelNumber();
-dt = getDate();
-classOf = dt.getFullYear() + 12 - gradeLevel;
-attendanceType = self.getCurrentAttendanceType();
-if attendanceType == valuesEnum.NA.valueOf()
-    statusName = 'No attendance taken';
-    status = 'not-assigned';
-else
-    statusName = self.getAttendanceTypeName();
-    status = statusName && statusName.toLowerCase();
+statusData = self.getStatusData()
 .loader-container
     .loader
-    -console.log('1')
     +UserProfileTopBar(self, 'details')
-    -console.log('2')
     .summary-view
         #top-summary-panel
             #avatar-photo-conainer
@@ -22,12 +11,12 @@ else
                     +PersonImg(user, 256)
                     .grades-container
                         p=Msg.Class_Of
-                            span=classOf
-                        .grade #{getSerial(gradeLevel)} #{Msg.Grade}
+                            span=self.getAvatarTitle()
+                        .grade #{self.getSerial(user.getGradeLevelNumber())} #{Msg.Grade}
             #student-info-panel
                 h1.display-name=user.getDisplayName() || user.getFullName()
                 .status
-                    div(class=status, data-tooltip=statusName)
+                    div(class=statusData.status, data-tooltip=statusData.statusName)
                     |#{user.getCurrentClassName()}
                     if(!user.getCurrentClassName() || user.getCurrentClassName().toLowerCase() != 'no class now')
                         |&nbsp;- #{user.getRoomName()}

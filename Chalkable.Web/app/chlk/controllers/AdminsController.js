@@ -6,7 +6,7 @@ REQUIRE('chlk.services.AccountService');
 
 REQUIRE('chlk.activities.profile.SchoolPersonInfoPage');
 REQUIRE('chlk.activities.admin.PeoplePage');
-
+REQUIRE('chlk.activities.profile.PersonProfileSummaryPage');
 
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.people.User');
@@ -64,13 +64,24 @@ NAMESPACE('chlk.controllers', function (){
 
 
             [[chlk.models.id.SchoolPersonId]],
+            function detailsAction(personId){
+                var res = this.adminService
+                    .getSummary(personId)
+                    .attach(this.validateResponse_())
+                    .then(function(model){
+                        return new chlk.models.people.UserProfileSummaryViewData(this.getCurrentRole(), model);
+                    }, this);
+                return this.PushView(chlk.activities.profile.PersonProfileSummaryPage, res);
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
             function infoAction(personId){
                 var result = this.adminService
                     .getInfo(personId)
                     .attach(this.validateResponse_())
                     .then(function(model){
                         var userData = this.prepareProfileData(model);
-                        var res = new chlk.models.student.UserProfileInfoViewData(this.getCurrentRole(), userData);
+                        var res = new chlk.models.people.UserProfileInfoViewData(this.getCurrentRole(), userData);
                         this.setUserToSession(res);
                         return res;
                     }.bind(this));
