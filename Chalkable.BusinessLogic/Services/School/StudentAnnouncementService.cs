@@ -22,6 +22,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         //int? GetAssignmentAverage(int announcementId);
         //double GetAvgByAnnouncements(IList<StudentAnnouncement> studentAnnouncements, bool dropLowest);
+
+        IList<StudentAnnouncementGrade> GetLastGrades(Guid studentId, int count = int.MaxValue);
     }
 
     public class StudentAnnouncementService : SchoolServiceBase, IStudentAnnouncementService
@@ -101,7 +103,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableSecurityException();
                 var state = StudentAnnouncementStateEnum.Auto;
                 var da = new StudentAnnouncementDataAccess(uow);
-                var sas = da.GetList(new StudentAnnouncementQuery {AnnouncementId = announcementId, State = state});
+                var sas = da.GetList(new StudentAnnouncementShortQuery {AnnouncementId = announcementId, State = state});
                 foreach (var studentAnnouncement in sas)
                 {
                     studentAnnouncement.State = StudentAnnouncementStateEnum.Manual;
@@ -110,6 +112,19 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 da.Update(sas);
                 uow.Commit();
+            }
+        }
+
+
+        public IList<StudentAnnouncementGrade> GetLastGrades(Guid studentId, int count = int.MaxValue)
+        {
+            using (var uow = Read())
+            {
+                return new StudentAnnouncementDataAccess(uow).GetStudentAnnouncementGrades(new StudentAnnouncementQuery
+                    {
+                        StudentId = studentId,
+                        Count = count
+                    });
             }
         }
     }

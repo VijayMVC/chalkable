@@ -250,6 +250,55 @@ namespace Chalkable.Data.School.DataAccess
                 return res;
             }
         }
+    
+        
+        public IList<StudentGradingRank> GetStudentGradingRank(Guid callerId, int roleId, Guid schoolYearId, Guid? gradeLevelId,
+                                                               Guid? studentId, Guid? classId)
+        {
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.AppendFormat(@"
+                                select x.* from 
+                                    (select	
+	                                    Person.Id as StudentId,
+	                                    mp.Id as MarkingPeriodId,
+	                                    mp.Name as MarkingPeriodName,
+	                                    si.{1} as GradeLevelId,
+	                                    Avg(sa.GradeValue) as [Avg],
+	                                    Rank() over (partition by mp.Id, si.{1} order by avg(sa.gradeValue) desc) as [Rank]
+                                    from Person   
+                                    join ClassPerson on ClassPerson.PersonRef = Person.Id
+                                    join StudentInfo si on si.Id = Person.Id
+                                    join StudentAnnouncement sa on sa.ClassPersonRef = ClassPerson.Id
+                                    join Announcement a on a.Id = sa.AnnouncementRef
+                                    join MarkingPeriodClass mpc on mpc.Id = a.MarkingPeriodClassRef
+                                    join MarkingPeriod mp on mp.Id = mpc.MarkingPeriodRef 
+                                    where {0} = mp.SchoolYearRef and (@{1} is null or si.{1} = @{1}) 
+		                                    and sa.GradeValue is not null and sa.[State] = 2
+                                    group by si.{1}, mp.Id, mp.Name, Person.Id) x
+                                ", MarkingPeriod.SCHOOL_YEAR_REF, StudentInfo.GRADE_LEVEL_REF_FIELD);
+            dbQuery.Parameters.Add(MarkingPeriod.SCHOOL_YEAR_REF, schoolYearId);
+            dbQuery.Parameters.Add(StudentInfo.GRADE_LEVEL_REF_FIELD, gradeLevelId);
+            dbQuery.Sql.Append(" where ")
+                       .Append(@"(@roleId = 1 or @roleId = 2 or @roleId = 5 or @roleId = 7 or @roleId = 8 
+	                              or (@roleId = 3 and x.[StudentId] = @callerId))");
+            dbQuery.Parameters.Add("@roleId", roleId);
+            dbQuery.Parameters.Add("@callerId", callerId);
+            if (studentId.HasValue)
+            {
+                dbQuery.Sql.Append(" and x.[StudentId] = @studentId ");
+                dbQuery.Parameters.Add("@studentId", studentId);
+            }
+            if (classId.HasValue)
+            {
+                dbQuery.Sql.Append(" and (x.[StudentId] in (select csp.SchoolPersonRef from ClassSchoolPerson csp where csp.ClassRef = @classId))");
+                dbQuery.Parameters.Add("@classId", classId);
+            }
+            if (gradeLevelId.HasValue)
+            {
+                dbQuery.Sql.AppendFormat(" and x.[GradeLevelId] = @{0}", StudentInfo.GRADE_LEVEL_REF_FIELD);
+            }
+            return ReadMany<StudentGradingRank>(dbQuery);
+        } 
     }
 
     public class GradingStatisticQuery

@@ -1,4 +1,5 @@
 ﻿using System;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
@@ -15,6 +16,7 @@ namespace Chalkable.Data.School.Model
         public const string ANNOUNCEMENT_REF_FIELD_NAME = "AnnouncementRef";
         public Guid AnnouncementRef { get; set; }
         public Guid ClassPersonRef { get; set; }
+        public const string GRADE_VALUE_FIELD = "GradeValue";
         public int? GradeValue { get; set; }
         public string Comment { get; set; }
         public string ExtraCredit { get; set; }
@@ -25,6 +27,11 @@ namespace Chalkable.Data.School.Model
         public Guid? ApplicationRef { get; set; }
 
 
+    }
+
+    public class StudentAnnouncementGrade : StudentAnnouncement
+    {
+        public AnnouncementComplex Announcement { get; set; }
     }
 
     public class StudentAnnouncementDetails : StudentAnnouncement

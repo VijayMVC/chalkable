@@ -25,25 +25,57 @@ REQUIRE('chlk.AppApiHost');
               [ria.mvc.DomEventBind('click', '#add-app')],
               [[ria.dom.Dom, ria.dom.Event]],
               VOID, function addApp(node, event){
+                  this.onAttachClick_();
+              },
 
-                  var rUrl = this.getFrameUrl('edit');
-                  var announcementAppId = node.getData('announcement-app-id');
-                  var announcementId = node.getData('announcement-id');
-                  var data = {
-                      attach: true,
-                      announcementAppId: announcementAppId,
-                      announcementId: announcementId
-                  };
+
+              [ria.mvc.DomEventBind('click', '.close')],
+              OVERRIDE, Boolean, function onCloseBtnClick(node, event){
+                  var isSave = this.dom.find('#save-app').exists();
+                  if (isSave){
+                      this.close();
+                  }
+                  else{
+                     (new chlk.AppApiHost()).closeApp({});
+                  }
+                  return false;
+              },
+
+              [[ria.dom.Dom]],
+              VOID, function onAttachClick_(){
+                  var isAppAttach = this.dom.find('#add-app').exists();
+                  var isSave = this.dom.find('#save-app').exists();
+
+                  if (!isAppAttach && !isSave){
+                      this.close();
+                  }
+
+                  var rUrl = null;
+                  var data = null;
+
+                  if (isAppAttach){
+                      rUrl = this.getFrameUrl('edit');
+                      var node = this.dom.find('#add-app');
+                      var announcementAppId = node.getData('announcement-app-id');
+                      var announcementId = node.getData('announcement-id');
+                      data = {
+                          attach: true,
+                          announcementAppId: announcementAppId,
+                          announcementId: announcementId
+                      };
+
+                  } else if(isSave){
+                      rUrl = this.getFrameUrl('view');
+                      data = {attach: false};
+                  }
                   (new chlk.AppApiHost()).addApp(this.getInnerDocument(), rUrl, data);
+
               },
 
               [ria.mvc.DomEventBind('click', '#save-app')],
               [[ria.dom.Dom, ria.dom.Event]],
               VOID, function saveApp(node, event){
-
-                  var rUrl = this.getFrameUrl('view');
-                  var data = {attach: false};
-                  (new chlk.AppApiHost()).addApp(this.getInnerDocument(), rUrl, data);
+                  this.onAttachClick_();
               }
 
           ]);
