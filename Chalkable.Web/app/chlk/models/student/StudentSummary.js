@@ -9,10 +9,9 @@ REQUIRE('chlk.models.student.StudentGradesHoverBox');
 NAMESPACE('chlk.models.student', function () {
     "use strict";
 
-    /** @class chlk.models.student.Summary*/
-    //todo rename this class to StudentSummary
+    /** @class chlk.models.student.StudentSummary*/
     CLASS(
-        'Summary', EXTENDS(chlk.models.people.PersonSummary), [
+        'StudentSummary', EXTENDS(chlk.models.people.PersonSummary), [
             [ria.serialize.SerializeProperty('gradelevelnumber')],
             Number, 'gradeLevelNumber',
 
