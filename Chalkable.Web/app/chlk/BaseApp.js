@@ -1,4 +1,4 @@
-REQUIRE('ria.mvc.Application');
+REQUIRE('ria.mvc.DefaultApplication');
 REQUIRE('ria.dom.jQueryDom');
 REQUIRE('ria.dom.ready');
 REQUIRE('chlk.activities.lib.TemplatePage');
@@ -60,7 +60,7 @@ NAMESPACE('chlk', function (){
 
     /** @class chlk.BaseApp */
     CLASS(
-        'BaseApp', EXTENDS(ria.mvc.Application), [
+        'BaseApp', EXTENDS(ria.mvc.DefaultApplication), [
             function $(){
                 BASE();
                 this.apiHost_ = new chlk.AppApiHost();
