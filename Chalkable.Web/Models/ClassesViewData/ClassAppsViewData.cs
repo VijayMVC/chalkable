@@ -11,17 +11,16 @@ namespace Chalkable.Web.Models.ClassesViewData
 {
     public class ClassAppsViewData : ClassViewData
     {
-        public IList<InstalledApplicationViewData> InstalledApplication { get; set; }
-        public decimal? Balance { get; set; }
-        public decimal? Reserve { get; set; }
-
+        public AppsBudgetViewData AppsBudget { get; set; }
         private ClassAppsViewData(ClassDetails classDetails) : base(classDetails) { }
 
         public static ClassAppsViewData Create(ClassDetails classDetails, decimal? reserve, decimal? balance, IList<ApplicationInstall> installedApps, IList<Application> applications)
         {
-            var res = new ClassAppsViewData(classDetails) {Balance = balance, Reserve = reserve};
+            var res = new ClassAppsViewData(classDetails);
+            IList<InstalledApplicationViewData> installedApplicationView = new List<InstalledApplicationViewData>();
             if (installedApps != null)
-                res.InstalledApplication = InstalledApplicationViewData.Create(installedApps, null, applications);
+                installedApplicationView = InstalledApplicationViewData.Create(installedApps, null, applications);
+            res.AppsBudget = AppsBudgetViewData.Create(balance, reserve, installedApplicationView);
             return res;
         }
     }

@@ -5,15 +5,15 @@ using System.Web;
 
 namespace Chalkable.Web.Models
 {
-    public class AppBudgetBalanceViewData
+    public class BudgetBalanceViewData
     {
         public double StartSchoolBalance { get; set; }
         public double CurrentBalance { get; set; }
         public int PersentSpent { get; set; }
 
-        public static AppBudgetBalanceViewData Craete(double startSchoolBalance, double paymentForApp)
+        public static BudgetBalanceViewData Craete(double startSchoolBalance, double paymentForApp)
         {
-            var res = new AppBudgetBalanceViewData
+            var res = new BudgetBalanceViewData
                 {
                     StartSchoolBalance = startSchoolBalance,
                     CurrentBalance = startSchoolBalance - paymentForApp

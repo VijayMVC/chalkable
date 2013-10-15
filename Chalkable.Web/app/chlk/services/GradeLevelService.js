@@ -39,14 +39,14 @@ NAMESPACE('chlk.services', function () {
                 var res = this.getGradesToFilter(), res1 = this.getGradesToFilterWithAll();
                 if(res)
                     return withAll_ ? res1 : res;
-                res = new ria.serialize.JsonSerializer().deserialize(window.gradeLevels, ArrayOf(chlk.models.grading.GradeLevelForTopBar));
+                res = new chlk.lib.serialize.ChlkJsonSerializer().deserialize(window.gradeLevels, ArrayOf(chlk.models.grading.GradeLevelForTopBar));
                 this.setGradesToFilter(res);
                 var gradesToFilterWithAll = window.gradeLevels.slice();
                 gradesToFilterWithAll.unshift({
                     name: 'All',
                     id: ''
                 });
-                res1 = new ria.serialize.JsonSerializer().deserialize(gradesToFilterWithAll, ArrayOf(chlk.models.grading.GradeLevelForTopBar));
+                res1 = new chlk.lib.serialize.ChlkJsonSerializer().deserialize(gradesToFilterWithAll, ArrayOf(chlk.models.grading.GradeLevelForTopBar));
                 this.setGradesToFilterWithAll(res1);
                 return withAll_ ? res1 : res;
             }

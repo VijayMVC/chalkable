@@ -1,4 +1,4 @@
-REQUIRE('chlk.models.people.User');
+REQUIRE('chlk.models.people.PersonSummary');
 REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.common.AttendanceHoverBox');
 REQUIRE('chlk.models.common.DisciplineHoverBox');
@@ -9,9 +9,9 @@ REQUIRE('chlk.models.student.StudentGradesHoverBox');
 NAMESPACE('chlk.models.student', function () {
     "use strict";
 
-    /** @class chlk.models.student.Summary*/
+    /** @class chlk.models.student.StudentSummary*/
     CLASS(
-        'Summary', EXTENDS(chlk.models.people.User), [
+        'StudentSummary', EXTENDS(chlk.models.people.PersonSummary), [
             [ria.serialize.SerializeProperty('gradelevelnumber')],
             Number, 'gradeLevelNumber',
 
@@ -24,14 +24,6 @@ NAMESPACE('chlk.models.student', function () {
             [ria.serialize.SerializeProperty('maxPeriodNumber')],
             Number, 'maxPeriodNumber',
 
-            [ria.serialize.SerializeProperty('roomid')],
-            chlk.models.id.RoomId, 'roomId',
-
-            [ria.serialize.SerializeProperty('roomname')],
-            String, 'roomName',
-
-            [ria.serialize.SerializeProperty('roomnumber')],
-            Number, 'roomNumber',
 
             [ria.serialize.SerializeProperty('attendancebox')],
             chlk.models.common.AttendanceHoverBox, 'attendanceBox',

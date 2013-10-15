@@ -1,4 +1,4 @@
-REQUIRE('ria.mvc.Application');
+REQUIRE('ria.mvc.DefaultApplication');
 REQUIRE('ria.dom.jQueryDom');
 REQUIRE('ria.dom.ready');
 REQUIRE('chlk.activities.lib.TemplatePage');
@@ -40,6 +40,7 @@ REQUIRE('chlk.models.attendance.AttendanceReason');
 REQUIRE('chlk.models.id.SchoolYearId');
 
 REQUIRE('chlk.AppApiHost');
+REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
 
 NAMESPACE('chlk', function (){
 
@@ -59,7 +60,7 @@ NAMESPACE('chlk', function (){
 
     /** @class chlk.BaseApp */
     CLASS(
-        'BaseApp', EXTENDS(ria.mvc.Application), [
+        'BaseApp', EXTENDS(ria.mvc.DefaultApplication), [
             function $(){
                 BASE();
                 this.apiHost_ = new chlk.AppApiHost();
@@ -93,7 +94,7 @@ NAMESPACE('chlk', function (){
 
             [[ria.mvc.ISession, String, Object, String]],
             function saveInSession(session, key, cls_, destKey_){
-               var serializer = new ria.serialize.JsonSerializer();
+               var serializer = new chlk.lib.serialize.ChlkJsonSerializer();
 
                var defaultValue = {};
                if (cls_ && (ria.__API.isArrayOfDescriptor(cls_) || cls_ == Array))

@@ -8,6 +8,7 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.TeacherService*/
     CLASS(
         'TeacherService', EXTENDS(chlk.services.BaseService), [
+
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function getInfo(personId) {
                 return this.get('Teacher/Info.json', chlk.models.people.User, {
@@ -37,6 +38,13 @@ NAMESPACE('chlk.services', function () {
                     classId: classId.valueOf(),
                     byLastName: byLastName,
                     start: start
+                });
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
+            ria.async.Future, function getSummary(personId){
+                return this.get('Teacher/Summary.json', chlk.models.people.PersonSummary,{
+                    personId: personId && personId.valueOf()
                 });
             }
         ])

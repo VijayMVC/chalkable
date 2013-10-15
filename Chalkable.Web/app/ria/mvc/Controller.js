@@ -9,10 +9,9 @@ REQUIRE('ria.reflection.ReflectionClass');
 NAMESPACE('ria.mvc', function () {
     "use strict";
 
-    var jsonSerializer = new ria.serialize.JsonSerializer;
-
     /** @class ria.mvc.ControllerUri */
     ANNOTATION(
+        [[String]],
         function ControllerUri(value) {});
 
     /** @class ria.mvc.AccessFor */
@@ -23,7 +22,10 @@ NAMESPACE('ria.mvc', function () {
     ANNOTATION(
         function Inject() {});
 
-
+    /** @class ria.mvc.SessionBind */
+    ANNOTATION(
+        [[String]],
+        function SessionBind(name_) {});
 
 
     function toCamelCase(str) {
@@ -47,6 +49,11 @@ NAMESPACE('ria.mvc', function () {
                 this.context = null;
                 this.state = null;
                 this.view = null;
+                this._serializer = this.initSerializer_();
+            },
+
+            ria.serialize.ISerializer, function initSerializer_() {
+                return new ria.serialize.JsonSerializer;
             },
 
             /**
@@ -157,11 +164,11 @@ NAMESPACE('ria.mvc', function () {
                 try {
                     return params.map(function (_, index) {
                         try {
-                            return (_ === null || _ === undefined || (!Array.isArray(_) && _ instanceof types[index])) ? _ : jsonSerializer.deserialize(_, types[index]);
+                            return (_ === null || _ === undefined || (!Array.isArray(_) && _ instanceof types[index])) ? _ : this._serializer.deserialize(_, types[index]);
                         } catch (e) {
                             throw new ria.mvc.MvcException('Error deserializing action param ' + names[index], e);
                         }
-                    });
+                    }, this);
                 } catch (e) {
                     throw new ria.mvc.MvcException('Error deserializing action params', e);
                 }

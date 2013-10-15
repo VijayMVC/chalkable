@@ -32,7 +32,7 @@ mixin  ActionLinkButton(controller, action)
             span
                 link = self.getLink(ria.__API.clone(arguments))
                 -attributes.href=attributes.href || 'javascript:'
-                -delete attributes.class
+                -delete attributes['class']
                 -attributes['data-link'] = link
                 a.action-link(attributes).not-blue
                     block

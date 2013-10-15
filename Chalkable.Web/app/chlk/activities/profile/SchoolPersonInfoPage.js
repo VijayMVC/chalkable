@@ -16,7 +16,7 @@ NAMESPACE('chlk.activities.profile', function () {
 
             function $(){
                 BASE();
-                this._serializer = new ria.serialize.JsonSerializer();
+                this._serializer = new chlk.lib.serialize.ChlkJsonSerializer();
             },
 
             [ria.mvc.DomEventBind('click', '.add-button')],

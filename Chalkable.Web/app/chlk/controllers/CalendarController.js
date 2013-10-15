@@ -16,7 +16,7 @@ REQUIRE('chlk.models.classes.ClassesForTopBar');
 
 NAMESPACE('chlk.controllers', function (){
 
-    var Serializer = new ria.serialize.JsonSerializer;
+    var Serializer = new chlk.lib.serialize.ChlkJsonSerializer;
 
     /** @class chlk.controllers.CalendarController*/
     CLASS(

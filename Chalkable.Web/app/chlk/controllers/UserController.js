@@ -3,6 +3,7 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.PersonService');
 REQUIRE('chlk.services.CalendarService');
 REQUIRE('chlk.activities.profile.SchedulePage');
+REQUIRE('chlk.activities.profile.SchoolPersonAppsPage');
 
 
 REQUIRE('chlk.models.common.ChlkDate');
@@ -162,6 +163,17 @@ NAMESPACE('chlk.controllers', function (){
                         return new chlk.models.people.UserProfileViewData(this.getCurrentRole(), res);
                     }.bind(this));
                 return this.UpdateView(this.getInfoPageClass(), result);
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
+            function appsAction(personId){
+                var res = this.personService
+                    .getAppsInfo(personId)
+                    .attach(this.validateResponse_())
+                    .then(function(model){
+                        return new chlk.models.people.UserProfileAppsViewData(this.getCurrentRole(), model);
+                    }, this);
+                return this.PushView(chlk.activities.profile.SchoolPersonAppsPage, res);
             }
         ])
 });

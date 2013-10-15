@@ -73,13 +73,14 @@ BODY {
                 padding: 21px 18px 0px;
                 position: relative;
 
-                IMG{
+                IMG, .avatar-wrapper>div{
                   border-width: 0px;
-                  background: none;
                   width: 201px;
                   height: 167px;
                 }
-
+                IMG{
+                  background: none;
+                }
                 .grades-container{
                   &:hover{
                     P{

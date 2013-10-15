@@ -4,11 +4,12 @@ REQUIRE('chlk.models.student.StudentProfileSummaryViewData');
 
 NAMESPACE('chlk.templates.student', function () {
 
-    /** @class chlk.templates.student.Summary*/
+    /** @class chlk.templates.student.StudentProfileSummaryTpl*/
+    //todo rename this class to StudentProfileSummaryTpl
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/student/SummaryView.jade')],
         [ria.templates.ModelBind(chlk.models.student.StudentProfileSummaryViewData)],
-        'Summary', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl), [
+        'StudentProfileSummaryTpl', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl), [
 
             function $(){
                 BASE();
@@ -20,6 +21,22 @@ NAMESPACE('chlk.templates.student', function () {
                 return this._converter.convert(this.getCurrentAttendanceType());
             },
 
+            String, function getAvatarTitle(){
+                return (getDate().getFullYear() + 12 - this.getUser().getGradeLevelNumber()).toString();
+            },
+
+            Object, function getStatusData(){
+                var attType =this.getCurrentAttendanceType();
+                var res = {};
+                if(attType == chlk.models.attendance.AttendanceTypeEnum.NA){
+                    res.statusName = 'No attendance taken';
+                    res.status = 'not-assigned';
+                }else{
+                    res.statusName = this.getAttendanceTypeName();
+                    res.status = res.statusName && res.statusName.toLowerCase();
+                }
+                return res;
+            },
 
             Object, function buildRankGlanceBoxData(){
                 return this.buildGlanceBoxData_(this.getUser().getRankBox()

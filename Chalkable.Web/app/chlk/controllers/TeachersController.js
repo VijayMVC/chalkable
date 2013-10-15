@@ -1,6 +1,7 @@
 REQUIRE('chlk.controllers.UserController');
 REQUIRE('chlk.services.TeacherService');
 REQUIRE('chlk.activities.profile.SchoolPersonInfoPage');
+REQUIRE('chlk.activities.profile.PersonProfileSummaryPage');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.people.UserProfileInfoViewData');
@@ -16,6 +17,17 @@ NAMESPACE('chlk.controllers', function (){
 
             function getInfoPageClass(){
                 return chlk.activities.profile.SchoolPersonInfoPage;
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
+            function detailsAction(personId){
+                var res = this.teacherService
+                    .getSummary(personId)
+                    .attach(this.validateResponse_())
+                    .then(function(model){
+                        return new chlk.models.people.UserProfileSummaryViewData(this.getCurrentRole(), model);
+                    }, this);
+                return this.PushView(chlk.activities.profile.PersonProfileSummaryPage, res);
             },
 
             [[chlk.models.id.SchoolPersonId]],

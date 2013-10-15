@@ -122,7 +122,7 @@ NAMESPACE('chlk.controllers', function (){
         //TODO:refactor
         [[chlk.models.id.SchoolId]],
         function peopleAction(id) {
-            var serializer = new ria.serialize.JsonSerializer();
+            var serializer = new chlk.lib.serialize.ChlkJsonSerializer();
             var newGradeLevels = this.convertGradeLevelsToNameIds_(this.gradeLevelService.getGradeLevels());
             newGradeLevels.unshift(serializer.deserialize({name: 'All Grades', id: null}, chlk.models.common.NameId));
             var roles =  this.convertRolesToNameIds_(this.accountService.getSchoolRoles());
