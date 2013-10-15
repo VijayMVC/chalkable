@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
+using Chalkable.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -53,7 +55,20 @@ namespace Chalkable.BusinessLogic.Services.School
                         TeacherId = teacherId,
                         SchoolYearId = schoolYearId
                     });
-                return new GradingStatisticDataAccess(uow).CalcStudentGradeAvgPerClass(query);
+                var studentGradeAvgPerMpc = new GradingStatisticDataAccess(uow).CalcStudentGradeAvgPerMPC(query);
+                var dic = studentGradeAvgPerMpc.GroupBy(x => new Pair<Guid,Guid>(x.MarkingPeriodClass.ClassRef, x.Student.Id))
+                                               .ToDictionary(x => x.Key, x => x.ToList());
+                var res = new List<StudentGradeAvgPerClass>();
+                foreach (var keyValue in dic)
+                {
+                    res.Add(new StudentGradeAvgPerClass
+                        {
+                            Student = keyValue.Value.First().Student,
+                            ClassRef = keyValue.Key.First,
+                            Avg = (int?)keyValue.Value.Average(x => x.Avg)
+                        });
+                }
+                return res;
             }
         }
 

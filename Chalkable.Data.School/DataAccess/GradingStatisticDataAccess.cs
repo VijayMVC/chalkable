@@ -76,17 +76,18 @@ namespace Chalkable.Data.School.DataAccess
             return dbQuery;
         }
 
-        private DbQuery BuildStudentGradeAvgPerMPCDbQuey(GradingStatisticQuery query)
+        private DbQuery BuildStudentGradeAvgPerMPCDbQuey(GradingStatisticQuery query, string avgFieldName = "[Avg]")
         {
             var dbQuery = new DbQuery();
             var types = new List<Type> { typeof(Person), typeof(MarkingPeriodClass) };
-            dbQuery.Sql.AppendFormat(@"select {0}, dbo.fnCalcStudentGradeAvgForFinalGrade(Person.Id, MarkingPeriodClass.Id, MarkingPeriod.EndDate) as [Avg] 
+            dbQuery.Sql.AppendFormat(@"select {0}, 
+                                       dbo.fnCalcStudentGradeAvgForFinalGrade(Person.Id, MarkingPeriodClass.Id, MarkingPeriod.EndDate) as {1} 
                              from Person 
                              join ClassPerson on ClassPerson.PersonRef = Person.Id
                              join Class on Class.Id = ClassPerson.ClassRef
                              join MarkingPeriodClass on MarkingPeriodClass.ClassRef = Class.Id
                              join MarkingPeriod on MarkingPeriod.Id = MarkingPeriodClass.MarkingPeriodRef "
-                             , Orm.ComplexResultSetQuery(types));
+                             , Orm.ComplexResultSetQuery(types), avgFieldName);
             dbQuery.Sql.Append(" where 1=1 ");
             return BuilStudentGradeStatisticQuery(dbQuery, query);
         }
@@ -94,7 +95,7 @@ namespace Chalkable.Data.School.DataAccess
         //TODO: add method to Orm for function building
         public IList<StudentGradeAvgPerMPC> CalcStudentGradeAvgPerMPC(GradingStatisticQuery query)
         {
-            var dbQuery = BuildStudentGradeAvgPerMPCDbQuey(query);
+            var dbQuery = BuildStudentGradeAvgPerMPCDbQuey(query, "StudentGradeAvg_Avg");
             return ReadMany<StudentGradeAvgPerMPC>(dbQuery, true);
         }
 
@@ -110,12 +111,13 @@ namespace Chalkable.Data.School.DataAccess
                     string.Format(fullFieldNameFormat, personType.Name, Person.FIRST_NAME_FIELD),
                     string.Format(fullFieldNameFormat, personType.Name, Person.LAST_NAME_FIELD),
                     string.Format(fullFieldNameFormat, personType.Name, Person.GENDER_FIELD),
+                    string.Format(fullFieldNameFormat, personType.Name, Person.ROLE_REF_FIELD),
                     string.Format(fullFieldNameFormat, mpcType.Name, MarkingPeriodClass.CLASS_REF_FIELD),
                 };
             var resultSetStr = fields.Select(x => string.Format("x.{0} as {0}", x)).JoinString(",");
             fields.Add(string.Format(fullFieldNameFormat, mpcType.Name, MarkingPeriodClass.ID_FIELD));
             var groupBySetStr = fields.Select(x => string.Format("x.{0}", x)).JoinString(",");
-            var sql = @"select {1}, AVG(x.[Avg]) as [Avg]                                
+            var sql = @"select {1}, AVG(x.[Avg]) as StudentGradeAvg_Avg                                
                         from ({0})x  group by {2}";
             sql = string.Format(sql, innerQuery.Sql, resultSetStr, groupBySetStr);
 
