@@ -11,6 +11,7 @@ NAMESPACE('ria.mvc', function () {
 
     /** @class ria.mvc.ControllerUri */
     ANNOTATION(
+        [[String]],
         function ControllerUri(value) {});
 
     /** @class ria.mvc.AccessFor */
@@ -21,7 +22,10 @@ NAMESPACE('ria.mvc', function () {
     ANNOTATION(
         function Inject() {});
 
-
+    /** @class ria.mvc.SessionBind */
+    ANNOTATION(
+        [[String]],
+        function SessionBind(name_) {});
 
 
     function toCamelCase(str) {

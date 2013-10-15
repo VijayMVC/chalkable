@@ -17,7 +17,7 @@ NAMESPACE('chlk.models.discipline', function(){
 
         [[String]],
         VOID, function setDisciplinesJson(disciplinesJsonObj){
-                var serializer = new ria.serialize.JsonSerializer();
+                var serializer = new chlk.lib.serialize.ChlkJsonSerializer();
                 var disciplinesObj = disciplinesJsonObj ? JSON.parse(disciplinesJsonObj) : null;
                 this.setDisciplines(serializer.deserialize(disciplinesObj, ArrayOf(chlk.models.discipline.SetDisciplineModel)));
         },

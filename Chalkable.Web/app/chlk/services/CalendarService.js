@@ -17,7 +17,7 @@ REQUIRE('chlk.models.id.ClassId');
 NAMESPACE('chlk.services', function () {
     "use strict";
 
-    var Serializer = new ria.serialize.JsonSerializer;
+    var Serializer = new chlk.lib.serialize.ChlkJsonSerializer;
 
     /** @class chlk.services.CalendarService */
     CLASS(

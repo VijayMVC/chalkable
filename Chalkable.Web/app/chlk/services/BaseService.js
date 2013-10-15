@@ -1,4 +1,4 @@
-REQUIRE('ria.serialize.JsonSerializer');
+REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
 
 REQUIRE('chlk.lib.ajax.ChlkJsonPostTask');
 REQUIRE('ria.ajax.JsonGetTask');
@@ -20,7 +20,7 @@ NAMESPACE('chlk.services', function () {
         ]);
 
     // Single instance
-    var Serializer = new ria.serialize.JsonSerializer;
+    var Serializer = new chlk.lib.serialize.ChlkJsonSerializer;
 
     /** @class chlk.services.BaseService*/
     CLASS(

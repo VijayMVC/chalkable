@@ -7,6 +7,7 @@ REQUIRE('chlk.activities.lib.PendingActionDialog');
 
 REQUIRE('chlk.models.common.InfoMsg');
 REQUIRE('chlk.models.common.Button');
+REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -81,7 +82,8 @@ NAMESPACE('chlk.controllers', function (){
                var instance = new chlk.activities.common.InfoMsgDialog();
                var buttons = [];
                if(buttons_){
-                   var serializer = new ria.serialize.JsonSerializer();
+
+                   var serializer = new chlk.lib.serialize.ChlkJsonSerializer();
                    buttons_.forEach(function(item){
                        buttons.push(serializer.deserialize(item, chlk.models.common.Button));
                    })
@@ -142,6 +144,10 @@ NAMESPACE('chlk.controllers', function (){
 
                }
                return method;
+           },
+
+           OVERRIDE, ria.serialize.ISerializer, function initSerializer_(){
+              return new chlk.lib.serialize.ChlkJsonSerializer();
            },
 
            OVERRIDE, VOID, function postDispatchAction_() {

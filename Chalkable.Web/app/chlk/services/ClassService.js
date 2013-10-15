@@ -28,7 +28,7 @@ NAMESPACE('chlk.services', function () {
                 var res = this.getClassesToFilter(), res1 = this.getClassesToFilterWithAll();
                 if(res)
                     return withAll_ ? res1 : res;
-                res = new ria.serialize.JsonSerializer().deserialize(window.classesToFilter, ArrayOf(chlk.models.classes.ClassForTopBar));
+                res = new chlk.lib.serialize.ChlkJsonSerializer().deserialize(window.classesToFilter, ArrayOf(chlk.models.classes.ClassForTopBar));
                 this.setClassesToFilter(res);
                 var classesToFilterWithAll = window.classesToFilter.slice();
                 classesToFilterWithAll.unshift({
@@ -36,7 +36,7 @@ NAMESPACE('chlk.services', function () {
                     description: 'All',
                     id: ''
                 });
-                res1 = new ria.serialize.JsonSerializer().deserialize(classesToFilterWithAll, ArrayOf(chlk.models.classes.ClassForTopBar));
+                res1 = chlk.lib.serialize.ChlkJsonSerializer().deserialize(classesToFilterWithAll, ArrayOf(chlk.models.classes.ClassForTopBar));
                 this.setClassesToFilterWithAll(res1);
                 return withAll_ ? res1 : res;
             },
@@ -46,7 +46,7 @@ NAMESPACE('chlk.services', function () {
             chlk.models.classes.ClassForWeekMask, function getClassAnnouncementInfo(id){
                 var res = window.classesInfo[id.valueOf()];
                 res.classId = id.valueOf();
-                res = new ria.serialize.JsonSerializer().deserialize(res, chlk.models.classes.ClassForWeekMask);
+                res = new chlk.lib.serialize.ChlkJsonSerializer().deserialize(res, chlk.models.classes.ClassForWeekMask);
                 return res;
             },
 
