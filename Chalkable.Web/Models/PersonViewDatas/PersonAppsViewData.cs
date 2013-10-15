@@ -8,20 +8,13 @@ namespace Chalkable.Web.Models.PersonViewDatas
 {
     public class PersonAppsViewData : ShortPersonViewData
     {
-        public IList<InstalledApplicationViewData> InstalledApplication { get; set; }
-        public decimal Balance { get; set; }
-        public decimal? Reserve { get; set; }
-
+        public AppsBudgetViewData AppsBudget { get; set; }
         private PersonAppsViewData(Person person) : base(person) { }
-
+        
         public static PersonAppsViewData Create( Person person, decimal? reserve, decimal balance, IList<Application> applications, IList<ApplicationInstall> appsInstalls)
         {
-            return new PersonAppsViewData(person)
-                {
-                    Balance = balance,
-                    InstalledApplication = InstalledApplicationViewData.Create(appsInstalls, person, applications),
-                    Reserve = reserve
-                };
+            var installedAppViewData = InstalledApplicationViewData.Create(appsInstalls, person, applications);
+            return new PersonAppsViewData(person){ AppsBudget = AppsBudgetViewData.Create(balance, reserve, installedAppViewData) };
         }
     }
 }

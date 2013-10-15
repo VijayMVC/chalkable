@@ -20,7 +20,7 @@ namespace Chalkable.Web.Controllers
             var schoolId = Context.SchoolId.Value;
             var toSchoolPayment = (double)MasterLocator.FundService.GetToSchoolPayment(schoolId);
             var paymentforApp = (double)MasterLocator.FundService.GetPaymentForApps(schoolId);
-            return Json(AppBudgetBalanceViewData.Craete(toSchoolPayment, paymentforApp));
+            return Json(BudgetBalanceViewData.Craete(toSchoolPayment, paymentforApp));
         }
     }
 }

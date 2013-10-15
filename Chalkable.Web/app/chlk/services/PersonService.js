@@ -46,6 +46,13 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Person/Schedule.json', chlk.models.people.Schedule, {
                     personId: personId.valueOf()
                 });
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
+            ria.async.Future, function getAppsInfo(personId){
+                return this.get('Person/Apps.json', chlk.models.people.PersonApps,{
+                    personId: personId && personId.valueOf()
+                });
             }
         ])
 });

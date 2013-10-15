@@ -9,6 +9,9 @@ namespace Chalkable.Web.Controllers.PersonControllers
 {
     public class AdminController : PersonController
     {
+
+
+
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult Info(Guid personId)
         {
