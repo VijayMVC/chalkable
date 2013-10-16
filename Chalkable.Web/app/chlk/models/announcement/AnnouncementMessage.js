@@ -1,4 +1,4 @@
-REQUIRE('chlk.models.people.Person');
+REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.common.ChlkDate');
 
 NAMESPACE('chlk.models.announcement', function () {
@@ -8,7 +8,7 @@ NAMESPACE('chlk.models.announcement', function () {
     CLASS(
         'AnnouncementMessage', [
             chlk.models.common.ChlkDate, 'created',
-            chlk.models.people.Person, 'person',
+            chlk.models.people.User, 'person',
             String, 'message'
         ]);
 });

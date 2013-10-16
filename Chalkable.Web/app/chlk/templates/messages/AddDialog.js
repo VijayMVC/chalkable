@@ -21,10 +21,10 @@ NAMESPACE('chlk.templates.messages', function () {
             String, 'body',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.people.Person, 'sender',
+            chlk.models.people.User, 'sender',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.people.Person, 'recipient',
+            chlk.models.people.User, 'recipient',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'sent'

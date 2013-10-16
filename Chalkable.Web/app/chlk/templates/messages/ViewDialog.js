@@ -1,7 +1,7 @@
 REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.messages.Message');
 REQUIRE('chlk.models.id.MessageId');
-REQUIRE('chlk.models.people.Person');
+REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.common.ChlkDate');
 
 NAMESPACE('chlk.templates.messages', function () {
@@ -21,10 +21,13 @@ NAMESPACE('chlk.templates.messages', function () {
             String, 'body',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.people.Person, 'sender',
+            chlk.models.people.User, 'sender',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.people.Person, 'recipient',
+            chlk.models.people.User, 'recipient',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'replay',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'sent'
