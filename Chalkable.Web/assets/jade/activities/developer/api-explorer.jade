@@ -1,0 +1,49 @@
+mixin ApiCallForm(controllerInfo)
+    .controller
+        .controller-header
+            .name=controllerInfo.getName()
+            .fill
+                div
+            .collapse-all
+        .content
+            methods = controllerInfo.getMethods() || []
+            each cntMethod in methods
+                .method
+                    methodType = cntMethod.getMethodType().toLowerCase()
+                    .header(class=methodType)
+                        span.header-line
+                        .header-body
+                            .call-type(class=methodType)
+                            .action(data-method-name=cntMethod.getName())=cntMethod.getName()
+                            .toggle
+                            .description=cntMethod.getDescription()
+                    .details
+                        .det-content
+
+.api-explorer
+    .action-bar.not-transparent
+        .container.panel-bg.buttons-toolbar
+            label API key:
+            input(type="text", name="app-secret-key").api-key=self.getAppSecretKey()
+
+            each apiRole in self.getApiRoles()
+                +ActionLink('developer', 'api', apiRole).toolbar-btn=apiRole
+    h4.text-title Chalkable REST API
+    .api-description
+        The API allows you to access real-time data from schools. All methods return JSON. There are user roles on the bar above.
+        Choosing a role, for example teacher, displays all of the methods available to your app if a teacher had installed it.
+    h4.text-title  OAuth
+    .api-description
+        OAuth 2.0 is used for authentication. The authentication token you receive, after making your request, includes a user role.
+        The user role defines the level of access.
+    div#api-search-field
+
+    apiInfo = self.getApiInfo()
+
+    roleControllers = apiInfo.getControllers() || []
+        each contr in roleControllers
+            +ApiCallForm(contr)
+
+
+
+

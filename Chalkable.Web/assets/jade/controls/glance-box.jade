@@ -1,0 +1,17 @@
+mixin GlanceBox(controller, action, data, color, converter)
+    if controller
+        +ActionLink(controller, action).glance-box.hover-action-box
+    else
+        span(class="glance-box" + (data.items ? " hover-action-box" : ""))
+            div
+                .value(class=self.getValueClass(data.value) + color ? ' ' + color : '') #{data.value}
+                p.glance-title #{data.title}
+                if data.items
+                    .details
+                        each item, i in data.items
+                            summary = (item.getSummaryMethod || item.data.getSummary)();
+                            summary = converter ? converter(summary) : summary;
+                            div #{self.getShortText((item.getTotalMethod || item.data.getTotal)(), summary)}
+
+
+
