@@ -1,0 +1,36 @@
+mixin CounterBox(title, value, editable)
+    .counter(attributes)
+        lable=title
+        span
+            input(name='value', value=value)
+
+mixin AppIcon(app)
+    .app-list-item
+        .icon
+            pictureUrl = self.getPictureURL(app.getSmallPictureId(), 74, 74)
+        img(src=pictureUrl)
+        .description
+            .name=app.getName()
+
+
+user = self.getUser()
+appsBudget = user.getAppsBudget()
+.loader-container
+    .loader
+    +UserProfileTopBar(self, 'apps')
+    .profile-info.apps-view
+        .summary-info
+            .person-info.standard-short-info
+                .avarar-container.standard-small-container
+                    .img-container
+                        +PersonImg(user, 64)
+                h1.profile-person-name=user.getDisplayName()
+
+            h2
+               .budget-info
+                   +CounterBox('Balance', appsBudget.getBalance(), true)
+                   +CounterBox('School reserve', appsBudget.getReserve(), true)
+            .apps
+                each app in appsBudget.getInstalledApps()
+                    +AppIcon(app)
+

@@ -1,0 +1,30 @@
+.dialog.add-message
+    .bg-top
+    .bg-middle
+        .x-window-body
+            .general-info
+                +ActionForm('message', 'send')
+                    .x-form-field
+                        label To:
+                        +SearchBox(chlk.services.PersonService, "getPersons", chlk.templates.messages.RecipientAutoComplete)#recipientId(
+                        name="recipientId",
+                        value=self.sender ? self.sender.getFirstName()+ ' ' + self.sender.getLastName() : "",
+                        default-value=self.sender ? self.sender.getId() : "",
+                        class="validate[required]")
+                    .x-form-field
+                        label Subject:
+                        input(type="text",name="subject", value=self.subject ? "Re: " + self.subject : "", class="validate[required]")
+                    .x-form-field
+                        label Body:
+                        textarea(type="text",name="body")
+
+                    if self.body
+                        .x-form-field
+                            label= 'send: ' + self.sent.toString('dd/m/yy hh:min:ss')
+                            textarea(type="text",name="prev")
+                                =self.body
+
+                    .form-buttons
+                        +Button()(type="submit").special-button.blue-button.submit-btn#submitbtn Submit
+                        +Button.special-button.red-button.close Cancel
+    .bg-bottom
