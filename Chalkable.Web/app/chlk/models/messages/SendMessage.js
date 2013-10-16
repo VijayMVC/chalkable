@@ -1,6 +1,6 @@
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.id.SchoolPersonId');
-REQUIRE('chlk.models.people.Person');
+REQUIRE('chlk.models.people.User');
 
 
 NAMESPACE('chlk.models.messages', function () {

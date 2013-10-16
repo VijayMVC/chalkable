@@ -88,7 +88,7 @@ NAMESPACE('chlk.controls', function () {
 
             [ria.mvc.DomEventBind('click', 'FORM [type=submit]')],
             [[ria.dom.Dom, ria.dom.Event]],
-            Boolean, function submitClicked($target, event) {
+            function submitClicked($target, event) {
                 var $form = $target.parent('FORM');
 
                 $form.setData('submit-name', $target.getAttr('name'));

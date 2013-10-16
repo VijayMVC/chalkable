@@ -1,6 +1,6 @@
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.id.MessageId');
-REQUIRE('chlk.models.people.Person');
+REQUIRE('chlk.models.people.User');
 
 
 NAMESPACE('chlk.models.messages', function () {
@@ -11,6 +11,7 @@ NAMESPACE('chlk.models.messages', function () {
         'Message', [
             chlk.models.id.MessageId, 'id',
             chlk.models.common.ChlkDate, 'sent',
+            Boolean, 'replay',
             String, 'subject',
             String, 'body',
             Boolean, 'read',
@@ -18,7 +19,20 @@ NAMESPACE('chlk.models.messages', function () {
             Boolean, 'deleteBySender',
             [ria.serialize.SerializeProperty('deletebyrecipient')],
             Boolean, 'deleteByRecipient',
-            chlk.models.people.Person, 'sender',
-            chlk.models.people.Person, 'recipient'
+            chlk.models.people.User, 'sender',
+            chlk.models.people.User, 'recipient',
+
+            [[String, String, chlk.models.people.User, chlk.models.common.ChlkDate]],
+            function $(body_, subject_, recipient_, sent_){
+                BASE();
+                if(body_)
+                    this.setBody(body_);
+                if(subject_)
+                    this.setSubject(subject_);
+                if(recipient_)
+                    this.setRecipient(recipient_);
+                if(sent_)
+                    this.setSent(sent_);
+            }
         ]);
 });
