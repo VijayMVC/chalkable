@@ -22,6 +22,6 @@ NAMESPACE('chlk.activities.developer', function () {
                 var parentNode = jQuery(node.valueOf()).parent().parent();
                 parentNode.find('.details').slideUp();
                 parentNode.find('.header').find('.description').removeClass('long');
-            },
+            }
         ]);
 });
