@@ -19,15 +19,43 @@ mixin ApiCallForm(controllerInfo)
                             .description=cntMethod.getDescription()
                     .details
                         .det-content
+                            methodParams = cntMethod.getParams() || []
+                            form
+                                if methodParams.length > 0
+                                    table
+                                        thead
+                                            th Parameter
+                                            th Value
+                                            th Description
+                                        tbody
+                                            each methodParam in methodParams
+                                                tr
+                                                    td.param-name=methodParam.getName()
+                                                    td.param-value
+                                                        input(type="text" data-form-id = "id", data-param-type = "type", name = methodParam.getName()).value-field(class = methodParam.isOptional() ? "optional" : undefined)
+                                                    td.param-description=methodParam.getDescription()
+                                else
+                                    .no-error No parameters required
+                            .code-examples
+                                .text-title Code Examples
+                                .tab-headers
+                                    .tab-header.active
+                                        span.triangle
+                                        cUrl
+                                    .tab-content
+                                        Some example
+
+apiInfo = self.getApiInfo()
 
 .api-explorer
     .action-bar.not-transparent
         .container.panel-bg.buttons-toolbar
             label API key:
-            input(type="text", name="app-secret-key").api-key=self.getAppSecretKey()
+            input(type="text", name="app-secret-key", value=self.getAppSecretKey()).api-key
 
             each apiRole in self.getApiRoles()
-                +ActionLink('developer', 'api', apiRole).toolbar-btn=apiRole
+                -console.log(apiRole == apiInfo.getRole())
+                +ActionLink('developer', 'api', apiRole).toolbar-btn(class = apiRole == apiInfo.getRole() == apiRole ? "selected" : undefined)=apiRole
     h4.text-title Chalkable REST API
     .api-description
         The API allows you to access real-time data from schools. All methods return JSON. There are user roles on the bar above.
@@ -38,7 +66,7 @@ mixin ApiCallForm(controllerInfo)
         The user role defines the level of access.
     div#api-search-field
 
-    apiInfo = self.getApiInfo()
+
 
     roleControllers = apiInfo.getControllers() || []
         each contr in roleControllers

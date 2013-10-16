@@ -9,7 +9,7 @@ NAMESPACE('chlk.models.api', function () {
             String, 'name',
             String, 'description',
             [ria.serialize.SerializeProperty('isnullable')],
-            Boolean, 'nullable'
+            Boolean, 'optional'
             //"paramtype": 1
         ]);
 });

@@ -14,6 +14,19 @@ NAMESPACE('chlk.templates.developer', function () {
             String, 'appSecretKey',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(String), 'apiRoles'
+            ArrayOf(String), 'apiRoles',
+
+
+            String, function getRubyExample(){
+
+            },
+
+            String, function getPythonExample(){
+
+            },
+
+            String, function getCurlExample(){
+
+            }
         ])
 });

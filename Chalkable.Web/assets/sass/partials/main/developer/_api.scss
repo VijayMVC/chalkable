@@ -8,10 +8,22 @@ BODY {
               DIV.api-explorer{
 
                 .api-key{
-                  margin-right: 100px;
+                  margin-right: 90px;
+                  margin-left: 5px;
+                  border: none;
+                  font: normal 14px Arial;
+                  color: #818181;
+                  background: none;
                 }
 
                 .buttons-toolbar{
+                  label{
+                    margin-left: 5px;
+                    margin-right: 3px;
+                    border: none;
+                    font: normal 14px Arial;
+                    color: #818181;
+                  }
                   .toolbar-btn{
                     padding: 0 7px;
                     color: #828282;
@@ -26,6 +38,10 @@ BODY {
 
                     &:hover{
                       @include background(linear-gradient(top, #f6f6f6,#d8d8d8));
+                    }
+
+                    &.selected{
+                       @include background(linear-gradient(top, #f6f6f6,#d8d8d8));
                     }
                   }
                 }
