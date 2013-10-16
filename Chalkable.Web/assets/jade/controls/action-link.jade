@@ -1,0 +1,38 @@
+mixin ActionLink(controller, action)
+    link = self.getLink(ria.__API.clone(arguments))
+    -attributes.href=attributes.href || 'javascript:'
+    -attributes['data-link'] = link
+    A.action-link(attributes)
+        block
+
+mixin ActionLinkWithPrepend(controller, action, prependParams)
+    args = ria.__API.clone(arguments)
+    - [].splice.apply(args, [2, 1].concat(prependParams || []))
+    link = self.getLink(args)
+    -attributes.href=attributes.href || 'javascript:'
+    -attributes['data-link'] = link
+    A.action-link(attributes)
+        block
+
+// requires: actionLinkModel instanceOf chlk.models.common.ActionLinkModel
+mixin ActionLinkWithModel(actionLinkModel)
+    classesNames = actionLinkModel.getClassesNames() || []
+    +ActionLinkWithPrepend(actionLinkModel.getControllerName(), actionLinkModel.getActionName(), actionLinkModel.getArgs()
+    )(class = classesNames && classesNames.length > 0 ? classesNames.join(' ') : '')(attributes)=(actionLinkModel.getTitle() || '')
+        block
+
+// requires: actionLinksModel instanceOf ArrayOf(chlk.models.common.ActionLinkModel)
+mixin ActionLinkList(actionLinksModel)
+    each item in actionLinksModel
+        +ActionLinkWithModel(item)
+
+mixin  ActionLinkButton(controller, action)
+    span.chlk-button.action-button(attributes)
+        span
+            span
+                link = self.getLink(ria.__API.clone(arguments))
+                -attributes.href=attributes.href || 'javascript:'
+                -delete attributes['class']
+                -attributes['data-link'] = link
+                a.action-link(attributes).not-blue
+                    block
