@@ -38,7 +38,18 @@ NAMESPACE('chlk.models.people', function () {
 
             String, 'genderFullText',
 
-            String, 'salutation'
+            String, 'salutation',
+
+            [[String, String, chlk.models.id.SchoolPersonId]],
+            function $(firstName_, lastName_, id_){
+                BASE();
+                if(firstName_)
+                    this.setFirstName(firstName_);
+                if(lastName_)
+                    this.setLastName(lastName_);
+                if(id_)
+                    this.setId(id_);
+            }
 
         ]);
 });
