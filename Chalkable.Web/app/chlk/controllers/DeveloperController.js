@@ -1,5 +1,6 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.ApplicationService');
+REQUIRE('chlk.services.ApiService');
 
 
 REQUIRE('chlk.templates.common.footers.DeveloperFooter');
@@ -8,7 +9,7 @@ REQUIRE('chlk.activities.developer.DeveloperDocsPage');
 REQUIRE('chlk.activities.developer.ApiExplorerPage');
 
 REQUIRE('chlk.models.common.footers.DeveloperFooter');
-REQUIRE('chlk.models.developer.ApiExplorerViewData');
+REQUIRE('chlk.models.api.ApiExplorerViewData');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -18,6 +19,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.ApplicationService, 'appsService',
+
+            [ria.mvc.Inject],
+            chlk.services.ApiService, 'apiService',
 
             OVERRIDE, ria.async.Future, function onAppInit() {
                 this.appsService.getDevApplicationListChange()
@@ -54,8 +58,19 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.DEVELOPER
             ])],
-            function apiAction(){
-                return this.PushView(chlk.activities.developer.ApiExplorerPage, new ria.async.DeferredData(new chlk.models.developer.ApiExplorerViewData()));
+
+            [[String]],
+            function apiAction(role_){
+                var showForRole = role_ ? role_ : "teacher";
+                var result = this.apiService
+                    .listApiForRole(showForRole)
+                    .then(function(data){
+                        var currentApp = this.appsService.getCurrentApp();
+                        var secretKey = currentApp.getSecretKey() || 'no-key';
+                        var apiRoles = this.apiService.getApiRoles();
+                        return chlk.models.api.ApiExplorerViewData.$create(data, secretKey, apiRoles);
+                    }, this)
+                return this.PushView(chlk.activities.developer.ApiExplorerPage, result);
             }
 
 

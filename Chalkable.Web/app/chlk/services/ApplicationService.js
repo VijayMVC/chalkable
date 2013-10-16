@@ -63,6 +63,10 @@ NAMESPACE('chlk.services', function () {
                 return this.getContext().getSession().get('currentAppId');
             },
 
+            function getCurrentApp(){
+                return this.getContext().getSession().get('currentApp');
+            },
+
             [[chlk.models.id.AppId, Boolean]],
             ria.async.Future, function getInfo(appId_, switchApp_) {
                 var mustSwitch = switchApp_ ? switchApp_ : true;
