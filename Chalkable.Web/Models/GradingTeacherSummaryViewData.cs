@@ -26,7 +26,10 @@ namespace Chalkable.Web.Models
         public static GradingTeacherClassSummaryViewData Create(ClassDetails classDetails, IList<StudentGradeAvgPerClass> studentClassStats)
         {
             var res = new GradingTeacherClassSummaryViewData {Class = ClassViewData.Create(classDetails)};
-            studentClassStats = studentClassStats.Where(x => x.ClassRef == classDetails.Id).OrderBy(x => x.Avg).ToList();     
+            studentClassStats = studentClassStats.Where(x => x.ClassRef == classDetails.Id)
+                                                 .OrderBy(x => x.Avg)
+                                                 .ThenBy(x => x.Student.LastName)
+                                                 .ThenBy(x => x.Student.FirstName).ToList();     
             var well = new List<StudentGradeAvgPerClass>();
             var trouble = new List<StudentGradeAvgPerClass>();
             foreach (var studentStats in studentClassStats)
@@ -35,10 +38,10 @@ namespace Chalkable.Web.Models
                     trouble.Add(studentStats);
                 else well.Add(studentStats);
             }
-            well.Reverse();
+            int skip = well.Count - DEFAUL_STUDENTS_COUNT > 0 ? well.Count - DEFAUL_STUDENTS_COUNT : 0; 
             res.AllStudents = ShortStudentGradingViewData.Create(studentClassStats);
             res.Trouble = ShortStudentGradingViewData.Create(trouble.Take(DEFAUL_STUDENTS_COUNT));
-            res.Well = ShortStudentGradingViewData.Create(well.Take(DEFAUL_STUDENTS_COUNT).OrderBy(x=>x.Avg));
+            res.Well = ShortStudentGradingViewData.Create(well.Skip(skip).Take(DEFAUL_STUDENTS_COUNT));
             return res;
         }
     }
