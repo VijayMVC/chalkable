@@ -7,6 +7,7 @@ REQUIRE('chlk.services.AnnouncementService');
 
 REQUIRE('chlk.activities.grading.TeacherSettingsPage');
 REQUIRE('chlk.activities.grading.GradingClassSummaryPage');
+REQUIRE('chlk.activities.grading.GradingTeacherClassSummaryPage');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -65,27 +66,36 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
             function summaryTeacherAction(classId_){
-                var classes = this.classService.getClassesForTopBar();
-                classId_ = classId_ || classes[0].getId();
-                var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_ || null);
+                if(!classId_ || !classId_.valueOf())
+                    return this.Redirect('grading', 'summaryAll', []);
+                var classes = this.classService.getClassesForTopBar(true);
+                var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                 var model = new chlk.models.grading.GradingClassSummary();
                 model.setTopData(topData);
-                var result;
-                if(classId_){
-                    result = this.gradingService
-                        .getClassSummary(classId_).then(function(result){
-                            result.forEach(function(mpData){
-                                mpData.getByAnnouncementTypes().forEach(function(item){
-                                    item.setClassId(classId_);
-                                });
+                var result = this.gradingService
+                    .getClassSummary(classId_).then(function(result){
+                        result.forEach(function(mpData){
+                            mpData.getByAnnouncementTypes().forEach(function(item){
+                                item.setClassId(classId_);
                             });
-                            model.setSummaryPart(new chlk.models.grading.GradingClassSummaryPart(result));
-                            return model;
-                        }.bind(this));
-                }else{
-                    result = new ria.async.DeferredData(model);
-                }
+                        });
+                        model.setSummaryPart(new chlk.models.grading.GradingClassSummaryPart(result));
+                        return model;
+                    }.bind(this));
                 return this.PushView(chlk.activities.grading.GradingClassSummaryPage, result);
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
+            function summaryAllTeacherAction(){
+                var teacherId = this.getContext().getSession().get('currentPerson').getId();
+                var result = this.gradingService
+                    .getTeacherSummary(teacherId).then(function(items){
+                        var classes = this.classService.getClassesForTopBar(true);
+                        var topData = new chlk.models.classes.ClassesForTopBar(classes, null);
+                        var model = new chlk.models.grading.GradingTeacherClassSummaryViewDataList(topData, items);
+                        return model;
+                    }.bind(this));
+                return this.PushView(chlk.activities.grading.GradingTeacherClassSummaryPage, result);
             },
 
             [[chlk.models.id.AnnouncementId]],

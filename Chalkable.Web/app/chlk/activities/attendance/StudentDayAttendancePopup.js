@@ -78,7 +78,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this.dom.find('[name="attendanceTypes"]').setValue(attendanceTypes.join(','));
                 this.dom.find('[name="attReasons"]').setValue(attReasons.join(','));
                 this.dom.find('form').trigger('submit');
-                new ria.dom.Dom('.student.absolute').remove();
+                //new ria.dom.Dom('.student.absolute').remove();
                 BASE();
             }
         ]);

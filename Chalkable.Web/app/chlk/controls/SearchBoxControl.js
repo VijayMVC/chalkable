@@ -28,9 +28,13 @@ NAMESPACE('chlk.controls', function () {
             VOID, function queueReanimation_(id, defaultValue_, serviceF, tpl, attrs) {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
-                        if (defaultValue_)
-                            ria.dom.Dom('#' + id + '-hidden').setValue(defaultValue_);
-                        this.reanimate_(ria.dom.Dom('#' + id), serviceF, tpl, attrs, activity, model)
+                        var node = ria.dom.Dom('#' + id);
+                        if(node.exists() && !node.hasClass('search-box-processed')){
+                            if (defaultValue_)
+                                ria.dom.Dom('#' + id + '-hidden').setValue(defaultValue_);
+                            this.reanimate_(node, serviceF, tpl, attrs, activity, model);
+                            node.addClass('search-box-processed');
+                        }
                     }.bind(this));
             },
 

@@ -4,6 +4,7 @@ REQUIRE('chlk.templates.attendance.AdminAttendanceNowTpl');
 REQUIRE('chlk.templates.attendance.AdminAttendanceDayTpl');
 REQUIRE('chlk.templates.attendance.AdminAttendanceMpTpl');
 REQUIRE('chlk.templates.attendance.AttendanceStudentBoxTpl');
+REQUIRE('chlk.templates.attendance.AdminStudentsBoxTpl');
 
 NAMESPACE('chlk.activities.attendance', function () {
 
@@ -17,6 +18,50 @@ NAMESPACE('chlk.activities.attendance', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.attendance.AdminAttendanceMpTpl, '', '.attendance-mp', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.TemplateBind(chlk.templates.attendance.AdminAttendanceSummaryTpl)],
         'AdminAttendanceSummaryPage', EXTENDS(chlk.activities.lib.TemplatePage), [
+
+            [[ArrayOf(chlk.models.people.User), String, Object, ria.dom.Dom, Boolean, Object, String]],
+            VOID, function quicksandStudents(students, selector, tpl, target, needPlus, model, msg_){
+                students = students ? (needPlus ? students.slice(0,17) : students.slice(0,18)) : [];
+                var allTpl = new chlk.templates.attendance.AdminAttendanceSummaryTpl();
+                var studentsTpl = new chlk.templates.attendance.AdminStudentsBoxTpl();
+                var students = allTpl.getPreparedStudents(students, needPlus);
+                studentsTpl.assign(new chlk.models.attendance.AdminStudentsBox(students));
+                studentsTpl.setStudents(students);
+                var that = this;
+                jQuery(this.dom.find(selector).find('.hidden-students-block-2:eq(0)').valueOf())
+                    .quicksand(studentsTpl.render());
+                setTimeout(function(){
+                    tpl.renderTo(target.empty());
+                    setTimeout(function(){
+                        that.onPartialRefresh_(model, msg_);
+                    }, 1);
+                }, 750);
+                //studentsTpl.renderTo(this.dom.find(selector).find('.hidden-students-block-2:eq(0)').empty());
+            },
+
+            OVERRIDE, VOID, function onPartialRender_(model, msg_) {
+                var isDay = model.getClass() == chlk.models.attendance.AttendanceDaySummary;
+                var isMp = model.getClass() == chlk.models.attendance.AttendanceMpSummary;
+                if(isDay || isMp){
+                    var rule = this.doFindTemplateForPartialModel_(model, msg_ || '');
+                    var tpl = rule.tpl;
+                    var target = this.dom;
+                    if (rule.selector)
+                        target = target.find(rule.selector);
+                    tpl.assign(model);
+                    if(isDay){
+                        this.quicksandStudents(model.getStudentsAbsentWholeDay(), '.whole-day', tpl, target, true, model, msg_);
+                        this.quicksandStudents(model.getExcusedStudents(), '.excused-students', tpl, target, true, model, msg_);
+                        this.quicksandStudents(model.getAbsentStudents(), '.absent-students', tpl, target, true, model, msg_);
+                        this.quicksandStudents(model.getLateStudents(), '.late-students', tpl, target, true, model, msg_);
+                    }else{
+                        this.quicksandStudents(model.getAbsentAndLateStudents(), '.mp-students', tpl, target, false, model, msg_);
+                    }
+                }else{
+                    BASE(model, msg_);
+                }
+
+            },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.attendance.AttendanceStudentBoxTpl)],
             VOID, function addStudentBox(tpl, model, msg_) {
@@ -173,24 +218,26 @@ NAMESPACE('chlk.activities.attendance', function () {
                 new ria.dom.Dom('body').on('click.student', function(node, event){
                     var target = new ria.dom.Dom(event.target);
                     var box = this.dom.find('.rightnow-usually');
-                    var container1 = box.find('.box-container:eq(0)');
-                    var container2 = box.find('.box-container:eq(1)');
-                    if(target.isOrInside('.student:not(.grey)') && target.parent('.attendance-now').exists()){
-                        var student = target.is('.student') ? target : target.parent('.student');
-                        if(student.getAttr('index') > 0){
-                            box.removeClass('usually');
-                            container1.find('.number').setHTML(student.getData('count').toString());
-                            container1.find('.title').setHTML(student.getData('name'));
-                            container2.find('.number').setHTML(box.getData('avg').toString());
-                            container2.find('.title').setHTML(Msg.School_Avg);
-                        }
-                    }else{
-                        if(!box.hasClass('usually')){
-                            box.addClass('usually');
-                            container1.find('.number').setHTML(box.getData('rightnow').toString());
-                            container1.find('.title').setHTML(Msg.Right_now);
-                            container2.find('.number').setHTML(box.getData('usually').toString());
-                            container2.find('.title').setHTML(Msg.Usually);
+                    if(box.exists() && box.is(':visible')){
+                        var container1 = box.find('.box-container:eq(0)');
+                        var container2 = box.find('.box-container:eq(1)');
+                        if(target.isOrInside('.student:not(.grey)') && target.parent('.attendance-now').exists()){
+                            var student = target.is('.student') ? target : target.parent('.student');
+                            if(student.getAttr('index') > 0){
+                                box.removeClass('usually');
+                                container1.find('.number').setHTML(student.getData('count').toString());
+                                container1.find('.title').setHTML(student.getData('name'));
+                                container2.find('.number').setHTML(box.getData('avg').toString());
+                                container2.find('.title').setHTML(Msg.School_Avg);
+                            }
+                        }else{
+                            if(!box.hasClass('usually')){
+                                box.addClass('usually');
+                                container1.find('.number').setHTML(box.getData('rightnow').toString());
+                                container1.find('.title').setHTML(Msg.Right_now);
+                                container2.find('.number').setHTML(box.getData('usually').toString());
+                                container2.find('.title').setHTML(Msg.Usually);
+                            }
                         }
                     }
                 }.bind(this))
@@ -199,6 +246,7 @@ NAMESPACE('chlk.activities.attendance', function () {
             OVERRIDE, VOID, function onStop_() {
                 BASE();
                 new ria.dom.Dom('body').off('click.student');
+                new ria.dom.Dom('.student.absolute').remove();
             }
         ]);
 });

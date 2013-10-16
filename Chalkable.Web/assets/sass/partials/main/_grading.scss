@@ -4,6 +4,205 @@ BODY {
       DIV#content-wrapper{
         #main-wrapper {
           #main{
+            .grading-summary{
+              .students-line{
+                position: relative;
+                display: none;
+                border-top: 1px solid #969696;
+                border-bottom: 1px solid #bebebe;
+                box-shadow: 0 1px 0 white;
+                margin-top: 22px;
+
+                >SPAN{
+                  position: absolute;
+                  color: #989898;
+                  top: 10px;
+                  font-size: 12px;
+
+                  &.n-0{
+                    left: -1px;
+                  }
+
+                  &.n-100{
+                    right: -9px;
+                  }
+                }
+
+                .student-pic-container{
+                  position: absolute;
+                  text-align: center;
+                  top: -13px;
+
+                  .student-pic{
+                    display: inline-block;
+                    background: url(images/grading/smal-pic-grey.png) 0 0 no-repeat;
+                    width: 16px;
+                    height: 21px;
+                  }
+
+                  .student-triangle{
+                    display: none;
+                    background: url(images/grading/smal-pic-triangle-grey.png) 0 0 no-repeat;
+                    width: 8px;
+                    height: 6px;
+                    margin: 0 auto;
+                    margin-top: -2px;
+                  }
+
+                  &.trouble{
+                    .student-pic{
+                      background-image: url(images/grading/smal-pic-red.png);
+                    }
+
+                    .student-triangle{
+                      background-image: url(images/grading/smal-pic-triangle-red.png);
+                    }
+                  }
+
+                  &.well{
+                    .student-pic{
+                      background-image: url(images/grading/smal-pic-blue.png);
+                    }
+
+                    .student-triangle{
+                      background-image: url(images/grading/smal-pic-triangle-blue.png);
+                    }
+                  }
+
+                  &.hovered, &:hover{
+                    z-index: 10;
+                    .student-triangle{
+                      display: block;
+                    }
+                  }
+                }
+              }
+
+              .class-block{
+                margin-bottom: 35px;
+
+                &.active{
+                  h2{
+                    .show-less{
+                      display: inline-block;
+                      text-decoration: none;
+
+                      span{
+                        font: bold 14px Arial;
+                        display: inline-block;
+                        margin-right: 4px;
+                      }
+                    }
+                  }
+
+                  .students-block{
+                    .student-item{
+                      &:not(.trouble):not(.well){
+                        display: inline-block;
+                      }
+                    }
+                  }
+
+                  .students-line{
+                    display: block;
+                  }
+
+                  .all-button{
+                    display: none;
+                  }
+                }
+              }
+
+              h2{
+                text-transform: uppercase;
+                color: #2f7790;
+                text-shadow: 0 1px 0 white;
+                font: bold 14px Arial;
+                padding-bottom: 5px;
+                margin-bottom: 11px;
+
+                .show-less{
+                  color: #989898;
+                  text-shadow: 1px 1px 0 white;
+                  font: normal 12px Arial;
+                  text-transform: uppercase;
+                  float: right;
+                  display: none;
+                }
+              }
+
+              .with-line{
+                border-bottom: 1px solid #c8c8c8;
+              }
+
+              .students-block{
+                padding-bottom: 4px;
+                width: 670px;
+
+                .student-item{
+                  &:not(.trouble):not(.well){
+                    display: none;
+                  }
+                }
+
+                >A{
+                  display: inline-block;
+                  margin: 0 8px 7px 0;
+                  vertical-align: top;
+
+                  &:nth-child(11n + 1):not(:nth-child(1)), &:last-child{
+                      margin-right: 0;
+                  }
+
+                  .person-avatar-m-47, .person-avatar-w-47{
+                    width: 49px;
+                    height: 49px;
+                  }
+                }
+
+                .no-grades{
+                  font: bold 22px/60px 'Reenie Beanie';
+                  text-align: center;
+                  height: 60px;
+                }
+
+                .all-button{
+                  width: 58px;
+                  height: 54px;
+                  @include border-radius(7px);
+                  margin-right: 8px;
+                  border: 1px solid #b3b3b3;
+                  @include box-shadow(0 1px 1px #cacaca, inset 0 1px 0 white);
+                  @include background(linear-gradient(top, #f5f5f5, #e0e0e0));
+                  color: #3d3d3d;
+                  font: bold 14px/52px Arial;
+                  text-shadow: 1px 1px 0 white;
+                  text-transform: uppercase;
+                  cursor: pointer;
+
+                  &:hover{
+                    @include background(linear-gradient(top, #e5e5e5, #d0d0d0));
+                  }
+                }
+
+                .image-container{
+                  @include border-radius(2px);
+
+                  &:not(:hover):not(.hovered){
+                    @include box-shadow(0 1px 1px grey);
+
+                    &.trouble{
+                      @include box-shadow(0 1px 3px #d68383);
+                    }
+
+                    &.well{
+                      @include box-shadow(0 1px 3px #73b4ca);
+                    }
+                  }
+                }
+              }
+            }
+
             .mps-container{
               width: 661px;
 

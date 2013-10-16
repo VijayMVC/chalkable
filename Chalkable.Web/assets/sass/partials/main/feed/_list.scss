@@ -296,7 +296,9 @@ $star-size: 18px;
       }
 
       h2 {
-        padding: 20px 0 0px;
+        padding: 20px 0 9px;
+        overflow: hidden;
+        text-overflow: ellipsis;
         font-size: 24px;
         font-weight: bold;
         text-shadow: 1px -1px 0px #fff;
@@ -313,7 +315,7 @@ $star-size: 18px;
       }
 
       P {
-        margin: 9px 5px 9px 0;
+        margin: 0px 5px 9px 0;
         font-size: 14px;
         color: #818181;
         text-shadow: 1px -1px 0px white;

@@ -51,7 +51,8 @@ NAMESPACE('chlk.templates.attendance', function () {
             chlk.models.common.ChlkDate, 'endDate',
 
             [[ArrayOf(chlk.models.people.User), Boolean]],
-            function getPreparedStudents(students, needPlus_){
+            function getPreparedStudents(studentsList, needPlus_){
+                var students = studentsList.slice();
                 var lineSize = 6;
                 if(needPlus_)
                     students.unshift(new chlk.models.people.User);
@@ -60,12 +61,13 @@ NAMESPACE('chlk.templates.attendance', function () {
                 if(!len || count)
                     for(var i = count; i < lineSize; i++)
                         students.push(new chlk.models.people.User);
+                return students;
             },
 
             [[ArrayOf(chlk.models.attendance.AdminAttendanceStatItem)]],
             function getMainChartInfo(attendancestats){
                 var categories = [], series = [], absent=[], excused=[], late=[];
-                attendancestats.forEach(function(item){
+                attendancestats && attendancestats.forEach(function(item){
                     categories.push(item.getSummary());
                     absent.push(item.getAbsentCount());
                     excused.push(item.getExcusedCount());

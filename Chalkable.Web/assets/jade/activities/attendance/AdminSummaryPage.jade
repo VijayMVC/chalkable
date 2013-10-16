@@ -113,22 +113,24 @@ mixin AdminAtteddanceMpChart(attendancestats)
 mixin StudentsTpl(students, header, needPlus, isDay, currentPage)
     preparedStudents = self.getPreparedStudents(students, needPlus)
     length = students.length
+    newLength = preparedStudents.length
     blockCount = 18
     date = isDay && self.getNowDateTime() ? self.getNowDateTime().format('mm/dd/yy') : null
     h2 #{length} - #{header}
     div(attributes).all-students
-        count = Math.ceil(length/blockCount)
+        -console.info(header, length, newLength)
+        count = Math.ceil(newLength/blockCount)
         -for (var i = 0; i < count; i++) {
-            max = length - i * blockCount
+            max = newLength - i * blockCount
             maxIndex = max < blockCount ? max : blockCount
             div(class=(((i == count - 1) ? "last-block " : "") + ((i == 0) ? "" : "hidden-students-block no-used")))
                 div.hidden-students-block-2
                     -for (var j = 0; j < maxIndex; j++) {
                         index = i*blockCount + j
-                        student = students[index]
+                        student = preparedStudents[index]
                         if !student.getId()
                             if i == 0 && j == 0
-                                div(index="0").student.grey.plus
+                                div(index="0", data-id=1111).student.grey.plus
                                     .plus-container.for-plus +
                                     .name.for-plus= Msg.Add_student
                                     .small-pop-up.for-plus
@@ -146,7 +148,7 @@ mixin StudentsTpl(students, header, needPlus, isDay, currentPage)
                                                     +Hidden('date', date)
                                             SPAN.enter= Msg.Enter_when_done
                             else
-                                div(index=index).student.grey
+                                div(index=index, data-id= ria.dom.NewGID()).student.grey
                                     .name
                         else
                             div(
@@ -161,7 +163,7 @@ mixin StudentsTpl(students, header, needPlus, isDay, currentPage)
                                 +ActionLink('students', 'details', student.getId()).name=student.getDisplayName()
                     -}
         -}
-    if students.length > blockCount
+    if newLength > blockCount
         .more-container
             a.more-students=Msg.More_students
 

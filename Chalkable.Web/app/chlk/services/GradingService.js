@@ -45,6 +45,13 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.SchoolPersonId]],
+            ria.async.Future, function getTeacherSummary(teacherId) {
+                return this.get('Grading/TeacherSummary', ArrayOf(chlk.models.grading.GradingTeacherClassSummaryViewData), {
+                    teacherId: teacherId.valueOf()
+                });
+            },
+
             [[chlk.models.id.AnnouncementId]],
             ria.async.Future, function getItemGradingStat(announcementId) {
                 return this.get('Grading/ItemGradingStat', chlk.models.grading.ItemGradingStat, {
