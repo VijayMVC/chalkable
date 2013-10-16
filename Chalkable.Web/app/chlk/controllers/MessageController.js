@@ -79,13 +79,37 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.MessageId]],
             function sendPageAction(replayOnId_)
             {
-                var model;
+                var res;
                 if (replayOnId_)
                 {
-                    model = this.getMessageFromSession(replayOnId_);
+                    res = this.getMessageFromSession(replayOnId_);
+                    res.then(function(model){
+                        if(this.getContext().getSession().get('currentPerson').getId() == model.getRecipient().getId()){
+                            model = new ria.async.DeferredData(new chlk.models.messages.Message(
+                                model.getBody(),
+                                model.getSubject(),
+                                model.getSender(),
+                                model.getSent()
+                            ));
+                        }
+                        return model;
+                    }.bind(this));
+
                 }
                 else
-                    model = new ria.async.DeferredData(new chlk.models.messages.Message());
+                    res = new ria.async.DeferredData(new chlk.models.messages.Message());
+                return this.ShadeView(chlk.activities.messages.AddDialog, res);
+            },
+
+            [[chlk.models.id.SchoolPersonId, String, String]],
+            function sendToPersonAction(personId, firstName, lastName)
+            {
+
+                var model = new ria.async.DeferredData(new chlk.models.messages.Message(
+                    null,
+                    null,
+                    new chlk.models.people.User(firstName, lastName, personId)
+                ));
                 return this.ShadeView(chlk.activities.messages.AddDialog, model);
             },
 
@@ -102,8 +126,13 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.MessageId]],
             function viewPageAction(id)
             {
-                var model = this.getMessageFromSession(id);
-                return this.ShadeView(chlk.activities.messages.ViewDialog, model);
+                var res = this.getMessageFromSession(id);
+                res.then(function(model){
+                    var isReplay = this.getContext().getSession().get('currentPerson').getId() == model.getRecipient().getId();
+                    model.setReplay(isReplay);
+                    return model;
+                }.bind(this));
+                return this.ShadeView(chlk.activities.messages.ViewDialog, res);
             },
 
             function getMessageFromSession(id)

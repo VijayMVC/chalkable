@@ -41,6 +41,11 @@ NAMESPACE('chlk.models.people', function () {
 
             Number, 'index',
 
-            Boolean, 'selected'
+            Boolean, 'selected',
+
+            [[String, String, chlk.models.id.SchoolPersonId]],
+            function $(firstName_, lastName_, id_){
+                BASE(firstName_, lastName_, id_);
+            }
         ]);
 });

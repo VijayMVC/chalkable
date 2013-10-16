@@ -1,7 +1,7 @@
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.id.MessageId');
 REQUIRE('chlk.models.messages.Message');
-REQUIRE('chlk.models.people.Person');
+REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.common.PaginatedList');
 
 
