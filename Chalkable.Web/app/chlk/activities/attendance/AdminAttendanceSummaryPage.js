@@ -246,6 +246,7 @@ NAMESPACE('chlk.activities.attendance', function () {
             OVERRIDE, VOID, function onStop_() {
                 BASE();
                 new ria.dom.Dom('body').off('click.student');
+                new ria.dom.Dom('.student.absolute').remove();
             }
         ]);
 });

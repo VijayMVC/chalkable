@@ -382,6 +382,7 @@ var Msg = {
     },
     No_check_in : 'No check-in',
     No_data: 'No data',
+    No_grades_yet: 'No grades yet',
     No_items_marked_important: 'No items marked important.',
     No_new_notifications: 'No new notifications',
     No_notifications_to_display: 'No notifications to display',
@@ -416,6 +417,7 @@ var Msg = {
     Sent_in_date: function(date){
         return String.format('Sent {0}', date)
     },
+    Show_less: 'Show less',
     Sorted_by: 'Sorted by',
     Source_Name: 'Source Name',
     Showing_items_due_before: function(endDateWithYear, endDate){

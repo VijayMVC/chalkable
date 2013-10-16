@@ -11,7 +11,7 @@ mixin LeftRightToolbar(data, tplClass, controller, action, params)
                         if configs.multiple
                             -item.setPressed(!id && !configs.selectedIds.length || configs.selectedIds.indexOf(id) > -1);
                         else
-                            -item.setPressed(configs.selectedItemId == id);
+                            -item.setPressed(configs.selectedItemId == id || (!id && !configs.selectedItemId));
                     -item.setDisabled && item.setDisabled(!configs.pressAfterClick);
                     -item.setIndex && item.setIndex(i);
                     if controller

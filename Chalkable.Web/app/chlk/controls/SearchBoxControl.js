@@ -29,7 +29,7 @@ NAMESPACE('chlk.controls', function () {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         var node = ria.dom.Dom('#' + id);
-                        if(node.exists() && node.hasClass('search-box-processed')){
+                        if(node.exists() && !node.hasClass('search-box-processed')){
                             if (defaultValue_)
                                 ria.dom.Dom('#' + id + '-hidden').setValue(defaultValue_);
                             this.reanimate_(node, serviceF, tpl, attrs, activity, model);
