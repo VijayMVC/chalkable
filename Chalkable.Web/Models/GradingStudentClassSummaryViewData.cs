@@ -12,17 +12,19 @@ namespace Chalkable.Web.Models
         public MarkingPeriodViewData CurrentMarkingPeriod { get; set; }
         public IList<GradingStatsByDateViewData> AvgPerDate { get; set; }
         public IList<FinalGradeAnnTypeGradeStatsViewData> AnnTypesGradeStats { get; set; }
-
+        public IList<GradingClassSummaryViewData> GradingPerMp { get; set; }
+        
         public static GradingStudentClassSummaryViewData Create(StudentClassGradeStats gradingStatsPerDate
-            , MarkingPeriod currentMp,  IList<FinalGradeAnnouncementType> fgAnnTypes)
+            , MarkingPeriod currentMp,  IList<FinalGradeAnnouncementType> fgAnnTypes
+            , IList<GradingClassSummaryViewData> gradingPerMp)
         {
-            var res = new GradingStudentClassSummaryViewData
+            return new GradingStudentClassSummaryViewData
                 {
-                    CurrentMarkingPeriod = MarkingPeriodViewData.Create(currentMp)
+                    CurrentMarkingPeriod = MarkingPeriodViewData.Create(currentMp),
+                    AvgPerDate = GradingStatsByDateViewData.Create(gradingStatsPerDate.GradeAvgPerDates),
+                    AnnTypesGradeStats = FinalGradeAnnTypeGradeStatsViewData.Create(gradingStatsPerDate.AnnTypesGradeStats, fgAnnTypes),
+                    GradingPerMp = gradingPerMp
                 };
-            res.AvgPerDate = GradingStatsByDateViewData.Create(gradingStatsPerDate.GradeAvgPerDates);
-            res.AnnTypesGradeStats = FinalGradeAnnTypeGradeStatsViewData.Create(gradingStatsPerDate.AnnTypesGradeStats, fgAnnTypes);
-            return res;
         }
     }
 }
