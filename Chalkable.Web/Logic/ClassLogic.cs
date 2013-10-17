@@ -17,6 +17,11 @@ namespace Chalkable.Web.Logic
             var nowDate = locator.Context.NowSchoolTime.Date;
             var gradeAvgClass = locator.GradingStatisticService.GetClassGradeAvgPerMP(classId, schoolYearId, null, teacherId);
             var announcements = locator.AnnouncementService.GetAnnouncements(false, 0, int.MaxValue, classId);
+            IList<StudentAnnouncementGrade> stAnns = null;
+            if (studentId.HasValue)
+            {
+                stAnns = locator.StudentAnnouncementService.GetLastGrades(studentId.Value, classId);
+            }
             IList<GradingClassSummaryViewData> res = new List<GradingClassSummaryViewData>();
             IList<FinalGradeAnnouncementType> fgAnnTypes = null;
             var mapper = locator.GradingStyleService.GetMapper();
@@ -32,7 +37,7 @@ namespace Chalkable.Web.Logic
                 }
                 if (fgAnnTypes != null && fgAnnTypes.Count > 0)
                 {
-                    res.Add(GradingClassSummaryViewData.Create(announcements, fgAnnTypes, markingPeriodClassGradeAvg, mapper));
+                    res.Add(GradingClassSummaryViewData.Create(announcements, fgAnnTypes, markingPeriodClassGradeAvg, mapper, stAnns));
                 }
             }
             return res.OrderBy(t => t.MarkingPeriod.StartDate).ToList();

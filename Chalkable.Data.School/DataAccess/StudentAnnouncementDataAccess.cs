@@ -72,11 +72,22 @@ namespace Chalkable.Data.School.DataAccess
             var res = new DbQuery();
             res.Sql.AppendFormat(sql, Orm.ComplexResultSetQuery(new List<Type>{typeof(StudentAnnouncement)}))
                    .AppendFormat(" where  [StudentAnnouncement].[{0}] is not null ",StudentAnnouncement.GRADE_VALUE_FIELD);
-            if (query.StudentId.HasValue)
+            if (query.StudentId.HasValue || query.ClassId.HasValue)
             {
-                res.Parameters.Add("studentId", query.StudentId);
                 res.Sql.Append(@" and StudentAnnouncement.ClassPersonRef 
-                                        in (select [ClassPerson].Id from ClassPerson where [ClassPerson].PersonRef = @studentId)");
+                                        in (select [ClassPerson].Id from ClassPerson where 1=1");
+
+                if (query.StudentId.HasValue)
+                {
+                    res.Parameters.Add("studentId", query.StudentId);
+                    res.Sql.Append(" and [ClassPerson].PersonRef=@studentId");
+                }
+                if (query.ClassId.HasValue)
+                {
+                    res.Parameters.Add("classId", query.ClassId);
+                    res.Sql.Append(" and [ClassPerson].ClassRef=@classId");
+                }
+                res.Sql.Append(")");
             }
             conds.BuildSqlWhere(res, "StudentAnnouncement", false);
             var orderBy = string.IsNullOrEmpty(query.OrderBy) ? Announcement.ID_FIELD : query.OrderBy;
@@ -112,6 +123,7 @@ namespace Chalkable.Data.School.DataAccess
         public Guid? StudentId { get; set; }
         public int Count { get; set; }
         public string OrderBy { get; set; }
+        public Guid? ClassId { get; set; }
 
         public StudentAnnouncementQuery()
         {

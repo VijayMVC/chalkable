@@ -11,7 +11,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         IList<StudentGradeAvgPerMPC> GetStudentsGradePerMPC(Guid teacherId, IList<Guid> markingPeriodIds);
         IList<StudentGradeAvgPerClass> GetStudentsGradePerClass(Guid teacherId, Guid schoolYearId);
-        IList<MarkingPeriodClassGradeAvg> GetClassGradeAvgPerMP(Guid classId, Guid schoolYearId, List<Guid> markingPeriodIds, Guid? teacherId);
+        IList<MarkingPeriodClassGradeAvg> GetClassGradeAvgPerMP(Guid classId, Guid schoolYearId, List<Guid> markingPeriodIds, Guid? teacherId, Guid? studentId = null);
         IList<StudentGradeAvgPerDate> GetStudentGradePerDate(Guid studentId, Guid markingPeriodId, Guid? classId);
         IList<StudentClassGradeStats> GetStudentClassGradeStats(Guid markingPeriodId, Guid classId, Guid? studentId);
         IList<DepartmentGradeAvg> GetDepartmentGradeAvgPerMp(Guid markingPeriodId, IList<Guid> gradeLevelIds);
@@ -72,7 +72,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<MarkingPeriodClassGradeAvg> GetClassGradeAvgPerMP(Guid classId, Guid schoolYearId, List<Guid> markingPeriodIds, Guid? teacherId)
+        public IList<MarkingPeriodClassGradeAvg> GetClassGradeAvgPerMP(Guid classId, Guid schoolYearId, List<Guid> markingPeriodIds, Guid? teacherId, Guid? studentId = null)
         {
             using (var uow = Read())
             {
@@ -81,7 +81,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         ClassId = classId,
                         SchoolYearId = schoolYearId,
                         MarkingPeriodIds = markingPeriodIds,
-                        TeacherId = teacherId
+                        TeacherId = teacherId,
+                        StudentId = studentId
                     });
                 return new GradingStatisticDataAccess(uow).CalcClassGradingPerMp(query);
             }

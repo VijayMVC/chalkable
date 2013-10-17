@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.School
         //int? GetAssignmentAverage(int announcementId);
         //double GetAvgByAnnouncements(IList<StudentAnnouncement> studentAnnouncements, bool dropLowest);
 
-        IList<StudentAnnouncementGrade> GetLastGrades(Guid studentId, int count = int.MaxValue);
+        IList<StudentAnnouncementGrade> GetLastGrades(Guid studentId, Guid? classId = null, int count = int.MaxValue);
     }
 
     public class StudentAnnouncementService : SchoolServiceBase, IStudentAnnouncementService
@@ -116,13 +116,14 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public IList<StudentAnnouncementGrade> GetLastGrades(Guid studentId, int count = int.MaxValue)
+        public IList<StudentAnnouncementGrade> GetLastGrades(Guid studentId, Guid? classId = null, int count = int.MaxValue)
         {
             using (var uow = Read())
             {
                 return new StudentAnnouncementDataAccess(uow).GetStudentAnnouncementGrades(new StudentAnnouncementQuery
                     {
                         StudentId = studentId,
+                        ClassId = classId,
                         Count = count
                     });
             }

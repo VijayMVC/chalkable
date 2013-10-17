@@ -45,7 +45,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             //var allStudentsRankStats = SchoolLocator.GradingStatisticService.get(mp.SchoolYearRef, gradeLevelRef, null, null);
             //var currentStudentRankStats = allStudentsRankStats.First(x => x.StudentId == student.SchoolPersonId);
 
-            var lastGrades =  SchoolLocator.StudentAnnouncementService.GetLastGrades(student.Id, 5);
+            var lastGrades =  SchoolLocator.StudentAnnouncementService.GetLastGrades(student.Id, null, 5);
             var mapper = SchoolLocator.GradingStyleService.GetMapper();
             var classes = SchoolLocator.ClassService.GetClasses(null, mp.Id, student.Id);
 

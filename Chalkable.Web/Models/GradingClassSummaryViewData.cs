@@ -15,7 +15,7 @@ namespace Chalkable.Web.Models
         public int? Avg { get; set; }
 
         public static GradingClassSummaryViewData Create(IList<AnnouncementComplex> announcements, IList<FinalGradeAnnouncementType> fgAnnouncementTypes,
-            MarkingPeriodClassGradeAvg classGradingStats, IGradingStyleMapper mapper)
+            MarkingPeriodClassGradeAvg classGradingStats, IGradingStyleMapper mapper, IList<StudentAnnouncementGrade> stAnnGrades = null)
         {
             var res = new GradingClassSummaryViewData
                     {
@@ -27,7 +27,7 @@ namespace Chalkable.Web.Models
             foreach (var fgAnnouncementType in fgAnnouncementTypes)
             {
                 var annPerMp = announcements.Where(x => x.AnnouncementTypeRef == fgAnnouncementType.AnnouncementTypeRef).ToList();
-                res.ByAnnouncementTypes.Add(GradingClassSummaryItemViewData.Create(annPerMp, fgAnnouncementType.AnnouncementType, fgAnnouncementType.PercentValue, mapper));
+                res.ByAnnouncementTypes.Add(GradingClassSummaryItemViewData.Create(annPerMp, fgAnnouncementType.AnnouncementType, fgAnnouncementType.PercentValue, mapper, stAnnGrades));
             }
             return res;
         }
@@ -39,16 +39,29 @@ namespace Chalkable.Web.Models
         public IList<AnnouncementShortGradeViewData> Announcements { get; set; }
         public int Percent { get; set; }
         public int? Avg { get; set; }
+        public int? StudentAvg { get; set; }
 
         public static GradingClassSummaryItemViewData Create(IList<AnnouncementComplex> announcements,
-                       AnnouncementType announcementType, int typePercent, IGradingStyleMapper mapper)
+                       AnnouncementType announcementType, int typePercent, IGradingStyleMapper mapper
+            , IList<StudentAnnouncementGrade> stAnnGrades = null)
         {
-            var res = new GradingClassSummaryItemViewData()
+            var res = new GradingClassSummaryItemViewData
                 {
                     Percent = typePercent,
                     Type = AnnouncementTypeViewData.Create(announcementType),
-                    Announcements = AnnouncementShortGradeViewData.Create(announcements, mapper)
                 };
+            if (stAnnGrades == null)
+                res.Announcements = AnnouncementShortGradeViewData.Create(announcements, mapper);
+            else
+            {
+                res.Announcements = new List<AnnouncementShortGradeViewData>();
+                foreach (var ann in announcements)
+                {
+                    var stAnn = stAnnGrades.FirstOrDefault(x=>x.AnnouncementRef == ann.Id);
+                    res.Announcements.Add(AnnouncementShortGradeViewData.Create(ann, mapper, stAnn != null ? stAnn.GradeValue : null));
+                }
+                res.StudentAvg = (int?) res.Announcements.Average(x => x.Grade);
+            }
             res.Avg = (int?) res.Announcements.Average(x => x.Avg);
             return res;
         }
