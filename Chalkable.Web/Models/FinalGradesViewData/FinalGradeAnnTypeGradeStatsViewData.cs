@@ -8,7 +8,7 @@ namespace Chalkable.Web.Models.FinalGradesViewData
 {
     public class FinalGradeAnnTypeGradeStatsViewData : FinalGradeAnnouncementTypeViewData
     {
-        IList<GradingStatsByDateViewData> GradePerDate { get; set; }
+        public IList<GradingStatsByDateViewData> GradePerDate { get; set; }
 
         protected FinalGradeAnnTypeGradeStatsViewData(FinalGradeAnnouncementType finalGradeAnnType)
             : base(finalGradeAnnType)
@@ -21,9 +21,10 @@ namespace Chalkable.Web.Models.FinalGradesViewData
             foreach (var annTypeGradeStats in annTypesGradeStats)
             {
                 var fgAnnType = fgAnnTypes.FirstOrDefault(x => x.AnnouncementTypeRef == annTypeGradeStats.AnnouncementTypeId);
+                var gradeAvgPerDates = annTypeGradeStats.GradeAvgPerDates; //.Where(x => x.Avg.HasValue).ToList();
                 res.Add(new FinalGradeAnnTypeGradeStatsViewData(fgAnnType)
                 {
-                    GradePerDate = GradingStatsByDateViewData.Create(annTypeGradeStats.GradeAvgPerDates)
+                    GradePerDate = GradingStatsByDateViewData.Create(gradeAvgPerDates)
                 });
             }
             return res;

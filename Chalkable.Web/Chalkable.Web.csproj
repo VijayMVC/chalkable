@@ -286,6 +286,7 @@
     <Compile Include="Models\FinalGradesViewData\StudentFinalGradeDetailsViewData.cs" />
     <Compile Include="Models\FinalGradesViewData\StudentFinalGradeViewData.cs" />
     <Compile Include="Models\GradingClassSummaryViewData.cs" />
+    <Compile Include="Models\GradingStudentClassSummaryViewData.cs" />
     <Compile Include="Models\GradingStudentSummaryViewData.cs" />
     <Compile Include="Models\GradingStyleViewData.cs" />
     <Compile Include="Models\GradingTeacherSummaryViewData.cs" />

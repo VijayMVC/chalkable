@@ -211,7 +211,7 @@ namespace Chalkable.Data.School.DataAccess
                     var annType = SqlTools.ReadInt32(reader, AnnTypeGradeStats.ANNOUNCEMENT_TYPE_ID_FIELD);
                     if(!anntypeDic.ContainsKey(stId))
                         anntypeDic.Add(stId, new Dictionary<int, AnnTypeGradeStats>());
-                    if(anntypeDic[stId].ContainsKey(annType))
+                    if(!anntypeDic[stId].ContainsKey(annType))
                         anntypeDic[stId].Add(annType, new AnnTypeGradeStats
                             {
                                 AnnouncementTypeId = annType,

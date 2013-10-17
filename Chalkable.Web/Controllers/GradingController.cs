@@ -55,6 +55,16 @@ namespace Chalkable.Web.Controllers
             return Json(GradingStudentSummaryViewData.Create(announcements, gradingStats));
         }
 
+        
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult StudentClassSummary(Guid studentId, Guid classId)
+        {
+            var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(Context.NowSchoolTime.Date, true);
+            var gradingStats = SchoolLocator.GradingStatisticService.GetStudentClassGradeStats(mp.Id, classId, studentId);
+            var fgAnnTypes = SchoolLocator.FinalGradeService.GetFinalGradeAnnouncementTypes(mp.Id, classId);
+            return Json(GradingStudentClassSummaryViewData.Create(gradingStats.FirstOrDefault(), mp, fgAnnTypes));
+        }
+
         //TODO: duplicate part of announcement/read data. for API compatibility only
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADE_LIST_ITEMS, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
         public ActionResult ItemGradesList(Guid announcementId)
