@@ -116,7 +116,7 @@ namespace Chalkable.Web.Controllers
             var c = SchoolLocator.ClassService.GetClassById(classId);
             if (!BaseSecurity.IsAdminViewerOrClassTeacher(c, Context))
                 return Json(ClassViewData.Create(c));
-            decimal balance = 0; //MasterLocator.FundService.GetClassBalance(classId); -- todo need fix fund service
+            decimal balance = MasterLocator.FundService.GetClassBalance(classId); 
             var appInstallactions = SchoolLocator.AppMarketService.ListInstalledForClass(classId);
             var applications = MasterLocator.ApplicationService.GetApplications(0, int.MaxValue, true);
             decimal? reserve = null;
