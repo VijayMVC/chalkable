@@ -208,6 +208,8 @@ NAMESPACE('chlk.controllers', function (){
                         announcement.setClassId(classId_ || null);
                         announcement.setAnnouncementTypeId(announcementTypeId_ || null);
                     }
+                    if(!announcement.getClassId() || !announcement.getClassId().valueOf())
+                        announcement.setAnnouncementTypeId(null);
                     if(date_){
                         announcement.setExpiresDate(date_);
                     }
