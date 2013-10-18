@@ -8,54 +8,10 @@ NAMESPACE('chlk.templates.classes', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/class/ClassSummary.jade')],
         [ria.templates.ModelBind(chlk.models.classes.ClassProfileSummaryViewData)],
         'ClassSummary', EXTENDS(chlk.templates.profile.ClassProfileTpl), [
-//            [ria.templates.ModelPropertyBind],
-//            chlk.models.classes.Room, 'room',
-//
-//            [ria.templates.ModelPropertyBind],
-//            ArrayOf(chlk.models.people.User), 'students',
-//
-//            [ria.templates.ModelPropertyBind],
-//            Number, 'classSize',
-//
-//            [ria.templates.ModelPropertyBind],
-//            chlk.models.common.CommonHoverBox, 'classAttendanceBox',
-//
-//            [ria.templates.ModelPropertyBind],
-//            chlk.models.common.DisciplineHoverBox, 'classDisciplineBox',
-//
-//            [ria.templates.ModelPropertyBind],
-//            chlk.models.common.CommonHoverBox, 'classAverageBox',
-//
-//            [ria.templates.ModelPropertyBind],
-//            ArrayOf(chlk.models.announcement.AnnouncementsByDate), 'announcementsByDate',
-//
-//            [ria.templates.ModelPropertyBind],
-//            chlk.models.id.ClassId, 'id',
-//
-//            [ria.templates.ModelPropertyBind],
-//            String, 'name',
-//
-//            [ria.templates.ModelPropertyBind],
-//            String, 'description',
-//
-//            [ria.templates.ModelPropertyBind],
-//            chlk.models.course.Course, 'course',
-//
-//            [ria.templates.ModelPropertyBind],
-//            chlk.models.grading.GradeLevel, 'gradeLevel',
-//
-//            [ria.templates.ModelPropertyBind],
-//            chlk.models.people.User, 'teacher',
-//
-//            [ria.templates.ModelPropertyBind],
-//            ArrayOf(chlk.models.id.MarkingPeriodId), 'markingPeriodsId',
-
-//            [ria.templates.ModelPropertyBind],
-//            chlk.models.classes.ClassSummary, 'classSummary'
 
             chlk.models.classes.ClassSummary, function getClassSummary(){return this.getClazz();},
 
-            [[chlk.models.common.CommonHoverBox, String]],
+            [[chlk.models.common.HoverBox.OF(chlk.models.common.HoverBoxItem), String]],
             Object, function buildCommonGlanceBoxData(model, boxTitle){
                 var items=[];
                 var boxItems = model.getHover();

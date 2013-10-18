@@ -23,7 +23,7 @@ NAMESPACE('chlk.templates.student', function(){
             ArrayOf(chlk.models.schoolYear.MarkingPeriod), 'markingPeriods',
 
 
-            [[chlk.models.attendance.StudentAttendanceHoverBox, String]],
+            [[chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem), String]],
             Object ,function buildAttendanceGlanceBoxData(model, boxTitle){
                 var items = [];
                 var hoverItems = model.getHover();

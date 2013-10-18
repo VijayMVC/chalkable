@@ -1,6 +1,6 @@
 REQUIRE('chlk.models.people.ShortUserInfo');
-REQUIRE('chlk.models.attendance.StudentAttendanceHoverBox');
 REQUIRE('chlk.models.schoolYear.MarkingPeriod');
+REQUIRE('chlk.models.attendance.StudentAttendanceHoverBoxItem');
 
 NAMESPACE('chlk.models.attendance', function(){
    "use strict";
@@ -12,15 +12,15 @@ NAMESPACE('chlk.models.attendance', function(){
         chlk.models.schoolYear.MarkingPeriod, 'markingPeriod',
 
         [ria.serialize.SerializeProperty('absentsection')],
-        chlk.models.attendance.StudentAttendanceHoverBox, 'absentSection',
+        chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem), 'absentSection',
 
         [ria.serialize.SerializeProperty('latesection')],
-        chlk.models.attendance.StudentAttendanceHoverBox, 'lateSection',
+        chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem), 'lateSection',
 
         [ria.serialize.SerializeProperty('excusedsection')],
-        chlk.models.attendance.StudentAttendanceHoverBox, 'excusedSection',
+        chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem), 'excusedSection',
 
         [ria.serialize.SerializeProperty('presentsection')],
-        chlk.models.attendance.StudentAttendanceHoverBox, 'presentSection'
+        chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem), 'presentSection'
     ]);
 });

@@ -1,10 +1,11 @@
 REQUIRE('chlk.models.people.PersonSummary');
 REQUIRE('chlk.models.classes.Class');
-REQUIRE('chlk.models.common.AttendanceHoverBox');
-REQUIRE('chlk.models.common.DisciplineHoverBox');
 REQUIRE('chlk.models.announcement.AnnouncementClassPeriod');
-REQUIRE('chlk.models.student.StudentRankHoverBox');
-REQUIRE('chlk.models.student.StudentGradesHoverBox');
+
+REQUIRE('chlk.models.common.AttendanceHoverBoxItem');
+REQUIRE('chlk.models.common.DisciplineHoverBoxItem');
+REQUIRE('chlk.models.student.StudentGradesHoverBoxItem');
+REQUIRE('chlk.models.student.StudentRankHoverBoxItem');
 
 NAMESPACE('chlk.models.student', function () {
     "use strict";
@@ -26,16 +27,16 @@ NAMESPACE('chlk.models.student', function () {
 
 
             [ria.serialize.SerializeProperty('attendancebox')],
-            chlk.models.common.AttendanceHoverBox, 'attendanceBox',
+            chlk.models.common.HoverBox.OF(chlk.models.common.AttendanceHoverBoxItem), 'attendanceBox',
 
             [ria.serialize.SerializeProperty('disciplinebox')],
-            chlk.models.common.DisciplineHoverBox, 'disciplineBox',
+            chlk.models.common.HoverBox.OF(chlk.models.common.DisciplineHoverBoxItem), 'disciplineBox',
 
             [ria.serialize.SerializeProperty('gradesbox')],
-            chlk.models.student.StudentGradesHoverBox, 'gradesBox',
+            chlk.models.common.HoverBox.OF(chlk.models.student.StudentGradesHoverBoxItem), 'gradesBox',
 
             [ria.serialize.SerializeProperty('ranksbox')],
-            chlk.models.student.StudentRankHoverBox, 'rankBox',
+            chlk.models.common.HoverBox.OF(chlk.models.student.StudentRankHoverBoxItem), 'rankBox',
 
             [ria.serialize.SerializeProperty('classessection')],
             ArrayOf(chlk.models.classes.Class), 'classesSection',

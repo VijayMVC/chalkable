@@ -5,7 +5,10 @@ NAMESPACE('chlk.models.common', function () {
 
     /** @class chlk.models.common.HoverBox*/
     CLASS(
+        GENERIC('THoverItem'),
         'HoverBox', [
-            Number, 'title'
+
+            Number, 'title',
+            ArrayOf(THoverItem), 'hover'
         ]);
 });
