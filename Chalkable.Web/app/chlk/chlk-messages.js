@@ -477,6 +477,7 @@ var Msg = {
     Whole_School: 'Whole School',
     Will_teachers_be_viewing_student_output: 'Will teachers be viewing student output?',
     Write_a_review: 'Write a review',
+    You_vs_Peers: 'You vs. Peers',
     Your_grade: 'Your grade',
 
     //Window titles----------------------------------------------------------------------------------------------------------\

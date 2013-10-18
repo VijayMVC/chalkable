@@ -22,7 +22,7 @@ NAMESPACE('chlk.controls', function () {
 
             [ria.mvc.DomEventBind('mouseover', '.chart-container')],
             [[ria.dom.Dom, ria.dom.Event]],
-            Boolean, function chartHoverStart(node, event) {
+            function chartHoverStart(node, event) {
                 this.updateMarkers(node, {
                     enabled: true,
                     lineWidth:2,
@@ -46,7 +46,7 @@ NAMESPACE('chlk.controls', function () {
 
             [ria.mvc.DomEventBind('mouseleave', '.chart-container')],
             [[ria.dom.Dom, ria.dom.Event]],
-            Boolean, function chartHoverEnd(node, event) {
+            function chartHoverEnd(node, event) {
                 this.updateMarkers(node, {
                     enabled: true,
                     lineWidth:0,

@@ -4,6 +4,87 @@ BODY {
       DIV#content-wrapper{
         #main-wrapper {
           #main{
+            .student-grading-summary{
+              h1{
+                font: bold 18px Arial;
+                margin: 30px 27px;
+                color: #2f7790;
+                text-shadow: 0 1px 0 white;
+                border-bottom: 1px solid #c8c8c8;
+              }
+
+              .grading-chart-part{
+                margin: 35px 0 54px -12px;
+
+                .chart-container-1{
+                  height: 172px;
+                  margin-bottom: 20px;
+                  overflow: hidden;
+                }
+
+                .panel-header{
+                  .chzn-container{
+                    position: absolute;
+                    right: 110px;
+                    top: -1px;
+                    z-index: 100;
+
+                    .chzn-single SPAN {
+                      background: url(images/grading/select-box.png) 0 center no-repeat;
+                      padding-left: 15px;
+                    }
+                  }
+
+                  .student-me{
+                    background: url(images/grading/student-me.png) 0 0 no-repeat;
+                    position: absolute;
+                    right: 43px;
+                    top: 7px;
+                    width: 42px;
+                    height:16px;
+                  }
+                }
+
+                .chart-bg{
+                  width: 654px;
+                  height: 184px;
+                  background-size: 100% 100%;
+                  top: 18px;
+                  left: 4px;
+
+                  &:hover{
+                    top: 18px;
+                  }
+                }
+
+                .chart-container{
+                  z-index: 10;
+                  margin-top: 5px;
+
+                  .chart-triangle{
+                    display: inline-block;
+                    position: absolute;
+                    bottom: -10px;
+                    left: 4px;
+                    width: 0;
+                    height: 0;
+                    border-left: 5px solid transparent;
+                    border-right: 5px solid transparent;
+                    border-top: 5px solid white;
+                  }
+
+                  .chart-text{
+                    width: 34px;
+                    display: inline-block;
+                    text-align: center;
+                    background: url(images/grading/chart-tooltip.png) 0 0 no-repeat;
+                    height: 34px;
+                    font: bold 12px/30px Verdana;
+                  }
+                }
+              }
+            }
+
             .grading-summary{
               .students-line{
                 position: relative;

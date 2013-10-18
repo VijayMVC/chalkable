@@ -1,4 +1,4 @@
-mixin FeedItem(item)
+mixin FeedItem(item, noDisabled)
     itemClasses = []
         -itemClasses.push(item.getOwnerAttachmentsCount() > 0 || item.getApplicationsCount() > 0 ? 'has-attachments' : 'no-attachments')
         -itemClasses.push(item.isShowGradingIcon() ? 'is-gradable' : 'non-gradable')
@@ -20,7 +20,7 @@ mixin FeedItem(item)
                     )
             .bullet
                 +ActionLink('announcement', 'star', item.getId().valueOf(), !item.isStarred()).star
-                +ActionLink('announcement', 'view', item.getId()).d-b.t-d.not-blue.announcement-link.disabled
+                +ActionLink('announcement', 'view', item.getId())(class = !noDisabled ? 'disabled' : '').d-b.t-d.not-blue.announcement-link
                     .item-type
                         .attachment
                             div(class="announcement-type-" + item.getAnnouncementTypeId()).icon.blue
