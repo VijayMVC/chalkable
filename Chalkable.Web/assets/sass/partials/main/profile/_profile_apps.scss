@@ -1,0 +1,40 @@
+BODY {
+  DIV.page{
+    >DIV#content {
+      DIV#content-wrapper.profile{
+        #main{
+          .apps-budget-info{
+            .budget-info{
+              height: 39px;
+              margin-top: 20px;
+              position: relative;
+              top: -12px;
+              .counter{
+                display: inline-block;
+                lable{
+                  margin-right: 15px;
+                  font-size: 21px;
+                }
+                margin-right: 10px;
+              }
+            }
+
+            .apps{
+              margin-top: 20px;
+              .app-list-item{
+                display: inline-block;
+                margin-right: 20px;
+                text-align: center;
+                .description{
+                  font-family: Pacifico;
+                  font-weight: normal;
+                  text-shadow: 0 1px 1px white;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
