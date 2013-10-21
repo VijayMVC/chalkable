@@ -6,7 +6,8 @@ NAMESPACE('chlk.templates.profile', function(){
 
     /**@class chlk.templates.profile.SchoolPersonProfileTpl*/
     CLASS(
-        [ria.templates.ModelBind(chlk.models.people.UserProfileViewData)],
+        GENERIC('TUser', ClassOf(chlk.models.people.ShortUserInfo)),
+        [ria.templates.ModelBind(chlk.models.people.UserProfileViewData.OF(TUser))],
         'SchoolPersonProfileTpl', EXTENDS(chlk.templates.profile.BaseProfileTpl),[
 
             function $(){
@@ -16,7 +17,7 @@ NAMESPACE('chlk.templates.profile', function(){
                 this._studentControllerName = 'students';
             },
 
-            Object, function getUser(){
+            TUser, function getUser(){
                 return this.getModel().getUser();},
 
             String, function getControllerName(){

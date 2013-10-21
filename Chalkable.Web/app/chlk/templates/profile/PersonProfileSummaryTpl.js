@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.profile', function(){
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/profile/SchoolPersonProfileSummaryView.jade')],
         [ria.templates.ModelBind(chlk.models.people.UserProfileSummaryViewData)],
-        'PersonProfileSummaryTpl', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl),[
+        'PersonProfileSummaryTpl', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl.OF(chlk.models.people.PersonSummary)),[
 
             String, function getStatusText(){
                 var user = this.getUser();

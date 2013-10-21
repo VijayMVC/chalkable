@@ -4,7 +4,7 @@ REQUIRE('chlk.models.people.UserProfileViewData');
 NAMESPACE('chlk.models.people', function(){
     "use strict";
     /**@class chlk.models.people.UserProfileInfoViewData*/
-    CLASS('UserProfileInfoViewData', EXTENDS(chlk.models.people.UserProfileViewData), [
+    CLASS('UserProfileInfoViewData', EXTENDS(chlk.models.people.UserProfileViewData.OF(chlk.models.people.User)), [
 
         [[chlk.models.common.Role, chlk.models.people.User]],
         function $(role_, user_){

@@ -9,7 +9,7 @@ NAMESPACE('chlk.templates.profile', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/profile/SchoolPersonProfileAppsView.jade')],
         [ria.templates.ModelBind(chlk.models.people.UserProfileAppsViewData)],
-        'SchoolPersonProfileAppsTpl', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl), [
+        'SchoolPersonProfileAppsTpl', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl.OF(chlk.models.people.PersonApps)), [
 
         ]);
 });

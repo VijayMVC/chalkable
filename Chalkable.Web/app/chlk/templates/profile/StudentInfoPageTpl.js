@@ -8,5 +8,5 @@ NAMESPACE('chlk.templates.profile', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/profile/student-info-page.jade')],
         [ria.templates.ModelBind(chlk.models.student.StudentProfileInfoViewData)],
-        'StudentInfoPageTpl', EXTENDS(chlk.templates.profile.SchoolPersonInfoPageTpl), [])
+        'StudentInfoPageTpl', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl.OF(chlk.models.student.StudentInfo)), [])
 });

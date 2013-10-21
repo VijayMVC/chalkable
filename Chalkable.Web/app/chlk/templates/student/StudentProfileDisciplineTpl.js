@@ -9,7 +9,7 @@ NAMESPACE('chlk.templates.student', function(){
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/student/StudentProfileDisciplineView.jade')],
         [ria.templates.ModelBind(chlk.models.student.StudentProfileDisciplineViewData)],
-        'StudentProfileDisciplineTpl', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl),[
+        'StudentProfileDisciplineTpl', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl.OF(chlk.models.discipline.StudentDisciplineSummary)),[
 
             chlk.models.discipline.StudentDisciplineSummary, function getSummaryInfo(){
                 return this.getUser();

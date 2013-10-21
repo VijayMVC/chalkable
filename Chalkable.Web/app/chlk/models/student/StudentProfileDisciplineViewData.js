@@ -7,7 +7,7 @@ NAMESPACE('chlk.models.student', function(){
     "use strict";
 
     /**@class chlk.models.student.StudentProfileDisciplineViewData*/
-    CLASS('StudentProfileDisciplineViewData',EXTENDS(chlk.models.people.UserProfileViewData), [
+    CLASS('StudentProfileDisciplineViewData',EXTENDS(chlk.models.people.UserProfileViewData.OF(chlk.models.discipline.StudentDisciplineSummary)), [
 
         chlk.models.calendar.discipline.StudentDisciplineMonthCalendar, 'disciplineCalendar',
         ArrayOf(chlk.models.schoolYear.MarkingPeriod), 'markingPeriods',

@@ -4,16 +4,16 @@ REQUIRE('chlk.models.people.ShortUserInfo');
 NAMESPACE('chlk.models.people', function(){
     "use strict";
     /**@class chlk.models.people.UserProfileViewData*/
-    CLASS('UserProfileViewData', EXTENDS(chlk.models.profile.BaseProfileViewData), [
+    CLASS(
+        GENERIC('TUser', ClassOf(chlk.models.people.ShortUserInfo)),
+        'UserProfileViewData', EXTENDS(chlk.models.profile.BaseProfileViewData), [
 
-        Object, function getUser(){return this._user;},
-
+        TUser, function getUser(){return this._user;},
+        [[TUser]],
         VOID, function setUser_(user){
-            if(user instanceof chlk.models.people.ShortUserInfo)
                 return this._user = user;
-            throw Exception('parameter should be instance of chlk.models.people.ShortUserInfo');
         },
-        [[chlk.models.common.Role, chlk.models.people.ShortUserInfo]],
+        [[chlk.models.common.Role, TUser]],
         function $(role_, user_){
             BASE(role_);
             if(user_)
