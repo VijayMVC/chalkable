@@ -7,7 +7,7 @@ NAMESPACE('chlk.models.people', function () {
 
     /** @class chlk.models.people.UserProfileScheduleViewData*/
     CLASS(
-        'UserProfileScheduleViewData', EXTENDS(chlk.models.people.UserProfileViewData), [
+        'UserProfileScheduleViewData', EXTENDS(chlk.models.people.UserProfileViewData.OF(chlk.models.people.Schedule)), [
 
             //todo : rename this property
             chlk.models.people.Schedule, 'schedule',

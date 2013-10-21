@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.people', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/profile/SchedulingPage.jade')],
         [ria.templates.ModelBind(chlk.models.people.UserProfileScheduleViewData)],
-        'SchedulePage', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl), [
+        'SchedulePage', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl.OF(chlk.models.people.Schedule)), [
             [ria.templates.ModelPropertyBind],
             chlk.models.people.Schedule, 'schedule',
 

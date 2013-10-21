@@ -5,7 +5,7 @@ REQUIRE('chlk.models.schoolYear.MarkingPeriod');
 NAMESPACE('chlk.models.student', function(){
     "use strict";
     /**@class chlk.models.student.StudentProfileGradingViewData*/
-    CLASS('StudentProfileGradingViewData', EXTENDS(chlk.models.people.UserProfileViewData), [
+    CLASS('StudentProfileGradingViewData', EXTENDS(chlk.models.people.UserProfileViewData.OF(chlk.models.student.StudentGradingInfo)), [
 
         chlk.models.schoolYear.MarkingPeriod, 'markingPeriod',
 

@@ -109,6 +109,7 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(model){
                         var userData = this.prepareProfileData(model);
                         var res = new chlk.models.student.StudentProfileInfoViewData(this.getCurrentRole(), userData);
+//                        var res = chlk.models.people.UserProfileViewData(chlk.models.student.StudentInfo, userData, this.getCurrentRole());
                         this.setUserToSession(res);
                         return res;
                     }.bind(this));
