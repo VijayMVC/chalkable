@@ -1,0 +1,32 @@
+app = self.getApp()
+
+.dialog.app-market-install
+    .x-window-header
+        a.close.close-btn.dark
+        h1=app.getName()
+    .x-window-body
+        +ActionForm('appmarket', 'install')
+            .install-for
+                +Hidden('appId', app.getId().valueOf())
+                +Hidden('classes', "")
+                +Hidden('gradeLevels', "")
+                +Hidden('departments', "")
+                +Hidden('roles', "")
+                +Hidden('currentPerson', "")
+
+                each column in self.getInstallGroupColumns()
+                    .column(style="width:" + self.getInstallGroupColumnWidth())
+                        each item in column
+                            +LabeledCheckbox(
+                                item.getDescription(),
+                                'chk-' + item.getId(),
+                                item.isInstalled(),
+                                item.isInstalled())(install-group="#{item.getGroupType().valueOf()}")
+            .install-info
+                .install-btn
+                    +Button(disabled = true).special-button.green-button Install App
+                .paycheck
+                    .container
+                        .top
+                            .middle
+                                .bottom
