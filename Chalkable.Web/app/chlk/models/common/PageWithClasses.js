@@ -10,6 +10,8 @@ NAMESPACE('chlk.models.common', function () {
 
             Number, 'selectedTypeId',
 
+            chlk.models.id.ClassId, function getSelectedItemId(){return this.getTopData().getSelectedItemId(); },
+
             [[chlk.models.classes.ClassesForTopBar, chlk.models.id.ClassId]],
             function $(topData_, selectedId_){
                 BASE();

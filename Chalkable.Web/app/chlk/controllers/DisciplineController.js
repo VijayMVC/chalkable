@@ -1,14 +1,18 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.DisciplineService');
 REQUIRE('chlk.services.DisciplineTypeService');
+REQUIRE('chlk.services.ClassService');
+
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.discipline.DisciplineList');
 REQUIRE('chlk.models.discipline.DisciplineInputModel');
 REQUIRE('chlk.models.discipline.SetDisciplineListModel');
 REQUIRE('chlk.models.discipline.PaginatedListByDateModel');
+
 REQUIRE('chlk.activities.discipline.DisciplineSummaryPage');
 REQUIRE('chlk.activities.discipline.SetDisciplineDialog');
 REQUIRE('chlk.activities.discipline.DayDisciplinePopup');
+REQUIRE('chlk.activities.discipline.ClassDisciplinesPage');
 
 NAMESPACE('chlk.controllers', function(){
     "use strict";
@@ -23,6 +27,10 @@ NAMESPACE('chlk.controllers', function(){
             [ria.mvc.Inject],
             chlk.services.DisciplineTypeService, 'disciplineTypeService',
 
+            [ria.mvc.Inject],
+            chlk.services.ClassService, 'classService',
+
+
             [chlk.controllers.SidebarButton('discipline')],
             [[chlk.models.common.ChlkDate, Number, Number]],
             function listAction(date_, pageSize_, pageIndex_){
@@ -36,6 +44,26 @@ NAMESPACE('chlk.controllers', function(){
                 var res = this.disciplineList_(pageIndex, pageSize, date_);
                 return this.UpdateView(chlk.activities.discipline.DisciplineSummaryPage, res);
             },
+
+            [chlk.controllers.SidebarButton('discipline')],
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Number, Number]],
+            function classListAction(classId, date_, pageSize_, pageIndex_){
+                var start = 0;
+                if(pageSize_ && pageIndex_)
+                    start = pageIndex_ * pageSize_;
+                var res = ria.async.wait([
+                        this.disciplineService.getClassDisciplines(classId, date_, start),
+                        this.disciplineTypeService.getDisciplineTypes()
+                    ])
+                    .attach(this.validateResponse_())
+                    .then(function(result){
+                        var classes = this.classService.getClassesForTopBar(true);
+                        var classBarData = new chlk.models.classes.ClassesForTopBar(classes);
+                        return new chlk.models.discipline.ClassDisciplinesViewData(classBarData, classId, result[0], result[1], date_, true);
+                    }, this);
+                return this.PushView(chlk.activities.discipline.ClassDisciplinesPage, res);
+            },
+
 
             [[Number, Number, chlk.models.common.ChlkDate]],
             ria.async.Future, function disciplineList_(pageIndex_, pageSize_, date_){

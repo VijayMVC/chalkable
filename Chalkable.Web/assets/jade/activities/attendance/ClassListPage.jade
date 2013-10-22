@@ -43,7 +43,6 @@
             )#class-attendance-list-panel.people-list
                 needSuggestion = self.getItems().filter(function(item){return item.getType() > valuesEnum.NA.valueOf()}).length == 0;
                 each item, i in self.getItems()
-                    -console.log(i)
                     needPresent = (i == 0 && item.getType() == valuesEnum.NA.valueOf());
                     .row(class=(i == 0 ? 'selected' : ''), index=i)
                         if needPresent

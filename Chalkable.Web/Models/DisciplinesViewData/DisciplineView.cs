@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
+using Chalkable.Web.Models.PersonViewDatas;
 
 
 namespace Chalkable.Web.Models.DisciplinesViewData
 {
     public class DisciplineView
     {
-        public Guid StudentId { get; set; }
+        public ShortPersonViewData Student { get; set; }
         public PeriodViewData Period { get; set; }
         public string ClassName { get; set; }
         public Guid TeacherId { get; set; }
@@ -21,7 +22,7 @@ namespace Chalkable.Web.Models.DisciplinesViewData
 
         protected DisciplineView(ClassDisciplineDetails discipline, Guid currentPersonId,  bool canEdit)
         {
-            StudentId = discipline.Student.Id;
+            Student = ShortPersonViewData.Create(discipline.Student);
             Period = PeriodViewData.Create(discipline.ClassPeriod.Period);
             DisciplineTypes = DisciplineTypeViewData.Create(discipline.DisciplineTypes.Select(x => x.DisciplineType).ToList());
             ClassName = discipline.Class.Name;

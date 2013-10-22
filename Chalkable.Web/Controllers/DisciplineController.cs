@@ -21,26 +21,49 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST, true, CallType.Get, new[] { AppPermissionType.Discipline })]
         public ActionResult List(DateTime? date, int? start, int? count)
         {
-            Guid currentYearId = GetCurrentSchoolYearId();
+            start = start ?? 0;
+            count = count ?? DEFAULT_PAGE_SIZE;
+            //var res = GetDisciplines(null, null, classId, date);
+            //return Json(new PaginatedList<DisciplineView>(res, start.Value/count.Value, count.Value));
+             Guid currentYearId = GetCurrentSchoolYearId();
             var datev = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
             var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineDetails(currentYearId, datev);
             var list = StudentDisciplineSummaryViewData.Create(disciplines);
-            start = start ?? 0;
-            count = count ?? DEFAULT_PAGE_SIZE;
             return Json(new PaginatedList<StudentDisciplineSummaryViewData>(list, start.Value / count.Value, count.Value));
         }
 
-        //[RequireRequestValue("schoolYearId")]
+        [AuthorizationFilter("Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST, true, CallType.Get, new[] { AppPermissionType.Discipline })]
+        public ActionResult ClassList(DateTime? date, Guid classId, int? start, int? count)
+        {
+            start = start ?? 0;
+            count = count ?? int.MaxValue;
+            var res = GetDisciplines(null, null, classId, date);
+            return Json(new PaginatedList<DisciplineView>(res, start.Value / count.Value, count.Value));
+        }
+
+
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST_STUDENT_DISCIPLINE, true, CallType.Get, new[] { AppPermissionType.Discipline })]
         public ActionResult ListStudentDiscipline(Guid? schoolYearId, Guid schoolPersonId, DateTime? date)
         {
+            return Json(GetDisciplines(schoolYearId, schoolPersonId, null, date));
+        }
+
+        private IList<DisciplineView> GetDisciplines(Guid? schoolYearId, Guid? studentId, Guid? classId, DateTime? date)
+        {
             var currentDate = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
             var schoolYearIdv = schoolYearId ?? GetCurrentSchoolYearId();
-            var list = SchoolLocator.DisciplineService.GetClassDisciplineDetails(schoolYearIdv, schoolPersonId, currentDate, currentDate, true);
+            var list = SchoolLocator.DisciplineService.GetClassDisciplineDetails(new ClassDisciplineQuery
+            {
+                ClassId = classId,
+                SchoolYearId = schoolYearIdv,
+                FromDate = currentDate,
+                ToDate = currentDate,
+                NeedAllData = true,
+                PersonId = studentId
+            });
             var canEdit = BaseSecurity.IsAdminEditor(SchoolLocator.Context);
-            return Json(DisciplineView.Create(list, Context.UserId, canEdit));
+            return DisciplineView.Create(list, Context.UserId, canEdit);
         }
-        
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult SetClassDiscipline(DisciplineListInputModel disciplineList)
         {

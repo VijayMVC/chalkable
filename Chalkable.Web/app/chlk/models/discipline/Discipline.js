@@ -13,6 +13,8 @@ NAMESPACE('chlk.models.discipline', function(){
         [ria.serialize.SerializeProperty('studentid')],
         chlk.models.id.SchoolPersonId, 'studentId',
 
+        chlk.models.people.ShortUserInfo, 'student',
+
         [ria.serialize.SerializeProperty('classpersonid')],
         chlk.models.id.ClassPersonId, 'classPersonId',
 
