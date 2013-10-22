@@ -104,8 +104,32 @@ NAMESPACE('chlk.services', function () {
                     });
             },
 
+            [[String, String, Object]],
+            ria.async.Future, function makeApiCall(uri, token, gParams) {
 
+                return new chlk.lib.ajax.ChlkJsonPostTask(this.resolveUri(uri))
+                    .params(gParams)
+                    .requestHeaders({
+                        "Content-Type": "application/json; charset=utf-8",
+                        "Authorization": "Bearer:" + token
+                    })
+                    .run()
+                    .then(function (data) {
+                        var result = {
+                           code: "",
+                           message: ""
+                        };
 
+                        if(!data.success){
+                            if (data.responseText && data.responseText.length > 0){
+                                result = JSON.parse(data.responseText);
+                            }
+                        }else{
+                          result = data.data;
+                        }
+                        return result;
+                    });
+            },
 
             [[String, Object, Object]],
             ria.async.Future, function postArray(uri, clazz, gParams) {

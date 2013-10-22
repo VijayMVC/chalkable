@@ -22,6 +22,8 @@ mixin ApiCallForm(controllerInfo, role)
                             methodParams = cntMethod.getParams() || []
                             +ActionForm('developer', 'makeApiCall')(id = ria.dom.NewGID())
                                 +Hidden('apiCallRole', role)
+                                +Hidden('controllerName', controllerInfo.getName())
+                                +Hidden('methodName', cntMethod.getName())
                                 if methodParams.length > 0
                                     table
                                         thead

@@ -2,6 +2,7 @@ REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.common.SimpleResult');
 REQUIRE('chlk.models.api.ApiRoleInfo');
+REQUIRE('chlk.models.api.ApiCallRequestData');
 
 
 NAMESPACE('chlk.services', function () {
@@ -48,8 +49,19 @@ NAMESPACE('chlk.services', function () {
                 return this.getContext().getSession().get('apiRoles') || [];
             },
 
-            ria.async.Future, function makeApiCall(){
-
+            [[chlk.models.api.ApiCallRequestData]],
+            ria.async.Future, function callApi(requestData){
+                var role = requestData.getApiRole();
+                //todo: check if there is token for role
+                return this
+                    .listApiForRole(role)
+                    .then(function(data){
+                        var token = data.getToken();
+                        var url = requestData.getControllerName() + "/" + requestData.getActionName()+ ".json";
+                        var params = requestData.getApiCallParams();
+                        return this.makeApiCall(url, token,  params);
+                    }, this)
+                //todo: update response area
             }
 
         ])
