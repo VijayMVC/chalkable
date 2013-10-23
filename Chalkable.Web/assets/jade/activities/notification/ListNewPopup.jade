@@ -1,0 +1,24 @@
+.list-new
+    each item in self.getNotifications().getItems()
+        .row
+            .image
+                if item.getType() == chlk.models.notification.NotificationTypeEnum.MESSAGE
+                    .notification-person
+                        +ActionLink('message', 'page', item.getPrivateMessageId().valueOf())#notification-action
+                            +PersonImg(item.getPerson(), 47)
+                        span Message
+                if item.getType() == chlk.models.notification.NotificationTypeEnum.QUESTION
+                    .notification-person
+                        +ActionLink('announcement', 'view', item.getAnnouncementId().valueOf())#notification-action
+                            +PersonImg(item.getPerson(), 47)
+                        span Question
+                if item.getType() == chlk.models.notification.NotificationTypeEnum.ANNOUNCEMENT
+                    .notification-announcement
+                        +ActionLink('announcement', 'view', item.getAnnouncementId().valueOf())#notification-action
+                            div(class="announcement-type-" + item.getAnnouncementType()).icon.blue
+                        span= item.getAnnouncementTypeName()
+
+            div(class=item.isShown()? 'content' : 'content unshown')
+                .inner-content!= item.getMessage()
+            div(class=self.convertNotificationTypeToStyleName(item)).small-icon.time=item.getCreatedTime()
+    +ActionLink('notification', 'listByDays').see-all-link See All Notifications
