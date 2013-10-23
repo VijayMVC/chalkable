@@ -1,4 +1,4 @@
-ALTER VIEW [vwPerson]
+create VIEW [vwPerson]
 AS
 SELECT
 	Person.Id as Id,
@@ -21,7 +21,7 @@ FROM
 	
 GO
 
-CREATE VIEW [vwAnnouncement] 
+create VIEW [vwAnnouncement] 
 AS 
 SELECT
 	Announcement.Id as Id,
@@ -36,15 +36,13 @@ SELECT
 	Announcement.AnnouncementTypeRef as AnnouncementTypeRef,
 	AnnouncementType.Name as AnnouncementTypeName,
 	Announcement.PersonRef as PersonRef,
-	Announcement.MarkingPeriodClassRef as MarkingPeriodClassRef,
+	Announcement.ClassRef as ClassRef,
 	Person.FirstName + ' ' + Person.LastName as PersonName,
 	Person.Gender as PersonGender,
 	Class.Name as ClassName,
 	Class.GradeLevelRef as GradeLevelId,  
-	MarkingPeriodClass.ClassRef as ClassId,
-	MarkingPeriodClass.MarkingPeriodRef as MarkingPeriodId,
 	(Select COUNT(*) from AnnouncementQnA where AnnouncementQnA.AnnouncementRef = Announcement.Id) as QnACount,	
-	(Select COUNT(*) from ClassPerson where ClassRef = MarkingPeriodClass.ClassRef) as StudentsCount,
+	(Select COUNT(*) from ClassPerson where ClassRef = Announcement.ClassRef) as StudentsCount,
 	(Select COUNT(*) from AnnouncementAttachment where AnnouncementRef = Announcement.Id) as AttachmentsCount,
 	(select count(*) from AnnouncementAttachment where AnnouncementRef = Announcement.Id and PersonRef = Announcement.PersonRef) as OwnerAttachmentsCount,
 	(	select COUNT(*) from
@@ -59,10 +57,8 @@ SELECT
 FROM 
 	Announcement
 	join AnnouncementType on Announcement.AnnouncementTypeRef = AnnouncementType.Id
-	left join MarkingPeriodClass on MarkingPeriodClass.Id = Announcement.MarkingPeriodClassRef
-	left join Class on Class.Id = MarkingPeriodClass.ClassRef
+	left join Class on Class.Id = Announcement.ClassRef
 	left join Person on Person.Id = Announcement.PersonRef
-
 GO
 
 
@@ -148,4 +144,3 @@ AS
 		join Person p2 on p2.Id = PrivateMessage.ToPersonRef 
 	
 GO 
-
