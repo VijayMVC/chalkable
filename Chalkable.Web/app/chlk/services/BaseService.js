@@ -115,17 +115,14 @@ NAMESPACE('chlk.services', function () {
                     })
                     .run()
                     .then(function (data) {
-                        var result = {
-                           code: "",
-                           message: ""
-                        };
-
-                        if(!data.success){
-                            if (data.responseText && data.responseText.length > 0){
-                                result = JSON.parse(data.responseText);
-                            }
-                        }else{
-                          result = data.data;
+                        var result = {};
+                        if (!data.success){
+                            result = {
+                                message: data.data.message
+                            };
+                        }
+                        else{
+                            result = data.data;
                         }
                         return result;
                     });

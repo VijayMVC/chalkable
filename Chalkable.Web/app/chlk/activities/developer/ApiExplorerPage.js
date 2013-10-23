@@ -1,5 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.developer.ApiExplorerTpl');
+REQUIRE('chlk.templates.developer.ApiExplorerResponseTpl');
 REQUIRE('chlk.models.api.ApiParamType');
 
 NAMESPACE('chlk.activities.developer', function () {
@@ -75,6 +76,15 @@ NAMESPACE('chlk.activities.developer', function () {
                });
 
                return form.valid();
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.developer.ApiExplorerResponseTpl)],
+            VOID, function updateApiResponse(tpl, model, msg_) {
+                var formId = model.getApiFormId();
+                var form = this.dom.find('#' + formId);
+                var responseContainer = form.find('.response');
+                tpl.renderTo(responseContainer.empty());
+                jQuery(form.valueOf()).find('pre').snippet("javascript", {style:"ide-eclipse"});
             }
         ]);
 });

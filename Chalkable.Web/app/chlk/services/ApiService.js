@@ -61,7 +61,6 @@ NAMESPACE('chlk.services', function () {
                         var params = requestData.getApiCallParams();
                         return this.makeApiCall(url, token,  params);
                     }, this)
-                //todo: update response area
             }
 
         ])

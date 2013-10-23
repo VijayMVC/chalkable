@@ -78,8 +78,14 @@ NAMESPACE('chlk.controllers', function (){
             function makeApiCallAction(data){
                 var controllerName = data.controllerName;
                 var methodName = data.methodName;
+                var apiFormId = data.apiFormId;
                 var apiCallData = chlk.models.api.ApiCallRequestData.$create(controllerName, methodName, data);
-                return this.apiService.callApi(apiCallData);
+                var result = this.apiService
+                    .callApi(apiCallData)
+                    .then(function(data){
+                        return chlk.models.api.ApiResponse.$create(apiFormId, data);
+                    });
+                return this.UpdateView(chlk.activities.developer.ApiExplorerPage, result);
             }
 
         ])

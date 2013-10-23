@@ -20,10 +20,12 @@ mixin ApiCallForm(controllerInfo, role)
                     .details
                         .det-content
                             methodParams = cntMethod.getParams() || []
-                            +ActionForm('developer', 'makeApiCall')(id = ria.dom.NewGID())
+                            apiFormId = ria.dom.NewGID()
+                            +ActionForm('developer', 'makeApiCall')(id = apiFormId)
                                 +Hidden('apiCallRole', role)
                                 +Hidden('controllerName', controllerInfo.getName())
                                 +Hidden('methodName', cntMethod.getName())
+                                +Hidden('apiFormId', apiFormId)
                                 if methodParams.length > 0
                                     table
                                         thead
