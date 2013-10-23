@@ -43,7 +43,7 @@ NAMESPACE('chlk.models.apps', function () {
                             status = 'Live - Update approved';
                             break;
                         default :
-                            status = 'Live';
+                            status = 'Your app is live in the Chalkable App Store';
                             break;
                     }
                 }
