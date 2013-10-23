@@ -51,9 +51,8 @@ CREATE TABLE SchoolPerson
 
 GO
 
-ALTER TABLE SchoolStaff
+ALTER TABLE SchoolPerson
 	ADD CONSTRAINT PK_SchoolStaff PRIMARY KEY (SchoolRef, PersonRef)
-
 GO
 
 CREATE TABLE [dbo].[AnnouncementType](
@@ -140,7 +139,7 @@ CREATE TABLE [dbo].[Announcement](
 	[State] INT NOT NULL,
 	[GradingStyle] INT NOT NULL,
 	[Subject] NVARCHAR(255) NULL,
-	[MarkingPeriodClassRef] INT NULL CONSTRAINT [FK_Announcement_MarkingPeriodClass] FOREIGN KEY REFERENCES MarkingPeriodClass(Id),
+	[ClassRef] int null constraint FK_Announcement_Class foreign key references Class(Id),
 	[Order] INT NOT NULL,
 	[Dropped] BIT NOT NULL,
 )
@@ -424,3 +423,13 @@ CREATE TABLE GradingStyle
 	StyledValue INT NOT NULL
 )
 GO
+
+create table SchoolGradeLevel
+(
+	SchoolRef int not null constraint FK_SchoolGradeLevel_School foreign key references School(Id),
+	GradeLevelRef int not null constraint FK_SchoolGradeLevel_GradeLevel foreign key references GradeLevel(Id),
+	constraint PK_SchoolGradeLevelId primary key (SchoolRef, GradeLevelRef)
+)
+go
+
+
