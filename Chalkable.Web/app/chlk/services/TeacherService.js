@@ -46,6 +46,17 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Teacher/Summary.json', chlk.models.people.PersonSummary,{
                     personId: personId && personId.valueOf()
                 });
+            },
+
+            [[chlk.models.id.ClassId, String, Boolean, Number, Number]],
+            ria.async.Future, function getTeachers(classId_, filter_, byLastName_, start_, count_) {
+                return this.getPaginatedList('Teacher/GetTeachers.json', chlk.models.people.User, {
+                    classId: classId_ && classId_.valueOf(),
+                    filter: filter_,
+                    byLastName: byLastName_,
+                    start: start_,
+                    count: count_
+                });
             }
         ])
 });
