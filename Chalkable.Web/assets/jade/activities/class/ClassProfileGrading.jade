@@ -12,4 +12,6 @@ clazz = self.getGradingPart()
                 div
             .grading-section
                 gradingModel = new chlk.models.grading.GradingClassSummaryPart(self.getGradingPart().getGradingPerMp())
-                +RenderWith(gradingModel, chlk.templates.grading.GradingClassSummaryPartTpl)
+                +RenderWith(gradingModel, chlk.templates.grading.GradingClassSummaryPartTpl, {
+                    userRole: self.getUserRole()
+                })

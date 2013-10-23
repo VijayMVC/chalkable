@@ -15,8 +15,8 @@ NAMESPACE('chlk.templates.grading', function () {
                 var peersAvgs = this.getPeersAvgPerDate();
                 totalAvgs.forEach(function(item, index){
                     categories.push(item.getDate().format('M d'));
-                    mineData.push(item.getAvg());
-                    peersData.push(peersAvgs[index].getAvg());
+                    mineData.push(item.getAvg() || 0);
+                    peersData.push(peersAvgs[index].getAvg() || 0);
                 });
                 return {
                     backgroundColor: 'transparent',

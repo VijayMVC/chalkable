@@ -20,7 +20,9 @@ mixin LeftRightToolbar(data, tplClass, controller, action, params)
                         -item.setParams(params || []);
                     else
                         -item.setController && item.setController(null);
-                    +RenderWith(item, tplClass)
+                    +RenderWith(item, tplClass)(
+                        userRole = self.getUserRole()
+                    )
         .A(class=configs.disableNextButton ? configs.disabledClass : "").next-button.arrow
         if(configs.needDots)
             div(class=attributes.roundedDots ? "rounded" : "").paginator

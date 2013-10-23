@@ -17,27 +17,28 @@ NAMESPACE('chlk.templates.grading', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.GraphPoint), 'graphPoints',
 
-            function l(x,j,XY){
+            function l(x,j,XY,len){
                 var res= 1,i;
-                for(i=0;i<5;i++)
+                for(i=0;i<=len;i++)
                     if(i != j){
                         res= res*(x - XY[i][0])/(XY[j][0] - XY[i][0]);
                     }
                 return res;
             },
 
-            function interpolate(XY,x){
+            function interpolate(XY,x,len){
                 var res = 0,i;
-                for(i=0;i<5;i++)
-                    res = res + XY[i][1] * this.l(x,i,XY);
+                for(i=0;i<=len;i++)
+                    res = res + XY[i][1] * this.l(x,i,XY, len);
                 return res < 0 ? 0 : res;
             },
 
             Object, function getGraphConfigs(){
                 var graphpoints = this.getGraphPoints();
+                var len = graphpoints.length;
                 var tickPositions = [], ticksLetters = [], graphdata=[], max = 0;
 
-                if(graphpoints && graphpoints.length){
+                if(graphpoints && len){
                     var XY = [];
                     graphpoints.forEach(function(item){
                         XY.push([item.getGrade(), item.getStudentCount()]);
@@ -46,7 +47,7 @@ NAMESPACE('chlk.templates.grading', function () {
 
                     XY.unshift([0,0]);
                     var x = graphpoints[0].getStartInterval();
-                    graphdata.push([x, this.interpolate(XY, x)]);
+                    graphdata.push([x, this.interpolate(XY, x, len)]);
                     tickPositions.push(x);
                     ticksLetters[x] = GradingStyler.getFromMapped(graphpoints[0].getGradingStyle(), graphpoints[0].getMappedStartInterval());
                     graphpoints.forEach(function(item){
@@ -54,7 +55,7 @@ NAMESPACE('chlk.templates.grading', function () {
                         graphdata.push([item.getGrade(), item.getStudentCount()]);
                         if(item.getStudentCount() > max)
                             max = item.getStudentCount();
-                        var fx = this.interpolate(XY, x);
+                        var fx = this.interpolate(XY, x, len);
                         tickPositions.push(x);
                         ticksLetters[x] = GradingStyler.getFromMapped(graphpoints[0].getGradingStyle(), item.getMappedEndInterval());
                         graphdata.push([x, fx]);

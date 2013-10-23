@@ -7,6 +7,7 @@ REQUIRE('chlk.models.announcement.StudentAnnouncements');
 REQUIRE('chlk.models.id.StudentAnnouncementId');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.AnnouncementId');
+REQUIRE('chlk.models.grading.GradingStudentClassSummaryViewData');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -41,6 +42,14 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.ClassId]],
             ria.async.Future, function getClassSummary(classId) {
                 return this.get('Grading/ClassSummary', ArrayOf(chlk.models.grading.GradingClassSummaryItems), {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.ClassId]],
+            ria.async.Future, function getStudentsClassSummary(studentId, classId) {
+                return this.get('Grading/StudentClassSummary', chlk.models.grading.GradingStudentClassSummaryViewData, {
+                    studentId: studentId.valueOf(),
                     classId: classId.valueOf()
                 });
             },

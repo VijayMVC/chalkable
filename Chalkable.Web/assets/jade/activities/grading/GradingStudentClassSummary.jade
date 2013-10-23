@@ -1,0 +1,32 @@
+topData = self.getTopData()
+topItems = topData.getTopItems()
+selectedId = topData.getSelectedItemId()
++LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summary')(
+    selectedItemId=selectedId
+).classes-bar
+.student-grading-summary.student-grading-class-summary
+    -clazz=self.getClazz()
+    h1
+        +ActionLink('user', 'infoByRole', clazz.getTeacher().getId(), chlk.models.common.RoleNamesEnum.TEACHER)
+            +PersonImg(clazz.getTeacher(), 47)
+        =clazz.getName()
+        .mp-info
+            -mp=self.getCurrentMarkingPeriod()
+            =Msg.Marking_Period_shortcut.toUpperCase() + ' ' + mp.getName() + mp.getStartDate().format(' M d - ') + mp.getEndDate().format('M d')
+    .item-types
+        each item,i in self.getAnnTypesGradeStats()
+            div(data-color=self.getColor(i), data-opacity-color=self.getColor(i, 0.2), data-index=i).item-type
+                div(style="background:" + self.getColor(i) + ";").box
+                .name=item.getTypeName()
+        .item-type.hovered.avg
+            .box
+            .name
+                |#{Msg.Avg} (#{self.getAvg()})
+    .grading-chart-part.relative
+        .chart-bg
+        .chart-container-1
+            +Chart()(
+                data-options = self.getChartOptions()
+            ).relative.main-chart
+    +RenderWith(self.getSummaryPart(), chlk.templates.grading.GradingClassSummaryPartTpl)
+
