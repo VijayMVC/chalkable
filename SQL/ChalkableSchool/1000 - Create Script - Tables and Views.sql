@@ -35,12 +35,25 @@ CREATE TABLE Person
 	[Salutation] NVARCHAR(255) NULL,
 	[Active] BIT NOT NULL,
 	[LastPasswordReset] DATETIME2(7) NULL,
-	[FirstLoginDate] DATETIME2(7) NULL
-	[RoleRef] INT NOT NULL,
+	[FirstLoginDate] DATETIME2(7) NULL,
 	[LastMailNotification] DATETIME2 NULL,
-	[Email] NVARCHAR(256) not null,
+	[Email] NVARCHAR(256) NOT NULL,
 	AddressRef INT CONSTRAINT FK_Person_Address FOREIGN KEY REFERENCES [Address](Id)
 )
+GO
+
+CREATE TABLE SchoolPerson
+(	
+	SchoolRef INT NOT NULL CONSTRAINT FK_SchoolStaff_School FOREIGN KEY REFERENCES School(Id),
+	PersonRef INT NOT NULL CONSTRAINT FK_SchoolStaff_PERSON FOREIGN KEY REFERENCES Person(Id),
+	RoleRef INT NOT NULL
+)
+
+GO
+
+ALTER TABLE SchoolStaff
+	ADD CONSTRAINT PK_SchoolStaff PRIMARY KEY (SchoolRef, PersonRef)
+
 GO
 
 CREATE TABLE [dbo].[AnnouncementType](
@@ -54,7 +67,7 @@ GO
 
 CREATE TABLE [dbo].[SchoolYear](
 	[Id] INT NOT NULL PRIMARY KEY,
-	SchoolRef INT not null CONSTRAINT FK_SchoolYear_School FOREIGN KEY REFERENCES School(Id)
+	SchoolRef INT NOT NULL CONSTRAINT FK_SchoolYear_School FOREIGN KEY REFERENCES School(Id),
 	[Name] NVARCHAR(255) NOT NULL,
 	[Description] NVARCHAR(1024) NULL,
 	[StartDate] DATETIME2(7) NOT NULL,
@@ -64,25 +77,25 @@ CREATE TABLE [dbo].[SchoolYear](
 GO
 
 Alter TABLE SchoolYear
-	Add CONSTRAINT QU_SchoolYear_Name UNIQUE(Name, SchoolId)
+	Add CONSTRAINT QU_SchoolYear_Name UNIQUE(Name, SchoolRef)
 GO
 
 CREATE TABLE [dbo].[MarkingPeriod](
-	[Id] INT not null PRIMARY KEY,
+	[Id] INT NOT NULL PRIMARY KEY,
 	[Name] NVARCHAR(255) NOT NULL,
 	[StartDate] DATETIME2(7) NOT NULL,
 	[EndDate] DATETIME2(7) NOT NULL,
 	[Description] NVARCHAR(1024) NULL,
-	[SchoolYearRef] [UNIQUEidentifier] NOT NULL CONSTRAINT FK_MarkingPeriod_SchoolYear FOREIGN KEY REFERENCES SchoolYear(Id),
+	[SchoolYearRef] INT NOT NULL CONSTRAINT FK_MarkingPeriod_SchoolYear FOREIGN KEY REFERENCES SchoolYear(Id),
 	[WeekDays] INT NOT NULL DEFAULT (126)
 )
 GO
 
 CREATE TABLE [dbo].[GradeLevel](
-	[Id] INT not null PRIMARY KEY,
+	[Id] INT NOT NULL PRIMARY KEY,
 	[Name] NVARCHAR(255) NOT NULL,
 	[Description] NVARCHAR(1024),
-	[Number] INT not null
+	[Number] INT NOT NULL
 )
 GO
 
@@ -91,11 +104,11 @@ Alter TABLE [GradeLevel]
 GO
 
 Alter TABLE [GradeLevel]
-	Add CONSTRAINT QU_GradeLevel_Sequence UNIQUE(Sequence)
+	Add CONSTRAINT QU_GradeLevel_Number UNIQUE(Number)
 GO
 
 CREATE TABLE [dbo].[Class](
-	[Id] INT not null PRIMARY KEY,
+	[Id] INT NOT NULL PRIMARY KEY,
 	[Name] NVARCHAR(255) NOT NULL,
 	[Description] NVARCHAR(1024) NULL,
 	[ChalkableDepartmentRef] INT NULL,
@@ -118,7 +131,7 @@ Alter TABLE MarkingPeriodClass
 GO
 
 CREATE TABLE [dbo].[Announcement](
-	[Id] INT PRIMARY KEY NOT NULL,
+	[Id] INT PRIMARY KEY IDENTITY(1000000000, 1) NOT NULL,
 	[PersonRef] INT NOT NULL CONSTRAINT [FK_Announcement_Person] FOREIGN KEY REFERENCES Person(Id),
 	[Content] NVARCHAR(max) NULL,
 	[CREATEd] DATETIME2(7) NOT NULL,
@@ -134,7 +147,7 @@ CREATE TABLE [dbo].[Announcement](
 GO
 
 CREATE TABLE [dbo].[AnnouncementApplication](
-	[Id] INT PRIMARY KEY NOT NULL,
+	[Id] INT PRIMARY KEY IDENTITY NOT NULL,
 	[AnnouncementRef] INT NOT NULL CONSTRAINT [FK_AnnouncementApplication_Announcement] FOREIGN KEY REFERENCES [Announcement](Id),
 	[ApplicationRef] [UNIQUEidentifier] NOT NULL,
 	[Active] BIT NOT NULL,
@@ -155,7 +168,7 @@ GO
 
 
 CREATE TABLE [dbo].[AnnouncementQnA](
-	[id] INT PRIMARY KEY NOT NULL,
+	[id] INT PRIMARY KEY IDENTITY NOT NULL,
 	[AnnouncementRef] INT NOT NULL CONSTRAINT [FK_AnnouncementQnA_Announcement] FOREIGN KEY REFERENCES [dbo].[Announcement] ([Id]),
 	[PersonRef] INT NOT NULL CONSTRAINT [FK_AnnouncementQnA_Person] FOREIGN KEY REFERENCES [dbo].[Person] ([Id]),
 	[Question] NVARCHAR(max) NOT NULL,
@@ -167,7 +180,7 @@ CREATE TABLE [dbo].[AnnouncementQnA](
 GO
 
 CREATE TABLE [dbo].[AnnouncementRecipient](
-	[Id] INT PRIMARY KEY NOT NULL,
+	[Id] INT PRIMARY KEY IDENTITY NOT NULL,
 	[AnnouncementRef] INT NOT NULL  CONSTRAINT [FK_AnnouncementRecipient_Announcement] FOREIGN KEY REFERENCES [dbo].[Announcement] ([Id]),
 	[ToAll] BIT NOT NULL,
 	[RoleRef] INT NULL,
@@ -177,7 +190,7 @@ CREATE TABLE [dbo].[AnnouncementRecipient](
 GO
 
 CREATE TABLE [dbo].[AnnouncementRecipientData](
-	[Id] INT PRIMARY KEY NOT NULL,
+	[Id] INT PRIMARY KEY IDENTITY NOT NULL,
 	[AnnouncementRef] INT NOT NULL CONSTRAINT [FK_AnnouncementRecipientData_Announcement] FOREIGN KEY REFERENCES [dbo].[Announcement] ([Id]),
 	[PersonRef] INT NOT NULL CONSTRAINT [FK_AnnouncementRecipientData_Person] FOREIGN KEY REFERENCES [dbo].[Person] ([Id]),
 	[Starred] BIT NOT NULL,
@@ -186,9 +199,8 @@ CREATE TABLE [dbo].[AnnouncementRecipientData](
 )
 GO
 
-
 CREATE TABLE [dbo].[AnnouncementReminder](
-	[Id] INT PRIMARY KEY NOT NULL,
+	[Id] INT PRIMARY KEY IDENTITY NOT NULL,
 	[RemindDate] DATETIME2(7) NULL,
 	[Processed] BIT NOT NULL,
 	[AnnouncementRef] INT NOT NULL CONSTRAINT [FK_AnnouncementReminder_Announcement] FOREIGN KEY REFERENCES [dbo].[Announcement] ([Id]),
@@ -198,120 +210,43 @@ CREATE TABLE [dbo].[AnnouncementReminder](
 GO
 
 CREATE TABLE ClassPerson
-(
-	Id INT not null PRIMARY KEY,
-	ClassRef INT not null CONSTRAINT FK_ClassPerson_Class FOREIGN KEY REFERENCES Class(Id),
-	PersonRef INT not null CONSTRAINT FK_ClassPerson_Person FOREIGN KEY REFERENCES Person(Id),
+(	
+	ClassRef INT NOT NULL CONSTRAINT FK_ClassPerson_Class FOREIGN KEY REFERENCES Class(Id),
+	PersonRef INT NOT NULL CONSTRAINT FK_ClassPerson_Person FOREIGN KEY REFERENCES Person(Id)
 )
 GO
 
-
 Alter TABLE ClassPerson
-	Add CONSTRAINT QU_ClassPerson_PersonRef_ClassRef UNIQUE(PersonRef, ClassRef)
+	ADD CONSTRAINT PK_ClassPerson PRIMARY KEY(PersonRef, ClassRef)
 GO
-
 
 CREATE TABLE StudentSchoolYear
 (
 	[Id] INT NOT NULL PRIMARY KEY,
-	SchoolYearId INT not null CONSTRAINT FK_StudentSchoolYear_SchoolYear FOREIGN KEY REFERENCES SchoolYear(Id),
-	GradeLevelRef INT not null CONSTRAINT FK_StudentSchoolYear_GradeLevel FOREIGN KEY REFERENCES GradeLevel(Id),
-	StudentRef INT not null CONSTRAINT FK_StudentSchoolYear_Person FOREIGN KEY REFERENCES Person(Id)
+	SchoolYearId INT NOT NULL CONSTRAINT FK_StudentSchoolYear_SchoolYear FOREIGN KEY REFERENCES SchoolYear(Id),
+	GradeLevelRef INT NOT NULL CONSTRAINT FK_StudentSchoolYear_GradeLevel FOREIGN KEY REFERENCES GradeLevel(Id),
+	StudentRef INT NOT NULL CONSTRAINT FK_StudentSchoolYear_Person FOREIGN KEY REFERENCES Person(Id)
 )
 GO
 
-CREATE view [vwPerson]
-as
-select 	
-	Person.Id as Id,
-	Person.RoleRef as RoleId,
-	Person.FirstName as FirstName,
-	Person.LastName as LastName,
-	Person.BirthDate as BirthDate,
-	Person.Gender as Gender,
-	Person.Salutation as Salutation,
-	Person.Active as Active,
-	Person.FirstLoginDate as FirstLogInDate,
-	Person.Email as Email,
-	GradeLevel.Id as GradeLevel_Id,
-	GradeLevel.Name as GradeLevel_Name,
-	StudentInfo.IEP as IEP,
-	StudentInfo.EnrollmentDate as EnrollmentDate,
-	StudentInfo.PreviousSchool as PreviousSchool,
-	StudentInfo.PreviousSchoolNote as PreviousSchoolNote,
-	StudentInfo.PreviousSchoolPhone as PreviousSchoolPhone
-from 
-	Person
-	left join StudentSchoolYear on StudentSchoolYear.StudentRef = Person.Id
-	left join GradeLevel on StudentSchoolYear.GradeLevelRef = GradeLevel.Id	
-GO
-
-
 CREATE TABLE StudentAnnouncement
 (
-	Id INT not null  PRIMARY KEY,
-	PersonRef INT not null CONSTRAINT FK_StudentAnnouncement_Person FOREIGN KEY REFERENCES Person(Id),
-	AnnouncementRef INT not null CONSTRAINT FK_StudentAnnouncement_Announcement FOREIGN KEY REFERENCES Announcement(Id),
-	Comment NVARCHAR(1024) null,
-	GradeValue INT null,
+	Id INT NOT NULL PRIMARY KEY IDENTITY(1000000000, 1),
+	PersonRef INT NOT NULL CONSTRAINT FK_StudentAnnouncement_Person FOREIGN KEY REFERENCES Person(Id),
+	AnnouncementRef INT NOT NULL CONSTRAINT FK_StudentAnnouncement_Announcement FOREIGN KEY REFERENCES Announcement(Id),
+	Comment NVARCHAR(1024) NULL,
+	GradeValue INT NULL,
 	ExtraCredit NVARCHAR(255) null,
-	Dropped bit not null,
-	State INT not null,
+	Dropped bit NOT NULL,
+	State INT NOT NULL,
 	ApplicationRef UNIQUEidentifier null
 )
 GO
 
-CREATE View [vwAnnouncement] 
-as 
-Select 
-	Announcement.Id as Id,
-	Announcement.CREATEd as CREATEd,
-	Announcement.Expires as Expires,
-	Announcement.[State] as [State],
-	Announcement.[Order] as [Order],
-	Announcement.Content as Content,
-	Announcement.[Subject] as [Subject],
-	Announcement.GradingStyle as GradingStyle,
-	Announcement.Dropped as Dropped,
-	Announcement.AnnouncementTypeRef as AnnouncementTypeRef,
-	AnnouncementType.Name as AnnouncementTypeName,
-	Announcement.PersonRef as PersonRef,
-	Announcement.MarkingPeriodClassRef as MarkingPeriodClassRef,
-	Person.FirstName + ' ' + Person.LastName as PersonName,
-	Person.Gender as PersonGender,
-	Class.Name as ClassName,
-	Class.GradeLevelRef as GradeLevelId,  
-	Class.CourseRef as CourseId,
-	MarkingPeriodClass.ClassRef as ClassId,
-	MarkingPeriodClass.MarkingPeriodRef as MarkingPeriodId,
-	(Select COUNT(*) from AnnouncementQnA where AnnouncementQnA.AnnouncementRef = Announcement.Id) as QnACount,	
-	(Select COUNT(*) from ClassPerson where ClassRef = MarkingPeriodClass.ClassRef) as StudentsCount,
-	(Select COUNT(*) from AnnouncementAttachment where AnnouncementRef = Announcement.Id) as AttachmentsCount,
-	(select count(*) from AnnouncementAttachment where AnnouncementRef = Announcement.Id and PersonRef = Announcement.PersonRef) as OwnerAttachmentsCount,
-	(	select COUNT(*) from
-			(Select distinct PersonRef from AnnouncementAttachment 
-			where AnnouncementRef = Announcement.Id
-			and PersonRef <> Announcement.PersonRef) as x
-	) as StudentsCountWithAttachments,
-	(Select COUNT(*) from StudentAnnouncement where AnnouncementRef = Announcement.Id and GradeValue is not null) as GradingStudentsCount, 
-	(Select AVG(GradeValue) from StudentAnnouncement where AnnouncementRef = Announcement.Id and GradeValue is not null) as [Avg], 
-	(Select COUNT(*) from AnnouncementApplication where AnnouncementRef = Announcement.Id and Active = 1) as ApplicationCount
-
-from 
-	Announcement
-	join AnnouncementType on Announcement.AnnouncementTypeRef = AnnouncementType.Id
-	left join MarkingPeriodClass on MarkingPeriodClass.Id = Announcement.MarkingPeriodClassRef
-	left join Class on Class.Id = MarkingPeriodClass.ClassRef
-	left join Person on Person.Id = Announcement.PersonRef
-
-GO
-
-
-
 CREATE TABLE Phone
 (
-	Id INT PRIMARY KEY not null,
-	PersonRef INT not null CONSTRAINT FK_Phone_Person FOREIGN KEY REFERENCES Person(Id),
+	Id INT PRIMARY KEY NOT NULL,
+	PersonRef INT NOT NULL CONSTRAINT FK_Phone_Person FOREIGN KEY REFERENCES Person(Id),
 	[Value] NVARCHAR(256) NOT NULL,
 	[Type] INT NOT NULL,
 	[IsPRIMARY] BIT NOT NULL,
@@ -320,7 +255,7 @@ CREATE TABLE Phone
 GO
 
 CREATE TABLE [dbo].[PrivateMessage](
-	[Id] INT not null PRIMARY KEY,
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
 	[FromPersonRef] INT NOT NULL CONSTRAINT FK_PrivateMessage_FromPerson FOREIGN KEY REFERENCES Person(Id),
 	[ToPersonRef] INT NOT NULL CONSTRAINT FK_PrivateMessage_ToPerson FOREIGN KEY REFERENCES Person(Id),
 	[Sent] DATETIME2(7) NULL,
@@ -334,7 +269,7 @@ GO
 
 CREATE TABLE Room
 (
-	Id INT PRIMARY KEY not null,
+	Id INT PRIMARY KEY NOT NULL,
 	[RoomNumber] NVARCHAR(255) NOT NULL,
 	[Description] NVARCHAR(1024) NULL,
 	[Size] NVARCHAR(255) NULL,
@@ -345,54 +280,53 @@ GO
 
 CREATE TABLE DayType
 (
-	Id INT not null PRIMARY KEY,
-	Number INT not null,
-	Name NVARCHAR(1024) not null,
-	SchoolYearRef INT not null CONSTRAINT FK_DayType_SchoolYear FOREIGN KEY REFERENCES SchoolYear(Id)
+	Id INT NOT NULL PRIMARY KEY,
+	Number INT NOT NULL,
+	Name NVARCHAR(1024) NOT NULL,
+	SchoolYearRef INT NOT NULL CONSTRAINT FK_DayType_SchoolYear FOREIGN KEY REFERENCES SchoolYear(Id)
 )
 GO
 
 CREATE TABLE Period
 (
-	Id INT not null PRIMARY KEY,
+	Id INT NOT NULL PRIMARY KEY,
 	[StartTime] INT NOT NULL,
 	[EndTime] INT NOT NULL,
-	SchoolYearRef INT not null CONSTRAINT FK_Period_SchoolYear FOREIGN KEY REFERENCES SchoolYear(Id),
+	SchoolYearRef INT NOT NULL CONSTRAINT FK_Period_SchoolYear FOREIGN KEY REFERENCES SchoolYear(Id),
 	[Order] INT NOT NULL
 )
 GO
 
 CREATE TABLE ClassPeriod
 (
-	Id INT PRIMARY KEY not null,
-	PeriodRef INT not null CONSTRAINT FK_ClassPeriod_Period FOREIGN KEY REFERENCES Period(Id),
-	DayTypeRef INT not null CONSTRAINT FK_ClassPeriod_DayType FOREIGN KEY REFERENCES DayType(Id),
-	ClassRef INT not null CONSTRAINT FK_ClassPeriod_Class FOREIGN KEY REFERENCES Class(Id),
-	RoomRef INT not null CONSTRAINT FK_ClassPeriod_Room FOREIGN KEY REFERENCES Room(Id)
+	Id INT NOT NULL PRIMARY KEY IDENTITY,
+	PeriodRef INT NOT NULL CONSTRAINT FK_ClassPeriod_Period FOREIGN KEY REFERENCES Period(Id),
+	DayTypeRef INT NOT NULL CONSTRAINT FK_ClassPeriod_DayType FOREIGN KEY REFERENCES DayType(Id),
+	ClassRef INT NOT NULL CONSTRAINT FK_ClassPeriod_Class FOREIGN KEY REFERENCES Class(Id),
+	RoomRef INT NOT NULL CONSTRAINT FK_ClassPeriod_Room FOREIGN KEY REFERENCES Room(Id)
 )
 GO
 
 Alter TABLE ClassPeriod
-	Add CONSTRAINT QU_ClassPeriod_ClassRef_PeriodRef UNIQUE(ClassRef, PeriodRef)
+	ADD CONSTRAINT UQ_Class_Period_DayType UNIQUE(ClassRef, PeriodRef, DayTypeRef)
 GO
 
 CREATE TABLE [Date]
 (
-	Id INT PRIMARY KEY,
-	DATETIME2 DATETIME2 not null,
+	[Date] DATETIME2 NOT NULL,
 	DayTypeRef INT CONSTRAINT FK_Date_DayType FOREIGN KEY REFERENCES DayType(Id),
-	SchoolYearRef INT not null CONSTRAINT FK_Date_SchoolYear FOREIGN KEY REFERENCES SchoolYear(Id),
-	IsSchoolDay bit not null
+	SchoolYearRef INT NOT NULL CONSTRAINT FK_Date_SchoolYear FOREIGN KEY REFERENCES SchoolYear(Id),
+	IsSchoolDay BIT NOT NULL
 )
 GO
 
 Alter TABLE [Date]
-	Add CONSTRAINT QU_Date_DateTime UNIQUE(DATETIME2, SchoolYearRef)
+	Add CONSTRAINT PK_Date PRIMARY KEY([Date], SchoolYearRef)
 GO
 
 
 CREATE TABLE [dbo].[Notification](
-	[Id] INT NOT NULL PRIMARY KEY,
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
 	[Type] INT NOT NULL,
 	[Message] NVARCHAR(1024) NULL,
 	[Shown] BIT NOT NULL,
@@ -413,7 +347,7 @@ CREATE TABLE [dbo].[ReportDownload]
 	[Id] INT NOT NULL PRIMARY KEY,
 	[Format] INT NOT NULL,
 	[PersonRef] INT NOT NULL CONSTRAINT FK_ReportDownload_Person FOREIGN KEY REFERENCES Person(Id),
-	[ReportType] INT not null,
+	[ReportType] INT NOT NULL,
 	[DownloadDate] DATETIME2(7) NOT NULL,
 	[FriendlyName] NVARCHAR(1024) NOT NULL,
 )
@@ -422,7 +356,7 @@ GO
 CREATE TABLE [dbo].[ReportMailDelivery]
 (
 	[Id] INT PRIMARY KEY NOT NULL,
-	[ReportType] INT not null ,
+	[ReportType] INT NOT NULL ,
 	[Format] INT NOT NULL,
 	[Frequency] INT NOT NULL,
 	[PersonRef] INT NOT NULL CONSTRAINT FK_ReportMailDelivery_Person FOREIGN KEY REFERENCES Person(Id),
@@ -434,7 +368,7 @@ CREATE TABLE [dbo].[ReportMailDelivery]
 GO
 
 CREATE TABLE [dbo].[ApplicationInstallAction](
-	[Id] INT PRIMARY KEY NOT NULL,
+	[Id] INT PRIMARY KEY NOT NULL IDENTITY,
 	[OwnerRef] INT NOT NULL CONSTRAINT FK_ApplicationInstallAction_Owner FOREIGN KEY REFERENCES Person(Id),
 	[PersonRef] INT NULL CONSTRAINT FK_ApplicationInstallAction_Person FOREIGN KEY REFERENCES Person(Id),
 	[ApplicationRef] UNIQUEidentifier NOT NULL,
@@ -443,35 +377,35 @@ CREATE TABLE [dbo].[ApplicationInstallAction](
 GO
 
 CREATE TABLE [dbo].[ApplicationInstallActionRole](
-	[Id] INT PRIMARY KEY NOT NULL,
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
 	[RoleId] INT NOT NULL,
 	[AppInstallActionRef] INT NOT NULL CONSTRAINT FK_ApplicationInstallActionRole_ApplicationInstallAction FOREIGN KEY REFERENCES ApplicationInstallAction(Id)
 )
 GO
 
 CREATE TABLE [dbo].[ApplicationInstallActionClasses](
-	[Id] INT PRIMARY KEY NOT NULL,
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
 	[ClassRef] INT NOT NULL CONSTRAINT FK_ApplicationInstallActionClasses_Class FOREIGN KEY REFERENCES Class(Id),
 	[AppInstallActionRef] INT NOT NULL CONSTRAINT FK_ApplicationInstallActionClasses_ApplicationInstallAction FOREIGN KEY REFERENCES ApplicationInstallAction(Id)
 )
 GO
 
 CREATE TABLE [dbo].[ApplicationInstallActionDepartment](
-	[Id] INT PRIMARY KEY NOT NULL,
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
 	[DepartmentRef] UNIQUEidentifier NOT NULL,
 	[AppInstallActionRef] INT NOT NULL CONSTRAINT FK_ApplicationInstallActionDepartment_ApplicationInstallAction FOREIGN KEY REFERENCES ApplicationInstallAction(Id),
 )
 GO
 
 CREATE TABLE [dbo].[ApplicationInstallActionGradeLevel](
-	[Id] INT NOT NULL PRIMARY KEY,
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
 	[GradeLevelRef] INT NOT NULL CONSTRAINT FK_ApplicationInstallActionGradeLevel_GradeLevel FOREIGN KEY REFERENCES GradeLevel(Id),
 	[AppInstallActionRef] INT NOT NULL CONSTRAINT FK_ApplicationInstallActionGradeLevel_ApplicationInstallAction FOREIGN KEY REFERENCES ApplicationInstallAction(Id),
 )
 GO
 
 CREATE TABLE [dbo].[ApplicationInstall](
-	[Id] INT PRIMARY KEY NOT NULL,
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
 	[ApplicationRef] UNIQUEidentifier NOT NULL,
 	[PersonRef] INT NOT NULL CONSTRAINT FK_ApplicationInstall_Person FOREIGN KEY REFERENCES Person(Id),
 	[InstallDate] DATETIME2 NOT NULL,
@@ -482,92 +416,11 @@ CREATE TABLE [dbo].[ApplicationInstall](
 )
 GO
 
-Alter view [dbo].[vwClass]
-as
-select 
-	Class.Id as Class_Id,
-	Class.Name as Class_Name,
-	Class.Description as Class_Description,
-	Class.SchoolYearRef as Class_SchoolYearRef,
-	Class.TeacherRef as Class_TeacherRef,
-	Class.GradeLevelRef as Class_GradeLevelRef,
-	Class.ChalkableDepartmentRef as Class_ChalkableDepartmentId,
-	GradeLevel.Id as GradeLevel_Id,
-	GradeLevel.Name as GradeLevel_Name,
-	GradeLevel.Number as GradeLevel_Number,
-	Person.Id as Person_Id,
-	Person.FirstName as Person_FirstName,
-	Person.LastName as Person_LastName,
-	Person.Gender as Person_Gender,
-	Person.Salutation as Person_Salutation,
-	Person.Email as Person_Email 
-from 
-	Class	
-	join GradeLevel on GradeLevel.Id = Class.GradeLevelRef
-	join Person on Person.Id = Class.TeacherRef
-GO
-
 CREATE TABLE GradingStyle
 (
-	Id INT not null PRIMARY KEY,
-	GradingStyleValue INT not null, 
-	MaxValue INT not null,
-	StyledValue INT not null
+	Id INT NOT NULL PRIMARY KEY,
+	GradingStyleValue INT NOT NULL, 
+	MaxValue INT NOT NULL,
+	StyledValue INT NOT NULL
 )
 GO
-
-CREATE view [vwAnnouncementQnA]
-as
-	select
-		ana.id as Id,
-		ana.AnsweredTime as AnsweredTime,
-		ana.QuestionTime as QuestionTime,
-		ana.Question as Question,
-		ana.Answer as Answer,
-		ana.AnnouncementRef as AnnouncementRef,
-		a.MarkingPeriodClassRef as MarkingPeriodClassRef,
-		ana.State as [State],
-		sp1.Id as AskerId,
-		sp1.FirstName as AskerFirstName,
-		sp1.LastName as AskerLastName,
-		sp1.Gender as AskerGender,
-		sp1.RoleRef as AskerRoleRef,
-		sp2.Id as AnswererId,
-		sp2.FirstName as AnswererFirstName,
-		sp2.LastName as AnswererLastName,
-		sp2.Gender as AnswererGender,
-		sp2.RoleRef as AnswererRoleRef
-	from AnnouncementQnA ana
-		join vwPerson sp1 on sp1.Id = ana.PersonRef
-		join Announcement a on a.Id = ana.AnnouncementRef
-		join vwPerson sp2 on sp2.Id = a.PersonRef
-GO
-
-CREATE View vwPrivateMessage
-as
-	select
-		 PrivateMessage.Id as PrivateMessage_Id,
-		 PrivateMessage.Body as PrivateMessage_Body,
-		 PrivateMessage.[Read] as PrivateMessage_Read,
-		 PrivateMessage.[Sent] as PrivateMessage_Sent,
-		 PrivateMessage.[Subject] as PrivateMessage_Subject,
-		 PrivateMessage.DeletedBySender as PrivateMessage_DeletedBySender,
-		 PrivateMessage.DeletedByRecipient as PrivateMessage_DeletedByRecipient,
-		 PrivateMessage.ToPersonRef as PrivateMessage_ToPersonRef,
-		 PrivateMessage.FromPersonRef as PrivateMessage_FromPersonRef,
-		 p.FirstName as PrivateMessage_SenderFirstName,
-		 p.LastName as PrivateMessage_SenderLastName,
-		 p.Gender as PrivateMessage_SenderGender,
-		 p.Salutation as PrivateMessage_SenderSalutation,
-		 p.RoleRef as PrivateMessage_SenderRoleRef,
-		 p2.FirstName as PrivateMessage_RecipientFirstName,
-		 p2.LastName as PrivateMessage_RecipientLastName,
-		 p2.Gender as PrivateMessage_RecipientGender,
-		 p2.Salutation as PrivateMessage_RecipientSalutation,
-		 p2.RoleRef as PrivateMessage_RecipientRoleRef
-	from PrivateMessage 
-		join Person p on p.Id = PrivateMessage.FromPersonRef
-		join Person p2 on p2.Id = PrivateMessage.ToPersonRef 
-	
-GO 
-
