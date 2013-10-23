@@ -464,7 +464,7 @@ BODY {
 
 
 
-      > DIV {
+      > DIV:not(.developer-docs-page) {
         text-align: left;
         width: $column-width;
 

@@ -2,14 +2,10 @@
 BODY {
   DIV.page {
      #content {
-         #dev-docs{
-           display: none;
-           width: 100%;
-           min-width: 1000px;
-           margin-top: -11px;
-           border: none;
-           overflow: visible;
-         }
+
+       .developer-docs-page{
+         margin-left: -18px;
+       }
 
        &.developer-docs {
          DIV.page {
@@ -20,22 +16,45 @@ BODY {
                display: block;
              }
 
-             #content-wrapper{
-               display: none;
-             }
 
-             .ribbon{
-               position: absolute;
-               top: 0;
-               left: 267px;
-               width: 105px;
-               height: 58px;
-               display: block;
-               background: url(images/developer/ribbon.png) 0 0 no-repeat;
-             }
+
+
            }
          }
        }
     }
+  }
+
+  &.developer-docs{
+    .ribbon{
+     position: absolute;
+     top: 0;
+     left: 267px;
+     width: 105px;
+     height: 58px;
+     display: block;
+     background: url(images/developer/ribbon.png) 0 0 no-repeat;
+   }
+
+    overflow-y:hidden;
+
+   #dev-docs{
+    width: 100%;
+    min-width: 1000px;
+    margin-top: -11px;
+    border: none;
+    overflow: visible;
+   }
+
+   #content-wrapper{
+     display: none;
+     width: 100% !important;
+   }
+
+
+   #logout-block{
+     right: 17px;
+   }
+
   }
 }
