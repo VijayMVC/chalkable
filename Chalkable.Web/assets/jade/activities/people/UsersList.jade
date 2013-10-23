@@ -2,7 +2,7 @@
 -selectedIndex = self.getSelectedIndex();
 .people-list-container.not-transparent
     .top.panel-bg
-        span.total-count #{users.getTotalCount()} #{Msg.Person(users.getTotalCount()!=1)}
+        span.total-count=self.getTotalText()
     .action-bar.buttons.filter
         .container.panel-bg
             .left
@@ -15,7 +15,9 @@
                     label.people-search-img
                     label.people-search-close.opacity0
     .grid-container.loader-container
-        +RenderWith(self.getModel(), chlk.templates.people.UsersGrid)
+        +RenderWith(self.getModel(), chlk.templates.people.UsersGrid)(
+            userRole = self.getUserRole()
+        )
 
 
 
