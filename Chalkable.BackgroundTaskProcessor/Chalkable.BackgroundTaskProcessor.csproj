@@ -97,6 +97,8 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="app.release.config" />
+    <None Include="app.staging.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
