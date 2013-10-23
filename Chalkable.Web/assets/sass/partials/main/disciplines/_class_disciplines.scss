@@ -1,0 +1,63 @@
+#main-wrapper{
+  #main{
+    .class-disciplines-page{
+
+      .row{
+        .triangle{
+          width: 0;
+          height: 0;
+          border-top: 9px solid transparent;
+          border-left: 10px solid #a5a5a5;
+          border-bottom: 9px solid transparent;
+          @include transition-property("all");
+          @include transition-duration("0.5s");
+
+          &.down{
+            @include transform(rotate(90deg));
+          }
+        }
+        .right{
+          margin-right: 35px;
+        }
+      }
+
+      .discipline-form-block{
+
+        .discipline-types, .discipline-desciption-container{
+          display: inline-block;
+          margin: 20px;
+        }
+        .discipline-types{
+          .column{
+            .labeled-checkbox{
+              display: inline-block;
+              margin-right: 10px;
+            }
+          }
+        }
+        .discipline-desciption-container{
+          background: #f5f5f5;
+          @include box-shadow(0 2px 6px 0px #989897);
+          width: 300px;
+          height: auto;
+
+          .title, .notes-area{
+            margin: 7px 15px 0px 15px;
+            background: none;
+            width: auto;
+          }
+          .title{
+            color: #5C7684;
+          }
+          .notes-area{
+            border: none;
+            width: 260px;
+            resize: none;
+            overflow-y: scroll;
+            line-height: 30px;
+          }
+        }
+      }
+    }
+  }
+}
