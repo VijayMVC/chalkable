@@ -141,8 +141,10 @@ BODY {
               text-decoration: none;
               @include transition(color, text-shadow 0.4s);
               text-shadow: 0 -1px 0 #173b48, 0 1px 0 white;
+            }
 
-              &:hover{
+            .admin-home{
+              .chart-bg:hover{
                 color: transparent;
                 text-shadow: none;
                 top: -19px;

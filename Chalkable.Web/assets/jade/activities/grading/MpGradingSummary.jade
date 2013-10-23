@@ -1,6 +1,8 @@
 div(data-index=self.getIndex()).ann-type-container
     type = self.getType()
-    div(data-tooltip="Avg " + (self.avg ? self.avg : 0) + "  Worth " + (self.percent ? self.percent : 0) + "%").type-name=type.getName()
+    div(
+        data-tooltip=(self.getUserRole().isStudent() ? "My avg: " :"Avg: ") + (self.avg ? self.avg : 0) + "  Worth " + (self.percent ? self.percent : 0) + "%"
+    ).type-name=type.getName()
     announcements = self.getAnnouncements()
     each announcement, i in announcements
         div(data-index=i).announcements-type-item

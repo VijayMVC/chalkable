@@ -20,7 +20,8 @@ NAMESPACE('chlk.controls', function () {
                     var controller = node.data('controller');
                     if(controller){
                         var action = node.data('action');
-                        var params = node.data('params') || [];
+                        var paramsArr = node.data('params') || [];
+                        var params = paramsArr.slice();
                         params.unshift(node.val());
                         var state = that.context.getState();
                         state.setController(controller);
