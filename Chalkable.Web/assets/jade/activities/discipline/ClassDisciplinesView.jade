@@ -1,0 +1,64 @@
+selectedId = self.getSelectedItemId()
+redirectData = self.getRedirectData()
+.students-list.loader-container
+    +LeftRightToolbar(self.getTopData().getTopItems(), chlk.templates.classes.TopBar, 'discipline', 'classList')(
+        selectedItemId=selectedId ? selectedId.valueOf() : ""
+    ).classes-bar
+    .loader
+    .action-bar.not-transparent.buttons
+       .container.panel-bg
+           .left.no-border
+               +DatePicker('disciplineDate', self.getDate())(
+                   data-options={
+                       showOtherMonths: true,
+                       selectOtherMonths: true
+                   },
+                   data-controller= "discipline",
+                   data-action="classList",
+                   data-params=selectedId ? [selectedId.valueOf()] : null
+               )#discipline-date.tb-date-picker
+    .people-list-container.not-transparent
+        .top.panel-bg
+        .action-bar.buttons.filter
+            .container.panel-bg
+                .left
+                    +ActionLinkWithPrepend('attendance', 'sortStudents', ['false'])(class=self.isByLastName()?"":"pressed").action-button.first-last=Msg.First_name
+                    +ActionLinkWithPrepend('attendance', 'sortStudents', [true])(class=self.isByLastName()?"pressed":"").action-button.first-last=Msg.Last_name
+        .grid-container.disciplines-individual.loader-container
+            +ListView(self.getDisciplines())(
+                selectedIndex = 0
+            )#class-attendance-list-panel.people-list
+                each item, i in self.getDisciplines()
+                    .row(class=(i == 0 ? 'selected' : ''), index=i)
+                        student = item.getStudent();
+                        +ActionLink('students', 'info', student.getId()).left.image-container.white.shadow
+                            +PersonImg(student, 47)
+                        p.left= student.getFullName()
+                        .right
+                            .short-discipline-info-block
+                                .status-block
+                                .triangle
+                    +ActionForm('discipline','setDisciplines')(style='display: none;').discipline-form-block
+                        input(name="disciplinesJson", type="hidden")
+                        +Hidden('controller', redirectData.controller)
+                        +Hidden('action', redirectData.action)
+                        +Hidden('params', redirectData.params)
+                        div(
+                            name="discipline",
+                            data-class-person-id=item.getClassPersonId().valueOf(),
+                            data-class-period-id=item.getClassPeriodId().valueOf(),
+                            data-date=self.date.getDate(),
+                        ).discipline-info
+                            +CheckboxList('disciplineTypes', 'disciplineTypes', null).discipline-types
+                                each column in self.getGroupDisciplineTypes(item)
+                                    .column
+                                        each discType in column
+                                            +LabeledCheckbox(
+                                            discType.disciplineTypeData.getName(),
+                                                discType.disciplineTypeData.getId().valueOf(),
+                                                discType.selected,
+                                                false).change-discipline
+                            .discipline-desciption-container
+                                .title Occurrence Note:
+                                textarea(name='description').notes-area.change-discipline=item.getDescription()
+
