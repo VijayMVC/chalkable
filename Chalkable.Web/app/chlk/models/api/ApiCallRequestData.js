@@ -8,7 +8,6 @@ NAMESPACE('chlk.models.api', function () {
             String, 'actionName',
             Object, 'params',
 
-
             [[String, String, Object]],
             function $create(controller, action, params){
                 BASE();
@@ -22,7 +21,6 @@ NAMESPACE('chlk.models.api', function () {
                 return data['apiCallRole'];
             },
 
-
             Object, function getApiCallParams(){
                 var data = this.getParams();
                 if (data.apiCallRole)
@@ -31,6 +29,8 @@ NAMESPACE('chlk.models.api', function () {
                     delete data.controllerName;
                 if (data.methodName)
                     delete data.methodName;
+                 if (data.apiFormId)
+                    delete data.apiFormId;
                 return data;
             }
         ]);

@@ -9,10 +9,10 @@
                 input(name="name", value=self.name)
             div
                 label Developer email
-                input(name="email", value=self.email)
+                input(name="email", value=self.email, class="validate[required, custom[email]]")
             div
                 label Developer web site
-                input(name="websitelink", value=self.webSite)
+                input(name="websitelink", value=self.webSite, class="validate[required, custom[url]]")
             div.align-right
                 Button Save
         div.bg-line
