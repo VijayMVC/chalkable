@@ -16,7 +16,7 @@ NAMESPACE('chlk.models.apps', function () {
             [[ArrayOf(chlk.models.apps.AppInstallGroup)]],
             function getSeparatedInstallGroups(installGroup){
                 var len = installGroup.length;
-                if(len < 6)  return installGroup;
+                if(len < 6)  return [installGroup];
                 if(len < 11) return [
                     installGroup.slice(0, 5),
                     installGroup.slice(5)
