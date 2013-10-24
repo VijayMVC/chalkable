@@ -266,14 +266,12 @@ NAMESPACE('chlk.controllers', function (){
                 .getDetails(appId)
                 .then(function(app){
                     var installedForGroups = app.getInstalledForGroups() || [];
-                    if (!this.userInRole(chlk.models.common.RoleEnum.STUDENT)){
-                        installedForGroups.unshift(new chlk.models.apps.AppInstallGroup(
-                            new chlk.models.id.AppInstallGroupId(this.getCurrentPerson().getId().valueOf()),
-                            chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER,
-                            app.isInstalledOnlyForCurrentUser(),
-                            "Just me"
-                        ));
-                    }
+                    installedForGroups.unshift(new chlk.models.apps.AppInstallGroup(
+                        new chlk.models.id.AppInstallGroupId(this.getCurrentPerson().getId().valueOf()),
+                        chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER,
+                        app.isInstalledOnlyForCurrentUser(),
+                        "Just me"
+                    ));
 
                     var installedCount = 0;
 
@@ -284,6 +282,13 @@ NAMESPACE('chlk.controllers', function (){
                         if (item.isInstalled()) ++installedCount;
                         return item;
                     }, this);
+
+                    if (this.userInRole(chlk.models.common.RoleEnum.STUDENT)){
+                        installedForGroups = installedForGroups.filter(function(item){
+                            return item.getGroupType() != chlk.models.apps.AppInstallGroupTypeEnum.ALL;
+                        });
+                    }
+
                     app.setInstalledForGroups(installedForGroups);
 
 
@@ -311,7 +316,7 @@ NAMESPACE('chlk.controllers', function (){
                        return this.ShowMsgBox(title, '', [{
                            text: 'Ok',
                            controller: 'appmarket',
-                           action: 'list',
+                           action: 'myApps',
                            params: [],
                            color: chlk.models.common.ButtonColor.GREEN.valueOf()
                        }], 'center');
