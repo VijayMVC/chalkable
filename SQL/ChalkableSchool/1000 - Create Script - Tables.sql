@@ -432,4 +432,26 @@ create table SchoolGradeLevel
 )
 go
 
+create table ClassAnnouncementType
+(
+	Id int not null primary key,
+	Name nvarchar(255),
+	[Description] nvarchar(1024),
+	Gradable bit null,
+	Percentage int not null,
+	AnnouncementTypeRef int not null constraint FK_ClassAnnouncementType_AnnouncementType foreign key references AnnouncementType(Id),
+	ClassRef int not null constraint FK_ClassAnnouncementType_Class foreign key references Class(Id)
+)
+go
 
+alter table Announcement
+drop constraint FK_Announcement_AnnouncementType
+go
+
+alter table Announcement
+drop column AnnouncementTypeRef
+go
+
+alter table Announcement
+add ClassAnnouncementTypeRef int null constraint FK_Announcement_ClassAnnouncementType foreign key references ClassAnnouncementType(Id)
+go

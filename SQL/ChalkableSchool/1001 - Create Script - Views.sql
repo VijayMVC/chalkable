@@ -33,8 +33,8 @@ SELECT
 	Announcement.[Subject] as [Subject],
 	Announcement.GradingStyle as GradingStyle,
 	Announcement.Dropped as Dropped,
-	Announcement.AnnouncementTypeRef as AnnouncementTypeRef,
-	AnnouncementType.Name as AnnouncementTypeName,
+	Announcement.ClassAnnouncementTypeRef as ClassAnnouncementTypeRef,
+	ClassAnnouncementType.Name as ClassAnnouncementTypeName,
 	Announcement.PersonRef as PersonRef,
 	Announcement.ClassRef as ClassRef,
 	Person.FirstName + ' ' + Person.LastName as PersonName,
@@ -56,7 +56,7 @@ SELECT
 
 FROM 
 	Announcement
-	join AnnouncementType on Announcement.AnnouncementTypeRef = AnnouncementType.Id
+	left join ClassAnnouncementType on Announcement.ClassAnnouncementTypeRef = ClassAnnouncementType.Id
 	left join Class on Class.Id = Announcement.ClassRef
 	left join Person on Person.Id = Announcement.PersonRef
 GO
@@ -99,7 +99,7 @@ AS
 		ana.Question as Question,
 		ana.Answer as Answer,
 		ana.AnnouncementRef as AnnouncementRef,
-		a.MarkingPeriodClassRef as MarkingPeriodClassRef,
+		a.ClassRef as ClassRef,
 		ana.State as [State],
 		sp1.Id as AskerId,
 		sp1.FirstName as AskerFirstName,
@@ -118,6 +118,8 @@ AS
 		join vwPerson sp2 on sp2.Id = a.PersonRef
 GO
 
+
+
 CREATE VIEW vwPrivateMessage
 AS
 	SELECT
@@ -134,15 +136,18 @@ AS
 		 p.LastName as PrivateMessage_SenderLastName,
 		 p.Gender as PrivateMessage_SenderGender,
 		 p.Salutation as PrivateMessage_SenderSalutation,
-		 p.RoleRef as PrivateMessage_SenderRoleRef,
+		 sp.RoleRef as PrivateMessage_SenderRoleRef,
 		 p2.FirstName as PrivateMessage_RecipientFirstName,
 		 p2.LastName as PrivateMessage_RecipientLastName,
 		 p2.Gender as PrivateMessage_RecipientGender,
 		 p2.Salutation as PrivateMessage_RecipientSalutation,
-		 p2.RoleRef as PrivateMessage_RecipientRoleRef
+		 sp2.RoleRef as PrivateMessage_RecipientRoleRef
 	FROM 
 		PrivateMessage 
 		join Person p on p.Id = PrivateMessage.FromPersonRef
+		join SchoolPerson sp on sp.PersonRef = p.Id
 		join Person p2 on p2.Id = PrivateMessage.ToPersonRef 
-	
+		join SchoolPerson sp2 on sp2.PersonRef = p2.Id
 GO 
+
+
