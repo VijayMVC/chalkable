@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
@@ -79,6 +80,34 @@ namespace Chalkable.Web.Controllers
             if (context != null)
                 ChalkableAuthentication.SignIn(context, remember);
             return context;
+        }
+
+        private const string SERVICE_NAMESPACE = "WindowsAzure.OAuth.ServiceNamespace";
+        private const string ACS_URL_FORMAT = "https://{0}.accesscontrol.windows.net/v2/OAuth2-13/";
+        private const string RELYING_PARTY_REALM = "WindowsAzure.OAuth.RelyingPartyRealm";
+
+        public ActionResult GetAccessToken(string login, string password, string clientId, string clientSecret, string redirectUri)
+        {
+            try
+            {
+                var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
+                var context = serviceLocator.UserService.Login(login, password);
+                if (context != null)
+                {
+                    var accessTokenUri = string.Format(ACS_URL_FORMAT, SERVICE_NAMESPACE);
+                    var scope = ConfigurationManager.AppSettings[RELYING_PARTY_REALM];
+                    return Json(new
+                    {
+                        token = serviceLocator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId,
+                                                           clientSecret, login, scope)
+                    }, 5);
+                }
+            }
+            catch (Exception)
+            {
+                return Json(false);
+            }
+            return Json(false);
         }
 
     }
