@@ -4,10 +4,10 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BackgroundTaskProducer.Producers
 {
-    public class AllSchoolsProducer : BaseProducer
+    public class AllDistrictsProducer : BaseProducer
     {
         private BackgroundTaskTypeEnum type;
-        public AllSchoolsProducer(string configSectionName, BackgroundTaskTypeEnum type)
+        public AllDistrictsProducer(string configSectionName, BackgroundTaskTypeEnum type)
             : base(configSectionName)
         {
             this.type = type;
@@ -16,10 +16,10 @@ namespace Chalkable.BackgroundTaskProducer.Producers
         protected override void ProduceInternal(DateTime currentTimeUtc)
         {
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var schools = sl.SchoolService.GetSchools(false, false);
-            foreach (var school in schools)
+            var districts = sl.DistrictService.GetDistricts(false, false, null);
+            foreach (var district in districts)
             {
-                sl.BackgroundTaskService.ScheduleTask(type, currentTimeUtc, school.Id, string.Empty);
+                sl.BackgroundTaskService.ScheduleTask(type, currentTimeUtc, district.Id, string.Empty);
             }
         }
     }

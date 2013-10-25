@@ -10,7 +10,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 {
     public interface IBackgroundTaskService
     {
-        BackgroundTask ScheduleTask(BackgroundTaskTypeEnum type, DateTime scheduled, Guid? schoolRef, string data);
+        BackgroundTask ScheduleTask(BackgroundTaskTypeEnum type, DateTime scheduled, Guid? districtRef, string data);
         BackgroundTask GetTaskToProcess(DateTime now);
         PaginatedList<BackgroundTask> GetTasks(int start, int count);
         void Complete(Guid id, bool success);
@@ -103,7 +103,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
         }
 
-        public BackgroundTask ScheduleTask(BackgroundTaskTypeEnum type, DateTime scheduled, Guid? schoolRef, string data)
+        public BackgroundTask ScheduleTask(BackgroundTaskTypeEnum type, DateTime scheduled, Guid? districtRef, string data)
         {
             DateTime now = DateTime.UtcNow;
             var task = new BackgroundTask
@@ -112,7 +112,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                     Data = data,
                     Id = Guid.NewGuid(),
                     Scheduled = scheduled,
-                    SchoolRef = schoolRef,
+                    DistrictRef = districtRef,
                     State = BackgroundTaskStateEnum.Created,
                     Type = type
                 };

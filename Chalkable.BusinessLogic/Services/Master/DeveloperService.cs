@@ -8,10 +8,10 @@ namespace Chalkable.BusinessLogic.Services.Master
 {
     public interface IDeveloperService
     {
-        Developer GetDeveloperBySchool(Guid schoolId);
+        Developer GetDeveloperByDictrict(Guid districtId);
         Developer GetDeveloperById(Guid developerId);
         IList<Developer> GetDevelopers();
-        Developer Add(string login, string password, string name, string webSite, Guid schoolId);
+        Developer Add(string login, string password, string name, string webSite, Guid districtId);
         Developer Edit(Guid developerId, string name, string email, string webSite);
     }
     public class DeveloperService : MasterServiceBase, IDeveloperService
@@ -22,11 +22,11 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
         //TODO: needs test 
-        public Developer GetDeveloperBySchool(Guid schoolId)
+        public Developer GetDeveloperByDictrict(Guid districtId)
         {
             using (var uow = Read())
             {
-                return new DeveloperDataAccess(uow).GetDeveloper(schoolId);
+                return new DeveloperDataAccess(uow).GetDeveloper(districtId);
             }
         }
 
@@ -62,16 +62,16 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        public Developer Add(string login, string password, string name, string webSite, Guid schoolId)
+        public Developer Add(string login, string password, string name, string webSite, Guid districtId)
         {
             using (var uow = Update())
             {
-                var user = ServiceLocator.UserService.CreateSchoolUser(login, password, schoolId, CoreRoles.DEVELOPER_ROLE.Name); // security here 
+                var user = ServiceLocator.UserService.CreateSchoolUser(login, password, districtId, CoreRoles.DEVELOPER_ROLE.Name); // security here 
                 var res = new Developer
                     {
                         Id = user.Id,
                         Name = name,
-                        SchoolRef = schoolId,
+                        DistrictRef = districtId,
                         WebSite = webSite,
                         User = user
                     };

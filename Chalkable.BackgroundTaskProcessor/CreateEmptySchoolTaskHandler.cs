@@ -10,14 +10,16 @@ namespace Chalkable.BackgroundTaskProcessor
     {
         public bool Handle(BackgroundTask task, BackgroundTaskService.BackgroundTaskLog log)
         {
-            var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
+            //also don't need anymore
+            throw new NotImplementedException();
+            /*var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
             var have = sl.SchoolService.GetSchools(true, false).Count;
             int need = Settings.Configuration.EmptySchoolsReserved;
             int cnt = Math.Max(0, need - have);
             log.LogInfo(string.Format("There are {0} schools to create", cnt));
             for (int i = 0; i < cnt; i++)
                 sl.SchoolService.CreateEmpty();
-            return true;
+            return true;*/
         }
     }
 }

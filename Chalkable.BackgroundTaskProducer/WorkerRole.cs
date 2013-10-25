@@ -15,12 +15,13 @@ namespace Chalkable.BackgroundTaskProducer
             Trace.WriteLine("BackgroundTaskProducer entry point called", "Information");
             var cp = new CompositeProducer();
             cp.AddProducer("Empty school producer", new EmptySchoolTaskProducer());
-            cp.AddProducer("Demo school producer", new CreateDemoSchoolTaskProducer());
-            cp.AddProducer("Demo school delete producer", new DemoSchoolDeleteTaskProducer());
+            cp.AddProducer("Demo school producer", new CreateDemoDistrictTaskProducer());
+            cp.AddProducer("Demo school delete producer", new DemoDistrictDeleteTaskProducer());
 
-            cp.AddProducer("Process Reminders Producer", new AllSchoolsProducer("ProcessReminderProducer", BackgroundTaskTypeEnum.ProcessReminder));
-            cp.AddProducer("Attendance Notification Producer", new AllSchoolsProducer("AttendanceNotificationProducer", BackgroundTaskTypeEnum.AttendanceNotification));
-            cp.AddProducer("Teacher Attendance Notification Producer", new AllSchoolsProducer("TeacherAttendanceNotification", BackgroundTaskTypeEnum.TeacherAttendanceNotification));
+            cp.AddProducer("Process Reminders Producer", new AllDistrictsProducer("ProcessReminderProducer", BackgroundTaskTypeEnum.ProcessReminder));
+            cp.AddProducer("Attendance Notification Producer", new AllDistrictsProducer("AttendanceNotificationProducer", BackgroundTaskTypeEnum.AttendanceNotification));
+            cp.AddProducer("Teacher Attendance Notification Producer", new AllDistrictsProducer("TeacherAttendanceNotification", BackgroundTaskTypeEnum.TeacherAttendanceNotification));
+            cp.AddProducer("Sis Import Producer", new AllDistrictsProducer("SisImportProducer", BackgroundTaskTypeEnum.SisDataImport));
             
             while (true)
             {

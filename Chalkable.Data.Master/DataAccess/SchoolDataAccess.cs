@@ -14,109 +14,47 @@ namespace Chalkable.Data.Master.DataAccess
         {
         }
 
-        public void Create(School school)
+        public School GetSchoolById(Guid id)
         {
-            SimpleInsert(school);
-        }
-
-        public IDictionary<string, int> CalcServersLoading()
-        {
-            var res = Settings.Servers.ToDictionary(server => server, server => 0);
-            string sql = string.Format("select {0}, count(*) as [Count] from School group by {0}", School.SERVER_URL_FIELD);
-            using (var reader = ExecuteReaderParametrized(sql, new Dictionary<string, object>()))
+            var sql = @"select 
+	                        School.Id as School_Id,
+	                        School.DistrictRef as School_Id,
+	                        School.LocalId as School_LocalId, 
+	                        School.Name as School_Name, 
+	                        District.Id as District_Id, 
+	                        District.Name as District_Name, 
+	                        District.SisUrl as District_SisUrl, 
+	                        District.DbName as District_DbName, 
+	                        District.SisUserName as District_SisUserName, 
+	                        District.SisPassword as District_SisPassword, 
+	                        District.[Status] as District_Status, 
+	                        District.TimeZone as District_TimeZone, 
+	                        District.DemoPrefix as District_DemoPrefix, 
+	                        District.LastUseDemo as District_LastUseDemo, 
+	                        District.ServerUrl as District_ServerUrl, 
+	                        District.IsEmpty as District_IsEmpty
+                        from 
+                        school
+                        join District on School.DistrictRef = District.Id
+                        where
+	                        School.Id = @{1}
+                        ";
+            sql = string.Format(sql, School.ID_FIELD);
+            using (var reader = ExecuteReaderParametrized(sql, new Dictionary<string, object> { { School.ID_FIELD, id } }))
             {
-                while (reader.Read())
-                {
-                    var server = SqlTools.ReadStringNull(reader, School.SERVER_URL_FIELD);
-                    var count = SqlTools.ReadInt32(reader, "Count");
-                    res[server] = count;
-                }
+                var res = reader.Read<School>(true);
+                res.District = reader.Read<District>(true);
+                return res;
             }
-            return res;
         }
-
-        public IList<School> GetEmpty()
-        {
-            return SelectMany<School>(new AndQueryCondition {{School.IS_EMPTY_FIELD, true}});
-        }
-
-        public IList<School> GetSchools()
-        {
-            return SelectMany<School>(new AndQueryCondition());
-        } 
 
         public PaginatedList<School> GetSchools(Guid? districtId, int start, int count)
         {
             var conds = new AndQueryCondition();
-            if(districtId.HasValue)
+            if (districtId.HasValue)
                 conds.Add(School.DISTRICT_REF_FIELD, districtId);
             return PaginatedSelect<School>(conds, School.ID_FIELD, start, count);
         }
- 
-
-        public IList<School> GetSchools(bool? empty, bool? demo, bool? usedDemo)
-        {
-            var conds = new AndQueryCondition();
-            if (empty.HasValue)
-                conds.Add(School.IS_EMPTY_FIELD, empty);
-            if (demo.HasValue)
-                conds.Add(School.DEMO_PREFIX_FIELD, null, demo.Value ? ConditionRelation.NotEqual : ConditionRelation.Equal);
-            if (usedDemo.HasValue)
-                conds.Add(School.LAST_USED_DEMO_FIELD, null, usedDemo.Value ? ConditionRelation.NotEqual : ConditionRelation.Equal);
-            return SelectMany<School>(conds);
-        }
-
-        public SisSync GetSyncData(Guid schoolId)
-        {
-            return SelectOneOrNull<SisSync>(new AndQueryCondition { { "Id", schoolId } });
-        }
-
-        public void SetSyncData(SisSync sisSync)
-        {
-            if (GetSyncData(sisSync.Id) != null)
-                SimpleUpdate(sisSync);
-            else
-                SimpleInsert(sisSync);
-        }
-
-        public new void Delete(Guid id)
-        {
-            using (ExecuteStoredProcedureReader("spDeleteSchool", new Dictionary<string, object>{{"id", id}})) { }
-        }
-
-        //---------------------------------------------------------------------
-        //TODO: next methods runs on the school db server under master database
-        //---------------------------------------------------------------------
-
-        public void CreateSchoolDataBase(string dbName, string prototypeName)
-        {
-            //TODO: what if servers are different?
-            var sql = string.Format("Create Database [{0}] as copy of [{1}]", dbName, prototypeName);
-            ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
-        }
-
-        public IList<string> GetOnline(IEnumerable<Guid> names)
-        {
-            var sql = string.Format("SELECT name FROM sys.databases WHERE name  in ({0}) and state = 0",
-                                    names.Select(x => "'" + x + "'").JoinString(","));
-            var res = new List<string>();
-            using (var reader = ExecuteReaderParametrized(sql, new Dictionary<string, object>()))
-                while (reader.Read())
-                    res.Add(SqlTools.ReadStringNull(reader, "name"));
-            return res;
-        }
-
-        public void DeleteSchoolDataBase(string name)
-        {
-            var sql = string.Format("drop database [{0}]", name);
-            ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
-        }
-
-        public IList<School> GetSchoolsToDelete(DateTime expires)
-        {
-            var sql = string.Format(@"Select * from school s where [{0}] is not null and [{1}] <= @{1} and 
-                            not exists(select * from Developer where schoolref = s.id)", School.DEMO_PREFIX_FIELD, School.LAST_USED_DEMO_FIELD);
-            return ReadMany<School>(new DbQuery(sql, new Dictionary<string, object> { { School.LAST_USED_DEMO_FIELD , expires} }));
-        }
+        
     }
 }

@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Master.DataAccess;
-using Chalkable.Data.Master.Model;
 using Chalkable.Tests.Services.TestContext;
-using NUnit.Framework;
 
 namespace Chalkable.Tests.Services
 {
@@ -35,18 +29,11 @@ namespace Chalkable.Tests.Services
             var school = new Data.Master.Model.School
             {
                 Id = Guid.NewGuid(),
-                Name = schoolName,
-                IsEmpty = false,
-                ServerUrl = server,
-                Status = SchoolStatus.PayingCustomer,
-                TimeZone = "UTC"
-            };
-            if (isDemo)
-                school.DemoPrefix = Guid.NewGuid().ToString().Replace("-", "");
-            using (var uow = new UnitOfWork(chalkableMasterConnection, true))
+                Name = schoolName
+            };using (var uow = new UnitOfWork(chalkableMasterConnection, true))
             {
                 var da = new SchoolDataAccess(uow);
-                da.Create(school);
+                da.Insert(school);
                 uow.Commit();
                 ExecuteQuery(masterConnection, "create database [" + school.Id.ToString() + "]");
                 var schoolDbConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, server, school.Id.ToString());
@@ -61,7 +48,7 @@ namespace Chalkable.Tests.Services
             {
                 using (var uow = new UnitOfWork(chalkableConnection, true))
                 {
-                    var schools = new SchoolDataAccess(uow).GetSchools();
+                    var schools = new SchoolDataAccess(uow).GetSchools(null, 0, int.MaxValue);
                     uow.Commit();
                     foreach (var school in schools)
                     {
@@ -83,11 +70,12 @@ namespace Chalkable.Tests.Services
 
         protected DeveloperSchoolTestContex CreateDeveloperSchoolTestContext()
         {
-            CreateTestDemoSchool();
+            /*CreateTestDemoSchool();
             var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
             var school = sysLocator.SchoolService.UseDemoSchool();
             var sysSchoolL = sysLocator.SchoolServiceLocator(school.Id);
-            return DeveloperSchoolTestContex.Create(sysSchoolL);
+            return DeveloperSchoolTestContex.Create(sysSchoolL);*/
+            throw new NotImplementedException();
         }
 
         protected SchoolTestContext CreateSchoolTestContext()

@@ -7,8 +7,8 @@ namespace Chalkable.Data.Master.Model
 {
     public class BackgroundTask
     {
-        public const string SCHOOL_REF_FIELD_NAME = "SchoolRef";
-        public Guid? SchoolRef { get; set; }
+        public const string DISTRICT_REF_FIELD_NAME = "DistrictRef";
+        public Guid? DistrictRef { get; set; }
         public const string ID_FIELD_NAME = "Id";
         public Guid Id { get; set; }
         public const string TYPE_FIELD_NAME = "Type";
@@ -33,35 +33,6 @@ namespace Chalkable.Data.Master.Model
             var res = (T)Activator.CreateInstance(typeof(T), new object[] { Data });
             return res;
         }
-    }
-
-    public class SisImportTaskData
-    {
-        private const string FORMAT = "{0},{1},{2}";
-        public Guid SchoolId { get; private set; }
-        public int SisSchoolId { get; private set; }
-        public IList<int> SchoolYearIds { get; private set; }
-
-        public override string ToString()
-        {
-            return string.Format(FORMAT, SchoolId, SisSchoolId, SchoolYearIds.JoinString(","));
-        }
-
-        public SisImportTaskData(Guid schoolId, int sisSchoolId, IList<int> schoolYearIds)
-        {
-            SchoolId = schoolId;
-            SisSchoolId = sisSchoolId;
-            SchoolYearIds = schoolYearIds;
-        }
-
-        public SisImportTaskData(string str)
-        {
-            var intList = str.Split(',').ToList();
-            SchoolId = Guid.Parse(intList[0]);
-            SisSchoolId = int.Parse(intList[1]);
-            SchoolYearIds = intList.Skip(2).Select(int.Parse).ToList();
-        }
-
     }
 
     public class DatabaseBackupRestoreTaskData
@@ -93,8 +64,8 @@ namespace Chalkable.Data.Master.Model
         BackupDatabases = 2,
         RestoreDatabases = 3,
         DatabaseUpdate = 4,
-        CreateDemoSchool = 5,
-        DeleteSchool = 6,
+        CreateDemoDistrict = 5,
+        DeleteDistrict = 6,
         ProcessReminder = 7,
         AttendanceNotification = 8,
         TeacherAttendanceNotification = 9

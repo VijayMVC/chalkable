@@ -38,10 +38,10 @@ namespace Chalkable.Data.Master.DataAccess
             SimpleUpdate<BackgroundTask>(setParamsDic, conds);
         }
 
-        public BackgroundTask Find(Guid? schoolId, BackgroundTaskStateEnum state, BackgroundTaskTypeEnum type)
+        public BackgroundTask Find(Guid? districtId, BackgroundTaskStateEnum state, BackgroundTaskTypeEnum type)
         {
             return SelectOneOrNull<BackgroundTask>(new AndQueryCondition {
-                                                                        {BackgroundTask.SCHOOL_REF_FIELD_NAME, schoolId},
+                                                                        {BackgroundTask.DISTRICT_REF_FIELD_NAME, districtId},
                                                                         {BackgroundTask.STATE_FIELD_NAME, state},
                                                                         {BackgroundTask.TYPE_FIELD_NAME, type},
                                                                 });

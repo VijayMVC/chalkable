@@ -280,10 +280,6 @@
       <Project>{C5753C2A-F2BC-4F96-846B-548FC67191B2}</Project>
       <Name>Chalkable.Data.School</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Chalkable.SisConnector\Chalkable.SisConnector.csproj">
-      <Project>{C6A26439-411D-4D8C-9BCE-1A34E7EE604F}</Project>
-      <Name>Chalkable.SisConnector</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

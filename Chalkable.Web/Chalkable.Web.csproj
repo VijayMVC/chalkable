@@ -321,7 +321,6 @@
     <Compile Include="Models\SchoolsViewData\ShortSchoolViewData.cs" />
     <Compile Include="Models\SchoolYearViewData.cs" />
     <Compile Include="Models\SearchViewData.cs" />
-    <Compile Include="Models\SisSyncViewData.cs" />
     <Compile Include="Models\StorageMonitorViewData.cs" />
     <Compile Include="Models\StudentAnnouncementViewData.cs" />
     <Compile Include="Models\HoverBoxesViewData.cs" />
@@ -379,14 +378,6 @@
     <ProjectReference Include="..\Chalkable.Data.School\Chalkable.Data.School.csproj">
       <Project>{c5753c2a-f2bc-4f96-846b-548fc67191b2}</Project>
       <Name>Chalkable.Data.School</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Chalkable.SisConnector\Chalkable.SisConnector.csproj">
-      <Project>{C6A26439-411D-4D8C-9BCE-1A34E7EE604F}</Project>
-      <Name>Chalkable.SisConnector</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Chalkable.SisImportFacade\Chalkable.SisImportFacade.csproj">
-      <Project>{BD404053-D827-4695-9F57-5003A337428C}</Project>
-      <Name>Chalkable.SisImportFacade</Name>
     </ProjectReference>
     <ProjectReference Include="..\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.csproj">
       <Project>{3051F268-B03F-42AE-A06C-1D8DD751BDBF}</Project>

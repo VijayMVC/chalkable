@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using Chalkable.BusinessLogic.Model;
@@ -13,6 +14,8 @@ namespace Chalkable.Tests.Services.Master
         [Test]
         public void CreateSchoolTest()
         {
+            throw new NotImplementedException();
+            /*
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
             sl.SchoolService.CreateEmpty();
             var distr = sl.DistrictService.Create("some distr", "someDb", "someurl", "sisUser", "sisPass", 0);
@@ -40,7 +43,7 @@ namespace Chalkable.Tests.Services.Master
                 
             }
             Assert.IsNotNull(school);
-            
+            */
         }
     }
 }

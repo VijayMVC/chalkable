@@ -71,6 +71,8 @@
     <Compile Include="DataAccess\GradingStatisticDataAccess.cs" />
     <Compile Include="DataAccess\GradingStyleDataAccess.cs" />
     <Compile Include="DataAccess\NotificationDataAccess.cs" />
+    <Compile Include="DataAccess\SchoolDataAccess.cs" />
+    <Compile Include="DataAccess\SchoolPersonDataAccess.cs" />
     <Compile Include="DataAccess\StudentDailyAttendanceDataAccess.cs" />
     <Compile Include="DataAccess\DateDataAccess.cs" />
     <Compile Include="DataAccess\ClassDataAccess.cs" />
@@ -133,6 +135,8 @@
     <Compile Include="Model\ReportMailDelivery.cs" />
     <Compile Include="Model\Room.cs" />
     <Compile Include="Model\ScheduleSection.cs" />
+    <Compile Include="Model\School.cs" />
+    <Compile Include="Model\SchoolPerson.cs" />
     <Compile Include="Model\SchoolYear.cs" />
     <Compile Include="Model\StudentAnnouncement.cs" />
     <Compile Include="Model\StudentDailyAttendance.cs" />

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Logic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -56,10 +55,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 var periods = da.GetPeriods(sectionId);
                 if (ExistsOverlapping(periods, startTime, endTime))
                     throw new ChalkableException(ChlkResources.ERR_PERIODS_CANT_OVERLAP);
-               var machine = new SchoolStateMachine(Context.SchoolId.Value, ServiceLocator.ServiceLocatorMaster);
-                if (!machine.CanApply(StateActionEnum.SectionsAdd))
-                    throw new InvalidSchoolStatusException(ChlkResources.ERR_PERIOD_INVALID_SCHOOL_STATUS);
-                
                 var period = new Period
                     {
                         Id = Guid.NewGuid(),
@@ -151,10 +146,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableSecurityException();
                 if (!Context.SchoolId.HasValue)
                     throw new UnassignedUserException();
-                IStateMachine machine = new SchoolStateMachine(Context.SchoolId.Value, ServiceLocator.ServiceLocatorMaster);
-                if (!machine.CanApply(StateActionEnum.SectionsAdd))
-                    throw new InvalidSchoolStatusException();
-
+                
                 IList<Period> res = new List<Period>();
                 if (ServiceLocator.ScheduleSectionService.CanDeleteSections(markingPeriodIds.ToList()))
                 {
@@ -191,7 +183,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     throw new ChalkableException(ChlkResources.ERR_CANT_CHANGE_GENERAL_PERIODS);
                 }
-                machine.Apply(StateActionEnum.DailyPeriodsAdd);
                 return res;
             }
 

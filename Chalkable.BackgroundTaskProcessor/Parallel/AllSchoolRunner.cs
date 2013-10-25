@@ -28,7 +28,7 @@ namespace Chalkable.BackgroundTaskProcessor.Parallel
             Running
         }
 
-        public bool Run(IList<School> schools, T data, BackgroundTaskService.BackgroundTaskLog log, Func<Task, string> f, Func<Task, TaskStatusEnum> checkStatus)
+        public bool Run(IList<District> schools, T data, BackgroundTaskService.BackgroundTaskLog log, Func<Task, string> f, Func<Task, TaskStatusEnum> checkStatus)
         {
             var allTasks = new List<Task>();
             var threadTasks = new List<Task>();

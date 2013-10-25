@@ -6,6 +6,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 {
     public interface IServiceLocatorMaster : IServiceLocator
     {
+        IServiceLocatorSchool SchoolServiceLocator(Guid districtId, Guid? schoolId);
         IServiceLocatorSchool SchoolServiceLocator(Guid schoolId);
         UserContext Context { get; }
         IUserService UserService { get; }
@@ -99,18 +100,23 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IPictureService FundRequestPictureService { get { return fundRequestPictureService; } }
         public IPictureService ApplicationPictureService { get { return applicationPictureService; } }
 
-
-        public IServiceLocatorSchool SchoolServiceLocator(Guid schoolId)
+        public IServiceLocatorSchool SchoolServiceLocator(Guid districtId, Guid? schoolId)
         {
-            if (Context.SchoolId != schoolId)
+            if (Context.DistrictId != districtId)
             {
-                var school = SchoolService.GetById(schoolId);
-                var developer = DeveloperService.GetDeveloperBySchool(schoolId);
+                var district = DistrictService.GetByIdOrNull(districtId);
+                var developer = DeveloperService.GetDeveloperByDictrict(district.Id);
                 var developerId = developer != null ? developer.Id : (Guid?)null;
-                Context.SwitchSchool(schoolId, school.Name, school.TimeZone, school.ServerUrl, developerId);
+                Context.SwitchSchool(schoolId, district.Id, district.Name, district.TimeZone, district.ServerUrl, developerId);
             }
             var serviceLocator = new ServiceLocatorSchool(this);
             return serviceLocator;
+        }
+
+        public IServiceLocatorSchool SchoolServiceLocator(Guid schoolId)
+        {
+            var school = SchoolService.GetById(schoolId);
+            return SchoolServiceLocator(school.DistrictRef, schoolId);
         }
 
 

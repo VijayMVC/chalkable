@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Web.Models.SchoolsViewData
@@ -12,12 +11,12 @@ namespace Chalkable.Web.Models.SchoolsViewData
         public string SchoolType { get; set; }
         //public string SchoolUrl { get; set; }
         public bool SendEmailNotifications { get; set; }
-        public int ImportSystemType { get; set; }
+        //public int ImportSystemType { get; set; }
         
         protected SchoolViewData(School school) : base(school)
         {
             DistrictId = school.DistrictRef;
-            ImportSystemType = (int) school.ImportSystemType;
+            //ImportSystemType = (int) ImportSystemType.Sti;
         }
 
         public static new SchoolViewData Create(School school)

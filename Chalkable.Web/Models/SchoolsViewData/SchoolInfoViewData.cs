@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Web.Models.SchoolsViewData
@@ -8,30 +7,15 @@ namespace Chalkable.Web.Models.SchoolsViewData
     {
         public IList<string> Emails { get; set; }
         public int[] Buttons { get; set; }
-        public SisSyncViewData SisData { get; set; }
 
-        protected SchoolInfoViewData(School school, SisSync sisData) : base(school)
+        protected SchoolInfoViewData(School school) : base(school)
         {
-            Buttons = GetButtons(school.Status);
-            SisData = SisSyncViewData.Create(sisData);
+            Buttons = new[]{1, 2, 3, 4};
         }
 
-        public static SchoolInfoViewData Create(School school, SisSync sisData)
+        new public static SchoolInfoViewData Create(School school)
         {
-            return new SchoolInfoViewData(school, sisData);
+            return new SchoolInfoViewData(school);
         }
-
-        private static int[] GetButtons(SchoolStatus status)
-        {
-            return statusBtDic.ContainsKey(status) ? statusBtDic[status] : null;
-        }
-        private static IDictionary<SchoolStatus, int[]> statusBtDic = new Dictionary<SchoolStatus, int[]>
-            {
-                {SchoolStatus.PersonalInfoImported, new[] { 2, 1 }},
-                {SchoolStatus.Created, new[] { 1 }},
-                {SchoolStatus.DailyPeriods, new[] { 3, 2, 1 }},
-                {SchoolStatus.StudentLogged, new[] { 4, 3, 2, 1 }},
-                {SchoolStatus.PayingCustomer,  new[] { 1 , 2 }}
-            }; 
     }
 }

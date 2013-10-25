@@ -21,7 +21,6 @@ namespace Chalkable.Web.Models
             Id = district.Id;
             Name = district.Name;
             DbName = district.DbName;
-            SisSystemType = (int)district.SisSystemType;
             SisUrl = district.SisUrl;
             SisUserName = district.SisUserName;
         }
