@@ -44,7 +44,7 @@ namespace Chalkable.BusinessLogic.Services
            var school = schoolUser.School;
            var role = CoreRoles.GetById(schoolUser.Role);
            var context = new UserContext(schoolUser.UserRef, schoolUser.School.DistrictRef, schoolUser.SchoolRef, user.Login, school.Name,
-                                          user.District.TimeZone, user.District.ServerUrl, role, null);
+                                          user.District.TimeZone, user.District.ServerUrl, role, null, user.LocalId);
            return CreateSchoolLocator(context);
         }
 

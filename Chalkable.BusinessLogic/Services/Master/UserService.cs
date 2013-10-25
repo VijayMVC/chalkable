@@ -138,7 +138,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 else
                     throw new Exception("User's role can not be defined");
             }
-            var res = new UserContext(user.Id, districtId, schoolId, user.Login, schoolName, schoolTimeZone, schoolServerUrl, role, developerId);
+            var res = new UserContext(user.Id, districtId, schoolId, user.Login, schoolName, schoolTimeZone, schoolServerUrl, role, developerId, user.LocalId);
             return res;
         }
 

@@ -49,7 +49,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 var user = ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUser(email, password, Context.SchoolId.Value, role);
                 var person = new Person
                     {
-                        Id = user.Id,
                         Active = false,
                         Email = email,
                         BirthDate = birthDate,
@@ -58,7 +57,6 @@ namespace Chalkable.BusinessLogic.Services.School
                         Gender = gender,
                         Salutation = salutation,
                         RoleRef = roleId,
-                        SisId = sisId
                     };
                 da.Insert(person);
                 if (role == CoreRoles.STUDENT_ROLE.Name)
@@ -169,11 +167,6 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var student = Edit(new PersonDataAccess(uow), studentId, email, firstName, lastName, gender, salutation, birthDate);
-                student.StudentInfo.IEP = iep;
-                student.StudentInfo.EnrollmentDate = enrollmentDate;
-                student.StudentInfo.PreviousSchool = previousSchool;
-                student.StudentInfo.PreviousSchoolNote = previousSchoolNote;
-                student.StudentInfo.PreviousSchoolPhone = previousSchoolPhone;
                 if (gradeLevelId.HasValue)
                     student.StudentInfo.GradeLevelRef = gradeLevelId.Value;
 

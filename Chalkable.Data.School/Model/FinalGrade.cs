@@ -7,7 +7,7 @@ namespace Chalkable.Data.School.Model
     public class FinalGrade
     {
         public const string ID_FIELD = "Id";
-        public virtual Guid Id { get; set; }
+        public virtual int Id { get; set; }
         public FinalGradeStatus Status { get; set; }
         public int ParticipationPercent { get; set; }
         public int Discipline { get; set; }
@@ -23,7 +23,7 @@ namespace Chalkable.Data.School.Model
         private ClassDetails _class;
         private MarkingPeriodClass markingPeriodClass;
         
-        public override Guid Id
+        public override int Id
         {
             get{ return base.Id;}
             set
@@ -42,14 +42,14 @@ namespace Chalkable.Data.School.Model
                 markingPeriodClass = value;
                 if (value != null)
                 {
-                    if(Id != Guid.Empty)
+                    if (Id != 0)
                         markingPeriodClass.Id = Id;
                     if (_class != null)
                     {
-                        if (_class.Id != Guid.Empty)
+                        if (_class.Id != 0)
                             markingPeriodClass.ClassRef = _class.Id;
-                        if(_class.MarkingPeriodClasses == null || _class.MarkingPeriodClasses.Count == 0)
-                            _class.MarkingPeriodClasses = new List<MarkingPeriodClass>{value};
+                        if (_class.MarkingPeriodClasses == null || _class.MarkingPeriodClasses.Count == 0)
+                            _class.MarkingPeriodClasses = new List<MarkingPeriodClass> { value };
                     } 
                         
                 }

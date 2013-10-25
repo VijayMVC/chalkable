@@ -30,7 +30,7 @@ namespace Chalkable.Data.School.Model
             set
             {
                 sender = value;
-                if (value.Id == Guid.Empty && FromPersonRef != Guid.Empty)
+                if (value.Id == 0 && FromPersonRef != 0)
                     value.Id = FromPersonRef;
             }
         }
@@ -40,7 +40,7 @@ namespace Chalkable.Data.School.Model
             set
             {
                 recipient = value;
-                if (value.Id == Guid.Empty && ToPersonRef != Guid.Empty)
+                if (value.Id == 0 && ToPersonRef != 0)
                     value.Id = ToPersonRef;
             }
         }

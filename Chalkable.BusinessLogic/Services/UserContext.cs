@@ -22,6 +22,7 @@ namespace Chalkable.BusinessLogic.Services
         public string SchoolTimeZoneId { get; private set; }
 
         public Guid? DeveloperId { get; private set; }
+        public int? LocalId { get; set; }
 
         public DateTime NowSchoolTime
         {
@@ -34,7 +35,8 @@ namespace Chalkable.BusinessLogic.Services
         public bool IsInternalApp{ get; set; }
         public string OAuthApplication{ get; set; }
 
-        public UserContext(Guid id, Guid? districtId, Guid? schoolId, string login, string districtName, string schoolTimeZoneId, string schoolServerUrl, CoreRole role, Guid? developerId)
+        public UserContext(Guid id, Guid? districtId, Guid? schoolId, string login, string districtName,
+            string schoolTimeZoneId, string schoolServerUrl, CoreRole role, Guid? developerId, int? localId)
         {
             SchoolServerUrl = schoolServerUrl;
             DistrictName = districtName;
@@ -46,7 +48,8 @@ namespace Chalkable.BusinessLogic.Services
 
             SchoolTimeZoneId = schoolTimeZoneId;
             DeveloperId = developerId;
-            
+            LocalId = localId;
+
             if (schoolId.HasValue)
                 SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, SchoolServerUrl, schoolId);
             MasterConnectionString = Settings.MasterConnectionString;
@@ -78,7 +81,8 @@ namespace Chalkable.BusinessLogic.Services
                     SchoolServerUrl ?? string.Empty,
                     SchoolTimeZoneId ?? string.Empty,
                     DistrictId.HasValue ? DistrictId.ToString() : string.Empty,
-                    DeveloperId.HasValue ? DeveloperId.ToString() : string.Empty
+                    DeveloperId.HasValue ? DeveloperId.ToString() : string.Empty,
+                    LocalId.HasValue ? LocalId.ToString() : string.Empty
                 };
             return parameters.JoinString(DELIMITER.ToString(CultureInfo.InvariantCulture));
         }
@@ -93,7 +97,7 @@ namespace Chalkable.BusinessLogic.Services
         private const int SCHOOL_TIMEZONE_ID = 6;
         private const int DISTRICT_ID = 7;
         private const int DEVELOPER_ID = 8;
-
+        private const int LOCAL_ID = 9;
 
 
         public static UserContext FromString(string s)
@@ -108,7 +112,7 @@ namespace Chalkable.BusinessLogic.Services
             string schoolTimeZone = null;
             string schoolServerUrl = null;
             Guid? developerId = (Guid?)null;
-            
+            int? localId = null;
             if (schoolId.HasValue)
             {
                 schoolName = sl[SCHOOL_NAME];
@@ -117,9 +121,11 @@ namespace Chalkable.BusinessLogic.Services
 
                 if (sl.Length > 7 && !string.IsNullOrEmpty(sl[DEVELOPER_ID]))
                     developerId = Guid.Parse(sl[DEVELOPER_ID]);
+                if (sl.Length > 8 && !string.IsNullOrEmpty(sl[LOCAL_ID]))
+                    localId = int.Parse(sl[LOCAL_ID]);
             }
             var role = CoreRoles.GetById(int.Parse(sl[ROLE_ID]));
-            var res = new UserContext(userId, districtId, schoolId, login, schoolName, schoolTimeZone, schoolServerUrl, role, developerId);
+            var res = new UserContext(userId, districtId, schoolId, login, schoolName, schoolTimeZone, schoolServerUrl, role, developerId, localId);
             return res;
         }
     }
