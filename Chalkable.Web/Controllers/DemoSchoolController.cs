@@ -3,7 +3,6 @@ using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Common;
 using Chalkable.Web.Models;
@@ -22,7 +21,7 @@ namespace Chalkable.Web.Controllers
                                 CoreRoles.STUDENT_ROLE
                             };
             var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var demoSchool = sysLocator.SchoolService.UseDemoSchool();
+            var demoSchool = sysLocator.DistrictService.UseDemoDistrict();
             if (demoSchool == null)
                 ViewData[ViewConstants.ERROR_MESSAGE_KEY] = ChlkResources.ERR_DEMO_UNAVAILABLE;
             else ViewData[ViewConstants.DEMO_PREFIX_KEY] = demoSchool.DemoPrefix;

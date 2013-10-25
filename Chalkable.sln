@@ -30,10 +30,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.BackgroundTaskPro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GCObjectRenderer", "GCObjectRenderer\GCObjectRenderer.csproj", "{CCD7266B-94BB-45EF-BC49-0F608DA006F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.SisImportFacade", "Chalkable.SisImportFacade\Chalkable.SisImportFacade.csproj", "{BD404053-D827-4695-9F57-5003A337428C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.SisConnector", "Chalkable.SisConnector\Chalkable.SisConnector.csproj", "{C6A26439-411D-4D8C-9BCE-1A34E7EE604F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.StiConnector", "Chalkable.StiConnector\Chalkable.StiConnector.csproj", "{3D16203E-D19D-41E1-9918-2A9448427BFD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsAzure.Acs.Oauth2", "WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.csproj", "{3051F268-B03F-42AE-A06C-1D8DD751BDBF}"
@@ -111,18 +107,6 @@ Global
 		{CCD7266B-94BB-45EF-BC49-0F608DA006F3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CCD7266B-94BB-45EF-BC49-0F608DA006F3}.Staging|Any CPU.ActiveCfg = Staging|Any CPU
 		{CCD7266B-94BB-45EF-BC49-0F608DA006F3}.Staging|Any CPU.Build.0 = Staging|Any CPU
-		{BD404053-D827-4695-9F57-5003A337428C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BD404053-D827-4695-9F57-5003A337428C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BD404053-D827-4695-9F57-5003A337428C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BD404053-D827-4695-9F57-5003A337428C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BD404053-D827-4695-9F57-5003A337428C}.Staging|Any CPU.ActiveCfg = STAGING|Any CPU
-		{BD404053-D827-4695-9F57-5003A337428C}.Staging|Any CPU.Build.0 = STAGING|Any CPU
-		{C6A26439-411D-4D8C-9BCE-1A34E7EE604F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6A26439-411D-4D8C-9BCE-1A34E7EE604F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C6A26439-411D-4D8C-9BCE-1A34E7EE604F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C6A26439-411D-4D8C-9BCE-1A34E7EE604F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C6A26439-411D-4D8C-9BCE-1A34E7EE604F}.Staging|Any CPU.ActiveCfg = STAGING|Any CPU
-		{C6A26439-411D-4D8C-9BCE-1A34E7EE604F}.Staging|Any CPU.Build.0 = STAGING|Any CPU
 		{3D16203E-D19D-41E1-9918-2A9448427BFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3D16203E-D19D-41E1-9918-2A9448427BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D16203E-D19D-41E1-9918-2A9448427BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU

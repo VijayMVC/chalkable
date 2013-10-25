@@ -1,48 +1,71 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common.Enums;
+using Chalkable.Data.Common;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.Master
 {
     public interface IDistrictService
     {
-        District GetById(Guid id);
-        void Delete(Guid id);
-        District Create(string name, string dbName, string sisUrl, string sisUserName, string sisPassword, ImportSystemTypeEnum sisSystemType);
+        District GetByIdOrNull(Guid id);
+        District Create(string name, string dbName, string sisUrl, string sisUserName, string sisPassword, string timeZone);
         PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue);
+        IList<District> GetDistricts(bool? empty, bool? demo, bool? usedDemo = null);
         void Update(District district);
+        District Create(string name, IList<UserInfo> principals);
+        District UseDemoDistrict();
+        void CreateDemo();
+        IList<District> GetDemoDistrictsToDelete();
+        void DeleteDistrict(Guid id);
     }
 
     public class DistrictService : MasterServiceBase, IDistrictService
     {
+        public const int DEMO_EXPIRE_HOURS = 3;
+
         public DistrictService(IServiceLocatorMaster serviceLocator)
             : base(serviceLocator)
         {
         }
 
-        public District Create(string name, string dbName, string sisUrl, string sisUserName, string sisPassword, ImportSystemTypeEnum sisSystemType)
+        public District Create(string name, string dbName, string sisUrl, string sisUserName, string sisPassword, string timeZone)
         {
+            string server;
+            District res;
             using (var uow = Update())
             {
+                server = FindServer(uow);
                 var da = new DistrictDataAccess(uow);
-                var res = new District
+                res = new District
                     {
+                        ServerUrl = server,
                         Id = Guid.NewGuid(),
                         Name = name,
                         DbName = dbName,
                         SisUrl = sisUrl,
                         SisUserName = sisUserName,
                         SisPassword = sisPassword,
-                        SisSystemType = sisSystemType
+                        TimeZone = timeZone,
+                        IsEmpty = false
                     };
                 da.Insert(res);
                 uow.Commit();
-                return res;
             }
+            using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, server, "Master"), false))
+            {
+                var da = new DistrictDataAccess(unitOfWork);
+                da.CreateDistrictDataBase(res.Id.ToString(), Settings.Configuration.SchoolTemplateDataBase);
+            }
+            return res;
         }
 
         public PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue)
@@ -50,6 +73,15 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 return new DistrictDataAccess(uow).GetPage(start, count);
+            }
+        }
+
+        public IList<District> GetDistricts(bool? empty, bool? demo, bool? usedDemo = null)
+        {
+            using (var uow = Read())
+            {
+                var da = new DistrictDataAccess(uow);
+                return da.GetDistricts(empty, demo, usedDemo);
             }
         }
 
@@ -63,26 +95,175 @@ namespace Chalkable.BusinessLogic.Services.Master
                 uow.Commit();
             }
         }
-
-        public void Delete(Guid id)
-        {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new DistrictDataAccess(uow).Delete(id);
-                uow.Commit();
-            }
-        }
-
-        public District GetById(Guid id)
+        
+        public District GetByIdOrNull(Guid id)
         {
             if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException(); 
             using (var uow = Read())
             {
                 var da = new DistrictDataAccess(uow);
-                return da.GetById(id);
+                return da.GetByIdOrNull(id);
+            }
+        }
+        
+        public void CreateDemo()
+        {
+            District district;
+            var prefix = Guid.NewGuid().ToString().Replace("-", "");
+            var prototypeId = Guid.Parse(PreferenceService.Get(Preference.DEMO_DISTRICT_ID).Value);
+            var prototype = GetByIdOrNull(prototypeId);
+            var server = prototype.ServerUrl;
+            using (var uow = Update())
+            {
+
+                district = new District()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = prototype.Name + prefix,
+                    ServerUrl = server,
+                    IsEmpty = false,
+                    TimeZone = prototype.TimeZone,
+                    DemoPrefix = prefix
+                };
+                var da = new DistrictDataAccess(uow);
+                da.Insert(district);
+                uow.Commit();
+            }
+
+            using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, server, "Master"), false))
+            {
+                var da = new DistrictDataAccess(unitOfWork);
+                da.CreateDistrictDataBase(district.Id.ToString(), prototype.Id.ToString());
+            }
+
+            //wait for online for an hour
+            for (int i = 0; i < 3600; i++)
+            {
+                using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, server, "Master"), false))
+                {
+                    var da = new DistrictDataAccess(unitOfWork);
+                    var l = da.GetOnline(new[] { district.Id });
+                    if (l.Count > 0)
+                        break;
+                }
+                Thread.Sleep(1000);
+            }
+
+
+            IList<Person> users;
+            using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, server, district.Id.ToString()), false))
+            {
+                var da = new PersonDataAccess(unitOfWork);
+                da.RepopulateDemoIds(prefix);
+                users = da.GetAll();
+            }
+            foreach (var person in users)
+            {
+                ServiceLocator.UserService.CreateSchoolUser(person.Email, "tester", district.Id, CoreRoles.GetById(person.RoleRef).Name, person.Id);
+            }
+        }
+
+        public IList<District> GetDemoDistrictsToDelete()
+        {
+            var expires = DateTime.UtcNow.AddHours(-DEMO_EXPIRE_HOURS);
+            using (var uow = Read())
+            {
+                var da = new DistrictDataAccess(uow);
+                return da.GetDistrictsToDelete(expires);
+            }
+        }
+
+        public District Create(string name, IList<UserInfo> principals)
+        {
+            District district = GetEmpty();
+            if (district == null)
+                return null;
+            var schoolSl = ServiceLocator.SchoolServiceLocator(district.Id);
+            foreach (var principal in principals)
+            {
+                schoolSl.PersonService.Add(principal.Login, principal.Password, principal.FirstName, principal.LastName, CoreRoles.ADMIN_GRADE_ROLE.Name, principal.Gender, principal.Salutation, principal.BirthDate, null);
+            }
+            district.IsEmpty = false;
+            Update(district);
+            return district;
+        }
+
+        private static string FindServer(UnitOfWork uow)
+        {
+            var da = new DistrictDataAccess(uow);
+            var serverLoading = da.CalcServersLoading();
+            string s = null;
+            int cnt = int.MaxValue;
+            foreach (var sl in serverLoading)
+            {
+                if (sl.Value >= cnt) continue;
+                cnt = sl.Value;
+                s = sl.Key;
+            }
+            if (s == null)
+                throw new NullReferenceException();
+            return s;
+        }
+
+        private District GetEmpty()
+        {
+            var allEmpty = new Dictionary<string, List<Guid>>();
+            using (var uow = Read())
+            {
+                var da = new DistrictDataAccess(uow);
+                var candidats = da.GetEmpty();
+                foreach (var candidat in candidats)
+                {
+                    if (allEmpty.ContainsKey(candidat.ServerUrl))
+                        allEmpty[candidat.ServerUrl].Add(candidat.Id);
+                    else
+                        allEmpty.Add(candidat.ServerUrl, new List<Guid> { candidat.Id });
+                }
+            }
+
+            foreach (var serversEmpty in allEmpty)
+            {
+                using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, serversEmpty.Key, "Master"), false))
+                {
+                    var da = new DistrictDataAccess(unitOfWork);
+                    var online = da.GetOnline(serversEmpty.Value);
+                    if (online.Count > 0)
+                        return GetByIdOrNull(Guid.Parse(online[0]));
+                }
+            }
+            return null;
+        }
+
+
+        public District UseDemoDistrict()
+        {
+            using (var uow = Update())
+            {
+                var da = new DistrictDataAccess(uow);
+                var notUsedDemo = da.GetDistricts(null, true, false).FirstOrDefault();
+                if (notUsedDemo == null) return null;
+                notUsedDemo.LastUseDemo = DateTime.UtcNow.ConvertFromUtc(notUsedDemo.TimeZone);
+                da.Update(notUsedDemo);
+                uow.Commit();
+                return notUsedDemo;
+            }
+        }
+
+        public void DeleteDistrict(Guid id)
+        {
+            var district = GetByIdOrNull(id);
+            using (var uow = Update())
+            {
+                var da = new DistrictDataAccess(uow);
+                da.Delete(id);
+                uow.Commit();
+            }
+
+            using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, district.ServerUrl, "Master"), false))
+            {
+                var da = new DistrictDataAccess(unitOfWork);
+                da.DeleteDistrictDataBase(district.Id.ToString());
             }
         }
     }

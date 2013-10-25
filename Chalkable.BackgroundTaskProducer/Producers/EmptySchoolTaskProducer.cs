@@ -14,17 +14,19 @@ namespace Chalkable.BackgroundTaskProducer.Producers
 
         protected override void ProduceInternal(DateTime currentTimeUtc)
         {
-            var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
+            //we don't need this anymore
+            throw new NotImplementedException();
+            /*var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
             var existing = sl.BackgroundTaskService.Find(null, BackgroundTaskStateEnum.Created, BackgroundTaskTypeEnum.CreateEmptySchool);
             if (existing == null)
             {
-                var have = sl.SchoolService.GetSchools(true, false).Count;
+                var have = sl.SchoolService.GetSchools(true, false, null).Count;
                 int need = Settings.Configuration.EmptySchoolsReserved;
-                int cnt = Math.Max(0, need - have);
+                var cnt = Math.Max(0, need - have);
                 if (cnt > 0)
                     sl.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.CreateEmptySchool, currentTimeUtc, null, string.Empty);
             }
-                
+            */    
         }
     }
 }

@@ -54,7 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\AppTools.cs" />
-    <Compile Include="Logic\SchoolStateMachine.cs" />
     <Compile Include="Mapping\GradingStyleMapper.cs" />
     <Compile Include="Model\AnnouncementInfo.cs" />
     <Compile Include="Model\ApplicationInfo.cs" />
@@ -125,6 +124,8 @@
     <Compile Include="Services\School\PrivateMessageService.cs" />
     <Compile Include="Services\School\RoomService.cs" />
     <Compile Include="Services\School\ScheduleSectionService.cs" />
+    <Compile Include="Services\School\SchoolPersonService.cs" />
+    <Compile Include="Services\School\SchoolService.cs" />
     <Compile Include="Services\School\SchoolServiceBase.cs" />
     <Compile Include="Services\School\SchoolYearService.cs" />
     <Compile Include="Services\School\ServiceLocatorSchool.cs" />
@@ -159,6 +160,9 @@
       <Project>{3051F268-B03F-42AE-A06C-1D8DD751BDBF}</Project>
       <Name>WindowsAzure.Acs.Oauth2</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Logic\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

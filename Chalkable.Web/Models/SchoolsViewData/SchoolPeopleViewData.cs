@@ -13,17 +13,17 @@ namespace Chalkable.Web.Models.SchoolsViewData
 
         public PaginatedList<PersonViewData> Persons { get; set; }
 
-        protected SchoolPeopleViewData(School school, SisSync sisData, int studentsCount, int teachersCount, int staffsCount) 
-            : base(school, sisData)
+        protected SchoolPeopleViewData(School school, int studentsCount, int teachersCount, int staffsCount) 
+            : base(school)
         {
             StudentsCount = studentsCount;
             TeachersCount = teachersCount;
             StaffsCount = staffsCount;
         }
 
-        public static SchoolPeopleViewData Create(School school, SisSync sisData, int studentsCount, int teachersCount, int staffsCount)
+        public static SchoolPeopleViewData Create(School school, int studentsCount, int teachersCount, int staffsCount)
         {
-            return new SchoolPeopleViewData(school, sisData, studentsCount, teachersCount, staffsCount);
+            return new SchoolPeopleViewData(school, studentsCount, teachersCount, staffsCount);
         }
     }
 }

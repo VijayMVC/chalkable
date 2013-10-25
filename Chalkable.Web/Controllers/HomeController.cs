@@ -10,9 +10,7 @@ using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
-using Chalkable.Web.Authentication;
 using Chalkable.Web.Common;
-using Chalkable.Web.Controllers.PersonControllers;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.AttendancesViewData;
@@ -44,7 +42,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Developer")]
         public ActionResult Developer(Guid? currentApplicationId)
         {
-            var prefDemoSchool = MasterLocator.SchoolService.GetById(Context.SchoolId.Value).DemoPrefix;
+            var prefDemoSchool = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value).DemoPrefix;
             var developer = MasterLocator.DeveloperService.GetDeveloperById(MasterLocator.Context.UserId);
             ViewData[ViewConstants.IS_DEV] = true;
             PrepareJsonData(DeveloperViewData.Create(developer), ViewConstants.CURRENT_PERSON);
@@ -95,11 +93,12 @@ namespace Chalkable.Web.Controllers
         private void PrepareCommonViewData(string prefixDemoSchool = null, MarkingPeriod markingPeriod = null)
         {
             //TODO: render data for demo school 
-            if (Context.SchoolId.HasValue)
+            if (Context.DistrictId.HasValue && Context.SchoolId.HasValue)
             {
-                var school = MasterLocator.SchoolService.GetById(Context.SchoolId.Value);
+                var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
+                var school = MasterLocator.SchoolService.GetById(Context.DistrictId.Value);
                 PrepareJsonData(ShortSchoolViewData.Create(school), ViewConstants.SCHOOL);
-                if (!string.IsNullOrEmpty(school.DemoPrefix) && !string.IsNullOrEmpty(prefixDemoSchool))
+                if (!string.IsNullOrEmpty(district.DemoPrefix) && !string.IsNullOrEmpty(prefixDemoSchool))
                 {
                     ViewData[ViewConstants.STUDENT_ROLE] = CoreRoles.STUDENT_ROLE.Name;
                     ViewData[ViewConstants.TEACHER_ROLE] = CoreRoles.TEACHER_ROLE.Name;

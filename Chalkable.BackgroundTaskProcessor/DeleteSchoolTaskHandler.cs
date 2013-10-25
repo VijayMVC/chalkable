@@ -11,9 +11,9 @@ namespace Chalkable.BackgroundTaskProcessor
         {
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
             var id = Guid.Parse(task.Data);
-            if (sl.SchoolService.GetByIdOrNull(id) != null)
+            if (sl.DistrictService.GetByIdOrNull(id) != null)
             {
-                sl.SchoolService.DeleteSchool(id);    
+                sl.DistrictService.DeleteDistrict(id);    
             }
             return true;
         }

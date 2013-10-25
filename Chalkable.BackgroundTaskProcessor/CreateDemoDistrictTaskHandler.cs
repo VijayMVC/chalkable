@@ -6,17 +6,17 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BackgroundTaskProcessor
 {
-    public class CreateDemoSchoolTaskHandler : ITaskHandler
+    public class CreateDemoDistrictTaskHandler : ITaskHandler
     {
         public bool Handle(BackgroundTask task, BackgroundTaskService.BackgroundTaskLog log)
         {
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var have = sl.SchoolService.GetSchools(false, true, false).Count;
+            var have = sl.DistrictService.GetDistricts(false, true, false).Count;
             int need = Settings.Configuration.DemoSchoolsReserved;
-            int cnt = Math.Max(0, need - have);
+            var cnt = Math.Max(0, need - have);
             log.LogInfo(string.Format("There are {0} demo schools to create", cnt));
             for (int i = 0; i < cnt; i++)
-                sl.SchoolService.CreateDemo();
+                sl.DistrictService.CreateDemo();
             return true;
         }
     }

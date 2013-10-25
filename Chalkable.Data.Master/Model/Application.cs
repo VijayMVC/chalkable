@@ -83,8 +83,8 @@ namespace Chalkable.Data.Master.Model
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string WebSite { get; set; }
-        public const string SCHOOL_REF_FIELD = "SchoolRef";
-        public Guid SchoolRef { get; set; }
+        public const string DISTRICT_REF_FIELD = "DistrictRef";
+        public Guid DistrictRef { get; set; }
         [DataEntityAttr]
         public User User { get; set; }
 

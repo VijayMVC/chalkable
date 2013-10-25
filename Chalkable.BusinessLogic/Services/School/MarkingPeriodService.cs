@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Logic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -94,17 +93,12 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new UnassignedUserException();
             using (var uow = Update())
             {
-                IStateMachine machine = new SchoolStateMachine(Context.SchoolId.Value, ServiceLocator.ServiceLocatorMaster);
-                if (!machine.CanApply(StateActionEnum.MarkingPeriodsAdd))
-                    throw new InvalidSchoolStatusException(ChlkResources.ERR_MARKING_PERIOD_INVALID_SCHOOL_STATUS);
-
                 var da = new MarkingPeriodDataAccess(uow);
                 var sy = new SchoolYearDataAccess(uow).GetById(schoolYearId);
                 var mp = AddMarkingPeriod(da, sy, startDate, endDate, name, description, weekDays);
                 mp.SisId = sisId;
                 da.Insert(mp);
                 uow.Commit();
-                machine.Apply(StateActionEnum.MarkingPeriodsAdd);
                 if (generatePeriods)
                 {
                     var names = new[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
@@ -208,9 +202,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new UnassignedUserException();
             error = null;
             var year = ServiceLocator.SchoolYearService.GetSchoolYearById(schoolYearId);
-            IStateMachine machine = new SchoolStateMachine(Context.SchoolId.Value, ServiceLocator.ServiceLocatorMaster);
-            if (!machine.CanApply(StateActionEnum.MarkingPeriodsAdd))
-                throw new InvalidSchoolStatusException(ChlkResources.ERR_MARKING_PERIOD_CHANGE_INVALID_STATUS);
             if (count <= 0)
                 throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_INVALID_COUNT);
 
@@ -258,7 +249,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     }
                 }
             }
-            machine.Apply(StateActionEnum.MarkingPeriodsAdd);
             return true;
         }
 

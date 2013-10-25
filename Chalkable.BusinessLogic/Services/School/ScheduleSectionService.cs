@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Logic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -113,10 +112,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new UnassignedUserException();
             using (var uow = Update())
             {
-                IStateMachine machine = new SchoolStateMachine(Context.SchoolId.Value, ServiceLocator.ServiceLocatorMaster);
-                if (!machine.CanApply(StateActionEnum.SectionsAdd))
-                    throw new InvalidSchoolStatusException(ChlkResources.ERR_SCHEDULE_SECTION_INVALID_STATUS);
-
                 var ss = new ScheduleSection
                     {
                         Id = Guid.NewGuid(),
@@ -138,7 +133,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 sections.Add(ss);
                 sections = AdjustNumbering(sections);
                 da.Update(sections);
-                machine.Apply(StateActionEnum.SectionsAdd);
                 uow.Commit();
                 return GetSectionById(ss.Id);
             }
@@ -216,12 +210,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 using (var uow = Update())
                 {
-                    var machine = new SchoolStateMachine(Context.SchoolId.Value, ServiceLocator.ServiceLocatorMaster);
-                    if (!machine.CanApply(StateActionEnum.SectionsAdd))
-                        throw new InvalidSchoolStatusException(ChlkResources.ERR_SCHEDULE_SECTION_INVALID_STATUS);
-
                     new ScheduleSectionDataAccess(uow).ReBuildSection(markingPeriodIds, sections);
-                    machine.Apply(StateActionEnum.SectionsAdd);
                     uow.Commit();
                 }
 

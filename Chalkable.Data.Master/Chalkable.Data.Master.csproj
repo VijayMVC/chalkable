@@ -67,9 +67,7 @@
     <Compile Include="Model\DatabaseUpdateTaskData.cs" />
     <Compile Include="Model\District.cs" />
     <Compile Include="Model\Fund.cs" />
-    <Compile Include="Model\ImportSystemType.cs" />
     <Compile Include="Model\Preference.cs" />
-    <Compile Include="Model\SisSync.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
