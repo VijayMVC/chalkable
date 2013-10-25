@@ -104,7 +104,7 @@ namespace Chalkable.Data.School.DataAccess
             var b = new StringBuilder();
             b.AppendFormat(@"select [Date].*, {0} from [Date] 
                              left join ScheduleSection on ScheduleSection.Id = [Date].ScheduleSectionRef"
-                           , Orm.ComplexResultSetQuery(new List<Type> {typeof (ScheduleSection)}));
+                           , Orm.ComplexResultSetQuery(new List<Type> {typeof (DateType)}));
             var q = BuildConditionQuery(b, query);
             q.Sql.AppendFormat(" order by DateTime desc OFFSET 0 ROWS FETCH NEXT {0} ROWS ONLY ", query.Count);
             q.Sql.Insert(0, " select * from (").Append(")x order by x.DateTime");
@@ -119,8 +119,8 @@ namespace Chalkable.Data.School.DataAccess
                 while (reader.Read())
                 {
                     var date = reader.Read<DateDetails>();
-                    if(date.ScheduleSectionRef.HasValue)
-                        date.ScheduleSection = reader.Read<ScheduleSection>(true);
+                    if(date.DateTypeRef.HasValue)
+                        date.ScheduleSection = reader.Read<DateType>(true);
                     res.Add(date);
                 }
                 return res;

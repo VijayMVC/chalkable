@@ -7,17 +7,18 @@ using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
-    public class StudentInfo
+    public class StudentSchoolYear
     {
         public const string ID_FIELD = "Id";
-        public Guid Id { get; set; }
-        public bool IEP { get; set; }
-        public DateTime? EnrollmentDate { get; set; }
-        public string PreviousSchool { get; set; }
-        public string PreviousSchoolPhone { get; set; }
-        public string PreviousSchoolNote { get; set; }
+        public int Id { get; set; }
+
         public const string GRADE_LEVEL_REF_FIELD = "GradeLevelRef";
-        public Guid GradeLevelRef { get; set; }
+        public int GradeLevelRef { get; set; }
+
+        public const string STUDENT_FIELD_REF_FIELD = "StudentRef";
+        public int StudentRef { get; set; }
+        public const string SCHOOL_YEAR_REF_FIELD = "SchoolYearRef";
+        public int SchoolYearRef { get; set; }
 
         [NotDbFieldAttr]
         public GradeLevel GradeLevel { get; set; }

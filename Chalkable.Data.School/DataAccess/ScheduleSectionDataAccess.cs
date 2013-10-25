@@ -9,12 +9,12 @@ using Chalkable.Common;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class ScheduleSectionDataAccess : DataAccessBase<ScheduleSection>
+    public class ScheduleSectionDataAccess : DataAccessBase<DateType>
     {
         public ScheduleSectionDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-        public void Delete(ScheduleSection scheduleSection)
+        public void Delete(DateType scheduleSection)
         {
             var b = new StringBuilder();
             b.Append(@"delete from ClassPeriod where PeriodRef in (select Id from Period where SectionRef = @sectionRef) ");
@@ -44,23 +44,23 @@ namespace Chalkable.Data.School.DataAccess
             ExecuteStoredProcedureReader(REBUILD_SECTION_PROC, parameters).Dispose();
         }
       
-        public IList<ScheduleSection> GetSections(Guid markingPeriodId, int? fromNumber, int? tillNumber)
+        public IList<DateType> GetSections(Guid markingPeriodId, int? fromNumber, int? tillNumber)
         {
-            var conds = new AndQueryCondition { {ScheduleSection.MARKING_PERIOD_REF_FIELD, markingPeriodId} };
+            var conds = new AndQueryCondition { {DateType.MARKING_PERIOD_REF_FIELD, markingPeriodId} };
             if (fromNumber.HasValue)
-                conds.Add(ScheduleSection.NUMBER_FIELD, "fromNumber", fromNumber.Value, ConditionRelation.GreaterEqual);
+                conds.Add(DateType.NUMBER_FIELD, "fromNumber", fromNumber.Value, ConditionRelation.GreaterEqual);
             if (tillNumber.HasValue)
-                conds.Add(ScheduleSection.NUMBER_FIELD, "tillNumber", tillNumber.Value, ConditionRelation.LessEqual);
-            var dbQuery = Orm.SimpleSelect<ScheduleSection>(conds);
-            dbQuery.Sql.AppendFormat("  order by ScheduleSection.{0} ", ScheduleSection.NUMBER_FIELD);
-            return ReadMany<ScheduleSection>(dbQuery);
+                conds.Add(DateType.NUMBER_FIELD, "tillNumber", tillNumber.Value, ConditionRelation.LessEqual);
+            var dbQuery = Orm.SimpleSelect<DateType>(conds);
+            dbQuery.Sql.AppendFormat("  order by ScheduleSection.{0} ", DateType.NUMBER_FIELD);
+            return ReadMany<DateType>(dbQuery);
         } 
 
-        public IList<ScheduleSection> GetSections(IList<Guid> markingPeriodIds)
+        public IList<DateType> GetSections(IList<Guid> markingPeriodIds)
         {
             var mpIds = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
             var sql = string.Format("select * from ScheduleSection where MarkingPeriodRef in ({0})", mpIds);
-            return ReadMany<ScheduleSection>(new DbQuery(sql, new Dictionary<string, object>()));
+            return ReadMany<DateType>(new DbQuery(sql, new Dictionary<string, object>()));
         }
     }
 }

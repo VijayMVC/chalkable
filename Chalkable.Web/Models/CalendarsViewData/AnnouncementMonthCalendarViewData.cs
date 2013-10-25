@@ -13,7 +13,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
         public IList<AnnouncementShortViewData> Announcements { get; set; }
         public IList<AnnouncementShortViewData> Items { get; set; }
 
-        protected AnnouncementMonthCalendarViewData(DateTime date, bool isCurrentMonth, IList<AnnouncementComplex> announcements, ScheduleSection section)
+        protected AnnouncementMonthCalendarViewData(DateTime date, bool isCurrentMonth, IList<AnnouncementComplex> announcements, DateType section)
             : base(date, isCurrentMonth)
         {
             Announcements = announcements.Where(x => !x.GradableType).Select(AnnouncementShortViewData.Create).ToList();

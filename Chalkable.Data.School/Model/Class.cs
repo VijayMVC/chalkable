@@ -9,18 +9,18 @@ namespace Chalkable.Data.School.Model
 {
     public class Class
     {
-        public const string ID_FIELD = "Id"; 
-        public Guid Id { get; set; }
+        public const string ID_FIELD = "Id";
+        public const string SCHOOL_YEAR_REF = "SchoolYearRef";
+        public const string TEACHER_REF_FIELD = "TeacherRef";
+        public const string GRADE_LEVEL_REF_FIELD = "GradeLevelRef";
+ 
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public const string SCHOOL_YEAR_REF = "SchoolYearRef";
-        public Guid SchoolYearRef { get; set; }
-        public Guid CourseRef { get; set; }
-        public const string TEACHER_REF_FIELD = "TeacherRef";
-        public Guid TeacherRef { get; set; }
-        public const string GRADE_LEVEL_REF_FIELD = "GradeLevelRef";
-        public Guid GradeLevelRef { get; set; }
-        public int? SisId { get; set; }
+        public int SchoolYearRef { get; set; }
+        public int ChalkableDepartmentRef { get; set; }
+        public int TeacherRef { get; set; }
+        public int GradeLevelRef { get; set; }
     }
 
     public class ClassDetails : Class
@@ -30,8 +30,6 @@ namespace Chalkable.Data.School.Model
         public IList<MarkingPeriodClass> MarkingPeriodClasses { get; set; }
         [DataEntityAttr]
         public GradeLevel GradeLevel { get; set; }
-        [DataEntityAttr]
-        public Course Course { get; set; }
         public int StudentsCount { get; set; }
     }
 }

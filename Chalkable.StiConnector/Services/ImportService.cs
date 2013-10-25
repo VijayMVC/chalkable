@@ -354,7 +354,7 @@ namespace Chalkable.StiConnector.Services
             var days = stiEntities.CalendarDays.Where(x => x.AcadSessionID == sessionId).ToList();
 
             var markingPeriods = ServiceLocatorSchool.MarkingPeriodService.GetMarkingPeriods(schoolYearId);
-            var scheduleSections = new List<ScheduleSection>();
+            var scheduleSections = new List<DateType>();
             var mpIds = markingPeriods.Select(x => x.Id).ToList();
             foreach (var id in mpIds)
             {
@@ -420,7 +420,7 @@ namespace Chalkable.StiConnector.Services
             var dayTypes = stiEntities.DayTypes.Where(x => x.AcadSessionID == sessionId).ToList();
             foreach (var dayType in dayTypes)
             {
-                ScheduleSection scheduleSection = ServiceLocatorSchool.ScheduleSectionService.Add(dayType.Sequence, dayType.Name, markingPeriodId, dayType.DayTypeID);
+                DateType scheduleSection = ServiceLocatorSchool.ScheduleSectionService.Add(dayType.Sequence, dayType.Name, markingPeriodId, dayType.DayTypeID);
                 Log.LogInfo(string.Format(ChlkResources.IMPORT_GENERAL_PERIODS_FOR_SCHEDULE_SECTION_START, scheduleSection.Id));
                 ImportGeneralperiods(scheduleSection.Id, dayType.DayTypeID, dayType.AcadSessionID);
             }

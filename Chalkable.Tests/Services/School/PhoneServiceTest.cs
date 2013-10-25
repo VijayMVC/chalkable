@@ -26,7 +26,7 @@ namespace Chalkable.Tests.Services.School
                 , SchoolContextRoles.FirstParent | SchoolContextRoles.Checkin | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent | SchoolContextRoles.SecondStudent);
 
             var phone = SchoolTestContext.AdminGradeSl.PhoneService.Add(SchoolTestContext.AdminGrade.Id, phoneNumber, PhoneType.Home, true);
-            Assert.IsTrue(phone.IsPrimary);
+            Assert.IsTrue(phone.IsPRIMARY);
             Assert.AreEqual(phone.PersonRef, SchoolTestContext.AdminGrade.Id);
             Assert.AreEqual(phone.Value, phoneNumber);
             Assert.AreEqual(phone.Type,  PhoneType.Home);
@@ -55,7 +55,7 @@ namespace Chalkable.Tests.Services.School
                             , SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher | SchoolContextRoles.Checkin);
 
             phone = SchoolTestContext.AdminGradeSl.PhoneService.Edit(phone.Id, phoneNumber, PhoneType.Work, false);
-            Assert.IsFalse(phone.IsPrimary);
+            Assert.IsFalse(phone.IsPRIMARY);
             Assert.AreEqual(phone.PersonRef, SchoolTestContext.AdminGrade.Id);
             Assert.AreEqual(phone.Value, phoneNumber);
             Assert.AreEqual(phone.DigitOnlyValue, digitValue);

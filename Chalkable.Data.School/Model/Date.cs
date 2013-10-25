@@ -7,19 +7,18 @@ using System.Threading.Tasks;
 namespace Chalkable.Data.School.Model
 {
     public class Date
-    {
-        public Guid Id { get; set; }
-        public const string DATE_TIME_FIELD = "DateTime";
+    {   
+        public const string DATE_TIME_FIELD = "Date";
         public DateTime DateTime { get; set; }
-        public Guid? ScheduleSectionRef { get; set; }
-        public Guid? MarkingPeriodRef { get; set; }
+        public const string DATE_TYPE_REF_FIELD = "DateTypeRef";
+        public int? DateTypeRef { get; set; }
         public const string IS_SCHOOL_DAY_FIELD = "IsSchoolDay";
         public bool IsSchoolDay { get; set; }
-        public int? SisId { get; set; }
+        public int SchoolYearRef { get; set; }     
     }
 
     public class DateDetails : Date
     {
-        public ScheduleSection ScheduleSection { get; set; }
+        public DateType ScheduleSection { get; set; }
     }
 }

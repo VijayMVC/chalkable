@@ -6,12 +6,12 @@ namespace Chalkable.Data.School.Model
     public class ClassPeriod
     {
         public const string ID_FIELD = "Id";
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public const string PERIOD_REF_FIELD = "PeriodRef";
-        public Guid PeriodRef { get; set; }
-        public Guid ClassRef { get; set; }
-        public Guid RoomRef { get; set; }
-        public int? SisId { get; set; }
+        public int PeriodRef { get; set; }
+        public int ClassRef { get; set; }
+        public int RoomRef { get; set; }
+        public int DateTypeRef { get; set; }
 
         private Period period;
         [DataEntityAttr]
@@ -21,7 +21,7 @@ namespace Chalkable.Data.School.Model
             set
             {
                 period = value;
-                if (value != null && value.Id != Guid.Empty)
+                if (value != null && value.Id != 0)
                     PeriodRef = value.Id;
             }
         }

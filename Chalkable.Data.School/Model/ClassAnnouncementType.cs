@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace Chalkable.Data.School.Model
 {
-    public class Room
+    public class ClassAnnouncementType
     {
         public int Id { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
-        public string RoomNumber { get; set; }
-        public string Size { get; set; }
-        public int? Capacity { get; set; }
-        public string PhoneNumber { get; set; }
+        public bool Gradable { get; set; }
+        public int Percentage { get; set; }
+        public int AnnouncementTypeRef { get; set; }
+        public int ClassRef { get; set; }
     }
 }

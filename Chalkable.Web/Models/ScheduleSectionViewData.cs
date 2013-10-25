@@ -15,7 +15,7 @@ namespace Chalkable.Web.Models
 
         private ScheduleSectionViewData() { }
 
-        public static ScheduleSectionViewData Create(ScheduleSection section)
+        public static ScheduleSectionViewData Create(DateType section)
         {
             return new ScheduleSectionViewData
             {
@@ -26,7 +26,7 @@ namespace Chalkable.Web.Models
             };
         }
 
-        public static IList<ScheduleSectionViewData> Create(IList<ScheduleSection> sections)
+        public static IList<ScheduleSectionViewData> Create(IList<DateType> sections)
         {
             return sections.Select(Create).ToList();
         }

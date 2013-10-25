@@ -11,15 +11,15 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IScheduleSectionService
     {
-        IList<ScheduleSection> GetSections(Guid markingPeriodId);
-        IList<ScheduleSection> GetSections(List<Guid> markingPeriodIds);
-        ScheduleSection GetSectionById(Guid id);
+        IList<DateType> GetSections(Guid markingPeriodId);
+        IList<DateType> GetSections(List<Guid> markingPeriodIds);
+        DateType GetSectionById(Guid id);
 
         bool CanDeleteSections(IList<Guid> markingPeriodIds);
         bool CanGetSection(IList<Guid> markingPeriodIds);
 
-        ScheduleSection Add(int number, string name, Guid markingPeriodId, int? sisId = null);
-        ScheduleSection Edit(Guid id, int number, string name);
+        DateType Add(int number, string name, Guid markingPeriodId, int? sisId = null);
+        DateType Edit(Guid id, int number, string name);
         void Delete(Guid id);
         void ReBuildSections(List<string> sections, List<Guid> markingPeriodIds);
         void GenerateDefaultSections(Guid markingPeriodId);
@@ -33,7 +33,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public IList<ScheduleSection> GetSections(Guid markingPeriodId)
+        public IList<DateType> GetSections(Guid markingPeriodId)
         {
             using (var uow = Read())
             {
@@ -41,7 +41,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<ScheduleSection> GetSections(List<Guid> markingPeriodIds)
+        public IList<DateType> GetSections(List<Guid> markingPeriodIds)
         {
             if(!CanGetSection(markingPeriodIds))
                 throw new ChalkableException(ChlkResources.ERR_SCHEDULE_SECTION_SECTIONS_NOT_EQUIVALENT);
@@ -51,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public ScheduleSection GetSectionById(Guid id)
+        public DateType GetSectionById(Guid id)
         {
             using (var uow = Read())
             {
@@ -104,7 +104,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return true;
         }
 
-        public ScheduleSection Add(int number, string name, Guid markingPeriodId, int? sisId = null)
+        public DateType Add(int number, string name, Guid markingPeriodId, int? sisId = null)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -112,7 +112,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new UnassignedUserException();
             using (var uow = Update())
             {
-                var ss = new ScheduleSection
+                var ss = new DateType
                     {
                         Id = Guid.NewGuid(),
                         MarkingPeriodRef = markingPeriodId,
@@ -138,7 +138,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public ScheduleSection Edit(Guid id, int number, string name)
+        public DateType Edit(Guid id, int number, string name)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -152,7 +152,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var mx = Math.Max(old, number);
                 var d = Math.Sign(old - number);
 
-                IList<ScheduleSection> sections = da.GetSections(section.MarkingPeriodRef, null, null).Where(x => x.Id != section.Id).ToList();
+                IList<DateType> sections = da.GetSections(section.MarkingPeriodRef, null, null).Where(x => x.Id != section.Id).ToList();
                 foreach (var scheduleSection in sections)
                 {
                     if (scheduleSection.Number >= mn && scheduleSection.Number <= mx)
@@ -170,7 +170,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        private IList<ScheduleSection> AdjustNumbering(IList<ScheduleSection> sections)
+        private IList<DateType> AdjustNumbering(IList<DateType> sections)
         {
             sections = sections.OrderBy(x=>x.Number).ToList();
             int i = 0;

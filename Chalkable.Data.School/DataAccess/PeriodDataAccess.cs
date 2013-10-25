@@ -59,11 +59,11 @@ namespace Chalkable.Data.School.DataAccess
             var sql = @"select {0} from Period 
                         join ScheduleSection on ScheduleSection.Id = Period.SectionRef";
             var dbQuery = new DbQuery(); 
-            var types = new List<Type> { typeof(Period), typeof(ScheduleSection) };
+            var types = new List<Type> { typeof(Period), typeof(DateType) };
             dbQuery.Sql.AppendFormat(sql, Orm.ComplexResultSetQuery(types));
             conds.BuildSqlWhere(dbQuery, types[0].Name);
             dbQuery.Sql.AppendFormat(" order by Period.{0}, ScheduleSection.{1}"
-                    , Period.START_TIME_FIELD, ScheduleSection.NUMBER_FIELD);
+                    , Period.START_TIME_FIELD, DateType.NUMBER_FIELD);
 
             using (var reader = ExecuteReaderParametrized(dbQuery.Sql.ToString(), dbQuery.Parameters))
             {
@@ -71,7 +71,7 @@ namespace Chalkable.Data.School.DataAccess
                 while (reader.Read())
                 {
                     var period = reader.Read<Period>(true);
-                    period.Section = reader.Read<ScheduleSection>(true);
+                    period.Section = reader.Read<DateType>(true);
                     res.Add(period);
                 }
                 return res;

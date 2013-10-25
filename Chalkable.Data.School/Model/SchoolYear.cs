@@ -10,7 +10,7 @@ namespace Chalkable.Data.School.Model
     public  class SchoolYear
     {
         public const string ID_FIELD = "Id";
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public const string NAME_FIELD = "Name";
         public string Name { get; set; }
         public string Description { get; set; }
@@ -18,6 +18,7 @@ namespace Chalkable.Data.School.Model
         public DateTime StartDate { get; set; }
         public const string END_DATE_FIELD = "EndDate";
         public DateTime EndDate { get; set; }
-        public int? SisId { get; set; }
+        public const string SCHOOL_REF_FIELD = "SchoolRef";
+        public int SchoolRef { get; set; }
     }
 }

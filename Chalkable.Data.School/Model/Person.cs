@@ -17,7 +17,7 @@ namespace Chalkable.Data.School.Model
         public const string ROLE_REF_FIELD = "RoleRef";
         public const string SALUTATION_FIELD = "Salutation";
 
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime? BirthDate { get; set; }
@@ -30,8 +30,6 @@ namespace Chalkable.Data.School.Model
         public DateTime? LastMailNotification { get; set; }
         public int? SisId { get; set; }
         public string Email { get; set; }
-        [NotDbFieldAttr]
-        public StudentInfo StudentInfo { get; set; }
         
         [NotDbFieldAttr]
         public string FullName
@@ -93,7 +91,7 @@ namespace Chalkable.Data.School.Model
 
     public class PersonDetails : Person
     {
-        public IList<Address> Addresses { get; set; }
+        public Address Addresses { get; set; }
         public IList<Phone> Phones { get; set; } 
     }
 }

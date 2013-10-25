@@ -63,7 +63,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         Value = value,
                         DigitOnlyValue = DigitsOnly(value),
                         PersonRef = personId,
-                        IsPrimary = isPrimary,
+                        IsPRIMARY = isPrimary,
                         Type = type
                     };
                 da.Insert(phone);
@@ -82,7 +82,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableSecurityException();
                 phone.DigitOnlyValue = DigitsOnly(value);
                 phone.Value = value;
-                phone.IsPrimary = isPrimary;
+                phone.IsPRIMARY = isPrimary;
                 phone.Type = type;
                 da.Update(phone);
                 uow.Commit();

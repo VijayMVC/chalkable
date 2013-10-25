@@ -21,7 +21,7 @@ namespace Chalkable.Web.Models
                        {
                            Id =  phone.Id,
                            Value = phone.Value,
-                           IsPrimary = phone.IsPrimary,
+                           IsPrimary = phone.IsPRIMARY,
                            Type = (int)phone.Type
                        };
         }

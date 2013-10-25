@@ -8,14 +8,13 @@ namespace Chalkable.Data.School.Model
 {
     public  class Phone
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public const string PERSON_REF_FIELD = "PersonRef";
-        public Guid PersonRef { get; set; }
+        public int PersonRef { get; set; }
         public string Value { get; set; }
         public PhoneType Type { get; set; }
         public string DigitOnlyValue { get; set; }
-        public bool IsPrimary { get; set; }
-        public int? SisId { get; set; }
+        public bool IsPRIMARY { get; set; }
     }
 
     public enum PhoneType
