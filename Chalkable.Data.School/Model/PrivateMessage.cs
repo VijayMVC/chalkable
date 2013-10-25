@@ -8,9 +8,9 @@ namespace Chalkable.Data.School.Model
 {
     public class PrivateMessage
     {
-        public Guid Id { get; set; }
-        public Guid FromPersonRef { get; set; }
-        public Guid ToPersonRef { get; set; }
+        public int Id { get; set; }
+        public int FromPersonRef { get; set; }
+        public int ToPersonRef { get; set; }
         public DateTime? Sent { get; set; }
         public string Subject { get; set; }
         public string Body { get; set; }

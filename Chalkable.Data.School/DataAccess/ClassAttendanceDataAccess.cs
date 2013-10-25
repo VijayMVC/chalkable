@@ -87,7 +87,7 @@ namespace Chalkable.Data.School.DataAccess
                     attendance.Class.Id = attendance.ClassPerson.ClassRef;
                     attendance.ClassPeriodRef = attendance.ClassPeriod.Id;
                     attendance.ClassPeriod.PeriodRef = attendance.ClassPeriod.Period.Id;
-                    attendance.ClassPersonRef = attendance.ClassPerson.Id;
+                    //attendance.ClassPersonRef = attendance.ClassPerson.Id;
                     attendance.ClassPeriod.ClassRef = attendance.Class.Id;
                     res.Add(attendance);
                 }

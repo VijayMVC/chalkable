@@ -5,24 +5,25 @@ namespace Chalkable.Data.School.Model
     public class Notification
     {
         public const string ID_FIELD = "Id";
-        public Guid Id { get; set; }
         public const string TYPE_FIELD = "Type";
+        public const string SHOWN_FIELD = "Shown";
+        public const string CREATED_FIELD = "Created";
+        public const string PERSON_REF_FIELD = "PersonRef";
+        public const string CLASS_PERIOD_REF_FIELD = "ClassPeriodRef";
+        
+        public int Id { get; set; }
         public NotificationType Type { get; set; }
         public string Message { get; set; }
-        public const string SHOWN_FIELD = "Shown";
         public bool Shown { get; set; }
-        public const string CREATED_FIELD = "Created";
         public DateTime Created { get; set; }
         public bool WasSend { get; set; }
-        public const string PERSON_REF_FIELD = "PersonRef";
-        public Guid PersonRef { get; set; }
-        public Guid? AnnouncementRef { get; set; }
-        public Guid? PrivateMessageRef { get; set; }
+        public int PersonRef { get; set; }
+        public int? AnnouncementRef { get; set; }
+        public int? PrivateMessageRef { get; set; }
         public Guid? ApplicationRef { get; set; }
-        public Guid? QuestionPersonRef { get; set; }
-        public Guid? MarkingPeriodRef { get; set; }
-        public const string CLASS_PERIOD_REF_FIELD = "ClassPeriodRef";
-        public Guid? ClassPeriodRef { get; set; }
+        public int? QuestionPersonRef { get; set; }
+        public int? MarkingPeriodRef { get; set; }
+        public int? ClassPeriodRef { get; set; }
     }
 
 

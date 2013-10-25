@@ -8,8 +8,8 @@ namespace Chalkable.Data.School.Model.ApplicationInstall
 {
     public  class ApplicationInstallActionDepartment
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public Guid DepartmentRef { get; set; }
-        public Guid AppInstallActionRef { get; set; }
+        public int AppInstallActionRef { get; set; }
     }
 }

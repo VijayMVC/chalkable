@@ -7,12 +7,15 @@ namespace Chalkable.Data.School.Model
     public class AnnouncementType
     {
         public const string ID_FIELD = "Id";
+        public const string GRADABLE_FIELD_NAME = "Gradable";
+        
         public int Id { get; set; }
         public bool IsSystem { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public bool Gradable { get; set; }
-        public const string GRADABLE_FIELD_NAME = "Gradable";
+        public int Percentage { get; set; }
+
         [NotDbFieldAttr]
         public bool CanCreate { get; set; }
         [NotDbFieldAttr]

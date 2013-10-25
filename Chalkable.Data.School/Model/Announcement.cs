@@ -13,19 +13,20 @@ namespace Chalkable.Data.School.Model
     public class Announcement
     {
         public const string ID_FIELD = "Id";
-        public Guid Id { get; set; }
         public const string PERSON_REF_FIELD = "PersonRef";
-        public Guid PersonRef { get; set; }
         public const string CONTENT_FIELD = "Content";
-        public string Content { get; set; }
         public const string CREATED_FIELD = "Created";
+     
+        public int Id { get; set; }
+        public int PersonRef { get; set; }
+        public string Content { get; set; }
         public DateTime Created { get; set; }
         public DateTime Expires { get; set; }
-        public int AnnouncementTypeRef { get; set; }
+        public int? ClassAnnouncementTypeRef { get; set; }
         public AnnouncementState State { get; set; }
         public GradingStyleEnum GradingStyle { get; set; }
         public string Subject { get; set; }
-        public Guid? MarkingPeriodClassRef { get; set; }
+        public int? ClassRef { get; set; }
         public int Order { get; set; }
         public bool Dropped { get; set; }
     }
@@ -33,17 +34,15 @@ namespace Chalkable.Data.School.Model
 
     public class AnnouncementComplex : Announcement
     {
-        public string AnnouncementTypeName { get; set; }
+        public string ClassAnnouncementTypeName { get; set; }
+        public int AnnouncementType { get; set; }
         public string PersonName { get; set; }
         public string Gender { get; set; }
 
-        public Guid? ClassId { get; set; }
         public string ClassName { get; set; }
-        public Guid? GradeLevelId { get; set; }
-        public Guid? CourseId { get; set; }
-
-        public Guid? MarkingPeriodId { get; set; }
-
+        public int? GradeLevelId { get; set; }
+        
+        
         public int QnACount { get; set; }
         public int StudentsCount { get; set; }
         public int AttachmentsCount { get; set; }
@@ -66,7 +65,7 @@ namespace Chalkable.Data.School.Model
         {
             get
             {
-                if (AnnouncementTypeRef == (int)SystemAnnouncementType.Admin)
+                if (!ClassAnnouncementTypeRef.HasValue)
                 {
                     return Subject;
                 }
@@ -82,7 +81,7 @@ namespace Chalkable.Data.School.Model
         {
             get
             {
-               var systemType = new AnnouncementType {Id = AnnouncementTypeRef, Name = AnnouncementTypeName}.SystemType;
+                var systemType = new AnnouncementType { Id = AnnouncementType, Name = ClassAnnouncementTypeName }.SystemType;
                return (systemType == SystemAnnouncementType.Essay
                     || systemType == SystemAnnouncementType.Final
                     || systemType == SystemAnnouncementType.Test
@@ -96,7 +95,7 @@ namespace Chalkable.Data.School.Model
         }
       
     }
-
+    //TODO: remove final grade status
     public class AnnouncementDetails : AnnouncementComplex
     {
         public int? FinalGradeStatus { get; set; }

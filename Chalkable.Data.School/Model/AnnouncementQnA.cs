@@ -9,9 +9,9 @@ namespace Chalkable.Data.School.Model
 {
     public class AnnouncementQnA
     {
-        public Guid Id { get; set; }
-        public Guid AnnouncementRef { get; set; }
-        public Guid PersonRef { get; set; }
+        public int Id { get; set; }
+        public int AnnouncementRef { get; set; }
+        public int PersonRef { get; set; }
         public string Question { get; set; }
         public string Answer { get; set; }
         public AnnouncementQnAState State { get; set; }
@@ -32,7 +32,7 @@ namespace Chalkable.Data.School.Model
             set
             {
                 asker = value;
-                if (PersonRef == Guid.Empty && asker != null)
+                if (PersonRef == 0 && asker != null)
                     PersonRef = asker.Id;
             }
         }

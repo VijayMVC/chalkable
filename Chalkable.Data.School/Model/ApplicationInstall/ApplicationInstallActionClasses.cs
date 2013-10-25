@@ -8,9 +8,10 @@ namespace Chalkable.Data.School.Model.ApplicationInstall
 {
     public class ApplicationInstallActionClasses
     {
-        public Guid Id { get; set; }
         public const string CLASS_REF_FIELD = "ClassRef";
-        public Guid ClassRef { get; set; }
-        public Guid AppInstallActionRef { get; set; }
+      
+        public Guid Id { get; set; }
+        public int ClassRef { get; set; }
+        public int AppInstallActionRef { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace Chalkable.Data.School.DataAccess
             parameters.Add("@teacherId", query.TeacherId);
             parameters.Add("@classId", query.ClassId);
             parameters.Add("@callerRoleId", query.CallerRoleId);
-            
+            parameters.Add("@schoolId", query.);
 
             string filter1 = null;
             string filter2 = null;
@@ -72,7 +72,8 @@ namespace Chalkable.Data.School.DataAccess
                 {
                     {"personId", personId},
                     {"callerId", callerId},
-                    {"callerRoleId", callerRoleId}
+                    {"callerRoleId", callerRoleId},
+                    {"schoolId", null}
                 };
             using (var reader = ExecuteStoredProcedureReader("spGetPersonDetails", parameters))
             {
@@ -100,8 +101,6 @@ namespace Chalkable.Data.School.DataAccess
         {
             var res = ReadPersonData(reader);
             reader.NextResult();
-            res.Addresses = reader.ReadList<Address>();
-            reader.NextResult();
             res.Phones = reader.ReadList<Phone>();
             return res;
         }
@@ -111,11 +110,12 @@ namespace Chalkable.Data.School.DataAccess
             if (reader != null)
             {
                 var res = reader.Read<PersonDetails>();
+                res.Addresses = reader.Read<Address>(true);
                 if (res.RoleRef == CoreRoles.STUDENT_ROLE.Id)
                 {
-                    res.StudentInfo = reader.Read<StudentInfo>();
-                    res.StudentInfo.GradeLevel = reader.Read<GradeLevel>(true);
-                    res.StudentInfo.GradeLevelRef = res.StudentInfo.GradeLevel.Id;
+                    //res.StudentInfo = reader.Read<StudentInfo>();
+                    //res.StudentInfo.GradeLevel = reader.Read<GradeLevel>(true);
+                    //res.StudentInfo.GradeLevelRef = res.StudentInfo.GradeLevel.Id;
                 }
                 return res;
             }
@@ -124,7 +124,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public void AddStudent(Guid id, Guid gradeLevelId)
         {
-            SimpleInsert(new StudentInfo{GradeLevelRef = gradeLevelId, Id = id});
+            //SimpleInsert(new StudentInfo{GradeLevelRef = gradeLevelId, Id = id});
         }
 
         public void RepopulateDemoIds(string prefix)
@@ -141,12 +141,13 @@ namespace Chalkable.Data.School.DataAccess
         public int Start { get; set; }
         public int Count { get; set; }
         public int? RoleId { get; set; }
-        public Guid? ClassId { get; set; }
-        public Guid? TeacherId { get; set; }
-        public Guid? PersonId { get; set; }
-        public Guid? CallerId { get; set; }
+        public int? ClassId { get; set; }
+        public int? TeacherId { get; set; }
+        public int? PersonId { get; set; }
+        public int? CallerId { get; set; }
         public int CallerRoleId { get; set; }
-        
+        public int? SchoolId { get; set; }
+
         public string StartFrom { get; set; }
         public string Filter { get; set; }
         public IEnumerable<Guid> GradeLevelIds { get; set; }

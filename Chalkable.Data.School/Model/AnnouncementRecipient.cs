@@ -9,14 +9,15 @@ namespace Chalkable.Data.School.Model
 {
     public class AnnouncementRecipient
     {
-        public Guid Id { get; set; }
-        public Guid AnnouncementRef { get; set; }
         public const string ANNOUNCEMENT_REF_FIELD = "announcementRef";
 
+        public int Id { get; set; }
+        public int AnnouncementRef { get; set; }
+        
         public bool ToAll { get; set; }
         public int? RoleRef { get; set; }
-        public Guid? GradeLevelRef { get; set; }
-        public Guid? PersonRef { get; set; }
+        public int? GradeLevelRef { get; set; }
+        public int? PersonRef { get; set; }
 
         [DataEntityAttr]
         public Person Person { get; set; }

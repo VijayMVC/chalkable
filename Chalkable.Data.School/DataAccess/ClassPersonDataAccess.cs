@@ -20,8 +20,6 @@ namespace Chalkable.Data.School.DataAccess
         public QueryCondition BuildConditioins(ClassPersonQuery query)
         {
             var conds = new AndQueryCondition();
-            if(query.Id.HasValue)
-                conds.Add(ClassPerson.ID_FIELD, query.Id);
             if(query.ClassId.HasValue)
                 conds.Add(ClassPerson.CLASS_REF_FIELD, query.ClassId);
             if(query.PersonId.HasValue)
@@ -52,7 +50,6 @@ namespace Chalkable.Data.School.DataAccess
 
     public class ClassPersonQuery
     {
-        public Guid? Id { get; set; }
         public Guid? ClassId { get; set; }
         public Guid? PersonId { get; set; }
     }

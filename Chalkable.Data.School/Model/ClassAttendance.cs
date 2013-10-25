@@ -10,9 +10,9 @@ namespace Chalkable.Data.School.Model
     public class ClassAttendance
     {
         public Guid Id { get; set; }
-        public Guid ClassPersonRef { get; set; }
+        public int ClassPersonRef { get; set; }
         public const string CLASS_PERIOD_REF_FIELD = "ClassPeriodRef";
-        public Guid ClassPeriodRef { get; set; }
+        public int ClassPeriodRef { get; set; }
         public Guid? AttendanceReasonRef { get; set; }
         public string Description { get; set; }
         public const string TYPE_FIELD = "Type";
@@ -36,8 +36,8 @@ namespace Chalkable.Data.School.Model
             set
             {
                 person = value;
-                if (value != null && value.Id != Guid.Empty)
-                    ClassPersonRef = value.Id;
+                //if (value != null && value.Id != Guid.Empty)
+                //    ClassPersonRef = value.Id;
             }
         }
 

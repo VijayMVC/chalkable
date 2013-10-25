@@ -28,9 +28,9 @@ namespace Chalkable.Data.School.Model
         public DateTime? FirstLoginDate { get; set; }
         public int RoleRef { get; set; }
         public DateTime? LastMailNotification { get; set; }
-        public int? SisId { get; set; }
         public string Email { get; set; }
-        
+        public int? AddressRef { get; set; }
+
         [NotDbFieldAttr]
         public string FullName
         {
@@ -91,7 +91,17 @@ namespace Chalkable.Data.School.Model
 
     public class PersonDetails : Person
     {
-        public Address Addresses { get; set; }
+        public Address address;
+        public Address Addresses
+        {
+            get { return address; } 
+            set
+            {
+                address = value;
+                if (value != null && value.Id != 0)
+                    AddressRef = address.Id;
+            }
+        }
         public IList<Phone> Phones { get; set; } 
     }
 }

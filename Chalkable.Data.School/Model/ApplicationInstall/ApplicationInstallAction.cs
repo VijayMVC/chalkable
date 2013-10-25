@@ -9,10 +9,11 @@ namespace Chalkable.Data.School.Model.ApplicationInstall
 {
     public class ApplicationInstallAction
     {
-        public Guid Id { get; set; }
         public const string OWNER_REF_FIELD = "OwnerRef";
-        public Guid OwnerRef { get; set; }
-        public Guid? PersonRef { get; set; }
+      
+        public int Id { get; set; }
+        public int OwnerRef { get; set; }
+        public int? PersonRef { get; set; }
         public Guid ApplicationRef { get; set; }
         public string Description { get; set; }
 
