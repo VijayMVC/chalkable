@@ -84,7 +84,7 @@
 
   > SPAN {
     > SPAN {
-      display: block;
+      display: inline-block;
       > BUTTON {
         background: none;
         border: 0 none;
@@ -115,11 +115,11 @@
   > SPAN {
     min-height: 54px;
     padding-right: 21px;
-    display: block;
+    display: inline-block;
     background-repeat: no-repeat;
     background-position: right 0px;
     > SPAN {
-      display: block;
+      display: inline-block;
       background-repeat: repeat-x;
       height: 54px;
       > BUTTON {
@@ -241,11 +241,11 @@
   > SPAN {
     min-height: 33px;
     padding-right: 9px;
-    display: block;
+    display: inline-block;
     background-repeat: no-repeat;
     > SPAN {
       min-height: 33px;
-      display:block;
+      display:inline-block;
       background-repeat: repeat-x;
       > BUTTON {
         height: 30px;

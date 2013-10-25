@@ -7,7 +7,7 @@ mixin Button()
     isDisabled = (attributes.disabled===true ? "disabled" : undefined);
 
 
-    span.chlk-button(attributes)
+    div.chlk-button(attributes)
         span
             span
                 button(type=type, name=name, value=value, disabled=isDisabled)

@@ -7,31 +7,34 @@ each item, i in self.getAnnouncementQnAs()
                 +PersonImg(item.getQuestion().getPerson(), 47)
             .qna.i-b
                 h2= item.getQuestion().getPerson().getFirstName()
-                p#edit-question-text= item.getQuestion().getMessage()
-                input(type="text",name="question", value=item.getQuestion().getMessage())#edit-question-input.x-hidden
-                +Button()(type="submit").special-button.blue-button.submit-btn.x-hidden#edit-question-btn Update
-                span= self.convertWith(item.getQuestion().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
-                if self.annOwner
-                    a(href='javascript:', name='edit-question-link')#edit-question-link Edit
-                    a(href='javascript:', name='cancel-question-link')#cancel-question-link.x-hidden cancel
+                .edit-question-block
+                    p.edit-question-text= item.getQuestion().getMessage()
+                    span= self.convertWith(item.getQuestion().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
+                    if self.annOwner
+                        a(href='javascript:', name='edit-question-link').edit-question-link=Msg.Edit
+                        //a(href='javascript:', name='cancel-question-link').cancel-question-link cancel
+                input(type="text",name="question", value=item.getQuestion().getMessage()).edit-question-input
+                br
+                +Button()(type="submit").special-button.blue-button.submit-btn.edit-question-btn=Msg.Update.toUpperCase()
 
-
-        .row
-            answered = (item.getState() == chlk.models.announcement.QnAState.ANSWERED)
-            hideEdit = answered || !self.annOwner
-            .avatar-container.i-b
-                +PersonImg(item.getAnswer().getPerson(), 47)
-            .qna.i-b
-                h2= item.getAnswer().getPerson().getFirstName()
-                p(class = hideEdit ? "" : "x-hidden")#edit-answer-text= item.getAnswer().getMessage()
-                input(type="text",name="answer", value=item.getAnswer().getMessage()
-                    , class=hideEdit ? "x-hidden validate[required]" : "validate[required]")#edit-answer-input
-                +Button()(type="submit"
-                    , class=hideEdit ? "special-button blue-button submit-btn x-hidden" : "special-button blue-button submit-btn")#edit-answer-btn Update
-                span= self.convertWith(item.getAnswer().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
-                if answered && self.annOwner
-                    a(href='javascript:', name='edit-answer-link')#edit-answer-link Edit
-                    a(href='javascript:', name='cancel-answer-link')#cancel-answer-link.x-hidden cancel
+        answered = (item.getState() == chlk.models.announcement.QnAState.ANSWERED)
+        if answered || self.getUserRole().isTeacher()
+            .row
+                hideEdit = answered || !self.annOwner
+                .avatar-container.i-b
+                    +PersonImg(item.getAnswer().getPerson(), 47)
+                .qna.i-b
+                    h2= item.getAnswer().getPerson().getFirstName()
+                    .edit-answer-block
+                        p(class = hideEdit ? "" : "x-hidden").edit-answer-text= item.getAnswer().getMessage()
+                        span= self.convertWith(item.getAnswer().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
+                        if answered && self.annOwner
+                            a(href='javascript:', name='edit-answer-link').edit-answer-link=Msg.Edit
+                        //a(href='javascript:', name='cancel-answer-link').cancel-answer-link cancel
+                    input(type="text",name="answer", value=item.getAnswer().getMessage()
+                        , class=hideEdit ? "x-hidden validate[required]" : "validate[required]").edit-answer-input
+                    br
+                    +Button()(type="submit", class="special-button blue-button submit-btn").edit-answer-btn=Msg.Update.toUpperCase()
 
 if !self.annOwner
     +ActionForm('announcement', 'askQuestion')

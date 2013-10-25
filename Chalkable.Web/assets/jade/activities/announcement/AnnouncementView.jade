@@ -53,7 +53,9 @@ mixin AppAttachmentBlock(item, pictureHref, i)
                                 userRole = self.getUserRole()
                             )
             .questions-and-answers.silver-panel
-                +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementQnAs)
+                +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementQnAs)(
+                    userRole = self.getUserRole()
+                )
             .grading-part
                 if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length
                     +RenderWith(studentAnnouncementsInfo, chlk.templates.announcement.AnnouncementGradingPartTpl)(
