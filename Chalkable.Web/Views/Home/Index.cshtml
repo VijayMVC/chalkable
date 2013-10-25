@@ -1,0 +1,249 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Chalkable";
+}
+
+@section Styles {
+    <link href="@Url.StaticContent("/Content/reset.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.StaticContent("/Content/screen-index.css")" rel="stylesheet" type="text/css" />
+}
+
+
+
+@section ContentSection {
+<div id="wrapper">
+    @ChlkHelpers.RenderSignInForm(Url, Html)
+    <div class="tab" id="signinanchor">
+	    <ul class="login">
+		    <li id="toggle"><button id="open" class="toplogin open">Sign in </button></li>
+	    </ul>
+    </div> <div class="content clearfix"></div>
+    <!-- / top -->
+    
+<!--Splash-->
+<div class="michaels_border"></div>
+	<section class="splash">
+
+        <div class="logotop">
+            <a href="#start" class="scroll"><img src="@Url.StaticContent("/Content/images/common/logo_bigger.png")" alt="logo"></a>
+        </div>
+
+        <div id="vidyard_container">
+            <div class="vidyard_wrapper">
+                <a href="http://www.youtube.com/embed/IsY9NJWf1nY?rel=0;autoplay=1" rel="media-gallery" class="fancybox-media">
+                    <div class = "vidyard_play_button"></div>
+                    <img alt="Chalkable" src="@Url.StaticContent("/Content/images/index/main_vid_placeholder_image.png")" width="503" />
+                </a>
+            </div>
+        </div>
+
+
+	<div class="titletext">
+		<h1>Web apps for your school.</h1>
+		<h3 class="syncs">Syncs with
+            <span class="cycle" style="display:none">
+                <span class="sis_name" style="position:absolute; width: 200px;"><i class="underlines">POWER SCHOOL</i>.</span>
+                <span class="sis_name" style="position:absolute; width: 200px;"><i class="underlines">ESCHOOL DATA</i>.</span>
+                <span class="sis_name" style="position:absolute; width: 200px;"><i class="underlines">INFINITE CAMPUS</i>.</span>
+                <span class="sis_name" style="position:absolute; width: 200px;"><i class="underlines">FOCUS SIS</i>.</span>
+                <span class="sis_name" style="position:absolute; width: 200px;"><i class="underlines">ILLUMINATE</i>.</span>
+                <span class="sis_name" style="position:absolute; width: 200px;"><i class="underlines">IPASS</i>.</span>
+                <span class="sis_name" style="position:absolute; width: 200px;"><i class="underlines">GRADESPEED</i>.</span>
+                <span class="sis_name" style="position:absolute; width: 200px;"><i class="underlines">LUMENS</i>.</span>
+                <span class="sis_name" style="position:absolute; width: 200px;"><i class="underlines">SKYWARD</i>.</span>
+            </span>
+
+        </h3>
+		<h3 class="syncs">Instant setup.</h3>
+		<h3 class="syncs">$10 a student.</h3>
+		<h4 class="try">*Try it free with up to 5 teachers. $10 a student when you love it & want it for everyone.</h4>
+		<h4 class="admins">Admins and teachers get $5 back per student to buy apps from day one.</h4>
+			<div id="floatingbuttons">
+				<a href="@Url.Content("~/DemoSchool/Index")" class="demo-button" ></a>
+				<a href="@Url.Content("~/SignUp/Admin")" class="signup-button" ></a>
+			</div>
+	</div>
+	</section>
+<!--End Splash-->
+
+	<div id="demo_top_wrapper" class="index">
+		<div id="sticky-anchor"><a style="margin-top: 4px;" id="first-anchor"></a>
+		</div>
+		<div id="sticky_navigation_wrapper">
+			<div id="sticky_navigation">
+				<div class="demo_container">
+					<ul id="nav1">
+						<li><a href="#signinanchor" class="scroll"><img src="@Url.StaticContent("/Content/images/common/nav-logo-150.png")" class="navlogo" alt="nav logo"></a></li>
+						<li id="overviewLI" class="active"><a id="nav_section1" href="#first-anchor" class="scroll">What You Get</a></li>
+						<li class="pricingLI"><a id="nav_section_two" href="#second_anchor" class="scroll">What it Costs</a></li>
+                        <li class="demoLI"><a href="@Url.Content("~/DemoSchool/Index")" >Demo</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!--Begin Overview  -->
+<a id="first-anchor"></a>
+	<section id="overview">
+	<div id="main_body_container">
+		<div class="top_price_section1">
+			<h3>What you get</h3>
+		</div>
+		<div class="wrapper">
+			<div id="body_container">
+				<div class="details_box">
+					<div class="contents">
+						<div class="details">
+							<h3>App Store</h3>
+							<p>
+								Amazing digital tools and content can transform the way students learn in school.
+							</p>
+							<p>
+								The Chalkable app store lists the best education apps from across the web. You can browse apps by category, such as History, Math, Science, and more. When you find an app you like, click to buy it.
+							</p>
+						</div>
+					</div>
+					<img src="@Url.StaticContent("/Content/images/index/app_store_upper.png")" alt="app store" class="app_store_img" />
+				</div>
+				<div class="details_box" id="lowerdetail">
+					<div class="image_box">
+						<img src="@Url.StaticContent("/Content/images/index/platform_img.png")" alt="platform"/>
+					</div>
+					<div class="contents">
+						<div class="details">
+							<h3>The Platform</h3>
+							<p>
+								Lots of Apps. One login. One calendar. One gradebook. It all just works.
+							</p>
+							<p>
+								The Chalkable platform is a basic set of tools for students, teachers, admins, and parents. We built the Feed, Calendar, Grading, Messaging and more to make using Apps simple.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    </section>
+<!--END Overview  -->
+
+<div id="sticky-anchor-pricing"></div>
+<br>
+<a id="second_anchor" class="section"></a>
+<!--begin PRICING -->
+<section id="pricing"><br>
+<div id="main_body_container">
+	<div class="wrapper">
+		<div id="body_container">
+			<div class="top_price_section">
+				<h3>WHAT IT COSTS</h3>
+
+			</div>
+			<div id="price_slider_content">
+				<div class="col1">
+					<h3>Parent</h3>
+					<ul class="listing">
+						<li><span>Stay informed.</span></li>
+						<li><span>Important updates.</span></li>
+						<li><span>No setup, at all.</span></li>
+					</ul>
+					<h5>$0</h5>
+				</div>
+				<div class="col1">
+					<h3>Teacher</h3>
+					<ul class="listing">
+						<li><span>Connect with students.</span></li>
+						<li><span>Amazing apps.</span></li>
+						<li><span>No training session.</span></li>
+					</ul>
+					<h5>$0</h5>
+				</div>
+				<div class="col2">
+					<h3>Student</h3>
+					<ul class="listing">
+						<li><span>Organized by default.</span></li>
+						<li class="mid"><span>$5 app budget.</span><small>Just the start.</small></li>
+						<li class="last"><span>No homework pad.</span></li>
+					</ul>
+					<h5><span>$10</span><small>For a whole year.</small></h5>
+				</div>
+				<div class="col1">
+					<h3>Admin</h3>
+					<ul class="listing">
+						<li><span>Manage it all.</span></li>
+						<li><span>Gorgeous analytics.</span></li>
+						<li><span>No contract.</span></li>
+					</ul>
+					<h5>$0</h5>
+				</div>
+				<div class="col1">
+					<h3>District</h3>
+					<ul class="listing">
+						<li><span>Know it all.</span></li>
+						<li><span>Trends.</span></li>
+						<li><span>No data left behind.</span></li>
+					</ul>
+					<h5>$0</h5>
+				</div>
+			</div>
+			<div class="price_bott_section">
+				<h3>ARE YOU READY?</h3>
+				<ul class="btn_grp">
+					<div id="lowerbuttons" class="index" style="padding-bottom: 30px;">
+                        <a href="@Url.Content("~/DemoSchool/Index")" class="demo-button"></a>
+                        <a href="@Url.Content("~/SignUp/Admin")" class="signup-button"></a>
+					</div>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+</section>
+<!--  END PRICING  -->
+</div>
+<!--wrapper-->
+
+}
+
+@Html.Partial("Footer")
+
+@section BottomScripts {
+
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/all_not_minified.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.waypoints.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.cycle.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.fancybox.js")"></script>
+    
+
+}
+
+@section MixPanelTracking {
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("a > .demo-button , #floatingbuttons > a.demo-button").click(function () {
+                mixpanel.track("Demo Button clicked");
+            });
+
+            $("li.demoLI a").click(function () {
+                mixpanel.track("Navbar Demo Button clicked");
+            });
+
+            $("a > .signup-button , #floatingbuttons > a.signup-button").click(function () {
+                mixpanel.track("Signup Button clicked");
+            });
+
+            mixpanel.track_links("a > .demo-button", "Demo Button clicked", { 'referrer': document.referrer });
+            mixpanel.track_links("a > .signup-button", "Signup Button clicked", { 'referrer': document.referrer });
+            mixpanel.track_pageview("/Account/LogOn.html");
+
+            mixpanel.track_pageview("/SignUp/Admin");
+            mixpanel.track_pageview("/SignUp/AdminSisInfo");
+            mixpanel.track_pageview("/Account/Terms");
+            mixpanel.track_pageview("/Account/Developers");
+            mixpanel.track_pageview("/Account/FAQ");
+        });
+    </script>   
+}
