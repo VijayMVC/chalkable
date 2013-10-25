@@ -1,3 +1,4 @@
+using System;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Data.Master.Model;
@@ -10,24 +11,21 @@ namespace Chalkable.BackgroundTaskProcessor
         public bool Handle(BackgroundTask task, BackgroundTaskService.BackgroundTaskLog log)
         {
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
+
+            var districtId = Guid.Parse(task.Data);
             
+            var district = sl.DistrictService.GetByIdOrNull(districtId);
             
-            /*var schoolId = data.SchoolId;
-            var school = sl.SchoolService.GetById(schoolId);
-            
-            var district = sl.DistrictService.GetByIdOrNull(school.DistrictRef);
-            
-            var connectionInfo = new SisConnectionInfo
+            var info = new SisConnectionInfo
                 {
                     DbName = district.DbName,
                     SisPassword = district.SisPassword,
                     SisUrl = district.SisUrl,
                     SisUserName = district.SisUserName
                 };
-
-            var importService = new ImportService(schoolId, data.SisSchoolId, data.SchoolYearIds, connectionInfo, log);
+            var importService = new ImportService(districtId, info, log);
             importService.ImportPeople(null);
-            importService.ImportSchedule(null);*/
+            importService.ImportSchedule(null);
             return true;
         }
     }

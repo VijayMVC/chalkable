@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using Chalkable.Common;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 
 namespace Chalkable.BusinessLogic.Services.Master
@@ -12,6 +10,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         Data.Master.Model.School GetByIdOrNull(Guid id);
         void Update(Data.Master.Model.School school);
         PaginatedList<Data.Master.Model.School> GetSchools(Guid districtId, int start, int count);
+        void Add(Guid districtId, int localId, string name);
     }
 
     public class SchoolService : MasterServiceBase, ISchoolService
@@ -35,6 +34,22 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new SchoolDataAccess(uow);
                 return da.GetSchools(districtId, start, count);
+            }
+        }
+
+        public void Add(Guid districtId, int localId, string name)
+        {
+            using (var uow = Update())
+            {
+                var school = new Data.Master.Model.School
+                    {
+                        DistrictRef = districtId,
+                        Id = Guid.NewGuid(),
+                        LocalId = localId,
+                        Name = name
+                    };
+                new SchoolDataAccess(uow).Insert(school);
+                uow.Commit();
             }
         }
 
