@@ -13,6 +13,7 @@ NAMESPACE('chlk.activities.admin', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function chartHoverStart(node, event) {
                 node.parent('.chart-block').find('.chart-container').trigger(event.type);
+                return false;
             }
         ]);
 });

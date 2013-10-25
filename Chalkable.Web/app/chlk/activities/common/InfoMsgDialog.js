@@ -21,6 +21,7 @@ NAMESPACE('chlk.activities.common', function () {
             Boolean, function onBtnClick(node, event) {
                 this.close();
                 event.preventDefault();
+                return false;
             }
          ]);
  });
