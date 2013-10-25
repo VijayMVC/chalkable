@@ -32,6 +32,7 @@ REQUIRE('chlk.controls.SelectControl');
 REQUIRE('chlk.controls.SlideCheckboxControl');
 REQUIRE('chlk.controls.TextAreaControl');
 REQUIRE('chlk.controls.VideoControl');
+REQUIRE('chlk.controls.PayCheckControl');
 
 REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.Role');

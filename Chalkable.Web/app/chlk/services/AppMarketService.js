@@ -1,5 +1,7 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('chlk.services.AppCategoryService');
+
+
 REQUIRE('ria.async.Future');
 
 REQUIRE('chlk.models.apps.AppGradeLevel');
@@ -9,7 +11,7 @@ REQUIRE('chlk.models.apps.AppMarketApplication');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.apps.AppInstallPostData');
 REQUIRE('chlk.models.people.Role');
-
+REQUIRE('chlk.models.apps.AppTotalPrice');
 
 REQUIRE('chlk.models.apps.AppPriceType');
 REQUIRE('chlk.models.apps.AppSortingMode');
@@ -213,6 +215,26 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function installApp(appId, departments, classes, roles, gradeLevels, currentPerson_) {
                 return this
                     .post('AppMarket/Install.json', Boolean, {
+                        applicationId: appId.valueOf(),
+                        personId: currentPerson_ && currentPerson_.valueOf(),
+                        departmentids: this.arrayToCsv(departments),
+                        classids: this.arrayToCsv(classes),
+                        roleIds: this.arrayToCsv(roles),
+                        gradelevelids: this.arrayToCsv(gradeLevels)
+                    });
+            },
+
+            [[
+                chlk.models.id.AppId,
+                ArrayOf(chlk.models.id.AppInstallGroupId),
+                ArrayOf(chlk.models.id.AppInstallGroupId),
+                ArrayOf(chlk.models.id.AppInstallGroupId),
+                ArrayOf(chlk.models.id.AppInstallGroupId),
+                chlk.models.id.AppInstallGroupId
+            ]],
+            ria.async.Future, function getApplicationTotalPrice(appId, departments, classes, roles, gradeLevels, currentPerson_) {
+                return this
+                    .post('AppMarket/GetApplicationTotalPrice.json', chlk.models.apps.AppTotalPrice, {
                         applicationId: appId.valueOf(),
                         personId: currentPerson_ && currentPerson_.valueOf(),
                         departmentids: this.arrayToCsv(departments),
