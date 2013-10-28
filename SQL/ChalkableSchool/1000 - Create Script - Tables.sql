@@ -56,7 +56,7 @@ ALTER TABLE SchoolPerson
 GO
 
 CREATE TABLE [dbo].[AnnouncementType](
-	[Id] INT PRIMARY KEY IDENTITY NOT NULL,
+	[Id] INT PRIMARY KEY NOT NULL,
 	[IsSystem] BIT NOT NULL,
 	[Name] NVARCHAR(255) NOT NULL,
 	[Description] NVARCHAR(1024) NULL,
@@ -295,10 +295,9 @@ CREATE TABLE Period
 	[Order] INT NOT NULL
 )
 GO
-
 CREATE TABLE ClassPeriod
 (
-	Id INT NOT NULL PRIMARY KEY IDENTITY,
+	Id INT NOT NULL PRIMARY KEY,
 	PeriodRef INT NOT NULL CONSTRAINT FK_ClassPeriod_Period FOREIGN KEY REFERENCES Period(Id),
 	DayTypeRef INT NOT NULL CONSTRAINT FK_ClassPeriod_DayType FOREIGN KEY REFERENCES DayType(Id),
 	ClassRef INT NOT NULL CONSTRAINT FK_ClassPeriod_Class FOREIGN KEY REFERENCES Class(Id),
@@ -455,3 +454,10 @@ go
 alter table Announcement
 add ClassAnnouncementTypeRef int null constraint FK_Announcement_ClassAnnouncementType foreign key references ClassAnnouncementType(Id)
 go
+
+
+alter table Room 
+add SchoolRef int not null constraint FK_Room_School foreign key references School(Id)
+go
+
+sp_RENAME 'Date.[Date]' , 'Day', 'COLUMN'
