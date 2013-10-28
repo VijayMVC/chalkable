@@ -9,7 +9,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
-    public abstract class AnnouncementDataAccess : DataAccessBase<Announcement>
+    public abstract class AnnouncementDataAccess : DataAccessBase<Announcement, int>
     {
         protected AnnouncementDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -97,8 +97,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
             return res;
         }
-   
-        public AnnouncementDetails Create(int announcementTypeId, Guid? classId, Guid markingPeriodId, DateTime created, Guid personId)
+
+        public AnnouncementDetails Create(int announcementTypeId, int? classId, int markingPeriodId, DateTime created, int personId)
         {
             var parameters = new Dictionary<string, object>
                 {
@@ -118,7 +118,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
         }
 
-        public void Delete(Guid? id, Guid? personId, Guid? classId, int? announcementTypeId, AnnouncementState? state)
+        public void Delete(int? id, int? personId, int? classId, int? announcementTypeId, AnnouncementState? state)
         {
             var parameters = new Dictionary<string, object>
                 {
@@ -132,8 +132,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         }
         
         public abstract AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query);
-        
-        public void ReorderAnnouncements(Guid schoolYearId, int announcementTypeId, Guid ownerId, Guid recipientId)
+
+        public void ReorderAnnouncements(int schoolYearId, int announcementTypeId, int ownerId, int recipientId)
         {
             var parameters = new Dictionary<string, object>
                 {
@@ -146,8 +146,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             {
             }
         }
- 
-        public AnnouncementDetails GetDetails(Guid id, Guid callerId, int? roleId)
+
+        public AnnouncementDetails GetDetails(int id, int callerId, int? roleId)
         {
             var parameters = new Dictionary<string, object>
                 {
@@ -160,8 +160,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 return BuildGetDetailsResult(reader);
             }
         }
-        
-        public IList<Person> GetAnnouncementRecipientPersons(Guid announcementId, Guid callerId)
+
+        public IList<Person> GetAnnouncementRecipientPersons(int announcementId, int callerId)
         {
             var parameters = new Dictionary<string, object>
                 {
@@ -177,9 +177,9 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 }
                 return res;
             }
-        } 
-       
-        public Announcement GetAnnouncement(Guid id, int roleId, Guid callerId)
+        }
+
+        public Announcement GetAnnouncement(int id, int roleId, int callerId)
         {
             var dbQuery = new DbQuery();
             dbQuery.Sql.Append("select Announcement.* from Announcement ");
@@ -189,10 +189,10 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             BuildConditionForGetSimpleAnnouncement(dbQuery, roleId, callerId);
             return ReadOneOrNull<Announcement>(dbQuery);
         }
-        
-        protected abstract void BuildConditionForGetSimpleAnnouncement(DbQuery dbQuery, int role, Guid callerId);
-        
-        public Announcement GetLastDraft(Guid personId)
+
+        protected abstract void BuildConditionForGetSimpleAnnouncement(DbQuery dbQuery, int role, int callerId);
+
+        public Announcement GetLastDraft(int personId)
         {
             var conds = new Dictionary<string, object>
                 {
@@ -205,7 +205,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
            return  ReadOneOrNull<Announcement>(new DbQuery (sql, conds));
         }
 
-        public IList<string> GetLastFieldValues(Guid personId, Guid classId, int announcementType, int count)
+        public IList<string> GetLastFieldValues(int personId, int classId, int announcementType, int count)
         {
             var conds = new Dictionary<string, object>
                 {
@@ -239,11 +239,11 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
     {
         public int Start { get; set; }
         public int Count { get; set; }
-        public Guid? Id { get; set; }
+        public int? Id { get; set; }
         public int? RoleId { get; set; }
-        public Guid? ClassId { get; set; }
-        public Guid? PersonId { get; set; }
-        public Guid? MarkingPeriodId { get; set; }
+        public int? ClassId { get; set; }
+        public int? PersonId { get; set; }
+        public int? MarkingPeriodId { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public DateTime? Now { get; set; }
@@ -252,7 +252,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public bool GradedOnly { get; set; }
         public bool AllSchoolItems { get; set; }
 
-        public IList<Guid> GradeLevelIds { get; set; }
+        public IList<int> GradeLevelIds { get; set; }
 
         public AnnouncementsQuery()
         {

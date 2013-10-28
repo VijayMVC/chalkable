@@ -9,7 +9,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class NotificationDataAccess : DataAccessBase<Notification>
+    public class NotificationDataAccess : DataAccessBase<Notification, int>
     {
         public NotificationDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -139,13 +139,13 @@ namespace Chalkable.Data.School.DataAccess
 
     public class NotificationQuery
     {
-        public Guid? Id { get; set; }
-        public Guid PersonId { get; set; }
+        public int? Id { get; set; }
+        public int? PersonId { get; set; }
         public bool? Shown { get; set; }
         public int Start { get; set; }
         public int Count { get; set; }
         public NotificationType? Type { get; set; }
-        public Guid? ClassPeriodRef { get; set; }
+        public int? ClassPeriodRef { get; set; }
 
         public NotificationQuery()
         {

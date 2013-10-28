@@ -7,7 +7,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class AnnouncementReminderDataAccess : DataAccessBase<AnnouncementReminder>
+    public class AnnouncementReminderDataAccess : DataAccessBase<AnnouncementReminder, int>
     {
         public AnnouncementReminderDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -18,13 +18,13 @@ namespace Chalkable.Data.School.DataAccess
             SimpleDelete(announcementReminder);
         }
 
-        public void DeleteByAnnouncementId(Guid announcementId)
+        public void DeleteByAnnouncementId(int announcementId)
         {
             var conds = new AndQueryCondition {{AnnouncementReminder.ANNOUNCEMENT_REF_FIELD, announcementId}};
             SimpleDelete<AnnouncementReminder>(conds);
         }
 
-        public AnnouncementReminder GetById(Guid id, Guid personId)
+        public AnnouncementReminder GetById(int id, int personId)
         {
             var conds = new AndQueryCondition {{AnnouncementReminder.ID_FIELD, id}};
             var res = GetReminders(conds, personId);
@@ -58,7 +58,7 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        private IList<AnnouncementReminder> GetReminders(QueryCondition conds, Guid personId)
+        private IList<AnnouncementReminder> GetReminders(QueryCondition conds, int personId)
         {
 
             var annRType = typeof(AnnouncementReminder);
@@ -70,9 +70,9 @@ namespace Chalkable.Data.School.DataAccess
                              or (AnnouncementReminder.PersonRef = @personId))");
             dbQuery.Parameters.Add("@personId", personId);
             return Read(dbQuery);
-        } 
-        
-        public IList<AnnouncementReminder> GetList(Guid announcementId, Guid personId)
+        }
+
+        public IList<AnnouncementReminder> GetList(int announcementId, int personId)
         {
             var conds = new AndQueryCondition {{AnnouncementReminder.ANNOUNCEMENT_REF_FIELD, announcementId}};
             return GetReminders(conds, personId);

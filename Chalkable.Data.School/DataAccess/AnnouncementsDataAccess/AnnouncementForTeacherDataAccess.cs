@@ -23,7 +23,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 };
             return GetAnnouncementsComplex(GET_TEACHER_ANNOUNCEMENTS, parameters, query);
         }
-        protected override void BuildConditionForGetSimpleAnnouncement(Common.Orm.DbQuery dbQuery, int role, Guid callerId)
+        protected override void BuildConditionForGetSimpleAnnouncement(Common.Orm.DbQuery dbQuery, int role, int callerId)
         {
             dbQuery.Sql.Append(" and ");
             dbQuery.Sql.Append(@" (Announcement.PersonRef = @callerId 

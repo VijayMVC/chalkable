@@ -7,7 +7,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class StudentParentDataAccess : DataAccessBase<StudentParent>
+    public class StudentParentDataAccess : DataAccessBase<StudentParent, int>
     {
         public StudentParentDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -20,7 +20,7 @@ namespace Chalkable.Data.School.DataAccess
 
 
 
-        public IList<StudentParentDetails> GetParents(Guid studentId, Guid callerId, int callerRoleId)
+        public IList<StudentParentDetails> GetParents(int studentId, int callerId, int callerRoleId)
         {
             var parameters = new Dictionary<string, object>
                 {

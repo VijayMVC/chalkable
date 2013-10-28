@@ -9,7 +9,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class AnnouncementAttachmentDataAccess : DataAccessBase<AnnouncementAttachment>
+    public class AnnouncementAttachmentDataAccess : DataAccessBase<AnnouncementAttachment, int>
     {
 
 
@@ -17,18 +17,18 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public AnnouncementAttachment GetById(Guid id, Guid callerId, int roleId)
+        public AnnouncementAttachment GetById(int id, int callerId, int roleId)
         {
-            var conds = new AndQueryCondition() { { AnnouncementAttachment.ID_FIELD, id } };
+            var conds = new AndQueryCondition { { AnnouncementAttachment.ID_FIELD, id } };
             return GetAnnouncementAttachments(conds, callerId, roleId).First();
         }
 
-        public IList<AnnouncementAttachment> GetList(Guid callerId, int roleId, string filter = null)
+        public IList<AnnouncementAttachment> GetList(int callerId, int roleId, string filter = null)
         {
             return GetAnnouncementAttachments(new AndQueryCondition(), callerId, roleId, filter);
         }
 
-        public PaginatedList<AnnouncementAttachment> GetPaginatedList(Guid announcementId, Guid callerId, int roleId, int start, int count, bool needsAllAttachments = true)
+        public PaginatedList<AnnouncementAttachment> GetPaginatedList(int announcementId, int callerId, int roleId, int start, int count, bool needsAllAttachments = true)
         {
             var conds = new AndQueryCondition { { AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD, announcementId } };
             var query = BuildGetAttachmentQuery(conds, callerId, roleId, needsAllAttachments);
@@ -40,13 +40,13 @@ namespace Chalkable.Data.School.DataAccess
         }
 
         //private const string CALLER_ID = "@callerId"
-        private IList<AnnouncementAttachment> GetAnnouncementAttachments(QueryConditionSet conds, Guid callerId, int roleId, string filter = null)
+        private IList<AnnouncementAttachment> GetAnnouncementAttachments(QueryConditionSet conds, int callerId, int roleId, string filter = null)
         {
             var query = BuildGetAttachmentQuery(conds, callerId, roleId, true, filter);
             return query == null ? new List<AnnouncementAttachment>() : ReadMany<AnnouncementAttachment>(query);
         }
 
-        private DbQuery BuildGetAttachmentQuery(QueryConditionSet queryCondition,  Guid callerId, int roleId, bool needsAllAttachments = true, string filter = null)
+        private DbQuery BuildGetAttachmentQuery(QueryConditionSet queryCondition, int callerId, int roleId, bool needsAllAttachments = true, string filter = null)
         {
             var res = new DbQuery();
             var type = typeof(AnnouncementAttachment);

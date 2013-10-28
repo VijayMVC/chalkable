@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Common\AppTools.cs" />
     <Compile Include="Mapping\GradingStyleMapper.cs" />
+    <Compile Include="Model\AddressInfo.cs" />
     <Compile Include="Model\AnnouncementInfo.cs" />
     <Compile Include="Model\ApplicationInfo.cs" />
     <Compile Include="Model\ApplicationTotalPriceInfo.cs" />
@@ -108,7 +109,6 @@
     <Compile Include="Services\School\DisciplineService.cs" />
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
-    <Compile Include="Services\School\CourseService.cs" />
     <Compile Include="Services\School\DisciplineTypeService.cs" />
     <Compile Include="Services\School\FinalGradeService.cs" />
     <Compile Include="Services\School\GradeLevelService.cs" />

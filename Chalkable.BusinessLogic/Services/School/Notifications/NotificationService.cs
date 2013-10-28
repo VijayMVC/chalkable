@@ -14,22 +14,22 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
     {
         IList<Notification> GetUnshownNotifications();
         PaginatedList<NotificationDetails> GetNotifications(int start, int count);
-        IList<Notification> GetNotificationsByTypes(Guid personId, IList<int> types, bool? wasSent = null);
+        IList<Notification> GetNotificationsByTypes(int personId, IList<int> types, bool? wasSent = null);
 
-        void AddAnnouncementNewAttachmentNotification(Guid announcementId);
-        void AddAnnouncementNewAttachmentNotificationToPerson(Guid announcementId, Guid fromPersonId);
+        void AddAnnouncementNewAttachmentNotification(int announcementId);
+        void AddAnnouncementNewAttachmentNotificationToPerson(int announcementId, int fromPersonId);
         void AddAnnouncementReminderNotification(AnnouncementReminder announcementReminder, AnnouncementComplex announcement);
-        void AddAnnouncementNotificationQnToAuthor(Guid announcementQnAId, Guid announcementId);
-        void AddAnnouncementNotificationAnswerToPerson(Guid announcementQnAId, Guid announcementId);
-        void AddAnnouncementSetGradeNotificationToPerson(Guid announcement, Guid recipient);
-        void AddPrivateMessageNotification(Guid privateMessageId);
+        void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId);
+        void AddAnnouncementNotificationAnswerToPerson(int announcementQnAId, int announcementId);
+        void AddAnnouncementSetGradeNotificationToPerson(int announcement, int recipient);
+        void AddPrivateMessageNotification(int privateMessageId);
         void AddApplicationNotification(IList<Person> toPerson, Person fromPerson, Guid applicationId);
-        void AddAppBudgetBalanceNotification(Guid recipientId, double budgetBalance);
-        void AddEndMarkingPeriodNotification(Guid toPersonId, Guid markingPeriodId, int endDays, bool isNextMpNotExist, bool isNextMpNotAssignedToClass);
-        void AddAttendanceNotification(Guid toPersonId, IList<Person> persons);
-        void AddAttendanceNotificationToStudent(Guid toPersonId, Guid classAttendanceId);
-        void AddAttendanceNotificationToTeacher(Guid toPersonId, ClassPeriod classPeriod, DateTime dateTime);
-        void MarkAsShown(Guid[] notificationIds);
+        void AddAppBudgetBalanceNotification(int recipientId, double budgetBalance);
+        void AddEndMarkingPeriodNotification(int toPersonId, int markingPeriodId, int endDays, bool isNextMpNotExist, bool isNextMpNotAssignedToClass);
+        void AddAttendanceNotification(int toPersonId, IList<Person> persons);
+        void AddAttendanceNotificationToStudent(int toPersonId, int classAttendanceId);
+        void AddAttendanceNotificationToTeacher(int toPersonId, ClassPeriod classPeriod, DateTime dateTime);
+        void MarkAsShown(int[] notificationIds);
     }
 
 
@@ -49,7 +49,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             using (var uow = Read())
             {
                 var da = new NotificationDataAccess(uow);
-                return da.GetNotifications(new NotificationQuery {Shown = false, PersonId = Context.UserId});
+                return da.GetNotifications(new NotificationQuery {Shown = false, PersonId = Context.LocalId});
             }
         }
 
@@ -60,24 +60,24 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                 var da = new NotificationDataAccess(uow);
                 return da.GetPaginatedNotificationsDetails(new NotificationQuery
                     {
-                        PersonId = Context.UserId, 
+                        PersonId = Context.LocalId, 
                         Start = start, 
                         Count = count
                     });
             }
         }
 
-        public IList<Notification> GetNotificationsByTypes(Guid personId, IList<int> types, bool? wasSent = null)
+        public IList<Notification> GetNotificationsByTypes(int personId, IList<int> types, bool? wasSent = null)
         {
             throw new NotImplementedException();
         }
 
-        public void MarkAsShown(Guid[] notificationIds)
+        public void MarkAsShown(int[] notificationIds)
         {
             using (var uow = Update())
             {
                 var da = new NotificationDataAccess(uow);
-                var notifications = da.GetNotifications(new NotificationQuery {Shown = false, PersonId = Context.UserId});
+                var notifications = da.GetNotifications(new NotificationQuery { Shown = false, PersonId = Context.LocalId });
                 foreach (var notificationId in notificationIds)
                 {
                     var notification = notifications.FirstOrDefault(x => x.Id == notificationId);
@@ -91,7 +91,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             }
         }
 
-        public void AddAnnouncementNewAttachmentNotification(Guid announcementId)
+        public void AddAnnouncementNewAttachmentNotification(int announcementId)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var persons = ServiceLocator.AnnouncementService.GetAnnouncementRecipientPersons(announcementId);
@@ -103,7 +103,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             AddNotifications(notifications);
         }
 
-        public void AddAnnouncementNewAttachmentNotificationToPerson(Guid announcementId, Guid fromPersonId)
+        public void AddAnnouncementNewAttachmentNotificationToPerson(int announcementId, int fromPersonId)
         {
             var announcement = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var fromPerson = ServiceLocator.PersonService.GetPerson(fromPersonId);
@@ -127,7 +127,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             AddNotifications(notifications);
         }
 
-        public void AddAnnouncementNotificationQnToAuthor(Guid announcementQnAId, Guid announcementId)
+        public void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var annQnA = ann.AnnouncementQnAs.First(x => x.Id == announcementQnAId);
@@ -135,7 +135,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             AddNotification(notification);
         }
 
-        public void AddAnnouncementNotificationAnswerToPerson(Guid announcementQnAId, Guid announcementId)
+        public void AddAnnouncementNotificationAnswerToPerson(int announcementQnAId, int announcementId)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var annQnA = ann.AnnouncementQnAs.First(x => x.Id == announcementQnAId);
@@ -143,7 +143,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             AddNotification(notification);
         }
 
-        public void AddAnnouncementSetGradeNotificationToPerson(Guid announcementId, Guid recipientId)
+        public void AddAnnouncementSetGradeNotificationToPerson(int announcementId, int recipientId)
         {
             var announcement = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var recipient = ServiceLocator.PersonService.GetPerson(recipientId);
@@ -164,11 +164,14 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             }
         }
 
-        public void AddPrivateMessageNotification(Guid privateMessageId)
+        public void AddPrivateMessageNotification(int privateMessageId)
         {
             using (var uow = Update())
             {
-                var privateMessage = new PrivateMessageDataAccess(uow).GetDetailsById(privateMessageId, Context.UserId);
+                if(!Context.LocalId.HasValue)
+                    throw new UnassignedUserException();
+
+                var privateMessage = new PrivateMessageDataAccess(uow).GetDetailsById(privateMessageId, Context.LocalId.Value);
                 var notification = builder.BuildPrivateMessageNotification(privateMessage, privateMessage.Sender, privateMessage.Recipient);
                 new NotificationDataAccess(uow).Insert(notification);
                 uow.Commit();
@@ -180,12 +183,12 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             throw new NotImplementedException();
         }
 
-        public void AddAppBudgetBalanceNotification(Guid recipientId, double budgetBalance)
+        public void AddAppBudgetBalanceNotification(int recipientId, double budgetBalance)
         {
             throw new NotImplementedException();
         }
 
-        public void AddEndMarkingPeriodNotification(Guid toPersonId, Guid markingPeriodId, int endDays, bool isNextMpNotExist,
+        public void AddEndMarkingPeriodNotification(int toPersonId, int markingPeriodId, int endDays, bool isNextMpNotExist,
                                                     bool isNextMpNotAssignedToClass)
         {
             var markingPeriod = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId);
@@ -194,7 +197,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             AddNotification(notification);
         }
 
-        public void AddAttendanceNotification(Guid toPersonId, IList<Person> persons)
+        public void AddAttendanceNotification(int toPersonId, IList<Person> persons)
         {
             //TODO: think about security
             var toSchoolPerson = ServiceLocator.PersonService.GetPerson(toPersonId);
@@ -202,15 +205,16 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             AddNotification(notification);
         }
 
-        public void AddAttendanceNotificationToStudent(Guid toPersonId, Guid classAttendanceId)
+        public void AddAttendanceNotificationToStudent(int toPersonId, int classAttendanceId)
         {
-            var recipient = ServiceLocator.PersonService.GetPerson(toPersonId);
-            var classAtt = ServiceLocator.AttendanceService.GetClassAttendanceDetailsById(classAttendanceId);
-            var notification = builder.BuildAttendanceNotificationToStudent(recipient, classAtt);
-            AddNotification(notification);
+            throw new NotImplementedException();
+            //var recipient = ServiceLocator.PersonService.GetPerson(toPersonId);
+            //var classAtt = ServiceLocator.AttendanceService.GetClassAttendanceDetailsById(classAttendanceId);
+            //var notification = builder.BuildAttendanceNotificationToStudent(recipient, classAtt);
+            //AddNotification(notification);
         }
 
-        public void AddAttendanceNotificationToTeacher(Guid toPersonId, ClassPeriod classPeriod, DateTime dateTime)
+        public void AddAttendanceNotificationToTeacher(int toPersonId, ClassPeriod classPeriod, DateTime dateTime)
         {
             var recipient = ServiceLocator.PersonService.GetPerson(toPersonId);
             var classComplex = ServiceLocator.ClassService.GetClassById(classPeriod.ClassRef);

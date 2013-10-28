@@ -22,7 +22,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var parameters = new Dictionary<string, object> { { GRADED_ONLY_PARAM, query.GradedOnly } };
             return GetAnnouncementsComplex(GET_STUDENT_ANNOUNCEMENTS, parameters, query);
         }
-        protected override void BuildConditionForGetSimpleAnnouncement(Common.Orm.DbQuery dbQuery, int role, Guid callerId)
+        protected override void BuildConditionForGetSimpleAnnouncement(Common.Orm.DbQuery dbQuery, int role, int callerId)
         {
             dbQuery.Sql.Append(@" and (
                                         (Announcement.MarkingPeriodClassRef in (select mpc.Id from MarkingPeriodClass mpc

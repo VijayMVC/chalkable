@@ -5,13 +5,13 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class AnnouncementRecipientDataDataAccess : DataAccessBase<AnnouncementRecipientData>
+    public class AnnouncementRecipientDataDataAccess : DataAccessBase<AnnouncementRecipientData, int>
     {
         public AnnouncementRecipientDataDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
 
-        public void Update(Guid announcementId, Guid personId, bool starred, int? starredAutomatically, DateTime modifiedDate)
+        public void Update(int announcementId, int personId, bool starred, int? starredAutomatically, DateTime modifiedDate)
         {
             var parameters = new Dictionary<string, object>
                 {

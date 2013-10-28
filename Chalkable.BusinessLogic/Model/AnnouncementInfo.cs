@@ -8,17 +8,17 @@ namespace Chalkable.BusinessLogic.Model
 {
     public class AnnouncementInfo
     {
-        public Guid AnnouncementId { get; set; }
+        public int AnnouncementId { get; set; }
         public string Subject { get; set; }
         public string Content { get; set; }
         public DateTime? ExpiresDate { get; set; }
-        public int? AnnouncementTypeId { get; set; }
+        public int? ClassAnnouncementTypeId { get; set; }
 
         public static AnnouncementInfo Create(Announcement announcement)
         {
             return new AnnouncementInfo
                 {
-                    AnnouncementTypeId = announcement.AnnouncementTypeRef,
+                    ClassAnnouncementTypeId = announcement.ClassAnnouncementTypeRef,
                     AnnouncementId = announcement.Id,
                     Content = announcement.Content,
                     ExpiresDate = announcement.Expires,

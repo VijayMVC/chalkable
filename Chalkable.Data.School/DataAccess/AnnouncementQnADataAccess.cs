@@ -7,7 +7,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class AnnouncementQnADataAccess : DataAccessBase<AnnouncementQnA>
+    public class AnnouncementQnADataAccess : DataAccessBase<AnnouncementQnA, int>
     {
         public AnnouncementQnADataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -63,22 +63,22 @@ namespace Chalkable.Data.School.DataAccess
             var template = prefix + "{0}";
             return new Person
                 {
-                    Id = SqlTools.ReadGuid(reader, string.Format(template, Person.ID_FIELD)),
+                    Id = SqlTools.ReadInt32(reader, string.Format(template, Person.ID_FIELD)),
                     FirstName = SqlTools.ReadStringNull(reader, string.Format(template, Person.FIRST_NAME_FIELD)),
                     LastName = SqlTools.ReadStringNull(reader, string.Format(template, Person.LAST_NAME_FIELD)),
                     Gender = SqlTools.ReadStringNull(reader, string.Format(template, Person.GENDER_FIELD)),
-                    RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD))
+                    //RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD))
                 };
         } 
     }
 
     public class AnnouncementQnAQuery
     {
-        public Guid? Id { get; set; }
-        public Guid? AskerId { get; set; }
-        public Guid? AnswererId { get; set; }
-        public Guid? AnnouncementId { get; set; }
-        public Guid CallerId { get; set; }
+        public int? Id { get; set; }
+        public int? AskerId { get; set; }
+        public int? AnswererId { get; set; }
+        public int? AnnouncementId { get; set; }
+        public int? CallerId { get; set; }
     }
 
     public class AnnouncementQnAQueryResult

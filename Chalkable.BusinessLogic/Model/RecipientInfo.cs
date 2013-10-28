@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.Common;
 
 namespace Chalkable.BusinessLogic.Model
 {
@@ -11,10 +7,10 @@ namespace Chalkable.BusinessLogic.Model
     {
         public bool ToAll { get; set; }
         public int? RoleId { get; set; }
-        public Guid? GradeLevelId { get; set; }
-        public Guid? PersonId { get; set; }
+        public int? GradeLevelId { get; set; }
+        public int? PersonId { get; set; }
 
-        public static RecipientInfo Create(bool toAll, int? roleId, Guid? gradeLevelId, Guid? personId)
+        public static RecipientInfo Create(bool toAll, int? roleId, int? gradeLevelId, int? personId)
         {
             var res = new RecipientInfo
             {
@@ -31,8 +27,8 @@ namespace Chalkable.BusinessLogic.Model
             {
                 ToAll = int.Parse(recipient[0]) == 1,
                 RoleId = int.Parse(recipient[1]) == -1 ? (int?)null : int.Parse(recipient[1]),
-                GradeLevelId = (string.IsNullOrEmpty(recipient[2]) || recipient[2] == "-1")  ? (Guid?) null : new Guid(recipient[2]),
-                PersonId = (string.IsNullOrEmpty(recipient[3]) || recipient[3] == "-1") ? (Guid?)null : new Guid(recipient[3])
+                GradeLevelId = (string.IsNullOrEmpty(recipient[2]) || recipient[2] == "-1") ? (int?)null : int.Parse(recipient[2]),
+                PersonId = (string.IsNullOrEmpty(recipient[3]) || recipient[3] == "-1") ? (int?)null : int.Parse(recipient[3])
             };
             return res;
         }
