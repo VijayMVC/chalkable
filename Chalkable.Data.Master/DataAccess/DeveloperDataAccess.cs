@@ -6,7 +6,7 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Data.Master.DataAccess
 {
-    public class DeveloperDataAccess : DataAccessBase<Developer>
+    public class DeveloperDataAccess : DataAccessBase<Developer, Guid>
     {
         public DeveloperDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {

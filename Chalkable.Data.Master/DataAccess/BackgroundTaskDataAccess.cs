@@ -7,7 +7,7 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Data.Master.DataAccess
 {
-    public class BackgroundTaskDataAccess : DataAccessBase<BackgroundTask>
+    public class BackgroundTaskDataAccess : DataAccessBase<BackgroundTask, Guid>
     {
         public BackgroundTaskDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {

@@ -7,7 +7,7 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Data.Master.DataAccess
 {
-    public class FundDataAccess : DataAccessBase<Fund>
+    public class FundDataAccess : DataAccessBase<Fund, Guid>
     {
         public FundDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -42,14 +42,14 @@ namespace Chalkable.Data.Master.DataAccess
         }
     }
 
-    public class FundRequestDataAccess : DataAccessBase<FundRequest>
+    public class FundRequestDataAccess : DataAccessBase<FundRequest,Guid>
     {
         public FundRequestDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
     }
 
-    public class FundRequestRoleDistributionDataAccess : DataAccessBase<FundRequestRoleDistribution>
+    public class FundRequestRoleDistributionDataAccess : DataAccessBase<FundRequestRoleDistribution, Guid>
     {
         public FundRequestRoleDistributionDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {

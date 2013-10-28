@@ -8,7 +8,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class FinalGradeAnnouncementTypeDataAccess : DataAccessBase<FinalGradeAnnouncementType>
+    public class FinalGradeAnnouncementTypeDataAccess : DataAccessBase<FinalGradeAnnouncementType, int>
     {
         public FinalGradeAnnouncementTypeDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {

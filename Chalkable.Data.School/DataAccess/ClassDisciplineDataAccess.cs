@@ -7,7 +7,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class ClassDisciplineDataAccess : DataAccessBase<ClassDiscipline>
+    public class ClassDisciplineDataAccess : DataAccessBase<ClassDiscipline, int>
     {
         public ClassDisciplineDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {

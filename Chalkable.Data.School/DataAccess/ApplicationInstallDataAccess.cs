@@ -8,7 +8,7 @@ using Chalkable.Data.School.Model.ApplicationInstall;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class ApplicationInstallDataAccess : DataAccessBase<ApplicationInstall>
+    public class ApplicationInstallDataAccess : DataAccessBase<ApplicationInstall, int>
     {
         public ApplicationInstallDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -120,28 +120,28 @@ namespace Chalkable.Data.School.DataAccess
         }
     }
 
-    public class ApplicationInstallActionDataAccess : DataAccessBase<ApplicationInstallAction>
+    public class ApplicationInstallActionDataAccess : DataAccessBase<ApplicationInstallAction, int>
     {
         public ApplicationInstallActionDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
     }
 
-    public class ApplicationInstallActionClassesDataAccess : DataAccessBase<ApplicationInstallActionClasses>
+    public class ApplicationInstallActionClassesDataAccess : DataAccessBase<ApplicationInstallActionClasses, int>
     {
         public ApplicationInstallActionClassesDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
     }
-    
-    public class ApplicationInstallActionGradeLevelDataAccess : DataAccessBase<ApplicationInstallActionGradeLevel>
+
+    public class ApplicationInstallActionGradeLevelDataAccess : DataAccessBase<ApplicationInstallActionGradeLevel, int>
     {
         public ApplicationInstallActionGradeLevelDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
     }
 
-    public class ApplicationInstallActionDepartmentDataAccess : DataAccessBase<ApplicationInstallActionDepartment>
+    public class ApplicationInstallActionDepartmentDataAccess : DataAccessBase<ApplicationInstallActionDepartment, int>
     {
         public ApplicationInstallActionDepartmentDataAccess(UnitOfWork unitOfWork)
             : base(unitOfWork)
@@ -149,7 +149,7 @@ namespace Chalkable.Data.School.DataAccess
         }
     }
 
-    public class ApplicationInstallActionRoleDataAccess : DataAccessBase<ApplicationInstallActionRole>
+    public class ApplicationInstallActionRoleDataAccess : DataAccessBase<ApplicationInstallActionRole, int>
     {
         public ApplicationInstallActionRoleDataAccess(UnitOfWork unitOfWork)
             : base(unitOfWork)

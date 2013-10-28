@@ -8,7 +8,7 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Data.Master.DataAccess
 {
-    public class DistrictDataAccess : DataAccessBase<District>
+    public class DistrictDataAccess : DataAccessBase<District, Guid>
     {
         public DistrictDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {

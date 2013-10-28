@@ -6,7 +6,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class AnnouncementApplicationDataAccess : DataAccessBase<AnnouncementApplication>
+    public class AnnouncementApplicationDataAccess : DataAccessBase<AnnouncementApplication, int>
     {
         public AnnouncementApplicationDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {

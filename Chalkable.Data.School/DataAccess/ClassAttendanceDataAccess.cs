@@ -10,7 +10,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class ClassAttendanceDataAccess : DataAccessBase<ClassAttendance>
+    public class ClassAttendanceDataAccess : DataAccessBase<ClassAttendance, int>
     {
         public ClassAttendanceDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
