@@ -27,7 +27,6 @@ namespace Chalkable.Data.School.Model
         public bool Active { get; set; }
         public DateTime? LastPasswordReset { get; set; }
         public DateTime? FirstLoginDate { get; set; }
-        public int RoleRef { get; set; }
         public DateTime? LastMailNotification { get; set; }
         public string Email { get; set; }
         public int? AddressRef { get; set; }

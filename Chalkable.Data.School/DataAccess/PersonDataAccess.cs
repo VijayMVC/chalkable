@@ -66,7 +66,7 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public PersonDetails GetPersonDetails(Guid personId, Guid callerId, int callerRoleId)
+        public PersonDetails GetPersonDetails(int personId, int callerId, int callerRoleId)
         {
             var parameters = new Dictionary<string, object>
                 {
@@ -111,12 +111,12 @@ namespace Chalkable.Data.School.DataAccess
             {
                 var res = reader.Read<PersonDetails>();
                 res.Addresses = reader.Read<Address>(true);
-                if (res.RoleRef == CoreRoles.STUDENT_ROLE.Id)
-                {
-                    //res.StudentInfo = reader.Read<StudentInfo>();
-                    //res.StudentInfo.GradeLevel = reader.Read<GradeLevel>(true);
-                    //res.StudentInfo.GradeLevelRef = res.StudentInfo.GradeLevel.Id;
-                }
+                //if (res.RoleRef == CoreRoles.STUDENT_ROLE.Id)
+                //{
+                //    //res.StudentInfo = reader.Read<StudentInfo>();
+                //    //res.StudentInfo.GradeLevel = reader.Read<GradeLevel>(true);
+                //    //res.StudentInfo.GradeLevelRef = res.StudentInfo.GradeLevel.Id;
+                //}
                 return res;
             }
             return null;

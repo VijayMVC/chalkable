@@ -12,19 +12,19 @@ namespace Chalkable.BusinessLogic.Services.School
 
     public interface IPersonService
     {
-        Person Add(string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, Guid? gradeLevelId, int? sisId = null);
-        Person Edit(Guid personId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate);
+        Person Add(int localId, int schoolId, string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, Guid? gradeLevelId, int? sisId = null);
+        Person Edit(int localId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate);
 
-        Person EditStudent(Guid studentId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate
+        Person EditStudent(int studentId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate
             ,bool iep, DateTime enrollmentDate, string previousSchool, string previousSchoolPhone, string previousSchoolNote, Guid? gradeLevelId);
 
-        void Delete(string id);
+        void Delete(int id);
         IList<Person> GetPersons();
         PaginatedList<Person> GetPaginatedPersons(PersonQuery query); 
         //PaginatedList<Person> GetPersons(int? roleId, Guid? classId, IList<Guid> gradeLevelId, string filter, SortTypeEnum sortType = SortTypeEnum.ByLastName, int start = 0, int count = int.MaxValue); 
-        Person GetPerson(Guid id);
-        PersonDetails GetPersonDetails(Guid id);
-        void ActivatePerson(Guid id);
+        Person GetPerson(int id);
+        PersonDetails GetPersonDetails(int id);
+        void ActivatePerson(int id);
     }
 
     public class PersonService : SchoolServiceBase, IPersonService
@@ -35,7 +35,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         //TODO: needs tests
-        public Person Add(string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, Guid? gradeLevelId, int? sisId = null)
+        public Person Add(int localId, int schoolId, string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, Guid? gradeLevelId, int? sisId = null)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -46,9 +46,10 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new PersonDataAccess(uow);
                 var roleId = CoreRoles.GetByName(role).Id;
-                var user = ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUser(email, password, Context.SchoolId.Value, role);
+                var user = ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUser(email, password, Context.SchoolId.Value, role, localId);
                 var person = new Person
                     {
+                        Id = localId,
                         Active = false,
                         Email = email,
                         BirthDate = birthDate,
@@ -56,7 +57,6 @@ namespace Chalkable.BusinessLogic.Services.School
                         LastName = lastName,
                         Gender = gender,
                         Salutation = salutation,
-                        RoleRef = roleId,
                     };
                 da.Insert(person);
                 if (role == CoreRoles.STUDENT_ROLE.Name)
@@ -66,12 +66,18 @@ namespace Chalkable.BusinessLogic.Services.School
                     else
                         throw new ChalkableException("Grade level is required for adding student");
                 }
+                new SchoolPersonDataAccess(uow).Insert(new SchoolPerson
+                    {
+                        SchoolRef = schoolId,
+                        PersonRef = person.Id,
+                        RoleRef = roleId
+                    });
                 uow.Commit();
                 return person;
             }
         }
         
-        public void Delete(string id)
+        public void Delete(int id)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -79,7 +85,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new PersonDataAccess(uow);
-                da.Delete(Guid.Parse(id));
+                da.Delete(id);
                 uow.Commit();
             }
         }
@@ -107,15 +113,15 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new PersonDataAccess(uow);
-                query.CallerId = Context.;
+                query.CallerId = Context.LocalId;
                 query.CallerRoleId = Context.Role.Id;
                 var res = da.GetPersons(query);
                 return res;
             }
-        } 
+        }
 
 
-        public Person GetPerson(Guid id)
+        public Person GetPerson(int id)
         {
             return GetPersons(new PersonQuery
                 {
@@ -139,48 +145,49 @@ namespace Chalkable.BusinessLogic.Services.School
         //        });
         //}
 
-        public PersonDetails GetPersonDetails(Guid id)
+        public PersonDetails GetPersonDetails(int id)
         {
             using (var uow = Read())
             {
-                return new PersonDataAccess(uow).GetPersonDetails(id, Context.UserId, Context.Role.Id);
+                return new PersonDataAccess(uow).GetPersonDetails(id, Context.LocalId ?? 0, Context.Role.Id);
             }
         }
 
-        public Person Edit(Guid personId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate)
+        public Person Edit(int localId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate)
         {
             using (var uow = Update())
             {
-                var res = Edit(new PersonDataAccess(uow), personId, email, firstName, lastName, gender, salutation, birthDate);
+                var res = Edit(new PersonDataAccess(uow), localId, email, firstName, lastName, gender, salutation, birthDate);
                 uow.Commit();
                 return res;
             }
         }
 
-        public Person EditStudent(Guid studentId, string email, string firstName, string lastName, string gender, string salutation, 
+        public Person EditStudent(int studentId, string email, string firstName, string lastName, string gender, string salutation, 
             DateTime? birthDate, bool iep, DateTime enrollmentDate, string previousSchool, string previousSchoolPhone, 
             string previousSchoolNote, Guid? gradeLevelId)
         {
-            if(!(BaseSecurity.IsAdminOrTeacher(Context) || Context.UserId == studentId))
+            if(!(BaseSecurity.IsAdminOrTeacher(Context) || Context.LocalId == studentId))
                 throw new ChalkableSecurityException();
             
             using (var uow = Update())
             {
                 var student = Edit(new PersonDataAccess(uow), studentId, email, firstName, lastName, gender, salutation, birthDate);
-                if (gradeLevelId.HasValue)
-                    student.StudentInfo.GradeLevelRef = gradeLevelId.Value;
+                //if (gradeLevelId.HasValue)
+                //    student.StudentInfo.GradeLevelRef = gradeLevelId.Value;
 
-                new StudentInfoDataAccess(uow).Update(student.StudentInfo);
+                //new StudentInfoDataAccess(uow).Update(student.StudentInfo);
                 uow.Commit();
                 return student;
             }
         }
 
-        private Person Edit(PersonDataAccess dataAccess, Guid personId, string email, string firstName
+        private Person Edit(PersonDataAccess dataAccess, int localId, string email, string firstName
                     , string lastName, string gender, string salutation, DateTime? birthDate)
         {
-            ServiceLocator.ServiceLocatorMaster.UserService.ChangeUserLogin(personId, email);
-            var res = GetPerson(personId);
+            var res = GetPerson(localId);
+            var user = ServiceLocator.ServiceLocatorMaster.UserService.GetByLogin(res.Email);
+            ServiceLocator.ServiceLocatorMaster.UserService.ChangeUserLogin(user.Id, email);
             res.FirstName = firstName;
             res.LastName = lastName;
             res.Gender = gender;
@@ -191,7 +198,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public void ActivatePerson(Guid id)
+        public void ActivatePerson(int id)
         {
             if(BaseSecurity.IsAdminEditorOrCurrentPerson(id, Context))
                 throw new ChalkableSecurityException();

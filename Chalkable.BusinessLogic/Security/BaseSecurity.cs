@@ -47,9 +47,9 @@ namespace Chalkable.BusinessLogic.Security
                    || context.Role == CoreRoles.CHECKIN_ROLE;
         }
 
-        public static bool IsAdminEditorOrCurrentPerson(Guid personId, UserContext context)
+        public static bool IsAdminEditorOrCurrentPerson(int personId, UserContext context)
         {
-            return IsAdminEditor(context) || context.UserId == personId;
+            return IsAdminEditor(context) || context.LocalId == personId;
         }
 
         public static bool IsAdminTeacherOrExactStudent(User user, UserContext context)
