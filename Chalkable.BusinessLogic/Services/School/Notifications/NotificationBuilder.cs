@@ -78,7 +78,6 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             var parameters = new List<string> {GetBaseUrlByRole(recipient, baseUrl)};
             var notification = new NotificationDetails
             {
-                Id = Guid.NewGuid(),
                 PersonRef = recipient.Id,
                 Person = recipient,
                 Shown = false,
@@ -184,7 +183,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                  NotificationType.Question, announcementQnA.Answerer, announcement, null, null, null, null,
                                                  announcementQnA.Asker, new
                                                      {
-                                                         AnnouncementTypeName = announcement.AnnouncementTypeName,
+                                                         AnnouncementTypeName = announcement.ClassAnnouncementTypeName,
                                                          PersonQuestion = StringTools.BuildShortText(announcementQnA.Question, 35),
                                                          AnnouncementTitle = announcement.Title
                                                      });
@@ -197,7 +196,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                  NotificationType.Announcement, announcementQnA.Asker, announcement, null, null, null,
                                                  null, announcementQnA.Answerer, new
                                                      {
-                                                         AnnouncementTypeName = announcement.AnnouncementTypeName,
+                                                         AnnouncementTypeName = announcement.ClassAnnouncementTypeName,
                                                          AnnouncementTitle = announcement.Title,
                                                          PersonQuestion = StringTools.BuildShortText(announcementQnA.Question, 40)
                                                      });
@@ -208,8 +207,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON,
                                                  NotificationType.Announcement, recipient, announcement, null, null, null, null, null, 
                                                  new {
-                                                         AnnouncementOwner = announcement.Owner, 
-                                                         AnnouncementTypeName = announcement.AnnouncementTypeName,
+                                                         AnnouncementOwner = announcement.Owner,
+                                                         AnnouncementTypeName = announcement.ClassAnnouncementTypeName,
                                                          AnnouncementTitle = announcement.Title
                                                      });
         }

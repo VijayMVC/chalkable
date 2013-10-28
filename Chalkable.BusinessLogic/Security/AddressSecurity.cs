@@ -12,7 +12,7 @@ namespace Chalkable.BusinessLogic.Security
     {
         public static bool CanModify(Address address, UserContext context)
         {
-            return BaseSecurity.IsAdminEditor(context) || address.PersonRef == context.UserId;
+            return BaseSecurity.IsAdminEditor(context); //|| address.PersonRef == context.UserId;
         }
     }
 }

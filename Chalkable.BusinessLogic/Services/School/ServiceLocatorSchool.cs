@@ -13,7 +13,6 @@ namespace Chalkable.BusinessLogic.Services.School
         IMarkingPeriodService MarkingPeriodService { get; }
         IClassService ClassService { get; }
         ISchoolYearService SchoolYearService { get; }
-        ICourseService CourseService { get; }
         IAnnouncementQnAService AnnouncementQnAService { get; }
         IAnnouncementService AnnouncementService { get; }
         IAnnouncementReminderService AnnouncementReminderService { get; }
@@ -50,7 +49,6 @@ namespace Chalkable.BusinessLogic.Services.School
         private IMarkingPeriodService markingPeriodService;
         private IClassService classService;
         private ISchoolYearService schoolYearService;
-        private ICourseService courseService;
         private IAnnouncementQnAService announcementQnAService;
         private IAnnouncementReminderService announcementReminderService;
         private IAnnouncementService announcementService;
@@ -88,7 +86,6 @@ namespace Chalkable.BusinessLogic.Services.School
             markingPeriodService = new MarkingPeriodService(this);
             classService = new ClassService(this);
             schoolYearService = new SchoolYearService(this);
-            courseService = new CourseService(this);
             announcementQnAService = new AnnouncementQnAService(this);
             announcementReminderService = new AnnouncementReminderService(this);
             announcementService = new AnnouncementService(this);
@@ -124,7 +121,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public IMarkingPeriodService MarkingPeriodService { get { return markingPeriodService; } }
         public IClassService ClassService { get { return classService; } }
         public ISchoolYearService SchoolYearService { get { return schoolYearService; } }
-        public ICourseService CourseService { get { return courseService; } }
         public IAnnouncementQnAService AnnouncementQnAService{ get { return announcementQnAService; } }
         public IAnnouncementService AnnouncementService { get { return announcementService; } }
         public IAnnouncementReminderService AnnouncementReminderService { get { return announcementReminderService; } }

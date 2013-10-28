@@ -14,13 +14,13 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IApplicationSchoolService
     {
-        IList<Guid> GetAssignedUserIds(Guid appId, Guid? announcementAppId);
-        AnnouncementApplication AddToAnnouncement(Guid announcementId, Guid applicationId);
-        AnnouncementApplication GetAnnouncementApplication(Guid announcementAppId);
-        void AttachAppToAnnouncement(Guid announcementAppId);
-        IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(Guid announcementId, bool onlyActive = false);
-        IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(Guid personId, bool onlyActive = false);
-        Announcement RemoveFromAnnouncement(Guid announcementAppId);
+        IList<int> GetAssignedUserIds(Guid appId, int? announcementAppId);
+        AnnouncementApplication AddToAnnouncement(int announcementId, Guid applicationId);
+        AnnouncementApplication GetAnnouncementApplication(int announcementAppId);
+        void AttachAppToAnnouncement(int announcementAppId);
+        IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(int announcementId, bool onlyActive = false);
+        IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false);
+        Announcement RemoveFromAnnouncement(int announcementAppId);
 
     }
 
@@ -30,9 +30,9 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public IList<Guid> GetAssignedUserIds(Guid appId, Guid? announcementAppId)
+        public IList<int> GetAssignedUserIds(Guid appId, int? announcementAppId)
         {
-            var res = new List<Guid>();
+            var res = new List<int>();
             using (var uow = Read())
             {
                 if (announcementAppId.HasValue)
@@ -41,10 +41,9 @@ namespace Chalkable.BusinessLogic.Services.School
                     var da = new AnnouncementApplicationDataAccess(uow);
                     var announcementApplication = da.GetById(announcementAppId.Value);
                     var ann = anDa.GetById(announcementApplication.AnnouncementRef);
-                    if (ann.MarkingPeriodClassRef.HasValue)
+                    if (ann.ClassRef.HasValue)
                     {
-                        var mpclass = new MarkingPeriodClassDataAccess(uow).GetById(ann.MarkingPeriodClassRef.Value);
-                        var csp = new ClassPersonDataAccess(uow).GetClassPersons(new ClassPersonQuery{ClassId = mpclass.ClassRef});
+                        var csp = new ClassPersonDataAccess(uow).GetClassPersons(new ClassPersonQuery{ClassId = ann.ClassRef});
                         res.AddRange(csp.Select(x=>x.PersonRef));
                     }
                     res.Add(ann.PersonRef);
@@ -62,7 +61,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
-        public AnnouncementApplication AddToAnnouncement(Guid announcementId, Guid applicationId)
+        public AnnouncementApplication AddToAnnouncement(int announcementId, Guid applicationId)
         {
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
             using (var uow = Update())
@@ -72,7 +71,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableSecurityException();
                 var aa = new AnnouncementApplication
                     {
-                        Id = Guid.NewGuid(),
                         AnnouncementRef = announcementId,
                         ApplicationRef = applicationId,
                         Active = false,
@@ -84,7 +82,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public AnnouncementApplication GetAnnouncementApplication(Guid announcementAppId)
+        public AnnouncementApplication GetAnnouncementApplication(int announcementAppId)
         {
             using (var uow = Read())
             {
@@ -92,14 +90,14 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void AttachAppToAnnouncement(Guid announcementAppId)
+        public void AttachAppToAnnouncement(int announcementAppId)
         {
             using (var uow = Update())
             {
                 var da = new AnnouncementApplicationDataAccess(uow);
                 var aa = da.GetById(announcementAppId);
-                var ann = new AnnouncementForTeacherDataAccess(uow).GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.UserId);
-                if (Context.UserId != ann.PersonRef)
+                var ann = new AnnouncementForTeacherDataAccess(uow).GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.UserLocalId.Value);
+                if (Context.UserLocalId != ann.PersonRef)
                     throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                 aa.Active = true;
                 da.Update(aa);
@@ -107,7 +105,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(Guid announcementId, bool onlyActive = false)
+        public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(int announcementId, bool onlyActive = false)
         {
             //TODO: thing about security
             using (var uow = Read())
@@ -121,7 +119,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(Guid personId, bool onlyActive = false)
+        public IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false)
         {
             using (var uow = Read())
             {
@@ -130,7 +128,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public Announcement RemoveFromAnnouncement(Guid announcementAppId)
+        public Announcement RemoveFromAnnouncement(int announcementAppId)
         {
             try
             {
@@ -143,7 +141,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     da.Delete(announcementAppId);
                     uow.Commit();
                     var res = ServiceLocator.AnnouncementService.GetAnnouncementById(aa.AnnouncementRef);
-                    if (Context.UserId != res.PersonRef)
+                    if (Context.UserLocalId != res.PersonRef)
                         throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                     return res;
                 }

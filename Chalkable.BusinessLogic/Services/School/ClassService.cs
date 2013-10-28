@@ -13,7 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IClassService
     {
         ClassDetails Add(int classId, int schoolYearId, Guid? chlkableDepartmentId, string name, string description, int teacherId, int gradeLevelId, List<int> markingPeriodsId);
-        ClassDetails Edit(int classId, int chlkableDepartmentId, string name, string description, int teacherId, int gradeLevelId, List<int> markingPeriodsId);
+        ClassDetails Edit(int classId, Guid? chlkableDepartmentId, string name, string description, int teacherId, int gradeLevelId, List<int> markingPeriodsId);
         ClassDetails AddStudent(int classId, int personId);
         ClassDetails DeleteStudent(int classId, int personId);
         ClassDetails GetClassById(int id);
@@ -118,7 +118,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var classPersonDa = new ClassPersonDataAccess(uow);
                 var classPeriodDa = new ClassPeriodDataAccess(uow);
                 var person = new PersonDataAccess(uow).GetById(personId);
-                if(CoreRoles.GetById(person.RoleRef) != CoreRoles.STUDENT_ROLE)
+                if (new SchoolPersonDataAccess(uow).Exists(personId, CoreRoles.STUDENT_ROLE.Id, null))
                     throw new ChalkableException("Only student can be added to class");
 
                 if (classPeriodDa.IsStudentAlreadyAssignedToClassPeriod(personId, classId))
@@ -242,7 +242,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                query.CallerId = Context.LocalId.HasValue ? Context.LocalId.Value : 0;
+                query.CallerId = Context.UserLocalId.HasValue ? Context.UserLocalId.Value : 0;
                 query.CallerRoleId = Context.Role.Id;
                 return new ClassDataAccess(uow)
                     .GetClassesComplex(query);

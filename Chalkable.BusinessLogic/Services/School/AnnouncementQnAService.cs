@@ -37,7 +37,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                if (!(Context.LocalId.HasValue && Context.SchoolId.HasValue))
+                if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
                     throw new UnassignedUserException();
           
                 var da = new AnnouncementQnADataAccess(uow);
@@ -46,7 +46,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var annQnA = new AnnouncementQnAComplex
                     {
                         AnnouncementRef = announcementId,
-                        PersonRef = Context.LocalId.Value,
+                        PersonRef = Context.UserLocalId.Value,
                         Question = question,
                         QuestionTime = Context.NowSchoolTime,
                         State = AnnouncementQnAState.Asked
@@ -151,7 +151,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private AnnouncementQnAQueryResult GetAnnouncmentQnAs(AnnouncementQnAQuery query)
         {
-            query.CallerId = Context.LocalId;
+            query.CallerId = Context.UserLocalId;
             using (var uow = Read())
             {
                 return new AnnouncementQnADataAccess(uow).GetAnnouncementQnA(query);

@@ -71,7 +71,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = CreateAnnoucnementDataAccess(uow);
                 query.RoleId = Context.Role.Id;
-                query.PersonId = Context.LocalId;
+                query.PersonId = Context.UserLocalId;
                 query.Now = Context.NowSchoolTime.Date;
                 return da.GetAnnouncements(query);
             }
@@ -160,7 +160,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var annDa = CreateAnnoucnementDataAccess(uow);
                 var nowLocalDate = Context.NowSchoolTime;
                 var markingPeriod = ServiceLocator.MarkingPeriodService.GetLastMarkingPeriod(nowLocalDate);
-                var res = annDa.Create(announcementTypeId, classId, markingPeriod.Id, nowLocalDate, Context.LocalId ?? 0);
+                var res = annDa.Create(announcementTypeId, classId, markingPeriod.Id, nowLocalDate, Context.UserLocalId ?? 0);
                 uow.Commit();
                 return res;
             }
@@ -171,7 +171,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                return da.GetDetails(announcementId, Context.LocalId ?? 0, Context.Role.Id);
+                return da.GetDetails(announcementId, Context.UserLocalId ?? 0, Context.Role.Id);
             }
         }
 
@@ -194,20 +194,20 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                da.Delete(null, Context.LocalId, classId, announcementType, state);
+                da.Delete(null, Context.UserLocalId, classId, announcementType, state);
                 uow.Commit();
             }
         }
 
         public void DeleteAnnouncements(int schoolpersonid, AnnouncementState state = AnnouncementState.Draft)
         {
-            if(Context.LocalId != schoolpersonid && !BaseSecurity.IsSysAdmin(Context))
+            if(Context.UserLocalId != schoolpersonid && !BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                da.Delete(null, Context.LocalId, null, null, state);
+                da.Delete(null, Context.UserLocalId, null, null, state);
                 uow.Commit();
             }
         }
@@ -318,7 +318,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var da = new AnnouncementReminderDataAccess(unitOfWork);
             if (expires.Date >= Context.NowSchoolTime.Date)
             {
-                var annReminders = da.GetList(announcement.Id, Context.LocalId ?? 0);
+                var annReminders = da.GetList(announcement.Id, Context.UserLocalId ?? 0);
                 foreach (var reminder in annReminders)
                 {
                     reminder.RemindDate = reminder.Before.HasValue ? expires.AddDays(-reminder.Before.Value) : dateNow.Date;
@@ -393,7 +393,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var ouw = Read())
             {
                 var da = CreateAnnoucnementDataAccess(ouw);
-                var res = da.GetAnnouncement(id, Context.Role.Id, Context.LocalId ?? 0); // security here 
+                var res = da.GetAnnouncement(id, Context.Role.Id, Context.UserLocalId ?? 0); // security here 
                 if(res == null)
                     throw new ChalkableSecurityException();
                 return res;
@@ -434,7 +434,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 new AnnouncementRecipientDataDataAccess(uow)
-                    .Update(id, Context.LocalId ?? 0, starred, null, Context.NowSchoolTime.Date);
+                    .Update(id, Context.UserLocalId ?? 0, starred, null, Context.NowSchoolTime.Date);
                 uow.Commit();
                 return ann;
             }
@@ -446,7 +446,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                return da.GetLastDraft(Context.LocalId ?? 0);
+                return da.GetLastDraft(Context.UserLocalId ?? 0);
             }
         }
 
@@ -458,7 +458,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableException(ChlkResources.ERR_NO_RECIPIENTS_IN_DRAFT_STATE);
             using (var uow = Read())
             {
-                return CreateAnnoucnementDataAccess(uow).GetAnnouncementRecipientPersons(announcementId, Context.LocalId ?? 0);
+                return CreateAnnoucnementDataAccess(uow).GetAnnouncementRecipientPersons(announcementId, Context.UserLocalId ?? 0);
             }
         }
 

@@ -49,8 +49,8 @@ namespace Chalkable.Data.School.Model
             set
             {
                 period = value;
-                if (value != null && value.Id != Guid.Empty)
-                    ClassPeriodRef = value.Id;
+                //if (value != null && value.Id != Guid.Empty)
+                //    ClassPeriodRef = value.Id;
             }
         }
         

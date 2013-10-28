@@ -69,14 +69,14 @@ namespace Chalkable.Data.School.DataAccess
         public IList<DateType> GetSections(int markingPeriodId, int? fromNumber, int? tillNumber)
         {
             throw new NotImplementedException();
-            var conds = new AndQueryCondition { {DateType.MARKING_PERIOD_REF_FIELD, markingPeriodId} };
-            if (fromNumber.HasValue)
-                conds.Add(DateType.NUMBER_FIELD, "fromNumber", fromNumber.Value, ConditionRelation.GreaterEqual);
-            if (tillNumber.HasValue)
-                conds.Add(DateType.NUMBER_FIELD, "tillNumber", tillNumber.Value, ConditionRelation.LessEqual);
-            var dbQuery = Orm.SimpleSelect<DateType>(conds);
-            dbQuery.Sql.AppendFormat("  order by ScheduleSection.{0} ", DateType.NUMBER_FIELD);
-            return ReadMany<DateType>(dbQuery);
+            //var conds = new AndQueryCondition { {DateType.MARKING_PERIOD_REF_FIELD, markingPeriodId} };
+            //if (fromNumber.HasValue)
+            //    conds.Add(DateType.NUMBER_FIELD, "fromNumber", fromNumber.Value, ConditionRelation.GreaterEqual);
+            //if (tillNumber.HasValue)
+            //    conds.Add(DateType.NUMBER_FIELD, "tillNumber", tillNumber.Value, ConditionRelation.LessEqual);
+            //var dbQuery = Orm.SimpleSelect<DateType>(conds);
+            //dbQuery.Sql.AppendFormat("  order by ScheduleSection.{0} ", DateType.NUMBER_FIELD);
+            //return ReadMany<DateType>(dbQuery);
         }
 
         public IList<DateType> GetSections(IList<int> markingPeriodIds)

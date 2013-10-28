@@ -22,7 +22,7 @@ namespace Chalkable.BusinessLogic.Services
         public string SchoolTimeZoneId { get; private set; }
 
         public Guid? DeveloperId { get; private set; }
-        public int? LocalId { get; set; }
+        public int? UserLocalId { get; set; }
 
         public DateTime NowSchoolTime
         {
@@ -48,7 +48,7 @@ namespace Chalkable.BusinessLogic.Services
 
             SchoolTimeZoneId = schoolTimeZoneId;
             DeveloperId = developerId;
-            LocalId = localId;
+            UserLocalId = localId;
 
             if (schoolId.HasValue)
                 SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, SchoolServerUrl, schoolId);
@@ -82,7 +82,7 @@ namespace Chalkable.BusinessLogic.Services
                     SchoolTimeZoneId ?? string.Empty,
                     DistrictId.HasValue ? DistrictId.ToString() : string.Empty,
                     DeveloperId.HasValue ? DeveloperId.ToString() : string.Empty,
-                    LocalId.HasValue ? LocalId.ToString() : string.Empty
+                    UserLocalId.HasValue ? UserLocalId.ToString() : string.Empty
                 };
             return parameters.JoinString(DELIMITER.ToString(CultureInfo.InvariantCulture));
         }

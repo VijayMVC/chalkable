@@ -32,11 +32,11 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                if (!(Context.LocalId.HasValue && Context.SchoolId.HasValue))
+                if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
                     throw new UnassignedUserException();
 
                 var da = new AnnouncementReminderDataAccess(uow);
-                return da.GetList(announcementId, Context.LocalId.Value);
+                return da.GetList(announcementId, Context.UserLocalId.Value);
             }
         }
 
@@ -57,8 +57,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         RemindDate = remiderDateTime,
                         Announcement = ann
                     };
-                if (ann.PersonRef != Context.LocalId)
-                    reminder.PersonRef = Context.LocalId;
+                if (ann.PersonRef != Context.UserLocalId)
+                    reminder.PersonRef = Context.UserLocalId;
                 da.Insert(reminder);
                 uow.Commit();
                 return reminder;
@@ -69,11 +69,11 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                if(!(Context.LocalId.HasValue && Context.SchoolId.HasValue))
+                if(!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
                     throw new UnassignedUserException();
 
                 var da = new AnnouncementReminderDataAccess(uow);
-                var reminder = da.GetById(reminderId, Context.LocalId.Value);
+                var reminder = da.GetById(reminderId, Context.UserLocalId.Value);
                 if(!AnnouncementSecurity.IsReminderOwner(reminder, Context))
                     throw new ChalkableSecurityException();
                 da.Delete(reminder);
@@ -86,11 +86,11 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                if (!(Context.LocalId.HasValue && Context.SchoolId.HasValue))
+                if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
                     throw new UnassignedUserException();
 
                 var da = new AnnouncementReminderDataAccess(uow);
-                var reminder = da.GetById(reminderId, Context.LocalId.Value);
+                var reminder = da.GetById(reminderId, Context.UserLocalId.Value);
                 
                 if(!AnnouncementSecurity.IsReminderOwner(reminder, Context))
                     throw new ChalkableSecurityException();

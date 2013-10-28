@@ -33,7 +33,7 @@ namespace Chalkable.Data.School.DataAccess
             parameters.Add("@teacherId", query.TeacherId);
             parameters.Add("@classId", query.ClassId);
             parameters.Add("@callerRoleId", query.CallerRoleId);
-            parameters.Add("@schoolId", query.);
+            parameters.Add("@schoolId", query.SchoolId);
 
             string filter1 = null;
             string filter2 = null;

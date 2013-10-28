@@ -133,9 +133,9 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!classId.HasValue)
             {
                 if (Context.Role == CoreRoles.STUDENT_ROLE)
-                    studentId = Context.LocalId;
+                    studentId = Context.UserLocalId;
                 if (Context.Role == CoreRoles.TEACHER_ROLE)
-                    teacherId = Context.LocalId;
+                    teacherId = Context.UserLocalId;
             }
             var classPeriods = GetClassPeriods(dateTime, classId, null, studentId, teacherId);
 

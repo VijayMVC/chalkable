@@ -88,22 +88,23 @@ namespace Chalkable.Data.School.DataAccess
         }
         private IList<FinalGradeDetails> ReadFinalGradesResult(SqlDataReader reader, out int sourceCount)
         {
-            sourceCount = reader.Read() ? SqlTools.ReadInt32(reader, "SourceCount") : 0;
-            reader.NextResult();
-            var finalGrades = reader.ReadList<FinalGradeDetails>(true);
-            if (finalGrades.Count > 0)
-            {
-                reader.NextResult();
-                var fgAnnTypes = reader.ReadList<FinalGradeAnnouncementType>(true);
-                reader.NextResult();
-                var stFinalGrades = StudentFinalGradeDataAccess.ReadStudentFinalGradeResult(reader);
-                foreach (var finalGrade in finalGrades)
-                {
-                    finalGrade.StudentFinalGrades = stFinalGrades.Where(x => x.FinalGradeRef == finalGrade.Id).ToList();
-                    finalGrade.FinalGradeAnnouncementTypes = fgAnnTypes.Where(x => x.FinalGradeRef == finalGrade.Id).ToList();
-                }
-            }
-            return finalGrades;
+            throw new NotImplementedException();
+            //sourceCount = reader.Read() ? SqlTools.ReadInt32(reader, "SourceCount") : 0;
+            //reader.NextResult();
+            //var finalGrades = reader.ReadList<FinalGradeDetails>(true);
+            //if (finalGrades.Count > 0)
+            //{
+            //    reader.NextResult();
+            //    var fgAnnTypes = reader.ReadList<FinalGradeAnnouncementType>(true);
+            //    reader.NextResult();
+            //    var stFinalGrades = StudentFinalGradeDataAccess.ReadStudentFinalGradeResult(reader);
+            //    foreach (var finalGrade in finalGrades)
+            //    {
+            //        finalGrade.StudentFinalGrades = stFinalGrades.Where(x => x.FinalGradeRef == finalGrade.Id).ToList();
+            //        finalGrade.FinalGradeAnnouncementTypes = fgAnnTypes.Where(x => x.FinalGradeRef == finalGrade.Id).ToList();
+            //    }
+            //}
+            //return finalGrades;
         }  
     }
 

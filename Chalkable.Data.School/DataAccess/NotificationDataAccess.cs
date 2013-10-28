@@ -110,10 +110,10 @@ namespace Chalkable.Data.School.DataAccess
             var template = prefix + "_{0}";
             return new Person
                 {
-                    Id = SqlTools.ReadGuid(reader, string.Format(template, Person.ID_FIELD)),
+                    Id = SqlTools.ReadInt32(reader, string.Format(template, Person.ID_FIELD)),
                     FirstName = SqlTools.ReadStringNull(reader, string.Format(template, Person.FIRST_NAME_FIELD)),
                     LastName = SqlTools.ReadStringNull(reader, string.Format(template, Person.LAST_NAME_FIELD)),
-                    RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD)),
+                    //RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD)),
                     Gender = SqlTools.ReadStringNull(reader, string.Format(template, Person.GENDER_FIELD)),
                     Salutation = SqlTools.ReadStringNull(reader, string.Format(template, Person.SALUTATION_FIELD)),
                 };

@@ -18,35 +18,35 @@ namespace Chalkable.BusinessLogic.Security
 
         public static bool CanModifyAnnouncement(Announcement announcement, UserContext context)
         {
-            return BaseSecurity.IsAdminEditor(context) || context.UserId == announcement.PersonRef;
+            return BaseSecurity.IsAdminEditor(context) || context.UserLocalId == announcement.PersonRef;
         }
 
         public static bool CanDeleteAnnouncement(Announcement announcement, UserContext context)
         {
-            return BaseSecurity.IsSysAdmin(context) || announcement.PersonRef == context.UserId;
+            return BaseSecurity.IsSysAdmin(context) || announcement.PersonRef == context.UserLocalId;
         }
 
 
         public static bool IsReminderOwner(AnnouncementReminder announcementReminder, UserContext context)
         {
             return announcementReminder.PersonRef.HasValue &&
-                   announcementReminder.PersonRef.Value == context.UserId ||
-                   announcementReminder.Announcement.PersonRef == context.UserId;
+                   announcementReminder.PersonRef.Value == context.UserLocalId ||
+                   announcementReminder.Announcement.PersonRef == context.UserLocalId;
         }
 
         public static bool CanModifyAnnouncementQnA(AnnouncementQnAComplex announcementQnA, UserContext context)
         {
-            return BaseSecurity.IsAdminEditor(context) || context.UserId == announcementQnA.Answerer.Id;
+            return BaseSecurity.IsAdminEditor(context) || context.UserLocalId == announcementQnA.Answerer.Id;
         }
 
         public static bool CanDeleteAttachment(AnnouncementAttachment announcementAttachment, UserContext context)
         {
-            return BaseSecurity.IsSysAdmin(context) || announcementAttachment.PersonRef == context.UserId;
+            return BaseSecurity.IsSysAdmin(context) || announcementAttachment.PersonRef == context.UserLocalId;
         }
         public static bool CanAttach(AnnouncementDetails announcementDetails, UserContext context)
         {
             return CanModifyAnnouncement(announcementDetails, context) ||
-                   announcementDetails.StudentAnnouncements.Any(x => x.Person.Id == context.UserId);
+                   announcementDetails.StudentAnnouncements.Any(x => x.Person.Id == context.UserLocalId);
             
         }
     }

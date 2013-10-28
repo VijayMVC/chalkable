@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public Announcement AddAttachment(int announcementId, byte[] content, string name, string uuid)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
-            if (!(Context.LocalId.HasValue && Context.SchoolId.HasValue))
+            if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
                 throw new UnassignedUserException();
             if(!AnnouncementSecurity.CanAttach(ann, Context))
                 throw new ChalkableSecurityException();
@@ -45,24 +45,24 @@ namespace Chalkable.BusinessLogic.Services.School
                 da.Insert(new AnnouncementAttachment
                     {
                         AnnouncementRef = ann.Id,
-                        PersonRef = Context.LocalId.Value,
+                        PersonRef = Context.UserLocalId.Value,
                         AttachedDate = Context.NowSchoolTime,
                         Name = name,
                         Uuid = uuid,
                         Order = ServiceLocator.AnnouncementService.GetNewAnnouncementItemOrder(ann)
                     });
-                var atts =  da.GetList(Context.LocalId.Value, Context.Role.Id, name);
+                var atts =  da.GetList(Context.UserLocalId.Value, Context.Role.Id, name);
                 ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, atts.Last().Id.ToString(), content);
                 uow.Commit();
                 if (ann.State != AnnouncementState.Draft)
                 {
-                    if (Context.LocalId == ann.PersonRef)
+                    if (Context.UserLocalId == ann.PersonRef)
                     {
                         ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotification(announcementId);
                     }
                     else
                     {
-                        ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToPerson(announcementId, Context.LocalId.Value);
+                        ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToPerson(announcementId, Context.UserLocalId.Value);
                     }
                 }
 
@@ -90,7 +90,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new AnnouncementAttachmentDataAccess(uow);
-                return da.GetPaginatedList(announcementId, Context.LocalId ?? 0, Context.Role.Id, start, count, needsAllAttachments);
+                return da.GetPaginatedList(announcementId, Context.UserLocalId ?? 0, Context.Role.Id, start, count, needsAllAttachments);
             }
         }
 
@@ -99,7 +99,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new AnnouncementAttachmentDataAccess(uow);
-                return da.GetById(announcementAttachmentId, Context.LocalId ?? 0, Context.Role.Id);
+                return da.GetById(announcementAttachmentId, Context.UserLocalId ?? 0, Context.Role.Id);
             }
         }
 
@@ -113,7 +113,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new AnnouncementAttachmentDataAccess(uow).GetList(Context.LocalId ?? 0, Context.Role.Id, filter);
+                return new AnnouncementAttachmentDataAccess(uow).GetList(Context.UserLocalId ?? 0, Context.Role.Id, filter);
             }
         }
         public static string GetAttachmentRelativeAddress()

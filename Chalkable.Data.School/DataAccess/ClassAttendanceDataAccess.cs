@@ -221,20 +221,21 @@ namespace Chalkable.Data.School.DataAccess
         }
         private DbQuery PrepareGetStudentAbsentFromPeriodQuery(int periodOrder, string periodOrderParamName, DateTime fromDate, DateTime toDate, IList<Guid> gradeLevels)
         {
-            var dbQuery = new DbQuery();
-            dbQuery.Sql.AppendFormat(@"select x.{0} as {0}, x.{1} as {1} 
-                                       from StudentInfo si", PERSON_ID_RES_FIELD, DATE_RES_FIELD);
-            dbQuery.Sql.Append(" join ").AppendFormat(FN_GET_STUDENT_ABSENT_FROM_PERIOD, "@" + periodOrderParamName, "@" + FROM_DATE_PARAM, "@" + TO_DATE_PARAM);
-            dbQuery.Sql.AppendFormat(" x on x.{0} = si.{1} ", PERSON_ID_RES_FIELD, StudentInfo.ID_FIELD);
-            dbQuery.Parameters.Add(periodOrderParamName, periodOrder);
-            dbQuery.Parameters.Add(FROM_DATE_PARAM, fromDate);
-            dbQuery.Parameters.Add(TO_DATE_PARAM, toDate);
-            if (gradeLevels != null && gradeLevels.Count > 0)
-            {
-                var glStr = gradeLevels.Select(x => "'" + x.ToString() + "'").JoinString(",");
-                dbQuery.Sql.AppendFormat(" where si.{0} in ({1})", StudentInfo.GRADE_LEVEL_REF_FIELD, glStr);
-            }
-            return dbQuery;
+            throw new NotImplementedException();
+//            var dbQuery = new DbQuery();
+//            dbQuery.Sql.AppendFormat(@"select x.{0} as {0}, x.{1} as {1} 
+//                                       from StudentInfo si", PERSON_ID_RES_FIELD, DATE_RES_FIELD);
+//            dbQuery.Sql.Append(" join ").AppendFormat(FN_GET_STUDENT_ABSENT_FROM_PERIOD, "@" + periodOrderParamName, "@" + FROM_DATE_PARAM, "@" + TO_DATE_PARAM);
+//            dbQuery.Sql.AppendFormat(" x on x.{0} = si.{1} ", PERSON_ID_RES_FIELD, StudentInfo.ID_FIELD);
+//            dbQuery.Parameters.Add(periodOrderParamName, periodOrder);
+//            dbQuery.Parameters.Add(FROM_DATE_PARAM, fromDate);
+//            dbQuery.Parameters.Add(TO_DATE_PARAM, toDate);
+//            if (gradeLevels != null && gradeLevels.Count > 0)
+//            {
+//                var glStr = gradeLevels.Select(x => "'" + x.ToString() + "'").JoinString(",");
+//                dbQuery.Sql.AppendFormat(" where si.{0} in ({1})", StudentInfo.GRADE_LEVEL_REF_FIELD, glStr);
+//            }
+//            return dbQuery;
         }
        
 

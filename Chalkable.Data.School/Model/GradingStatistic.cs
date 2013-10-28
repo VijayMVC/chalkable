@@ -35,8 +35,8 @@ namespace Chalkable.Data.School.Model
             set
             {
                 _class = value;
-                if (value != null && value.Id != Guid.Empty)
-                    ClassRef = value.Id;
+                //if (value != null && value.Id != Guid.Empty)
+                //    ClassRef = value.Id;
             }
         }
         private MarkingPeriod markingPeriod;
@@ -47,8 +47,8 @@ namespace Chalkable.Data.School.Model
             set
             {
                 markingPeriod = value;
-                if (value != null && value.Id != Guid.Empty)
-                    MarkingPeriodRef = value.Id;
+                //if (value != null && value.Id != Guid.Empty)
+                //    MarkingPeriodRef = value.Id;
             }
         }
         public int? Avg { get; set; }

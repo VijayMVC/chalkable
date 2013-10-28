@@ -52,7 +52,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Phone Add(int id, int personId, string value, PhoneType type, bool isPrimary)
         {
-            if (!(BaseSecurity.IsAdminOrTeacher(Context) || Context.LocalId == personId))//TODO:can teacher do this?
+            if (!(BaseSecurity.IsAdminOrTeacher(Context) || Context.UserLocalId == personId))//TODO:can teacher do this?
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -78,7 +78,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new PhoneDataAccess(uow);
                 var phone = da.GetById(id);
-                if (!(BaseSecurity.IsAdminOrTeacher(Context) || Context.LocalId == phone.PersonRef))//TODO:can teacher do this?
+                if (!(BaseSecurity.IsAdminOrTeacher(Context) || Context.UserLocalId == phone.PersonRef))//TODO:can teacher do this?
                     throw new ChalkableSecurityException();
                 phone.DigitOnlyValue = DigitsOnly(value);
                 phone.Value = value;
@@ -96,7 +96,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new PhoneDataAccess(uow);
                 var phone = da.GetById(id);
-                if (!(BaseSecurity.IsAdminEditor(Context) || Context.LocalId == phone.PersonRef))
+                if (!(BaseSecurity.IsAdminEditor(Context) || Context.UserLocalId == phone.PersonRef))
                     throw new ChalkableSecurityException();
                 da.Delete(phone.Id);
                 uow.Commit();

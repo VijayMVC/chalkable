@@ -13,17 +13,17 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IStudentAnnouncementService
     {
-        IList<StudentAnnouncementDetails> GetStudentAnnouncements(Guid announcementId);
-        void ResolveAutoGrading(Guid announcementId, bool apply);
+        IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId);
+        void ResolveAutoGrading(int announcementId, bool apply);
         //IList<StudentAnnouncement> GetStudentAnnouncements(int schoolPersonId, int classId);
-        StudentAnnouncement SetGrade(Guid studentAnnouncementId, int? value, string extraCredits, string comment, bool dropped, GradingStyleEnum? gradingStyle = null);
-        StudentAnnouncement SetAutoGrade(Guid studentAnnouncementId, int value, Guid applicationId);
+        StudentAnnouncement SetGrade(int studentAnnouncementId, int? value, string extraCredits, string comment, bool dropped, GradingStyleEnum? gradingStyle = null);
+        StudentAnnouncement SetAutoGrade(int studentAnnouncementId, int value, Guid applicationId);
         //IList<StudentGradingComplex> GetStudentGradedAnnouncements(int schoolPersonId, int markingPeriodId);
 
         //int? GetAssignmentAverage(int announcementId);
         //double GetAvgByAnnouncements(IList<StudentAnnouncement> studentAnnouncements, bool dropLowest);
 
-        IList<StudentAnnouncementGrade> GetLastGrades(Guid studentId, Guid? classId = null, int count = int.MaxValue);
+        IList<StudentAnnouncementGrade> GetLastGrades(int studentId, int? classId = null, int count = int.MaxValue);
     }
 
     public class StudentAnnouncementService : SchoolServiceBase, IStudentAnnouncementService
@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         //TODO : needs testing 
-        public StudentAnnouncement SetGrade(Guid studentAnnouncementId, int? value, string extraCredits, string comment, bool dropped,
+        public StudentAnnouncement SetGrade(int studentAnnouncementId, int? value, string extraCredits, string comment, bool dropped,
                                             GradingStyleEnum? gradingStyle = null)
         {
             using (var uow = Update())
@@ -66,17 +66,17 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<StudentAnnouncementDetails> GetStudentAnnouncements(Guid announcementId)
+        public IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId)
         {
             using (var uow = Read())
             {
                return  new StudentAnnouncementDataAccess(uow)
-                   .GetStudentAnnouncementsDetails(announcementId, Context.UserId);
+                   .GetStudentAnnouncementsDetails(announcementId, Context.UserLocalId ?? 0);
             }
         }
 
         //TODO: check application existing  
-        public StudentAnnouncement SetAutoGrade(Guid studentAnnouncementId, int value, Guid applicationId)
+        public StudentAnnouncement SetAutoGrade(int studentAnnouncementId, int value, Guid applicationId)
         {
             using (var uow = Update())
             {
@@ -95,7 +95,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public void ResolveAutoGrading(Guid announcementId, bool apply)
+        public void ResolveAutoGrading(int announcementId, bool apply)
         {
             using (var uow = Update())
             {
@@ -116,7 +116,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public IList<StudentAnnouncementGrade> GetLastGrades(Guid studentId, Guid? classId = null, int count = int.MaxValue)
+        public IList<StudentAnnouncementGrade> GetLastGrades(int studentId, int? classId = null, int count = int.MaxValue)
         {
             using (var uow = Read())
             {

@@ -8,7 +8,7 @@ namespace Chalkable.Data.School.Model
 
         public string GroupId { get; set; }
 
-        public Guid PersonId { get; set; }
+        public int PersonId { get; set; }
     }
 
     public class PersonsForApplicationInstallCount
@@ -22,7 +22,7 @@ namespace Chalkable.Data.School.Model
 
     public class StudentCountToAppInstallByClass
     {
-        public Guid ClassId { get; set; }
+        public int ClassId { get; set; }
 
         public string ClassName { get; set; }
 

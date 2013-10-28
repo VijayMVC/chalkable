@@ -113,7 +113,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new PersonDataAccess(uow);
-                query.CallerId = Context.LocalId;
+                query.CallerId = Context.UserLocalId;
                 query.CallerRoleId = Context.Role.Id;
                 var res = da.GetPersons(query);
                 return res;
@@ -149,7 +149,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new PersonDataAccess(uow).GetPersonDetails(id, Context.LocalId ?? 0, Context.Role.Id);
+                return new PersonDataAccess(uow).GetPersonDetails(id, Context.UserLocalId ?? 0, Context.Role.Id);
             }
         }
 
@@ -167,7 +167,7 @@ namespace Chalkable.BusinessLogic.Services.School
             DateTime? birthDate, bool iep, DateTime enrollmentDate, string previousSchool, string previousSchoolPhone, 
             string previousSchoolNote, Guid? gradeLevelId)
         {
-            if(!(BaseSecurity.IsAdminOrTeacher(Context) || Context.LocalId == studentId))
+            if(!(BaseSecurity.IsAdminOrTeacher(Context) || Context.UserLocalId == studentId))
                 throw new ChalkableSecurityException();
             
             using (var uow = Update())

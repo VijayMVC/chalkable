@@ -11,11 +11,11 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IPrivateMessageService
     {
-        PrivateMessageDetails SendMessage(Guid toPersonId, string subject, string body);
+        PrivateMessageDetails SendMessage(int toPersonId, string subject, string body);
         PaginatedList<PrivateMessageDetails> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword);
-        void MarkAsRead(IList<Guid> ids, bool read);
-        void Delete(IList<Guid> id);
-        PrivateMessageDetails GetMessage(Guid id);
+        void MarkAsRead(IList<int> ids, bool read);
+        void Delete(IList<int> id);
+        PrivateMessageDetails GetMessage(int id);
     }
 
     public enum PrivateMessageType
@@ -32,24 +32,25 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public PrivateMessageDetails SendMessage(Guid toPersonId, string subject, string body)
+        public PrivateMessageDetails SendMessage(int toPersonId, string subject, string body)
         {
+            if(!Context.UserLocalId.HasValue)
+                throw new UnassignedUserException();
             using (var uow = Update())
             {
                 var da = new PrivateMessageDataAccess(uow);
                 var message = new PrivateMessage
                     {
-                        Id = Guid.NewGuid(),
                         Body = body,
                         Subject = subject,
-                        FromPersonRef = Context.UserId,
+                        FromPersonRef = Context.UserLocalId.Value,
                         ToPersonRef = toPersonId,
                         Sent = Context.NowSchoolTime
                     };
                 da.Insert(message);
                 uow.Commit();
                 ServiceLocator.NotificationService.AddPrivateMessageNotification(message.Id);
-                return da.GetDetailsById(message.Id, Context.UserId);
+                return da.GetDetailsById(message.Id, Context.UserLocalId.Value);
             }
         }
 
@@ -63,22 +64,22 @@ namespace Chalkable.BusinessLogic.Services.School
                 switch (type)
                 {
                     case PrivateMessageType.Income:
-                        return da.GetIncomeMessages(rolesIds, keyword, read, Context.UserId, start, count);
+                        return da.GetIncomeMessages(rolesIds, keyword, read, Context.UserLocalId ?? 0, start, count);
                     case PrivateMessageType.Outcome:
-                        return da.GetOutComeMessage(rolesIds, keyword, Context.UserId, start, count);
+                        return da.GetOutComeMessage(rolesIds, keyword, Context.UserLocalId ?? 0, start, count);
                     default:
                         throw new ChalkableException(ChlkResources.ERR_PRIVATE_MESSAGE_INVALID_TYPE);
                 }    
             }
         }
 
-        public void MarkAsRead(IList<Guid> ids, bool read)
+        public void MarkAsRead(IList<int> ids, bool read)
         {
             if (ids != null)
                 using (var uow = Update())
                 {
                     var da = new PrivateMessageDataAccess(uow);
-                    var messages = da.GetNotDeleted(Context.UserId).Where(x=>ids.Contains(x.Id)).ToList();
+                    var messages = da.GetNotDeleted(Context.UserLocalId ?? 0).Where(x=>ids.Contains(x.Id)).ToList();
                     if(messages.Count == 0)
                         throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_MARK_INVALID_RIGHTS);
 
@@ -93,13 +94,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
         }
 
-        public void Delete(IList<Guid> ids)
+        public void Delete(IList<int> ids)
         {
             if (ids != null)
                 using (var uow = Update())
                 {
                     var da = new PrivateMessageDataAccess(uow);
-                    var messages = da.GetNotDeleted(Context.UserId).Where(x => ids.Contains(x.Id)).ToList();
+                    var messages = da.GetNotDeleted(Context.UserLocalId ?? 0).Where(x => ids.Contains(x.Id)).ToList();
                     if (messages.Count == 0)
                         throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_DELETE_INVALID_RIGHTS);
 
@@ -108,9 +109,9 @@ namespace Chalkable.BusinessLogic.Services.School
                         if (!PrivateMessageSecurity.CanDeleteMessage(message, Context))
                             throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_DELETE_INVALID_RIGHTS);
 
-                        if(message.ToPersonRef == Context.UserId)
+                        if(message.ToPersonRef == Context.UserLocalId)
                             message.DeletedByRecipient = true;
-                        if(message.FromPersonRef == Context.UserId)
+                        if(message.FromPersonRef == Context.UserLocalId)
                             message.DeletedBySender = true;
                     }
                     da.Update(messages);
@@ -118,12 +119,12 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
         }
 
-        public PrivateMessageDetails GetMessage(Guid id)
+        public PrivateMessageDetails GetMessage(int id)
         {
             using (var uow = Read())
             {
                 var da = new PrivateMessageDataAccess(uow);
-                var res = da.GetDetailsById(id, Context.UserId);
+                var res = da.GetDetailsById(id, Context.UserLocalId ?? 0);
                 return res;
             }
         }
