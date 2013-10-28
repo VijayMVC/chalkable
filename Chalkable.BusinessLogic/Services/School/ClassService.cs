@@ -12,7 +12,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IClassService
     {
-        ClassDetails Add(int classId, int schoolYearId, int chlkableDepartmentId, string name, string description, int teacherId, int gradeLevelId, List<int> markingPeriodsId);
+        ClassDetails Add(int classId, int schoolYearId, Guid? chlkableDepartmentId, string name, string description, int teacherId, int gradeLevelId, List<int> markingPeriodsId);
         ClassDetails Edit(int classId, int chlkableDepartmentId, string name, string description, int teacherId, int gradeLevelId, List<int> markingPeriodsId);
         ClassDetails AddStudent(int classId, int personId);
         ClassDetails DeleteStudent(int classId, int personId);
@@ -36,7 +36,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         //TODO: needs test
-        public ClassDetails Add(int classId, int schoolYearId, int chlkableDepartmentId, string name
+        public ClassDetails Add(int classId, int schoolYearId, Guid? chlkableDepartmentId, string name
             , string description, int teacherId, int gradeLevelId, List<int> markingPeriodsId)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
@@ -79,7 +79,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public ClassDetails Edit(int classId, int chlkableDepartmentId, string name
+        public ClassDetails Edit(int classId, Guid? chlkableDepartmentId, string name
             , string description, int teacherId, int gradeLevelId, List<int> markingPeriodsId)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
