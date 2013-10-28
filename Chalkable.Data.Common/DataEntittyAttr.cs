@@ -9,4 +9,9 @@ namespace Chalkable.Data.Common
     public class NotDbFieldAttr : Attribute
     {
     }
+
+    public class IdentityFieldAttr : Attribute
+    {
+        
+    }
 }

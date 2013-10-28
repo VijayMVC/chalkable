@@ -6,7 +6,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class ClassPersonDataAccess : DataAccessBase<ClassPerson>
+    public class ClassPersonDataAccess : DataAccessBase<ClassPerson, int>
     {
         public ClassPersonDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -50,7 +50,7 @@ namespace Chalkable.Data.School.DataAccess
 
     public class ClassPersonQuery
     {
-        public Guid? ClassId { get; set; }
-        public Guid? PersonId { get; set; }
+        public int? ClassId { get; set; }
+        public int? PersonId { get; set; }
     }
 }

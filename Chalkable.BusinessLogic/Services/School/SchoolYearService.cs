@@ -10,11 +10,11 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface ISchoolYearService
     {
-        SchoolYear Add(string name,string description, DateTime startDate, DateTime endDate, int? sisId = null);
-        SchoolYear Edit(Guid id, string name, string description, DateTime startDate, DateTime endDate);
-        SchoolYear GetSchoolYearById(Guid id);
+        SchoolYear Add(int id, string name,string description, DateTime startDate, DateTime endDate);
+        SchoolYear Edit(int id, string name, string description, DateTime startDate, DateTime endDate);
+        SchoolYear GetSchoolYearById(int id);
         PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue);
-        void Delete(Guid schoolYearId);
+        void Delete(int schoolYearId);
         SchoolYear GetCurrentSchoolYear();
         IList<SchoolYear> GetSortedYears();
     }
@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         //TODO: needs test 
-        public SchoolYear Add(string name, string description, DateTime startDate, DateTime endDate, int? sisId = null)
+        public SchoolYear Add(int id, string name, string description, DateTime startDate, DateTime endDate)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -42,12 +42,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 
                 var schoolYear = new SchoolYear
                     {
-                        Id = Guid.NewGuid(),
+                        Id = id,
                         Description = description,
                         Name = name,
                         StartDate = startDate,
                         EndDate = endDate,
-                        SisId = sisId
                     };
                 
                 da.Insert(schoolYear);
@@ -58,11 +57,11 @@ namespace Chalkable.BusinessLogic.Services.School
         
         private bool IsOverlaped(DateTime startDate, DateTime endDate, SchoolYearDataAccess dataAccess, SchoolYear schoolYear = null)
         {
-            var id = schoolYear != null ? schoolYear.Id : (Guid?) null;
+            var id = schoolYear != null ? schoolYear.Id : (int?) null;
             return startDate >= endDate || (dataAccess.IsOverlaped(startDate, endDate, id));
         }
 
-        public SchoolYear Edit(Guid id, string name, string description, DateTime startDate, DateTime endDate)
+        public SchoolYear Edit(int id, string name, string description, DateTime startDate, DateTime endDate)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -86,7 +85,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public SchoolYear GetSchoolYearById(Guid id)
+        public SchoolYear GetSchoolYearById(int id)
         {
             using (var uow = Read())
             {
@@ -104,7 +103,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void Delete(Guid schoolYearId)
+        public void Delete(int schoolYearId)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();

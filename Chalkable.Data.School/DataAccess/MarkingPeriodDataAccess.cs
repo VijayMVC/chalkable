@@ -9,16 +9,16 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class MarkingPeriodDataAccess : DataAccessBase<MarkingPeriod>
+    public class MarkingPeriodDataAccess : DataAccessBase<MarkingPeriod, int>
     {
         public MarkingPeriodDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
 
-        public void DeleteMarkingPeriods(IList<Guid> markingPeriodIds)
+        public void DeleteMarkingPeriods(IList<int> markingPeriodIds)
         {
             var b = new StringBuilder();
-            var mpidsString = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
+            var mpidsString = markingPeriodIds.Select(x => "'" + x + "'").JoinString(",");
             b.Append(@"delete from ClassPeriod where PeriodRef in (select Id from Period where MarkingPeriodRef in ({0})) ");
             b.Append(@"delete from Period where MarkingPeriodRef in ({0}) ");
             b.Append(@"delete from ScheduleSection where MarkingPeriodRef in ({0}) ");
@@ -28,7 +28,7 @@ namespace Chalkable.Data.School.DataAccess
             ExecuteNonQueryParametrized(sql, conds);
         }
         
-        public void ChangeWeekDays(IList<Guid> markingPeriodIds, int weekDays)
+        public void ChangeWeekDays(IList<int> markingPeriodIds, int weekDays)
         {
             var b = new StringBuilder();
             foreach (var markingPeriodId in markingPeriodIds)
@@ -52,7 +52,7 @@ namespace Chalkable.Data.School.DataAccess
             return ReadOneOrNull<MarkingPeriod>(q);
         }
 
-        public MarkingPeriod GetNextInYear(Guid markingPeriodId)
+        public MarkingPeriod GetNextInYear(int markingPeriodId)
         {
             var sql = @"declare @schoolYearId uniqueidentifier, @startDate datetime2
                         select @schoolYearId = SchoolYearRef, @startDate = StartDate
@@ -66,7 +66,7 @@ namespace Chalkable.Data.School.DataAccess
             return ReadOneOrNull<MarkingPeriod>(new DbQuery (sql, conds));
         }
 
-        public IList<MarkingPeriod> GetMarkingPeriods(Guid? schoolYearId)
+        public IList<MarkingPeriod> GetMarkingPeriods(int? schoolYearId)
         {
             var conds = new AndQueryCondition();
             if (schoolYearId.HasValue)
@@ -84,7 +84,7 @@ namespace Chalkable.Data.School.DataAccess
             return SelectOneOrNull<MarkingPeriod>(conds);   
         }
 
-        public bool IsOverlaped(DateTime startDate, DateTime endDate, Guid? currentMarkingPeriodId)
+        public bool IsOverlaped(DateTime startDate, DateTime endDate, int? currentMarkingPeriodId)
         {
             var conds = new AndQueryCondition
                 {

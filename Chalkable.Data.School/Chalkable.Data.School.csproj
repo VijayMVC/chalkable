@@ -78,7 +78,6 @@
     <Compile Include="DataAccess\ClassDataAccess.cs" />
     <Compile Include="DataAccess\ClassPeriodDataAccess.cs" />
     <Compile Include="DataAccess\ClassPersonDataAccess.cs" />
-    <Compile Include="DataAccess\CourseDataAccess.cs" />
     <Compile Include="DataAccess\GradeLevelDataAccess.cs" />
     <Compile Include="DataAccess\MarkingPeriodClassDataAccess.cs" />
     <Compile Include="DataAccess\MarkingPeriodDataAccess.cs" />
@@ -87,7 +86,7 @@
     <Compile Include="DataAccess\PhoneDataAccess.cs" />
     <Compile Include="DataAccess\PrivateMessageDataAccess.cs" />
     <Compile Include="DataAccess\RoomDataAccess.cs" />
-    <Compile Include="DataAccess\ScheduleSectionDataAccess.cs" />
+    <Compile Include="DataAccess\DateTypeDataAccess.cs" />
     <Compile Include="DataAccess\SchoolYearDataAccess.cs" />
     <Compile Include="DataAccess\StudentAnnouncementDataAccess.cs" />
     <Compile Include="DataAccess\StudentFinalGradeDataAccess.cs" />

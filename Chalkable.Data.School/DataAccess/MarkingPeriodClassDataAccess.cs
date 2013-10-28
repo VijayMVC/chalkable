@@ -9,7 +9,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class MarkingPeriodClassDataAccess : DataAccessBase<MarkingPeriodClass>
+    public class MarkingPeriodClassDataAccess : DataAccessBase<MarkingPeriodClass, int>
     {
 
         public MarkingPeriodClassDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
@@ -44,7 +44,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             return Exists<MarkingPeriodClass>(BuildConditions(query));
         }
-        public bool Exists(IList<Guid> markingPeriodIds)
+        public bool Exists(IList<int> markingPeriodIds)
         {
             var mpIdsString = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
             var query = new DbQuery();
@@ -67,8 +67,8 @@ namespace Chalkable.Data.School.DataAccess
 
     public class MarkingPeriodClassQuery
     {
-        public Guid? Id { get; set; }
-        public Guid? ClassId { get; set; }
-        public Guid? MarkingPeriodId { get; set; }
+        public int? Id { get; set; }
+        public int? ClassId { get; set; }
+        public int? MarkingPeriodId { get; set; }
     }
 }

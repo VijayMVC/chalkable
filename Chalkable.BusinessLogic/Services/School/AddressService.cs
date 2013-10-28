@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Orm;
@@ -10,11 +11,11 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAddressService
     {
-        Address Add(Guid personId, string value, string note, AddressType type);
-        Address Edit(Guid id, string value, string note, AddressType type);
-        void Delete(Guid id);
+        Address Add(AddressInfo address);
+        Address Edit(AddressInfo address);
+        void Delete(int id);
         IList<Address> GetAddress();
-        IList<Address> GetAddress(Guid personId);
+        IList<Address> GetAddress(int personId);
     }
     public class AddressService : SchoolServiceBase, IAddressService
     {
@@ -23,47 +24,55 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public Address Add(Guid personId, string value, string note, AddressType type)
+        public Address Add(AddressInfo addressInfo)
         {
             if(!BaseSecurity.IsAdminOrTeacher(Context))//TODO:can teacher do this?
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new AddressDataAccess(uow);
-                var address = new Address
-                    {
-                        Id = Guid.NewGuid(),
-                        Note = note,
-                        PersonRef = personId,
-                        Type = type,
-                        Value = value
-                    };
+                var address = EditAddress(addressInfo, null);
                 da.Insert(address);
                 uow.Commit();
                 return address;
             }
         }
 
-        public Address Edit(Guid id, string value, string note, AddressType type)
+        public Address Edit(AddressInfo addressInfo)
         {
             if (!BaseSecurity.IsAdminOrTeacher(Context))//TODO:can teacher do this?
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new AddressDataAccess(uow);
-                var address = da.GetById(id);
+                var address = da.GetById(addressInfo.Id);
                 if (!AddressSecurity.CanModify(address, Context))
                     throw new ChalkableSecurityException();
-                address.Value = value;
-                address.Note = note;
-                address.Type = type;
+                address = EditAddress(addressInfo, address);
                 da.Update(address);
                 uow.Commit();
                 return address;
             }
         }
 
-        public void Delete(Guid id)
+        private Address EditAddress(AddressInfo addressInfo, Address address)
+        {
+            if(address == null)
+                address = new Address();
+            address.Id = addressInfo.Id;
+            address.AddressLine1 = addressInfo.AddressLine1;
+            address.AddressLine2 = addressInfo.AddressLine2;
+            address.AddressNumber = addressInfo.AddressNumber;
+            address.City = addressInfo.City;
+            address.Country = addressInfo.Country;
+            address.CountryID = addressInfo.CountryID;
+            address.Latitude = addressInfo.Latitude;
+            address.Longitude = addressInfo.Longitude;
+            address.PostalCode = addressInfo.PostalCode;
+            return address;
+        }
+
+        public void Delete(int id)
         {
             using (var uow = Update())
             {
@@ -88,7 +97,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Address> GetAddress(Guid personId)
+        public IList<Address> GetAddress(int personId)
         {
             if (!BaseSecurity.IsAdminOrTeacher(Context))
                 throw new ChalkableSecurityException();
@@ -96,7 +105,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new AddressDataAccess(uow);
-                return da.GetAll(new AndQueryCondition{{Address.PERSON_REF_FIELD, personId}});
+                return da.GetAddress(personId);
             }
         }
     }

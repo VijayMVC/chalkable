@@ -1,4 +1,5 @@
 ﻿using System;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
@@ -10,7 +11,9 @@ namespace Chalkable.Data.School.Model
         public const string CREATED_FIELD = "Created";
         public const string PERSON_REF_FIELD = "PersonRef";
         public const string CLASS_PERIOD_REF_FIELD = "ClassPeriodRef";
-        
+
+
+        [IdentityFieldAttr]
         public int Id { get; set; }
         public NotificationType Type { get; set; }
         public string Message { get; set; }

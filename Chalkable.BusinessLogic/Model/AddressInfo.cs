@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Chalkable.Data.Common;
 
-namespace Chalkable.Data.School.Model
+namespace Chalkable.BusinessLogic.Model
 {
-    public class Address
+    public class AddressInfo
     {
-        public const string ID_FIELD = "Id";
         public int Id { get; set; }
         public string AddressNumber { get; set; }
         public string StreetNumber { get; set; }
@@ -22,11 +20,5 @@ namespace Chalkable.Data.School.Model
         public int CountryID { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
-    }
-
-    public enum AddressType
-    {
-        Home,
-        Work
     }
 }

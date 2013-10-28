@@ -7,7 +7,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class SchoolYearDataAccess : DataAccessBase<SchoolYear>
+    public class SchoolYearDataAccess : DataAccessBase<SchoolYear, int>
     {
         public SchoolYearDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -44,10 +44,8 @@ namespace Chalkable.Data.School.DataAccess
             return Exists<SchoolYear>(conds);
         }
 
-        public bool IsOverlaped(DateTime startDate, DateTime endDate, Guid? currentSchoolYearId)
+        public bool IsOverlaped(DateTime startDate, DateTime endDate, int? currentSchoolYearId)
         {
-            //var sqlCommand = "select * from SchoolYear where StartDate <= @endDate and EndDate >= @startDate";
-
             var conds = new AndQueryCondition
                 {
                     {SchoolYear.START_DATE_FIELD, SchoolYear.END_DATE_FIELD, endDate, ConditionRelation.LessEqual},
@@ -56,17 +54,6 @@ namespace Chalkable.Data.School.DataAccess
             if(currentSchoolYearId.HasValue)
                 conds.Add(SchoolYear.ID_FIELD, currentSchoolYearId.Value, ConditionRelation.NotEqual);
             
-            //var conds = new Dictionary<string, object>
-            //    {  
-            //        {"startDate", startDate},
-            //        {"endDate", endDate}
-            //    };
-            //if (currentSchoolYearId.HasValue)
-            //{
-            //    conds.Add("id", currentSchoolYearId);
-            //    sqlCommand += " and Id != @id";
-            //}
-            //var query = new DbQuery(sqlCommand, conds);
             return Exists<SchoolYear>(conds);
         }
     }

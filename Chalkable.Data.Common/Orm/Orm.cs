@@ -28,14 +28,15 @@ namespace Chalkable.Data.Common.Orm
                 && propertyInfo.GetCustomAttribute<NotDbFieldAttr>() == null;
         }
         
-        public static List<string> Fields(Type t)
+        public static List<string> Fields(Type t, bool identityFields = true)
         {
             var res = new List<string>();
             var props = t.GetProperties(BindingFlags.Instance | BindingFlags.Public);
             foreach (var propertyInfo in props)
                 if (propertyInfo.CanWrite && propertyInfo.CanRead)
                 {
-                    if (IsDbField(propertyInfo))
+                    if (IsDbField(propertyInfo) 
+                        && (identityFields || propertyInfo.GetCustomAttribute<IdentityFieldAttr>() == null))
                         res.Add(propertyInfo.Name);
                 }
             return res;
@@ -101,7 +102,7 @@ namespace Chalkable.Data.Common.Orm
             var res = new DbQuery {Parameters = new Dictionary<string, object>()};
             var b = new StringBuilder();
             var t = typeof(T);
-            var fields = Fields(t);
+            var fields = Fields(t, false);
             b.Append("Insert into [").Append(t.Name).Append("] (");
             b.Append(fields.Select(x => "[" + x + "]").JoinString(",")).Append(")");
             b.Append(" values ");

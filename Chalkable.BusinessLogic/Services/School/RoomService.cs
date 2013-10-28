@@ -9,12 +9,12 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IRoomService
     {
-        Room AddRoom(string roomNumber, string description, string size, int? capacity, string phoneNumber, int? sisId = null);
-        Room EditRoom(Guid id, string roomNumber, string description, string size, int? capacity, string phoneNumber);
-        void DeleteRoom(Guid id);
+        Room AddRoom(int id, int schoolId, string roomNumber, string description, string size, int? capacity, string phoneNumber);
+        Room EditRoom(int id, int schoolId, string roomNumber, string description, string size, int? capacity, string phoneNumber);
+        void DeleteRoom(int id);
         PaginatedList<Room> GetRooms(int start = 0, int count = int.MaxValue);
-        Room WhereIsPerson(Guid personId, DateTime dateTime);
-        Room GetRoomById(Guid id);
+        Room WhereIsPerson(int personId, DateTime dateTime);
+        Room GetRoomById(int id);
     }
 
     //TODO: needs tests 
@@ -25,7 +25,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public Room AddRoom(string roomNumber, string description, string size, int? capacity, string phoneNumber, int? sisId = null)
+        public Room AddRoom(int id, int schoolId, string roomNumber, string description, string size, int? capacity, string phoneNumber)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -34,13 +34,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new RoomDataAccess(uow);
                 var room = new Room
                     {
-                        Id = Guid.NewGuid(),
+                        Id = id,
+                        SchoolRef = schoolId,
                         Capacity = capacity,
                         Description = description,
                         PhoneNumber = phoneNumber,
                         RoomNumber = roomNumber,
                         Size = size, 
-                        SisId = sisId
                     };
                 da.Insert(room);
                 uow.Commit();
@@ -48,7 +48,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public Room EditRoom(Guid id, string roomNumber, string description, string size, int? capacity, string phoneNumber)
+        public Room EditRoom(int id, int schoolId, string roomNumber, string description, string size, int? capacity, string phoneNumber)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -60,6 +60,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 room.Description = description;
                 room.Capacity = capacity;
                 room.Size = size;
+                room.SchoolRef = schoolId;
                 room.PhoneNumber = phoneNumber;
                 da.Update(room);
                 uow.Commit();
@@ -67,7 +68,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void DeleteRoom(Guid id)
+        public void DeleteRoom(int id)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -91,13 +92,13 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public Room WhereIsPerson(Guid personId, DateTime dateTime)
+        public Room WhereIsPerson(int personId, DateTime dateTime)
         {
             var classPeriod = ServiceLocator.ClassPeriodService.GetClassPeriodForSchoolPersonByDate(personId, dateTime);
             return classPeriod != null ? GetRoomById(classPeriod.RoomRef) : null;
         }
 
-        public Room GetRoomById(Guid id)
+        public Room GetRoomById(int id)
         {
             using (var uow = Read())
             {

@@ -14,6 +14,8 @@ namespace Chalkable.Data.School.Model
         public const string PROCESSED_FIELD = "Processed";
         public const string ANNOUNCEMENT_REF_FIELD = "AnnouncementRef";
 
+
+        [IdentityFieldAttr]
         public int Id { get; set; }
         public DateTime? RemindDate { get; set; }
         public bool Processed { get; set; }

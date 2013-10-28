@@ -11,18 +11,18 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IMarkingPeriodService
     {
-        MarkingPeriod Add(Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays, bool generatePeriods = false, int? sisId = null);
-        void Delete(Guid id);
-        MarkingPeriod Edit(Guid id, Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays);
-        MarkingPeriod GetMarkingPeriodById(Guid id);
+        MarkingPeriod Add(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays, bool generatePeriods = false);
+        void Delete(int id);
+        MarkingPeriod Edit(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays);
+        MarkingPeriod GetMarkingPeriodById(int id);
         MarkingPeriod GetLastMarkingPeriod(DateTime? tillDate = null);
-        MarkingPeriod GetNextMarkingPeriodInYear(Guid markingPeriodId);
-        MarkingPeriodClass GetMarkingPeriodClass(Guid classId, Guid markingPeriodId);
-        MarkingPeriodClass GetMarkingPeriodClass(Guid markingPeriodClassId);
-        IList<MarkingPeriod> GetMarkingPeriods(Guid? schoolYearId);
+        MarkingPeriod GetNextMarkingPeriodInYear(int markingPeriodId);
+        MarkingPeriodClass GetMarkingPeriodClass(int classId, int markingPeriodId);
+        MarkingPeriodClass GetMarkingPeriodClass(int markingPeriodClassId);
+        IList<MarkingPeriod> GetMarkingPeriods(int? schoolYearId);
         MarkingPeriod GetMarkingPeriodByDate(DateTime date, bool useLastExisting = false);
-        bool ChangeWeekDays(IList<Guid> markingPeriodIds, int weekDays);
-        bool ChangeMarkingPeriodsCount(Guid schoolYearId, int count, out string error);
+        bool ChangeWeekDays(IList<int> markingPeriodIds, int weekDays);
+        bool ChangeMarkingPeriodsCount(int schoolYearId, int count, out string error);
        
     }
 
@@ -32,7 +32,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public MarkingPeriod GetMarkingPeriodById(Guid id)
+        public MarkingPeriod GetMarkingPeriodById(int id)
         {
             using (var uow = Read())
             {
@@ -50,7 +50,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public MarkingPeriodClass GetMarkingPeriodClass(Guid classId, Guid markingPeriodId)
+        public MarkingPeriodClass GetMarkingPeriodClass(int classId, int markingPeriodId)
         {
             using (var uow = Read())
             {
@@ -63,7 +63,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<MarkingPeriod> GetMarkingPeriods(Guid? schoolYearId)
+        public IList<MarkingPeriod> GetMarkingPeriods(int? schoolYearId)
         {
             using (var uow = Read())
             {
@@ -85,7 +85,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return null;
         }
 
-        public MarkingPeriod Add(Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays, bool generatePeriods = false, int? sisId = null)
+        public MarkingPeriod Add(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays, bool generatePeriods = false)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -95,14 +95,13 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new MarkingPeriodDataAccess(uow);
                 var sy = new SchoolYearDataAccess(uow).GetById(schoolYearId);
-                var mp = AddMarkingPeriod(da, sy, startDate, endDate, name, description, weekDays);
-                mp.SisId = sisId;
+                var mp = AddMarkingPeriod(da, sy, startDate, endDate, name, description, weekDays, new MarkingPeriod{Id = id});
                 da.Insert(mp);
                 uow.Commit();
                 if (generatePeriods)
                 {
                     var names = new[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-                    ServiceLocator.ScheduleSectionService.GenerateScheduleSectionsWithDefaultPeriods(mp.Id, names);
+                    // todo ServiceLocator.ScheduleSectionService.GenerateScheduleSectionsWithDefaultPeriods(mp.Id, names);
                 }
                 return mp;
             }
@@ -112,10 +111,10 @@ namespace Chalkable.BusinessLogic.Services.School
         private MarkingPeriod AddMarkingPeriod(MarkingPeriodDataAccess dataAccess, SchoolYear sy, DateTime startDate, DateTime endDate, 
             string name, string description, int weekDays, MarkingPeriod markingPeriod = null)
         {
-            Guid? id = null;
+            int? id = null;
             if (markingPeriod != null)
                 id = markingPeriod.Id;
-            else markingPeriod = new MarkingPeriod {Id = Guid.NewGuid()};
+            else markingPeriod = new MarkingPeriod();
             
             if (dataAccess.IsOverlaped(startDate, endDate, id))
                 throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_CANT_OVERLAP);
@@ -131,12 +130,12 @@ namespace Chalkable.BusinessLogic.Services.School
             return markingPeriod;
         }
         
-        public void Delete(Guid id)
+        public void Delete(int id)
         {
-            Delete(new List<Guid> {id});
+            Delete(new List<int> {id});
         }
 
-        private void Delete(IList<Guid> markingPeriodIds)
+        private void Delete(IList<int> markingPeriodIds)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -145,18 +144,13 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 if (new MarkingPeriodClassDataAccess(uow).Exists(markingPeriodIds))
                     throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_ASSIGNED_TO_CLASS);
-                if (new DateDataAccess(uow).Exists(markingPeriodIds))
-                    throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_CANT_DELETE);
-                if (!ServiceLocator.ScheduleSectionService.CanDeleteSections(markingPeriodIds))
-                    throw new ChalkableException(ChlkResources.ERR_SCHEDULE_SECTION_CANT_DELETE);
-                
                 new MarkingPeriodDataAccess(uow).DeleteMarkingPeriods(markingPeriodIds);
                 uow.Commit();
             }
         }
 
 
-        public MarkingPeriod Edit(Guid id, Guid schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays)
+        public MarkingPeriod Edit(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -177,7 +171,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         //TODO : think how to rewrite this for better performance
         //TODO : needs testing
-        public bool ChangeWeekDays(IList<Guid> markingPeriodIds, int weekDays)
+        public bool ChangeWeekDays(IList<int> markingPeriodIds, int weekDays)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -193,67 +187,68 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        //TODO: needs test
-        public bool ChangeMarkingPeriodsCount(Guid schoolYearId, int count, out string error)
+        //TODO: remove this method
+        public bool ChangeMarkingPeriodsCount(int schoolYearId, int count, out string error)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
-                throw new ChalkableSecurityException();
-            if(!Context.SchoolId.HasValue)
-                throw new UnassignedUserException();
-            error = null;
-            var year = ServiceLocator.SchoolYearService.GetSchoolYearById(schoolYearId);
-            if (count <= 0)
-                throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_INVALID_COUNT);
+            throw new NotImplementedException();
+            //if (!BaseSecurity.IsAdminEditor(Context))
+            //    throw new ChalkableSecurityException();
+            //if(!Context.SchoolId.HasValue)
+            //    throw new UnassignedUserException();
+            //error = null;
+            //var year = ServiceLocator.SchoolYearService.GetSchoolYearById(schoolYearId);
+            //if (count <= 0)
+            //    throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_INVALID_COUNT);
 
-            var mps = GetMarkingPeriods(year.Id);
-            if (mps.Count != count)
-            {
-                using (var uow = Update())
-                {
-                    var mpDa = new MarkingPeriodDataAccess(uow);
-                    var syDa = new SchoolYearDataAccess(uow);
-                    var oldYearEndDate = year.EndDate;
-                    var changeMpCount = Math.Abs(count - mps.Count);
-                    try
-                    {
-                        if (count > mps.Count)
-                        {
-                            const int mpLength = 30;
-                            var endDate = year.StartDate.AddDays(1);
-                            if (mps.Count > 0)
-                                endDate = mps.Last().EndDate;
-                            var mpsForInsert = new List<MarkingPeriod>();
-                            for (var i = 0; i < changeMpCount; i++)
-                            {
-                                var startDate = endDate.AddDays(1);
-                                endDate = endDate.AddDays(mpLength);
-                                mpsForInsert.Add(AddMarkingPeriod(mpDa, year, startDate, endDate, "MP" + (mps.Count + i + 1), "", 62));
-                            }
-                            if (year.EndDate <= endDate)
-                                year.EndDate = endDate.AddDays(1);
-                            mpDa.Insert(mpsForInsert);
-                        }
-                        else
-                        {
-                            var mpsForDelete = mps.Skip(count).Take(changeMpCount).Select(x => x.Id).ToList();
-                            Delete(mpsForDelete);
-                            year.EndDate = mps[count - 1].EndDate.AddDays(1);
-                        }
-                        if (year.EndDate != oldYearEndDate)
-                            syDa.Update(year);
-                        uow.Commit();
-                    }
-                    catch (Exception e)
-                    {
-                        error = e.Message;
-                    }
-                }
-            }
-            return true;
+            //var mps = GetMarkingPeriods(year.Id);
+            //if (mps.Count != count)
+            //{
+            //    using (var uow = Update())
+            //    {
+            //        var mpDa = new MarkingPeriodDataAccess(uow);
+            //        var syDa = new SchoolYearDataAccess(uow);
+            //        var oldYearEndDate = year.EndDate;
+            //        var changeMpCount = Math.Abs(count - mps.Count);
+            //        try
+            //        {
+            //            if (count > mps.Count)
+            //            {
+            //                const int mpLength = 30;
+            //                var endDate = year.StartDate.AddDays(1);
+            //                if (mps.Count > 0)
+            //                    endDate = mps.Last().EndDate;
+            //                var mpsForInsert = new List<MarkingPeriod>();
+            //                for (var i = 0; i < changeMpCount; i++)
+            //                {
+            //                    var startDate = endDate.AddDays(1);
+            //                    endDate = endDate.AddDays(mpLength);
+            //                    mpsForInsert.Add(AddMarkingPeriod(mpDa, year, startDate, endDate, "MP" + (mps.Count + i + 1), "", 62));
+            //                }
+            //                if (year.EndDate <= endDate)
+            //                    year.EndDate = endDate.AddDays(1);
+            //                mpDa.Insert(mpsForInsert);
+            //            }
+            //            else
+            //            {
+            //                var mpsForDelete = mps.Skip(count).Take(changeMpCount).Select(x => x.Id).ToList();
+            //                Delete(mpsForDelete);
+            //                year.EndDate = mps[count - 1].EndDate.AddDays(1);
+            //            }
+            //            if (year.EndDate != oldYearEndDate)
+            //                syDa.Update(year);
+            //            uow.Commit();
+            //        }
+            //        catch (Exception e)
+            //        {
+            //            error = e.Message;
+            //        }
+            //    }
+            //}
+            //return true;
         }
 
 
-        public MarkingPeriodClass GetMarkingPeriodClass(Guid markingPeriodClassId)
+        public MarkingPeriodClass GetMarkingPeriodClass(int markingPeriodClassId)
         {
             using (var uow = Read())
             {
@@ -262,7 +257,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
     
 
-        public MarkingPeriod GetNextMarkingPeriodInYear(Guid markingPeriodId)
+        public MarkingPeriod GetNextMarkingPeriodInYear(int markingPeriodId)
         {
             using (var uow = Read())
             {

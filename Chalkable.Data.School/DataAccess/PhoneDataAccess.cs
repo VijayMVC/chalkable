@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class PhoneDataAccess : DataAccessBase<Phone>
+    public class PhoneDataAccess : DataAccessBase<Phone, int>
     {
         public PhoneDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -12,14 +13,14 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<Person> GetUsersByPhone(string phone)
         {
-            var sql = @"select p.* from Phone 
-                      join Person p on p.Id = Phone.PersonRef
-                      where Phone.DigitOnlyValue = @phone";
-            var conds = new Dictionary<string, object> {{"phone", phone}};
-            using (var reader = ExecuteReaderParametrized(sql, conds))
-            {
-                return reader.ReadList<Person>();
-            }
+            var phoneTName = "Phone";
+            var query = new DbQuery();
+            query.Sql.AppendFormat(@"select [{1}].* from [{0}] 
+                                     join [{1}] on [{1}].[{2}] = [{0}].[{3}]"
+                , "Phone", phoneTName, Person.ID_FIELD, Phone.PERSON_REF_FIELD);
+            var conds = new AndQueryCondition {{Phone.DIGIT_ONLY_VALUE_FIELD, phone}};
+            conds.BuildSqlWhere(query, phoneTName);
+            return ReadMany<Person>(query);
         } 
     }
 }

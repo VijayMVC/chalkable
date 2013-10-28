@@ -8,7 +8,7 @@ using Chalkable.Data.Common.Orm;
 
 namespace Chalkable.Data.Common
 {
-    public class DataAccessBase<TEntity> where TEntity : new()
+    public class DataAccessBase<TEntity, TIdParam> where TEntity : new()
     {
         protected const string FILTER_FORMAT = "%{0}%";
         
@@ -104,7 +104,7 @@ namespace Chalkable.Data.Common
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
 
-        protected void SimpleDelete<T>(Guid id)
+        protected void SimpleDelete<T, TParam>(TParam id)
         {
             var conds = new AndQueryCondition {{"id", id}};
             var q = Orm.Orm.SimpleDelete<T>(conds);
@@ -222,12 +222,12 @@ namespace Chalkable.Data.Common
         }
 
 
-        public virtual TEntity GetById(Guid id)
+        public virtual TEntity GetById(TIdParam id)
         {
             return SelectOne<TEntity>(new AndQueryCondition { { "Id", id } });
         }
 
-        public virtual TEntity GetByIdOrNull(Guid id)
+        public virtual TEntity GetByIdOrNull(TIdParam id)
         {
             return SelectOneOrNull<TEntity>(new AndQueryCondition { { "Id", id } });
         }
@@ -262,9 +262,9 @@ namespace Chalkable.Data.Common
         {
             SimpleUpdate(entities);
         }
-        public virtual void Delete(Guid id)
+        public virtual void Delete(TIdParam id) 
         {
-            SimpleDelete<TEntity>(id);
+            SimpleDelete<TEntity, TIdParam>(id);
         }
     }
 }

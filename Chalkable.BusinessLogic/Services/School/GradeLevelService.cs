@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.InteropServices;
+using Chalkable.BusinessLogic.Security;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -9,7 +12,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IGradeLevelService
     {
         IList<GradeLevel> GetGradeLevels();
-        void AddGradeLevel(string name, int number);
+        void AddGradeLevel(int id, string name, int number);
         IList<GradeLevel> CreateDefault();
     }
     public class GradeLevelService : SchoolServiceBase, IGradeLevelService
@@ -27,11 +30,14 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void AddGradeLevel(string name, int number)
+        public void AddGradeLevel(int id, string name, int number)
         {
+            if (BaseSecurity.IsAdminGrader(Context))
+                throw new ChalkableSecurityException();
+
             using (var uow = Update())
             {
-                new GradeLevelDataAccess(uow).Insert(new GradeLevel{Id = Guid.NewGuid(), Name = name, Number = number});
+                new GradeLevelDataAccess(uow).Insert(new GradeLevel{Id = id, Name = name, Number = number});
                 uow.Commit();
             }
         }
@@ -46,7 +52,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     gradeLevels.Add(new GradeLevel
                         {
-                            Id = Guid.NewGuid(), 
+                            Id = i, 
                             Name = i.ToString(CultureInfo.InvariantCulture),
                             Number = i
                         });

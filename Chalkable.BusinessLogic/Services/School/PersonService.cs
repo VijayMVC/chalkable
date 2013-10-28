@@ -107,7 +107,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new PersonDataAccess(uow);
-                query.CallerId = Context.UserId;
+                query.CallerId = Context.;
                 query.CallerRoleId = Context.Role.Id;
                 var res = da.GetPersons(query);
                 return res;

@@ -11,10 +11,10 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IPhoneService
     {
         IList<Phone> GetPhones();
-        IList<Phone> GetPhones(Guid personId);
-        Phone Add(Guid personId, string value, PhoneType type, bool isPrimary);
-        Phone Edit(Guid id, string value, PhoneType type, bool isPrimary);
-        void Delete(Guid id);
+        IList<Phone> GetPhones(int personId);
+        Phone Add(int id, int personId, string value, PhoneType type, bool isPrimary);
+        Phone Edit(int id, string value, PhoneType type, bool isPrimary);
+        void Delete(int id);
         IList<Person> GetUsersByPhone(string phone);
     }
 
@@ -41,7 +41,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Phone> GetPhones(Guid personId)
+        public IList<Phone> GetPhones(int personId)
         {
             using (var uow = Read())
             {
@@ -50,16 +50,16 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public Phone Add(Guid personId, string value, PhoneType type, bool isPrimary)
+        public Phone Add(int id, int personId, string value, PhoneType type, bool isPrimary)
         {
-            if (!(BaseSecurity.IsAdminOrTeacher(Context) || Context.UserId == personId))//TODO:can teacher do this?
+            if (!(BaseSecurity.IsAdminOrTeacher(Context) || Context.LocalId == personId))//TODO:can teacher do this?
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new PhoneDataAccess(uow);
                 var phone = new Phone
                     {
-                        Id = Guid.NewGuid(),
+                        Id = id,
                         Value = value,
                         DigitOnlyValue = DigitsOnly(value),
                         PersonRef = personId,
@@ -72,13 +72,13 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public Phone Edit(Guid id, string value, PhoneType type, bool isPrimary)
+        public Phone Edit(int id, string value, PhoneType type, bool isPrimary)
         {
             using (var uow = Update())
             {
                 var da = new PhoneDataAccess(uow);
                 var phone = da.GetById(id);
-                if (!(BaseSecurity.IsAdminOrTeacher(Context) || Context.UserId == phone.PersonRef))//TODO:can teacher do this?
+                if (!(BaseSecurity.IsAdminOrTeacher(Context) || Context.LocalId == phone.PersonRef))//TODO:can teacher do this?
                     throw new ChalkableSecurityException();
                 phone.DigitOnlyValue = DigitsOnly(value);
                 phone.Value = value;
@@ -90,13 +90,13 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void Delete(Guid id)
+        public void Delete(int id)
         {
             using (var uow = Update())
             {
                 var da = new PhoneDataAccess(uow);
                 var phone = da.GetById(id);
-                if (!(BaseSecurity.IsAdminEditor(Context) || Context.UserId == phone.PersonRef))
+                if (!(BaseSecurity.IsAdminEditor(Context) || Context.LocalId == phone.PersonRef))
                     throw new ChalkableSecurityException();
                 da.Delete(phone.Id);
                 uow.Commit();

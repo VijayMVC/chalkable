@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model.ApplicationInstall
 {
@@ -13,7 +14,8 @@ namespace Chalkable.Data.School.Model.ApplicationInstall
         public const string SCHOOL_YEAR_REF_FIELD = "SchoolYearRef";
         public const string OWNER_REF_FIELD = "OwnerRef";
         public const string ACTIVE_FIELD = "Active";
- 
+
+        [IdentityFieldAttr]
         public int Id { get; set; }
         public Guid ApplicationRef { get; set; }
         public int PersonRef { get; set; }

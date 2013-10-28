@@ -11,19 +11,19 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IScheduleSectionService
     {
-        IList<DateType> GetSections(Guid markingPeriodId);
-        IList<DateType> GetSections(List<Guid> markingPeriodIds);
-        DateType GetSectionById(Guid id);
-
-        bool CanDeleteSections(IList<Guid> markingPeriodIds);
-        bool CanGetSection(IList<Guid> markingPeriodIds);
-
-        DateType Add(int number, string name, Guid markingPeriodId, int? sisId = null);
-        DateType Edit(Guid id, int number, string name);
-        void Delete(Guid id);
-        void ReBuildSections(List<string> sections, List<Guid> markingPeriodIds);
-        void GenerateDefaultSections(Guid markingPeriodId);
-        void GenerateScheduleSectionsWithDefaultPeriods(Guid markingPeriodId, string[] names);
+        IList<DateType> GetSections(int schoolYearId);
+        DateType GetSectionById(int id);
+        bool CanDeleteSections(int schoolYearId);
+        DateType Add(int id, int number, string name, int schoolYearId);
+        DateType Edit(int id, int number, string name);
+        void Delete(int id);
+        
+        //TODO: remove those methods 
+        IList<DateType> GetSections(List<int> markingPeriodIds);
+        bool CanGetSection(int schoolYearId);
+        void ReBuildSections(List<string> sections, List<int> markingPeriodIds);
+        void GenerateDefaultSections(int markingPeriodId);
+        void GenerateScheduleSectionsWithDefaultPeriods(int markingPeriodId, string[] names);
     }
 
     public class ScheduleSectionService : SchoolServiceBase, IScheduleSectionService
@@ -33,78 +33,74 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public IList<DateType> GetSections(Guid markingPeriodId)
+        public IList<DateType> GetSections(int schoolYearId)
         {
             using (var uow = Read())
             {
-                return new ScheduleSectionDataAccess(uow).GetSections(markingPeriodId, null, null);
+                return new DateTypeDataAccess(uow).GetDateTypes(schoolYearId);
             }
         }
 
-        public IList<DateType> GetSections(List<Guid> markingPeriodIds)
+        //TODO: remove this method
+        public IList<DateType> GetSections(List<int> markingPeriodIds)
         {
-            if(!CanGetSection(markingPeriodIds))
-                throw new ChalkableException(ChlkResources.ERR_SCHEDULE_SECTION_SECTIONS_NOT_EQUIVALENT);
+            throw new NotImplementedException();
+            //if(!CanGetSection(markingPeriodIds))
+            //    throw new ChalkableException(ChlkResources.ERR_SCHEDULE_SECTION_SECTIONS_NOT_EQUIVALENT);
+            //using (var uow = Read())
+            //{
+            //    return new DateTypeDataAccess(uow).GetSections(markingPeriodIds);
+            //}
+        }
+
+        public DateType GetSectionById(int id)
+        {
             using (var uow = Read())
             {
-                return new ScheduleSectionDataAccess(uow).GetSections(markingPeriodIds);
+                return new DateTypeDataAccess(uow).GetById(id);
             }
         }
-
-        public DateType GetSectionById(Guid id)
+        public bool CanDeleteSections(int schoolYearId)
         {
+            if (!BaseSecurity.IsAdminEditor(Context))
+                throw new ChalkableSecurityException();
+
             using (var uow = Read())
             {
-                return new ScheduleSectionDataAccess(uow).GetById(id);
+                var cpDa = new ClassPeriodDataAccess(uow);
+                return !cpDa.Exists(new ClassPeriodQuery{SchoolYearId = schoolYearId});
             }
         }
-        public bool CanDeleteSections(IList<Guid> markingPeriodIds)
+
+        //TODO: remove this methods
+        public bool CanGetSection(int schoolYearId)
         {
-            if (markingPeriodIds != null && markingPeriodIds.Count > 0)
-            {
-                if (!BaseSecurity.IsAdminEditor(Context))
-                    throw new ChalkableSecurityException();
-
-                using (var uow = Read())
-                {
-                    var cpDa = new ClassPeriodDataAccess(uow);
-                    return CanGetSection(markingPeriodIds) && !cpDa.Exists(markingPeriodIds);
-                }
-            }
-            return false;
+            throw new NotImplementedException();
+            //if (markingPeriodIds.Count > 1)
+            //{ 
+            //  var firstSections = GetSections(markingPeriodIds[0]);
+            //  var firstMarkingPeriod = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodIds[0]);
+            //    for (var i = 1; i < markingPeriodIds.Count; i++)
+            //    {
+            //        var markingPeriod = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodIds[i]);
+            //        var sections = GetSections(markingPeriod.Id);
+            //        if (markingPeriod.SchoolYearRef != firstMarkingPeriod.SchoolYearRef
+            //            || markingPeriod.WeekDays != firstMarkingPeriod.WeekDays || sections.Count != firstSections.Count)
+            //        {
+            //            return false;
+            //        }
+            //        for (var j = 0; j < sections.Count; j++)
+            //        {
+            //            if (sections[j].Name != firstSections[j].Name
+            //                || sections[j].Number != firstSections[j].Number)
+            //                return false;
+            //        }
+            //    }
+            //}
+            //return true;
         }
 
-        //TODO: move it to stored procedure
-        public bool CanGetSection(IList<Guid> markingPeriodIds)
-        {
-            if (markingPeriodIds == null || markingPeriodIds.Count == 0)
-                return false;
-
-            if (markingPeriodIds.Count > 1)
-            { 
-              var firstSections = GetSections(markingPeriodIds[0]);
-              var firstMarkingPeriod = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodIds[0]);
-                for (var i = 1; i < markingPeriodIds.Count; i++)
-                {
-                    var markingPeriod = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodIds[i]);
-                    var sections = GetSections(markingPeriod.Id);
-                    if (markingPeriod.SchoolYearRef != firstMarkingPeriod.SchoolYearRef
-                        || markingPeriod.WeekDays != firstMarkingPeriod.WeekDays || sections.Count != firstSections.Count)
-                    {
-                        return false;
-                    }
-                    for (var j = 0; j < sections.Count; j++)
-                    {
-                        if (sections[j].Name != firstSections[j].Name
-                            || sections[j].Number != firstSections[j].Number)
-                            return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        public DateType Add(int number, string name, Guid markingPeriodId, int? sisId = null)
+        public DateType Add(int id, int number, string name, int schoolYearId)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -114,14 +110,12 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var ss = new DateType
                     {
-                        Id = Guid.NewGuid(),
-                        MarkingPeriodRef = markingPeriodId,
+                        Id = id,
                         Name = name,
-                        Number = number,
-                        SisId = sisId
+                        Number = number,               
                     };
-                var da = new ScheduleSectionDataAccess(uow);
-                var sections = da.GetSections(markingPeriodId, null, null);
+                var da = new DateTypeDataAccess(uow);
+                var sections = da.GetSections(schoolYearId, null, null);
                 foreach (var scheduleSection in sections)
                 {
                     if (scheduleSection.Number >= number)
@@ -138,21 +132,22 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public DateType Edit(Guid id, int number, string name)
+        public DateType Edit(int id, int number, string name)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
             {
-                var da = new ScheduleSectionDataAccess(uow);
+                var da = new DateTypeDataAccess(uow);
                 var section = da.GetById(id);
                 var old = section.Number;
                 var mn = Math.Min(old, number);
                 var mx = Math.Max(old, number);
                 var d = Math.Sign(old - number);
 
-                IList<DateType> sections = da.GetSections(section.MarkingPeriodRef, null, null).Where(x => x.Id != section.Id).ToList();
+                IList<DateType> sections = da.GetDateTypes(section.SchoolYearRef, null, null)
+                                             .Where(x => x.Id != section.Id).ToList();
                 foreach (var scheduleSection in sections)
                 {
                     if (scheduleSection.Number >= mn && scheduleSection.Number <= mx)
@@ -182,67 +177,70 @@ namespace Chalkable.BusinessLogic.Services.School
             return sections;
         }  
 
-        public void Delete(Guid id)
+
+        public void Delete(int id)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                var da = new ScheduleSectionDataAccess(uow);
-                var ss = da.GetById(id);
-                if (!CanDeleteSections(new List<Guid> { ss.MarkingPeriodRef }))
+                var da = new DateTypeDataAccess(uow);
+                var dateType = da.GetById(id);
+                if (!CanDeleteSections(dateType.SchoolYearRef))
                     throw new ChalkableException(ChlkResources.ERR_SCHEDULE_SECTION_CANT_DELETE);
                 
-                da.Delete(ss);
-                var sections = AdjustNumbering(da.GetSections(ss.MarkingPeriodRef, null, null));
+                da.Delete(dateType);
+                var sections = AdjustNumbering(da.GetDateTypes(dateType.SchoolYearRef));
                 da.Update(sections);
                 uow.Commit();
             }
         }
 
-        public void ReBuildSections(List<string> sections, List<Guid> markingPeriodIds)
+        //TODO: remove those methods later
+       
+        public void ReBuildSections(List<string> sections, List<int> markingPeriodIds)
         {
-            if(!CanDeleteSections(markingPeriodIds))
-                throw new ChalkableException(ChlkResources.ERR_SCHEDULE_SECTION_CANT_DELETE);
-            if (!Context.SchoolId.HasValue)
-                throw new UnassignedUserException();
-            if (markingPeriodIds.Count > 0)
-            {
-                using (var uow = Update())
-                {
-                    new ScheduleSectionDataAccess(uow).ReBuildSection(markingPeriodIds, sections);
-                    uow.Commit();
-                }
+            throw new NotImplementedException();
+            //if(!CanDeleteSections(markingPeriodIds))
+            //    throw new ChalkableException(ChlkResources.ERR_SCHEDULE_SECTION_CANT_DELETE);
+            //if (!Context.SchoolId.HasValue)
+            //    throw new UnassignedUserException();
+            //if (markingPeriodIds.Count > 0)
+            //{
+            //    using (var uow = Update())
+            //    {
+            //        new DateTypeDataAccess(uow).ReBuildSection(markingPeriodIds, sections);
+            //        uow.Commit();
+            //    }
 
-            }
+            //}
         }
-
-        
-        public void GenerateDefaultSections(Guid markingPeriodId)
+        public void GenerateDefaultSections(int markingPeriodId)
         {
-            var names = new[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-            var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId);
-            var number = 0;
-            for (int i = 0; i < names.Length; i++)
-            {
-                if ((mp.WeekDays & (1 << i)) != 0)
-                {
-                    Add(number, names[i], markingPeriodId);
-                    number++;
-                }
-            }
+
+            throw new NotImplementedException();
+            //var names = new[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+            //var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId);
+            //var number = 0;
+            //for (int i = 0; i < names.Length; i++)
+            //{
+            //    if ((mp.WeekDays & (1 << i)) != 0)
+            //    {
+            //        Add(number, names[i], markingPeriodId);
+            //        number++;
+            //    }
+            //}
         }
-        public void GenerateScheduleSectionsWithDefaultPeriods(Guid markingPeriodId, string[] names)
+        public void GenerateScheduleSectionsWithDefaultPeriods(int markingPeriodId, string[] names)
         {
-            var markingPeriod = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId);
-            for (int i = 0; i < names.Length; i++)
-            {
-                var section = Add(i, names[i], markingPeriod.Id);
-                for (int start = 8 * 60; start < 18 * 60; start += 60)
-                    ServiceLocator.PeriodService.Add(markingPeriod.Id, start, start + 45, section.Id, i+1);
-            }
+            throw new NotImplementedException();
+            //var markingPeriod = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId);
+            //for (int i = 0; i < names.Length; i++)
+            //{
+            //    var section = Add(i, names[i], markingPeriod.Id);
+            //    for (int start = 8 * 60; start < 18 * 60; start += 60)
+            //        ServiceLocator.PeriodService.Add(markingPeriod.Id, start, start + 45, section.Id, i+1);
+            //}
         }
-
-
     }
 }
