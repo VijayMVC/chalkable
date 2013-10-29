@@ -461,3 +461,7 @@ add SchoolRef int not null constraint FK_Room_School foreign key references Scho
 go
 
 sp_RENAME 'Date.[Date]' , 'Day', 'COLUMN'
+
+alter table ClassPeriod
+alter column RoomRef int null
+go
