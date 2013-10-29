@@ -66,7 +66,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             using (var uow = Update())
             {
-                var user = ServiceLocator.UserService.CreateSchoolUser(login, password, districtId, CoreRoles.DEVELOPER_ROLE.Name); // security here 
+                var user = ServiceLocator.UserService.CreateSchoolUser(login, password, districtId, CoreRoles.DEVELOPER_ROLE.Name, null); // security here 
                 var res = new Developer
                     {
                         Id = user.Id,
