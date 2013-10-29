@@ -9,7 +9,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
 {
     public class ShortPersonViewData
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string DisplayName { get; set; }
         public string FullName { get; set; }
         public string FirstName { get; set; }
@@ -20,13 +20,13 @@ namespace Chalkable.Web.Models.PersonViewDatas
         protected ShortPersonViewData(Person person)
         {
             Id = person.Id;
-            DisplayName = person.RoleRef == CoreRoles.STUDENT_ROLE.Id ? person.FullName : person.ShortSalutationName; //TODO: think about this
+            //DisplayName = person.RoleRef == CoreRoles.STUDENT_ROLE.Id ? person.FullName : person.ShortSalutationName; //TODO: think about this
             FullName = person.FullName;
             FirstName = person.FirstName;
             LastName = person.LastName;
             Gender = person.Gender;
-            if(person.RoleRef > 0)
-               Role = RoleViewData.Create(CoreRoles.GetById(person.RoleRef));
+            //if(person.RoleRef > 0)
+            //   Role = RoleViewData.Create(CoreRoles.GetById(person.RoleRef));
         }
         public static ShortPersonViewData Create(Person person)
         {

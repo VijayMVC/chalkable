@@ -9,11 +9,12 @@ namespace Chalkable.Web.Models
 {
     public class ClassPeriodShortViewData
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public PeriodViewData Period { get; set; }
-        public Guid RoomId { get; set; }
+        public int RoomId { get; set; }
         public string RoomNumber { get; set; }
-        public Guid ClassId { get; set; }
+        public int ClassId { get; set; }
+        public int DateTypeId { get; set; }
 
         protected ClassPeriodShortViewData(ClassPeriod classPeriod, Room room)
         {
@@ -21,6 +22,7 @@ namespace Chalkable.Web.Models
             Period = PeriodViewData.Create(classPeriod.Period);
             RoomId = classPeriod.RoomRef;
             ClassId = classPeriod.ClassRef;
+            DateTypeId = classPeriod.DateTypeRef;
             if (room != null)
                 RoomNumber = room.RoomNumber;
         }

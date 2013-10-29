@@ -14,7 +14,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
     {
         [RequireRequestValue("personId")]
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_TEACHER_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User })]
-        public ActionResult Summary(Guid personId)
+        public ActionResult Summary(int personId)
         {
             var teacher = SchoolLocator.PersonService.GetPerson(personId);
             var room = SchoolLocator.RoomService.WhereIsPerson(personId, SchoolLocator.Context.NowSchoolTime);
@@ -22,7 +22,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult Info(Guid personId)
+        public ActionResult Info(int personId)
         {
             var res = GetInfo(personId, TeacherInfoViewData.Create);
             return Json(res);
@@ -38,7 +38,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
 
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult GetTeachers(string filter, int? start, int? count, Guid? classId, bool? byLastName)
+        public ActionResult GetTeachers(string filter, int? start, int? count, int? classId, bool? byLastName)
         {
             var role = CoreRoles.TEACHER_ROLE.Name;
             return Json(PersonLogic.GetPersons(SchoolLocator, start, count, byLastName, filter, role, classId));

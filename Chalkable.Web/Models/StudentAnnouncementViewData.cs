@@ -38,9 +38,9 @@ namespace Chalkable.Web.Models
         {
             var res = Create(items, attachments, state, gradingStyle);
             res.ClassName = anouncement.ClassName;
-            res.CourseId = anouncement.CourseId;
+            //res.CourseId = anouncement.CourseId;
             //res.AnnouncmentTitle = anouncement.Title;
-            res.AnnouncementTypeId = anouncement.AnnouncementTypeRef;
+            res.AnnouncementTypeId = anouncement.ClassAnnouncementTypeRef;
             return res;
         }
         private static void CalculateClassAvg(StudentAnnouncementsViewData res, IEnumerable<StudentAnnouncementDetails> items)
@@ -69,8 +69,8 @@ namespace Chalkable.Web.Models
         public bool Dropped { get; set; }
         public string Raw { get; set; }
         public string ExtraCredits { get; set; }
-        public Guid Id { get; set; }
-        public Guid AnnouncementId { get; set; }
+        public int Id { get; set; }
+        public int AnnouncementId { get; set; }
         public IList<AnnouncementAttachmentViewData> Attachments { get; set; }
         public string Comment { get; set; }
         public int State { get; set; }

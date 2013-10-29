@@ -8,15 +8,14 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
 {
     public class AnnouncementShortViewData
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public string AnnouncementTypeName { get; set; }
-        public int AnnouncementTypeId { get; set; }
-        public Guid PersonId { get; set; }
+        public int? AnnouncementTypeId { get; set; }
+        public int PersonId { get; set; }
         public string PersonName { get; set; }
         public string PersonGender { get; set; }
-        public Guid? CourseId { get; set; }
-        public Guid? ClassId { get; set; }
+        public int? ClassId { get; set; }
         public string ClassName { get; set; }
         public bool Dropped { get; set; }
         public bool IsOwner { get; set; }
@@ -24,18 +23,19 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public int Order { get; set; }
         public string Subject { get; set; }
 
+        //todo add property departmentid 
+
         protected AnnouncementShortViewData(AnnouncementComplex announcement)
         {
             Id = announcement.Id;
             Title = announcement.Title;
-            AnnouncementTypeId = announcement.AnnouncementTypeRef;
-            AnnouncementTypeName = announcement.AnnouncementTypeName;
+            AnnouncementTypeId = announcement.ClassAnnouncementTypeRef;
+            AnnouncementTypeName = announcement.ClassAnnouncementTypeName;
             PersonId = announcement.PersonRef;
             PersonName = announcement.PersonName;
             PersonGender = announcement.Gender;
-            ClassId = announcement.ClassId;
+            ClassId = announcement.ClassRef;
             ClassName = announcement.ClassName;
-            CourseId = announcement.CourseId;
             Dropped = announcement.Dropped;
             ExpiresDate = announcement.Expires;
             Order = announcement.Order;

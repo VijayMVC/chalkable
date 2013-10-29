@@ -6,6 +6,7 @@ using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -127,11 +128,11 @@ namespace Chalkable.Web.Controllers
         private void PrepareStudentJsonData()
         {
             var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
-            var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.UserId);
+            var person = SchoolLocator.PersonService.GetPerson(Context.UserLocalId.Value);
             var personView = PersonViewData.Create(person);
             personView.DisplayName = person.FullName;
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
-            var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, SchoolLocator.Context.UserId);
+            var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, Context.UserLocalId);
             PrepareJsonData(ClassViewData.Create(classes), ViewConstants.CLASSES);
             PrepareCommonViewData(null, mp);
         }           
@@ -139,7 +140,7 @@ namespace Chalkable.Web.Controllers
         private void PrepareAdminJsonData()
         {
             var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
-            var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.UserId);
+            var person = SchoolLocator.PersonService.GetPerson(Context.UserLocalId.Value);
             var personView = PersonViewData.Create(person);
             personView.DisplayName = person.ShortSalutationName;
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
@@ -150,15 +151,18 @@ namespace Chalkable.Web.Controllers
 
         private void PrepareTeacherJsonData(MarkingPeriod mp, bool getAllAnnouncementTypes)
         {
-            var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.UserId);
+            if (!Context.UserLocalId.HasValue)
+                throw new UnassignedUserException();
+            var person = SchoolLocator.PersonService.GetPerson(Context.UserLocalId.Value);
             var personView = PersonViewData.Create(person);
             personView.DisplayName = person.ShortSalutationName;
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
 
-            var finalizedClasses = SchoolLocator.FinalGradeService.GetFinalizedClasses(mp.Id);
-            PrepareJsonData(finalizedClasses.Select(x => x.Id), ViewConstants.FINALIZED_CLASSES_IDS);
+            //TODO : get finalizedClasses 
+            //var finalizedClasses = SchoolLocator.FinalGradeService.GetFinalizedClasses(mp.Id);
+            //PrepareJsonData(finalizedClasses.Select(x => x.Id), ViewConstants.FINALIZED_CLASSES_IDS);
 
-            var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, SchoolLocator.Context.UserId);
+            var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, Context.UserLocalId.Value);
             var now = SchoolLocator.Context.NowSchoolTime;
             if (classes.Count > 0)
             {
@@ -205,21 +209,20 @@ namespace Chalkable.Web.Controllers
             var classesAdvancedData = new List<object>();
             classDetailses = classDetailses.Where(x => x.MarkingPeriodClasses.Any(y => y.MarkingPeriodRef == mp.Id));
             var classesMaskDic = ClassController.BuildClassesUsageMask(SchoolLocator, mp.Id, SchoolLocator.Context.SchoolTimeZoneId);
-            var baseAnnTypes = SchoolLocator.AnnouncementTypeService.GetAnnouncementTypes(null);
+            //var baseAnnTypes = SchoolLocator.AnnouncementTypeService.GetAnnouncementTypes(null);
 
             var standard = new[] { SchoolLocator.AnnouncementTypeService.GetAnnouncementTypeById((int)SystemAnnouncementType.Standard) };
 
             foreach (var classDetails in classDetailses)
             {
-                Guid classId = classDetails.Id;
+                int classId = classDetails.Id;
                 var mpc = classDetails.MarkingPeriodClasses.First(y => y.MarkingPeriodRef == mp.Id).Id;
-                var typesByClasses = getAllAnnouncementTypes ? baseAnnTypes
-                                    : AnnouncementTypeController.GetTypesByClass(SchoolLocator, mpc, standard);
+                var typesByClasses = AnnouncementTypeController.GetTypesByClass(SchoolLocator, mpc, standard);
                 classesAdvancedData.Add(new
                 {
                     ClassId = classId,
                     Mask = classesMaskDic.ContainsKey(classId) ? classesMaskDic[classId] : new List<int>(),
-                    TypesByClass = AnnouncementTypeViewData.Create(typesByClasses)
+                    TypesByClass = ClassAnnouncementTypeViewData.Create(typesByClasses)
                 });
             }
             PrepareJsonData(classesAdvancedData, ViewConstants.CLASSES_ADV_DATA);

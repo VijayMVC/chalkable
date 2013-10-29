@@ -8,13 +8,13 @@ namespace Chalkable.Web.Models.ClassesViewData
 {
     public class ClassViewData
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public CourseViewData Course { get; set; }
+        public Guid? DepartmentId { get; set; }
         public GradeLevelViewData GradeLevel { get; set; }
         public ShortPersonViewData Teacher { get; set; }
-        public IList<Guid> MarkingPeriodsId { get; set; }
+        public IList<int> MarkingPeriodsId { get; set; }
         
 
         protected ClassViewData(ClassDetails classComplex)
@@ -22,7 +22,7 @@ namespace Chalkable.Web.Models.ClassesViewData
             Id = classComplex.Id;
             Name = classComplex.Name;
             Description = classComplex.Description;
-            Course = CourseViewData.Create(classComplex.Course);
+            DepartmentId = classComplex.ChalkableDepartmentRef;
             GradeLevel =  GradeLevelViewData.Create(classComplex.GradeLevel);
             Teacher = ShortPersonViewData.Create(classComplex.Teacher);
             MarkingPeriodsId = classComplex.MarkingPeriodClasses.Select(x => x.MarkingPeriodRef).ToList();
@@ -39,7 +39,7 @@ namespace Chalkable.Web.Models.ClassesViewData
             return classComplexs.Select(Create).ToList();
         } 
 
-        public static ClassViewData Create(Guid id, string name)
+        public static ClassViewData Create(int id, string name)
         {
             return  new ClassViewData{Id = id, Name = name};
         }

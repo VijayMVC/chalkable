@@ -2,6 +2,7 @@
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -12,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<AnnouncementType> GetAnnouncementTypes(bool? gradable);
         AnnouncementType GetAnnouncementTypeById(int id);
         AnnouncementType GetAnnouncementTypeBySystemType(SystemAnnouncementType type);
+        IList<ClassAnnouncementType> GetClassAnnouncementTypes(int classId, bool all = true);
     }
     public class AnnouncementTypeService : SchoolServiceBase, IAnnouncementTypeService
     {
@@ -63,6 +65,21 @@ namespace Chalkable.BusinessLogic.Services.School
         public AnnouncementType GetAnnouncementTypeBySystemType(SystemAnnouncementType type)
         {
             return GetAnnouncementTypeById((int)type);
+        }
+
+
+        public IList<ClassAnnouncementType> GetClassAnnouncementTypes(int classId, bool all = true)
+        {
+            using (var uow = Read())
+            {
+                var cond = new AndQueryCondition
+                    {
+                        {ClassAnnouncementType.CLASS_REF_FIELD, classId},
+                    };
+                if(!all)
+                    cond.Add(ClassAnnouncementType.PERCENTAGE_FIELD, 0, ConditionRelation.Greater);
+                return new ClassAnnouncementTypeDataAccess(uow).GetAll();
+            }
         }
     }
 }

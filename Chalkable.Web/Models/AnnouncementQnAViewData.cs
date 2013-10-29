@@ -9,8 +9,8 @@ namespace Chalkable.Web.Models
 {
     public class AnnouncementQnAViewData
     {
-        public Guid Id { get; set; }
-        public Guid AnnouncementId { get; set; }
+        public int Id { get; set; }
+        public int AnnouncementId { get; set; }
         public AnnouncementMessageViewData Question { get; set; }
         public AnnouncementMessageViewData Answer { get; set; }
         public bool IsOwner { get; set; }

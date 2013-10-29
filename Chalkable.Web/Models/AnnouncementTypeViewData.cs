@@ -13,6 +13,7 @@ namespace Chalkable.Web.Models
         public bool CanCreate { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public int Percentage { get; set; }
 
         protected AnnouncementTypeViewData(AnnouncementType announcementType)
         {
@@ -30,6 +31,35 @@ namespace Chalkable.Web.Models
         public static IList<AnnouncementTypeViewData> Create(IList<AnnouncementType> announcementTypes)
         {
             return announcementTypes.Select(Create).ToList();
+        } 
+    }
+
+    public class ClassAnnouncementTypeViewData
+    {
+        public int Id { get; set; }
+        public int ClassId { get; set; }
+        public AnnouncementTypeViewData AnnouncementType { get; set; }
+
+        public static ClassAnnouncementTypeViewData Create(ClassAnnouncementType classAnnouncementType)
+        {
+            return new ClassAnnouncementTypeViewData
+                {
+                    Id = classAnnouncementType.Id,
+                    ClassId = classAnnouncementType.ClassRef,
+                    AnnouncementType = AnnouncementTypeViewData.Create(new AnnouncementType
+                        {
+                            Id = classAnnouncementType.Id,
+                            Description = classAnnouncementType.Description,
+                            Gradable = classAnnouncementType.Gradable,
+                            Percentage = classAnnouncementType.Percentage,
+                            Name = classAnnouncementType.Name,
+                        })
+                };
+        }
+
+        public static IList<ClassAnnouncementTypeViewData> Create(IList<ClassAnnouncementType> classAnnouncementTypes)
+        {
+            return classAnnouncementTypes.Select(Create).ToList();
         } 
     }
 }

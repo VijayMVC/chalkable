@@ -8,10 +8,10 @@ namespace Chalkable.Web.Models.DisciplinesViewData
 {
     public class DisciplineInputModel
     {
-        public Guid ClassPersonId { get; set; }
-        public Guid ClassPeriodId { get; set; }
+        public int ClassPersonId { get; set; }
+        public int ClassPeriodId { get; set; }
         public DateTime Date { get; set; }
-        public GuidList DisciplineTypeIds { get; set; }
+        public IntList DisciplineTypeIds { get; set; }
         public string Description { get; set; }
     }
 

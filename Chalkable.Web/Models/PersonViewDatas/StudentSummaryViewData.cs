@@ -111,7 +111,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
     public class StudentSummeryRankViewData
     {
-        public Guid MarkingPeriodId { get; set; }
+        public int MarkingPeriodId { get; set; }
         public string MarkingPeiordName { get; set; }
         public int? Rank { get; set; }
         public static IList<StudentSummeryRankViewData> Create(IList<StudentGradingRank> currentStudentRanks, IList<StudentGradingRank> allStudentsRanks)
@@ -180,8 +180,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
             {
                 GradingStyle = (int)gradingStyle,
                 Grade = gradingMapper.Map(gradingStyle, studentAnnouncement.GradeValue),
-                AnnouncementTypeId = studentAnnouncement.Announcement.AnnouncementTypeRef,
-                AnnouncmentTypeName = studentAnnouncement.Announcement.AnnouncementTypeName
+                AnnouncementTypeId = studentAnnouncement.Announcement.AnnouncementType,
+                AnnouncmentTypeName = studentAnnouncement.Announcement.ClassAnnouncementTypeName
             };
             return res;
         }

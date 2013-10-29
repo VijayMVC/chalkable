@@ -9,7 +9,7 @@ namespace Chalkable.Data.School.Model
 {
     public class ClassAttendance
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public int ClassPersonRef { get; set; }
         public const string CLASS_PERIOD_REF_FIELD = "ClassPeriodRef";
         public int ClassPeriodRef { get; set; }
@@ -68,12 +68,12 @@ namespace Chalkable.Data.School.Model
     }
     public class PersonAttendanceTotalPerType : AttendanceTotalPerType
     {
-        public Guid PersonId { get; set; }
+        public int PersonId { get; set; }
     }
     public class StudentAbsentFromPeriod
     {
         public DateTime Date { get; set; }
-        public Guid PersonId { get; set; }
+        public int PersonId { get; set; }
         public int PeriodOrder { get; set; }
     }
     public class StudentCountAbsentFromPeriod

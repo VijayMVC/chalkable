@@ -43,10 +43,10 @@ namespace Chalkable.Web.Models.AttendancesViewData
                     x => x.Date.Month == d.Month && x.Date.Year == d.Year &&
                          (x.Type == AttendanceTypeEnum.Absent || x.Type == AttendanceTypeEnum.Late)).ToList();
 
-                var dic = new Dictionary<Pair<Guid, string>, int>();
+                var dic = new Dictionary<Pair<int, string>, int>();
                 foreach (var classAttendance in atts)
                 {
-                    var p = new Pair<Guid, string>(classAttendance.Class.Id, classAttendance.Class.Name);
+                    var p = new Pair<int, string>(classAttendance.Class.Id, classAttendance.Class.Name);
                     if (!dic.ContainsKey(p))
                         dic.Add(p, 0);
                     dic[p] = dic[p] + 1;
@@ -71,10 +71,10 @@ namespace Chalkable.Web.Models.AttendancesViewData
     {
         public int AbsentCount { get; set; }
         public string ClassName { get; set; }
-        public Guid ClassId { get; set; }
+        public int ClassId { get; set; }
         private AbsentStatForClassViewData() { }
 
-        public static AbsentStatForClassViewData Create(Guid classId, string className, int count)
+        public static AbsentStatForClassViewData Create(int classId, string className, int count)
         {
             var res = new AbsentStatForClassViewData();
             res.AbsentCount = count;

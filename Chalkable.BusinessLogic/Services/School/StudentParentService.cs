@@ -12,10 +12,10 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IStudentParentService
     {
-        StudentParent Add(Guid studentId, Guid parentId);
-        void Delete(Guid studentParentId);
-        IList<StudentParentDetails> GetParents(Guid studentId);
-        void SetParents(Guid studentId, IList<Guid> parentIds);
+        StudentParent Add(int studentId, int parentId);
+        void Delete(int studentParentId);
+        IList<StudentParentDetails> GetParents(int studentId);
+        void SetParents(int studentId, IList<int> parentIds);
         //IList<Person> ListPossibleParents(Guid studentId);
         
     }
@@ -90,22 +90,23 @@ namespace Chalkable.BusinessLogic.Services.School
         //    }
         //}
 
-        public StudentParent Add(Guid studentId, Guid parentId)
+
+        public StudentParent Add(int studentId, int parentId)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(Guid studentParentId)
+        public void Delete(int studentParentId)
         {
             throw new NotImplementedException();
         }
 
-        public IList<StudentParentDetails> GetParents(Guid studentId)
+        public IList<StudentParentDetails> GetParents(int studentId)
         {
             throw new NotImplementedException();
         }
 
-        public void SetParents(Guid studentId, IList<Guid> parentIds)
+        public void SetParents(int studentId, IList<int> parentIds)
         {
             throw new NotImplementedException();
         }

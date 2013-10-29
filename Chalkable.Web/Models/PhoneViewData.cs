@@ -9,7 +9,7 @@ namespace Chalkable.Web.Models
 {
     public class PhoneViewData
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         [SensitiveData]
         public string Value { get; set; }
         public bool IsPrimary { get; set; }

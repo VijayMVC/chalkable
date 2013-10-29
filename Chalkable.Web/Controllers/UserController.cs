@@ -50,7 +50,8 @@ namespace Chalkable.Web.Controllers
         private ActionResult AfterConfirmAction(UserContext context)
         {
             //TODO: create default Announcement for teacher
-            SchoolLocator.PersonService.ActivatePerson(context.UserId);
+            if(context.UserLocalId.HasValue)
+                SchoolLocator.PersonService.ActivatePerson(context.UserLocalId.Value);
             //TODO: mix panel 
             if (context.Role == CoreRoles.SUPER_ADMIN_ROLE)
                 return Redirect<HomeController>(x => x.SysAdmin());

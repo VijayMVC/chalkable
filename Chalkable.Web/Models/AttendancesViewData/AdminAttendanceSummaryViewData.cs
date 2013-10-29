@@ -37,7 +37,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
 
         public IList<AttendanceStatsViewData> AttendanceStats { get; set; } 
 
-        public static NowAttendanceViewData Create(IList<Person> studentsAbsentNow, IDictionary<Guid, int> studentsAbsentTotal
+        public static NowAttendanceViewData Create(IList<Person> studentsAbsentNow, IDictionary<int, int> studentsAbsentTotal
             , int absentUsually, IList<AttendanceStatsViewData>  attendanceStats)
         {
             return new NowAttendanceViewData
@@ -63,7 +63,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public IList<AttendanceStatsViewData> AttendancesStats { get; set; }
  
         public static AttendanceByDayViewData Create(IList<Person> allStudents, IList<PersonAttendanceTotalPerType> stsAttendanceTotalPerType
-               , IList<Guid> stsIdsAbsentFromDay, IList<AttendanceStatsViewData> attendancesStats)
+               , IList<int> stsIdsAbsentFromDay, IList<AttendanceStatsViewData> attendancesStats)
         {
 
             var groupedSts = GroupStudentsByType(stsAttendanceTotalPerType, allStudents);
@@ -107,7 +107,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
 
         public IList<AttendanceStatsViewData> AttendanceStats { get; set; }
 
-        public static AttendanceByMpViewData Create(IList<Person> allStudents, IList<Guid> absentAndLateStudentsIds
+        public static AttendanceByMpViewData Create(IList<Person> allStudents, IList<int> absentAndLateStudentsIds
             , int absentStsCountAvg, IList<AttendanceStatsViewData> attendanceStats)
         {
             var res = new AttendanceByMpViewData

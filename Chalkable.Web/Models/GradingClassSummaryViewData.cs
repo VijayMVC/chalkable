@@ -17,19 +17,20 @@ namespace Chalkable.Web.Models
         public static GradingClassSummaryViewData Create(IList<AnnouncementComplex> announcements, IList<FinalGradeAnnouncementType> fgAnnouncementTypes,
             MarkingPeriodClassGradeAvg classGradingStats, IGradingStyleMapper mapper, IList<StudentAnnouncementGrade> stAnnGrades = null)
         {
-            var res = new GradingClassSummaryViewData
-                    {
-                        MarkingPeriod = MarkingPeriodViewData.Create(classGradingStats.MarkingPeriod),
-                        Avg = classGradingStats.Avg,
-                        ByAnnouncementTypes = new List<GradingClassSummaryItemViewData>()
-                    };
-            announcements = announcements.Where(x => x.MarkingPeriodClassRef == classGradingStats.Id).ToList();
-            foreach (var fgAnnouncementType in fgAnnouncementTypes)
-            {
-                var annPerMp = announcements.Where(x => x.AnnouncementTypeRef == fgAnnouncementType.AnnouncementTypeRef).ToList();
-                res.ByAnnouncementTypes.Add(GradingClassSummaryItemViewData.Create(annPerMp, fgAnnouncementType.AnnouncementType, fgAnnouncementType.PercentValue, mapper, stAnnGrades));
-            }
-            return res;
+            throw new NotImplementedException();
+            //var res = new GradingClassSummaryViewData
+            //        {
+            //            MarkingPeriod = MarkingPeriodViewData.Create(classGradingStats.MarkingPeriod),
+            //            Avg = classGradingStats.Avg,
+            //            ByAnnouncementTypes = new List<GradingClassSummaryItemViewData>()
+            //        };
+            //announcements = announcements.Where(x => x.MarkingPeriodClassRef == classGradingStats.Id).ToList();
+            //foreach (var fgAnnouncementType in fgAnnouncementTypes)
+            //{
+            //    var annPerMp = announcements.Where(x => x.AnnouncementTypeRef == fgAnnouncementType.AnnouncementTypeRef).ToList();
+            //    res.ByAnnouncementTypes.Add(GradingClassSummaryItemViewData.Create(annPerMp, fgAnnouncementType.AnnouncementType, fgAnnouncementType.PercentValue, mapper, stAnnGrades));
+            //}
+            //return res;
         }
     }
 

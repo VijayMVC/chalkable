@@ -10,7 +10,7 @@ namespace Chalkable.Web.Models.FinalGradesViewData
 {
     public class FinalGradeViewData
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public int State { get; set; }
         public ClassViewData Class { get; set; }
         public int GradedStudentCount { get; set; }

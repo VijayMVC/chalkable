@@ -9,11 +9,11 @@ namespace Chalkable.Web.Models
     public class AnnouncementReminderViewData
     {
         public DateTime? RemindDate { get; set; }
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public int? Before { get; set; }
         public bool IsOwner { get; set; }
 
-        public static AnnouncementReminderViewData Create(AnnouncementReminder reminder, Guid personId, Guid annOwnerId)
+        public static AnnouncementReminderViewData Create(AnnouncementReminder reminder, int personId, int annOwnerId)
         {
             return new AnnouncementReminderViewData
             {
@@ -24,8 +24,8 @@ namespace Chalkable.Web.Models
             };
         }
 
-        public static IList<AnnouncementReminderViewData> Create(IList<AnnouncementReminder> reminders, Guid personId,
-                                                                 Guid annOwnerId)
+        public static IList<AnnouncementReminderViewData> Create(IList<AnnouncementReminder> reminders, int personId,
+                                                                 int annOwnerId)
         {
             return reminders.Select(x => Create(x, personId, annOwnerId)).ToList();
         }

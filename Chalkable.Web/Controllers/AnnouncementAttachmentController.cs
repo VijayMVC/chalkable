@@ -113,7 +113,7 @@ namespace Chalkable.Web.Controllers
         }
         
         [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult AddAttachment(Guid announcementId)
+        public ActionResult AddAttachment(int announcementId)
         {
             byte[] bin;
             string name;
@@ -140,7 +140,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult DownloadAttachment(Guid announcementAttachmentId, bool? needsDownload, int? width, int? height)
+        public ActionResult DownloadAttachment(int announcementAttachmentId, bool? needsDownload, int? width, int? height)
         {
             var attContentInfo = SchoolLocator.AnnouncementAttachmentService.GetAttachmentContent(announcementAttachmentId);
             var attName = attContentInfo.Attachment.Name;
@@ -159,7 +159,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult DeleteAttachment(Guid announcementAttachmentId)
+        public ActionResult DeleteAttachment(int announcementAttachmentId)
         {
             var attachment = SchoolLocator.AnnouncementAttachmentService.GetAttachmentById(announcementAttachmentId);
             SchoolLocator.AnnouncementAttachmentService.DeleteAttachment(announcementAttachmentId);
@@ -167,23 +167,23 @@ namespace Chalkable.Web.Controllers
             return Json(res, 6);
         }
         [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult GetAttachments(Guid announcementId, int? start, int? count)
+        public ActionResult GetAttachments(int announcementId, int? start, int? count)
         {
             var announcementAttachments = SchoolLocator.AnnouncementAttachmentService.GetAttachments(announcementId, start ?? 0, count ?? 10, false);
             var attachmentsInfo = AttachmentLogic.PrepareAttachmentsInfo(announcementAttachments);
-            var res = AnnouncementAttachmentViewData.Create(attachmentsInfo, SchoolLocator.Context.UserId);
+            var res = AnnouncementAttachmentViewData.Create(attachmentsInfo, SchoolLocator.Context.UserLocalId ?? 0);
             return Json(res);
         }
 
         [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult StartViewSession(Guid announcementAttachmentId)
+        public ActionResult StartViewSession(int announcementAttachmentId)
         {
             var att = SchoolLocator.AnnouncementAttachmentService.GetAttachmentById(announcementAttachmentId);
             var attinfo = AttachmentLogic.PrepareAttachmentInfo(att);
             try
             {
                 var wc = new WebClient();
-                var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.UserId);
+                var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.UserLocalId ?? 0);
                 bool isOwner = (person.Id == att.PersonRef);
                 var canAnnotate = isOwner || person.RoleRef != CoreRoles.STUDENT_ROLE.Id;
                 var nameValue = new NameValueCollection

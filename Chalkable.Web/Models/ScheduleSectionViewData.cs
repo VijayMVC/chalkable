@@ -6,27 +6,27 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models
 {
-    public class ScheduleSectionViewData
+    public class DateTypeViewData
     {
-        public Guid Id { get; set; }
-        public Guid MarkingPeriodId { get; set; }
+        public int Id { get; set; }
+        public int SchoolYearId { get; set; }
         public string Name { get; set; }
         public int Number { get; set; }
 
-        private ScheduleSectionViewData() { }
+        private DateTypeViewData() { }
 
-        public static ScheduleSectionViewData Create(DateType section)
+        public static DateTypeViewData Create(DateType section)
         {
-            return new ScheduleSectionViewData
+            return new DateTypeViewData
             {
                 Id = section.Id,
-                MarkingPeriodId = section.MarkingPeriodRef,
+                SchoolYearId = section.SchoolYearRef,
                 Name = section.Name,
                 Number = section.Number
             };
         }
 
-        public static IList<ScheduleSectionViewData> Create(IList<DateType> sections)
+        public static IList<DateTypeViewData> Create(IList<DateType> sections)
         {
             return sections.Select(Create).ToList();
         }

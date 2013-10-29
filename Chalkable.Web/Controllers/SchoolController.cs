@@ -36,10 +36,10 @@ namespace Chalkable.Web.Controllers
         public ActionResult People(Guid schoolId, int? roolId, Guid? gradeLevelId, int? start, int? count)
         {
             var school = MasterLocator.SchoolService.GetById(schoolId);
-            if(SchoolLocator.Context.SchoolId != schoolId)
-                 SchoolLocator = MasterLocator.SchoolServiceLocator(school.Id);
+            if (SchoolLocator.Context.SchoolId != schoolId)
+                SchoolLocator = MasterLocator.SchoolServiceLocator(school.Id);
             var persons = SchoolLocator.PersonService.GetPersons();
-            var studentsCount = persons.Count(x => x.RoleRef == CoreRoles.STUDENT_ROLE.Id);   
+            var studentsCount = persons.Count(x => x.RoleRef == CoreRoles.STUDENT_ROLE.Id);
             var teachersCount = persons.Count(x => x.RoleRef == CoreRoles.TEACHER_ROLE.Id);
             var adminsCount = persons.Count(x => x.RoleRef == CoreRoles.ADMIN_EDIT_ROLE.Id)
                               + persons.Count(x => x.RoleRef == CoreRoles.ADMIN_GRADE_ROLE.Id)
@@ -49,7 +49,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin")]
-        public ActionResult GetPersons(Guid schoolId, int? roleId, GuidList gradeLevelIds, int? start, int? count, bool? byLastName)
+        public ActionResult GetPersons(Guid schoolId, int? roleId, IntList gradeLevelIds, int? start, int? count, bool? byLastName)
         {
             if (SchoolLocator.Context.SchoolId != schoolId)
                 SchoolLocator = MasterLocator.SchoolServiceLocator(schoolId);

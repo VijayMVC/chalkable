@@ -46,8 +46,8 @@ namespace Chalkable.Web.Models.AttendancesViewData
             var res = new List<AttendanceStatsViewData>();
             foreach (var date in dates)
             {
-                var attsTotal = attsTotalPerDate.ContainsKey(date.DateTime) ? attsTotalPerDate[date.DateTime] : null;
-                res.Add(Create(attsTotal, date.DateTime, date.DateTime.ToString(dateFormat)));
+                var attsTotal = attsTotalPerDate.ContainsKey(date.Day) ? attsTotalPerDate[date.Day] : null;
+                res.Add(Create(attsTotal, date.Day, date.Day.ToString(dateFormat)));
             }
             return res;
         }

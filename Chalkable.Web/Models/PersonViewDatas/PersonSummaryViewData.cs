@@ -5,7 +5,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
 {
     public class PersonSummaryViewData : ShortPersonViewData
     {
-        public Guid RoomId { get; set; }
+        public int RoomId { get; set; }
         public string RoomName { get; set; }
         public string RoomNumber { get; set; }
         //public IList<PrivateNoteViewData> Notes { get; set; }

@@ -8,9 +8,9 @@ namespace Chalkable.Web.Models.AttendancesViewData
 {
     public class ClassAttendanceViewData
     {
-        public Guid Id { get; set; }
-        public Guid ClassPersonId { get; set; }
-        public Guid ClassPeriodId { get; set; }
+        public int Id { get; set; }
+        public int ClassPersonId { get; set; }
+        public int ClassPeriodId { get; set; }
         public DateTime Date { get; set; }
         public int Type { get; set; }
         public PeriodViewData Period { get; set; }
@@ -18,8 +18,8 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public Guid? AttendanceReasonId { get; set; }
         public AttendanceReasonViewData AttendanceReason { get; set; }
 
-        public Guid TeacherId { get; set; }
-        public Guid ClassId { get; set; }
+        public int TeacherId { get; set; }
+        public int ClassId { get; set; }
         public string ClassName { get; set; }
 
         public static ClassAttendanceViewData Create(ClassAttendanceDetails attendance, AttendanceReason reason)

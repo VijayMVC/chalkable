@@ -9,7 +9,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
 {
     public class AnnouncementMonthCalendarViewData : MonthCalendarViewData
     {
-        public ScheduleSectionViewData ScheduleSection { get; set; }
+        public DateTypeViewData ScheduleSection { get; set; }
         public IList<AnnouncementShortViewData> Announcements { get; set; }
         public IList<AnnouncementShortViewData> Items { get; set; }
 
@@ -19,15 +19,15 @@ namespace Chalkable.Web.Models.CalendarsViewData
             Announcements = announcements.Where(x => !x.GradableType).Select(AnnouncementShortViewData.Create).ToList();
             Items = announcements.Where(x => x.GradableType).Select(AnnouncementShortViewData.Create).ToList();
             if(section != null)
-               ScheduleSection = ScheduleSectionViewData.Create(section);
+               ScheduleSection = DateTypeViewData.Create(section);
         }
 
         public static AnnouncementMonthCalendarViewData Create(DateTime dateTime, bool isCurrentMonth, IList<AnnouncementComplex> announcements
             , IList<DateDetails> dates)
         {
             var anns = announcements.Where(x => x.Expires.Date == dateTime).ToList();
-            var dateDetails = dates.FirstOrDefault(x => x.DateTime == dateTime.Date);
-            var section = dateDetails != null ? dateDetails.ScheduleSection : null;
+            var dateDetails = dates.FirstOrDefault(x => x.Day == dateTime.Date);
+            var section = dateDetails != null ? dateDetails.DateType : null;
             return new AnnouncementMonthCalendarViewData(dateTime, isCurrentMonth, anns, section);
         }
     }

@@ -110,7 +110,7 @@ namespace Chalkable.Data.School.DataAccess
             if (reader != null)
             {
                 var res = reader.Read<PersonDetails>();
-                res.Addresses = reader.Read<Address>(true);
+                res.Address = reader.Read<Address>(true);
                 //if (res.RoleRef == CoreRoles.STUDENT_ROLE.Id)
                 //{
                 //    //res.StudentInfo = reader.Read<StudentInfo>();
@@ -150,7 +150,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public string StartFrom { get; set; }
         public string Filter { get; set; }
-        public IEnumerable<Guid> GradeLevelIds { get; set; }
+        public IEnumerable<int> GradeLevelIds { get; set; }
         public SortTypeEnum SortType { get; set; }
 
         

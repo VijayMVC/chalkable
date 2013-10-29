@@ -9,7 +9,7 @@ namespace Chalkable.Web.Models
 {
     public class PrivateMessageViewData
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public DateTime? Sent { get; set; }
         public string Subject { get; set; }
         public string Body { get; set; }

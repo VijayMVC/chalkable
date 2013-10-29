@@ -43,7 +43,7 @@ namespace Chalkable.Web.Models.ClassesViewData
 
     public class ClassAverageForMpHoverViewData
     {
-        public Guid MarkingPeriodId { get; set; }
+        public int MarkingPeriodId { get; set; }
         public string MarkingPeriodName { get; set; }
         public int? Avg { get; set; }
         public static IList<ClassAverageForMpHoverViewData> Create(IList<MarkingPeriodClassGradeAvg> classGradingStats)

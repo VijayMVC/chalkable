@@ -19,26 +19,27 @@ namespace Chalkable.Web.Controllers
     public class GradingController : ChalkableController
     {
         [AuthorizationFilter("Teacher")]
-        public ActionResult TeacherSummary(Guid teacherId)
+        public ActionResult TeacherSummary(int teacherId)
         {
-            var schoolYearId = GetCurrentSchoolYearId();
-            var gradingStats = SchoolLocator.GradingStatisticService.GetStudentsGradePerClass(teacherId, schoolYearId);
-            gradingStats = gradingStats.Where(x => x.Avg.HasValue).ToList();
-            var classes = SchoolLocator.ClassService.GetClasses(null, null, teacherId);
-            return Json(GradingTeacherClassSummaryViewData.Create(gradingStats, classes), 6);
+            throw new NotImplementedException();
+            //var schoolYearId = GetCurrentSchoolYearId();
+            //var gradingStats = SchoolLocator.GradingStatisticService.GetStudentsGradePerClass(teacherId, schoolYearId);
+            //gradingStats = gradingStats.Where(x => x.Avg.HasValue).ToList();
+            //var classes = SchoolLocator.ClassService.GetClasses(null, null, teacherId);
+            //return Json(GradingTeacherClassSummaryViewData.Create(gradingStats, classes), 6);
         }
 
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
-        public ActionResult ClassSummary(Guid classId)
+        public ActionResult ClassSummary(int classId)
         {
             if (!SchoolLocator.Context.SchoolId.HasValue)
                 throw new UnassignedUserException();
-            var teacherId = Context.UserId;
+            var teacherId = Context.UserLocalId;
             return Json(ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), teacherId), 7);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
-        public ActionResult ItemGradingStat(Guid announcementId)
+        public ActionResult ItemGradingStat(int announcementId)
         {
             var ann = SchoolLocator.AnnouncementService.GetAnnouncementById(announcementId);
             var studentAnns = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
@@ -47,16 +48,17 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult StudentSummary(Guid studentId, Guid? classId)
+        public ActionResult StudentSummary(int studentId, int? classId)
         {
-            var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(30, true);
-            var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(Context.NowSchoolTime.Date, true);
-            var gradingStats = SchoolLocator.GradingStatisticService.GetStudentGradePerDate(studentId, mp.Id, classId);
-            return Json(GradingStudentSummaryViewData.Create(announcements, gradingStats));
+            throw new NotImplementedException();
+            //var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(30, true);
+            //var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(Context.NowSchoolTime.Date, true);
+            //var gradingStats = SchoolLocator.GradingStatisticService.GetStudentGradePerDate(studentId, mp.Id, classId);
+            //return Json(GradingStudentSummaryViewData.Create(announcements, gradingStats));
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult StudentClassSummary(Guid studentId, Guid classId)
+        public ActionResult StudentClassSummary(int studentId, int classId)
         {
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(Context.NowSchoolTime.Date, true);
             var gradingStats = SchoolLocator.GradingStatisticService.GetStudentClassGradeStats(mp.Id, classId, studentId);
@@ -67,7 +69,7 @@ namespace Chalkable.Web.Controllers
 
         //TODO: duplicate part of announcement/read data. for API compatibility only
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADE_LIST_ITEMS, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
-        public ActionResult ItemGradesList(Guid announcementId)
+        public ActionResult ItemGradesList(int announcementId)
         {
             var annView = SchoolLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var attachmentsInfo = AttachmentLogic.PrepareAttachmentsInfo(annView.AnnouncementAttachments);
@@ -75,13 +77,13 @@ namespace Chalkable.Web.Controllers
             return Json(res);
         }
 
-        public ActionResult ApplyAutoGrade(Guid announcementId)
+        public ActionResult ApplyAutoGrade(int announcementId)
         {
             SchoolLocator.StudentAnnouncementService.ResolveAutoGrading(announcementId, true);
             return ItemGradesList(announcementId);
         }
 
-        public ActionResult ApplyManualGrade(Guid announcementId)
+        public ActionResult ApplyManualGrade(int announcementId)
         {
             SchoolLocator.StudentAnnouncementService.ResolveAutoGrading(announcementId, false);
             return ItemGradesList(announcementId);
@@ -90,14 +92,14 @@ namespace Chalkable.Web.Controllers
         //TODO: do we need this in API still?
         [RequireRequestValue("studentAnnouncementId")]
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADE_UPDATE_ITEM, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
-        public ActionResult UpdateItem(Guid studentAnnouncementId, int? gradeValue, string extraCredits, string comment, bool dropped)
+        public ActionResult UpdateItem(int studentAnnouncementId, int? gradeValue, string extraCredits, string comment, bool dropped)
         {
             var studentAnn = SchoolLocator.StudentAnnouncementService.SetGrade(studentAnnouncementId, gradeValue, extraCredits, comment, dropped, (int)GradingStyleEnum.Numeric100);
             return PrepareStudentAnnouncementResponse(studentAnn);
         }
 
         [AuthorizationFilter("Teacher ,AdminGrade, Student", Preference.API_DESCR_SET_AUTO_GRADE, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
-        public ActionResult SetAutoGrade(Guid studentAnnouncementId, int value, Guid applicationId)
+        public ActionResult SetAutoGrade(int studentAnnouncementId, int value, Guid applicationId)
         {
             var res = SchoolLocator.StudentAnnouncementService.SetAutoGrade(studentAnnouncementId, value, applicationId);
             return PrepareStudentAnnouncementResponse(res);

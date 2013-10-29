@@ -42,7 +42,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public bool IsPassing { get; set; }
 
         public static StudentAttendanceBoxViewData Create(IList<ClassAttendanceDetails> attendances, 
-            IDictionary<Guid, List<ClassAttendanceDetails>> attendancesDictionary, AttendanceTypeEnum type)
+            IDictionary<int, List<ClassAttendanceDetails>> attendancesDictionary, AttendanceTypeEnum type)
         {
             var isPassing = true;
             var typeCount = attendances.Count(x => x.Type == type);
@@ -79,7 +79,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
         }
 
         private const string OTHER = "Other";
-        public static IList<StudentAttendanceHoverViewData> Create(IDictionary<Guid, List<ClassAttendanceDetails>> attendancesDictionary, AttendanceTypeEnum type)
+        public static IList<StudentAttendanceHoverViewData> Create(IDictionary<int, List<ClassAttendanceDetails>> attendancesDictionary, AttendanceTypeEnum type)
         {
             var res = attendancesDictionary.Select(x => Create(x.Value, type))
                 .Where(x => x.Value > 0)

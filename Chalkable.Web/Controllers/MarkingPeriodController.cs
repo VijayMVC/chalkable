@@ -14,7 +14,7 @@ namespace Chalkable.Web.Controllers
     public class MarkingPeriodController : ChalkableController
     {
         [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_MARKING_PERIOD_LIST, true, CallType.Get, new[] { AppPermissionType.Schedule })]
-        public ActionResult List(Guid schoolYearId, DateTime? tillDate)
+        public ActionResult List(int schoolYearId, DateTime? tillDate)
         {
             var res = SchoolLocator.MarkingPeriodService.GetMarkingPeriods(schoolYearId);
             if (tillDate.HasValue)
@@ -34,7 +34,7 @@ namespace Chalkable.Web.Controllers
         //}
 
         [AuthorizationFilter("System Admin, AdminGrade, AdminEdit")]
-        public ActionResult ChangeMarkingPeriodsCount(Guid schoolYearId, int count)
+        public ActionResult ChangeMarkingPeriodsCount(int schoolYearId, int count)
         {
             string error;
             var res = SchoolLocator.MarkingPeriodService.ChangeMarkingPeriodsCount(schoolYearId, count, out error);
@@ -42,7 +42,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit")]
-        public ActionResult ChangeWeekDays(GuidList markingPeriodIds, int weekDays)
+        public ActionResult ChangeWeekDays(IntList markingPeriodIds, int weekDays)
         {
             var res = SchoolLocator.MarkingPeriodService.ChangeWeekDays(markingPeriodIds, weekDays);
             return Json(res);

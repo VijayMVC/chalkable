@@ -386,13 +386,13 @@ namespace Chalkable.Data.School.DataAccess
     
     public class ClassAttendanceQuery
     {
-        public Guid? Id { get; set; }
-        public Guid? StudentId { get; set; }
-        public Guid? TeacherId { get; set; }
-        public Guid? MarkingPeriodId { get; set; }
-        public Guid? ClassId { get; set; }
-        public Guid? ClassPeriodId { get; set; }
-        public Guid? SchoolYearId { get; set; }
+        public int? Id { get; set; }
+        public int? StudentId { get; set; }
+        public int? TeacherId { get; set; }
+        public int? MarkingPeriodId { get; set; }
+        public int? ClassId { get; set; }
+        public int? ClassPeriodId { get; set; }
+        public int? SchoolYearId { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public AttendanceTypeEnum? Type { get; set; }

@@ -9,14 +9,14 @@ namespace Chalkable.Web.Controllers
     public class AnnouncementQnAController : ChalkableController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult List(Guid announcementId)
+        public ActionResult List(int announcementId)
         {
             var res = SchoolLocator.AnnouncementQnAService.GetAnnouncementQnAs(announcementId);
             return Json(AnnouncementQnAViewData.Create(res), 5);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult Ask(Guid announcementId, string question)
+        public ActionResult Ask(int announcementId, string question)
         {
             var qna = SchoolLocator.AnnouncementQnAService.AskQuestion(announcementId, question);
             var res = SchoolLocator.AnnouncementQnAService.GetAnnouncementQnA(qna.Id);
@@ -24,7 +24,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult Answer(Guid announcementQnAId, string question, string answer)
+        public ActionResult Answer(int announcementQnAId, string question, string answer)
         {
             var qna = SchoolLocator.AnnouncementQnAService.Answer(announcementQnAId, question, answer);
             var res = SchoolLocator.AnnouncementQnAService.GetAnnouncementQnA(qna.Id);
@@ -32,7 +32,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult EditAnswer(Guid announcementQnAId, string answer)
+        public ActionResult EditAnswer(int announcementQnAId, string answer)
         {
             var annQnA = SchoolLocator.AnnouncementQnAService.EditAnswer(announcementQnAId, answer);
             var res = SchoolLocator.AnnouncementQnAService.GetAnnouncementQnAs(annQnA.AnnouncementRef);
@@ -40,7 +40,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult EditQuestion(Guid announcementQnAId, string question)
+        public ActionResult EditQuestion(int announcementQnAId, string question)
         {
             var annQnA = SchoolLocator.AnnouncementQnAService.EditQuestion(announcementQnAId, question);
             var res = SchoolLocator.AnnouncementQnAService.GetAnnouncementQnAs(annQnA.AnnouncementRef);
@@ -48,7 +48,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult Delete(Guid announcementQnAId)
+        public ActionResult Delete(int announcementQnAId)
         {
             var annQnA = SchoolLocator.AnnouncementQnAService.GetAnnouncementQnA(announcementQnAId);
             SchoolLocator.AnnouncementQnAService.Delete(announcementQnAId);
@@ -57,7 +57,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult MarkUnanswered(Guid announcementQnAId)
+        public ActionResult MarkUnanswered(int announcementQnAId)
         {
             var res = SchoolLocator.AnnouncementQnAService.MarkUnanswered(announcementQnAId);
             return Json(true);

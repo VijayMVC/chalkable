@@ -22,7 +22,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult ListByClass(Guid classId)
+        public ActionResult ListByClass(int classId)
         {
             if (!SchoolLocator.Context.SchoolId.HasValue)
                 throw new UnassignedUserException();
@@ -33,21 +33,23 @@ namespace Chalkable.Web.Controllers
                 return Json(new NoMarkingPeriodException());
 
             var standard = new[] {SchoolLocator.AnnouncementTypeService.GetAnnouncementTypeById((int) SystemAnnouncementType.Standard)};
-            var markingPeriodClass = SchoolLocator.MarkingPeriodService.GetMarkingPeriodClass(classId, markingPeriod.Id);
-            var res = GetTypesByClass(SchoolLocator, markingPeriodClass.Id, standard);
-            return Json(AnnouncementTypeViewData.Create(res), 3);
+            var res = GetTypesByClass(SchoolLocator, classId, standard);
+            return Json(ClassAnnouncementTypeViewData.Create(res), 3);
         }
 
-        public static IList<AnnouncementType> GetTypesByClass(IServiceLocatorSchool serviceLocator, Guid markingPeriodClassId, IEnumerable<AnnouncementType> defaults)
+        public static IList<ClassAnnouncementType> GetTypesByClass(IServiceLocatorSchool serviceLocator, int classId, IEnumerable<AnnouncementType> defaults)
         {
-            var finalAnnTypes = serviceLocator.FinalGradeService.GetFinalGradeAnnouncementTypes(markingPeriodClassId);
-            var annTypes = finalAnnTypes.Where(x => x.PercentValue > 0).Select(x => x.AnnouncementType).ToList();
-            annTypes.AddRange(defaults);
-            foreach (var announcementType in annTypes)
-            {
-                announcementType.CanCreate = true;
-            }
-            return annTypes;
+            var classAnnTypes = serviceLocator.AnnouncementTypeService.GetClassAnnouncementTypes(classId, false).ToList();
+            classAnnTypes.AddRange(defaults.Select(x=> new ClassAnnouncementType
+                {
+                    AnnouncementTypeRef = x.Id,
+                    ClassRef = classId,
+                    Description = x.Description,
+                    Gradable = x.Gradable,
+                    Name = x.Name,
+                    Percentage = x.Percentage
+                }));
+            return classAnnTypes;
         }
     }
 }

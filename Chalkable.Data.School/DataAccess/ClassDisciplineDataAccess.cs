@@ -103,17 +103,17 @@ namespace Chalkable.Data.School.DataAccess
 
     public class ClassDisciplineQuery
     {
-        public Guid? PersonId { get; set; }
-        public Guid? MarkingPeriodId { get; set; }
-        public Guid? ClassId { get; set; }
-        public Guid? TeacherId { get; set; }
-        public Guid? Type { get; set; }
+        public int? PersonId { get; set; }
+        public int? MarkingPeriodId { get; set; }
+        public int? ClassId { get; set; }
+        public int? TeacherId { get; set; }
+        public int? Type { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public int? StartTime { get; set; }
         public int? EndTime { get; set; }
-        public Guid? SchoolYearId { get; set; }
-        public Guid? Id { get; set; }
+        public int? SchoolYearId { get; set; }
+        public int? Id { get; set; }
         public bool NeedAllData { get; set; }
     }
 }

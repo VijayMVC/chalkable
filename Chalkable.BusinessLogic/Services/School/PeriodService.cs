@@ -16,7 +16,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Period Edit(int id, int startTime, int endTime);
         Period GetPeriod(int time, DateTime date);
         Period GetPeriod(int time);
-
+        IList<Period> GetPeriods(int schoolYearId);
         IList<Period> ReGeneratePeriods(IList<Guid> markingPeriodIds, int? startTime = null, int? length = null, int? lengthBetweenPeriods = null, int? periodCount = null);
     }
 
@@ -192,5 +192,12 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
+        public IList<Period> GetPeriods(int schoolYearId)
+        {
+            using (var uow = Read())
+            {
+                return new PeriodDataAccess(uow).GetPeriods(schoolYearId);
+            }
+        }
     }
 }

@@ -25,14 +25,14 @@ namespace Chalkable.Web.Models.PersonViewDatas
      */
     public class AddressInputModel
     {
-        public Guid? Id { get; set; }
+        public int? Id { get; set; }
         public string Value { get; set; }
         public int Type { get; set; }
     }
 
     public class PhoneInputModel
     {
-        public Guid? Id { get; set; }
+        public int? Id { get; set; }
         public string Value { get; set; }
         public int Type { get; set; }
         public bool IsPrimary { get; set; }
@@ -40,7 +40,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
     public class AdminTeacherInputModel
     {
-        public Guid PersonId { get; set; }
+        public int PersonId { get; set; }
         public AddressInputModel[] Addresses { get; set; }
         public PhoneInputModel[] Phones { get; set; }
         public string Email { get; set; }

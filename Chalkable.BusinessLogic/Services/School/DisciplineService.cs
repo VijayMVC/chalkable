@@ -13,13 +13,13 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IDisciplineService
     {
-        ClassDiscipline SetClassDiscipline(Guid classPersonId, Guid classPeriodId, DateTime date, ISet<Guid> disciplineTypes, string description);
-        void DeleteClassDiscipline(Guid classPersonId, Guid classPeriodId, DateTime date);
-        IList<ClassDisciplineDetails> GetClassDisciplineDetails(ClassDisciplineQuery query, IList<Guid> gradeLevelIds = null);
-        IList<ClassDisciplineDetails> GetClassDisciplineDetails(Guid schoolYearId, Guid personId, DateTime start, DateTime end, bool needsAllData = false);
-        IList<ClassDisciplineDetails> GetClassDisciplineDetails(Guid schoolYearId, DateTime date);
-        IList<DisciplineTotalPerType> CalcDisciplineTypeTotalForStudent(Guid studentId, Guid? markingPeriodId, Guid? schoolYearId, DateTime? fromDate, DateTime? toDate);
-        IList<DisciplineTotalPerType> CalcDisciplineTypeTotalForStudents(IList<Guid> studentIds, Guid? markingPeriodId, Guid? schoolYearId, DateTime? fromDate, DateTime? toDate);
+        ClassDiscipline SetClassDiscipline(int classPersonId, int classPeriodId, DateTime date, ISet<int> disciplineTypes, string description);
+        void DeleteClassDiscipline(int classPersonId, int classPeriodId, DateTime date);
+        IList<ClassDisciplineDetails> GetClassDisciplineDetails(ClassDisciplineQuery query, IList<int> gradeLevelIds = null);
+        IList<ClassDisciplineDetails> GetClassDisciplineDetails(int schoolYearId, int personId, DateTime start, DateTime end, bool needsAllData = false);
+        IList<ClassDisciplineDetails> GetClassDisciplineDetails(int schoolYearId, DateTime date);
+        IList<DisciplineTotalPerType> CalcDisciplineTypeTotalForStudent(int studentId, int? markingPeriodId, int? schoolYearId, DateTime? fromDate, DateTime? toDate);
+        IList<DisciplineTotalPerType> CalcDisciplineTypeTotalForStudents(IList<int> studentIds, int? markingPeriodId, int? schoolYearId, DateTime? fromDate, DateTime? toDate);
     }
 
     public class DisciplineService : SchoolServiceBase, IDisciplineService
@@ -159,39 +159,37 @@ namespace Chalkable.BusinessLogic.Services.School
         //}
 
 
-
-
-        public ClassDiscipline SetClassDiscipline(Guid classPersonId, Guid classPeriodId, DateTime date, ISet<Guid> disciplineTypes, string description)
+        public ClassDiscipline SetClassDiscipline(int classPersonId, int classPeriodId, DateTime date, ISet<int> disciplineTypes, string description)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteClassDiscipline(Guid classPersonId, Guid classPeriodId, DateTime date)
+        public void DeleteClassDiscipline(int classPersonId, int classPeriodId, DateTime date)
         {
             throw new NotImplementedException();
         }
 
-        public IList<ClassDisciplineDetails> GetClassDisciplineDetails(ClassDisciplineQuery query, IList<Guid> gradeLevelIds = null)
+        public IList<ClassDisciplineDetails> GetClassDisciplineDetails(ClassDisciplineQuery query, IList<int> gradeLevelIds = null)
         {
             throw new NotImplementedException();
         }
 
-        public IList<ClassDisciplineDetails> GetClassDisciplineDetails(Guid schoolYearId, Guid personId, DateTime start, DateTime end, bool needsAllData = false)
+        public IList<ClassDisciplineDetails> GetClassDisciplineDetails(int schoolYearId, int personId, DateTime start, DateTime end, bool needsAllData = false)
         {
             throw new NotImplementedException();
         }
 
-        public IList<ClassDisciplineDetails> GetClassDisciplineDetails(Guid schoolYearId, DateTime date)
+        public IList<ClassDisciplineDetails> GetClassDisciplineDetails(int schoolYearId, DateTime date)
         {
             throw new NotImplementedException();
         }
 
-        public IList<DisciplineTotalPerType> CalcDisciplineTypeTotalForStudent(Guid studentId, Guid? markingPeriodId, Guid? schoolYearId, DateTime? fromDate, DateTime? toDate)
+        public IList<DisciplineTotalPerType> CalcDisciplineTypeTotalForStudent(int studentId, int? markingPeriodId, int? schoolYearId, DateTime? fromDate, DateTime? toDate)
         {
             throw new NotImplementedException();
         }
 
-        public IList<DisciplineTotalPerType> CalcDisciplineTypeTotalForStudents(IList<Guid> studentIds, Guid? markingPeriodId, Guid? schoolYearId, DateTime? fromDate, DateTime? toDate)
+        public IList<DisciplineTotalPerType> CalcDisciplineTypeTotalForStudents(IList<int> studentIds, int? markingPeriodId, int? schoolYearId, DateTime? fromDate, DateTime? toDate)
         {
             throw new NotImplementedException();
         }

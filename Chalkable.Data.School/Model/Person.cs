@@ -88,14 +88,16 @@ namespace Chalkable.Data.School.Model
             get { return !string.IsNullOrEmpty(LastName) && LastName.Trim() != ""; }
         }
 
-
+        //todo remove this later
+        [NotDbFieldAttr]
+        public int RoleRef { get; set; }
     }
 
 
     public class PersonDetails : Person
     {
         public Address address;
-        public Address Addresses
+        public Address Address
         {
             get { return address; } 
             set

@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IFinalGradeService
     {
         IList<FinalGradeAnnouncementType> GetFinalGradeAnnouncementTypes(Guid finalGradeId);
-        IList<FinalGradeAnnouncementType> GetFinalGradeAnnouncementTypes(Guid markingPeriodId, Guid classId);
+        IList<FinalGradeAnnouncementType> GetFinalGradeAnnouncementTypes(int markingPeriodId, int classId);
         StudentFinalGrade SetStudentFinalGrade(Guid studentFinalGradeId, int? gradeByAttendance, int? gradeByDiscipline, int? gradeByParticipation, int? teacherGrade, int? adminGrade, string comment);
         
         FinalGradeDetails ReBuildFinalGrade(Guid finalGradeId);
@@ -275,10 +275,6 @@ namespace Chalkable.BusinessLogic.Services.School
             throw new NotImplementedException();
         }
 
-        public IList<FinalGradeAnnouncementType> GetFinalGradeAnnouncementTypes(Guid markingPeriodId, Guid classId)
-        {
-            throw new NotImplementedException();
-        }
 
         public StudentFinalGrade SetStudentFinalGrade(Guid studentFinalGradeId, int? gradeByAttendance, int? gradeByDiscipline, int? gradeByParticipation, int? teacherGrade, int? adminGrade, string comment)
         {
@@ -316,6 +312,13 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
         public IList<ClassDetails> GetFinalizedClasses(Guid markingPeriodId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+        public IList<FinalGradeAnnouncementType> GetFinalGradeAnnouncementTypes(int markingPeriodId, int classId)
         {
             throw new NotImplementedException();
         }

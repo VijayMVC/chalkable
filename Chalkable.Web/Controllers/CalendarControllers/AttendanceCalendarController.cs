@@ -14,7 +14,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
     public class AttendanceCalendarController : CalendarController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult MonthForClass(Guid classId, DateTime? date)
+        public ActionResult MonthForClass(int classId, DateTime? date)
         {
             var type = AttendanceTypeEnum.Absent | AttendanceTypeEnum.Excused | AttendanceTypeEnum.Late;
             var attQuery = new ClassAttendanceQuery {ClassId = classId, Type = type};
@@ -23,7 +23,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult MonthForPerson(Guid personId, DateTime? date)
+        public ActionResult MonthForPerson(int personId, DateTime? date)
         {
             var attQuery = new ClassAttendanceQuery { StudentId = personId};
             return AttendancesForMonth(date, attQuery, (dateTime, isCurrentMonth, atts) =>

@@ -178,7 +178,7 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public IList<StudentClassGradeStats> CalcStudentClassGradeStats(Guid classId, Guid markingPeriodId, Guid? studentId, int dayInterval)
+        public IList<StudentClassGradeStats> CalcStudentClassGradeStats(int classId, int markingPeriodId, int? studentId, int dayInterval)
         {
             var parameters = new Dictionary<string, object>
                 {
@@ -189,10 +189,10 @@ namespace Chalkable.Data.School.DataAccess
                 };
             using (var reader = ExecuteStoredProcedureReader("spCalcStudentClassGradeStatsPerDate", parameters))
             {
-                var stDic = new Dictionary<Guid, StudentClassGradeStats>();
+                var stDic = new Dictionary<int, StudentClassGradeStats>();
                 while (reader.Read())
                 {
-                    var stId = SqlTools.ReadGuid(reader, StudentClassGradeStats.STUDENT_ID_FEILD);
+                    var stId = SqlTools.ReadInt32(reader, StudentClassGradeStats.STUDENT_ID_FEILD);
                     if(!stDic.ContainsKey(stId))
                         stDic.Add(stId, new StudentClassGradeStats
                             {
@@ -204,10 +204,10 @@ namespace Chalkable.Data.School.DataAccess
                     stDic[stId].GradeAvgPerDates.Add(reader.Read<GradeAvgPerDate>()); 
                 }
                 reader.NextResult();
-                var anntypeDic = new Dictionary<Guid, IDictionary<int, AnnTypeGradeStats>>();
+                var anntypeDic = new Dictionary<int, IDictionary<int, AnnTypeGradeStats>>();
                 while (reader.Read())
                 {
-                    var stId = SqlTools.ReadGuid(reader, StudentClassGradeStats.STUDENT_ID_FEILD);
+                    var stId = SqlTools.ReadInt32(reader, StudentClassGradeStats.STUDENT_ID_FEILD);
                     var annType = SqlTools.ReadInt32(reader, AnnTypeGradeStats.ANNOUNCEMENT_TYPE_ID_FIELD);
                     if(!anntypeDic.ContainsKey(stId))
                         anntypeDic.Add(stId, new Dictionary<int, AnnTypeGradeStats>());

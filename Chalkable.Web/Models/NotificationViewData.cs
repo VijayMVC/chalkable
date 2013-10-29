@@ -10,13 +10,13 @@ namespace Chalkable.Web.Models
 {
     public class NotificationViewData
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public int Type { get; set; }
         public string Message { get; set; }
         public bool Shown { get; set; }
-        public Guid? AnnouncementId { get; set; }
-        public Guid? PrivateMessageId { get; set; }
-        public Guid? MarkingPeriodId { get; set; }
+        public int? AnnouncementId { get; set; }
+        public int? PrivateMessageId { get; set; }
+        public int? MarkingPeriodId { get; set; }
         public ShortPersonViewData Person { get; set; }
         public Guid? ApplicationId { get; set; }
         public string ApplcicationName { get; set; }
@@ -24,8 +24,8 @@ namespace Chalkable.Web.Models
         public int? AnnouncementType { get; set; }
         public string AnnouncementTypeName { get; set; }
         public DateTime Created { get; set; }
-        public Guid? ClassId { get; set; }
-        public Guid? ClassPeriodId { get; set; }
+        public int? ClassId { get; set; }
+        public int? ClassPeriodId { get; set; }
 
         //private NotificationViewData(){}
 

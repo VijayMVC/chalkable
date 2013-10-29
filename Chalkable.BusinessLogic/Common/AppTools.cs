@@ -25,7 +25,7 @@ namespace Chalkable.BusinessLogic.Common
         public const string ICON_17_FILE = "icon17.png";
         public const string ICON_47_FILE = "icon47.png";
 
-        public static string BuildAppUrl(Application application, Guid? announcementAppId, Guid? appInstallId, AppMode mode)
+        public static string BuildAppUrl(Application application, int? announcementAppId, int? appInstallId, AppMode mode)
         {
             string page;
             switch (mode)

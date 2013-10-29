@@ -30,11 +30,11 @@ namespace Chalkable.Web.Models.CalendarsViewData
     }
     public class AttendanceForStudentCalendarItemViewData : AttendanceCalendarItemViewData
     {
-        public Guid PersonId { get; set; }
+        public int PersonId { get; set; }
         public string ClassName { get; set; }
-        public Guid TeacherId { get; set; }
+        public int TeacherId { get; set; }
         public int PeriodOrder { get; set; }
-        public Guid PeriodId { get; set; }
+        public int PeriodId { get; set; }
 
         public static IList<AttendanceForStudentCalendarItemViewData> Create(IList<ClassAttendanceDetails> attendances)
         {
@@ -63,7 +63,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
         public bool IsExcused { get; set; }
         public bool IsAbsent { get; set; }
         public bool ShowGroupedData { get; set; }
-        public Guid PersonId { get; set; }
+        public int PersonId { get; set; }
 
         protected AttendanceForStudentCalendarViewData(DateTime date, bool isCurrentMonth)
             : base(date, isCurrentMonth)
@@ -71,7 +71,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
         }
 
 
-        public static AttendanceForStudentCalendarViewData Create(DateTime date, bool isCurrentMonth, Guid personId
+        public static AttendanceForStudentCalendarViewData Create(DateTime date, bool isCurrentMonth, int personId
             , IList<ClassAttendanceDetails> attendances)
         {
             attendances = attendances.Where(x => x.Date == date && x.Type != AttendanceTypeEnum.NotAssigned).ToList();
@@ -115,13 +115,13 @@ namespace Chalkable.Web.Models.CalendarsViewData
 
     public class AttendanceForClassCalendarViewData : BaseAttendanceMonthCalendarViewData<AttendanceCalendarItemViewData>
     {
-        public Guid ClassId { get; set; }
+        public int ClassId { get; set; }
         protected AttendanceForClassCalendarViewData(DateTime date, bool isCurrentMonth)
             : base(date, isCurrentMonth)
         {
         }
 
-        public static AttendanceForClassCalendarViewData Create(DateTime date, bool isCurrentMonth, Guid classId, IList<ClassAttendanceDetails> attendances)
+        public static AttendanceForClassCalendarViewData Create(DateTime date, bool isCurrentMonth, int classId, IList<ClassAttendanceDetails> attendances)
         {
             var groupedAtt = attendances.Where(x=>x.Date == date).GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.Count());
             return new AttendanceForClassCalendarViewData(date, isCurrentMonth)
