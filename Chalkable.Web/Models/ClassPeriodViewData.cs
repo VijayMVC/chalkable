@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Chalkable.Data.School.Model;
+﻿using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ClassesViewData;
 
 namespace Chalkable.Web.Models
@@ -11,7 +7,7 @@ namespace Chalkable.Web.Models
     {
         public int Id { get; set; }
         public PeriodViewData Period { get; set; }
-        public int RoomId { get; set; }
+        public int? RoomId { get; set; }
         public string RoomNumber { get; set; }
         public int ClassId { get; set; }
         public int DateTypeId { get; set; }

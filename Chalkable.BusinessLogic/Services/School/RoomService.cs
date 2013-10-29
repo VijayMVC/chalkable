@@ -95,7 +95,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public Room WhereIsPerson(int personId, DateTime dateTime)
         {
             var classPeriod = ServiceLocator.ClassPeriodService.GetClassPeriodForSchoolPersonByDate(personId, dateTime);
-            return classPeriod != null ? GetRoomById(classPeriod.RoomRef) : null;
+            return classPeriod != null && classPeriod.RoomRef.HasValue ? GetRoomById(classPeriod.RoomRef.Value) : null;
         }
 
         public Room GetRoomById(int id)
