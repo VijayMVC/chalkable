@@ -180,7 +180,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Person EditStudent(int studentId, string email, string firstName, string lastName, string gender, string salutation, 
             DateTime? birthDate, bool iep, DateTime enrollmentDate, string previousSchool, string previousSchoolPhone, 
-            string previousSchoolNote, Guid? gradeLevelId)
+            string previousSchoolNote, int? gradeLevelId)
         {
             if(!(BaseSecurity.IsAdminOrTeacher(Context) || Context.UserLocalId == studentId))
                 throw new ChalkableSecurityException();

@@ -12,9 +12,13 @@ namespace Chalkable.BusinessLogic.Security
         {
             return context.Role ==  CoreRoles.SUPER_ADMIN_ROLE;
         }
+        public static bool IsDistrict(UserContext context)
+        {
+            return IsSysAdmin(context) || context.Role == CoreRoles.DISTRICT_ROLE;
+        }
         public static bool IsAdminGrader(UserContext context)
         {
-            return IsSysAdmin(context) || context.Role ==  CoreRoles.ADMIN_GRADE_ROLE;
+            return IsDistrict(context) || context.Role ==  CoreRoles.ADMIN_GRADE_ROLE;
         }
         public static bool IsAdminEditor(UserContext context)
         {

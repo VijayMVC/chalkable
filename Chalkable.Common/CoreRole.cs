@@ -29,7 +29,8 @@ namespace Chalkable.Common
         public static CoreRole ADMIN_EDIT_ROLE = new CoreRole(7, "AdminEdit", "School Administrator for Edit");
         public static CoreRole ADMIN_VIEW_ROLE = new CoreRole(8, "AdminView", "Administrator for View");
         public static CoreRole DEVELOPER_ROLE = new CoreRole(9, "Developer", "Chalkable Developer");
-        
+        public static CoreRole DISTRICT_ROLE = new CoreRole(10, "District", "District");
+
         private static Dictionary<string, CoreRole> roles = new Dictionary<string, CoreRole>
                                                                  {
                                                                      {SUPER_ADMIN_ROLE.LoweredName, SUPER_ADMIN_ROLE},
