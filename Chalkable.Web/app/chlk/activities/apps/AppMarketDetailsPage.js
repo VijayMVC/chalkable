@@ -12,6 +12,18 @@ NAMESPACE('chlk.activities.apps', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppMarketReviewsTpl, 'updateReviews', '.reviews', ria.mvc.PartialUpdateRuleActions.Replace)],
         'AppMarketDetailsPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
+            OVERRIDE, VOID, function onRender_(model){
+                BASE(model);
+                jQuery('textarea').autoResize({
+                    limit: 9999,
+                    animateDuration : 100,
+                    onResize : function() {
+                        var node = jQuery(this);
+                        node.scrollTo('10000px');
+                    }
+                });
+            },
+
             [ria.mvc.DomEventBind('click', '.write-review-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleReviewArea(node, event){
