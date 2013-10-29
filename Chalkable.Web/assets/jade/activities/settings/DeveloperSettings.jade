@@ -6,9 +6,10 @@
         .row
             +ActionLink('account', 'profile', self.developerId) Profile
         .row
-            -id = self.currentAppId ? self.currentAppId.valueOf() : null
+            id = self.currentAppId ? self.currentAppId.valueOf() : null
+            appName = self.getCurrentAppName() || ''
             if id
-                +ActionLink('apps', 'tryDeleteApplication', id) Delete application
+                +ActionLink('apps', 'tryDeleteApplication', id, appName) Delete application
 
 
 

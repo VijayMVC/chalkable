@@ -102,6 +102,7 @@ NAMESPACE('chlk.controllers', function (){
                 var app = this.getCurrentApp();
                 if (app){
                     devSettings.setCurrentAppId(app.getId());
+                    devSettings.setCurrentAppName(app.getName());
                 }
                 return this.PushView(chlk.activities.settings.DeveloperPage, ria.async.DeferredData(devSettings));
             }
