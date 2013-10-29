@@ -49,10 +49,10 @@ namespace Chalkable.Tests.Services.TestContext
             AdminEditSl = CreateUserWithLocator(AdminEditName, CoreRoles.ADMIN_EDIT_ROLE, null);
             AdminViewSl = CreateUserWithLocator(AdminViewName, CoreRoles.ADMIN_VIEW_ROLE, null);
             FirstTeacherSl = CreateUserWithLocator(FirstTeacherName, CoreRoles.TEACHER_ROLE, null);
-            FirstStudentSl = CreateUserWithLocator(FirstStudentName, CoreRoles.STUDENT_ROLE, gradeLevels[0].Id);
+            //FirstStudentSl = CreateUserWithLocator(FirstStudentName, CoreRoles.STUDENT_ROLE, gradeLevels[0].Id);
             FirstParentSl = CreateUserWithLocator(FirstParentName, CoreRoles.PARENT_ROLE, null);
             SecondTeacherSl = CreateUserWithLocator(SecondTeacherName, CoreRoles.TEACHER_ROLE, null);
-            SecondStudentSl = CreateUserWithLocator(SecondStudentName, CoreRoles.STUDENT_ROLE, gradeLevels[0].Id);
+            //SecondStudentSl = CreateUserWithLocator(SecondStudentName, CoreRoles.STUDENT_ROLE, gradeLevels[0].Id);
             SecondParentSl = CreateUserWithLocator(SecondParentName, CoreRoles.PARENT_ROLE, null);
         }
 
@@ -63,10 +63,11 @@ namespace Chalkable.Tests.Services.TestContext
 
         private IServiceLocatorSchool CreateUserWithLocator(string name, CoreRole role, Guid? gradeLevelId)
         {
-            var userinfo = CreateUserInfo(name, role);
-            sysSchoolSl.PersonService.Add(userinfo.Login, userinfo.Password, userinfo.FirstName, userinfo.LastName,
-                                              userinfo.Role.Name, userinfo.Gender, userinfo.Salutation, userinfo.BirthDate, gradeLevelId);
-            return CreateLocatorByUserInfo(userinfo);
+            throw new NotImplementedException();
+            //var userinfo = CreateUserInfo(name, role);
+            //sysSchoolSl.PersonService.Add(userinfo.Login, userinfo.Password, userinfo.FirstName, userinfo.LastName,
+            //                                  userinfo.Role.Name, userinfo.Gender, userinfo.Salutation, userinfo.BirthDate, gradeLevelId);
+            //return CreateLocatorByUserInfo(userinfo);
         }
 
         private IServiceLocatorSchool CreateLocatorByUserInfo(UserInfoTest userInfo)
@@ -87,8 +88,9 @@ namespace Chalkable.Tests.Services.TestContext
         }
         private static Person GetPerson(IServiceLocatorSchool locator, string name, CoreRole role)
         {
-            var schoolUser = GetSchoolUser(locator, name, role);
-            return locator.PersonService.GetPerson(schoolUser.User.Id);
+            throw new NotImplementedException();
+            //var schoolUser = GetSchoolUser(locator, name, role);
+            //return locator.PersonService.GetPerson(schoolUser.User.Id);
         }
 
         protected UserInfoTest CreateUserInfo(string name, CoreRole role)

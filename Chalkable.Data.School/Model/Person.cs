@@ -87,7 +87,10 @@ namespace Chalkable.Data.School.Model
         {
             get { return !string.IsNullOrEmpty(LastName) && LastName.Trim() != ""; }
         }
+
+
     }
+
 
     public class PersonDetails : Person
     {

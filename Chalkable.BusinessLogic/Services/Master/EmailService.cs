@@ -58,7 +58,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             var sysEMail = PreferenceService.GetTyped<EmailInfo>(Preference.SYSTEM_EMAIL);
             var personMail = person.Email;
             var mail = PrepareDefaultMail(sysEMail);
-            var user = ServiceLocator.UserService.GetById(person.Id);
+            var user = ServiceLocator.UserService.GetByLogin(person.Email);
             var schoolName = user.SchoolUsers.First().School.Name;
             if (EmailTools.IsValidEmailAddress(personMail))
                 mail.To.Add(personMail);

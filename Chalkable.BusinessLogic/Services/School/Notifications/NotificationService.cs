@@ -49,7 +49,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             using (var uow = Read())
             {
                 var da = new NotificationDataAccess(uow);
-                return da.GetNotifications(new NotificationQuery {Shown = false, PersonId = Context.LocalId});
+                return da.GetNotifications(new NotificationQuery {Shown = false, PersonId = Context.UserLocalId});
             }
         }
 
@@ -60,7 +60,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                 var da = new NotificationDataAccess(uow);
                 return da.GetPaginatedNotificationsDetails(new NotificationQuery
                     {
-                        PersonId = Context.LocalId, 
+                        PersonId = Context.UserLocalId, 
                         Start = start, 
                         Count = count
                     });
@@ -77,7 +77,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             using (var uow = Update())
             {
                 var da = new NotificationDataAccess(uow);
-                var notifications = da.GetNotifications(new NotificationQuery { Shown = false, PersonId = Context.LocalId });
+                var notifications = da.GetNotifications(new NotificationQuery { Shown = false, PersonId = Context.UserLocalId });
                 foreach (var notificationId in notificationIds)
                 {
                     var notification = notifications.FirstOrDefault(x => x.Id == notificationId);
@@ -168,10 +168,10 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         {
             using (var uow = Update())
             {
-                if(!Context.LocalId.HasValue)
+                if (!Context.UserLocalId.HasValue)
                     throw new UnassignedUserException();
 
-                var privateMessage = new PrivateMessageDataAccess(uow).GetDetailsById(privateMessageId, Context.LocalId.Value);
+                var privateMessage = new PrivateMessageDataAccess(uow).GetDetailsById(privateMessageId, Context.UserLocalId.Value);
                 var notification = builder.BuildPrivateMessageNotification(privateMessage, privateMessage.Sender, privateMessage.Recipient);
                 new NotificationDataAccess(uow).Insert(notification);
                 uow.Commit();

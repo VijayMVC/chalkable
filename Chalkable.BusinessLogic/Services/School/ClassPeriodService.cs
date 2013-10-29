@@ -120,8 +120,9 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var personDa = new PersonDataAccess(uow);
                 var person = personDa.GetById(personId);
-                var teacherId = person.RoleRef == CoreRoles.TEACHER_ROLE.Id ? person.Id : default(int?);
-                var studentId = person.RoleRef == CoreRoles.STUDENT_ROLE.Id ? person.Id : default(int?);
+                var schoolPerson = new SchoolPersonDataAccess(uow).GetSchoolPerson(personId, Context.SchoolLocalId, null);
+                var teacherId = schoolPerson.RoleRef == CoreRoles.TEACHER_ROLE.Id ? person.Id : default(int?);
+                var studentId = schoolPerson.RoleRef == CoreRoles.STUDENT_ROLE.Id ? person.Id : default(int?);
                 var time = (int)(dateTime - dateTime.Date).TotalMinutes;
                 return GetClassPeriods(dateTime.Date, null, null, studentId, teacherId, time).FirstOrDefault();    
             }

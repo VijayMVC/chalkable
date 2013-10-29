@@ -152,15 +152,20 @@ namespace Chalkable.BusinessLogic.Services.Master
 
 
             IList<Person> users;
+            IList<SchoolPerson> schoolPersons;
             using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, server, district.Id.ToString()), false))
             {
                 var da = new PersonDataAccess(unitOfWork);
                 da.RepopulateDemoIds(prefix);
                 users = da.GetAll();
+                var spDa = new SchoolPersonDataAccess(unitOfWork);
+                schoolPersons = spDa.GetSchoolPersons(null, null, null);
             }
+
             foreach (var person in users)
             {
-                ServiceLocator.UserService.CreateSchoolUser(person.Email, "tester", district.Id, CoreRoles.GetById(person.RoleRef).Name, person.Id);
+                var sp = schoolPersons.First(x => x.PersonRef == person.Id);
+                ServiceLocator.UserService.CreateSchoolUser(person.Email, "tester", district.Id, CoreRoles.GetById(sp.RoleRef).Name, person.Id);
             }
         }
 
@@ -182,7 +187,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             var schoolSl = ServiceLocator.SchoolServiceLocator(district.Id);
             foreach (var principal in principals)
             {
-                schoolSl.PersonService.Add(principal.Login, principal.Password, principal.FirstName, principal.LastName, CoreRoles.ADMIN_GRADE_ROLE.Name, principal.Gender, principal.Salutation, principal.BirthDate, null);
+                schoolSl.PersonService.Add(principal.LocalId, principal.SchoolId, principal.Login, principal.Password, principal.FirstName, principal.LastName, CoreRoles.ADMIN_GRADE_ROLE.Name, principal.Gender, principal.Salutation, principal.BirthDate, null);
             }
             district.IsEmpty = false;
             Update(district);

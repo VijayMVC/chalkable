@@ -124,35 +124,37 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         private string GetBaseUrlByRole(Person person, string baseUrl)
         {
-            if (string.IsNullOrEmpty(baseUrl))
-                baseUrl = PreferenceService.Get(Preference.APPLICATION_URL).Value;
-            var url = UrlTools.UrlCombine(baseUrl , "/Home/") + "{0}";
-            if (person.RoleRef == CoreRoles.SUPER_ADMIN_ROLE.Id)
-                return string.Format(url, ROLE_SYSADMIN);
-            if(person.RoleRef == CoreRoles.ADMIN_EDIT_ROLE.Id || person.RoleRef == CoreRoles.ADMIN_VIEW_ROLE.Id
-               || person.RoleRef == CoreRoles.ADMIN_GRADE_ROLE.Id)
-            {
-                return string.Format(url, ROLE_ADMIN);
-            }
-            if(person.RoleRef == CoreRoles.TEACHER_ROLE.Id)
-                return string.Format(url, ROLE_TEACHER);
-            if (person.RoleRef == CoreRoles.STUDENT_ROLE.Id)
-                return string.Format(url, ROLE_STUDENT);
-            if (person.RoleRef == CoreRoles.PARENT_ROLE.Id)
-                return string.Format(url, ROLE_PARENT);
-            if (person.RoleRef == CoreRoles.CHECKIN_ROLE.Id)
-                return string.Format(url, ROLE_CHECKIN);
+            throw new NotImplementedException();
+            //if (string.IsNullOrEmpty(baseUrl))
+            //    baseUrl = PreferenceService.Get(Preference.APPLICATION_URL).Value;
+            //var url = UrlTools.UrlCombine(baseUrl , "/Home/") + "{0}";
+            //if (person.RoleRef == CoreRoles.SUPER_ADMIN_ROLE.Id)
+            //    return string.Format(url, ROLE_SYSADMIN);
+            //if(person.RoleRef == CoreRoles.ADMIN_EDIT_ROLE.Id || person.RoleRef == CoreRoles.ADMIN_VIEW_ROLE.Id
+            //   || person.RoleRef == CoreRoles.ADMIN_GRADE_ROLE.Id)
+            //{
+            //    return string.Format(url, ROLE_ADMIN);
+            //}
+            //if(person.RoleRef == CoreRoles.TEACHER_ROLE.Id)
+            //    return string.Format(url, ROLE_TEACHER);
+            //if (person.RoleRef == CoreRoles.STUDENT_ROLE.Id)
+            //    return string.Format(url, ROLE_STUDENT);
+            //if (person.RoleRef == CoreRoles.PARENT_ROLE.Id)
+            //    return string.Format(url, ROLE_PARENT);
+            //if (person.RoleRef == CoreRoles.CHECKIN_ROLE.Id)
+            //    return string.Format(url, ROLE_CHECKIN);
 
-            throw new UnknownRoleException();
+            //throw new UnknownRoleException();
         }
 
         private string GetRelativeUrlByRole(Person person)
         {
-            if (person.RoleRef == CoreRoles.TEACHER_ROLE.Id)
-                return TEACHERS;            
-            if (person.RoleRef == CoreRoles.STUDENT_ROLE.Id)
-                return STUDENTS;
-            return null;
+            throw new NotImplementedException();
+            //if (person.RoleRef == CoreRoles.TEACHER_ROLE.Id)
+            //    return TEACHERS;            
+            //if (person.RoleRef == CoreRoles.STUDENT_ROLE.Id)
+            //    return STUDENTS;
+            //return null;
         }
 
         //TODO: implement builders 
@@ -228,18 +230,19 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         public Notification BuildPrivateMessageNotification(PrivateMessageDetails privateMessage, Person fromPerson, Person toPerson)
         {
-            var fromPersonRole = CoreRoles.GetById(fromPerson.RoleRef);
-            var otherModel = new
-                    {
-                        NeedsUrlLink = fromPersonRole == CoreRoles.TEACHER_ROLE
-                                        || fromPersonRole == CoreRoles.STUDENT_ROLE,
-                        ShortedMessage = StringTools.BuildShortText(privateMessage.Body, 30),
-                        MessageSubject = privateMessage.Subject,
-                        MessageSender = privateMessage.Sender
-                    };
-            return BuildNotificationFromTemplate(NotificationTemplateProvider.PRIVATE_MESSAGE_NOTIFICATION,
-                                                    NotificationType.Message, toPerson, null, null, null,
-                                                    null, privateMessage, fromPerson, otherModel);
+            throw new NotImplementedException();
+            //var fromPersonRole = CoreRoles.GetById(fromPerson.RoleRef);
+            //var otherModel = new
+            //        {
+            //            NeedsUrlLink = fromPersonRole == CoreRoles.TEACHER_ROLE
+            //                            || fromPersonRole == CoreRoles.STUDENT_ROLE,
+            //            ShortedMessage = StringTools.BuildShortText(privateMessage.Body, 30),
+            //            MessageSubject = privateMessage.Subject,
+            //            MessageSender = privateMessage.Sender
+            //        };
+            //return BuildNotificationFromTemplate(NotificationTemplateProvider.PRIVATE_MESSAGE_NOTIFICATION,
+            //                                        NotificationType.Message, toPerson, null, null, null,
+            //                                        null, privateMessage, fromPerson, otherModel);
         }
 
         public Notification BuildEndMarkingPeriodNotification(MarkingPeriod markingPeriod, Person recipient, int endDays, 
