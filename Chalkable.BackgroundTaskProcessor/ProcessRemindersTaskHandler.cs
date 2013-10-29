@@ -1,4 +1,3 @@
-using System.Linq;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Data.Master.Model;
@@ -15,8 +14,7 @@ namespace Chalkable.BackgroundTaskProcessor
                 log.LogError(string.Format("process reminders task {0} should contains school id", task.Id));
                 return false;
             }
-            var school = sl.SchoolService.GetSchools(task.DistrictRef.Value, 0, 1).First();
-            var schoolSl = sl.SchoolServiceLocator(school.Id);
+            var schoolSl = sl.SchoolServiceLocator(task.DistrictRef.Value, null);
             schoolSl.AnnouncementReminderService.ProcessReminders(int.MaxValue);
             return true;
         }

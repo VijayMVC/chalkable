@@ -12,11 +12,11 @@ namespace Chalkable.BusinessLogic.Services.School
 
     public interface IPersonService
     {
-        Person Add(int localId, int schoolId, string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, int? gradeLevelId, int? sisId = null);
+        Person Add(int localId, string email, string password, string firstName, string lastName, string gender, string salutation, DateTime? birthDate, IList<SchoolAssignmentInfo> assignments);
         Person Edit(int localId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate);
 
         Person EditStudent(int studentId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate
-            ,bool iep, DateTime enrollmentDate, string previousSchool, string previousSchoolPhone, string previousSchoolNote, int? gradeLevelId);
+            ,bool iep, DateTime enrollmentDate, string previousSchool, string previousSchoolPhone, string previousSchoolNote, Guid? gradeLevelId);
 
         void Delete(int id);
         IList<Person> GetPersons();
@@ -27,6 +27,12 @@ namespace Chalkable.BusinessLogic.Services.School
         void ActivatePerson(int id);
     }
 
+    public class SchoolAssignmentInfo
+    {
+        public int Role { get; set; }
+        public int SchoolId { get; set; }
+    }
+
     public class PersonService : SchoolServiceBase, IPersonService
     {
         public PersonService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
@@ -35,18 +41,24 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         //TODO: needs tests
-        public Person Add(int localId, int schoolId, string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, int? gradeLevelId, int? sisId = null)
+        public Person Add(int localId, string email, string password, string firstName, string lastName, string gender, string salutation, DateTime? birthDate, IList<SchoolAssignmentInfo> assignments)
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
-            if (!Context.SchoolId.HasValue)
+            if (!Context.DistrictId.HasValue)
                 throw new UnassignedUserException();
             //TODO: need cross db transaction handling
             using (var uow = Update())
             {
                 var da = new PersonDataAccess(uow);
-                var roleId = CoreRoles.GetByName(role).Id;
-                var user = ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUser(email, password, Context.SchoolId.Value, role, localId);
+                
+                var user = ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUser(email, password, Context.DistrictId.Value, localId);
+                foreach (var assignment in assignments)
+                {
+                    ServiceLocator.ServiceLocatorMaster.UserService.AssignUserToSchool(user.Id, assignment.SchoolId, assignment.Role);
+                }
+
+
                 var person = new Person
                     {
                         Id = localId,
@@ -59,34 +71,18 @@ namespace Chalkable.BusinessLogic.Services.School
                         Salutation = salutation,
                     };
                 da.Insert(person);
-                new SchoolPersonDataAccess(uow).Insert(new SchoolPerson
-                    {
-                        PersonRef = localId,
-                        RoleRef = roleId,
-                        SchoolRef = schoolId
-                    });
-                if (role == CoreRoles.STUDENT_ROLE.Name)
+                var schoolDataAccess = new SchoolPersonDataAccess(uow);
+                foreach (var assignment in assignments)
                 {
-                    //if (gradeLevelId.HasValue)
-                    //{
-                    //    var ssyDa = new StudentSchoolYearDataAccess(uow);
-                    //    ssyDa.Insert(new StudentSchoolYear
-                    //        {
-                    //            GradeLevelRef = gradeLevelId.Value,
-                    //            StudentRef = person.Id,
-
-                    //        });                    
-                    //}
-
-                    //else
-                    //    throw new ChalkableException("Grade level is required for adding student");
-                }
-                new SchoolPersonDataAccess(uow).Insert(new SchoolPerson
+                    schoolDataAccess.Insert(new SchoolPerson
                     {
-                        SchoolRef = schoolId,
+                        SchoolRef = assignment.SchoolId,
                         PersonRef = person.Id,
-                        RoleRef = roleId
+                        RoleRef = assignment.Role
                     });
+                }
+
+                
                 uow.Commit();
                 return person;
             }
@@ -94,7 +90,7 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public void Delete(int id)
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
@@ -180,7 +176,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Person EditStudent(int studentId, string email, string firstName, string lastName, string gender, string salutation, 
             DateTime? birthDate, bool iep, DateTime enrollmentDate, string previousSchool, string previousSchoolPhone, 
-            string previousSchoolNote, int? gradeLevelId)
+            string previousSchoolNote, Guid? gradeLevelId)
         {
             if(!(BaseSecurity.IsAdminOrTeacher(Context) || Context.UserLocalId == studentId))
                 throw new ChalkableSecurityException();

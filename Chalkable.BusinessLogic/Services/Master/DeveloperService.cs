@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chalkable.Common;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
@@ -66,7 +65,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             using (var uow = Update())
             {
-                var user = ServiceLocator.UserService.CreateSchoolUser(login, password, districtId, CoreRoles.DEVELOPER_ROLE.Name, null); // security here 
+                var user = ServiceLocator.UserService.CreateDeveloperUser(login, password, districtId); // security here 
                 var res = new Developer
                     {
                         Id = user.Id,

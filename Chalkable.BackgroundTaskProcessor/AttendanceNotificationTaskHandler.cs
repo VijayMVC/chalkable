@@ -32,8 +32,7 @@ namespace Chalkable.BackgroundTaskProcessor
                 log.LogError(string.Format("teacher attendance notification task {0} should contains school id", task.Id));
                 return false;
             }
-            var school = sl.SchoolService.GetSchools(task.DistrictRef.Value, 0, 1).First();
-            var schoolSl = sl.SchoolServiceLocator(school.Id);
+            var schoolSl = sl.SchoolServiceLocator(task.DistrictRef.Value, null);
             schoolSl.AttendanceService.NotAssignedAttendanceProcess();
             return true;
         }

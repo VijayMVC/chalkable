@@ -29,6 +29,7 @@ namespace Chalkable.Data.Master.Model
         public string Name { get; set; }
         public const string DISTRICT_REF_FIELD = "DistrictRef";
         public Guid DistrictRef { get; set; }
+        public const string LOCAL_ID_FIELD = "LocalId";
         public int LocalId { get; set; }
         [NotDbFieldAttr]
         public District District { get; set; }

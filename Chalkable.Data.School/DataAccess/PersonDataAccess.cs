@@ -126,13 +126,6 @@ namespace Chalkable.Data.School.DataAccess
             }
             return null;
         }
-        public void RepopulateDemoIds(string prefix)
-        {
-            IDictionary<string, object> ps = new Dictionary<string, object> { { "prefix", prefix } };
-            using (var reader = ExecuteStoredProcedureReader("spRepopulatePersonId", ps))
-            {
-            }
-        }
     }
 
     public class PersonQuery

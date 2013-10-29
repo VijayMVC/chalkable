@@ -125,7 +125,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         private static IDictionary<string, PreferenceInfo> DefaultList()
         {
             var res = new Dictionary<string, PreferenceInfo>();
-            res.Add(Preference.DEMO_DISTRICT_ID, new PreferenceInfo { Value = "1" });
+            res.Add(Preference.DEMO_DISTRICT_ID, new PreferenceInfo { Value = "DDB57498-80C4-413D-B152-71B902EB13ED" });
             res.Add(Preference.DEMO_SCHOOL_ADMIN_GRADE, new PreferenceInfo { Value = "rosteradmin" });
             res.Add(Preference.DEMO_SCHOOL_ADMIN_EDIT, new PreferenceInfo { Value = "" });
             res.Add(Preference.DEMO_SCHOOL_ADMIN_VIEW, new PreferenceInfo { Value = "" });

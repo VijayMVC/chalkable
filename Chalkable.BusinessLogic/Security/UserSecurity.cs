@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Data.Master.Model;
 
@@ -10,16 +6,16 @@ namespace Chalkable.BusinessLogic.Security
 {
     public static class UserSecurity
     {
-        public static bool CanCreate(UserContext context, Guid schoolId)
+        public static bool CanCreate(UserContext context, Guid? districtId)
         {
             return BaseSecurity.IsSysAdmin(context) ||
-                   (BaseSecurity.IsAdminEditor(context) && context.SchoolId == schoolId);
+                   (BaseSecurity.IsAdminEditor(context) && context.DistrictId == districtId);
         }
 
         public static bool CanModify(UserContext context, User user)
         {
-            var schoolId = user.SchoolUsers.First().SchoolRef;
-            return CanCreate(context, schoolId) || context.UserId == user.Id;
+            var districtId = user.DistrictRef;
+            return CanCreate(context, districtId) || context.UserId == user.Id;
         }
     }
 }

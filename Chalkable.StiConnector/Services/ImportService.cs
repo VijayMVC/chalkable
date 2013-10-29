@@ -191,26 +191,14 @@ namespace Chalkable.StiConnector.Services
                 
                 string roleId = null;
                 int schoolid;
-                if (person.Student != null)
-                {
-                    roleId = CoreRoles.STUDENT_ROLE.Name;
-                    schoolid = stiEntities.StudentSchools.First(x => x.StudentID == person.PersonID).SchoolID;
-                }
-                else if (person.Staff != null)
-                {
-                    roleId = CoreRoles.TEACHER_ROLE.Name;
-                    schoolid = stiEntities.StaffSchools.First(x => x.StaffID == person.PersonID).SchoolID;
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
+
+                var assignments = new List<SchoolAssignmentInfo>();
+                assignments.AddRange(stiEntities.StudentSchools.Select(x=>new SchoolAssignmentInfo{Role = CoreRoles.STUDENT_ROLE.Id, SchoolId = x.SchoolID}));
+                assignments.AddRange(stiEntities.StaffSchools.Select(x=>new SchoolAssignmentInfo{Role = CoreRoles.TEACHER_ROLE.Id, SchoolId = x.SchoolID}));
                 //TODO: what about admins? probably will be resolved by API
                 //TODO: need to remake service method to support many schoolpersons
 
-                var pr = ServiceLocatorSchool.PersonService.Add(person.PersonID, schoolid, email, defUserPass,
-                                                            person.FirstName, person.LastName, roleId,
-                                                            person.Gender.Code, null, person.DateOfBirth, null);
+                ServiceLocatorSchool.PersonService.Add(person.PersonID, email, defUserPass, person.FirstName, person.LastName, person.Gender.Code, null, person.DateOfBirth, assignments);
             }
         }
 

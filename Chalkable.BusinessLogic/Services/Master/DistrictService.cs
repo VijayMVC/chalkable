@@ -21,7 +21,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue);
         IList<District> GetDistricts(bool? empty, bool? demo, bool? usedDemo = null);
         void Update(District district);
-        District Create(string name, IList<UserInfo> principals);
         District UseDemoDistrict();
         void CreateDemo();
         IList<District> GetDemoDistrictsToDelete();
@@ -117,7 +116,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Update())
             {
 
-                district = new District()
+                district = new District
                 {
                     Id = Guid.NewGuid(),
                     Name = prototype.Name + prefix,
@@ -156,7 +155,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, server, district.Id.ToString()), false))
             {
                 var da = new PersonDataAccess(unitOfWork);
-                da.RepopulateDemoIds(prefix);
                 users = da.GetAll();
                 var spDa = new SchoolPersonDataAccess(unitOfWork);
                 schoolPersons = spDa.GetSchoolPersons(null, null, null);
@@ -164,8 +162,13 @@ namespace Chalkable.BusinessLogic.Services.Master
 
             foreach (var person in users)
             {
-                var sp = schoolPersons.First(x => x.PersonRef == person.Id);
-                ServiceLocator.UserService.CreateSchoolUser(person.Email, "tester", district.Id, CoreRoles.GetById(sp.RoleRef).Name, person.Id);
+                var u = ServiceLocator.UserService.CreateSchoolUser(person.Email, "tester", district.Id, person.Id);
+                var p = person;
+                var sps = schoolPersons.Where(x => x.PersonRef == p.Id);
+                foreach (var schoolPerson in sps)
+                {
+                    ServiceLocator.UserService.AssignUserToSchool(u.Id, schoolPerson.SchoolRef, schoolPerson.RoleRef);
+                }
             }
         }
 
@@ -178,22 +181,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 return da.GetDistrictsToDelete(expires);
             }
         }
-
-        public District Create(string name, IList<UserInfo> principals)
-        {
-            District district = GetEmpty();
-            if (district == null)
-                return null;
-            var schoolSl = ServiceLocator.SchoolServiceLocator(district.Id);
-            foreach (var principal in principals)
-            {
-                schoolSl.PersonService.Add(principal.LocalId, principal.SchoolId, principal.Login, principal.Password, principal.FirstName, principal.LastName, CoreRoles.ADMIN_GRADE_ROLE.Name, principal.Gender, principal.Salutation, principal.BirthDate, null);
-            }
-            district.IsEmpty = false;
-            Update(district);
-            return district;
-        }
-
+        
         private static string FindServer(UnitOfWork uow)
         {
             var da = new DistrictDataAccess(uow);
@@ -210,37 +198,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 throw new NullReferenceException();
             return s;
         }
-
-        private District GetEmpty()
-        {
-            var allEmpty = new Dictionary<string, List<Guid>>();
-            using (var uow = Read())
-            {
-                var da = new DistrictDataAccess(uow);
-                var candidats = da.GetEmpty();
-                foreach (var candidat in candidats)
-                {
-                    if (allEmpty.ContainsKey(candidat.ServerUrl))
-                        allEmpty[candidat.ServerUrl].Add(candidat.Id);
-                    else
-                        allEmpty.Add(candidat.ServerUrl, new List<Guid> { candidat.Id });
-                }
-            }
-
-            foreach (var serversEmpty in allEmpty)
-            {
-                using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, serversEmpty.Key, "Master"), false))
-                {
-                    var da = new DistrictDataAccess(unitOfWork);
-                    var online = da.GetOnline(serversEmpty.Value);
-                    if (online.Count > 0)
-                        return GetByIdOrNull(Guid.Parse(online[0]));
-                }
-            }
-            return null;
-        }
-
-
+        
         public District UseDemoDistrict()
         {
             using (var uow = Update())
