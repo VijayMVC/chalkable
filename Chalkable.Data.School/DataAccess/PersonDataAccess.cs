@@ -17,8 +17,13 @@ namespace Chalkable.Data.School.DataAccess
         }
         
         private const string FILTER_FORMAT = "%{0}%";
-        
-       
+
+        public Person GetPerson(PersonQuery query)
+        {
+            query.Count = 1;
+            return GetPersons(query).Persons.First();
+        }
+
         public PersonQueryResult GetPersons(PersonQuery query)
         {
             
@@ -121,12 +126,6 @@ namespace Chalkable.Data.School.DataAccess
             }
             return null;
         }
-
-        public void AddStudent(Guid id, Guid gradeLevelId)
-        {
-            //SimpleInsert(new StudentInfo{GradeLevelRef = gradeLevelId, Id = id});
-        }
-
         public void RepopulateDemoIds(string prefix)
         {
             IDictionary<string, object> ps = new Dictionary<string, object> { { "prefix", prefix } };

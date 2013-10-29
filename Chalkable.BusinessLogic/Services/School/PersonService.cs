@@ -12,11 +12,11 @@ namespace Chalkable.BusinessLogic.Services.School
 
     public interface IPersonService
     {
-        Person Add(int localId, int schoolId, string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, Guid? gradeLevelId, int? sisId = null);
+        Person Add(int localId, int schoolId, string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, int? gradeLevelId, int? sisId = null);
         Person Edit(int localId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate);
 
         Person EditStudent(int studentId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate
-            ,bool iep, DateTime enrollmentDate, string previousSchool, string previousSchoolPhone, string previousSchoolNote, Guid? gradeLevelId);
+            ,bool iep, DateTime enrollmentDate, string previousSchool, string previousSchoolPhone, string previousSchoolNote, int? gradeLevelId);
 
         void Delete(int id);
         IList<Person> GetPersons();
@@ -35,7 +35,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         //TODO: needs tests
-        public Person Add(int localId, int schoolId, string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, Guid? gradeLevelId, int? sisId = null)
+        public Person Add(int localId, int schoolId, string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, int? gradeLevelId, int? sisId = null)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -59,12 +59,27 @@ namespace Chalkable.BusinessLogic.Services.School
                         Salutation = salutation,
                     };
                 da.Insert(person);
+                new SchoolPersonDataAccess(uow).Insert(new SchoolPerson
+                    {
+                        PersonRef = localId,
+                        RoleRef = roleId,
+                        SchoolRef = schoolId
+                    });
                 if (role == CoreRoles.STUDENT_ROLE.Name)
                 {
-                    if (gradeLevelId.HasValue)
-                        da.AddStudent(user.Id, gradeLevelId.Value);
-                    else
-                        throw new ChalkableException("Grade level is required for adding student");
+                    //if (gradeLevelId.HasValue)
+                    //{
+                    //    var ssyDa = new StudentSchoolYearDataAccess(uow);
+                    //    ssyDa.Insert(new StudentSchoolYear
+                    //        {
+                    //            GradeLevelRef = gradeLevelId.Value,
+                    //            StudentRef = person.Id,
+
+                    //        });                    
+                    //}
+
+                    //else
+                    //    throw new ChalkableException("Grade level is required for adding student");
                 }
                 new SchoolPersonDataAccess(uow).Insert(new SchoolPerson
                     {

@@ -117,8 +117,13 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var classPersonDa = new ClassPersonDataAccess(uow);
                 var classPeriodDa = new ClassPeriodDataAccess(uow);
-                var person = new PersonDataAccess(uow).GetById(personId);
-                if (new SchoolPersonDataAccess(uow).Exists(personId, CoreRoles.STUDENT_ROLE.Id, null))
+                var person = new PersonDataAccess(uow).GetPerson(new PersonQuery
+                    {
+                        CallerId = Context.UserLocalId,
+                        RoleId = Context.Role.Id,
+                        PersonId = personId
+                    });
+                if (person.RoleRef != CoreRoles.STUDENT_ROLE.Id)
                     throw new ChalkableException("Only student can be added to class");
 
                 if (classPeriodDa.IsStudentAlreadyAssignedToClassPeriod(personId, classId))
