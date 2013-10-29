@@ -18,10 +18,9 @@ NAMESPACE('chlk.activities.common', function () {
 
             [ria.mvc.DomEventBind('click', 'button, a')],
             [[ria.dom.Dom, ria.dom.Event]],
-            Boolean, function onBtnClick(node, event) {
+            VOID, function onBtnClick(node, event) {
                 this.close();
                 event.preventDefault();
-                return false;
             }
          ]);
  });
