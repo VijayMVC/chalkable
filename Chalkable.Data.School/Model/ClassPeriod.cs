@@ -14,7 +14,7 @@ namespace Chalkable.Data.School.Model
         public int Id { get; set; }
         public int PeriodRef { get; set; }
         public int ClassRef { get; set; }
-        public int RoomRef { get; set; }
+        public int? RoomRef { get; set; }
         public int DateTypeRef { get; set; }
 
         private Period period;

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -13,7 +11,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IClassPeriodService
     {
-        ClassPeriod Add(int id, int periodId, int classId, int roomId, int dateTypeId);
+        ClassPeriod Add(int id, int periodId, int classId, int? roomId, int dateTypeId);
         void Delete(int id);
         IList<ClassPeriod> GetClassPeriods(int schoolYearId,  int? markingPeriodId, int? classId, int? roomId, int? periodId, int? dateTypeId, int? studentId = null, int? teacherId = null, int? time = null);
         IList<Class> GetAvailableClasses(int periodId);
@@ -33,7 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public ClassPeriod Add(int id, int periodId, int classId, int roomId, int dateTypeId)
+        public ClassPeriod Add(int id, int periodId, int classId, int? roomId, int dateTypeId)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
