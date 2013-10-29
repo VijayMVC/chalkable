@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Room AddRoom(int id, int schoolId, string roomNumber, string description, string size, int? capacity, string phoneNumber)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -50,7 +50,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Room EditRoom(int id, int schoolId, string roomNumber, string description, string size, int? capacity, string phoneNumber)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -70,7 +70,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void DeleteRoom(int id)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
            
             using (var uow = Update())

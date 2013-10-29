@@ -87,7 +87,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public MarkingPeriod Add(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays, bool generatePeriods = false)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             if (!Context.SchoolId.HasValue)
                 throw new UnassignedUserException();
@@ -137,7 +137,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private void Delete(IList<int> markingPeriodIds)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
@@ -152,7 +152,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public MarkingPeriod Edit(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             
             using (var uow = Update())
@@ -173,7 +173,7 @@ namespace Chalkable.BusinessLogic.Services.School
         //TODO : needs testing
         public bool ChangeWeekDays(IList<int> markingPeriodIds, int weekDays)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {

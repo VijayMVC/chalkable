@@ -18,7 +18,7 @@ namespace Chalkable.BusinessLogic.Security
 
         public static bool CanModifyAnnouncement(Announcement announcement, UserContext context)
         {
-            return BaseSecurity.IsAdminEditor(context) || context.UserLocalId == announcement.PersonRef;
+            return BaseSecurity.IsSysAdmin(context) || context.UserLocalId == announcement.PersonRef;
         }
 
         public static bool CanDeleteAnnouncement(Announcement announcement, UserContext context)
@@ -36,7 +36,7 @@ namespace Chalkable.BusinessLogic.Security
 
         public static bool CanModifyAnnouncementQnA(AnnouncementQnAComplex announcementQnA, UserContext context)
         {
-            return BaseSecurity.IsAdminEditor(context) || context.UserLocalId == announcementQnA.Answerer.Id;
+            return BaseSecurity.IsSysAdmin(context) || context.UserLocalId == announcementQnA.Answerer.Id;
         }
 
         public static bool CanDeleteAttachment(AnnouncementAttachment announcementAttachment, UserContext context)

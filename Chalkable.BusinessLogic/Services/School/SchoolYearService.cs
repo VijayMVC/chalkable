@@ -29,7 +29,7 @@ namespace Chalkable.BusinessLogic.Services.School
         //TODO: needs test 
         public SchoolYear Add(int id, string name, string description, DateTime startDate, DateTime endDate)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
@@ -63,7 +63,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public SchoolYear Edit(int id, string name, string description, DateTime startDate, DateTime endDate)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -105,7 +105,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(int schoolYearId)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {

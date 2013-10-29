@@ -37,7 +37,7 @@ namespace Chalkable.BusinessLogic.Services.School
         //TODO: needs tests
         public Person Add(int localId, int schoolId, string email, string password, string firstName, string lastName, string role, string gender, string salutation, DateTime? birthDate, int? gradeLevelId, int? sisId = null)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             if (!Context.SchoolId.HasValue)
                 throw new UnassignedUserException();
@@ -94,7 +94,7 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public void Delete(int id)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())

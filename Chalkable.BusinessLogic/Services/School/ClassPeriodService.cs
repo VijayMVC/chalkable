@@ -33,7 +33,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public ClassPeriod Add(int id, int periodId, int classId, int? roomId, int dateTypeId)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
@@ -62,7 +62,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(int id)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if(!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())

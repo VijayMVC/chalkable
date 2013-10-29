@@ -62,7 +62,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
         public bool CanDeleteSections(int schoolYearId)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Read())
@@ -102,10 +102,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public DateType Add(int id, int number, string name, int schoolYearId)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            if (!Context.SchoolId.HasValue)
-                throw new UnassignedUserException();
             using (var uow = Update())
             {
                 var ss = new DateType
@@ -134,7 +132,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public DateType Edit(int id, int number, string name)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
@@ -180,7 +178,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(int id)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {

@@ -39,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public ClassDetails Add(int classId, int schoolYearId, Guid? chlkableDepartmentId, string name
             , string description, int teacherId, int gradeLevelId, List<int> markingPeriodsId)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
@@ -64,7 +64,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(int id)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
@@ -82,7 +82,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public ClassDetails Edit(int classId, Guid? chlkableDepartmentId, string name
             , string description, int teacherId, int gradeLevelId, List<int> markingPeriodsId)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
@@ -110,7 +110,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public ClassDetails AddStudent(int classId, int personId)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
@@ -144,7 +144,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public ClassDetails DeleteStudent(int classId, int personId)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -196,7 +196,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public ClassDetails AddMarkingPeriod(int markingPeriodClassId, int classId, int markingPeriodId)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())

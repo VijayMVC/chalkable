@@ -150,7 +150,7 @@ namespace Chalkable.BusinessLogic.Services.School
         
         private void Delete(DateQuery query)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -162,7 +162,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public bool CanAssignDate(DateTime date, int sectionId)
         {
             var cdDate = GetByDate(date);
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             var section = ServiceLocator.ScheduleSectionService.GetSectionById(sectionId);
@@ -208,7 +208,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Date Add(DateTime date, bool schoolDay, int schoolYearId, int? dateTypeId)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             if (!schoolDay && dateTypeId.HasValue)
                 throw new ChalkableException("Incorrect parameters data");

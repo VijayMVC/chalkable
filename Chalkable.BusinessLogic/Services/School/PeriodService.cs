@@ -45,7 +45,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (startTime >= endTime)
                 throw new ChalkableException(ChlkResources.ERR_PERIOD_INVALID_TIME);
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             if (!Context.SchoolId.HasValue)
                 throw new UnassignedUserException();
@@ -72,7 +72,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(int id)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -85,7 +85,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (startTime >= endTime)
                 throw new ChalkableException(ChlkResources.ERR_PERIOD_INVALID_TIME);
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
