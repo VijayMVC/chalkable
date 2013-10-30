@@ -478,7 +478,7 @@ GO
 
 
 create procedure [dbo].[spGetAdminAnnouncements]  
-	@id int, @personId int, @classId int, @roleId int, @staredOnly bit, @ownedOnly bit
+	@id int, @schoolId int, @personId int, @classId int, @roleId int, @staredOnly bit, @ownedOnly bit
 	,@fromDate DateTime2, @toDate DateTime2, @markingPeriodId int, @start int, @count int, @now DateTime2
 	,@gradeLevelsIds nvarchar(256) 
 as 
@@ -502,6 +502,7 @@ set @allCount = (select COUNT(*) from
 where
 	(@id is not null  or [State] = 1) and
 	(@id is null or vwAnnouncement.Id = @id)
+	and (@roleId = 1 or (@schoolId is not null and SchoolRef = @schoolId))
 	and (@classId is null or ClassRef = @classId)
 	and (@staredOnly = 0 or Starred = 1)
 	and (@ownedOnly = 0 or vwAnnouncement.PersonRef = @personId)
@@ -531,6 +532,7 @@ where
 	where
 		(@id is not null or [State] = 1) and
 		(@id is null or vwAnnouncement.Id = @id)
+		and (@roleId = 1 or (@schoolId is not null and SchoolRef = @schoolId))
 		and (@classId is null or ClassRef = @classId)
 		and (@staredOnly = 0 or Starred = 1)
 		and (@ownedOnly = 0 or vwAnnouncement.PersonRef = @personId)
@@ -545,10 +547,11 @@ where
 		)
 	order by Created desc				
 	OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
+
 GO
 
 create procedure [dbo].[spGetTeacherAnnouncements]  
-	@id int, @personId int, @classId int, @roleId int, @staredOnly bit, @ownedOnly bit, @gradedOnly bit
+	@id int, @schoolId int, @personId int, @classId int, @roleId int, @staredOnly bit, @ownedOnly bit, @gradedOnly bit
 	,@fromDate DateTime2, @toDate DateTime2, @markingPeriodId int, @start int, @count int, @now DateTime2, @allSchoolItems bit
 as 
 
@@ -581,7 +584,8 @@ where
 								or (RoleRef = @roleId and (@roleId <> 2 or GradeLevelRef is null or GradeLevelRef in (select Id from @gradeLevelsT))))
 						   )
 		    )
-		)			
+		)
+	and (@roleId = 1 or (@schoolId is not null and SchoolRef = @schoolId))
 	and (@staredOnly = 0 or Starred = 1)
 	and (@ownedOnly = 0 or vwAnnouncement.PersonRef = @personId)
 	and (@fromDate is null or Expires >= @fromDate)
@@ -614,6 +618,7 @@ where
 						)
 			)
 		)			
+	and (@roleId = 1 or (@schoolId is not null and SchoolRef = @schoolId))
 	and (@staredOnly = 0 or Starred = 1)
 	and (@ownedOnly = 0 or vwAnnouncement.PersonRef = @personId)
 	and (@fromDate is null or Expires >= @fromDate)
@@ -622,10 +627,14 @@ where
 	and (@gradedOnly = 0 or GradingStudentsCount > 0)		
 order by Created desc				
 OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
+
 GO
 
+
+
+
 create procedure [dbo].[spGetStudentAnnouncements]  
-	@id int, @personId int, @classId int,  @roleId int, @staredOnly bit, @ownedOnly bit,  @gradedOnly bit
+	@id int, @schoolId int, @personId int, @classId int,  @roleId int, @staredOnly bit, @ownedOnly bit,  @gradedOnly bit
 	, @fromDate DateTime2, @toDate DateTime2, @markingPeriodId int
 	, @start int, @count int, @now DateTime2
 as 
@@ -650,6 +659,7 @@ declare @allCount int = (select COUNT(*) from
 where
 	(@id is not null  or [State] = 1) and
 	(@id is null or vwAnnouncement.Id = @id)
+	and (@roleId = 1 or (@schoolId is not null and SchoolRef = @schoolId))	
 	and(@classId is null or ClassRef = @classId)
 	and (vwAnnouncement.PersonRef = @personId 
 		or (ClassAnnouncementTypeRef is null 
@@ -679,6 +689,7 @@ declare @notExpiredCount int = (select count(*)
 		(@id is not null or Expires >= @now) and
 		(@id is not null or [State] = 1) and
 		(@id is null or vwAnnouncement.Id = @id)
+		and (@roleId = 1 or (@schoolId is not null and SchoolRef = @schoolId))
 		and(@classId is null or ClassRef = @classId)
 		and (vwAnnouncement.PersonRef = @personId 
 			or (ClassAnnouncementTypeRef is null 
@@ -719,6 +730,7 @@ from
 		(@id is not null or Expires >= @now) and
 		(@id is not null or [State] = 1) and
 		(@id is null or vwAnnouncement.Id = @id)
+		and (@roleId = 1 or (@schoolId is not null and SchoolRef = @schoolId))
 		and(@classId is null or ClassRef = @classId)
 		and (vwAnnouncement.PersonRef = @personId 
 			or (ClassAnnouncementTypeRef is null 
@@ -754,6 +766,7 @@ from
 		(@id is not null or Expires < @now) and
 		(@id is not null or [State] = 1) and
 		(@id is null or vwAnnouncement.Id = @id)
+		and (@roleId = 1 or (@schoolId is not null and SchoolRef = @schoolId))
 		and(@classId is null or ClassRef = @classId)
 		and (vwAnnouncement.PersonRef = @personId 
 			or (ClassAnnouncementTypeRef is null 
@@ -844,7 +857,7 @@ GO
 
 
 
-CREATE procedure [dbo].[spGetAnnouncementDetails] @id int, @callerId int, @callerRole int, @schoolId int
+create procedure [dbo].[spGetAnnouncementDetails] @id int, @callerId int, @callerRole int, @schoolId int
 as
 
 if @callerRole is null
@@ -889,17 +902,17 @@ declare @announcementTb table
 if(@callerRole = 5 or @callerRole = 8  or @callerRole = 7 or @callerRole = 1)
 begin
 insert into @announcementTb
-exec spGetAdminAnnouncements @id, @callerId, null,  @callerRole, 0, 0, null, null, null, 0, 1, null, null
+exec spGetAdminAnnouncements @id, @schoolId, @callerId, null,  @callerRole, 0, 0, null, null, null, 0, 1, null, null
 end
 if(@callerRole = 3)
 begin
 insert into @announcementTb
-exec spGetStudentAnnouncements @id, @callerId, null, @callerRole, 0, 0, 0, null, null, null, 0, 1, null
+exec spGetStudentAnnouncements @id, @schoolId, @callerId, null, @callerRole, 0, 0, 0, null, null, null, 0, 1, null
 end
 if(@callerRole = 2)
 begin
 insert into @announcementTb
-exec spGetTeacherAnnouncements @id, @callerId, null,  @callerRole, 0, 0, 0, null, null, null, 0, 1, null, 1
+exec spGetTeacherAnnouncements @id, @schoolId, @callerId, null,  @callerRole, 0, 0, 0, null, null, null, 0, 1, null, 1
 end
 
 declare @annExists bit
@@ -972,7 +985,6 @@ where aa.AnnouncementRef = @id and (@annExists = 1) and aa.Active = 1
 
 exec spGetPersons @schoolId, @ownerId, @callerId, null, 0, 1, null,null,null,null,null,null,null, 1, @callerRole
 end
-
 GO
 
 

@@ -41,7 +41,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var saDa = new StudentAnnouncementDataAccess(uow);
                 var sa = saDa.GetById(studentAnnouncementId);
-                var annDa = new AnnouncementForTeacherDataAccess(uow);
+                var annDa = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId);
                 var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(sa.AnnouncementRef);
 
                 if(!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))

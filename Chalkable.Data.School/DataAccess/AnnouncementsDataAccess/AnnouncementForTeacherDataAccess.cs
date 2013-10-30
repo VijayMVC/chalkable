@@ -7,7 +7,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
     public class AnnouncementForTeacherDataAccess : AnnouncementDataAccess
     {
-        public AnnouncementForTeacherDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public AnnouncementForTeacherDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
         {
         }
         private const string GET_TEACHER_ANNOUNCEMENTS = "spGetTeacherAnnouncements";

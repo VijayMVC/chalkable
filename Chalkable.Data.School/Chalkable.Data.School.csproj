@@ -116,7 +116,6 @@
     <Compile Include="Model\ClassDisciplineType.cs" />
     <Compile Include="Model\ClassPeriod.cs" />
     <Compile Include="Model\ClassPerson.cs" />
-    <Compile Include="Model\Course.cs" />
     <Compile Include="Model\Date.cs" />
     <Compile Include="Model\DisciplineType.cs" />
     <Compile Include="Model\FinalGrade.cs" />

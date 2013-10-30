@@ -29,6 +29,8 @@ namespace Chalkable.Data.School.Model
         public int? ClassRef { get; set; }
         public int Order { get; set; }
         public bool Dropped { get; set; }
+
+        public int SchoolRef { get; set; }
     }
 
 

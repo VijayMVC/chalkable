@@ -9,9 +9,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
-    public abstract class AnnouncementDataAccess : DataAccessBase<Announcement, int>
+    public abstract class AnnouncementDataAccess : BaseSchoolDataAccess<Announcement>
     {
-        protected AnnouncementDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        protected AnnouncementDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
         {
         }
 
@@ -39,7 +39,9 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         private const string ROLE_ID_PARAM = "roleId";
         private const string FROM_DATE_PARAM = "fromDate";
         private const string TO_DATE_PARAM = "toDate";
-        
+
+        private const string SCHOOL_ID = "schoolId";
+
         private AnnouncementDetails BuildGetDetailsResult(SqlDataReader reader)
         {
             var announcement = reader.ReadOrNull<AnnouncementDetails>();
@@ -75,6 +77,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             parameters.Add("now", query.Now);
             parameters.Add("ownedOnly", query.OwnedOnly);
             parameters.Add("staredOnly", query.StarredOnly);
+            parameters.Add(SCHOOL_ID, schoolId);
             //parameters.Add();
             using (var reader = ExecuteStoredProcedureReader(procedureName, parameters))
             {
@@ -109,7 +112,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     {STATE_PARAM, AnnouncementState.Draft},
                     {GRADING_STYLE_PARAM, GradingStyleEnum.Numeric100},
                     {CLASS_ID_PARAM, classId},
-                    {MARKING_PERIOD_ID_PARAM, markingPeriodId}
+                    {MARKING_PERIOD_ID_PARAM, markingPeriodId},
+                    {SCHOOL_ID, schoolId}
                 };
 
             using (var reader = ExecuteStoredProcedureReader(CREATE_PORCEDURE, parameters))
@@ -153,7 +157,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 {
                     {ID_PARAM, id},
                     {CALLER_ID_PARAM, callerId},
-                    {CALLER_ROLE_PARAM, roleId}
+                    {CALLER_ROLE_PARAM, roleId},
+                    {SCHOOL_ID, schoolId}
                 };
             using (var reader = ExecuteStoredProcedureReader(GET_DETAILS_PROCEDURE, parameters))
             {
@@ -183,9 +188,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
             var dbQuery = new DbQuery();
             dbQuery.Sql.Append("select Announcement.* from Announcement ");
-            dbQuery.Sql.Append(" where ");
-            dbQuery.Sql.AppendFormat(" Announcement.{0} = @{0}", Announcement.ID_FIELD);
-            dbQuery.Parameters.Add(Announcement.ID_FIELD, id);
+            FilterBySchool(new AndQueryCondition{{Announcement.ID_FIELD, id}}).BuildSqlWhere(dbQuery, "Announcement");
             BuildConditionForGetSimpleAnnouncement(dbQuery, roleId, callerId);
             return ReadOneOrNull<Announcement>(dbQuery);
         }

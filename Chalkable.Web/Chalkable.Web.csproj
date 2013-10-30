@@ -266,7 +266,6 @@
     <Compile Include="Models\ClassesViewData\ClassTitlesViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassViewData.cs" />
     <Compile Include="Models\ClassPeriodViewData.cs" />
-    <Compile Include="Models\CourseViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\CreateAnnouncementViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
     <Compile Include="Models\DepartmentGradingStatViewData.cs" />

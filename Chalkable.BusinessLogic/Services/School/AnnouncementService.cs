@@ -56,11 +56,11 @@ namespace Chalkable.BusinessLogic.Services.School
         private AnnouncementDataAccess CreateAnnoucnementDataAccess(UnitOfWork unitOfWork)
         {
             if(BaseSecurity.IsAdminViewer(Context))
-                return new AnnouncementForAdminDataAccess(unitOfWork);
+                return new AnnouncementForAdminDataAccess(unitOfWork, Context.SchoolLocalId);
             if(Context.Role == CoreRoles.TEACHER_ROLE)
-                return new AnnouncementForTeacherDataAccess(unitOfWork);
+                return new AnnouncementForTeacherDataAccess(unitOfWork, Context.SchoolLocalId);
             if(Context.Role == CoreRoles.STUDENT_ROLE)
-                return new AnnouncementForStudentDataAccess(unitOfWork);
+                return new AnnouncementForStudentDataAccess(unitOfWork, Context.SchoolLocalId);
             throw new ChalkableException("Unsupported role for announcements");
         }
 
@@ -296,7 +296,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = CreateAnnoucnementDataAccess(uow);
                 var res = Submit(da, uow, announcementId, recipientId);
-                var sy = new SchoolYearDataAccess(uow).GetByDate(res.Expires);
+                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(res.Expires);
                 da.ReorderAnnouncements(sy.Id, res.ClassAnnouncementTypeRef.Value, res.PersonRef, recipientId);
                 uow.Commit();
             }

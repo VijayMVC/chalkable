@@ -30,7 +30,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                var da = new AddressDataAccess(uow, Context.SchoolLocalId);
+                var da = new AddressDataAccess(uow);
                 var address = EditAddress(addressInfo, null);
                 da.Insert(address);
                 uow.Commit();
@@ -44,7 +44,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                var da = new AddressDataAccess(uow, Context.SchoolLocalId);
+                var da = new AddressDataAccess(uow);
                 var address = da.GetById(addressInfo.Id);
                 if (!AddressSecurity.CanModify(address, Context))
                     throw new ChalkableSecurityException();
@@ -76,7 +76,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                var da = new AddressDataAccess(uow, Context.SchoolLocalId);
+                var da = new AddressDataAccess(uow);
                 var address = da.GetById(id);
                 if (!AddressSecurity.CanModify(address, Context))
                     throw new ChalkableSecurityException();
@@ -92,7 +92,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Read())
             {
-                var da = new AddressDataAccess(uow, Context.SchoolLocalId);
+                var da = new AddressDataAccess(uow);
                 return da.GetAll();
             }
         }
@@ -104,7 +104,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Read())
             {
-                var da = new AddressDataAccess(uow, Context.SchoolLocalId);
+                var da = new AddressDataAccess(uow);
                 return da.GetAddress(personId);
             }
         }
