@@ -64,7 +64,7 @@ apiInfo = self.getApiInfo()
             input(type="text", name="app-secret-key", value=self.getAppSecretKey()).api-key
 
             each apiRole in self.getApiRoles()
-                +ActionLink('developer', 'api', apiRole).toolbar-btn(class = apiRole == apiInfo.getRole() == apiRole ? "selected" : undefined)=apiRole
+                +ActionLink('developer', 'api', apiRole).toolbar-btn(class = apiInfo.getRole() == apiRole ? "selected" : undefined)=apiRole
     h4.text-title Chalkable REST API
     .api-description
         The API allows you to access real-time data from schools. All methods return JSON. There are user roles on the bar above.
