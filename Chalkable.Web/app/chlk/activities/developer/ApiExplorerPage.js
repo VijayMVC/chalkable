@@ -5,6 +5,35 @@ REQUIRE('chlk.models.api.ApiParamType');
 
 NAMESPACE('chlk.activities.developer', function () {
 
+
+    function serializeFormToJSON(obj){
+      var arrayData, objectData;
+      arrayData = obj.serializeArray();
+      objectData = {};
+
+      jQuery.each(arrayData, function() {
+        var value;
+
+        if (this.value != null) {
+          value = this.value;
+        } else {
+          value = '';
+        }
+
+        if (objectData[this.name] != null) {
+          if (!objectData[this.name].push) {
+            objectData[this.name] = [objectData[this.name]];
+          }
+
+          objectData[this.name].push(value);
+        } else {
+          objectData[this.name] = value;
+        }
+      });
+
+      return objectData;
+    };
+
     /** @class chlk.activities.developer.ApiExplorerPage*/
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
@@ -49,6 +78,61 @@ NAMESPACE('chlk.activities.developer', function () {
                     rule: rule,
                     message: message
                 };
+            },
+
+            [[ria.dom.Dom]],
+            function refreshExampleCode(node){
+                var tabs = node.parent();
+                var tabContent = this.dom.find('#' + tabs.getAttr('tabId'));
+
+                var form = this.dom.find('#' + tabContent.getAttr('formId'));
+                var controllerName = form.find('input[name=controllerName]').getValue();
+                var actionName = form.find('input[name=methodName]').getValue();
+
+                var url = WEB_SITE_ROOT + controllerName + "/" + actionName + ".json";
+
+                var formData = serializeFormToJSON(jQuery('#' + tabContent.getAttr('formId')));
+                delete formData.apiFormId;
+                delete formData.controllerName;
+                delete formData.methodName;
+                delete formData.apiCallRole;
+
+                var params = JSON.stringify(formData);
+                var codeArea = tabContent.find('pre');
+
+                var code = this.getExampleCode_(node.getAttr('data-example-type') | 0, url, params, "{your token here}");
+                codeArea.empty().setHTML(code);
+                //jQuery(codeArea.valueOf()).snippet("javascript", {style:"ide-eclipse"});
+            },
+
+            [ria.mvc.DomEventBind('keyup', '.value-field')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function onFieldChange(node, event){
+              var form = this.dom.find('#' + node.getAttr('data-formid'));
+              var tab = form.find('.tab-header.active');
+              this.refreshExampleCode(tab);
+            },
+
+            [ria.mvc.DomEventBind('click', '.tab-header')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function exampleTabClick(node, event){
+                var tabs = node.parent();
+                tabs.find('.active').removeClass('active');
+                this.refreshExampleCode(node);
+                node.addClass('active');
+            },
+
+            function getExampleCode_(type, url, params, token){
+                //type 0 == curl
+                var result = "no example";
+
+                switch(type){
+                    case 0:{
+                        var authHeader = ' -H "Authorization: Bearer:' + token + '"';
+                        result = 'curl -X POST -H "Content-Type: application/json"' + authHeader + ' -d ' + params + ' ' + url;
+                    }  break;
+                }
+                return result;
             },
 
             [ria.mvc.DomEventBind('click', '.try-btn')],

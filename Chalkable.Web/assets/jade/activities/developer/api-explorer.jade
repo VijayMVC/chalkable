@@ -39,18 +39,26 @@ mixin ApiCallForm(controllerInfo, role)
                                                     td.param-value
                                                         input(type="text",
                                                             data-param-type = methodParam.getParamType().valueOf(),
+                                                            data-formid = apiFormId,
                                                             name = methodParam.getName()).value-field(class = methodParam.isOptional() ? "optional" : undefined)
                                                     td.param-description=methodParam.getDescription()
                                 else
                                     .no-params No parameters required
                                 .code-examples
+                                    tabContentId = "tab-" + apiFormId
                                     .text-title Code Examples
-                                    .tab-headers
-                                        .tab-header.active
+                                    .tab-headers(tabId=tabContentId)
+                                        .tab-header.active(data-example-type="0")
                                             span.triangle
-                                            cUrl
-                                        .tab-content
-                                            Some example
+                                            |cUrl
+                                        .tab-header(data-example-type="1")
+                                            span.triangle
+                                            |ruby
+                                        .tab-header(data-example-type="2")
+                                            span.triangle
+                                            |python
+                                    .tab-content(formId = apiFormId, id="tab-" + apiFormId)
+                                        pre
 
                                 +Button()(type="submit").submit-draft-btn.special-button.blue-button.try-btn Try it out
                                 .response
