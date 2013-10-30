@@ -43,7 +43,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     var ann = anDa.GetById(announcementApplication.AnnouncementRef);
                     if (ann.ClassRef.HasValue)
                     {
-                        var csp = new ClassPersonDataAccess(uow).GetClassPersons(new ClassPersonQuery{ClassId = ann.ClassRef});
+                        var csp = new ClassPersonDataAccess(uow, Context.SchoolLocalId)
+                            .GetClassPersons(new ClassPersonQuery { ClassId = ann.ClassRef });
                         res.AddRange(csp.Select(x=>x.PersonRef));
                     }
                     res.Add(ann.PersonRef);

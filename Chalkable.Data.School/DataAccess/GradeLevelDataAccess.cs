@@ -10,9 +10,9 @@ namespace Chalkable.Data.School.DataAccess
         }
     }
 
-    public class SchoolGradeLevelDataAccess: DataAccessBase<SchoolGradeLevel, int>
+    public class SchoolGradeLevelDataAccess: BaseSchoolDataAccess<SchoolGradeLevel>
     {
-        public SchoolGradeLevelDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public SchoolGradeLevelDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
         {
         }
     }

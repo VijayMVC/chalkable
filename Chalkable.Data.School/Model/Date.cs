@@ -16,7 +16,8 @@ namespace Chalkable.Data.School.Model
         public DateTime Day { get; set; }
         public int? DateTypeRef { get; set; }
         public bool IsSchoolDay { get; set; }
-        public int SchoolYearRef { get; set; }     
+        public int SchoolYearRef { get; set; }
+        public int SchoolRef { get; set; }
     }
 
     public class DateDetails : Date

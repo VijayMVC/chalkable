@@ -39,6 +39,9 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new PrivateMessageDataAccess(uow);
+                var toSchoolPerson = new SchoolPersonDataAccess(uow).GetSchoolPerson(toPersonId, Context.SchoolLocalId, null);
+                if(toSchoolPerson == null)
+                    throw new ChalkableSecurityException();
                 var message = new PrivateMessage
                     {
                         Body = body,

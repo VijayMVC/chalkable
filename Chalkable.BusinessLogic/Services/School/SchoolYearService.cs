@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                var da = new SchoolYearDataAccess(uow);
+                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
                 if(IsOverlaped(startDate, endDate, da))
                     throw new ChalkableException(ChlkResources.ERR_SCHOOL_YEAR_OVERLAPPING_DATA);
                 if (da.Exists(name))
@@ -67,7 +67,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                var da = new SchoolYearDataAccess(uow);
+                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
                 var schoolYear = da.GetById(id);
 
                 if(IsOverlaped(startDate, endDate, da, schoolYear))
@@ -89,7 +89,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                var da = new SchoolYearDataAccess(uow);
+                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
                 return da.GetById(id);
             }
         }
@@ -98,8 +98,8 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                var da = new SchoolYearDataAccess(uow);
-                return da.GetSchoolYears(start, count);
+                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
+                return da.GetPage(start, count);
             }
         }
 
@@ -109,7 +109,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                var da = new SchoolYearDataAccess(uow);
+                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
                 da.Delete(schoolYearId);
                 uow.Commit();
             }
@@ -120,7 +120,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var nowDate = Context.NowSchoolTime.Date;
             using (var uow = Read())
             {
-                var da = new SchoolYearDataAccess(uow);
+                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
                 return da.GetByDate(nowDate);
             }
         }
@@ -128,7 +128,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                var da = new SchoolYearDataAccess(uow);
+                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
                 return da.GetAll();
             }
         }

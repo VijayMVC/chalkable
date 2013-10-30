@@ -9,10 +9,10 @@ using Chalkable.Data.School.Model;
 namespace Chalkable.Data.School.DataAccess
 {
 
-    public class ClassPeriodDataAccess : DataAccessBase<ClassPeriod, int>
+    public class ClassPeriodDataAccess : BaseSchoolDataAccess<ClassPeriod>
     {
-        public ClassPeriodDataAccess(UnitOfWork unitOfWork)
-            : base(unitOfWork)
+        public ClassPeriodDataAccess(UnitOfWork unitOfWork, int? schoolId)
+            : base(unitOfWork, schoolId)
         {
         }
 
@@ -139,7 +139,7 @@ namespace Chalkable.Data.School.DataAccess
             if (query.DateTypeId.HasValue)
                 conds.Add(ClassPeriod.DATE_TYPE_REF_FIELD, query.DateTypeId);
 
-            conds.BuildSqlWhere(dbQuery, classPeriodTName, false);
+            FilterBySchool(conds).BuildSqlWhere(dbQuery, classPeriodTName, false);
 
             if (query.StudentId.HasValue)
             {

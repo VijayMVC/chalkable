@@ -16,6 +16,7 @@ namespace Chalkable.Data.School.Model
         public int ClassRef { get; set; }
         public int? RoomRef { get; set; }
         public int DateTypeRef { get; set; }
+        public int SchoolRef { get; set; }
 
         private Period period;
         [DataEntityAttr]

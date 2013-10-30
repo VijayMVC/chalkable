@@ -465,3 +465,30 @@ sp_RENAME 'Date.[Date]' , 'Day', 'COLUMN'
 alter table ClassPeriod
 alter column RoomRef int null
 go
+
+alter table ClassPeriod 
+add SchoolRef int not null constraint FK_ClassPeriod_School foreign key references School(Id)
+go
+
+alter table Period 
+add SchoolRef int not null constraint FK_Period_School foreign key references School(Id)
+go
+
+
+alter table MarkingPeriod 
+add SchoolRef int not null constraint FK_MarkingPeriod_School foreign key references School(Id)
+go
+
+alter table Class 
+add SchoolRef int not null constraint FK_Class_School foreign key references School(Id)
+go
+
+alter table MarkingPeriodClass 
+add SchoolRef int not null constraint FK_MarkingPeriodClass_School foreign key references School(Id)
+go
+
+alter table [Date] 
+add SchoolRef int not null constraint FK_Date_School foreign key references School(Id)
+go
+
+

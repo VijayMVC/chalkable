@@ -6,17 +6,23 @@ using System.Globalization;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class PersonDataAccess : DataAccessBase<Person, int>
+    public class PersonDataAccess : BaseSchoolDataAccess<Person>
     {
-        public PersonDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public PersonDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
         {
         }
         
         private const string FILTER_FORMAT = "%{0}%";
+
+        protected override QueryCondition FilterBySchool(QueryCondition queryCondition)
+        {
+            return queryCondition;
+        }
 
         public Person GetPerson(PersonQuery query)
         {
@@ -38,7 +44,7 @@ namespace Chalkable.Data.School.DataAccess
             parameters.Add("@teacherId", query.TeacherId);
             parameters.Add("@classId", query.ClassId);
             parameters.Add("@callerRoleId", query.CallerRoleId);
-            parameters.Add("@schoolId", query.SchoolId);
+            parameters.Add("@schoolId", schoolId);
 
             string filter1 = null;
             string filter2 = null;
@@ -138,8 +144,7 @@ namespace Chalkable.Data.School.DataAccess
         public int? PersonId { get; set; }
         public int? CallerId { get; set; }
         public int CallerRoleId { get; set; }
-        public int? SchoolId { get; set; }
-
+        
         public string StartFrom { get; set; }
         public string Filter { get; set; }
         public IEnumerable<int> GradeLevelIds { get; set; }

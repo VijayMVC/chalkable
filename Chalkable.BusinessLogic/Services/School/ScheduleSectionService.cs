@@ -67,7 +67,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Read())
             {
-                var cpDa = new ClassPeriodDataAccess(uow);
+                var cpDa = new ClassPeriodDataAccess(uow, Context.SchoolLocalId);
                 return !cpDa.Exists(new ClassPeriodQuery{SchoolYearId = schoolYearId});
             }
         }

@@ -9,10 +9,10 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class PeriodDataAccess : DataAccessBase<Period, int>
+    public class PeriodDataAccess : BaseSchoolDataAccess<Period>
     {
-        public PeriodDataAccess(UnitOfWork unitOfWork)
-            : base(unitOfWork)
+        public PeriodDataAccess(UnitOfWork unitOfWork, int? schoolId)
+            : base(unitOfWork, schoolId)
         {
         }
 
@@ -23,45 +23,32 @@ namespace Chalkable.Data.School.DataAccess
         //    ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
         //}
 
-        
-        //public Period GeComplextById(Guid id)
-        //{
-        //    return GetComplexPeriods(new AndQueryCondition { { Period.ID_FIELD, id } }).First();
-        //}
+        public void Delete(int? schoolYearId)
+        {
+            SimpleDelete<Period>(FilterBySchoolYear(null, schoolYearId));
+        }
 
         public IList<Period> GetPeriods(int schoolYearId)
         {
             var conds = new AndQueryCondition { { Period.SCHOOL_YEAR_REF, schoolYearId } };
-            return SelectMany<Period>(conds);
+            return SelectMany<Period>(FilterBySchool(conds));
         }
 
-        public IList<Period> GetPeriods(Guid sectionId)
+        public Period GetPeriodOrNull(int time, int schoolYearId)
         {
-            throw new NotImplementedException();
-            //var conds = new AndQueryCondition { { Period.SECTION_REF, sectionId } };
-            //return SelectMany<Period>(conds);
-        }
-
-
-        public Period GetPeriodOrNull(int time)
-        {
-            return SelectOneOrNull<Period>(new AndQueryCondition
+            return SelectOneOrNull<Period>(FilterBySchoolYear(new AndQueryCondition
                 {
-                    {Period.START_TIME_FIELD, "time1", time, ConditionRelation.LessEqual},
-                    {Period.END_TIME_FIELD, "time2", time, ConditionRelation.GreaterEqual}
-                });
-        }
+                    {Period.START_TIME_FIELD, time, ConditionRelation.LessEqual},
+                    {Period.END_TIME_FIELD, time, ConditionRelation.GreaterEqual},
 
-        public Period GetPeriodOrNull(Guid sectionId, int time)
+                }, schoolYearId));
+        }
+        private QueryCondition FilterBySchoolYear(QueryCondition conds, int? schoolYearId)
         {
-            throw new NotImplementedException();
-            //var conds = new AndQueryCondition
-            //    {
-            //        {Period.SECTION_REF, sectionId},
-            //        {Period.START_TIME_FIELD, "time1", time, ConditionRelation.LessEqual},
-            //        {Period.END_TIME_FIELD, "time2", time, ConditionRelation.GreaterEqual}
-            //    };
-            //return SelectOneOrNull<Period>(conds);
+            var res = new AndQueryCondition {FilterBySchool(conds)};
+            if (schoolYearId.HasValue)
+                res.Add(Period.SCHOOL_YEAR_REF, schoolYearId);
+            return res;
         }
 
 //        public IList<Period> GetComplexPeriods(Guid? sectionId, Guid? markingPeriodId)

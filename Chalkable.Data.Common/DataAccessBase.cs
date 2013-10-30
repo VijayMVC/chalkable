@@ -11,7 +11,9 @@ namespace Chalkable.Data.Common
     public class DataAccessBase<TEntity, TIdParam> where TEntity : new()
     {
         protected const string FILTER_FORMAT = "%{0}%";
-        
+        protected const string ID_FIELD = "Id";
+        private const string ALL_COUNT_FIELD = "AllCount";
+
         private UnitOfWork unitOfWork;
         public DataAccessBase(UnitOfWork unitOfWork)
         {
@@ -106,7 +108,7 @@ namespace Chalkable.Data.Common
 
         protected void SimpleDelete<T, TParam>(TParam id)
         {
-            var conds = new AndQueryCondition {{"id", id}};
+            var conds = new AndQueryCondition { { ID_FIELD, id } };
             var q = Orm.Orm.SimpleDelete<T>(conds);
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
@@ -168,7 +170,7 @@ namespace Chalkable.Data.Common
         }
 
         protected PaginatedList<T> PaginatedSelect<T>(QueryCondition conditions, string orderByColumn,
-                                                      int start, int count, Orm.Orm.OrderType orderType = Orm.Orm.OrderType.Asc) where T : new()
+                                                            int start, int count, Orm.Orm.OrderType orderType = Orm.Orm.OrderType.Asc) where T : new()
         {
             var q = Orm.Orm.PaginationSelect<T>(conditions, orderByColumn, orderType, start, count);
             return ReadPaginatedResult<T>(q, start, count);
@@ -188,7 +190,7 @@ namespace Chalkable.Data.Common
             {
                 if (reader.Read())
                 {
-                    var allCount = SqlTools.ReadInt32(reader, "AllCount");
+                    var allCount = SqlTools.ReadInt32(reader, ALL_COUNT_FIELD);
                     reader.NextResult();
                     var res = readAction(reader);
                     return new PaginatedList<T>(res, start / count, count, allCount);
@@ -204,32 +206,30 @@ namespace Chalkable.Data.Common
 
         protected bool Exists<T>(QueryCondition conditions) where T : new()
         {
-            var resName = "AllCount";
-            var q = Orm.Orm.CountSelect<T>(conditions, resName);
-            return Read(q, reader => reader.Read() && SqlTools.ReadInt32(reader, resName) > 0);
+            var q = Orm.Orm.CountSelect<T>(conditions, ALL_COUNT_FIELD);
+            return Read(q, reader => reader.Read() && SqlTools.ReadInt32(reader, ALL_COUNT_FIELD) > 0);
         }
 
-        protected bool Exists(DbQuery query, string resName = "AllCount")
+        protected bool Exists(DbQuery query, string resName = ALL_COUNT_FIELD)
         {
             var q = Orm.Orm.CountSelect(query, resName);
             return Read(q, reader => reader.Read() && SqlTools.ReadInt32(reader, resName) > 0);
         }
         protected int Count(DbQuery query)
         {
-            var resName = "AllCount";
-            var q = Orm.Orm.CountSelect(query, resName);
-            return Read(q, reader => reader.Read() ? SqlTools.ReadInt32(reader, resName) : 0);
+            var q = Orm.Orm.CountSelect(query, ALL_COUNT_FIELD);
+            return Read(q, reader => reader.Read() ? SqlTools.ReadInt32(reader, ALL_COUNT_FIELD) : 0);
         }
 
 
         public virtual TEntity GetById(TIdParam id)
         {
-            return SelectOne<TEntity>(new AndQueryCondition { { "Id", id } });
+            return SelectOne<TEntity>(new AndQueryCondition { { ID_FIELD, id } });
         }
 
         public virtual TEntity GetByIdOrNull(TIdParam id)
         {
-            return SelectOneOrNull<TEntity>(new AndQueryCondition { { "Id", id } });
+            return SelectOneOrNull<TEntity>(new AndQueryCondition { { ID_FIELD, id } });
         }
 
         public virtual IList<TEntity> GetAll(QueryCondition conditions = null)
@@ -240,7 +240,7 @@ namespace Chalkable.Data.Common
         public virtual PaginatedList<TEntity> GetPage(int start, int count, string orderBy = null, Orm.Orm.OrderType orderType = Orm.Orm.OrderType.Asc)
         {
             if (string.IsNullOrEmpty(orderBy))
-                orderBy = "Id";
+                orderBy = ID_FIELD;
             return PaginatedSelect<TEntity>(orderBy, start, count, orderType);
         }
 

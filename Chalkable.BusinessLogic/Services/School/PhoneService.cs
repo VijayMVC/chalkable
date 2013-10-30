@@ -37,7 +37,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new PhoneDataAccess(uow).GetAll();
+                return new PhoneDataAccess(uow, Context.SchoolLocalId).GetAll();
             }
         }
 
@@ -45,7 +45,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new PhoneDataAccess(uow)
+                return new PhoneDataAccess(uow, Context.SchoolLocalId)
                     .GetAll(new AndQueryCondition{{Phone.PERSON_REF_FIELD, personId}});
             }
         }
@@ -56,7 +56,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                var da = new PhoneDataAccess(uow);
+                var da = new PhoneDataAccess(uow, Context.SchoolLocalId);
                 var phone = new Phone
                     {
                         Id = id,
@@ -76,7 +76,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                var da = new PhoneDataAccess(uow);
+                var da = new PhoneDataAccess(uow, Context.SchoolLocalId);
                 var phone = da.GetById(id);
                 if (!(BaseSecurity.IsDistrict(Context) || Context.UserLocalId == phone.PersonRef))//TODO:can teacher do this?
                     throw new ChalkableSecurityException();
@@ -94,7 +94,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                var da = new PhoneDataAccess(uow);
+                var da = new PhoneDataAccess(uow, Context.SchoolLocalId);
                 var phone = da.GetById(id);
                 if (!(BaseSecurity.IsDistrict(Context) || Context.UserLocalId == phone.PersonRef))
                     throw new ChalkableSecurityException();
@@ -107,7 +107,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-               return  new PhoneDataAccess(uow).GetUsersByPhone(phone);
+                return new PhoneDataAccess(uow, Context.SchoolLocalId).GetUsersByPhone(phone);
             }
         }
     }

@@ -7,9 +7,10 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class SchoolYearDataAccess : DataAccessBase<SchoolYear, int>
+    public class SchoolYearDataAccess : BaseSchoolDataAccess<SchoolYear>
     {
-        public SchoolYearDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public SchoolYearDataAccess(UnitOfWork unitOfWork, int? schoolId)
+            : base(unitOfWork, schoolId)
         {
         }
 
@@ -20,28 +21,13 @@ namespace Chalkable.Data.School.DataAccess
                     {SchoolYear.START_DATE_FIELD, date, ConditionRelation.LessEqual},
                     {SchoolYear.END_DATE_FIELD, date, ConditionRelation.GreaterEqual}
                 };
-            return SelectOneOrNull<SchoolYear>(conds);
-            //var conds = new Dictionary<string, object> {{"date", date}};
-            //var sqlCommand = "select * from SchoolYear where StartDate <= @date and EndDate >= @date";
-            //using (var reader = ExecuteReaderParametrized(sqlCommand, conds))
-            //{
-            //    return reader.ReadOrNull<SchoolYear>();
-            //}
-        }
-
-        public IList<SchoolYear> GetSchoolYears()
-        {
-            return SelectMany<SchoolYear>();
-        }
-        public PaginatedList<SchoolYear> GetSchoolYears(int start, int count)
-        {
-            return PaginatedSelect<SchoolYear>(SchoolYear.ID_FIELD, start, count);
+            return SelectOneOrNull<SchoolYear>(FilterBySchool(conds));
         }
 
         public bool Exists(string name)
         {
             var conds = new AndQueryCondition { { SchoolYear.NAME_FIELD, name } };
-            return Exists<SchoolYear>(conds);
+            return Exists<SchoolYear>(FilterBySchool(conds));
         }
 
         public bool IsOverlaped(DateTime startDate, DateTime endDate, int? currentSchoolYearId)
@@ -54,7 +40,7 @@ namespace Chalkable.Data.School.DataAccess
             if(currentSchoolYearId.HasValue)
                 conds.Add(SchoolYear.ID_FIELD, currentSchoolYearId.Value, ConditionRelation.NotEqual);
             
-            return Exists<SchoolYear>(conds);
+            return Exists<SchoolYear>(FilterBySchool(conds));
         }
     }
 }

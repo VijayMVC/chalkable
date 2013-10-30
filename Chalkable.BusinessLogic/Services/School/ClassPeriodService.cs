@@ -38,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                var da = new ClassPeriodDataAccess(uow);
+                var da = new ClassPeriodDataAccess(uow, Context.SchoolLocalId);
                 if (da.Exists( new ClassPeriodQuery{ PeriodId = periodId, RoomId = roomId, DateTypeId = dateTypeId}))
                     throw new ChalkableException(ChlkResources.ERR_OTHER_CLASS_ALREADY_ASSIGNED_TO_ROOM);
                 if (da.Exists(new ClassPeriodQuery { ClassIds = new List<int> {classId}, PeriodId = periodId, DateTypeId = dateTypeId}))
@@ -67,7 +67,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                new ClassPeriodDataAccess(uow).FullDelete(id);
+                new ClassPeriodDataAccess(uow, Context.SchoolLocalId).FullDelete(id);
                 uow.Commit();
             }
         }
@@ -81,7 +81,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if(classId.HasValue)
                     classIds.Add(classId.Value);
 
-                return new ClassPeriodDataAccess(uow)
+                return new ClassPeriodDataAccess(uow, Context.SchoolLocalId)
                             .GetClassPeriods(new ClassPeriodQuery
                                 {
                                     MarkingPeriodId = markingPeriodId,
@@ -100,7 +100,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new ClassPeriodDataAccess(uow).GetAvailableClasses(periodId);
+                return new ClassPeriodDataAccess(uow, Context.SchoolLocalId).GetAvailableClasses(periodId);
             }
         }
 
@@ -108,7 +108,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new ClassPeriodDataAccess(uow).GetAvailableRooms(periodId);
+                return new ClassPeriodDataAccess(uow, Context.SchoolLocalId).GetAvailableRooms(periodId);
             }
         }
 
@@ -116,7 +116,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                var personDa = new PersonDataAccess(uow);
+                var personDa = new PersonDataAccess(uow, Context.SchoolLocalId);
                 var person = personDa.GetPerson(new PersonQuery
                     {
                         CallerId = Context.UserLocalId,

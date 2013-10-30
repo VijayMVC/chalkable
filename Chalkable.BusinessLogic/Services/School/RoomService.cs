@@ -31,7 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                var da = new RoomDataAccess(uow);
+                var da = new RoomDataAccess(uow, Context.SchoolLocalId);
                 var room = new Room
                     {
                         Id = id,
@@ -54,7 +54,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                var da = new RoomDataAccess(uow);
+                var da = new RoomDataAccess(uow, Context.SchoolLocalId);
                 var room = da.GetById(id);
                 room.RoomNumber = roomNumber;
                 room.Description = description;
@@ -75,11 +75,11 @@ namespace Chalkable.BusinessLogic.Services.School
            
             using (var uow = Update())
             {
-                var cpDa = new ClassPeriodDataAccess(uow);
+                var cpDa = new ClassPeriodDataAccess(uow, Context.SchoolLocalId);
                 if (cpDa.Exists(new ClassPeriodQuery{RoomId = id}))
                     throw new ChalkableException(ChlkResources.ERR_ROOM_CANT_DELETE_ROOM_TYPE_ASSIGNED_TO_CLASSPERIOD);
-                
-                new RoomDataAccess(uow).Delete(id);
+
+                new RoomDataAccess(uow, Context.SchoolLocalId).Delete(id);
                 uow.Commit();
             }
         }
@@ -88,7 +88,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new RoomDataAccess(uow).GetPage(start, count);
+                return new RoomDataAccess(uow, Context.SchoolLocalId).GetPage(start, count);
             }
         }
 
@@ -102,7 +102,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new RoomDataAccess(uow).GetById(id);
+                return new RoomDataAccess(uow, Context.SchoolLocalId).GetById(id);
             }
         }
     }

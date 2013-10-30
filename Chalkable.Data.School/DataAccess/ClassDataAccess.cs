@@ -6,9 +6,10 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class ClassDataAccess : DataAccessBase<Class, int>
+    public class ClassDataAccess : BaseSchoolDataAccess<Class>
     {
-        public ClassDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public ClassDataAccess(UnitOfWork unitOfWork, int? schoolId)
+            : base(unitOfWork, schoolId)
         {
         }
 
@@ -38,7 +39,7 @@ namespace Chalkable.Data.School.DataAccess
                     {START_PARAM, query.Start},
                     {COUNT_PARAM, query.Count},
                     {CALLER_ROLE_ID_PARAM, query.CallerRoleId},
-                    {SCHOOL_ID, query.SchoolId}
+                    {SCHOOL_ID, schoolId}
                 };
 
             string filter1 = null;
@@ -87,8 +88,6 @@ namespace Chalkable.Data.School.DataAccess
         
         public int Start { get; set; }
         public int Count { get; set; }
-
-        public int? SchoolId { get; set; }
 
         public ClassQuery()
         {

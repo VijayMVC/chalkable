@@ -11,5 +11,6 @@ namespace Chalkable.Data.School.Model
         public int Id { get; set; }
         public int ClassRef { get; set; }
         public int MarkingPeriodRef { get; set; }
+        public int SchoolRef { get; set; }
     }
 }

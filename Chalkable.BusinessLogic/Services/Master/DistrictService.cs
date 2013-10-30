@@ -154,7 +154,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             IList<SchoolPerson> schoolPersons;
             using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, server, district.Id.ToString()), false))
             {
-                var da = new PersonDataAccess(unitOfWork);
+                var da = new PersonDataAccess(unitOfWork, Context.SchoolLocalId);
                 users = da.GetAll();
                 var spDa = new SchoolPersonDataAccess(unitOfWork);
                 schoolPersons = spDa.GetSchoolPersons(null, null, null);

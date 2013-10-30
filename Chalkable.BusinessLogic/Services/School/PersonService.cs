@@ -50,7 +50,7 @@ namespace Chalkable.BusinessLogic.Services.School
             //TODO: need cross db transaction handling
             using (var uow = Update())
             {
-                var da = new PersonDataAccess(uow);
+                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
                 
                 var user = ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUser(email, password, Context.DistrictId.Value, localId);
                 foreach (var assignment in assignments)
@@ -95,7 +95,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                var da = new PersonDataAccess(uow);
+                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
                 da.Delete(id);
                 uow.Commit();
             }
@@ -123,7 +123,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                var da = new PersonDataAccess(uow);
+                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
                 query.CallerId = Context.UserLocalId;
                 query.CallerRoleId = Context.Role.Id;
                 var res = da.GetPersons(query);
@@ -160,7 +160,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new PersonDataAccess(uow).GetPersonDetails(id, Context.UserLocalId ?? 0, Context.Role.Id);
+                return new PersonDataAccess(uow, Context.SchoolLocalId).GetPersonDetails(id, Context.UserLocalId ?? 0, Context.Role.Id);
             }
         }
 
@@ -168,7 +168,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                var res = Edit(new PersonDataAccess(uow), localId, email, firstName, lastName, gender, salutation, birthDate);
+                var res = Edit(new PersonDataAccess(uow, Context.SchoolLocalId), localId, email, firstName, lastName, gender, salutation, birthDate);
                 uow.Commit();
                 return res;
             }
@@ -183,7 +183,7 @@ namespace Chalkable.BusinessLogic.Services.School
             
             using (var uow = Update())
             {
-                var student = Edit(new PersonDataAccess(uow), studentId, email, firstName, lastName, gender, salutation, birthDate);
+                var student = Edit(new PersonDataAccess(uow, Context.SchoolLocalId), studentId, email, firstName, lastName, gender, salutation, birthDate);
                 //if (gradeLevelId.HasValue)
                 //    student.StudentInfo.GradeLevelRef = gradeLevelId.Value;
 
@@ -215,7 +215,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                var da = new PersonDataAccess(uow);
+                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
                 var person = GetPerson(id);
                 //TODO: change school status 
                 person.Active = true;

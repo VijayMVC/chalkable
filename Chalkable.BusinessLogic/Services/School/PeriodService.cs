@@ -52,10 +52,12 @@ namespace Chalkable.BusinessLogic.Services.School
             
             using (var uow = Update())
             {
-                var da = new PeriodDataAccess(uow);
+                var da = new PeriodDataAccess(uow, Context.SchoolLocalId);
                 var periods = da.GetPeriods(schoolYearId);
                 if (ExistsOverlapping(periods, startTime, endTime))
                     throw new ChalkableException(ChlkResources.ERR_PERIODS_CANT_OVERLAP);
+
+                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetById(schoolYearId);
                 var period = new Period
                     {
                         Id = periodId,
@@ -63,6 +65,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         StartTime = startTime,
                         SchoolYearRef = schoolYearId,
                         Order = order, 
+                        SchoolRef = sy.SchoolRef
                     };
                 da.Insert(period);
                 uow.Commit();
@@ -76,7 +79,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                new PeriodDataAccess(uow).Delete(id);
+                new PeriodDataAccess(uow, Context.SchoolLocalId).Delete(id);
                 uow.Commit();
             }
         }
@@ -90,7 +93,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                var da = new PeriodDataAccess(uow);
+                var da = new PeriodDataAccess(uow, Context.SchoolLocalId);
                 var period = da.GetById(id);
                 var periods = da.GetPeriods(period.SchoolYearRef).Where(x => x.Id != period.Id).ToList();
                 if(ExistsOverlapping(periods, startTime, endTime))
@@ -105,24 +108,26 @@ namespace Chalkable.BusinessLogic.Services.School
         }
         public Period GetPeriod(int time)
         {
-            using (var uow = Read())
-            {
-                return new PeriodDataAccess(uow).GetPeriodOrNull(time);
-            }
+            return GetPeriod(time, Context.NowSchoolTime.Date);
         }
 
 
         //TODO: remove those methods later
         public Period GetPeriod(int time, DateTime date)
         {
-            throw new NotImplementedException();
-            //using (var uow = Read())
-            //{
-            //    var calendarDate = ServiceLocator.CalendarDateService.GetCalendarDateByDate(date);
-            //    if(calendarDate.ScheduleSectionRef.HasValue)
-            //        return new PeriodDataAccess(uow).GetPeriodOrNull(calendarDate.ScheduleSectionRef.Value, time);
-            //}
-            //return null;
+            using (var uow = Read())
+            {
+                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(date);
+                return new PeriodDataAccess(uow, Context.SchoolLocalId).GetPeriodOrNull(time, sy.Id);
+            }
+        }
+
+        public IList<Period> GetPeriods(int schoolYearId)
+        {
+            using (var uow = Read())
+            {
+                return new PeriodDataAccess(uow, Context.SchoolLocalId).GetPeriods(schoolYearId);
+            }
         }
 
 
@@ -189,15 +194,6 @@ namespace Chalkable.BusinessLogic.Services.School
             //    return res;
             //}
 
-        }
-
-
-        public IList<Period> GetPeriods(int schoolYearId)
-        {
-            using (var uow = Read())
-            {
-                return new PeriodDataAccess(uow).GetPeriods(schoolYearId);
-            }
         }
     }
 }

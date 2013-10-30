@@ -9,10 +9,10 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class MarkingPeriodClassDataAccess : DataAccessBase<MarkingPeriodClass, int>
+    public class MarkingPeriodClassDataAccess : BaseSchoolDataAccess<MarkingPeriodClass>
     {
 
-        public MarkingPeriodClassDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public MarkingPeriodClassDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
         {
         }
         
@@ -61,7 +61,7 @@ namespace Chalkable.Data.School.DataAccess
                 res.Add(MarkingPeriodClass.CLASS_REF_FIELD, query.ClassId);
             if(query.MarkingPeriodId.HasValue)
                 res.Add(MarkingPeriodClass.MARKING_PERIOD_REF_FIELD, query.MarkingPeriodId);
-            return res;
+            return FilterBySchool(res);
         } 
     }
 

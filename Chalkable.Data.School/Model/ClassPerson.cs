@@ -9,5 +9,6 @@ namespace Chalkable.Data.School.Model
        
         public int PersonRef { get; set; }
         public int ClassRef { get; set; }
+        public int SchoolRef { get; set; }
    }
 }

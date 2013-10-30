@@ -19,6 +19,7 @@ namespace Chalkable.Data.School.Model
         public int StartTime { get; set; }
         public int EndTime { get; set; }
         public int SchoolYearRef { get; set; }
-        public int Order { get; set; }   
+        public int Order { get; set; }
+        public int SchoolRef { get; set; }
     }
 }

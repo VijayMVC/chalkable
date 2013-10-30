@@ -33,8 +33,9 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                var da = new DateDataAccess(uow);
+                var da = new DateDataAccess(uow, Context.SchoolLocalId);
                 var res = da.GetDateOrNull(new DateQuery {FromDate = date, ToDate = date});
+                //TODO: rewrite this
                 if (res == null)
                 {
                     var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date);
@@ -88,7 +89,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new DateDataAccess(uow).GetDbDateTime();
+                return new DateDataAccess(uow, Context.SchoolLocalId).GetDbDateTime();
             }
         }
 
@@ -99,7 +100,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Read())
             {
-                return new DateDataAccess(uow)
+                return new DateDataAccess(uow, Context.SchoolLocalId)
                     .GetDates(new DateQuery
                         {
                             MarkingPeriodId = markingPeriodId,
@@ -126,7 +127,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     }
                 }
 
-                var da = new DateDataAccess(uow);
+                var da = new DateDataAccess(uow, Context.SchoolLocalId);
                 return da.GetDatesDetails(new DateQuery
                     {
                         SchoolYearId = schoolYearId,
@@ -154,7 +155,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                new DateDataAccess(uow).Delete(query);
+                new DateDataAccess(uow, Context.SchoolLocalId).Delete(query);
                 uow.Commit();
             }
         }
@@ -188,7 +189,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var cdDate = GetByDate(date, uow);
                 cdDate.DateTypeRef = sectionId;
                 cdDate.IsSchoolDay = true;
-                new DateDataAccess(uow).Update(cdDate);
+                new DateDataAccess(uow, Context.SchoolLocalId).Update(cdDate);
                 uow.Commit();
             }
         }
@@ -203,7 +204,7 @@ namespace Chalkable.BusinessLogic.Services.School
         
         private Date GetByDate(DateTime date, UnitOfWork unitOfWork)
         {
-            return new DateDataAccess(unitOfWork).GetDate(new DateQuery {FromDate = date, ToDate = date});
+            return new DateDataAccess(unitOfWork, Context.SchoolLocalId).GetDate(new DateQuery { FromDate = date, ToDate = date });
         }
 
         public Date Add(DateTime date, bool schoolDay, int schoolYearId, int? dateTypeId)
@@ -230,8 +231,9 @@ namespace Chalkable.BusinessLogic.Services.School
                         IsSchoolDay = schoolDay,
                         SchoolYearRef = schoolYearId,
                         DateTypeRef = dateTypeId,
+                        SchoolRef = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetById(schoolYearId).SchoolRef
                     };
-                new DateDataAccess(uow).Insert(res);
+                new DateDataAccess(uow, Context.SchoolLocalId).Insert(res);
                 uow.Commit();
                 return res;
             }

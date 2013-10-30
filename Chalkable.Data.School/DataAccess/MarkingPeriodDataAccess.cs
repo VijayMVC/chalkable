@@ -9,9 +9,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class MarkingPeriodDataAccess : DataAccessBase<MarkingPeriod, int>
+    public class MarkingPeriodDataAccess : BaseSchoolDataAccess<MarkingPeriod>
     {
-        public MarkingPeriodDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public MarkingPeriodDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
         {
         }
 
@@ -39,16 +39,14 @@ namespace Chalkable.Data.School.DataAccess
             ExecuteNonQueryParametrized(b.ToString(), conds);
         }
 
-        private const string TILL_DATE_PARAM = "tillDate";
-
         public MarkingPeriod GetLast(DateTime tillDate)
         {
-            var q = new DbQuery();
-            var sqlCommand = @"select top 1 * from MarkingPeriod 
-                               where StartDate <= @{0}
-                               order by EndDate desc ";
-            q.Parameters.Add(TILL_DATE_PARAM, tillDate);
-            q.Sql.AppendFormat(sqlCommand, TILL_DATE_PARAM);
+            var q = Orm.SimpleSelect<MarkingPeriod>(
+                FilterBySchool(new AndQueryCondition
+                    {
+                        {MarkingPeriod.START_DATE_FIELD, tillDate, ConditionRelation.LessEqual}
+                    }));
+            q.Sql.AppendFormat("order by {0}  desc", MarkingPeriod.END_DATE_FIELD);
             return ReadOneOrNull<MarkingPeriod>(q);
         }
 
@@ -64,6 +62,7 @@ namespace Chalkable.Data.School.DataAccess
 
             var conds = new Dictionary<string, object>{{"markingPeriodId", markingPeriodId}};
             return ReadOneOrNull<MarkingPeriod>(new DbQuery (sql, conds));
+            //todo filtering by school
         }
 
         public IList<MarkingPeriod> GetMarkingPeriods(int? schoolYearId)
@@ -71,7 +70,7 @@ namespace Chalkable.Data.School.DataAccess
             var conds = new AndQueryCondition();
             if (schoolYearId.HasValue)
                 conds.Add(MarkingPeriod.SCHOOL_YEAR_REF, schoolYearId);
-            return SelectMany<MarkingPeriod>(conds);
+            return SelectMany<MarkingPeriod>(FilterBySchool(conds));
         } 
 
         public MarkingPeriod GetMarkingPeriod(DateTime date)
@@ -81,7 +80,7 @@ namespace Chalkable.Data.School.DataAccess
                     {MarkingPeriod.START_DATE_FIELD, "date1", date, ConditionRelation.LessEqual},
                     {MarkingPeriod.END_DATE_FIELD, "date2", date, ConditionRelation.GreaterEqual}
                 };
-            return SelectOneOrNull<MarkingPeriod>(conds);   
+            return SelectOneOrNull<MarkingPeriod>(FilterBySchool(conds));   
         }
 
         public bool IsOverlaped(DateTime startDate, DateTime endDate, int? currentMarkingPeriodId)
@@ -93,7 +92,7 @@ namespace Chalkable.Data.School.DataAccess
                 };
             if (currentMarkingPeriodId.HasValue)
                 conds.Add(MarkingPeriod.ID_FIELD, currentMarkingPeriodId, ConditionRelation.NotEqual);
-            return Exists<MarkingPeriod>(conds);
+            return Exists<MarkingPeriod>(FilterBySchool(conds));
             
         } 
 

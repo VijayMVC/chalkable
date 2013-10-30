@@ -36,7 +36,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                var da = new MarkingPeriodDataAccess(uow);
+                var da = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId);
                 return da.GetById(id);
             }
         }
@@ -45,7 +45,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                var da = new MarkingPeriodDataAccess(uow);
+                var da = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId);
                 return  da.GetLast(tillDate ?? Context.NowSchoolTime);
             }
         }
@@ -54,7 +54,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new MarkingPeriodClassDataAccess(uow)
+                return new MarkingPeriodClassDataAccess(uow, Context.SchoolLocalId)
                     .GetMarkingPeriodClassOrNull(new MarkingPeriodClassQuery
                         {
                             MarkingPeriodId = markingPeriodId,
@@ -67,7 +67,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new MarkingPeriodDataAccess(uow).GetMarkingPeriods(schoolYearId);
+                return new MarkingPeriodDataAccess(uow, Context.SchoolLocalId).GetMarkingPeriods(schoolYearId);
             }
         }
 
@@ -75,7 +75,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                var da = new MarkingPeriodDataAccess(uow);
+                var da = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId);
                 var res = da.GetMarkingPeriod(date);
                 if (res != null)
                     return res;
@@ -93,8 +93,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new UnassignedUserException();
             using (var uow = Update())
             {
-                var da = new MarkingPeriodDataAccess(uow);
-                var sy = new SchoolYearDataAccess(uow).GetById(schoolYearId);
+                var da = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId);
+                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetById(schoolYearId);
                 var mp = AddMarkingPeriod(da, sy, startDate, endDate, name, description, weekDays, new MarkingPeriod{Id = id});
                 da.Insert(mp);
                 uow.Commit();
@@ -127,6 +127,7 @@ namespace Chalkable.BusinessLogic.Services.School
             markingPeriod.StartDate = startDate;
             markingPeriod.EndDate = endDate;
             markingPeriod.WeekDays = weekDays;
+            markingPeriod.SchoolRef = sy.SchoolRef;
             return markingPeriod;
         }
         
@@ -142,9 +143,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                if (new MarkingPeriodClassDataAccess(uow).Exists(markingPeriodIds))
+                if (new MarkingPeriodClassDataAccess(uow, null).Exists(markingPeriodIds))
                     throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_ASSIGNED_TO_CLASS);
-                new MarkingPeriodDataAccess(uow).DeleteMarkingPeriods(markingPeriodIds);
+                new MarkingPeriodDataAccess(uow, Context.SchoolLocalId).DeleteMarkingPeriods(markingPeriodIds);
                 uow.Commit();
             }
         }
@@ -157,8 +158,8 @@ namespace Chalkable.BusinessLogic.Services.School
             
             using (var uow = Update())
             {
-                var da = new MarkingPeriodDataAccess(uow);
-                var sy = new SchoolYearDataAccess(uow).GetById(schoolYearId);
+                var da = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId);
+                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetById(schoolYearId);
                 var mp = da.GetById(id);
                 mp = AddMarkingPeriod(da, sy, startDate, endDate, name, description, weekDays, mp);
                 da.Update(mp);
@@ -177,8 +178,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                var mpDa = new MarkingPeriodDataAccess(uow);
-                if (new DateDataAccess(uow).Exists(markingPeriodIds))
+                var mpDa = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId);
+                if (new DateDataAccess(uow, Context.SchoolLocalId).Exists(markingPeriodIds))
                     throw new ChalkableException("Can't change markingPeriod week days ");
                 
                 mpDa.ChangeWeekDays(markingPeriodIds, weekDays);
@@ -252,7 +253,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new MarkingPeriodClassDataAccess(uow).GetById(markingPeriodClassId);
+                return new MarkingPeriodClassDataAccess(uow, Context.SchoolLocalId).GetById(markingPeriodClassId);
             }
         }
     
@@ -261,7 +262,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-               return new MarkingPeriodDataAccess(uow).GetNextInYear(markingPeriodId);
+                return new MarkingPeriodDataAccess(uow, Context.SchoolLocalId).GetNextInYear(markingPeriodId);
             }
         }
     }

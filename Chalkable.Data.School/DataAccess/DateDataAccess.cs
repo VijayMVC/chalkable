@@ -9,9 +9,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class DateDataAccess : DataAccessBase<Date, int>
+    public class DateDataAccess : BaseSchoolDataAccess<Date>
     {
-        public DateDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public DateDataAccess(UnitOfWork unitOfWork, int? schoolid) : base(unitOfWork, schoolid)
         {
         }
 
@@ -40,7 +40,7 @@ namespace Chalkable.Data.School.DataAccess
                 condition.Add(Date.IS_SCHOOL_DAY_FIELD, true, ConditionRelation.Equal);
 
             dbQuery.Sql.Append(" where 1 = 1 ");
-            condition.BuildSqlWhere(dbQuery, "Date", false);
+            FilterBySchool(condition).BuildSqlWhere(dbQuery, "Date", false);
 
             if (query.MarkingPeriodId.HasValue)
             {
