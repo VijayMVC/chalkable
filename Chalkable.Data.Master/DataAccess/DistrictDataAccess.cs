@@ -14,11 +14,9 @@ namespace Chalkable.Data.Master.DataAccess
         {
         }
 
-        public IList<District> GetDistricts(bool? empty, bool? demo, bool? usedDemo)
+        public IList<District> GetDistricts(bool? demo, bool? usedDemo)
         {
             var conds = new AndQueryCondition();
-            if (empty.HasValue)
-                conds.Add(District.IS_EMPTY_FIELD, empty);
             if (demo.HasValue)
                 conds.Add(District.DEMO_PREFIX_FIELD, null, demo.Value ? ConditionRelation.NotEqual : ConditionRelation.Equal);
             if (usedDemo.HasValue)
@@ -41,12 +39,6 @@ namespace Chalkable.Data.Master.DataAccess
             }
             return res;
         }
-
-        public IList<District> GetEmpty()
-        {
-            return SelectMany<District>(new AndQueryCondition { { District.IS_EMPTY_FIELD, true } });
-        }
-
         
         public new void Delete(Guid id)
         {

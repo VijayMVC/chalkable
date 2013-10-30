@@ -16,7 +16,7 @@ namespace Chalkable.BackgroundTaskProducer.Producers
         protected override void ProduceInternal(DateTime currentTimeUtc)
         {
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var districts = sl.DistrictService.GetDistricts(false, false, null);
+            var districts = sl.DistrictService.GetDistricts(false);
             foreach (var district in districts)
             {
                 sl.BackgroundTaskService.ScheduleTask(type, currentTimeUtc, district.Id, string.Empty);

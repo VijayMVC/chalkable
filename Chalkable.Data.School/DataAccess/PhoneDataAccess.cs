@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
@@ -22,5 +23,21 @@ namespace Chalkable.Data.School.DataAccess
             conds.BuildSqlWhere(query, phoneTName);
             return ReadMany<Person>(query);
         } 
+
+        public Phone GetPhone(int personId, string digitOnlyValue)
+        {
+            var conds = new AndQueryCondition();
+            conds.Add(Phone.PERSON_REF_FIELD, personId);
+            conds.Add(Phone.DIGIT_ONLY_VALUE_FIELD, digitOnlyValue);
+            return GetAll(conds).First();
+        }
+
+        public void Delete(Phone phone)
+        {
+            var conds = new AndQueryCondition();
+            conds.Add(Phone.DIGIT_ONLY_VALUE_FIELD, phone.DigitOnlyValue);
+            conds.Add(Phone.PERSON_REF_FIELD, phone.PersonRef);
+            SimpleDelete(conds);
+        }
     }
 }

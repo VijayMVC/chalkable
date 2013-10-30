@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -86,17 +84,12 @@ namespace Chalkable.Web.Controllers.PersonControllers
 
         protected Person UpdateTeacherOrAdmin(AdminTeacherInputModel model)
         {
-            SchoolLocator.PersonService.Edit(model.PersonId, model.Email, model.FirstName, model.LastName, model.Gender, model.Salutation, model.BirthdayDate);
-            return EditPersonAdditionalInfo(model);
+            throw new NotImplementedException();
         }
 
         private Person EditPersonAdditionalInfo(AdminTeacherInputModel model)
         {
-            SaveAddresses(model);
-            SavePhones(model);
-            var person = SchoolLocator.PersonService.GetPerson(model.PersonId);
-            ReLogOn(person);
-            return person;
+            throw new NotImplementedException();
         }
 
         protected void ReLogOn(Person person)
@@ -108,44 +101,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 throw new ChalkableSecurityException();
         }
         
-        protected void SavePhones(AdminTeacherInputModel model)
-        {
-            var prev = SchoolLocator.PhoneService.GetPhones(model.PersonId);
-            foreach (var phone in prev)
-            {
-                if (!model.Phones.Any(x=>x.Id == phone.Id))
-                    SchoolLocator.PhoneService.Delete(phone.Id);
-            }
-            if (model.Phones != null)
-                foreach (var phone in model.Phones)
-                {
-                    if (phone.Id.HasValue)
-                        SchoolLocator.PhoneService.Edit(phone.Id.Value, phone.Value, (PhoneType)phone.Type, phone.IsPrimary);
-                    else
-                        throw new NotImplementedException();
-                        //SchoolLocator.PhoneService.Add(model.PersonId, phone.Value, (PhoneType)phone.Type, phone.IsPrimary);
-                }
-        }
-
-        protected void SaveAddresses(AdminTeacherInputModel model)
-        {
-            var prev = SchoolLocator.AddressService.GetAddress(model.PersonId);
-            foreach (var address in prev)
-            {
-                if (!model.Addresses.Any(x => x.Id == address.Id))
-                    SchoolLocator.AddressService.Delete(address.Id);
-            }
-            if (model.Addresses != null)
-                foreach (var address in model.Addresses)
-                {
-                    throw new NotImplementedException();
-                    //if (address.Id.HasValue)
-                    //    SchoolLocator.AddressService.Edit(address.Id.Value, address.Value, string.Empty, (AddressType)address.Type);
-                    //else
-                    //    SchoolLocator.AddressService.Add(model.PersonId, address.Value, string.Empty, (AddressType)address.Type);
-                }
-        }
-
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult GetPersons(int? roleId, IntList gradeLevelIds, int? start, int? count, bool? byLastName, string filter)
         {

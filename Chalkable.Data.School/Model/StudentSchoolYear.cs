@@ -9,9 +9,6 @@ namespace Chalkable.Data.School.Model
 {
     public class StudentSchoolYear
     {
-        public const string ID_FIELD = "Id";
-        public int Id { get; set; }
-
         public const string GRADE_LEVEL_REF_FIELD = "GradeLevelRef";
         public int GradeLevelRef { get; set; }
 

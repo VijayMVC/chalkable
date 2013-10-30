@@ -19,7 +19,7 @@ CREATE TABLE [dbo].[Address]
 	[State] NVARCHAR(5) NOT NULL,
 	[PostalCode] CHAR(10) NOT NULL,
 	[Country] NVARCHAR(60) NOT NULL,
-	[CountyID] SMALLINT NULL,
+	[CountyId] INT NULL,
 	[Latitude] DECIMAL(10, 7) NULL,
 	[Longitude] DECIMAL(10, 7) NULL,
 )
@@ -52,7 +52,7 @@ CREATE TABLE SchoolPerson
 GO
 
 ALTER TABLE SchoolPerson
-	ADD CONSTRAINT PK_SchoolStaff PRIMARY KEY (SchoolRef, PersonRef)
+	ADD CONSTRAINT PK_SchoolPerson PRIMARY KEY (SchoolRef, PersonRef)
 GO
 
 CREATE TABLE [dbo].[AnnouncementType](
@@ -221,11 +221,14 @@ GO
 
 CREATE TABLE StudentSchoolYear
 (
-	[Id] INT NOT NULL PRIMARY KEY,
-	SchoolYearId INT NOT NULL CONSTRAINT FK_StudentSchoolYear_SchoolYear FOREIGN KEY REFERENCES SchoolYear(Id),
+	SchoolYearRef INT NOT NULL CONSTRAINT FK_StudentSchoolYear_SchoolYear FOREIGN KEY REFERENCES SchoolYear(Id),
 	GradeLevelRef INT NOT NULL CONSTRAINT FK_StudentSchoolYear_GradeLevel FOREIGN KEY REFERENCES GradeLevel(Id),
 	StudentRef INT NOT NULL CONSTRAINT FK_StudentSchoolYear_Person FOREIGN KEY REFERENCES Person(Id)
 )
+GO
+
+Alter Table StudentSchoolYear
+	Add Constraint PK_StudentSchoolYear Primary Key (SchoolYearRef, StudentRef)
 GO
 
 CREATE TABLE StudentAnnouncement
@@ -244,13 +247,15 @@ GO
 
 CREATE TABLE Phone
 (
-	Id INT PRIMARY KEY NOT NULL,
 	PersonRef INT NOT NULL CONSTRAINT FK_Phone_Person FOREIGN KEY REFERENCES Person(Id),
 	[Value] NVARCHAR(256) NOT NULL,
 	[Type] INT NOT NULL,
 	[IsPRIMARY] BIT NOT NULL,
 	[DigitOnlyValue] NVARCHAR(256) NOT NULL
 )
+GO
+Alter Table Phone
+	Add Constraint PK_Phone Primary Key (DigitOnlyValue, PersonRef)
 GO
 
 CREATE TABLE [dbo].[PrivateMessage](

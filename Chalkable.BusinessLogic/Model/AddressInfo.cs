@@ -17,7 +17,7 @@ namespace Chalkable.BusinessLogic.Model
         public string State { get; set; }
         public string PostalCode { get; set; }
         public string Country { get; set; }
-        public int CountryID { get; set; }
+        public int? CountyId { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
     }

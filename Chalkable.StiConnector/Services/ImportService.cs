@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
+using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Model;
 
 namespace Chalkable.StiConnector.Services
@@ -43,9 +45,9 @@ namespace Chalkable.StiConnector.Services
         {
             ImportSchools();
             Log.LogInfo(ChlkResources.IMPORT_PERSONS_START);
+            ImportAddresses();
             ImportSchoolPersons();
             ImportPhones();
-            ImportAddresses();
             Log.LogInfo("Start importing grade levels");
             ImportGradeLevels();
             Log.LogInfo("Start importing school years");
@@ -179,70 +181,81 @@ namespace Chalkable.StiConnector.Services
         private void ImportSchoolPersons()
         {
             int counter = 0;
-            var persons = stiEntities.People;
+            var persons = stiEntities.People.ToList();
 
             foreach (var person in persons)
             {
                 counter++;
                 if (counter % 100 == 0)
                     Log.LogWarning(string.Format(ChlkResources.USERS_PROCESSED, counter));
-                
                 var email = string.Format(userEmailFmt, person.PersonID, ServiceLocatorSchool.Context.DistrictId);
-                
-                string roleId = null;
-                int schoolid;
-
                 var assignments = new List<SchoolAssignmentInfo>();
-                assignments.AddRange(stiEntities.StudentSchools.Select(x=>new SchoolAssignmentInfo{Role = CoreRoles.STUDENT_ROLE.Id, SchoolId = x.SchoolID}));
-                assignments.AddRange(stiEntities.StaffSchools.Select(x=>new SchoolAssignmentInfo{Role = CoreRoles.TEACHER_ROLE.Id, SchoolId = x.SchoolID}));
+                assignments.AddRange(stiEntities.StudentSchools.Where(x=>x.StudentID == person.PersonID).Select(x=>new SchoolAssignmentInfo{Role = CoreRoles.STUDENT_ROLE.Id, SchoolId = x.SchoolID}));
+                assignments.AddRange(stiEntities.StaffSchools.Where(x => x.StaffID == person.PersonID).Select(x => new SchoolAssignmentInfo { Role = CoreRoles.TEACHER_ROLE.Id, SchoolId = x.SchoolID }));
                 //TODO: what about admins? probably will be resolved by API
-                //TODO: need to remake service method to support many schoolpersons
-
-                ServiceLocatorSchool.PersonService.Add(person.PersonID, email, defUserPass, person.FirstName, person.LastName, person.Gender.Code, null, person.DateOfBirth, assignments);
+                
+                try
+                {
+                    ServiceLocatorSchool.PersonService.Add(person.PersonID, email, defUserPass, person.FirstName, person.LastName
+                        , person.Gender != null ? person.Gender.Code : "M", null, person.DateOfBirth, person.PhysicalAddressID, assignments);
+                }
+                catch (Exception ex)
+                {
+                    Log.LogError(string.Format(ex.Message));
+                    Log.LogError(string.Format(ex.StackTrace));
+                }
+                
             }
         }
 
         private void ImportStudentSchoolYears()
         {
-            throw new NotImplementedException();
+            var studentAcadSessions = stiEntities.StudentAcadSessions.ToList();
+            foreach (var studentAcadSession in studentAcadSessions)
+            {
+                if (studentAcadSession.GradeLevelID.HasValue)
+                    ServiceLocatorSchool.SchoolYearService.AssignStudent(studentAcadSession.AcadSessionID, studentAcadSession.StudentID, studentAcadSession.GradeLevelID.Value);
+                else
+                    Log.LogWarning(string.Format("No grade level for student {0} school year {1}", studentAcadSession.StudentID, studentAcadSession.AcadSessionID));
+            }
         }
 
         private void ImportPhones()
         {
-            throw new NotImplementedException();
-            /*foreach (var personTelephone in person.PersonTelephones)
+            var phones = stiEntities.PersonTelephones.ToList();
+            foreach (var pt in phones)
             {
                 var type = PhoneType.Home;
-                if (personTelephone.Description == descrWork)
+                if (pt.Description == descrWork)
                     type = PhoneType.Work;
-                if (personTelephone.Description == descrCell)
+                if (pt.Description == descrCell)
                     type = PhoneType.Mobile;
-                if (!string.IsNullOrEmpty(personTelephone.FormattedTelephoneNumber))
+                if (!string.IsNullOrEmpty(pt.FormattedTelephoneNumber))
                 {
-                    ServiceLocatorSchool.PhoneService.Add(pr.Id, personTelephone.FormattedTelephoneNumber, type, personTelephone.IsPrimary);
+                    ServiceLocatorSchool.PhoneService.Add(pt.TelephoneNumber, pt.PersonID, pt.FormattedTelephoneNumber, type, pt.IsPrimary);
                 }
-
-            }*/
+            }
         }
 
         private void ImportAddresses()
         {
-            throw new NotImplementedException();
-            /*var addr = person.Address ?? person.Address1;
-            if (addr != null)
+            var adds = stiEntities.Addresses.ToList();
+            foreach (var address in adds)
             {
-                ServiceLocatorSchool.AddressService.Add(pr.Id, addr.AddressLine1 + "," + addr.City + "," + addr.PostalCode + "," + addr.State, null, AddressType.Home);
+                ServiceLocatorSchool.AddressService.Add(new AddressInfo
+                    {
+                        AddressLine1 = address.AddressLine1,
+                        AddressLine2 = address.AddressLine2,
+                        AddressNumber = address.AddressNumber,
+                        StreetNumber = address.StreetNumber,
+                        City = address.City,
+                        PostalCode = address.PostalCode,
+                        State = address.State,
+                        Country = address.Country,
+                        CountyId = address.CountryID,
+                        Id = address.AddressID
+                    });
             }
-            else
-                Log.LogWarning(string.Format(ChlkResources.ERR_STI_NO_ADDRESS_FOR_PERSON, person.PersonID));
-
-            if (person.Document != null)
-            {
-                if (person.Document.MIMEType.ToLower().StartsWith(img))//TODO: other picture formats
-                {
-                    ServiceLocatorMaster.PersonPictureService.UploadPicture(pr.Id, person.Document.Data);
-                }
-            }*/
         }
 
         

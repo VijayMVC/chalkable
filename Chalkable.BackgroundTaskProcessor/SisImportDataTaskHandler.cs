@@ -1,6 +1,7 @@
 using System;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.StiConnector.Services;
 
@@ -10,9 +11,11 @@ namespace Chalkable.BackgroundTaskProcessor
     {
         public bool Handle(BackgroundTask task, BackgroundTaskService.BackgroundTaskLog log)
         {
+            if (!task.DistrictRef.HasValue)
+                throw new ChalkableException("No district id for district task");
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
 
-            var districtId = Guid.Parse(task.Data);
+            var districtId = task.DistrictRef.Value;
             
             var district = sl.DistrictService.GetByIdOrNull(districtId);
             

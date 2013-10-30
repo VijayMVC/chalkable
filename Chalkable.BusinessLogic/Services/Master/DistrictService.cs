@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -19,7 +18,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         District GetByIdOrNull(Guid id);
         District Create(string name, string dbName, string sisUrl, string sisUserName, string sisPassword, string timeZone);
         PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue);
-        IList<District> GetDistricts(bool? empty, bool? demo, bool? usedDemo = null);
+        IList<District> GetDistricts(bool? demo, bool? usedDemo = null);
         void Update(District district);
         District UseDemoDistrict();
         void CreateDemo();
@@ -53,8 +52,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         SisUrl = sisUrl,
                         SisUserName = sisUserName,
                         SisPassword = sisPassword,
-                        TimeZone = timeZone,
-                        IsEmpty = false
+                        TimeZone = timeZone
                     };
                 da.Insert(res);
                 uow.Commit();
@@ -75,12 +73,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public IList<District> GetDistricts(bool? empty, bool? demo, bool? usedDemo = null)
+        public IList<District> GetDistricts(bool? demo, bool? usedDemo = null)
         {
             using (var uow = Read())
             {
                 var da = new DistrictDataAccess(uow);
-                return da.GetDistricts(empty, demo, usedDemo);
+                return da.GetDistricts(demo, usedDemo);
             }
         }
 
@@ -121,7 +119,6 @@ namespace Chalkable.BusinessLogic.Services.Master
                     Id = Guid.NewGuid(),
                     Name = prototype.Name + prefix,
                     ServerUrl = server,
-                    IsEmpty = false,
                     TimeZone = prototype.TimeZone,
                     DemoPrefix = prefix
                 };
@@ -204,7 +201,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Update())
             {
                 var da = new DistrictDataAccess(uow);
-                var notUsedDemo = da.GetDistricts(null, true, false).FirstOrDefault();
+                var notUsedDemo = da.GetDistricts(true, false).FirstOrDefault();
                 if (notUsedDemo == null) return null;
                 notUsedDemo.LastUseDemo = DateTime.UtcNow.ConvertFromUtc(notUsedDemo.TimeZone);
                 da.Update(notUsedDemo);

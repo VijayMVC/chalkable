@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Common.Web;
 using Chalkable.Data.School.Model;
@@ -26,7 +25,7 @@ namespace Chalkable.Web.Models
         [SensitiveData]
         public string Country { get; set; }
         [SensitiveData]
-        public int CountryId { get; set; }
+        public int? CountyId { get; set; }
         [SensitiveData]
         public decimal Latitude { get; set; }
         [SensitiveData]
@@ -45,7 +44,7 @@ namespace Chalkable.Web.Models
                            AddressNumber = address.AddressNumber,
                            City = address.City,
                            Country = address.Country,
-                           CountryId = address.CountryID,
+                           CountyId = address.CountyId,
                            Latitude = address.Latitude,
                            Longitude = address.Longitude,
                            PostalCode = address.PostalCode

@@ -72,7 +72,7 @@ namespace Chalkable.BackgroundTaskProcessor
                 }
             }
 
-            var schools = sl.DistrictService.GetDistricts(null, null, null);
+            var schools = sl.DistrictService.GetDistricts(null);
             var runer = new AllSchoolRunner<long>();
             bool res;
             if (backup)

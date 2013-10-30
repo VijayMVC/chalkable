@@ -18,7 +18,7 @@ namespace Chalkable.BusinessLogic.Services
         public string Login { get; private set; }
         public string DistrictName { get; private set; }
         public CoreRole Role { get; private set; }
-        public string SchoolServerUrl { get; private set; }
+        public string districtServerUrl { get; private set; }
         public string SchoolTimeZoneId { get; private set; }
 
         public int? SchoolLocalId { get; set; }
@@ -39,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services
         public UserContext(Guid id, Guid? districtId, Guid? schoolId, string login, string districtName,
             string schoolTimeZoneId, string schoolServerUrl, int? schoolLocalId, CoreRole role, Guid? developerId, int? localId)
         {
-            SchoolServerUrl = schoolServerUrl;
+            districtServerUrl = schoolServerUrl;
             DistrictName = districtName;
             UserId = id;
             SchoolId = schoolId;
@@ -53,7 +53,7 @@ namespace Chalkable.BusinessLogic.Services
             UserLocalId = localId;
 
             if (schoolId.HasValue)
-                SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, SchoolServerUrl, schoolId);
+                SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, districtServerUrl, schoolId);
             MasterConnectionString = Settings.MasterConnectionString;
         }
 
@@ -61,14 +61,14 @@ namespace Chalkable.BusinessLogic.Services
         {
             if (Role != CoreRoles.SUPER_ADMIN_ROLE)
                 throw new ChalkableSecurityException("Only sys admin is able to switch between schools");
-            SchoolServerUrl = districtServerUrl;
+            this.districtServerUrl = districtServerUrl;
             DistrictName = schoolName;
             SchoolId = schoolId;
             SchoolTimeZoneId = schoolTimeZoneId;
             SchoolLocalId = schoolLocalId;
             DistrictId = districtId;
             DeveloperId = developerId;
-            SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, SchoolServerUrl, schoolId);   
+            SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, this.districtServerUrl, districtId);   
         }
 
         private const char DELIMITER = '\n';
@@ -81,7 +81,7 @@ namespace Chalkable.BusinessLogic.Services
                     Login,
                     DistrictName ?? string.Empty,
                     Role.Id.ToString(CultureInfo.InvariantCulture),
-                    SchoolServerUrl ?? string.Empty,
+                    districtServerUrl ?? string.Empty,
                     SchoolTimeZoneId ?? string.Empty,
                     SchoolLocalId.HasValue ? SchoolLocalId.ToString() : string.Empty,
                     DistrictId.HasValue ? DistrictId.ToString() : string.Empty,

@@ -12,16 +12,11 @@ namespace Chalkable.BusinessLogic.Services.School
 
     public interface IPersonService
     {
-        Person Add(int localId, string email, string password, string firstName, string lastName, string gender, string salutation, DateTime? birthDate, IList<SchoolAssignmentInfo> assignments);
-        Person Edit(int localId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate);
-
-        Person EditStudent(int studentId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate
-            ,bool iep, DateTime enrollmentDate, string previousSchool, string previousSchoolPhone, string previousSchoolNote, Guid? gradeLevelId);
-
+        Person Add(int localId, string email, string password, string firstName, string lastName, string gender, string salutation, DateTime? birthDate, int? addressId, IList<SchoolAssignmentInfo> assignments);
+        Person Edit(int localId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate, int? addressId);
         void Delete(int id);
         IList<Person> GetPersons();
         PaginatedList<Person> GetPaginatedPersons(PersonQuery query); 
-        //PaginatedList<Person> GetPersons(int? roleId, Guid? classId, IList<Guid> gradeLevelId, string filter, SortTypeEnum sortType = SortTypeEnum.ByLastName, int start = 0, int count = int.MaxValue); 
         Person GetPerson(int id);
         PersonDetails GetPersonDetails(int id);
         void ActivatePerson(int id);
@@ -41,7 +36,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         //TODO: needs tests
-        public Person Add(int localId, string email, string password, string firstName, string lastName, string gender, string salutation, DateTime? birthDate, IList<SchoolAssignmentInfo> assignments)
+        public Person Add(int localId, string email, string password, string firstName, string lastName, string gender, string salutation, DateTime? birthDate, int? addressId, IList<SchoolAssignmentInfo> assignments)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -58,7 +53,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     ServiceLocator.ServiceLocatorMaster.UserService.AssignUserToSchool(user.Id, assignment.SchoolId, assignment.Role);
                 }
 
-
                 var person = new Person
                     {
                         Id = localId,
@@ -69,6 +63,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         LastName = lastName,
                         Gender = gender,
                         Salutation = salutation,
+                        AddressRef = addressId
                     };
                 da.Insert(person);
                 var schoolDataAccess = new SchoolPersonDataAccess(uow);
@@ -142,20 +137,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 }).Persons.First();
         }
 
-        //public PaginatedList<Person> GetPersons(int? roleId, Guid? classId, IList<Guid> gradeLevelId, string filter, SortTypeEnum sortType = SortTypeEnum.ByLastName, int start = 0, int count = int.MaxValue)
-        //{
-        //   return GetPaginatedPersons(new PersonQuery
-        //        {
-        //            RoleId = roleId,
-        //            ClassId = classId,
-        //            GradeLevelIds = gradeLevelId,
-        //            Filter = filter,
-        //            SortType = sortType,
-        //            Start = start,
-        //            Count = count
-        //        });
-        //}
-
         public PersonDetails GetPersonDetails(int id)
         {
             using (var uow = Read())
@@ -164,37 +145,18 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public Person Edit(int localId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate)
+        public Person Edit(int localId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate, int? addressId)
         {
             using (var uow = Update())
             {
-                var res = Edit(new PersonDataAccess(uow, Context.SchoolLocalId), localId, email, firstName, lastName, gender, salutation, birthDate);
+                var res = Edit(new PersonDataAccess(uow, Context.SchoolLocalId), localId, email, firstName, lastName, gender, salutation, birthDate, addressId);
                 uow.Commit();
                 return res;
             }
         }
 
-        public Person EditStudent(int studentId, string email, string firstName, string lastName, string gender, string salutation, 
-            DateTime? birthDate, bool iep, DateTime enrollmentDate, string previousSchool, string previousSchoolPhone, 
-            string previousSchoolNote, Guid? gradeLevelId)
-        {
-            if(!(BaseSecurity.IsAdminOrTeacher(Context) || Context.UserLocalId == studentId))
-                throw new ChalkableSecurityException();
-            
-            using (var uow = Update())
-            {
-                var student = Edit(new PersonDataAccess(uow, Context.SchoolLocalId), studentId, email, firstName, lastName, gender, salutation, birthDate);
-                //if (gradeLevelId.HasValue)
-                //    student.StudentInfo.GradeLevelRef = gradeLevelId.Value;
-
-                //new StudentInfoDataAccess(uow).Update(student.StudentInfo);
-                uow.Commit();
-                return student;
-            }
-        }
-
         private Person Edit(PersonDataAccess dataAccess, int localId, string email, string firstName
-                    , string lastName, string gender, string salutation, DateTime? birthDate)
+                    , string lastName, string gender, string salutation, DateTime? birthDate, int? addressId)
         {
             var res = GetPerson(localId);
             var user = ServiceLocator.ServiceLocatorMaster.UserService.GetByLogin(res.Email);
@@ -204,6 +166,7 @@ namespace Chalkable.BusinessLogic.Services.School
             res.Gender = gender;
             res.Salutation = salutation;
             res.BirthDate = birthDate;
+            res.AddressRef = addressId;
             dataAccess.Update(res);
             return res;
         }

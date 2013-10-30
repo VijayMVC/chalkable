@@ -10,8 +10,7 @@ Create Table District
 	TimeZone nvarchar(1024) not null,
 	DemoPrefix nvarchar(256),
 	LastUseDemo DateTime2,
-	ServerUrl nvarchar(256) not null,
-	IsEmpty bit not null
+	ServerUrl nvarchar(256) not null
 )
 GO
 

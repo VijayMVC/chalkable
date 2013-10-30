@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Orm;
@@ -12,9 +11,9 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         IList<Phone> GetPhones();
         IList<Phone> GetPhones(int personId);
-        Phone Add(int id, int personId, string value, PhoneType type, bool isPrimary);
-        Phone Edit(int id, string value, PhoneType type, bool isPrimary);
-        void Delete(int id);
+        Phone Add(string digitOnlyValue, int personId, string value, PhoneType type, bool isPrimary);
+        Phone Edit(string digitOnlyValue, int personId, string value, PhoneType type, bool isPrimary);
+        void Delete(string digitOnlyValue, int personId);
         IList<Person> GetUsersByPhone(string phone);
     }
 
@@ -50,7 +49,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public Phone Add(int id, int personId, string value, PhoneType type, bool isPrimary)
+        public Phone Add(string digitOnlyValue, int personId, string value, PhoneType type, bool isPrimary)
         {
             if (!(BaseSecurity.IsDistrict(Context) || Context.UserLocalId == personId))//TODO:can teacher do this?
                 throw new ChalkableSecurityException();
@@ -59,11 +58,10 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new PhoneDataAccess(uow);
                 var phone = new Phone
                     {
-                        Id = id,
                         Value = value,
                         DigitOnlyValue = DigitsOnly(value),
                         PersonRef = personId,
-                        IsPRIMARY = isPrimary,
+                        IsPrimary = isPrimary,
                         Type = type
                     };
                 da.Insert(phone);
@@ -72,17 +70,17 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public Phone Edit(int id, string value, PhoneType type, bool isPrimary)
+        public Phone Edit(string digitOnlyValue, int personId, string value, PhoneType type, bool isPrimary)
         {
             using (var uow = Update())
             {
                 var da = new PhoneDataAccess(uow);
-                var phone = da.GetById(id);
+                var phone = da.GetPhone(personId, digitOnlyValue);
                 if (!(BaseSecurity.IsDistrict(Context) || Context.UserLocalId == phone.PersonRef))//TODO:can teacher do this?
                     throw new ChalkableSecurityException();
                 phone.DigitOnlyValue = DigitsOnly(value);
                 phone.Value = value;
-                phone.IsPRIMARY = isPrimary;
+                phone.IsPrimary = isPrimary;
                 phone.Type = type;
                 da.Update(phone);
                 uow.Commit();
@@ -90,15 +88,15 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void Delete(int id)
+        public void Delete(string digitOnlyValue, int personId)
         {
             using (var uow = Update())
             {
                 var da = new PhoneDataAccess(uow);
-                var phone = da.GetById(id);
+                var phone = da.GetPhone(personId, digitOnlyValue);
                 if (!(BaseSecurity.IsDistrict(Context) || Context.UserLocalId == phone.PersonRef))
                     throw new ChalkableSecurityException();
-                da.Delete(phone.Id);
+                da.Delete(phone);
                 uow.Commit();
             }
         }

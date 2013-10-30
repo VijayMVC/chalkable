@@ -14,6 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
         SchoolYear Edit(int id, string name, string description, DateTime startDate, DateTime endDate);
         SchoolYear GetSchoolYearById(int id);
         PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue);
+        void AssignStudent(int schoolYearId, int personId, int gradeLevelId);
         void Delete(int schoolYearId);
         SchoolYear GetCurrentSchoolYear();
         IList<SchoolYear> GetSortedYears();
@@ -100,6 +101,21 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
                 return da.GetPage(start, count);
+            }
+        }
+
+        public void AssignStudent(int schoolYearId, int personId, int gradeLevelId)
+        {
+            using (var uow = Update())
+            {
+                var da = new StudentSchoolYearDataAccess(uow);
+                da.Insert(new StudentSchoolYear
+                    {
+                        GradeLevelRef = gradeLevelId,
+                        SchoolYearRef = schoolYearId,
+                        StudentRef = personId
+                    });
+                uow.Commit();
             }
         }
 

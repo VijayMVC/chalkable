@@ -18,7 +18,7 @@ namespace Chalkable.BackgroundTaskProducer.Producers
             var existing = sl.BackgroundTaskService.Find(null, BackgroundTaskStateEnum.Created, BackgroundTaskTypeEnum.CreateDemoDistrict);
             if (existing == null)
             {
-                var have = sl.DistrictService.GetDistricts(false, true, false).Count;
+                var have = sl.DistrictService.GetDistricts(true, false).Count;
                 int need = Settings.Configuration.DemoSchoolsReserved;
                 int cnt = Math.Max(0, need - have);
                 if (cnt > 0)

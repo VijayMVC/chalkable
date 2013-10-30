@@ -11,7 +11,7 @@ namespace Chalkable.BackgroundTaskProcessor
         public bool Handle(BackgroundTask task, BackgroundTaskService.BackgroundTaskLog log)
         {
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var have = sl.DistrictService.GetDistricts(false, true, false).Count;
+            var have = sl.DistrictService.GetDistricts(true, false).Count;
             int need = Settings.Configuration.DemoSchoolsReserved;
             var cnt = Math.Max(0, need - have);
             log.LogInfo(string.Format("There are {0} demo schools to create", cnt));

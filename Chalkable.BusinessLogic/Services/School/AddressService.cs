@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -63,9 +61,11 @@ namespace Chalkable.BusinessLogic.Services.School
             address.AddressLine1 = addressInfo.AddressLine1;
             address.AddressLine2 = addressInfo.AddressLine2;
             address.AddressNumber = addressInfo.AddressNumber;
+            address.StreetNumber = addressInfo.StreetNumber;
             address.City = addressInfo.City;
+            address.State = addressInfo.State;
             address.Country = addressInfo.Country;
-            address.CountryID = addressInfo.CountryID;
+            address.CountyId = addressInfo.CountyId;
             address.Latitude = addressInfo.Latitude;
             address.Longitude = addressInfo.Longitude;
             address.PostalCode = addressInfo.PostalCode;

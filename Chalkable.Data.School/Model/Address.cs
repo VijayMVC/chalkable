@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.Data.Common;
-
-namespace Chalkable.Data.School.Model
+﻿namespace Chalkable.Data.School.Model
 {
     public class Address
     {
@@ -19,7 +12,7 @@ namespace Chalkable.Data.School.Model
         public string State { get; set; }
         public string PostalCode { get; set; }
         public string Country { get; set; }
-        public int CountryID { get; set; }
+        public int? CountyId { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
     }
