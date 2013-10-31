@@ -22,7 +22,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IRoomService RoomService { get; }
         IPeriodService PeriodService { get; }
         ICalendarDateService CalendarDateService { get; }
-        IScheduleSectionService DayTypeService { get; }
+        IDayTypeService DayTypeService { get; }
         IClassPeriodService ClassPeriodService { get; }
         INotificationService NotificationService { get; }
         IAttendanceService AttendanceService { get; }
@@ -58,7 +58,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IRoomService roomService;
         private IPeriodService periodService;
         private ICalendarDateService calendarDateService;
-        private IScheduleSectionService dayTypeService;
+        private IDayTypeService dayTypeService;
         private IClassPeriodService classPeriodService;
         private INotificationService notificationService;
         private IAttendanceService attendanceService;
@@ -95,7 +95,7 @@ namespace Chalkable.BusinessLogic.Services.School
             roomService = new RoomService(this);
             periodService = new PeriodService(this);
             calendarDateService = new CalendarDateService(this);
-            dayTypeService = new ScheduleSectionService(this);
+            dayTypeService = new DayTypeService(this);
             classPeriodService = new ClassPeriodService(this);
             notificationService = new NotificationService(this);
             attendanceReasonService = new AttendanceReasonService(this);
@@ -131,7 +131,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IPeriodService PeriodService { get { return periodService; } }
         public IServiceLocatorMaster ServiceLocatorMaster { get { return serviceLocatorMaster; } }
         public ICalendarDateService CalendarDateService { get { return calendarDateService; } }
-        public IScheduleSectionService DayTypeService { get { return dayTypeService; } }
+        public IDayTypeService DayTypeService { get { return dayTypeService; } }
         public IClassPeriodService ClassPeriodService { get { return classPeriodService; } }
         public INotificationService NotificationService { get { return notificationService; } }
         public IAttendanceService AttendanceService { get { return attendanceService; } }

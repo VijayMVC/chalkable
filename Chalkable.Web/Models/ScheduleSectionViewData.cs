@@ -15,7 +15,7 @@ namespace Chalkable.Web.Models
 
         private DateTypeViewData() { }
 
-        public static DateTypeViewData Create(DateType section)
+        public static DateTypeViewData Create(DayType section)
         {
             return new DateTypeViewData
             {
@@ -26,7 +26,7 @@ namespace Chalkable.Web.Models
             };
         }
 
-        public static IList<DateTypeViewData> Create(IList<DateType> sections)
+        public static IList<DateTypeViewData> Create(IList<DayType> sections)
         {
             return sections.Select(Create).ToList();
         }

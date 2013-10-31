@@ -91,8 +91,8 @@ namespace Chalkable.Data.School.DataAccess
         {
             var q = new DbQuery();
             q.Sql.AppendFormat(@"select [Date].*, {0} from [Date] 
-                             left join DateType on DateType.Id = [Date].DateTypeRef"
-                           , Orm.ComplexResultSetQuery(new List<Type> {typeof (DateType)}));
+                             left join DayType on DayType.Id = [Date].DateTypeRef"
+                           , Orm.ComplexResultSetQuery(new List<Type> {typeof (DayType)}));
             q = BuildConditionQuery(q, query);
             q.Sql.AppendFormat(" order by Day desc OFFSET 0 ROWS FETCH NEXT {0} ROWS ONLY ", query.Count);
             q.Sql.Insert(0, " select * from (").Append(")x order by x.Day");
@@ -108,7 +108,7 @@ namespace Chalkable.Data.School.DataAccess
                 {
                     var date = reader.Read<DateDetails>();
                     if(date.DateTypeRef.HasValue)
-                        date.DateType = reader.Read<DateType>(true);
+                        date.DayType = reader.Read<DayType>(true);
                     res.Add(date);
                 }
                 return res;

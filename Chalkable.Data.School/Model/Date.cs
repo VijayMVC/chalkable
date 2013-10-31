@@ -22,6 +22,6 @@ namespace Chalkable.Data.School.Model
 
     public class DateDetails : Date
     {
-        public DateType DateType { get; set; }
+        public DayType DayType { get; set; }
     }
 }

@@ -217,7 +217,7 @@ namespace Chalkable.StiConnector.Services
 
         private void ImportStudentSchoolYears()
         {
-            if (ServiceLocatorSchool.SchoolYearService.GetSortedYears().Count > 0)
+            if (ServiceLocatorSchool.SchoolYearService.GetStudentAssignments().Count > 0)
                 return;//TODO: untill versioning is implemented
             var studentAcadSessions = stiEntities.StudentAcadSessions.ToList();
             foreach (var studentAcadSession in studentAcadSessions)
@@ -231,6 +231,8 @@ namespace Chalkable.StiConnector.Services
 
         private void ImportPhones()
         {
+            if (ServiceLocatorSchool.PhoneService.GetPhones().Count > 0)
+                return;//TODO: untill versioning is implemented
             var phones = stiEntities.PersonTelephones.ToList();
             foreach (var pt in phones)
             {
@@ -286,16 +288,17 @@ namespace Chalkable.StiConnector.Services
                     Log.LogWarning(string.Format(ChlkResources.ERR_SCHEDULE_IMPORT_END_DATE_IS_NULL, calendar.AcadSessionID));
                     continue;
                 }
-                ServiceLocatorSchool.SchoolYearService.Add(calendar.AcadSessionID, calendar.AcadYear.ToString(CultureInfo.InvariantCulture),
+                ServiceLocatorSchool.SchoolYearService.Add(calendar.AcadSessionID, calendar.SchoolID, calendar.AcadYear.ToString(CultureInfo.InvariantCulture),
                                                            calendar.Name, calendar.StartDate.Value, calendar.EndDate.Value);
-                
             }
-
-
         }
 
         private void ImportDays()
         {
+            var schoolYears = ServiceLocatorSchool.SchoolYearService.GetSchoolYears();
+            if (schoolYears.Any(x => ServiceLocatorSchool.CalendarDateService.GetLastDays(x.Id, false, null, null).Count > 0))
+                return;//TODO: untill versioning is implemented
+
             var days = stiEntities.CalendarDays.ToList();
             foreach (var day in days)
             {
@@ -321,13 +324,15 @@ namespace Chalkable.StiConnector.Services
                     Log.LogWarning(string.Format(ChlkResources.ERR_SCHEDULE_IMPORT_TERM_HAS_END_DATE_NULL, term.TermID));
                     continue;
                 }
-                ServiceLocatorSchool.MarkingPeriodService.Add(0, term.AcadSessionID, term.StartDate.Value, term.EndDate.Value, term.Name, term.Description, 62);
+                ServiceLocatorSchool.MarkingPeriodService.Add(term.TermID, term.AcadSessionID, term.StartDate.Value, term.EndDate.Value, term.Name, term.Description, 62);
             }
         }
 
         private const string UNKNOWN_ROOM_NUMBER = "Unknown number";
         private void ImportRooms()
         {
+            if (ServiceLocatorSchool.RoomService.GetRooms().Count > 0)
+                return;//TODO: untill versioning is implemented
             var rooms = stiEntities.Rooms.ToList();
             foreach (var room in rooms)
             {

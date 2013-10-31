@@ -246,7 +246,8 @@ namespace Chalkable.Data.Common.Orm
         {
             var res = new DbQuery();
             res.Sql.AppendFormat("Select * from [{0}] ", tableName);
-            queryCondition.BuildSqlWhere(res, tableName);
+            if (queryCondition != null)
+                queryCondition.BuildSqlWhere(res, tableName);
             return res;   
         }
 

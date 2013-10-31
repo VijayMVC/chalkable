@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -11,7 +10,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IMarkingPeriodService
     {
-        MarkingPeriod Add(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays, bool generatePeriods = false);
+        MarkingPeriod Add(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays);
         void Delete(int id);
         MarkingPeriod Edit(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays);
         MarkingPeriod GetMarkingPeriodById(int id);
@@ -85,12 +84,10 @@ namespace Chalkable.BusinessLogic.Services.School
             return null;
         }
 
-        public MarkingPeriod Add(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays, bool generatePeriods = false)
+        public MarkingPeriod Add(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            if (!Context.SchoolId.HasValue)
-                throw new UnassignedUserException();
             using (var uow = Update())
             {
                 var da = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId);
@@ -98,11 +95,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 var mp = AddMarkingPeriod(da, sy, startDate, endDate, name, description, weekDays, new MarkingPeriod{Id = id});
                 da.Insert(mp);
                 uow.Commit();
-                if (generatePeriods)
-                {
-                    var names = new[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-                    // todo ServiceLocator.DayTypeService.GenerateScheduleSectionsWithDefaultPeriods(mp.Id, names);
-                }
                 return mp;
             }
         }

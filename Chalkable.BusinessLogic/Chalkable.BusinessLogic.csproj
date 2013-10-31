@@ -106,6 +106,7 @@
     <Compile Include="Services\School\AttendanceReasonService.cs" />
     <Compile Include="Services\School\AttendanceService.cs" />
     <Compile Include="Services\School\CalendarDateService.cs" />
+    <Compile Include="Services\School\DayTypeService.cs" />
     <Compile Include="Services\School\DisciplineService.cs" />
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
@@ -123,7 +124,6 @@
     <Compile Include="Services\School\PhoneService.cs" />
     <Compile Include="Services\School\PrivateMessageService.cs" />
     <Compile Include="Services\School\RoomService.cs" />
-    <Compile Include="Services\School\ScheduleSectionService.cs" />
     <Compile Include="Services\School\SchoolPersonService.cs" />
     <Compile Include="Services\School\SchoolService.cs" />
     <Compile Include="Services\School\SchoolServiceBase.cs" />

@@ -134,7 +134,7 @@
     <Compile Include="Model\ReportDownload.cs" />
     <Compile Include="Model\ReportMailDelivery.cs" />
     <Compile Include="Model\Room.cs" />
-    <Compile Include="Model\DateType.cs" />
+    <Compile Include="Model\DayType.cs" />
     <Compile Include="Model\School.cs" />
     <Compile Include="Model\SchoolGradeLevel.cs" />
     <Compile Include="Model\SchoolPerson.cs" />

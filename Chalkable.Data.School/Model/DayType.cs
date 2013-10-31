@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Chalkable.Data.School.Model
 {
-    public class DateType
+    public class DayType
     {
         public const string NUMBER_FIELD = "Number";
         public const string SCHOOL_YEAR_REF = "SchoolYearRef";

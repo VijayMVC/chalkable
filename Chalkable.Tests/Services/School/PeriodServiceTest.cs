@@ -68,7 +68,7 @@
 //            var sy = SchoolYearServiceTest.CreateNextSchoolYear(SchoolTestContext, SchoolTestContext.NowDate.AddDays(-7));
 //            var mp1 = MarkingPeriodServiceTest.CreateNextMp(SchoolTestContext, sy.Id);
 //            var mp2 = MarkingPeriodServiceTest.CreateNextMp(SchoolTestContext, sy.Id);
-//            SchoolTestContext.AdminGradeSl.ScheduleSectionService.GenerateDefaultSections(mp1.Id);
+//            SchoolTestContext.AdminGradeSl.DayTypeService.GenerateDefaultSections(mp1.Id);
 //            int startTime = 450, pLength = 50, notPLength = 10, pCount = 5;
 //            var mpIds = new List<Guid> { mp1.Id};
             

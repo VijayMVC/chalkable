@@ -218,7 +218,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 if (dateTypeId.HasValue)
                 {
-                    //var section = new DateTypeDataAccess(uow).GetById(dateType.Value);
+                    //var section = new DateTypeDataAccess(uow).GetById(DayType.Value);
                     //if (!markingPeriodId.HasValue)
                     //    markingPeriodId = section.MarkingPeriodRef;
                     //if (markingPeriodId.Value != section.MarkingPeriodRef)
