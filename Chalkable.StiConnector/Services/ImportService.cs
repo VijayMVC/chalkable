@@ -119,7 +119,6 @@ namespace Chalkable.StiConnector.Services
 
             var courses = stiEntities.Courses.ToList();
             foreach (var course in courses)
-                if (course.AcadSessionID.HasValue)
             {
                 if (!course.PrimaryTeacherID.HasValue)
                 {

@@ -485,7 +485,7 @@ add SchoolRef int not null constraint FK_MarkingPeriod_School foreign key refere
 go
 
 alter table Class 
-add SchoolRef int not null constraint FK_Class_School foreign key references School(Id)
+add SchoolRef int constraint FK_Class_School foreign key references School(Id)
 go
 
 alter table MarkingPeriodClass 

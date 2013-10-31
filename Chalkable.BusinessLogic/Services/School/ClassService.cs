@@ -11,7 +11,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IClassService
     {
-        ClassDetails Add(int classId, int schoolYearId, Guid? chlkableDepartmentId, string name, string description, int teacherId, int gradeLevelId);
+        ClassDetails Add(int classId, int? schoolYearId, Guid? chlkableDepartmentId, string name, string description, int? teacherId, int gradeLevelId);
         ClassDetails Edit(int classId, Guid? chlkableDepartmentId, string name, string description, int teacherId, int gradeLevelId);
         void Delete(int id);
 
@@ -35,8 +35,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         //TODO: needs test
-        public ClassDetails Add(int classId, int schoolYearId, Guid? chlkableDepartmentId, string name
-            , string description, int teacherId, int gradeLevelId)
+        public ClassDetails Add(int classId, int? schoolYearId, Guid? chlkableDepartmentId, string name
+            , string description, int? teacherId, int gradeLevelId)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
@@ -44,7 +44,9 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new ClassDataAccess(uow, Context.SchoolLocalId);
-                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetById(schoolYearId);
+                SchoolYear sy = null;
+                if (schoolYearId.HasValue)
+                    sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetById(schoolYearId.Value);
                 var cClass = new Class
                     {
                         Id = classId,
@@ -54,10 +56,9 @@ namespace Chalkable.BusinessLogic.Services.School
                         Name = name,
                         SchoolYearRef = schoolYearId,
                         TeacherRef = teacherId,
-                        SchoolRef = sy.SchoolRef
+                        SchoolRef = sy != null ? sy.SchoolRef : (int?)null
                     };
                 da.Insert(cClass);
-                //CreateMarkingPeriodClasses(cClass, markingPeriodsId, uow);
                 uow.Commit();
                 return GetClassById(cClass.Id);
             }
@@ -92,7 +93,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     ClassRef = classId,
                     MarkingPeriodRef = markingPeriodId,
-                    SchoolRef = schoolId
+                    SchoolRef = schoolId.Value
                 };
                 mpClassDa.Insert(mpc);
             }
@@ -147,7 +148,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         {
                             PersonRef = personId,
                             ClassRef = classId,
-                            SchoolRef = cClass.SchoolRef
+                            SchoolRef = cClass.SchoolRef.Value
                         });    
                 }
                 uow.Commit();
