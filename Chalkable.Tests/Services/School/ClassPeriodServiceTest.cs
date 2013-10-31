@@ -15,7 +15,7 @@
 //        {
 //            var sy = SchoolYearServiceTest.CreateNextSchoolYear(SchoolTestContext, SchoolTestContext.NowDate.AddDays(-7));
 //            var mp = MarkingPeriodServiceTest.CreateNextMp(SchoolTestContext, sy.Id);
-//            SchoolTestContext.AdminGradeSl.ScheduleSectionService.GenerateDefaultSections(mp.Id);
+//            SchoolTestContext.AdminGradeSl.DayTypeService.GenerateDefaultSections(mp.Id);
 //            var cDate = SchoolTestContext.AdminGradeSl.CalendarDateService.GetCalendarDateByDate(SchoolTestContext.NowDate);
 //            var course = SchoolTestContext.AdminGradeSl.CourseService.Add("001", "course1", null);
 //            var room1 = SchoolTestContext.AdminGradeSl.RoomService.AddRoom("001", "room1", "10X10", null, "333-444");

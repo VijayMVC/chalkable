@@ -101,7 +101,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (generatePeriods)
                 {
                     var names = new[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-                    // todo ServiceLocator.ScheduleSectionService.GenerateScheduleSectionsWithDefaultPeriods(mp.Id, names);
+                    // todo ServiceLocator.DayTypeService.GenerateScheduleSectionsWithDefaultPeriods(mp.Id, names);
                 }
                 return mp;
             }

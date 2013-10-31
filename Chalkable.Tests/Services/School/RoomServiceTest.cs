@@ -56,7 +56,7 @@
 //            var nowTime = (int) (nowDate - nowDate.Date).TotalMinutes;
 //            var sy = SchoolYearServiceTest.CreateNextSchoolYear(SchoolTestContext, nowDate.AddDays(-7));
 //            var mp = MarkingPeriodServiceTest.CreateNextMp(SchoolTestContext, sy.Id);
-//            SchoolTestContext.AdminGradeSl.ScheduleSectionService.GenerateDefaultSections(mp.Id);
+//            SchoolTestContext.AdminGradeSl.DayTypeService.GenerateDefaultSections(mp.Id);
 //            var cDate = SchoolTestContext.AdminGradeSl.CalendarDateService.GetCalendarDateByDate(nowDate.Date);
 //            var currentPeriod = SchoolTestContext.AdminGradeSl.PeriodService.Add(mp.Id, nowTime - 10, nowTime + 30, cDate.ScheduleSectionRef.Value, 0);
 //            var course = SchoolTestContext.AdminGradeSl.CourseService.Add("test", "test", null);

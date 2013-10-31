@@ -156,7 +156,7 @@ namespace Chalkable.BusinessLogic.Services.School
             //        throw new UnassignedUserException();
                 
             //    IList<Period> res = new List<Period>();
-            //    if (ServiceLocator.ScheduleSectionService.CanDeleteSections(markingPeriodIds.ToList()))
+            //    if (ServiceLocator.DayTypeService.CanDeleteSections(markingPeriodIds.ToList()))
             //    {
 
             //        var da = new PeriodDataAccess(uow);

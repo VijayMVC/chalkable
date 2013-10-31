@@ -87,7 +87,7 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public IList<Address> GetAddress()
         {
-            if(!BaseSecurity.IsAdminOrTeacher(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Read())

@@ -50,14 +50,14 @@ namespace Chalkable.StiConnector.Services
             ImportPhones();
             Log.LogInfo("Start importing grade levels");
             ImportGradeLevels();
-            Log.LogInfo("Start importing school years");
-            ImportStudentSchoolYears();
             Log.LogInfo(ChlkResources.SCHOOL_YEAR_IMPORT_START);
             ImportSchoolYears();
+            ImportStudentSchoolYears();
+            
             Log.LogInfo("Start importing marking periods");
             ImportMarkingPeriods();
             Log.LogInfo("Start importing day types");
-            ImportDaytypes();
+            ImportDayTypes();
             Log.LogInfo("Start importing days");
             ImportDays();
             
@@ -75,6 +75,8 @@ namespace Chalkable.StiConnector.Services
         
         private void ImportSchools()
         {
+            if (ServiceLocatorSchool.SchoolService.GetSchools().Count > 0)
+                return;//TODO: untill versioning is implemented
             foreach (var school in stiEntities.Schools)
             {
                 ServiceLocatorSchool.SchoolService.Add(new Data.School.Model.School
@@ -163,6 +165,8 @@ namespace Chalkable.StiConnector.Services
         private void ImportGradeLevels()
         {
             var existing = ServiceLocatorSchool.GradeLevelService.GetGradeLevels();
+            if (existing.Count > 0)
+                return;//TODO: untill versioning is implemented
             var sisGradeLevels = stiEntities.GradeLevels.ToList();
             foreach (var gradeLevel in sisGradeLevels)
                 if (!existing.Any(x => x.Name == gradeLevel.Name))
@@ -180,6 +184,9 @@ namespace Chalkable.StiConnector.Services
 
         private void ImportSchoolPersons()
         {
+            if (ServiceLocatorSchool.SchoolPersonService.GetAll().Count > 0)
+                return;//TODO: untill versioning is implemented
+
             int counter = 0;
             var persons = stiEntities.People.ToList();
 
@@ -210,6 +217,8 @@ namespace Chalkable.StiConnector.Services
 
         private void ImportStudentSchoolYears()
         {
+            if (ServiceLocatorSchool.SchoolYearService.GetSortedYears().Count > 0)
+                return;//TODO: untill versioning is implemented
             var studentAcadSessions = stiEntities.StudentAcadSessions.ToList();
             foreach (var studentAcadSession in studentAcadSessions)
             {
@@ -239,6 +248,8 @@ namespace Chalkable.StiConnector.Services
 
         private void ImportAddresses()
         {
+            if (ServiceLocatorSchool.AddressService.GetAddress().Count > 0)
+                return;//TODO: untill versioning is implemented
             var adds = stiEntities.Addresses.ToList();
             foreach (var address in adds)
             {
@@ -261,6 +272,8 @@ namespace Chalkable.StiConnector.Services
         
         private void ImportSchoolYears()
         {
+            if (ServiceLocatorSchool.SchoolYearService.GetSortedYears().Count > 0)
+                return;//TODO: untill versioning is implemented
             foreach (var calendar in stiEntities.AcadSessions)
             {
                 if (!calendar.StartDate.HasValue)
@@ -292,6 +305,9 @@ namespace Chalkable.StiConnector.Services
 
         private void ImportMarkingPeriods()
         {
+            if (ServiceLocatorSchool.MarkingPeriodService.GetMarkingPeriods(null).Count > 0)
+                return;//TODO: untill versioning is implemented
+
             var terms = stiEntities.Terms.ToList();
             foreach (var term in terms)
             {
@@ -319,18 +335,26 @@ namespace Chalkable.StiConnector.Services
             }
         }
 
-        private void ImportDaytypes()
+        private void ImportDayTypes()
         {
+            var schoolYears = ServiceLocatorSchool.SchoolYearService.GetSchoolYears();
+            if (schoolYears.Any(x => ServiceLocatorSchool.DayTypeService.GetSections(x.Id).Count > 0))
+                return;//TODO: untill versioning is implemented
+            
             var dayTypes = stiEntities.DayTypes.ToList();
             foreach (var dayType in dayTypes)
             {
-                var scheduleSection = ServiceLocatorSchool.ScheduleSectionService.Add(dayType.DayTypeID, dayType.Sequence, dayType.Name, dayType.AcadSessionID);
+                var scheduleSection = ServiceLocatorSchool.DayTypeService.Add(dayType.DayTypeID, dayType.Sequence, dayType.Name, dayType.AcadSessionID);
                 Log.LogInfo(string.Format(ChlkResources.IMPORT_GENERAL_PERIODS_FOR_SCHEDULE_SECTION_START, scheduleSection.Id));
             }
         }
 
         private void ImportPeriods()
         {
+            var schoolYears = ServiceLocatorSchool.SchoolYearService.GetSchoolYears();
+            if (schoolYears.Any(x => ServiceLocatorSchool.PeriodService.GetPeriods(x.Id).Count > 0))
+                return;//TODO: untill versioning is implemented
+
             var periods = stiEntities.TimeSlots.ToList();
             foreach (var timeSlot in periods)
             {

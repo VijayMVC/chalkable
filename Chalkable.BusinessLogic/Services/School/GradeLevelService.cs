@@ -32,7 +32,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void AddGradeLevel(int id, string name, int number)
         {
-            if (BaseSecurity.IsAdminGrader(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())

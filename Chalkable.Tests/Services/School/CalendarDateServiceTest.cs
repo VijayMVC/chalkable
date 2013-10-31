@@ -21,7 +21,7 @@
 
 //            var mp2 = MarkingPeriodServiceTest.CreateNextMp(SchoolTestContext, mp.SchoolYearRef);
 //            var dateService = SchoolTestContext.AdminGradeSl.CalendarDateService;
-//            var sections = SchoolTestContext.AdminGradeSl.ScheduleSectionService.GetSections(mp.Id);
+//            var sections = SchoolTestContext.AdminGradeSl.DayTypeService.GetSections(mp.Id);
 //            AssertException<Exception>(() => dateService.Add(SchoolTestContext.NowDate, false, mp.Id, sections[0].Id, null));
 //            AssertException<Exception>(() => dateService.Add(SchoolTestContext.NowDate, true, mp2.Id, sections[0].Id, null));
 
@@ -42,7 +42,7 @@
 //        public void AssignDateTest()
 //        {
 //            var mp = MarkingPeriodServiceTest.CreateSchoolYearWithMp(SchoolTestContext, SchoolTestContext.NowDate.AddDays(-7), true);
-//            var sections = SchoolTestContext.AdminGradeSl.ScheduleSectionService.GetSections(mp.Id);
+//            var sections = SchoolTestContext.AdminGradeSl.DayTypeService.GetSections(mp.Id);
 //            var section1 = sections[0];
 //            var cDate = SchoolTestContext.AdminGradeSl.CalendarDateService.Add(SchoolTestContext.NowDate, true, mp.Id, section1.Id, null);
            
@@ -55,8 +55,8 @@
 
 //            var mp2 = MarkingPeriodServiceTest.CreateNextMp(SchoolTestContext, mp.SchoolYearRef);
 //            var sectionNames = new List<string>{"A","B","C"};
-//            SchoolTestContext.AdminGradeSl.ScheduleSectionService.ReBuildSections(sectionNames, new List<Guid>{mp2.Id});
-//            var sections2 = SchoolTestContext.AdminGradeSl.ScheduleSectionService.GetSections(mp2.Id);
+//            SchoolTestContext.AdminGradeSl.DayTypeService.ReBuildSections(sectionNames, new List<Guid>{mp2.Id});
+//            var sections2 = SchoolTestContext.AdminGradeSl.DayTypeService.GetSections(mp2.Id);
             
 //            AssertException<Exception>(() => SchoolTestContext.AdminGradeSl.CalendarDateService.CanAssignDate(cDate.Id, sections2[0].Id));
 //            AssertException<Exception>(() => SchoolTestContext.AdminGradeSl.CalendarDateService.AssignDate(cDate.Id, sections2[0].Id));
@@ -85,7 +85,7 @@
 //            var mpInterval = 30;
 //            var mpStartDate = SchoolTestContext.NowTime.AddDays(-5).Date;
 //            var mp = MarkingPeriodServiceTest.CreateSchoolYearWithMp(SchoolTestContext, mpStartDate, false, false, mpInterval, 62);
-//            var section = SchoolTestContext.AdminGradeSl.ScheduleSectionService.Add(1, "1", mp.Id);
+//            var section = SchoolTestContext.AdminGradeSl.DayTypeService.Add(1, "1", mp.Id);
 //            var date = mpStartDate.AddDays(1);
 //            var dateService = SchoolTestContext.AdminGradeSl.CalendarDateService;
 //            while (date.DayOfWeek != DayOfWeek.Saturday && date.DayOfWeek != DayOfWeek.Sunday)
@@ -113,7 +113,7 @@
             
 //            var mp2 = MarkingPeriodServiceTest.CreateNextMp(SchoolTestContext, mp.SchoolYearRef);
 //            AssertException<Exception>(() => dateService.GetCalendarDateByDate(mp2.StartDate));
-//            var section2 = SchoolTestContext.AdminGradeSl.ScheduleSectionService.Add(1, "1", mp2.Id);
+//            var section2 = SchoolTestContext.AdminGradeSl.DayTypeService.Add(1, "1", mp2.Id);
 //            dateService.ClearCalendarDates(mp.Id);
 //            dateService.Delete(cDate2.Id);
 //            var dates = dateService.GetLastDays(mp.SchoolYearRef, false, null, null);

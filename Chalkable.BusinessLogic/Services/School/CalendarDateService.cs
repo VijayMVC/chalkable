@@ -51,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
                         da.Delete(new DateQuery {MarkingPeriodId = mp.Id});
 
-                        var sections = ServiceLocator.ScheduleSectionService.GetSections(mp.Id);
+                        var sections = ServiceLocator.DayTypeService.GetSections(mp.Id);
                         if (sections.Count == 0)
                             throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_SHOULD_HAVE_SECTION);
                        
@@ -166,7 +166,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
-            var section = ServiceLocator.ScheduleSectionService.GetSectionById(sectionId);
+            var section = ServiceLocator.DayTypeService.GetSectionById(sectionId);
             if (section.SchoolYearRef != cdDate.SchoolYearRef)
                 throw new ChalkableException(ChlkResources.ERR_SECTION_NOT_IN_MARKING_PERIOD_FOR_CURRENT_DAY);
             

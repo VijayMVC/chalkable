@@ -17,7 +17,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter]
         public ActionResult List(int schoolYearId)
         {
-            var res = SchoolLocator.ScheduleSectionService.GetSections(schoolYearId);
+            var res = SchoolLocator.DayTypeService.GetSections(schoolYearId);
             return Json(res.Select(DateTypeViewData.Create));
         }
 
@@ -25,20 +25,20 @@ namespace Chalkable.Web.Controllers
         //public ActionResult ListForMarkingPeriods(GuidList markingPeriodIds)
         //{
         //    var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodIds[0]);
-        //    var canGetSectoions = SchoolLocator.ScheduleSectionService.CanGetSection(markingPeriodIds);
+        //    var canGetSectoions = SchoolLocator.DayTypeService.CanGetSection(markingPeriodIds);
         //    IList<ScheduleSection> sections = new List<ScheduleSection>();
         //    if (canGetSectoions)
         //    {
-        //        sections = SchoolLocator.ScheduleSectionService.GetSections(markingPeriodIds);
+        //        sections = SchoolLocator.DayTypeService.GetSections(markingPeriodIds);
         //    }
-        //    var canchange = canGetSectoions && SchoolLocator.ScheduleSectionService.CanDeleteSections(markingPeriodIds);
+        //    var canchange = canGetSectoions && SchoolLocator.DayTypeService.CanDeleteSections(markingPeriodIds);
         //    return Json(SectionsForMPsViewData.Create(sections, markingPeriod, canGetSectoions, canchange));
         //}
 
         //[AuthorizationFilter("System Admin, AdminGrade, AdminEdit")]
         //public ActionResult ChangeSections(StringList sections, GuidList markingPeriodIds)
         //{
-        //    SchoolLocator.ScheduleSectionService.ReBuildSections(sections, markingPeriodIds);
+        //    SchoolLocator.DayTypeService.ReBuildSections(sections, markingPeriodIds);
         //    return Json(true);
         //}
     }

@@ -90,7 +90,7 @@
 //            var startSyDate = nowDate.Date.AddDays(-7);
 //            var sy = SchoolYearServiceTest.CreateNextSchoolYear(SchoolTestContext, startSyDate);
 //            var mp = MarkingPeriodServiceTest.CreateNextMp(SchoolTestContext, sy.Id);
-//            SchoolTestContext.AdminGradeSl.ScheduleSectionService.GenerateDefaultSections(mp.Id);
+//            SchoolTestContext.AdminGradeSl.DayTypeService.GenerateDefaultSections(mp.Id);
 
 //            SchoolTestContext.AdminGradeSl.CalendarDateService.GetCalendarDateByDate(mp.StartDate);
 //            var toDayDate = SchoolTestContext.AdminGradeSl.CalendarDateService.GetCalendarDateByDate(nowDate.Date);

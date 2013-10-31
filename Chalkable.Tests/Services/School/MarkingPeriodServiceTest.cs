@@ -131,7 +131,7 @@
 //            if (buildSections)
 //            {
 //                var sections = new List<string> { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-//                context.AdminGradeSl.ScheduleSectionService.ReBuildSections(sections, new List<Guid>() {mp.Id});
+//                context.AdminGradeSl.DayTypeService.ReBuildSections(sections, new List<Guid>() {mp.Id});
 //            }
 //            return mp;
 //        }

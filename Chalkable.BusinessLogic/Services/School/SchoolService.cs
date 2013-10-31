@@ -1,4 +1,6 @@
-﻿using Chalkable.Common;
+﻿using System.Collections.Generic;
+using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 
@@ -7,6 +9,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface ISchoolService
     {
         void Add(Data.School.Model.School school);
+        IList<Data.School.Model.School> GetSchools();
     }
 
     public class SchoolService : SchoolServiceBase, ISchoolService
@@ -28,6 +31,17 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
             }
             ServiceLocator.ServiceLocatorMaster.SchoolService.Add(Context.DistrictId.Value, school.Id, school.Name);
+        }
+
+        public IList<Data.School.Model.School> GetSchools()
+        {
+            if (BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Read())
+            {
+                var da = new SchoolDataAccess(uow);
+                return da.GetAll();
+            }
         }
     }
 }
