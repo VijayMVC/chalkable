@@ -14,6 +14,7 @@ namespace Chalkable.Data.School.Model
 
 
         [IdentityFieldAttr]
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public NotificationType Type { get; set; }
         public string Message { get; set; }

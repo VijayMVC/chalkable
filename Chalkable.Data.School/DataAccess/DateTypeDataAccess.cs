@@ -20,23 +20,8 @@ namespace Chalkable.Data.School.DataAccess
             var updateParams = new Dictionary<string, object> {{Date.DATE_TIME_FIELD, null}};
             var updateDateQuery = Orm.SimpleUpdate<Date>(updateParams, new AndQueryCondition { { Date.DATE_TYPE_REF_FIELD, dayType } });
             var deleteSectionQuery = Orm.SimpleDelete(dayType);
-            var query = JoinQueries(new List<DbQuery> { cpQuery, updateDateQuery, deleteSectionQuery });
+            var query = new DbQuery(new List<DbQuery> { cpQuery, updateDateQuery, deleteSectionQuery });
             ExecuteNonQueryParametrized(query.ToString(), query.Parameters);
-        }
-
-        private DbQuery JoinQueries(IList<DbQuery> dbQueries)
-        {
-            var res = new DbQuery();
-            foreach (var dbQuery in dbQueries)
-            {
-                res.Sql.Append(dbQuery.Sql).Append("  ");
-                foreach (var param in dbQuery.Parameters)
-                {
-                    if (!res.Parameters.ContainsKey(param.Key))
-                        res.Parameters.Add(param);
-                }
-            }
-            return res;
         }
 
         public IList<DayType> GetDateTypes(int schoolYearId, int? fromNumber = null, int? toNumber = null)

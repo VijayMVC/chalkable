@@ -1,10 +1,12 @@
 ﻿using System;
+using Chalkable.Data.Common;
 using Chalkable.Data.Common.Enums;
 
 namespace Chalkable.Data.Master.Model
 {
     public class District
     {
+        [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string DbName { get; set; }

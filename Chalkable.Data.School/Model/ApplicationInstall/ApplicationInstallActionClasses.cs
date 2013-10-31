@@ -12,6 +12,7 @@ namespace Chalkable.Data.School.Model.ApplicationInstall
         public const string CLASS_REF_FIELD = "ClassRef";
 
         [IdentityFieldAttr]
+        [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public int ClassRef { get; set; }
         public int AppInstallActionRef { get; set; }

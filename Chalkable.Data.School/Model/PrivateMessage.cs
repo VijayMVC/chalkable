@@ -10,6 +10,7 @@ namespace Chalkable.Data.School.Model
     public class PrivateMessage
     {
         [IdentityFieldAttr]
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public int FromPersonRef { get; set; }
         public int ToPersonRef { get; set; }

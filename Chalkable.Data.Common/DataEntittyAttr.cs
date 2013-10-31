@@ -11,7 +11,10 @@ namespace Chalkable.Data.Common
     }
 
     public class IdentityFieldAttr : Attribute
+    {    
+    }
+
+    public class PrimaryKeyFieldAttr : Attribute
     {
-        
     }
 }

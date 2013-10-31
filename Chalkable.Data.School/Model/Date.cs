@@ -10,8 +10,10 @@ namespace Chalkable.Data.School.Model
         public const string IS_SCHOOL_DAY_FIELD = "IsSchoolDay";
         public const string SCHOOL_YEAR_REF = "SchoolYearRef";
 
+        [PrimaryKeyFieldAttr]
         public DateTime Day { get; set; }
         public bool IsSchoolDay { get; set; }
+        [PrimaryKeyFieldAttr]
         public int SchoolYearRef { get; set; }
         public int SchoolRef { get; set; }
         public int? DayTypeRef { get; set; }

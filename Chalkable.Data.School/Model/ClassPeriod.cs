@@ -11,6 +11,7 @@ namespace Chalkable.Data.School.Model
         public const string ROOM_REF_FIELD = "RoomRef";
         public const string CLASS_REF_FIELD = "ClassRef";
 
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public int PeriodRef { get; set; }
         public int ClassRef { get; set; }

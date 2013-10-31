@@ -70,7 +70,7 @@ namespace Chalkable.Data.School.DataAccess
             QueryCondition conds = null;
             if (schoolYearId.HasValue)
                 conds = new AndQueryCondition {{MarkingPeriod.SCHOOL_YEAR_REF, schoolYearId}};
-            return SelectMany<MarkingPeriod>(FilterBySchool(conds));
+            return SelectMany<MarkingPeriod>(conds);
         } 
 
         public MarkingPeriod GetMarkingPeriod(DateTime date)
@@ -80,7 +80,7 @@ namespace Chalkable.Data.School.DataAccess
                     {MarkingPeriod.START_DATE_FIELD, "date1", date, ConditionRelation.LessEqual},
                     {MarkingPeriod.END_DATE_FIELD, "date2", date, ConditionRelation.GreaterEqual}
                 };
-            return SelectOneOrNull<MarkingPeriod>(FilterBySchool(conds));   
+            return SelectOneOrNull<MarkingPeriod>(conds);   
         }
 
         public bool IsOverlaped(DateTime startDate, DateTime endDate, int? currentMarkingPeriodId)
@@ -92,7 +92,7 @@ namespace Chalkable.Data.School.DataAccess
                 };
             if (currentMarkingPeriodId.HasValue)
                 conds.Add(MarkingPeriod.ID_FIELD, currentMarkingPeriodId, ConditionRelation.NotEqual);
-            return Exists<MarkingPeriod>(FilterBySchool(conds));
+            return Exists<MarkingPeriod>(conds);
             
         } 
 

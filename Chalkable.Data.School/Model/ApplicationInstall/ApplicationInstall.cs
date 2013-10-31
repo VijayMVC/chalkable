@@ -16,6 +16,7 @@ namespace Chalkable.Data.School.Model.ApplicationInstall
         public const string ACTIVE_FIELD = "Active";
 
         [IdentityFieldAttr]
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public Guid ApplicationRef { get; set; }
         public int PersonRef { get; set; }

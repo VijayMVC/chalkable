@@ -13,7 +13,8 @@ namespace Chalkable.Data.School.Model
         public const string START_DATE_FIELD = "StartDate";
         public const string END_DATE_FIELD = "EndDate";
         public const string SCHOOL_YEAR_REF = "SchoolYearRef";
-   
+
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string Name { get; set; }
         public DateTime StartDate { get; set; }

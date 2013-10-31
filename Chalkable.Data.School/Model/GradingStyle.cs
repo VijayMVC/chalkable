@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
     public class GradingStyle
     {
+        [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public GradingStyleEnum GradingStyleValue { get; set; }
         public int MaxValue { get; set; }

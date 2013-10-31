@@ -14,7 +14,7 @@ namespace Chalkable.Data.School.Model
         public const string END_TIME_FIELD = "EndTime";
         public const string SCHOOL_YEAR_REF = "SchoolYearRef";
         public const string ORDER_FIELD = "Order";
-        
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public int StartTime { get; set; }
         public int EndTime { get; set; }

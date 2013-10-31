@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Common;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.Master.Model
 {
@@ -10,6 +11,7 @@ namespace Chalkable.Data.Master.Model
         public const string DISTRICT_REF_FIELD_NAME = "DistrictRef";
         public Guid? DistrictRef { get; set; }
         public const string ID_FIELD_NAME = "Id";
+        [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public const string TYPE_FIELD_NAME = "Type";
         public BackgroundTaskTypeEnum Type { get; set; }

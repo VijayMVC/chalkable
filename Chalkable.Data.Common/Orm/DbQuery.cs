@@ -25,5 +25,18 @@ namespace Chalkable.Data.Common.Orm
             Sql = sql;
             Parameters = parameters;
         }
+        
+        public DbQuery(IList<DbQuery> dbQueries)
+        {
+            foreach (var dbQuery in dbQueries)
+            {
+                Sql.Append(dbQuery.Sql).Append("  ");
+                foreach (var param in dbQuery.Parameters)
+                {
+                    if (!Parameters.ContainsKey(param.Key))
+                        Parameters.Add(param);
+                }
+            }
+        }
     }
 }

@@ -9,8 +9,8 @@ namespace Chalkable.Data.School.Model.ApplicationInstall
 {
     public  class ApplicationInstallActionDepartment
     {
-
         [IdentityFieldAttr]
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public Guid DepartmentRef { get; set; }
         public int AppInstallActionRef { get; set; }

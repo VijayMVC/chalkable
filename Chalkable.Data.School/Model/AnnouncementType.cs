@@ -8,7 +8,8 @@ namespace Chalkable.Data.School.Model
     {
         public const string ID_FIELD = "Id";
         public const string GRADABLE_FIELD_NAME = "Gradable";
-        
+
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public bool IsSystem { get; set; }
         public string Name { get; set; }

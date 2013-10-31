@@ -57,7 +57,7 @@ namespace Chalkable.Data.School.DataAccess
                 res.Add(MarkingPeriodClass.CLASS_REF_FIELD, query.ClassId);
             if(query.MarkingPeriodId.HasValue)
                 res.Add(MarkingPeriodClass.MARKING_PERIOD_REF_FIELD, query.MarkingPeriodId);
-            return FilterBySchool(res);
+            return res;
         } 
     }
 

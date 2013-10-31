@@ -16,6 +16,7 @@ namespace Chalkable.Data.School.Model
 
 
         [IdentityFieldAttr]
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public DateTime? RemindDate { get; set; }
         public bool Processed { get; set; }

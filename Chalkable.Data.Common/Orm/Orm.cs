@@ -41,12 +41,21 @@ namespace Chalkable.Data.Common.Orm
                 }
             return res;
         }
-
+        
         public static List<string> Fields<T>()
         {
             var t = typeof (T);
             return Fields(t);
         }
+
+        public static IList<PropertyInfo> GetPrimaryKeyFields(Type t)
+        {
+            var primaryKeyFields = t.GetProperties(BindingFlags.Instance | BindingFlags.Public).ToList();
+            primaryKeyFields = primaryKeyFields.Where(x => x.CanRead && x.GetCustomAttribute<PrimaryKeyFieldAttr>() != null).ToList();
+            if (primaryKeyFields.Count == 0)
+                throw new ChalkableException("There are no primary keys attributes in current model");
+            return primaryKeyFields;
+        } 
 
         private const string FULL_FIELD_NAME_FORMAT = "[{0}].[{1}]";
         private const string COMPLEX_RESULT_FORMAT = " [{0}].[{1}] as {0}_{1}";
@@ -89,6 +98,16 @@ namespace Chalkable.Data.Common.Orm
             return res.ToString();
         }
 
+        private static QueryCondition BuildCondsByProperties<T>(Type t, T obj, IList<PropertyInfo> properties, string prefix = "")
+        {
+            var res = new AndQueryCondition();
+            foreach (var property in properties)
+            {
+                res.Add(property.Name, prefix + property.Name, t.GetProperty(property.Name).GetValue(obj), ConditionRelation.Equal);
+            }
+            return res;
+        }
+
 
         //TODO: insert from select 
 
@@ -124,33 +143,33 @@ namespace Chalkable.Data.Common.Orm
             return res;
         }
 
-
-         public static DbQuery SimpleUpdate<T>(T obj)
-         {
+        public static DbQuery SimpleUpdate<T>(T obj)
+        {
              var t = typeof(T);
              var fields = Fields(t);
-             return SimpleUpdate(t, fields, obj);
-         }
+            return SimpleUpdate(t, fields, GetPrimaryKeyFields(t), obj);
+        }
 
-         public static DbQuery SimpleUpdate<T>(IList<T> objs)
-         {
-             var b = new StringBuilder();
-             var t = typeof(T);
-             var fields = Fields(t);
-             var res = new DbQuery {Parameters = new Dictionary<string, object>()};
-             for (int i = 0; i < objs.Count; i++)
-             {
-                 var q = SimpleUpdate(t, fields, objs[i], i);
+        public static DbQuery SimpleUpdate<T>(IList<T> objs)
+        {
+            var b = new StringBuilder();
+            var t = typeof(T);
+            var fields = Fields(t);
+            var primaryKeyFields = GetPrimaryKeyFields(t);
+            var res = new DbQuery {Parameters = new Dictionary<string, object>()};
+            for (int i = 0; i < objs.Count; i++)
+            {
+                 var q = SimpleUpdate(t, fields, primaryKeyFields, objs[i], i);
                  b.Append(q.Sql).Append(" ");
                  foreach (var parameter in q.Parameters)
                  {
                      if (!res.Parameters.ContainsKey(parameter.Key))
                          res.Parameters.Add(parameter);
                  }
-             }
-             res.Sql = b;
-             return res;
-         }
+            }
+            res.Sql = b;
+            return res;
+        }
 
 
 
@@ -161,7 +180,7 @@ namespace Chalkable.Data.Common.Orm
              return SimpleUpdate(t,  updateParams, conditions);
          }
 
-         private static DbQuery SimpleUpdate<T>(Type t, IList<string> fields, T obj, int index = 0)
+         private static DbQuery SimpleUpdate<T>(Type t, IList<string> fields, IList<PropertyInfo> primaryKeyFields, T obj, int index = 0)
          {
               var updateParams = new Dictionary<string, object>();
              foreach (var field in fields)
@@ -170,11 +189,7 @@ namespace Chalkable.Data.Common.Orm
                  //if(value != null)
                      updateParams.Add(field, value);
              }
-             var queryConds = new AndQueryCondition
-                 {
-                     {ID_FIELD, ID_FIELD + "_" + index, t.GetProperty(ID_FIELD).GetValue(obj), ConditionRelation.Equal}
-                 };
-             return SimpleUpdate(t, updateParams, queryConds, index);
+             return SimpleUpdate(t, updateParams, BuildCondsByProperties(t, obj, primaryKeyFields, index + "_"), index);
          }
 
          private static DbQuery SimpleUpdate(Type t, IEnumerable<KeyValuePair<string, object>> updateParams, QueryCondition queryCondition, int index = 0)
@@ -209,8 +224,8 @@ namespace Chalkable.Data.Common.Orm
         public static DbQuery SimpleDelete<T>(T obj)
         {
             var t = typeof(T);
-            var conds = new AndQueryCondition { { ID_FIELD, t.GetProperty(ID_FIELD).GetValue(obj) } };
-            return SimpleDelete<T>(conds);
+            var primaryKeyFields = GetPrimaryKeyFields(t);
+            return SimpleDelete<T>(BuildCondsByProperties(t, obj, primaryKeyFields));
         }
 
         public static DbQuery SimpleDelete<T>(QueryCondition conditioins)
@@ -224,18 +239,22 @@ namespace Chalkable.Data.Common.Orm
 
         public static DbQuery SimpleDelete<T>(IList<T> objs)
         {
-            var t = typeof (T);
-            var res = SimpleDelete<T>(new AndQueryCondition());
-            var idProperty = t.GetProperty(ID_FIELD);
-            var ids = objs.Select(x => idProperty.GetValue(x)).ToList();
-            for (int i = 0; i < ids.Count; i++)
+            var t = typeof(T);
+            var primaryKeyFields = GetPrimaryKeyFields(t);
+            var queries = new List<DbQuery>(); 
+            for (int i = 0; i < objs.Count; i++)
             {
-                res.Parameters.Add("@" + ID_FIELD + "_" + i, ids[0]);
+               queries.Add(SimpleDelete<T>(BuildCondsByProperties(t, objs[i], primaryKeyFields, i + "_")));
             }
-            res.Sql.AppendFormat(" where Id in ({0})", res.Parameters.Select(x=>x.Key).JoinString(","));
-            return res;
+            //var idProperty = t.GetProperty(ID_FIELD);
+            //var ids = objs.Select(x => idProperty.GetValue(x)).ToList();
+            //for (int i = 0; i < ids.Count; i++)
+            //{
+            //    res.Parameters.Add("@" + ID_FIELD + "_" + i, ids[0]);
+            //}
+            //res.Sql.AppendFormat(" where Id in ({0})", res.Parameters.Select(x=>x.Key).JoinString(","));
+            return new DbQuery(queries);
         }
-
 
         public static DbQuery SimpleSelect<T>(QueryCondition queryCondition)
         {

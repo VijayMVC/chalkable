@@ -1,8 +1,11 @@
-﻿namespace Chalkable.Data.School.Model
+﻿using Chalkable.Data.Common;
+
+namespace Chalkable.Data.School.Model
 {
     public class Address
     {
         public const string ID_FIELD = "Id";
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string AddressNumber { get; set; }
         public string StreetNumber { get; set; }

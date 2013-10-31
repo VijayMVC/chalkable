@@ -13,6 +13,7 @@ namespace Chalkable.Data.School.Model.ApplicationInstall
 
 
         [IdentityFieldAttr]
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public int OwnerRef { get; set; }
         public int? PersonRef { get; set; }

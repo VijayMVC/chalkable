@@ -16,7 +16,8 @@ namespace Chalkable.Data.School.Model
         public const string GRADE_VALUE_FIELD = "GradeValue";
         public const string DROPPED_FIELD = "dropped";
         public const string STATE_FIELD = "state";
-  
+
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public int AnnouncementRef { get; set; }
         public int ClassPersonRef { get; set; }

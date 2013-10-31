@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.Master.Model
 {
@@ -18,6 +19,7 @@ namespace Chalkable.Data.Master.Model
 
     public class Preference
     {
+        [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public string Key { get; set; }
         public string Value { get; set; }

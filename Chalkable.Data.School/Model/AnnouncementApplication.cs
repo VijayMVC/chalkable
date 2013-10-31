@@ -14,6 +14,7 @@ namespace Chalkable.Data.School.Model
         public const string ACTIVE_FIELD = "Active";
     
         [IdentityFieldAttr]
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public int AnnouncementRef { get; set; }
         public Guid ApplicationRef { get; set; }

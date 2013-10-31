@@ -10,6 +10,7 @@ namespace Chalkable.Data.School.Model
     public class AnnouncementRecipientData
     {
         [IdentityFieldAttr]
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public int AnnouncementRef { get; set; }
         public int PersonRef { get; set; }

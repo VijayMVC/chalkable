@@ -17,7 +17,8 @@ namespace Chalkable.Data.School.Model
         public const string ROLE_REF_FIELD = "RoleRef";
         public const string SALUTATION_FIELD = "Salutation";
         public const string ADDRESS_REF_FIELD = "AddressRef";
-
+       
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

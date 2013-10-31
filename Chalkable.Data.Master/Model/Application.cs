@@ -8,6 +8,7 @@ namespace Chalkable.Data.Master.Model
     public class Application
     {
         public const string ID_FIELD = "Id";
+        [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public const string NAME_FIELD = "Name";
         public string Name { get; set; }

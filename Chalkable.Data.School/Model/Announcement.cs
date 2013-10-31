@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
@@ -15,7 +16,7 @@ namespace Chalkable.Data.School.Model
         public const string PERSON_REF_FIELD = "PersonRef";
         public const string CONTENT_FIELD = "Content";
         public const string CREATED_FIELD = "Created";
-     
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public int PersonRef { get; set; }
         public string Content { get; set; }

@@ -1,9 +1,11 @@
 ﻿using System;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.Master.Model
 {
     public class Fund
     {
+        [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public DateTime PerformedDateTime { get; set; }
         public const string AMOUNT_FIELD = "Amount";
@@ -28,6 +30,7 @@ namespace Chalkable.Data.Master.Model
 
     public class FundRequest
     {
+        [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public const string SCHOOL_REF_FIELD = "SchoolRef";
         public Guid? SchoolRef { get; set; }
@@ -52,6 +55,7 @@ namespace Chalkable.Data.Master.Model
 
     public class FundRequestRoleDistribution
     {
+        [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public int RoleRef { get; set; }
         public const string FUND_REQUEST_REF_FIELD = "FundRequestRef";
