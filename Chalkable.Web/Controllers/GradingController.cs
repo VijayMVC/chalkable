@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Services;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
@@ -62,9 +58,8 @@ namespace Chalkable.Web.Controllers
         {
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(Context.NowSchoolTime.Date, true);
             var gradingStats = SchoolLocator.GradingStatisticService.GetStudentClassGradeStats(mp.Id, classId, studentId);
-            var fgAnnTypes = SchoolLocator.FinalGradeService.GetFinalGradeAnnouncementTypes(mp.Id, classId);
             var gradingPerMp = ClassLogic.GetGradingSummary(SchoolLocator, classId, mp.SchoolYearRef, null, studentId, false);
-            return Json(GradingStudentClassSummaryViewData.Create(gradingStats.FirstOrDefault(), mp, fgAnnTypes, gradingPerMp));
+            return Json(GradingStudentClassSummaryViewData.Create(gradingStats.FirstOrDefault(), mp, gradingPerMp));
         }
 
         //TODO: duplicate part of announcement/read data. for API compatibility only

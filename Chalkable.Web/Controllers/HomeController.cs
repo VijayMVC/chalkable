@@ -216,8 +216,7 @@ namespace Chalkable.Web.Controllers
             foreach (var classDetails in classDetailses)
             {
                 int classId = classDetails.Id;
-                var mpc = classDetails.MarkingPeriodClasses.First(y => y.MarkingPeriodRef == mp.Id).Id;
-                var typesByClasses = AnnouncementTypeController.GetTypesByClass(SchoolLocator, mpc, standard);
+                var typesByClasses = AnnouncementTypeController.GetTypesByClass(SchoolLocator, classId, standard);
                 classesAdvancedData.Add(new
                 {
                     ClassId = classId,

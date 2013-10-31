@@ -144,11 +144,12 @@ namespace Chalkable.StiConnector.Services
                         closestDep = departmenPairs[i];
                     }
                 }
-                List<int> mps = course.SectionTerms.Select(x=>x.TermID).ToList();
                 ServiceLocatorSchool.ClassService.Add(course.CourseID, course.AcadSessionID.Value
                                                       , closestDep != null ? closestDep.Second : (Guid?) null,
                                                       course.ShortName, course.FullName, course.PrimaryTeacherID.Value,
-                                                      glId.Value, mps);
+                                                      glId.Value);
+
+                    
             }
         }
 
@@ -349,8 +350,8 @@ namespace Chalkable.StiConnector.Services
             var dayTypes = stiEntities.DayTypes.ToList();
             foreach (var dayType in dayTypes)
             {
-                var scheduleSection = ServiceLocatorSchool.DayTypeService.Add(dayType.DayTypeID, dayType.Sequence, dayType.Name, dayType.AcadSessionID);
-                Log.LogInfo(string.Format(ChlkResources.IMPORT_GENERAL_PERIODS_FOR_SCHEDULE_SECTION_START, scheduleSection.Id));
+                var dt = ServiceLocatorSchool.DayTypeService.Add(dayType.DayTypeID, dayType.Sequence, dayType.Name, dayType.AcadSessionID);
+                Log.LogInfo(string.Format(ChlkResources.IMPORT_GENERAL_PERIODS_FOR_SCHEDULE_SECTION_START, dt.Id));
             }
         }
 

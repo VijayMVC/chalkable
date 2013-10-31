@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.AnnouncementsViewData;
 
@@ -23,12 +22,12 @@ namespace Chalkable.Web.Models.CalendarsViewData
         }
 
         public static AnnouncementMonthCalendarViewData Create(DateTime dateTime, bool isCurrentMonth, IList<AnnouncementComplex> announcements
-            , IList<DateDetails> dates)
+            , IList<Date> dates)
         {
             var anns = announcements.Where(x => x.Expires.Date == dateTime).ToList();
             var dateDetails = dates.FirstOrDefault(x => x.Day == dateTime.Date);
-            var section = dateDetails != null ? dateDetails.DayType : null;
-            return new AnnouncementMonthCalendarViewData(dateTime, isCurrentMonth, anns, section);
+            var dt = dateDetails != null ? dateDetails.DayType : null;
+            return new AnnouncementMonthCalendarViewData(dateTime, isCurrentMonth, anns, dt);
         }
     }
 }

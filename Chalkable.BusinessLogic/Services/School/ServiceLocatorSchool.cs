@@ -31,7 +31,6 @@ namespace Chalkable.BusinessLogic.Services.School
         IGradingStyleService GradingStyleService { get; }
         IStudentAnnouncementService StudentAnnouncementService { get; }
         IAnnouncementTypeService AnnouncementTypeService { get; }
-        IFinalGradeService FinalGradeService { get; }
         IDisciplineTypeService DisciplineTypeService { get; }
         IApplicationSchoolService ApplicationSchoolService { get; }
         IDisciplineService DisciplineService { get; }
@@ -67,7 +66,6 @@ namespace Chalkable.BusinessLogic.Services.School
         private IGradingStyleService gradingStyleService;
         private IStudentAnnouncementService studentAnnouncementService;
         private IAnnouncementTypeService announcementTypeService;
-        private IFinalGradeService finalGradeService;
         private IDisciplineTypeService disciplineTypeService;
         private IApplicationSchoolService applicationSchoolService;
         private IDisciplineService disciplineService;
@@ -104,7 +102,6 @@ namespace Chalkable.BusinessLogic.Services.School
             gradingStyleService = new GradingStyleService(this);
             studentAnnouncementService = new StudentAnnouncementService(this);
             announcementTypeService = new AnnouncementTypeService(this);
-            finalGradeService = new FinalGradeService(this);
             disciplineTypeService = new DisciplineTypeService(this);
             applicationSchoolService = new ApplicationSchoolService(this);
             disciplineService = new DisciplineService(this);
@@ -140,7 +137,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public IGradingStyleService GradingStyleService { get { return gradingStyleService; } }
         public IStudentAnnouncementService StudentAnnouncementService { get { return studentAnnouncementService; } }
         public IAnnouncementTypeService AnnouncementTypeService { get { return announcementTypeService; } }
-        public IFinalGradeService FinalGradeService { get { return finalGradeService; } }
         public IDisciplineTypeService DisciplineTypeService { get { return disciplineTypeService; } }
         public IApplicationSchoolService ApplicationSchoolService { get { return applicationSchoolService; } }
         public IDisciplineService DisciplineService { get { return disciplineService; } }

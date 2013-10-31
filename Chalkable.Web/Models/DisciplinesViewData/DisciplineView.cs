@@ -12,7 +12,7 @@ namespace Chalkable.Web.Models.DisciplinesViewData
         public ShortPersonViewData Student { get; set; }
         public PeriodViewData Period { get; set; }
         public string ClassName { get; set; }
-        public int TeacherId { get; set; }
+        public int? TeacherId { get; set; }
         public IList<DisciplineTypeViewData> DisciplineTypes { get; set; }
         public string Description { get; set; }
         public Guid ClassPersonId { get; set; }

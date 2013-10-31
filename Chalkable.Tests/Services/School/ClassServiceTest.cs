@@ -139,7 +139,7 @@
 //            //Security check 
 //            AssertForDeny(sl=>sl.ClassService.AddMarkingPeriod(c.Id, mp2.Id), SchoolTestContext, SchoolContextRoles.FirstTeacher 
 //                | SchoolContextRoles.FirstStudent | SchoolContextRoles.FirstParent | SchoolContextRoles.AdminViewer | SchoolContextRoles.Checkin);
-//            AssertForDeny(sl => sl.ClassService.DeleteClassFromMarkingPeriod(c.Id, mp1.Id), SchoolTestContext, SchoolContextRoles.FirstTeacher
+//            AssertForDeny(sl => sl.ClassService.UnassignClassFromMarkingPeriod(c.Id, mp1.Id), SchoolTestContext, SchoolContextRoles.FirstTeacher
 //                | SchoolContextRoles.FirstStudent | SchoolContextRoles.FirstParent | SchoolContextRoles.AdminViewer | SchoolContextRoles.Checkin);
 
 //            AssertException<Exception>(() => cService.AddMarkingPeriod(c.Id, mp3.Id));
@@ -150,7 +150,7 @@
 //            Assert.AreEqual(cService.GetClasses(mp1.SchoolYearRef, mp1.Id, null).Count, 1);
 //            Assert.AreEqual(cService.GetClasses(mp1.SchoolYearRef, mp2.Id, null).Count, 1);
 
-//            c = cService.DeleteClassFromMarkingPeriod(c.Id, mp2.Id);
+//            c = cService.UnassignClassFromMarkingPeriod(c.Id, mp2.Id);
 //            Assert.AreEqual(c.MarkingPeriodClasses.Count, 1);
 //            Assert.AreEqual(cService.GetClasses(mp1.SchoolYearRef, mp2.Id, null).Count, 0);
 

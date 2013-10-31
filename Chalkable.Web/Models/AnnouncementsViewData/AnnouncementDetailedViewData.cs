@@ -19,8 +19,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public IList<String> autoGradeApps { get; set; }
 
         public ShortPersonViewData Owner { get; set; }
-        public bool WasSubmittedToAdmin { get; set; }
-
+        
         private AnnouncementDetailedViewData(AnnouncementDetails announcementDetails, IList<StudentAnnouncement> studentAnnouncements, IGradingStyleMapper mapper, int currentSchoolPersonId)
             : base(announcementDetails, studentAnnouncements, mapper, announcementDetails.Gradable, null)
         {
@@ -29,8 +28,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
 
             Owner = ShortPersonViewData.Create(announcementDetails.Owner);
             AnnouncementReminders = AnnouncementReminderViewData.Create(announcementDetails.AnnouncementReminders, currentSchoolPersonId, Owner.Id);
-            WasSubmittedToAdmin = announcementDetails.WasSubmittedToAdmin;
-
+            
             if (announcementDetails.AnnouncementApplications == null) return;
             //TODO: applicationViewData
             //Applications = new List<AnnouncementApplicationViewData>();

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 
@@ -41,7 +40,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
         }
 
         public static IList<AttendanceStatsViewData> BuildStatsPerDate(IDictionary<DateTime, IList<AttendanceTotalPerType>> attsTotalPerDate
-            , IList<DateDetails> dates, string dateFormat)
+            , IList<Date> dates, string dateFormat)
         {
             var res = new List<AttendanceStatsViewData>();
             foreach (var date in dates)

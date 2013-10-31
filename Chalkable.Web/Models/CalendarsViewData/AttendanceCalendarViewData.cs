@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.CalendarsViewData
@@ -32,7 +31,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
     {
         public int PersonId { get; set; }
         public string ClassName { get; set; }
-        public int TeacherId { get; set; }
+        public int? TeacherId { get; set; }
         public int PeriodOrder { get; set; }
         public int PeriodId { get; set; }
 

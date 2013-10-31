@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
@@ -37,7 +34,7 @@ namespace Chalkable.Data.School.DataAccess
             if(query.SchoolDaysOnly)
                 condition.Add(Date.IS_SCHOOL_DAY_FIELD, true, ConditionRelation.Equal);
 
-            condition.BuildSqlWhere(dbQuery, "Date");
+            FilterBySchool(condition).BuildSqlWhere(dbQuery, "Date");
             if (query.MarkingPeriodId.HasValue)
             {
                 var joinOperand = dbQuery.Parameters.Count > 0 ? "and" : "where";
@@ -84,34 +81,6 @@ namespace Chalkable.Data.School.DataAccess
             return ReadMany<Date>(q);
         }
 
-        public IList<DateDetails> GetDatesDetails(DateQuery query)
-        {
-            var q = new DbQuery();
-            q.Sql.AppendFormat(@"select [Date].*, {0} from [Date] 
-                                left join DayType on DayType.Id = [Date].DayTypeRef"
-                           , Orm.ComplexResultSetQuery(new List<Type> {typeof (DayType)}));
-            q = BuildConditionQuery(q, query);
-            q.Sql.AppendFormat(" order by Day desc OFFSET 0 ROWS FETCH NEXT {0} ROWS ONLY ", query.Count);
-            q.Sql.Insert(0, " select * from (").Append(")x order by x.Day");
-            return ReadDetailsDate(q);
-        } 
-
-        private IList<DateDetails> ReadDetailsDate(DbQuery query)
-        {
-            using (var reader = ExecuteReaderParametrized(query.Sql.ToString(), query.Parameters))
-            {
-                var res = new List<DateDetails>();
-                while (reader.Read())
-                {
-                    var date = reader.Read<DateDetails>();
-                    if(date.DayTypeRef.HasValue)
-                        date.DayType = reader.Read<DayType>(true);
-                    res.Add(date);
-                }
-                return res;
-            }
-        }
- 
         public bool Exists(DateQuery query)
         {
             var dbQuery = new DbQuery();

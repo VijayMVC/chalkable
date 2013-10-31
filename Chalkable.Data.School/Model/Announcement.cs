@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
@@ -102,16 +101,6 @@ namespace Chalkable.Data.School.Model
     {
         public int? FinalGradeStatus { get; set; }
         
-        public FinalGradeStatus? FinalGradeStatusTyped
-        {
-            get { return (FinalGradeStatus?) FinalGradeStatus; }
-        }
-
-        public bool WasSubmittedToAdmin
-        {
-            get { return FinalGradeStatusTyped.HasValue && FinalGradeStatusTyped.Value == Model.FinalGradeStatus.Submit; }
-        }
-
         public IList<StudentAnnouncementDetails> StudentAnnouncements { get; set; }
         public IList<AnnouncementApplication> AnnouncementApplications { get; set; }
         public IList<AnnouncementAttachment> AnnouncementAttachments { get; set; }

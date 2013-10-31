@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.BusinessLogic.Mapping;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -14,7 +13,7 @@ namespace Chalkable.Web.Models
         public MarkingPeriodViewData MarkingPeriod { get; set; }
         public int? Avg { get; set; }
 
-        public static GradingClassSummaryViewData Create(IList<AnnouncementComplex> announcements, IList<FinalGradeAnnouncementType> fgAnnouncementTypes,
+        public static GradingClassSummaryViewData Create(IList<AnnouncementComplex> announcements, 
             MarkingPeriodClassGradeAvg classGradingStats, IGradingStyleMapper mapper, IList<StudentAnnouncementGrade> stAnnGrades = null)
         {
             throw new NotImplementedException();

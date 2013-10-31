@@ -115,7 +115,10 @@ namespace Chalkable.Data.School.DataAccess
                     string.Format(fullFieldNameFormat, mpcType.Name, MarkingPeriodClass.CLASS_REF_FIELD),
                 };
             var resultSetStr = fields.Select(x => string.Format("x.{0} as {0}", x)).JoinString(",");
-            fields.Add(string.Format(fullFieldNameFormat, mpcType.Name, MarkingPeriodClass.ID_FIELD));
+            
+            //fields.Add(string.Format(fullFieldNameFormat, mpcType.Name, MarkingPeriodClass.ID_FIELD)); TODO: fix it
+            
+            
             var groupBySetStr = fields.Select(x => string.Format("x.{0}", x)).JoinString(",");
             var sql = @"select {1}, AVG(x.[Avg]) as StudentGradeAvg_Avg                                
                         from ({0})x  group by {2}";

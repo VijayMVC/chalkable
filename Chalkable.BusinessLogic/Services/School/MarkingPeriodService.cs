@@ -92,7 +92,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId);
                 var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetById(schoolYearId);
-                var mp = AddMarkingPeriod(da, sy, startDate, endDate, name, description, weekDays, new MarkingPeriod{Id = id});
+                var mp = UpdateMarkingPeriod(da, sy, startDate, endDate, name, description, weekDays, new MarkingPeriod{Id = id});
                 da.Insert(mp);
                 uow.Commit();
                 return mp;
@@ -100,7 +100,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        private MarkingPeriod AddMarkingPeriod(MarkingPeriodDataAccess dataAccess, SchoolYear sy, DateTime startDate, DateTime endDate, 
+        private MarkingPeriod UpdateMarkingPeriod(MarkingPeriodDataAccess dataAccess, SchoolYear sy, DateTime startDate, DateTime endDate, 
             string name, string description, int weekDays, MarkingPeriod markingPeriod = null)
         {
             int? id = null;
@@ -155,10 +155,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId);
                 var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetById(schoolYearId);
                 var mp = da.GetById(id);
-                mp = AddMarkingPeriod(da, sy, startDate, endDate, name, description, weekDays, mp);
+                mp = UpdateMarkingPeriod(da, sy, startDate, endDate, name, description, weekDays, mp);
                 da.Update(mp);
                 uow.Commit();
-                ServiceLocator.CalendarDateService.ClearCalendarDates(id);
                 return mp;
             }
         }
@@ -217,7 +216,7 @@ namespace Chalkable.BusinessLogic.Services.School
             //                {
             //                    var startDate = endDate.AddDays(1);
             //                    endDate = endDate.AddDays(mpLength);
-            //                    mpsForInsert.Add(AddMarkingPeriod(mpDa, year, startDate, endDate, "MP" + (mps.Count + i + 1), "", 62));
+            //                    mpsForInsert.Add(UpdateMarkingPeriod(mpDa, year, startDate, endDate, "MP" + (mps.Count + i + 1), "", 62));
             //                }
             //                if (year.EndDate <= endDate)
             //                    year.EndDate = endDate.AddDays(1);

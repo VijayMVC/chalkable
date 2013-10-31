@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
-using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.CalendarsViewData;
 
@@ -82,18 +81,6 @@ namespace Chalkable.Web.Controllers.CalendarControllers
                 res.Add(TeacherClassWeekCalendarViewData.Create(d.Day.Date, currentClassPeriods));
             }
             return Json(res);
-        }
-
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
-        public ActionResult AssignDate(DateTime date, int sectionId)
-        {
-            var cdDate = SchoolLocator.CalendarDateService.GetCalendarDateByDate(date);
-            if (SchoolLocator.CalendarDateService.CanAssignDate(cdDate.Day, sectionId))
-            {
-                SchoolLocator.CalendarDateService.AssignDate(cdDate.Day, sectionId);
-                return Json(true);
-            }
-            return Json(false);
         }
     }
 }

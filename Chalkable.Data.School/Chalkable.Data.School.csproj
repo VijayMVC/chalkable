@@ -67,8 +67,6 @@
     <Compile Include="DataAccess\ClassDisciplineDataAccess.cs" />
     <Compile Include="DataAccess\ClassDisciplineTypeDataAccess.cs" />
     <Compile Include="DataAccess\DisciplineTypeDataAccess.cs" />
-    <Compile Include="DataAccess\FinalGradeAnnouncementTypeDataAccess.cs" />
-    <Compile Include="DataAccess\FinalGradeDataAccess.cs" />
     <Compile Include="DataAccess\GradingStatisticDataAccess.cs" />
     <Compile Include="DataAccess\GradingStyleDataAccess.cs" />
     <Compile Include="DataAccess\NotificationDataAccess.cs" />
@@ -90,7 +88,6 @@
     <Compile Include="DataAccess\DateTypeDataAccess.cs" />
     <Compile Include="DataAccess\SchoolYearDataAccess.cs" />
     <Compile Include="DataAccess\StudentAnnouncementDataAccess.cs" />
-    <Compile Include="DataAccess\StudentFinalGradeDataAccess.cs" />
     <Compile Include="DataAccess\StudentSchoolYearDataAccess.cs" />
     <Compile Include="DataAccess\StudentParentDataAccess.cs" />
     <Compile Include="Model\Address.cs" />
@@ -118,8 +115,6 @@
     <Compile Include="Model\ClassPerson.cs" />
     <Compile Include="Model\Date.cs" />
     <Compile Include="Model\DisciplineType.cs" />
-    <Compile Include="Model\FinalGrade.cs" />
-    <Compile Include="Model\FinalGradeAnnouncementType.cs" />
     <Compile Include="Model\GradeLevel.cs" />
     <Compile Include="Model\GradingStatistic.cs" />
     <Compile Include="Model\GradingStyle.cs" />
@@ -141,7 +136,6 @@
     <Compile Include="Model\SchoolYear.cs" />
     <Compile Include="Model\StudentAnnouncement.cs" />
     <Compile Include="Model\StudentDailyAttendance.cs" />
-    <Compile Include="Model\StudentFinalGrade.cs" />
     <Compile Include="Model\StudentSchoolYear.cs" />
     <Compile Include="Model\StudentParent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

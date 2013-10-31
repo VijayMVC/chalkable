@@ -111,22 +111,22 @@ CREATE TABLE [dbo].[Class](
 	[Name] NVARCHAR(255) NOT NULL,
 	[Description] NVARCHAR(1024) NULL,
 	[ChalkableDepartmentRef] INT NULL,
-	[SchoolYearRef] INT NOT NULL CONSTRAINT FK_Class_SchoolYearRef FOREIGN KEY REFERENCES SchoolYear(Id),
+	[SchoolYearRef] INT NULL CONSTRAINT FK_Class_SchoolYearRef FOREIGN KEY REFERENCES SchoolYear(Id),
 	[TeacherRef] INT NULL CONSTRAINT FK_Class_Person FOREIGN KEY REFERENCES Person(Id),
 	[GradeLevelRef] INT NOT NULL CONSTRAINT FK_Class_GradeLevel FOREIGN KEY REFERENCES GradeLevel(Id)
 )
 GO
 
 CREATE TABLE [dbo].[MarkingPeriodClass](
-	[Id] INT PRIMARY KEY NOT NULL,
 	[ClassRef] INT NOT NULL CONSTRAINT [FK_MarkingPeriodClass_Class] FOREIGN KEY REFERENCES Class(Id),
 	[MarkingPeriodRef] INT NOT NULL CONSTRAINT [FK_MarkingPeriodClass_MarkingPeriod] FOREIGN KEY REFERENCES MarkingPeriod(Id),
 )
 GO
 
 
-Alter TABLE MarkingPeriodClass
-	Add CONSTRAINT UQ_MarkingPeriodClass_ClassRef_MarkingPeriodRef UNIQUE(ClassRef, MarkingPeriodRef)
+Alter Table MarkingPeriodClass
+	Add Constraint PK_MarkingPeriodClass Primary Key (ClassRef, MarkingPeriodRef)
+
 GO
 
 CREATE TABLE [dbo].[Announcement](

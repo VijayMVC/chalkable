@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Tests.Services.TestContext;
 using NUnit.Framework;
@@ -102,7 +96,7 @@ namespace Chalkable.Tests.Services.School
             //    FirstSchoolContext.FirstStudent, null, "math", sy.Id);
 
             //AssertException<Exception>(() => FirstSchoolContext.AdminGradeSl.MarkingPeriodService.Delete(mp.Id));
-            //adminSl.ClassService.DeleteClassFromMarkingPeriod(cl.Id, mp.Id);
+//            adminSl.ClassService.UnassignClassFromMarkingPeriod(cl.Id, mp.Id);
             //FirstSchoolContext.AdminGradeSl.MarkingPeriodService.Delete(mp.Id);
             //Assert.AreEqual(0, FirstSchoolContext.AdminGradeSl.MarkingPeriodService.GetMarkingPeriods(sy.Id).Count);
         }
@@ -137,14 +131,7 @@ namespace Chalkable.Tests.Services.School
         public static MarkingPeriod CreateSchoolYearWithMp(IServiceLocatorSchool locator, DateTime? date, bool buildSections = false, bool generatePeriods = false
             , int mpInterval = 30, int weekDays = DEFAULT_WEEK_DAYS)
         {
-            var sy = SchoolYearServiceTest.CreateNextSchoolYear(locator, date);
-            var mp = CreateNextMp(locator, sy.Id, generatePeriods, mpInterval, weekDays);
-            if (buildSections)
-            {
-                var sections = new List<string> { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-                locator.DayTypeService.ReBuildSections(sections, new List<int> { mp.Id });
-            }
-            return mp;
+            throw new NotImplementedException();
         }
     }
 }

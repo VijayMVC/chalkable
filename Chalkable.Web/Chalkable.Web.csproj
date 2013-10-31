@@ -176,7 +176,6 @@
     <Compile Include="Controllers\DisciplineTypeController.cs" />
     <Compile Include="Controllers\DistrictController.cs" />
     <Compile Include="Controllers\FeedController.cs" />
-    <Compile Include="Controllers\FinalGradeController.cs" />
     <Compile Include="Controllers\FundController.cs" />
     <Compile Include="Controllers\GradingController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
@@ -276,13 +275,6 @@
     <Compile Include="Models\DisciplinesViewData\StudentDisciplineDetailedViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\StudentDisciplineSummaryViewData.cs" />
     <Compile Include="Models\DistrictViewData.cs" />
-    <Compile Include="Models\FinalGradesViewData\FinalGradeAnnouncementTypeViewData.cs" />
-    <Compile Include="Models\FinalGradesViewData\FinalGradeAnnTypeGradeStatsViewData.cs" />
-    <Compile Include="Models\FinalGradesViewData\FinalGradeDetailsViewData.cs" />
-    <Compile Include="Models\FinalGradesViewData\FinalGradeInputModel.cs" />
-    <Compile Include="Models\FinalGradesViewData\FinalGradeViewData.cs" />
-    <Compile Include="Models\FinalGradesViewData\StudentFinalGradeDetailsViewData.cs" />
-    <Compile Include="Models\FinalGradesViewData\StudentFinalGradeViewData.cs" />
     <Compile Include="Models\GradingClassSummaryViewData.cs" />
     <Compile Include="Models\GradingStudentClassSummaryViewData.cs" />
     <Compile Include="Models\GradingStudentSummaryViewData.cs" />
