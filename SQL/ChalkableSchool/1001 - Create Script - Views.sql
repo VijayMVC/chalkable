@@ -34,6 +34,7 @@ SELECT
 	Announcement.GradingStyle as GradingStyle,
 	Announcement.Dropped as Dropped,
 	Announcement.ClassAnnouncementTypeRef as ClassAnnouncementTypeRef,
+	Announcement.SchoolRef as SchoolRef,
 	ClassAnnouncementType.Name as ClassAnnouncementTypeName,
 	Announcement.PersonRef as PersonRef,
 	Announcement.ClassRef as ClassRef,
@@ -62,7 +63,7 @@ FROM
 GO
 
 
-CREATE VIEW [dbo].[vwClass]
+create VIEW [dbo].[vwClass]
 AS
 SELECT
 	Class.Id as Class_Id,
@@ -72,6 +73,7 @@ SELECT
 	Class.TeacherRef as Class_TeacherRef,
 	Class.GradeLevelRef as Class_GradeLevelRef,
 	Class.ChalkableDepartmentRef as Class_ChalkableDepartmentId,
+	Class.SchoolRef as Class_SchoolRef,
 	GradeLevel.Id as GradeLevel_Id,
 	GradeLevel.Name as GradeLevel_Name,
 	GradeLevel.Number as GradeLevel_Number,

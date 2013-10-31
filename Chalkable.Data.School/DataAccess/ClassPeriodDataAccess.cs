@@ -63,7 +63,7 @@ namespace Chalkable.Data.School.DataAccess
             var sql = @"select * from ClassPerson
                         where ClassRef = @classId and PersonRef in (
 	                        select csp.PersonRef from ClassPerson csp
-	                        join ClassPeriod cgp on cgp.ClassRef = csp.ClassRef and cgp.PeriodRef = @periodId and cgp.DateTypeRef = @dateTypeId)";
+	                        join ClassPeriod cgp on cgp.ClassRef = csp.ClassRef and cgp.PeriodRef = @periodId and cgp.DayTypeRef = @dateTypeId)";
 
             var conds = new Dictionary<string, object> { { "periodId", periodId }, { "classId", classId }, { "dateTypeId", dateTypeId } };
             var query = new DbQuery(sql, conds);
@@ -76,7 +76,7 @@ namespace Chalkable.Data.School.DataAccess
                         where cPeriod1.ClassRef = @classId and exists(
 	                        select * from ClassPeriod cPeriod2
 	                        join ClassPerson cPerson on cPerson.ClassRef = cPeriod2.ClassRef and cPerson.PersonRef = @personId
-                            where cPeriod2.PeriodRef = cPeriod1.PeriodRef and cPeriod1.DateTypeRef = cPeriod2.DateTypeRef)";
+                            where cPeriod2.PeriodRef = cPeriod1.PeriodRef and cPeriod1.DayTypeRef = cPeriod2.DayTypeRef)";
 
             var conds = new Dictionary<string, object> { { "personId", personId }, { "classId", classId } };
             var query = new DbQuery(sql, conds);

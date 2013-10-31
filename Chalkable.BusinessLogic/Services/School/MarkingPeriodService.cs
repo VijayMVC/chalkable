@@ -108,6 +108,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 id = markingPeriod.Id;
             else markingPeriod = new MarkingPeriod();
             
+            if(startDate > endDate)
+                throw new ChalkableException("Invalida date params. StartDate is biger than EndDate");
             if (dataAccess.IsOverlaped(startDate, endDate, id))
                 throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_CANT_OVERLAP);
             if (!(sy.StartDate <= startDate && sy.EndDate >= endDate))

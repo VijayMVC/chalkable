@@ -1,4 +1,5 @@
 ﻿using System;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.BusinessLogic.Services.School;
 
@@ -102,7 +103,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public IServiceLocatorSchool SchoolServiceLocator(Guid districtId, Guid? schoolId)
         {
-            if (Context.DistrictId != districtId)
+            if (Context.DistrictId != districtId || Context.SchoolId != schoolId)
             {
                 var district = DistrictService.GetByIdOrNull(districtId);
                 var schoolLocalId = schoolId.HasValue ? SchoolService.GetById(schoolId.Value).LocalId : (int?)null;
@@ -119,10 +120,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             var school = SchoolService.GetById(schoolId);
             return SchoolServiceLocator(school.DistrictRef, schoolId);
         }
-
-
-
-
-
+        
     }
 }

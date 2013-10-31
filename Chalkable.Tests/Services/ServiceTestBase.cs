@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Master.DataAccess;
+using Chalkable.Data.Master.Model;
 using Chalkable.Tests.Services.TestContext;
 
 namespace Chalkable.Tests.Services
@@ -30,7 +32,8 @@ namespace Chalkable.Tests.Services
             {
                 Id = Guid.NewGuid(),
                 Name = schoolName
-            };using (var uow = new UnitOfWork(chalkableMasterConnection, true))
+            };
+            using (var uow = new UnitOfWork(chalkableMasterConnection, true))
             {
                 var da = new SchoolDataAccess(uow);
                 da.Insert(school);
@@ -42,19 +45,44 @@ namespace Chalkable.Tests.Services
             return school;
         }
 
+        protected District CreateSimpleDistrict(string districtName)
+        {
+            var chalkableMasterConnection = Settings.MasterConnectionString;
+            var masterConnection = chalkableMasterConnection.Replace(MASTER_DB_NAME, "Master");
+            var server = Settings.Servers[0];
+            var district = new District
+                {
+                    Id = Guid.NewGuid(),
+                    Name = districtName,
+                    TimeZone = "UTC",
+                    ServerUrl = server
+                };
+            using (var uow = new UnitOfWork(chalkableMasterConnection, true))
+            {
+                var da = new DistrictDataAccess(uow);
+                da.Insert(district);
+                uow.Commit();
+                ExecuteQuery(masterConnection, "create database [" + district.Id.ToString() + "]");
+                var schoolDbConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, server, district.Id.ToString());
+                RunCreateSchoolScripts(schoolDbConnectionString);
+            
+            }
+            return district;
+        }
+
         protected override void BeforCreateDb(string chalkableConnection, string masterConnection)
         {
             if (ExistsDb(masterConnection, MASTER_DB_NAME))
             {
                 using (var uow = new UnitOfWork(chalkableConnection, true))
                 {
-                    var schools = new SchoolDataAccess(uow).GetSchools(null, 0, int.MaxValue);
+                    var districts = new DistrictDataAccess(uow).GetDistricts(null, null);
                     uow.Commit();
-                    foreach (var school in schools)
+                    foreach (var district in districts)
                     {
                         try
                         {
-                            DropDbIfExists(masterConnection, school.Id.ToString());
+                            DropDbIfExists(masterConnection, district.Id.ToString());
                         }
                         catch (Exception ex)
                         {
@@ -76,6 +104,13 @@ namespace Chalkable.Tests.Services
             var sysSchoolL = sysLocator.SchoolServiceLocator(school.Id);
             return DeveloperSchoolTestContex.Create(sysSchoolL);*/
             throw new NotImplementedException();
+        }
+
+        protected DistrictTestContext CreateDistrictTestContext()
+        {
+            var district = CreateSimpleDistrict("DistrictForTest");
+            var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
+            return DistrictTestContext.Create(sysLocator, district);
         }
 
         protected SchoolTestContext CreateSchoolTestContext()

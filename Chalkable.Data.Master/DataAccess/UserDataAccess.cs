@@ -35,10 +35,8 @@ namespace Chalkable.Data.Master.DataAccess
                     District.TimeZone as District_TimeZone,
                     District.DemoPrefix as District_DemoPrefix,
                     District.LastUseDemo as District_LastUseDemo,
-                    District.ServerUrl as District_ServerUrl,
-                    District.IsEmpty as District_IsEmpty
-                    from 
-                    [User]
+                    District.ServerUrl as District_ServerUrl
+                    from [User]
                     left join District on [User].DistrictRef = District.Id");
             p2.Append(@"select 
                               [User].Id as User_Id,
@@ -53,7 +51,8 @@ namespace Chalkable.Data.Master.DataAccess
                               SchoolUser.Role as SchoolUser_Role,
                               School.Id as School_Id,
                               School.Name as School_Name,
-                              School.DistrictRef as School_DistrictRef                              
+                              School.DistrictRef as School_DistrictRef,
+                              School.LocalId as School_LocalId                             
                         from [User]
                         join SchoolUser on [User].Id = SchoolUser.UserRef
                         join School on SchoolUser.SchoolRef = School.Id");

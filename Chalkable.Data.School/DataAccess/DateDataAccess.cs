@@ -25,13 +25,11 @@ namespace Chalkable.Data.School.DataAccess
 
         private DbQuery BuildConditionQuery(DbQuery dbQuery, DateQuery query)
         {
-            var conds = new Dictionary<string, object>();
-
-            var condition = new AndQueryCondition();
+            var condition = new AndQueryCondition {FilterBySchool(null)};
             if(query.SchoolYearId.HasValue)
                 condition.Add(Date.SCHOOL_YEAR_REF, query.SchoolYearId, ConditionRelation.Equal);
-            if(query.DateType.HasValue)
-                condition.Add(Date.DATE_TYPE_REF_FIELD, query.DateType, ConditionRelation.Equal);
+            if(query.DayType.HasValue)
+                condition.Add(Date.DATE_TYPE_REF_FIELD, query.DayType, ConditionRelation.Equal);
             if(query.FromDate.HasValue)
                 condition.Add(Date.DATE_TIME_FIELD, "fromDate", query.FromDate, ConditionRelation.Greater);
             if(query.ToDate.HasValue)
@@ -39,15 +37,14 @@ namespace Chalkable.Data.School.DataAccess
             if(query.SchoolDaysOnly)
                 condition.Add(Date.IS_SCHOOL_DAY_FIELD, true, ConditionRelation.Equal);
 
-            dbQuery.Sql.Append(" where 1 = 1 ");
-            FilterBySchool(condition).BuildSqlWhere(dbQuery, "Date", false);
-
+            condition.BuildSqlWhere(dbQuery, "Date");
             if (query.MarkingPeriodId.HasValue)
             {
-                conds.Add("@markingPeriodId", query.MarkingPeriodId);
-                dbQuery.Sql.AppendFormat(@" and exists(select * from MarkingPeriod where [MarkingPeriod].[{0}] = @markingPeriodId 
+                var joinOperand = dbQuery.Parameters.Count > 0 ? "and" : "where";
+                dbQuery.Parameters.Add("@markingPeriodId", query.MarkingPeriodId);
+                dbQuery.Sql.AppendFormat(@" {4} exists(select * from MarkingPeriod where [MarkingPeriod].[{0}] = @markingPeriodId 
                                                           and [MarkingPeriod].[{1}] <= [Date].[{3}] and [MarkingPeriod].[{2}] >= [Date].[{3}])"
-                    , MarkingPeriod.ID_FIELD, MarkingPeriod.START_DATE_FIELD, MarkingPeriod.END_DATE_FIELD, Date.DATE_TIME_FIELD);
+                    , MarkingPeriod.ID_FIELD, MarkingPeriod.START_DATE_FIELD, MarkingPeriod.END_DATE_FIELD, Date.DATE_TIME_FIELD, joinOperand);
             }
             return dbQuery;
         }
@@ -91,7 +88,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             var q = new DbQuery();
             q.Sql.AppendFormat(@"select [Date].*, {0} from [Date] 
-                             left join DayType on DayType.Id = [Date].DateTypeRef"
+                                left join DayType on DayType.Id = [Date].DayTypeRef"
                            , Orm.ComplexResultSetQuery(new List<Type> {typeof (DayType)}));
             q = BuildConditionQuery(q, query);
             q.Sql.AppendFormat(" order by Day desc OFFSET 0 ROWS FETCH NEXT {0} ROWS ONLY ", query.Count);
@@ -107,7 +104,7 @@ namespace Chalkable.Data.School.DataAccess
                 while (reader.Read())
                 {
                     var date = reader.Read<DateDetails>();
-                    if(date.DateTypeRef.HasValue)
+                    if(date.DayTypeRef.HasValue)
                         date.DayType = reader.Read<DayType>(true);
                     res.Add(date);
                 }
@@ -142,7 +139,7 @@ namespace Chalkable.Data.School.DataAccess
         public bool SchoolDaysOnly { get; set; }
 
         public int? MarkingPeriodId { get; set; }
-        public int? DateType { get; set; }
+        public int? DayType { get; set; }
 
         public DateQuery()
         {

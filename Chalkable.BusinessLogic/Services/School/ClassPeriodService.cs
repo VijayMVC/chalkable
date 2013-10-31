@@ -52,7 +52,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     ClassRef = classId,
                     PeriodRef = periodId,
                     RoomRef = roomId,
-                    DateTypeRef = dateTypeId
+                    DayTypeRef = dateTypeId
                 };
                 da.Insert(res);
                 uow.Commit();
@@ -159,10 +159,10 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<ClassPeriod> GetClassPeriods(DateTime date, int? classId, int? roomId, int? studentId, int? teacherId, int? time = null)
         {
             var d = ServiceLocator.CalendarDateService.GetCalendarDateByDate(date.Date);
-            if (d == null || !d.DateTypeRef.HasValue)
+            if (d == null || !d.DayTypeRef.HasValue)
                 return new List<ClassPeriod>();
 
-            return GetClassPeriods(d.SchoolYearRef, null, classId, roomId, null, d.DateTypeRef, studentId, teacherId, time);
+            return GetClassPeriods(d.SchoolYearRef, null, classId, roomId, null, d.DayTypeRef, studentId, teacherId, time);
         }
     }
 }

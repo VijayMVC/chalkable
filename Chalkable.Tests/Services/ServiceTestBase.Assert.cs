@@ -62,5 +62,10 @@ namespace Chalkable.Tests.Services
             }
         }
 
+        public static int GetNewId<TModel>(IList<TModel> models, Func<TModel, int> action)
+        {
+            return models.Count > 0 ? models.Max(action) + 1 : 1;
+        }
+
     }
 }

@@ -18,7 +18,7 @@ namespace Chalkable.Web.Models
             Period = PeriodViewData.Create(classPeriod.Period);
             RoomId = classPeriod.RoomRef;
             ClassId = classPeriod.ClassRef;
-            DateTypeId = classPeriod.DateTypeRef;
+            DateTypeId = classPeriod.DayTypeRef;
             if (room != null)
                 RoomNumber = room.RoomNumber;
         }

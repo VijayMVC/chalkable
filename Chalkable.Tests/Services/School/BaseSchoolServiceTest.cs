@@ -27,25 +27,17 @@ namespace Chalkable.Tests.Services.School
             InitBaseData();
         }
 
-       
-        private SchoolTestContext schoolTestContext;
-        public SchoolTestContext SchoolTestContext
-        {
-            get { return schoolTestContext; }
-            private set { schoolTestContext = value; }
-        }
+        public DistrictTestContext DistrictTestContext { get; private set; }
+        public SchoolTestContext FirstSchoolContext { get { return DistrictTestContext.FirstSchoolContext; } }
+        public SchoolTestContext SecondSchoolContext { get { return DistrictTestContext.SecondSchoolContext; } }
 
-        private IServiceLocatorSchool sysAdminSchoolLocator;
-        public IServiceLocatorSchool SysAdminSchoolLocator
-        {
-            get { return sysAdminSchoolLocator; }
-            private set { sysAdminSchoolLocator = value; }
-        }
+        public IServiceLocatorSchool SysAdminFirstSchoolLocator{ get; private set; }
+        public IServiceLocatorSchool SysAdminSecondSchoolLocator { get; private set; }
         public IServiceLocatorMaster SysAdminMasterLocator
         {
-            get { return SysAdminSchoolLocator.ServiceLocatorMaster; }
+            get { return SysAdminFirstSchoolLocator.ServiceLocatorMaster; }
         }
-
+        
         [TearDown]
         public void TearDown()
         {
@@ -53,11 +45,16 @@ namespace Chalkable.Tests.Services.School
 
         protected void InitBaseData()
         {
-            SchoolTestContext = CreateSchoolTestContext();
+            DistrictTestContext = CreateDistrictTestContext();
             var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var context = sysLocator.SchoolServiceLocator(SchoolTestContext.AdminGradeSl.Context.SchoolId.Value).Context;
-            SysAdminSchoolLocator = new BaseSchoolServiceLocatorTest(new BaseMasterServiceLocatorTest(context));
+            SysAdminFirstSchoolLocator = CreateSysAdminSchoolLocator(sysLocator, DistrictTestContext.FirstSchoolContext);
+            SysAdminSecondSchoolLocator = CreateSysAdminSchoolLocator(sysLocator, DistrictTestContext.SecondSchoolContext);
         }
-
+        
+        private IServiceLocatorSchool CreateSysAdminSchoolLocator(IServiceLocatorMaster sysLocator, SchoolTestContext schoolContext)
+        {
+            var context = sysLocator.SchoolServiceLocator(schoolContext.School.Id).Context;
+            return new BaseSchoolServiceLocatorTest(new BaseMasterServiceLocatorTest(context));
+        }
     }
 }

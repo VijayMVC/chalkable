@@ -16,6 +16,7 @@ declare @class table
 	Class_TeacherRef int,
 	Class_GradeLevelRef int,
 	Class_ChalkableDepartmentId int,
+	Class_SchoolRef  int,
 	GradeLevel_Id int,
 	GradeLevel_Name nvarchar(255),
 	GradeLevel_Number int,
@@ -85,6 +86,7 @@ join @class c on c.Class_Id = mpc.ClassRef
 GO
 
 
+----------------------
 -- GET PERSONS
 
 CREATE procedure [dbo].[spGetPersons] @schoolId int,
@@ -643,7 +645,7 @@ exec spApplyStarringAnnouncementForStudent @personId, @now;
 
 declare @gradeLevelRef int = (select top 1 GradeLevelRef  
 							  from StudentSchoolYear 
-							  join SchoolYear on SchoolYear.Id = StudentSchoolYear.SchoolYearId 
+							  join SchoolYear on SchoolYear.Id = StudentSchoolYear.SchoolYearRef 
 							  where StudentRef = @personId and SchoolYear.StartDate <= @now and SchoolYear.EndDate >= @now)
 
 
@@ -875,6 +877,7 @@ declare @announcementTb table
 	GradingStyle int not null,
 	Dropped bit not null,
 	ClassAnnouncementTypeRef int not null,
+	SchoolRef int not null,
 	ClassAnnouncementTypeName nvarchar(255),
 	PersonRef int not null,
 	PersonName nvarchar(255),
@@ -1371,7 +1374,7 @@ begin
 	([type], groupId, PersonId)
 	select distinct 2, cast(gl.Value as nvarchar(256)), sp.Id
 	from @localPersons as sp
-	join StudentSchoolYear as ssy on sp.Id = ssy.StudentRef and ssy.SchoolYearId = @schoolYearId
+	join StudentSchoolYear as ssy on sp.Id = ssy.StudentRef and ssy.SchoolYearRef = @schoolYearId
 	join @gradeLevelIdsT gl on ssy.GradeLevelRef = gl.value 
 	
 	Insert into @preResult

@@ -87,7 +87,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
                  
              foreach (var d in days)
              {
-                 if (!d.DateTypeRef.HasValue) continue;
+                 if (!d.DayTypeRef.HasValue) continue;
                  var announcements = anns.Where(x => x.Expires.Date == d.Day).ToList();
                  var annPeriods = AnnouncementPeriodViewData.Create(periods, classPeriods, d, announcements, rooms);
                  var ann = announcements.Where(x => !x.ClassRef.HasValue || !x.GradableType).ToList();
@@ -129,7 +129,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              var days = locator.CalendarDateService.GetLastDays(schoolYearId, false, start, end);
              foreach (var d in days)
              {
-                 if (d.DateTypeRef.HasValue)
+                 if (d.DayTypeRef.HasValue)
                  {
                      var currentDayAnns = announcements.Where(x => x.Expires.Date == d.Day).ToList();
                      var currentDayClassPeriods = classPeriods.Where(x => periods.Any(y => y.Id == x.PeriodRef)).ToList();

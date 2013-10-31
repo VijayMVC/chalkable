@@ -30,7 +30,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             var res = new List<AnnouncementPeriodViewData>();
             foreach (var period in periods)
             {
-                var cp = classPeriods.Where(x => x.PeriodRef == period.Id && date.DateTypeRef == x.DateTypeRef).ToList();
+                var cp = classPeriods.Where(x => x.PeriodRef == period.Id && date.DayTypeRef == x.DayTypeRef).ToList();
                 var annItems = announcements.Where(x => cp.Any(y => y.ClassRef == x.ClassRef) && x.GradableType).ToList();
                 string roomNumber = cp.Aggregate("", (current, classePeriod) => current + rooms.First(x => x.Id == classePeriod.RoomRef).RoomNumber + " ");
                 res.Add(Create(period, date.Day, annItems, roomNumber));

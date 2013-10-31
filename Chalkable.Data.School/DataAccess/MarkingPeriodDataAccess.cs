@@ -67,9 +67,9 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<MarkingPeriod> GetMarkingPeriods(int? schoolYearId)
         {
-            var conds = new AndQueryCondition();
+            QueryCondition conds = null;
             if (schoolYearId.HasValue)
-                conds.Add(MarkingPeriod.SCHOOL_YEAR_REF, schoolYearId);
+                conds = new AndQueryCondition {{MarkingPeriod.SCHOOL_YEAR_REF, schoolYearId}};
             return SelectMany<MarkingPeriod>(FilterBySchool(conds));
         } 
 
@@ -87,8 +87,8 @@ namespace Chalkable.Data.School.DataAccess
         {
             var conds = new AndQueryCondition
                 {
-                    {MarkingPeriod.START_DATE_FIELD, endDate, ConditionRelation.LessEqual},
-                    {MarkingPeriod.END_DATE_FIELD, startDate, ConditionRelation.GreaterEqual}
+                    {MarkingPeriod.START_DATE_FIELD, MarkingPeriod.END_DATE_FIELD, endDate, ConditionRelation.LessEqual},
+                    {MarkingPeriod.END_DATE_FIELD, MarkingPeriod.START_DATE_FIELD, startDate, ConditionRelation.GreaterEqual}
                 };
             if (currentMarkingPeriodId.HasValue)
                 conds.Add(MarkingPeriod.ID_FIELD, currentMarkingPeriodId, ConditionRelation.NotEqual);

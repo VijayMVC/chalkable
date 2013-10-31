@@ -166,10 +166,10 @@ namespace Chalkable.Web.Controllers
                 for (int i = 0; i < dates.Count; i++)
                 {
                     bool exists = false;
-                    var d = days.FirstOrDefault(x => x.DateTypeRef.HasValue && x.Day == dates[i]);
+                    var d = days.FirstOrDefault(x => x.DayTypeRef.HasValue && x.Day == dates[i]);
                     if (d != null)
                     {
-                        exists = classPeriods.Any(x => x.DateTypeRef == d.DateTypeRef && x.ClassRef == classId);
+                        exists = classPeriods.Any(x => x.DayTypeRef == d.DayTypeRef && x.ClassRef == classId);
                     }
                     res[classId].Add(exists ? 2 : 0);
                 }

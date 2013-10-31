@@ -496,4 +496,7 @@ alter table [Date]
 add SchoolRef int not null constraint FK_Date_School foreign key references School(Id)
 go
 
+alter table Announcement 
+add SchoolRef int not null constraint FK_Announcement_School foreign key references School(Id)
+go
 

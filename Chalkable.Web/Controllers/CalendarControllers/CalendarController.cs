@@ -77,8 +77,8 @@ namespace Chalkable.Web.Controllers.CalendarControllers
             for (var i = 0; i < days.Count; i++)
             {
                 var d = days[i];
-                if (d == null || !d.DateTypeRef.HasValue) continue;
-                var currentClassPeriods = classPeriods.Where(x => x.DateTypeRef == d.DateTypeRef).ToList();
+                if (d == null || !d.DayTypeRef.HasValue) continue;
+                var currentClassPeriods = classPeriods.Where(x => x.DayTypeRef == d.DayTypeRef).ToList();
                 res.Add(TeacherClassWeekCalendarViewData.Create(d.Day.Date, currentClassPeriods));
             }
             return Json(res);

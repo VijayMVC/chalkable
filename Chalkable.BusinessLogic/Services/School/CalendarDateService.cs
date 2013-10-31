@@ -51,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
                         da.Delete(new DateQuery {MarkingPeriodId = mp.Id});
 
-                        var sections = ServiceLocator.DayTypeService.GetSections(mp.Id);
+                        var sections = ServiceLocator.DayTypeService.GetSections(mp.SchoolYearRef);
                         if (sections.Count == 0)
                             throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_SHOULD_HAVE_SECTION);
                        
@@ -71,7 +71,7 @@ namespace Chalkable.BusinessLogic.Services.School
                             if (((1 << (int)dt.DayOfWeek) & mp.WeekDays) != 0)
                             {
                                 d.IsSchoolDay = true;
-                                d.DateTypeRef = sections[sectionIndex].Id;
+                                d.DayTypeRef = sections[sectionIndex].Id;
                                 sectionIndex = (sectionIndex + 1) % sections.Count;
                             }
                             if (d.Day == date) res = d;
@@ -187,7 +187,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var cdDate = GetByDate(date, uow);
-                cdDate.DateTypeRef = sectionId;
+                cdDate.DayTypeRef = sectionId;
                 cdDate.IsSchoolDay = true;
                 new DateDataAccess(uow, Context.SchoolLocalId).Update(cdDate);
                 uow.Commit();
@@ -230,7 +230,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         Day = date,
                         IsSchoolDay = schoolDay,
                         SchoolYearRef = schoolYearId,
-                        DateTypeRef = dateTypeId,
+                        DayTypeRef = dateTypeId,
                         SchoolRef = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetById(schoolYearId).SchoolRef
                     };
                 new DateDataAccess(uow, Context.SchoolLocalId).Insert(res);

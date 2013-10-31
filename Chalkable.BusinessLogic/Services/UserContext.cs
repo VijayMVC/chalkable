@@ -53,14 +53,14 @@ namespace Chalkable.BusinessLogic.Services
             UserLocalId = localId;
 
             if (schoolId.HasValue)
-                SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, districtServerUrl, schoolId);
+                SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, districtServerUrl, districtId);
             MasterConnectionString = Settings.MasterConnectionString;
         }
 
         public void SwitchSchool(Guid? schoolId, Guid districtId, string schoolName, string schoolTimeZoneId, int? schoolLocalId, string districtServerUrl, Guid? developerId)
         {
-            if (Role != CoreRoles.SUPER_ADMIN_ROLE)
-                throw new ChalkableSecurityException("Only sys admin is able to switch between schools");
+            if (Role != CoreRoles.SUPER_ADMIN_ROLE && !(Role == CoreRoles.DISTRICT_ROLE && districtId == DistrictId))
+                throw new ChalkableSecurityException("Only sys admin or district is able to switch between schools");
             this.districtServerUrl = districtServerUrl;
             DistrictName = schoolName;
             SchoolId = schoolId;

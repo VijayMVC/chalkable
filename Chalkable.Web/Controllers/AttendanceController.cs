@@ -103,7 +103,7 @@ namespace Chalkable.Web.Controllers
         {
             var now = SchoolLocator.Context.NowSchoolTime;
             var cDate = SchoolLocator.CalendarDateService.GetCalendarDateByDate(now.Date);
-            if (!(cDate.IsSchoolDay && cDate.DateTypeRef.HasValue))
+            if (!(cDate.IsSchoolDay && cDate.DayTypeRef.HasValue))
                 throw new ChalkableException("Today is not school day");
 
             var att = SchoolLocator.AttendanceService.SwipeCard(personId, now, classPeriodId);
