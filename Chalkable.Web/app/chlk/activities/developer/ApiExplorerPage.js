@@ -1,6 +1,9 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.developer.ApiExplorerTpl');
 REQUIRE('chlk.templates.developer.ApiExplorerResponseTpl');
+REQUIRE('chlk.templates.developer.ApiListTpl');
+REQUIRE('chlk.templates.developer.ApiCallSeqTpl');
+
 REQUIRE('chlk.models.api.ApiParamType');
 
 NAMESPACE('chlk.activities.developer', function () {
@@ -38,6 +41,7 @@ NAMESPACE('chlk.activities.developer', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.developer.ApiExplorerTpl)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.developer.ApiCallSeqTpl, 'update-api-calls-list', '.api-calls-seq', ria.mvc.PartialUpdateRuleActions.Replace)],
         'ApiExplorerPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
             [ria.mvc.DomEventBind('click', '.header')],
@@ -113,6 +117,27 @@ NAMESPACE('chlk.activities.developer', function () {
               this.refreshExampleCode(tab);
             },
 
+            [ria.mvc.DomEventBind('click', '.way-item')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function onNodeClick(node, event){
+                var text = jQuery(node.valueOf()).data('param');
+                var resItem;
+                jQuery('.header-body .action').each(function(index, item){
+                    if (jQuery(item).data('method-name') == text){
+                        resItem = item;
+                    }
+                });
+
+                if (resItem) {
+                    jQuery(document).scrollTop(jQuery(resItem).parent().offset().top);
+                    //think about this madness
+                    if (!jQuery(resItem).parent().parent().parent().find('.details').is(':visible'))
+                        resItem.click();
+                }
+            },
+
+
+
             [ria.mvc.DomEventBind('click', '.tab-header')],
             [[ria.dom.Dom, ria.dom.Event]],
             function exampleTabClick(node, event){
@@ -162,13 +187,25 @@ NAMESPACE('chlk.activities.developer', function () {
                return form.valid();
             },
 
+
+            /*[ria.mvc.DomEventBind('click', '.api-search-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function on
+              */
+
+            [ria.mvc.DomEventBind('click', '.api-search-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function apiSearchBtnClick(node, event) {
+                 jQuery('#api-search-box').autocomplete( "search" , "");
+            },
+
             [ria.mvc.PartialUpdateRule(chlk.templates.developer.ApiExplorerResponseTpl)],
             VOID, function updateApiResponse(tpl, model, msg_) {
                 var formId = model.getApiFormId();
                 var form = this.dom.find('#' + formId);
                 var responseContainer = form.find('.response');
                 tpl.renderTo(responseContainer.empty());
-                jQuery(form.valueOf()).find('pre').snippet("javascript", {style:"ide-eclipse"});
+                jQuery(form.valueOf()).find('pre.result').snippet("javascript", {style:"ide-eclipse"});
             }
         ]);
 });

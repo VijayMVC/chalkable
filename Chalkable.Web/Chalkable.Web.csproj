@@ -338,6 +338,11 @@
     <Content Include="app\api\chlk-post-message-api.js" />
     <Content Include="Global.asax" />
     <Content Include="loaderio-f0d51fdd912a285e8c3b581c292489c8.html" />
+    <Content Include="pathfinder\adminedit_methods.xml" />
+    <Content Include="pathfinder\admingrade_methods.xml" />
+    <Content Include="pathfinder\adminview_methods.xml" />
+    <Content Include="pathfinder\student_methods.xml" />
+    <Content Include="pathfinder\teacher_methods.xml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

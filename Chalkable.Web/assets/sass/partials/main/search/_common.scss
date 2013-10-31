@@ -138,6 +138,20 @@ ul.ui-autocomplete{
       }
     }
 
+    >div.api-list{
+      .api-list-item{
+        padding: 8px;
+        color: gray;
+        font-size: 16px;
+
+        &:hover{
+          border-color: #a3bae9;
+          border: 1px dotted;
+          background-color: #dfe8f6;
+        }
+      }
+    }
+
   }
 }
 

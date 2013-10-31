@@ -403,6 +403,87 @@ BODY {
                   }
                 }
               }
+
+              #api-search-box{
+                border-bottom-right-radius: 0;
+                border-top-right-radius: 0;
+                border: 1px solid #ccc;
+                border-top-left-radius: 7px;
+                border-bottom-left-radius: 7px;
+                @include box-shadow(0 0 4px 1px #ccc inset);
+
+                background: url(images/developer/dropdown-trigger.png) no-repeat right center;
+                background-color: #fff;
+
+                color: #ccc;
+
+                width: 622px;
+                height: 15px;
+
+                margin-bottom: 10px;
+                padding-left: 4px;
+                font-style: italic;
+              }
+
+              .search-btn{
+                border: none;
+                width: 33px;
+                vertical-align: top;
+                height: 33px;
+                background-image: url(images/app/search-button.png);
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-color: transparent;
+                cursor: pointer;
+                outline: none;
+                padding: 0;
+                display: inline-block;
+                margin-top: -3px;
+                background-size: 33px;
+              }
+
+
+                .call-tree{
+                  background: #DBDCDC !important;
+                  border: 1px #7DC2CA solid !important;
+                  padding: 10px;
+                  height: 70px;
+                  text-align: center;
+                  .way-item{
+                    cursor: pointer;
+                  }
+                  .tree-node{
+
+                    display: inline-block;
+                    height: 60px;
+                    background: #E8EAEA;
+                    color: #30585D;
+                    padding: 5px;
+                    white-space: nowrap;
+                    &.separator{
+                      display: inline-block;
+                      background: url(images/developer/separator-arrow.png) center center no-repeat;
+                      width: 40px;
+                      vertical-align: top;
+
+                    }
+                    &.single{
+                      display: block;
+                    }
+                    .title{
+                      color: #6b8386;
+                      font-weight: bold;
+                      font-size: 12px;
+                    }
+                    .param{
+                      display: table-row;
+                      font-size: 12px;
+                      text-align: center;
+                      color: #888888;
+                      font-weight: bold;
+                    }
+                  }
+              }
             }
           }
         }
