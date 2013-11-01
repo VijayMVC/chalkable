@@ -16,73 +16,73 @@
 //        {
 //            var addressValue = "USA New York";
 //            //security check
-//            AssertForDeny(sl => sl.AddressService.Add(SchoolTestContext.AdminGrade.Id, addressValue, "test", AddressType.Home), 
-//                SchoolTestContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent
+//            AssertForDeny(sl => sl.AddressService.Add(FirstSchoolContext.AdminGrade.Id, addressValue, "test", AddressType.Home), 
+//                FirstSchoolContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent
 //                | SchoolContextRoles.AdminViewer | SchoolContextRoles.Checkin);
-//            AssertForDeny(sl => sl.AddressService.Add(SchoolTestContext.AdminView.Id, addressValue, "test", AddressType.Home),
-//                SchoolTestContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent
+//            AssertForDeny(sl => sl.AddressService.Add(FirstSchoolContext.AdminView.Id, addressValue, "test", AddressType.Home),
+//                FirstSchoolContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent
 //                | SchoolContextRoles.Checkin);
-//            AssertForDeny(sl => sl.AddressService.Add(SchoolTestContext.FirstTeacher.Id, addressValue, "test", AddressType.Home),
-//                SchoolTestContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstStudent 
+//            AssertForDeny(sl => sl.AddressService.Add(FirstSchoolContext.FirstTeacher.Id, addressValue, "test", AddressType.Home),
+//                FirstSchoolContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstStudent 
 //                                  | SchoolContextRoles.AdminViewer | SchoolContextRoles.Checkin);
-//            AssertForDeny(sl => sl.AddressService.Add(SchoolTestContext.FirstStudent.Id, addressValue, "test", AddressType.Home),
-//                SchoolTestContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher 
+//            AssertForDeny(sl => sl.AddressService.Add(FirstSchoolContext.FirstStudent.Id, addressValue, "test", AddressType.Home),
+//                FirstSchoolContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher 
 //                                 | SchoolContextRoles.AdminViewer | SchoolContextRoles.Checkin);
 
-//            var address = SchoolTestContext.AdminGradeSl.AddressService.Add(SchoolTestContext.AdminGrade.Id, addressValue, "test", AddressType.Home);
+//            var address = FirstSchoolContext.AdminGradeSl.AddressService.Add(FirstSchoolContext.AdminGrade.Id, addressValue, "test", AddressType.Home);
 //            Assert.AreEqual(address.Value, addressValue);
 //            Assert.AreEqual(address.Note, "test");
 //            Assert.AreEqual(address.Type, AddressType.Home);
-//            Assert.AreEqual(address.PersonRef, SchoolTestContext.AdminGrade.Id);
+//            Assert.AreEqual(address.PersonRef, FirstSchoolContext.AdminGrade.Id);
 
-//            var addresses = SchoolTestContext.AdminGradeSl.AddressService.GetAddress();
+//            var addresses = FirstSchoolContext.AdminGradeSl.AddressService.GetAddress();
 //            Assert.AreEqual(addresses.Count, 1);
 //            AssertAreEqual(address, addresses[0]);
 
-//            var address2 = SchoolTestContext.AdminGradeSl.AddressService.Add(SchoolTestContext.AdminView.Id, addressValue, "test", AddressType.Home);
-//            var address3 = SchoolTestContext.AdminGradeSl.AddressService.Add(SchoolTestContext.FirstTeacher.Id, addressValue, "test", AddressType.Home);
-//            var address4 = SchoolTestContext.AdminGradeSl.AddressService.Add(SchoolTestContext.FirstStudent.Id, addressValue, "test", AddressType.Home);
-//            Assert.AreEqual(SchoolTestContext.AdminGradeSl.AddressService.GetAddress().Count, 4);
+//            var address2 = FirstSchoolContext.AdminGradeSl.AddressService.Add(FirstSchoolContext.AdminView.Id, addressValue, "test", AddressType.Home);
+//            var address3 = FirstSchoolContext.AdminGradeSl.AddressService.Add(FirstSchoolContext.FirstTeacher.Id, addressValue, "test", AddressType.Home);
+//            var address4 = FirstSchoolContext.AdminGradeSl.AddressService.Add(FirstSchoolContext.FirstStudent.Id, addressValue, "test", AddressType.Home);
+//            Assert.AreEqual(FirstSchoolContext.AdminGradeSl.AddressService.GetAddress().Count, 4);
 
 //            //edit security check 
 //            AssertForDeny(sl => sl.AddressService.Edit(address.Id, addressValue, "test", AddressType.Work),
-//                SchoolTestContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent
+//                FirstSchoolContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent
 //                | SchoolContextRoles.AdminViewer | SchoolContextRoles.Checkin);
 //            AssertForDeny(sl => sl.AddressService.Edit(address2.Id, addressValue, "test", AddressType.Work),
-//                SchoolTestContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent
+//                FirstSchoolContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent
 //                | SchoolContextRoles.Checkin);
 //            AssertForDeny(sl => sl.AddressService.Edit(address3.Id, addressValue, "test", AddressType.Work),
-//                SchoolTestContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstStudent
+//                FirstSchoolContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstStudent
 //                                  | SchoolContextRoles.AdminViewer | SchoolContextRoles.Checkin);
 //            AssertForDeny(sl => sl.AddressService.Edit(address4.Id, addressValue, "test", AddressType.Work),
-//                SchoolTestContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher
+//                FirstSchoolContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher
 //                                 | SchoolContextRoles.AdminViewer | SchoolContextRoles.Checkin);
 
 //            addressValue += " test";
-//            address = SchoolTestContext.AdminGradeSl.AddressService.Edit(address.Id, addressValue, "test2", AddressType.Work);
+//            address = FirstSchoolContext.AdminGradeSl.AddressService.Edit(address.Id, addressValue, "test2", AddressType.Work);
 //            Assert.AreEqual(address.Value, addressValue);
 //            Assert.AreEqual(address.Note, "test2");
 //            Assert.AreEqual(address.Type, AddressType.Work);
 
 //            //delete security check 
 //            AssertForDeny(sl => sl.AddressService.Delete(address.Id),
-//                SchoolTestContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent
+//                FirstSchoolContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent
 //                | SchoolContextRoles.AdminViewer | SchoolContextRoles.Checkin);
 //            AssertForDeny(sl => sl.AddressService.Delete(address2.Id),
-//                SchoolTestContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent
+//                FirstSchoolContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent
 //                | SchoolContextRoles.Checkin);
 //            AssertForDeny(sl => sl.AddressService.Delete(address3.Id),
-//                SchoolTestContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstStudent
+//                FirstSchoolContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstStudent
 //                                  | SchoolContextRoles.AdminViewer | SchoolContextRoles.Checkin);
 //            AssertForDeny(sl => sl.AddressService.Delete(address4.Id),
-//                SchoolTestContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher
+//                FirstSchoolContext, SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher
 //                                 | SchoolContextRoles.AdminViewer | SchoolContextRoles.Checkin);
 
-//            SchoolTestContext.AdminGradeSl.AddressService.Delete(address.Id);
-//            SchoolTestContext.AdminViewSl.AddressService.Delete(address2.Id);
-//            SchoolTestContext.FirstTeacherSl.AddressService.Delete(address3.Id);
-//            SchoolTestContext.FirstStudentSl.AddressService.Delete(address4.Id);
-//            Assert.AreEqual(SchoolTestContext.AdminGradeSl.AddressService.GetAddress().Count, 0);
+//            FirstSchoolContext.AdminGradeSl.AddressService.Delete(address.Id);
+//            FirstSchoolContext.AdminViewSl.AddressService.Delete(address2.Id);
+//            FirstSchoolContext.FirstTeacherSl.AddressService.Delete(address3.Id);
+//            FirstSchoolContext.FirstStudentSl.AddressService.Delete(address4.Id);
+//            Assert.AreEqual(FirstSchoolContext.AdminGradeSl.AddressService.GetAddress().Count, 0);
 
 //        }
 //    }

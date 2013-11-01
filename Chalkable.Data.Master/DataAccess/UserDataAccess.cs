@@ -40,6 +40,7 @@ namespace Chalkable.Data.Master.DataAccess
                     left join District on [User].DistrictRef = District.Id");
             p2.Append(@"select 
                               [User].Id as User_Id,
+                              [User].LocalId as User_LocalId,
                               [User].Login as User_Login,
                               [User].Password as User_Password,
                               [User].IsSysAdmin as User_IsSysAdmin,

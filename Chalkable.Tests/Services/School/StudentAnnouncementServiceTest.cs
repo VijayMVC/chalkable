@@ -11,7 +11,7 @@
 //        [Test]
 //        public void GetSetStudentAnnouncementTest()
 //        {
-//            var context = SchoolTestContext;
+//            var context = FirstSchoolContext;
 //            var type = context.FirstTeacherSl.AnnouncementTypeService.GetAnnouncementTypeBySystemType(SystemAnnouncementType.Standard);
 //            var mathClass = ClassServiceTest.CreateClass(context, context.FirstTeacher, context.FirstStudent, context.SecondStudent);
 
@@ -23,7 +23,7 @@
 //            var stAnns = announcement.StudentAnnouncements;
 //            var sa1 = stAnns[0];
 //            AssertForDeny(sl=> sl.StudentAnnouncementService.SetGrade(sa1.Id, 20, "testCredits", "test", false, GradingStyleEnum.Numeric100)
-//                , SchoolTestContext, SchoolContextRoles.SecondTeacher | SchoolContextRoles.FirstStudent | SchoolContextRoles.SecondStudent
+//                , FirstSchoolContext, SchoolContextRoles.SecondTeacher | SchoolContextRoles.FirstStudent | SchoolContextRoles.SecondStudent
 //                | SchoolContextRoles.FirstParent | SchoolContextRoles.Checkin);
 
 //            var gradingStyle = GradingStyleEnum.Numeric100;
@@ -31,8 +31,8 @@
 //            var sa = context.FirstTeacherSl.StudentAnnouncementService.SetGrade(sa1.Id, 20, "testCredits", "test", false, gradingStyle);
 
 //            //check notification
-//            Assert.AreEqual(1, SchoolTestContext.FirstStudentSl.NotificationService.GetUnshownNotifications().Count);
-//            Assert.AreEqual(sa.AnnouncementRef, SchoolTestContext.FirstStudentSl.NotificationService.GetUnshownNotifications().First().AnnouncementRef);
+//            Assert.AreEqual(1, FirstSchoolContext.FirstStudentSl.NotificationService.GetUnshownNotifications().Count);
+//            Assert.AreEqual(sa.AnnouncementRef, FirstSchoolContext.FirstStudentSl.NotificationService.GetUnshownNotifications().First().AnnouncementRef);
            
 
 //            Assert.AreEqual(sa.Id, sa1.Id);

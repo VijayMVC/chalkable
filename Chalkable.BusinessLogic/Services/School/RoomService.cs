@@ -10,7 +10,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IRoomService
     {
         Room AddRoom(int id, int schoolId, string roomNumber, string description, string size, int? capacity, string phoneNumber);
-        Room EditRoom(int id, int schoolId, string roomNumber, string description, string size, int? capacity, string phoneNumber);
+        Room EditRoom(int id, string roomNumber, string description, string size, int? capacity, string phoneNumber);
         void DeleteRoom(int id);
         PaginatedList<Room> GetRooms(int start = 0, int count = int.MaxValue);
         Room WhereIsPerson(int personId, DateTime dateTime);
@@ -48,7 +48,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public Room EditRoom(int id, int schoolId, string roomNumber, string description, string size, int? capacity, string phoneNumber)
+        public Room EditRoom(int id, string roomNumber, string description, string size, int? capacity, string phoneNumber)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
@@ -60,7 +60,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 room.Description = description;
                 room.Capacity = capacity;
                 room.Size = size;
-                room.SchoolRef = schoolId;
                 room.PhoneNumber = phoneNumber;
                 da.Update(room);
                 uow.Commit();

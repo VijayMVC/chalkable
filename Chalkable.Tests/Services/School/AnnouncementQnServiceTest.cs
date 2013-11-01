@@ -16,73 +16,73 @@
 //        [Test]
 //        public void QuestionAnswerTest()
 //        {
-//            var c = ClassServiceTest.CreateClass(SchoolTestContext, SchoolTestContext.FirstTeacher,
-//                                                 SchoolTestContext.FirstStudent, null);
+//            var c = ClassServiceTest.CreateClass(FirstSchoolContext, FirstSchoolContext.FirstTeacher,
+//                                                 FirstSchoolContext.FirstStudent, null);
 
-//            var annType = SchoolTestContext.FirstStudentSl.AnnouncementTypeService.GetAnnouncementTypeBySystemType(SystemAnnouncementType.HW);
-//            var announcement = SchoolTestContext.FirstTeacherSl.AnnouncementService.CreateAnnouncement(annType.Id, c.Id);
+//            var annType = FirstSchoolContext.FirstStudentSl.AnnouncementTypeService.GetAnnouncementTypeBySystemType(SystemAnnouncementType.HW);
+//            var announcement = FirstSchoolContext.FirstTeacherSl.AnnouncementService.CreateAnnouncement(annType.Id, c.Id);
 //            var currentMpId = c.MarkingPeriodClasses[0].MarkingPeriodRef;  
-//            SchoolTestContext.FirstTeacherSl.AnnouncementService.SubmitAnnouncement(announcement.Id, c.Id, currentMpId);
-//            announcement = SchoolTestContext.FirstTeacherSl.AnnouncementService.GetAnnouncementDetails(announcement.Id);
+//            FirstSchoolContext.FirstTeacherSl.AnnouncementService.SubmitAnnouncement(announcement.Id, c.Id, currentMpId);
+//            announcement = FirstSchoolContext.FirstTeacherSl.AnnouncementService.GetAnnouncementDetails(announcement.Id);
 
-//            AssertForDeny(sl => sl.AnnouncementQnAService.AskQuestion(announcement.Id, "question"), SchoolTestContext
+//            AssertForDeny(sl => sl.AnnouncementQnAService.AskQuestion(announcement.Id, "question"), FirstSchoolContext
 //                          , SchoolContextRoles.FirstParent | SchoolContextRoles.SecondStudent 
 //                          | SchoolContextRoles.SecondTeacher | SchoolContextRoles.Checkin);
 
-//            var annQuestion = SchoolTestContext.FirstStudentSl.AnnouncementQnAService.AskQuestion(announcement.Id, "question");
+//            var annQuestion = FirstSchoolContext.FirstStudentSl.AnnouncementQnAService.AskQuestion(announcement.Id, "question");
 //            //check notification
-//            Assert.AreEqual(1, SchoolTestContext.FirstTeacherSl.NotificationService.GetUnshownNotifications().Count);
-//            Assert.AreEqual(announcement.Id, SchoolTestContext.FirstTeacherSl.NotificationService.GetUnshownNotifications().First().AnnouncementRef);
+//            Assert.AreEqual(1, FirstSchoolContext.FirstTeacherSl.NotificationService.GetUnshownNotifications().Count);
+//            Assert.AreEqual(announcement.Id, FirstSchoolContext.FirstTeacherSl.NotificationService.GetUnshownNotifications().First().AnnouncementRef);
             
 
-//            Assert.AreEqual(annQuestion.PersonRef, SchoolTestContext.FirstStudent.Id);
+//            Assert.AreEqual(annQuestion.PersonRef, FirstSchoolContext.FirstStudent.Id);
 //            Assert.AreEqual(annQuestion.Question, "question");
 //            Assert.AreEqual(annQuestion.State, AnnouncementQnAState.Asked);
 //            Assert.AreEqual(annQuestion.Answer, null);
-//            AssertAreEqual(annQuestion, SchoolTestContext.FirstStudentSl.AnnouncementQnAService.GetAnnouncementQnA(annQuestion.Id));
-//            Assert.AreEqual(SchoolTestContext.FirstStudentSl.AnnouncementQnAService.GetAnnouncementQnAs(announcement.Id).Count, 1);
+//            AssertAreEqual(annQuestion, FirstSchoolContext.FirstStudentSl.AnnouncementQnAService.GetAnnouncementQnA(annQuestion.Id));
+//            Assert.AreEqual(FirstSchoolContext.FirstStudentSl.AnnouncementQnAService.GetAnnouncementQnAs(announcement.Id).Count, 1);
 
-//            AssertForDeny(sl => sl.AnnouncementQnAService.Answer(annQuestion.Id, "question", "answer"), SchoolTestContext
+//            AssertForDeny(sl => sl.AnnouncementQnAService.Answer(annQuestion.Id, "question", "answer"), FirstSchoolContext
 //                          , SchoolContextRoles.FirstParent | SchoolContextRoles.SecondStudent | SchoolContextRoles.FirstStudent
 //                          | SchoolContextRoles.SecondTeacher | SchoolContextRoles.Checkin);
 
-//            annQuestion = SchoolTestContext.FirstTeacherSl.AnnouncementQnAService.Answer(annQuestion.Id, "question", "answer");
+//            annQuestion = FirstSchoolContext.FirstTeacherSl.AnnouncementQnAService.Answer(annQuestion.Id, "question", "answer");
 //            //check notification
-//            Assert.AreEqual(1, SchoolTestContext.FirstStudentSl.NotificationService.GetUnshownNotifications().Count);
-//            Assert.AreEqual(announcement.Id, SchoolTestContext.FirstStudentSl.NotificationService.GetUnshownNotifications().First().AnnouncementRef);
+//            Assert.AreEqual(1, FirstSchoolContext.FirstStudentSl.NotificationService.GetUnshownNotifications().Count);
+//            Assert.AreEqual(announcement.Id, FirstSchoolContext.FirstStudentSl.NotificationService.GetUnshownNotifications().First().AnnouncementRef);
             
 //            Assert.AreEqual(annQuestion.Answer, "answer");
 //            Assert.AreEqual(annQuestion.State, AnnouncementQnAState.Answered);
-//            Assert.AreEqual(annQuestion.AnsweredTime.Value.Date, SchoolTestContext.NowDate);
+//            Assert.AreEqual(annQuestion.AnsweredTime.Value.Date, FirstSchoolContext.NowDate);
 
-//            AssertAreEqual(annQuestion, SchoolTestContext.FirstStudentSl.AnnouncementQnAService.GetAnnouncementQnA(annQuestion.Id));
-//            Assert.AreEqual(SchoolTestContext.FirstStudentSl.AnnouncementQnAService.GetAnnouncementQnAs(announcement.Id).Count, 1);
+//            AssertAreEqual(annQuestion, FirstSchoolContext.FirstStudentSl.AnnouncementQnAService.GetAnnouncementQnA(annQuestion.Id));
+//            Assert.AreEqual(FirstSchoolContext.FirstStudentSl.AnnouncementQnAService.GetAnnouncementQnAs(announcement.Id).Count, 1);
 
 //            //security check
-//            AssertForDeny(sl => sl.AnnouncementQnAService.EditAnswer(annQuestion.Id, "answer2"), SchoolTestContext
+//            AssertForDeny(sl => sl.AnnouncementQnAService.EditAnswer(annQuestion.Id, "answer2"), FirstSchoolContext
 //              , SchoolContextRoles.FirstParent | SchoolContextRoles.SecondStudent | SchoolContextRoles.FirstStudent
 //              | SchoolContextRoles.SecondTeacher | SchoolContextRoles.Checkin);
-//            AssertForDeny(sl => sl.AnnouncementQnAService.EditQuestion(annQuestion.Id, "question2"), SchoolTestContext
+//            AssertForDeny(sl => sl.AnnouncementQnAService.EditQuestion(annQuestion.Id, "question2"), FirstSchoolContext
 //                          , SchoolContextRoles.FirstParent | SchoolContextRoles.SecondStudent | SchoolContextRoles.FirstStudent
 //                          | SchoolContextRoles.SecondTeacher | SchoolContextRoles.Checkin);
-//            AssertForDeny(sl => sl.AnnouncementQnAService.MarkUnanswered(annQuestion.Id), SchoolTestContext
+//            AssertForDeny(sl => sl.AnnouncementQnAService.MarkUnanswered(annQuestion.Id), FirstSchoolContext
 //                          , SchoolContextRoles.FirstParent | SchoolContextRoles.SecondStudent | SchoolContextRoles.FirstStudent
 //                          | SchoolContextRoles.SecondTeacher | SchoolContextRoles.Checkin);
-//            AssertForDeny(sl => sl.AnnouncementQnAService.Delete(annQuestion.Id), SchoolTestContext
+//            AssertForDeny(sl => sl.AnnouncementQnAService.Delete(annQuestion.Id), FirstSchoolContext
 //                          , SchoolContextRoles.FirstParent | SchoolContextRoles.SecondStudent | SchoolContextRoles.FirstStudent
 //                          | SchoolContextRoles.SecondTeacher | SchoolContextRoles.Checkin);
             
-//            annQuestion = SchoolTestContext.FirstTeacherSl.AnnouncementQnAService.EditAnswer(annQuestion.Id, "answer2");
+//            annQuestion = FirstSchoolContext.FirstTeacherSl.AnnouncementQnAService.EditAnswer(annQuestion.Id, "answer2");
 //            Assert.AreEqual(annQuestion.Answer, "answer2");
-//            annQuestion = SchoolTestContext.FirstTeacherSl.AnnouncementQnAService.EditQuestion(annQuestion.Id, "question2");
+//            annQuestion = FirstSchoolContext.FirstTeacherSl.AnnouncementQnAService.EditQuestion(annQuestion.Id, "question2");
 //            Assert.AreEqual(annQuestion.Question, "question2");
-//            annQuestion = SchoolTestContext.FirstTeacherSl.AnnouncementQnAService.MarkUnanswered(annQuestion.Id);
+//            annQuestion = FirstSchoolContext.FirstTeacherSl.AnnouncementQnAService.MarkUnanswered(annQuestion.Id);
 //            Assert.AreEqual(annQuestion.State, AnnouncementQnAState.Unanswered);
-//            Assert.AreEqual(SchoolTestContext.SecondStudentSl.AnnouncementQnAService.GetAnnouncementQnAs(announcement.Id).Count, 0);
-//            c = SchoolTestContext.AdminGradeSl.ClassService.AddStudent(c.Id, SchoolTestContext.SecondStudent.Id);
-//            Assert.AreEqual(SchoolTestContext.SecondStudentSl.AnnouncementQnAService.GetAnnouncementQnAs(announcement.Id).Count, 1);
-//            SchoolTestContext.FirstTeacherSl.AnnouncementQnAService.Delete(annQuestion.Id);
-//            Assert.AreEqual(SchoolTestContext.FirstTeacherSl.AnnouncementQnAService.GetAnnouncementQnAs(announcement.Id).Count, 0);  
+//            Assert.AreEqual(FirstSchoolContext.SecondStudentSl.AnnouncementQnAService.GetAnnouncementQnAs(announcement.Id).Count, 0);
+//            c = FirstSchoolContext.AdminGradeSl.ClassService.AddStudent(c.Id, FirstSchoolContext.SecondStudent.Id);
+//            Assert.AreEqual(FirstSchoolContext.SecondStudentSl.AnnouncementQnAService.GetAnnouncementQnAs(announcement.Id).Count, 1);
+//            FirstSchoolContext.FirstTeacherSl.AnnouncementQnAService.Delete(annQuestion.Id);
+//            Assert.AreEqual(FirstSchoolContext.FirstTeacherSl.AnnouncementQnAService.GetAnnouncementQnAs(announcement.Id).Count, 0);  
 
 //        }
 //    }

@@ -14,29 +14,29 @@
 //        [Test]
 //        public void AttReasonTest()
 //        {
-//            AssertForDeny(sl => sl.AttendanceReasonService.Add(AttendanceTypeEnum.Excused, "code1", "reason 1"), SchoolTestContext,
+//            AssertForDeny(sl => sl.AttendanceReasonService.Add(AttendanceTypeEnum.Excused, "code1", "reason 1"), FirstSchoolContext,
 //                SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent | SchoolContextRoles.AdminViewer | SchoolContextRoles.FirstParent);
 
-//            var attReason = SchoolTestContext.AdminGradeSl.AttendanceReasonService.Add(AttendanceTypeEnum.Excused, "code1", "reason 1");
+//            var attReason = FirstSchoolContext.AdminGradeSl.AttendanceReasonService.Add(AttendanceTypeEnum.Excused, "code1", "reason 1");
 //            Assert.AreEqual(attReason.Code, "code1");
 //            Assert.AreEqual(attReason.AttendanceType, AttendanceTypeEnum.Excused);
 //            Assert.AreEqual(attReason.Description, "reason 1");
 
-//            Assert.AreEqual(SchoolTestContext.AdminGradeSl.AttendanceReasonService.List().Count, 1);
-//            Assert.AreEqual(SchoolTestContext.FirstTeacherSl.AttendanceReasonService.List().Count, 1);
+//            Assert.AreEqual(FirstSchoolContext.AdminGradeSl.AttendanceReasonService.List().Count, 1);
+//            Assert.AreEqual(FirstSchoolContext.FirstTeacherSl.AttendanceReasonService.List().Count, 1);
 
-//            AssertForDeny(sl => sl.AttendanceReasonService.Edit(attReason.Id, AttendanceTypeEnum.Excused, "code1", "reason 1"), SchoolTestContext,
+//            AssertForDeny(sl => sl.AttendanceReasonService.Edit(attReason.Id, AttendanceTypeEnum.Excused, "code1", "reason 1"), FirstSchoolContext,
 //                SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent | SchoolContextRoles.FirstParent | SchoolContextRoles.AdminViewer);
 
-//            attReason = SchoolTestContext.AdminGradeSl.AttendanceReasonService.Edit(attReason.Id, AttendanceTypeEnum.Late, "code2", "reason 2");
+//            attReason = FirstSchoolContext.AdminGradeSl.AttendanceReasonService.Edit(attReason.Id, AttendanceTypeEnum.Late, "code2", "reason 2");
 //            Assert.AreEqual(attReason.Code, "code2");
 //            Assert.AreEqual(attReason.AttendanceType, AttendanceTypeEnum.Late);
 //            Assert.AreEqual(attReason.Description, "reason 2");
 
-//            AssertForDeny(sl => sl.AttendanceReasonService.Delete(attReason.Id), SchoolTestContext, SchoolContextRoles.FirstTeacher
+//            AssertForDeny(sl => sl.AttendanceReasonService.Delete(attReason.Id), FirstSchoolContext, SchoolContextRoles.FirstTeacher
 //                | SchoolContextRoles.FirstStudent | SchoolContextRoles.AdminViewer | SchoolContextRoles.FirstParent);
 
-//            SchoolTestContext.AdminGradeSl.AttendanceReasonService.Delete(attReason.Id);
+//            FirstSchoolContext.AdminGradeSl.AttendanceReasonService.Delete(attReason.Id);
 //        }
 //    }
 //}

@@ -67,7 +67,7 @@ namespace Chalkable.Tests.Services.TestContext
         private SchoolTestContext CreateSchoolTextContext(string schoolName, bool isActive, bool isPrivate)
         {
             var school = CreateSchool(schoolName, isActive, isPrivate);
-            return SchoolTestContext.Create(sysMasterLocator.SchoolServiceLocator(DistrictId, school.Id));
+            return SchoolTestContext.Create(ServiceLocatorFactory.CreateMasterSysAdmin().SchoolServiceLocator(DistrictId, school.Id));
         }
 
         public IServiceLocatorSchool GetDistrictSchoolLocator(SchoolTestContext schoolContext)

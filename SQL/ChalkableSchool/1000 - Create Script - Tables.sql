@@ -211,7 +211,8 @@ GO
 CREATE TABLE ClassPerson
 (	
 	ClassRef INT NOT NULL CONSTRAINT FK_ClassPerson_Class FOREIGN KEY REFERENCES Class(Id),
-	PersonRef INT NOT NULL CONSTRAINT FK_ClassPerson_Person FOREIGN KEY REFERENCES Person(Id)
+	PersonRef INT NOT NULL CONSTRAINT FK_ClassPerson_Person FOREIGN KEY REFERENCES Person(Id),
+	SchoolRef INT not null CONSTRAINT FK_ClassPerson_School FOREIGN KEY REFERENCES School(Id)
 )
 GO
 

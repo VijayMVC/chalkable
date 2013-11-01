@@ -132,7 +132,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var person = new PersonDataAccess(uow, Context.SchoolLocalId).GetPerson(new PersonQuery
                     {
                         CallerId = Context.UserLocalId,
-                        RoleId = Context.Role.Id,
+                        CallerRoleId = Context.Role.Id,
                         PersonId = personId
                     });
                 if (person.RoleRef != CoreRoles.STUDENT_ROLE.Id)

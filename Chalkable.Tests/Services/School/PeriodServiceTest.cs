@@ -13,16 +13,16 @@
 //        [Test]
 //        public void AddDeletePeriodTest()
 //        {
-//            var sy = SchoolYearServiceTest.CreateNextSchoolYear(SchoolTestContext, SchoolTestContext.NowDate.AddDays(-7));
-//            var mp = MarkingPeriodServiceTest.CreateNextMp(SchoolTestContext, sy.Id);
-//            SchoolTestContext.AdminGradeSl.DayTypeService.GenerateDefaultSections(mp.Id);
+//            var sy = SchoolYearServiceTest.CreateNextSchoolYear(FirstSchoolContext, FirstSchoolContext.NowDate.AddDays(-7));
+//            var mp = MarkingPeriodServiceTest.CreateNextMp(FirstSchoolContext, sy.Id);
+//            FirstSchoolContext.AdminGradeSl.DayTypeService.GenerateDefaultSections(mp.Id);
 
-//            var cDate = SchoolTestContext.AdminGradeSl.CalendarDateService.GetCalendarDateByDate(SchoolTestContext.NowDate);
-//            AssertForDeny(sl => sl.PeriodService.Add(mp.Id, 450, 500, cDate.ScheduleSectionRef.Value, 1), SchoolTestContext
+//            var cDate = FirstSchoolContext.AdminGradeSl.CalendarDateService.GetCalendarDateByDate(FirstSchoolContext.NowDate);
+//            AssertForDeny(sl => sl.PeriodService.Add(mp.Id, 450, 500, cDate.ScheduleSectionRef.Value, 1), FirstSchoolContext
 //                , SchoolContextRoles.AdminViewer | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent 
 //                | SchoolContextRoles.FirstParent | SchoolContextRoles.Checkin);
 
-//            var pService = SchoolTestContext.AdminGradeSl.PeriodService; 
+//            var pService = FirstSchoolContext.AdminGradeSl.PeriodService; 
 //            AssertException<Exception>(() => pService.Add(mp.Id, 500, 450, cDate.ScheduleSectionRef.Value, 1));
 
 //            var period1 = pService.Add(mp.Id, 450, 500, cDate.ScheduleSectionRef.Value, 1);
@@ -43,7 +43,7 @@
 //            var period2 = pService.Add(mp.Id, 510, 560, cDate.ScheduleSectionRef.Value, 2);
 //            Assert.AreEqual(pService.GetPeriods(mp.Id, cDate.ScheduleSectionRef.Value).Count, 2);
             
-//            AssertForDeny(sl => sl.PeriodService.Edit(period1.Id, 570, 620), SchoolTestContext
+//            AssertForDeny(sl => sl.PeriodService.Edit(period1.Id, 570, 620), FirstSchoolContext
 //                , SchoolContextRoles.AdminViewer | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent
 //                | SchoolContextRoles.FirstParent | SchoolContextRoles.Checkin);
 
@@ -53,7 +53,7 @@
 //            Assert.AreEqual(period1.EndTime, 620);
 //            AssertAreEqual(period1, pService.GetPeriod(580, cDate.DateTime));
             
-//            AssertForDeny(sl => sl.PeriodService.Delete(period1.Id), SchoolTestContext
+//            AssertForDeny(sl => sl.PeriodService.Delete(period1.Id), FirstSchoolContext
 //                , SchoolContextRoles.AdminViewer | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent
 //                | SchoolContextRoles.FirstParent | SchoolContextRoles.Checkin);
 
@@ -65,41 +65,41 @@
 //        [Test]
 //        public void ReGeneratePeriodsTest()
 //        {
-//            var sy = SchoolYearServiceTest.CreateNextSchoolYear(SchoolTestContext, SchoolTestContext.NowDate.AddDays(-7));
-//            var mp1 = MarkingPeriodServiceTest.CreateNextMp(SchoolTestContext, sy.Id);
-//            var mp2 = MarkingPeriodServiceTest.CreateNextMp(SchoolTestContext, sy.Id);
-//            SchoolTestContext.AdminGradeSl.DayTypeService.GenerateDefaultSections(mp1.Id);
+//            var sy = SchoolYearServiceTest.CreateNextSchoolYear(FirstSchoolContext, FirstSchoolContext.NowDate.AddDays(-7));
+//            var mp1 = MarkingPeriodServiceTest.CreateNextMp(FirstSchoolContext, sy.Id);
+//            var mp2 = MarkingPeriodServiceTest.CreateNextMp(FirstSchoolContext, sy.Id);
+//            FirstSchoolContext.AdminGradeSl.DayTypeService.GenerateDefaultSections(mp1.Id);
 //            int startTime = 450, pLength = 50, notPLength = 10, pCount = 5;
 //            var mpIds = new List<Guid> { mp1.Id};
             
 //            AssertForDeny(sl => sl.PeriodService.ReGeneratePeriods(mpIds, startTime, pLength, notPLength, pCount)
-//                , SchoolTestContext, SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent | SchoolContextRoles.FirstParent
+//                , FirstSchoolContext, SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent | SchoolContextRoles.FirstParent
 //                  | SchoolContextRoles.AdminViewer | SchoolContextRoles.Checkin);
 
 //            var sectionsNames = new List<string> {"A", "B", "C"};
-//            SchoolTestContext.AdminGradeSl.DayTypeService.ReBuildSections(sectionsNames, new List<Guid> {mp2.Id});
+//            FirstSchoolContext.AdminGradeSl.DayTypeService.ReBuildSections(sectionsNames, new List<Guid> {mp2.Id});
 //            mpIds.Add(mp2.Id);
-//            var pService = SchoolTestContext.AdminGradeSl.PeriodService;
+//            var pService = FirstSchoolContext.AdminGradeSl.PeriodService;
 //            AssertException<Exception>(()=>pService.ReGeneratePeriods(mpIds, startTime, pLength, notPLength, pCount));
-//            var sections = SchoolTestContext.AdminGradeSl.DayTypeService.GetSections(mp2.Id);
+//            var sections = FirstSchoolContext.AdminGradeSl.DayTypeService.GetSections(mp2.Id);
 //            foreach (var section in sections)
 //            {
-//                SchoolTestContext.AdminGradeSl.DayTypeService.Delete(section.Id);
+//                FirstSchoolContext.AdminGradeSl.DayTypeService.Delete(section.Id);
 //            }
-//            SchoolTestContext.AdminGradeSl.DayTypeService.GenerateDefaultSections(mp2.Id);
-//            var course = SchoolTestContext.AdminGradeSl.CourseService.Add("01", "course1", null);
-//            var room = SchoolTestContext.AdminGradeSl.RoomService.AddRoom("001", "room1", "10X10", null, "333-444");
-//            var c = SchoolTestContext.AdminGradeSl.ClassService.Add(sy.Id, course.Id, "class1", "class1",
-//                               SchoolTestContext.FirstTeacher.Id, SchoolTestContext.FirstStudent.StudentInfo.GradeLevelRef, mpIds);
-//            var cDate = SchoolTestContext.AdminGradeSl.CalendarDateService.GetCalendarDateByDate(SchoolTestContext.NowDate);
+//            FirstSchoolContext.AdminGradeSl.DayTypeService.GenerateDefaultSections(mp2.Id);
+//            var course = FirstSchoolContext.AdminGradeSl.CourseService.Add("01", "course1", null);
+//            var room = FirstSchoolContext.AdminGradeSl.RoomService.AddRoom("001", "room1", "10X10", null, "333-444");
+//            var c = FirstSchoolContext.AdminGradeSl.ClassService.Add(sy.Id, course.Id, "class1", "class1",
+//                               FirstSchoolContext.FirstTeacher.Id, FirstSchoolContext.FirstStudent.StudentInfo.GradeLevelRef, mpIds);
+//            var cDate = FirstSchoolContext.AdminGradeSl.CalendarDateService.GetCalendarDateByDate(FirstSchoolContext.NowDate);
 //            var period = pService.Add(mp1.Id, startTime, startTime + pLength, cDate.ScheduleSectionRef.Value, 1);
-//            var cPeriod = SchoolTestContext.AdminGradeSl.ClassPeriodService.Add(period.Id, c.Id, room.Id);
+//            var cPeriod = FirstSchoolContext.AdminGradeSl.ClassPeriodService.Add(period.Id, c.Id, room.Id);
 
 //            AssertException<Exception>(() => pService.ReGeneratePeriods(mpIds, startTime, pLength, notPLength, pCount));
-//            SchoolTestContext.AdminGradeSl.ClassPeriodService.Delete(cPeriod.Id);
+//            FirstSchoolContext.AdminGradeSl.ClassPeriodService.Delete(cPeriod.Id);
 //            pService.ReGeneratePeriods(mpIds, startTime, pLength, notPLength, pCount);
 
-//            sections = SchoolTestContext.AdminGradeSl.DayTypeService.GetSections(mp1.Id); 
+//            sections = FirstSchoolContext.AdminGradeSl.DayTypeService.GetSections(mp1.Id); 
 //            var mp1Periods = pService.GetPeriods(mp1.Id, null);
 //            var mp2Periods = pService.GetPeriods(mp2.Id, null);
 //            Assert.AreEqual(mp1Periods.Count, sections.Count * 5);

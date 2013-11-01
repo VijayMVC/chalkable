@@ -24,13 +24,13 @@
 //            mappers.Add(GradingStyleEnum.Complete, s1L3);
 //            var school1Mapper = GradingStyleMapper.Create(mappers);
 
-//            AssertForDeny(sl => sl.GradingStyleService.SetMapper(school1Mapper), SchoolTestContext
+//            AssertForDeny(sl => sl.GradingStyleService.SetMapper(school1Mapper), FirstSchoolContext
 //                , SchoolContextRoles.AdminEditor | SchoolContextRoles.AdminViewer | SchoolContextRoles.FirstTeacher
 //                 | SchoolContextRoles.FirstStudent | SchoolContextRoles.FirstParent | SchoolContextRoles.Checkin);
 
-//            SchoolTestContext.AdminGradeSl.GradingStyleService.SetMapper(school1Mapper);
+//            FirstSchoolContext.AdminGradeSl.GradingStyleService.SetMapper(school1Mapper);
             
-//            var s1Mapper = SchoolTestContext.AdminGradeSl.GradingStyleService.GetMapper();
+//            var s1Mapper = FirstSchoolContext.AdminGradeSl.GradingStyleService.GetMapper();
 //            AssertAreEqual(s1L1.OrderBy(x => x).ToList(), s1Mapper.GetValuesByStyle(GradingStyleEnum.Abcf));
 //            AssertAreEqual(s1L2.OrderBy(x => x).ToList(), s1Mapper.GetValuesByStyle(GradingStyleEnum.Check));
 //            AssertAreEqual(s1L3.OrderBy(x => x).ToList(), s1Mapper.GetValuesByStyle(GradingStyleEnum.Complete));

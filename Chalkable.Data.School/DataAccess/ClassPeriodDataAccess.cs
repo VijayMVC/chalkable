@@ -18,24 +18,25 @@ namespace Chalkable.Data.School.DataAccess
 
         public void FullDelete(int id)
         {
-            var b = new StringBuilder();
-            var conds = new AndQueryCondition {{ClassAttendance.CLASS_PERIOD_REF_FIELD, id}};
-            var deleteAttQ = Orm.SimpleDelete<ClassAttendance>(conds);
+            //var b = new StringBuilder();
+            //var conds = new AndQueryCondition {{ClassAttendance.CLASS_PERIOD_REF_FIELD, id}};
+            //var deleteAttQ = Orm.SimpleDelete<ClassAttendance>(conds);
 
-            b.Append(deleteAttQ.Sql).Append(" ");
-            b.Append(Orm.SimpleDelete<ClassDiscipline>(conds).Sql).Append(" ");
+            //b.Append(deleteAttQ.Sql).Append(" ");
+            //b.Append(Orm.SimpleDelete<ClassDiscipline>(conds).Sql).Append(" ");
 
-            conds.Add(ClassPeriod.ID_FIELD, id);
-            var classPeriodQ = Orm.SimpleDelete<ClassPeriod>(new AndQueryCondition {{ClassPeriod.ID_FIELD, id}});
-            b.Append(classPeriodQ.Sql);
+            //conds.Add(ClassPeriod.ID_FIELD, id);
+            //var classPeriodQ = Orm.SimpleDelete<ClassPeriod>(new AndQueryCondition {{ClassPeriod.ID_FIELD, id}});
+            //b.Append(classPeriodQ.Sql);
             
-            var allParams = deleteAttQ.Parameters;
-            foreach (var parameter in classPeriodQ.Parameters)
-            {
-                allParams.Add(parameter);    
-            }
+            //var allParams = deleteAttQ.Parameters;
+            //foreach (var parameter in classPeriodQ.Parameters)
+            //{
+            //    allParams.Add(parameter);    
+            //}
             
-            ExecuteNonQueryParametrized(b.ToString(), allParams);
+            //ExecuteNonQueryParametrized(b.ToString(), allParams);
+            Delete(id);
         }
 
         public bool Exists(ClassPeriodQuery query)
@@ -121,7 +122,6 @@ namespace Chalkable.Data.School.DataAccess
         }
         private DbQuery BuildGetClassPeriodsConditions(DbQuery dbQuery, ClassPeriodQuery query)
         {
-            dbQuery.Sql.Append(" where 1=1 ");
             var conds = new AndQueryCondition();
             var classPeriodTName = "ClassPeriod";
             if (query.Id.HasValue)
@@ -139,7 +139,7 @@ namespace Chalkable.Data.School.DataAccess
             if (query.DateTypeId.HasValue)
                 conds.Add(ClassPeriod.DATE_TYPE_REF_FIELD, query.DateTypeId);
 
-            FilterBySchool(conds).BuildSqlWhere(dbQuery, classPeriodTName, false);
+            FilterBySchool(conds).BuildSqlWhere(dbQuery, classPeriodTName);
 
             if (query.StudentId.HasValue)
             {
@@ -173,7 +173,7 @@ namespace Chalkable.Data.School.DataAccess
                 {
                     var classIdParam = "@classId_" + i;
                     classIdsParams.Add(classIdParam);
-                    conds.Add(classIdParam, query.ClassIds[i]);
+                    dbQuery.Parameters.Add(classIdParam, query.ClassIds[i]);
                 }
                 dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in ({2})", classPeriodTName
                     , ClassPeriod.CLASS_REF_FIELD,  classIdsParams.JoinString(","));

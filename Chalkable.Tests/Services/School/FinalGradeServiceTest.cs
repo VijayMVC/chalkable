@@ -11,7 +11,7 @@
 //{
 //    public class FinalGradeServiceTest : BaseSchoolServiceTest
 //    {
-//        private FinalGradeDetails UpdateFinalGrade(Guid finalGradeId, SchoolTestContext context, out int percentmode, 
+//        private FinalGradeDetails UpdateFinalGrade(Guid finalGradeId, FirstSchoolContext context, out int percentmode, 
 //            out int percentByType, bool dropLowest, GradingStyleEnum gradingStyle = GradingStyleEnum.Numeric100, 
 //            GradingStyleEnum annTypeGradingStyle = GradingStyleEnum.Numeric100)
 //        {
@@ -60,54 +60,54 @@
 //        [Test]
 //        public void GetBuildFinalGradesTest()
 //        {
-//            var mathClass1 = ClassServiceTest.CreateClass(SchoolTestContext, SchoolTestContext.FirstTeacher,
-//                                                         SchoolTestContext.FirstStudent, null);
+//            var mathClass1 = ClassServiceTest.CreateClass(FirstSchoolContext, FirstSchoolContext.FirstTeacher,
+//                                                         FirstSchoolContext.FirstStudent, null);
 //            var mpc1 = mathClass1.MarkingPeriodClasses[0];
 //            var mpId = mpc1.MarkingPeriodRef;
-//            var an1 = AnnouncementServiceTest.CreateDefaulTeacherAnnouncement(SchoolTestContext.FirstTeacherSl, mathClass1.Id, mpId, null, SystemAnnouncementType.HW);
+//            var an1 = AnnouncementServiceTest.CreateDefaulTeacherAnnouncement(FirstSchoolContext.FirstTeacherSl, mathClass1.Id, mpId, null, SystemAnnouncementType.HW);
 
 
 //            var item1 = an1.StudentAnnouncements.First();
-//            SchoolTestContext.FirstTeacherSl.StudentAnnouncementService.SetGrade(item1.Id, 70, "0", null, false);
+//            FirstSchoolContext.FirstTeacherSl.StudentAnnouncementService.SetGrade(item1.Id, 70, "0", null, false);
 
-//            AssertForDeny(sl => sl.FinalGradeService.GetFinalGrade(mpc1.Id, true), SchoolTestContext
+//            AssertForDeny(sl => sl.FinalGradeService.GetFinalGrade(mpc1.Id, true), FirstSchoolContext
 //                , SchoolContextRoles.FirstParent | SchoolContextRoles.FirstStudent | SchoolContextRoles.Checkin
 //                | SchoolContextRoles.SecondTeacher);
 
-//            var finalGradeService = SchoolTestContext.FirstTeacherSl.FinalGradeService;
+//            var finalGradeService = FirstSchoolContext.FirstTeacherSl.FinalGradeService;
 //            var finalGrade = finalGradeService.GetFinalGrade(mpc1.Id, true);
 
 //            Assert.AreEqual(finalGrade.Id, mpc1.Id);
 //            Assert.AreEqual(finalGradeService.GetPaginatedFinalGrades(0).Count, 1);
             
-//            AssertForDeny(sl => sl.FinalGradeService.ReBuildFinalGrade(finalGrade.Id), SchoolTestContext
+//            AssertForDeny(sl => sl.FinalGradeService.ReBuildFinalGrade(finalGrade.Id), FirstSchoolContext
 //                , SchoolContextRoles.FirstParent | SchoolContextRoles.FirstStudent
 //             | SchoolContextRoles.SecondStudent | SchoolContextRoles.Checkin);
 
 //            int percentmode, percentByType;
-//            finalGrade = UpdateFinalGrade(finalGrade.Id, SchoolTestContext, out percentmode, out percentByType, true, GradingStyleEnum.Abcf);
+//            finalGrade = UpdateFinalGrade(finalGrade.Id, FirstSchoolContext, out percentmode, out percentByType, true, GradingStyleEnum.Abcf);
 //            var finalGrade2 = finalGradeService.ReBuildFinalGrade(finalGrade.Id);
 //            Assert.AreNotEqual(finalGrade2.GradingStyle, finalGrade.GradingStyle);
 //            Assert.AreNotEqual(finalGrade2.ParticipationPercent, finalGrade.ParticipationPercent);
 //            Assert.AreNotEqual(finalGrade2.Discipline, finalGrade.Discipline);
 //            Assert.AreNotEqual(finalGrade2.Attendance, finalGrade.Attendance);
-//            finalGrade = UpdateFinalGrade(finalGrade2.Id, SchoolTestContext, out percentmode, out percentByType, true, GradingStyleEnum.Abcf, GradingStyleEnum.Abcf);
+//            finalGrade = UpdateFinalGrade(finalGrade2.Id, FirstSchoolContext, out percentmode, out percentByType, true, GradingStyleEnum.Abcf, GradingStyleEnum.Abcf);
             
-//            var mathClass2 = ClassServiceTest.CreateClass(SchoolTestContext, SchoolTestContext.FirstTeacher,
-//                             SchoolTestContext.FirstStudent, null, "math2", mathClass1.SchoolYearRef);
+//            var mathClass2 = ClassServiceTest.CreateClass(FirstSchoolContext, FirstSchoolContext.FirstTeacher,
+//                             FirstSchoolContext.FirstStudent, null, "math2", mathClass1.SchoolYearRef);
 //            var fg3 = finalGradeService.GetFinalGrade(mathClass2.MarkingPeriodClasses[0].Id);
 //            CheckFinalGradeEquality(fg3, finalGrade, Assert.AreEqual);
             
-//            var mathClass3 = ClassServiceTest.CreateClass(SchoolTestContext, SchoolTestContext.SecondTeahcer,
-//                             SchoolTestContext.FirstStudent, null, "math3", mathClass1.SchoolYearRef);
-//            var fg4 = SchoolTestContext.SecondTeacherSl.FinalGradeService.GetFinalGrade(mathClass3.MarkingPeriodClasses[0].Id);
+//            var mathClass3 = ClassServiceTest.CreateClass(FirstSchoolContext, FirstSchoolContext.SecondTeahcer,
+//                             FirstSchoolContext.FirstStudent, null, "math3", mathClass1.SchoolYearRef);
+//            var fg4 = FirstSchoolContext.SecondTeacherSl.FinalGradeService.GetFinalGrade(mathClass3.MarkingPeriodClasses[0].Id);
 //            CheckFinalGradeEquality(fg4, finalGrade, Assert.AreNotEqual);
 
 //            //check calculate grade by ann 
-//            var a1 = AnnouncementServiceTest.CreateDefaulTeacherAnnouncement(SchoolTestContext.FirstTeacherSl, mathClass1.Id, mpId, null,  SystemAnnouncementType.Project);
-//            var stA1 = SchoolTestContext.FirstTeacherSl.StudentAnnouncementService.SetGrade(a1.StudentAnnouncements.First().Id, 40, null, null, false);
-//            var a3 = AnnouncementServiceTest.CreateDefaulTeacherAnnouncement(SchoolTestContext.FirstTeacherSl, mathClass1.Id, mpId, null,  SystemAnnouncementType.Midterm);
-//            SchoolTestContext.FirstTeacherSl.StudentAnnouncementService.SetGrade(a3.StudentAnnouncements.First().Id, 60, null, null, false);
+//            var a1 = AnnouncementServiceTest.CreateDefaulTeacherAnnouncement(FirstSchoolContext.FirstTeacherSl, mathClass1.Id, mpId, null,  SystemAnnouncementType.Project);
+//            var stA1 = FirstSchoolContext.FirstTeacherSl.StudentAnnouncementService.SetGrade(a1.StudentAnnouncements.First().Id, 40, null, null, false);
+//            var a3 = AnnouncementServiceTest.CreateDefaulTeacherAnnouncement(FirstSchoolContext.FirstTeacherSl, mathClass1.Id, mpId, null,  SystemAnnouncementType.Midterm);
+//            FirstSchoolContext.FirstTeacherSl.StudentAnnouncementService.SetGrade(a3.StudentAnnouncements.First().Id, 60, null, null, false);
 
 //            foreach (var type in finalGrade.FinalGradeAnnouncementTypes)
 //            {
@@ -131,39 +131,39 @@
 //        [Test]
 //        public void SetGetStudentFinalGradesTest()
 //        {
-//            var mathClass1 = ClassServiceTest.CreateClass(SchoolTestContext, SchoolTestContext.FirstTeacher,
-//                                                         SchoolTestContext.FirstStudent, null);
+//            var mathClass1 = ClassServiceTest.CreateClass(FirstSchoolContext, FirstSchoolContext.FirstTeacher,
+//                                                         FirstSchoolContext.FirstStudent, null);
 //            var mpc1 = mathClass1.MarkingPeriodClasses[0];
 //            var mpId = mpc1.MarkingPeriodRef;
-//            AnnouncementServiceTest.CreateDefaulTeacherAnnouncement(SchoolTestContext.FirstTeacherSl, mathClass1.Id, mpId);
+//            AnnouncementServiceTest.CreateDefaulTeacherAnnouncement(FirstSchoolContext.FirstTeacherSl, mathClass1.Id, mpId);
 
-//            var finalGrade = SchoolTestContext.FirstTeacherSl.FinalGradeService.GetFinalGrade(mpc1.Id, true);
+//            var finalGrade = FirstSchoolContext.FirstTeacherSl.FinalGradeService.GetFinalGrade(mpc1.Id, true);
 
 //            var studentFinalGrade = finalGrade.StudentFinalGrades.First();
             
-//            AssertForDeny(sl => sl.FinalGradeService.SetStudentFinalGrade(studentFinalGrade.Id, 10, 10, 5, 40, 20, ""), SchoolTestContext
+//            AssertForDeny(sl => sl.FinalGradeService.SetStudentFinalGrade(studentFinalGrade.Id, 10, 10, 5, 40, 20, ""), FirstSchoolContext
 //                , SchoolContextRoles.FirstParent | SchoolContextRoles.FirstStudent | SchoolContextRoles.Checkin
 //                | SchoolContextRoles.SecondTeacher | SchoolContextRoles.AdminViewer);
 
-//            var studentFinalGrade2 = SchoolTestContext.FirstTeacherSl.FinalGradeService.SetStudentFinalGrade(studentFinalGrade.Id, 10, 10, 5, 40, 20, "");
+//            var studentFinalGrade2 = FirstSchoolContext.FirstTeacherSl.FinalGradeService.SetStudentFinalGrade(studentFinalGrade.Id, 10, 10, 5, 40, 20, "");
 //            Assert.AreEqual(studentFinalGrade2.GradeByAttendance, 10);
 //            Assert.AreEqual(studentFinalGrade2.GradeByDiscipline, 10);
 //            Assert.AreEqual(studentFinalGrade2.GradeByParticipation, 5);
 //            Assert.AreEqual(studentFinalGrade2.TeacherGrade, 40);
 //            Assert.AreEqual(studentFinalGrade2.AdminGrade, 0);
-//            finalGrade = SchoolTestContext.FirstTeacherSl.FinalGradeService.GetFinalGrade(mpc1.Id);
+//            finalGrade = FirstSchoolContext.FirstTeacherSl.FinalGradeService.GetFinalGrade(mpc1.Id);
 //            AssertAreEqual(studentFinalGrade2, finalGrade.StudentFinalGrades.First());
 //        }
 
 //        [Test]
 //        public void SubmitApproveFinalGradeTest()
 //        {
-//            var mathClass1 = ClassServiceTest.CreateClass(SchoolTestContext, SchoolTestContext.FirstTeacher,
-//                                                         SchoolTestContext.FirstStudent, null);
+//            var mathClass1 = ClassServiceTest.CreateClass(FirstSchoolContext, FirstSchoolContext.FirstTeacher,
+//                                                         FirstSchoolContext.FirstStudent, null);
 
 //            var mpc1 = mathClass1.MarkingPeriodClasses.First();
-//            var teacherFgService = SchoolTestContext.FirstTeacherSl.FinalGradeService;
-//            var adminFgService = SchoolTestContext.AdminGradeSl.FinalGradeService;
+//            var teacherFgService = FirstSchoolContext.FirstTeacherSl.FinalGradeService;
+//            var adminFgService = FirstSchoolContext.AdminGradeSl.FinalGradeService;
 //            var finalGrade = teacherFgService.GetFinalGrade(mpc1.Id, true);
 
 //            Assert.IsTrue(teacherFgService.Submit(finalGrade.Id));
@@ -181,11 +181,11 @@
 //            Assert.IsTrue(!adminFgService.Submit(finalGrade.Id));
 
 
-//            AssertForDeny(sl => sl.FinalGradeService.Submit(finalGrade.Id), SchoolTestContext,
+//            AssertForDeny(sl => sl.FinalGradeService.Submit(finalGrade.Id), FirstSchoolContext,
 //                SchoolContextRoles.FirstParent | SchoolContextRoles.FirstStudent | SchoolContextRoles.Checkin
 //                | SchoolContextRoles.SecondTeacher | SchoolContextRoles.AdminViewer);
 
-//            AssertForDeny(sl => sl.FinalGradeService.ApproveReject(finalGrade.Id, true), SchoolTestContext
+//            AssertForDeny(sl => sl.FinalGradeService.ApproveReject(finalGrade.Id, true), FirstSchoolContext
 //                , SchoolContextRoles.FirstParent | SchoolContextRoles.FirstStudent | SchoolContextRoles.Checkin
 //                | SchoolContextRoles.SecondTeacher | SchoolContextRoles.AdminViewer | SchoolContextRoles.AdminEditor);
 

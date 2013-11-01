@@ -22,26 +22,25 @@ namespace Chalkable.Data.School.DataAccess
 
         private DbQuery BuildConditionQuery(DbQuery dbQuery, DateQuery query)
         {
-            var condition = new AndQueryCondition {FilterBySchool(null)};
+            var condition = new AndQueryCondition ();
             if(query.SchoolYearId.HasValue)
                 condition.Add(Date.SCHOOL_YEAR_REF, query.SchoolYearId, ConditionRelation.Equal);
             if(query.DayType.HasValue)
                 condition.Add(Date.DATE_TYPE_REF_FIELD, query.DayType, ConditionRelation.Equal);
             if(query.FromDate.HasValue)
-                condition.Add(Date.DATE_TIME_FIELD, "fromDate", query.FromDate, ConditionRelation.Greater);
+                condition.Add(Date.DATE_TIME_FIELD, "fromDate", query.FromDate, ConditionRelation.GreaterEqual);
             if(query.ToDate.HasValue)
-                condition.Add(Date.DATE_TIME_FIELD, "toDate", query.ToDate, ConditionRelation.Less);
+                condition.Add(Date.DATE_TIME_FIELD, "toDate", query.ToDate, ConditionRelation.LessEqual);
             if(query.SchoolDaysOnly)
                 condition.Add(Date.IS_SCHOOL_DAY_FIELD, true, ConditionRelation.Equal);
 
             FilterBySchool(condition).BuildSqlWhere(dbQuery, "Date");
             if (query.MarkingPeriodId.HasValue)
             {
-                var joinOperand = dbQuery.Parameters.Count > 0 ? "and" : "where";
                 dbQuery.Parameters.Add("@markingPeriodId", query.MarkingPeriodId);
-                dbQuery.Sql.AppendFormat(@" {4} exists(select * from MarkingPeriod where [MarkingPeriod].[{0}] = @markingPeriodId 
+                dbQuery.Sql.AppendFormat(@" and exists(select * from MarkingPeriod where [MarkingPeriod].[{0}] = @markingPeriodId 
                                                           and [MarkingPeriod].[{1}] <= [Date].[{3}] and [MarkingPeriod].[{2}] >= [Date].[{3}])"
-                    , MarkingPeriod.ID_FIELD, MarkingPeriod.START_DATE_FIELD, MarkingPeriod.END_DATE_FIELD, Date.DATE_TIME_FIELD, joinOperand);
+                    , MarkingPeriod.ID_FIELD, MarkingPeriod.START_DATE_FIELD, MarkingPeriod.END_DATE_FIELD, Date.DATE_TIME_FIELD);
             }
             return dbQuery;
         }
