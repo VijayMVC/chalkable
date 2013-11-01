@@ -139,6 +139,14 @@ NAMESPACE('chlk', function (){
                     tooltip.find('.tooltip-content').html('');
                 });
 
+                 jQuery(document).on('click', '.demo-role-button:not(.coming)', function(){
+                    if(!jQuery(this).hasClass('active')){
+                        window.location.href = WEB_SITE_ROOT + 'DemoSchool/LogOnIntoDemo.json?rolename='
+                            + jQuery(this).attr('rolename') + '&prefix=' + window.school.demoprefix;
+                    }
+                    return false;
+                });
+
                 this.apiHost_.onStart(this.context);
 
                 return BASE()

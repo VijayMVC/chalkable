@@ -59,8 +59,7 @@
 
         @{
             var isDeveloper = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
-            var isDemoSchool = !string.IsNullOrEmpty((string)ViewData.GetValueOrNull("Prefix"));
-            var needsTour = !string.IsNullOrEmpty(Convert.ToString(ViewData.GetValueOrNull(ViewConstants.NEEDS_TOUR)));
+            var isDemoSchool = !string.IsNullOrEmpty((string)ViewData.GetValueOrNull(ViewConstants.DEMO_PREFIX_KEY));
         }
         
         
@@ -94,7 +93,42 @@
         </div>
         @if (isDemoSchool || isDeveloper)
         {
-            <div id="demo-footer" class="top"></div>
+            <div id="demo-footer" class="top">
+            @if (isDeveloper)
+            {
+                <div id="dev-apps-list"></div>
+            }
+            else
+            {
+                <div id="fb">
+                    <h>Don't be shy</h>
+                    <div class="fb-like" data-href="https://chalkable.com" data-layout="button_count" data-send="true" data-width="55" data-show-faces="true"></div>
+                    <a id="principal"></a>
+                </div>
+                    <div class="border demo-end"></div>
+                    <div class="demo-end">
+                        <h>Demo</h>
+                        <div id="demo-end-container"></div>
+                    </div>
+                <div class="border"></div>
+                <div>
+                    <h>Sign up</h>
+                    <div id="demo-sign-up-container"></div>
+                </div>
+            }
+
+            <div class="border"></div>
+            <div id="roles-buttons">
+                @if (isDeveloper)
+                {
+                    <a class="demo-role-button" rolename="Developer"><span><div class="mark left"></div><div class="mark right"></div>Developer</span></a
+                >}<a class="demo-role-button" rolename="Student"><span><div class="mark left"></div><div class="mark right"></div>Student</span></a
+                ><a class="demo-role-button" rolename="Teacher"><span><div class="mark left"></div><div class="mark right"></div>Teacher</span></a
+                ><a class="demo-role-button" rolename="AdminGrade"><span><div class="mark left"></div><div class="mark right"></div>Admin</span></a
+                ><a class="demo-role-button coming" rolename="Parent"><span><span></span><div class="mark left"></div><div class="mark right"></div>Parent</span></a
+                ><a class="demo-role-button coming" rolename="District"><span><span></span><div class="mark left"></div><div class="mark right"></div>District</span></a>
+            </div>
+            </div>
         }
         <div id = "chlk-overlay" class ="x-hidden"></div>
         <div id="chlk-pop-up-container" class="x-hidden">

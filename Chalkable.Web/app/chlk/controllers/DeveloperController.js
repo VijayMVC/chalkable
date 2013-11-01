@@ -99,38 +99,5 @@ NAMESPACE('chlk.controllers', function (){
                      });
                  return this.UpdateView(chlk.activities.developer.ApiExplorerPage, result, 'update-api-calls-list');
             }
-
-            /*
-
-                                that.handlers.showCalltree(data, function(res){
-
-                            }
-                          }
-                        }),
-                        that.callTreePanel = new chlk.Controls.LeftRightToolbar ({
-                            border: false,
-                            autoHeight: true,
-                            autoScroll: true,
-                            hidden: true,
-                            layout: 'hbox',
-                            cls:'api-list call-tree',
-                            renderItemTpl: callTreeTpl,
-                             listeners: {
-                                afterRender: function(){
-                                  var panel = jQuery(this.el.dom);
-                                  panel.offOn('click','.way-item', function(){
-
-                                  });
-                                }
-                            }
-                        })]
-                    });
-                    jQuery('.tab-header .active').click();
-
-                })
-            * */
-
-
-
         ])
 });
