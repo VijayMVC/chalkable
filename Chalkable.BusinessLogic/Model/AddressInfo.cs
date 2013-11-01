@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Model
 {
@@ -20,5 +21,24 @@ namespace Chalkable.BusinessLogic.Model
         public int? CountyId { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
+
+        public static AddressInfo Create(Address address)
+        {
+            return new AddressInfo
+                {
+                    Id = address.Id,
+                    AddressLine2 = address.AddressLine2,
+                    AddressLine1 = address.AddressLine1,
+                    AddressNumber = address.AddressNumber,
+                    City = address.City,
+                    Country = address.Country,
+                    CountyId = address.CountyId,
+                    Latitude = address.Latitude,
+                    Longitude = address.Longitude,
+                    PostalCode = address.PostalCode,
+                    StreetNumber = address.StreetNumber,
+                    State = address.State
+                };
+        }
     }
 }

@@ -20,12 +20,9 @@ namespace Chalkable.Tests.Services.School
             //add phone security check
             var phoneId = 1;
             AssertForDeny(sl => sl.PhoneService.Add(digitValue, FirstSchoolContext.FirstStudent.Id, phoneNumber, PhoneType.Home, true), FirstSchoolContext
-                , SchoolContextRoles.FirstParent | SchoolContextRoles.Checkin | SchoolContextRoles.FirstTeacher | SchoolContextRoles.SecondStudent);
-            AssertForDeny(sl => sl.PhoneService.Add(digitValue, FirstSchoolContext.FirstTeacher.Id, phoneNumber, PhoneType.Home, true), FirstSchoolContext
-                , SchoolContextRoles.FirstParent | SchoolContextRoles.Checkin | SchoolContextRoles.FirstStudent | SchoolContextRoles.SecondStudent);
-            AssertForDeny(sl => sl.PhoneService.Add(digitValue, FirstSchoolContext.AdminGrade.Id, phoneNumber, PhoneType.Home, true), FirstSchoolContext
-                , SchoolContextRoles.FirstParent | SchoolContextRoles.Checkin | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent | SchoolContextRoles.SecondStudent);
-
+                , SchoolContextRoles.AdminGrade | SchoolContextRoles.AdminEditor | SchoolContextRoles.FirstParent
+                | SchoolContextRoles.Checkin | SchoolContextRoles.FirstTeacher | SchoolContextRoles.SecondStudent);
+            
             var phoneService = DistrictTestContext.DistrictLocatorFirstSchool.PhoneService;
             var phone = phoneService.Add(digitValue, FirstSchoolContext.AdminGrade.Id, phoneNumber, PhoneType.Home, true);
             Assert.IsTrue(phone.IsPrimary);
@@ -53,13 +50,7 @@ namespace Chalkable.Tests.Services.School
             AssertForDeny(sl => sl.PhoneService.Edit(phone.DigitOnlyValue, phone.PersonRef, phoneNumber, PhoneType.Work, false), FirstSchoolContext
                 , SchoolContextRoles.AdminEditor | SchoolContextRoles.FirstParent
                 | SchoolContextRoles.FirstTeacher |  SchoolContextRoles.Checkin);
-            AssertForDeny(sl => sl.PhoneService.Edit(phone2.DigitOnlyValue, phone2.PersonRef, phoneNumber, PhoneType.Work, false), FirstSchoolContext
-                , SchoolContextRoles.AdminGrade | SchoolContextRoles.AdminEditor | SchoolContextRoles.FirstParent 
-                | SchoolContextRoles.FirstStudent | SchoolContextRoles.Checkin);
-            AssertForDeny(sl => sl.PhoneService.Edit(phone3.DigitOnlyValue, phone3.PersonRef, phoneNumber, PhoneType.Work, false), FirstSchoolContext
-                            , SchoolContextRoles.AdminGrade | SchoolContextRoles.AdminEditor
-                            | SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher | SchoolContextRoles.Checkin);
-
+            
             phone = phoneService.Edit(phone.DigitOnlyValue, phone.PersonRef, phoneNumber, PhoneType.Work, false);
             Assert.IsFalse(phone.IsPrimary);
             Assert.AreEqual(phone.PersonRef, FirstSchoolContext.AdminGrade.Id);
@@ -73,11 +64,7 @@ namespace Chalkable.Tests.Services.School
             //delete phone security check
             AssertForDeny(sl => sl.PhoneService.Delete(phone.DigitOnlyValue, phone.PersonRef), FirstSchoolContext
                 , SchoolContextRoles.AdminGrade | SchoolContextRoles.AdminEditor | SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher | SchoolContextRoles.FirstStudent | SchoolContextRoles.Checkin);
-            AssertForDeny(sl => sl.PhoneService.Delete(phone2.DigitOnlyValue, phone.PersonRef), FirstSchoolContext
-                , SchoolContextRoles.AdminGrade | SchoolContextRoles.AdminEditor | SchoolContextRoles.FirstParent | SchoolContextRoles.FirstStudent | SchoolContextRoles.Checkin);
-            AssertForDeny(sl => sl.PhoneService.Delete(phone3.DigitOnlyValue, phone.PersonRef), FirstSchoolContext
-                            , SchoolContextRoles.AdminGrade | SchoolContextRoles.AdminEditor | SchoolContextRoles.FirstParent | SchoolContextRoles.FirstTeacher | SchoolContextRoles.Checkin);
-
+            
             phoneService.Delete(phone.DigitOnlyValue, phone.PersonRef);
             Assert.AreEqual(FirstSchoolContext.AdminGradeSl.PhoneService.GetUsersByPhone(digitValue).Count, 0);
             Assert.AreEqual(FirstSchoolContext.AdminGradeSl.PhoneService.GetPhones().Count, 2);

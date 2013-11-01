@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Address Add(AddressInfo addressInfo)
         {
-            if(!BaseSecurity.IsAdminOrTeacher(Context))//TODO:can teacher do this?
+            if(!BaseSecurity.IsDistrict(Context))//TODO:can teacher do this?
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -38,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Address Edit(AddressInfo addressInfo)
         {
-            if (!BaseSecurity.IsAdminOrTeacher(Context))//TODO:can teacher do this?
+            if (!BaseSecurity.IsDistrict(Context))//TODO:can teacher do this?
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -87,7 +87,7 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public IList<Address> GetAddress()
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsAdminOrTeacher(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Read())
