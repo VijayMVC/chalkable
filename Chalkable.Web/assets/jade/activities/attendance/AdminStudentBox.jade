@@ -1,6 +1,5 @@
-date = self.getDate() ? self.getDate().format('mm/dd/yy') : null
-div(index=0, data-id=self.getStudent().getId().valueOf(), style="top:" + self.getTop() + 'px').student.absolute
-    +ActionLink('attendance', 'showStudentAttendance', self.getStudent().getId(), date,
-            'attendance', 'summary', JSON.stringify([true, self.getGradeLevelsIds(), self.getCurrentPage(), date])).img-container
-        +PersonImg(self.getStudent(), 128)
-    +ActionLink('students', 'details',self.getStudent().getId()).name=self.getStudent().getDisplayName()
+student = self.getStudent()
+.new.student
+    a.img-container
+        +PersonImg(student, 128)
+    .name=student.getDisplayName()

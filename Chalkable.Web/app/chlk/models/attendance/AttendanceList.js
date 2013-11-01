@@ -20,6 +20,8 @@ NAMESPACE('chlk.models.attendance', function () {
 
             String, 'params',
 
+            Boolean, 'newStudent',
+
             chlk.models.common.ChlkDate, 'date'
         ]);
 });

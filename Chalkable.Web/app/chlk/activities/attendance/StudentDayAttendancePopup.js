@@ -8,7 +8,7 @@ NAMESPACE('chlk.activities.attendance', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-pop-up-container')],
         [chlk.activities.lib.IsHorizontalAxis(false)],
-        [chlk.activities.lib.isTopLeftPosition(false)],
+        [chlk.activities.lib.isTopLeftPosition(true)],
         [ria.mvc.ActivityGroup('StudentDayAttendancesPopUp')],
         [ria.mvc.TemplateBind(chlk.templates.attendance.StudentDayAttendanceTpl)],
         'StudentDayAttendancePopup', EXTENDS(chlk.activities.lib.TemplatePopup), [
@@ -17,7 +17,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 tpl.options({
                     currentReasons: this.getCurrentReasons()
                 });
-                var container = this.dom.find('.attendance-column.wide.reasons.current');
+                var container = this.dom.find('.reasons-container.current');
                 container
                     .empty()
                     .removeClass('current');
@@ -39,30 +39,48 @@ NAMESPACE('chlk.activities.attendance', function () {
                     return item.getAttendanceType() == value;
                 });
                 this.setCurrentReasons(currentReasons);
-                node
-                    .parent('.row')
+                var row = node.parent('.row');
+                row
                     .addClass('changed')
-                    .find('.attendance-column.wide.reasons')
+                    .find('.reasons-container')
                     .addClass('current');
                 this.onPartialRender_(new chlk.models.attendance.StudentDayAttendances, chlk.activities.lib.DontShowLoader());
                 this.onPartialRefresh_(new chlk.models.attendance.StudentDayAttendances, chlk.activities.lib.DontShowLoader());
+                if(row.hasClass('all-row')){
+                    this.changeSelects(node, '.attendance-type-select');
+                }
+            },
+
+            [[ria.dom.Dom, String]],
+            VOID, function changeSelects(node, selector){
+                var select = this.dom
+                    .find('.row:not(.all-row)')
+                    .find(selector);
+
+                select.forEach(function(item){
+                    if(item.getValue() != node.getValue()){
+                        item
+                            .setValue(node.getValue())
+                            .trigger('change', {})
+                            .trigger('liszt:updated');
+                    }
+                })
             },
 
             [ria.mvc.DomEventBind('change', '.attendance-reason-select')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function reasonChange(node, event, options){
-                node
-                    .parent('.row')
-                    .addClass('changed');
+                var row = node.parent('.row');
+                row.addClass('changed');
+                if(row.hasClass('all-row')){
+                    this.changeSelects(node, '.attendance-reason-select');
+                }
             },
 
-            OVERRIDE, VOID, function onRender_(model){
-                BASE(model);
-                this.setReasons(model.getReasons());
-            },
-
-            OVERRIDE, VOID, function onStop_() {
-                var changed = this.dom.find('.row.changed');
+            [ria.mvc.DomEventBind('click', '.save-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function saveClick(node, event){
+                var changed = this.dom.find('.row.changed:not(.all-row)');
                 var classPersonIds = [];
                 var classPeriodIds = [];
                 var attendanceTypes = [];
@@ -78,8 +96,18 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this.dom.find('[name="attendanceTypes"]').setValue(attendanceTypes.join(','));
                 this.dom.find('[name="attReasons"]').setValue(attReasons.join(','));
                 this.dom.find('form').trigger('submit');
-                //new ria.dom.Dom('.student.absolute').remove();
-                BASE();
+                if(this.dom.find('.is-new-student').getValue()){
+                    new ria.dom.Dom('.add-new-student')
+                        .setValue(attendanceTypes.join(','))
+                        .trigger('change');
+                }
+                this.close();
+            },
+
+            OVERRIDE, VOID, function onRefresh_(model){
+                BASE(model);
+                this.setReasons(model.getReasons());
+                this.dom.find('.all-select').setValue('');
             }
         ]);
 });

@@ -12,7 +12,11 @@ NAMESPACE('chlk.models.attendance', function () {
         'StudentDayAttendances', EXTENDS(chlk.models.Popup), [
             ArrayOf(chlk.models.attendance.ClassAttendance), 'attendances',
 
+            chlk.models.attendance.ClassAttendance, 'allItem',
+
             chlk.models.people.User, 'student',
+
+            Boolean, 'newStudent',
 
             [ria.serialize.SerializeProperty('dailyattendance')],
             chlk.models.attendance.DailyAttendance, 'dailyAttendance',

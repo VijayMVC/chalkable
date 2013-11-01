@@ -54,6 +54,7 @@ NAMESPACE('chlk.controls', function () {
                 };
 
                 jQuery(node.valueOf()).autocomplete({
+                    minLength: 2,
                     source: function( request, response ) {
                         serviceF(request.term)
                             .then(function(data){

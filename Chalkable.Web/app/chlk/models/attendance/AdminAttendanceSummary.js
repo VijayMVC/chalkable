@@ -32,6 +32,8 @@ NAMESPACE('chlk.models.attendance', function () {
 
             String, 'gradeLevelsIds',
 
+            String, 'attendanceTypes',
+
             chlk.models.common.ChlkDate, 'nowDateTime',
 
             chlk.models.id.MarkingPeriodId, 'fromMarkingPeriodId',

@@ -10,10 +10,10 @@ NAMESPACE('chlk.controls', function () {
                 ASSET('~/assets/jade/controls/select.jade')(this);
             },
 
-            [[Object]],
-            VOID, function updateSelect(node){
+            [[Object, Object]],
+            VOID, function updateSelect(node, attributes){
                 var that = this;
-                node.chosen({disable_search_threshold: 1000}).change(function(){
+                node.chosen({disable_search_threshold: attributes.maxLength || 1000}).change(function(){
                     var node = jQuery(this);
                     node.find('option[selected]').attr('selected', false);
                     node.find('option[value="' + node.val() + '"]').attr('selected', true);
@@ -38,7 +38,7 @@ NAMESPACE('chlk.controls', function () {
                 attributes.id = attributes.id || ria.dom.NewGID();
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
-                        this.updateSelect(jQuery('#'+attributes.id));
+                        this.updateSelect(jQuery('#'+attributes.id), attributes);
                     }.bind(this));
                 return attributes;
             }
