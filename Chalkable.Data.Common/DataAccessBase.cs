@@ -88,6 +88,11 @@ namespace Chalkable.Data.Common
             }
         }
 
+        protected void SimpleUpdate<T>(T obj, QueryCondition condition)
+        {
+            var q = Orm.Orm.SimpleUpdate(obj, condition);
+            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
+        }
 
         protected void SimpleUpdate<T>(IDictionary<string, object> updateParams, QueryCondition conditions)
         {

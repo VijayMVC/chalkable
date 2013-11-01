@@ -51,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Phone Add(string digitOnlyValue, int personId, string value, PhoneType type, bool isPrimary)
         {
-            if (!(BaseSecurity.IsDistrict(Context) || Context.UserLocalId == personId))//TODO:can teacher do this?
+            if (!(BaseSecurity.IsDistrict(Context)))//TODO:can teacher do this?
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -76,13 +76,17 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new PhoneDataAccess(uow);
                 var phone = da.GetPhone(personId, digitOnlyValue);
-                if (!(BaseSecurity.IsDistrict(Context) || Context.UserLocalId == phone.PersonRef))//TODO:can teacher do this?
+                if (!(BaseSecurity.IsDistrict(Context)))
                     throw new ChalkableSecurityException();
                 phone.DigitOnlyValue = DigitsOnly(value);
                 phone.Value = value;
                 phone.IsPrimary = isPrimary;
                 phone.Type = type;
-                da.Update(phone);
+                da.Update(phone, new AndQueryCondition
+                    {
+                        {Phone.DIGIT_ONLY_VALUE_FIELD, digitOnlyValue},
+                        {Phone.PERSON_REF_FIELD, personId}
+                    });
                 uow.Commit();
                 return phone;
             }
@@ -94,7 +98,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new PhoneDataAccess(uow);
                 var phone = da.GetPhone(personId, digitOnlyValue);
-                if (!(BaseSecurity.IsDistrict(Context) || Context.UserLocalId == phone.PersonRef))
+                if (!(BaseSecurity.IsDistrict(Context)))
                     throw new ChalkableSecurityException();
                 da.Delete(phone);
                 uow.Commit();

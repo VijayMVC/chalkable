@@ -172,6 +172,12 @@ namespace Chalkable.Data.Common.Orm
         }
 
 
+         public static DbQuery SimpleUpdate<T>(T obj, QueryCondition condition)
+         {
+             var t = typeof(T);
+             var fields = Fields(t);
+             return SimpleUpdate(t, fields.ToDictionary(x => x, x => t.GetProperty(x).GetValue(obj)), condition);
+         }
 
          public static DbQuery SimpleUpdate<T>(IDictionary<string, object> updateParams, QueryCondition conditions)
          {
