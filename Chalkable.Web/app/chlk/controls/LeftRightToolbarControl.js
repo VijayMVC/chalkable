@@ -72,51 +72,52 @@ NAMESPACE('chlk.controls', function () {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         var toolbar = activity.getDom().find('#'+attributes.id);
-                        //toolbar.setData('configs', configs);
-                        toolbar.setData('currentIndex', 0);
-                        if(configs.pressAfterClick){
-                            var pressedIndex = parseInt(toolbar.find('.pressed').getAttr('index'), 10);
-                            var pageIndex = Math.floor(pressedIndex / configs.itemsCount) || 0;
-                            that.setPageByCurrentDot(null, toolbar, pageIndex);
-                            toolbar.on('click', '.second-container>*:not(.pressed)', function(node, event){
-                                if(!configs.multiple)
-                                    toolbar.find('.second-container>.pressed').removeClass('pressed');
-                                setTimeout(function() {node.addClass('pressed');}, 1);
-                            });
-                        }
-                        if(configs.multiple){
-                            toolbar.on('click', '.second-container>*', function(node, event){
-                                var state = that.context.getState();
-                                state.setController(configs.controller);
-                                state.setAction(configs.action);
-                                var params = configs.params;
-                                var ids = Array.isArray(configs.selectedIds) ? configs.selectedIds : configs.selectedIds.split(',');
-                                var currentId = node.getData('id');
-                                if(currentId){
-                                    if(node.hasClass('pressed'))
-                                        ids.splice(ids.indexOf(currentId), 1);
-                                    else
-                                        ids.push(currentId);
-                                    params.push(ids.join(','));
-                                }
-                                state.setParams(params);
-                                state.setPublic(false);
-                                that.context.stateUpdated();
-                            });
-                        }
-                        toolbar.on('click', '.arrow:not(.disabled)', function(node, event){
-                            var index = toolbar.getData('currentIndex');
-                            if(node.hasClass('prev-button')){
-                                toolbar.setData('currentIndex', --index);
-                            }else{
-                                toolbar.setData('currentIndex', ++index);
+                        if(toolbar.exists()){
+                            toolbar.setData('currentIndex', 0);
+                            if(configs.pressAfterClick){
+                                var pressedIndex = parseInt(toolbar.find('.pressed').getAttr('index'), 10);
+                                var pageIndex = Math.floor(pressedIndex / configs.itemsCount) || 0;
+                                that.setPageByCurrentDot(null, toolbar, pageIndex);
+                                toolbar.on('click', '.second-container>*:not(.pressed)', function(node, event){
+                                    if(!configs.multiple)
+                                        toolbar.find('.second-container>.pressed').removeClass('pressed');
+                                    setTimeout(function() {node.addClass('pressed');}, 1);
+                                });
                             }
-                            that.setPageByCurrentDot(null, toolbar, index);
-                        });
-                        toolbar.find('.paginator').on('click', 'a:not(.current)', function(node, event){
-                            that.setPageByCurrentDot(node, toolbar);
-                            return false;
-                        })
+                            if(configs.multiple){
+                                toolbar.on('click', '.second-container>*', function(node, event){
+                                    var state = that.context.getState();
+                                    state.setController(configs.controller);
+                                    state.setAction(configs.action);
+                                    var params = configs.params;
+                                    var ids = Array.isArray(configs.selectedIds) ? configs.selectedIds : configs.selectedIds.split(',');
+                                    var currentId = node.getData('id');
+                                    if(currentId){
+                                        if(node.hasClass('pressed'))
+                                            ids.splice(ids.indexOf(currentId), 1);
+                                        else
+                                            ids.push(currentId);
+                                        params.push(ids.join(','));
+                                    }
+                                    state.setParams(params);
+                                    state.setPublic(false);
+                                    that.context.stateUpdated();
+                                });
+                            }
+                            toolbar.on('click', '.arrow:not(.disabled)', function(node, event){
+                                var index = toolbar.getData('currentIndex');
+                                if(node.hasClass('prev-button')){
+                                    toolbar.setData('currentIndex', --index);
+                                }else{
+                                    toolbar.setData('currentIndex', ++index);
+                                }
+                                that.setPageByCurrentDot(null, toolbar, index);
+                            });
+                            toolbar.find('.paginator').on('click', 'a:not(.current)', function(node, event){
+                                that.setPageByCurrentDot(node, toolbar);
+                                return false;
+                            })
+                        }
                     }.bind(this));
                 return attributes;
             },

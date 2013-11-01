@@ -1,3 +1,4 @@
+REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.common.ChlkDate');
 
@@ -7,6 +8,8 @@ NAMESPACE('chlk.models.attendance', function () {
     /** @class chlk.models.attendance.AttendanceStudentBox*/
     CLASS(
         'AttendanceStudentBox', [
+            chlk.models.id.SchoolPersonId, 'id',
+
             Object, 'student',
 
             chlk.models.common.ChlkDate, 'date',

@@ -66,7 +66,7 @@ NAMESPACE('chlk.templates.grading', function () {
                                 }
                             }
                         },
-                        color: that.getColor(i, 0.2),
+                        color: 'rgba(193,193,193,0.2)',
                         data: data
                     });
                 });

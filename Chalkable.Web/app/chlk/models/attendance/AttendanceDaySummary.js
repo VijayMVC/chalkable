@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.attendance.AdminAttendanceStatItem');
 REQUIRE('chlk.models.people.User');
+REQUIRE('chlk.models.common.ChlkDate');
 
 NAMESPACE('chlk.models.attendance', function () {
     "use strict";
@@ -15,6 +16,8 @@ NAMESPACE('chlk.models.attendance', function () {
 
             [ria.serialize.SerializeProperty('studentscountabsentwholeday')],
             Number, 'studentsCountAbsentWholeDay',
+
+            chlk.models.common.ChlkDate, 'date',
 
             [ria.serialize.SerializeProperty('absentstudents')],
             ArrayOf(chlk.models.people.User), 'absentStudents',

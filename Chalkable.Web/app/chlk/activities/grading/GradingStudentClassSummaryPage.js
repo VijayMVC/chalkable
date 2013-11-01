@@ -29,7 +29,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
             [[ria.dom.Dom, Boolean]],
             VOID, function changeLineOpacity(node, needOpacity){
-                var color = needOpacity ? node.getData('opacity-color') : node.getData('color');
+                var color = needOpacity ? 'rgba(193,193,193,0.2)' /*node.getData('opacity-color')*/ : node.getData('color');
                 var index = node.getData('index');
                 var chart = this.dom.find('.main-chart').getData('chart');
                 chart.series[index].graph.attr({ stroke: color });

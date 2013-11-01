@@ -91,6 +91,10 @@ INPUT, TEXTAREA, .text-field{
   }
 }
 
+a{
+  text-decoration: none;
+}
+
 BODY {
   DIV.page{
     >DIV#content {
@@ -378,7 +382,7 @@ TEXTAREA.animated-textarea{
   }
 
   ul{
-    >LI{
+    >LI:not(.active-result){
       background: url(images/common/dialog-separator.png) bottom no-repeat;
       position: relative;
 
@@ -526,4 +530,25 @@ BODY{
       }
     }
   }
+}
+
+.big-triangle {
+  width: 95px;
+  height: 14px;
+  position: absolute;
+  overflow: hidden;
+  @include box-shadow(0 16px 10px -17px rgba(0, 0, 0, 0.5));
+  bottom: -14px;
+  background: transparent;
+}
+.big-triangle:after {
+  content: "";
+  position: absolute;
+  width: 50px;
+  height: 44px;
+  -webkit-transform: rotate(-45deg);
+  top: -45px;
+  left: 12px;
+  @include box-shadow(-3px 3px 10px -1px rgba(0, 0, 0, 0.5));
+  background: #eaeaea;
 }

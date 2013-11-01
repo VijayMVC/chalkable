@@ -3,8 +3,9 @@ REQUIRE('chlk.templates.attendance.AdminAttendanceSummaryTpl');
 REQUIRE('chlk.templates.attendance.AdminAttendanceNowTpl');
 REQUIRE('chlk.templates.attendance.AdminAttendanceDayTpl');
 REQUIRE('chlk.templates.attendance.AdminAttendanceMpTpl');
-REQUIRE('chlk.templates.attendance.AttendanceStudentBoxTpl');
 REQUIRE('chlk.templates.attendance.AdminStudentsBoxTpl');
+REQUIRE('chlk.templates.attendance.AttendanceStudentBoxTpl');
+REQUIRE('chlk.templates.attendance.AdminStudentSearchTpl');
 
 NAMESPACE('chlk.activities.attendance', function () {
 
@@ -19,87 +20,99 @@ NAMESPACE('chlk.activities.attendance', function () {
         [ria.mvc.TemplateBind(chlk.templates.attendance.AdminAttendanceSummaryTpl)],
         'AdminAttendanceSummaryPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
-            [[ArrayOf(chlk.models.people.User), String, Object, ria.dom.Dom, Boolean, Object, String]],
-            VOID, function quicksandStudents(students, selector, tpl, target, needPlus, model, msg_){
-                students = students ? (needPlus ? students.slice(0,17) : students.slice(0,18)) : [];
-                var allTpl = new chlk.templates.attendance.AdminAttendanceSummaryTpl();
-                var studentsTpl = new chlk.templates.attendance.AdminStudentsBoxTpl();
-                var students = allTpl.getPreparedStudents(students, needPlus);
-                studentsTpl.assign(new chlk.models.attendance.AdminStudentsBox(students));
-                studentsTpl.setStudents(students);
-                var that = this;
-                jQuery(this.dom.find(selector).find('.hidden-students-block-2:eq(0)').valueOf())
-                    .quicksand(studentsTpl.render());
-                setTimeout(function(){
-                    tpl.renderTo(target.empty());
-                    setTimeout(function(){
-                        that.onPartialRefresh_(model, msg_);
-                    }, 1);
-                }, 750);
-                //studentsTpl.renderTo(this.dom.find(selector).find('.hidden-students-block-2:eq(0)').empty());
-            },
-
-            OVERRIDE, VOID, function onPartialRender_(model, msg_) {
-                var isDay = model.getClass() == chlk.models.attendance.AttendanceDaySummary;
-                var isMp = model.getClass() == chlk.models.attendance.AttendanceMpSummary;
-                if(isDay || isMp){
-                    var rule = this.doFindTemplateForPartialModel_(model, msg_ || '');
-                    var tpl = rule.tpl;
-                    var target = this.dom;
-                    if (rule.selector)
-                        target = target.find(rule.selector);
-                    tpl.assign(model);
-                    if(isDay){
-                        this.quicksandStudents(model.getStudentsAbsentWholeDay(), '.whole-day', tpl, target, true, model, msg_);
-                        this.quicksandStudents(model.getExcusedStudents(), '.excused-students', tpl, target, true, model, msg_);
-                        this.quicksandStudents(model.getAbsentStudents(), '.absent-students', tpl, target, true, model, msg_);
-                        this.quicksandStudents(model.getLateStudents(), '.late-students', tpl, target, true, model, msg_);
-                    }else{
-                        this.quicksandStudents(model.getAbsentAndLateStudents(), '.mp-students', tpl, target, false, model, msg_);
+            [[Boolean, String]],
+            function getMarkerConfigs_(enabled, color_){
+                return enabled ? {
+                    enabled: true,
+                    symbol: 'circle',
+                    radius: 3,
+                    fillColor: '#ffffff',
+                    lineWidth: 2,
+                    lineColor: color_,
+                    states: {
+                        hover: {
+                            radius: 6,
+                            lineWidth: 2
+                        }
                     }
-                }else{
-                    BASE(model, msg_);
-                }
-
+                } : {
+                    enabled: false,
+                    states: {
+                        hover: {
+                            radius: 0,
+                            lineWidth: 0
+                        }
+                    }
+                };
             },
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.attendance.AttendanceStudentBoxTpl)],
-            VOID, function addStudentBox(tpl, model, msg_) {
-                tpl.renderTo(this.dom);
-            },
+            Object, 'addedStudent',
 
             [ria.mvc.DomEventBind('change', '.student-search-input')],
                 [[ria.dom.Dom, ria.dom.Event, Object]],
                 VOID, function selectStudent(node, event, o) {
                     var form = node.parent().find('.show-student-form');
                     var student = o.selected;
-                    var date = new Date(form.find('[name="date"]').getValue());
-                    var gradeLevelsIds = form.find('[name="gradeLevelsIds"]').getValue();
-                    var currentPage = parseInt(form.find('[name="currentPage"]').getValue(), 10) || 1;
-                    var target = node.parent('.student');
-                    var top = target.offset().top - this.dom.offset().top;
-                    var model = new chlk.models.attendance.AttendanceStudentBox(student,
-                        new chlk.models.common.ChlkDate(date), top, currentPage, gradeLevelsIds);
-                    node.parent('.small-pop-up').hide();
-                    this.onPartialRender_(model);
-                    this.onPartialRefresh_(model);
-                    setTimeout(function(){
-                        new ria.dom.Dom('.student.absolute').find('a.img-container').trigger('click');
-                    }, 1);
+                    form.find('[name=id]').setValue(student.getId().valueOf());
+                    form.trigger('submit');
+                    this.hidePopUp();
+                    node.setValue('');
+                    this.setAddedStudent(student);
             },
 
-            [ria.mvc.DomEventBind('click', '.attendance-top-box:not(.active-part)')],
+            [ria.mvc.DomEventBind('change', '.attendance-type-chart-select')],
+                [[ria.dom.Dom, ria.dom.Event, Object]],
+                VOID, function selectAttendanceType(node, event, o) {
+                    var colors = ['#e49e3c', '#b93838', '#5093a7'];
+                    var types = ['late', 'absent', 'excused'];
+                    var type = node.getValue();
+                    var num = type == chlk.models.attendance.AttendanceTypeEnum.LATE.valueOf() ? 0 :
+                        (type == chlk.models.attendance.AttendanceTypeEnum.ABSENT.valueOf() ? 1 : 2);
+                    var chart = node.parent().find('.top-chart').getData('chart'), that = this;
+                    chart.series.forEach(function(ser, i){
+                        if(i == num){
+                            //ser.options.color = colors[i];
+                            //ser.options.marker = that.getMarkerConfigs_(true, colors[i]);
+                            //ser.graph.attr({ stroke: colors[i] });
+                            ser.update({
+                                marker : that.getMarkerConfigs_(true, colors[i]),
+                                color: colors[i],
+                                zIndex: 10
+                            });
+                        }
+                        else{
+                            //ser.options.color = "#c1c1c1";
+                            //ser.options.marker = that.getMarkerConfigs_(false);
+                            //ser.graph.attr({ stroke: "#c1c1c1" });
+                            ser.update({
+                                marker : that.getMarkerConfigs_(false),
+                                color: "#c1c1c1",
+                                zIndex: 1
+                            });
+                        }
+                    });
+                    node.next()
+                        .find('.chzn-single span')
+                        .removeClass('late')
+                        .removeClass('absent')
+                        .removeClass('excused')
+                        .addClass(types[num]);
+                    chart.redraw();
+            },
+
+            [ria.mvc.DomEventBind('blur', '.student-search-input')],
+                [[ria.dom.Dom, ria.dom.Event]],
+                VOID, function hidePopUp(node_, event_) {
+                    this.dom.find('.add-popup').fadeOut();
+            },
+
+            [ria.mvc.DomEventBind('click', '.top-number-box:not(.active-part)')],
                 [[ria.dom.Dom, ria.dom.Event]],
                 VOID, function boxClick(node, event) {
                     var index = node.getData('index');
                     this.dom.find('.active-part').removeClass('active-part');
                     this.dom.find('.page-' + index).addClass('active-part');
-                    node.addClass('active');
-                    var left = node.getAttr('left');
-                    var text = node.getAttr('text');
-                    var slider = this.dom.find('.slider-container');
-                    slider.setCss('left', left);
-                    slider.find('.active').setHTML(text);
+                    node.addClass('active-part');
             },
 
             [ria.mvc.DomEventBind('click', '.for-date-picker')],
@@ -108,12 +121,12 @@ NAMESPACE('chlk.activities.attendance', function () {
                     this.dom.find('#nowDateTime').trigger('focus');
             },
 
-            [ria.mvc.DomEventBind('click', '.plus')],
+            [ria.mvc.DomEventBind('click', '.add-student-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function plusClick(node, event){
-                node.find('.for-plus').show();
+                node.find('.add-popup').fadeIn();
                 setTimeout(function(){
-                    node.find('.student-search-input').trigger('focus');
+                    node.find('input').trigger('focus');
                 }, 1);
             },
 
@@ -188,16 +201,36 @@ NAMESPACE('chlk.activities.attendance', function () {
                     }
             },
 
-            [ria.mvc.DomEventBind('click', '.more-students')],
+            [ria.mvc.DomEventBind('click', '.all-button')],
                 [[ria.dom.Dom, ria.dom.Event]],
-                VOID, function moreStudentsClick(node, event) {
-                    var hiddenBlock = node.parent('.attendance-students').find('.hidden-students-block.no-used:eq(0)');
+                VOID, function allButtonClick(node, event) {
+                var firstBlock = node.parent('.attendance-students');
+                var hiddenBlock = firstBlock.find('.hidden-students-block');
+                var visibleBlock2 = firstBlock.find('.visible-block').find('.hidden-students-block-2');
+                if(node.hasClass('less')){
+                    hiddenBlock
+                        .setCss('height', 0);
+                    node.removeClass('less');
+                    node.setHTML(Msg.All);
+                    visibleBlock2.removeClass('expanded');
+                }else{
                     var height = hiddenBlock.find('.hidden-students-block-2').height();
                     hiddenBlock
-                        .setCss('height', height)
-                        .removeClass('no-used');
-                    if(hiddenBlock.hasClass('last-block'))
-                        node.parent('.more-container').hide();
+                        .setCss('height', height);
+                    var interval, kil = 0;
+                    interval = setInterval(function(){
+                        var scrollToNode = firstBlock.next('.attendance-students');
+                        var dest = scrollToNode.exists() ? scrollToNode.offset().top - jQuery(window).height() : jQuery(document).height();
+                        if(dest > jQuery(document).scrollTop())
+                            jQuery("html, body").animate({scrollTop:dest}, 200);
+                        kil++;
+                        if(kil == 5)
+                            clearInterval(interval);
+                    }, 100);
+                    node.addClass('less');
+                    node.setHTML(Msg.Less);
+                    visibleBlock2.addClass('expanded');
+                }
             },
 
             [ria.mvc.DomEventBind('change', '#nowDateTime')],
@@ -241,6 +274,34 @@ NAMESPACE('chlk.activities.attendance', function () {
                         }
                     }
                 }.bind(this))
+            },
+
+            [ria.mvc.DomEventBind('change', '.add-new-student')],
+                [[ria.dom.Dom, ria.dom.Event]],
+                VOID, function addedNewStudent(node, event) {
+                    var typesArray = node.getValue().split(',');
+                    var student = this.getAddedStudent();
+                    var studentBoxModel = new chlk.models.attendance.AttendanceStudentBox(student);
+                    var tpl = new chlk.templates.attendance.AttendanceStudentBoxTpl();
+                    tpl.assign(studentBoxModel);
+                    var html = tpl.render();
+                    var that = this;
+                    typesArray.forEach(function(elem, pos){
+                        if(typesArray.indexOf(elem) == pos){
+                            var container = that.dom.find('.all-students.attendance-' + elem);
+                            var block = container.find('.visible-block:visible').find('.hidden-students-block-2');
+                            if(block.exists() && !block.find('.student.new').exists()){
+                                new ria.dom.Dom().fromHTML(html).prependTo(block);
+                                if(block.hasClass('need-button'))
+                                    new ria.dom.Dom().fromHTML('<button class="all-button new">' + Msg.All + '</button>').appendTo(block);
+                                container.find('.hidden-students-block-2').addClass('animate');
+                                var secondBlock = container.find('.hidden-students');
+                                if(secondBlock.hasClass('need-big-height')){
+                                    secondBlock.setCss('height', secondBlock.getCss('height') + 113 + 'px');
+                                }
+                            }
+                        }
+                    })
             },
 
             OVERRIDE, VOID, function onStop_() {

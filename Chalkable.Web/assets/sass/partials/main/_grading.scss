@@ -14,8 +14,7 @@ BODY {
                 .grading-chart-part {
                   margin: 15px 0 0 -14px;
 
-                  .chart-bg{
-                    background: url(images/grading/chart-bg.png) 28px center no-repeat;
+                  .chart-bg2{
                     top: -16px;
                     height: 155px;
 
@@ -153,15 +152,6 @@ BODY {
                     border-left: 5px solid transparent;
                     border-right: 5px solid transparent;
                     border-top: 5px solid white;
-                  }
-
-                  .chart-text{
-                    width: 34px;
-                    display: inline-block;
-                    text-align: center;
-                    background: url(images/grading/chart-tooltip.png) 0 0 no-repeat;
-                    height: 34px;
-                    font: bold 12px/30px Verdana;
                   }
                 }
               }
@@ -332,20 +322,7 @@ BODY {
                 .all-button{
                   width: 58px;
                   height: 54px;
-                  @include border-radius(7px);
                   margin-right: 8px;
-                  border: 1px solid #b3b3b3;
-                  @include box-shadow(0 1px 1px #cacaca, inset 0 1px 0 white);
-                  @include background(linear-gradient(top, #f5f5f5, #e0e0e0));
-                  color: #3d3d3d;
-                  font: bold 14px/52px Arial;
-                  text-shadow: 1px 1px 0 white;
-                  text-transform: uppercase;
-                  cursor: pointer;
-
-                  &:hover{
-                    @include background(linear-gradient(top, #e5e5e5, #d0d0d0));
-                  }
                 }
 
                 .image-container{
