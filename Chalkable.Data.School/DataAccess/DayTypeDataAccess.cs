@@ -35,5 +35,10 @@ namespace Chalkable.Data.School.DataAccess
             dbQuery.Sql.AppendFormat("  order by [{0}].[{1}] ", "DayType", DayType.NUMBER_FIELD);
             return ReadMany<DayType>(dbQuery);
         } 
+
+        public bool Exists(int schoolYearId)
+        {
+            return Exists<DayType>(new AndQueryCondition {{DayType.SCHOOL_YEAR_REF, schoolYearId}});
+        }
     }
 }

@@ -44,9 +44,6 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<Date> GetDays(int markingPeriodId, bool schoolDaysOnly, DateTime? fromDate = null, DateTime? tillDate = null, int count = Int32.MaxValue)
         {
-            var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId);
-            GetCalendarDateByDate(mp.EndDate);
-
             using (var uow = Read())
             {
                 return new DateDataAccess(uow, Context.SchoolLocalId)
@@ -103,13 +100,17 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
+                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetById(schoolYearId);
+                if (dateTypeId.HasValue && !new DayTypeDataAccess(uow).Exists(schoolYearId))
+                    throw new ChalkableException("day type is not assigned to current school year");
+
                 var res = new Date
                     {
                         Day = date,
                         IsSchoolDay = schoolDay,
                         SchoolYearRef = schoolYearId,
                         DayTypeRef = dateTypeId,
-                        SchoolRef = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetById(schoolYearId).SchoolRef
+                        SchoolRef = sy.SchoolRef
                     };
                 new DateDataAccess(uow, Context.SchoolLocalId).Insert(res);
                 uow.Commit();
