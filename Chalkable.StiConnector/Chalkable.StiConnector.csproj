@@ -1,0 +1,293 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3D16203E-D19D-41E1-9918-2A9448427BFD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Chalkable.StiConnector</RootNamespace>
+    <AssemblyName>Chalkable.StiConnector</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'STAGING|AnyCPU'">
+    <OutputPath>bin\STAGING\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Connectors\ConnectorBase.cs" />
+    <Compile Include="Connectors\ConnectorLocator.cs" />
+    <Compile Include="Connectors\Model\School.cs" />
+    <Compile Include="Model\AbsenceLevelReason.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\AbsenceReason.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\AcadSession.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Address.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\AttendanceCalendar.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\AttendanceCalendarDay.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\AttendanceSetting.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\BellSchedule.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\CalendarDay.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Course.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\CourseSchool.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\CourseType.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DayType.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Document.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Enrollment.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Ethnicity.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Gender.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\GradeLevel.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\OrganizationAddress.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Person.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\PersonAddress.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\PersonEmail.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\PersonEthnicity.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\PersonTelephone.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Room.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\ScheduledBlock.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\ScheduledSection.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\ScheduledTimeSlot.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\School.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\SchoolGradeLevel.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\SectionStaff.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\SectionTerm.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Staff.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StaffClassification.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StaffContact.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StaffRole.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StaffSchool.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StiEntities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StiEntities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StiEntities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StiEntities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StiEntities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StiEntitiesEx.cs" />
+    <Compile Include="Model\Student.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StudentAcadSession.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StudentAttendanceMinute.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StudentCheckInOut.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StudentDailyAbsence.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StudentGradeLevel.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StudentPeriodAbsence.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StudentSchedule.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StudentSchool.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Term.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\TimeSlot.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\User.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\UserLogin.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\UserPassword.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\UserSchool.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ImportService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Model\StiEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>StiEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="Model\StiEntities.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>StiEntities.Context.cs</LastGenOutput>
+      <DependentUpon>StiEntities.edmx</DependentUpon>
+    </None>
+    <None Include="Model\StiEntities.edmx.diagram">
+      <DependentUpon>StiEntities.edmx</DependentUpon>
+    </None>
+    <None Include="Model\StiEntities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>StiEntities.edmx</DependentUpon>
+      <LastGenOutput>StiEntities.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Chalkable.BusinessLogic\Chalkable.BusinessLogic.csproj">
+      <Project>{B008FBC2-8AFB-48FF-BA85-97845DDF02D2}</Project>
+      <Name>Chalkable.BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
+      <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
+      <Name>Chalkable.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.Master\Chalkable.Data.Master.csproj">
+      <Project>{C9ACB7A6-1755-424A-B0BB-3B0C5B13EC15}</Project>
+      <Name>Chalkable.Data.Master</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.School\Chalkable.Data.School.csproj">
+      <Project>{C5753C2A-F2BC-4F96-846B-548FC67191B2}</Project>
+      <Name>Chalkable.Data.School</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
