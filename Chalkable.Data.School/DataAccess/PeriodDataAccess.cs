@@ -23,7 +23,7 @@ namespace Chalkable.Data.School.DataAccess
         //    ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
         //}
 
-        public void Delete(int? schoolYearId)
+        public void DeleteBySchoolYearId(int? schoolYearId)
         {
             SimpleDelete<Period>(GetCondsBySchoolYear(schoolYearId));
         }

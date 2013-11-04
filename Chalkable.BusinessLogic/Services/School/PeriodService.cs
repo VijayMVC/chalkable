@@ -118,6 +118,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(date);
+                if (sy == null) return null;
                 return new PeriodDataAccess(uow, Context.SchoolLocalId).GetPeriodOrNull(time, sy.Id);
             }
         }
