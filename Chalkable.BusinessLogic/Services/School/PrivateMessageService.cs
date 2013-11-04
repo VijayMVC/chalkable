@@ -52,7 +52,9 @@ namespace Chalkable.BusinessLogic.Services.School
                     };
                 da.Insert(message);
                 uow.Commit();
-                ServiceLocator.NotificationService.AddPrivateMessageNotification(message.Id);
+                message = da.GetOutComeMessage(null, null, Context.UserLocalId.Value, 0, int.MaxValue).Last();
+                //TODO: notification sending 
+                //ServiceLocator.NotificationService.AddPrivateMessageNotification(message.Id);
                 return da.GetDetailsById(message.Id, Context.UserLocalId.Value);
             }
         }
