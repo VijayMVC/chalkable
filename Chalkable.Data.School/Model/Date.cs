@@ -6,7 +6,7 @@ namespace Chalkable.Data.School.Model
     public class Date
     {
         public const string DATE_TIME_FIELD = "Day";
-        public const string DATE_TYPE_REF_FIELD = "DateTypeRef";
+        public const string DATE_TYPE_REF_FIELD = "DayTypeRef";
         public const string IS_SCHOOL_DAY_FIELD = "IsSchoolDay";
         public const string SCHOOL_YEAR_REF = "SchoolYearRef";
 

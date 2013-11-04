@@ -115,9 +115,10 @@ namespace Chalkable.Data.School.DataAccess
         {
             var dbQuery = new DbQuery();
             var types = new List<Type> {typeof (ClassPeriod), typeof (Period)};
-            dbQuery.Sql.AppendFormat(@"select {0} from ClassPeriod 
-                                       join Period on Period.Id = ClassPeriod.PeriodRef"
-                                     , Orm.ComplexResultSetQuery(types));
+            dbQuery.Sql.AppendFormat(@"select {0} from [{1}] 
+                                       join [{2}] on [{2}].[{3}] = [{1}].[{4}]"
+                                     , Orm.ComplexResultSetQuery(types), types[0].Name, types[1].Name
+                                     , Period.ID_FIELD, ClassPeriod.PERIOD_REF_FIELD);
             return BuildGetClassPeriodsConditions(dbQuery, query);
         }
         private DbQuery BuildGetClassPeriodsConditions(DbQuery dbQuery, ClassPeriodQuery query)
@@ -157,7 +158,7 @@ namespace Chalkable.Data.School.DataAccess
             if (query.SchoolYearId.HasValue)
             {
                 dbQuery.Parameters.Add(Period.SCHOOL_YEAR_REF, query.SchoolYearId);
-                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] = @[{1}]", "Period", Period.SCHOOL_YEAR_REF);
+                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] = @{1}", "Period", Period.SCHOOL_YEAR_REF);
             }
 
             if (query.Time.HasValue)

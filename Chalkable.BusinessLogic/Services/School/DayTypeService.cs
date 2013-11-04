@@ -30,15 +30,16 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new DateTypeDataAccess(uow).GetDateTypes(schoolYearId);
+                return new DayTypeDataAccess(uow).GetDateTypes(schoolYearId);
             }
         }
 
+        //TODO : filter by school 
         public DayType GetSectionById(int id)
         {
             using (var uow = Read())
             {
-                return new DateTypeDataAccess(uow).GetById(id);
+                return new DayTypeDataAccess(uow).GetById(id);
             }
         }
         public bool CanDeleteSections(int schoolYearId)
@@ -67,7 +68,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         Number = number,               
                         SchoolYearRef = schoolYearId
                     };
-                var da = new DateTypeDataAccess(uow);
+                var da = new DayTypeDataAccess(uow);
                 var dayTypes = da.GetDateTypes(schoolYearId);
                 foreach (var scheduleSection in dayTypes)
                 {
@@ -92,7 +93,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                var da = new DateTypeDataAccess(uow);
+                var da = new DayTypeDataAccess(uow);
                 var section = da.GetById(id);
                 var old = section.Number;
                 var mn = Math.Min(old, number);
@@ -137,7 +138,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                var da = new DateTypeDataAccess(uow);
+                var da = new DayTypeDataAccess(uow);
                 var dateType = da.GetById(id);
                 if (!CanDeleteSections(dateType.SchoolYearRef))
                     throw new ChalkableException(ChlkResources.ERR_SCHEDULE_SECTION_CANT_DELETE);

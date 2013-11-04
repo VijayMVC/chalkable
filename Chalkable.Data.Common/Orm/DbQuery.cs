@@ -26,7 +26,7 @@ namespace Chalkable.Data.Common.Orm
             Parameters = parameters;
         }
         
-        public DbQuery(IList<DbQuery> dbQueries)
+        public DbQuery(IList<DbQuery> dbQueries) : this()
         {
             foreach (var dbQuery in dbQueries)
             {
