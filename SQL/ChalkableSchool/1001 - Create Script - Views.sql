@@ -87,7 +87,7 @@ SELECT
 FROM 
 	Class	
 	join GradeLevel on GradeLevel.Id = Class.GradeLevelRef
-	join Person on Person.Id = Class.TeacherRef
+	left join Person on Person.Id = Class.TeacherRef
 	join SchoolYear on SchoolYear.Id = Class.SchoolYearRef
 GO
 
