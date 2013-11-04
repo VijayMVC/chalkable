@@ -61,6 +61,7 @@
     <Compile Include="DataAccess\OrmTest.cs" />
     <Compile Include="OnDataBaseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\GradeLevelServiceTest.cs" />
     <Compile Include="Services\Master\AccessControlTestService.cs" />
     <Compile Include="Services\Master\ApplicationServiceTest.cs" />
     <Compile Include="Services\Master\BackgrounTaskServiceTest.cs" />
