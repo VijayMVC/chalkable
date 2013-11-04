@@ -160,6 +160,8 @@ var Msg = {
     Required: 'Required',
     Room: 'Room',
     Save: 'Save',
+    Saved: 'Saved',
+    Saving: 'Saving',
     Schedule: 'Schedule',
     Scheduled: 'Scheduled',
     School: 'School',

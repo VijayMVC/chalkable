@@ -62,7 +62,7 @@ NAMESPACE('chlk.controllers', function(){
                 var activityClass = chlk.activities.discipline.ClassDisciplinesPage;
                 var currentActivity = this.getView().getCurrent();
                 if(currentActivity && activityClass == currentActivity.getClass()){
-                    return this.UpdateView(activityClass, res, chlk.activities.lib.DontShowLoader());
+                    return this.UpdateView(activityClass, res);
                 }
                 return this.PushView(activityClass, res);
             },
@@ -110,13 +110,15 @@ NAMESPACE('chlk.controllers', function(){
 
             [[chlk.models.discipline.SetDisciplineListModel]],
             function setDisciplinesAction(model){
-               return this.disciplineService.setDisciplines(model).attach(this.validateResponse_())
-                   .then(function(data){
-                       var controller = model.getController() || 'discipline';
-                       var action = model.getAction() || 'list';
-                       var params = JSON.parse(model.getParams()) || [];
-                       return this.Redirect(controller, action, params);
-                   }, this);
+                var result = this.disciplineService.setDisciplines(model).attach(this.validateResponse_())
+                    .then(function(data){
+                        /*var controller = model.getController() || 'discipline';
+                        var action = model.getAction() || 'list';
+                        var params = JSON.parse(model.getParams()) || [];
+                        return this.Redirect(controller, action, params);*/
+                        return model.getDisciplines()[0];
+                    }, this);
+                return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
             }
         ])
 });

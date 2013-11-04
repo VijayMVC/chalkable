@@ -14,6 +14,7 @@ NAMESPACE('chlk.models.discipline', function(){
           chlk.models.common.ChlkDate, 'date',
           String, 'description',
           String, 'disciplineTypeIds',
+          Number, 'time',
 
           Object, function getPostData(){
                return{
@@ -21,6 +22,7 @@ NAMESPACE('chlk.models.discipline', function(){
                    classpersonid: this.getClassPersonId().valueOf(),
                    date: this.getDate().getDate(),
                    description: this.getDescription(),
+                   time: this.getTime(),
                    disciplinetypeids: this.getDisciplineTypeIds()
                }
           }

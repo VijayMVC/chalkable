@@ -40,6 +40,40 @@
         .right{
           margin-right: 35px;
         }
+
+        .saving-block, .saved-block{
+          display: none;
+          font: bold 12px Arial;
+          color: #5d5d5d;
+        }
+
+        .saved-block{
+          background: url(images/discipline/saved.png) 0 center no-repeat;
+          padding-left: 25px;
+        }
+
+        .tooltip-container{
+          margin-right: 0;
+
+          .with-discipline{
+            background: url(images/discipline/width-discipline.png) 0 center no-repeat;
+            width:24px;
+            height: 21px;
+            margin-right: 22px;
+          }
+        }
+
+        &.saving{
+          .saving-block{
+            display: block;
+          }
+        }
+
+        &.saved{
+          .saved-block{
+            display: block;
+          }
+        }
       }
 
       .discipline-form-block{
