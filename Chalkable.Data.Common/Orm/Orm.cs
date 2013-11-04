@@ -154,7 +154,7 @@ namespace Chalkable.Data.Common.Orm
         {
             var b = new StringBuilder();
             var t = typeof(T);
-            var fields = Fields(t);
+            var fields = Fields(t, false);
             var primaryKeyFields = GetPrimaryKeyFields(t);
             var res = new DbQuery {Parameters = new Dictionary<string, object>()};
             for (int i = 0; i < objs.Count; i++)

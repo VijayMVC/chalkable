@@ -18,12 +18,14 @@ namespace Chalkable.Data.School.DataAccess
 
         private QueryCondition GetSchoolPersonsCondition(int? personId, int? roleId, int? schoolId)
         {
-            return new AndQueryCondition
-                {
-                    {SchoolPerson.PERSON_REF_FIELD, personId},
-                    {SchoolPerson.ROLE_REF, roleId},
-                    {SchoolPerson.SCHOOL_REF_FIELD, schoolId}
-                };
+            var res = new AndQueryCondition();
+            if(personId.HasValue)
+                res.Add(SchoolPerson.PERSON_REF_FIELD, personId);
+            if (roleId.HasValue)
+                res.Add(SchoolPerson.ROLE_REF, roleId);
+            if (schoolId.HasValue)
+                res.Add(SchoolPerson.SCHOOL_REF_FIELD, schoolId);
+            return res;
         } 
 
         public IList<SchoolPerson> GetSchoolPersons(int? personId, int? roleId, int? schoolId)
