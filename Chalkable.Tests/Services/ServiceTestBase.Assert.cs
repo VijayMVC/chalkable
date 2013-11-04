@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Tests.Services.School;
 using NUnit.Framework;
@@ -66,6 +67,14 @@ namespace Chalkable.Tests.Services
         {
             return models.Count > 0 ? models.Max(action) + 1 : 1;
         }
+
+        public static int GetNewId<TModel>(IServiceLocatorSchool distirctLocator, Func<IServiceLocatorSchool, IList<TModel>> serviceMethod, Func<TModel, int> action)
+        {
+            var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin()
+                .SchoolServiceLocator(distirctLocator.Context.DistrictId.Value, null);
+            return GetNewId(serviceMethod(sysLocator), action);
+        }
+
 
     }
 }

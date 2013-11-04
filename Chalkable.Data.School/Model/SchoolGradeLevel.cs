@@ -10,7 +10,7 @@ namespace Chalkable.Data.School.Model
     public class SchoolGradeLevel
     {
         public const string SCHOOL_REF_FIELD = "SchoolRef";
-        public const string GRADE_LEVEL_REF_FIELD = "SchoolRef";
+        public const string GRADE_LEVEL_REF_FIELD = "GradeLevelRef";
 
         [PrimaryKeyFieldAttr]
         public int SchoolRef { get; set; }

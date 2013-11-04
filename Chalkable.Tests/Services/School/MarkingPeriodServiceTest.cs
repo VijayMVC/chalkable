@@ -125,13 +125,14 @@ namespace Chalkable.Tests.Services.School
 
         private static int GetNewMpId(IServiceLocatorSchool serviceLocator)
         {
-            return GetNewId(serviceLocator.MarkingPeriodService.GetMarkingPeriods(null), x => x.Id);
+            return GetNewId(serviceLocator, sl=> sl.MarkingPeriodService.GetMarkingPeriods(null), x => x.Id);
         }
 
         public static MarkingPeriod CreateSchoolYearWithMp(IServiceLocatorSchool locator, DateTime? date, bool buildSections = false, bool generatePeriods = false
             , int mpInterval = 30, int weekDays = DEFAULT_WEEK_DAYS)
         {
-            throw new NotImplementedException();
+            var sy = SchoolYearServiceTest.CreateNextSchoolYear(locator, date);
+            return CreateNextMp(locator, sy.Id, generatePeriods, mpInterval, weekDays);
         }
     }
 }

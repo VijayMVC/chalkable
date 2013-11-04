@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Common;
@@ -47,6 +48,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 SchoolYear sy = null;
                 if (schoolYearId.HasValue)
                     sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetById(schoolYearId.Value);
+                if (sy != null)
+                {
+                   if(!(new SchoolGradeLevelDataAccess(uow, sy.SchoolRef).Exists(gradeLevelId)))
+                      throw new ChalkableException("GradeLevel is not assigned to current school");
+                   if(teacherId.HasValue && !(new SchoolPersonDataAccess(uow).Exists(teacherId, CoreRoles.TEACHER_ROLE.Id, sy.SchoolRef)))
+                       throw new ChalkableException("Teacher is not assigned to current school");
+                }
                 var cClass = new Class
                     {
                         Id = classId,
@@ -85,15 +93,20 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            var schoolId = GetClassById(classId).SchoolRef;
+            var c = GetClassById(classId);
+            if(!c.SchoolYearRef.HasValue)
+                throw new ChalkableException("school year is not assigned for this class");
             using (var uow = Read())
             {
-                var mpClassDa = new MarkingPeriodClassDataAccess(uow, Context.SchoolLocalId);    
+                var mpClassDa = new MarkingPeriodClassDataAccess(uow, Context.SchoolLocalId);
+                var mp = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId).GetById(markingPeriodId);
+                if(mp.SchoolYearRef != c.SchoolYearRef)
+                    throw new ChalkableException();
                 var mpc = new MarkingPeriodClass
                 {
                     ClassRef = classId,
                     MarkingPeriodRef = markingPeriodId,
-                    SchoolRef = schoolId.Value
+                    SchoolRef = c.SchoolRef.Value
                 };
                 mpClassDa.Insert(mpc);
             }
@@ -109,6 +122,9 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var classDa = new ClassDataAccess(uow, Context.SchoolLocalId);
                 var cClass = classDa.GetById(classId);
+                if (!(new SchoolPersonDataAccess(uow).Exists(teacherId, CoreRoles.TEACHER_ROLE.Id, cClass.SchoolRef)))
+                    throw new ChalkableException("Teacher is not assigned to current school");
+                
                 cClass.Name = name;
                 cClass.ChalkableDepartmentRef = chlkableDepartmentId;
                 cClass.Description = description;
@@ -137,7 +153,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     });
                 if (person.RoleRef != CoreRoles.STUDENT_ROLE.Id)
                     throw new ChalkableException("Only student can be added to class");
-
                 if (classPeriodDa.IsStudentAlreadyAssignedToClassPeriod(personId, classId))
                     throw new ChalkableException(ChlkResources.ERR_STUDENT_BAD_CLASS_PERIOD);
 

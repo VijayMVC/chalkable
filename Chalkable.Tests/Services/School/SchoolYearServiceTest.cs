@@ -100,7 +100,7 @@ namespace Chalkable.Tests.Services.School
                 var lastSy = schoolYears[schoolYears.Count - 1];
                 startDate = lastSy.EndDate.AddDays(1);
             }
-            var newId = GetNewId(schoolYears, x => x.Id);
+            var newId = GetNewId(locator, sl => sl.SchoolYearService.GetSortedYears(), x => x.Id);
             string syName = string.Format("{0}_{1}", SCHOOL_YEAR_NAME, newId);
             return syService.Add(newId, locator.Context.SchoolLocalId.Value, syName, syName, startDate, startDate.AddYears(1));
         }

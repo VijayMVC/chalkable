@@ -96,7 +96,7 @@
     <Compile Include="Services\School\PhoneServiceTest.cs" />
     <Compile Include="Services\School\PrivateMessageServiceTest.cs" />
     <Compile Include="Services\School\RoomServiceTest.cs" />
-    <Compile Include="Services\School\DateTypeServiceTest.cs" />
+    <Compile Include="Services\School\DayTypeServiceTest.cs" />
     <Compile Include="Services\TestContext\SchoolTestContext.cs" />
     <Compile Include="Services\School\SchoolYearServiceTest.cs" />
     <Compile Include="Services\School\StudentAnnouncementServiceTest.cs" />

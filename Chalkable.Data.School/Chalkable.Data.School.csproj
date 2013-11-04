@@ -85,7 +85,7 @@
     <Compile Include="DataAccess\PhoneDataAccess.cs" />
     <Compile Include="DataAccess\PrivateMessageDataAccess.cs" />
     <Compile Include="DataAccess\RoomDataAccess.cs" />
-    <Compile Include="DataAccess\DateTypeDataAccess.cs" />
+    <Compile Include="DataAccess\DayTypeDataAccess.cs" />
     <Compile Include="DataAccess\SchoolYearDataAccess.cs" />
     <Compile Include="DataAccess\StudentAnnouncementDataAccess.cs" />
     <Compile Include="DataAccess\StudentSchoolYearDataAccess.cs" />
