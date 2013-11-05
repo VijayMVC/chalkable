@@ -197,7 +197,7 @@ namespace Chalkable.StiConnector.Services
                 try
                 {
                     ServiceLocatorSchool.PersonService.Add(person.PersonID, email, DEF_USER_PASS, person.FirstName, person.LastName
-                        , person.Gender != null ? person.Gender.Code : "M", null, person.DateOfBirth, person.PhysicalAddressID, person.User.UserName, assignments);
+                        , person.Gender != null ? person.Gender.Code : "M", null, person.DateOfBirth, person.PhysicalAddressID, person.User != null ? person.User.UserName : null, assignments);
                 }
                 catch (Exception ex)
                 {
