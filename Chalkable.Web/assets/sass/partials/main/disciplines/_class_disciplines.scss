@@ -77,13 +77,21 @@
       }
 
       .discipline-form-block{
+        >DIV{
+          max-height: 189px;
+          overflow: auto;
+        }
 
-        .discipline-types, .discipline-desciption-container{
+        .discipline-types{
           display: inline-block;
-          margin: 20px;
+          margin: 24px 21px;
+          vertical-align: top;
         }
         .discipline-types{
           .column{
+            display: inline-block;
+            width: 140px;
+
             .labeled-checkbox{
               display: inline-block;
               margin-right: 10px;
@@ -92,17 +100,22 @@
         }
         .discipline-desciption-container{
           background: #f5f5f5;
+          display: inline-block;
           @include box-shadow(0 2px 6px 0px #989897);
-          width: 300px;
+          width: 311px;
+          vertical-align: top;
           height: auto;
+          margin: 23px 0 27px 3px;
 
           .title, .notes-area{
-            margin: 7px 15px 0px 15px;
+            margin: 2px 15px 0 13px;
             width: auto;
             background: none;
           }
           .title{
-            color: #5C7684;
+            margin: 2px 15px -6px 13px;
+            color: #154158;
+            font: normal 28px 'Reenie Beanie';
             background: none;
           }
 
@@ -116,7 +129,8 @@
             width: 260px;
             resize: none;
             overflow-y: scroll;
-            line-height: 30px;
+            line-height: 31px;
+            height: 93px;
             margin-top: 3px !important;
             //
             //::-webkit-scrollbar {
