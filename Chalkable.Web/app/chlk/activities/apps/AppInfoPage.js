@@ -32,6 +32,7 @@ NAMESPACE('chlk.activities.apps', function () {
                 var submitBtnWrapper = this.dom.find('.submit-btn');
                 submitBtnWrapper.addClass(DISABLED_CLASS);
                 var submitBtn = submitBtnWrapper.find('button');
+                submitBtnWrapper.setAttr('data-tooltip', 'Unsaved changed');
                 submitBtn.setAttr('disabled', true);
                 var isDraftHidden = this.dom.find('input[name=draft]');
                 isDraftHidden.setValue('true');
@@ -41,6 +42,8 @@ NAMESPACE('chlk.activities.apps', function () {
                 updateDraftBtnWrapper.removeAttr("disabled");
                 var updateDraftBtn = updateDraftBtnWrapper.find('button');
                 updateDraftBtn.removeAttr('disabled');
+                jQuery(updateDraftBtn.valueOf()).html("Unsaved changes");
+
             },
 
 
