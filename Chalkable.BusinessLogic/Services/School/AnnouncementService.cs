@@ -14,7 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAnnouncementService
     {
-        AnnouncementDetails CreateAnnouncement(int announcementTypeId, int? classId = null);
+        AnnouncementDetails CreateAnnouncement(int? classAnnouncementTypeId, int? classId = null);
         AnnouncementDetails GetAnnouncementDetails(int announcementId);
         void DeleteAnnouncement(int announcementId);
         void DeleteAnnouncements(int classId, int announcementType, AnnouncementState state);
@@ -150,7 +150,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public AnnouncementDetails CreateAnnouncement(int announcementTypeId, int? classId = null)
+        public AnnouncementDetails CreateAnnouncement(int? classAnnouncementTypeId, int? classId = null)
         {
             if (!AnnouncementSecurity.CanCreateAnnouncement(Context))
                 throw new ChalkableSecurityException();
@@ -159,8 +159,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var annDa = CreateAnnoucnementDataAccess(uow);
                 var nowLocalDate = Context.NowSchoolTime;
-                var markingPeriod = ServiceLocator.MarkingPeriodService.GetLastMarkingPeriod(nowLocalDate);
-                var res = annDa.Create(announcementTypeId, classId, markingPeriod.Id, nowLocalDate, Context.UserLocalId ?? 0);
+                var res = annDa.Create(classAnnouncementTypeId, classId, nowLocalDate, Context.UserLocalId ?? 0);
                 uow.Commit();
                 return res;
             }

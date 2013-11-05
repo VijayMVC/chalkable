@@ -14,6 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
         AnnouncementType GetAnnouncementTypeById(int id);
         AnnouncementType GetAnnouncementTypeBySystemType(SystemAnnouncementType type);
         IList<ClassAnnouncementType> GetClassAnnouncementTypes(int classId, bool all = true);
+        IList<ClassAnnouncementType> GetClassAnnouncementTypes(int type, int? classId);
     }
     public class AnnouncementTypeService : SchoolServiceBase, IAnnouncementTypeService
     {
@@ -72,14 +73,52 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                var cond = new AndQueryCondition
-                    {
-                        {ClassAnnouncementType.CLASS_REF_FIELD, classId},
-                    };
-                if(!all)
-                    cond.Add(ClassAnnouncementType.PERCENTAGE_FIELD, 0, ConditionRelation.Greater);
-                return new ClassAnnouncementTypeDataAccess(uow).GetAll();
+                var cond = new AndQueryCondition{{ClassAnnouncementType.CLASS_REF_FIELD, classId}};
+                var res = new ClassAnnouncementTypeDataAccess(uow).GetAll(cond);
+                if (res.Count == 0)
+                    res = BuildClassAnnouncementTypes(classId);
+                if (!all)
+                    res = res.Where(x => x.Percentage > 0).ToList();
+                return res;
             }
+        }
+
+        private IList<ClassAnnouncementType> BuildClassAnnouncementTypes(int classId)
+        {
+            using (var uow = Update())
+            {
+                var da = new ClassAnnouncementTypeDataAccess(uow);
+                var annTypes = PrepareAnnouncementTypes(new AnnouncementTypeDataAccess(uow).GetAll());
+                var res = annTypes.Select(x => new ClassAnnouncementType
+                    {
+                        AnnouncementTypeRef = x.Id,
+                        ClassRef = classId,
+                        Description = x.Description,
+                        Gradable = x.Gradable,
+                        Name = x.Name,
+                        Percentage = x.Percentage
+                    }).ToList();
+                da.Insert(res);
+                uow.Commit();
+                return res;
+            }
+        }
+
+
+        public IList<ClassAnnouncementType> GetClassAnnouncementTypes(int type, int? classId)
+        {
+            using (var uow = Read())
+            {
+                var conds = new AndQueryCondition {{ClassAnnouncementType.ANNOUNCEMENT_TYPE_REF, type}};
+                if (classId.HasValue)
+                    conds = new AndQueryCondition {{ClassAnnouncementType.CLASS_REF_FIELD, classId}};
+                var res = new ClassAnnouncementTypeDataAccess(uow).GetAll(conds);
+                //if (res.Count == 0)
+                //    res = BuildClassAnnouncementTypes(classId);
+                return res;
+
+            }
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -99,14 +99,14 @@ namespace Chalkable.Web.Controllers
                 var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
                 var school = MasterLocator.SchoolService.GetById(Context.DistrictId.Value);
                 PrepareJsonData(ShortSchoolViewData.Create(school), ViewConstants.SCHOOL);
-                if (!string.IsNullOrEmpty(school.DemoPrefix))
+                if (!string.IsNullOrEmpty(district.DemoPrefix))
                 {
                     ViewData[ViewConstants.STUDENT_ROLE] = CoreRoles.STUDENT_ROLE.Name;
                     ViewData[ViewConstants.TEACHER_ROLE] = CoreRoles.TEACHER_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_GRADE_ROLE] = CoreRoles.ADMIN_GRADE_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
-                    ViewData[ViewConstants.DEMO_PREFIX_KEY] = school.DemoPrefix;
+                    ViewData[ViewConstants.DEMO_PREFIX_KEY] = district.DemoPrefix;
 
 
                     if (Context.DeveloperId != null)

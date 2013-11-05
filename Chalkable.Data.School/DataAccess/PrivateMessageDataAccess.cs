@@ -81,7 +81,7 @@ namespace Chalkable.Data.School.DataAccess
                     LastName = SqlTools.ReadStringNull(reader, string.Format(template, Person.LAST_NAME_FIELD)),
                     Gender = SqlTools.ReadStringNull(reader, string.Format(template, Person.GENDER_FIELD)),
                     Salutation = SqlTools.ReadStringNull(reader, string.Format(template, Person.SALUTATION_FIELD)),
-                    //RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD))
+                    RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD))
                 };
         }
 

@@ -23,6 +23,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         private const string REORDER_PROCEDURE = "spReorderAnnouncements";
 
         private const string ANNOUNCEMENT_TYPE_ID_PARAM = "announcementTypeId";
+        private const string CLASS_ANNOUNCEMENT_TYPE_ID_PARAM = "classAnnouncementTypeId";
         private const string CREATED_PARAM = "created";
         private const string EXPIRES_PARAM = "expires";
         private const string PERSON_ID_PARAM = "personId";
@@ -101,18 +102,17 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return res;
         }
 
-        public AnnouncementDetails Create(int announcementTypeId, int? classId, int markingPeriodId, DateTime created, int personId)
+        public AnnouncementDetails Create(int? classAnnouncementTypeId, int? classId, DateTime created, int personId)
         {
             var parameters = new Dictionary<string, object>
                 {
-                    {ANNOUNCEMENT_TYPE_ID_PARAM, announcementTypeId},
+                    {CLASS_ANNOUNCEMENT_TYPE_ID_PARAM, classAnnouncementTypeId},
                     {PERSON_ID_PARAM, personId},
                     {CREATED_PARAM, created},
                     {EXPIRES_PARAM, DateTime.MinValue},
                     {STATE_PARAM, AnnouncementState.Draft},
                     {GRADING_STYLE_PARAM, GradingStyleEnum.Numeric100},
                     {CLASS_ID_PARAM, classId},
-                    {MARKING_PERIOD_ID_PARAM, markingPeriodId},
                     {SCHOOL_ID, schoolId}
                 };
 

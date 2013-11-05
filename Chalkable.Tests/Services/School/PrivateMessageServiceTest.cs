@@ -40,9 +40,9 @@ namespace Chalkable.Tests.Services.School
             Assert.AreEqual(0, adminMsgs.TotalCount);
 
             //todo :check notification
-            //Assert.AreEqual(1, FirstSchoolContext.FirstTeacherSl.NotificationService.GetUnshownNotifications().Count);
-            //Assert.AreEqual(adminMsg.Id, FirstSchoolContext.FirstTeacherSl.NotificationService.GetUnshownNotifications().First().PrivateMessageRef);
-            //
+            Assert.AreEqual(1, FirstSchoolContext.FirstTeacherSl.NotificationService.GetUnshownNotifications().Count);
+            Assert.AreEqual(adminMsg.Id, FirstSchoolContext.FirstTeacherSl.NotificationService.GetUnshownNotifications().First().PrivateMessageRef);
+            
             var teacherMsgs = FirstSchoolContext.FirstTeacherSl.PrivateMessageService.GetMessages(0, 10, null, PrivateMessageType.Income, "", "");
             msgIds = new List<int> { teacherMsgs.First().Id };
             Assert.AreEqual(1, teacherMsgs.TotalCount);

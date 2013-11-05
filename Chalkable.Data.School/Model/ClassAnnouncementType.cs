@@ -11,6 +11,7 @@ namespace Chalkable.Data.School.Model
     {
         public const string CLASS_REF_FIELD = "ClassRef";
         public const string PERCENTAGE_FIELD = "Percentage";
+        public const string ANNOUNCEMENT_TYPE_REF = "AnnouncementTypeRef";
 
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }

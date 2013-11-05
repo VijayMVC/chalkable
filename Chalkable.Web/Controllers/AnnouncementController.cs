@@ -23,32 +23,38 @@ namespace Chalkable.Web.Controllers
     {
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult Create(int? announcementTypeId, int? classId)
+        public ActionResult Create(int? classAnnouncementTypeId, int? classId)
         {
             if (!SchoolLocator.Context.SchoolId.HasValue)
                 throw new UnassignedUserException();
-            if (classId.HasValue && !announcementTypeId.HasValue)
+            if (classId.HasValue && !classAnnouncementTypeId.HasValue)
                 throw new ChalkableException("Invalid method parameters");
 
-            if (!announcementTypeId.HasValue)
+            if (!classAnnouncementTypeId.HasValue)
             {
                 if (SchoolLocator.Context.Role.Id == CoreRoles.TEACHER_ROLE.Id)
                 {
                     var lastAnnouncement = SchoolLocator.AnnouncementService.GetAnnouncements(0, 1, true).FirstOrDefault();
-                    announcementTypeId = lastAnnouncement != null ? lastAnnouncement.ClassAnnouncementTypeRef : (int)SystemAnnouncementType.HW;   
+                    if (lastAnnouncement != null)
+                        classAnnouncementTypeId = lastAnnouncement.ClassAnnouncementTypeRef;
+                    else
+                    {
+                        var classAnnTypes = SchoolLocator.AnnouncementTypeService.GetClassAnnouncementTypes((int) SystemAnnouncementType.HW, null);
+                        classAnnouncementTypeId = classAnnTypes.First().AnnouncementTypeRef;
+                    }
                 }
             }
             else
             {
                 var draft = SchoolLocator.AnnouncementService.GetLastDraft();
-                if (draft != null && draft.ClassAnnouncementTypeRef != announcementTypeId &&
+                if (draft != null && draft.ClassAnnouncementTypeRef != classAnnouncementTypeId &&
                     !BaseSecurity.IsAdminViewer(SchoolLocator.Context))
                 {
-                    draft.ClassAnnouncementTypeRef = announcementTypeId.Value;
+                    draft.ClassAnnouncementTypeRef = classAnnouncementTypeId.Value;
                     SchoolLocator.AnnouncementService.EditAnnouncement(AnnouncementInfo.Create(draft), classId);
                 }
             }
-            var annDetails = SchoolLocator.AnnouncementService.CreateAnnouncement(announcementTypeId.Value, classId);
+            var annDetails = SchoolLocator.AnnouncementService.CreateAnnouncement(classAnnouncementTypeId, classId);
             var attachments = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments);
             var avd = AnnouncementDetailedViewData.Create(annDetails, null, Context.UserLocalId.Value, attachments);
             var res = new CreateAnnouncementViewData
