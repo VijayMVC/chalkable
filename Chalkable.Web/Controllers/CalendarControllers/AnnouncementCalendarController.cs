@@ -89,6 +89,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              {
                  if (!d.DayTypeRef.HasValue) continue;
                  var announcements = anns.Where(x => x.Expires.Date == d.Day).ToList();
+                 classPeriods = classPeriods.Where(x => x.DayTypeRef == d.DayTypeRef).ToList();
                  var annPeriods = AnnouncementPeriodViewData.Create(periods, classPeriods, d, announcements, rooms);
                  var ann = announcements.Where(x => !x.ClassRef.HasValue || !x.GradableType).ToList();
                  res.Add(AnnouncementCalendarWeekViewData.Create(d.Day, annPeriods, ann));
@@ -132,7 +133,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
                  if (d.DayTypeRef.HasValue)
                  {
                      var currentDayAnns = announcements.Where(x => x.Expires.Date == d.Day).ToList();
-                     var currentDayClassPeriods = classPeriods.Where(x => periods.Any(y => y.Id == x.PeriodRef)).ToList();
+                     var currentDayClassPeriods = classPeriods.Where(x => periods.Any(y => y.Id == x.PeriodRef) && x.DayTypeRef == d.DayTypeRef).ToList();
                      res.Add(AnnouncementDayCalendarViewData.Create(periods, d.Day, currentDayClassPeriods, classes, currentDayAnns, rooms));
                  }
                  else res.Add(AnnouncementDayCalendarViewData.Create(null, d.Day, null, null, null, null));
@@ -150,11 +151,9 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              }
              else
              {
-                 throw new NotImplementedException();
                  var person = locator.PersonService.GetPerson(personId.Value);
-                 //todo this case
-                 //teacherId = person.RoleRef == CoreRoles.TEACHER_ROLE.Id ? person.Id : (Guid?)null;
-                 //studentId = person.RoleRef == CoreRoles.STUDENT_ROLE.Id ? person.Id : (Guid?)null;
+                 teacherId = person.RoleRef == CoreRoles.TEACHER_ROLE.Id ? person.Id : (int?)null;
+                 studentId = person.RoleRef == CoreRoles.STUDENT_ROLE.Id ? person.Id : (int?)null;
              }
          }
         

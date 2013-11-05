@@ -120,8 +120,11 @@ namespace Chalkable.BusinessLogic.Services.Master
                         var developer = new DeveloperDataAccess(uow).GetDeveloper(su.SchoolRef);
                         if (developer != null) developerId = developer.Id;
                     }
-                    var cl = ConnectorLocator.Create(user.SisUserName, user.Password, user.District.SisUrl);
-                    token = cl.Token;
+                    if (user.SisUserName != null)
+                    {
+                        var cl = ConnectorLocator.Create(user.SisUserName, user.Password, user.District.SisUrl);
+                        token = cl.Token;           
+                    }
                     sisUrl = user.District.SisUrl;
                 }
                 else

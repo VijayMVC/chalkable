@@ -1486,3 +1486,5 @@ group by
 Class.Id, Class.Name
 
 GO
+
+

@@ -97,7 +97,7 @@ namespace Chalkable.Web.Controllers
             if (Context.DistrictId.HasValue && Context.SchoolId.HasValue)
             {
                 var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
-                var school = MasterLocator.SchoolService.GetById(Context.DistrictId.Value);
+                var school = MasterLocator.SchoolService.GetById(Context.SchoolId.Value);
                 PrepareJsonData(ShortSchoolViewData.Create(school), ViewConstants.SCHOOL);
                 if (!string.IsNullOrEmpty(district.DemoPrefix))
                 {
@@ -118,7 +118,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.CURR_SCHOOL_YEAR_ID] = GetCurrentSchoolYearId();
             ViewData[ViewConstants.VERSION] = CompilerHelper.Version;
             ViewData[ViewConstants.CROCODOC_API_URL] = PreferenceService.Get(Preference.CROCODOC_URL).Value;
-            PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
+            //PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
 
             ViewData[ViewConstants.UNSHOWN_NOTIFICATIONS_COUNT] = SchoolLocator.NotificationService.GetUnshownNotifications().Count;
             if (markingPeriod != null && SchoolLocator.Context.SchoolId.HasValue)
@@ -206,7 +206,7 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(executionResult, ViewConstants.CLASSES);
             PrepareClassesAdvancedData(classes, mp, getAllAnnouncementTypes);
             PrepareCommonViewData(mp);
-            PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
+            //PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
         }
 
         private void PrepareClassesAdvancedData(IEnumerable<ClassDetails> classDetailses, MarkingPeriod mp, bool getAllAnnouncementTypes)

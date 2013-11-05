@@ -52,7 +52,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public MarkingPeriod GetNextInYear(int markingPeriodId)
         {
-            var sql = @"declare @schoolYearId uniqueidentifier, @startDate datetime2
+            var sql = @"declare @schoolYearId int, @startDate datetime2
                         select @schoolYearId = SchoolYearRef, @startDate = StartDate
                         from MarkingPeriod where Id = @markingPeriodId
                             

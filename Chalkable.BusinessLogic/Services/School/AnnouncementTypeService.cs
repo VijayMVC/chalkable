@@ -2,6 +2,7 @@
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -89,6 +90,9 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new ClassAnnouncementTypeDataAccess(uow);
                 var annTypes = PrepareAnnouncementTypes(new AnnouncementTypeDataAccess(uow).GetAll());
+                var c = new ClassDataAccess(uow, Context.SchoolLocalId).GetById(classId);
+                if(c.TeacherRef != Context.UserLocalId)
+                    throw new ChalkableSecurityException();
                 var res = annTypes.Select(x => new ClassAnnouncementType
                     {
                         AnnouncementTypeRef = x.Id,
