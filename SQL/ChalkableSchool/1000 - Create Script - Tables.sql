@@ -110,7 +110,7 @@ CREATE TABLE [dbo].[Class](
 	[Id] INT NOT NULL PRIMARY KEY,
 	[Name] NVARCHAR(255) NOT NULL,
 	[Description] NVARCHAR(1024) NULL,
-	[ChalkableDepartmentRef] INT NULL,
+	[ChalkableDepartmentRef] UNIQUEIDENTIFIER NULL,
 	[SchoolYearRef] INT NULL CONSTRAINT FK_Class_SchoolYearRef FOREIGN KEY REFERENCES SchoolYear(Id),
 	[TeacherRef] INT NULL CONSTRAINT FK_Class_Person FOREIGN KEY REFERENCES Person(Id),
 	[GradeLevelRef] INT NOT NULL CONSTRAINT FK_Class_GradeLevel FOREIGN KEY REFERENCES GradeLevel(Id)

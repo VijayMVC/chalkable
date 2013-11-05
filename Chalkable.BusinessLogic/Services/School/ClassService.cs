@@ -42,6 +42,9 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
+            if (!CanAssignDepartment(chlkableDepartmentId))
+                   throw new ChalkableException("There are no department with such id");
+            
             using (var uow = Update())
             {
                 var da = new ClassDataAccess(uow, Context.SchoolLocalId);
@@ -63,6 +66,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
                 return GetClassById(classId);
             }
+        }
+
+        private bool CanAssignDepartment(Guid? departmentId)
+        {
+            return !departmentId.HasValue
+                   || ServiceLocator.ServiceLocatorMaster.ChalkableDepartmentService.GetChalkableDepartmentById(
+                       departmentId.Value) != null;
         }
 
         public void Delete(int id)
@@ -110,7 +120,9 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-
+            if (!CanAssignDepartment(chlkableDepartmentId))
+                throw new ChalkableException("There are no department with such id");
+            
             using (var uow = Update())
             {
                 var classDa = new ClassDataAccess(uow, Context.SchoolLocalId);

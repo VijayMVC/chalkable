@@ -141,7 +141,10 @@ namespace Chalkable.Tests.Services.TestContext
 
         private IServiceLocatorSchool CreateLocatorByUserInfo(UserInfoTest userInfo)
         {
-            var context = sysSchoolSl.ServiceLocatorMaster.UserService.Login(userInfo.Login, userInfo.Password);
+            var user =  sysSchoolSl.ServiceLocatorMaster.UserService.GetByLogin(userInfo.Login);
+            var su = user.SchoolUsers[0];
+            su.User = user;
+            var context = ServiceLocatorFactory.CreateSchoolLocator(user.SchoolUsers[0]).Context;
             var masterLocator = new BaseMasterServiceLocatorTest(context);
             return new BaseSchoolServiceLocatorTest(masterLocator);
         }

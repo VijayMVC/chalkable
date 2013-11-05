@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
+using Chalkable.Tests.Services.Master;
 using Chalkable.Tests.Services.TestContext;
 using NUnit.Framework;
 
@@ -29,7 +30,13 @@ namespace Chalkable.Tests.Services.School
                 | SchoolContextRoles.AdminViewer | SchoolContextRoles.Checkin);
 
             var cService = districtSl.ClassService;
-            var c = cService.Add(newId, mp.SchoolYearRef, null, "class1", "first class", FirstSchoolContext.FirstTeacher.Id, gradeLevel.Id);
+            AssertException<Exception>(()=>cService.Add(newId, mp.SchoolYearRef, Guid.NewGuid(), "class1", "first class1", FirstSchoolContext.FirstTeacher.Id, gradeLevel.Id));
+             
+            var icon1 = PictureServiceTest.LoadImage(DefaulImage1Path);
+            IList<string> keywords1 = new List<string>{"dep1", "dep2"};
+            var department = SysAdminMasterLocator.ChalkableDepartmentService.Add("test1", keywords1, icon1);
+
+            var c = cService.Add(newId, mp.SchoolYearRef, department.Id, "class1", "first class", FirstSchoolContext.FirstTeacher.Id, gradeLevel.Id);
 
             Assert.AreEqual(c.SchoolYearRef, mp.SchoolYearRef);
             Assert.AreEqual(c.Name, "class1");
@@ -37,6 +44,7 @@ namespace Chalkable.Tests.Services.School
             Assert.AreEqual(c.TeacherRef, FirstSchoolContext.FirstTeacher.Id);
             Assert.AreEqual(c.StudentsCount, 0);
             Assert.AreEqual(c.GradeLevelRef, gradeLevel.Id);
+            Assert.AreEqual(c.ChalkableDepartmentRef, department.Id);
             AssertAreEqual(c, cService.GetClassById(c.Id));
             Assert.AreEqual(FirstSchoolContext.AdminGradeSl.ClassService.GetClasses(mp.SchoolYearRef, null, null).Count, 1);
             Assert.AreEqual(SecondSchoolContext.AdminGradeSl.ClassService.GetClasses(null).Count, 0);
@@ -44,8 +52,8 @@ namespace Chalkable.Tests.Services.School
             var sy2 = SchoolYearServiceTest.CreateNextSchoolYear(districtSl);
             var mp2 = MarkingPeriodServiceTest.CreateNextMp(districtSl, sy2.Id);
             newId++;
-            AssertException<Exception>(() => cService.Add(newId, sy2.Id, null, "class2", "second class"
-                                  , SecondSchoolContext.FirstTeacher.Id, gradeLevel.Id));
+            //AssertException<Exception>(() => cService.Add(newId, sy2.Id, null, "class2", "second class"
+            //                      , SecondSchoolContext.FirstTeacher.Id, gradeLevel.Id));
             
             var c2 = cService.Add(newId, sy2.Id, null, "class2", "second class"
                                   , FirstSchoolContext.FirstTeacher.Id, gradeLevel.Id);
@@ -59,6 +67,8 @@ namespace Chalkable.Tests.Services.School
                     | SchoolContextRoles.FirstStudent | SchoolContextRoles.FirstParent
                     | SchoolContextRoles.AdminViewer | SchoolContextRoles.Checkin);
 
+            AssertException<Exception>(() => cService.Edit(c.Id, Guid.NewGuid(), "class3", "third class", FirstSchoolContext.FirstTeacher.Id
+                    , gradeLevel.Id));
             AssertException<Exception>(() => cService.Edit(c.Id, null, "class3", "third class"
                            , SecondSchoolContext.FirstTeacher.Id, gradeLevel.Id));
 

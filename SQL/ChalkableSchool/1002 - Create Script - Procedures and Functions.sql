@@ -15,7 +15,7 @@ declare @class table
 	Class_SchoolYearRef int,
 	Class_TeacherRef int,
 	Class_GradeLevelRef int,
-	Class_ChalkableDepartmentId int,
+	Class_ChalkableDepartmentRef uniqueidentifier,
 	Class_SchoolRef  int,
 	GradeLevel_Id int,
 	GradeLevel_Name nvarchar(255),
@@ -1236,7 +1236,7 @@ CREATE procedure [dbo].[spGetPersonsForApplicationInstall]
 	, @hasAdminMyApps bit, @hasTeacherMyApps bit, @hasStudentMyApps bit, @canAttach bit, @schoolYearId int
 as
 declare @roleIdsT table(value int);
-declare @departmentIdsT table(value int);
+declare @departmentIdsT table(value uniqueidentifier);
 declare @gradeLevelIdsT table(value int);
 declare @classIdsT table(value int);
 

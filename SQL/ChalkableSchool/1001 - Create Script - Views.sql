@@ -72,7 +72,7 @@ SELECT
 	Class.SchoolYearRef as Class_SchoolYearRef,
 	Class.TeacherRef as Class_TeacherRef,
 	Class.GradeLevelRef as Class_GradeLevelRef,
-	Class.ChalkableDepartmentRef as Class_ChalkableDepartmentId,
+	Class.ChalkableDepartmentRef as Class_ChalkableDepartmentRef,
 	Class.SchoolRef as Class_SchoolRef,
 	GradeLevel.Id as GradeLevel_Id,
 	GradeLevel.Name as GradeLevel_Name,
