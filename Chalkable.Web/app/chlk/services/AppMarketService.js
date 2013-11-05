@@ -1,5 +1,7 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('chlk.services.AppCategoryService');
+
+
 REQUIRE('ria.async.Future');
 
 REQUIRE('chlk.models.apps.AppGradeLevel');
@@ -9,7 +11,7 @@ REQUIRE('chlk.models.apps.AppMarketApplication');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.apps.AppInstallPostData');
 REQUIRE('chlk.models.people.Role');
-
+REQUIRE('chlk.models.apps.AppTotalPrice');
 
 REQUIRE('chlk.models.apps.AppPriceType');
 REQUIRE('chlk.models.apps.AppSortingMode');
@@ -61,6 +63,8 @@ NAMESPACE('chlk.services', function () {
                 var categoryIds = categories.map(function(item){
                     return item.getId().valueOf()
                 }).join(',');
+
+
                 return this
                     .getPaginatedList('AppMarket/List.json', chlk.models.apps.AppMarketApplication, {
                         start: start_ | 0,
@@ -73,7 +77,7 @@ NAMESPACE('chlk.services', function () {
                     })
                     .then(function(data){
                         var items = data.getItems();
-                        for(var i = 0; i < 19; ++i){
+                        for(var i = 0; i < 10; ++i){
                             var app =  new chlk.models.apps.AppMarketApplication();
                             app.setName("App test");
                             app.setId(new chlk.models.id.AppId('dab27768-6a5d-41d5-82b1-d943ef002eae'));
@@ -81,14 +85,34 @@ NAMESPACE('chlk.services', function () {
                             app.setSmallPictureId(new chlk.models.id.PictureId("90e359b7-7199-4296-8148-a072bcd67bb3"));
                             items.push(app);
                         }
-                        data.setPageIndex(1);
-                        data.setPageSize(10);
-                        data.setTotalPages(2);
                         data.setItems(items);
+                        data.setTotalCount(50);
 
                         return data;
 
                     }, this);
+
+
+
+                /*
+                var apps = [];
+                var items = [];
+                var data = new chlk.models.common.PaginatedList(chlk.models.apps.AppMarketApplication);
+                for(var i = 0; i < 10; ++i){
+                    var app =  new chlk.models.apps.AppMarketApplication();
+                    app.setName("App test");
+                    app.setId(new chlk.models.id.AppId('dab27768-6a5d-41d5-82b1-d943ef002eae'));
+                    app.setShortDescription("rskldfj;alskdfja;skldjfa;sldkfja;sdfsdfsdfsdfsdfldkfjasl;");
+                    app.setSmallPictureId(new chlk.models.id.PictureId("90e359b7-7199-4296-8148-a072bcd67bb3"));
+                    items.push(app);
+                }
+                data.setItems(items);
+                data.setTotalCount(50);
+                data.setPageSize(10);
+                data.setPageIndex(start_ / 10);
+
+                return ria.async.DeferredData(data);*/
+
             },
 
             [[chlk.models.id.SchoolPersonId, Number]],
@@ -101,7 +125,7 @@ NAMESPACE('chlk.services', function () {
                     .then(function(data){
                         var items = data.getItems();
 
-                        for(var i = 0; i < 9; ++i){
+                        for(var i = 0; i < 10; ++i){
                             var app =  new chlk.models.apps.AppMarketApplication();
                             app.setName("App test");
                             app.setId(new chlk.models.id.AppId('dab27768-6a5d-41d5-82b1-d943ef002eae'));
@@ -109,11 +133,8 @@ NAMESPACE('chlk.services', function () {
                             app.setSmallPictureId(new chlk.models.id.PictureId("90e359b7-7199-4296-8148-a072bcd67bb3"));
                             items.push(app);
                         }
-                        data.setPageIndex(1);
-                        data.setPageSize(10);
-                        data.setTotalPages(2);
                         data.setItems(items);
-
+                        data.setTotalCount(50);
 
 
                         return data;
@@ -213,6 +234,26 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function installApp(appId, departments, classes, roles, gradeLevels, currentPerson_) {
                 return this
                     .post('AppMarket/Install.json', Boolean, {
+                        applicationId: appId.valueOf(),
+                        personId: currentPerson_ && currentPerson_.valueOf(),
+                        departmentids: this.arrayToCsv(departments),
+                        classids: this.arrayToCsv(classes),
+                        roleIds: this.arrayToCsv(roles),
+                        gradelevelids: this.arrayToCsv(gradeLevels)
+                    });
+            },
+
+            [[
+                chlk.models.id.AppId,
+                ArrayOf(chlk.models.id.AppInstallGroupId),
+                ArrayOf(chlk.models.id.AppInstallGroupId),
+                ArrayOf(chlk.models.id.AppInstallGroupId),
+                ArrayOf(chlk.models.id.AppInstallGroupId),
+                chlk.models.id.AppInstallGroupId
+            ]],
+            ria.async.Future, function getApplicationTotalPrice(appId, departments, classes, roles, gradeLevels, currentPerson_) {
+                return this
+                    .post('AppMarket/GetApplicationTotalPrice.json', chlk.models.apps.AppTotalPrice, {
                         applicationId: appId.valueOf(),
                         personId: currentPerson_ && currentPerson_.valueOf(),
                         departmentids: this.arrayToCsv(departments),

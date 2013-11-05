@@ -32,6 +32,8 @@ REQUIRE('chlk.controls.SelectControl');
 REQUIRE('chlk.controls.SlideCheckboxControl');
 REQUIRE('chlk.controls.TextAreaControl');
 REQUIRE('chlk.controls.VideoControl');
+REQUIRE('chlk.controls.PayCheckControl');
+REQUIRE('chlk.controls.ScrollBoxControl');
 
 REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.Role');
@@ -135,6 +137,14 @@ NAMESPACE('chlk', function (){
                     var tooltip = jQuery('#chlk-tooltip-item');
                     tooltip.hide();
                     tooltip.find('.tooltip-content').html('');
+                });
+
+                 jQuery(document).on('click', '.demo-role-button:not(.coming)', function(){
+                    if(!jQuery(this).hasClass('active')){
+                        window.location.href = WEB_SITE_ROOT + 'DemoSchool/LogOnIntoDemo.json?rolename='
+                            + jQuery(this).attr('rolename') + '&prefix=' + window.school.demoprefix;
+                    }
+                    return false;
                 });
 
                 this.apiHost_.onStart(this.context);

@@ -10,17 +10,18 @@ NAMESPACE('chlk.controls', function () {
                 ASSET('~/assets/jade/controls/select.jade')(this);
             },
 
-            [[Object]],
-            VOID, function updateSelect(node){
+            [[Object, Object]],
+            VOID, function updateSelect(node, attributes){
                 var that = this;
-                node.chosen({disable_search_threshold: 1000}).change(function(){
+                node.chosen({disable_search_threshold: attributes.maxLength || 1000}).change(function(){
                     var node = jQuery(this);
                     node.find('option[selected]').attr('selected', false);
                     node.find('option[value="' + node.val() + '"]').attr('selected', true);
                     var controller = node.data('controller');
                     if(controller){
                         var action = node.data('action');
-                        var params = node.data('params') || [];
+                        var paramsArr = node.data('params') || [];
+                        var params = paramsArr.slice();
                         params.unshift(node.val());
                         var state = that.context.getState();
                         state.setController(controller);
@@ -32,12 +33,15 @@ NAMESPACE('chlk.controls', function () {
                 });
             },
 
+
+
+            //TODO: make base jquery control method
             [[Object]],
             Object, function processAttrs(attributes) {
                 attributes.id = attributes.id || ria.dom.NewGID();
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
-                        this.updateSelect(jQuery('#'+attributes.id));
+                        this.updateSelect(jQuery('#'+attributes.id), attributes);
                     }.bind(this));
                 return attributes;
             }

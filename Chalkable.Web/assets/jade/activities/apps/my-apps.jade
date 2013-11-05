@@ -31,5 +31,6 @@ mixin MyAppsIconLink(app, editable)
             +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
             +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn My Apps
     .apps
-        each app in self.apps.getItems()
-            +MyAppsIconLink(app, self.isEditable())
+
+            each app in self.apps.getItems()
+                +MyAppsIconLink(app, self.isEditable())

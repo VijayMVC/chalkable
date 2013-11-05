@@ -10,9 +10,10 @@ NAMESPACE('chlk.controls', function () {
                 ASSET('~/assets/jade/controls/checkbox-list.jade')(this);
             },
 
-            [ria.mvc.DomEventBind('click', '.checkbox-list')],
+            [ria.mvc.DomEventBind('change', '.checkbox-list input[type=checkbox]')],
             [[ria.dom.Dom, ria.dom.Event]],
-            function onClicked($target, node){
+            function onChange(node, event){
+                var $target = node.parent('.checkbox-list');
                 var checkboxes = $target.find('input[type=checkbox]:not(:disabled)');
                 var res = [];
                 var prefix = $target.getData('prefix');
@@ -25,7 +26,17 @@ NAMESPACE('chlk.controls', function () {
                         res.push(el.getAttr('name').split(prefix).pop());
                     });
                 res = res.join(',');
-                new ria.dom.Dom("input[name=" + name + "]").setValue(res);
+                var newNode = $target.find("input[name=" + name + "]");
+                if(! newNode.exists())
+                    newNode = new ria.dom.Dom("input[name=" + name + "]");
+                newNode.setValue(res);
+            },
+
+            [ria.mvc.DomEventBind('click', '.checkbox-list label[for]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function onClicked(node, event){
+                node.parent().find('input[type="checkbox"]').trigger('click');
+                return false;
             }
         ]);
 });

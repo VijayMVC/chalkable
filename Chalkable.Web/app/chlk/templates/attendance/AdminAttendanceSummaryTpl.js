@@ -50,22 +50,41 @@ NAMESPACE('chlk.templates.attendance', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'endDate',
 
-            [[ArrayOf(chlk.models.people.User), Boolean]],
-            function getPreparedStudents(studentsList, needPlus_){
-                var students = studentsList.slice();
-                var lineSize = 6;
-                if(needPlus_)
-                    students.unshift(new chlk.models.people.User);
-                var len = students.length;
-                var count = len % lineSize;
-                if(!len || count)
-                    for(var i = count; i < lineSize; i++)
-                        students.push(new chlk.models.people.User);
-                return students;
+            [ria.templates.ModelPropertyBind],
+            String, 'attendanceTypes',
+
+            [[Boolean, String]],
+            function getMarkerConfigs_(enabled, color_){
+                return enabled ? {
+                    enabled: true,
+                    symbol: 'circle',
+                    radius: 3,
+                    fillColor: '#ffffff',
+                    lineWidth: 2,
+                    lineColor: color_,
+                    states: {
+                        hover: {
+                            radius: 6
+                        }
+                    }
+                } : {
+                    enabled: false,
+                    states: {
+                        hover: {
+                            radius: 0,
+                            lineWidth: 0
+                        }
+                    }
+                };
             },
 
-            [[ArrayOf(chlk.models.attendance.AdminAttendanceStatItem)]],
-            function getMainChartInfo(attendancestats){
+            [[ArrayOf(chlk.models.people.User), Boolean]],
+            function getPreparedStudents(studentsList, needPlus_){
+                return studentsList;
+            },
+
+            [[ArrayOf(chlk.models.attendance.AdminAttendanceStatItem), Object]],
+            function getMainChartConfigs(attendancestats, width_){
                 var categories = [], series = [], absent=[], excused=[], late=[];
                 attendancestats && attendancestats.forEach(function(item){
                     categories.push(item.getSummary());
@@ -74,17 +93,157 @@ NAMESPACE('chlk.templates.attendance', function () {
                     late.push(item.getLateCount());
                 });
                 series = [{
+                    name: Msg.Late,
+                    data: late,
+                    zIndex: 10,
+                    marker: this.getMarkerConfigs_(true, '#e49e3c')
+                }, {
                     name: Msg.Absent,
-                    data: absent
+                    data: absent,
+                    zIndex: 1,
+                    marker: this.getMarkerConfigs_(false)
                 }, {
                     name: Msg.Excused,
-                    data: excused
-                }, {
-                    name: Msg.Late,
-                    data: late
+                    data: excused,
+                    zIndex: 1,
+                    marker: this.getMarkerConfigs_(false)
                 }];
                 return {
-                    categories: categories,
+                    backgroundColor: 'transparent',
+                    chart: {
+                        backgroundColor: 'transparent',
+                        width: width_ || 660,
+                        height: 178,
+                        style: {
+                            fontFamily: 'Arial',
+                            fontSize: '10px',
+                            color: '#a6a6a6'
+                        }
+
+                    },
+                    labels: {
+                        style: {
+                            color: '#a6a6a6',
+                            textOverflow: 'ellipsis',
+                            fontSize: '9px'
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    title: {
+                        text: ''
+                    },
+                    xAxis: {
+                        categories: categories
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                        lineWidth:0,
+                        gridLineDashStyle: 'dot',
+                        min: 0
+                    },
+                    tooltip: {
+                        headerFormat: '',
+                        pointFormat: '<b class="chart-text">{point.y}</b>',
+                        borderWidth: 0,
+                        borderRadius: 2,
+                        useHTML: true,
+                        positioner: function (labelWidth, labelHeight, point) {
+                            return { x: point.plotX + 17, y: point.plotY - 37 };
+                        },
+                        style: {
+                            display: 'none'
+                        }
+                    },
+                    legend:{
+                        enabled: false
+                    },
+                    colors: ['#e49e3c', '#c1c1c1', '#c1c1c1'],
+                    //colors: ['#e49e3c', '#b93838', '#5093a7'],
+
+                    series: series
+                }
+            },
+
+            [[ArrayOf(chlk.models.attendance.AdminAttendanceStatItem)]],
+            function getMpChartConfigs(attendancestats){
+                var categories = [], series = [], absent=[], excused=[], late=[];
+                attendancestats && attendancestats.forEach(function(item){
+                    categories.push(item.getSummary());
+                    absent.push(item.getAbsentCount());
+                    excused.push(item.getExcusedCount());
+                    late.push(item.getLateCount());
+                });
+                series = [{
+                    name: Msg.Late,
+                    data: late
+                }, {
+                    name: Msg.Absent,
+                    data: absent,
+                    visible: false
+                }, {
+                    name: Msg.Excused,
+                    data: excused,
+                    visible: false
+                }];
+                return {
+                    backgroundColor: 'transparent',
+                    chart: {
+                        backgroundColor: 'transparent',
+                        width: 660,
+                        type: 'column',
+                        height: 215,
+                        style: {
+                            fontFamily: 'Arial',
+                            fontSize: '10px',
+                            color: '#a6a6a6'
+                        }
+
+                    },
+                    labels: {
+                        style: {
+                            color: '#a6a6a6',
+                            textOverflow: 'ellipsis',
+                            fontSize: '9px'
+                        }
+                    },
+                    plotOptions: {
+                        series: {
+                            events: {
+                                legendItemClick: function(event) {
+                                    if(this.visible)
+                                        return false;
+                                    var index = this.index;
+                                    this.chart.series.forEach(function(item){
+                                        if(item.index != index)
+                                            item.hide();
+                                    });
+                                }
+                            }
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    title: {
+                        text: ''
+                    },
+                    xAxis: {
+                        categories: categories
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                        lineWidth:0,
+                        gridLineDashStyle: 'dot',
+                        min: 0
+                    },
+                    colors: ['#e49e3c', '#b93838', '#5093a7'],
+
                     series: series
                 }
             }

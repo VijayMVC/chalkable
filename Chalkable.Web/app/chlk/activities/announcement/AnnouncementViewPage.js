@@ -112,59 +112,69 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind('keyup', '#edit-question-input')],
+            /*[ria.mvc.DomEventBind('keyup', '.edit-question-input')],
             [[ria.dom.Dom, ria.dom.Event]],
             function editQnASubmitClick(node, event){
                 var f = node.parent('.row').parent('form');
                 if (!node.getValue())
-                    f.find('#edit-answer-input').removeClass('validate[required]');
+                    f.find('.edit-answer-input').removeClass('validate[required]');
                 else
-                    f.find('#edit-answer-input').addClass('validate[required]');
+                    f.find('.edit-answer-input').addClass('validate[required]');
             },
 
-            [ria.mvc.DomEventBind('click', '#edit-question-link')],
+            [ria.mvc.DomEventBind('click', '.edit-question-link')],
             [[ria.dom.Dom, ria.dom.Event]],
             function editQuestionClick(node, event){
                 var row = node.parent('.row');
-                row.find('#edit-question-input').removeClass('x-hidden');
-                row.find('#edit-question-btn').removeClass('x-hidden');
-                row.find('#cancel-question-link').removeClass('x-hidden');
-                row.find('#edit-question-link').addClass('x-hidden');
-                row.find('#edit-question-text').addClass('x-hidden');
+                row.find('.edit-question-link, .edit-question-text').fadeOut(function(){
+                    row.find('.edit-question-input, .edit-question-btn, .cancel-question-link').removeClass('x-hidden').fadeIn();
+                });
             },
 
 
-            [ria.mvc.DomEventBind('click', '#cancel-question-link')],
+            [ria.mvc.DomEventBind('click', '.cancel-question-link')],
             [[ria.dom.Dom, ria.dom.Event]],
             function cancelQuestionClick(node, event){
                 var row = node.parent('.row');
-                row.find('#edit-question-input').addClass('x-hidden');
-                row.find('#edit-question-btn').addClass('x-hidden');
-                row.find('#cancel-question-link').addClass('x-hidden');
-                row.find('#edit-question-link').removeClass('x-hidden');
-                row.find('#edit-question-text').removeClass('x-hidden');
-            },
+                row.find('.edit-question-input, .edit-question-btn, .cancel-question-link').removeClass('x-hidden').fadeOut(function(){
+                    row.find('.edit-question-link, .edit-question-text').fadeIn();
+                });
+            },*/
 
-            [ria.mvc.DomEventBind('click', '#edit-answer-link')],
+            [ria.mvc.DomEventBind('click', '.edit-answer-link, .edit-question-link')],
             [[ria.dom.Dom, ria.dom.Event]],
             function editAnswerClick(node, event){
                 var row = node.parent('.row');
-                row.find('#edit-answer-input').removeClass('x-hidden');
-                row.find('#edit-answer-btn').removeClass('x-hidden');
-                row.find('#cancel-answer-link').removeClass('x-hidden');
-                row.find('#edit-answer-link').addClass('x-hidden');
-                row.find('#edit-answer-text').addClass('x-hidden');
+                row.find('.edit-answer-block, .edit-question-block').fadeOut(function(){
+                    var node = row.find('.edit-answer-input, .edit-question-input');
+                    node.removeClass('x-hidden').fadeIn(function(){
+                        node.trigger('focus');
+                    });
+                });
             },
 
-            [ria.mvc.DomEventBind('click', '#cancel-answer-link')],
+            [ria.mvc.DomEventBind('keyup', '.edit-answer-input, .edit-question-input')],
             [[ria.dom.Dom, ria.dom.Event]],
-            function cancelAnswerClick(node, event){
+            function editAnswerKeyUp(node, event){
                 var row = node.parent('.row');
-                row.find('#edit-answer-input').addClass('x-hidden');
-                row.find('#edit-answer-btn').addClass('x-hidden');
-                row.find('#cancel-answer-link').addClass('x-hidden');
-                row.find('#edit-answer-link').removeClass('x-hidden');
-                row.find('#edit-answer-text').removeClass('x-hidden');
+                var button = row.find('.edit-answer-btn, .edit-question-btn');
+                if(row.find('.edit-answer-text, .edit-question-text').getHTML() == node.getValue())
+                    button.fadeOut();
+                else
+                    button.fadeIn();
+            },
+
+            [ria.mvc.DomEventBind('blur', '.edit-answer-input, .edit-question-input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function blurAnswer(node, event){
+                var row = node.parent('.row');
+                if(!row.find('.edit-answer-btn:visible, .edit-question-btn:visible').exists())
+                    row.find('.edit-answer-input, .edit-answer-btn, .edit-question-input, .edit-question-btn').fadeOut(function(){
+                        setTimeout(function(){
+                            row.find('.edit-answer-block, .edit-question-block').removeClass('x-hidden').fadeIn();
+                        }, 500);
+
+                    });
             },
 
             [ria.mvc.DomEventBind('click', '.comment-grade')],

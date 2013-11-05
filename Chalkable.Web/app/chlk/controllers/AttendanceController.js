@@ -51,8 +51,8 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('attendance')],
-        [[Boolean, String, Number, chlk.models.common.ChlkDate]],
-        function summaryAdminAction(update_, gradeLevels_, currentPage_, date_) {
+        [[Boolean, String, Number, chlk.models.common.ChlkDate, String]],
+        function summaryAdminAction(update_, gradeLevels_, currentPage_, date_, types_) {
             var markingPeriod = this.getContext().getSession().get('markingPeriod', null), //TODO: use method getCurrentMarkingPeriod
                 currentSchoolYearId = this.getContext().getSession().get('currentSchoolYearId', null), //TODO: use method getCurrentSchoolYearId
                 fromMarkingPeriodId = markingPeriod.getId(),
@@ -67,9 +67,13 @@ NAMESPACE('chlk.controllers', function (){
                     model.setMarkingPeriods(result[1]);
                     if(currentPage_)
                         model.setCurrentPage(currentPage_);
-                    return this.prepareAttendanceSummaryModel(model, gradeLevels_, null, fromMarkingPeriodId, toMarkingPeriodId);
+                    if(types_)
+                        model.setAttendanceTypes(types_);
+                    return this.prepareAttendanceSummaryModel(model, gradeLevels_, date_, fromMarkingPeriodId, toMarkingPeriodId);
                 }, this);
-            return (update_ ? this.UpdateView : this.PushView)(chlk.activities.attendance.AdminAttendanceSummaryPage, res);
+            return /*!update_ && this.PushView(chlk.activities.attendance.AdminAttendanceSummaryPage, res); */update_ ?
+                this.UpdateView(chlk.activities.attendance.AdminAttendanceSummaryPage, res) :
+                this.PushView(chlk.activities.attendance.AdminAttendanceSummaryPage, res);
         },
 
         [[chlk.models.attendance.AdminAttendanceSummary]],
@@ -105,6 +109,9 @@ NAMESPACE('chlk.controllers', function (){
                         if(controller){
                             var action = model.getAction();
                             var params = JSON.parse(model.getParams());
+                            if(model.isNewStudent()){
+                                params.push(model.getAttendanceTypes());
+                            }
                             this.Redirect(controller, action, params);
                         }
                     }, this);
@@ -118,9 +125,9 @@ NAMESPACE('chlk.controllers', function (){
             function prepareAttendanceSummaryModel(model, gradeLevelsIds_, nowDateTime_, fromMarkingPeriodId, toMarkingPeriodId, startDate_, endDate_){
                 var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);
                 var topModel = new chlk.models.grading.GradeLevelsForTopBar(gradeLevels, gradeLevelsIds_);
-                model.setNowDateTime(nowDateTime_ ? nowDateTime_ : new chlk.models.common.ChlkDate(getDate()));
                 model.setTopData(topModel);
                 model.setFromMarkingPeriodId(fromMarkingPeriodId);
+                model.getAttendanceByDayData().setDate(nowDateTime_ ? nowDateTime_ : new chlk.models.common.ChlkDate(getDate()));
                 model.setToMarkingPeriodId(toMarkingPeriodId);
                 if(gradeLevelsIds_)
                     model.setGradeLevelsIds(gradeLevelsIds_);
@@ -131,8 +138,12 @@ NAMESPACE('chlk.controllers', function (){
                 return model;
         },
 
-        [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate, String, String, String]],
-        VOID, function showStudentAttendanceAction(studentId, date_, controller_, action_, params_) {
+        VOID, function addStudentClickAction(){
+
+        },
+
+        [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate, String, String, String, Boolean]],
+        VOID, function showStudentAttendanceAction(studentId, date_, controller_, action_, params_, isNew_) {
             var result = this.attendanceService.getStudentAttendance(studentId, date_)
                 .then(function(model){
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
@@ -144,15 +155,18 @@ NAMESPACE('chlk.controllers', function (){
                         model.setAction(action_);
                     if(params_)
                         model.setParams(params_);
+                    if(isNew_)
+                        model.setNewStudent(true);
                     return model;
                 }, this);
             return this.ShadeView(chlk.activities.attendance.StudentDayAttendancePopup, result);
         },
 
-        /*[[chlk.models.attendance.AttendanceStudentBox]],
+        [[chlk.models.attendance.AttendanceStudentBox]],
         VOID, function showStudentBoxAction(model) {
-            return this.UpdateView(chlk.activities.attendance.AdminAttendanceSummaryPage, ria.async.DeferredData(model));
-        },*/
+            this.showStudentAttendanceAction(model.getId(), model.getDate(), 'attendance', 'summary',
+                JSON.stringify([true, model.getGradeLevelsIds(), model.getCurrentPage(), model.getDate().format('mm-dd-yy')]), true);
+        },
 
         [[chlk.models.id.ClassId, chlk.models.id.ClassPeriodId, chlk.models.common.ChlkDate, Boolean]],
         function markAllAction(classId, classPeriodId, date, isProfile_){

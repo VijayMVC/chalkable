@@ -54,6 +54,9 @@ NAMESPACE('chlk.controllers', function (){
                                                   : chlk.models.apps.AppSortingMode.POPULAR;
 
 
+            var start = filterData_ ? filterData_.getStart() : 0;
+
+
             var selectedCategories = [];
             if (filterData_){
                 selectedCategories = this.getIdsList(filterData_.getSelectedCategories(), chlk.models.id.AppCategoryId);
@@ -76,7 +79,6 @@ NAMESPACE('chlk.controllers', function (){
                 });
             }
 
-            //todo: sort if there is filterdata
             var result = this.appCategoryService
                 .getCategories()
                 .then(function(data){
@@ -93,10 +95,12 @@ NAMESPACE('chlk.controllers', function (){
                             actualGradeLevels,
                             "",
                             selectedPriceType,
-                            selectedSortingMode
+                            selectedSortingMode,
+                            start
                         )
                         .then(function(apps){
                             var items = apps.getItems();
+
                             items = items.map(function(app){
                                 var screenshots = this.pictureService.getAppPicturesByIds(app.getScreenshotIds(), 640, 390);
                                 app.setScreenshotPictures(new chlk.models.apps.AppScreenshots(screenshots, false));
@@ -109,8 +113,10 @@ NAMESPACE('chlk.controllers', function (){
                 }, this)
                 .attach(this.validateResponse_());
 
-            if (filterData_)
-                return this.UpdateView(chlk.activities.apps.AppMarketPage, result, 'updateApps');
+            if (filterData_) {
+                var msg = filterData_.isScroll() ? "scrollApps" : "updateApps";
+                return this.UpdateView(chlk.activities.apps.AppMarketPage, result, msg);
+            }
             else
                 return this.PushView(chlk.activities.apps.AppMarketPage, result);
         },
@@ -176,12 +182,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     app.setPermissions(filteredPermissions);
 
-
-                    //todo: when ready on server remove this
-
-
                     var appRating = app.getApplicationRating();
-
 
                     if (!appRating)   {
                         appRating = new chlk.models.apps.AppRating();
@@ -190,26 +191,6 @@ NAMESPACE('chlk.controllers', function (){
                         app.setApplicationRating(appRating);
                     }
 
-
-                    /*appRating.setAverage(5);
-
-                    var personRating = new chlk.models.apps.PersonRating();
-                    personRating.setReview("Great app");
-                    personRating.setRoleName("Teacher");
-                    personRating.setRoleId(4);
-                    personRating.setRating(5);
-
-                    var roleRating = new chlk.models.apps.RoleRating();
-                    roleRating.setRating(3);
-                    roleRating.setRoleName("Teacher");
-                    roleRating.setRoleId(4);
-                    roleRating.setPersonCount(5);
-
-                    appRating.setPersonRatings([personRating]);
-                    appRating.setRoleRatings([roleRating]);
-
-                    app.setApplicationRating(appRating);*/
-
                     var installBtnTitle ='';
 
                     if (this.userInRole(chlk.models.common.RoleEnum.STUDENT) && app.isInstalledOnlyForCurrentUser()){
@@ -217,20 +198,6 @@ NAMESPACE('chlk.controllers', function (){
                     }else{
                         installBtnTitle = app.getApplicationPrice().formatPrice();
                     }
-
-                    /*
-                     if(data.videodemourl){
-                         max++;
-                         var ifrm = document.createElement("embed");
-                         ifrm.setAttribute("src", getVideoUrl(data.videodemourl));
-                         ifrm.setAttribute("id", "app-img");
-                         ifrm.setAttribute("wmode", "transparent");
-                         ifrm.setAttribute("width", "100%");
-                         ifrm.setAttribute("height", "387px");
-                         images.push(ifrm);
-                     }
-
-                     */
                     return this.appCategoryService
                         .getCategories()
                         .then(function(categories){
@@ -266,14 +233,12 @@ NAMESPACE('chlk.controllers', function (){
                 .getDetails(appId)
                 .then(function(app){
                     var installedForGroups = app.getInstalledForGroups() || [];
-                    if (!this.userInRole(chlk.models.common.RoleEnum.STUDENT)){
-                        installedForGroups.unshift(new chlk.models.apps.AppInstallGroup(
-                            new chlk.models.id.AppInstallGroupId(this.getCurrentPerson().getId().valueOf()),
-                            chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER,
-                            app.isInstalledOnlyForCurrentUser(),
-                            "Just me"
-                        ));
-                    }
+                    installedForGroups.unshift(new chlk.models.apps.AppInstallGroup(
+                        new chlk.models.id.AppInstallGroupId(this.getCurrentPerson().getId().valueOf()),
+                        chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER,
+                        app.isInstalledOnlyForCurrentUser(),
+                        "Just me"
+                    ));
 
                     var installedCount = 0;
 
@@ -284,6 +249,13 @@ NAMESPACE('chlk.controllers', function (){
                         if (item.isInstalled()) ++installedCount;
                         return item;
                     }, this);
+
+                    if (this.userInRole(chlk.models.common.RoleEnum.STUDENT)){
+                        installedForGroups = installedForGroups.filter(function(item){
+                            return item.getGroupType() != chlk.models.apps.AppInstallGroupTypeEnum.ALL;
+                        });
+                    }
+
                     app.setInstalledForGroups(installedForGroups);
 
 
@@ -311,7 +283,7 @@ NAMESPACE('chlk.controllers', function (){
                        return this.ShowMsgBox(title, '', [{
                            text: 'Ok',
                            controller: 'appmarket',
-                           action: 'list',
+                           action: 'myApps',
                            params: [],
                            color: chlk.models.common.ButtonColor.GREEN.valueOf()
                        }], 'center');

@@ -6,6 +6,7 @@ NAMESPACE('chlk.models.settings', function () {
     CLASS(
         'DeveloperSettings', [
             chlk.models.id.SchoolPersonId, 'developerId',
-            chlk.models.id.AppId, 'currentAppId'
+            chlk.models.id.AppId, 'currentAppId',
+            String, 'currentAppName'
         ]);
 });

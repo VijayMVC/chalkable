@@ -8,6 +8,8 @@ NAMESPACE('chlk.controls', function () {
     CLASS(
         'SearchBoxControl', EXTENDS(chlk.controls.Base), [
 
+            String, 'triggerBtnId',
+
             OVERRIDE, VOID, function onCreate_() {
                 BASE();
                 ASSET('~/assets/jade/controls/SearchBox.jade')(this);
@@ -17,6 +19,10 @@ NAMESPACE('chlk.controls', function () {
             VOID, function initialize(attrs, service, method, tpl, prependArgs)
             {
                 attrs.id = attrs.id || ria.dom.NewGID();
+
+                if (attrs.triggerBtnId){
+                    this.setTriggerBtnId(attrs.triggerBtnId);
+                }
                 var serviceIns = this.getContext().getService(service);
                 var ref = ria.reflection.ReflectionClass(service);
                 var methodRef = ref.getMethodReflector(method);
@@ -54,6 +60,7 @@ NAMESPACE('chlk.controls', function () {
                 };
 
                 jQuery(node.valueOf()).autocomplete({
+                    minLength: 2,
                     source: function( request, response ) {
                         serviceF(request.term)
                             .then(function(data){
@@ -99,6 +106,16 @@ NAMESPACE('chlk.controls', function () {
                     item.dataId = id;
                     return jQuery(li).appendTo(ul);
                 };
+
+                var triggerBtnId = this.getTriggerBtnId() || '';
+                if (triggerBtnId){
+                    jQuery('#' + triggerBtnId).click(function(){
+                        jQuery(node.valueOf()).autocomplete("search", jQuery(node.valueOf()).val());
+                    })
+                }
+
+
+
             }
 
         ]);

@@ -11,10 +11,11 @@ NAMESPACE('chlk.models.apps', function () {
 
             [ria.serialize.SerializeProperty('gradeLevelsSelectedValues')],
             String, 'gradeLevels',
+            Number, 'start',
 
             String, 'filter',
             Number, 'priceType',
-            Number, 'sortingMode'
-
+            Number, 'sortingMode',
+            Boolean, 'scroll'
         ]);
 });

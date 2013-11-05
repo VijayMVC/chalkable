@@ -18,12 +18,26 @@ NAMESPACE('chlk.templates.attendance', function () {
             Number, 'studentsCountAbsentWholeDay',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.common.ChlkDate, 'date',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.people.User), 'absentStudents',
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.people.User), 'excusedStudents',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.people.User), 'lateStudents'
+            ArrayOf(chlk.models.people.User), 'lateStudents',
+
+            function getSortedBlocksInfo(){
+                var array = [[1, this.getStudentsAbsentWholeDay() ? this.getStudentsAbsentWholeDay().length : 0],
+                    [2, this.getExcusedStudents() ? this.getExcusedStudents().length : 0],
+                    [3, this.getAbsentStudents() ? this.getAbsentStudents().length : 0],
+                    [4, this.getLateStudents() ? this.getLateStudents().length : 0]
+                ];
+                return array.sort(function(a,b){
+                    return a[1] < b[1];
+                })
+            }
         ])
 });

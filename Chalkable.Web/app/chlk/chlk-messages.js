@@ -121,6 +121,7 @@ var Msg = {
     Item: oneOrMany('Item'),
     Keywords: 'Keywords',
     Last: 'Last',
+    Less: 'Less',
     Live: 'Live',
     List: 'List',
     Message: 'Message',
@@ -159,6 +160,8 @@ var Msg = {
     Required: 'Required',
     Room: 'Room',
     Save: 'Save',
+    Saved: 'Saved',
+    Saving: 'Saving',
     Schedule: 'Schedule',
     Scheduled: 'Scheduled',
     School: 'School',
@@ -229,6 +232,7 @@ var Msg = {
     Absent_Today: 'Absent Today',
     Add_reminder: 'Add Reminder',
     Add_student: 'Add student',
+    All_day: 'All day',
     All_students: 'All students',
     All_subjects: 'All subjects',
     All_teachers: 'All teachers',
@@ -477,6 +481,7 @@ var Msg = {
     Whole_School: 'Whole School',
     Will_teachers_be_viewing_student_output: 'Will teachers be viewing student output?',
     Write_a_review: 'Write a review',
+    You_vs_Peers: 'You vs. Peers',
     Your_grade: 'Your grade',
 
     //Window titles----------------------------------------------------------------------------------------------------------\

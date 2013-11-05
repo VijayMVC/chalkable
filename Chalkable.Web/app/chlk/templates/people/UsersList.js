@@ -16,6 +16,17 @@ NAMESPACE('chlk.templates.people', function () {
             [ria.templates.ModelPropertyBind],
             String, 'filter',
             [ria.templates.ModelPropertyBind],
-            Number, 'start'
+            Number, 'start',
+            Boolean, 'my',
+
+            String, function getTotalText(){
+                var users = this.getUsers();
+                var res = users.getTotalCount() + ' ';
+                if(this.getUserRole().isStudent() && !this.isMy())
+                    res += Msg.Teacher(users.getTotalCount()!=1);
+                else
+                    res += Msg.Student(users.getTotalCount()!=1);
+                return res;
+            }
         ])
 });

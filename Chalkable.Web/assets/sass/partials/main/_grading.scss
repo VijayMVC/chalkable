@@ -4,6 +4,159 @@ BODY {
       DIV#content-wrapper{
         #main-wrapper {
           #main{
+            .student-grading-summary{
+
+              &.student-grading-class-summary{
+                h1{
+                  margin-top: 7px;
+                }
+
+                .grading-chart-part {
+                  margin: 15px 0 0 -14px;
+
+                  .chart-bg2{
+                    top: -16px;
+                    height: 155px;
+
+                    .chart-container-1{
+                      height: 155px;
+                    }
+                  }
+                }
+              }
+
+              h1{
+                font: bold 18px Arial;
+                margin: 30px 27px;
+                color: #2f7790;
+                text-shadow: 0 1px 0 white;
+                border-bottom: 1px solid #c8c8c8;
+                position: relative;
+                padding-bottom: 2px;
+
+                .avatar-wrapper{
+                  margin-right: 9px;
+                  display: inline-block;
+                  @include border-radius(2px);
+                  overflow: hidden;
+
+                  >DIV{
+                    width: 39px;
+                    height: 39px;
+                  }
+                }
+
+                .mp-info{
+                  text-shadow: 1px 1px 0 white, -1px 0 0 #afafaf;
+                  color: #868686;
+                  position: absolute;
+                  right: 5px;
+                  bottom: 5px;
+                  font: normal 14px Arial;
+                }
+              }
+
+              .item-types{
+                margin: 33px 28px 0;
+                text-align: center;
+
+                .item-type{
+                  display: inline-block;
+                  text-align: center;
+                  padding: 5px;
+                  opacity: 0.5;
+                  cursor: pointer;
+                  margin-bottom: 5px;
+
+                  &:not(:last-child){
+                    margin-right: 30px;
+                  }
+
+                  &:hover, &.hovered{
+                    background: #f8f8f8;
+                    opacity: 1;
+                    @include border-radius(4px);
+                    @include box-shadow(0 2px 3px gray);
+                  }
+
+                  >DIV{
+                    display: inline-block;
+                    vertical-align: middle;
+                  }
+
+                  .box{
+                    width:12px;
+                    height: 12px;
+                    background: #2f7790;
+                    @include box-shadow(0 2px 1px gray);
+                  }
+
+                  .name{
+                    font: bold 11px Arial;
+                    color: #3d3d3d;
+                  }
+                }
+              }
+
+              .grading-chart-part{
+                margin: 35px 0 54px -12px;
+
+                .chart-container-1{
+                  height: 172px;
+                  margin-bottom: 20px;
+                  overflow: hidden;
+                }
+
+                .panel-header{
+                  .chzn-container{
+                    position: absolute;
+                    right: 110px;
+                    top: -1px;
+                    z-index: 100;
+
+                    .chzn-single SPAN {
+                      background: url(images/grading/select-box.png) 0 center no-repeat;
+                      padding-left: 15px;
+                    }
+                  }
+
+                  .student-me{
+                    background: url(images/grading/student-me.png) 0 0 no-repeat;
+                    position: absolute;
+                    right: 43px;
+                    top: 7px;
+                    width: 42px;
+                    height:16px;
+                  }
+                }
+
+                .chart-bg{
+                  width: 654px;
+                  height: 184px;
+                  background-size: 100% 100%;
+                  top: 18px;
+                  left: 4px;
+                }
+
+                .chart-container{
+                  z-index: 10;
+                  margin-top: 5px;
+
+                  .chart-triangle{
+                    display: inline-block;
+                    position: absolute;
+                    bottom: -10px;
+                    left: 4px;
+                    width: 0;
+                    height: 0;
+                    border-left: 5px solid transparent;
+                    border-right: 5px solid transparent;
+                    border-top: 5px solid white;
+                  }
+                }
+              }
+            }
+
             .grading-summary{
               .students-line{
                 position: relative;
@@ -169,20 +322,7 @@ BODY {
                 .all-button{
                   width: 58px;
                   height: 54px;
-                  @include border-radius(7px);
                   margin-right: 8px;
-                  border: 1px solid #b3b3b3;
-                  @include box-shadow(0 1px 1px #cacaca, inset 0 1px 0 white);
-                  @include background(linear-gradient(top, #f5f5f5, #e0e0e0));
-                  color: #3d3d3d;
-                  font: bold 14px/52px Arial;
-                  text-shadow: 1px 1px 0 white;
-                  text-transform: uppercase;
-                  cursor: pointer;
-
-                  &:hover{
-                    @include background(linear-gradient(top, #e5e5e5, #d0d0d0));
-                  }
                 }
 
                 .image-container{

@@ -3,6 +3,9 @@ REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.common.SimpleResult');
 REQUIRE('chlk.models.api.ApiRoleInfo');
 REQUIRE('chlk.models.api.ApiCallRequestData');
+REQUIRE('chlk.models.api.ApiListItem');
+
+
 
 
 NAMESPACE('chlk.services', function () {
@@ -61,8 +64,35 @@ NAMESPACE('chlk.services', function () {
                         var params = requestData.getApiCallParams();
                         return this.makeApiCall(url, token,  params);
                     }, this)
-                //todo: update response area
-            }
+            },
 
+
+            [[String, Boolean, String]],
+            ria.async.Future, function getRequiredApiCalls(query, isMethod, role){
+                return this
+                    .post('Developer/GetRequiredMethodCallsFor.json', ArrayOf(chlk.models.api.ApiListItem), {
+                        query: query,
+                        role: role,
+                        isMethod: isMethod
+                    })
+                    .then(function(data){
+                        return data;
+                    });
+            },
+
+            [[String, String]],
+            ria.async.Future, function getList(role, query){
+                return this
+                    .post('Developer/MethodParamList.json', ArrayOf(chlk.models.api.ApiListItem), {
+                        query: query,
+                        role: role
+                    })
+                    .then(function(data){
+                        return data.map(function(item){
+                           item.setRole(role);
+                           return item;
+                        })
+                    });
+            }
         ])
 });

@@ -11,8 +11,6 @@
                     liveAppId = self.liveAppId ? self.liveAppId.valueOf() : null
                     if self.isApproved()
                         +ActionLinkButton('apps', 'goLive', self.draftAppId).special-button.blue-button Go Live
-                    else
-                        +ActionLinkButton('apps', 'unlist', liveAppId).special-button.blue-button Unlist
                 else
                     if self.isApproved()
                         +ActionLinkButton('apps', 'goLive', self.draftAppId).special-button.blue-button Go Live

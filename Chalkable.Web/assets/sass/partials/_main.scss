@@ -34,13 +34,13 @@
 @import "partials/main/developer/_app";
 @import "partials/main/developer/_app_general";
 @import "partials/main/developer/_api";
+@import "partials/main/developer/_docs";
 
 @import "partials/main/apps/_market_pages";
 @import "partials/main/apps/_my_apps";
 
 @import "partials/main/popups/attachments/_attachment_dialogs";
 @import "partials/main/popups/_day_discipline";
-//@import "partials/main/developer/_docs";
 @import "partials/main/sysadmin/_apps";
 @import "partials/main/popups/_popups";
 @import "partials/main/popups/_add_app";
@@ -91,6 +91,10 @@ INPUT, TEXTAREA, .text-field{
   }
 }
 
+a{
+  text-decoration: none;
+}
+
 BODY {
   DIV.page{
     >DIV#content {
@@ -114,9 +118,30 @@ BODY {
 
               .panel-bg{
                 @include background(linear-gradient(top, #f3eee0, #ece1c1));
+              }
 
+              .paginator-container{
+                .left-container{
+                  .first-page{
+                    @include background(url(images/common/navigation-first.png) center center no-repeat, linear-gradient(top, #f3eee0, #ece1c1));
+                  }
 
+                  .prev-page{
+                    @include background(url(images/common/navigation-prev.png) center center no-repeat, linear-gradient(top, #f3eee0, #ece1c1));
+                  }
 
+                  .next-page{
+                    @include background(url(images/common/navigation-next.png) center center no-repeat, linear-gradient(top, #f3eee0, #ece1c1));
+                  }
+
+                  .last-page{
+                    @include background(url(images/common/navigation-last.png) center center no-repeat, linear-gradient(top, #f3eee0, #ece1c1));
+                  }
+
+                  .info-container{
+                    @include background(linear-gradient(top, #f5ebd7,#eadac1));
+                  }
+                }
               }
             }
           }
@@ -283,6 +308,7 @@ TEXTAREA.animated-textarea{
   @include box-shadow(0 2px 6px 0px #989897);
   text-shadow: white 0px 1px 1px;
   padding: 7px;
+  z-index: 100;
 
   #pop-up-triangle{
     position: absolute;
@@ -356,7 +382,7 @@ TEXTAREA.animated-textarea{
   }
 
   ul{
-    >LI{
+    >LI:not(.active-result){
       background: url(images/common/dialog-separator.png) bottom no-repeat;
       position: relative;
 
@@ -504,4 +530,25 @@ BODY{
       }
     }
   }
+}
+
+.big-triangle {
+  width: 95px;
+  height: 14px;
+  position: absolute;
+  overflow: hidden;
+  @include box-shadow(0 16px 10px -17px rgba(0, 0, 0, 0.5));
+  bottom: -14px;
+  background: transparent;
+}
+.big-triangle:after {
+  content: "";
+  position: absolute;
+  width: 50px;
+  height: 44px;
+  -webkit-transform: rotate(-45deg);
+  top: -45px;
+  left: 12px;
+  @include box-shadow(-3px 3px 10px -1px rgba(0, 0, 0, 0.5));
+  background: #eaeaea;
 }

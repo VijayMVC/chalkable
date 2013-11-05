@@ -1,5 +1,6 @@
 REQUIRE('chlk.controllers.UserController');
 REQUIRE('chlk.services.StudentService');
+REQUIRE('chlk.services.TeacherService');
 REQUIRE('chlk.services.PersonService');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.AttendanceCalendarService');
@@ -35,6 +36,9 @@ NAMESPACE('chlk.controllers', function (){
             chlk.services.StudentService, 'studentService',
 
             [ria.mvc.Inject],
+            chlk.services.TeacherService, 'teacherService',
+
+            [ria.mvc.Inject],
             chlk.services.ClassService, 'classService',
 
             [ria.mvc.Inject],
@@ -58,10 +62,16 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             //TODO: refactor
+            [chlk.controllers.SidebarButton('people')],
             [[Boolean, chlk.models.id.ClassId]],
             function showStudentsList(isMy, classId_){
-                var result = this.studentService.getStudents(classId_, null, isMy, true, 0, 10)
-                    .then(function(users){
+                var result, isStudent = this.getCurrentRole().isStudent();
+                if(isStudent && !isMy){
+                    result = this.teacherService.getTeachers(classId_, null, true, 0, 10);
+                }else{
+                    result = this.studentService.getStudents(classId_, null, !isStudent && isMy, true, 0, 10);
+                }
+                result.then(function(users){
                         var usersModel = this.prepareUsersModel(users, 0, true);
                         var classes = this.classService.getClassesForTopBar(true);
                         var topModel = new chlk.models.classes.ClassesForTopBar(classes, classId_);
@@ -83,18 +93,31 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             //TODO: refactor
+            [chlk.controllers.SidebarButton('people')],
             [[chlk.models.teacher.StudentsList]],
             function updateListAction(model){
                 var isScroll = model.isScroll(), start = model.getStart();
-                var result = this.studentService.getStudents(
+                var result, isStudent = this.getCurrentRole().isStudent();
+                if(isStudent && !model.isMy()){
+                    result = this.teacherService.getTeachers(
                         model.getClassId(),
                         model.getFilter(),
-                        model.isMy(),
+                        model.isByLastName(),
+                        start,
+                        10
+                    );
+                }else{
+                    result = this.studentService.getStudents(
+                        model.getClassId(),
+                        model.getFilter(),
+                        !isStudent && model.isMy(),
                         model.isByLastName(),
                         start,
                         10
                     )
-                    .then(function(usersData){
+                }
+
+                result.then(function(usersData){
                         if(isScroll)  return this.prepareUsers(usersData, start);
                         return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter());
                     }.bind(this));

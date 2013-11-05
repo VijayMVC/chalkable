@@ -9,6 +9,7 @@ NAMESPACE('chlk.activities.apps', function () {
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.apps.AppMarket)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppMarketAppsTpl, 'updateApps', '.apps', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppMarketAppsTpl, 'scrollApps', '.apps', ria.mvc.PartialUpdateRuleActions.Append)],
 
         'AppMarketPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 

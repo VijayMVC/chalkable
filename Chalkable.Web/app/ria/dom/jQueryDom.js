@@ -104,6 +104,18 @@ NAMESPACE('ria.dom', function () {
                 return this;
             },
 
+            [[Function]],
+            SELF, function fadeIn(callback_){
+                callback_ ? this._dom.fadeIn(callback_) : this._dom.fadeIn();
+                return this;
+            },
+
+            [[Function]],
+            SELF, function fadeOut(callback_){
+                callback_ ? this._dom.fadeOut(callback_) : this._dom.fadeOut();
+                return this;
+            },
+
             SELF, function clone(){
                 return new SELF(this._dom.clone());
             },

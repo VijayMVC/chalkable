@@ -261,6 +261,9 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.appsService
                 .addToAnnouncement(appId, announcementId)
                 .then(function(app){
+                    var apps = this.getContext().getSession().get('AnnoucementApplications', []);
+                    apps.push(app);
+                    this.getContext().getSession().set('AnnoucementApplications', apps);
                     app.setCurrentModeUrl(app.getEditUrl());
                     return new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.EDIT);
                 })
@@ -358,9 +361,11 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
-        [[chlk.models.id.AppId]],
-        function tryDeleteApplicationAction(id) {
-            return this.ShowMsgBox('Are you sure you want to delete?', null, [{
+        [[chlk.models.id.AppId, String]],
+        function tryDeleteApplicationAction(id, appName) {
+            var msgText = "You are about to delete " + appName + " application.\n\n This can not be undone.";
+
+            return this.ShowMsgBox(msgText, "whoa.", [{
                 text: "Cancel",
                 color: chlk.models.common.ButtonColor.GREEN.valueOf()
             }, {

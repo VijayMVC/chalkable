@@ -35,13 +35,7 @@ NAMESPACE('chlk', function (){
 
 
             OVERRIDE, ria.async.Future, function onStart_() {
-                jQuery(document).on('click', '.demo-role-button:not(.coming)', function(){
-                    if(!jQuery(this).hasClass('active')){
-                        window.location.href = WEB_SITE_ROOT + 'DemoSchool/LogOnIntoDemo.json?rolename='
-                            + jQuery(this).attr('rolename') + '&prefix=' + window.school.demoprefix;
-                    }
-                    return false;
-                });
+
 
                 return BASE()
                     .then(function(data){

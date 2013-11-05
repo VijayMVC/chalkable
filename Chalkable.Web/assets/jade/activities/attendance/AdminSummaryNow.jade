@@ -15,7 +15,9 @@ if self.getAbsentNowStudents()
                     .title=Msg.Usually
         .now-chart-block.i-b
             +AdminAtteddanceChart(self.getAttendanceStats(), 550)
-    .attendance-students
-        +StudentsTpl(self.getAbsentNowStudents(), Msg.Absent + " " + Msg.Right_now.toLowerCase(), true, false, 1)(
-            class = 'attendance-' + valuesEnum.ABSENT.valueOf()
-        )
+    +AddStudentTpl(1)
+    if self.getAbsentNowStudents().length
+        .attendance-students
+            +StudentsTpl(self.getAbsentNowStudents(), Msg.Absent + " " + Msg.Right_now.toLowerCase(), 1)(
+                class = 'attendance-' + valuesEnum.ABSENT.valueOf()
+            )

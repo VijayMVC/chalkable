@@ -63,6 +63,29 @@ BODY {
                 @include background(linear-gradient(top, #f5ebd7,#eadac1));
               }
 
+              .paginator-container{
+                .left-container{
+                  .first-page{
+                    @include background(url(images/common/navigation-first.png) center center no-repeat, linear-gradient(top, #f5ebd7,#eadac1));
+                  }
+
+                  .prev-page{
+                    @include background(url(images/common/navigation-prev.png) center center no-repeat, linear-gradient(top, #f5ebd7,#eadac1));
+                  }
+
+                  .next-page{
+                    @include background(url(images/common/navigation-next.png) center center no-repeat, linear-gradient(top, #f5ebd7,#eadac1));
+                  }
+
+                  .last-page{
+                    @include background(url(images/common/navigation-last.png) center center no-repeat, linear-gradient(top, #f5ebd7,#eadac1));
+                  }
+
+                  .info-container{
+                    @include background(linear-gradient(top, #f5ebd7,#eadac1));
+                  }
+                }
+              }
 
               .grid-container{
                 .container{
@@ -182,14 +205,8 @@ BODY {
                   }
                 }
                 .paginator-container
-                {
-                  margin-top:24px;
-                  -webkit-border-radius: 7px;
-                  -o-border-radius: 7px;
-                  -ms-border-radius: 7px;
-                  -khtml-border-radius: 7px;
-                  border-radius: 7px;
-                  background-color: #c8b088;
+                  {
+                  margin-top:10px;
                   padding: 3px;
                 }
               }

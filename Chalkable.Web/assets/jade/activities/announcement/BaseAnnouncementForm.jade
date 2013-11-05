@@ -49,7 +49,8 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
         +TextArea(id="content",name="content",placeholder=isAnnouncement ? "Message" : "Assignment")=announcement.getContent()
         .drop-down-container
         input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
-        input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
+        if !announcement.getState()
+            input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
     .right-block
         .date-picker-container
             +DatePicker('expiresdate', announcement.getExpiresDate())(

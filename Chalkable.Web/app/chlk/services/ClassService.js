@@ -41,6 +41,16 @@ NAMESPACE('chlk.services', function () {
                 return withAll_ ? res1 : res;
             },
 
+            [[chlk.models.id.ClassId]],
+            chlk.models.classes.ClassForTopBar, function getClassById(classId) {
+                var classes = this.getClassesForTopBar(), res;
+                classes.forEach(function(item){
+                    if(item.getId() == classId)
+                        res = item;
+                });
+                return res;
+            },
+
             //TODO: refactor
             [[chlk.models.id.ClassId]],
             chlk.models.classes.ClassForWeekMask, function getClassAnnouncementInfo(id){

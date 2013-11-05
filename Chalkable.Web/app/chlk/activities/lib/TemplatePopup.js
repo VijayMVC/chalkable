@@ -84,7 +84,8 @@ NAMESPACE('chlk.activities.lib', function () {
                 var container = this.getContainer(), res;
                 if(this._isHorizontal){
                     this._popupHolder.setCss('top', offset.top - 10);
-                    if(this._isTopLeft && (container.offset().left + container.width()) > (this._popupHolder.offset().left + this._popupHolder.width())){
+                    if(this._isTopLeft && (offset.left - container.offset().left > this._popupHolder.width())){
+                    //if(this._isTopLeft && (container.offset().left + container.width()) > (this._popupHolder.offset().left + this._popupHolder.width())){
                         this._popupHolder.setCss('left', offset.left - 10 - this._popupHolder.width());
                         res = positionClasses.left;
                     }else{
@@ -93,7 +94,8 @@ NAMESPACE('chlk.activities.lib', function () {
                     }
                 }else{
                     this._popupHolder.setCss('left', offset.left - (this._popupHolder.width() - target.width())/2);
-                    if(this._isTopLeft && (container.offset().top + container.height()) > (this._popupHolder.offset().top + this._popupHolder.height())){
+                    if(this._isTopLeft && (offset.top - container.offset().top > this._popupHolder.height())){
+                    //if(this._isTopLeft && (container.offset().top + container.height()) > (this._popupHolder.offset().top + this._popupHolder.height())){
                         this._popupHolder.setCss('top', offset.top - 10 - this._popupHolder.height());
                         res = positionClasses.top;
                     }else{

@@ -8,9 +8,9 @@
         .buttons-row
             +ActionLink('calendar', 'month').one-third-button.calendar(title="View Calendar") Calendar
             +ActionLink('message', 'page').one-third-button.messages(title="View Messages") Messages
-            +ActionLink('students', 'all').one-third-button.people(title="View People") People
+            +ActionLink('students', 'my').one-third-button.people(title="View People") People
         .buttons-row
-            +ActionLink('grading', '').one-third-button.statistic(title="View Grades") Grades
+            +ActionLink('grading', 'summaryAll').one-third-button.statistic(title="View Grades") Grades
             +ActionLink('appmarket', 'list').one-third-button.apps(title="View Apps") Apps
             +ActionLink('settings', 'dashboardStudent').one-third-button.settings(title="View Settings") Settings
 +ListForWeekCalendar()

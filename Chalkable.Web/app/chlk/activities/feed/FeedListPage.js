@@ -30,7 +30,7 @@ NAMESPACE('chlk.activities.feed', function () {
 
             [ria.mvc.DomEventBind('click', '.announcement-link')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function announcementClick(node, event){
+            Boolean, function announcementClick(node, event){
                 var item = node.parent('.feed-item');
                 var clone = item.clone();
                 clone = clone.wrap('<div class="moving-wrapper"></div>').parent();

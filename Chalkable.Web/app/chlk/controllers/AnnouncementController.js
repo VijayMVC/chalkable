@@ -108,6 +108,7 @@ NAMESPACE('chlk.controllers', function (){
                 if(item.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf())
                     item.setThumbnailUrl(this.announcementService.getAttachmentUri(item.getId(), false, 170, 110));
             }, this);
+            this.getContext().getSession().set('AnnouncementAttachments', attachments);
         },
 
         [[chlk.models.announcement.StudentAnnouncement]],
@@ -170,7 +171,6 @@ NAMESPACE('chlk.controllers', function (){
 
             var attachments = announcement.getAnnouncementAttachments() || [];
             this.prepareAttachments(attachments);
-            this.getContext().getSession().set('AnnouncementAttachments', attachments);
 
             var applications = announcement.getApplications() || [];
             this.getContext().getSession().set('AnnouncementApplications', applications);
@@ -269,7 +269,6 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(announcement){
                     var attachments = announcement.getAnnouncementAttachments();
                     this.prepareAttachments(attachments);
-                    this.getContext().getSession().set('AnnouncementAttachments', attachments);
                     var apps = announcement.getApplications() || [];
                     var gradeViewApps = apps.filter(function(app){
                         return app.getAppAccess().isVisibleInGradingView();

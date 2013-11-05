@@ -78,9 +78,26 @@ NAMESPACE('chlk.controllers', function (){
             function makeApiCallAction(data){
                 var controllerName = data.controllerName;
                 var methodName = data.methodName;
+                var apiFormId = data.apiFormId;
                 var apiCallData = chlk.models.api.ApiCallRequestData.$create(controllerName, methodName, data);
-                return this.apiService.callApi(apiCallData);
-            }
+                var result = this.apiService
+                    .callApi(apiCallData)
+                    .then(function(data){
+                        return chlk.models.api.ApiResponse.$create(apiFormId, data);
+                    });
+                return this.UpdateView(chlk.activities.developer.ApiExplorerPage, result);
+            },
 
+
+            [[String, Boolean, String]],
+            function getRequiredApiCallsAction(query, isMethod, role){
+                 var result = this.apiService
+                     .getRequiredApiCalls(query, isMethod, role)
+                     .then(function(data){
+                         var seq= chlk.models.api.ApiCallSequence.$create(data);
+                         return seq;
+                     });
+                 return this.UpdateView(chlk.activities.developer.ApiExplorerPage, result, 'update-api-calls-list');
+            }
         ])
 });

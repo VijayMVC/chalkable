@@ -26,9 +26,8 @@ NAMESPACE('chlk.controls', function () {
 
 
             [[Object]],
-            VOID, function updateDot(target){
-                jQuery('.carousel-pagination .dot.selected').removeClass('selected');
-                 var index = target.data('page');
+            VOID, function updateControls(target){
+                var index = target.data('page');
 
                 if (index == this.getStartPage()){
                     jQuery('.picture-left').attr('disabled', true);
@@ -41,12 +40,6 @@ NAMESPACE('chlk.controls', function () {
                 } else {
                     jQuery('.picture-right').attr('disabled', false);
                 }
-
-                if (index > 0)
-                    index -= 1;
-                jQuery('.carousel-pagination .dot:eq(' + index + ')').addClass('selected');
-
-
             },
 
             [[Object]],
@@ -72,36 +65,16 @@ NAMESPACE('chlk.controls', function () {
                 jQuery('.picture-left').click(function(event){
                     jQuery('.carousel').jcarousel('scroll', '-=1');
                     var target = jQuery('.carousel').jcarousel('target');
-                    that.updateDot(target);
+                    that.updateControls(target);
                     return false;
                 });
 
                 jQuery('.picture-right').click(function(event){
                     jQuery('.carousel').jcarousel('scroll', '+=1');
                     var target = jQuery('.carousel').jcarousel('target');
-                    that.updateDot(target);
+                    that.updateControls(target);
                     return false;
                 });
-
-
-                jQuery('.carousel-pagination').jcarouselPagination({
-                    item: function(page, carouselItems) {
-                        return '<div class="dot" data-page="' + page + '"></div>';
-                    }
-                });
-
-                jQuery('.carousel-pagination .dot').click(function(item){
-                    var index = jQuery(this).data('page');
-                    if (index > 0) index -= 1;
-
-                    var newElem = jQuery('.carousel li:eq(' + index + ')');
-                    jQuery('.carousel').jcarousel('scroll', newElem);
-
-                    that.updateDot(newElem);
-                    return false;
-                });
-
-                jQuery('.carousel-pagination .dot:first').addClass('selected');
 
             }
 

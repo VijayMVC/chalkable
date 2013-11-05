@@ -126,7 +126,9 @@ NAMESPACE('chlk.activities.announcement', function () {
             },
 
             OVERRIDE, VOID, function onStop_() {
-                new ria.dom.Dom('#save-form-button').trigger('click');
+                var button = new ria.dom.Dom('#save-form-button');
+                if(button.exists())
+                    button.trigger('click');
                 new ria.dom.Dom().off('click.dropdown', this._handler);
                 BASE();
             },

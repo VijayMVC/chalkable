@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Web.ActionFilters;
-using Chalkable.Web.Authentication;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.ChalkableApiExplorerViewData;

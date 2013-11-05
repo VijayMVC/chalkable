@@ -1,5 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.discipline.ClassDisciplinesTpl');
+REQUIRE('chlk.templates.discipline.DisciplineTpl');
 
 NAMESPACE('chlk.activities.discipline', function(){
    "use strict";
@@ -8,6 +9,7 @@ NAMESPACE('chlk.activities.discipline', function(){
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.discipline.ClassDisciplinesTpl)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.discipline.ClassDisciplinesTpl, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         'ClassDisciplinesPage', EXTENDS(chlk.activities.lib.TemplatePage),[
 
             function $(){
@@ -59,29 +61,54 @@ NAMESPACE('chlk.activities.discipline', function(){
                             classPersonId: node.getData('class-person-id'),
                             date: node.getData('date'),
                             description: descNode.getValue(),
-                            disciplineTypeIds: discTypesNode.getValue()
+                            disciplineTypeIds: discTypesNode.getValue(),
+                            time: rowNode.find('[name="time"]').getValue()
                         });
                     }
                 }
+                var row = rowNode.previous();
+                var tooltipNode = row.find('.with-discipline');
+                if(discTypesNode.getValue()){
+                    var text = rowNode.find(':checked').next().valueOf().map(function(item){
+                        return item.innerHTML.capitalize()
+                    }).join(', ');
+                    if(tooltipNode.exists())
+                        tooltipNode
+                            .show()
+                            .setData('tooltip', text);
+                    else{
+                        new ria.dom.Dom()
+                            .fromHTML('<div class="with-discipline" data-tooltip="' + text + '"></div>')
+                            .appendTo(row.find('.tooltip-container'));
+                    }
+                }else{
+                    if(tooltipNode.exists())
+                        tooltipNode.hide();
+                }
+
                 return res;
             },
 
             [[ria.dom.Dom, Boolean]],
             VOID, function updateDiscipline_(node){
                 var form = node.parent('form');
+                var time = getDate().getTime();
+                form.find('.save-time').setValue(time);
+                form.previous()
+                    .setAttr('time', time)
+                    .removeClass('saved')
+                    .addClass('saving');
                 var disciplinesNode = form.find('input[name="disciplinesJson"]');
                 disciplinesNode.setValue(JSON.stringify(this.getDisciplines_(form)));
                 form.trigger('submit');
-//                setTimeout(function(){
-//                    var next = row.next();
-//                    if(next.exists()){
-//                        row.removeClass('selected');
-//                        next.addClass('selected');
-//                    }
-//                },1);
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.discipline.DisciplineTpl, chlk.activities.lib.DontShowLoader())],
+            VOID, function doUpdateItem(tpl, model, msg_) {
+                var row = this.dom.find('.row[time=' + model.getTime() + ']');
+                if(row.exists()){
+                    row.removeClass('saving').addClass('saved');
+                }
             }
-
-
-
     ]);
 });

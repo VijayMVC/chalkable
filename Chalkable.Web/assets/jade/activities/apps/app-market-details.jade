@@ -6,10 +6,13 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
     +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels)
     .app-screenshots-panel
         +Carousel()
+            -videoUrl = app.getVideoDemoUrl() || ''
+            if videoUrl
+                +CarouselItem().img(data-page = 1)
+                    +Video(true)(src=videoUrl, width="640", height="390")
             each picture, index in app.getScreenshotPictures().getItems()
-                +CarouselItem().img(data-page= index + 1)
+                +CarouselItem().img(data-page= index + 2)
                     img(src=picture.getPictureUrl())
-
     .app-price-info
         .app-title
             h1=app.getName()

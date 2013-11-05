@@ -13,7 +13,13 @@ NAMESPACE('chlk.templates.attendance', function () {
             ArrayOf(chlk.models.attendance.ClassAttendance), 'attendances',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.attendance.ClassAttendance, 'allItem',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.people.User, 'student',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'newStudent',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.attendance.DailyAttendance, 'dailyAttendance',

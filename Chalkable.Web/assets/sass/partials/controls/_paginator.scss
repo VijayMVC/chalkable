@@ -6,27 +6,35 @@
   .left-container{
     float: left;
 
+    .first-page, .prev-page, .next-page, .last-page, .info-container{
+      background-color: #e7e7e7;
+      background-position: center center;
+      background-repeat: no-repeat;
+      @include border-radius(5px);
+      border: 1px solid #868686;
+      position: relative;
+    }
+
     .first-page{
-      background: url(images/common/navigation-first.png) 0 0 no-repeat;
+      background-image: url(images/common/navigation-first.png);
     }
 
     .prev-page{
-      background: url(images/common/navigation-prev.png) 0 0 no-repeat;
+      background-image: url(images/common/navigation-prev.png);
     }
 
     .next-page{
-      background: url(images/common/navigation-next.png) 0 0 no-repeat;
+      background-image: url(images/common/navigation-next.png);
     }
 
     .last-page{
-      background: url(images/common/navigation-last.png) 0 0 no-repeat;
+      background-image: url(images/common/navigation-last.png);
     }
 
     .info-container{
       display: inline-block;
-      background: url(images/common/notification-total-of.png) 0 0 no-repeat;
       width: 107px;
-      height: 33px;
+      height: 30px;
       padding: 0 7px;
 
       INPUT{
@@ -47,8 +55,8 @@
     }
 
     >A{
-      height: 33px;
-      width: 28px;
+      height: 30px;
+      width: 26px;
       display: inline-block;
 
       &.disabled{

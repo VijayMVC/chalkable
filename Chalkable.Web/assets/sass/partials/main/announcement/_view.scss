@@ -227,6 +227,11 @@ $red-color: #842727;
         .avatar-container{
           vertical-align: top;
         }
+
+        .edit-question-input, .edit-answer-btn.chlk-button, .edit-question-btn.chlk-button, .cancel-question-link, .cancel-answer-link{
+          display: none;
+        }
+
         .chlk-button{
           display: block;
           margin-top: 10px;
@@ -253,9 +258,17 @@ $red-color: #842727;
           a{
             margin-left: 10px;
           }
+          BUTTON{
+            width:104px;
+          }
+
           >INPUT{
             border-color: "#9e9e9e";
             width: 300px;
+            border: 1px solid silver;
+            height: 16px;
+            padding: 7px;
+            color: #a5a5a5;
           }
         }
       }
