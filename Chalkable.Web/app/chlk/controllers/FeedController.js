@@ -36,10 +36,20 @@ NAMESPACE('chlk.controllers', function (){
         [[Boolean, Boolean, chlk.models.id.ClassId, Number]],
         function listAction(postback_, starredOnly_, classId_, pageIndex_) {
             starredOnly_ = starredOnly_ != false;
-            var result = this.announcementService
+            var result = this.getFeedItems(postback_, starredOnly_, classId_, pageIndex_)
+                .attach(this.validateResponse_());
+            return postback_
+                    ? this.UpdateView(chlk.activities.feed.FeedListPage, result)
+                    : this.PushView(chlk.activities.feed.FeedListPage, result);
+        },
+
+        [[Boolean, Boolean, chlk.models.id.ClassId, Number]],
+        function getFeedItems(postback_, starredOnly_, classId_, pageIndex_){
+            return this.announcementService
                 .getAnnouncements(pageIndex_ | 0, classId_, starredOnly_)
                 .then(function(feedItems){
-
+                    if(!postback_ && starredOnly_ && feedItems.getItems().length == 0)
+                        return this.getFeedItems(postback_, false, classId_, pageIndex_);
                     var classes = this.classService.getClassesForTopBar(true);
                     var topModel = new chlk.models.classes.ClassesForTopBar(classes, classId_);
 
@@ -49,12 +59,7 @@ NAMESPACE('chlk.controllers', function (){
                     feedModel.setImportantCount(this.announcementService.getImportantCount());
                     return feedModel;
                 }.bind(this))
-                .attach(this.validateResponse_());
-            return postback_
-                    ? this.UpdateView(chlk.activities.feed.FeedListPage, result)
-                    : this.PushView(chlk.activities.feed.FeedListPage, result);
         },
-
 
 
         //TODO: refactor
