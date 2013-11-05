@@ -60,6 +60,7 @@ CREATE TABLE [dbo].[AnnouncementType](
 	[IsSystem] BIT NOT NULL,
 	[Name] NVARCHAR(255) NOT NULL,
 	[Description] NVARCHAR(1024) NULL,
+	Percentage int not null,
 	Gradable BIT NULL,
 )
 GO
