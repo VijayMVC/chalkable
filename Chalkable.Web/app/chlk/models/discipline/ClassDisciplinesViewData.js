@@ -15,6 +15,8 @@ NAMESPACE('chlk.models.discipline', function(){
 
         Boolean, 'byLastName',
 
+        String, 'filter',
+
         [[chlk.models.classes.ClassesForTopBar, chlk.models.id.ClassId
             , ArrayOf(chlk.models.discipline.Discipline)
             , ArrayOf(chlk.models.discipline.DisciplineType)
