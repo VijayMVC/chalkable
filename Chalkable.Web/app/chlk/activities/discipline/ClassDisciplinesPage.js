@@ -1,4 +1,4 @@
-REQUIRE('chlk.activities.lib.TemplatePage');
+REQUIRE('chlk.activities.person.PersonGrid');
 REQUIRE('chlk.templates.discipline.ClassDisciplinesTpl');
 REQUIRE('chlk.templates.discipline.DisciplineTpl');
 
@@ -10,7 +10,7 @@ NAMESPACE('chlk.activities.discipline', function(){
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.discipline.ClassDisciplinesTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.discipline.ClassDisciplinesTpl, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
-        'ClassDisciplinesPage', EXTENDS(chlk.activities.lib.TemplatePage),[
+        'ClassDisciplinesPage', EXTENDS(chlk.activities.person.PersonGrid),[
 
             function $(){
                 BASE();
@@ -44,6 +44,14 @@ NAMESPACE('chlk.activities.discipline', function(){
                 this._submitTimeout = setTimeout(function(){
                     this.updateDiscipline_(node);
                 }.bind(this), 1000);
+            },
+
+            [[Object]],
+            OVERRIDE, VOID, function onRefresh_(model){
+                BASE(model);
+                new ria.dom.Dom('.change-discipline').on('scroll', function(node, event){
+                    node.parent().setCss('background-position', '0 ' +  (-jQuery(node.valueOf()).scrollTop()) + 'px')
+                });
             },
 
             [[ria.dom.Dom]],
