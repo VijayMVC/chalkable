@@ -38,6 +38,9 @@ DIV.page {
                 width: 122px;
                 display: inline-block;
                 vertical-align: top;
+                .installed{
+                  margin-left: -23px;
+                }
 
                 .action-link{
                   min-width: 90px;

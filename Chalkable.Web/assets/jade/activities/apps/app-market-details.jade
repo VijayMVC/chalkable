@@ -19,7 +19,7 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
             span="by "
             a(href = webSiteLink).dev-web-site=devName
         .app-buy
-            +ActionLinkButton('appmarket', 'tryToInstall', app.getId()).special-button.blue-button=self.installBtnTitle
+            +ActionLinkButton('appmarket', 'tryToInstall', app.getId()).special-button.blue-button(class=self.isInstalled? "installed" : undefined)=self.installBtnTitle
 
         textarea(name = "app-description", class ="app-description", readonly)=app.getDescription()
         .app-general-info

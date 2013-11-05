@@ -193,7 +193,9 @@ NAMESPACE('chlk.controllers', function (){
 
                     var installBtnTitle ='';
 
-                    if (this.userInRole(chlk.models.common.RoleEnum.STUDENT) && app.isInstalledOnlyForCurrentUser()){
+                    var isAlreadyInstalledForStudent = this.userInRole(chlk.models.common.RoleEnum.STUDENT) && app.isInstalledOnlyForCurrentUser();
+
+                    if (isAlreadyInstalledForStudent){
                         installBtnTitle = 'Installed';
                     }else{
                         installBtnTitle = app.getApplicationPrice().formatPrice();
@@ -206,8 +208,9 @@ NAMESPACE('chlk.controllers', function (){
                                 installBtnTitle,
                                 categories.getItems(),
                                 this.gradeLevelService.getGradeLevels(),
-                                0
-                                ); //todo: add real balance
+                                0,
+                                isAlreadyInstalledForStudent
+                            ); //todo: add real balance
                         }, this)
 
                 }, this)
