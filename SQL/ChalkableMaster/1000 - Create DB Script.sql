@@ -23,6 +23,7 @@ Create Table [User]
 	IsSysAdmin bit not null,
 	IsDeveloper bit not null,
 	ConfirmationKey nvarchar(256),
+	SisUserName nvarchar(256),
 	DistrictRef uniqueidentifier Constraint FK_User_District Foreign Key References District(Id)
 )
 GO

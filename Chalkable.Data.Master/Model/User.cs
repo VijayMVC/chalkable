@@ -21,6 +21,7 @@ namespace Chalkable.Data.Master.Model
         public Guid? DistrictRef { get; set; }
         [NotDbFieldAttr]
         public District District { get; set; }
+        public string SisUserName { get; set; }
     }
 
     public class School

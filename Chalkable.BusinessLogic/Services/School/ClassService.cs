@@ -48,13 +48,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 SchoolYear sy = null;
                 if (schoolYearId.HasValue)
                     sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetById(schoolYearId.Value);
-                if (sy != null)
-                {
-                   if(!(new SchoolGradeLevelDataAccess(uow, sy.SchoolRef).Exists(gradeLevelId)))
-                      throw new ChalkableException("GradeLevel is not assigned to current school");
-                   if(teacherId.HasValue && !(new SchoolPersonDataAccess(uow).Exists(teacherId, CoreRoles.TEACHER_ROLE.Id, sy.SchoolRef)))
-                       throw new ChalkableException("Teacher is not assigned to current school");
-                }
                 var cClass = new Class
                     {
                         Id = classId,

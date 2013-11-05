@@ -1,70 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Text;
-using System.Threading.Tasks;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.StiConnector.Connectors
 {
     public class ConnectorBase
     {
-        private const string REQ_ON_FORMAT = "Request on: {0}";
-        private string userName;
-        private string password;
-        protected string BaseUrl { get; private set; }
 
-        public ConnectorBase(string userName, string password, string baseUrl)
+        private ConnectorLocator locator;
+        public ConnectorBase(ConnectorLocator locator)
         {
-            this.userName = userName;
-            this.password = password;
-            BaseUrl = baseUrl;
+            this.locator = locator;
         }
 
         public T Call<T>(string url)
         {
-            string credentials = string.Format("{0}:{1}", userName, password);
-            byte[] credentialsBytes = Encoding.UTF8.GetBytes(credentials);
-            string credentialsBase64 = Convert.ToBase64String(credentialsBytes);
             var client = new WebClient();
-            client.Headers[HttpRequestHeader.Authorization] = "Basic " + credentialsBase64;
+            client.Headers[HttpRequestHeader.Authorization] = "Session " + locator.Token;
             client.Encoding = Encoding.UTF8;
-            Debug.WriteLine(REQ_ON_FORMAT, url);
+            Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
             var x = typeof (T);
             var ser = new DataContractJsonSerializer(x);
-
             using (var stream = new MemoryStream(client.DownloadData(url)))
             {
                 return (T) ser.ReadObject(stream);
             }
         }
-    }
 
-    public class SchoolConnector : ConnectorBase
-    {
-        public SchoolConnector(string userName, string password, string baseUrl) : base(userName, password, baseUrl)
+        protected string BaseUrl
         {
-        }
-
-        public List<School> GetSchools()
-        {
-            return Call<School[]>(BaseUrl + "schools").ToList();
-        }
-
-        public School GetSchoolDetails(int id)
-        {
-            return Call<School>(BaseUrl + "schools/" + id);
+            get { return locator.BaseUrl; }
         }
     }
 
     public class AcadSessionConnector : ConnectorBase
     {
-        public AcadSessionConnector(string userName, string password, string baseUrl)
-            : base(userName, password, baseUrl)
+        public AcadSessionConnector(ConnectorLocator locator) : base(locator)
         {
         }
 
@@ -76,7 +52,7 @@ namespace Chalkable.StiConnector.Connectors
 
     public class StudentConnector : ConnectorBase
     {
-        public StudentConnector(string userName, string password, string baseUrl) : base(userName, password, baseUrl)
+        public StudentConnector(ConnectorLocator locator) : base(locator)
         {
         }
 
@@ -88,7 +64,7 @@ namespace Chalkable.StiConnector.Connectors
 
     public class GradeLevelConnector : ConnectorBase
     {
-        public GradeLevelConnector(string userName, string password, string baseUrl) : base(userName, password, baseUrl)
+        public GradeLevelConnector(ConnectorLocator locator) : base(locator)
         {
         }
 
@@ -100,7 +76,7 @@ namespace Chalkable.StiConnector.Connectors
 
     public class GenderConnector : ConnectorBase
     {
-        public GenderConnector(string userName, string password, string baseUrl) : base(userName, password, baseUrl)
+        public GenderConnector(ConnectorLocator locator) : base(locator)
         {
         }
 
@@ -112,7 +88,7 @@ namespace Chalkable.StiConnector.Connectors
 
     public class ContactConnector : ConnectorBase
     {
-        public ContactConnector(string userName, string password, string baseUrl) : base(userName, password, baseUrl)
+        public ContactConnector(ConnectorLocator locator) : base(locator)
         {
         }
 

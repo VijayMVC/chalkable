@@ -56,14 +56,12 @@ namespace Chalkable.StiConnector.Services
             Log.LogInfo(ChlkResources.SCHOOL_YEAR_IMPORT_START);
             ImportSchoolYears();
             ImportStudentSchoolYears();
-            
             Log.LogInfo("Start importing marking periods");
             ImportMarkingPeriods();
             Log.LogInfo("Start importing day types");
             ImportDayTypes();
             Log.LogInfo("Start importing days");
             ImportDays();
-            
             Log.LogInfo(ChlkResources.IMPORT_ROOMS_START);
             ImportRooms();
             Log.LogInfo(ChlkResources.IMPORT_COURSES_START);
@@ -91,7 +89,6 @@ namespace Chalkable.StiConnector.Services
                     });
             }
         }
-
 
         private void ImportClassSchoolPersons()
         {
@@ -200,7 +197,7 @@ namespace Chalkable.StiConnector.Services
                 try
                 {
                     ServiceLocatorSchool.PersonService.Add(person.PersonID, email, DEF_USER_PASS, person.FirstName, person.LastName
-                        , person.Gender != null ? person.Gender.Code : "M", null, person.DateOfBirth, person.PhysicalAddressID, assignments);
+                        , person.Gender != null ? person.Gender.Code : "M", null, person.DateOfBirth, person.PhysicalAddressID, person.User.UserName, assignments);
                 }
                 catch (Exception ex)
                 {

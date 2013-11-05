@@ -62,6 +62,7 @@
     <Compile Include="Connectors\ConnectorBase.cs" />
     <Compile Include="Connectors\ConnectorLocator.cs" />
     <Compile Include="Connectors\Model\School.cs" />
+    <Compile Include="Connectors\SchoolConnector.cs" />
     <Compile Include="Model\AbsenceLevelReason.cs">
       <DependentUpon>StiEntities.tt</DependentUpon>
     </Compile>
@@ -235,7 +236,6 @@
       <DependentUpon>StiEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\ImportService.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Model\StiEntities.edmx">
@@ -264,10 +264,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Chalkable.BusinessLogic\Chalkable.BusinessLogic.csproj">
-      <Project>{B008FBC2-8AFB-48FF-BA85-97845DDF02D2}</Project>
-      <Name>Chalkable.BusinessLogic</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
       <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
       <Name>Chalkable.Common</Name>

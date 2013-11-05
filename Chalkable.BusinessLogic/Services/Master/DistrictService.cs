@@ -159,7 +159,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
             foreach (var person in users)
             {
-                var u = ServiceLocator.UserService.CreateSchoolUser(person.Email, "tester", district.Id, person.Id);
+                var u = ServiceLocator.UserService.CreateSchoolUser(person.Email, "tester", district.Id, person.Id, null);
                 var p = person;
                 var sps = schoolPersons.Where(x => x.PersonRef == p.Id);
                 foreach (var schoolPerson in sps)

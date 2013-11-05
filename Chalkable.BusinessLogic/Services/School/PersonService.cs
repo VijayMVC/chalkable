@@ -12,7 +12,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
     public interface IPersonService
     {
-        Person Add(int localId, string email, string password, string firstName, string lastName, string gender, string salutation, DateTime? birthDate, int? addressId, IList<SchoolAssignmentInfo> assignments);
+        Person Add(int localId, string email, string password, string firstName, string lastName, string gender, string salutation, DateTime? birthDate
+            , int? addressId, string sisUserName, IList<SchoolAssignmentInfo> assignments);
         Person Edit(int localId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate, int? addressId);
         void Delete(int id);
         IList<Person> GetPersons();
@@ -36,7 +37,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         //TODO: needs tests
-        public Person Add(int localId, string email, string password, string firstName, string lastName, string gender, string salutation, DateTime? birthDate, int? addressId, IList<SchoolAssignmentInfo> assignments)
+        public Person Add(int localId, string email, string password, string firstName, string lastName, string gender, string salutation, DateTime? birthDate
+            , int? addressId, string sisUserName, IList<SchoolAssignmentInfo> assignments)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -47,7 +49,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new PersonDataAccess(uow, Context.SchoolLocalId);
                 
-                var user = ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUser(email, password, Context.DistrictId.Value, localId);
+                var user = ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUser(email, password, Context.DistrictId.Value, localId, sisUserName);
                 foreach (var assignment in assignments)
                 {
                     ServiceLocator.ServiceLocatorMaster.UserService.AssignUserToSchool(user.Id, assignment.SchoolId, assignment.Role);

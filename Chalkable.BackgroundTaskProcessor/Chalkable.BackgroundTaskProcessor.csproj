@@ -122,6 +122,10 @@
       <Project>{3D16203E-D19D-41E1-9918-2A9448427BFD}</Project>
       <Name>Chalkable.StiConnector</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Chalkable.StiImport\Chalkable.StiImport.csproj">
+      <Project>{C7406CA4-FF85-4BF9-A729-1A5AFAB7F5B4}</Project>
+      <Name>Chalkable.StiImport</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -135,7 +135,7 @@ namespace Chalkable.Tests.Services.TestContext
                     new SchoolAssignmentInfo {Role = role.Id, SchoolId = School.LocalId}
                 };
             sysSchoolSl.PersonService.Add(userinfo.LocalId, userinfo.Login, userinfo.Password, userinfo.FirstName, userinfo.LastName,
-                                              userinfo.Gender, userinfo.Salutation, userinfo.BirthDate, null,schoolAssignments);
+                                              userinfo.Gender, userinfo.Salutation, userinfo.BirthDate, null, null,schoolAssignments);
             return CreateLocatorByUserInfo(userinfo);
         }
 

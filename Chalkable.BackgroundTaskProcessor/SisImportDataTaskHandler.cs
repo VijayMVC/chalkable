@@ -1,4 +1,3 @@
-using System;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common.Exceptions;

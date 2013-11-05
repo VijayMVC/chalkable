@@ -151,6 +151,10 @@
       <Project>{c5753c2a-f2bc-4f96-846b-548fc67191b2}</Project>
       <Name>Chalkable.Data.School</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Chalkable.StiConnector\Chalkable.StiConnector.csproj">
+      <Project>{3D16203E-D19D-41E1-9918-2A9448427BFD}</Project>
+      <Name>Chalkable.StiConnector</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GCObjectRenderer\GCObjectRenderer.csproj">
       <Project>{ccd7266b-94bb-45ef-bc49-0f608da006f3}</Project>
       <Name>GCObjectRenderer</Name>
