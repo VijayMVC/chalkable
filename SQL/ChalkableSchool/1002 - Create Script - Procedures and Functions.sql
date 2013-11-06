@@ -817,26 +817,25 @@ as
 GO
 
 
-CREATE Procedure [dbo].[spGetStudentAnnouncementsForAnnouncement]
-	@announcementId int, @personId int
+CREATE Procedure [dbo].[spGetStudentAnnouncementsForAnnouncement] @announcementId int, @personId int
 as
-
-		Insert Into StudentAnnouncement
-		(AnnouncementRef, PersonRef, Dropped, [State])
-		select x.AnnouncementRef, x.PersonRef, 0, 1 from
-		StudentAnnouncement
-		right join 	(select Announcement.Id as AnnouncementRef, ClassPerson.ClassRef as ClassRef, ClassPerson.PersonRef as PersonRef  
-					 from Announcement
-					 join ClassPerson on ClassPerson.ClassRef = Announcement.ClassRef
-					 where Announcement.[State] = 1)x
-		on StudentAnnouncement.PersonRef = x.PersonRef and x.AnnouncementRef = StudentAnnouncement.AnnouncementRef
-		where x.AnnouncementRef = @announcementId
-			and StudentAnnouncement.Id is null
+	Insert Into StudentAnnouncement
+	(AnnouncementRef, PersonRef, Dropped, [State])
+	select x.AnnouncementRef, x.PersonRef, 0, 1 from
+	StudentAnnouncement
+	right join 	(select Announcement.Id as AnnouncementRef, ClassPerson.ClassRef as ClassRef, ClassPerson.PersonRef as PersonRef  
+					from Announcement
+					join ClassPerson on ClassPerson.ClassRef = Announcement.ClassRef
+					where Announcement.[State] = 1)x
+	on StudentAnnouncement.PersonRef = x.PersonRef and x.AnnouncementRef = StudentAnnouncement.AnnouncementRef
+	where x.AnnouncementRef = @announcementId
+		and StudentAnnouncement.Id is null
 	
 	declare @roleId int
 	select top 1 @roleId = RoleRef from SchoolPerson where PersonRef = @personId
 
-	select vwPerson.*,
+	select Person.*,
+		   SchoolPerson.RoleRef as RoleRef,
 		   StudentAnnouncement.Id as StudentAnnouncement_Id,
 		   StudentAnnouncement.PersonRef as StudentAnnouncement_PersonRef,
 		   StudentAnnouncement.AnnouncementRef as StudentAnnouncement_AnnouncementRef,
@@ -849,7 +848,8 @@ as
 		   Announcement.ClassRef as StudentAnnouncement_ClassId
 	from StudentAnnouncement 
 	join Announcement on StudentAnnouncement.AnnouncementRef = Announcement.Id
-	join vwPerson  on vwPerson.Id = StudentAnnouncement.PersonRef
+	join Person  on Person.Id = StudentAnnouncement.PersonRef
+	join SchoolPerson on SchoolPerson.PersonRef = Person.Id and SchoolPerson.SchoolRef = Announcement.SchoolRef
 	where  Announcement.[State] = 1 
 			and AnnouncementRef = @announcementId
 			and (StudentAnnouncement.PersonRef = @personId or @roleId = 2 or @roleId = 5 or @roleId = 8 or @roleId = 7)
