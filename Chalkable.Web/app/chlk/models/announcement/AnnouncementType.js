@@ -24,7 +24,10 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('cancreate')],
             Boolean, 'canCreate',
             String, 'description',
-            Number, 'id',
+
+            [ria.serialize.SerializeProperty('announcementtypeid')],
+            Number, 'announcementTypeId',
+
             [ria.serialize.SerializeProperty('issystem')],
             Boolean, 'isSystem',
             String, 'name'

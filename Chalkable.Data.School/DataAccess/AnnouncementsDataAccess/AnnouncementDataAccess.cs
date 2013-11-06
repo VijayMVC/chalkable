@@ -122,14 +122,14 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
         }
 
-        public void Delete(int? id, int? personId, int? classId, int? announcementTypeId, AnnouncementState? state)
+        public void Delete(int? id, int? personId, int? classId, int? classAnnouncementTypeId, AnnouncementState? state)
         {
             var parameters = new Dictionary<string, object>
                 {
                     {ID_PARAM, id},
                     {PERSON_ID_PARAM, personId},
                     {CLASS_ID_PARAM, classId},
-                    {ANNOUNCEMENT_TYPE_ID_PARAM, announcementTypeId},
+                    {CLASS_ANNOUNCEMENT_TYPE_ID_PARAM, classAnnouncementTypeId},
                     {STATE_PARAM, state}
                 };
             ExecuteStoredProcedureReader(DELETE_PROCEDURE, parameters).Dispose();
@@ -142,7 +142,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var parameters = new Dictionary<string, object>
                 {
                     {SCHOOL_YEAR_ID_PARAM, schoolYearId},
-                    {"annType", announcementTypeId},
+                    {"classAnnType", announcementTypeId},
                     {OWNER_ID_PARAM, ownerId},
                     {CLASS_ID_PARAM, recipientId}
                 };
@@ -197,44 +197,27 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         public Announcement GetLastDraft(int personId)
         {
-            var conds = new Dictionary<string, object>
+            var conds = new AndQueryCondition
                 {
                     {Announcement.PERSON_REF_FIELD, personId},
-                    {STATE_PARAM, AnnouncementState.Draft}
+                    {Announcement.STATE_FIELD, AnnouncementState.Draft}
                 };
-            var sql = @"select top 1 * from Announcement 
-                      where PersonRef = @PersonRef and State = @state
-                      order by Created desc";
-           return  ReadOneOrNull<Announcement>(new DbQuery (sql, conds));
+           var dbQuery = Orm.OrderedSelect(typeof (Announcement).Name, conds, Announcement.CREATED_FIELD, Orm.OrderType.Desc, 1);
+           return ReadOneOrNull<Announcement>(dbQuery);
         }
 
-        public IList<string> GetLastFieldValues(int personId, int classId, int announcementType, int count)
+        public IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType, int count)
         {
-            var conds = new Dictionary<string, object>
+            var conds = new AndQueryCondition
                 {
-                    {"personId", personId},
-                    {"classId", classId},
-                    {"announcementTypeId", announcementType},
-                    {"count", count}
+                    {Announcement.PERSON_REF_FIELD, personId},
+                    {Announcement.CLASS_REF_FIELD, classId},
+                    {Announcement.CLASS_ANNOUNCEMENT_TYPE_REF_FIELD, classAnnouncementType}
                 };
-            var sql = @"select Announcement.Content as Content from Announcement
-                        join MarkingPeriodClass on MarkingPeriodClass.Id = Announcement.MarkingPeriodClassRef 
-                        where Announcement.PersonRef = @personId 
-                              and Announcement.AnnouncementTypeRef = @announcementTypeId
-                              and MarkingPeriodClass.ClassRef = @classId
-                              and Announcement.Content is not null and Announcement.Content <> ''
-                        order by Announcement.Id desc
-                        OFFSET 0 ROWS FETCH NEXT @count ROWS ONLY";
-            using (var reader = ExecuteReaderParametrized(sql, conds))
-            {
-                var res = new List<string>();
-                while (reader.Read())
-                {
-                    res.Add(SqlTools.ReadStringNull(reader, Announcement.CONTENT_FIELD));
-                }
-                return res;
-            }
-
+            var dbQuery = Orm.OrderedSelect(typeof (Announcement).Name, conds, Announcement.ID_FIELD, Orm.OrderType.Desc, count);
+            var anns = ReadMany<Announcement>(dbQuery);
+            if(anns.Count == 0) return new List<string>();
+            return anns.Select(x => x.Content).ToList();
         }
     }
 

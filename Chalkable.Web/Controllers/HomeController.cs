@@ -169,39 +169,39 @@ namespace Chalkable.Web.Controllers
 
             var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, Context.UserLocalId.Value);
             var now = SchoolLocator.Context.NowSchoolTime;
-            if (classes.Count > 0)
-            {
-                MarkingPeriod currentMp = mp;
-                if(mp.StartDate > now || mp.EndDate < now)
-                    currentMp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(now);
-                if (currentMp != null)
-                {
-                    var cp = SchoolLocator.ClassPeriodService.GetNearestClassPeriod(null, now);
-                    if (cp != null)
-                    {
-                        var minutes = (int) (now - now.Date).TotalMinutes;
-                        if (cp.Period.StartTime - minutes <= 5)
-                        {
-                            SchoolLocator.CalendarDateService.GetCalendarDateByDate(now);
-                            var attQuery = new ClassAttendanceQuery
-                                {
-                                    MarkingPeriodId = currentMp.Id,
-                                    ClassId = cp.ClassRef,
-                                    FromTime = cp.Period.StartTime,
-                                    ToTime = cp.Period.EndTime,
-                                    FromDate = now.Date,
-                                    ToDate = now.Date
-                                };
-                            var attendances = SchoolLocator.AttendanceService.GetClassAttendanceDetails(attQuery);
-                            //check is it tour now or demo school
-                            if (attendances.Any(x => x.Type == AttendanceTypeEnum.NotAssigned))
-                            {
-                                ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.ATTENDANCE_CLASS_LIST_URL_FORMAT, cp.ClassRef);
-                            }
-                        }
-                    }
-                }
-            } 
+            //if (classes.Count > 0)
+            //{
+            //    MarkingPeriod currentMp = mp;
+            //    if(mp.StartDate > now || mp.EndDate < now)
+            //        currentMp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(now);
+            //    if (currentMp != null)
+            //    {
+            //        var cp = SchoolLocator.ClassPeriodService.GetNearestClassPeriod(null, now);
+            //        if (cp != null)
+            //        {
+            //            var minutes = (int) (now - now.Date).TotalMinutes;
+            //            if (cp.Period.StartTime - minutes <= 5)
+            //            {
+            //                SchoolLocator.CalendarDateService.GetCalendarDateByDate(now);
+            //                var attQuery = new ClassAttendanceQuery
+            //                    {
+            //                        MarkingPeriodId = currentMp.Id,
+            //                        ClassId = cp.ClassRef,
+            //                        FromTime = cp.Period.StartTime,
+            //                        ToTime = cp.Period.EndTime,
+            //                        FromDate = now.Date,
+            //                        ToDate = now.Date
+            //                    };
+            //                var attendances = SchoolLocator.AttendanceService.GetClassAttendanceDetails(attQuery);
+            //                //check is it tour now or demo school
+            //                if (attendances.Any(x => x.Type == AttendanceTypeEnum.NotAssigned))
+            //                {
+            //                    ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.ATTENDANCE_CLASS_LIST_URL_FORMAT, cp.ClassRef);
+            //                }
+            //            }
+            //        }
+            //    }
+            //} 
             var executionResult = classes.Select(ClassViewData.Create).ToList();
             PrepareJsonData(executionResult, ViewConstants.CLASSES);
             PrepareClassesAdvancedData(classes, mp, getAllAnnouncementTypes);

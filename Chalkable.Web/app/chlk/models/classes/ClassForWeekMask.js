@@ -1,4 +1,4 @@
-REQUIRE('chlk.models.announcement.AnnouncementType');
+REQUIRE('chlk.models.announcement.ClassAnnouncementType');
 REQUIRE('chlk.models.id.ClassId');
 
 NAMESPACE('chlk.models.classes', function () {
@@ -10,6 +10,6 @@ NAMESPACE('chlk.models.classes', function () {
             [ria.serialize.SerializeProperty('classid')],
             chlk.models.id.ClassId, 'classId',
             ArrayOf(Number), 'mask',
-            ArrayOf(chlk.models.announcement.AnnouncementType), 'typesByClass'
+            ArrayOf(chlk.models.announcement.ClassAnnouncementType), 'typesByClass'
         ]);
 });

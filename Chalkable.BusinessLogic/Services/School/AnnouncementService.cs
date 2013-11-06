@@ -43,7 +43,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         Announcement Star(int id, bool starred);
 
-        IList<string> GetLastFieldValues(int personId, int classId, int announcementType);
+        IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType);
 
     }
 
@@ -461,11 +461,11 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<string> GetLastFieldValues(int personId, int classId, int announcementType)
+        public IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType)
         {
             using (var uow = Read())
             {
-                return CreateAnnoucnementDataAccess(uow).GetLastFieldValues(personId, classId, announcementType, 10);
+                return CreateAnnoucnementDataAccess(uow).GetLastFieldValues(personId, classId, classAnnouncementType, 10);
             }
         }
 

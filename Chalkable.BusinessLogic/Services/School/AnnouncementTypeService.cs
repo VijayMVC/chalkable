@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
         AnnouncementType GetAnnouncementTypeById(int id);
         AnnouncementType GetAnnouncementTypeBySystemType(SystemAnnouncementType type);
         IList<ClassAnnouncementType> GetClassAnnouncementTypes(int classId, bool all = true);
-        IList<ClassAnnouncementType> GetClassAnnouncementTypes(int type, int? classId);
+        IList<ClassAnnouncementType> GetClassAnnouncementTypes(int type, int? classId, int? teacherId);
     }
     public class AnnouncementTypeService : SchoolServiceBase, IAnnouncementTypeService
     {
@@ -109,20 +109,12 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public IList<ClassAnnouncementType> GetClassAnnouncementTypes(int type, int? classId)
+        public IList<ClassAnnouncementType> GetClassAnnouncementTypes(int type, int? classId, int? teacherId)
         {
             using (var uow = Read())
             {
-                var conds = new AndQueryCondition {{ClassAnnouncementType.ANNOUNCEMENT_TYPE_REF, type}};
-                if (classId.HasValue)
-                    conds = new AndQueryCondition {{ClassAnnouncementType.CLASS_REF_FIELD, classId}};
-                var res = new ClassAnnouncementTypeDataAccess(uow).GetAll(conds);
-                //if (res.Count == 0)
-                //    res = BuildClassAnnouncementTypes(classId);
-                return res;
-
+                return new ClassAnnouncementTypeDataAccess(uow).GetClassAnnouncementTypes(type, classId, teacherId);
             }
-            throw new System.NotImplementedException();
         }
     }
 }

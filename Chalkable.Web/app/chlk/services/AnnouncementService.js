@@ -81,18 +81,18 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.ClassId, Number]],
-            ria.async.Future, function addAnnouncement(classId_, announcementTypeId_) {
+            ria.async.Future, function addAnnouncement(classId_, classAnnouncementTypeId_) {
                 return this.get('Announcement/Create.json', chlk.models.announcement.AnnouncementForm, {
                     classId: classId_ ? classId_.valueOf() : null,
-                    announcementTypeId: announcementTypeId_
+                    classAnnouncementTypeId: classAnnouncementTypeId_
                 });
             },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number, String, String, chlk.models.common.ChlkDate, String, String, chlk.models.id.MarkingPeriodId]],
-            ria.async.Future, function saveAnnouncement(id, classId_, announcementTypeId_, subject_, content_, expiresdate_, attachments_, applications_, markingPeriodId_) {
+            ria.async.Future, function saveAnnouncement(id, classId_, classAnnouncementTypeId_, subject_, content_, expiresdate_, attachments_, applications_, markingPeriodId_) {
                 return this.get('Announcement/SaveAnnouncement.json', chlk.models.announcement.AnnouncementForm, {
                     announcementId:id.valueOf(),
-                    announcementTypeId:announcementTypeId_,
+                    classAnnouncementTypeId:classAnnouncementTypeId_,
                     classId: classId_ ? classId_.valueOf() : null,
                     markingPeriodId:markingPeriodId_ ? markingPeriodId_.valueOf() : null,
                     subject: subject_,
@@ -147,10 +147,10 @@ NAMESPACE('chlk.services', function () {
 
 
             [[chlk.models.id.ClassId, Number, chlk.models.id.SchoolPersonId]],
-            ria.async.Future, function listLast(classId, announcementTypeId, schoolPersonId) {
+            ria.async.Future, function listLast(classId, classAnnouncementTypeId, schoolPersonId) {
                 return this.get('Announcement/ListLast.json', ArrayOf(String), {
                     classId: classId.valueOf(),
-                    announcementTypeId: announcementTypeId,
+                    classAnnouncementTypeId: classAnnouncementTypeId,
                     personId: schoolPersonId.valueOf()
                 });
             },

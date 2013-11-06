@@ -16,7 +16,12 @@ namespace Chalkable.Data.School.Model
         public const string PERSON_REF_FIELD = "PersonRef";
         public const string CONTENT_FIELD = "Content";
         public const string CREATED_FIELD = "Created";
+        public const string STATE_FIELD = "State";
+        public const string CLASS_REF_FIELD = "ClassRef";
+        public const string CLASS_ANNOUNCEMENT_TYPE_REF_FIELD = "ClassAnnouncementTypeRef";
+
         [PrimaryKeyFieldAttr]
+        [IdentityFieldAttr]
         public int Id { get; set; }
         public int PersonRef { get; set; }
         public string Content { get; set; }

@@ -25,5 +25,22 @@ namespace Chalkable.Data.School.DataAccess
         public ClassAnnouncementTypeDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
+
+        public IList<ClassAnnouncementType> GetClassAnnouncementTypes(int announcementTypeId, int? classId, int? teacherId)
+        {
+            var conds = new AndQueryCondition { { ClassAnnouncementType.ANNOUNCEMENT_TYPE_REF, announcementTypeId } };
+            if (classId.HasValue)
+                conds = new AndQueryCondition { { ClassAnnouncementType.CLASS_REF_FIELD, classId } };
+            var dbQuery = Orm.SimpleSelect<ClassAnnouncementType>(conds);
+            if (teacherId.HasValue)
+            {
+                dbQuery.Parameters.Add(Class.TEACHER_REF_FIELD, teacherId);
+                var tName = typeof (ClassAnnouncementType).Name;
+                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in (select {3} from [{2}] where  [{2}].[{4}] = @{4})"
+                                         , tName, ClassAnnouncementType.CLASS_REF_FIELD, "Class", Class.ID_FIELD,
+                                         Class.TEACHER_REF_FIELD);
+            }
+            return ReadMany<ClassAnnouncementType>(dbQuery);
+        } 
     }
 }

@@ -145,9 +145,10 @@ namespace Chalkable.Data.Common.Orm
 
         public static DbQuery SimpleUpdate<T>(T obj)
         {
-             var t = typeof(T);
-             var fields = Fields(t);
-            return SimpleUpdate(t, fields, GetPrimaryKeyFields(t), obj);
+            //var t = typeof(T);
+            //var fields = Fields(t, false);
+            //return SimpleUpdate(t, fields, GetPrimaryKeyFields(t), obj);
+            return SimpleUpdate<T>(new List<T> {obj});
         }
 
         public static DbQuery SimpleUpdate<T>(IList<T> objs)
@@ -211,6 +212,7 @@ namespace Chalkable.Data.Common.Orm
              }
              return SimpleUpdate(t, setParams, setParamMapper, queryCondition);
          }
+   
          private static DbQuery SimpleUpdate(Type t, IDictionary<string, object> updateParams,
                                              IDictionary<string, string> updateParamsMapper, QueryCondition queryCondition)
          {
@@ -262,15 +264,27 @@ namespace Chalkable.Data.Common.Orm
             return new DbQuery(queries);
         }
 
-        public static DbQuery SimpleSelect<T>(QueryCondition queryCondition)
+        public static DbQuery SimpleSelect<T>(QueryCondition queryCondition, int? count = null)
         {
-            return SimpleSelect(typeof(T).Name, queryCondition);
+            return SimpleSelect(typeof(T).Name, queryCondition, count);
         }
 
-        public static DbQuery SimpleSelect(string tableName, QueryCondition queryCondition)
+        private const string ORDER_BY_FORMAT = "ORDER BY [{0}].[{1}] {2}";
+        public static DbQuery OrderedSelect(string tName, QueryCondition queryCondition, string orderBy, OrderType orderType, int? count = null)
+        {
+            return OrderBy(SimpleSelect(tName, queryCondition, count), tName, orderBy, orderType);
+        }
+
+        public static DbQuery OrderBy(DbQuery dbQuery, string tName, string orderByColumn, OrderType orderType)
+        {
+            dbQuery.Sql.AppendFormat(ORDER_BY_FORMAT, tName, orderByColumn, orederTypesMap[orderType]);
+            return dbQuery;
+        }
+
+        public static DbQuery SimpleSelect(string tableName, QueryCondition queryCondition, int? count = null)
         {
             var res = new DbQuery();
-            res.Sql.AppendFormat("Select * from [{0}] ", tableName);
+            res.Sql.AppendFormat("Select {1} * from [{0}] ", tableName, count.HasValue ? " TOP " + count : "");
             if (queryCondition != null)
                 queryCondition.BuildSqlWhere(res, tableName);
             return res;   

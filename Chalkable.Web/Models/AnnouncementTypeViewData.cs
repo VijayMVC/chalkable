@@ -8,7 +8,7 @@ namespace Chalkable.Web.Models
 {
     public class AnnouncementTypeViewData
     {
-        public int Id { get; set; }
+        public int AnnouncementTypeId { get; set; }
         public bool IsSystem { get; set; }
         public bool CanCreate { get; set; }
         public string Name { get; set; }
@@ -17,7 +17,7 @@ namespace Chalkable.Web.Models
 
         protected AnnouncementTypeViewData(AnnouncementType announcementType)
         {
-            Id = announcementType.Id;
+            AnnouncementTypeId = announcementType.Id;
             IsSystem = announcementType.IsSystem;
             CanCreate = announcementType.CanCreate;
             Name = announcementType.Name;
@@ -34,27 +34,30 @@ namespace Chalkable.Web.Models
         } 
     }
 
-    public class ClassAnnouncementTypeViewData
+    public class ClassAnnouncementTypeViewData : AnnouncementTypeViewData
     {
         public int Id { get; set; }
         public int ClassId { get; set; }
-        public AnnouncementTypeViewData AnnouncementType { get; set; }
+
+        protected ClassAnnouncementTypeViewData(ClassAnnouncementType classAnnouncementType)
+            : base(new AnnouncementType
+            {
+                Id = classAnnouncementType.AnnouncementTypeRef,
+                Description = classAnnouncementType.Description,
+                Gradable = classAnnouncementType.Gradable,
+                Percentage = classAnnouncementType.Percentage,
+                Name = classAnnouncementType.Name,
+                CanCreate = true
+            })
+        {
+            Id = classAnnouncementType.Id;
+            ClassId = classAnnouncementType.ClassRef;
+        }
+
 
         public static ClassAnnouncementTypeViewData Create(ClassAnnouncementType classAnnouncementType)
         {
-            return new ClassAnnouncementTypeViewData
-                {
-                    Id = classAnnouncementType.Id,
-                    ClassId = classAnnouncementType.ClassRef,
-                    AnnouncementType = AnnouncementTypeViewData.Create(new AnnouncementType
-                        {
-                            Id = classAnnouncementType.Id,
-                            Description = classAnnouncementType.Description,
-                            Gradable = classAnnouncementType.Gradable,
-                            Percentage = classAnnouncementType.Percentage,
-                            Name = classAnnouncementType.Name,
-                        })
-                };
+            return new ClassAnnouncementTypeViewData(classAnnouncementType);
         }
 
         public static IList<ClassAnnouncementTypeViewData> Create(IList<ClassAnnouncementType> classAnnouncementTypes)

@@ -872,19 +872,20 @@ declare @announcementTb table
 	Expires dateTime2 not null,
 	[State] int not null,
 	[Order] int not null,
-	Content nvarchar(2048),
-	[Subject] nvarchar(1024),
+	Content nvarchar(max),
+	[Subject] nvarchar(max),
 	GradingStyle int not null,
 	Dropped bit not null,
 	ClassAnnouncementTypeRef int not null,
 	SchoolRef int not null,
-	ClassAnnouncementTypeName nvarchar(255),
+	ClassAnnouncementTypeName nvarchar(max),
+	AnnouncementType int,
 	PersonRef int not null,
-	PersonName nvarchar(255),
-	PersonGender nvarchar(10),
-	ClassName nvarchar(255),
+	ClassRef int,
+	PersonName nvarchar(max),
+	PersonGender nvarchar(max),
+	ClassName nvarchar(max),
 	GradeLevelId int,
-	ClassId int,
 	QnACount int,
 	StudentsCount int,
 	AttachmentsCount int,
@@ -928,7 +929,7 @@ begin
 declare @ownerId int
 declare @classId int
 declare @annTypeId int
-select @ownerId = PersonRef , @classId = ClassId, @annTypeId = cat.AnnouncementTypeRef 
+select @ownerId = PersonRef , @classId = a.ClassRef, @annTypeId = cat.AnnouncementTypeRef 
 from @announcementTb a
 join ClassAnnouncementType cat on cat.Id = a.ClassAnnouncementTypeRef 
 
@@ -1118,7 +1119,7 @@ GO
 
 
 
-create procedure [dbo].[spReorderAnnouncements] @schoolYearId int, @clasAnnType int, 
+create procedure [dbo].[spReorderAnnouncements] @schoolYearId int, @classAnnType int, 
 												@ownerId int, @classId int
 as
 with AnnView as
@@ -1126,7 +1127,7 @@ with AnnView as
                 select a.Id, Row_Number() over(order by a.Expires, a.[Created]) as [Order]  
                 from Announcement a
                 join Class c on c.Id = a.ClassRef
-				where c.SchoolYearRef = @schoolYearId and a.ClassAnnouncementTypeRef = @clasAnnType 
+				where c.SchoolYearRef = @schoolYearId and a.ClassAnnouncementTypeRef = @classAnnType 
                       and a.PersonRef = @ownerId and [State] = 1 and a.ClassRef = @classId
                )
 update Announcement

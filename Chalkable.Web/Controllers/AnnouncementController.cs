@@ -39,7 +39,7 @@ namespace Chalkable.Web.Controllers
                         classAnnouncementTypeId = lastAnnouncement.ClassAnnouncementTypeRef;
                     else
                     {
-                        var classAnnTypes = SchoolLocator.AnnouncementTypeService.GetClassAnnouncementTypes((int) SystemAnnouncementType.HW, null);
+                        var classAnnTypes = SchoolLocator.AnnouncementTypeService.GetClassAnnouncementTypes((int) SystemAnnouncementType.HW, null, Context.UserLocalId);
                         classAnnouncementTypeId = classAnnTypes.First().AnnouncementTypeRef;
                     }
                 }
@@ -200,9 +200,9 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult ListLast(int personId, int classId, int announcementTypeId)
+        public ActionResult ListLast(int personId, int classId, int classAnnouncementTypeId)
         {
-            var res = SchoolLocator.AnnouncementService.GetLastFieldValues(personId, classId, announcementTypeId);
+            var res = SchoolLocator.AnnouncementService.GetLastFieldValues(personId, classId, classAnnouncementTypeId);
             return Json(res.GroupBy(x => x).Select(x => x.Key));
         }
 

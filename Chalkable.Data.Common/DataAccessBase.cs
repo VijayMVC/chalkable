@@ -142,12 +142,12 @@ namespace Chalkable.Data.Common
 
         protected T SelectOne<T>(QueryCondition conditions) where T : new() 
         {
-            var command = Orm.Orm.SimpleSelect<T>(FilterConditions(conditions));
+            var command = Orm.Orm.SimpleSelect<T>(FilterConditions(conditions), 1);
             return ReadOne<T>(command);
         }
         protected T SelectOneOrNull<T>(QueryCondition conditions) where T : new()
         {
-            var command = Orm.Orm.SimpleSelect<T>(FilterConditions(conditions));
+            var command = Orm.Orm.SimpleSelect<T>(FilterConditions(conditions), 1);
             return ReadOneOrNull<T>(command);
         }
 
