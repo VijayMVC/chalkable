@@ -337,7 +337,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var mpc = ServiceLocator.MarkingPeriodService.GetMarkingPeriodClass(classId.Value, mp.Id);
                 if (mpc == null)
                     throw new ChalkableException(ChlkResources.ERR_CLASS_IS_NOT_SCHEDULED_FOR_MARKING_PERIOD);
-                if (announcement.State == AnnouncementState.Created && announcement.ClassRef == classId)
+                if (announcement.State == AnnouncementState.Created && announcement.ClassRef != classId)
                       throw new ChalkableException("Class can't be changed for submmited announcement");
                 announcement.ClassRef = classId;
             }

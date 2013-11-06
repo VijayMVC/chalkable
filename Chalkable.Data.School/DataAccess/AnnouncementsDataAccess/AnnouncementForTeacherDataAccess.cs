@@ -27,7 +27,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
             dbQuery.Sql.Append(" and ");
             dbQuery.Sql.Append(@" (Announcement.PersonRef = @callerId 
-                                        or (AnnouncementTypeRef = @adminType and Announcement.Id in (select ar.AnnouncementRef from AnnouncementRecipient ar 
+                                        or (ClassAnnouncementTypeRef is null and Announcement.Id in (select ar.AnnouncementRef from AnnouncementRecipient ar 
                                                                                                       where ar.ToAll = 1 or ar.PersonRef = @callerId or ar.RoleRef = @roleId))
                                   )");
             dbQuery.Parameters.Add("callerId", callerId);

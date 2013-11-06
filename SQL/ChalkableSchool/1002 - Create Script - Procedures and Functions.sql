@@ -1464,7 +1464,7 @@ PRINT(getDate());
 
 GO
 
-CREATE procedure [dbo].[spGetStudentCountToAppInstallByClass]
+CREATE PROCEDURE [dbo].[spGetStudentCountToAppInstallByClass]
 @applicationId uniqueidentifier, @schoolYearId int, @personId int, @roleId int
 as
 
@@ -1489,3 +1489,56 @@ Class.Id, Class.Name
 GO
 
 
+
+CREATE PROCEDURE [dbo].[spGetAnnouncementRecipientPersons] @announcementId int, @callerId int 
+as
+declare @classId int, @schoolId int, @schoolYearId int
+select top 1 @classId = Announcement.ClassRef,
+			 @schoolId = Announcement.SchoolRef, 
+			 @schoolYearId = (select top 1 Id from SchoolYear where SchoolRef = Announcement.SchoolRef and Announcement.Expires between StartDate and EndDate)  
+from Announcement where Announcement.Id = @announcementId
+
+if(@classId is not null)
+begin
+	select *, SchoolPerson.RoleRef as RoleRef from Person 
+	join SchoolPerson on SchoolPerson.PersonRef = Person.Id
+	where exists(select * from ClassPerson where ClassRef = @classId and PersonRef = Person.Id)
+	and Person.Id <> @callerId and SchoolPerson.SchoolRef = @schoolId
+end
+else
+begin
+	declare @annRecipientR table
+	(
+		Id int,
+		AnnouncementRef int,
+		ToAll bit,
+		RoleRef int, 
+		GradeLevelRef int,
+		PersonRef int
+	)
+
+	insert into @annRecipientR
+	select * from AnnouncementRecipient
+	where AnnouncementRef = @announcementId
+
+	if(exists(select * from @annRecipientR where ToAll = 1))
+		select *, SchoolPerson.RoleRef as RoleRef			   
+		from Person
+		join SchoolPerson on SchoolPerson.PersonRef = Person.Id
+		where Id <> @callerId and SchoolPerson.SchoolRef = @schoolId
+	else
+	begin
+		select *, SchoolPerson.RoleRef as RoleRef from Person p
+		join SchoolPerson on SchoolPerson.PersonRef = p.Id
+		where exists
+					(
+						select * from @annRecipientR ar
+						where ar.RoleRef = SchoolPerson.RoleRef or ar.PersonRef = p.Id
+							  or ar.GradeLevelRef in (select GradeLevelRef from StudentSchoolYear 
+													  where StudentRef = p.Id and SchoolYearRef = @schoolYearId)
+							  
+					)
+				and p.Id <> @callerId and SchoolPerson.SchoolRef = @schoolId
+	end
+end
+GO

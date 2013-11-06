@@ -54,7 +54,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             {
                 Id = x.Id,
                 AnnouncementRef = x.AnnouncementRef,
-                ClassPersonRef = x.ClassPersonRef,
+                PersonRef = x.PersonRef,
                 Comment = x.Comment,
                 Dropped = x.Dropped,
                 ExtraCredit = x.ExtraCredit,

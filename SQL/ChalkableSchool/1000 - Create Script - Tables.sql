@@ -156,7 +156,7 @@ CREATE TABLE [dbo].[AnnouncementApplication](
 GO
 
 CREATE TABLE [dbo].[AnnouncementAttachment](
-	[Id] UNIQUEidentifier PRIMARY KEY NOT NULL,
+	[Id] INT PRIMARY KEY IDENTITY NOT NULL,
 	[Name] NVARCHAR(255) NOT NULL,
 	[PersonRef] INT NOT NULL CONSTRAINT [FK_AnnouncementAttachment_Person] FOREIGN KEY REFERENCES Person(Id),
 	[AnnouncementRef] INT NOT NULL CONSTRAINT [FK_AnnouncementAttachment_Announcement] FOREIGN KEY REFERENCES [Announcement](Id),

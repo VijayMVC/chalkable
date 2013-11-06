@@ -50,18 +50,13 @@ namespace Chalkable.Data.School.DataAccess
         {
             var res = new DbQuery();
             var type = typeof(AnnouncementAttachment);
-            res.Sql.AppendFormat(@"select {0}.*
-                                   from AnnouncementAttachment 
-                                   join Announcement on Announcement.Id = AnnouncementAttachment.AnnouncementRef"
-                              , type.Name);
-
+            res.Sql.AppendFormat(@"select [{0}].* from [{0}] 
+                                   join [{2}] on [{2}].[{3}] = [{0}].[{1}]"
+                              , type.Name, AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD, "Announcement", Announcement.ID_FIELD);
 
             queryCondition.BuildSqlWhere(res, type.Name);
-
-            if (queryCondition.Count == 0)
-                res.Sql.Append(" where 1 = 1 ");
             if (!needsAllAttachments)
-                res.Sql.Append(" and AnnouncementAttachment.PersonRef = @callerId");
+                res.Sql.AppendFormat(" and AnnouncementAttachment.PersonRef = @callerId");
             
             if (!string.IsNullOrEmpty(filter))
             {
@@ -110,8 +105,7 @@ namespace Chalkable.Data.School.DataAccess
             if (CoreRoles.STUDENT_ROLE.Id == roleId)
             {
                 res.Sql.Append(@" and (AnnouncementAttachment.PersonRef = @callerId 
-                                   or (Announcement.MarkingPeriodClassRef in (select mpc.Id from MarkingPeriodClass mpc
-                                                                              join ClassPerson cp on cp.ClassRef = mpc.ClassRef and cp.PersonRef = @callerId)
+                                   or (Announcement.ClassRef in (select cp.ClassRef from ClassPerson cp where cp.PersonRef = @callerId)
                                        and AnnouncementAttachment.PersonRef = Announcement.PersonRef)
                                 )");
                 return res;

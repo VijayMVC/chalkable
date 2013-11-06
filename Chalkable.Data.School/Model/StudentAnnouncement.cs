@@ -18,9 +18,10 @@ namespace Chalkable.Data.School.Model
         public const string STATE_FIELD = "state";
 
         [PrimaryKeyFieldAttr]
+        [IdentityFieldAttr]
         public int Id { get; set; }
         public int AnnouncementRef { get; set; }
-        public int ClassPersonRef { get; set; }
+        public int PersonRef { get; set; }
         public int? GradeValue { get; set; }
         public string Comment { get; set; }
         public string ExtraCredit { get; set; }

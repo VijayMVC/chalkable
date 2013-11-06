@@ -25,13 +25,11 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         protected override void BuildConditionForGetSimpleAnnouncement(Common.Orm.DbQuery dbQuery, int role, int callerId)
         {
             dbQuery.Sql.Append(@" and (
-                                        (Announcement.MarkingPeriodClassRef in (select mpc.Id from MarkingPeriodClass mpc
-                                                                                join ClassPerson cp on cp.ClassRef = mpc.ClassRef
-                                                                                where cp.PersonRef = @callerId)
-                                        ) or (AnnouncementTypeRef = @adminType 
+                                        (Announcement.ClassRef in (select cp.ClassRef from ClassPerson cp where cp.PersonRef = @callerId)
+                                        ) or (ClassAnnouncementTypeRef is null
                                                     and Announcement.Id in (select ar.AnnouncementRef from AnnouncementRecipient ar 
                                                                             where ar.ToAll = 1 or ar.PersonRef = @callerId or ar.RoleRef = @roleId
-                                                                                or ar.GradeLevelRef in (select GradeLevelRef from StudentInfo where Id = @callerId)
+                                                                                or ar.GradeLevelRef in (select GradeLevelRef from StudentSchoolYear where StudentRef = @callerId)
                                                                         )
                                               )
                                        )");
