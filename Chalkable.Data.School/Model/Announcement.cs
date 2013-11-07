@@ -60,7 +60,7 @@ namespace Chalkable.Data.School.Model
         public int ApplicationCount { get; set; }
 
         public bool IsOwner { get; set; }
-        public Guid? RecipientDataPersonId { get; set; }
+        public int? RecipientDataPersonId { get; set; }
         public bool? Starred { get; set; }
         
         public bool IsDraft
