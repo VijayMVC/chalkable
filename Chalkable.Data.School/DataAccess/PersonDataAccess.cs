@@ -84,7 +84,7 @@ namespace Chalkable.Data.School.DataAccess
                     {"personId", personId},
                     {"callerId", callerId},
                     {"callerRoleId", callerRoleId},
-                    {"schoolId", null}
+                    {"schoolId", schoolId}
                 };
             using (var reader = ExecuteStoredProcedureReader("spGetPersonDetails", parameters))
             {
@@ -92,7 +92,6 @@ namespace Chalkable.Data.School.DataAccess
                 return reader.Read() ? ReadPersonDetailsData(reader) : null;
             }
         }
-
 
         public static PersonQueryResult ReadPersonQueryResult(DbDataReader reader)
         {
@@ -112,22 +111,25 @@ namespace Chalkable.Data.School.DataAccess
         {
             var res = ReadPersonData(reader);
             reader.NextResult();
+            res.Address = reader.ReadOrNull<Address>();
+            reader.NextResult();
             res.Phones = reader.ReadList<Phone>();
+            reader.NextResult();
+            res.StudentSchoolYears = new List<StudentSchoolYear>();
+            while (reader.Read())
+            {
+                var studentSchoolYear = reader.Read<StudentSchoolYear>();
+                studentSchoolYear.GradeLevel = reader.Read<GradeLevel>();
+                res.StudentSchoolYears.Add(studentSchoolYear);
+            }
             return res;
         }
-
+        
         public static PersonDetails ReadPersonData(DbDataReader reader)
         {
             if (reader != null)
             {
                 var res = reader.Read<PersonDetails>();
-                res.Address = reader.Read<Address>(true);
-                //if (res.RoleRef == CoreRoles.STUDENT_ROLE.Id)
-                //{
-                //    //res.StudentInfo = reader.Read<StudentInfo>();
-                //    //res.StudentInfo.GradeLevel = reader.Read<GradeLevel>(true);
-                //    //res.StudentInfo.GradeLevelRef = res.StudentInfo.GradeLevel.Id;
-                //}
                 return res;
             }
             return null;

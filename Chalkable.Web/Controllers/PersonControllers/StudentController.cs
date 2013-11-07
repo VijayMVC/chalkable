@@ -85,15 +85,16 @@ namespace Chalkable.Web.Controllers.PersonControllers
         public ActionResult Info(int personId)
         {
             var res = (StudentInfoViewData)GetInfo(personId, StudentInfoViewData.Create);
-            var studentParents = SchoolLocator.StudentParentService.GetParents(personId);
-            res.Parents = StudentParentViewData.Create(studentParents);
+            //parents functionality are not implemanted yet
+            //var studentParents = SchoolLocator.StudentParentService.GetParents(personId);
+            //res.Parents = StudentParentViewData.Create(studentParents);
             return Json(res, 6);
         }
 
         //ToDo This is only info copy 
         [RequireRequestValue("personId")]
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_INFO, true, CallType.Get, new[] { AppPermissionType.User })]
-        public ActionResult Schedule(int personId)
+        public new ActionResult Schedule(int personId)
         {
             var res = (StudentInfoViewData)GetInfo(personId, StudentInfoViewData.Create);
             return Json(res, 6);

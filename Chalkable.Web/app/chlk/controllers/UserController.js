@@ -58,10 +58,13 @@ NAMESPACE('chlk.controllers', function (){
                 }
 
                 var phones = model.getPhones();
-                var addresses = model.getAddresses();
+                var address = model.getAddress();
                 var phonesValue = [];
-                var addressesValue = [];
-
+                var addressesValue = {
+                    id: address.getId().valueOf(),
+                    type: address.getType(),
+                    value: address.getValue()
+                };
                 phones.forEach(function(item){
                     var values = {
                         id: item.getId().valueOf(),
@@ -77,16 +80,6 @@ NAMESPACE('chlk.controllers', function (){
                             model.setHomePhone(item);
                     }
                 });
-
-                addresses.forEach(function(item){
-                    var values = {
-                        id: item.getId().valueOf(),
-                        type: item.getType(),
-                        value: item.getValue()
-                    }
-                    addressesValue.push(values);
-                });
-
                 model.setPhonesValue(JSON.stringify(phonesValue));
                 model.setAddressesValue(JSON.stringify(addressesValue));
 

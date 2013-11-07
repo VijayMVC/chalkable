@@ -107,6 +107,7 @@ namespace Chalkable.Data.School.Model
                     AddressRef = address.Id;
             }
         }
-        public IList<Phone> Phones { get; set; } 
+        public IList<Phone> Phones { get; set; }
+        public IList<StudentSchoolYear> StudentSchoolYears { get; set; }
     }
 }

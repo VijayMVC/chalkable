@@ -12,7 +12,7 @@ NAMESPACE('chlk.models.people', function () {
         'User', EXTENDS(chlk.models.people.ShortUserInfo), [
             Boolean, 'active',
 
-            ArrayOf(chlk.models.people.Address), 'addresses',
+            chlk.models.people.Address, 'address',
 
             String, 'grade',
 
