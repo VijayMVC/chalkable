@@ -24,9 +24,12 @@ namespace Chalkable.Web.Models.ClassesViewData
             Description = classComplex.Description;
             DepartmentId = classComplex.ChalkableDepartmentRef;
             GradeLevel =  GradeLevelViewData.Create(classComplex.GradeLevel);
-            Teacher = ShortPersonViewData.Create(classComplex.Teacher);
+            if (classComplex.TeacherRef.HasValue && classComplex.Teacher != null)
+            {
+                Teacher = ShortPersonViewData.Create(classComplex.Teacher);
+                Teacher.DisplayName = classComplex.Teacher.ShortSalutationName;
+            }
             MarkingPeriodsId = classComplex.MarkingPeriodClasses.Select(x => x.MarkingPeriodRef).ToList();
-            Teacher.DisplayName = classComplex.Teacher.ShortSalutationName;
         }
         private ClassViewData() {}
 

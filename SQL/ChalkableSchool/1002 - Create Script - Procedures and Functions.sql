@@ -10,22 +10,24 @@ declare @roleId int = (select top 1 RoleRef from SchoolPerson where PersonRef = 
 declare @class table
 (
 	Class_Id int,
-	Class_Name nvarchar(255),
-	Class_Description  nvarchar(1024),
+	Class_Name nvarchar(max),
+	Class_Description  nvarchar(max),
 	Class_SchoolYearRef int,
 	Class_TeacherRef int,
 	Class_GradeLevelRef int,
 	Class_ChalkableDepartmentRef uniqueidentifier,
 	Class_SchoolRef  int,
 	GradeLevel_Id int,
-	GradeLevel_Name nvarchar(255),
+	GradeLevel_Name nvarchar(max),
 	GradeLevel_Number int,
 	Person_Id int,
-	Person_FirstName nvarchar(255),
-	Person_LastName nvarchar(255),
-	Person_Gender nvarchar(255),
-	Person_Salutation nvarchar(255),
-	Person_Email nvarchar(256),
+	Person_FirstName nvarchar(max),
+	Person_LastName nvarchar(max),
+	Person_Gender nvarchar(max),
+	Person_Salutation nvarchar(max),
+	Person_Email nvarchar(max),
+	Person_AddressRef int,
+	Person_RoleRef int,
 	Class_SchoolId int,
 	Class_StudentsCount int
 )
@@ -83,8 +85,8 @@ select * from @class
 
 select mpc.* from MarkingPeriodClass mpc
 join @class c on c.Class_Id = mpc.ClassRef
-GO
 
+GO
 
 
 CREATE PROCEDURE [dbo].[spGetPersons] @schoolId int, @personId int, @callerId int, @roleId int, @start int, @count int, @startFrom nvarchar(255)

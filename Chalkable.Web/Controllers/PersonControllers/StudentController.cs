@@ -91,14 +91,14 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(res, 6);
         }
 
-        //ToDo This is only info copy 
-        [RequireRequestValue("personId")]
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_INFO, true, CallType.Get, new[] { AppPermissionType.User })]
-        public new ActionResult Schedule(int personId)
-        {
-            var res = (StudentInfoViewData)GetInfo(personId, StudentInfoViewData.Create);
-            return Json(res, 6);
-        }
+        ////ToDo This is only info copy 
+        //[RequireRequestValue("personId")]
+        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_INFO, true, CallType.Get, new[] { AppPermissionType.User })]
+        //public new ActionResult Schedule(int personId)
+        //{
+        //    var res = (StudentInfoViewData)GetInfo(personId, StudentInfoViewData.Create);
+        //    return Json(res, 6);
+        //}
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_GET_STUDENTS, true, CallType.Get, new[] { AppPermissionType.User, })]
         public ActionResult GetStudents(string filter, bool? myStudentsOnly, int? start, int? count, int? classId, bool? byLastName)

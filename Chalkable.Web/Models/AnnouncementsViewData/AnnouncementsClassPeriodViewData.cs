@@ -19,7 +19,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             foreach (var classPeriod in classPeriods)
             {
                 var anns = announcements.Where(x => x.ClassRef == classPeriod.ClassRef).ToList();
-                var room = rooms.First(x => x.Id == classPeriod.RoomRef);
+                var room = classPeriod.RoomRef.HasValue ? rooms.First(x => x.Id == classPeriod.RoomRef) : null;
                 var c = classes.First(x => x.Id == classPeriod.ClassRef);
                 res.Add(new AnnouncementsClassPeriodViewData
                     {

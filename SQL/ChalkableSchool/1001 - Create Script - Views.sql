@@ -66,7 +66,7 @@ FROM
 GO
 
 
-create VIEW [dbo].[vwClass]
+CREATE VIEW [dbo].[vwClass]
 AS
 SELECT
 	Class.Id as Class_Id,
@@ -86,12 +86,16 @@ SELECT
 	Person.Gender as Person_Gender,
 	Person.Salutation as Person_Salutation,
 	Person.Email as Person_Email,
+	Person.AddressRef as Person_AddressRef,
+	SchoolPerson.RoleRef as Person_RoleRef,
 	SchoolYear.SchoolRef as Class_SchoolId 
 FROM 
 	Class	
 	join GradeLevel on GradeLevel.Id = Class.GradeLevelRef
 	left join Person on Person.Id = Class.TeacherRef
+	left join SchoolPerson on SchoolPerson.PersonRef = Class.TeacherRef and SchoolPerson.SchoolRef = Class.SchoolRef
 	left join SchoolYear on SchoolYear.Id = Class.SchoolYearRef
+where Class.TeacherRef is null or SchoolPerson.RoleRef is not null 
 GO
 
 
