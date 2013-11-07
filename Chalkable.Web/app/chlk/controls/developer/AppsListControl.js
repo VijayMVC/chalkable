@@ -1,20 +1,20 @@
-REQUIRE('chlk.controls.Base');
+REQUIRE('chlk.controls.BaseJQueryControl');
 
 
-NAMESPACE('chlk.controls', function () {
+NAMESPACE('chlk.controls.developer', function () {
 
     /** @class chlk.controls.AppsListControl*/
     CLASS(
-        'AppsListControl', EXTENDS(chlk.controls.Base), [
+        'AppsListControl', EXTENDS(chlk.controls.BaseJQueryControl), [
             OVERRIDE, VOID, function onCreate_() {
                 BASE();
                 ASSET('~/assets/jade/controls/apps-list.jade')(this);
             },
 
             [[Object]],
-            VOID, function update(node){
+            OVERRIDE, VOID, function update(node){
+                BASE(node);
                 var that = this;
-                //node.chosen({disable_search_threshold: 1000}).change(function(){
                 node.change(function(){
                     var node = jQuery(this);
                     var selected = node.find('option:selected');
@@ -34,19 +34,6 @@ NAMESPACE('chlk.controls', function () {
                     }
 
                 });
-            },
-
-
-
-            //TODO: move to base control
-            [[Object]],
-            Object, function processAttrs(attributes) {
-                attributes.id = attributes.id || ria.dom.NewGID();
-                this.context.getDefaultView()
-                    .onActivityRefreshed(function (activity, model) {
-                        this.update(jQuery('#'+attributes.id));
-                    }.bind(this));
-                return attributes;
             }
         ]);
 });
