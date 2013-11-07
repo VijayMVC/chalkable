@@ -12,6 +12,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IClassPeriodService
     {
         ClassPeriod Add(int periodId, int classId, int? roomId, int dateTypeId);
+        void Add(IList<ClassPeriod> classPeriods);
         void Delete(int periodId, int classId, int dayTypeId);
         IList<ClassPeriod> GetClassPeriods(int schoolYearId,  int? markingPeriodId, int? classId, int? roomId, int? periodId, int? dateTypeId, int? studentId = null, int? teacherId = null, int? time = null);
         IList<Class> GetAvailableClasses(int periodId);
@@ -49,6 +50,19 @@ namespace Chalkable.BusinessLogic.Services.School
                 da.Insert(res);
                 uow.Commit();
                 return res;
+            }
+        }
+
+        public void Add(IList<ClassPeriod> classPeriods)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+
+            using (var uow = Update())
+            {
+                var da = new ClassPeriodDataAccess(uow, Context.SchoolLocalId);
+                da.Insert(classPeriods);
+                uow.Commit();
             }
         }
 

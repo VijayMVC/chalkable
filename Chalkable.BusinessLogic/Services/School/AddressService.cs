@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
@@ -9,7 +10,8 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAddressService
     {
-        Address Add(AddressInfo address);
+        void Add(IList<AddressInfo> addressInfos);
+        Address Add(AddressInfo addressInfo);
         Address Edit(AddressInfo address);
         void Delete(int id);
         IList<Address> GetAddress();
@@ -22,18 +24,31 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public Address Add(AddressInfo addressInfo)
+        public void Add(IList<AddressInfo> addressInfos)
         {
             if(!BaseSecurity.IsDistrict(Context))//TODO:can teacher do this?
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new AddressDataAccess(uow);
-                var address = EditAddress(addressInfo, null);
-                da.Insert(address);
+                var addresses = addressInfos.Select(EditAddress).ToList();
+                da.Insert(addresses);
                 uow.Commit();
-                return address;
             }
+        }
+
+        public Address Add(AddressInfo addressInfo)
+        {
+            var a = EditAddress(addressInfo);
+            if (!BaseSecurity.IsDistrict(Context))//TODO:can teacher do this?
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                var da = new AddressDataAccess(uow);
+                da.Insert(a);
+                uow.Commit();
+            }
+            return a;
         }
 
         public Address Edit(AddressInfo addressInfo)
@@ -46,17 +61,16 @@ namespace Chalkable.BusinessLogic.Services.School
                 var address = da.GetById(addressInfo.Id);
                 if (!AddressSecurity.CanModify(address, Context))
                     throw new ChalkableSecurityException();
-                address = EditAddress(addressInfo, address);
+                address = EditAddress(addressInfo);
                 da.Update(address);
                 uow.Commit();
                 return address;
             }
         }
 
-        private Address EditAddress(AddressInfo addressInfo, Address address)
+        private Address EditAddress(AddressInfo addressInfo)
         {
-            if(address == null)
-                address = new Address();
+            var address = new Address();
             address.Id = addressInfo.Id;
             address.AddressLine1 = addressInfo.AddressLine1;
             address.AddressLine2 = addressInfo.AddressLine2;

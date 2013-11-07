@@ -64,7 +64,6 @@
     <Compile Include="Services\GradeLevelServiceTest.cs" />
     <Compile Include="Services\Master\AccessControlTestService.cs" />
     <Compile Include="Services\Master\ApplicationServiceTest.cs" />
-    <Compile Include="Services\Master\BackgrounTaskServiceTest.cs" />
     <Compile Include="Services\Master\BaseMasterServiceLocatorTest.cs" />
     <Compile Include="Services\Master\CategoryServiceTest.cs" />
     <Compile Include="Services\Master\DepartmentServiceTest.cs" />

@@ -130,12 +130,12 @@ namespace Chalkable.Tests.Services.TestContext
         private IServiceLocatorSchool CreateUserWithLocator(string name, CoreRole role, Guid? gradeLevelId)
         {
             var userinfo = CreateUserInfo(name, role);
-            var schoolAssignments = new List<SchoolAssignmentInfo>
+            IList<SchoolPerson> assignments = new List<SchoolPerson>
                 {
-                    new SchoolAssignmentInfo {Role = role.Id, SchoolId = School.LocalId}
+                    new SchoolPerson{PersonRef = userinfo.LocalId, RoleRef = userinfo.Role.Id, SchoolRef = userinfo.SchoolId}
                 };
             sysSchoolSl.PersonService.Add(userinfo.LocalId, userinfo.Login, userinfo.Password, userinfo.FirstName, userinfo.LastName,
-                                              userinfo.Gender, userinfo.Salutation, userinfo.BirthDate, null, null,schoolAssignments);
+                                              userinfo.Gender, userinfo.Salutation, userinfo.BirthDate, null, null, assignments);
             return CreateLocatorByUserInfo(userinfo);
         }
 

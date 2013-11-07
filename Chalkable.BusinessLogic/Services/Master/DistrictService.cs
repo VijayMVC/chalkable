@@ -24,6 +24,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void CreateDemo();
         IList<District> GetDemoDistrictsToDelete();
         void DeleteDistrict(Guid id);
+        bool IsOnline(Guid id);
     }
 
     public class DistrictService : MasterServiceBase, IDistrictService
@@ -134,14 +135,9 @@ namespace Chalkable.BusinessLogic.Services.Master
             //wait for online for an hour
             for (int i = 0; i < 3600; i++)
             {
-                using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, server, "Master"), false))
-                {
-                    var da = new DistrictDataAccess(unitOfWork);
-                    var l = da.GetOnline(new[] { district.Id });
-                    if (l.Count > 0)
-                        break;
-                }
-                Thread.Sleep(1000);
+                if (IsOnline(district.Id))
+                    break;
+                Thread.Sleep(10000);
             }
 
 
@@ -155,6 +151,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 schoolPersons = spDa.GetSchoolPersons(null, null, null);
             }
 
+            var schools = ServiceLocator.SchoolService.GetAll();
             foreach (var person in users)
             {
                 var u = ServiceLocator.UserService.CreateSchoolUser(person.Email, "tester", district.Id, person.Id, null);
@@ -162,7 +159,15 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var sps = schoolPersons.Where(x => x.PersonRef == p.Id);
                 foreach (var schoolPerson in sps)
                 {
-                    ServiceLocator.UserService.AssignUserToSchool(u.Id, schoolPerson.SchoolRef, schoolPerson.RoleRef);
+                    ServiceLocator.UserService.AssignUserToSchool(new List<SchoolUser>
+                        {
+                            new SchoolUser
+                                {
+                                    Id = u.Id, 
+                                    SchoolRef = schools.First(x=>x.LocalId == schoolPerson.SchoolRef).Id, 
+                                    Role = schoolPerson.RoleRef
+                                }
+                        });
                 }
             }
         }
@@ -222,6 +227,17 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new DistrictDataAccess(unitOfWork);
                 da.DeleteDistrictDataBase(district.Id.ToString());
+            }
+        }
+
+        public bool IsOnline(Guid id)
+        {
+            var d = GetByIdOrNull(id);
+            using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, d.ServerUrl, "Master"), false))
+            {
+                var da = new DistrictDataAccess(unitOfWork);
+                var l = da.GetOnline(new[] { id });
+                return (l.Count > 0) ;
             }
         }
     }

@@ -82,7 +82,6 @@
     <Compile Include="Producers\AllDistrictsProducer.cs" />
     <Compile Include="Producers\CreateDemoDistrictTaskProducer.cs" />
     <Compile Include="Producers\DemoDistrictDeleteTaskProducer.cs" />
-    <Compile Include="Producers\EmptySchoolTaskProducer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Producers\TaskProducer.cs" />
     <Compile Include="WorkerRole.cs" />

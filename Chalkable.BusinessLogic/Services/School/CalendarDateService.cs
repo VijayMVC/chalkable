@@ -14,6 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<Date> GetDays(int markingPeriodId, bool schoolDaysOnly, DateTime? fromDate = null, DateTime? tillDate = null, int count = Int32.MaxValue);
         IList<Date> GetLastDays(int schoolYearId, bool schoolDaysOnly, DateTime? fromDate, DateTime? tillDate, int count = int.MaxValue);
         Date Add(DateTime date, bool schoolDay, int schoolYearId, int? dateTypeId);
+        void Add(IList<Date> days);
         void Delete(DateTime date);
     }
 
@@ -72,6 +73,17 @@ namespace Chalkable.BusinessLogic.Services.School
                         Count = count,
                         SchoolDaysOnly = schoolDaysOnly
                     });
+            }
+        }
+
+        public void Add(IList<Date> days)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new DateDataAccess(uow, Context.SchoolLocalId).Insert(days);
+                uow.Commit();
             }
         }
 

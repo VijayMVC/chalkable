@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -6,7 +7,6 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 using Chalkable.StiConnector.Connectors;
@@ -24,11 +24,11 @@ namespace Chalkable.BusinessLogic.Services.Master
         User CreateSysAdmin(string login, string password);
         User CreateDeveloperUser(string login, string password, Guid districtId);
         User CreateSchoolUser(string login, string password, Guid? districtId, int? localId, string sisUserName);
-        void AssignUserToSchool(Guid id, int schoolLocalId, int role);
+        void AssignUserToSchool(IList<SchoolUser> schoolUsers);
         void ChangePassword(string login, string newPassword);
         void ChangeUserLogin(Guid id, string login);
         User GetSysAdmin();
-
+        void CreateSchoolUsers(IList<User> userInfos);
     }
 
     public class UserService : MasterServiceBase, IUserService
@@ -199,23 +199,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             return CreateUser(login, password, true, false, null, null, null);
         }
 
-        public void AssignUserToSchool(Guid id, int schoolLocalId, int role)
+        public void AssignUserToSchool(IList<SchoolUser> schoolUsers)
         {
             using (var uow = Update())
             {
                 var schoolUserDa = new SchoolUserDataAccess(uow);
-                var school =
-                    (new SchoolDataAccess(uow)).GetAll(new SimpleQueryCondition(
-                                                           Data.Master.Model.School.LOCAL_ID_FIELD, schoolLocalId,
-                                                           ConditionRelation.Equal)).First();
-                var schoolUser = new SchoolUser
-                {
-                    Id = Guid.NewGuid(),
-                    Role = role,
-                    UserRef = id,
-                    SchoolRef = school.Id
-                };
-                schoolUserDa.Insert(schoolUser);
+                schoolUserDa.Insert(schoolUsers);
                 uow.Commit();
             }
         }
@@ -237,6 +226,16 @@ namespace Chalkable.BusinessLogic.Services.Master
                 throw new ChalkableSecurityException();
         }
 
+        public void CreateSchoolUsers(IList<User> users)
+        {
+            using (var uow = Update())
+            {
+                var userDa = new UserDataAccess(uow);
+                userDa.Insert(users);
+                uow.Commit();
+            }
+        }
+
         private User CreateUser(string login, string password, bool isSysAdmin, bool isDeveloper, Guid? districtId, int? localId, string sisUserName)
         {
             using (var uow = Update())
@@ -253,7 +252,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                     DistrictRef = districtId,
                     SisUserName = sisUserName
                 };
-                userDa.Create(user);
+                userDa.Insert(user);
                 uow.Commit();
                 return user;
             }

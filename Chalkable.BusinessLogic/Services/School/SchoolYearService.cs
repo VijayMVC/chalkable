@@ -19,6 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
         SchoolYear GetCurrentSchoolYear();
         IList<SchoolYear> GetSortedYears();
         IList<StudentSchoolYear> GetStudentAssignments();
+        void AssignStudent(IList<StudentSchoolYear> studentAssignments);
     }
 
     public class SchoolYearService : SchoolServiceBase, ISchoolYearService
@@ -108,6 +109,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void AssignStudent(int schoolYearId, int personId, int gradeLevelId)
         {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new StudentSchoolYearDataAccess(uow);
@@ -117,6 +120,18 @@ namespace Chalkable.BusinessLogic.Services.School
                         SchoolYearRef = schoolYearId,
                         StudentRef = personId
                     });
+                uow.Commit();
+            }
+        }
+
+        public void AssignStudent(IList<StudentSchoolYear> studentAssignments)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                var da = new StudentSchoolYearDataAccess(uow);
+                da.Insert(studentAssignments);
                 uow.Commit();
             }
         }

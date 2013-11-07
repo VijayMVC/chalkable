@@ -13,6 +13,11 @@ namespace Chalkable.BackgroundTaskProcessor
             if (!task.DistrictRef.HasValue)
                 throw new ChalkableException("No district id for district task");
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
+            if (!sl.DistrictService.IsOnline(task.DistrictRef.Value))
+            {
+                log.LogError(string.Format("district {0} is not online yet", task.DistrictRef.Value));
+                return false;
+            }
 
             var districtId = task.DistrictRef.Value;
             

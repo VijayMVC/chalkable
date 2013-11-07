@@ -84,7 +84,6 @@
     <Compile Include="DeleteSchoolTaskHandler.cs" />
     <Compile Include="Parallel\AllSchoolRunner.cs" />
     <Compile Include="BackupTaskHandler.cs" />
-    <Compile Include="CreateEmptySchoolTaskHandler.cs" />
     <Compile Include="DatabaseUpdateTaskHandler.cs" />
     <Compile Include="ITaskHandler.cs" />
     <Compile Include="ProcessRemindersTaskHandler.cs" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -10,6 +11,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IRoomService
     {
         Room AddRoom(int id, int schoolId, string roomNumber, string description, string size, int? capacity, string phoneNumber);
+        void AddRooms(IList<Room> rooms);
         Room EditRoom(int id, string roomNumber, string description, string size, int? capacity, string phoneNumber);
         void DeleteRoom(int id);
         PaginatedList<Room> GetRooms(int start = 0, int count = int.MaxValue);
@@ -45,6 +47,18 @@ namespace Chalkable.BusinessLogic.Services.School
                 da.Insert(room);
                 uow.Commit();
                 return room;
+            }
+        }
+
+        public void AddRooms(IList<Room> rooms)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                var da = new RoomDataAccess(uow, Context.SchoolLocalId);
+                da.Insert(rooms);
+                uow.Commit();
             }
         }
 

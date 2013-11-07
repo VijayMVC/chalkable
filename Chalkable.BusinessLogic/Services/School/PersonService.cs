@@ -4,6 +4,7 @@ using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -13,7 +14,8 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IPersonService
     {
         Person Add(int localId, string email, string password, string firstName, string lastName, string gender, string salutation, DateTime? birthDate
-            , int? addressId, string sisUserName, IList<SchoolAssignmentInfo> assignments);
+            , int? addressId, string sisUserName, IList<SchoolPerson> assignments);
+        void Add(IList<PersonInfo> persons, IList<SchoolPerson> assignments);
         Person Edit(int localId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate, int? addressId);
         void Delete(int id);
         IList<Person> GetPersons();
@@ -22,13 +24,7 @@ namespace Chalkable.BusinessLogic.Services.School
         PersonDetails GetPersonDetails(int id);
         void ActivatePerson(int id);
     }
-
-    public class SchoolAssignmentInfo
-    {
-        public int Role { get; set; }
-        public int SchoolId { get; set; }
-    }
-
+    
     public class PersonService : SchoolServiceBase, IPersonService
     {
         public PersonService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
@@ -38,22 +34,27 @@ namespace Chalkable.BusinessLogic.Services.School
 
         //TODO: needs tests
         public Person Add(int localId, string email, string password, string firstName, string lastName, string gender, string salutation, DateTime? birthDate
-            , int? addressId, string sisUserName, IList<SchoolAssignmentInfo> assignments)
+            , int? addressId, string sisUserName, IList<SchoolPerson> assignments)
         {
             if(!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
             if (!Context.DistrictId.HasValue)
                 throw new UnassignedUserException();
+
+            var schools = ServiceLocator.ServiceLocatorMaster.SchoolService.GetAll();
             //TODO: need cross db transaction handling
             using (var uow = Update())
             {
                 var da = new PersonDataAccess(uow, Context.SchoolLocalId);
                 
                 var user = ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUser(email, password, Context.DistrictId.Value, localId, sisUserName);
-                foreach (var assignment in assignments)
+                ServiceLocator.ServiceLocatorMaster.UserService.AssignUserToSchool(assignments.Select(x => new SchoolUser
                 {
-                    ServiceLocator.ServiceLocatorMaster.UserService.AssignUserToSchool(user.Id, assignment.SchoolId, assignment.Role);
-                }
+                    Id = Guid.NewGuid(),
+                    Role = x.RoleRef,
+                    SchoolRef = schools.First(y=>y.LocalId == x.SchoolRef).Id,
+                    UserRef = user.Id
+                }).ToList());
 
                 var person = new Person
                     {
@@ -69,19 +70,58 @@ namespace Chalkable.BusinessLogic.Services.School
                     };
                 da.Insert(person);
                 var schoolDataAccess = new SchoolPersonDataAccess(uow);
-                foreach (var assignment in assignments)
-                {
-                    schoolDataAccess.Insert(new SchoolPerson
-                    {
-                        SchoolRef = assignment.SchoolId,
-                        PersonRef = person.Id,
-                        RoleRef = assignment.Role
-                    });
-                }
-
-                
+                schoolDataAccess.Insert(assignments);
                 uow.Commit();
                 return person;
+            }
+        }
+
+        public void Add(IList<PersonInfo> persons, IList<SchoolPerson> assignments)
+        {
+            if (!BaseSecurity.IsAdminEditor(Context))
+                throw new ChalkableSecurityException();
+            if (!Context.DistrictId.HasValue)
+                throw new UnassignedUserException();
+            //TODO: need cross db transaction handling
+            using (var uow = Update())
+            {
+                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
+
+                var users = persons.Select(x => new User
+                    {
+                        LocalId = x.Id,
+                        Login = x.Email,
+                        DistrictRef = Context.DistrictId.Value,
+                        Password = x.Password,
+                        SisUserName = x.SisUserName,
+                        Id = Guid.NewGuid()
+                    }).ToList();
+
+                ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUsers(users);
+                var schoolUsers = assignments.Select(x => new SchoolUser
+                    {
+                        Id = Guid.NewGuid(),
+                        Role = x.RoleRef,
+                        SchoolRef = Context.SchoolId.Value,
+                        UserRef = users.First(y => y.LocalId == x.PersonRef).Id
+
+                    }).ToList();
+                ServiceLocator.ServiceLocatorMaster.UserService.AssignUserToSchool(schoolUsers);
+
+                var ps = persons.Select(x => new Person
+                    {
+                        Active = x.Active,
+                        AddressRef = x.AddressRef,
+                        BirthDate = x.BirthDate,
+                        Email = x.Email,
+                        FirstName = x.FirstName,
+                        Gender = x.Gender,
+                        Id = x.Id,
+                    }).ToList();
+                da.Insert(ps);
+                var schoolDataAccess = new SchoolPersonDataAccess(uow);
+                schoolDataAccess.Insert(assignments);
+                uow.Commit();
             }
         }
         
@@ -189,5 +229,19 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
             }
         }
+    }
+
+    public class PersonInfo
+    {
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public string Gender { get; set; }
+        public bool Active { get; set; }
+        public string Email { get; set; }
+        public int? AddressRef { get; set; }
+        public string Password { get; set; }
+        public string SisUserName { get; set; }
     }
 }

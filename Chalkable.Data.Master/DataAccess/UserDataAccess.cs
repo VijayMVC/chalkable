@@ -154,10 +154,5 @@ namespace Chalkable.Data.Master.DataAccess
                 return res;
             }
         }
-
-        public void Create(User user)
-        {
-            SimpleInsert(user);
-        }
     }
 }

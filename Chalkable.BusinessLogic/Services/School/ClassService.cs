@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Common;
@@ -13,10 +12,12 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IClassService
     {
         ClassDetails Add(int classId, int? schoolYearId, Guid? chlkableDepartmentId, string name, string description, int? teacherId, int gradeLevelId);
+        void Add(IList<Class> classes);
         ClassDetails Edit(int classId, Guid? chlkableDepartmentId, string name, string description, int teacherId, int gradeLevelId);
         void Delete(int id);
 
         ClassDetails AddStudent(int classId, int personId);
+        void AddStudents(IList<ClassPerson> classPersons);
         ClassDetails DeleteStudent(int classId, int personId);
         ClassDetails GetClassById(int id);
         IList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue);
@@ -25,6 +26,7 @@ namespace Chalkable.BusinessLogic.Services.School
         ClassPerson GetClassPerson(int classId, int personId);
         
         void AssignClassToMarkingPeriod(int classId, int markingPeriodId);
+        void AssignClassToMarkingPeriod(IList<MarkingPeriodClass> markingPeriodClasses);
         void UnassignClassFromMarkingPeriod(int classId, int markingPeriodId);
     }
 
@@ -68,6 +70,19 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
+        public void Add(IList<Class> classes)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+
+           using (var uow = Update())
+            {
+                var da = new ClassDataAccess(uow, Context.SchoolLocalId);
+                da.Insert(classes);
+                uow.Commit();
+            }
+        }
+
         private bool CanAssignDepartment(Guid? departmentId)
         {
             return !departmentId.HasValue
@@ -99,7 +114,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var c = GetClassById(classId);
             if(!c.SchoolYearRef.HasValue)
                 throw new ChalkableException("school year is not assigned for this class");
-            using (var uow = Read())
+            using (var uow = Update())
             {
                 var mpClassDa = new MarkingPeriodClassDataAccess(uow, Context.SchoolLocalId);
                 var mp = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId).GetById(markingPeriodId);
@@ -112,6 +127,19 @@ namespace Chalkable.BusinessLogic.Services.School
                     SchoolRef = c.SchoolRef.Value
                 };
                 mpClassDa.Insert(mpc);
+                uow.Commit();
+            }
+        }
+
+        public void AssignClassToMarkingPeriod(IList<MarkingPeriodClass> markingPeriodClasses)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                var mpClassDa = new MarkingPeriodClassDataAccess(uow, Context.SchoolLocalId);
+                mpClassDa.Insert(markingPeriodClasses);
+                uow.Commit();
             }
         }
 
@@ -159,6 +187,19 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
             }
             return GetClassById(classId);
+        }
+
+        public void AddStudents(IList<ClassPerson> classPersons)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+
+            using (var uow = Update())
+            {
+                var classPersonDa = new ClassPersonDataAccess(uow, Context.SchoolLocalId);
+                classPersonDa.Insert(classPersons);
+                uow.Commit();
+            }
         }
 
         public ClassDetails DeleteStudent(int classId, int personId)

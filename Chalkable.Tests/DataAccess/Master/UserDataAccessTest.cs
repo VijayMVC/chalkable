@@ -23,7 +23,7 @@ namespace Chalkable.Tests.DataAccess.Master
                     Login = "TestUser",
                     Password = "somepwd"
                 };
-            da.Create(user);
+            da.Insert(user);
 
             var u = da.GetUser("TestUser", "somepwd", null);
             Assert.NotNull(u);
@@ -63,7 +63,7 @@ namespace Chalkable.Tests.DataAccess.Master
                         Login = un,
                         Password = pwd
                     };
-                    da.Create(user);
+                    da.Insert(user);
                     uow.Commit();
                 }
                 users.Add(un, pwd);
