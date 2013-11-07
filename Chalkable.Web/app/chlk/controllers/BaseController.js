@@ -64,7 +64,7 @@ NAMESPACE('chlk.controllers', function (){
                        // todo: scoping !?
                        //me.view.showAlertBox(error.getMessage());
                        return ria.async.BREAK; // failed with exception, stop further processing
-                   }.bind(this));
+                   }, this);
 
                return head;
            },
