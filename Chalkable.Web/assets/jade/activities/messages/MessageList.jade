@@ -38,7 +38,7 @@
                     +GridRow()
                         .read
                             .chk
-                                +Checkbox(item.getId().valueOf(), false)(name='ch')
+                                +Checkbox(item.getId().valueOf().toString(), false)(name='ch')
                             .av
                                 .avatar-container
                                     if self.isInbox()
