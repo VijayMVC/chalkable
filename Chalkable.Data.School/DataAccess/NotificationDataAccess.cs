@@ -55,21 +55,19 @@ namespace Chalkable.Data.School.DataAccess
                                QuestionPerson.Id as QuestionPerson_Id
                         from [Notification]
                         left join Announcement on Announcement.Id  = [Notification].AnnouncementRef
-                        left join AnnouncementType on AnnouncementType.Id = Announcement.AnnouncementTypeRef
+                        left join ClassAnnouncementType on ClassAnnouncementType.Id = Announcement.ClassAnnouncementTypeRef
                         left join MarkingPeriod on MarkingPeriod.Id = [Notification].MarkingPeriodRef
-                        left join ClassPeriod on ClassPeriod.Id = [Notification].ClassPeriodRef
                         left join vwPrivateMessage on vwPrivateMessage.PrivateMessage_Id = [Notification].PrivateMessageRef
-                        join Person toPerson on toPerson.Id = [Notification].PersonRef
-                        left join Person QuestionPerson on QuestionPerson.Id = [Notification].QuestionPersonRef";
+                        join vwPerson toPerson on toPerson.Id = [Notification].PersonRef
+                        left join vwPerson QuestionPerson on QuestionPerson.Id = [Notification].QuestionPersonRef";
 
             var b = new StringBuilder();
             var tables = new List<Type>
                 {
                     typeof (Notification),
                     typeof (Announcement),
-                    typeof (AnnouncementType),
-                    typeof (MarkingPeriod),
-                    typeof (ClassPeriod)
+                    typeof (ClassAnnouncementType),
+                    typeof (MarkingPeriod)
                 };
             b.AppendFormat(sql, Orm.ComplexResultSetQuery(tables));
             var res = new DbQuery(b, new Dictionary<string, object>());
@@ -101,8 +99,9 @@ namespace Chalkable.Data.School.DataAccess
             }
             if (res.Type == NotificationType.MarkingPeriodEnding)
                 res.MarkingPeriod = reader.Read<MarkingPeriod>(true);
-            if (res.Type == NotificationType.NoTakeAttendance)
-                res.ClassPeriod = reader.Read<ClassPeriod>(true);
+            //todo this later 
+            //if (res.Type == NotificationType.NoTakeAttendance)
+            //    res.ClassPeriod = reader.Read<ClassPeriod>(true);
             return res;
         }
         private Person ReadNotificationPerson(DbDataReader reader, string prefix)
@@ -113,7 +112,7 @@ namespace Chalkable.Data.School.DataAccess
                     Id = SqlTools.ReadInt32(reader, string.Format(template, Person.ID_FIELD)),
                     FirstName = SqlTools.ReadStringNull(reader, string.Format(template, Person.FIRST_NAME_FIELD)),
                     LastName = SqlTools.ReadStringNull(reader, string.Format(template, Person.LAST_NAME_FIELD)),
-                    //RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD)),
+                    RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD)),
                     Gender = SqlTools.ReadStringNull(reader, string.Format(template, Person.GENDER_FIELD)),
                     Salutation = SqlTools.ReadStringNull(reader, string.Format(template, Person.SALUTATION_FIELD)),
                 };
@@ -146,7 +145,7 @@ namespace Chalkable.Data.School.DataAccess
         public int Count { get; set; }
         public NotificationType? Type { get; set; }
         public int? ClassPeriodRef { get; set; }
-
+        
         public NotificationQuery()
         {
             Start = 0;

@@ -38,7 +38,6 @@ namespace Chalkable.Data.School.Model
         public PrivateMessageDetails PrivateMessage { get; set; }
         public Person QuestionPerson { get; set; }
         public MarkingPeriod MarkingPeriod { get; set; }
-        public ClassPeriod ClassPeriod { get; set; }
     }
 
     
