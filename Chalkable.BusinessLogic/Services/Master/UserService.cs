@@ -29,6 +29,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void ChangeUserLogin(Guid id, string login);
         User GetSysAdmin();
         void CreateSchoolUsers(IList<User> userInfos);
+        string PasswordMd5(string password);
     }
 
     public class UserService : MasterServiceBase, IUserService
@@ -37,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
         }
 
-        private string PasswordMd5(string password)
+        public string PasswordMd5(string password)
         {
             var bytes = Encoding.UTF8.GetBytes(password);
             var hash = new MD5CryptoServiceProvider().ComputeHash(bytes);
@@ -50,6 +51,8 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 var user = new UserDataAccess(uow).GetUser(login, PasswordMd5(password), null);
+                if (user != null)
+                    user.OriginalPassword = password;
                 return Login(user, uow);
             }
         }
@@ -122,7 +125,9 @@ namespace Chalkable.BusinessLogic.Services.Master
                     }
                     if (user.SisUserName != null)
                     {
-                        var cl = ConnectorLocator.Create(user.SisUserName, user.Password, user.District.SisUrl);
+                        if (user.OriginalPassword == null)
+                            throw new ChalkableException("Sis connection requires not encripted password");
+                        var cl = ConnectorLocator.Create(user.SisUserName, user.OriginalPassword, user.District.SisUrl);
                         token = cl.Token;           
                     }
                     sisUrl = user.District.SisUrl;

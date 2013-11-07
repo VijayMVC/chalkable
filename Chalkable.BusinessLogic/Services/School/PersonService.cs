@@ -98,11 +98,15 @@ namespace Chalkable.BusinessLogic.Services.School
                     }).ToList();
 
                 ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUsers(users);
+
+                var schools = ServiceLocator.ServiceLocatorMaster.SchoolService.GetSchools(Context.DistrictId.Value, 0,
+                                                                                           int.MaxValue);
+
                 var schoolUsers = assignments.Select(x => new SchoolUser
                     {
                         Id = Guid.NewGuid(),
                         Role = x.RoleRef,
-                        SchoolRef = Context.SchoolId.Value,
+                        SchoolRef = schools.First(y=>y.LocalId == x.SchoolRef).Id,
                         UserRef = users.First(y => y.LocalId == x.PersonRef).Id
 
                     }).ToList();
@@ -115,6 +119,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         BirthDate = x.BirthDate,
                         Email = x.Email,
                         FirstName = x.FirstName,
+                        LastName = x.LastName,
                         Gender = x.Gender,
                         Id = x.Id,
                     }).ToList();

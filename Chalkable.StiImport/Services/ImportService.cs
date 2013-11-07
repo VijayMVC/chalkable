@@ -72,7 +72,7 @@ namespace Chalkable.StiConnector.Services
             Log.LogInfo(ChlkResources.IMPORT_CLASS_PERIODS_START);
             ImportClassPeriods();
             Log.LogInfo(ChlkResources.IMPORT_CLASS_SCHOOL_PERSONS_START);
-            ImportClassSchoolPersons();
+            ImportClassPersons();
         }
         
         private void ImportSchools()
@@ -90,14 +90,14 @@ namespace Chalkable.StiConnector.Services
             }
         }
 
-        private void ImportClassSchoolPersons()
+        private void ImportClassPersons()
         {
             var studentSchedules = stiEntities.StudentSchedules.ToList()
                 .Select(x=>new ClassPerson
                     {
                         ClassRef = x.SectionID,
                         PersonRef = x.StudentID,
-                        SchoolRef = x.Course.AcadSession.SchoolID
+                        SchoolRef = x.Course1.AcadSession.SchoolID
                     }).ToList();
             ServiceLocatorSchool.ClassService.AddStudents(studentSchedules);
         }
@@ -189,10 +189,10 @@ namespace Chalkable.StiConnector.Services
 
 
         private const string USER_EMAIL_FMT = "user{0}_{1}@chalkable.com";
-        private const string DEF_USER_PASS = "tester";
+        private const string DEF_USER_PASS = "Qwerty1@";
         private const string DESCR_WORK = "Work";
         private const string DESCR_CELL = "cell";
-        private const string img = "image";
+        private const string IMG = "image";
 
         private void ImportSchoolPersons()
         {
@@ -208,7 +208,7 @@ namespace Chalkable.StiConnector.Services
                 var email = string.Format(USER_EMAIL_FMT, person.PersonID, ServiceLocatorSchool.Context.DistrictId);
                 
                 assignments.AddRange(stiEntities.StudentSchools.Where(x => x.StudentID == person.PersonID).Select(x => new SchoolPerson { RoleRef = CoreRoles.STUDENT_ROLE.Id, SchoolRef = x.SchoolID, PersonRef = person.PersonID}));
-                assignments.AddRange(stiEntities.StaffSchools.Where(x => x.StaffID == person.PersonID).Select(x => new SchoolPerson() { RoleRef = CoreRoles.STUDENT_ROLE.Id, SchoolRef = x.SchoolID, PersonRef = person.PersonID }));
+                assignments.AddRange(stiEntities.StaffSchools.Where(x => x.StaffID == person.PersonID).Select(x => new SchoolPerson() { RoleRef = CoreRoles.TEACHER_ROLE.Id, SchoolRef = x.SchoolID, PersonRef = person.PersonID }));
                 //TODO: what about admins? probably will be resolved by API
                 string userName = null;
                 if (person.Staff != null && person.Staff.User != null)
@@ -226,7 +226,7 @@ namespace Chalkable.StiConnector.Services
                         Gender = person.Gender != null ? person.Gender.Code : "M",
                         Id = person.PersonID,
                         LastName = person.LastName,
-                        Password = DEF_USER_PASS,
+                        Password = ServiceLocatorMaster.UserService.PasswordMd5(DEF_USER_PASS),
                         SisUserName = userName
                     });
             }
@@ -313,7 +313,8 @@ namespace Chalkable.StiConnector.Services
                         DayTypeRef = x.DayTypeID,
                         IsSchoolDay = x.InSchool,
                         SchoolRef = x.AcadSession.SchoolID,
-                        SchoolYearRef = x.AcadSessionID
+                        SchoolYearRef = x.AcadSessionID,
+                        Day = x.Date
                     }).ToList();
             ServiceLocatorSchool.CalendarDateService.Add(days);
         }
