@@ -81,10 +81,12 @@ namespace Chalkable.Data.Master.Model
     public class Developer
     {
         public const string ID_FIELD = "Id";
+        public const string DISTRICT_REF_FIELD = "DistrictRef";
+        
+        [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string WebSite { get; set; }
-        public const string DISTRICT_REF_FIELD = "DistrictRef";
         public Guid DistrictRef { get; set; }
         [DataEntityAttr]
         public User User { get; set; }
@@ -107,6 +109,7 @@ namespace Chalkable.Data.Master.Model
 
     public class ApplicationRating
     {
+        [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public const string APPLICATION_REF_FIELD = "ApplicationRef";
         public Guid ApplicationRef { get; set; }
@@ -117,6 +120,7 @@ namespace Chalkable.Data.Master.Model
 
     public class ApplicationPicture
     {
+        [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public const string APPLICATION_REF_FIELD = "ApplicationRef";
         public Guid ApplicationRef { get; set; }
@@ -124,6 +128,7 @@ namespace Chalkable.Data.Master.Model
 
     public class Category
     {
+        [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -131,6 +136,7 @@ namespace Chalkable.Data.Master.Model
 
     public class ApplicationCategory
     {
+        [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public const string APPLICATION_REF_FIELD = "ApplicationRef";
         public Guid ApplicationRef { get; set; }
@@ -139,6 +145,7 @@ namespace Chalkable.Data.Master.Model
 
     public class ApplicationPermission
     {
+        [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public const string APPLICATION_REF_FIELD = "ApplicationRef";
         public Guid ApplicationRef { get; set; }
@@ -147,6 +154,7 @@ namespace Chalkable.Data.Master.Model
 
     public class ApplicationGradeLevel
     {
+        [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public const string APPLICATION_REF_FIELD = "ApplicationRef";
         public Guid ApplicationRef { get; set; }

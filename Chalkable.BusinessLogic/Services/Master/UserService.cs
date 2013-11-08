@@ -107,30 +107,48 @@ namespace Chalkable.BusinessLogic.Services.Master
             string token = null;
             string sisUrl = null;
 
-            if (user.District != null)
+            if (user.District != null && user.DistrictRef.HasValue)
             {
-                if (user.SchoolUsers.Count == 1)
+                if (user.SchoolUsers.Count <= 1)
                 {
-                    var su = user.SchoolUsers[0];
-                    schoolId = su.SchoolRef;
-                    districtId = user.DistrictRef;
-                    schoolServerUrl = user.District.ServerUrl;
-                    schoolTimeZone = user.District.TimeZone;
-                    schoolLocalId = su.School.LocalId;
-                    role = CoreRoles.GetById(su.Role);
-                    if (!string.IsNullOrEmpty(user.District.DemoPrefix))
+                    if (user.SchoolUsers.Count == 1)
                     {
-                        var developer = new DeveloperDataAccess(uow).GetDeveloper(su.SchoolRef);
-                        if (developer != null) developerId = developer.Id;
+                        var su = user.SchoolUsers[0];
+                        schoolId = su.SchoolRef;
+                        districtId = user.DistrictRef;
+                        schoolServerUrl = user.District.ServerUrl;
+                        schoolTimeZone = user.District.TimeZone;
+                        schoolLocalId = su.School.LocalId;
+                        role = CoreRoles.GetById(su.Role);
+                        if (!string.IsNullOrEmpty(user.District.DemoPrefix))
+                        {
+                            var developer = new DeveloperDataAccess(uow).GetDeveloper(su.SchoolRef);
+                            if (developer != null) developerId = developer.Id;
+                        }
+                        if (user.SisUserName != null)
+                        {
+                            if (user.OriginalPassword == null)
+                                throw new ChalkableException("Sis connection requires not encripted password");
+                            var cl = ConnectorLocator.Create(user.SisUserName, user.OriginalPassword,
+                                                             user.District.SisUrl);
+                            token = cl.Token;
+                        }
+                        sisUrl = user.District.SisUrl;
                     }
-                    if (user.SisUserName != null)
+                    else if (user.IsDeveloper)
                     {
-                        if (user.OriginalPassword == null)
-                            throw new ChalkableException("Sis connection requires not encripted password");
-                        var cl = ConnectorLocator.Create(user.SisUserName, user.OriginalPassword, user.District.SisUrl);
-                        token = cl.Token;           
+                        role = CoreRoles.DEVELOPER_ROLE;
+                        var developer = new DeveloperDataAccess(uow).GetDeveloper(user.DistrictRef.Value);
+                        developerId = developer.Id;
+                        var school = ServiceLocator.SchoolService.GetSchools(developer.DistrictRef, 0, 10).OrderBy(x=>x.LocalId).First(); //todo rewrite this later
+                        schoolId = school.Id;
+                        schoolLocalId = school.LocalId;
+                        districtId = school.DistrictRef;
+                        schoolServerUrl = user.District.ServerUrl;
+                        schoolTimeZone = user.District.TimeZone;
                     }
-                    sisUrl = user.District.SisUrl;
+                    else
+                        throw new Exception("User's role can not be defined");
                 }
                 else
                     throw new NotSupportedException("multiple school users are not supported yet");
@@ -139,19 +157,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 if (user.IsSysAdmin)
                     role = CoreRoles.SUPER_ADMIN_ROLE;
-                else if (user.IsDeveloper)
-                {
-                    role = CoreRoles.DEVELOPER_ROLE;
-                    var developer = new DeveloperDataAccess(uow).GetDeveloper(user.Id);
-                    developerId = developer.Id;
-                    var school = ServiceLocator.SchoolService.GetSchools(developer.DistrictRef, 0, 1).First();
-                    var district = ServiceLocator.DistrictService.GetByIdOrNull(school.DistrictRef);
-                    schoolId = school.Id;
-                    schoolLocalId = school.LocalId;
-                    districtId = school.DistrictRef;
-                    schoolServerUrl = district.ServerUrl;
-                    schoolTimeZone = district.TimeZone;
-                }
                 else
                     throw new Exception("User's role can not be defined");
             }
