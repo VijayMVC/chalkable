@@ -109,13 +109,24 @@ namespace Chalkable.Data.Master.Model
 
     public class ApplicationRating
     {
+        public const string ID_FIELD = "Id";
+        public const string APPLICATION_REF_FIELD = "ApplicationRef";
+        public const string USER_REF_FIELD = "UserRef";
+
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
-        public const string APPLICATION_REF_FIELD = "ApplicationRef";
         public Guid ApplicationRef { get; set; }
         public Guid UserRef { get; set; }
         public int Rating { get; set; }
         public string Review { get; set; }
+
+        [DataEntityAttr]
+        public User User { get; set; }
+        [NotDbFieldAttr]
+        public int? UserLocalId
+        {
+            get { return User != null ? User.LocalId : null; }
+        }
     }
 
     public class ApplicationPicture

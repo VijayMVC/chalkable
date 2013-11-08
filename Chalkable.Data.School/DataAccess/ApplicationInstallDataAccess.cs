@@ -54,7 +54,7 @@ namespace Chalkable.Data.School.DataAccess
         }
 
         public IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Guid applicationId, int callerId, int? personId, IList<int> roles, IList<Guid> departments
-            , IList<int> gradeLevels, IList<int> classes, int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach)
+            , IList<int> gradeLevels, IList<int> classes, int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
                 {
@@ -71,6 +71,7 @@ namespace Chalkable.Data.School.DataAccess
                     {"hasTeacherMyApps", hasTeacherMyApps},
                     {"hasStudentMyApps", hasStudentMyApps},
                     {"canAttach", canAttach},
+                    {"schoolYearId", schoolYearId}
                 };
             using (var reader = ExecuteStoredProcedureReader("spGetPersonsForApplicationInstall", ps))
             {
@@ -79,7 +80,7 @@ namespace Chalkable.Data.School.DataAccess
         }
 
         public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int callerId, int? personId, IList<int> roles, IList<Guid> departments
-            , IList<int> gradeLevels, IList<int> classes, int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach)
+            , IList<int> gradeLevels, IList<int> classes, int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
                 {
@@ -92,6 +93,7 @@ namespace Chalkable.Data.School.DataAccess
                     {"hasTeacherMyApps", hasTeacherMyApps},
                     {"hasStudentMyApps", hasStudentMyApps},
                     {"canAttach", canAttach},
+                    {"schoolYearId", schoolYearId}
                 };
             ps.Add("roleIds", roles == null || roles.Count == 0 ? null : roles.JoinString(","));
             ps.Add("departmentIds", departments == null || departments.Count == 0 ? null : departments.JoinString(","));
@@ -125,6 +127,18 @@ namespace Chalkable.Data.School.DataAccess
         public ApplicationInstallActionDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
+
+        public ApplicationInstallAction GetLastAppInstallAction(Guid appId, int ownerId)
+        {
+            var tname = typeof (ApplicationInstallAction).Name;
+            var conds = new AndQueryCondition
+                {
+                    {ApplicationInstallAction.OWNER_REF_FIELD, ownerId},
+                    {ApplicationInstallAction.APPLICATION_REF_FIELD, appId}
+                };
+            var q = Orm.OrderedSelect(tname, conds, ApplicationInstallAction.ID_FIELD, Orm.OrderType.Desc, 1);
+            return ReadOne<ApplicationInstallAction>(q);
+        } 
     }
 
     public class ApplicationInstallActionClassesDataAccess : DataAccessBase<ApplicationInstallActionClasses, int>

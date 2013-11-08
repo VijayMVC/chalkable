@@ -110,7 +110,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new ApplicationInstallDataAccess(uow);
                 var persons = da.GetPersonsForApplicationInstall(applicationId, Context.UserLocalId.Value, personId, roleIds, departmentIds, gradeLevelIds, classIds, Context.Role.Id
-                                                   , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach);
+                                                   , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, schoolYearId);
                 var spIds = persons.Select(x => x.PersonId).Distinct().ToList();
                 var schoolYear = ServiceLocator.SchoolYearService.GetSchoolYearById(schoolYearId);
                 var res = RegistarationInstallationAction(uow, app, personId, roleIds, classIds, departmentIds, gradeLevelIds);
@@ -147,7 +147,7 @@ namespace Chalkable.BusinessLogic.Services.School
             };
             var ada = new ApplicationInstallActionDataAccess(uow);
             ada.Insert(res);
-
+            res = ada.GetLastAppInstallAction(app.Id, Context.UserLocalId.Value);
             var descriptionBuilder = new StringBuilder();
             descriptionBuilder.AppendFormat(APP_INSTALLED_FOR_FMT, app.Name);
             if (Context.Role.Id == CoreRoles.TEACHER_ROLE.Id && classids != null)
@@ -299,7 +299,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new UnassignedUserException();
             var priceData = GetApplicationTotalPrice(applicationId, schoolPersonId, roleIds, classIds, gradelevelIds, departmentIds);
             var cnt = priceData.ApplicationInstallCountInfo.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count.Value;
-            var bugetBalance = ServiceLocator.ServiceLocatorMaster.FundService.GetUserBalance(Context.UserId);
+            var bugetBalance = 0; // todo : implement fund service ServiceLocator.ServiceLocatorMaster.FundService.GetUserBalance(Context.UserId);
             return (bugetBalance - priceData.TotalPrice >= 0 || priceData.TotalPrice == 0) && cnt > 0;
         }
 
@@ -365,8 +365,9 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new ApplicationInstallDataAccess(uow);
+                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(Context.NowSchoolTime.Date);
                 return da.GetPersonsForApplicationInstallCount(applicationId, Context.UserLocalId ?? 0, personId, roleIds, departmentIds, gradeLevelIds, classIds, Context.Role.Id
-                                                   , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach);
+                                                   , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
             }
         }
     }

@@ -6,6 +6,7 @@ namespace Chalkable.Data.Master.Model
 {
     public class User
     {
+        public const string ID_FIELD = "Id";
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public string Login { get; set; }
@@ -42,11 +43,13 @@ namespace Chalkable.Data.Master.Model
 
     public class SchoolUser
     {
+        public const string ROLE_FIELD = "Role";
+        public const string SCHOOL_REF_FIELD = "SchoolRef";
+
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public Guid UserRef { get; set; }
         public Guid SchoolRef { get; set; }
-        public const string ROLE_FIELD = "Role";
         public int Role { get; set; }
         [DataEntityAttr]
         public User User { get; set; }

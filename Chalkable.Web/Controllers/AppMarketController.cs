@@ -90,7 +90,7 @@ namespace Chalkable.Web.Controllers
             
             var appRatings = MasterLocator.ApplicationService.GetRatings(applicationId);
             var allPersons = SchoolLocator.PersonService.GetPaginatedPersons(new PersonQuery());
-
+            
             var res = ApplicationDetailsViewData.Create(application, null, categories, appRatings, allPersons);
             var persons = SchoolLocator.AppMarketService.GetPersonsForApplicationInstallCount(application.Id, Context.UserLocalId, null, null, null, null);
             res.InstalledForPersonsGroup = ApplicationLogic.PrepareInstalledForPersonGroupData(SchoolLocator, MasterLocator, application);

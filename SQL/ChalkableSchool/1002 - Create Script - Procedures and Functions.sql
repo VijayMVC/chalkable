@@ -1199,8 +1199,7 @@ GO
 
 
 
-
-CREATE procedure [dbo].[spGetPersonsForApplicationInstall]
+CREATE PROCEDURE [dbo].[spGetPersonsForApplicationInstall]
 	@applicationId uniqueidentifier, @callerId int, @personId int, @roleIds nvarchar(2048), @departmentIds nvarchar(2048)
 	, @gradeLevelIds nvarchar(2048), @classIds nvarchar(2048), @callerRoleId int
 	, @hasAdminMyApps bit, @hasTeacherMyApps bit, @hasStudentMyApps bit, @canAttach bit, @schoolYearId int
@@ -1228,7 +1227,7 @@ end
 if(@departmentIds is not null)
 begin
 	insert into @departmentIdsT(value)
-	select cast(s as int) from dbo.split(',', @departmentIds)
+	select cast(s as uniqueidentifier) from dbo.split(',', @departmentIds)
 end
 if(@gradeLevelIds is not null)
 begin
@@ -1401,14 +1400,14 @@ if @roleIds is null and @departmentIds is null and @gradeLevelIds is null
 select * 
 from @preResult
 
+
 GO
 
-
-CREATE procedure [dbo].[spGetPersonsForApplicationInstallCount]
+CREATE PROCEDURE [dbo].[spGetPersonsForApplicationInstallCount]
 	@applicationId uniqueidentifier, @callerId int, @personId int,
 	 @roleIds nvarchar(2048), @departmentIds nvarchar(2048)
 	, @gradeLevelIds nvarchar(2048), @classIds nvarchar(2048), @callerRoleId int
-	, @hasAdminMyApps bit, @hasTeacherMyApps bit, @hasStudentMyApps bit, @canAttach bit, @schoolId int
+	, @hasAdminMyApps bit, @hasTeacherMyApps bit, @hasStudentMyApps bit, @canAttach bit, @schoolYearId int
 as
 PRINT('start');
 PRINT(getDate());
@@ -1420,7 +1419,7 @@ declare @preResult table
 );
 insert into @preResult
 exec dbo.spGetPersonsForApplicationInstall @applicationId, @callerId, @personId, @roleIds, @departmentIds, @gradeLevelIds, @classIds
-, @callerRoleId , @hasAdminMyApps , @hasTeacherMyApps , @hasStudentMyApps , @canAttach, @schoolId
+, @callerRoleId , @hasAdminMyApps , @hasTeacherMyApps , @hasStudentMyApps , @canAttach, @schoolYearId
 
 select [Type], [GroupId], Count(*) as [Count]
 from @preResult
@@ -1510,4 +1509,20 @@ begin
 				and p.Id <> @callerId and SchoolPerson.SchoolRef = @schoolId
 	end
 end
+GO
+CREATE FUNCTION [dbo].[Split] (@sep char(1), @s nvarchar(2048))
+RETURNS table
+AS
+RETURN (
+    WITH Pieces(pn, start, stop) AS (
+      SELECT 1, 1, CHARINDEX(@sep, @s)
+      UNION ALL
+      SELECT pn + 1, stop + 1, CHARINDEX(@sep, @s, stop + 1)
+      FROM Pieces
+      WHERE stop > 0
+    )
+    SELECT pn,
+      SUBSTRING(@s, start, CASE WHEN stop > 0 THEN stop-start ELSE 512 END) AS s
+    FROM Pieces
+  )
 GO

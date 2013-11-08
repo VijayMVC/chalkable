@@ -138,7 +138,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult AddToAnnouncement(int announcementId, Guid applicationId)
         {
-            if(Context.UserLocalId.HasValue)
+            if(!Context.UserLocalId.HasValue)
                 throw new UnassignedUserException();
 
             var res = SchoolLocator.ApplicationSchoolService.AddToAnnouncement(announcementId, applicationId);

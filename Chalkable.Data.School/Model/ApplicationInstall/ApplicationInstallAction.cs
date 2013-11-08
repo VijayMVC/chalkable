@@ -9,8 +9,9 @@ namespace Chalkable.Data.School.Model.ApplicationInstall
 {
     public class ApplicationInstallAction
     {
+        public const string ID_FIELD = "Id";
         public const string OWNER_REF_FIELD = "OwnerRef";
-
+        public const string APPLICATION_REF_FIELD = "ApplicationRef";
 
         [IdentityFieldAttr]
         [PrimaryKeyFieldAttr]

@@ -266,7 +266,7 @@ NAMESPACE('chlk.controllers', function (){
                     this.getContext().getSession().set('AnnoucementApplications', apps);
                     app.setCurrentModeUrl(app.getEditUrl());
                     return new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.EDIT);
-                })
+                }, this)
                 .attach(this.validateResponse_());
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
