@@ -18,8 +18,8 @@
         {
             get
             {
-                //var res = "https://az374501.vo.msecnd.net/static-" + Version;
-                var res = "https://127.0.0.1:444";
+                var res = "https://az374501.vo.msecnd.net/static-" + Version;
+                //var res = "https://127.0.0.1:444";
                 return res;
             }
         }
