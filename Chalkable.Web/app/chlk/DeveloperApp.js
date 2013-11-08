@@ -4,9 +4,8 @@ REQUIRE('chlk.controllers.DeveloperController');
 REQUIRE('chlk.controllers.AccountController');
 REQUIRE('chlk.controllers.AppsController');
 REQUIRE('chlk.models.apps.Application');
-REQUIRE('chlk.controls.AppsListControl');
-
-
+REQUIRE('chlk.controls.developer.AppsListControl');
+REQUIRE('chlk.controls.developer.ApiCallListControl');
 
 NAMESPACE('chlk', function (){
 
