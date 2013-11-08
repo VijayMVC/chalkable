@@ -110,9 +110,9 @@ namespace Chalkable.BusinessLogic.Services.Master
             var prototypeId = Guid.Parse(PreferenceService.Get(Preference.DEMO_DISTRICT_ID).Value);
             var prototype = GetByIdOrNull(prototypeId);
             var server = prototype.ServerUrl;
+            IList<Data.Master.Model.School> schools;
             using (var uow = Update())
             {
-
                 district = new District
                 {
                     Id = Guid.NewGuid(),
@@ -123,6 +123,17 @@ namespace Chalkable.BusinessLogic.Services.Master
                 };
                 var da = new DistrictDataAccess(uow);
                 da.Insert(district);
+                var schoolDa = new Data.Master.DataAccess.SchoolDataAccess(uow);
+                var  oldSchools = schoolDa.GetSchools(prototypeId, 0, int.MaxValue);
+                schools = oldSchools.Select(x => new Data.Master.Model.School
+                    {
+                        Id = Guid.NewGuid(),
+                        DistrictRef = district.Id,
+                        LocalId = x.LocalId,
+                        District = district,
+                        Name = x.Name
+                    }).ToList();
+                schoolDa.Insert(schools);
                 uow.Commit();
             }
 
@@ -141,35 +152,40 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
 
 
-            IList<Person> users;
+            IList<Person> persons;
             IList<SchoolPerson> schoolPersons;
-            using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, server, district.Id.ToString()), false))
+            using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, server, district.Id.ToString()), true))
             {
                 var da = new PersonDataAccess(unitOfWork, Context.SchoolLocalId);
-                users = da.GetAll();
+                persons = da.GetAll();
+                foreach (var person in persons)
+                {
+                    person.Email = district.DemoPrefix + person.Email;
+                }
+                da.Update(persons);
                 var spDa = new SchoolPersonDataAccess(unitOfWork);
                 schoolPersons = spDa.GetSchoolPersons(null, null, null);
+                unitOfWork.Commit();
             }
-
-            var schools = ServiceLocator.SchoolService.GetAll();
-            foreach (var person in users)
+            IList<User> users = new List<User>();
+            IList<SchoolUser> schoolUsers = new List<SchoolUser>();
+            foreach (var person in persons)
             {
                 var u = ServiceLocator.UserService.CreateSchoolUser(person.Email, "tester", district.Id, person.Id, null);
-                var p = person;
-                var sps = schoolPersons.Where(x => x.PersonRef == p.Id);
+                users.Add(u);
+                var sps = schoolPersons.Where(x => x.PersonRef == person.Id).ToList();
                 foreach (var schoolPerson in sps)
                 {
-                    ServiceLocator.UserService.AssignUserToSchool(new List<SchoolUser>
-                        {
-                            new SchoolUser
-                                {
-                                    Id = u.Id, 
-                                    SchoolRef = schools.First(x=>x.LocalId == schoolPerson.SchoolRef).Id, 
-                                    Role = schoolPerson.RoleRef
-                                }
-                        });
+                    schoolUsers.Add(new SchoolUser
+                    {
+                        Id = Guid.NewGuid(),
+                        SchoolRef = schools.First(x => x.LocalId == schoolPerson.SchoolRef).Id,
+                        Role = schoolPerson.RoleRef,
+                        UserRef = u.Id,
+                    });
                 }
             }
+            ServiceLocator.UserService.AssignUserToSchool(schoolUsers);
         }
 
         public IList<District> GetDemoDistrictsToDelete()
