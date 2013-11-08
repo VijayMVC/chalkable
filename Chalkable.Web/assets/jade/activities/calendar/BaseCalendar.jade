@@ -1,4 +1,4 @@
-mixin Calendar(data, bodyTpl, bodyModel, controller, actions, params)
+mixin Calendar(data, bodyTpl, bodyModel, controller, actions, params, userRole)
     .chlk-calendar(attributes)
         .header
             .header-container
@@ -7,7 +7,9 @@ mixin Calendar(data, bodyTpl, bodyModel, controller, actions, params)
                         block
                         +CalendarHeader(data, controller, actions, params)
         .calendar-body
-            +RenderWith(bodyModel, bodyTpl)
+            +RenderWith(bodyModel, bodyTpl)(
+                userRole = userRole
+            )
 
 
 mixin CalendarHeader(data, controller, actions, params)

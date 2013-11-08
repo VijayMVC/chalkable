@@ -72,6 +72,12 @@ NAMESPACE('chlk.controls', function () {
                 return false;
             },
 
+            [ria.mvc.DomEventBind('click', 'A[data-link].disabled, A[data-link].pressed, A[data-link][disabled]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            Boolean, function onDisabledActionLinkClick(node, event) {
+                return false;
+            },
+
 
             [ria.mvc.DomEventBind('click', 'span.chlk-button.action-button:not(.disabled)')],
             [[ria.dom.Dom, ria.dom.Event]],

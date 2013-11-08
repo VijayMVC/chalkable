@@ -231,6 +231,7 @@ NAMESPACE('ria.mvc', function () {
             [[ImplementerOf(ria.mvc.IActivity), ria.async.Future]],
             function ShadeView(clazz, data) {
                 var instance = new clazz();
+                this.prepareActivity(instance);
                 this.view.shadeD(instance, data);
             },
 

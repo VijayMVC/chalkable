@@ -8,5 +8,6 @@ div
         selectedIds=obj.selectedIds
         multiple=obj.multiple
     ).classes-bar
-    +Calendar(self, chlk.templates.calendar.announcement.MonthCalendarBodyTpl, self.getModel(), 'calendar', actions, [params])
+    -console.info(self.getUserRole());
+    +Calendar(self, chlk.templates.calendar.announcement.MonthCalendarBodyTpl, self.getModel(), 'calendar', actions, [params], self.getUserRole())
 
