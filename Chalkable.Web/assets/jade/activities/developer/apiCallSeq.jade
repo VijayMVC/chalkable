@@ -1,0 +1,14 @@
+items = self.getApiCallSequence(self.getItems())
+
+if items.length == 0
+    .tree-node.single No calls required
+else
+    each item, index in items
+        if !item.separator
+            .tree-node.way-item(data-param=item.getName())
+                span.title=item.getIndex()+ ". " + item.getName()
+                    each param in item.getRequiredParams()
+                        span.param=param
+        else
+            .tree-node.separator
+                span.way-arrow
