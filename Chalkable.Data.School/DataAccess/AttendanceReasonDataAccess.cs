@@ -9,4 +9,11 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
     }
+
+    public class AttendanceLevelReasonDataAccess : DataAccessBase<AttendacneLevelReason, int>
+    {
+        public AttendanceLevelReasonDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        {
+        }
+    }
 }
