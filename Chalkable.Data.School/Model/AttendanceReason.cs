@@ -9,6 +9,7 @@ namespace Chalkable.Data.School.Model
 {
     public class AttendanceReason
     {
+        public const string ID_FIELD = "Id";
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string Code { get; set; }
@@ -17,14 +18,20 @@ namespace Chalkable.Data.School.Model
         public string Category { get; set; }
         public bool IsSystem { get; set; }
         public bool IsActive { get; set; }
+
+        [DataEntityAttr]
+        public IList<AttendanceReason> AttendanceReasons { get; set; } 
     }
 
     public class AttendacneLevelReason
     {
+        public const string ATTENDACNE_REASON_REF_FIELD = "AttendanceReasonRef";
+
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
-        public int AttendanceReasonId { get; set; }
+        public int AttendanceReasonRef { get; set; }
         public string Level { get; set; }
         public bool IsDefault { get; set; }
+        
     }
 }
