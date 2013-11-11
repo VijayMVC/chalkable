@@ -19,8 +19,8 @@ namespace Chalkable.Data.School.Model
         public bool IsSystem { get; set; }
         public bool IsActive { get; set; }
 
-        [DataEntityAttr]
-        public IList<AttendanceReason> AttendanceReasons { get; set; } 
+        [NotDbFieldAttr]
+        public IList<AttendanceLevelReason> AttendanceLevelReasons { get; set; } 
     }
 
     public class AttendanceLevelReason
@@ -32,6 +32,8 @@ namespace Chalkable.Data.School.Model
         public int AttendanceReasonRef { get; set; }
         public string Level { get; set; }
         public bool IsDefault { get; set; }
-        
+
+        [NotDbFieldAttr]
+        public AttendanceReason AttendanceReason { get; set; }
     }
 }
