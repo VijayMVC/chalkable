@@ -4,7 +4,8 @@ NAMESPACE('chlk.models.apps', function(){
         ADD_ME: 'addMe',
         CLOSE_ME : 'closeMe',
         SAVE_ME: 'saveMe',
-        SHOW_PLUS: 'showPlus'
+        SHOW_PLUS: 'showPlus',
+        APP_ERROR: 'appError'
     });
 })
 

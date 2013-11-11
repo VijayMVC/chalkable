@@ -30,13 +30,13 @@ namespace Chalkable.Web.Controllers
 
         //TODO: add paginated list
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult ListInstalled(Guid personId)
+        public ActionResult ListInstalled(Guid personId, int? start, int? count)
         {
             var sp = SchoolLocator.PersonService.GetPerson(personId);
             var appInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(personId);
-            var instaledApp = SchoolLocator.AppMarketService.ListInstalled(personId, true);
-            var hasMyAppDic = instaledApp.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
-            var res = InstalledApplicationViewData.Create(appInstallations, sp, instaledApp, hasMyAppDic);
+            var installedApp = SchoolLocator.AppMarketService.ListInstalled(personId, true);
+            var hasMyAppDic = installedApp.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
+            var res = InstalledApplicationViewData.Create(appInstallations, sp, installedApp, hasMyAppDic);
             return Json(res);
         }
 

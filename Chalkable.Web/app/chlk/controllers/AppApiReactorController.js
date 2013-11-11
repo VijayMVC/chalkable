@@ -78,10 +78,15 @@ NAMESPACE('chlk.controllers', function (){
             [[Object]],
             function showPlusAction(data){
                 //do partial update and show buttons
-                console.info('addMe', data);
                 /*
                  IWindow.find('.chalkable-app-action-button').fadeIn();
                 * */
+            },
+
+
+            [[Object]],
+            function appError(data){
+
             }
         ]);
 });
