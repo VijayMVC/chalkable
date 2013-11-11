@@ -45,7 +45,7 @@ namespace Chalkable.Web.Controllers
                     
                 });
 
-            var l = new ConnectorLocator(Context.SisToken, Context.DistrictServerUrl);
+            var l = new ConnectorLocator(Context.SisToken, Context.SisUrl);
             var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
             l.AttendanceConnector.SetSectionAttendance(sy.Id, date, classId, sa);
 
@@ -100,7 +100,7 @@ namespace Chalkable.Web.Controllers
             var listClassAttendance = new List<ClassAttendanceViewData>();
             if (cp != null)
             {
-                var l = new ConnectorLocator(Context.SisToken, Context.DistrictServerUrl);
+                var l = new ConnectorLocator(Context.SisToken, Context.SisUrl);
                 var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
                 var sa = l.AttendanceConnector.GetSectionAttendance(sy.Id, date.Value, classId);
                 var clazz = SchoolLocator.ClassService.GetClassById(cp.ClassRef);
@@ -225,7 +225,7 @@ namespace Chalkable.Web.Controllers
                     well.Add(student);
             }
 
-            return Json(AttendanceSummaryViewData.Create(trouble, well, all, markingPeriod), 5);
+            return Json(AttendanceSummaryViewData.Create(trouble, well.Take(10).ToList(), all, markingPeriod), 5);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]

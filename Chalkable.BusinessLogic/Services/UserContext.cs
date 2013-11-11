@@ -105,7 +105,7 @@ namespace Chalkable.BusinessLogic.Services
         private const int DEVELOPER_ID = 8;
         private const int USER_LOCAL_ID = 9;
         private const int SIS_TOKEN = 10;
-        private const int SIS_URL = 10;
+        private const int SIS_URL = 11;
 
         public static UserContext FromString(string s)
         {
@@ -133,7 +133,7 @@ namespace Chalkable.BusinessLogic.Services
                 if (!string.IsNullOrEmpty(sl[USER_LOCAL_ID]))
                     localId = int.Parse(sl[USER_LOCAL_ID]);
                 sisToken = sl[SIS_TOKEN];
-                sisUrl = sl[SIS_TOKEN];
+                sisUrl = sl[SIS_URL];
             }
             var role = CoreRoles.GetById(int.Parse(sl[ROLE_ID]));
             
