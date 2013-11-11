@@ -1,5 +1,5 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
-REQUIRE('chlk.templates.attendance.ClassAttendance');
+REQUIRE('chlk.templates.attendance.ClassAttendanceTpl');
 REQUIRE('chlk.templates.attendance.ClassList');
 
 NAMESPACE('chlk.activities.attendance', function () {
@@ -19,10 +19,10 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this._gridEvents = chlk.controls.GridEvents;
             },
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.attendance.ClassAttendance)],
+            [ria.mvc.PartialUpdateRule(chlk.templates.attendance.ClassAttendanceTpl)],
             VOID, function doUpdateItem(tpl, model, msg_) {
                 this.dom.find('.keyboard-suggestion').hide();
-                var container = this.dom.find('.container-' + model.getClassPersonId().valueOf());
+                var container = this.dom.find('.container-' + model.getClassId().valueOf());
                 container.empty();
                 tpl.renderTo(container);
                 var row = container.parent('.row');

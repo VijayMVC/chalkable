@@ -184,6 +184,8 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
             return ServiceLocator.UserService.GetByLogin(BuildDemoUserName(roleName, prefix));
         }
+
+
         
         public User GetByLogin(string login)
         {

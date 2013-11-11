@@ -26,17 +26,17 @@ NAMESPACE('chlk.models.attendance', function () {
         'ClassAttendance', [
             chlk.models.id.ClassAttendanceId, 'id',
 
-            [ria.serialize.SerializeProperty('classpersonid')],
-            chlk.models.id.ClassPersonId, 'classPersonId',
-
-            [ria.serialize.SerializeProperty('classperiodid')],
-            chlk.models.id.ClassPeriodId, 'classPeriodId',
+//            [ria.serialize.SerializeProperty('classpersonid')],
+//            chlk.models.id.ClassPersonId, 'classPersonId',
+//
+//            [ria.serialize.SerializeProperty('classperiodid')],
+//            chlk.models.id.ClassPeriodId, 'classPeriodId',
 
             chlk.models.common.ChlkDate, 'date',
 
             Number, 'type',
 
-            chlk.models.period.Period, 'period',
+//            chlk.models.period.Period, 'period',
 
             chlk.models.people.User, 'student',
 

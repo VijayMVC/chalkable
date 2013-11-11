@@ -4,19 +4,19 @@ REQUIRE('chlk.converters.attendance.AttendanceTypeToNameConverter');
 
 NAMESPACE('chlk.templates.attendance', function () {
 
-    /** @class chlk.templates.attendance.ClassAttendance*/
+    /** @class chlk.templates.attendance.ClassAttendanceTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/attendance/StudentAttendance.jade')],
         [ria.templates.ModelBind(chlk.models.attendance.ClassAttendance)],
-        'ClassAttendance', EXTENDS(chlk.templates.ChlkTemplate), [
+        'ClassAttendanceTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.id.ClassAttendanceId, 'id',
 
-            [ria.templates.ModelPropertyBind],
-            chlk.models.id.ClassPersonId, 'classPersonId',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.id.ClassPeriodId, 'classPeriodId',
+//            [ria.templates.ModelPropertyBind],
+//            chlk.models.id.ClassPersonId, 'classPersonId',
+//
+//            [ria.templates.ModelPropertyBind],
+//            chlk.models.id.ClassPeriodId, 'classPeriodId',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'date',
@@ -24,11 +24,14 @@ NAMESPACE('chlk.templates.attendance', function () {
             [ria.templates.ModelPropertyBind],
             Number, 'type',
 
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.ClassId, 'classId',
+
             [ria.templates.ModelPropertyBind('type', chlk.converters.attendance.AttendanceTypeToNameConverter)],
             String, 'typeName',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.period.Period, 'period',
+//
+//            [ria.templates.ModelPropertyBind],
+//            chlk.models.period.Period, 'period',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.people.User, 'student',
@@ -46,6 +49,6 @@ NAMESPACE('chlk.templates.attendance', function () {
 
             String, function getSubmitFormActionName(){
                 return 'setAttendanceProfile';
-            }
+            },
         ])
 });

@@ -6,9 +6,11 @@ reason = needDropdown ? self.getAttendanceReason() : '';
 name = self.getTypeName();
 student = self.getStudent();
 +ActionForm('attendance', 'setAttendance')(class= self.isNeedPresent && self.isNeedPresent() ? 'need-present' : '').student-attendance-form
-    +Hidden('classpersonid', self.getClassPersonId().valueOf())
+    //+Hidden('classpersonid', self.getClassPersonId().valueOf())
     +Hidden('type', value)
-    +Hidden('classperiodid', self.getClassPeriodId().valueOf())
+    +Hidden('classid', self.getClassId().valueOf())
+    +Hidden('studentid', self.getStudent().getId().valueOf())
+    //+Hidden('classperiodid', self.getClassPeriodId().valueOf())
     +Hidden('attendancereasonid', reason && reason.getId().valueOf())
     +Hidden('date', self.getDate().toStandardFormat())
     +Hidden('attendanceReasonDescription', reason && reason.getDescription())

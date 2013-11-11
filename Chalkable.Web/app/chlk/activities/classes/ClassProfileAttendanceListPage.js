@@ -1,5 +1,5 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
-REQUIRE('chlk.templates.attendance.ClassAttendance');
+REQUIRE('chlk.templates.attendance.ClassAttendanceTpl');
 REQUIRE('chlk.templates.classes.ClassProfileAttendanceListTpl');
 
 NAMESPACE('chlk.activities.classes', function () {

@@ -98,6 +98,7 @@ namespace Chalkable.Web.Controllers
             {
                 var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
                 var school = MasterLocator.SchoolService.GetById(Context.SchoolId.Value);
+                school.District = district;
                 PrepareJsonData(ShortSchoolViewData.Create(school), ViewConstants.SCHOOL);
                 if (!string.IsNullOrEmpty(district.DemoPrefix))
                 {
