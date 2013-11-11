@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chalkable.BusinessLogic.Security;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -9,7 +7,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAttendanceReasonService
     {
-        AttendanceReason Add(AttendanceTypeEnum type, string code, string description);
+        void Add(IList<AttendanceReason> reasons);
         AttendanceReason Edit(Guid id, AttendanceTypeEnum type, string code, string description);
         void Delete(Guid id);
         IList<AttendanceReason> List();
@@ -86,9 +84,14 @@ namespace Chalkable.BusinessLogic.Services.School
         //    }
         //}
 
-        public AttendanceReason Add(AttendanceTypeEnum type, string code, string description)
+        public void Add(IList<AttendanceReason> reasons)
         {
-            throw new NotImplementedException();
+            using (var uow = Update())
+            {
+                var da = new AttendanceReasonDataAccess(uow);
+                da.Insert(reasons);
+                uow.Commit();
+            }
         }
 
         public AttendanceReason Edit(Guid id, AttendanceTypeEnum type, string code, string description)
@@ -103,7 +106,11 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<AttendanceReason> List()
         {
-            throw new NotImplementedException();
+            using (var uow = Read())
+            {
+                var da = new AttendanceReasonDataAccess(uow);
+                return da.GetAll();
+            }
         }
 
         public AttendanceReason Get(Guid id)

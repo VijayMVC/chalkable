@@ -95,7 +95,7 @@ namespace Chalkable.Web.Controllers
                             Student = persons.First(x=>x.Id == ssa.StudentId)
                         });
                 }
-                IList<AttendanceReason> attendanceReason = new List<AttendanceReason>();
+                IList<AttendanceReason> attendanceReason = SchoolLocator.AttendanceReasonService.List();
 
                 listClassAttendance = ClassAttendanceViewData.Create(attendances, attendanceReason).ToList();
             }

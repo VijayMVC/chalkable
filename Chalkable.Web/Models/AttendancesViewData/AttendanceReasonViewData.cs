@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
 
@@ -8,8 +7,8 @@ namespace Chalkable.Web.Models.AttendancesViewData
     public class AttendanceReasonViewData
     {
         public int Id { get; set; }
-        public int AttendanceType { get; set; }
         public string Code { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
 
         public static AttendanceReasonViewData Create(AttendanceReason reason)
@@ -17,7 +16,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
             return new AttendanceReasonViewData
                 {
                     Id = reason.Id,
-                    AttendanceType = (int) reason.AttendanceType,
+                    Name = reason.Name,
                     Code = reason.Code,
                     Description = reason.Description
                 };

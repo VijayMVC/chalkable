@@ -73,8 +73,27 @@ namespace Chalkable.StiConnector.Services
             ImportClassPeriods();
             Log.LogInfo(ChlkResources.IMPORT_CLASS_SCHOOL_PERSONS_START);
             ImportClassPersons();
+            Log.LogInfo("Import attendance reasons");
+            ImportAttendanceReasons();
         }
-        
+
+        private void ImportAttendanceReasons()
+        {
+            var reasons = stiEntities.AbsenceReasons.ToList();
+            var rs = reasons.Select(x => new AttendanceReason
+                {
+                    Category = x.AbsenceCategory,
+                    Code = x.Code,
+                    Description = x.Description,
+                    Id = x.AbsenceReasonID,
+                    IsActive = x.IsActive,
+                    IsSystem = x.IsSystem,
+                    Name = x.Name
+                }).ToList();
+            ServiceLocatorSchool.AttendanceReasonService.Add(rs);
+
+        }
+
         private void ImportSchools()
         {
             var schools = stiEntities.Schools;
