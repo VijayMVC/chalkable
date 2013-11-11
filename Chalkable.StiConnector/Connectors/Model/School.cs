@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -109,25 +107,4 @@ namespace Chalkable.StiConnector.Connectors.Model
         public double Latitude { get; set; }
         public double Longitude { get; set; }
     }
-
-    /*
-     <AddressLine1>430 Plum Dr</AddressLine1>
-<AddressLine2/>
-<AddressNumber>A4649</AddressNumber>
-<City>Abydos</City>
-<CountryId>220</CountryId>
-<CountyId i:nil="true"/>
-<Description/>
-<Id>5451</Id>
-<IsHeadOfHousehold>false</IsHeadOfHousehold>
-<IsListed>true</IsListed>
-<IsMailing>true</IsMailing>
-<IsPhysical>true</IsPhysical>
-<Latitude>0.0000000</Latitude>
-<Longitude>0.0000000</Longitude>
-<PersonId>4951</PersonId>
-<PostalCode>00000</PostalCode>
-<StateId>1</StateId>
-<SubdivisionName/>
-     */
 }

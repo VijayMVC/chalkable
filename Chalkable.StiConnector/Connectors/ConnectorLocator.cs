@@ -28,6 +28,7 @@ namespace Chalkable.StiConnector.Connectors
             GradeLevelConnector = new GradeLevelConnector(this);
             GenderConnector = new GenderConnector(this);
             ContactConnector = new ContactConnector(this);
+            AttendanceConnector = new AttendanceConnector(this);
         }
 
         public SchoolConnector SchoolConnector { get; private set; }
@@ -36,6 +37,7 @@ namespace Chalkable.StiConnector.Connectors
         public GradeLevelConnector GradeLevelConnector { get; private set; }
         public GenderConnector GenderConnector { get; private set; }
         public ContactConnector ContactConnector { get; private set; }
+        public AttendanceConnector AttendanceConnector { get; set; }
 
         public class TokenModel
         {

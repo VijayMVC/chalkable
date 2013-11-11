@@ -12,12 +12,12 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAttendanceService
     {
-        ClassAttendance SetClassAttendance(Guid classPersonId, Guid classPeriodId, DateTime date, AttendanceTypeEnum type, Guid? attendanceReasonId = null, int? sisId = null);
+        ClassAttendance SetClassAttendance(int personId, int sectionId, DateTime date, AttendanceTypeEnum type, int? attendanceReasonId);
         IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, AttendanceTypeEnum type, Guid? attendanceReasonId = null, int? sisId = null);
         StudentDailyAttendance SetDailyAttendance(DateTime date, Guid personId,  int? timeIn, int? timeOut);
         StudentDailyAttendance GetDailyAttendance(DateTime date, Guid personId);
         IList<StudentDailyAttendance> GetDailyAttendances(DateTime date); 
-        IList<ClassAttendanceDetails> GetClassAttendanceDetails(ClassAttendanceQuery attendanceQuery, IList<Guid> gradeLevelIds = null);
+        //IList<ClassAttendanceDetails> GetClassAttendanceDetails(ClassAttendanceQuery attendanceQuery, IList<Guid> gradeLevelIds = null);
         ClassAttendanceDetails GetClassAttendanceDetails(Guid studentId, Guid classPeriodId, DateTime date);
         ClassAttendanceDetails GetClassAttendanceDetailsById(Guid classAttendanceId);
         IList<ClassAttendanceDetails> GetClassAttendanceDetails(Guid? schoolYearId, Guid? markingPeriodId, Guid? classId, Guid? personId, AttendanceTypeEnum? type, DateTime date);
@@ -406,7 +406,7 @@ namespace Chalkable.BusinessLogic.Services.School
        //     return res && (attendances.Count > 0 || attendances.All(x => x.Type == AttendanceTypeEnum.NotAssigned));
        // }
 
-        public ClassAttendance SetClassAttendance(Guid classPersonId, Guid classPeriodId, DateTime date, AttendanceTypeEnum type, Guid? attendanceReasonId = null, int? sisId = null)
+        public ClassAttendance SetClassAttendance(int personId, int sectionId, DateTime date, AttendanceTypeEnum type, int? attendanceReasonId)
         {
             throw new NotImplementedException();
         }
@@ -431,10 +431,10 @@ namespace Chalkable.BusinessLogic.Services.School
             throw new NotImplementedException();
         }
 
-        public IList<ClassAttendanceDetails> GetClassAttendanceDetails(ClassAttendanceQuery attendanceQuery, IList<Guid> gradeLevelIds = null)
+        /*public IList<ClassAttendanceDetails> GetClassAttendanceDetails(ClassAttendanceQuery attendanceQuery, IList<Guid> gradeLevelIds = null)
         {
             throw new NotImplementedException();
-        }
+        }*/
 
         public ClassAttendanceDetails GetClassAttendanceDetails(Guid studentId, Guid classPeriodId, DateTime date)
         {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -29,6 +30,22 @@ namespace Chalkable.StiConnector.Connectors
             using (var stream = new MemoryStream(client.DownloadData(url)))
             {
                 return (T) ser.ReadObject(stream);
+            }
+        }
+
+        public void Post<T>(string url, T obj)
+        {
+            var client = new WebClient();
+            client.Headers[HttpRequestHeader.Authorization] = "Session " + locator.Token;
+            client.Encoding = Encoding.UTF8;
+
+            Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
+            var x = typeof(T);
+            var ser = new DataContractJsonSerializer(x);
+            using (var stream = new MemoryStream())
+            {
+                ser.WriteObject(stream, obj);
+                client.UploadData(url, stream.ToArray());
             }
         }
 
@@ -100,6 +117,27 @@ namespace Chalkable.StiConnector.Connectors
         public IList<PersonAddresses> GetAddresses(int personId)
         {
             return Call<PersonAddresses[]>(string.Format("{0}persons/{1}/addresses", BaseUrl, personId)).ToList();
+        }
+    }
+
+    public class AttendanceConnector : ConnectorBase
+    {
+        public AttendanceConnector(ConnectorLocator locator) : base(locator)
+        {
+        }
+
+        public SectionAttendance GetSectionAttendance(int acadSessionId, DateTime date, int sectionId)
+        {
+            return Call<SectionAttendance>(string.Format("{0}Chalkable/{1}/sections/{2}/attendance/{3}", BaseUrl, acadSessionId, sectionId, date.ToString("yyyy-MM-dd")));
+        }
+
+        public void SetSectionAttendance(int acadSessionId, DateTime date, int sectionId, SectionAttendance sectionAttendance)
+        {
+            string url = string.Format("{0}Chalkable/{1}/sections/{2}/attendance/{3}", BaseUrl, acadSessionId, sectionId,
+                                       date.ToString("yyyy-MM-dd"));
+
+            Post(url, sectionAttendance);
+                        
         }
     }
 }

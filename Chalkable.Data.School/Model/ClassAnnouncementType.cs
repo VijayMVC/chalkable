@@ -14,6 +14,7 @@ namespace Chalkable.Data.School.Model
         public const string ANNOUNCEMENT_TYPE_REF = "AnnouncementTypeRef";
 
         [PrimaryKeyFieldAttr]
+        [IdentityFieldAttr]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

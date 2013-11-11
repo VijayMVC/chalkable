@@ -9,13 +9,13 @@ namespace Chalkable.Web.Models.AttendancesViewData
     public class ClassAttendanceViewData
     {
         public int Id { get; set; }
-        public int ClassPersonId { get; set; }
+        public int PersonId { get; set; }
         public int ClassPeriodId { get; set; }
         public DateTime Date { get; set; }
         public int Type { get; set; }
         public PeriodViewData Period { get; set; }
         public ShortPersonViewData Student { get; set; }
-        public Guid? AttendanceReasonId { get; set; }
+        public int? AttendanceReasonId { get; set; }
         public AttendanceReasonViewData AttendanceReason { get; set; }
 
         public int TeacherId { get; set; }
@@ -26,14 +26,11 @@ namespace Chalkable.Web.Models.AttendancesViewData
         {
             var res = new ClassAttendanceViewData
                 {
-                    Id = attendance.Id,
-                    ClassPersonId = attendance.ClassPersonRef,
-                    ClassPeriodId = attendance.ClassPeriodRef,
+                    PersonId = attendance.PersonRef,
                     ClassId = attendance.Class.Id,
                     ClassName = attendance.Class.Name,
                     Date = attendance.Date,
                     AttendanceReasonId = attendance.AttendanceReasonRef,
-                    Period = PeriodViewData.Create(attendance.ClassPeriod.Period),
                     Student = ShortPersonViewData.Create(attendance.Student),
                     Type = (int)attendance.Type
                 };
@@ -55,5 +52,6 @@ namespace Chalkable.Web.Models.AttendancesViewData
             }
             return res;
         }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -7,6 +8,7 @@ using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.AttendancesViewData;
@@ -17,9 +19,9 @@ namespace Chalkable.Web.Controllers
     public class AttendanceController : ChalkableController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Attendance })]
-        public ActionResult SetAttendance(Guid classPersonid, Guid classPeriodId, int type, Guid? attendanceReasonId, DateTime date)
+        public ActionResult SetAttendance(int personId, int sectionId, DateTime date, AttendanceTypeEnum type, int? attendanceReasonId)
         {
-            SchoolLocator.AttendanceService.SetClassAttendance(classPersonid, classPeriodId, date, (AttendanceTypeEnum)type, attendanceReasonId);
+            //SchoolLocator.AttendanceService.SetClassAttendance(classPersonid, classPeriodId, date, (AttendanceTypeEnum)type, attendanceReasonId);
             return Json(true);
         }
 
@@ -27,7 +29,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult SetAttendanceForList(GuidList classPersonIds, GuidList classPeriodIds, IntList attendanceTypes, StringList attReasons, DateTime date)
         {
-            for (int i = 0; i < classPersonIds.Count; ++i)
+            /*for (int i = 0; i < classPersonIds.Count; ++i)
             {
                 var classPersonId = classPersonIds[i];
                 var attendanceType = attendanceTypes[i];
@@ -36,7 +38,7 @@ namespace Chalkable.Web.Controllers
                 var periodId = classPeriodIds[i];
                 SchoolLocator.AttendanceService.SetClassAttendance(classPersonId, periodId, date
                     , (AttendanceTypeEnum)attendanceType, hasReason  && reason != Guid.Empty ? reason : (Guid?)null);
-            }
+            }*/
             return Json(true);
         }
 
@@ -49,37 +51,56 @@ namespace Chalkable.Web.Controllers
         }
 
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_ATTENDANCE_LIST_CLASS_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Schedule, AppPermissionType.Class })]
-        public ActionResult ClassList(DateTime? date, Guid classId)
+        private AttendanceTypeEnum Map(string level)
         {
-            throw new NotImplementedException();
-            //date = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
-            //var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(date.Value);
-            //if (mp == null)
-            //    throw new NoMarkingPeriodException();
-           
-            //var attendanceReason = SchoolLocator.AttendanceReasonService.List();
-            //var teacherId = SchoolLocator.Context.Role == CoreRoles.TEACHER_ROLE ? SchoolLocator.Context.UserId : default(Guid?);
-            //var cps = SchoolLocator.ClassPeriodService.GetClassPeriods(date.Value, classId, null, null, teacherId);
-            //var cp = cps.OrderBy(x => x.Period.StartTime).LastOrDefault();
-            //var listClassAttendance = new List<ClassAttendanceViewData>();
-            //if (cp != null)
-            //{
-            //    var query = new ClassAttendanceQuery
-            //        {
-            //            MarkingPeriodId = mp.Id,
-            //            ClassId = classId,
-            //            FromDate = date.Value,
-            //            ToDate = date.Value,
-            //            FromTime = cp.Period.StartTime,
-            //            ToTime = cp.Period.EndTime,
-            //            NeedAllData = true
-            //        };
-            //    var attendances = SchoolLocator.AttendanceService.GetClassAttendanceDetails(query);
-            //    listClassAttendance = ClassAttendanceViewData.Create(attendances, attendanceReason).ToList();
-            //}
-            //listClassAttendance.Sort((x, y) => string.CompareOrdinal(x.Student.LastName, y.Student.LastName));
-            //return Json(new PaginatedList<ClassAttendanceViewData>(listClassAttendance, 0, int.MaxValue));
+            if (level.ToLower() == "present")
+                return AttendanceTypeEnum.Present;
+            throw new ChalkableException("absence level is not recognized");
+
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_ATTENDANCE_LIST_CLASS_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Schedule, AppPermissionType.Class })]
+        public ActionResult ClassList(DateTime? date, int classId)
+        {
+            date = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
+            var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(date.Value);
+            if (mp == null)
+                throw new NoMarkingPeriodException();
+
+            
+
+            var teacherId = SchoolLocator.Context.Role == CoreRoles.TEACHER_ROLE ? SchoolLocator.Context.UserLocalId : default(int?);
+            
+            var cps = SchoolLocator.ClassPeriodService.GetClassPeriods(date.Value, classId, null, null, teacherId);
+            var cp = cps.OrderBy(x => x.Period.StartTime).LastOrDefault();
+            var listClassAttendance = new List<ClassAttendanceViewData>();
+            if (cp != null)
+            {
+                var l = new ConnectorLocator(Context.SisToken, "http://localhost/Api/");
+                var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
+                var sa = l.AttendanceConnector.GetSectionAttendance(sy.Id, date.Value, classId);
+                var clazz = SchoolLocator.ClassService.GetClassById(cp.ClassRef);
+                var persons = SchoolLocator.PersonService.GetPersons();//TODO: get class persons only
+                var attendances = new List<ClassAttendanceDetails>();
+                foreach (var ssa in sa.StudentAttendance)
+                {
+                    attendances.Add(new ClassAttendanceDetails
+                        {
+                            ClassRef = ssa.SectionId,
+                            AttendanceReasonRef = ssa.ReasonId,
+                            Date = date.Value,
+                            PersonRef = ssa.StudentId,
+                            Type = Map(ssa.ClassroomLevel),
+                            Class = clazz,
+                            Student = persons.First(x=>x.Id == ssa.StudentId)
+                        });
+                }
+                IList<AttendanceReason> attendanceReason = new List<AttendanceReason>();
+
+                listClassAttendance = ClassAttendanceViewData.Create(attendances, attendanceReason).ToList();
+            }
+            listClassAttendance.Sort((x, y) => string.CompareOrdinal(x.Student.LastName, y.Student.LastName));
+            return Json(new PaginatedList<ClassAttendanceViewData>(listClassAttendance, 0, int.MaxValue));
         }
 
 
@@ -158,36 +179,29 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher", Preference.API_DESCR_ATTENDANCE_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Attendance })]
         public ActionResult AttendanceSummary(DateTime? date)
         {
-            throw new NotImplementedException();
-            //date = date ?? SchoolLocator.Context.NowSchoolTime;
-            //var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(date.Value);
-            //if (markingPeriod == null)
-            //    throw new NoMarkingPeriodException();
-            //var trouble = new List<Person>();
-            //var well = new List<Person>();
-            //var query = new ClassAttendanceQuery
-            //{
-            //    MarkingPeriodId = markingPeriod.Id,
-            //    FromDate = date,
-            //    ToDate = date,
-            //    TeacherId = SchoolLocator.Context.UserId,
-            //    Type = AttendanceTypeEnum.Absent | AttendanceTypeEnum.Excused | AttendanceTypeEnum.Late | AttendanceTypeEnum.Present
-            //};
-            //var studentsList = SchoolLocator.PersonService.GetPersons().Where(x=>x.RoleRef == CoreRoles.STUDENT_ROLE.Id).ToList();
-
-
-            //var all = SchoolLocator.AttendanceService.GetClassAttendanceDetails(query);
-            //foreach (var student in studentsList)
-            //{
-            //    var attendances = all.Where(x => x.Student.Id == student.Id).ToList();
-            //    var stat = attendances.Where(t => t.Type == AttendanceTypeEnum.Absent || t.Type == AttendanceTypeEnum.Late).ToList();
-            //    if (stat.Count >= 5)
-            //        trouble.Add(student);
-            //    else if (stat.Count <= 1)
-            //        well.Add(student);
-            //}
+            //throw new NotImplementedException();
+            date = date ?? SchoolLocator.Context.NowSchoolTime;
+            var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(date.Value);
+            if (markingPeriod == null)
+                throw new NoMarkingPeriodException();
+            var trouble = new List<Person>();
+            var well = new List<Person>();
             
-            //return Json(AttendanceSummaryViewData.Create(trouble, well, all, markingPeriod), 5);
+            var studentsList = SchoolLocator.PersonService.GetPersons().Where(x => x.RoleRef == CoreRoles.STUDENT_ROLE.Id).ToList();
+
+
+            var all = new List<ClassAttendanceDetails>();
+            foreach (var student in studentsList)
+            {
+                var attendances = all.Where(x => x.Student.Id == student.Id).ToList();
+                var stat = attendances.Where(t => t.Type == AttendanceTypeEnum.Absent || t.Type == AttendanceTypeEnum.Late).ToList();
+                if (stat.Count >= 5)
+                    trouble.Add(student);
+                else if (stat.Count <= 1)
+                    well.Add(student);
+            }
+
+            return Json(AttendanceSummaryViewData.Create(trouble, well, all, markingPeriod), 5);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]

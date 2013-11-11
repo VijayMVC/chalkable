@@ -264,7 +264,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                         AttendanceType = classAttendance.Type,
                         ClassName = classAttendance.Class.Name,
                         Date = classAttendance.Date.ToString(DATA_FORMAT),
-                        Period = classAttendance.ClassPeriod.Period.Order
+                        Period = 0//TODO: no data in INOW ?
                     };
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ATTENDANCE_NOTIFICATION_TO_STUDENT,
                                                  NotificationType.Attendance, recipient, null, null, null, null, null, otherModel);

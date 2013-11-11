@@ -23,12 +23,12 @@ namespace Chalkable.Web.Models.PersonViewDatas
             //var studentGradings = new List<ClassPersonGradingStatsViewData>();
             //foreach (var gSt in gradingStats)
             //{
-            //    var stGrading = studentGradings.FirstOrDefault(x => x.ClassPersonId == gSt.Id);
+            //    var stGrading = studentGradings.FirstOrDefault(x => x.PersonId == gSt.Id);
             //    if (stGrading == null)
             //    {
             //        stGrading = new ClassPersonGradingStatsViewData
             //        {
-            //            ClassPersonId = gSt.Id,
+            //            PersonId = gSt.Id,
             //            PersonId = gSt.PersonRef,
             //            ClassId = gSt.ClassRef,
             //            ClassName = gSt.ClassName,
