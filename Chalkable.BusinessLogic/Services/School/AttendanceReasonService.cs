@@ -12,6 +12,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Delete(Guid id);
         IList<AttendanceReason> List();
         AttendanceReason Get(Guid id);
+        void AddAttendanceLevelReasons(List<AttendanceLevelReason> absebceLevelReasons);
     }
 
     public class AttendanceReasonService : SchoolServiceBase, IAttendanceReasonService
@@ -116,6 +117,16 @@ namespace Chalkable.BusinessLogic.Services.School
         public AttendanceReason Get(Guid id)
         {
             throw new NotImplementedException();
+        }
+
+        public void AddAttendanceLevelReasons(List<AttendanceLevelReason> absebceLevelReasons)
+        {
+            using (var uow = Update())
+            {
+                var da = new AttendanceLevelReasonDataAccess(uow);
+                da.Insert(absebceLevelReasons);
+                uow.Commit();
+            }
         }
     }
 }

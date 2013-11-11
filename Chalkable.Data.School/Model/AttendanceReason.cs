@@ -19,7 +19,7 @@ namespace Chalkable.Data.School.Model
         public bool IsActive { get; set; }
     }
 
-    public class AttendacneLevelReason
+    public class AttendanceLevelReason
     {
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }

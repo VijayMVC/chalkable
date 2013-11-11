@@ -92,6 +92,16 @@ namespace Chalkable.StiConnector.Services
                 }).ToList();
             ServiceLocatorSchool.AttendanceReasonService.Add(rs);
 
+
+            var absebceLevelReasons = stiEntities.AbsenceLevelReasons.ToList()
+                                                 .Select(x => new AttendanceLevelReason
+                                                     {
+                                                         Id = x.AbsenceLevelReasonID,
+                                                         AttendanceReasonId = x.AbsenceReasonID,
+                                                         IsDefault = x.IsDefaultReason,
+                                                         Level = x.AbsenceLevel
+                                                     }).ToList();
+            ServiceLocatorSchool.AttendanceReasonService.AddAttendanceLevelReasons(absebceLevelReasons);
         }
 
         private void ImportSchools()
