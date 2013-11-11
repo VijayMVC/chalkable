@@ -9,6 +9,7 @@ using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors;
+using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.AttendancesViewData;
@@ -19,9 +20,35 @@ namespace Chalkable.Web.Controllers
     public class AttendanceController : ChalkableController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Attendance })]
-        public ActionResult SetAttendance(int personId, int classId, DateTime date, AttendanceTypeEnum type, int? attendanceReasonId)
+        public ActionResult SetAttendance(int personId, int classId, DateTime date, string level, int? attendanceReasonId)
         {
-            //SchoolLocator.AttendanceService.SetClassAttendance(classPersonid, classPeriodId, date, (AttendanceTypeEnum)type, attendanceReasonId);
+            if (!attendanceReasonId.HasValue)
+                return Json(true);//TODO: how to remove?
+
+            var sa = new SectionAttendance
+                {
+                    Date = date.ToString("yyyy-MM-dd"),
+                    SectionId = classId
+                };
+
+            
+
+            var reason = SchoolLocator.AttendanceReasonService.Get(attendanceReasonId.Value);
+            sa.StudentAttendance.Add(new StudentSectionAttendance
+                {
+                    Category = reason.Category,
+                    Date = date.ToString("yyyy-MM-dd"),
+                    Level = level,
+                    ReasonId = (short)attendanceReasonId.Value,
+                    SectionId = classId,
+                    StudentId = personId
+                    
+                });
+
+            var l = new ConnectorLocator(Context.SisToken, Context.DistrictServerUrl);
+            var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
+            l.AttendanceConnector.SetSectionAttendance(sy.Id, date, classId, sa);
+
             return Json(true);
         }
 
@@ -63,10 +90,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult ClassList(DateTime? date, int classId)
         {
             date = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
-            var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(date.Value);
-            if (mp == null)
-                throw new NoMarkingPeriodException();
-
+            
             
 
             var teacherId = SchoolLocator.Context.Role == CoreRoles.TEACHER_ROLE ? SchoolLocator.Context.UserLocalId : default(int?);
@@ -76,7 +100,7 @@ namespace Chalkable.Web.Controllers
             var listClassAttendance = new List<ClassAttendanceViewData>();
             if (cp != null)
             {
-                var l = new ConnectorLocator(Context.SisToken, "http://localhost/Api/");
+                var l = new ConnectorLocator(Context.SisToken, Context.DistrictServerUrl);
                 var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
                 var sa = l.AttendanceConnector.GetSectionAttendance(sy.Id, date.Value, classId);
                 var clazz = SchoolLocator.ClassService.GetClassById(cp.ClassRef);

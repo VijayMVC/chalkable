@@ -105,7 +105,7 @@ namespace Chalkable.StiConnector.Connectors.Model
         /// <summary>
         ///A list of all students enrolled in the section and their current attendance status
         /// </summary>
-        public IEnumerable<StudentSectionAttendance> StudentAttendance { get; set; }
+        public IList<StudentSectionAttendance> StudentAttendance { get; set; }
 
     }
 }
