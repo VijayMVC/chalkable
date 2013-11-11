@@ -7,6 +7,8 @@ BODY {
             #main {
               DIV.api-explorer{
 
+
+
                 .lr-toolbar{
                   .arrow{
                     margin:0;
@@ -521,4 +523,26 @@ BODY {
      }
     }
   }
+
+  .apiDropdownList  {
+     .ui-autocomplete-category{
+        width: 100%;
+        span{
+          font-weight: bold;
+          font-size: 15px;
+          display: inline-block;
+          float: left;
+          width: 20%;
+          line-height: 32px;
+        }
+
+        hr{
+          margin-top: 15px;
+        }
+
+
+
+     }
+  }
+
 }
