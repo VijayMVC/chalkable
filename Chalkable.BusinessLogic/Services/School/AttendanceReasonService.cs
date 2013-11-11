@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chalkable.BusinessLogic.Security;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -87,6 +89,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Add(IList<AttendanceReason> reasons)
         {
+            if(!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new AttendanceReasonDataAccess(uow);
