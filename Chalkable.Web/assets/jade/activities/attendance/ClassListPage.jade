@@ -48,6 +48,7 @@
                         if needPresent
                             -item.setType(valuesEnum.PRESENT.valueOf());
                         student = item.getStudent();
+                        -console.log(student);
                         +ActionLink('students', 'info', student.getId()).left.image-container.white.shadow
                             +PersonImg(student, 47)
                         p.left= student.getFullName()

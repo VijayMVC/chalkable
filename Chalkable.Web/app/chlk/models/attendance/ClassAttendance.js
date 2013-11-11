@@ -24,6 +24,13 @@ NAMESPACE('chlk.models.attendance', function () {
     /** @class chlk.models.attendance.ClassAttendance*/
     CLASS(
         'ClassAttendance', [
+
+            function $(){
+                BASE();
+                this._studentId = null;
+                this._student = null;
+            },
+
             chlk.models.id.ClassAttendanceId, 'id',
 
 //            [ria.serialize.SerializeProperty('classpersonid')],
@@ -39,6 +46,28 @@ NAMESPACE('chlk.models.attendance', function () {
 //            chlk.models.period.Period, 'period',
 
             chlk.models.people.User, 'student',
+
+            [[chlk.models.people.User]],
+            VOID, function setStudent(student){
+                this._student = student;
+                if(student)
+                    this.setStudentId(student.getId());
+            },
+            chlk.models.people.User, function getStudent(){
+                return this._student;
+            },
+
+            [ria.serialize.SerializeProperty('studentid')],
+            chlk.models.id.SchoolPersonId, 'studentId',
+
+            chlk.models.id.SchoolPersonId, function getStudentId(){
+                return this._studentId || (this.getStudent() ? this.getStudent().getId() : null);
+            },
+            [[chlk.models.id.SchoolPersonId]],
+            VOID, function setStudentId(studentId){
+                this._studentId = studentId;
+            },
+
 
             [ria.serialize.SerializeProperty('attendancereasonid')],
             chlk.models.id.AttendanceReasonId, 'attendanceReasonId',

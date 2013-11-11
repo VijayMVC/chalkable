@@ -227,49 +227,50 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.attendance.ClassAttendance]],
         function setAttendanceAction(model){
-//            if(canUpdateStudentAttendance || currentStudentId != model.getClassPersonId()){
-//                currentStudentId = model.getClassPersonId();
-//                canUpdateStudentAttendance = false;
-//                studentAttendanceTimeout = setTimeout(function(){
-//                    canUpdateStudentAttendance = true;
-//                },5);
-//                var activityClass = this.getView().getCurrent().getClass();
-//                return this.UpdateView(activityClass, this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
-//            }
-//            return null;
+            if(canUpdateStudentAttendance || currentStudentId != model.getStudentId()){
+                currentStudentId = model.getStudentId();
+                canUpdateStudentAttendance = false;
+                studentAttendanceTimeout = setTimeout(function(){
+                    canUpdateStudentAttendance = true;
+                },5);
+                var activityClass = this.getView().getCurrent().getClass();
+                return this.UpdateView(activityClass, this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
+            }
+            return null;
         },
 
+        [[chlk.models.attendance.ClassAttendance]],
         ria.async.Future, function setAttendance_(model){
-//            var type = this.changeAttendanceType_(model.getSubmitType(), model.getType());
-//            var items = this.getContext().getSession().get('attendanceData');
-//            var item = items.filter(function(item){
-//                return item.getClassPersonId() == model.getClassPersonId()
-//            })[0];
-//            item.setType(type);
-//            var attReasonId = model.getAttendanceReasonId();
-//            try{
-//                if(attReasonId && attReasonId.valueOf() && item.getReasons().filter(function(item){
-//                    return item.getAttendanceType() == type && item.getId() == attReasonId;
-//                }).length == 0)
-//                    console.info('WARNING setAttendance: type = ' + type + ', reasonId = ' + attReasonId);
-//                else
-//                    this.attendanceService.setAttendance(model.getClassPersonId(), model.getClassPeriodId(), type, attReasonId, model.getDate());
-//
-//            }catch(e){
-//                console.info('ERROR setAttendance: type = ' + type + ', reasonId = ' + attReasonId);
-//            }
-//            if(attReasonId && attReasonId.valueOf()){
-//                if(item.getAttendanceReason()){
-//                    item.getAttendanceReason().setId(attReasonId);
-//                    item.getAttendanceReason().setDescription(model.getAttendanceReasonDescription());
-//                }else{
-//                    var reason = new chlk.models.attendance.AttendanceReason(attReasonId, model.getAttendanceReasonDescription());
-//                    item.setAttendanceReason(reason);
-//                }
-//            }else{
-//                item.setAttendanceReason(null);
-//            }
-//            return new ria.async.DeferredData(item);
+            var type = this.changeAttendanceType_(model.getSubmitType(), model.getType());
+            var items = this.getContext().getSession().get('attendanceData');
+            var item = items.filter(function(item){
+                return item.getStudentId() == model.getStudentId()
+            })[0];
+            item.setType(type);
+            var attReasonId = model.getAttendanceReasonId();
+            try{
+                if(attReasonId && attReasonId.valueOf() && item.getReasons().filter(function(item){
+                    return item.getAttendanceType() == type && item.getId() == attReasonId;
+                }).length == 0)
+                    console.info('WARNING setAttendance: type = ' + type + ', reasonId = ' + attReasonId);
+                else
+                    this.attendanceService.setAttendance(model.getStudentId(), model.getClassId(), type, attReasonId, model.getDate());
+
+            }catch(e){
+                console.info('ERROR setAttendance: type = ' + type + ', reasonId = ' + attReasonId);
+            }
+            if(attReasonId && attReasonId.valueOf()){
+                if(item.getAttendanceReason()){
+                    item.getAttendanceReason().setId(attReasonId);
+                    item.getAttendanceReason().setDescription(model.getAttendanceReasonDescription());
+                }else{
+                    var reason = new chlk.models.attendance.AttendanceReason(attReasonId, model.getAttendanceReasonDescription());
+                    item.setAttendanceReason(reason);
+                }
+            }else{
+                item.setAttendanceReason(null);
+            }
+            return new ria.async.DeferredData(item);
         },
 
         Number,  function changeAttendanceType_(submitType, currentType){

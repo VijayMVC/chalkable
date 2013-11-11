@@ -19,7 +19,7 @@ namespace Chalkable.Web.Controllers
     public class AttendanceController : ChalkableController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Attendance })]
-        public ActionResult SetAttendance(int personId, int sectionId, DateTime date, AttendanceTypeEnum type, int? attendanceReasonId)
+        public ActionResult SetAttendance(int personId, int classId, DateTime date, AttendanceTypeEnum type, int? attendanceReasonId)
         {
             //SchoolLocator.AttendanceService.SetClassAttendance(classPersonid, classPeriodId, date, (AttendanceTypeEnum)type, attendanceReasonId);
             return Json(true);
