@@ -22,7 +22,7 @@ NAMESPACE('chlk.activities.attendance', function () {
             [ria.mvc.PartialUpdateRule(chlk.templates.attendance.ClassAttendanceTpl)],
             VOID, function doUpdateItem(tpl, model, msg_) {
                 this.dom.find('.keyboard-suggestion').hide();
-                var container = this.dom.find('.container-' + model.getClassId().valueOf());
+                var container = this.dom.find('.container-' + model.getStudent().getId().valueOf());
                 container.empty();
                 tpl.renderTo(container);
                 var row = container.parent('.row');

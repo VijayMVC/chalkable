@@ -48,7 +48,6 @@
                         if needPresent
                             -item.setType(valuesEnum.PRESENT.valueOf());
                         student = item.getStudent();
-                        -console.log(student);
                         +ActionLink('students', 'info', student.getId()).left.image-container.white.shadow
                             +PersonImg(student, 47)
                         p.left= student.getFullName()
@@ -57,7 +56,7 @@
                                 len = self.getItems().length;
                                 if (needSuggestion && (i== 5 || (i == len - 1 && len < 6 && len > 2)))
                                     .keyboard-suggestion
-                                div(class="container-" + item.getClassId().valueOf())
+                                div(class="container-" + item.getStudentId().valueOf())
                                     -item.setReasons(self.getReasons());
                                     +RenderWith(item, self.getItemClassType())(
                                         needPresent = needPresent
