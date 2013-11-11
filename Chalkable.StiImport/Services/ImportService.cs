@@ -97,7 +97,7 @@ namespace Chalkable.StiConnector.Services
                                                  .Select(x => new AttendanceLevelReason
                                                      {
                                                          Id = x.AbsenceLevelReasonID,
-                                                         AttendanceReasonId = x.AbsenceReasonID,
+                                                         AttendanceReasonRef = x.AbsenceReasonID,
                                                          IsDefault = x.IsDefaultReason,
                                                          Level = x.AbsenceLevel
                                                      }).ToList();

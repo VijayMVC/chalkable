@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chalkable.BusinessLogic.Security;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -9,9 +11,9 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void Add(IList<AttendanceReason> reasons);
         AttendanceReason Edit(Guid id, AttendanceTypeEnum type, string code, string description);
-        void Delete(Guid id);
+        void Delete(int id);
         IList<AttendanceReason> List();
-        AttendanceReason Get(Guid id);
+        AttendanceReason Get(int id);
         void AddAttendanceLevelReasons(List<AttendanceLevelReason> attendanceLevelReasons);
     }
 
@@ -87,6 +89,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Add(IList<AttendanceReason> reasons)
         {
+            if(!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new AttendanceReasonDataAccess(uow);
@@ -100,7 +104,7 @@ namespace Chalkable.BusinessLogic.Services.School
             throw new NotImplementedException();
         }
 
-        public void Delete(Guid id)
+        public void Delete(int id)
         {
             throw new NotImplementedException();
         }
@@ -114,9 +118,12 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public AttendanceReason Get(Guid id)
+        public AttendanceReason Get(int id)
         {
-            throw new NotImplementedException();
+            using (var uow = Read())
+            {
+                return new AttendanceReasonDataAccess(uow).GetById(id);
+            }
         }
 
         public void AddAttendanceLevelReasons(List<AttendanceLevelReason> attendanceLevelReasons)
