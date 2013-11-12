@@ -22,9 +22,6 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Attendance })]
         public ActionResult SetAttendance(int personId, int classId, DateTime date, string level, int? attendanceReasonId)
         {
-            if (!attendanceReasonId.HasValue)
-                return Json(true);//TODO: how to remove?
-
             var sa = new SectionAttendance
                 {
                     Date = date.ToString("yyyy-MM-dd"),
@@ -32,15 +29,17 @@ namespace Chalkable.Web.Controllers
                     StudentAttendance = new List<StudentSectionAttendance>()
                 };
 
-            
 
-            var reason = SchoolLocator.AttendanceReasonService.Get(attendanceReasonId.Value);
+
+            AttendanceReason reason = null;
+            if (attendanceReasonId.HasValue)
+                reason = SchoolLocator.AttendanceReasonService.Get(attendanceReasonId.Value);
             sa.StudentAttendance.Add(new StudentSectionAttendance
                 {
-                    Category = reason.Category,
+                    Category = reason != null ? reason.Category : "U",
                     Date = date.ToString("yyyy-MM-dd"),
                     Level = level,
-                    ReasonId = (short)attendanceReasonId.Value,
+                    ReasonId = (short)(attendanceReasonId.HasValue ? attendanceReasonId.Value : 0),
                     SectionId = classId,
                     StudentId = personId
                     
