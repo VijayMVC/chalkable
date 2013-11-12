@@ -2,9 +2,9 @@ schedule = self.getSchedule()
 .loader-container
     .loader
     +UserProfileTopBar(self, 'schedule')
-    +RenderWith(self.getCalendar(), chlk.templates.calendar.announcement.DayPage)(
-        notMainCalendar = true,
-        controllerName = self.getControllerName(),
-        actionName = 'schedule',
-        params = [schedule.getId().valueOf()]
-    )
+    actions = {todayAction: 'schedule', currentAction: 'daySchedule'}
+    if self.getControllerName() == 'students'
+        -actions.day= 'daySchedule';
+        -actions.week= 'weekSchedule';
+        -actions.month= 'monthSchedule';
+    +Calendar(self, chlk.templates.calendar.announcement.DayCalendarBodyTpl, self.getCalendar(), self.getControllerName(), actions, [schedule.getId()])

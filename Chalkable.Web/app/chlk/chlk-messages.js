@@ -128,6 +128,7 @@ var Msg = {
     Messaging: 'Messaging',
     Method: oneOrMany('Method'),
     Mistake: 'Mistake',
+    Month: oneOrMany('Month'),
     Monthly: 'Monthly',
     Name: 'Name',
     New: 'New',

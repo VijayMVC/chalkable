@@ -33,7 +33,7 @@ NAMESPACE('chlk.controls', function () {
             },
 
             [[Array]],
-            String, function getHref(values) {
+            String, function parseValues_(values) {
                 var res = [];
                 values.forEach(function(item){
                     item = item && item.valueOf ? item.valueOf() : item;
@@ -41,6 +41,22 @@ NAMESPACE('chlk.controls', function () {
                         res.push(item);
                     else
                         res.push(JSON.stringify(item));
+                });
+                return res.join('/');
+            },
+
+            [[Array]],
+            String, function getHref(values) {
+                var res = [], that = this;
+                values.forEach(function(item){
+                    item = item && item.valueOf ? item.valueOf() : item;
+                    if(Array.isArray(item))
+                        res.push(that.parseValues_(item));
+                    else
+                        if(typeof item == "number" || typeof item == "string")
+                            res.push(item);
+                        else
+                            res.push(JSON.stringify(item));
                 });
                 return '#' + res.join('/');
             },

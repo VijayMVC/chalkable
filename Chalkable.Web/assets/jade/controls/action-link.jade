@@ -8,6 +8,7 @@ mixin ActionLink(controller, action)
 mixin ActionLinkWithPrepend(controller, action, prependParams)
     args = ria.__API.clone(arguments)
     - [].splice.apply(args, [2, 1].concat(prependParams || []))
+    -console.info(args)
     link = self.getLink(args)
     -attributes.href=attributes.href || self.getHref(ria.__API.clone(arguments))
     -attributes['data-link'] = link

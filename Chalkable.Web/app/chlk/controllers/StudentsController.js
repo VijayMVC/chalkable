@@ -153,10 +153,24 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.student.StudentProfileSummaryPage, result);
             },
 
-            [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
-            function scheduleAction(personId, date_){
-                //return BASE(personId, chlk.models.common.RoleNamesEnum.TEACHER);
+            [[chlk.models.id.SchoolPersonId]],
+            function scheduleAction(personId){
+                return this.Redirect('students', 'daySchedule', [null, personId]);
+            },
+
+            [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
+            function dayScheduleAction(date_, personId){
                 return this.scheduleByRole(personId, date_, chlk.models.common.RoleNamesEnum.STUDENT.valueOf());
+            },
+
+            [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
+            function weekScheduleAction(date_, personId){
+
+            },
+
+            [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
+            function monthScheduleAction(date_, personId){
+
             },
 
             [[chlk.models.id.MarkingPeriodId, chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
