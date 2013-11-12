@@ -111,16 +111,16 @@ namespace Chalkable.Web.Controllers
                     attendances.Add(new ClassAttendanceDetails
                         {
                             ClassRef = ssa.SectionId,
-                            AttendanceReasonRef = ssa.ReasonId,
+                            AttendanceReasonRef = ssa.ReasonId > 0 ? ssa.ReasonId : (int?)null,
                             Date = date.Value,
                             PersonRef = ssa.StudentId,
                             Type = Map(ssa.ClassroomLevel),
+                            Level = ssa.Level,
                             Class = clazz,
-                            Student = persons.First(x=>x.Id == ssa.StudentId)
+                            Student = persons.First(x=>x.Id == ssa.StudentId),
                         });
                 }
                 IList<AttendanceReason> attendanceReason = SchoolLocator.AttendanceReasonService.List();
-
                 listClassAttendance = ClassAttendanceViewData.Create(attendances, attendanceReason).ToList();
             }
             listClassAttendance.Sort((x, y) => string.CompareOrdinal(x.Student.LastName, y.Student.LastName));

@@ -9,6 +9,7 @@ namespace Chalkable.Data.School.Model
         public int? AttendanceReasonRef { get; set; }
         public string Description { get; set; }
         public AttendanceTypeEnum Type { get; set; }
+        public string Level { get; set; }
         public DateTime Date { get; set; }
         public DateTime LastModified { get; set; }
     }

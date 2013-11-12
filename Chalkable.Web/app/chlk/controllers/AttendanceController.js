@@ -247,14 +247,15 @@ NAMESPACE('chlk.controllers', function (){
                 return item.getStudentId() == model.getStudentId()
             })[0];
             item.setType(type);
+            var level = item.getLevel();
             var attReasonId = model.getAttendanceReasonId();
             try{
                 if(attReasonId && attReasonId.valueOf() && item.getReasons().filter(function(item){
-                    return item.getAttendanceType() == type && item.getId() == attReasonId;
+                    return item.hasLevel(level) && item.getId() == attReasonId;
                 }).length == 0)
-                    console.info('WARNING setAttendance: type = ' + type + ', reasonId = ' + attReasonId);
+                    console.info('WARNING setAttendance: type = ' + level + ', reasonId = ' + attReasonId);
                 else
-                    this.attendanceService.setAttendance(model.getStudentId(), model.getClassId(), type, attReasonId, model.getDate());
+                    this.attendanceService.setAttendance(model.getStudentId(), model.getClassId(), level, attReasonId, model.getDate());
 
             }catch(e){
                 console.info('ERROR setAttendance: type = ' + type + ', reasonId = ' + attReasonId);
@@ -278,7 +279,7 @@ NAMESPACE('chlk.controllers', function (){
             var types = [
                 attTypeEnum.PRESENT.valueOf(),
                 attTypeEnum.ABSENT.valueOf(),
-                attTypeEnum.EXCUSED.valueOf(),
+//                attTypeEnum.EXCUSED.valueOf(),
                 attTypeEnum.LATE.valueOf()
             ];
             var index = types.indexOf(currentType);

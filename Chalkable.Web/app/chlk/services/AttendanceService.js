@@ -49,13 +49,13 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.SchoolPersonId, chlk.models.id.ClassId, Number, chlk.models.id.AttendanceReasonId, chlk.models.common.ChlkDate]],
-            ria.async.Future, function setAttendance(studentId, classId, type, attendanceReasonId_, date) {
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.ClassId, String, chlk.models.id.AttendanceReasonId, chlk.models.common.ChlkDate]],
+            ria.async.Future, function setAttendance(studentId, classId, level, attendanceReasonId_, date) {
                 return this.get('Attendance/SetAttendance.json', Boolean, {
                     personId: studentId.valueOf(),
                     classId: classId.valueOf(),
                     attendanceReasonId: attendanceReasonId_ && attendanceReasonId_.valueOf(),
-                    type: type,
+                    level: level,
                     date: date && date.toString('mm-dd-yy')
                 });
             },

@@ -1,16 +1,15 @@
 valuesEnum = chlk.models.attendance.AttendanceTypeEnum;
 value = self.getType();
-reasons = self.getReasons().filter(function(item){return item.getAttendanceType() == value});
+level = self.getLevel();
+reasons = [];
 needDropdown = (value > valuesEnum.PRESENT.valueOf()) && reasons.length;
 reason = needDropdown ? self.getAttendanceReason() : '';
 name = self.getTypeName();
 student = self.getStudent();
 +ActionForm('attendance', 'setAttendance')(class= self.isNeedPresent && self.isNeedPresent() ? 'need-present' : '').student-attendance-form
-    //+Hidden('classpersonid', self.getClassPersonId().valueOf())
     +Hidden('type', value)
     +Hidden('classid', self.getClassId().valueOf())
     +Hidden('studentid', self.getStudent().getId().valueOf())
-    //+Hidden('classperiodid', self.getClassPeriodId().valueOf())
     +Hidden('attendancereasonid', reason && reason.getId().valueOf())
     +Hidden('date', self.getDate().toStandardFormat())
     +Hidden('attendanceReasonDescription', reason && reason.getDescription())

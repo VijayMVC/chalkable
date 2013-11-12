@@ -47,7 +47,6 @@ namespace Chalkable.Data.School.DataAccess
 
         private IList<AttendanceReason> ReadGetAttendanceReasonReasult(DbDataReader reader)
         {
-            var res = new List<AttendanceReason>();
             IDictionary<int, AttendanceReason> attReasonDic = new Dictionary<int, AttendanceReason>();
             while (reader.Read())
             {
@@ -61,7 +60,7 @@ namespace Chalkable.Data.School.DataAccess
                 attLevelReason.AttendanceReason = reason;
                 attReasonDic[reason.Id].AttendanceLevelReasons.Add(attLevelReason);
             }
-            return res;
+            return attReasonDic.Select(x=>x.Value).ToList();
         } 
     }
 

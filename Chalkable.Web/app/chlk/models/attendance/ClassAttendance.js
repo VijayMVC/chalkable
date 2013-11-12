@@ -7,6 +7,7 @@ REQUIRE('chlk.models.id.AttendanceReasonId');
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.period.Period');
 REQUIRE('chlk.models.attendance.AttendanceReason');
+//REQUIRE('chlk.converters.attendance.AttendanceLevelToTypeConverter');
 
 NAMESPACE('chlk.models.attendance', function () {
     "use strict";
@@ -21,6 +22,40 @@ NAMESPACE('chlk.models.attendance', function () {
             LATE: 16
         });
 
+    /** @class chlk.models.attendance.AttendanceLevelEnum*/
+    ENUM('AttendanceLevelEnum',{
+        ABSENT_LEVEL: 'A',
+        LATE_LEVEL: 'T'
+    });
+
+    /** @class chlk.models.attendance.AttendanceTypeMapper*/
+    CLASS('AttendanceTypeMapper', [
+
+        function $(){
+            BASE();
+            this._attLevelEnum = chlk.models.attendance.AttendanceLevelEnum;
+            this._attTypeEnum = chlk.models.attendance.AttendanceTypeEnum;
+        },
+        [[String]],
+        chlk.models.attendance.AttendanceTypeEnum, function mapBack(level){
+            if(!level) return this._attTypeEnum.PRESENT;
+            switch (level){
+                case this._attLevelEnum.ABSENT_LEVEL.valueOf() : return this._attTypeEnum.ABSENT;
+                case this._attLevelEnum.LATE_LEVEL.valueOf() : return this._attTypeEnum.LATE;
+            }
+            throw new Exception('Unknown attendance level ');
+        },
+        [[chlk.models.attendance.AttendanceTypeEnum]],
+        String, function map(type){
+            switch (type){
+                case this._attTypeEnum.ABSENT : return this._attLevelEnum.ABSENT_LEVEL.valueOf();
+                case this._attTypeEnum.LATE : return this._attLevelEnum.LATE_LEVEL.valueOf();
+                case this._attTypeEnum.PRESENT : return null;
+            }
+            throw new Exception('Unknown attendance type ');
+        }
+    ]);
+
     /** @class chlk.models.attendance.ClassAttendance*/
     CLASS(
         'ClassAttendance', [
@@ -29,19 +64,24 @@ NAMESPACE('chlk.models.attendance', function () {
                 BASE();
                 this._studentId = null;
                 this._student = null;
+                this._attendanceTypeMapper = new chlk.models.attendance.AttendanceTypeMapper();
             },
 
             chlk.models.id.ClassAttendanceId, 'id',
-
-//            [ria.serialize.SerializeProperty('classpersonid')],
-//            chlk.models.id.ClassPersonId, 'classPersonId',
-//
-//            [ria.serialize.SerializeProperty('classperiodid')],
-//            chlk.models.id.ClassPeriodId, 'classPeriodId',
-
             chlk.models.common.ChlkDate, 'date',
 
+            //todo change number to AttendanceTypeEnum
             Number, 'type',
+            Number, function getType(){
+                return this._attendanceTypeMapper.mapBack(this.getLevel()).valueOf();
+            },
+            [[Number]],
+            VOID, function setType(type){
+               var level = this._attendanceTypeMapper.map(new chlk.models.attendance.AttendanceTypeEnum(type));
+               this.setLevel(level);
+            },
+
+            String, 'level',
 
 //            chlk.models.period.Period, 'period',
 

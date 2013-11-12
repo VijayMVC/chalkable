@@ -12,17 +12,14 @@ NAMESPACE('chlk.templates.attendance', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.id.ClassAttendanceId, 'id',
 
-//            [ria.templates.ModelPropertyBind],
-//            chlk.models.id.ClassPersonId, 'classPersonId',
-//
-//            [ria.templates.ModelPropertyBind],
-//            chlk.models.id.ClassPeriodId, 'classPeriodId',
-
             [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'date',
 
             [ria.templates.ModelPropertyBind],
             Number, 'type',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'level',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.ClassId, 'classId',
@@ -49,6 +46,6 @@ NAMESPACE('chlk.templates.attendance', function () {
 
             String, function getSubmitFormActionName(){
                 return 'setAttendanceProfile';
-            },
-        ])
+            }
+        ]);
 });
