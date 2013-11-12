@@ -27,9 +27,22 @@ namespace Chalkable.StiConnector.Connectors
             Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
             var x = typeof (T);
             var ser = new DataContractJsonSerializer(x);
-            using (var stream = new MemoryStream(client.DownloadData(url)))
+            MemoryStream stream = null;
+            try
             {
+                stream = new MemoryStream(client.DownloadData(url));
                 return (T) ser.ReadObject(stream);
+            }
+            catch (WebException ex)
+            {
+                var reader = new StreamReader(ex.Response.GetResponseStream());
+                var msg = reader.ReadToEnd();
+                throw new Exception(msg);
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Dispose();
             }
         }
 
@@ -43,10 +56,23 @@ namespace Chalkable.StiConnector.Connectors
             Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
             var x = typeof(T);
             var ser = new DataContractJsonSerializer(x);
-            using (var stream = new MemoryStream())
+            
+
+            var stream = new MemoryStream();
+            try
             {
                 ser.WriteObject(stream, obj);
-                client.UploadData(url, "POST", stream.ToArray());
+                client.UploadData(url, stream.ToArray());
+            }
+            catch (WebException ex)
+            {
+                var reader = new StreamReader(ex.Response.GetResponseStream());
+                var msg = reader.ReadToEnd();
+                throw new Exception(msg);
+            }
+            finally
+            {
+                stream.Dispose();
             }
         }
 
