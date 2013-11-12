@@ -171,7 +171,7 @@ NAMESPACE('chlk.controllers', function (){
            },
 
            [[ria.mvc.IActivity]],
-           OVERRIDE, function prepareActivity(activity){
+           OVERRIDE, function prepareActivity_(activity){
               activity.setRole(this.getCurrentRole());
            }
 
