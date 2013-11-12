@@ -20,35 +20,37 @@ namespace Chalkable.Web.Controllers
     public class AttendanceController : ChalkableController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Attendance })]
-        public ActionResult SetAttendance(int personId, int classId, DateTime date, string level, int? attendanceReasonId)
+        public ActionResult SetAttendance(SetClassAttendanceViewData data)
         {
+            var dataStr = data.Date.ToString("yyyy-MM-dd");
             var sa = new SectionAttendance
                 {
-                    Date = date.ToString("yyyy-MM-dd"),
-                    SectionId = classId,
+                    Date = dataStr,
+                    SectionId = data.ClassId,
                     StudentAttendance = new List<StudentSectionAttendance>()
                 };
 
 
-
-            AttendanceReason reason = null;
-            if (attendanceReasonId.HasValue)
-                reason = SchoolLocator.AttendanceReasonService.Get(attendanceReasonId.Value);
-            sa.StudentAttendance.Add(new StudentSectionAttendance
+            foreach (var item in data.Items)
+            {
+                AttendanceReason reason = null;
+                if (item.AttendanceReasonId.HasValue)
+                    reason = SchoolLocator.AttendanceReasonService.Get(item.AttendanceReasonId.Value);
+                sa.StudentAttendance.Add(new StudentSectionAttendance
                 {
                     Category = reason != null ? reason.Category : "U",
-                    Date = date.ToString("yyyy-MM-dd"),
-                    Level = level,
-                    ReasonId = (short)(attendanceReasonId.HasValue ? attendanceReasonId.Value : 0),
-                    SectionId = classId,
-                    StudentId = personId
-                    
-                });
+                    Date = dataStr,
+                    Level = item.Level,
+                    ReasonId = (short)(item.AttendanceReasonId.HasValue ? item.AttendanceReasonId.Value : 0),
+                    SectionId = data.ClassId,
+                    StudentId = item.PersonId
+                });    
+            }
+            
 
             var l = new ConnectorLocator(Context.SisToken, Context.SisUrl);
             var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
-            l.AttendanceConnector.SetSectionAttendance(sy.Id, date, classId, sa);
-
+            l.AttendanceConnector.SetSectionAttendance(sy.Id, data.Date, data.ClassId, sa);
             return Json(true);
         }
 

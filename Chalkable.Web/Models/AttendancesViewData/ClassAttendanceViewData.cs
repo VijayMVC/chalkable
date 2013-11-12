@@ -12,7 +12,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public int PersonId { get; set; }
         public int ClassPeriodId { get; set; }
         public DateTime Date { get; set; }
-        public int Type { get; set; }
+        public string Level { get; set; }
         public PeriodViewData Period { get; set; }
         public ShortPersonViewData Student { get; set; }
         public int? AttendanceReasonId { get; set; }
@@ -32,7 +32,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
                     Date = attendance.Date,
                     AttendanceReasonId = attendance.AttendanceReasonRef,
                     Student = ShortPersonViewData.Create(attendance.Student),
-                    Type = (int)attendance.Type
+                    Level = attendance.Level
                 };
             if (reason != null)
                 res.AttendanceReason = AttendanceReasonViewData.Create(reason);
@@ -52,6 +52,21 @@ namespace Chalkable.Web.Models.AttendancesViewData
             }
             return res;
         }
+    }
 
+
+    //int personId, int classId, DateTime date, string level, int? attendanceReasonId
+    public class SetClassAttendanceViewData
+    {
+        public class SetClassAttendanceViewDataItem
+        {
+            public int PersonId { get; set; }
+            public string Level { get; set; }
+            public int? AttendanceReasonId { get; set; }
+        }
+
+        public int ClassId { get; set; }
+        public DateTime Date { get; set; }
+        public IList<SetClassAttendanceViewDataItem> Items { get; set; }
     }
 }
