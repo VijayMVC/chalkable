@@ -56,6 +56,7 @@ NAMESPACE('chlk', function(){
                                 case chlk.models.apps.AppActionTypes.ADD_ME.valueOf():
                                 case chlk.models.apps.AppActionTypes.CLOSE_ME.valueOf():
                                 case chlk.models.apps.AppActionTypes.SAVE_ME.valueOf():
+                                case chlk.models.apps.AppActionTypes.APP_ERROR.valueOf():
                                 case chlk.models.apps.AppActionTypes.SHOW_PLUS.valueOf():{
                                     this.doCallApiReactor_(e.data.action, e.data);
                                     break;

@@ -55,8 +55,8 @@ NAMESPACE('chlk.controllers', function (){
                        console.error(error.toString());
 
                        var state = this.context.getState();
-                       state.setController('user');
-                       state.setAction('error');
+                       state.setController('error');
+                       state.setAction('generalError');
                        state.setParams([]);
                        state.setPublic(false);
                        this.context.stateUpdated();
@@ -171,7 +171,7 @@ NAMESPACE('chlk.controllers', function (){
            },
 
            [[ria.mvc.IActivity]],
-           OVERRIDE, function prepareActivity(activity){
+           OVERRIDE, function prepareActivity_(activity){
               activity.setRole(this.getCurrentRole());
            }
 

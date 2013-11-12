@@ -34,15 +34,13 @@ var CHLK_MESSENGER = (function () {
         CLOSE_ME : 'closeMe',
         SAVE_ME: 'saveMe',
         SHOW_PLUS: 'showPlus',
+        APP_ERROR: 'appError',
         ADD_YOURSELF: 'addYourself',
         UPDATE_ORIGIN: 'updateOrigin',
         REQUEST_ORIGIN: 'requestOrigin'
     };
     var messenger = {
         parentURL: chlkRequestSiteRoot(),
-
-
-
 
         updated: false,
         closeMe : function(data){
@@ -73,6 +71,10 @@ var CHLK_MESSENGER = (function () {
 
         saveMe : function(data){
             this.postAction(data, ChlkActionTypes.SAVE_ME, this.parentURL);
+        },
+
+        appError : function(data){
+            this.postAction(data, ChlkActionTypes.APP_ERROR, this.parentURL);
         },
 
         addApp : function(rWindow, rURL, data){

@@ -4,7 +4,7 @@ REQUIRE('chlk.services.PersonService');
 REQUIRE('chlk.services.CalendarService');
 REQUIRE('chlk.activities.profile.SchedulePage');
 REQUIRE('chlk.activities.profile.SchoolPersonAppsPage');
-REQUIRE('chlk.activities.chlkerror.Error404Page');
+
 
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.people.User');
@@ -176,9 +176,6 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.profile.SchoolPersonAppsPage, res);
             },
 
-            function errorAction() {
-                var result = new ria.async.DeferredData(new chlk.models.Success());
-                return this.PushView(chlk.activities.chlkerror.Error404Page, result);
-            }
+
         ])
 });

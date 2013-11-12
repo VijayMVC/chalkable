@@ -109,7 +109,7 @@ namespace Chalkable.BusinessLogic.Services.School
                                                    , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach);
                 var spIds = persons.Select(x => x.PersonId).Distinct().ToList();
                 var schoolYear = ServiceLocator.SchoolYearService.GetSchoolYearById(schoolYearId);
-                var res = RegistarationInstallationAction(uow, app, personId, roleIds, classIds, departmentIds, gradeLevelIds);
+                var res = RegistrationInstallationAction(uow, app, personId, roleIds, classIds, departmentIds, gradeLevelIds);
                 var appInstalls = new List<ApplicationInstall>();
 
                 foreach (var spId in spIds)
@@ -133,7 +133,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        private ApplicationInstallAction RegistarationInstallationAction(UnitOfWork uow, Application app, Guid? schoolPersonId, IList<int> roleids, IList<Guid> classids, IList<Guid> departmentids, IList<Guid> gradelevelids)
+        private ApplicationInstallAction RegistrationInstallationAction(UnitOfWork uow, Application app, Guid? schoolPersonId, IList<int> roleids, IList<Guid> classids, IList<Guid> departmentids, IList<Guid> gradelevelids)
         {
             var res = new ApplicationInstallAction
             {

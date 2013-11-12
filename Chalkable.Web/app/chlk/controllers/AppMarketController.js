@@ -44,7 +44,6 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.apps.AppMarketPostData]],
-            //todo: add sort mode and other options
         function listAction(filterData_) {
 
 

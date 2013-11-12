@@ -4,11 +4,14 @@ REQUIRE('ria.templates.Template');
 
 
 NAMESPACE('chlk.controls', function () {
+
     /** @class chlk.controls.SearchBoxControl */
     CLASS(
         'SearchBoxControl', EXTENDS(chlk.controls.Base), [
 
             String, 'triggerBtnId',
+            Boolean, 'categorized',
+            String, 'groupingField',
 
             OVERRIDE, VOID, function onCreate_() {
                 BASE();
@@ -20,9 +23,13 @@ NAMESPACE('chlk.controls', function () {
             {
                 attrs.id = attrs.id || ria.dom.NewGID();
 
-                if (attrs.triggerBtnId){
+                if (attrs.triggerBtnId)
                     this.setTriggerBtnId(attrs.triggerBtnId);
-                }
+                if (attrs.categorized)
+                    this.setCategorized(true);
+                if (attrs.groupingField)
+                    this.setGroupingField(attrs.groupingField);
+
                 var serviceIns = this.getContext().getService(service);
                 var ref = ria.reflection.ReflectionClass(service);
                 var methodRef = ref.getMethodReflector(method);
@@ -59,7 +66,73 @@ NAMESPACE('chlk.controls', function () {
                     return false;
                 };
 
-                jQuery(node.valueOf()).autocomplete({
+                var autocompleteConfig = this.getAutoCompleteConfig_(id,
+                    attrs, serviceF, selectHandler, this.isCategorized(), this.getGroupingField());
+
+
+                var renderItemFunction =  function( ul, item ) {
+                    var fixedInstance = ria.__API.inheritFrom(item.constructor);
+                    for(var k in item) if (item.hasOwnProperty(k))
+                        fixedInstance[k] = item[k];
+                    tpl.assign(fixedInstance);
+                    var li = jQuery.parseHTML(tpl.render());
+                    var id = ria.dom.NewGID();
+                    jQuery(li).attr("data-id", id);
+                    item.dataId = id;
+                    return jQuery(li).appendTo(ul);
+                };
+
+                var groupingField = this.getGroupingField() || '';
+
+
+                var renderMenuFunction = function( ul, items ) {
+                    var that = this;
+                    var currentCategory = "";
+                    jQuery.each( items, function( index, item ) {
+                        var fixedInstance = ria.__API.inheritFrom(item.constructor);
+                        for(var k in item) if (item.hasOwnProperty(k))
+                            fixedInstance[k] = item[k];
+
+                        var itemCategory = '';
+                        if (groupingField){
+                            var ref = new ria.reflection.ReflectionClass(fixedInstance).getPropertyReflector(groupingField);
+                            itemCategory = ref.invokeGetterOn(fixedInstance);
+                        }
+
+                        if ( itemCategory != currentCategory ) {
+                            ul.append( "<li class='ui-autocomplete-category'><span>" + itemCategory + "</span><hr/></li>" );
+                            currentCategory = itemCategory;
+                        }
+                        that._renderItemData( ul, item );
+                    });
+                };
+
+                jQuery('.ui-autocomplete-category').click(function(item){
+                   jQuery(this).toggleClass('x-hidden');
+                });
+
+                jQuery(node.valueOf())
+                    .autocomplete(autocompleteConfig)
+                    .data( "ui-autocomplete" )
+                    ._renderItem = renderItemFunction;
+
+                if (this.isCategorized())
+                    jQuery(node.valueOf())
+                        .data( "ui-autocomplete" )
+                        ._renderMenu = renderMenuFunction;
+
+
+                var triggerBtnId = this.getTriggerBtnId() || '';
+                if (triggerBtnId){
+                    jQuery('#' + triggerBtnId).click(function(){
+                        jQuery(node.valueOf()).autocomplete("search", jQuery(node.valueOf()).val());
+                    })
+                }
+            },
+
+            [[String, Object, Function, Function, Boolean, String]],
+            Object, function getAutoCompleteConfig_(id, attrs, serviceF, selectHandler, categorized, groupingField_){
+                return {
                     minLength: 2,
                     source: function( request, response ) {
                         serviceF(request.term)
@@ -95,27 +168,7 @@ NAMESPACE('chlk.controls', function () {
                             menu.setCss('left', node.offset().left - 1);
                         }
                     }
-                }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                    var fixedInstance = ria.__API.inheritFrom(item.constructor);
-                    for(var k in item) if (item.hasOwnProperty(k))
-                        fixedInstance[k] = item[k];
-                    tpl.assign(fixedInstance);
-                    var li = jQuery.parseHTML(tpl.render());
-                    var id = ria.dom.NewGID();
-                    jQuery(li).attr("data-id", id);
-                    item.dataId = id;
-                    return jQuery(li).appendTo(ul);
                 };
-
-                var triggerBtnId = this.getTriggerBtnId() || '';
-                if (triggerBtnId){
-                    jQuery('#' + triggerBtnId).click(function(){
-                        jQuery(node.valueOf()).autocomplete("search", jQuery(node.valueOf()).val());
-                    })
-                }
-
-
-
             }
 
         ]);

@@ -24,7 +24,7 @@
         this.properties = base ? ria.__API.clone(base.__META.properties) : {};
         this.methods = base ? ria.__API.clone(base.__META.methods) : {};
         this.defCtor = null;
-        this.ctors = [];
+        this.ctors = {};
         this.children = [];
 
         var gt = [];
@@ -70,7 +70,7 @@
         if (name == '$')
             this.defCtor = def;
 
-        this.ctors.push(def);
+        this.ctors[def.name] = def;
     };
     ClassDescriptor.prototype.addChild = function (clazz) {
         if (!ria.__API.isClassConstructor(clazz))
@@ -185,12 +185,13 @@
 
         var genericTypes = clazz.__META.genericTypes || [],
             genericTypesLength = genericTypes.length - clazz.__META.baseSpecs.length,
-            genericSpecs = clazz.__META.baseSpecs.concat(args.slice(0, genericTypesLength));
+            ownGenericSpecs = args.slice(0, genericTypesLength),
+            genericSpecs = clazz.__META.baseSpecs.concat(ownGenericSpecs);
 
         args = args.slice(genericTypesLength);
 
         if (_DEBUG) {
-            ria.__API.OF.apply(clazz, genericSpecs);
+            ria.__API.OF.apply(clazz, ownGenericSpecs);
         }
 
         var publicInstance = instance;

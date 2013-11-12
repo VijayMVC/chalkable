@@ -11,6 +11,8 @@ NAMESPACE('chlk.models.api', function () {
             Number, 'index',
             Boolean, 'separator',
 
+            String, 'category',
+
             [ria.serialize.SerializeProperty('requiredparams')],
             ArrayOf(String), 'requiredParams',
 
