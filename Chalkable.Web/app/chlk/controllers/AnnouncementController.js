@@ -222,31 +222,19 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId]],
-        function attachAppAction(announcementId) {
+        [[chlk.models.id.AnnouncementId, Number]],
+        function attachAppAction(announcementId, pageIndex_) {
             var userId = this.getCurrentPerson().getId();
-            var result = this.appMarketService.getInstalledApps(userId)
-                .then(function(data){
-                    return new chlk.models.apps.InstalledAppsViewData(userId, announcementId, data);
-                })
-                .attach(this.validateResponse_());
-            return this.ShadeView(chlk.activities.apps.AttachAppDialog, result);
-        },
 
-        //todo: join with attachAppAction
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER
-        ])],
-        [[chlk.models.id.SchoolPersonId, chlk.models.id.AnnouncementId, Number]],
-        function listAvailableForAttachPageTeacherAction(teacherId, announcementId, pageIndex_) {
-            var userId = this.getCurrentPerson().getId();
-            var result = this.appMarketService
-                .getInstalledApps(teacherId, pageIndex_)
+            var result = this.appMarketService.getInstalledApps(userId, pageIndex_ | 0)
                 .then(function(data){
                     return new chlk.models.apps.InstalledAppsViewData(userId, announcementId, data);
                 })
                 .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.apps.AttachAppDialog, result);
+            if (pageIndex_)
+                return this.UpdateView(chlk.activities.apps.AttachAppDialog, result);
+            else
+                return this.ShadeView(chlk.activities.apps.AttachAppDialog, result);
         },
 
         [[chlk.models.id.AnnouncementId]],

@@ -20,4 +20,4 @@ announcementId = self.announcementId.valueOf()
             each app in self.apps.getItems()
                 +AppIconLink(announcementId, app)
         .paging
-            +Paginator('announcement', 'listAvailableForAttachPage', self.apps, [teacherId, announcementId])
+            +Paginator('announcement', 'attachApp', self.apps, [announcementId])
