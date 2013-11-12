@@ -24,27 +24,47 @@ NAMESPACE('chlk.models.attendance', function () {
 
             chlk.models.id.AttendanceReasonId, 'id',
             String, 'name',
+
             String, 'description',
+            String, function getDescription(){ return this._description || this.getName(); },
+            [[String]],
+            VOID, function setDescription(description){ this._description = description; },
+
             String, 'category',
 
             [ria.serialize.SerializeProperty('attendancelevelreason')],
             ArrayOf(chlk.models.attendance.AttendanceLevelReason), 'attendanceLevelReasons',
 
-            [[chlk.models.id.AttendanceReasonId, String, ArrayOf(chlk.models.attendance.AttendanceLevelReason)]],
-            function $(id_, description_, attLevelReasons_){
+            [[chlk.models.id.AttendanceReasonId, String, String, ArrayOf(chlk.models.attendance.AttendanceLevelReason)]],
+            function $(id_, name_, description_, attLevelReasons_){
                 BASE();
+                this._description = null;
                 if(id_)
                     this.setId(id_);
+                if(name_)
+                    this.setName(name_);
                 if(description_)
-                    this.setDescription(description_);
+                    this._description = description_;
                 if(attLevelReasons_)
                     this.setAttendanceLevelReasons(attLevelReasons_);
             },
 
             [[String]],
-            Boolean, function hasLevel(level){
+            chlk.models.attendance.AttendanceLevelReason, function getAttendanceLevelReason_(level){
                 var attLevelReasons = this.getAttendanceLevelReasons();
-                return attLevelReasons && attLevelReasons.filter(function(item){return this.getLevel() == level;}).length > 0;
+                if(!attLevelReasons) return null;
+                var res = attLevelReasons.filter(function(item){return item.getLevel() == level;});
+                return res.length > 0 ? res[0] : null;
+            },
+
+            [[String]],
+            Boolean, function hasLevel(level){
+               return this.getAttendanceLevelReason_(level) != null;
+            },
+            [[String]],
+            Boolean, function isDefaultReason(level){
+                var reason = this.getAttendanceLevelReason_(level);
+                return reason != null && reason.isDefaultReason();
             }
     ]);
 });

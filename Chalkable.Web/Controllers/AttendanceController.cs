@@ -28,7 +28,8 @@ namespace Chalkable.Web.Controllers
             var sa = new SectionAttendance
                 {
                     Date = date.ToString("yyyy-MM-dd"),
-                    SectionId = classId
+                    SectionId = classId,
+                    StudentAttendance = new List<StudentSectionAttendance>()
                 };
 
             

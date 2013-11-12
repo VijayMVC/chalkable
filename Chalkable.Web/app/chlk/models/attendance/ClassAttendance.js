@@ -125,6 +125,7 @@ NAMESPACE('chlk.models.attendance', function () {
 
             String, 'submitType',
 
-            String, 'attendanceReasonDescription'
+            String, 'attendanceReasonDescription'//,
+           // String, 'attendanceReasonName'
         ]);
 });

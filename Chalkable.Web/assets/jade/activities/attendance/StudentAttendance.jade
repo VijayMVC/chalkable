@@ -1,7 +1,9 @@
 valuesEnum = chlk.models.attendance.AttendanceTypeEnum;
 value = self.getType();
 level = self.getLevel();
-reasons = [];
+-console.log(self.getReasons());
+-console.log(self.getReasons().filter);
+-reasons = self.getReasons().filter(function(item){ return item.hasLevel(level); })
 needDropdown = (value > valuesEnum.PRESENT.valueOf()) && reasons.length;
 reason = needDropdown ? self.getAttendanceReason() : '';
 name = self.getTypeName();
