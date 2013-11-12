@@ -115,7 +115,6 @@ namespace Chalkable.Web.Controllers
                             AttendanceReasonRef = ssa.ReasonId > 0 ? ssa.ReasonId : (int?)null,
                             Date = date.Value,
                             PersonRef = ssa.StudentId,
-                            Type = Map(ssa.ClassroomLevel),
                             Level = ssa.Level,
                             Class = clazz,
                             Student = persons.First(x=>x.Id == ssa.StudentId),

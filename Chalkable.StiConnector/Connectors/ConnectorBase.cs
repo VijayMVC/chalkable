@@ -38,6 +38,7 @@ namespace Chalkable.StiConnector.Connectors
             var client = new WebClient();
             client.Headers[HttpRequestHeader.Authorization] = "Session " + locator.Token;
             client.Encoding = Encoding.UTF8;
+            client.Headers.Add("Content-Type", "application/json");
 
             Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
             var x = typeof(T);
@@ -45,7 +46,7 @@ namespace Chalkable.StiConnector.Connectors
             using (var stream = new MemoryStream())
             {
                 ser.WriteObject(stream, obj);
-                client.UploadData(url, stream.ToArray());
+                client.UploadData(url, "POST", stream.ToArray());
             }
         }
 

@@ -77,8 +77,10 @@ NAMESPACE('chlk.models.attendance', function () {
             },
             [[Number]],
             VOID, function setType(type){
-               var level = this._attendanceTypeMapper.map(new chlk.models.attendance.AttendanceTypeEnum(type));
-               this.setLevel(level);
+               if(type > 0){
+                   var level = this._attendanceTypeMapper.map(new chlk.models.attendance.AttendanceTypeEnum(type));
+                   this.setLevel(level);
+               }
             },
 
             String, 'level',
