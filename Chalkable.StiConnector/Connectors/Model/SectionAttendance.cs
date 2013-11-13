@@ -50,7 +50,7 @@ namespace Chalkable.StiConnector.Connectors.Model
         /// <summary>
         /// The id of the absence reason
         /// </summary>
-        public short ReasonId { get; set; }
+        public short? ReasonId { get; set; }
 
         /// <summary>
         /// The id of the section
