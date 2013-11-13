@@ -203,9 +203,6 @@ appPermissions = appPermissions.join(',')
                         .banner
                             +RenderWith(app.getBannerPicture(), chlk.templates.apps.AppPicture)
                 .elem.screenshots
-                    label.hint Screenshots:
-
-                    .screenshot-pictures
                         +RenderWith(app.getScreenshotPictures(), chlk.templates.apps.AppScreenshots)
 
         if !self.isReadOnly()

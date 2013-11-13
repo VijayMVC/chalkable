@@ -122,7 +122,7 @@ NAMESPACE('chlk.controllers', function (){
                     .getInfo(appId_)
                     .then(function(data){
                         if (!data.getId()){
-                            return this.forward_('apps', 'add', []);
+                            return this.Forward('apps', 'add', []);
                         }
                         else
                             return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data, isReadonly, isDraft));
@@ -333,7 +333,7 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.appsService
                 .createApp(devId, model.getName())
                 .then(function(){
-                    return this.forward_('apps', 'details', []);
+                    return this.Forward('apps', 'details', []);
                 }, this);
             return result;
         },
@@ -346,7 +346,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.appsService
                 .deleteApp(id)
                 .then(function(){
-                    return this.forward_('apps', 'details', []);
+                    return this.Forward('apps', 'details', []);
                 }, this);
         },
 
@@ -355,7 +355,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.apps.Application]],
         function updateApp(app) {
-            return this.forward_('apps', 'details', [app.getId().valueOf(), true]);
+            return this.Forward('apps', 'details', [app.getId().valueOf(), true]);
         },
 
         [chlk.controllers.AccessForRoles([
@@ -483,7 +483,7 @@ NAMESPACE('chlk.controllers', function (){
                 .getInfo()
                 .then(function(data){
                     if (!data.getId()){
-                        return this.forward_('apps', 'add', []);
+                        return this.Forward('apps', 'add', []);
                     }
                     else{
                         var pictureUrl = this.pictureService.getPictureUrl(data.getSmallPictureId(), 74);

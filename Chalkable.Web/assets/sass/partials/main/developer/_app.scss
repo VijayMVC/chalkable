@@ -230,6 +230,11 @@ BODY {
                       margin-left: 190px;
                       margin-top: -15px;
 
+                      &.short{
+                        margin-left: 0px;
+                        margin-top: 0px;
+                      }
+
                       .upload-img-block{
                         float: left;
                       }
