@@ -172,7 +172,7 @@ NAMESPACE('chlk.controllers', function (){
                             color: chlk.models.common.ButtonColor.GREEN.valueOf()
                         }], 'center');
                     }else{
-                        return this.redirect_('setup', action, params);
+                        return this.Redirect('setup', action, params);
                     }
 
                 }else{
@@ -203,9 +203,9 @@ NAMESPACE('chlk.controllers', function (){
                             .then(function(model){
 
                                 if(index < classes.length){
-                                    this.redirect_('setup', 'teacherSettings', [index]);
+                                    this.Redirect('setup', 'teacherSettings', [index]);
                                 }else{
-                                    this.redirect_('setup', 'start', []);
+                                    this.Redirect('setup', 'start', []);
                                 }
 
                             }.bind(this));
@@ -226,7 +226,7 @@ NAMESPACE('chlk.controllers', function (){
                     }, this)
                     .attach(this.validateResponse_())
                     .then(function(model){
-                        return this.redirect_('setup', 'video', [model.getId().valueOf()]);
+                        return this.Redirect('setup', 'video', [model.getId().valueOf()]);
                     }, this);
                 return this.ShadeLoader();
             }
