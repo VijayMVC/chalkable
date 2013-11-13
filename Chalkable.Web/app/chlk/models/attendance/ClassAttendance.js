@@ -37,16 +37,19 @@ NAMESPACE('chlk.models.attendance', function () {
             this._attTypeEnum = chlk.models.attendance.AttendanceTypeEnum;
         },
         [[String]],
-        chlk.models.attendance.AttendanceTypeEnum, function mapBack(level){
+        chlk.models.attendance.AttendanceTypeEnum, function map(level){
             if(!level) return this._attTypeEnum.PRESENT;
             switch (level){
                 case this._attLevelEnum.ABSENT_LEVEL.valueOf() : return this._attTypeEnum.ABSENT;
+                case 'AO' : return this._attLevelEnum.ABSENT;
+                case 'H' : return this._attLevelEnum.ABSENT;
+                case 'HO' : return this._attLevelEnum.ABSENT;
                 case this._attLevelEnum.LATE_LEVEL.valueOf() : return this._attTypeEnum.LATE;
             }
             throw new Exception('Unknown attendance level ');
         },
         [[chlk.models.attendance.AttendanceTypeEnum]],
-        String, function map(type){
+        String, function mapBack(type){
             switch (type){
                 case this._attTypeEnum.ABSENT : return this._attLevelEnum.ABSENT_LEVEL.valueOf();
                 case this._attTypeEnum.LATE : return this._attLevelEnum.LATE_LEVEL.valueOf();
@@ -73,12 +76,12 @@ NAMESPACE('chlk.models.attendance', function () {
             //todo change number to AttendanceTypeEnum
             Number, 'type',
             Number, function getType(){
-                return this._attendanceTypeMapper.mapBack(this.getLevel()).valueOf();
+                return this._attendanceTypeMapper.map(this.getLevel()).valueOf();
             },
             [[Number]],
             VOID, function setType(type){
                if(type > 0){
-                   var level = this._attendanceTypeMapper.map(new chlk.models.attendance.AttendanceTypeEnum(type));
+                   var level = this._attendanceTypeMapper.mapBack(new chlk.models.attendance.AttendanceTypeEnum(type));
                    this.setLevel(level);
                }
             },
@@ -109,7 +112,6 @@ NAMESPACE('chlk.models.attendance', function () {
             VOID, function setStudentId(studentId){
                 this._studentId = studentId;
             },
-
 
             [ria.serialize.SerializeProperty('attendancereasonid')],
             chlk.models.id.AttendanceReasonId, 'attendanceReasonId',

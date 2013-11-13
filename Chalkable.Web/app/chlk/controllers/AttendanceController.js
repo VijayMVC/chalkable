@@ -225,19 +225,30 @@ NAMESPACE('chlk.controllers', function (){
         },
 
 
-        [[chlk.models.attendance.ClassAttendance]],
-        function setAttendanceAction(model){
-            if(canUpdateStudentAttendance || currentStudentId != model.getStudentId()){
-                currentStudentId = model.getStudentId();
-                canUpdateStudentAttendance = false;
-                studentAttendanceTimeout = setTimeout(function(){
-                    canUpdateStudentAttendance = true;
-                },5);
-                var activityClass = this.getView().getCurrent().getClass();
-                return this.UpdateView(activityClass, this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
-            }
-            return null;
+//        [[chlk.models.attendance.ClassAttendance]],
+//        function setAttendanceAction(model){
+//            if(canUpdateStudentAttendance || currentStudentId != model.getStudentId()){
+//                currentStudentId = model.getStudentId();
+//                canUpdateStudentAttendance = false;
+//                studentAttendanceTimeout = setTimeout(function(){
+//                    canUpdateStudentAttendance = true;
+//                },5);
+//                var activityClass = this.getView().getCurrent().getClass();
+//                return this.UpdateView(activityClass, this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
+//            }
+//            return null;
+//        },
+
+        [[chlk.models.attendance.SetClassListAttendance]],
+        function setClassAttendanceListAction(model){
+           // var activityClass = this.getView().getCurrent().getClass();
+            this.attendanceService.setAttendance(model)
+                .then(function(res){
+                    this.redirect_('attendance', 'classList', [model.getClassId()]);
+                }, this);
+            //return this.UpdateView(activityClass, this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
         },
+
 
         [[chlk.models.attendance.ClassAttendance]],
         ria.async.Future, function setAttendance_(model){

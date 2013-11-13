@@ -19,8 +19,6 @@ NAMESPACE('chlk.models.attendance', function () {
     /** @class chlk.models.attendance.AttendanceReason*/
     CLASS(
         'AttendanceReason', [
-//            [ria.serialize.SerializeProperty('attendancetype')],
-//            Number, 'attendanceType',
 
             chlk.models.id.AttendanceReasonId, 'id',
             String, 'name',

@@ -57,11 +57,12 @@ namespace Chalkable.BusinessLogic.Services.School
             };
             foreach (var item in items)
             {
+
                 sa.StudentAttendance.Add(new StudentSectionAttendance
                 {
                     Category = item.Category,
                     Date = dataStr,
-                    Level = item.Level,
+                    ClassroomLevel = LevelToClassRoomLevel(item.Level),
                     ReasonId = (short)(item.AttendanceReasonRef.HasValue ? item.AttendanceReasonRef.Value : 0),
                     SectionId = classId,
                     StudentId = item.PersonRef
@@ -69,6 +70,17 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
             ConnectorLocator.AttendanceConnector.SetSectionAttendance(sy.Id, date, classId, sa);
+        }
+
+        private string LevelToClassRoomLevel(string level)
+        {
+            if (level == null)
+                return "Present";
+            if (level == "T")
+                return "Tardy";
+            if (level == "A" || level == "AO")
+                return "Absent";
+            return "Missing";
         }
 
         public IList<ClassAttendanceDetails> GetClassAttendances(DateTime date, int classId)
@@ -83,7 +95,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 attendances.Add(new ClassAttendanceDetails
                 {
                     ClassRef = ssa.SectionId,
-                    AttendanceReasonRef = ssa.ReasonId > 0 ? ssa.ReasonId : (int?)null,
+                    AttendanceReasonRef = ssa.ReasonId,
                     Date = date,
                     PersonRef = ssa.StudentId,
                     Level = ssa.Level,
