@@ -107,7 +107,6 @@
     <Compile Include="Model\AttendanceReason.cs" />
     <Compile Include="Model\Class.cs" />
     <Compile Include="Model\ClassAnnouncementType.cs" />
-    <Compile Include="Model\ClassAttendance.cs" />
     <Compile Include="Model\ClassDiscipline.cs" />
     <Compile Include="Model\ClassDisciplineType.cs" />
     <Compile Include="Model\ClassPeriod.cs" />

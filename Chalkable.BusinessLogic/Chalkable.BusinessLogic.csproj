@@ -62,6 +62,7 @@
     <Compile Include="Model\AttachmentContentInfo.cs" />
     <Compile Include="Model\BlobContainerInfo.cs" />
     <Compile Include="Model\BlobInfo.cs" />
+    <Compile Include="Model\ClassAttendance.cs" />
     <Compile Include="Model\EmailInfo.cs" />
     <Compile Include="Model\RecipientInfo.cs" />
     <Compile Include="Model\UserInfo.cs" />

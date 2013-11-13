@@ -10,11 +10,11 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IAttendanceReasonService
     {
         void Add(IList<AttendanceReason> reasons);
-        AttendanceReason Edit(Guid id, AttendanceTypeEnum type, string code, string description);
         void Delete(int id);
         IList<AttendanceReason> List();
         AttendanceReason Get(int id);
         void AddAttendanceLevelReasons(List<AttendanceLevelReason> attendanceLevelReasons);
+        IList<AttendanceReason> GetAll();
     }
 
     public class AttendanceReasonService : SchoolServiceBase, IAttendanceReasonService
@@ -23,69 +23,6 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        //public AttendanceReason Add(AttendanceTypeEnum type, string code, string description)
-        //{
-        //    if(!BaseSecurity.IsAdminEditor(Context))
-        //        throw new ChalkableSecurityException();
-
-        //    using (var uow = Update())
-        //    {
-        //        var res = new AttendanceReason
-        //            {
-        //                Id = Guid.NewGuid(),
-        //                AttendanceType = type,
-        //                Code = code,
-        //                Description = description
-        //            };
-        //        new AttendanceReasonDataAccess(uow).Insert(res);
-        //        uow.Commit();
-        //        return res;
-        //    }
-        //}
-
-        //public AttendanceReason Edit(Guid id, AttendanceTypeEnum type, string code, string description)
-        //{
-        //    if (!BaseSecurity.IsAdminEditor(Context))
-        //        throw new ChalkableSecurityException();
-        //    using (var uow = Update())
-        //    {
-        //        var da = new AttendanceReasonDataAccess(uow);
-        //        var res =  da.GetById(id);
-        //        res.Code = code;
-        //        res.Description = description;
-        //        res.AttendanceType = type;
-        //        da.Update(res);
-        //        uow.Commit();
-        //        return res;
-        //    }
-        //}
-
-        //public void Delete(Guid id)
-        //{
-        //    if (!BaseSecurity.IsAdminEditor(Context))
-        //        throw new ChalkableSecurityException();
-        //    using (var uow = Update())
-        //    {
-        //        new AttendanceReasonDataAccess(uow).Delete(id);
-        //        uow.Commit();
-        //    }
-        //}
-
-        //public IList<AttendanceReason> List()
-        //{
-        //    using (var uow = Read())
-        //    {
-        //      return  new AttendanceReasonDataAccess(uow).GetAll();
-        //    }
-        //}
-
-        //public AttendanceReason Get(Guid id)
-        //{
-        //    using (var uow = Read())
-        //    {
-        //        return new AttendanceReasonDataAccess(uow).GetById(id);
-        //    }
-        //}
 
         public void Add(IList<AttendanceReason> reasons)
         {
@@ -97,11 +34,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 da.Insert(reasons);
                 uow.Commit();
             }
-        }
-
-        public AttendanceReason Edit(Guid id, AttendanceTypeEnum type, string code, string description)
-        {
-            throw new NotImplementedException();
         }
 
         public void Delete(int id)
@@ -133,6 +65,14 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new AttendanceLevelReasonDataAccess(uow);
                 da.Insert(attendanceLevelReasons);
                 uow.Commit();
+            }
+        }
+
+        public IList<AttendanceReason> GetAll()
+        {
+            using (var uow = Read())
+            {
+                return new AttendanceReasonDataAccess(uow).GetAll();
             }
         }
     }

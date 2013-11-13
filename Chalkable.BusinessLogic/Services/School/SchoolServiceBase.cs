@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Chalkable.Data.Common;
+using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -29,5 +30,15 @@ namespace Chalkable.BusinessLogic.Services.School
             return new UnitOfWork(ServiceLocator.Context.SchoolConnectionString, true);
         }
 
+    }
+
+    public class SisConnectedService : SchoolServiceBase
+    {
+        public SisConnectedService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
+        {
+            ConnectorLocator = new ConnectorLocator(Context.SisToken, Context.SisUrl);
+        }
+
+        protected ConnectorLocator ConnectorLocator { get; private set; }
     }
 }

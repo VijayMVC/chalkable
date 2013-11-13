@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using Chalkable.Data.School.DataAccess;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 
@@ -66,29 +64,20 @@ namespace Chalkable.Web.Models.AttendancesViewData
                , IList<int> stsIdsAbsentFromDay, IList<AttendanceStatsViewData> attendancesStats)
         {
 
-            var groupedSts = GroupStudentsByType(stsAttendanceTotalPerType, allStudents);
-            return new AttendanceByDayViewData
-                {
-                    StudentsAbsentWholeDay = ShortPersonViewData.Create(allStudents.Where(x => stsIdsAbsentFromDay.Contains(x.Id)).ToList()),
-                    StudentsCountAbsentWholeDay = stsIdsAbsentFromDay.Count,
-                    AbsentStudents = PrepareStudentsByAttendanceType(AttendanceTypeEnum.Absent, groupedSts),
-                    ExcusedStudents = PrepareStudentsByAttendanceType(AttendanceTypeEnum.Excused, groupedSts),
-                    LateStudents = PrepareStudentsByAttendanceType(AttendanceTypeEnum.Late, groupedSts),
-                    AttendancesStats = attendancesStats
-                };
+            throw new NotImplementedException();
         }
 
-        private static IList<ShortPersonViewData> PrepareStudentsByAttendanceType(AttendanceTypeEnum type,
-                                           IDictionary<AttendanceTypeEnum, List<Person>> stsByType)
+        private static IList<ShortPersonViewData> PrepareStudentsByAttendanceType(string level,
+                                           IDictionary<string, List<Person>> stsByType)
         {
-            var res = stsByType.ContainsKey(type) ? stsByType[type] : new List<Person>();
+            var res = stsByType.ContainsKey(level) ? stsByType[level] : new List<Person>();
             return ShortPersonViewData.Create(res);
         }
 
-        private static IDictionary<AttendanceTypeEnum, List<Person>> GroupStudentsByType(IList<PersonAttendanceTotalPerType> stsAttendanceTotalPerType
+        private static IDictionary<string, List<Person>> GroupStudentsByType(IList<PersonAttendanceTotalPerType> stsAttendanceTotalPerType
             , IList<Person> allStudents)
         {
-            var res = stsAttendanceTotalPerType.GroupBy(x => x.AttendanceType)
+            var res = stsAttendanceTotalPerType.GroupBy(x => x.Level)
                                             .ToDictionary
                                             (
                                                 x => x.Key,

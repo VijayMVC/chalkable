@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.AttendancesViewData;
 using Chalkable.Web.Models.DisciplinesViewData;

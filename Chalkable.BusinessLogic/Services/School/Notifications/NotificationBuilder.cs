@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -261,7 +262,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         {
             var otherModel = new
                     {
-                        AttendanceType = classAttendance.Type,
+                        AttendanceType = classAttendance.Level,
                         ClassName = classAttendance.Class.Name,
                         Date = classAttendance.Date.ToString(DATA_FORMAT),
                         Period = 0//TODO: no data in INOW ?

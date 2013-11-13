@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
@@ -40,8 +41,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
             while (d < mp.EndDate)
             {
                 var atts = attendances.Where(
-                    x => x.Date.Month == d.Month && x.Date.Year == d.Year &&
-                         (x.Type == AttendanceTypeEnum.Absent || x.Type == AttendanceTypeEnum.Late)).ToList();
+                    x => x.Date.Month == d.Month && x.Date.Year == d.Year && x.IsAbsentOrLate).ToList();
 
                 var dic = new Dictionary<Pair<int, string>, int>();
                 foreach (var classAttendance in atts)

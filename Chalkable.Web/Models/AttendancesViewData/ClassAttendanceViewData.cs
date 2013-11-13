@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 
@@ -63,6 +64,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
             public int PersonId { get; set; }
             public string Level { get; set; }
             public int? AttendanceReasonId { get; set; }
+            public string Category { get; set; }
         }
 
         public int ClassId { get; set; }

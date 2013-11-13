@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
-using Chalkable.StiConnector.Connectors;
-using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.AttendancesViewData;
@@ -22,35 +21,13 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Attendance })]
         public ActionResult SetAttendance(SetClassAttendanceViewData data)
         {
-            var dataStr = data.Date.ToString("yyyy-MM-dd");
-            var sa = new SectionAttendance
+            SchoolLocator.AttendanceService.SetClassAttendances(data.Date, data.ClassId, data.Items.Select(x=>new ClassAttendance
                 {
-                    Date = dataStr,
-                    SectionId = data.ClassId,
-                    StudentAttendance = new List<StudentSectionAttendance>()
-                };
-
-
-            foreach (var item in data.Items)
-            {
-                AttendanceReason reason = null;
-                if (item.AttendanceReasonId.HasValue)
-                    reason = SchoolLocator.AttendanceReasonService.Get(item.AttendanceReasonId.Value);
-                sa.StudentAttendance.Add(new StudentSectionAttendance
-                {
-                    Category = reason != null ? reason.Category : "U",
-                    Date = dataStr,
-                    Level = item.Level,
-                    ReasonId = (short)(item.AttendanceReasonId.HasValue ? item.AttendanceReasonId.Value : 0),
-                    SectionId = data.ClassId,
-                    StudentId = item.PersonId
-                });    
-            }
-            
-
-            var l = new ConnectorLocator(Context.SisToken, Context.SisUrl);
-            var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
-            l.AttendanceConnector.SetSectionAttendance(sy.Id, data.Date, data.ClassId, sa);
+                    AttendanceReasonRef = x.AttendanceReasonId,
+                    ClassRef = data.ClassId,
+                    Date = data.Date,
+                    PersonRef = x.PersonId
+                }).ToList());
             return Json(true);
         }
 
@@ -73,54 +50,28 @@ namespace Chalkable.Web.Controllers
 
         
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE_FOR_CLASS, true, CallType.Post, new[] { AppPermissionType.Attendance })]
-        public ActionResult SetAttendanceForClass(int type, Guid? attendanceReason, Guid classPeriodId, DateTime date)
+        public ActionResult SetAttendanceForClass(string level, int? attendanceReasonId, int classId, DateTime date)
         {
-            SchoolLocator.AttendanceService.SetAttendanceForClass(classPeriodId, date, (AttendanceTypeEnum)type, attendanceReason);
+            IList<Person> persons = SchoolLocator.ClassService.GetStudents(classId);
+            SchoolLocator.AttendanceService.SetClassAttendances(date, classId, persons.Select(x => new ClassAttendance
+            {
+                AttendanceReasonRef = attendanceReasonId,
+                ClassRef = classId,
+                Date = date,
+                PersonRef = x.Id
+            }).ToList());
             return Json(true);
         }
-
-
-        private AttendanceTypeEnum Map(string level)
-        {
-            if (level.ToLower() == "present")
-                return AttendanceTypeEnum.Present;
-            throw new ChalkableException("absence level is not recognized");
-
-        }
-
+        
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_ATTENDANCE_LIST_CLASS_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Schedule, AppPermissionType.Class })]
         public ActionResult ClassList(DateTime? date, int classId)
         {
             date = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
-            
-            
-
-            var teacherId = SchoolLocator.Context.Role == CoreRoles.TEACHER_ROLE ? SchoolLocator.Context.UserLocalId : default(int?);
-            
-            var cps = SchoolLocator.ClassPeriodService.GetClassPeriods(date.Value, classId, null, null, teacherId);
-            var cp = cps.OrderBy(x => x.Period.StartTime).LastOrDefault();
+            var cps = SchoolLocator.ClassPeriodService.GetClassPeriods(date.Value, classId, null, null, null);
             var listClassAttendance = new List<ClassAttendanceViewData>();
-            if (cp != null)
+            if (cps.Count > 0)
             {
-                var l = new ConnectorLocator(Context.SisToken, Context.SisUrl);
-                var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
-                var sa = l.AttendanceConnector.GetSectionAttendance(sy.Id, date.Value, classId);
-                var clazz = SchoolLocator.ClassService.GetClassById(cp.ClassRef);
-                var persons = SchoolLocator.PersonService.GetPersons();//TODO: get class persons only
-                var attendances = new List<ClassAttendanceDetails>();
-                foreach (var ssa in sa.StudentAttendance)
-                {
-                    attendances.Add(new ClassAttendanceDetails
-                        {
-                            ClassRef = ssa.SectionId,
-                            AttendanceReasonRef = ssa.ReasonId > 0 ? ssa.ReasonId : (int?)null,
-                            Date = date.Value,
-                            PersonRef = ssa.StudentId,
-                            Level = ssa.Level,
-                            Class = clazz,
-                            Student = persons.First(x=>x.Id == ssa.StudentId),
-                        });
-                }
+                var attendances = SchoolLocator.AttendanceService.GetClassAttendances(date.Value, classId);
                 IList<AttendanceReason> attendanceReason = SchoolLocator.AttendanceReasonService.List();
                 listClassAttendance = ClassAttendanceViewData.Create(attendances, attendanceReason).ToList();
             }
@@ -219,7 +170,7 @@ namespace Chalkable.Web.Controllers
             foreach (var student in studentsList)
             {
                 var attendances = all.Where(x => x.Student.Id == student.Id).ToList();
-                var stat = attendances.Where(t => t.Type == AttendanceTypeEnum.Absent || t.Type == AttendanceTypeEnum.Late).ToList();
+                var stat = attendances.Where(t => t.IsAbsentOrLate).ToList();
                 if (stat.Count >= 5)
                     trouble.Add(student);
                 else if (stat.Count <= 1)

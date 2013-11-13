@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 
@@ -28,10 +27,10 @@ namespace Chalkable.Web.Models.AttendancesViewData
             var res = new StudentAttendanceDetailedViewData(student)
             {
                 MarkingPeriod = MarkingPeriodViewData.Create(markingPeriod),
-                AbsentSection = StudentAttendanceBoxViewData.Create(studentAttendnaces, attendancesDictionary, AttendanceTypeEnum.Absent),
-                LateSection = StudentAttendanceBoxViewData.Create(studentAttendnaces, attendancesDictionary, AttendanceTypeEnum.Late),
-                ExcusedSection = StudentAttendanceBoxViewData.Create(studentAttendnaces, attendancesDictionary, AttendanceTypeEnum.Excused),
-                PresentSection = StudentAttendanceBoxViewData.Create(studentAttendnaces, attendancesDictionary, AttendanceTypeEnum.Present)
+                AbsentSection = StudentAttendanceBoxViewData.Create(studentAttendnaces, attendancesDictionary, "A"),//todo: should be all absent levels
+                LateSection = StudentAttendanceBoxViewData.Create(studentAttendnaces, attendancesDictionary, "T"),
+                //ExcusedSection = StudentAttendanceBoxViewData.Create(studentAttendnaces, attendancesDictionary, AttendanceTypeEnum.Excused), TODO wtf
+                PresentSection = StudentAttendanceBoxViewData.Create(studentAttendnaces, attendancesDictionary, null)
             };
             return res;
         }
@@ -42,21 +41,21 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public bool IsPassing { get; set; }
 
         public static StudentAttendanceBoxViewData Create(IList<ClassAttendanceDetails> attendances, 
-            IDictionary<int, List<ClassAttendanceDetails>> attendancesDictionary, AttendanceTypeEnum type)
+            IDictionary<int, List<ClassAttendanceDetails>> attendancesDictionary, string level)
         {
             var isPassing = true;
-            var typeCount = attendances.Count(x => x.Type == type);
+            var typeCount = attendances.Count(x => x.Level == level);
 
-            if (type == AttendanceTypeEnum.Absent || type == AttendanceTypeEnum.Late)
+            if (ClassAttendance.IsAbsentOrLateLevel(level))
             {
-                var presentCount = attendances.Count(x => x.Type == AttendanceTypeEnum.Present);
+                var presentCount = attendances.Count(x => x.Level == null);
                 if (presentCount == 0) presentCount = 1;
-                isPassing = 100 * typeCount / presentCount < (type == AttendanceTypeEnum.Absent ? 10 : 5);
+                isPassing = 100 * typeCount / presentCount < (ClassAttendance.IsAbsentLevel(level) ? 10 : 5);
             }
 
             return new StudentAttendanceBoxViewData
             {
-                Hover = StudentAttendanceHoverViewData.Create(attendancesDictionary, type),
+                Hover = StudentAttendanceHoverViewData.Create(attendancesDictionary, level),
                 IsPassing = isPassing,
                 Title = typeCount.ToString()
             };
@@ -68,18 +67,18 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public int Value { get; set; }
         public string ClassName { get; set; }
         public const int HOVER_DATA_COUNT = 4;
-        public static StudentAttendanceHoverViewData Create(List<ClassAttendanceDetails> attendanceComplexes, AttendanceTypeEnum type)
+        public static StudentAttendanceHoverViewData Create(List<ClassAttendanceDetails> attendanceComplexes, string type)
         {
             var res = new StudentAttendanceHoverViewData
             {
-                Value = attendanceComplexes.Count(x => x.Type == type),
+                Value = attendanceComplexes.Count(x => x.Level == type),
                 ClassName = attendanceComplexes.First().Class.Name
             };
             return res;
         }
 
         private const string OTHER = "Other";
-        public static IList<StudentAttendanceHoverViewData> Create(IDictionary<int, List<ClassAttendanceDetails>> attendancesDictionary, AttendanceTypeEnum type)
+        public static IList<StudentAttendanceHoverViewData> Create(IDictionary<int, List<ClassAttendanceDetails>> attendancesDictionary, string type)
         {
             var res = attendancesDictionary.Select(x => Create(x.Value, type))
                 .Where(x => x.Value > 0)

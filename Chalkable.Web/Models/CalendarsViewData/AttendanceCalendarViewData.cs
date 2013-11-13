@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.Data.School.Model;
+using Chalkable.BusinessLogic.Model;
 
 namespace Chalkable.Web.Models.CalendarsViewData
 {
@@ -15,14 +15,14 @@ namespace Chalkable.Web.Models.CalendarsViewData
     }
     public class AttendanceCalendarItemViewData
     {
-        public int AttendanceType { get; set; }
+        public string AttendanceType { get; set; }
         public int Count { get; set; }
 
-        public static IList<AttendanceCalendarItemViewData> Create(IDictionary<AttendanceTypeEnum, int> attendanceCountDic)
+        public static IList<AttendanceCalendarItemViewData> Create(IDictionary<string, int> attendanceCountDic)
         {
             return attendanceCountDic.Select(x => new AttendanceCalendarItemViewData
             {
-                AttendanceType = (int)x.Key,
+                AttendanceType = x.Key,
                 Count = x.Value
             }).ToList();
         }
@@ -44,7 +44,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
             return new AttendanceForStudentCalendarItemViewData
             {
                 PersonId = attendances.Student.Id,
-                AttendanceType = (int)attendances.Type,
+                AttendanceType = attendances.Level,
                 ClassName = attendances.Class.Name,
                 //PeriodId = attendances.PeriodRef,//TODO: no data in INOW?
                 //PeriodOrder = attendances.ClassPeriod.Period.Order,
@@ -73,16 +73,16 @@ namespace Chalkable.Web.Models.CalendarsViewData
         public static AttendanceForStudentCalendarViewData Create(DateTime date, bool isCurrentMonth, int personId
             , IList<ClassAttendanceDetails> attendances)
         {
-            attendances = attendances.Where(x => x.Date == date && x.Type != AttendanceTypeEnum.NotAssigned).ToList();
+            attendances = attendances.Where(x => x.Date == date && x.Level != null).ToList();
 
             var moreCount = 0;
             IList<AttendanceForStudentCalendarItemViewData> itemAttendances;
-            var count = attendances.Count(x => x.Type != AttendanceTypeEnum.Present);
+            var count = attendances.Count(x => x.IsAbsentOrLate);
             var showGroupedData = count > NON_PRESENT_COUNT;
             if (showGroupedData)
             {
                 itemAttendances = attendances
-                    .GroupBy(x => x.Type)
+                    .GroupBy(x => x.Level)
                     .ToDictionary(x => x.Key, x => x.ToList())
                     .OrderByDescending(x => x.Value.Count)
                     .Select(x => AttendanceForStudentCalendarItemViewData.Create(x.Value.First(), x.Value.Count)).ToList();
@@ -99,8 +99,8 @@ namespace Chalkable.Web.Models.CalendarsViewData
             }
             var res = new AttendanceForStudentCalendarViewData(date, isCurrentMonth)
             {
-                IsAbsent = attendances.Count > 0 && attendances.All(x => x.Type == AttendanceTypeEnum.Absent),
-                IsExcused = attendances.Count > 0 && attendances.All(x => x.Type == AttendanceTypeEnum.Excused),
+                IsAbsent = attendances.Count > 0 && attendances.All(x => x.IsExcused),
+                IsExcused = attendances.Count > 0 && attendances.All(x => x.IsExcused),
                 Attendances = itemAttendances,
                 MoreCount = moreCount,
                 ShowGroupedData = showGroupedData,
@@ -122,7 +122,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
 
         public static AttendanceForClassCalendarViewData Create(DateTime date, bool isCurrentMonth, int classId, IList<ClassAttendanceDetails> attendances)
         {
-            var groupedAtt = attendances.Where(x=>x.Date == date).GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.Count());
+            var groupedAtt = attendances.Where(x=>x.Date == date).GroupBy(x => x.Level).ToDictionary(x => x.Key, x => x.Count());
             return new AttendanceForClassCalendarViewData(date, isCurrentMonth)
                 {
                     ClassId = classId,
