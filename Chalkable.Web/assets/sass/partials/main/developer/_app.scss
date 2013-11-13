@@ -114,6 +114,18 @@ BODY {
                       }
                     }
 
+                    &.paypal{
+                      .paypal-button{
+                        background: url(images/developer/paypal-btn.png);
+                        width: 107px;
+                        height: 26px;
+                        display: inline-block;
+                        vertical-align: top;
+                        margin-top: -7px;
+                        margin-left: 59px;
+                      }
+                    }
+
                     .icons, .screenshot-pictures, .screenshots{
                       display: inline-block;
                       vertical-align: top;

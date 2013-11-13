@@ -6,6 +6,8 @@
         .row
             +ActionLink('account', 'profile', self.developerId) Profile
         .row
+            +ActionLink('developer', 'paypalSettings', self.developerId) PayPal
+        .row
             id = self.currentAppId ? self.currentAppId.valueOf() : null
             appName = self.getCurrentAppName() || ''
             if id

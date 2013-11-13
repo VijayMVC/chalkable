@@ -58,6 +58,14 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.DEVELOPER
             ])],
+            function paypalSettingsAction(){
+
+            },
+
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.DEVELOPER
+            ])],
 
             [[String]],
             function apiAction(role_){
