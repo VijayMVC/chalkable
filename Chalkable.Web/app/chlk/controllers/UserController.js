@@ -174,7 +174,7 @@ NAMESPACE('chlk.controllers', function (){
                         return new chlk.models.people.UserProfileAppsViewData(this.getCurrentRole(), model);
                     }, this);
                 return this.PushView(chlk.activities.profile.SchoolPersonAppsPage, res);
-            },
+            }
 
 
         ])

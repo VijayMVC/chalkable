@@ -15,6 +15,8 @@ REQUIRE('chlk.activities.profile.StudentInfoPage');
 REQUIRE('chlk.activities.student.StudentProfileAttendancePage');
 REQUIRE('chlk.activities.student.StudentProfileDisciplinePage');
 REQUIRE('chlk.activities.student.StudentProfileGradingPage');
+REQUIRE('chlk.activities.profile.ScheduleWeekPage');
+REQUIRE('chlk.activities.profile.ScheduleMonthPage');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.teacher.StudentsList');
@@ -165,12 +167,32 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
             function weekScheduleAction(date_, personId){
-
+                var result = ria.async.wait([
+                        this.personService.getSchedule(personId),
+                        this.calendarService.getWeekInfo(null, date_, null, personId)
+                    ])
+                    .attach(this.validateResponse_())
+                    .then(function(results){
+                        var schedule = results[0];
+                        schedule.setRoleName(chlk.models.common.RoleNamesEnum.STUDENT.valueOf());
+                        return new chlk.models.people.UserProfileScheduleViewData(chlk.models.calendar.announcement.Week, this.getCurrentRole(), schedule, results[1]);
+                    }.bind(this));
+                return this.PushView(chlk.activities.profile.ScheduleWeekPage, result);
             },
 
             [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
             function monthScheduleAction(date_, personId){
-
+                var result = ria.async.wait([
+                        this.personService.getSchedule(personId),
+                        this.calendarService.listForMonth(null, date_, null, personId)
+                    ])
+                    .attach(this.validateResponse_())
+                    .then(function(results){
+                        var schedule = results[0];
+                        schedule.setRoleName(chlk.models.common.RoleNamesEnum.STUDENT.valueOf());
+                        return new chlk.models.people.UserProfileScheduleViewData(chlk.models.calendar.announcement.Month, this.getCurrentRole(), schedule, results[1]);
+                    }.bind(this));
+                return this.PushView(chlk.activities.profile.ScheduleMonthPage, result);
             },
 
             [[chlk.models.id.MarkingPeriodId, chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],

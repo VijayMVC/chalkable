@@ -11,7 +11,7 @@
                     items = item.getCalendarDayItems() || [];
                     each calendarDayItem,i in items
                         period = calendarDayItem.getAnnouncementClassPeriods()[0];
-                        +ActionLink('calendar', 'showDayPopUp', item.getDate().format('mm-dd-yy'), i)(class = period ? "" : "disabled").period-item.day
+                        +ActionLink('calendar', 'showDayPopUp', item.getDate().format('mm-dd-yy'), i)(class = period && self.isMainCalendar() ? "" : "disabled").period-item.day
                             if(item.getDate().getDate().getDay() == 0)
                                 .period-info=(i+1)
                                 span.time #{calendarDayItem.getPeriod().getStartTime()} - #{calendarDayItem.getPeriod().getEndTime()}

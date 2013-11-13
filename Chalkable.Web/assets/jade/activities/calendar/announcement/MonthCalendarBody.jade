@@ -1,4 +1,3 @@
--console.info(self.getUserRole());
 .month-calendar-body
     .day-names
         div
@@ -19,9 +18,9 @@
         each item in self.getItems()
             announcements = item.getAnnouncements()
             itemsArr = item.getItemsArray()
-            -console.info(self.getUserRole().isStudent(), announcements.length, itemsArr.length, self.getUserRole().isStudent() && !announcements.length && !itemsArr.length);
+            disablePopUp = !self.isMainCalendar() || self.getUserRole().isStudent() && !announcements.length && !itemsArr.length
             +ActionLink('calendar', 'showMonthDayPopUp', item.getDate().format('mm-dd-yy'))(
-                class = ((item.isSunday() ? 'sunday ' : ' ') + item.getClassName() + ' ' + item.getTodayClassName() + (self.getUserRole().isStudent() && !announcements.length && !itemsArr.length ? ' disabled' : ''))
+                class = ((item.isSunday() ? 'sunday ' : ' ') + item.getClassName() + ' ' + item.getTodayClassName() + (disablePopUp ? ' disabled' : ''))
             ).gradient-cnt.item
                 div
                     h2.number=item.getDay()

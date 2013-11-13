@@ -1,6 +1,6 @@
-schedule = self.getSchedule()
+schedule = self.getUser()
 .loader-container
     .loader
     +UserProfileTopBar(self, 'schedule')
-    actions = {todayAction: 'monthToodaySchedule', currentAction: 'monthSchedule', day: 'daySchedule', week: 'weekSchedule', month: 'monthSchedule'}
-    +Calendar(self, chlk.templates.calendar.announcement.WeekCalendarBodyTpl, self.getCalendar(), self.getControllerName(), actions, [schedule.getId()])
+    actions = {currentAction: 'monthSchedule', day: 'daySchedule', week: 'weekSchedule', month: 'monthSchedule'}
+    +Calendar(self, chlk.templates.calendar.announcement.MonthCalendarBodyTpl, self.getCalendar(), self.getControllerName(), actions, [schedule.getId()])

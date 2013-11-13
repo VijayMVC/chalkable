@@ -9,13 +9,16 @@ mixin Calendar(data, bodyTpl, bodyModel, controller, actions, params)
         .calendar-body
             +RenderWith(bodyModel, bodyTpl)(
                 userRole = data.getUserRole()
+                mainCalendar = true
             )
 
 mixin CalendarHeader(data, controller, bodyModel, actions, params)
     currentAction = actions.currentAction
     todayAction = actions.todayAction || actions.currentAction
         .calendar-today-container
+            -params.unshift('')
             +ActionLinkWithPrepend(controller, todayAction, params).calendar-today.week=Msg.Today
+            -params.shift()
         .prev-month-container
             if bodyModel.getPrevDate()
                 -params.unshift(bodyModel.getPrevDate().format('mm-dd-yy'))
@@ -29,18 +32,20 @@ mixin CalendarHeader(data, controller, bodyModel, actions, params)
             if bodyModel.getNextDate()
                 -params.unshift(bodyModel.getNextDate().format('mm-dd-yy'))
                 +ActionLinkWithPrepend(controller, currentAction, params).next-month.week
+                -params.shift()
             else
                 A.next-month.week
         if actions.day && actions.week && actions.month
+            -params.unshift('')
             .calendar-day-container
-                +ActionLink(controller, actions.day)(class = actions.day == currentAction ? 'pressed' : '').calendar-day.week
+                +ActionLinkWithPrepend(controller, actions.day, params)(class = actions.day == currentAction ? 'pressed' : '').calendar-day.week
                     span.tooltip
                     |#{Msg.Day}
             .calendar-week-container
-                +ActionLink(controller, actions.week)(class = actions.week == currentAction ? 'pressed' : '').calendar-week.week
+                +ActionLinkWithPrepend(controller, actions.week, params)(class = actions.week == currentAction ? 'pressed' : '').calendar-week.week
                     span.tooltip
                     |#{Msg.Week}
             .calendar-month-container
-                +ActionLink(controller, actions.month)(class = actions.month == currentAction ? 'pressed' : '').calendar-month.week
+                +ActionLinkWithPrepend(controller, actions.month, params)(class = actions.month == currentAction ? 'pressed' : '').calendar-month.week
                     span.tooltip
                     |#{Msg.Month}
