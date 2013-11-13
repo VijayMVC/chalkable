@@ -159,8 +159,18 @@ namespace Chalkable.BusinessLogic.Services.Master
                 throw new ChalkableException(ChlkResources.ERR_APP_SHORT_DESCRIPTION_MISSING);
             if (string.IsNullOrEmpty(shortAppInfo.Description))
                 throw new ChalkableException(ChlkResources.ERR_APP_LONG_DESCRIPTION_MISSING);
-            if (!(shortAppInfo.BigPictureId.HasValue && shortAppInfo.SmallPictureId.HasValue))
-                throw new ChalkableException(ChlkResources.ERR_APP_ICONS_MISSING);
+
+
+            if (appInfo.ApplicationAccessInfo.CanAttach)
+            {
+                if (!(shortAppInfo.BigPictureId.HasValue && shortAppInfo.SmallPictureId.HasValue))
+                    throw new ChalkableException(ChlkResources.ERR_APP_ICONS_MISSING);    
+            }
+            else
+            {
+                if (!(shortAppInfo.SmallPictureId.HasValue))
+                    throw new ChalkableException(ChlkResources.ERR_APP_SMALL_ICON_MISSING);        
+            }
 
             var developer = application.Developer;
             if (string.IsNullOrEmpty(developer.Name) || string.IsNullOrEmpty(developer.WebSite))

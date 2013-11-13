@@ -416,55 +416,57 @@ NAMESPACE('chlk.controllers', function (){
         //TODO refactor
         [[chlk.models.announcement.Announcement]],
         function saveAction(model) {
-            if(!this.isAnnouncementSavingDisabled()){
-                this.disableAnnouncementSaving(false);
-                var session = this.getContext().getSession();
-                var result;
-                var submitType = model.getSubmitType();
-                var schoolPersonId = model.getPersonId();
-                var announcementTypeId = model.getAnnouncementTypeId();
-                var announcementTypeName = model.getAnnouncementTypeName();
-                var classId = model.getClassId();
-                model.setMarkingPeriodId(session.get('markingPeriod').getId());
-                if(submitType == 'listLast'){
-                    if(!this.userIsAdmin()){
-                        result = this.announcementService
-                            .listLast(classId, announcementTypeId,schoolPersonId)
-                            .attach(this.validateResponse_())
-                            .then(function(data){
-                                var model = new chlk.models.announcement.LastMessages();
-                                model.setItems(data);
-                                model.setAnnouncementTypeName(announcementTypeName);
-                                return new ria.async.DeferredData(model);
-                            }.bind(this));
-                        return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());
-                    }
-                }else{
-                    if(submitType == 'save'){
-                        model.setAnnouncementAttachments(this.getContext().getSession().get('AnnouncementAttachments'));
-                        model.setApplications(this.getContext().getSession().get('AnnoucementApplications'));
-                        var announcementForm = new chlk.models.announcement.AnnouncementForm();
-                        announcementForm.setAnnouncement(model);
-                        result = this.addEditAction(announcementForm, false);
-                        this.saveAnnouncement(model);
-                        return this.UpdateView(this.getAnnouncementFormPageType_(), result);
-                    }else{
-                        if(submitType == 'saveNoUpdate'){
-                            this.saveAnnouncement(model);
-                        }else{
-                        //TODO nextMarkingPeriod
+            if(this.isAnnouncementSavingDisabled())
+                return;
 
-                            if(!this.userInRole(chlk.models.common.RoleEnum.ADMINEDIT) && !this.userInRole(chlk.models.common.RoleEnum.ADMINVIEW)
-                                && session.get('finalizedClassesIds').indexOf(classId.valueOf()) > -1){
-                                    var nextMp = model.setMarkingPeriodId(session.get('nextMarkingPeriod'));
-                                    if(nextMp){
-                                        this.submitAnnouncement(model, submitType == 'submitOnEdit');
-                                        return this.ShadeLoader();
-                                    }
-                            }else{
-                                this.submitAnnouncement(model, submitType == 'submitOnEdit');
-                                return this.ShadeLoader();
-                            }
+            this.disableAnnouncementSaving(false);
+            var session = this.getContext().getSession();
+            var result;
+            var submitType = model.getSubmitType();
+            var schoolPersonId = model.getPersonId();
+            var announcementTypeId = model.getAnnouncementTypeId();
+            var announcementTypeName = model.getAnnouncementTypeName();
+            var classId = model.getClassId();
+            model.setMarkingPeriodId(session.get('markingPeriod').getId());
+
+            if(submitType == 'listLast'){
+                if(!this.userIsAdmin()){
+                    result = this.announcementService
+                        .listLast(classId, announcementTypeId,schoolPersonId)
+                        .attach(this.validateResponse_())
+                        .then(function(data){
+                            var model = new chlk.models.announcement.LastMessages();
+                            model.setItems(data);
+                            model.setAnnouncementTypeName(announcementTypeName);
+                            return new ria.async.DeferredData(model);
+                        }.bind(this));
+                    return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());
+                }
+            }else{
+                if(submitType == 'save'){
+                    model.setAnnouncementAttachments(this.getContext().getSession().get('AnnouncementAttachments'));
+                    model.setApplications(this.getContext().getSession().get('AnnoucementApplications'));
+                    var announcementForm = new chlk.models.announcement.AnnouncementForm();
+                    announcementForm.setAnnouncement(model);
+                    result = this.addEditAction(announcementForm, false);
+                    this.saveAnnouncement(model);
+                    return this.UpdateView(this.getAnnouncementFormPageType_(), result);
+                }else{
+                    if(submitType == 'saveNoUpdate'){
+                        this.saveAnnouncement(model);
+                    }else{
+                    //TODO nextMarkingPeriod
+
+                        if(!this.userInRole(chlk.models.common.RoleEnum.ADMINEDIT) && !this.userInRole(chlk.models.common.RoleEnum.ADMINVIEW)
+                            && session.get('finalizedClassesIds').indexOf(classId.valueOf()) > -1){
+                                var nextMp = model.setMarkingPeriodId(session.get('nextMarkingPeriod'));
+                                if(nextMp){
+                                    this.submitAnnouncement(model, submitType == 'submitOnEdit');
+                                    return this.ShadeLoader();
+                                }
+                        }else{
+                            this.submitAnnouncement(model, submitType == 'submitOnEdit');
+                            return this.ShadeLoader();
                         }
                     }
                 }

@@ -51,6 +51,22 @@ NAMESPACE('chlk.activities.apps', function () {
                 this.onFormChange(node, event);
             },
 
+            [ria.mvc.DomEventBind('change', 'input[name=attachEnabled]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function attachChanged(node, event){
+
+                var val = node.checked();
+                if (val){
+                    var mdl = new chlk.models.apps.AppPicture(new chlk.models.id.PictureId(''), '', 170, 110, 'banner', true);
+                    var tpl = new chlk.templates.apps.AppPicture();
+                    tpl.assign(mdl);
+                    tpl.renderTo(this.dom.find('.banner').empty());
+                }
+                else
+                    this.dom.find('.banner').empty();
+
+            },
+
             [ria.mvc.DomEventBind('keyup', 'input')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function inputsChanged(node, event){

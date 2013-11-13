@@ -435,10 +435,22 @@ NAMESPACE('chlk.controllers', function (){
                     if (appBannerId.length == 0) appBannerId = null;
                 }
 
-                if (appIconId == null || appBannerId == null){
-                    return this.ShowMsgBox('You need to upload icon and banner picture for you app', 'Error', [{
-                        text: 'Ok'
-                    }], 'center');
+
+
+                if (appAccess.isAttachEnabled()){
+                    if (appIconId == null || appBannerId == null){
+                        return this.ShowMsgBox('You need to upload icon and banner picture for you app', 'Error', [{
+                            text: 'Ok'
+                        }], 'center');
+                    }
+                }
+                else
+                {
+                    if (appIconId == null){
+                        return this.ShowMsgBox('You need to upload icon picture for you app', 'Error', [{
+                            text: 'Ok'
+                        }], 'center');
+                    }
                 }
 
                 var developerWebsite = model.getDeveloperWebSite();

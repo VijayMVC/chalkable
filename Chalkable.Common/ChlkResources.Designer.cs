@@ -655,6 +655,15 @@ namespace Chalkable.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application icon is missing.
+        /// </summary>
+        public static string ERR_APP_SMALL_ICON_MISSING {
+            get {
+                return ResourceManager.GetString("ERR_APP_SMALL_ICON_MISSING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application url is missing.
         /// </summary>
         public static string ERR_APP_URL_MISSING {
