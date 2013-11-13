@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.Data.Common;
+﻿using Chalkable.Data.Common;
 using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -36,9 +31,17 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         public SisConnectedService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
-            ConnectorLocator = new ConnectorLocator(Context.SisToken, Context.SisUrl);
         }
 
-        protected ConnectorLocator ConnectorLocator { get; private set; }
+        private ConnectorLocator connectorLocator;
+        protected ConnectorLocator ConnectorLocator
+        {
+            get
+            {
+                if (connectorLocator == null)
+                    connectorLocator = new ConnectorLocator(Context.SisToken, Context.SisUrl);
+                return connectorLocator;
+            }
+        }
     }
 }
