@@ -5,7 +5,26 @@ BODY {
         #main-wrapper {
           #main {
             DIV.developer {
+
+              h2{
+                background: url(images/profile/header-line.png) 0 0 no-repeat !important;
+                padding-top: 8px;
+                padding-bottom: 12px;
+                font-family: tahoma, arial, helvetica, sans-serif;
+                color: #808080;
+                margin-left: -3px;
+              }
+
+
               .info{
+                position: relative;
+
+                .hint{
+                  font-size: 11px;
+                  position: absolute;
+                  top: 10px;
+                  right: 0;
+                }
 
 
                 .bg-line{
@@ -18,10 +37,11 @@ BODY {
 
                 label{
                   color: #808080;
-                  font-size: 17px;
-                  width: 160px;
+                  font-size: 1.2em;
+                  width: 149px;
                   display: inline-block;
                   margin-bottom: 9px;
+                  font-weight: bold;
 
                 }
                 input{
