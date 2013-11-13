@@ -32,15 +32,15 @@ NAMESPACE('chlk.activities.attendance', function () {
                     states: {
                         hover: {
                             radius: 6,
-                            lineWidth: 2
+                            lineWidth: 2,
+                            enabled: true
                         }
                     }
                 } : {
                     enabled: false,
                     states: {
                         hover: {
-                            radius: 0,
-                            lineWidth: 0
+                            enabled: false
                         }
                     }
                 };
@@ -77,7 +77,8 @@ NAMESPACE('chlk.activities.attendance', function () {
                             ser.update({
                                 marker : that.getMarkerConfigs_(true, colors[i]),
                                 color: colors[i],
-                                zIndex: 10
+                                zIndex: 10,
+                                enableMouseTracking: true
                             });
                         }
                         else{
@@ -87,7 +88,8 @@ NAMESPACE('chlk.activities.attendance', function () {
                             ser.update({
                                 marker : that.getMarkerConfigs_(false),
                                 color: "#c1c1c1",
-                                zIndex: 1
+                                zIndex: 1,
+                                enableMouseTracking: false
                             });
                         }
                     });
@@ -97,7 +99,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                         .removeClass('absent')
                         .removeClass('excused')
                         .addClass(types[num]);
-                    chart.redraw();
+                    //chart.redraw();
             },
 
             [ria.mvc.DomEventBind('blur', '.student-search-input')],
