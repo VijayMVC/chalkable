@@ -64,15 +64,16 @@ NAMESPACE('chlk.templates.attendance', function () {
                     lineColor: color_,
                     states: {
                         hover: {
-                            radius: 6
+                            radius: 6,
+                            lineWidth: 2,
+                            enabled: true
                         }
                     }
                 } : {
                     enabled: false,
                     states: {
                         hover: {
-                            radius: 0,
-                            lineWidth: 0
+                            enabled: false
                         }
                     }
                 };
@@ -96,17 +97,20 @@ NAMESPACE('chlk.templates.attendance', function () {
                     name: Msg.Late,
                     data: late,
                     zIndex: 10,
-                    marker: this.getMarkerConfigs_(true, '#e49e3c')
+                    marker: this.getMarkerConfigs_(true, '#e49e3c'),
+                    enableMouseTracking: true
                 }, {
                     name: Msg.Absent,
                     data: absent,
                     zIndex: 1,
-                    marker: this.getMarkerConfigs_(false)
+                    marker: this.getMarkerConfigs_(false),
+                    enableMouseTracking: false
                 }, {
                     name: Msg.Excused,
                     data: excused,
                     zIndex: 1,
-                    marker: this.getMarkerConfigs_(false)
+                    marker: this.getMarkerConfigs_(false),
+                    enableMouseTracking: false
                 }];
                 return {
                     backgroundColor: 'transparent',
@@ -152,7 +156,7 @@ NAMESPACE('chlk.templates.attendance', function () {
                         borderRadius: 2,
                         useHTML: true,
                         positioner: function (labelWidth, labelHeight, point) {
-                            return { x: point.plotX + 17, y: point.plotY - 37 };
+                            return { x: point.plotX + 7, y: point.plotY - 37 };
                         },
                         style: {
                             display: 'none'

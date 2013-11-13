@@ -1,5 +1,5 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
-REQUIRE('chlk.templates.people.SchedulePage');
+REQUIRE('chlk.templates.people.ScheduleDayTpl');
 REQUIRE('chlk.templates.calendar.announcement.DayPage');
 
 NAMESPACE('chlk.activities.profile', function () {
@@ -8,6 +8,6 @@ NAMESPACE('chlk.activities.profile', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [chlk.activities.lib.PageClass('profile')],
-        [ria.mvc.TemplateBind(chlk.templates.people.SchedulePage)],
+        [ria.mvc.TemplateBind(chlk.templates.people.ScheduleDayTpl)],
         'SchedulePage', EXTENDS(chlk.activities.lib.TemplatePage), []);
 });

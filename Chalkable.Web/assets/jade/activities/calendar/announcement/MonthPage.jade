@@ -1,12 +1,12 @@
 div
     actions = {currentAction: 'month', day: 'day', week: 'week', month: 'month'}
     obj = self.getDataForToolBar()
-    params = obj.selectedItemId || obj.selectedIds
+    param = obj.selectedItemId || obj.selectedIds
     toolBarParams = [self.getCurrentDate().format('mm-dd-yy')]
     +LeftRightToolbar(obj.data, obj.tpl, 'calendar', 'month', toolBarParams)(
         selectedItemId=obj.selectedItemId,
         selectedIds=obj.selectedIds
         multiple=obj.multiple
     ).classes-bar
-    +Calendar(self, chlk.templates.calendar.announcement.MonthCalendarBodyTpl, self.getModel(), 'calendar', actions, [params])
+    +Calendar(self, chlk.templates.calendar.announcement.MonthCalendarBodyTpl, self.getModel(), 'calendar', actions, param ? [param] : [])
 

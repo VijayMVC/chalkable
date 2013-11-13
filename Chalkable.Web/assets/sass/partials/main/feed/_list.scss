@@ -113,6 +113,11 @@ $star-size: 18px;
   background: url(images/feed/item-bg.png) 0 top repeat-x;
   @include border-radius(7px);
 
+  &.is-admin{
+    padding-left: 15px;
+    width: 643px;
+  }
+
   &.starred {
     DIV.bullet {
       a.star {

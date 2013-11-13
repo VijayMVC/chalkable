@@ -245,7 +245,7 @@ NAMESPACE('ria.mvc', function () {
                 params.unshift(state.getAction());
                 params.unshift(state.getController());
                 params = params.map(function(item){
-                    return item.valueOf().toString();
+                    return item ? item.valueOf().toString() : '';
                 });
                 var href = '#' + params.join('/');
                 if(href != window.location.hash)
@@ -255,6 +255,7 @@ NAMESPACE('ria.mvc', function () {
             [[ImplementerOf(ria.mvc.IActivity), ria.async.Future]],
             function ShadeView(clazz, data) {
                 var instance = new clazz();
+                this.prepareActivity_(instance);
                 this.view.shadeD(instance, data);
                 return null;
             },

@@ -4,7 +4,7 @@ REQUIRE('chlk.models.id.AppPermissionId');
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
 
-    /** @class chlk.model.apps.AppPermissionTypeEnum*/
+    /** @class chlk.models.apps.AppPermissionTypeEnum*/
     ENUM('AppPermissionTypeEnum',{
         USER: 0,
         MESSAGE: 1,
@@ -17,7 +17,7 @@ NAMESPACE('chlk.models.apps', function () {
         UNKNOWN: 999
     });
 
-    /** @class chlk.model.apps.AppPermission*/
+    /** @class chlk.models.apps.AppPermission*/
     CLASS(
         'AppPermission', IMPLEMENTS(ria.serialize.IDeserializable),  [
             chlk.models.apps.AppPermissionTypeEnum, 'id',

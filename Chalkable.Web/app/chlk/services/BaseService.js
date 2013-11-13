@@ -1,6 +1,7 @@
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
 
 REQUIRE('chlk.lib.ajax.ChlkJsonPostTask');
+REQUIRE('chlk.lib.ajax.ChlkJsonGetTask');
 REQUIRE('ria.ajax.JsonGetTask');
 REQUIRE('chlk.lib.ajax.UploadFileTask');
 
@@ -57,14 +58,18 @@ NAMESPACE('chlk.services', function () {
             [[Object]],
             function handleError(data){
                 if(!data.success){
-                    var state = this.context.getState();
-                    state.setController('user');
-                    state.setAction('error');
-                    state.setParams([]);
-                    state.setPublic(false);
-                    this.context.stateUpdated();
+                    this.redirectToErrorPage();
                 }
                 //throw chlk.services.DataException('Server error', Error(data.message));
+            },
+
+            function redirectToErrorPage(){
+                var state = this.context.getState();
+                state.setController('user');
+                state.setAction('error');
+                state.setParams([]);
+                state.setPublic(false);
+                this.context.stateUpdated();
             },
 
             [[String, Object, Object]],
@@ -80,7 +85,9 @@ NAMESPACE('chlk.services', function () {
                             return data.data || null;
 
                         return Serializer.deserialize(data.data, clazz_);
-                    }.bind(this));
+                    }.bind(this)).catchError(function(handler, scope_){
+                        this.redirectToErrorPage();
+                    }, this);
             },
 
             [[String, Object, Object, Object]],
@@ -170,7 +177,9 @@ NAMESPACE('chlk.services', function () {
                         this.handleError(data);
 
                         return Serializer.deserialize(data.data, ArrayOf(clazz));
-                    }.bind(this));
+                    }.bind(this)).catchError(function(handler, scope_){
+                        this.redirectToErrorPage();
+                    }, this);
             },
 
 
@@ -190,7 +199,9 @@ NAMESPACE('chlk.services', function () {
                         model.setHasPreviousPage(Boolean(data.haspreviouspage));
 
                         return model;
-                    });
+                    }).catchError(function(handler, scope_){
+                        this.redirectToErrorPage();
+                    }, this);
             }
         ]);
 });

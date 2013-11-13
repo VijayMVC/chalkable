@@ -68,6 +68,57 @@ BODY {
                             color: #957633;
                             text-shadow: 1px 1px 1px #dfcea9;
                           }
+
+                          .calendar-today{
+                            @include box-shadow(0 1px 0 white inset, 0 1px 0 #b7a378);
+                            @include border-radius(5px);
+                            margin-top: -6px;
+                            height: 24px;
+                            display: block;
+                            position: relative;
+                            left: 13px;
+                            width: 61px;
+                          }
+
+                          .calendar-day, .calendar-week, .calendar-month{
+                            @include box-shadow(1px 0 0 #dfcfac inset, 0 1px 0 white inset, 0 1px 0 #b7a378);
+                            width: auto;
+                            padding: 0 9px;
+                            height: 24px;
+                            margin-top: -4px;
+                            position: relative;
+                            left: 16px;
+
+                            &:not(.calendar-month){
+                              border-right: none;
+                            }
+                          }
+
+                          .calendar-day{
+                            @include border-radius(5px 0 0 5px);
+                          }
+
+                          .calendar-month{
+                            @include border-radius(0 5px 5px 0);
+                          }
+
+                          .calendar-today, .calendar-day, .calendar-week, .calendar-month{
+                            border: 1px solid #957633;
+                            color: white;
+                            font: normal 12px/24px Arial;
+                            text-align: center;
+                            text-shadow: 0 1px 0 #8a7649;
+                            @include background(linear-gradient(top, #e5ca95, #ba9c57));
+
+                            &:hover{
+                              @include background(linear-gradient(top, #ba9c57, #e5ca95));
+                            }
+
+                            &:active, &.pressed{
+                              background: #957633;
+                              @include box-shadow(0 1px 0 #d2bc89);
+                            }
+                          }
                         }
                       }
                     }
@@ -232,6 +283,10 @@ BODY {
                           &:active{
                             background-position: -126px 0;
                           }
+                        }
+
+                        .calendar-today, .calendar-day, .calendar-week, .calendar-month{
+                          color: transparent;
                         }
 
                         .calendar-today.week {

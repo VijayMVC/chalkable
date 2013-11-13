@@ -6,7 +6,7 @@ NAMESPACE('chlk.templates.calendar.announcement', function () {
 
     /** @class chlk.templates.calendar.announcement.DayPage*/
     CLASS(
-        [ria.templates.TemplateBind('~/assets/jade/activities/calendar/announcement/dayPage.jade')],
+        [ria.templates.TemplateBind('~/assets/jade/activities/calendar/announcement/DayPage.jade')],
         [ria.templates.ModelBind(chlk.models.calendar.announcement.Day)],
         [chlk.activities.lib.PageClass('calendar')],
         'DayPage', EXTENDS(chlk.templates.calendar.BaseCalendarTpl), [
@@ -14,14 +14,6 @@ NAMESPACE('chlk.templates.calendar.announcement', function () {
             ArrayOf(chlk.models.calendar.announcement.DayItem), 'items',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.classes.ClassesForTopBar, 'topData',
-
-            Boolean, 'notMainCalendar',
-
-            String, 'controllerName',
-
-            String, 'actionName',
-
-            Array, 'params'
+            chlk.models.classes.ClassesForTopBar, 'topData'
         ]);
 });

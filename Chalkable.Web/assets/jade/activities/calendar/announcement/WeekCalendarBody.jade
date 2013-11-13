@@ -9,13 +9,13 @@
             div
                 anns = item.getAnnouncements();
                 if anns && anns.length
-                    +ActionLink('calendar', 'showWeekBarPopUp', item.getDate().format('mm-dd-yy')).bar-item
+                    +ActionLink('calendar', 'showWeekBarPopUp', item.getDate().format('mm-dd-yy'))(class = self.isMainCalendar() ? '' : 'disabled').bar-item
     .items
         each item in self.getItems()
             div(class = item.getTodayClassName(), data-day = item.getDay()).gradient-cnt.item.week-day.week
                 ul
                     each announcementPeriod,i in item.getAnnouncementPeriods()
-                        +ActionLink('calendar', 'showWeekBarPopUp', item.getDate().format('mm-dd-yy'), i).period-item
+                        +ActionLink('calendar', 'showWeekBarPopUp', item.getDate().format('mm-dd-yy'), i)(class = self.isMainCalendar() ? '' : 'disabled').period-item
                             if item.getDate().format('DD') == Msg.Sunday
                                 .period-info=i+1
                             else
@@ -23,8 +23,9 @@
                                 if anns.length == 1
                                     li
                                         .announcement-calendar-item
+                                            //TODO add course
                                             .course-icon
-                                                img
+                                                +ClassImg(null, 24, 48).avatar.course-icon
                                             .text-container
                                                 p.typename=anns[0].getAnnouncementTypeName()
                                                 p.title=anns[0].getClassName()
