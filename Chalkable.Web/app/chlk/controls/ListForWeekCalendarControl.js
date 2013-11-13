@@ -8,6 +8,11 @@ REQUIRE('chlk.templates.calendar.ListForWeekCalendarTpl');
 REQUIRE('chlk.models.announcement.AnnouncementType');
 
 NAMESPACE('chlk.controls', function () {
+    chlk.controls.updateWeekCalendar = function () {
+        var node = new ria.dom.Dom('.announcement-week');
+        chlk.controls.ListForWeekCalendarControl.prototype.addCalendar.call(node.getData('control'), node.getData('date'));
+    };
+
     /** @class chlk.controls.ListForWeekCalendarControl */
     CLASS(
         'ListForWeekCalendarControl', EXTENDS(chlk.controls.Base), [
@@ -25,13 +30,16 @@ NAMESPACE('chlk.controls', function () {
                     var res = new chlk.models.calendar.ListForWeekCalendar(model);
                     var tpl = new chlk.templates.calendar.ListForWeekCalendarTpl();
                     tpl.assign(res);
-                    tpl.renderTo(new ria.dom.Dom('.announcement-week').empty());
-                })
+                    var dom = new ria.dom.Dom('.announcement-week');
+                    dom.setData('control', this);
+                    dom.setData('date', date_ || null);
+                    tpl.renderTo(dom.empty());
+                }, this)
             },
 
             [ria.mvc.DomEventBind('click', '.list-for-week-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function clickPrevNextBtn(node, event) {
+            function clickPrevNextBtn(node, event) {
                 var date = new chlk.models.common.ChlkDate(getDate(node.getData('date')));
                 new ria.dom.Dom('.announcement-week-loader').addClass('loading');
                 this.addCalendar(date);

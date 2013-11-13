@@ -212,7 +212,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.appsService
                 .approveApp(appId)
                 .then(function(data){
-                    return this.redirect_('apps', 'list', []);
+                    return this.Redirect('apps', 'list', []);
                 }, this);
         },
 
@@ -224,7 +224,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.appsService
                 .declineApp(appId)
                 .then(function(data){
-                    return this.redirect_('apps', 'list', []);
+                    return this.Redirect('apps', 'list', []);
                 }, this);
         },
 
@@ -236,7 +236,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.appsService
                 .goLive(appId)
                 .then(function(data){
-                    return this.redirect_('apps', 'general', []);
+                    return this.Redirect('apps', 'general', []);
                 }, this);
         },
 
@@ -248,7 +248,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.appsService
                 .unlist(liveAppId)
                 .then(function(data){
-                    return this.redirect_('apps', 'general', []);
+                    return this.Redirect('apps', 'general', []);
                 }, this);
         },
 
