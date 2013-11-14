@@ -10,6 +10,7 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'gradeLevels',
             String, 'permissions',
             String, 'categories',
+            String, 'platforms',
             String, 'name',
             String, 'url',
             String, 'videoDemoUrl',

@@ -5,6 +5,7 @@ REQUIRE('ria.async.Observable');
 
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.apps.AppPermission');
+REQUIRE('chlk.models.apps.AppPlatform');
 REQUIRE('chlk.models.apps.AppAccess');
 REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.apps.ShortAppInfo');
@@ -194,10 +195,12 @@ NAMESPACE('chlk.services', function () {
                 ArrayOf(chlk.models.id.AppCategoryId),
                 ArrayOf(chlk.models.id.PictureId),
                 ArrayOf(chlk.models.id.GradeLevelId),
+                ArrayOf(chlk.models.apps.AppPlatformTypeEnum),
                 Boolean
             ]],
             ria.async.Future, function updateApp(
-                appId, shortAppInfo, permissionIds, appPricesInfo, devId, appAccess, categories, pictures_, gradeLevels, forSubmit){
+                appId, shortAppInfo, permissionIds, appPricesInfo, devId, appAccess, categories, pictures_,
+                gradeLevels, platforms, forSubmit){
                 return this.post('Application/Update.json', chlk.models.apps.Application,  {
                     applicationId: appId.valueOf(),
                     shortApplicationInfo: shortAppInfo.getPostData(),
@@ -208,6 +211,7 @@ NAMESPACE('chlk.services', function () {
                     categories: this.arrayToIds(categories),
                     picturesid: this.arrayToIds(pictures_ || ""),
                     gradeLevels: this.arrayToIds(gradeLevels),
+                    platforms: this.arrayToIds(platforms),
                     forSubmit: forSubmit
                 })
                 .then(function(newApp){
@@ -229,6 +233,16 @@ NAMESPACE('chlk.services', function () {
                     new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.DISCIPLINE, "Discipline")
                 ];
             },
+
+            ArrayOf(chlk.models.apps.AppPlatform), function getAppPlatforms(){
+                return  [
+                    new chlk.models.apps.AppPlatform(chlk.models.apps.AppPlatformTypeEnum.WEB, "Web"),
+                    new chlk.models.apps.AppPlatform(chlk.models.apps.AppPlatformTypeEnum.IOS, "iOS"),
+                    new chlk.models.apps.AppPlatform(chlk.models.apps.AppPlatformTypeEnum.ANDROID, "Android")
+                ];
+            },
+
+
 
             [[chlk.models.id.AppId, chlk.models.id.AnnouncementId]],
             ria.async.Future, function addAppToAnnouncement(appId, announcementId){
