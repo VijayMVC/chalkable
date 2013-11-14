@@ -21,17 +21,22 @@ namespace Chalkable.Web.Controllers.CalendarControllers
     public class AnnouncementCalendarController : CalendarController
     {
          [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_LIST, true, CallType.Get, new[] { AppPermissionType.Announcement })]
-        public ActionResult List(DateTime? date, int? classId, IntList gradeLevelIds)
+        public ActionResult List(DateTime? date, int? classId, IntList gradeLevelIds, int? schoolPersonId)
          {
              if (!SchoolLocator.Context.SchoolId.HasValue)
                  throw new UnassignedUserException();
              DateTime start, end;
              MonthCalendar(ref date, out start, out end);
              var isAdmin = BaseSecurity.IsAdminViewer(SchoolLocator.Context);
+             var schoolYearId = GetCurrentSchoolYearId();
              var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, gradeLevelIds, !isAdmin ? classId : null);
              if (isAdmin)
                  announcements = announcements.Where(x => !x.ClassRef.HasValue).ToList();
-             var schoolYearId = GetCurrentSchoolYearId();
+             if (schoolPersonId.HasValue)
+             {
+                 var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, null, schoolPersonId);
+                 announcements = announcements.Where(x => classes.Any(y => y.Id == x.ClassRef)).ToList();
+             }
              var days = SchoolLocator.CalendarDateService.GetLastDays(schoolYearId, true, start, end);
              return Json(PrepareMonthCalendar(start, end, date.Value, (dateTime, isCurrentMonth) => 
                  AnnouncementMonthCalendarViewData.Create(dateTime, isCurrentMonth, announcements, days)));

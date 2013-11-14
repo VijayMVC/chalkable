@@ -20,8 +20,10 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 age = DateTime.UtcNow.Year - person.BirthDate.Value.Year; //TODO: think about
 
             Age = age;
-            Address = AddressViewData.Create(person.Address);
-            Phones = PhoneViewData.Create(person.Phones);
+            if (person.Address != null)
+                Address = AddressViewData.Create(person.Address);    
+            if(person.Phones != null)
+                Phones = PhoneViewData.Create(person.Phones);
         }
         public static PersonInfoViewData Create(PersonDetails person)
         {
