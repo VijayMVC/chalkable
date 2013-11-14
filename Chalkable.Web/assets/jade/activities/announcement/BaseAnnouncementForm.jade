@@ -23,8 +23,8 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
 
     //+AnnouncementFormDescriptionBlock(announcement)
     typesEnum = chlk.models.announcement.AnnouncementTypeEnum
-    isAdminAnnouncement = adminRecipients && announcement.getAnnouncementTypeId() == typesEnum.ADMIN.valueOf()
-    isAnnouncement = (announcement.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf() || isAdminAnnouncement)
+    isAdminAnnouncement = adminRecipients && announcement.isAdminAnnouncement()
+    isAnnouncement = (announcement.isStandartAnnouncement() || isAdminAnnouncement)
     .left-block
         if isAdminAnnouncement
             .buttons-container

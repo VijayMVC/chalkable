@@ -12,6 +12,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string Title { get; set; }
         public string AnnouncementTypeName { get; set; }
         public int? AnnouncementTypeId { get; set; }
+        public int? ChalkableAnnouncementTypeId { get; set; }
         public int PersonId { get; set; }
         public string PersonName { get; set; }
         public string PersonGender { get; set; }
@@ -31,6 +32,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             Title = announcement.Title;
             AnnouncementTypeId = announcement.ClassAnnouncementTypeRef;
             AnnouncementTypeName = announcement.ClassAnnouncementTypeName;
+            ChalkableAnnouncementTypeId = announcement.ChalkableAnnouncementType;
             PersonId = announcement.PersonRef;
             PersonName = announcement.PersonName;
             PersonGender = announcement.Gender;

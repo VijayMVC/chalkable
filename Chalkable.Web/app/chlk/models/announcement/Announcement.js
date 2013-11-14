@@ -3,6 +3,7 @@ REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.attachment.Attachment');
 
+REQUIRE('chlk.models.announcement.AnnouncementType');
 REQUIRE('chlk.models.announcement.StudentAnnouncements');
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.ClassId');
@@ -27,6 +28,14 @@ NAMESPACE('chlk.models.announcement', function () {
     /** @class chlk.models.announcement.Announcement*/
     CLASS(
         'Announcement', [
+
+            function $(){
+                BASE();
+                this._chalkableAnnouncementType = null;
+                this._announcementTypeId = null;
+                this._annTypeEnum = chlk.models.announcement.AnnouncementTypeEnum;
+            },
+
             chlk.models.id.AnnouncementId, 'id',
 
             [ria.serialize.SerializeProperty('announcementattachments')],
@@ -36,7 +45,32 @@ NAMESPACE('chlk.models.announcement', function () {
             ArrayOf(chlk.models.announcement.Reminder), 'announcementReminders',
 
             [ria.serialize.SerializeProperty('announcementtypeid')],
-            Number, 'announcementTypeId', // make enum
+            Number, 'announcementTypeId',
+            [[Number]],
+            VOID, function setAnnouncementTypeId(announcementTypeId){
+                this._announcementTypeId = announcementTypeId;
+                if(!announcementTypeId)
+                    this.setChalkableAnnouncementType(this._annTypeEnum.ADMIN.valueOf())
+            },
+            Number, function getAnnouncementTypeId(){return this._announcementTypeId; },
+
+            [ria.serialize.SerializeProperty('chalkableannouncementtypeid')], // make enum
+            Number, 'chalkableAnnouncementType',
+            [[Number]],
+            VOID, function setChalkableAnnouncementType(chalkableAnnouncementType){
+                this._chalkableAnnouncementType = chalkableAnnouncementType
+                    || this._annTypeEnum.ANNOUNCEMENT.valueOf();
+            },
+            Number, function getChalkableAnnouncementType(){ return this._chalkableAnnouncementType;},
+
+
+            Boolean, function isAdminAnnouncement(){
+                return  this.getChalkableAnnouncementType() == this._annTypeEnum.ADMIN.valueOf()
+                    && !this.getAnnouncementTypeId()
+            },
+            Boolean, function isStandartAnnouncement(){
+                return this.getChalkableAnnouncementType() == this._annTypeEnum.ANNOUNCEMENT.valueOf()
+            },
 
             [ria.serialize.SerializeProperty('announcementtypename')],
             String, 'announcementTypeName',
@@ -183,7 +217,7 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('announcementqnas')],
             ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
 
-String, 'annRecipients',
+            String, 'annRecipients',
 
             function prepareExpiresDateText(){
                 var now = getDate();

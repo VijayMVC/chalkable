@@ -22,6 +22,7 @@ namespace Chalkable.Web.Models
         public string ApplcicationName { get; set; }
         public string ApplicationIcon47Url { get; set; }
         public int? AnnouncementType { get; set; }
+        public bool IsAdminAnnouncement { get; set; }
         public string AnnouncementTypeName { get; set; }
         public DateTime Created { get; set; }
         public int? ClassId { get; set; }
@@ -111,10 +112,14 @@ namespace Chalkable.Web.Models
                 throw new ChalkableException(ChlkResources.ERR_INVALID_NOTIFICATION_BUILDER_FOR_TYPE);
             var res = new NotificationViewData(notification)
                 {
-                    AnnouncementType = notification.AnnouncementType.Id,
-                    AnnouncementTypeName = notification.AnnouncementType.Name,
+                    IsAdminAnnouncement = notification.AnnouncementType == null && !notification.Announcement.ClassAnnouncementTypeRef.HasValue,
                     Person = ShortPersonViewData.Create(notification.QuestionPerson)
                 };
+            if (notification.AnnouncementType != null)
+            {
+                res.AnnouncementType = notification.AnnouncementType.ChalkableAnnouncementTypeRef;
+                res.AnnouncementTypeName = notification.AnnouncementType.Name;
+            }
             return res;
         }
     }

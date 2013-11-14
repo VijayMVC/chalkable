@@ -76,6 +76,7 @@ namespace Chalkable.Web.Models
     public class AnnouncementSearchViewData : SearchViewData
     {
         public int? AnnouncementType { get; set; }
+        public bool IsAdminAnnouncement { get; set; }
         public static SearchViewData Create(AnnouncementComplex announcement)
         {
             return new AnnouncementSearchViewData
@@ -83,6 +84,7 @@ namespace Chalkable.Web.Models
                 Id = announcement.Id.ToString(),
                 Description = string.Format("{0} {1} {2}", announcement.Title, announcement.ClassAnnouncementTypeName, announcement.Order),
                 AnnouncementType = announcement.ChalkableAnnouncementType,
+                IsAdminAnnouncement = !announcement.ClassAnnouncementTypeRef.HasValue,
                 SearchType = (int)SearchTypeEnum.Announcements
             };
         }

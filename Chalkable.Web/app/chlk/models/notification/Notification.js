@@ -52,9 +52,19 @@ NAMESPACE('chlk.models.notification', function () {
             String, 'applicationName',
             [ria.serialize.SerializeProperty('announcementtype')],
             Number, 'announcementType',
+            [ria.serialize.SerializeProperty('isadminannouncement')],
+            Number, 'adminAnnouncement',
             [ria.serialize.SerializeProperty('announcementtypename')],
             String, 'announcementTypeName',
             chlk.models.common.ChlkDate, 'created',
+
+            READONLY, Number, 'chalkableAnnouncementType',
+            Number, function getChalkableAnnouncementType(){
+                var res = this.getAnnouncementType();
+                if(res) return res;
+                if(this.isAdminAnnouncement()) return chlk.models.announcement.AnnouncementTypeEnum.ADMIN.valueOf();
+                return chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf();
+            },
 
             String, function getCreatedTime(){
                 var created = this.getCreated();
