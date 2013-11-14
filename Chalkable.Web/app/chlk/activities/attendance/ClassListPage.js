@@ -146,13 +146,13 @@ NAMESPACE('chlk.activities.attendance', function () {
                if(atts && atts.length > 0){
                    var att = atts[0];
                    att.setType(type);
-                   if(!reasonId){
+                   /*if(!reasonId){
                        var level = att.getLevel();
                        var reasons = att.getReasons().filter(function(item){return item.isDefaultReason(level);});
                        if(reasons.length > 0){
                            reasonId = reasons[0].getId().valueOf();
                        }
-                   }
+                   }*/
                    if(reasonId){
                        var reason = this._reasons.filter(function(item){return item.getId().valueOf() == reasonId;})[0];
                        att.setAttendanceReasonId(reason.getId());

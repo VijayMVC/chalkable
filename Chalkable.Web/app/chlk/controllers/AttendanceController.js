@@ -173,7 +173,7 @@ NAMESPACE('chlk.controllers', function (){
             this.attendanceService
                 .markAllPresent(classId, date)
                 .then(function(success){
-                    this.redirect_('attendance', 'classList', [classId, date, false, isProfile_]);
+                    this.Redirect('attendance', 'classList', [classId, date, true, isProfile_]);
                   //  this.classListAction(classId, date, true, isProfile_);
                 }, this);
             //return this.ShadeLoader();
@@ -245,7 +245,7 @@ NAMESPACE('chlk.controllers', function (){
            // var activityClass = this.getView().getCurrent().getClass();
             this.attendanceService.setAttendance(model)
                 .then(function(res){
-                    this.redirect_('attendance', 'classList', [model.getClassId()]);
+                    this.Redirect('attendance', 'classList', [model.getClassId(), null, true]);
                 }, this);
             //return this.UpdateView(activityClass, this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
         },
