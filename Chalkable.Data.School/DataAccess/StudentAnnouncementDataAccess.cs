@@ -7,20 +7,20 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class StudentAnnouncementDataAccess : DataAccessBase<StudentAnnouncement>
+    public class StudentAnnouncementDataAccess : DataAccessBase<StudentAnnouncement, int>
     {
         public StudentAnnouncementDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-        
-        public void Update(Guid announcementId, bool drop)
+
+        public void Update(int announcementId, bool drop)
         {
             var conds = new AndQueryCondition { { StudentAnnouncement.ANNOUNCEMENT_REF_FIELD_NAME, announcementId } };
             var updateParams = new Dictionary<string, object> { { StudentAnnouncement.DROPPED_FIELD, drop } };
             SimpleUpdate<StudentAnnouncement>(updateParams, conds);
         }
 
-        public IList<StudentAnnouncementDetails> GetStudentAnnouncementsDetails(Guid announcementId, Guid personId)
+        public IList<StudentAnnouncementDetails> GetStudentAnnouncementsDetails(int announcementId, int personId)
         {
             var parameters = new Dictionary<string, object>
                 {
@@ -113,17 +113,17 @@ namespace Chalkable.Data.School.DataAccess
 
     public class StudentAnnouncementShortQuery
     {
-        public Guid? AnnouncementId { get; set; }
-        public Guid? MarkingPeriodClassId { get; set; }
+        public int? AnnouncementId { get; set; }
+        public int? MarkingPeriodClassId { get; set; }
         public StudentAnnouncementStateEnum? State { get; set; }     
     }
 
     public class StudentAnnouncementQuery : StudentAnnouncementShortQuery
     {
-        public Guid? StudentId { get; set; }
+        public int? StudentId { get; set; }
         public int Count { get; set; }
         public string OrderBy { get; set; }
-        public Guid? ClassId { get; set; }
+        public int? ClassId { get; set; }
 
         public StudentAnnouncementQuery()
         {

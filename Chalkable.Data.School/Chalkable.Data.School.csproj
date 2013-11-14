@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\BaseDataAccess.cs" />
     <Compile Include="DataAccess\AddressDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementApplicationDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementAttachmentDataAccess.cs" />
@@ -59,24 +60,22 @@
     <Compile Include="DataAccess\AnnouncementReminderDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\AnnouncementForStudentDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\AnnouncementForTeacherDataAccess.cs" />
-    <Compile Include="DataAccess\AnnouncementTypeDataAccess.cs" />
     <Compile Include="DataAccess\ApplicationInstallDataAccess.cs" />
     <Compile Include="DataAccess\AttendanceReasonDataAccess.cs" />
-    <Compile Include="DataAccess\ClassAttendanceDataAccess.cs" />
+    <Compile Include="DataAccess\ClassAnnouncementTypeDataAccess.cs" />
     <Compile Include="DataAccess\ClassDisciplineDataAccess.cs" />
     <Compile Include="DataAccess\ClassDisciplineTypeDataAccess.cs" />
     <Compile Include="DataAccess\DisciplineTypeDataAccess.cs" />
-    <Compile Include="DataAccess\FinalGradeAnnouncementTypeDataAccess.cs" />
-    <Compile Include="DataAccess\FinalGradeDataAccess.cs" />
     <Compile Include="DataAccess\GradingStatisticDataAccess.cs" />
     <Compile Include="DataAccess\GradingStyleDataAccess.cs" />
     <Compile Include="DataAccess\NotificationDataAccess.cs" />
+    <Compile Include="DataAccess\SchoolDataAccess.cs" />
+    <Compile Include="DataAccess\SchoolPersonDataAccess.cs" />
     <Compile Include="DataAccess\StudentDailyAttendanceDataAccess.cs" />
     <Compile Include="DataAccess\DateDataAccess.cs" />
     <Compile Include="DataAccess\ClassDataAccess.cs" />
     <Compile Include="DataAccess\ClassPeriodDataAccess.cs" />
     <Compile Include="DataAccess\ClassPersonDataAccess.cs" />
-    <Compile Include="DataAccess\CourseDataAccess.cs" />
     <Compile Include="DataAccess\GradeLevelDataAccess.cs" />
     <Compile Include="DataAccess\MarkingPeriodClassDataAccess.cs" />
     <Compile Include="DataAccess\MarkingPeriodDataAccess.cs" />
@@ -85,11 +84,10 @@
     <Compile Include="DataAccess\PhoneDataAccess.cs" />
     <Compile Include="DataAccess\PrivateMessageDataAccess.cs" />
     <Compile Include="DataAccess\RoomDataAccess.cs" />
-    <Compile Include="DataAccess\ScheduleSectionDataAccess.cs" />
+    <Compile Include="DataAccess\DayTypeDataAccess.cs" />
     <Compile Include="DataAccess\SchoolYearDataAccess.cs" />
     <Compile Include="DataAccess\StudentAnnouncementDataAccess.cs" />
-    <Compile Include="DataAccess\StudentFinalGradeDataAccess.cs" />
-    <Compile Include="DataAccess\StudentInfoDataAccess.cs" />
+    <Compile Include="DataAccess\StudentSchoolYearDataAccess.cs" />
     <Compile Include="DataAccess\StudentParentDataAccess.cs" />
     <Compile Include="Model\Address.cs" />
     <Compile Include="Model\Announcement.cs" />
@@ -99,7 +97,6 @@
     <Compile Include="Model\AnnouncementRecipient.cs" />
     <Compile Include="Model\AnnouncementRecipientData.cs" />
     <Compile Include="Model\AnnouncementReminder.cs" />
-    <Compile Include="Model\AnnouncementType.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstall.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstallAction.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstallActionClasses.cs" />
@@ -108,16 +105,13 @@
     <Compile Include="Model\ApplicationInstall\ApplicationInstallActionRole.cs" />
     <Compile Include="Model\AttendanceReason.cs" />
     <Compile Include="Model\Class.cs" />
-    <Compile Include="Model\ClassAttendance.cs" />
+    <Compile Include="Model\ClassAnnouncementType.cs" />
     <Compile Include="Model\ClassDiscipline.cs" />
     <Compile Include="Model\ClassDisciplineType.cs" />
     <Compile Include="Model\ClassPeriod.cs" />
     <Compile Include="Model\ClassPerson.cs" />
-    <Compile Include="Model\Course.cs" />
     <Compile Include="Model\Date.cs" />
     <Compile Include="Model\DisciplineType.cs" />
-    <Compile Include="Model\FinalGrade.cs" />
-    <Compile Include="Model\FinalGradeAnnouncementType.cs" />
     <Compile Include="Model\GradeLevel.cs" />
     <Compile Include="Model\GradingStatistic.cs" />
     <Compile Include="Model\GradingStyle.cs" />
@@ -132,12 +126,14 @@
     <Compile Include="Model\ReportDownload.cs" />
     <Compile Include="Model\ReportMailDelivery.cs" />
     <Compile Include="Model\Room.cs" />
-    <Compile Include="Model\ScheduleSection.cs" />
+    <Compile Include="Model\DayType.cs" />
+    <Compile Include="Model\School.cs" />
+    <Compile Include="Model\SchoolGradeLevel.cs" />
+    <Compile Include="Model\SchoolPerson.cs" />
     <Compile Include="Model\SchoolYear.cs" />
     <Compile Include="Model\StudentAnnouncement.cs" />
     <Compile Include="Model\StudentDailyAttendance.cs" />
-    <Compile Include="Model\StudentFinalGrade.cs" />
-    <Compile Include="Model\StudentInfo.cs" />
+    <Compile Include="Model\StudentSchoolYear.cs" />
     <Compile Include="Model\StudentParent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

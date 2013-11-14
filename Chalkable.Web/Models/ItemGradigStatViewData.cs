@@ -9,7 +9,7 @@ namespace Chalkable.Web.Models
 {
     public class ItemGradigStatViewData
     {
-        public Guid AnnouncementId { get; set; }
+        public int AnnouncementId { get; set; }
         public int GradingStyle { get; set; }
         public IList<ItemGradingGraphViewData> GraphPoints { get; set; }
 

@@ -10,22 +10,22 @@ namespace Chalkable.Web.Models
 {
     public class NotificationViewData
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public int Type { get; set; }
         public string Message { get; set; }
         public bool Shown { get; set; }
-        public Guid? AnnouncementId { get; set; }
-        public Guid? PrivateMessageId { get; set; }
-        public Guid? MarkingPeriodId { get; set; }
+        public int? AnnouncementId { get; set; }
+        public int? PrivateMessageId { get; set; }
+        public int? MarkingPeriodId { get; set; }
         public ShortPersonViewData Person { get; set; }
         public Guid? ApplicationId { get; set; }
         public string ApplcicationName { get; set; }
         public string ApplicationIcon47Url { get; set; }
         public int? AnnouncementType { get; set; }
+        public bool IsAdminAnnouncement { get; set; }
         public string AnnouncementTypeName { get; set; }
         public DateTime Created { get; set; }
-        public Guid? ClassId { get; set; }
-        public Guid? ClassPeriodId { get; set; }
+        public int? ClassId { get; set; }
 
         //private NotificationViewData(){}
 
@@ -38,7 +38,6 @@ namespace Chalkable.Web.Models
             AnnouncementId = notification.AnnouncementRef;
             PrivateMessageId = notification.PrivateMessageRef;
             ApplicationId = notification.ApplicationRef;
-            ClassPeriodId = notification.ClassPeriodRef;
             Created = notification.Created;
             MarkingPeriodId = notification.MarkingPeriodRef;
         }
@@ -101,10 +100,6 @@ namespace Chalkable.Web.Models
                 res.AnnouncementType = notification.AnnouncementType.Id;
                 res.AnnouncementTypeName = notification.AnnouncementType.Name;
             }
-            if (notification.ClassPeriodRef.HasValue)
-            {
-                res.ClassId = notification.ClassPeriod.ClassRef;
-            }
             return res;
         }
     }
@@ -117,10 +112,14 @@ namespace Chalkable.Web.Models
                 throw new ChalkableException(ChlkResources.ERR_INVALID_NOTIFICATION_BUILDER_FOR_TYPE);
             var res = new NotificationViewData(notification)
                 {
-                    AnnouncementType = notification.AnnouncementType.Id,
-                    AnnouncementTypeName = notification.AnnouncementType.Name,
+                    IsAdminAnnouncement = notification.AnnouncementType == null && !notification.Announcement.ClassAnnouncementTypeRef.HasValue,
                     Person = ShortPersonViewData.Create(notification.QuestionPerson)
                 };
+            if (notification.AnnouncementType != null)
+            {
+                res.AnnouncementType = notification.AnnouncementType.ChalkableAnnouncementTypeRef;
+                res.AnnouncementTypeName = notification.AnnouncementType.Name;
+            }
             return res;
         }
     }

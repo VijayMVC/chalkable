@@ -1,67 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class DateDataAccess : DataAccessBase<Date>
+    public class DateDataAccess : BaseSchoolDataAccess<Date>
     {
-        public DateDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public DateDataAccess(UnitOfWork unitOfWork, int? schoolid) : base(unitOfWork, schoolid)
         {
         }
 
         public void Delete(DateQuery query)
         {
-            var b = new StringBuilder();
-            b.Append("delete from [Date] ");
-            var  q = BuildConditionQuery(b, query);
+            var q = new DbQuery();
+            q.Sql.Append("delete from [Date] ");
+            q = BuildConditionQuery(q, query);
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
 
-        private DbQuery BuildConditionQuery(StringBuilder builder, DateQuery query)
+        private DbQuery BuildConditionQuery(DbQuery dbQuery, DateQuery query)
         {
-            var conds = new Dictionary<string, object>();
-            builder.Append(" where 1 = 1 ");
-            if (query.Id.HasValue)
-            {
-                conds.Add("@id", query.Id);
-                builder.AppendFormat(" and [Date].Id = @id");
-            }
+            var condition = new AndQueryCondition ();
+            if(query.SchoolYearId.HasValue)
+                condition.Add(Date.SCHOOL_YEAR_REF, query.SchoolYearId, ConditionRelation.Equal);
+            if(query.DayType.HasValue)
+                condition.Add(Date.DATE_TYPE_REF_FIELD, query.DayType, ConditionRelation.Equal);
+            if(query.FromDate.HasValue)
+                condition.Add(Date.DATE_TIME_FIELD, "fromDate", query.FromDate, ConditionRelation.GreaterEqual);
+            if(query.ToDate.HasValue)
+                condition.Add(Date.DATE_TIME_FIELD, "toDate", query.ToDate, ConditionRelation.LessEqual);
+            if(query.SchoolDaysOnly)
+                condition.Add(Date.IS_SCHOOL_DAY_FIELD, true, ConditionRelation.Equal);
+
+            FilterBySchool(condition).BuildSqlWhere(dbQuery, "Date");
             if (query.MarkingPeriodId.HasValue)
             {
-                conds.Add("@markingPeriodId", query.MarkingPeriodId);
-                builder.AppendFormat(" and [Date].markingPeriodRef =@markingPeriodId ");
+                dbQuery.Parameters.Add("@markingPeriodId", query.MarkingPeriodId);
+                dbQuery.Sql.AppendFormat(@" and exists(select * from MarkingPeriod where [MarkingPeriod].[{0}] = @markingPeriodId 
+                                                          and [MarkingPeriod].[{1}] <= [Date].[{3}] and [MarkingPeriod].[{2}] >= [Date].[{3}])"
+                    , MarkingPeriod.ID_FIELD, MarkingPeriod.START_DATE_FIELD, MarkingPeriod.END_DATE_FIELD, Date.DATE_TIME_FIELD);
             }
-            if (query.SchoolYearId.HasValue)
-            {
-                conds.Add("@schoolYearId", query.SchoolYearId);
-                builder.AppendFormat(" and [Date].MarkingPeriodRef in (select Id from MarkingPeriod where SchoolYearRef = @schoolYearId)");
-            }
-            if (query.FromDate.HasValue)
-            {
-                conds.Add("@fromDate", query.FromDate);
-                builder.AppendFormat(" and [Date].DateTime >= @fromDate");
-            }
-            if (query.ToDate.HasValue)
-            {
-                conds.Add("@toDate", query.ToDate);
-                builder.AppendFormat(" and [Date].DateTime <= @toDate ");
-            }
-            if (query.SectionRef.HasValue)
-            {
-                conds.Add("@sectionId", query.SectionRef);
-                builder.AppendFormat(" and [Date].ScheduleSectionRef = @sectionId");
-            }
-            if (query.SchoolDaysOnly)
-            {
-                builder.AppendFormat(" and [Date].IsSchoolDay = 1 ");
-            }
-            return new DbQuery {Sql = builder, Parameters = conds};
+            return dbQuery;
         }
 
 
@@ -83,77 +64,50 @@ namespace Chalkable.Data.School.DataAccess
         }
         private Date GetDate(DateQuery query, Func<DbQuery, bool, Date> acion)
         {
-            var b = new StringBuilder();
-            b.Append("select * from [Date]");
-            var q = BuildConditionQuery(b, query);
+            var q = new DbQuery();
+            q.Sql.Append("select * from [Date]");
+            q = BuildConditionQuery(q, query);
             return acion(q, false);
         }
         public IList<Date> GetDates(DateQuery query)
         {
-            var b = new StringBuilder();
-            b.Append("select * from [Date]");
-            var q = BuildConditionQuery(b, query);
-            b.AppendFormat(" order by DateTime desc OFFSET 0 ROWS FETCH NEXT {0} ROWS ONLY", query.Count);
+            var q = new DbQuery();
+            q.Sql.Append("select * from [Date]");
+            q = BuildConditionQuery(q, query);
+            q.Sql.AppendFormat(" order by {1} desc OFFSET 0 ROWS FETCH NEXT {0} ROWS ONLY", query.Count, Date.DATE_TIME_FIELD);
 
-            q = new DbQuery(string.Format("select * from ({0})x order by x.DateTime", b), q.Parameters);
+            q = new DbQuery(string.Format("select * from ({0})x order by x.{1}", q.Sql, Date.DATE_TIME_FIELD), q.Parameters);
             return ReadMany<Date>(q);
         }
 
-        public IList<DateDetails> GetDatesDetails(DateQuery query)
-        {
-            var b = new StringBuilder();
-            b.AppendFormat(@"select [Date].*, {0} from [Date] 
-                             left join ScheduleSection on ScheduleSection.Id = [Date].ScheduleSectionRef"
-                           , Orm.ComplexResultSetQuery(new List<Type> {typeof (ScheduleSection)}));
-            var q = BuildConditionQuery(b, query);
-            q.Sql.AppendFormat(" order by DateTime desc OFFSET 0 ROWS FETCH NEXT {0} ROWS ONLY ", query.Count);
-            q.Sql.Insert(0, " select * from (").Append(")x order by x.DateTime");
-            return ReadDetailsDate(q);
-        } 
-
-        private IList<DateDetails> ReadDetailsDate(DbQuery query)
-        {
-            using (var reader = ExecuteReaderParametrized(query.Sql.ToString(), query.Parameters))
-            {
-                var res = new List<DateDetails>();
-                while (reader.Read())
-                {
-                    var date = reader.Read<DateDetails>();
-                    if(date.ScheduleSectionRef.HasValue)
-                        date.ScheduleSection = reader.Read<ScheduleSection>(true);
-                    res.Add(date);
-                }
-                return res;
-            }
-        }
- 
         public bool Exists(DateQuery query)
         {
-            var b = new StringBuilder();
-            var dbQuery = BuildConditionQuery(b, query);
-            dbQuery.Sql.Insert(0, "select * from [Date] ");
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.Append("select * from [Date] ");
+            dbQuery = BuildConditionQuery(dbQuery, query);
             return Exists(dbQuery);
         }
 
-        public bool Exists(IList<Guid> markingPeriodIds)
+        public bool Exists(IList<int> markingPeriodIds)
         {
-            var sql = @"select * from [Date] where MarkingPeriodRef in ({0})";
-            var mpIdsString = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
-            sql = string.Format(sql, mpIdsString);
-            return Exists(new DbQuery(sql, new Dictionary<string, object>()));
+            throw new NotImplementedException();
+            //var sql = @"select * from [Date] where MarkingPeriodRef in ({0})";
+            //var mpIdsString = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
+            //sql = string.Format(sql, mpIdsString);
+            //return Exists(new DbQuery(sql, new Dictionary<string, object>()));
         }
     }
 
     public class DateQuery
     {
-        public Guid? Id { get; set; }
-        public Guid? MarkingPeriodId { get; set; }
-        public Guid? SchoolYearId { get; set; }
+        public int? SchoolYearId { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public int Count { get; set; }
         public bool SchoolDaysOnly { get; set; }
-        public Guid? SectionRef { get; set; }
+
+        public int? MarkingPeriodId { get; set; }
+        public int? DayType { get; set; }
 
         public DateQuery()
         {

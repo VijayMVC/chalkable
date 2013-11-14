@@ -9,73 +9,45 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class PeriodDataAccess : DataAccessBase<Period>
+    public class PeriodDataAccess : BaseSchoolDataAccess<Period>
     {
-        public PeriodDataAccess(UnitOfWork unitOfWork)
-            : base(unitOfWork)
+        public PeriodDataAccess(UnitOfWork unitOfWork, int? schoolId)
+            : base(unitOfWork, schoolId)
         {
         }
 
-        public void Delete(IList<Guid> markingPeriodIds)
+        //public void Delete(IList<Guid> markingPeriodIds)
+        //{
+        //    var mpIds = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
+        //    var sql = string.Format("delete from Period where {0} in ({1})", Period.MARKING_PERIOD_REF_FIELD, mpIds);
+        //    ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
+        //}
+
+        public void DeleteBySchoolYearId(int? schoolYearId)
         {
-            var mpIds = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
-            var sql = string.Format("delete from Period where {0} in ({1})", Period.MARKING_PERIOD_REF_FIELD, mpIds);
-            ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
+            SimpleDelete<Period>(GetCondsBySchoolYear(schoolYearId));
         }
 
-
-        public Period GeComplextById(Guid id)
+        public IList<Period> GetPeriods(int schoolYearId)
         {
-            return GetComplexPeriods(new AndQueryCondition { { Period.ID_FIELD, id } }).First();
-        }
-        public IList<Period> GetPeriods(Guid sectionId)
-        {
-            var conds = new AndQueryCondition { { Period.SECTION_REF, sectionId } };
-            return SelectMany<Period>(conds);
+            return SelectMany<Period>(GetCondsBySchoolYear(schoolYearId));
         }
 
-        public Period GetPeriodOrNull(Guid sectionId, int time)
+        public Period GetPeriodOrNull(int time, int schoolYearId)
         {
-            var conds = new AndQueryCondition
+            return SelectOneOrNull<Period>(new AndQueryCondition
                 {
-                    {Period.SECTION_REF, sectionId},
-                    {Period.START_TIME_FIELD, "time1", time, ConditionRelation.LessEqual},
-                    {Period.END_TIME_FIELD, "time2", time, ConditionRelation.GreaterEqual}
-                };
-            return SelectOneOrNull<Period>(conds);
+                    {Period.START_TIME_FIELD, time, ConditionRelation.LessEqual},
+                    {Period.END_TIME_FIELD, time, ConditionRelation.GreaterEqual},
+                    GetCondsBySchoolYear(schoolYearId)
+                });
         }
-
-        public IList<Period> GetComplexPeriods(Guid? sectionId, Guid? markingPeriodId)
+        private QueryCondition GetCondsBySchoolYear(int? schoolYearId)
         {
-            var conds = new AndQueryCondition();
-            if (markingPeriodId.HasValue)
-                conds.Add(Period.MARKING_PERIOD_REF_FIELD, markingPeriodId);
-            if (sectionId.HasValue)
-                conds.Add(Period.SECTION_REF, sectionId);
-            return GetComplexPeriods(conds);
-        }
-        private IList<Period> GetComplexPeriods(QueryCondition conds)
-        {
-            var sql = @"select {0} from Period 
-                        join ScheduleSection on ScheduleSection.Id = Period.SectionRef";
-            var dbQuery = new DbQuery(); 
-            var types = new List<Type> { typeof(Period), typeof(ScheduleSection) };
-            dbQuery.Sql.AppendFormat(sql, Orm.ComplexResultSetQuery(types));
-            conds.BuildSqlWhere(dbQuery, types[0].Name);
-            dbQuery.Sql.AppendFormat(" order by Period.{0}, ScheduleSection.{1}"
-                    , Period.START_TIME_FIELD, ScheduleSection.NUMBER_FIELD);
-
-            using (var reader = ExecuteReaderParametrized(dbQuery.Sql.ToString(), dbQuery.Parameters))
-            {
-                var res = new List<Period>();
-                while (reader.Read())
-                {
-                    var period = reader.Read<Period>(true);
-                    period.Section = reader.Read<ScheduleSection>(true);
-                    res.Add(period);
-                }
-                return res;
-            }
+            var res = new AndQueryCondition();
+            if (schoolYearId.HasValue)
+                res.Add(Period.SCHOOL_YEAR_REF, schoolYearId);
+            return res;
         }
     }
 }

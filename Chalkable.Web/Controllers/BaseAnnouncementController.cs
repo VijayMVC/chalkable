@@ -13,15 +13,15 @@ namespace Chalkable.Web.Controllers
 {
     public class AnnouncementBaseController : ChalkableController
     {
-        protected AnnouncementViewData PrepareFullAnnouncementViewData(Guid announcementId, bool needsAllAttachments = true, bool isRead = false)
+        protected AnnouncementViewData PrepareFullAnnouncementViewData(int announcementId, bool needsAllAttachments = true, bool isRead = false)
         {
             var annDetails = SchoolLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var attInfo = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments);
-            var annViewData = AnnouncementDetailedViewData.Create(annDetails, SchoolLocator.GradingStyleService.GetMapper(), SchoolLocator.Context.UserId, attInfo);
+            var annViewData = AnnouncementDetailedViewData.Create(annDetails, SchoolLocator.GradingStyleService.GetMapper(), Context.UserLocalId.Value, attInfo);
             var applications = MasterLocator.ApplicationService.GetApplications();
             var annApps = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(announcementId, true);
-            var installs = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.UserId);
-            annViewData.Applications = AnnouncementApplicationViewData.Create(annApps, applications, installs, Context.UserId); 
+            var installs = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.UserLocalId ?? 0);
+            annViewData.Applications = AnnouncementApplicationViewData.Create(annApps, applications, installs, Context.UserLocalId); 
             if (isRead && annDetails.State == AnnouncementState.Created)
             {
                 var ids = new HashSet<Guid>();

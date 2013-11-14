@@ -12,9 +12,13 @@ namespace Chalkable.BusinessLogic.Security
         {
             return context.Role ==  CoreRoles.SUPER_ADMIN_ROLE;
         }
+        public static bool IsDistrict(UserContext context)
+        {
+            return IsSysAdmin(context) || context.Role == CoreRoles.DISTRICT_ROLE;
+        }
         public static bool IsAdminGrader(UserContext context)
         {
-            return IsSysAdmin(context) || context.Role ==  CoreRoles.ADMIN_GRADE_ROLE;
+            return IsDistrict(context) || context.Role ==  CoreRoles.ADMIN_GRADE_ROLE;
         }
         public static bool IsAdminEditor(UserContext context)
         {
@@ -32,12 +36,12 @@ namespace Chalkable.BusinessLogic.Security
 
         public static bool IsAdminEditorOrClassTeacher(Class c, UserContext context)
         {
-            return IsAdminEditor(context) || (context.Role == CoreRoles.TEACHER_ROLE && context.UserId == c.TeacherRef);
+            return IsAdminEditor(context) || (context.Role == CoreRoles.TEACHER_ROLE && context.UserLocalId == c.TeacherRef);
         }
 
         public static bool IsAdminViewerOrClassTeacher(Class c, UserContext context)
         {
-            return IsAdminViewer(context) || (context.Role == CoreRoles.TEACHER_ROLE && context.UserId == c.TeacherRef);
+            return IsAdminViewer(context) || (context.Role == CoreRoles.TEACHER_ROLE && context.UserLocalId == c.TeacherRef);
         }
 
         public static bool HasChalkableRole(UserContext context)
@@ -47,9 +51,9 @@ namespace Chalkable.BusinessLogic.Security
                    || context.Role == CoreRoles.CHECKIN_ROLE;
         }
 
-        public static bool IsAdminEditorOrCurrentPerson(Guid personId, UserContext context)
+        public static bool IsAdminEditorOrCurrentPerson(int personId, UserContext context)
         {
-            return IsAdminEditor(context) || context.UserId == personId;
+            return IsAdminEditor(context) || context.UserLocalId == personId;
         }
 
         public static bool IsAdminTeacherOrExactStudent(User user, UserContext context)

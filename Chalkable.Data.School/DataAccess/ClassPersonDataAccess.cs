@@ -6,9 +6,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class ClassPersonDataAccess : DataAccessBase<ClassPerson>
+    public class ClassPersonDataAccess : BaseSchoolDataAccess<ClassPerson>
     {
-        public ClassPersonDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public ClassPersonDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
         {
         }
 
@@ -20,13 +20,11 @@ namespace Chalkable.Data.School.DataAccess
         public QueryCondition BuildConditioins(ClassPersonQuery query)
         {
             var conds = new AndQueryCondition();
-            if(query.Id.HasValue)
-                conds.Add(ClassPerson.ID_FIELD, query.Id);
             if(query.ClassId.HasValue)
                 conds.Add(ClassPerson.CLASS_REF_FIELD, query.ClassId);
             if(query.PersonId.HasValue)
                 conds.Add(ClassPerson.PERSON_REF_FIELD, query.PersonId);
-            return conds;
+            return conds;// FilterBySchool(conds);
         }
 
         public bool Exists(ClassPersonQuery query)
@@ -52,8 +50,7 @@ namespace Chalkable.Data.School.DataAccess
 
     public class ClassPersonQuery
     {
-        public Guid? Id { get; set; }
-        public Guid? ClassId { get; set; }
-        public Guid? PersonId { get; set; }
+        public int? ClassId { get; set; }
+        public int? PersonId { get; set; }
     }
 }

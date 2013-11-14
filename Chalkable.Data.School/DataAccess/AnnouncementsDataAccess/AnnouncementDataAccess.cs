@@ -9,9 +9,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
-    public abstract class AnnouncementDataAccess : DataAccessBase<Announcement>
+    public abstract class AnnouncementDataAccess : BaseSchoolDataAccess<Announcement>
     {
-        protected AnnouncementDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        protected AnnouncementDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
         {
         }
 
@@ -23,6 +23,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         private const string REORDER_PROCEDURE = "spReorderAnnouncements";
 
         private const string ANNOUNCEMENT_TYPE_ID_PARAM = "announcementTypeId";
+        private const string CLASS_ANNOUNCEMENT_TYPE_ID_PARAM = "classAnnouncementTypeId";
         private const string CREATED_PARAM = "created";
         private const string EXPIRES_PARAM = "expires";
         private const string PERSON_ID_PARAM = "personId";
@@ -39,7 +40,9 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         private const string ROLE_ID_PARAM = "roleId";
         private const string FROM_DATE_PARAM = "fromDate";
         private const string TO_DATE_PARAM = "toDate";
-        
+
+        private const string SCHOOL_ID = "schoolId";
+
         private AnnouncementDetails BuildGetDetailsResult(SqlDataReader reader)
         {
             var announcement = reader.ReadOrNull<AnnouncementDetails>();
@@ -75,6 +78,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             parameters.Add("now", query.Now);
             parameters.Add("ownedOnly", query.OwnedOnly);
             parameters.Add("staredOnly", query.StarredOnly);
+            parameters.Add(SCHOOL_ID, schoolId);
             //parameters.Add();
             using (var reader = ExecuteStoredProcedureReader(procedureName, parameters))
             {
@@ -97,19 +101,19 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
             return res;
         }
-   
-        public AnnouncementDetails Create(int announcementTypeId, Guid? classId, Guid markingPeriodId, DateTime created, Guid personId)
+
+        public AnnouncementDetails Create(int? classAnnouncementTypeId, int? classId, DateTime created, int personId)
         {
             var parameters = new Dictionary<string, object>
                 {
-                    {ANNOUNCEMENT_TYPE_ID_PARAM, announcementTypeId},
+                    {CLASS_ANNOUNCEMENT_TYPE_ID_PARAM, classAnnouncementTypeId},
                     {PERSON_ID_PARAM, personId},
                     {CREATED_PARAM, created},
                     {EXPIRES_PARAM, DateTime.MinValue},
                     {STATE_PARAM, AnnouncementState.Draft},
                     {GRADING_STYLE_PARAM, GradingStyleEnum.Numeric100},
                     {CLASS_ID_PARAM, classId},
-                    {MARKING_PERIOD_ID_PARAM, markingPeriodId}
+                    {SCHOOL_ID, schoolId}
                 };
 
             using (var reader = ExecuteStoredProcedureReader(CREATE_PORCEDURE, parameters))
@@ -118,27 +122,27 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
         }
 
-        public void Delete(Guid? id, Guid? personId, Guid? classId, int? announcementTypeId, AnnouncementState? state)
+        public void Delete(int? id, int? personId, int? classId, int? classAnnouncementTypeId, AnnouncementState? state)
         {
             var parameters = new Dictionary<string, object>
                 {
                     {ID_PARAM, id},
                     {PERSON_ID_PARAM, personId},
                     {CLASS_ID_PARAM, classId},
-                    {ANNOUNCEMENT_TYPE_ID_PARAM, announcementTypeId},
+                    {CLASS_ANNOUNCEMENT_TYPE_ID_PARAM, classAnnouncementTypeId},
                     {STATE_PARAM, state}
                 };
             ExecuteStoredProcedureReader(DELETE_PROCEDURE, parameters).Dispose();
         }
         
         public abstract AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query);
-        
-        public void ReorderAnnouncements(Guid schoolYearId, int announcementTypeId, Guid ownerId, Guid recipientId)
+
+        public void ReorderAnnouncements(int schoolYearId, int announcementTypeId, int ownerId, int recipientId)
         {
             var parameters = new Dictionary<string, object>
                 {
                     {SCHOOL_YEAR_ID_PARAM, schoolYearId},
-                    {"annType", announcementTypeId},
+                    {"classAnnType", announcementTypeId},
                     {OWNER_ID_PARAM, ownerId},
                     {CLASS_ID_PARAM, recipientId}
                 };
@@ -146,22 +150,23 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             {
             }
         }
- 
-        public AnnouncementDetails GetDetails(Guid id, Guid callerId, int? roleId)
+
+        public AnnouncementDetails GetDetails(int id, int callerId, int? roleId)
         {
             var parameters = new Dictionary<string, object>
                 {
                     {ID_PARAM, id},
                     {CALLER_ID_PARAM, callerId},
-                    {CALLER_ROLE_PARAM, roleId}
+                    {CALLER_ROLE_PARAM, roleId},
+                    {SCHOOL_ID, schoolId}
                 };
             using (var reader = ExecuteStoredProcedureReader(GET_DETAILS_PROCEDURE, parameters))
             {
                 return BuildGetDetailsResult(reader);
             }
         }
-        
-        public IList<Person> GetAnnouncementRecipientPersons(Guid announcementId, Guid callerId)
+
+        public IList<Person> GetAnnouncementRecipientPersons(int announcementId, int callerId)
         {
             var parameters = new Dictionary<string, object>
                 {
@@ -177,61 +182,42 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 }
                 return res;
             }
-        } 
-       
-        public Announcement GetAnnouncement(Guid id, int roleId, Guid callerId)
+        }
+
+        public Announcement GetAnnouncement(int id, int roleId, int callerId)
         {
             var dbQuery = new DbQuery();
             dbQuery.Sql.Append("select Announcement.* from Announcement ");
-            dbQuery.Sql.Append(" where ");
-            dbQuery.Sql.AppendFormat(" Announcement.{0} = @{0}", Announcement.ID_FIELD);
-            dbQuery.Parameters.Add(Announcement.ID_FIELD, id);
+            FilterBySchool(new AndQueryCondition{{Announcement.ID_FIELD, id}}).BuildSqlWhere(dbQuery, "Announcement");
             BuildConditionForGetSimpleAnnouncement(dbQuery, roleId, callerId);
             return ReadOneOrNull<Announcement>(dbQuery);
         }
-        
-        protected abstract void BuildConditionForGetSimpleAnnouncement(DbQuery dbQuery, int role, Guid callerId);
-        
-        public Announcement GetLastDraft(Guid personId)
+
+        protected abstract void BuildConditionForGetSimpleAnnouncement(DbQuery dbQuery, int role, int callerId);
+
+        public Announcement GetLastDraft(int personId)
         {
-            var conds = new Dictionary<string, object>
+            var conds = new AndQueryCondition
                 {
                     {Announcement.PERSON_REF_FIELD, personId},
-                    {STATE_PARAM, AnnouncementState.Draft}
+                    {Announcement.STATE_FIELD, AnnouncementState.Draft}
                 };
-            var sql = @"select top 1 * from Announcement 
-                      where PersonRef = @PersonRef and State = @state
-                      order by Created desc";
-           return  ReadOneOrNull<Announcement>(new DbQuery (sql, conds));
+           var dbQuery = Orm.OrderedSelect(typeof (Announcement).Name, conds, Announcement.CREATED_FIELD, Orm.OrderType.Desc, 1);
+           return ReadOneOrNull<Announcement>(dbQuery);
         }
 
-        public IList<string> GetLastFieldValues(Guid personId, Guid classId, int announcementType, int count)
+        public IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType, int count)
         {
-            var conds = new Dictionary<string, object>
+            var conds = new AndQueryCondition
                 {
-                    {"personId", personId},
-                    {"classId", classId},
-                    {"announcementTypeId", announcementType},
-                    {"count", count}
+                    {Announcement.PERSON_REF_FIELD, personId},
+                    {Announcement.CLASS_REF_FIELD, classId},
+                    {Announcement.CLASS_ANNOUNCEMENT_TYPE_REF_FIELD, classAnnouncementType}
                 };
-            var sql = @"select Announcement.Content as Content from Announcement
-                        join MarkingPeriodClass on MarkingPeriodClass.Id = Announcement.MarkingPeriodClassRef 
-                        where Announcement.PersonRef = @personId 
-                              and Announcement.AnnouncementTypeRef = @announcementTypeId
-                              and MarkingPeriodClass.ClassRef = @classId
-                              and Announcement.Content is not null and Announcement.Content <> ''
-                        order by Announcement.Id desc
-                        OFFSET 0 ROWS FETCH NEXT @count ROWS ONLY";
-            using (var reader = ExecuteReaderParametrized(sql, conds))
-            {
-                var res = new List<string>();
-                while (reader.Read())
-                {
-                    res.Add(SqlTools.ReadStringNull(reader, Announcement.CONTENT_FIELD));
-                }
-                return res;
-            }
-
+            var dbQuery = Orm.OrderedSelect(typeof (Announcement).Name, conds, Announcement.ID_FIELD, Orm.OrderType.Desc, count);
+            var anns = ReadMany<Announcement>(dbQuery);
+            if(anns.Count == 0) return new List<string>();
+            return anns.Select(x => x.Content).ToList();
         }
     }
 
@@ -239,11 +225,11 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
     {
         public int Start { get; set; }
         public int Count { get; set; }
-        public Guid? Id { get; set; }
+        public int? Id { get; set; }
         public int? RoleId { get; set; }
-        public Guid? ClassId { get; set; }
-        public Guid? PersonId { get; set; }
-        public Guid? MarkingPeriodId { get; set; }
+        public int? ClassId { get; set; }
+        public int? PersonId { get; set; }
+        public int? MarkingPeriodId { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public DateTime? Now { get; set; }
@@ -252,7 +238,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public bool GradedOnly { get; set; }
         public bool AllSchoolItems { get; set; }
 
-        public IList<Guid> GradeLevelIds { get; set; }
+        public IList<int> GradeLevelIds { get; set; }
 
         public AnnouncementsQuery()
         {

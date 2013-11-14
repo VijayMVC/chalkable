@@ -14,11 +14,14 @@ namespace Chalkable.Data.School.Model
 
         public const string ID_FIELD = "Id";
         public const string ANNOUNCEMENT_REF_FIELD = "AnnouncementRef";
+        public const string PERSON_REF_FIELD = "PersonRef";
 
-        public Guid Id { get; set; }
+        [IdentityFieldAttr]
+        [PrimaryKeyFieldAttr]
+        public int Id { get; set; }
         public string Name { get; set; }
-        public Guid PersonRef { get; set; }
-        public Guid AnnouncementRef { get; set; }
+        public int PersonRef { get; set; }
+        public int AnnouncementRef { get; set; }
         public DateTime AttachedDate { get; set; }
         public string Uuid { get; set; }
         public int Order { get; set; }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -9,33 +8,20 @@ using Chalkable.Data.School.Model;
 namespace Chalkable.Data.School.DataAccess
 {
 
-    public class ClassPeriodDataAccess : DataAccessBase<ClassPeriod>
+    public class ClassPeriodDataAccess : BaseSchoolDataAccess<ClassPeriod>
     {
-        public ClassPeriodDataAccess(UnitOfWork unitOfWork)
-            : base(unitOfWork)
+        public ClassPeriodDataAccess(UnitOfWork unitOfWork, int? schoolId)
+            : base(unitOfWork, schoolId)
         {
         }
 
-        public void FullDelete(Guid id)
+        public void FullDelete(int periodId, int classId, int dayTypeId)
         {
-            var b = new StringBuilder();
-            var conds = new AndQueryCondition {{ClassAttendance.CLASS_PERIOD_REF_FIELD, id}};
-            var deleteAttQ = Orm.SimpleDelete<ClassAttendance>(conds);
-
-            b.Append(deleteAttQ.Sql).Append(" ");
-            b.Append(Orm.SimpleDelete<ClassDiscipline>(conds).Sql).Append(" ");
-
-            conds.Add(ClassPeriod.ID_FIELD, id);
-            var classPeriodQ = Orm.SimpleDelete<ClassPeriod>(new AndQueryCondition {{ClassPeriod.ID_FIELD, id}});
-            b.Append(classPeriodQ.Sql);
-            
-            var allParams = deleteAttQ.Parameters;
-            foreach (var parameter in classPeriodQ.Parameters)
-            {
-                allParams.Add(parameter);    
-            }
-            
-            ExecuteNonQueryParametrized(b.ToString(), allParams);
+            var conds = new AndQueryCondition();
+            conds.Add(ClassPeriod.CLASS_REF_FIELD, classId);
+            conds.Add(ClassPeriod.PERIOD_REF_FIELD, classId);
+            conds.Add(ClassPeriod.DAY_TYPE_REF_FIELD, dayTypeId);
+            SimpleDelete(conds);
         }
 
         public bool Exists(ClassPeriodQuery query)
@@ -43,38 +29,25 @@ namespace Chalkable.Data.School.DataAccess
             return Exists(BuildGetClassPeriodsQuery(query));
         }
 
-        public bool Exists(IList<Guid> markingPeriodIds)
-        {
-            var sql = @"select cd.Id from ClassPeriod cd 
-                        join Period p on p.Id = cd.PeriodRef
-                        where p.MarkingPeriodRef in ({0})";
-            var mpDic = new Dictionary<string, object>();
-            for (var i = 0; i < markingPeriodIds.Count; i++)
-            {
-                mpDic.Add("@markingPeriodId_" + i, markingPeriodIds[i]);
-            }
-            sql = string.Format(sql, mpDic.Keys.JoinString(","));
-            return Exists(new DbQuery(sql, mpDic));
-        }
-
-        public bool IsClassStudentsAssignedToPeriod(Guid periodId, Guid classId)
+        public bool IsClassStudentsAssignedToPeriod(int periodId, int classId, int dateTypeId)
         {
             var sql = @"select * from ClassPerson
                         where ClassRef = @classId and PersonRef in (
 	                        select csp.PersonRef from ClassPerson csp
-	                        join ClassPeriod cgp on cgp.ClassRef = csp.ClassRef and cgp.PeriodRef = @periodId)";
+	                        join ClassPeriod cgp on cgp.ClassRef = csp.ClassRef and cgp.PeriodRef = @periodId and cgp.DayTypeRef = @dayTypeId)";
 
-            var conds = new Dictionary<string, object> {{"periodId", periodId}, {"classId", classId}};
+            var conds = new Dictionary<string, object> { { "periodId", periodId }, { "classId", classId }, { "dayTypeId", dateTypeId } };
             var query = new DbQuery(sql, conds);
             return Exists(query);
         }
 
-        public bool IsStudentAlreadyAssignedToClassPeriod(Guid personId, Guid classId)
+        public bool IsStudentAlreadyAssignedToClassPeriod(int personId, int classId)
         {
-            var sql = @"select * from ClassPeriod cPeriod
-                        where cPeriod.ClassRef = @classId and cPeriod.PeriodRef in (
-	                        select cPeriod.PeriodRef from ClassPeriod cPeriod
-	                        join ClassPerson cPerson on cPerson.ClassRef = cPeriod.ClassRef and cPerson.PersonRef = @personId)";
+            var sql = @"select * from ClassPeriod cPeriod1 
+                        where cPeriod1.ClassRef = @classId and exists(
+	                        select * from ClassPeriod cPeriod2
+	                        join ClassPerson cPerson on cPerson.ClassRef = cPeriod2.ClassRef and cPerson.PersonRef = @personId
+                            where cPeriod2.PeriodRef = cPeriod1.PeriodRef and cPeriod1.DayTypeRef = cPeriod2.DayTypeRef)";
 
             var conds = new Dictionary<string, object> { { "personId", personId }, { "classId", classId } };
             var query = new DbQuery(sql, conds);
@@ -82,7 +55,7 @@ namespace Chalkable.Data.School.DataAccess
         }
 
 
-        public IList<Class> GetAvailableClasses(Guid periodId)
+        public IList<Class> GetAvailableClasses(int periodId)
         {
             var dbQuery = new DbQuery();
             dbQuery.Sql.Append(@"select c.* from ClassPeriod 
@@ -90,8 +63,8 @@ namespace Chalkable.Data.School.DataAccess
             var conds = new AndQueryCondition { { ClassPeriod.PERIOD_REF_FIELD, periodId } };
             conds.BuildSqlWhere(dbQuery, typeof(ClassPeriod).Name);
             return ReadMany<Class>(dbQuery);
-        } 
-        public IList<Room> GetAvailableRooms(Guid periodId)
+        }
+        public IList<Room> GetAvailableRooms(int periodId)
         {
             var dbQuery = new DbQuery();
             dbQuery.Sql.Append(@"select r.* from ClassPeriod  
@@ -110,56 +83,51 @@ namespace Chalkable.Data.School.DataAccess
 
         public DbQuery BuildGetClassPeriodsQuery(ClassPeriodQuery query)
         {
-            var b = new StringBuilder();
+            var dbQuery = new DbQuery();
             var types = new List<Type> {typeof (ClassPeriod), typeof (Period)};
-            b.AppendFormat(@"select {0} from ClassPeriod 
-                             join Period on Period.Id = ClassPeriod.PeriodRef"
-                           , Orm.ComplexResultSetQuery(types));
-            return BuildGetClassPeriodsConditions(b, query);
+            dbQuery.Sql.AppendFormat(@"select {0} from [{1}] 
+                                       join [{2}] on [{2}].[{3}] = [{1}].[{4}]"
+                                     , Orm.ComplexResultSetQuery(types), types[0].Name, types[1].Name
+                                     , Period.ID_FIELD, ClassPeriod.PERIOD_REF_FIELD);
+            return BuildGetClassPeriodsConditions(dbQuery, query);
         }
-        private DbQuery BuildGetClassPeriodsConditions(StringBuilder builder, ClassPeriodQuery query)
+        private DbQuery BuildGetClassPeriodsConditions(DbQuery dbQuery, ClassPeriodQuery query)
         {
-            var conds = new Dictionary<string, object>();
-            builder.Append(" where 1=1 ");
-            if (query.Id.HasValue)
-            {
-                conds.Add("Id", query.Id);
-                builder.AppendFormat(" and ClassPeriod.Id = @id");
-            }
-            if (query.MarkingPeriodId.HasValue)
-            {
-                conds.Add("markingPeriodId", query.MarkingPeriodId);
-                builder.AppendFormat(" and Period.MarkingPeriodRef = @markingPeriodId");
-            }
+            var conds = new AndQueryCondition();
+            var classPeriodTName = "ClassPeriod";
             if (query.PeriodId.HasValue)
-            {
-                conds.Add("periodId", query.PeriodId);
-                builder.AppendFormat(" and ClassPeriod.PeriodRef = @periodId");
-            }
+                conds.Add(ClassPeriod.PERIOD_REF_FIELD, query.PeriodId);
             if (query.RoomId.HasValue)
-            {
-                conds.Add("roomId", query.RoomId);
-                builder.AppendFormat(" and ClassPeriod.RoomRef = @roomId");
-            }
-            if (query.SectionId.HasValue)
-            {
-                conds.Add("sectionId", query.SectionId);
-                builder.AppendFormat(" and Period.SectionRef = @sectionId");
-            }
+                conds.Add(ClassPeriod.ROOM_REF_FIELD, query.RoomId);
+            if (query.DateTypeId.HasValue)
+                conds.Add(ClassPeriod.DAY_TYPE_REF_FIELD, query.DateTypeId);
+
+            FilterBySchool(conds).BuildSqlWhere(dbQuery, classPeriodTName);
+
             if (query.StudentId.HasValue)
             {
-                conds.Add("studentId", query.StudentId);
-                builder.AppendFormat(" and ClassPeriod.ClassRef in (select ClassRef from ClassPerson where PersonRef = @studentId)");
+                dbQuery.Parameters.Add("studentId", query.StudentId);
+                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in (select [{2}].[{4}] from [{2}] where [{2}].[{3}]  = @studentId)"
+                    , classPeriodTName, ClassPeriod.CLASS_REF_FIELD, "ClassPerson", ClassPerson.PERSON_REF_FIELD, ClassPerson.CLASS_REF_FIELD);
             }
             if (query.TeacherId.HasValue)
             {
-                conds.Add("teacherId", query.TeacherId);
-                builder.AppendFormat(" and ClassPeriod.ClassRef in (select Id from Class where TeacherRef = @teacherId)");
+                dbQuery.Parameters.Add("teacherId", query.TeacherId);
+                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in (select [{2}].[{4}] from [{2}] where [{2}].[{3}] = @teacherId)"
+                    , classPeriodTName, ClassPeriod.CLASS_REF_FIELD, "Class", Class.TEACHER_REF_FIELD, Class.ID_FIELD);
             }
+
+            if (query.SchoolYearId.HasValue)
+            {
+                dbQuery.Parameters.Add(Period.SCHOOL_YEAR_REF, query.SchoolYearId);
+                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] = @{1}", "Period", Period.SCHOOL_YEAR_REF);
+            }
+
             if (query.Time.HasValue)
             {
-                conds.Add("time", query.Time);
-                builder.AppendFormat(" and Period.StartTime <= @time and Period.EndTime >= @time");
+                dbQuery.Parameters.Add("time", query.Time);
+                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] <= @time and [{0}].[{2}] >= @time"
+                    , "Period", Period.START_TIME_FIELD, Period.END_TIME_FIELD);
             }
             if (query.ClassIds != null && query.ClassIds.Count > 0)
             {
@@ -168,25 +136,26 @@ namespace Chalkable.Data.School.DataAccess
                 {
                     var classIdParam = "@classId_" + i;
                     classIdsParams.Add(classIdParam);
-                    conds.Add(classIdParam, query.ClassIds[i]);
+                    dbQuery.Parameters.Add(classIdParam, query.ClassIds[i]);
                 }
-                builder.AppendFormat(" and ClassPeriod.ClassRef in ({0})",  classIdsParams.JoinString(","));
+                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in ({2})", classPeriodTName
+                    , ClassPeriod.CLASS_REF_FIELD,  classIdsParams.JoinString(","));
             }
-            return new DbQuery(builder.ToString(), conds);
+            return dbQuery;
         }
 
     }
 
     public class ClassPeriodQuery
     {
-        public Guid? Id { get; set; }
-        public Guid? MarkingPeriodId { get; set; }
-        public List<Guid> ClassIds { get; set; }
-        public Guid? RoomId { get; set; }
-        public Guid? PeriodId { get; set; }
-        public Guid? StudentId { get; set; }
-        public Guid? TeacherId { get; set; }
-        public Guid? SectionId { get; set; }
+        public int? MarkingPeriodId { get; set; }
+        public List<int> ClassIds { get; set; }
+        public int? RoomId { get; set; }
+        public int? PeriodId { get; set; }
+        public int? StudentId { get; set; }
+        public int? TeacherId { get; set; }
+        public int? DateTypeId { get; set; }
         public int? Time { get; set; }
+        public int? SchoolYearId { get; set; }
     }
 }

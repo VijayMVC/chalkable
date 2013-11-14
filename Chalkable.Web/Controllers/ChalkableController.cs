@@ -144,7 +144,7 @@ namespace Chalkable.Web.Controllers
             return Json(id, htmlContentType);
         }
 
-        protected Guid GetCurrentSchoolYearId()
+        protected int GetCurrentSchoolYearId()
         {
             var currentYear = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
             if (currentYear != null)
@@ -160,7 +160,7 @@ namespace Chalkable.Web.Controllers
                 return (int)(now - now.Date).TotalMinutes;
             }
         }
-        protected Guid EnsureMarkingPeriodId(Guid? markingPeriodId)
+        protected int EnsureMarkingPeriodId(int? markingPeriodId)
         {
             if (!Context.SchoolId.HasValue)
                 throw new ChalkableException(ChlkResources.ERR_NO_SCHOOL_INFO_ID);

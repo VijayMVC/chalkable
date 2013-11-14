@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Chalkable.BusinessLogic.Mapping;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -18,49 +16,50 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
         public static StudentGradingViewData Create(Person person, IList<ClassPersonGradingStats> gradingStats, IGradingStyleMapper mapper)
         {
-            var res = new StudentGradingViewData(person);
-            var studentGradings = new List<ClassPersonGradingStatsViewData>();
-            foreach (var gSt in gradingStats)
-            {
-                var stGrading = studentGradings.FirstOrDefault(x => x.ClassPersonId == gSt.Id);
-                if (stGrading == null)
-                {
-                    stGrading = new ClassPersonGradingStatsViewData
-                    {
-                        ClassPersonId = gSt.Id,
-                        PersonId = gSt.PersonRef,
-                        ClassId = gSt.ClassRef,
-                        ClassName = gSt.ClassName,
-                        ClassAvg = gSt.ClassAvg,
-                        CourseId = gSt.CourseId,
-                        StudentAvg = gSt.StudentAvg,
-                        ItemTypesStats = new List<AnnouncementTypeGradingStatsViewData>()
-                    };
-                    studentGradings.Add(stGrading);
-                }
-                foreach (var gByAnnType in gSt.GradingsByAnnType)
-                {
-                    var annTypeStats = stGrading.ItemTypesStats.FirstOrDefault(x => x.Id == gByAnnType.AnnouncementTypeId);
-                    if (annTypeStats == null)
-                    {
-                        var annType = new AnnouncementType { Id = gByAnnType.AnnouncementTypeId, Name = gByAnnType.AnnouncementTypeName };
-                        annTypeStats = AnnouncementTypeGradingStatsViewData.Create(annType, gByAnnType.StudentItemTypeAvg, gByAnnType.ClassItemTypeAvg);
-                        annTypeStats.Items = new List<AnnouncementShortGradeViewData>();
-                        stGrading.ItemTypesStats.Add(annTypeStats);
-                    }
-                    var annComplex = new AnnouncementComplex
-                    {
-                        Id = gByAnnType.AnnouncementId,
-                        Order = gByAnnType.AnnouncementOrder,
-                        Dropped = gByAnnType.AnnouncementDropped,
-                        Avg = gByAnnType.ItemAvg,
+            throw new NotImplementedException();
+            //var res = new StudentGradingViewData(person);
+            //var studentGradings = new List<ClassPersonGradingStatsViewData>();
+            //foreach (var gSt in gradingStats)
+            //{
+            //    var stGrading = studentGradings.FirstOrDefault(x => x.PersonId == gSt.Id);
+            //    if (stGrading == null)
+            //    {
+            //        stGrading = new ClassPersonGradingStatsViewData
+            //        {
+            //            PersonId = gSt.Id,
+            //            PersonId = gSt.PersonRef,
+            //            ClassId = gSt.ClassRef,
+            //            ClassName = gSt.ClassName,
+            //            ClassAvg = gSt.ClassAvg,
+            //            CourseId = gSt.CourseId,
+            //            StudentAvg = gSt.StudentAvg,
+            //            ItemTypesStats = new List<AnnouncementTypeGradingStatsViewData>()
+            //        };
+            //        studentGradings.Add(stGrading);
+            //    }
+            //    foreach (var gByAnnType in gSt.GradingsByAnnType)
+            //    {
+            //        var annTypeStats = stGrading.ItemTypesStats.FirstOrDefault(x => x.Id == gByAnnType.AnnouncementTypeId);
+            //        if (annTypeStats == null)
+            //        {
+            //            var annType = new AnnouncementType { Id = gByAnnType.AnnouncementTypeId, Name = gByAnnType.AnnouncementTypeName };
+            //            annTypeStats = AnnouncementTypeGradingStatsViewData.Create(annType, gByAnnType.StudentItemTypeAvg, gByAnnType.ClassItemTypeAvg);
+            //            annTypeStats.Items = new List<AnnouncementShortGradeViewData>();
+            //            stGrading.ItemTypesStats.Add(annTypeStats);
+            //        }
+            //        var annComplex = new AnnouncementComplex
+            //        {
+            //            Id = gByAnnType.AnnouncementId,
+            //            Order = gByAnnType.AnnouncementOrder,
+            //            Dropped = gByAnnType.AnnouncementDropped,
+            //            Avg = gByAnnType.ItemAvg,
                         
-                    };
-                    annTypeStats.Items.Add(AnnouncementShortGradeViewData.Create(annComplex, mapper, gByAnnType.StudentGrade));
-                }
-            }
-            res.StudentGradings = studentGradings;
-            return res;
+            //        };
+            //        annTypeStats.Items.Add(AnnouncementShortGradeViewData.Create(annComplex, mapper, gByAnnType.StudentGrade));
+            //    }
+            //}
+            //res.StudentGradings = studentGradings;
+            //return res;
         }
     }
 
@@ -76,9 +75,9 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public IList<AnnouncementTypeGradingStatsViewData> ItemTypesStats { get; set; }
     }
 
-    public class AnnouncementTypeGradingStatsViewData : AnnouncementTypeViewData
+    public class AnnouncementTypeGradingStatsViewData : ClassAnnouncementTypeViewData
     {
-        protected AnnouncementTypeGradingStatsViewData(AnnouncementType announcementType) : base(announcementType)
+        protected AnnouncementTypeGradingStatsViewData(ClassAnnouncementType announcementType) : base(announcementType)
         {
         }
 
@@ -86,7 +85,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public int? ClassItemTypeAvg { get; set; }
         public IList<AnnouncementShortGradeViewData> Items { get; set; }
  
-        public static AnnouncementTypeGradingStatsViewData Create(AnnouncementType annType, int? studentItemTypeAvg, int? classItemTypeAvg)
+        public static AnnouncementTypeGradingStatsViewData Create(ClassAnnouncementType annType, int? studentItemTypeAvg, int? classItemTypeAvg)
         {
             return new AnnouncementTypeGradingStatsViewData(annType)
                 {

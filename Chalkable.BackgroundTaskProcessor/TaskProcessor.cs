@@ -13,13 +13,12 @@ namespace Chalkable.BackgroundTaskProcessor
 
         public TaskProcessor()
         {
-            handlers.Add(BackgroundTaskTypeEnum.CreateEmptySchool, new CreateEmptySchoolTaskHandler());
             handlers.Add(BackgroundTaskTypeEnum.SisDataImport, new SisImportDataTaskHandler());
             handlers.Add(BackgroundTaskTypeEnum.BackupDatabases, new BackupTaskHandler(true));
             handlers.Add(BackgroundTaskTypeEnum.RestoreDatabases, new BackupTaskHandler(false));
             handlers.Add(BackgroundTaskTypeEnum.DatabaseUpdate, new DatabaseUpdateTaskHandler());
-            handlers.Add(BackgroundTaskTypeEnum.CreateDemoSchool, new CreateDemoSchoolTaskHandler());
-            handlers.Add(BackgroundTaskTypeEnum.DeleteSchool, new DeleteSchoolTaskHandler());
+            handlers.Add(BackgroundTaskTypeEnum.CreateDemoDistrict, new CreateDemoDistrictTaskHandler());
+            handlers.Add(BackgroundTaskTypeEnum.DeleteDistrict, new DeleteSchoolTaskHandler());
             handlers.Add(BackgroundTaskTypeEnum.ProcessReminder, new ProcessRemindersTaskHandler());
             handlers.Add(BackgroundTaskTypeEnum.AttendanceNotification, new AttendanceNotificationTaskHandler());
             handlers.Add(BackgroundTaskTypeEnum.TeacherAttendanceNotification, new TeacherAttendanceNotificationTaskHandler());

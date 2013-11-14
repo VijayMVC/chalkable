@@ -4,9 +4,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class RoomDataAccess : DataAccessBase<Room>
+    public class RoomDataAccess : BaseSchoolDataAccess<Room>
     {
-        public RoomDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public RoomDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
         {
         }
     }

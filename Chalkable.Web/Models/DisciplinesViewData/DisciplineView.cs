@@ -12,7 +12,7 @@ namespace Chalkable.Web.Models.DisciplinesViewData
         public ShortPersonViewData Student { get; set; }
         public PeriodViewData Period { get; set; }
         public string ClassName { get; set; }
-        public Guid TeacherId { get; set; }
+        public int? TeacherId { get; set; }
         public IList<DisciplineTypeViewData> DisciplineTypes { get; set; }
         public string Description { get; set; }
         public Guid ClassPersonId { get; set; }
@@ -20,7 +20,7 @@ namespace Chalkable.Web.Models.DisciplinesViewData
         public string Summary { get; set; }
         public bool Editable { get; set; }
 
-        protected DisciplineView(ClassDisciplineDetails discipline, Guid currentPersonId,  bool canEdit)
+        protected DisciplineView(ClassDisciplineDetails discipline, int currentPersonId, bool canEdit)
         {
             Student = ShortPersonViewData.Create(discipline.Student);
             Period = PeriodViewData.Create(discipline.ClassPeriod.Period);
@@ -33,7 +33,7 @@ namespace Chalkable.Web.Models.DisciplinesViewData
             Description = discipline.Description;
         }
 
-        public static IList<DisciplineView> Create(IList<ClassDisciplineDetails> disciplines, Guid currentPersonId,
+        public static IList<DisciplineView> Create(IList<ClassDisciplineDetails> disciplines, int currentPersonId,
                                             bool canEdit = false)
         {
             return disciplines.Select(x => new DisciplineView(x, currentPersonId, canEdit)).ToList();

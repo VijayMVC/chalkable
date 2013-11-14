@@ -24,7 +24,7 @@
             ul.day-announcements
                 each item in announcements
                     li.items
-                        +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getAnnouncementTypeId()).pop-up-announcement
+                        +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getChalkableAnnouncementType()).pop-up-announcement
                             div
                                 p.item-title #{item.getAnnouncementTypeName()} #{item.getOrder()}
     if !self.getUserRole().isStudent()

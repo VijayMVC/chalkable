@@ -1,5 +1,4 @@
 ﻿using System;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
@@ -34,7 +33,7 @@ namespace Chalkable.BusinessLogic.Services
     {
         public static IServiceLocatorMaster CreateMasterSysAdmin()
         {
-            var context = new UserContext(Guid.Empty, null, "Virtual system admin", null, null, null, CoreRoles.SUPER_ADMIN_ROLE, null);
+            var context = new UserContext(Guid.Empty, null, null, "Virtual system admin", null, null, null, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
             var serviceLocator = new ServiceLocatorMaster(context);
             return serviceLocator;
         }
@@ -44,8 +43,9 @@ namespace Chalkable.BusinessLogic.Services
            var user = schoolUser.User;
            var school = schoolUser.School;
            var role = CoreRoles.GetById(schoolUser.Role);
-           var context = new UserContext(schoolUser.UserRef, schoolUser.SchoolRef, user.Login, school.Name,
-                                          school.TimeZone, school.ServerUrl, role, null);
+           //TODO: how to get SIS token for OAuth
+           var context = new UserContext(schoolUser.UserRef, schoolUser.School.DistrictRef, schoolUser.SchoolRef, user.Login, 
+                                          user.District.TimeZone, user.District.ServerUrl, schoolUser.School.LocalId, role, null, user.LocalId, null, null);
            return CreateSchoolLocator(context);
         }
 

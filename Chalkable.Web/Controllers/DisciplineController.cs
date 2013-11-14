@@ -25,7 +25,7 @@ namespace Chalkable.Web.Controllers
             count = count ?? DEFAULT_PAGE_SIZE;
             //var res = GetDisciplines(null, null, classId, date);
             //return Json(new PaginatedList<DisciplineView>(res, start.Value/count.Value, count.Value));
-             Guid currentYearId = GetCurrentSchoolYearId();
+            int currentYearId = GetCurrentSchoolYearId();
             var datev = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
             var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineDetails(currentYearId, datev);
             var list = StudentDisciplineSummaryViewData.Create(disciplines);
@@ -33,12 +33,12 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST, true, CallType.Get, new[] { AppPermissionType.Discipline })]
-        public ActionResult ClassList(DateTime? date, Guid classId, int? start, int? count)
+        public ActionResult ClassList(DateTime? date, int classId, int? start, int? count)
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
             var currentDate = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
-            var teacherId = SchoolLocator.Context.Role == CoreRoles.TEACHER_ROLE ? SchoolLocator.Context.UserId : default(Guid?);
+            var teacherId = SchoolLocator.Context.Role == CoreRoles.TEACHER_ROLE ? SchoolLocator.Context.UserLocalId : default(int?);
             var cps = SchoolLocator.ClassPeriodService.GetClassPeriods(currentDate, classId, null, null, teacherId);
             var cp = cps.OrderBy(x => x.Period.StartTime).LastOrDefault();
             var res = new List<DisciplineView>();
@@ -52,12 +52,12 @@ namespace Chalkable.Web.Controllers
 
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST_STUDENT_DISCIPLINE, true, CallType.Get, new[] { AppPermissionType.Discipline })]
-        public ActionResult ListStudentDiscipline(Guid? schoolYearId, Guid schoolPersonId, DateTime? date)
+        public ActionResult ListStudentDiscipline(int? schoolYearId, int schoolPersonId, DateTime? date)
         {
             return Json(GetDisciplines(schoolYearId, schoolPersonId, null, date));
         }
 
-        private List<DisciplineView> GetDisciplines(Guid? schoolYearId, Guid? studentId, Guid? classId, DateTime? date)
+        private List<DisciplineView> GetDisciplines(int? schoolYearId, int? studentId, int? classId, DateTime? date)
         {
             var currentDate = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(currentDate);
@@ -75,7 +75,7 @@ namespace Chalkable.Web.Controllers
                 PersonId = studentId,
             });
             var canEdit = BaseSecurity.IsAdminEditor(SchoolLocator.Context);
-            return DisciplineView.Create(list, Context.UserId, canEdit).ToList();
+            return DisciplineView.Create(list, Context.UserLocalId ?? 0, canEdit).ToList();
         }
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult SetClassDiscipline(DisciplineListInputModel disciplineList)
@@ -84,7 +84,7 @@ namespace Chalkable.Web.Controllers
             {
                 if (discInputModel.DisciplineTypeIds != null && discInputModel.DisciplineTypeIds.Count > 0)
                 {
-                    ISet<Guid> discplineTypesSet = new HashSet<Guid>();
+                    ISet<int> discplineTypesSet = new HashSet<int>();
                     foreach (var discplineTypeId in discInputModel.DisciplineTypeIds)
                     {
                         if (!discplineTypesSet.Contains(discplineTypeId))
@@ -103,7 +103,7 @@ namespace Chalkable.Web.Controllers
 
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_CLASS_DISCIPLINE_STUDENT_DISCIPLINE_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User, AppPermissionType.Discipline })]
-        public ActionResult StudentDisciplineSummary(Guid personId, Guid markingPeriodId)
+        public ActionResult StudentDisciplineSummary(int personId, int markingPeriodId)
         {
             if (!Context.SchoolId.HasValue)
                 throw new UnassignedUserException();

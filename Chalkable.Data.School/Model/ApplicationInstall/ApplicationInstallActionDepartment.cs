@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model.ApplicationInstall
 {
     public  class ApplicationInstallActionDepartment
     {
-        public Guid Id { get; set; }
+        [IdentityFieldAttr]
+        [PrimaryKeyFieldAttr]
+        public int Id { get; set; }
         public Guid DepartmentRef { get; set; }
-        public Guid AppInstallActionRef { get; set; }
+        public int AppInstallActionRef { get; set; }
     }
 }

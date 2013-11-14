@@ -9,6 +9,7 @@
           <EntitySet Name="AbsenceLevelReason" EntityType="INOWDEMOModel.Store.AbsenceLevelReason" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="AbsenceReason" EntityType="INOWDEMOModel.Store.AbsenceReason" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="AcadSession" EntityType="INOWDEMOModel.Store.AcadSession" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ActivityCategory" EntityType="INOWDEMOModel.Store.ActivityCategory" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Address" EntityType="INOWDEMOModel.Store.Address" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="AttendanceCalendar" EntityType="INOWDEMOModel.Store.AttendanceCalendar" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="AttendanceCalendarDay" EntityType="INOWDEMOModel.Store.AttendanceCalendarDay" store:Type="Tables" Schema="dbo" />
@@ -65,6 +66,10 @@
           <AssociationSet Name="FK_AcadSession_SchoolID" Association="INOWDEMOModel.Store.FK_AcadSession_SchoolID">
             <End Role="School" EntitySet="School" />
             <End Role="AcadSession" EntitySet="AcadSession" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ActivityCategory_SectionID" Association="INOWDEMOModel.Store.FK_ActivityCategory_SectionID">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="ActivityCategory" EntitySet="ActivityCategory" />
           </AssociationSet>
           <AssociationSet Name="FK_AttendanceCalendar_AcadSessionID" Association="INOWDEMOModel.Store.FK_AttendanceCalendar_AcadSessionID">
             <End Role="AcadSession" EntitySet="AcadSession" />
@@ -552,6 +557,21 @@
           <Property Name="DistrictGuid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="IsVisibleInHomePortal" Type="bit" Nullable="false" />
           <Property Name="ArchiveDate" Type="datetime" />
+          <Property Name="AcadSessionTypeID" Type="smallint" />
+        </EntityType>
+        <EntityType Name="ActivityCategory">
+          <Key>
+            <PropertyRef Name="ActivityCategoryID" />
+          </Key>
+          <Property Name="ActivityCategoryID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="SectionID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Description" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="Percentage" Type="decimal" Precision="6" Scale="3" />
+          <Property Name="HighScoresToDrop" Type="tinyint" Nullable="false" />
+          <Property Name="LowScoresToDrop" Type="tinyint" Nullable="false" />
+          <Property Name="DistrictGuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="GradeBookCategoryId" Type="int" />
         </EntityType>
         <EntityType Name="Address">
           <Key>
@@ -699,6 +719,7 @@
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="ReportingSchoolID" Type="int" />
           <Property Name="AreFeesPosted" Type="bit" Nullable="false" />
+          <Property Name="MergeRostersForAttendance" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="CourseSchool">
           <Key>
@@ -1500,6 +1521,20 @@
             </Principal>
             <Dependent Role="AcadSession">
               <PropertyRef Name="SchoolID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ActivityCategory_SectionID">
+          <End Role="Course" Type="INOWDEMOModel.Store.Course" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ActivityCategory" Type="INOWDEMOModel.Store.ActivityCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseID" />
+            </Principal>
+            <Dependent Role="ActivityCategory">
+              <PropertyRef Name="SectionID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3312,6 +3347,11 @@
             <End Role="Document" EntitySet="Documents" />
             <End Role="Student" EntitySet="Students" />
           </AssociationSet>
+          <EntitySet Name="ActivityCategories" EntityType="StiModel.ActivityCategory" />
+          <AssociationSet Name="FK_ActivityCategory_SectionID" Association="StiModel.FK_ActivityCategory_SectionID">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="ActivityCategory" EntitySet="ActivityCategories" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="AbsenceLevelReason">
           <Key>
@@ -3385,6 +3425,7 @@
           <NavigationProperty Name="Terms" Relationship="StiModel.FK_Term_AcadSessionID" FromRole="AcadSession" ToRole="Term" />
           <NavigationProperty Name="TimeSlots" Relationship="StiModel.FK_TimeSlot_AcadSessionID" FromRole="AcadSession" ToRole="TimeSlot" />
           <NavigationProperty Name="StudentPeriodAbsences" Relationship="StiModel.FK_StudentPeriodAbsence_AcadSessionID" FromRole="AcadSession" ToRole="StudentPeriodAbsence" />
+          <Property Type="Int16" Name="AcadSessionTypeID" />
         </EntityType>
         <EntityType Name="Address">
           <Key>
@@ -3568,6 +3609,8 @@
           <NavigationProperty Name="SectionStaffs" Relationship="StiModel.FK_SectionStaff_SectionID" FromRole="Course" ToRole="SectionStaff" />
           <NavigationProperty Name="CourseType" Relationship="StiModel.FK_Course_CourseTypeID" FromRole="Course" ToRole="CourseType" />
           <NavigationProperty Name="StudentPeriodAbsences" Relationship="StiModel.FK_StudentPeriodAbsence_SectionID" FromRole="Course" ToRole="StudentPeriodAbsence" />
+          <Property Type="Boolean" Name="MergeRostersForAttendance" Nullable="false" />
+          <NavigationProperty Name="ActivityCategories" Relationship="StiModel.FK_ActivityCategory_SectionID" FromRole="Course" ToRole="ActivityCategory" />
         </EntityType>
         <EntityType Name="CourseSchool">
           <Key>
@@ -5843,6 +5886,35 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ActivityCategory">
+          <Key>
+            <PropertyRef Name="ActivityCategoryID" />
+          </Key>
+          <Property Type="Int32" Name="ActivityCategoryID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="SectionID" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Description" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="Decimal" Name="Percentage" Precision="6" Scale="3" />
+          <Property Type="Byte" Name="HighScoresToDrop" Nullable="false" />
+          <Property Type="Byte" Name="LowScoresToDrop" Nullable="false" />
+          <Property Type="Guid" Name="DistrictGuid" Nullable="false" />
+          <Property Type="Int32" Name="GradeBookCategoryId" />
+          <NavigationProperty Name="Course" Relationship="StiModel.FK_ActivityCategory_SectionID" FromRole="ActivityCategory" ToRole="Course" />
+        </EntityType>
+        <Association Name="FK_ActivityCategory_SectionID">
+          <End Type="StiModel.Course" Role="Course" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="StiModel.ActivityCategory" Role="ActivityCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseID" />
+            </Principal>
+            <Dependent Role="ActivityCategory">
+              <PropertyRef Name="SectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5881,6 +5953,7 @@
           <EntitySetMapping Name="AcadSessions">
             <EntityTypeMapping TypeName="StiModel.AcadSession">
               <MappingFragment StoreEntitySet="AcadSession">
+                <ScalarProperty Name="AcadSessionTypeID" ColumnName="AcadSessionTypeID" />
                 <ScalarProperty Name="AcadSessionID" ColumnName="AcadSessionID" />
                 <ScalarProperty Name="SchoolID" ColumnName="SchoolID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6015,6 +6088,7 @@
           <EntitySetMapping Name="Courses">
             <EntityTypeMapping TypeName="StiModel.Course">
               <MappingFragment StoreEntitySet="Course">
+                <ScalarProperty Name="MergeRostersForAttendance" ColumnName="MergeRostersForAttendance" />
                 <ScalarProperty Name="CourseID" ColumnName="CourseID" />
                 <ScalarProperty Name="CourseNumber" ColumnName="CourseNumber" />
                 <ScalarProperty Name="SectionOfCourseID" ColumnName="SectionOfCourseID" />
@@ -6850,6 +6924,21 @@
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="DocumentID" ColumnName="DocumentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ActivityCategories">
+            <EntityTypeMapping TypeName="StiModel.ActivityCategory">
+              <MappingFragment StoreEntitySet="ActivityCategory">
+                <ScalarProperty Name="GradeBookCategoryId" ColumnName="GradeBookCategoryId" />
+                <ScalarProperty Name="DistrictGuid" ColumnName="DistrictGuid" />
+                <ScalarProperty Name="LowScoresToDrop" ColumnName="LowScoresToDrop" />
+                <ScalarProperty Name="HighScoresToDrop" ColumnName="HighScoresToDrop" />
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SectionID" ColumnName="SectionID" />
+                <ScalarProperty Name="ActivityCategoryID" ColumnName="ActivityCategoryID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

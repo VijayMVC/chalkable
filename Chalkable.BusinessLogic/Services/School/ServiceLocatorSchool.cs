@@ -13,7 +13,6 @@ namespace Chalkable.BusinessLogic.Services.School
         IMarkingPeriodService MarkingPeriodService { get; }
         IClassService ClassService { get; }
         ISchoolYearService SchoolYearService { get; }
-        ICourseService CourseService { get; }
         IAnnouncementQnAService AnnouncementQnAService { get; }
         IAnnouncementService AnnouncementService { get; }
         IAnnouncementReminderService AnnouncementReminderService { get; }
@@ -23,7 +22,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IRoomService RoomService { get; }
         IPeriodService PeriodService { get; }
         ICalendarDateService CalendarDateService { get; }
-        IScheduleSectionService ScheduleSectionService { get; }
+        IDayTypeService DayTypeService { get; }
         IClassPeriodService ClassPeriodService { get; }
         INotificationService NotificationService { get; }
         IAttendanceService AttendanceService { get; }
@@ -31,13 +30,14 @@ namespace Chalkable.BusinessLogic.Services.School
         IStudentParentService StudentParentService { get; }
         IGradingStyleService GradingStyleService { get; }
         IStudentAnnouncementService StudentAnnouncementService { get; }
-        IAnnouncementTypeService AnnouncementTypeService { get; }
-        IFinalGradeService FinalGradeService { get; }
+        IClassAnnouncementTypeService ClassClassAnnouncementTypeService { get; }
         IDisciplineTypeService DisciplineTypeService { get; }
         IApplicationSchoolService ApplicationSchoolService { get; }
         IDisciplineService DisciplineService { get; }
         IGradingStatisticService GradingStatisticService { get; }
         IAppMarketService AppMarketService { get; }
+        ISchoolService SchoolService { get; }
+        ISchoolPersonService SchoolPersonService { get; }
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
     {
@@ -48,7 +48,6 @@ namespace Chalkable.BusinessLogic.Services.School
         private IMarkingPeriodService markingPeriodService;
         private IClassService classService;
         private ISchoolYearService schoolYearService;
-        private ICourseService courseService;
         private IAnnouncementQnAService announcementQnAService;
         private IAnnouncementReminderService announcementReminderService;
         private IAnnouncementService announcementService;
@@ -58,7 +57,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IRoomService roomService;
         private IPeriodService periodService;
         private ICalendarDateService calendarDateService;
-        private IScheduleSectionService scheduleSectionService;
+        private IDayTypeService dayTypeService;
         private IClassPeriodService classPeriodService;
         private INotificationService notificationService;
         private IAttendanceService attendanceService;
@@ -66,13 +65,14 @@ namespace Chalkable.BusinessLogic.Services.School
         private IStudentParentService studentParentService;
         private IGradingStyleService gradingStyleService;
         private IStudentAnnouncementService studentAnnouncementService;
-        private IAnnouncementTypeService announcementTypeService;
-        private IFinalGradeService finalGradeService;
+        private IClassAnnouncementTypeService classClassAnnouncementTypeService;
         private IDisciplineTypeService disciplineTypeService;
         private IApplicationSchoolService applicationSchoolService;
         private IDisciplineService disciplineService;
         private IGradingStatisticService gradingStatisticService;
         private IAppMarketService appMarketService;
+        private ISchoolService schoolService;
+        private ISchoolPersonService schoolPersonService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -84,7 +84,6 @@ namespace Chalkable.BusinessLogic.Services.School
             markingPeriodService = new MarkingPeriodService(this);
             classService = new ClassService(this);
             schoolYearService = new SchoolYearService(this);
-            courseService = new CourseService(this);
             announcementQnAService = new AnnouncementQnAService(this);
             announcementReminderService = new AnnouncementReminderService(this);
             announcementService = new AnnouncementService(this);
@@ -94,7 +93,7 @@ namespace Chalkable.BusinessLogic.Services.School
             roomService = new RoomService(this);
             periodService = new PeriodService(this);
             calendarDateService = new CalendarDateService(this);
-            scheduleSectionService = new ScheduleSectionService(this);
+            dayTypeService = new DayTypeService(this);
             classPeriodService = new ClassPeriodService(this);
             notificationService = new NotificationService(this);
             attendanceReasonService = new AttendanceReasonService(this);
@@ -102,13 +101,15 @@ namespace Chalkable.BusinessLogic.Services.School
             studentParentService = new StudentParentService(this);
             gradingStyleService = new GradingStyleService(this);
             studentAnnouncementService = new StudentAnnouncementService(this);
-            announcementTypeService = new AnnouncementTypeService(this);
-            finalGradeService = new FinalGradeService(this);
+            classClassAnnouncementTypeService = new ClassClassAnnouncementTypeService(this);
             disciplineTypeService = new DisciplineTypeService(this);
             applicationSchoolService = new ApplicationSchoolService(this);
             disciplineService = new DisciplineService(this);
             gradingStatisticService = new GradingStatisticService(this);
             appMarketService = new AppMarketService(this);
+            schoolService = new SchoolService(this);
+            schoolPersonService = new SchoolPersonService(this);
+
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -117,7 +118,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public IMarkingPeriodService MarkingPeriodService { get { return markingPeriodService; } }
         public IClassService ClassService { get { return classService; } }
         public ISchoolYearService SchoolYearService { get { return schoolYearService; } }
-        public ICourseService CourseService { get { return courseService; } }
         public IAnnouncementQnAService AnnouncementQnAService{ get { return announcementQnAService; } }
         public IAnnouncementService AnnouncementService { get { return announcementService; } }
         public IAnnouncementReminderService AnnouncementReminderService { get { return announcementReminderService; } }
@@ -128,7 +128,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IPeriodService PeriodService { get { return periodService; } }
         public IServiceLocatorMaster ServiceLocatorMaster { get { return serviceLocatorMaster; } }
         public ICalendarDateService CalendarDateService { get { return calendarDateService; } }
-        public IScheduleSectionService ScheduleSectionService { get { return scheduleSectionService; } }
+        public IDayTypeService DayTypeService { get { return dayTypeService; } }
         public IClassPeriodService ClassPeriodService { get { return classPeriodService; } }
         public INotificationService NotificationService { get { return notificationService; } }
         public IAttendanceService AttendanceService { get { return attendanceService; } }
@@ -136,12 +136,13 @@ namespace Chalkable.BusinessLogic.Services.School
         public IStudentParentService StudentParentService { get { return studentParentService; } }
         public IGradingStyleService GradingStyleService { get { return gradingStyleService; } }
         public IStudentAnnouncementService StudentAnnouncementService { get { return studentAnnouncementService; } }
-        public IAnnouncementTypeService AnnouncementTypeService { get { return announcementTypeService; } }
-        public IFinalGradeService FinalGradeService { get { return finalGradeService; } }
+        public IClassAnnouncementTypeService ClassClassAnnouncementTypeService { get { return classClassAnnouncementTypeService; } }
         public IDisciplineTypeService DisciplineTypeService { get { return disciplineTypeService; } }
         public IApplicationSchoolService ApplicationSchoolService { get { return applicationSchoolService; } }
         public IDisciplineService DisciplineService { get { return disciplineService; } }
         public IGradingStatisticService GradingStatisticService { get { return gradingStatisticService; } }
         public IAppMarketService AppMarketService { get { return appMarketService; } }
+        public ISchoolService SchoolService { get { return schoolService; } }
+        public ISchoolPersonService SchoolPersonService { get { return schoolPersonService; } }
     }
 }

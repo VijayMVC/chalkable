@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 using Chalkable.Tests.Services.TestContext;
-using NUnit.Framework;
 
 namespace Chalkable.Tests.Services
 {
@@ -35,18 +31,12 @@ namespace Chalkable.Tests.Services
             var school = new Data.Master.Model.School
             {
                 Id = Guid.NewGuid(),
-                Name = schoolName,
-                IsEmpty = false,
-                ServerUrl = server,
-                Status = SchoolStatus.PayingCustomer,
-                TimeZone = "UTC"
+                Name = schoolName
             };
-            if (isDemo)
-                school.DemoPrefix = Guid.NewGuid().ToString().Replace("-", "");
             using (var uow = new UnitOfWork(chalkableMasterConnection, true))
             {
                 var da = new SchoolDataAccess(uow);
-                da.Create(school);
+                da.Insert(school);
                 uow.Commit();
                 ExecuteQuery(masterConnection, "create database [" + school.Id.ToString() + "]");
                 var schoolDbConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, server, school.Id.ToString());
@@ -55,19 +45,44 @@ namespace Chalkable.Tests.Services
             return school;
         }
 
+        protected District CreateSimpleDistrict(string districtName)
+        {
+            var chalkableMasterConnection = Settings.MasterConnectionString;
+            var masterConnection = chalkableMasterConnection.Replace(MASTER_DB_NAME, "Master");
+            var server = Settings.Servers[0];
+            var district = new District
+                {
+                    Id = Guid.NewGuid(),
+                    Name = districtName,
+                    TimeZone = "UTC",
+                    ServerUrl = server
+                };
+            using (var uow = new UnitOfWork(chalkableMasterConnection, true))
+            {
+                var da = new DistrictDataAccess(uow);
+                da.Insert(district);
+                uow.Commit();
+                ExecuteQuery(masterConnection, "create database [" + district.Id.ToString() + "]");
+                var schoolDbConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, server, district.Id.ToString());
+                RunCreateSchoolScripts(schoolDbConnectionString);
+            
+            }
+            return district;
+        }
+
         protected override void BeforCreateDb(string chalkableConnection, string masterConnection)
         {
             if (ExistsDb(masterConnection, MASTER_DB_NAME))
             {
                 using (var uow = new UnitOfWork(chalkableConnection, true))
                 {
-                    var schools = new SchoolDataAccess(uow).GetSchools();
+                    var districts = new DistrictDataAccess(uow).GetDistricts(null, null);
                     uow.Commit();
-                    foreach (var school in schools)
+                    foreach (var district in districts)
                     {
                         try
                         {
-                            DropDbIfExists(masterConnection, school.Id.ToString());
+                            DropDbIfExists(masterConnection, district.Id.ToString());
                         }
                         catch (Exception ex)
                         {
@@ -83,11 +98,19 @@ namespace Chalkable.Tests.Services
 
         protected DeveloperSchoolTestContex CreateDeveloperSchoolTestContext()
         {
-            CreateTestDemoSchool();
+            /*CreateTestDemoSchool();
             var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
             var school = sysLocator.SchoolService.UseDemoSchool();
             var sysSchoolL = sysLocator.SchoolServiceLocator(school.Id);
-            return DeveloperSchoolTestContex.Create(sysSchoolL);
+            return DeveloperSchoolTestContex.Create(sysSchoolL);*/
+            throw new NotImplementedException();
+        }
+
+        protected DistrictTestContext CreateDistrictTestContext()
+        {
+            var district = CreateSimpleDistrict("DistrictForTest");
+            var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
+            return DistrictTestContext.Create(sysLocator, district);
         }
 
         protected SchoolTestContext CreateSchoolTestContext()

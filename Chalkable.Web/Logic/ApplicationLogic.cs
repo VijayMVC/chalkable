@@ -64,7 +64,7 @@ namespace Chalkable.Web.Logic
             if (maseterLocator.Context.Role == CoreRoles.TEACHER_ROLE)
             {
                 var schoolYear = schoolLocator.SchoolYearService.GetCurrentSchoolYear();
-                var classes = schoolLocator.ClassService.GetClasses(schoolYear.Id, null, schoolLocator.Context.UserId);
+                var classes = schoolLocator.ClassService.GetClasses(schoolYear.Id, null, schoolLocator.Context.UserLocalId);
                 var studentCountToAppInstall = schoolLocator.AppMarketService.GetStudentCountToAppInstallByClass(schoolYear.Id, application.Id);
                 foreach (var clazz in classes)
                 {

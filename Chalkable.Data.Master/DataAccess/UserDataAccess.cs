@@ -7,7 +7,7 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Data.Master.DataAccess
 {
-    public class UserDataAccess : DataAccessBase<User>
+    public class UserDataAccess : DataAccessBase<User, Guid>
     {
         public UserDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -16,25 +16,47 @@ namespace Chalkable.Data.Master.DataAccess
         {
             var p1 = new StringBuilder();
             var p2 = new StringBuilder();
-            p1.Append("select * from [User]");
+            p1.Append(@"select 
+                    [User].Id as [User_Id],
+                    [User].LocalId as User_LocalId,
+                    [User].Login as User_Login,
+                    [User].Password as User_Password,
+                    [User].IsSysAdmin as User_IsSysAdmin,
+                    [User].IsDeveloper as User_IsDeveloper,
+                    [User].ConfirmationKey as User_ConfirmationKey,
+                    [User].Districtref as User_DistrictRef,
+                    [User].SisUserName as User_SisUserName,
+                    District.Id as District_Id,
+                    District.Name as District_Name,
+                    District.SisUrl as District_SisUrl,
+                    District.DbName as District_DbName,
+                    District.SisUserName as District_SisUserName,
+                    District.SisPassword as District_SisPassword,
+                    District.Status as District_Status,
+                    District.TimeZone as District_TimeZone,
+                    District.DemoPrefix as District_DemoPrefix,
+                    District.LastUseDemo as District_LastUseDemo,
+                    District.ServerUrl as District_ServerUrl
+                    from [User]
+                    left join District on [User].DistrictRef = District.Id");
             p2.Append(@"select 
                               [User].Id as User_Id,
+                              [User].LocalId as User_LocalId,
                               [User].Login as User_Login,
                               [User].Password as User_Password,
                               [User].IsSysAdmin as User_IsSysAdmin,
                               [User].IsDeveloper as User_IsDeveloper,
                               [User].ConfirmationKey as User_ConfirmationKey,
+                              [User].Districtref as User_DistrictRef,
+                              [User].SisUserName as User_SisUserName,                                                  
                               SchoolUser.Id as SchoolUser_Id,
                               SchoolUser.UserRef as SchoolUser_UserRef,
                               SchoolUser.SchoolRef as SchoolUser_SchoolRef,
                               SchoolUser.Role as SchoolUser_Role,
                               School.Id as School_Id,
                               School.Name as School_Name,
-                              School.ServerUrl as School_ServerUrl,
                               School.DistrictRef as School_DistrictRef,
-                              School.IsEmpty as School_IsEmpty,
-                              School.TimeZone as School_TimeZone,
-                              School.DemoPrefix as School_DemoPrefix
+                              School.LocalId as School_LocalId                             
                         from [User]
                         join SchoolUser on [User].Id = SchoolUser.UserRef
                         join School on SchoolUser.SchoolRef = School.Id");
@@ -68,9 +90,12 @@ namespace Chalkable.Data.Master.DataAccess
             var sql = BuildSql(conditions);
             using (var reader = ExecuteReaderParametrized(sql, conditions))
             {
-                var res = reader.ReadOrNull<User>();
-                if (res != null)
+                User res = null;
+                if (reader.Read())
                 {
+                    res = reader.Read<User>(true);
+                    if (res.DistrictRef.HasValue)
+                        res.District = reader.Read<District>(true);
                     reader.NextResult();
                     var sul = reader.ReadList<SchoolUser>(true);
                     res.SchoolUsers = sul;
@@ -111,7 +136,13 @@ namespace Chalkable.Data.Master.DataAccess
             var sql = BuildSql(conds);
             using (var reader = ExecuteReaderParametrized(sql, conds))
             {
-                var res = reader.ReadList<User>();
+                var res = new List<User>();
+                while (reader.Read())
+                {
+                    var u = reader.Read<User>(true);
+                    if (u.DistrictRef.HasValue)
+                        u.District = reader.Read<District>(true);
+                }
                 reader.NextResult();
                 var sul = reader.ReadList<SchoolUser>(true);
                 var sulDic = res.ToDictionary(x => x.Id, x=>new List<SchoolUser>());
@@ -125,11 +156,6 @@ namespace Chalkable.Data.Master.DataAccess
                 }
                 return res;
             }
-        }
-
-        public void Create(User user)
-        {
-            SimpleInsert(user);
         }
     }
 }

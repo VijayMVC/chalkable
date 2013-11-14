@@ -9,18 +9,8 @@ namespace Chalkable.Tests.Sis
         [Test]
         public void TestApi()
         {
-            //
 
-            /*string credentials = "chalkable:1234qwer";
-            byte[] credentialsBytes = Encoding.UTF8.GetBytes(credentials);
-            string credentialsBase64 = Convert.ToBase64String(credentialsBytes);
-            var client = new WebClient();
-            client.Headers[HttpRequestHeader.Authorization] = "Basic " + credentialsBase64;
-            client.Encoding = Encoding.UTF8;
-            string url = "http://sti-onlinereg-api.sti-k12.com/api/schools";
-            var s = client.DownloadString(url);*/
-
-            var cl = new ConnectorLocator("chalkable", "1234qwer", "http://sti-onlinereg-api.sti-k12.com/api/");
+            var cl = ConnectorLocator.Create("administrator", "1234qwer", "http://localhost/Api/");
             var schools = cl.SchoolConnector.GetSchools();
             foreach (var school in schools)
             {

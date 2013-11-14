@@ -9,9 +9,11 @@ namespace Chalkable.Data.School.Model
 {
     public class AnnouncementRecipientData
     {
-        public Guid Id { get; set; }
-        public Guid AnnouncementRef { get; set; }
-        public Guid PersonRef { get; set; }
+        [IdentityFieldAttr]
+        [PrimaryKeyFieldAttr]
+        public int Id { get; set; }
+        public int AnnouncementRef { get; set; }
+        public int PersonRef { get; set; }
         public bool Starred { get; set; }
         public bool StarredAutomatically { get; set; }
         public DateTime? LastModifiedDate { get; set; }

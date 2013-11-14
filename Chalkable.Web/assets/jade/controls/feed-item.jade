@@ -27,7 +27,7 @@ mixin FeedItem(item, noDisabled)
                 +ActionLink('announcement', 'view', item.getId())(class = !noDisabled ? 'disabled' : '').d-b.t-d.not-blue.announcement-link
                     .item-type
                         .attachment
-                            div(class="announcement-type-" + item.getAnnouncementTypeId()).icon.blue
+                            div(class="announcement-type-" + item.getChalkableAnnouncementType()).icon.blue
                             div(
                                 data-tooltip=item.getAnnouncementTypeName() + (isAdminAnnouncement ?
                                     ' ' + Msg.Announcement : '')

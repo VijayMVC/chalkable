@@ -169,7 +169,6 @@
     <Compile Include="ActionResults\ChalkableJsonResult.cs" />
     <Compile Include="Controllers\ChalkableDepartmentController.cs" />
     <Compile Include="Controllers\ClassController.cs" />
-    <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\DbMaintenanceController.cs" />
     <Compile Include="Controllers\DemoSchoolController.cs" />
     <Compile Include="Controllers\DeveloperController.cs" />
@@ -177,7 +176,6 @@
     <Compile Include="Controllers\DisciplineTypeController.cs" />
     <Compile Include="Controllers\DistrictController.cs" />
     <Compile Include="Controllers\FeedController.cs" />
-    <Compile Include="Controllers\FinalGradeController.cs" />
     <Compile Include="Controllers\FundController.cs" />
     <Compile Include="Controllers\GradingController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
@@ -220,7 +218,7 @@
     <Compile Include="Models\AnnouncementsViewData\AnnouncementPeriodViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementsClassPeriodViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementShortViewData.cs" />
-    <Compile Include="Models\AnnouncementTypeViewData.cs" />
+    <Compile Include="Models\ClassAnnouncementTypeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\AppsBudgetViewData.cs" />
     <Compile Include="Models\BudgetBalanceViewData.cs" />
@@ -267,7 +265,6 @@
     <Compile Include="Models\ClassesViewData\ClassTitlesViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassViewData.cs" />
     <Compile Include="Models\ClassPeriodViewData.cs" />
-    <Compile Include="Models\CourseViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\CreateAnnouncementViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
     <Compile Include="Models\DepartmentGradingStatViewData.cs" />
@@ -278,13 +275,6 @@
     <Compile Include="Models\DisciplinesViewData\StudentDisciplineDetailedViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\StudentDisciplineSummaryViewData.cs" />
     <Compile Include="Models\DistrictViewData.cs" />
-    <Compile Include="Models\FinalGradesViewData\FinalGradeAnnouncementTypeViewData.cs" />
-    <Compile Include="Models\FinalGradesViewData\FinalGradeAnnTypeGradeStatsViewData.cs" />
-    <Compile Include="Models\FinalGradesViewData\FinalGradeDetailsViewData.cs" />
-    <Compile Include="Models\FinalGradesViewData\FinalGradeInputModel.cs" />
-    <Compile Include="Models\FinalGradesViewData\FinalGradeViewData.cs" />
-    <Compile Include="Models\FinalGradesViewData\StudentFinalGradeDetailsViewData.cs" />
-    <Compile Include="Models\FinalGradesViewData\StudentFinalGradeViewData.cs" />
     <Compile Include="Models\GradingClassSummaryViewData.cs" />
     <Compile Include="Models\GradingStudentClassSummaryViewData.cs" />
     <Compile Include="Models\GradingStudentSummaryViewData.cs" />
@@ -321,7 +311,6 @@
     <Compile Include="Models\SchoolsViewData\ShortSchoolViewData.cs" />
     <Compile Include="Models\SchoolYearViewData.cs" />
     <Compile Include="Models\SearchViewData.cs" />
-    <Compile Include="Models\SisSyncViewData.cs" />
     <Compile Include="Models\StorageMonitorViewData.cs" />
     <Compile Include="Models\StudentAnnouncementViewData.cs" />
     <Compile Include="Models\HoverBoxesViewData.cs" />
@@ -385,13 +374,9 @@
       <Project>{c5753c2a-f2bc-4f96-846b-548fc67191b2}</Project>
       <Name>Chalkable.Data.School</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Chalkable.SisConnector\Chalkable.SisConnector.csproj">
-      <Project>{C6A26439-411D-4D8C-9BCE-1A34E7EE604F}</Project>
-      <Name>Chalkable.SisConnector</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Chalkable.SisImportFacade\Chalkable.SisImportFacade.csproj">
-      <Project>{BD404053-D827-4695-9F57-5003A337428C}</Project>
-      <Name>Chalkable.SisImportFacade</Name>
+    <ProjectReference Include="..\Chalkable.StiConnector\Chalkable.StiConnector.csproj">
+      <Project>{3D16203E-D19D-41E1-9918-2A9448427BFD}</Project>
+      <Name>Chalkable.StiConnector</Name>
     </ProjectReference>
     <ProjectReference Include="..\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.csproj">
       <Project>{3051F268-B03F-42AE-A06C-1D8DD751BDBF}</Project>

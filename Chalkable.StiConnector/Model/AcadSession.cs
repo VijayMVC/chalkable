@@ -51,6 +51,7 @@ namespace Chalkable.StiConnector.Model
         public System.Guid DistrictGuid { get; set; }
         public bool IsVisibleInHomePortal { get; set; }
         public Nullable<System.DateTime> ArchiveDate { get; set; }
+        public Nullable<short> AcadSessionTypeID { get; set; }
     
         public virtual School School { get; set; }
         public virtual ICollection<AttendanceCalendar> AttendanceCalendars { get; set; }

@@ -22,7 +22,7 @@ namespace Chalkable.Data.School.Model
 
     public class StudentGradeAvgPerClass : StudentGradeAvg
     {
-        public Guid ClassRef { get; set; }
+        public int ClassRef { get; set; }
     }
 
     public class MarkingPeriodClassGradeAvg : MarkingPeriodClass
@@ -35,8 +35,8 @@ namespace Chalkable.Data.School.Model
             set
             {
                 _class = value;
-                if (value != null && value.Id != Guid.Empty)
-                    ClassRef = value.Id;
+                //if (value != null && value.Id != Guid.Empty)
+                //    ClassRef = value.Id;
             }
         }
         private MarkingPeriod markingPeriod;
@@ -47,8 +47,8 @@ namespace Chalkable.Data.School.Model
             set
             {
                 markingPeriod = value;
-                if (value != null && value.Id != Guid.Empty)
-                    MarkingPeriodRef = value.Id;
+                //if (value != null && value.Id != Guid.Empty)
+                //    MarkingPeriodRef = value.Id;
             }
         }
         public int? Avg { get; set; }
@@ -77,8 +77,8 @@ namespace Chalkable.Data.School.Model
     public class StudentClassGradeStats
     {
         public const string STUDENT_ID_FEILD = "StudentId";
-        public Guid StudentId { get; set; }
-        public Guid ClassId { get; set; }
+        public int StudentId { get; set; }
+        public int ClassId { get; set; }
         public IList<GradeAvgPerDate> GradeAvgPerDates { get; set; }
         public IList<AnnTypeGradeStats> AnnTypesGradeStats { get; set; }
     }
@@ -100,13 +100,13 @@ namespace Chalkable.Data.School.Model
 
     public class AnnouncementTypeGrading
     {
-        public Guid ClassPersonId { get; set; }
-        public Guid MarkingPeriodClassId { get; set; }
+        public int ClassPersonId { get; set; }
+        public int MarkingPeriodClassId { get; set; }
         public int AnnouncementTypeId { get; set; }
         public string AnnouncementTypeName { get; set; }
         public int? StudentItemTypeAvg { get; set; }
         public int? ClassItemTypeAvg { get; set; }
-        public Guid AnnouncementId { get; set; }
+        public int AnnouncementId { get; set; }
         public int AnnouncementOrder { get; set; }
         public bool AnnouncementDropped { get; set; }
         public int? ItemAvg { get; set; }
@@ -126,11 +126,11 @@ namespace Chalkable.Data.School.Model
 
     public class StudentGradingRank
     {
-        public Guid StudentId { get; set; }
+        public int StudentId { get; set; }
         public int? Avg { get; set; }
         public long? Rank { get; set; }
-        public Guid MarkingPeriodId { get; set; }
+        public int MarkingPeriodId { get; set; }
         public string MarkingPeriodName { get; set; }
-        public Guid GradeLevelId { get; set; }
+        public int GradeLevelId { get; set; }
     }
 }

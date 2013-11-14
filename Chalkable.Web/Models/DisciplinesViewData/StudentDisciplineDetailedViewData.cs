@@ -91,7 +91,7 @@ namespace Chalkable.Web.Models.DisciplinesViewData
             };
             return res;
         }
-        public static IList<StudentDisciplineHoverViewData> Create(Dictionary<Guid, List<ClassDisciplineDetails>> disciplinesDictionary)
+        public static IList<StudentDisciplineHoverViewData> Create(Dictionary<int, List<ClassDisciplineDetails>> disciplinesDictionary)
         {
             var res = disciplinesDictionary.Select(x => Create(x.Value)).OrderByDescending(x => x.Value)
                 .ToList();

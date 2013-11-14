@@ -6,22 +6,22 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models
 {
-    public class IdNameViewData
+    public class IdNameViewData<TId>
     {
-        public Guid Id { get; set; }
+        public TId Id { get; set; }
         public string Name { get; set; }
-        protected IdNameViewData(Guid id, string name)
+        protected IdNameViewData(TId id, string name)
         {
             Id = id;
             Name = name;
         }
-        public static IdNameViewData Create(Guid id, string name)
+        public static IdNameViewData<int> Create(int id, string name)
         {
-            return new IdNameViewData(id, name);
+            return new IdNameViewData<int>(id, name);
         }
     }
 
-    public class GradeLevelViewData : IdNameViewData
+    public class GradeLevelViewData : IdNameViewData<int>
     {
         public int Number { get; set; }
         protected GradeLevelViewData(GradeLevel gradeLevel): base(gradeLevel.Id, gradeLevel.Name)

@@ -31,8 +31,8 @@ namespace Chalkable.Data.School.Model
             set
             {
                 classPerson = value;
-                if (value != null && value.Id != Guid.Empty)
-                    ClassPersonRef = value.Id;
+                //if (value != null && value.Id != Guid.Empty)
+                //    ClassPersonRef = value.Id;
             }
         }
 
@@ -44,8 +44,8 @@ namespace Chalkable.Data.School.Model
             set
             {
                 classPeriod = value;
-                if (value != null && value.Id != Guid.Empty)
-                    ClassPeriodRef = value.Id;
+                //if (value != null && value.Id != Guid.Empty)
+                //    ClassPeriodRef = value.Id;
             }
         }
         [DataEntityAttr]

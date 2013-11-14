@@ -136,16 +136,19 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult AddToAnnouncement(Guid announcementId, Guid applicationId)
+        public ActionResult AddToAnnouncement(int announcementId, Guid applicationId)
         {
+            if(!Context.UserLocalId.HasValue)
+                throw new UnassignedUserException();
+
             var res = SchoolLocator.ApplicationSchoolService.AddToAnnouncement(announcementId, applicationId);
-            var appInstalls = SchoolLocator.AppMarketService.GetInstallations(applicationId, Context.UserId, false);
+            var appInstalls = SchoolLocator.AppMarketService.GetInstallations(applicationId, Context.UserLocalId.Value, false);
             var app = MasterLocator.ApplicationService.GetApplicationById(applicationId);
-            return Json(AnnouncementApplicationViewData.Create(res, app, appInstalls, Context.UserId));
+            return Json(AnnouncementApplicationViewData.Create(res, app, appInstalls, Context.UserLocalId));
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult RemoveFromAnnouncement(Guid announcementApplicationId)
+        public ActionResult RemoveFromAnnouncement(int announcementApplicationId)
         {
             var ann = SchoolLocator.ApplicationSchoolService.RemoveFromAnnouncement(announcementApplicationId);
             return Json(PrepareFullAnnouncementViewData(ann.Id), 6);
@@ -153,7 +156,7 @@ namespace Chalkable.Web.Controllers
 
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult Attach(Guid announcementApplicationId)
+        public ActionResult Attach(int announcementApplicationId)
         {
             SchoolLocator.ApplicationSchoolService.AttachAppToAnnouncement(announcementApplicationId);
             var aa = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
@@ -161,7 +164,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GET_APP_ANNOUNCEMENT_APPLICATION, true, CallType.Post, new[] { AppPermissionType.Announcement })]
-        public ActionResult GetAnnouncementApplication(Guid announcementApplicationId)
+        public ActionResult GetAnnouncementApplication(int announcementApplicationId)
         {
             var res = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
             var app = MasterLocator.ApplicationService.GetApplicationById(res.ApplicationRef);

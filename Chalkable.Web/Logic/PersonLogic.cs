@@ -11,8 +11,8 @@ namespace Chalkable.Web.Logic
         private const int DEFAULT_COUNT = 10;
 
         public static PaginatedList<PersonViewData> GetPersons(IServiceLocatorSchool locator, int? start, int? count,
-            bool? byLastName = true, string filter = null, string roleName = null, Guid? classId = null
-            , GuidList gradeLevelsIds = null, Guid? teacherId = null)
+            bool? byLastName = true, string filter = null, string roleName = null, int? classId = null
+            , IntList gradeLevelsIds = null, int? teacherId = null)
         {
             var query = new PersonQuery
                 {

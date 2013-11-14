@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.Common.Web;
 using Chalkable.Data.School.Model;
 
@@ -9,7 +7,7 @@ namespace Chalkable.Web.Models
 {
     public class PhoneViewData
     {
-        public Guid Id { get; set; }
+        public int PersonId { get; set; }
         [SensitiveData]
         public string Value { get; set; }
         public bool IsPrimary { get; set; }
@@ -19,7 +17,7 @@ namespace Chalkable.Web.Models
         {
             return new PhoneViewData
                        {
-                           Id =  phone.Id,
+                           PersonId = phone.PersonRef,
                            Value = phone.Value,
                            IsPrimary = phone.IsPrimary,
                            Type = (int)phone.Type

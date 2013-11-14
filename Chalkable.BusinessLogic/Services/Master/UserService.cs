@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -6,8 +7,10 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
+using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.Master
 {
@@ -20,11 +23,14 @@ namespace Chalkable.BusinessLogic.Services.Master
         User GetByLogin(string login);
         User GetById(Guid id);
         User CreateSysAdmin(string login, string password);
-        User CreateSchoolUser(string login, string password, Guid schoolId, string role, Guid? id = null);
+        User CreateDeveloperUser(string login, string password, Guid districtId);
+        User CreateSchoolUser(string login, string password, Guid? districtId, int? localId, string sisUserName);
+        void AssignUserToSchool(IList<SchoolUser> schoolUsers);
         void ChangePassword(string login, string newPassword);
         void ChangeUserLogin(Guid id, string login);
         User GetSysAdmin();
-
+        void CreateSchoolUsers(IList<User> userInfos);
+        string PasswordMd5(string password);
     }
 
     public class UserService : MasterServiceBase, IUserService
@@ -33,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
         }
 
-        private string PasswordMd5(string password)
+        public string PasswordMd5(string password)
         {
             var bytes = Encoding.UTF8.GetBytes(password);
             var hash = new MD5CryptoServiceProvider().ComputeHash(bytes);
@@ -46,6 +52,8 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 var user = new UserDataAccess(uow).GetUser(login, PasswordMd5(password), null);
+                if (user != null)
+                    user.OriginalPassword = password;
                 return Login(user, uow);
             }
         }
@@ -91,27 +99,57 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             if (user == null) return null;
             Guid? schoolId = null;
-            string schoolName = null;
+            Guid? districtId = null;
             string schoolServerUrl = null;
             string schoolTimeZone = null;
+            int? schoolLocalId = null;
             CoreRole role;
             Guid? developerId = null;
+            string token = null;
+            string sisUrl = null;
 
-            if (user.SchoolUsers != null && user.SchoolUsers.Count > 0)
+            if (user.District != null && user.DistrictRef.HasValue)
             {
-                if (user.SchoolUsers.Count == 1)
+                if (user.SchoolUsers.Count <= 1)
                 {
-                    var su = user.SchoolUsers[0];
-                    schoolId = su.SchoolRef;
-                    schoolName = su.School.Name;
-                    schoolServerUrl = su.School.ServerUrl;
-                    schoolTimeZone = su.School.TimeZone;
-                    role = CoreRoles.GetById(su.Role);
-                    if (!string.IsNullOrEmpty(su.School.DemoPrefix))
+                    if (user.SchoolUsers.Count == 1)
                     {
-                        var developer = new DeveloperDataAccess(uow).GetDeveloper(su.SchoolRef);
-                        if (developer != null) developerId = developer.Id;
+                        var su = user.SchoolUsers[0];
+                        schoolId = su.SchoolRef;
+                        districtId = user.DistrictRef;
+                        schoolServerUrl = user.District.ServerUrl;
+                        schoolTimeZone = user.District.TimeZone;
+                        schoolLocalId = su.School.LocalId;
+                        role = CoreRoles.GetById(su.Role);
+                        if (!string.IsNullOrEmpty(user.District.DemoPrefix))
+                        {
+                            var developer = new DeveloperDataAccess(uow).GetDeveloper(su.SchoolRef);
+                            if (developer != null) developerId = developer.Id;
+                        }
+                        if (user.SisUserName != null)
+                        {
+                            if (user.OriginalPassword == null)
+                                throw new ChalkableException("Sis connection requires not encripted password");
+                            var cl = ConnectorLocator.Create(user.SisUserName, user.OriginalPassword,
+                                                             user.District.SisUrl);
+                            token = cl.Token;
+                        }
+                        sisUrl = user.District.SisUrl;
                     }
+                    else if (user.IsDeveloper)
+                    {
+                        role = CoreRoles.DEVELOPER_ROLE;
+                        var developer = new DeveloperDataAccess(uow).GetDeveloper(user.DistrictRef.Value);
+                        developerId = developer.Id;
+                        var school = ServiceLocator.SchoolService.GetSchools(developer.DistrictRef, 0, 10).OrderBy(x=>x.LocalId).First(); //todo rewrite this later
+                        schoolId = school.Id;
+                        schoolLocalId = school.LocalId;
+                        districtId = school.DistrictRef;
+                        schoolServerUrl = user.District.ServerUrl;
+                        schoolTimeZone = user.District.TimeZone;
+                    }
+                    else
+                        throw new Exception("User's role can not be defined");
                 }
                 else
                     throw new NotSupportedException("multiple school users are not supported yet");
@@ -120,21 +158,10 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 if (user.IsSysAdmin)
                     role = CoreRoles.SUPER_ADMIN_ROLE;
-                else if (user.IsDeveloper)
-                {
-                    role = CoreRoles.DEVELOPER_ROLE;
-                    var developer = new DeveloperDataAccess(uow).GetDeveloper(user.Id);
-                    developerId = developer.Id;
-                    var school = ServiceLocator.SchoolService.GetById(developer.SchoolRef);
-                    schoolId = school.Id;
-                    schoolName = school.Name;
-                    schoolServerUrl = school.ServerUrl;
-                    schoolTimeZone = school.TimeZone;
-                }
                 else
                     throw new Exception("User's role can not be defined");
             }
-            var res = new UserContext(user.Id, schoolId, user.Login, schoolName, schoolTimeZone, schoolServerUrl, role, developerId);
+            var res = new UserContext(user.Id, districtId, schoolId, user.Login, schoolTimeZone, schoolServerUrl, schoolLocalId, role, developerId, user.LocalId, token, sisUrl);
             return res;
         }
 
@@ -147,16 +174,18 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             if (roleName == CoreRoles.DEVELOPER_ROLE.LoweredName)
             {
-                var schools = ServiceLocator.SchoolService.GetSchools(null, true);
-                var currentSchool = schools.FirstOrDefault(x => x.DemoPrefix == prefix);
-                if (currentSchool != null)
+                var districts = ServiceLocator.DistrictService.GetDistricts(false, true);
+                var district = districts.FirstOrDefault(x => x.DemoPrefix == prefix);
+                if (district != null)
                 {
-                    var developer = ServiceLocator.DeveloperService.GetDeveloperBySchool(currentSchool.Id);
+                    var developer = ServiceLocator.DeveloperService.GetDeveloperByDictrict(district.Id);
                     if (developer != null) return developer.User;
                 }
             }
             return ServiceLocator.UserService.GetByLogin(BuildDemoUserName(roleName, prefix));
         }
+
+
         
         public User GetByLogin(string login)
         {
@@ -180,7 +209,17 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public User CreateSysAdmin(string login, string password)
         {
-            return CreateUser(login, password, null, null, true, false);
+            return CreateUser(login, password, true, false, null, null, null);
+        }
+
+        public void AssignUserToSchool(IList<SchoolUser> schoolUsers)
+        {
+            using (var uow = Update())
+            {
+                var schoolUserDa = new SchoolUserDataAccess(uow);
+                schoolUserDa.Insert(schoolUsers);
+                uow.Commit();
+            }
         }
 
         public void ChangePassword(string login, string newPassword)
@@ -200,45 +239,49 @@ namespace Chalkable.BusinessLogic.Services.Master
                 throw new ChalkableSecurityException();
         }
 
-        private User CreateUser(string login, string password, Guid? schoolId, string role, bool isSysAdmin, bool isDeveloper, Guid? id = null)
+        public void CreateSchoolUsers(IList<User> users)
+        {
+            using (var uow = Update())
+            {
+                var userDa = new UserDataAccess(uow);
+                userDa.Insert(users);
+                uow.Commit();
+            }
+        }
+
+        private User CreateUser(string login, string password, bool isSysAdmin, bool isDeveloper, Guid? districtId, int? localId, string sisUserName)
         {
             using (var uow = Update())
             {
                 var userDa = new UserDataAccess(uow);
                 var user = new User
                 {
-                    Id = id ?? Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     IsDeveloper = isDeveloper,
                     IsSysAdmin = isSysAdmin,
                     Login = login,
-                    Password = PasswordMd5(password)
+                    Password = PasswordMd5(password),
+                    LocalId = localId,
+                    DistrictRef = districtId,
+                    SisUserName = sisUserName
                 };
-                userDa.Create(user);
-                if (!(isDeveloper || isSysAdmin))
-                {
-                    if (!schoolId.HasValue)
-                        throw new NullReferenceException();
-                    var schoolUserDa = new SchoolUserDataAccess(uow);
-                    var schoolUser = new SchoolUser
-                    {
-                        Id = Guid.NewGuid(),
-                        Role = CoreRoles.GetByName(role).Id,
-                        UserRef = user.Id,
-                        SchoolRef = schoolId.Value
-                    };
-                    schoolUserDa.Insert(schoolUser);
-                }
+                userDa.Insert(user);
                 uow.Commit();
                 return user;
             }
         }
 
-        public User CreateSchoolUser(string login, string password, Guid schoolId, string role, Guid? id)
+        public User CreateDeveloperUser(string login, string password, Guid districtId)
         {
-            if(!UserSecurity.CanCreate(Context, schoolId))
+            return CreateUser(login, password, false, true, districtId, null, null);
+        }
+
+        public User CreateSchoolUser(string login, string password, Guid? districtId, int? localId, string sisUserName)
+        {
+            if(!UserSecurity.CanCreate(Context, districtId))
                 throw new ChalkableSecurityException();
 
-            return CreateUser(login, password, schoolId, role, false, false, id);
+            return CreateUser(login, password, false, false, districtId, localId, sisUserName);
         }
 
         public void ChangeUserLogin(Guid id, string login)

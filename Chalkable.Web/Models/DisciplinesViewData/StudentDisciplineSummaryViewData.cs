@@ -22,23 +22,24 @@ namespace Chalkable.Web.Models.DisciplinesViewData
 
         public static IList<StudentDisciplineSummaryViewData> Create(IList<ClassDisciplineDetails> disciplines)
         {
-            IDictionary<Guid, List<ClassDisciplineTypeDetails>> stDiscTypeDic = new Dictionary<Guid, List<ClassDisciplineTypeDetails>>();
-            IDictionary<Guid, Person> stDic = new Dictionary<Guid, Person>();
-            foreach (var discipline in disciplines)
-            {
-                if (!stDiscTypeDic.ContainsKey(discipline.Student.Id))
-                {
-                    stDic.Add(discipline.Student.Id, discipline.Student);
-                    stDiscTypeDic.Add(discipline.Student.Id, new List<ClassDisciplineTypeDetails>());
-                }
-                stDiscTypeDic[discipline.Student.Id].AddRange(discipline.DisciplineTypes);
-            }
-            return stDiscTypeDic.Select(x => new StudentDisciplineSummaryViewData(stDic[x.Key])
-            {
-                Summary = BuildSummary(x.Value),
-                Total = x.Value.Sum(y => y.DisciplineType.Score),
-                DisciplineRecordsNumber = x.Value.Count
-            }).ToList();
+            throw new NotImplementedException();
+            //IDictionary<Guid, List<ClassDisciplineTypeDetails>> stDiscTypeDic = new Dictionary<Guid, List<ClassDisciplineTypeDetails>>();
+            //IDictionary<Guid, Person> stDic = new Dictionary<Guid, Person>();
+            //foreach (var discipline in disciplines)
+            //{
+            //    if (!stDiscTypeDic.ContainsKey(discipline.Student.Id))
+            //    {
+            //        stDic.Add(discipline.Student.Id, discipline.Student);
+            //        stDiscTypeDic.Add(discipline.Student.Id, new List<ClassDisciplineTypeDetails>());
+            //    }
+            //    stDiscTypeDic[discipline.Student.Id].AddRange(discipline.DisciplineTypes);
+            //}
+            //return stDiscTypeDic.Select(x => new StudentDisciplineSummaryViewData(stDic[x.Key])
+            //{
+            //    Summary = BuildSummary(x.Value),
+            //    Total = x.Value.Sum(y => y.DisciplineType.Score),
+            //    DisciplineRecordsNumber = x.Value.Count
+            //}).ToList();
         }
 
         private static string BuildSummary(IEnumerable<ClassDisciplineTypeDetails> disciplineTypes)

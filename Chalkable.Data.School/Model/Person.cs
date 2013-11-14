@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
@@ -19,8 +16,10 @@ namespace Chalkable.Data.School.Model
         public const string GENDER_FIELD = "Gender";
         public const string ROLE_REF_FIELD = "RoleRef";
         public const string SALUTATION_FIELD = "Salutation";
-
-        public Guid Id { get; set; }
+        public const string ADDRESS_REF_FIELD = "AddressRef";
+       
+        [PrimaryKeyFieldAttr]
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime? BirthDate { get; set; }
@@ -29,13 +28,10 @@ namespace Chalkable.Data.School.Model
         public bool Active { get; set; }
         public DateTime? LastPasswordReset { get; set; }
         public DateTime? FirstLoginDate { get; set; }
-        public int RoleRef { get; set; }
         public DateTime? LastMailNotification { get; set; }
-        public int? SisId { get; set; }
         public string Email { get; set; }
-        [NotDbFieldAttr]
-        public StudentInfo StudentInfo { get; set; }
-        
+        public int? AddressRef { get; set; }
+
         [NotDbFieldAttr]
         public string FullName
         {
@@ -92,11 +88,26 @@ namespace Chalkable.Data.School.Model
         {
             get { return !string.IsNullOrEmpty(LastName) && LastName.Trim() != ""; }
         }
+
+        [NotDbFieldAttr]
+        public int RoleRef { get; set; }
     }
+
 
     public class PersonDetails : Person
     {
-        public IList<Address> Addresses { get; set; }
-        public IList<Phone> Phones { get; set; } 
+        public Address address;
+        public Address Address
+        {
+            get { return address; } 
+            set
+            {
+                address = value;
+                if (value != null && value.Id != 0)
+                    AddressRef = address.Id;
+            }
+        }
+        public IList<Phone> Phones { get; set; }
+        public IList<StudentSchoolYear> StudentSchoolYears { get; set; }
     }
 }

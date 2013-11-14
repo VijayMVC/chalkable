@@ -9,7 +9,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class AnnouncementAttachmentDataAccess : DataAccessBase<AnnouncementAttachment>
+    public class AnnouncementAttachmentDataAccess : DataAccessBase<AnnouncementAttachment, int>
     {
 
 
@@ -17,18 +17,18 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public AnnouncementAttachment GetById(Guid id, Guid callerId, int roleId)
+        public AnnouncementAttachment GetById(int id, int callerId, int roleId)
         {
-            var conds = new AndQueryCondition() { { AnnouncementAttachment.ID_FIELD, id } };
+            var conds = new AndQueryCondition { { AnnouncementAttachment.ID_FIELD, id } };
             return GetAnnouncementAttachments(conds, callerId, roleId).First();
         }
 
-        public IList<AnnouncementAttachment> GetList(Guid callerId, int roleId, string filter = null)
+        public IList<AnnouncementAttachment> GetList(int callerId, int roleId, string filter = null)
         {
             return GetAnnouncementAttachments(new AndQueryCondition(), callerId, roleId, filter);
         }
 
-        public PaginatedList<AnnouncementAttachment> GetPaginatedList(Guid announcementId, Guid callerId, int roleId, int start, int count, bool needsAllAttachments = true)
+        public PaginatedList<AnnouncementAttachment> GetPaginatedList(int announcementId, int callerId, int roleId, int start, int count, bool needsAllAttachments = true)
         {
             var conds = new AndQueryCondition { { AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD, announcementId } };
             var query = BuildGetAttachmentQuery(conds, callerId, roleId, needsAllAttachments);
@@ -40,28 +40,23 @@ namespace Chalkable.Data.School.DataAccess
         }
 
         //private const string CALLER_ID = "@callerId"
-        private IList<AnnouncementAttachment> GetAnnouncementAttachments(QueryConditionSet conds, Guid callerId, int roleId, string filter = null)
+        private IList<AnnouncementAttachment> GetAnnouncementAttachments(QueryConditionSet conds, int callerId, int roleId, string filter = null)
         {
             var query = BuildGetAttachmentQuery(conds, callerId, roleId, true, filter);
             return query == null ? new List<AnnouncementAttachment>() : ReadMany<AnnouncementAttachment>(query);
         }
 
-        private DbQuery BuildGetAttachmentQuery(QueryConditionSet queryCondition,  Guid callerId, int roleId, bool needsAllAttachments = true, string filter = null)
+        private DbQuery BuildGetAttachmentQuery(QueryConditionSet queryCondition, int callerId, int roleId, bool needsAllAttachments = true, string filter = null)
         {
             var res = new DbQuery();
             var type = typeof(AnnouncementAttachment);
-            res.Sql.AppendFormat(@"select {0}.*
-                                   from AnnouncementAttachment 
-                                   join Announcement on Announcement.Id = AnnouncementAttachment.AnnouncementRef"
-                              , type.Name);
-
+            res.Sql.AppendFormat(@"select [{0}].* from [{0}] 
+                                   join [{2}] on [{2}].[{3}] = [{0}].[{1}]"
+                              , type.Name, AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD, "Announcement", Announcement.ID_FIELD);
 
             queryCondition.BuildSqlWhere(res, type.Name);
-
-            if (queryCondition.Count == 0)
-                res.Sql.Append(" where 1 = 1 ");
             if (!needsAllAttachments)
-                res.Sql.Append(" and AnnouncementAttachment.PersonRef = @callerId");
+                res.Sql.AppendFormat(" and AnnouncementAttachment.PersonRef = @callerId");
             
             if (!string.IsNullOrEmpty(filter))
             {
@@ -110,8 +105,7 @@ namespace Chalkable.Data.School.DataAccess
             if (CoreRoles.STUDENT_ROLE.Id == roleId)
             {
                 res.Sql.Append(@" and (AnnouncementAttachment.PersonRef = @callerId 
-                                   or (Announcement.MarkingPeriodClassRef in (select mpc.Id from MarkingPeriodClass mpc
-                                                                              join ClassPerson cp on cp.ClassRef = mpc.ClassRef and cp.PersonRef = @callerId)
+                                   or (Announcement.ClassRef in (select cp.ClassRef from ClassPerson cp where cp.PersonRef = @callerId)
                                        and AnnouncementAttachment.PersonRef = Announcement.PersonRef)
                                 )");
                 return res;

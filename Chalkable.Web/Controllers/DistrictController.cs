@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
@@ -21,16 +22,22 @@ namespace Chalkable.Web.Controllers
 
 
         [AuthorizationFilter("SysAdmin")]
-        public ActionResult Create(string name, string dbName, string sisUrl, string sisUserName, string sisPassword, int sisSystemType)
+        public ActionResult Create(string name, string dbName, string sisUrl, string sisUserName, string sisPassword, string timeZone)
         {
-            var district = MasterLocator.DistrictService.Create(name, dbName, sisUrl, sisUserName, sisPassword, (ImportSystemTypeEnum)sisSystemType);
+            var district = MasterLocator.DistrictService.Create(name, dbName, sisUrl, sisUserName, sisPassword, timeZone ?? "UTC");
             return Json(DistrictViewData.Create(district));
+        }
+
+        public ActionResult ListTimeZones()
+        {
+            var tzCollection = DateTimeTools.GetAll();
+            return Json(tzCollection);
         }
 
         [AuthorizationFilter("SysAdmin")]
         public ActionResult Delete(Guid districtId)
         {
-            MasterLocator.DistrictService.Delete(districtId);
+            MasterLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.DeleteDistrict, DateTime.UtcNow, districtId, districtId.ToString());
             return Json(true);
         }
 
@@ -45,17 +52,15 @@ namespace Chalkable.Web.Controllers
                     DbName = dbName,
                     SisUrl = sisUrl,
                     SisUserName = sisUserName,
-                    SisPassword =  sisPassword,
-                    SisSystemType = (ImportSystemTypeEnum)sisSystemType
+                    SisPassword =  sisPassword
                 });
             return Json(true);
         }
 
         public ActionResult Info(Guid districtId)
         {
-            var result = MasterLocator.DistrictService.GetById(districtId);
+            var result = MasterLocator.DistrictService.GetByIdOrNull(districtId);
             return Json(DistrictViewData.Create(result));
         }
-
     }
 }

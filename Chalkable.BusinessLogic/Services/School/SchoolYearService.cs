@@ -10,13 +10,16 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface ISchoolYearService
     {
-        SchoolYear Add(string name,string description, DateTime startDate, DateTime endDate, int? sisId = null);
-        SchoolYear Edit(Guid id, string name, string description, DateTime startDate, DateTime endDate);
-        SchoolYear GetSchoolYearById(Guid id);
+        SchoolYear Add(int id, int schoolId, string name, string description, DateTime startDate, DateTime endDate);
+        SchoolYear Edit(int id, string name, string description, DateTime startDate, DateTime endDate);
+        SchoolYear GetSchoolYearById(int id);
         PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue);
-        void Delete(Guid schoolYearId);
+        void AssignStudent(int schoolYearId, int personId, int gradeLevelId);
+        void Delete(int schoolYearId);
         SchoolYear GetCurrentSchoolYear();
         IList<SchoolYear> GetSortedYears();
+        IList<StudentSchoolYear> GetStudentAssignments();
+        void AssignStudent(IList<StudentSchoolYear> studentAssignments);
     }
 
     public class SchoolYearService : SchoolServiceBase, ISchoolYearService
@@ -27,14 +30,14 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         //TODO: needs test 
-        public SchoolYear Add(string name, string description, DateTime startDate, DateTime endDate, int? sisId = null)
+        public SchoolYear Add(int id, int schoolId, string name, string description, DateTime startDate, DateTime endDate)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
             {
-                var da = new SchoolYearDataAccess(uow);
+                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
                 if(IsOverlaped(startDate, endDate, da))
                     throw new ChalkableException(ChlkResources.ERR_SCHOOL_YEAR_OVERLAPPING_DATA);
                 if (da.Exists(name))
@@ -42,12 +45,12 @@ namespace Chalkable.BusinessLogic.Services.School
                 
                 var schoolYear = new SchoolYear
                     {
-                        Id = Guid.NewGuid(),
+                        Id = id,
                         Description = description,
                         Name = name,
                         StartDate = startDate,
                         EndDate = endDate,
-                        SisId = sisId
+                        SchoolRef = schoolId
                     };
                 
                 da.Insert(schoolYear);
@@ -58,17 +61,17 @@ namespace Chalkable.BusinessLogic.Services.School
         
         private bool IsOverlaped(DateTime startDate, DateTime endDate, SchoolYearDataAccess dataAccess, SchoolYear schoolYear = null)
         {
-            var id = schoolYear != null ? schoolYear.Id : (Guid?) null;
+            var id = schoolYear != null ? schoolYear.Id : (int?) null;
             return startDate >= endDate || (dataAccess.IsOverlaped(startDate, endDate, id));
         }
 
-        public SchoolYear Edit(Guid id, string name, string description, DateTime startDate, DateTime endDate)
+        public SchoolYear Edit(int id, string name, string description, DateTime startDate, DateTime endDate)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                var da = new SchoolYearDataAccess(uow);
+                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
                 var schoolYear = da.GetById(id);
 
                 if(IsOverlaped(startDate, endDate, da, schoolYear))
@@ -86,11 +89,11 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public SchoolYear GetSchoolYearById(Guid id)
+        public SchoolYear GetSchoolYearById(int id)
         {
             using (var uow = Read())
             {
-                var da = new SchoolYearDataAccess(uow);
+                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
                 return da.GetById(id);
             }
         }
@@ -99,18 +102,47 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                var da = new SchoolYearDataAccess(uow);
-                return da.GetSchoolYears(start, count);
+                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
+                return da.GetPage(start, count);
             }
         }
 
-        public void Delete(Guid schoolYearId)
+        public void AssignStudent(int schoolYearId, int personId, int gradeLevelId)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                var da = new SchoolYearDataAccess(uow);
+                var da = new StudentSchoolYearDataAccess(uow);
+                da.Insert(new StudentSchoolYear
+                    {
+                        GradeLevelRef = gradeLevelId,
+                        SchoolYearRef = schoolYearId,
+                        StudentRef = personId
+                    });
+                uow.Commit();
+            }
+        }
+
+        public void AssignStudent(IList<StudentSchoolYear> studentAssignments)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                var da = new StudentSchoolYearDataAccess(uow);
+                da.Insert(studentAssignments);
+                uow.Commit();
+            }
+        }
+
+        public void Delete(int schoolYearId)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
                 da.Delete(schoolYearId);
                 uow.Commit();
             }
@@ -121,7 +153,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var nowDate = Context.NowSchoolTime.Date;
             using (var uow = Read())
             {
-                var da = new SchoolYearDataAccess(uow);
+                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
                 return da.GetByDate(nowDate);
             }
         }
@@ -129,7 +161,18 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                var da = new SchoolYearDataAccess(uow);
+                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
+                return da.GetAll();
+            }
+        }
+
+        public IList<StudentSchoolYear> GetStudentAssignments()
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Read())
+            {
+                var da = new StudentSchoolYearDataAccess(uow);
                 return da.GetAll();
             }
         }

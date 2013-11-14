@@ -35,7 +35,7 @@ NAMESPACE('chlk.templates.attendance', function () {
 
             ArrayOf(Object), function getAdditionalParams(){return [];},
 
-            Object, function getItemClassType(){return chlk.templates.attendance.ClassAttendance;},
+            Object, function getItemClassType(){return chlk.templates.attendance.ClassAttendanceTpl;},
 
             chlk.models.common.ActionLinkModel, function getDataForDatePicker(){
                 var topData = this.getModel().getTopData();

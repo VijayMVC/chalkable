@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.InteropServices;
+using Chalkable.BusinessLogic.Security;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -8,8 +11,10 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IGradeLevelService
     {
-        IList<GradeLevel> GetGradeLevels();
-        void AddGradeLevel(string name, int number);
+        IList<GradeLevel> GetGradeLevels(int? schoolId = null);
+        void AddGradeLevel(int id, string name, int number);
+        GradeLevel AddSchoolGradeLevel(int gradeLevelId, int schoolId);
+        GradeLevel DeleteSchoolGradeLevel(int gradeLevelId, int schoolId);
         IList<GradeLevel> CreateDefault();
     }
     public class GradeLevelService : SchoolServiceBase, IGradeLevelService
@@ -18,20 +23,23 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public IList<GradeLevel> GetGradeLevels()
+        public IList<GradeLevel> GetGradeLevels(int ? schoolId = null)
         {
             using (var uow = Read())
             {
                 var da = new GradeLevelDataAccess(uow);
-                return da.GetAll();
+                return da.GetGradeLevels(schoolId);
             }
         }
 
-        public void AddGradeLevel(string name, int number)
+        public void AddGradeLevel(int id, string name, int number)
         {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+
             using (var uow = Update())
             {
-                new GradeLevelDataAccess(uow).Insert(new GradeLevel{Id = Guid.NewGuid(), Name = name, Number = number});
+                new GradeLevelDataAccess(uow).Insert(new GradeLevel{Id = id, Name = name, Number = number});
                 uow.Commit();
             }
         }
@@ -46,7 +54,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     gradeLevels.Add(new GradeLevel
                         {
-                            Id = Guid.NewGuid(), 
+                            Id = i, 
                             Name = i.ToString(CultureInfo.InvariantCulture),
                             Number = i
                         });
@@ -55,6 +63,39 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
                 return gradeLevels;
             }
+        }
+
+
+        public GradeLevel AddSchoolGradeLevel(int gradeLevelId, int schoolId)
+        {
+            if(!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new SchoolGradeLevelDataAccess(uow, null)
+                    .Insert(new SchoolGradeLevel
+                        {
+                            GradeLevelRef = gradeLevelId,
+                            SchoolRef = schoolId,
+                        });
+                var gl = new GradeLevelDataAccess(uow).GetById(gradeLevelId);
+                uow.Commit();
+                return gl;
+            }
+        }
+
+        public GradeLevel DeleteSchoolGradeLevel(int gradeLevelId, int schoolId)
+        {
+            if(!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new SchoolGradeLevelDataAccess(uow, schoolId).DeleteSchoolGradeLevel(gradeLevelId);
+                var gl = new GradeLevelDataAccess(uow).GetById(gradeLevelId);
+                uow.Commit();
+                return gl;
+            }
+            
         }
     }
 }

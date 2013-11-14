@@ -7,7 +7,7 @@
                 each item in announcements
                     li.items
                         //A(href="#announcement/view/" + item.getId().valueOf()).pop-up-announcement
-                        +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getAnnouncementTypeId()).pop-up-announcement
+                        +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getChalkableAnnouncementType()).pop-up-announcement
                             div
                                 p.title=item.getTitle()
                                 p.classname-under=item.getClassName() || item.getPersonName()

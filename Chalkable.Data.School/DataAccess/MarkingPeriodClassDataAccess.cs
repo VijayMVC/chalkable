@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -9,10 +7,10 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class MarkingPeriodClassDataAccess : DataAccessBase<MarkingPeriodClass>
+    public class MarkingPeriodClassDataAccess : BaseSchoolDataAccess<MarkingPeriodClass>
     {
 
-        public MarkingPeriodClassDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public MarkingPeriodClassDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
         {
         }
         
@@ -44,7 +42,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             return Exists<MarkingPeriodClass>(BuildConditions(query));
         }
-        public bool Exists(IList<Guid> markingPeriodIds)
+        public bool Exists(IList<int> markingPeriodIds)
         {
             var mpIdsString = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
             var query = new DbQuery();
@@ -55,8 +53,6 @@ namespace Chalkable.Data.School.DataAccess
         private QueryCondition BuildConditions(MarkingPeriodClassQuery query)
         {
             var res = new AndQueryCondition();
-            if(query.Id.HasValue)
-                res.Add(MarkingPeriodClass.ID_FIELD, query.Id);
             if(query.ClassId.HasValue)
                 res.Add(MarkingPeriodClass.CLASS_REF_FIELD, query.ClassId);
             if(query.MarkingPeriodId.HasValue)
@@ -67,8 +63,7 @@ namespace Chalkable.Data.School.DataAccess
 
     public class MarkingPeriodClassQuery
     {
-        public Guid? Id { get; set; }
-        public Guid? ClassId { get; set; }
-        public Guid? MarkingPeriodId { get; set; }
+        public int? ClassId { get; set; }
+        public int? MarkingPeriodId { get; set; }
     }
 }

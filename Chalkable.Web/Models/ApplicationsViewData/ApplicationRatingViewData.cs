@@ -18,11 +18,13 @@ namespace Chalkable.Web.Models.ApplicationsViewData
 
         public static ApplicationRatingViewData Create(IList<ApplicationRating> ratings, IList<Person> persons)
         {
-            ratings = ratings.Where(x => persons.Any(y => y.Id == x.UserRef)).ToList();
-            persons = persons.Where(x => ratings.Any(y => y.UserRef == x.Id)).ToList();
+
+            ratings = ratings.Where(x => persons.Any(y => y.Id == x.User.LocalId)).ToList();
+            persons = persons.Where(x => ratings.Any(y => y.UserLocalId == x.Id)).ToList();
+
             var ratingsbyrole = persons.GroupBy(x => x.RoleRef)
-                                       .ToDictionary(x => CoreRoles.GetById(x.Key), 
-                                                     x => ratings.Where(y => x.Any(z => z.Id == y.UserRef)).ToList());
+                                       .ToDictionary(x => CoreRoles.GetById(x.Key),
+                                                     x => ratings.Where(y => x.Any(z => z.Id == y.UserLocalId)).ToList());
             var res = new ApplicationRatingViewData
             {
                 RatingByPerson = ApplicationRatingByPersonViewData.Create(ratings, persons),
@@ -43,13 +45,13 @@ namespace Chalkable.Web.Models.ApplicationsViewData
 
         private ApplicationRatingByPersonViewData() { }
 
-        public static ApplicationRatingByPersonViewData Create(ApplicationRating rating, IList<Person> person)
+        public static ApplicationRatingByPersonViewData Create(ApplicationRating rating, IList<Person> persons)
         {
             var res = new ApplicationRatingByPersonViewData
             {
                 Rating = rating.Rating,
                 Review = rating.Review,
-                Person = ShortPersonViewData.Create(person.First(x=>x.Id == rating.UserRef)) 
+                Person = ShortPersonViewData.Create(persons.First(x=>x.Id == rating.UserLocalId)) 
             };
             return res;
         }

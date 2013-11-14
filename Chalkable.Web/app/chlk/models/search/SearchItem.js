@@ -19,7 +19,17 @@ NAMESPACE('chlk.models.search', function () {
             [ria.serialize.SerializeProperty('announcementid')],
             String, 'announcementId',
             [ria.serialize.SerializeProperty('announcementtype')],
-            Number, 'announcementType'
+            Number, 'announcementType',
+            [ria.serialize.SerializeProperty('isadminannouncement')],
+            Number, 'adminAnnouncement',
+
+            READONLY, Number, 'chalkableAnnouncementType',
+            Number, function getChalkableAnnouncementType(){
+                var res = this.getAnnouncementType();
+                if(res) return res;
+                if(this.isAdminAnnouncement()) return chlk.models.announcement.AnnouncementTypeEnum.ADMIN.valueOf();
+                return chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf();
+            }
         ]);
 });
 

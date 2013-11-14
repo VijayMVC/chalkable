@@ -1,5 +1,5 @@
 mixin ProfileInfoView(model)
-    addresses = model.getAddresses() || [];
+    address = model.getAddress() || [];
     primaryPhone = model.getPrimaryPhone() ? model.getPrimaryPhone().getValue() : '';
     homePhone = model.getHomePhone() ? model.getHomePhone().getValue() : '';
     .info-view
@@ -32,8 +32,8 @@ mixin ProfileInfoView(model)
                         .data-info.big-font-size=homePhone
                     .section-data
                         .info-title=Msg.Home_Address
-                        each address in addresses
                             .data-info.low-font-size=address.getValue()
+
             block
         .sections-info.other-section
             .section-title.pacifico=Msg.Other(true)
@@ -41,7 +41,7 @@ mixin ProfileInfoView(model)
             +Button().special-button.blue-button#edit-info-button=Msg.Edit
 
 mixin ProfileInfoForm(controller, model)
-    addresses = model.getAddresses() || [];
+    address = model.getAddress() || [];
     primaryPhone = model.getPrimaryPhone() ? model.getPrimaryPhone().getValue() : '';
     homePhone = model.getHomePhone() ? model.getHomePhone().getValue() : '';
     .info-edit
@@ -109,7 +109,7 @@ mixin ProfileInfoForm(controller, model)
                             input(name="addressesValue", value=model.getAddressesValue(), type="hidden")
                             .adresses
                                 addressesModel = new chlk.models.people.Addresses()
-                            -addressesModel.setItems(addresses);
+                            -addressesModel.setItems([address]);
                             +RenderWith(addressesModel, chlk.templates.people.Addresses)
                 block
             .section-buttons

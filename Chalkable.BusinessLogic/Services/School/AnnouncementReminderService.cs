@@ -11,10 +11,10 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAnnouncementReminderService
     {
-        IList<AnnouncementReminder> GetReminders(Guid announcementId);
-        AnnouncementReminder AddReminder(Guid announcementId, int? before);
-        Announcement DeleteReminder(Guid reminderId);
-        AnnouncementReminder EditReminder(Guid reminderId, int? before);// Append Method
+        IList<AnnouncementReminder> GetReminders(int announcementId);
+        AnnouncementReminder AddReminder(int announcementId, int? before);
+        Announcement DeleteReminder(int reminderId);
+        AnnouncementReminder EditReminder(int reminderId, int? before);// Append Method
         void ProcessReminders(int count);
     }
 
@@ -28,16 +28,19 @@ namespace Chalkable.BusinessLogic.Services.School
         //TODO: notification sending
         //TODO: tests
 
-        public IList<AnnouncementReminder> GetReminders(Guid announcementId)
+        public IList<AnnouncementReminder> GetReminders(int announcementId)
         {
             using (var uow = Read())
             {
+                if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
+                    throw new UnassignedUserException();
+
                 var da = new AnnouncementReminderDataAccess(uow);
-                return da.GetList(announcementId, Context.UserId);
+                return da.GetList(announcementId, Context.UserLocalId.Value);
             }
         }
 
-        public AnnouncementReminder AddReminder(Guid announcementId, int? before)
+        public AnnouncementReminder AddReminder(int announcementId, int? before)
         {
             using (var uow = Update())
             {
@@ -49,26 +52,28 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 var reminder = new AnnouncementReminder
                     {
-                        Id = Guid.NewGuid(),
                         AnnouncementRef = ann.Id,
                         Before = before,
                         RemindDate = remiderDateTime,
                         Announcement = ann
                     };
-                if (ann.PersonRef != Context.UserId)
-                    reminder.PersonRef = Context.UserId;
+                if (ann.PersonRef != Context.UserLocalId)
+                    reminder.PersonRef = Context.UserLocalId;
                 da.Insert(reminder);
                 uow.Commit();
                 return reminder;
             }
         }
 
-        public Announcement DeleteReminder(Guid reminderId)
+        public Announcement DeleteReminder(int reminderId)
         {
             using (var uow = Update())
             {
+                if(!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
+                    throw new UnassignedUserException();
+
                 var da = new AnnouncementReminderDataAccess(uow);
-                var reminder = da.GetById(reminderId, Context.UserId);
+                var reminder = da.GetById(reminderId, Context.UserLocalId.Value);
                 if(!AnnouncementSecurity.IsReminderOwner(reminder, Context))
                     throw new ChalkableSecurityException();
                 da.Delete(reminder);
@@ -77,12 +82,15 @@ namespace Chalkable.BusinessLogic.Services.School
             }
          }
 
-        public AnnouncementReminder EditReminder(Guid reminderId, int? before)
+        public AnnouncementReminder EditReminder(int reminderId, int? before)
         {
             using (var uow = Update())
             {
+                if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
+                    throw new UnassignedUserException();
+
                 var da = new AnnouncementReminderDataAccess(uow);
-                var reminder = da.GetById(reminderId, Context.UserId);
+                var reminder = da.GetById(reminderId, Context.UserLocalId.Value);
                 
                 if(!AnnouncementSecurity.IsReminderOwner(reminder, Context))
                     throw new ChalkableSecurityException();

@@ -7,6 +7,7 @@ REQUIRE('chlk.models.id.AttendanceReasonId');
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.period.Period');
 REQUIRE('chlk.models.attendance.AttendanceReason');
+//REQUIRE('chlk.converters.attendance.AttendanceLevelToTypeConverter');
 
 NAMESPACE('chlk.models.attendance', function () {
     "use strict";
@@ -21,24 +22,96 @@ NAMESPACE('chlk.models.attendance', function () {
             LATE: 16
         });
 
+    /** @class chlk.models.attendance.AttendanceLevelEnum*/
+    ENUM('AttendanceLevelEnum',{
+        ABSENT_LEVEL: 'A',
+        LATE_LEVEL: 'T'
+    });
+
+    /** @class chlk.models.attendance.AttendanceTypeMapper*/
+    CLASS('AttendanceTypeMapper', [
+
+        function $(){
+            BASE();
+            this._attLevelEnum = chlk.models.attendance.AttendanceLevelEnum;
+            this._attTypeEnum = chlk.models.attendance.AttendanceTypeEnum;
+        },
+        [[String]],
+        chlk.models.attendance.AttendanceTypeEnum, function map(level){
+            if(!level) return this._attTypeEnum.PRESENT;
+            switch (level){
+                case this._attLevelEnum.ABSENT_LEVEL.valueOf() : return this._attTypeEnum.ABSENT;
+                case 'AO' : return this._attLevelEnum.ABSENT;
+                case 'H' : return this._attLevelEnum.ABSENT;
+                case 'HO' : return this._attLevelEnum.ABSENT;
+                case this._attLevelEnum.LATE_LEVEL.valueOf() : return this._attTypeEnum.LATE;
+            }
+            throw new Exception('Unknown attendance level ');
+        },
+        [[chlk.models.attendance.AttendanceTypeEnum]],
+        String, function mapBack(type){
+            switch (type){
+                case this._attTypeEnum.ABSENT : return this._attLevelEnum.ABSENT_LEVEL.valueOf();
+                case this._attTypeEnum.LATE : return this._attLevelEnum.LATE_LEVEL.valueOf();
+                case this._attTypeEnum.PRESENT : return null;
+            }
+            throw new Exception('Unknown attendance type ');
+        }
+    ]);
+
     /** @class chlk.models.attendance.ClassAttendance*/
     CLASS(
         'ClassAttendance', [
+
+            function $(){
+                BASE();
+                this._studentId = null;
+                this._student = null;
+                this._attendanceTypeMapper = new chlk.models.attendance.AttendanceTypeMapper();
+            },
+
             chlk.models.id.ClassAttendanceId, 'id',
-
-            [ria.serialize.SerializeProperty('classpersonid')],
-            chlk.models.id.ClassPersonId, 'classPersonId',
-
-            [ria.serialize.SerializeProperty('classperiodid')],
-            chlk.models.id.ClassPeriodId, 'classPeriodId',
-
             chlk.models.common.ChlkDate, 'date',
 
+            //todo change number to AttendanceTypeEnum
             Number, 'type',
+            Number, function getType(){
+                return this._attendanceTypeMapper.map(this.getLevel()).valueOf();
+            },
+            [[Number]],
+            VOID, function setType(type){
+               if(type > 0){
+                   var level = this._attendanceTypeMapper.mapBack(new chlk.models.attendance.AttendanceTypeEnum(type));
+                   this.setLevel(level);
+               }
+            },
 
-            chlk.models.period.Period, 'period',
+            String, 'level',
+
+//            chlk.models.period.Period, 'period',
 
             chlk.models.people.User, 'student',
+
+            [[chlk.models.people.User]],
+            VOID, function setStudent(student){
+                this._student = student;
+                if(student)
+                    this.setStudentId(student.getId());
+            },
+            chlk.models.people.User, function getStudent(){
+                return this._student;
+            },
+
+            [ria.serialize.SerializeProperty('studentid')],
+            chlk.models.id.SchoolPersonId, 'studentId',
+
+            chlk.models.id.SchoolPersonId, function getStudentId(){
+                return this._studentId || (this.getStudent() ? this.getStudent().getId() : null);
+            },
+            [[chlk.models.id.SchoolPersonId]],
+            VOID, function setStudentId(studentId){
+                this._studentId = studentId;
+            },
 
             [ria.serialize.SerializeProperty('attendancereasonid')],
             chlk.models.id.AttendanceReasonId, 'attendanceReasonId',
@@ -56,6 +129,7 @@ NAMESPACE('chlk.models.attendance', function () {
 
             String, 'submitType',
 
-            String, 'attendanceReasonDescription'
+            String, 'attendanceReasonDescription'//,
+           // String, 'attendanceReasonName'
         ]);
 });

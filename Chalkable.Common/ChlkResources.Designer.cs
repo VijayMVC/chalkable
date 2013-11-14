@@ -3301,20 +3301,20 @@ namespace Chalkable.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to start importing class periods.
+        /// </summary>
+        public static string IMPORT_CLASS_PERIODS_START {
+            get {
+                return ResourceManager.GetString("IMPORT_CLASS_PERIODS_START", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to start importing class school persons.
         /// </summary>
         public static string IMPORT_CLASS_SCHOOL_PERSONS_START {
             get {
                 return ResourceManager.GetString("IMPORT_CLASS_SCHOOL_PERSONS_START", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to start importing classes.
-        /// </summary>
-        public static string IMPORT_CLASSES_START {
-            get {
-                return ResourceManager.GetString("IMPORT_CLASSES_START", resourceCulture);
             }
         }
         

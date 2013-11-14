@@ -6,13 +6,13 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class AnnouncementRecipientDataAccess : DataAccessBase<AnnouncementRecipient>
+    public class AnnouncementRecipientDataAccess : DataAccessBase<AnnouncementRecipient, int>
     {
         public AnnouncementRecipientDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
 
-        public IList<AnnouncementRecipient> GetList(Guid announcementId)
+        public IList<AnnouncementRecipient> GetList(int announcementId)
         {
             var conds = new AndQueryCondition { { AnnouncementRecipient.ANNOUNCEMENT_REF_FIELD, announcementId } };
             var dbQuery = new DbQuery();
@@ -24,7 +24,7 @@ namespace Chalkable.Data.School.DataAccess
             return ReadMany<AnnouncementRecipient>(dbQuery, true);
         }
 
-        public void DeleteByAnnouncementId(Guid announcementId)
+        public void DeleteByAnnouncementId(int announcementId)
         {
             var conds = new AndQueryCondition { { AnnouncementRecipient.ANNOUNCEMENT_REF_FIELD, announcementId } };
             SimpleDelete<AnnouncementRecipient>(conds);

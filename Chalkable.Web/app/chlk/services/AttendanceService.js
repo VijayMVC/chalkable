@@ -11,6 +11,7 @@ REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.attendance.StudentDayAttendances');
+REQUIRE('chlk.models.attendance.SetClassListAttendance');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -49,22 +50,23 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.ClassPersonId, chlk.models.id.ClassPeriodId, Number, chlk.models.id.AttendanceReasonId, chlk.models.common.ChlkDate]],
-            ria.async.Future, function setAttendance(classPersonId, classPeriodId, type, attendanceReasonId_, date) {
-                return this.get('Attendance/SetAttendance.json', Boolean, {
-                    classPersonId: classPersonId.valueOf(),
-                    classPeriodId: classPeriodId.valueOf(),
-                    attendanceReasonId: attendanceReasonId_ && attendanceReasonId_.valueOf(),
-                    type: type,
-                    date: date && date.toString('mm-dd-yy')
+            [[chlk.models.attendance.SetClassListAttendance]],
+            ria.async.Future, function setAttendance(setAttendanceData) {
+                return this.post('Attendance/SetAttendance.json', Boolean,{
+                    classid: setAttendanceData.getClassId() && setAttendanceData.getClassId().valueOf(),
+                    date: setAttendanceData.getDate().toStandardFormat(),
+                    items: setAttendanceData.getPostItems()
                 });
             },
 
-            [[chlk.models.id.ClassPeriodId, chlk.models.common.ChlkDate]],
-            ria.async.Future, function markAllPresent(classPeriodId, date) {
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
+            ria.async.Future, function markAllPresent(classId, date) {
+                var level =  new chlk.models.attendance.AttendanceTypeMapper()
+                    .mapBack(chlk.models.attendance.AttendanceTypeEnum.PRESENT);
+
                 return this.get('Attendance/SetAttendanceForClass.json', Boolean, {
-                    classPeriodId: classPeriodId.valueOf(),
-                    type: chlk.models.attendance.AttendanceTypeEnum.PRESENT.valueOf(),
+                    classId: classId && classId.valueOf(),
+                    level: level,
                     date: date && date.toString('mm-dd-yy')
                 });
             },

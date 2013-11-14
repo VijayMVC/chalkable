@@ -19,12 +19,12 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public int QnACount { get; set; }
         public int AttachmentsCount { get; set; }
         public int OwnerAttachmentsCount { get; set; }
-        public Guid? RecipientId { get; set; }
+        public int? RecipientId { get; set; }
         public string Content { get; set; }
         public string ShortContent { get; set; }
         
         public int? Grade { get; set; }
-        public Guid? StudentAnnouncementId { get; set; }
+        public int? StudentAnnouncementId { get; set; }
         public int StudentsCount { get; set; }
         public int StudentsCountWithAttachments { get; set; }
         public int StudentsCountWithoutAttachments { get; set; }
@@ -50,8 +50,6 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             AttachmentsCount = announcement.AttachmentsCount;
             OwnerAttachmentsCount = announcement.OwnerAttachmentsCount;
             QnACount = announcement.QnACount;
-            AnnouncementTypeName = announcement.AnnouncementTypeName;
-            AnnouncementTypeId = announcement.AnnouncementTypeRef;
             ExpiresDate = announcement.Expires == DateTime.MinValue ? (DateTime?)null : announcement.Expires;
             IsOwner = announcement.IsOwner;
             Gradable = isGradable;
@@ -60,7 +58,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             Order = announcement.Order;
             State = (int)announcement.State;
             Title = announcement.Title;
-            RecipientId = announcement.ClassId;
+            RecipientId = announcement.ClassRef;
             Content = announcement.Content;
 
             var content = announcement.Content ?? "";

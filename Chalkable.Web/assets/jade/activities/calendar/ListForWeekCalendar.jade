@@ -22,7 +22,7 @@ nextDate = items[6].getDate().add(chlk.models.common.ChlkDateEnum.DAY, 1).format
                         ul
                             each announcement in item.getAnnouncements()
                                 secondText = announcement.getAnnouncementTypeName()
-                                if announcement.getAnnouncementTypeId() == chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf()
+                                if announcement.getChalkableAnnouncementType() == chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf()
                                     secondText = announcement.getSubject() || ''
                                 li
                                     +ActionLink('announcement', 'view', announcement.getId())=announcement.getTitle() + ' ' + secondText

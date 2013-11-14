@@ -30,7 +30,7 @@ namespace Chalkable.Web.Controllers
 
         //TODO: add paginated list
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult ListInstalled(Guid personId, int? start, int? count)
+        public ActionResult ListInstalled(int personId, int? start, int? count)
         {
             var st = start ?? 0;
             var cnt = count ?? 9;
@@ -48,7 +48,7 @@ namespace Chalkable.Web.Controllers
 
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher, Student")]
-        public ActionResult Install(Guid applicationId, Guid? personId, GuidList classids, IntList roleIds, GuidList departmentids, GuidList gradelevelids)
+        public ActionResult Install(Guid applicationId, int? personId, IntList classids, IntList roleIds, GuidList departmentids, IntList gradelevelids)
         {
             var schoolyearId = GetCurrentSchoolYearId();
             if (!SchoolLocator.AppMarketService.CanInstall(applicationId, personId, roleIds, classids, gradelevelids, departmentids))
@@ -59,7 +59,8 @@ namespace Chalkable.Web.Controllers
             try
             {
                 string description = ChlkResources.APP_WAS_BOUGHT;
-                MasterLocator.FundService.AppInstallPersonPayment(appinstallAction.Id, totalPrice, Context.NowSchoolTime, description);   
+                //todo: person payment
+                // MasterLocator.FundService.AppInstallPersonPayment(appinstallAction.Id, totalPrice, Context.NowSchoolTime, description);   
                 //TODO: mix panel
                 //var classNames = appinstallAction.ApplicationInstallActionClasses.Select(x => x.Class.Name).ToList();
                 ////var departments = appinstallAction.ApplicationInstallActionDepartments.Select(x => x.ChalkableDepartment.Name).ToList();//TODO: fix after DB remapping
@@ -77,7 +78,7 @@ namespace Chalkable.Web.Controllers
         }
         
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher, Student")]
-        public ActionResult Uninstall(GuidList applicationInstallIds)
+        public ActionResult Uninstall(IntList applicationInstallIds)
         {
             foreach (var applicationInstallId in applicationInstallIds)
             {
@@ -95,16 +96,16 @@ namespace Chalkable.Web.Controllers
             
             var appRatings = MasterLocator.ApplicationService.GetRatings(applicationId);
             var allPersons = SchoolLocator.PersonService.GetPaginatedPersons(new PersonQuery());
-
+            
             var res = ApplicationDetailsViewData.Create(application, null, categories, appRatings, allPersons);
-            var persons = SchoolLocator.AppMarketService.GetPersonsForApplicationInstallCount(application.Id, Context.UserId, null, null, null, null);
+            var persons = SchoolLocator.AppMarketService.GetPersonsForApplicationInstallCount(application.Id, Context.UserLocalId, null, null, null, null);
             res.InstalledForPersonsGroup = ApplicationLogic.PrepareInstalledForPersonGroupData(SchoolLocator, MasterLocator, application);
             res.IsInstalledOnlyForMe = persons.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count == 0;
             return Json(res);
         }
         
         [AuthorizationFilter("SysAdmin, Developer, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult GetApplicationTotalPrice(Guid applicationid, Guid? personId, GuidList classids, IntList roleids, GuidList departments, GuidList gradelevelids)
+        public ActionResult GetApplicationTotalPrice(Guid applicationid, int? personId, IntList classids, IntList roleids, GuidList departments, IntList gradelevelids)
         {
             var app = MasterLocator.ApplicationService.GetApplicationById(applicationid);
             var totalPrice = SchoolLocator.AppMarketService.GetApplicationTotalPrice(applicationid, personId, roleids, classids, gradelevelids, departments);

@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
-using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.CalendarsViewData;
 
@@ -64,42 +63,24 @@ namespace Chalkable.Web.Controllers.CalendarControllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult TeacherClassWeek(DateTime? date, Guid classId)
+        public ActionResult TeacherClassWeek(DateTime? date, int classId)
         {
             DateTime start, end;
             WeekCalendar(ref date, out start, out end);
 
             var res = new List<TeacherClassWeekCalendarViewData>();
-            MarkingPeriod mp = null;
-            IList<ClassPeriod> classPeriods = new List<ClassPeriod>();
             var schoolYearId = GetCurrentSchoolYearId();
             var days = SchoolLocator.CalendarDateService.GetLastDays(schoolYearId, false, start, end);
+            var classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(schoolYearId, null, classId, null, null, null);
 
             for (var i = 0; i < days.Count; i++)
             {
                 var d = days[i];
-                if (d == null || !d.ScheduleSectionRef.HasValue || !d.MarkingPeriodRef.HasValue) continue;
-                if (mp == null || mp.EndDate.Date < d.DateTime.Date)
-                {
-                    mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(d.DateTime.Date);
-                    classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(mp.Id, classId, null, null, null);
-                }
-                var currentClassPeriods = classPeriods.Where(x => x.Period.SectionRef == d.ScheduleSectionRef).ToList();
-                res.Add(TeacherClassWeekCalendarViewData.Create(d.DateTime.Date, currentClassPeriods));
+                if (d == null || !d.DayTypeRef.HasValue) continue;
+                var currentClassPeriods = classPeriods.Where(x => x.DayTypeRef == d.DayTypeRef).ToList();
+                res.Add(TeacherClassWeekCalendarViewData.Create(d.Day.Date, currentClassPeriods));
             }
             return Json(res);
-        }
-
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
-        public ActionResult AssignDate(DateTime date, Guid sectionId)
-        {
-            var cdDate = SchoolLocator.CalendarDateService.GetCalendarDateByDate(date);
-            if (SchoolLocator.CalendarDateService.CanAssignDate(cdDate.Id, sectionId))
-            {
-                SchoolLocator.CalendarDateService.AssignDate(cdDate.Id, sectionId);
-                return Json(true);
-            }
-            return Json(false);
         }
     }
 }

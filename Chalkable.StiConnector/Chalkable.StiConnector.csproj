@@ -44,6 +44,9 @@
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Chalkable.Web\bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -62,6 +65,8 @@
     <Compile Include="Connectors\ConnectorBase.cs" />
     <Compile Include="Connectors\ConnectorLocator.cs" />
     <Compile Include="Connectors\Model\School.cs" />
+    <Compile Include="Connectors\Model\SectionAttendance.cs" />
+    <Compile Include="Connectors\SchoolConnector.cs" />
     <Compile Include="Model\AbsenceLevelReason.cs">
       <DependentUpon>StiEntities.tt</DependentUpon>
     </Compile>
@@ -69,6 +74,9 @@
       <DependentUpon>StiEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\AcadSession.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\ActivityCategory.cs">
       <DependentUpon>StiEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\Address.cs">
@@ -235,7 +243,6 @@
       <DependentUpon>StiEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\ImportService.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Model\StiEntities.edmx">
@@ -264,10 +271,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Chalkable.BusinessLogic\Chalkable.BusinessLogic.csproj">
-      <Project>{B008FBC2-8AFB-48FF-BA85-97845DDF02D2}</Project>
-      <Name>Chalkable.BusinessLogic</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
       <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
       <Name>Chalkable.Common</Name>
@@ -279,10 +282,6 @@
     <ProjectReference Include="..\Chalkable.Data.School\Chalkable.Data.School.csproj">
       <Project>{C5753C2A-F2BC-4F96-846B-548FC67191B2}</Project>
       <Name>Chalkable.Data.School</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Chalkable.SisConnector\Chalkable.SisConnector.csproj">
-      <Project>{C6A26439-411D-4D8C-9BCE-1A34E7EE604F}</Project>
-      <Name>Chalkable.SisConnector</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

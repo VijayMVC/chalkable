@@ -1224,8 +1224,8 @@
   <data name="IMPORT_ATTENDANCE_START" xml:space="preserve">
     <value>Starting import attendances {0}</value>
   </data>
-  <data name="IMPORT_CLASSES_START" xml:space="preserve">
-    <value>start importing classes</value>
+  <data name="IMPORT_CLASS_PERIODS_START" xml:space="preserve">
+    <value>start importing class periods</value>
   </data>
   <data name="IMPORT_CLASS_SCHOOL_PERSONS_START" xml:space="preserve">
     <value>start importing class school persons</value>

@@ -20,7 +20,7 @@ li(data-title = self.description, data-value = self.id.valueOf() + '|' + self.se
         else if self.searchType == 2
             +ActionLink('announcement', 'view', self.id).left.image-container.white.shadow
                 div.site-search-announcement
-                    div(class="announcement-type-" + self.announcementType).icon.blue.image
+                    div(class="announcement-type-" + self.getChalkableAnnouncementType()).icon.blue.image
                     div.title= self.description
         else
             div= self.description

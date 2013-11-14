@@ -1,14 +1,17 @@
 ﻿using System;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
     public class ClassPerson
     {
-        public const string ID_FIELD = "Id";
-        public Guid Id { get; set; }
         public const string PERSON_REF_FIELD = "PersonRef";
-        public Guid PersonRef { get; set; }
         public const string CLASS_REF_FIELD = "ClassRef";
-        public Guid ClassRef { get; set; }
+
+        [PrimaryKeyFieldAttr]
+        public int PersonRef { get; set; }
+        [PrimaryKeyFieldAttr]
+        public int ClassRef { get; set; }
+        public int SchoolRef { get; set; }
    }
 }

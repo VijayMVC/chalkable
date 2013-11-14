@@ -22,66 +22,91 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
+        //public DisciplineType Add(string name, int score)
+        //{
+        //    if(!BaseSecurity.IsAdminEditor(Context))
+        //        throw new ChalkableSecurityException();
+
+        //    using (var uow = Update())
+        //    {
+        //        var res = new DisciplineType
+        //            {
+        //                Id = Guid.NewGuid(),
+        //                Name = name,
+        //                Score = score
+        //            };
+        //        new DisciplineTypeDataAccess(uow).Insert(res);
+        //        uow.Commit();
+        //        return res;
+        //    }
+        //}
+
+        //public DisciplineType Edit(Guid id, string name, int score)
+        //{
+        //    if (!BaseSecurity.IsAdminEditor(Context))
+        //        throw new ChalkableSecurityException();
+
+        //    //using (var uow = Update())
+        //    //{
+        //    //    var da = new DisciplineTypeDataAccess(uow);
+        //    //    var res = da.GetById(id);
+        //    //    res.Name = name;
+        //    //    res.Score = score;
+        //    //    da.Update(res);
+        //    //    uow.Commit();
+        //    //    return res;
+        //    //}
+        //}
+        //public void Delete(Guid id)
+        //{
+        //    if (!BaseSecurity.IsAdminEditor(Context))
+        //        throw new ChalkableSecurityException();
+        //    using (var uow = Update())
+        //    {
+        //        new DisciplineTypeDataAccess(uow).Delete(id);
+        //        uow.Commit();
+        //    }
+        //}
+
+        //public PaginatedList<DisciplineType> GetDisciplineTypes(int start, int count)
+        //{
+        //    using (var uow = Read())
+        //    {
+        //        return new DisciplineTypeDataAccess(uow).GetPage(start, count, DisciplineType.SCORE_FIELD);
+        //    }
+        //}
+
+        //public DisciplineType GetDisciplineTypeById(Guid id)
+        //{
+        //    using (var uow = Read())
+        //    {
+        //        return new DisciplineTypeDataAccess(uow).GetById(id);
+        //    }
+        //}
+
         public DisciplineType Add(string name, int score)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
-                throw new ChalkableSecurityException();
-
-            using (var uow = Update())
-            {
-                var res = new DisciplineType
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = name,
-                        Score = score
-                    };
-                new DisciplineTypeDataAccess(uow).Insert(res);
-                uow.Commit();
-                return res;
-            }
+            throw new NotImplementedException();
         }
 
         public DisciplineType Edit(Guid id, string name, int score)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
-                throw new ChalkableSecurityException();
-
-            using (var uow = Update())
-            {
-                var da = new DisciplineTypeDataAccess(uow);
-                var res = da.GetById(id);
-                res.Name = name;
-                res.Score = score;
-                da.Update(res);
-                uow.Commit();
-                return res;
-            }
+            throw new NotImplementedException();
         }
+
         public void Delete(Guid id)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new DisciplineTypeDataAccess(uow).Delete(id);
-                uow.Commit();
-            }
+            throw new NotImplementedException();
         }
 
         public PaginatedList<DisciplineType> GetDisciplineTypes(int start, int count)
         {
-            using (var uow = Read())
-            {
-                return new DisciplineTypeDataAccess(uow).GetPage(start, count, DisciplineType.SCORE_FIELD);
-            }
+            throw new NotImplementedException();
         }
 
         public DisciplineType GetDisciplineTypeById(Guid id)
         {
-            using (var uow = Read())
-            {
-                return new DisciplineTypeDataAccess(uow).GetById(id);
-            }
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.PersonViewDatas;
@@ -14,33 +13,33 @@ namespace Chalkable.Web.Models
         public int GradingStyle { get; set; }
         public string AnnouncmentTitle { get; set; }
         public int? AnnouncementTypeId { get; set; }
+        public int? ChalkableAnnouncementTypeId { get; set; }
         public int? ClassAvg { get; set; }
         public string ClassName { get; set; }
         public Guid? CourseId { get; set; }
         public int GradedStudentCount { get; set; }
-        public int Status { get; set; }
         public GradingStyleViewData GradingStyleMapper { get; set; }
 
         private StudentAnnouncementsViewData() { }
 
         public static StudentAnnouncementsViewData Create(IList<StudentAnnouncementDetails> items, IList<AnnouncementAttachmentInfo> attachments,
-            FinalGradeStatus state, GradingStyleEnum gradingStyle = GradingStyleEnum.Numeric100)
+            GradingStyleEnum gradingStyle = GradingStyleEnum.Numeric100)
         {
             var res = new StudentAnnouncementsViewData {GradingStyle = (int) gradingStyle};
             CalculateClassAvg(res, items);
             res.Items = StudentAnnouncementViewData.Create(items, attachments);
-            res.Status = (int)state;
             return res;
         }
 
         public static StudentAnnouncementsViewData Create(AnnouncementComplex anouncement, IList<StudentAnnouncementDetails> items,
-            IList<AnnouncementAttachmentInfo> attachments, FinalGradeStatus state, GradingStyleEnum gradingStyle = GradingStyleEnum.Numeric100)
+            IList<AnnouncementAttachmentInfo> attachments, GradingStyleEnum gradingStyle = GradingStyleEnum.Numeric100)
         {
-            var res = Create(items, attachments, state, gradingStyle);
+            var res = Create(items, attachments, gradingStyle);
             res.ClassName = anouncement.ClassName;
-            res.CourseId = anouncement.CourseId;
+            //res.CourseId = anouncement.CourseId;
             //res.AnnouncmentTitle = anouncement.Title;
-            res.AnnouncementTypeId = anouncement.AnnouncementTypeRef;
+            res.AnnouncementTypeId = anouncement.ClassAnnouncementTypeRef;
+            res.ChalkableAnnouncementTypeId = anouncement.ChalkableAnnouncementType;
             return res;
         }
         private static void CalculateClassAvg(StudentAnnouncementsViewData res, IEnumerable<StudentAnnouncementDetails> items)
@@ -69,8 +68,8 @@ namespace Chalkable.Web.Models
         public bool Dropped { get; set; }
         public string Raw { get; set; }
         public string ExtraCredits { get; set; }
-        public Guid Id { get; set; }
-        public Guid AnnouncementId { get; set; }
+        public int Id { get; set; }
+        public int AnnouncementId { get; set; }
         public IList<AnnouncementAttachmentViewData> Attachments { get; set; }
         public string Comment { get; set; }
         public int State { get; set; }

@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Chalkable.Data.School.Model;
+﻿using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ClassesViewData;
 
 namespace Chalkable.Web.Models
 {
     public class ClassPeriodShortViewData
     {
-        public Guid Id { get; set; }
         public PeriodViewData Period { get; set; }
-        public Guid RoomId { get; set; }
+        public int? RoomId { get; set; }
         public string RoomNumber { get; set; }
-        public Guid ClassId { get; set; }
+        public int ClassId { get; set; }
+        public int DateTypeId { get; set; }
 
         protected ClassPeriodShortViewData(ClassPeriod classPeriod, Room room)
         {
-            Id = classPeriod.Id;
             Period = PeriodViewData.Create(classPeriod.Period);
             RoomId = classPeriod.RoomRef;
             ClassId = classPeriod.ClassRef;
+            DateTypeId = classPeriod.DayTypeRef;
             if (room != null)
                 RoomNumber = room.RoomNumber;
         }

@@ -1,25 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
     public class Date
     {
-        public Guid Id { get; set; }
-        public const string DATE_TIME_FIELD = "DateTime";
-        public DateTime DateTime { get; set; }
-        public Guid? ScheduleSectionRef { get; set; }
-        public Guid? MarkingPeriodRef { get; set; }
+        public const string DATE_TIME_FIELD = "Day";
+        public const string DATE_TYPE_REF_FIELD = "DayTypeRef";
         public const string IS_SCHOOL_DAY_FIELD = "IsSchoolDay";
-        public bool IsSchoolDay { get; set; }
-        public int? SisId { get; set; }
-    }
+        public const string SCHOOL_YEAR_REF = "SchoolYearRef";
 
-    public class DateDetails : Date
-    {
-        public ScheduleSection ScheduleSection { get; set; }
+        [PrimaryKeyFieldAttr]
+        public DateTime Day { get; set; }
+        public bool IsSchoolDay { get; set; }
+        [PrimaryKeyFieldAttr]
+        public int SchoolYearRef { get; set; }
+        public int SchoolRef { get; set; }
+        public int? DayTypeRef { get; set; }
+        [NotDbFieldAttr]
+        public DayType DayType { get; set; }
     }
 }

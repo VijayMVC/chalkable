@@ -12,14 +12,15 @@ namespace Chalkable.Web.Controllers.CalendarControllers
     public class DisciplineCalendarController : CalendarController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult MonthForStudent(Guid studentId, DateTime? date)
+        public ActionResult MonthForStudent(int studentId, DateTime? date)
         {
-            DateTime start, end;
-            MonthCalendar(ref date, out start, out end);
-            var currentSchoolYearId = GetCurrentSchoolYearId();
-            var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineDetails(currentSchoolYearId, studentId, start, end);
-            var res = PrepareMonthCalendar(start, end, date.Value, (time, b) => DisciplineMonthCalendarViewData.Create(time, b, Context.UserId, disciplines));
-            return Json(res, 6);
+            throw new NotImplementedException();
+            //DateTime start, end;
+            //MonthCalendar(ref date, out start, out end);
+            //var currentSchoolYearId = GetCurrentSchoolYearId();
+            //var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineDetails(currentSchoolYearId, studentId, start, end);
+            //var res = PrepareMonthCalendar(start, end, date.Value, (time, b) => DisciplineMonthCalendarViewData.Create(time, b, Context.UserId, disciplines));
+            //return Json(res, 6);
         }
     }
 }

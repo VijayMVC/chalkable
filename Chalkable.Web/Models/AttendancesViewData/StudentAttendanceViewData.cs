@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 

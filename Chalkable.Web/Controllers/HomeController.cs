@@ -6,13 +6,11 @@ using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
-using Chalkable.Web.Authentication;
 using Chalkable.Web.Common;
-using Chalkable.Web.Controllers.PersonControllers;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.AttendancesViewData;
@@ -44,6 +42,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Developer")]
         public ActionResult Developer(Guid? currentApplicationId)
         {
+            var prefDemoSchool = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value).DemoPrefix;
             var developer = MasterLocator.DeveloperService.GetDeveloperById(MasterLocator.Context.UserId);
             ViewData[ViewConstants.IS_DEV] = true;
             PrepareJsonData(DeveloperViewData.Create(developer), ViewConstants.CURRENT_PERSON);
@@ -94,18 +93,20 @@ namespace Chalkable.Web.Controllers
         private void PrepareCommonViewData(MarkingPeriod markingPeriod = null)
         {
             //TODO: render data for demo school 
-            if (Context.SchoolId.HasValue)
+            if (Context.DistrictId.HasValue && Context.SchoolId.HasValue)
             {
+                var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
                 var school = MasterLocator.SchoolService.GetById(Context.SchoolId.Value);
+                school.District = district;
                 PrepareJsonData(ShortSchoolViewData.Create(school), ViewConstants.SCHOOL);
-                if (!string.IsNullOrEmpty(school.DemoPrefix))
+                if (!string.IsNullOrEmpty(district.DemoPrefix))
                 {
                     ViewData[ViewConstants.STUDENT_ROLE] = CoreRoles.STUDENT_ROLE.Name;
                     ViewData[ViewConstants.TEACHER_ROLE] = CoreRoles.TEACHER_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_GRADE_ROLE] = CoreRoles.ADMIN_GRADE_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
-                    ViewData[ViewConstants.DEMO_PREFIX_KEY] = school.DemoPrefix;
+                    ViewData[ViewConstants.DEMO_PREFIX_KEY] = district.DemoPrefix;
 
 
                     if (Context.DeveloperId != null)
@@ -117,7 +118,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.CURR_SCHOOL_YEAR_ID] = GetCurrentSchoolYearId();
             ViewData[ViewConstants.VERSION] = CompilerHelper.Version;
             ViewData[ViewConstants.CROCODOC_API_URL] = PreferenceService.Get(Preference.CROCODOC_URL).Value;
-            PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
+            //PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
 
             ViewData[ViewConstants.UNSHOWN_NOTIFICATIONS_COUNT] = SchoolLocator.NotificationService.GetUnshownNotifications().Count;
             if (markingPeriod != null && SchoolLocator.Context.SchoolId.HasValue)
@@ -132,11 +133,11 @@ namespace Chalkable.Web.Controllers
         private void PrepareStudentJsonData()
         {
             var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
-            var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.UserId);
+            var person = SchoolLocator.PersonService.GetPerson(Context.UserLocalId.Value);
             var personView = PersonViewData.Create(person);
             personView.DisplayName = person.FullName;
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
-            var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, SchoolLocator.Context.UserId);
+            var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, Context.UserLocalId);
             PrepareJsonData(ClassViewData.Create(classes), ViewConstants.CLASSES);
             PrepareCommonViewData(mp);
         }           
@@ -144,7 +145,7 @@ namespace Chalkable.Web.Controllers
         private void PrepareAdminJsonData()
         {
             var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
-            var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.UserId);
+            var person = SchoolLocator.PersonService.GetPerson(Context.UserLocalId.Value);
             var personView = PersonViewData.Create(person);
             personView.DisplayName = person.ShortSalutationName;
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
@@ -155,54 +156,57 @@ namespace Chalkable.Web.Controllers
 
         private void PrepareTeacherJsonData(MarkingPeriod mp, bool getAllAnnouncementTypes)
         {
-            var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.UserId);
+            if (!Context.UserLocalId.HasValue)
+                throw new UnassignedUserException();
+            var person = SchoolLocator.PersonService.GetPerson(Context.UserLocalId.Value);
             var personView = PersonViewData.Create(person);
             personView.DisplayName = person.ShortSalutationName;
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
 
-            var finalizedClasses = SchoolLocator.FinalGradeService.GetFinalizedClasses(mp.Id);
-            PrepareJsonData(finalizedClasses.Select(x => x.Id), ViewConstants.FINALIZED_CLASSES_IDS);
+            //TODO : get finalizedClasses 
+            //var finalizedClasses = SchoolLocator.FinalGradeService.GetFinalizedClasses(mp.Id);
+            //PrepareJsonData(finalizedClasses.Select(x => x.Id), ViewConstants.FINALIZED_CLASSES_IDS);
 
-            var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, SchoolLocator.Context.UserId);
+            var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, Context.UserLocalId.Value);
             var now = SchoolLocator.Context.NowSchoolTime;
-            if (classes.Count > 0)
-            {
-                MarkingPeriod currentMp = mp;
-                if(mp.StartDate > now || mp.EndDate < now)
-                    currentMp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(now);
-                if (currentMp != null)
-                {
-                    var cp = SchoolLocator.ClassPeriodService.GetNearestClassPeriod(null, now);
-                    if (cp != null)
-                    {
-                        var minutes = (int) (now - now.Date).TotalMinutes;
-                        if (cp.Period.StartTime - minutes <= 5)
-                        {
-                            SchoolLocator.CalendarDateService.GetCalendarDateByDate(now);
-                            var attQuery = new ClassAttendanceQuery
-                                {
-                                    MarkingPeriodId = currentMp.Id,
-                                    ClassId = cp.ClassRef,
-                                    FromTime = cp.Period.StartTime,
-                                    ToTime = cp.Period.EndTime,
-                                    FromDate = now.Date,
-                                    ToDate = now.Date
-                                };
-                            var attendances = SchoolLocator.AttendanceService.GetClassAttendanceDetails(attQuery);
-                            //check is it tour now or demo school
-                            if (attendances.Any(x => x.Type == AttendanceTypeEnum.NotAssigned))
-                            {
-                                ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.ATTENDANCE_CLASS_LIST_URL_FORMAT, cp.ClassRef);
-                            }
-                        }
-                    }
-                }
-            } 
+            //if (classes.Count > 0)
+            //{
+            //    MarkingPeriod currentMp = mp;
+            //    if(mp.StartDate > now || mp.EndDate < now)
+            //        currentMp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(now);
+            //    if (currentMp != null)
+            //    {
+            //        var cp = SchoolLocator.ClassPeriodService.GetNearestClassPeriod(null, now);
+            //        if (cp != null)
+            //        {
+            //            var minutes = (int) (now - now.Date).TotalMinutes;
+            //            if (cp.Period.StartTime - minutes <= 5)
+            //            {
+            //                SchoolLocator.CalendarDateService.GetCalendarDateByDate(now);
+            //                var attQuery = new ClassAttendanceQuery
+            //                    {
+            //                        MarkingPeriodId = currentMp.Id,
+            //                        ClassId = cp.ClassRef,
+            //                        FromTime = cp.Period.StartTime,
+            //                        ToTime = cp.Period.EndTime,
+            //                        FromDate = now.Date,
+            //                        ToDate = now.Date
+            //                    };
+            //                var attendances = SchoolLocator.AttendanceService.GetClassAttendanceDetails(attQuery);
+            //                //check is it tour now or demo school
+            //                if (attendances.Any(x => x.Type == AttendanceTypeEnum.NotAssigned))
+            //                {
+            //                    ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.ATTENDANCE_CLASS_LIST_URL_FORMAT, cp.ClassRef);
+            //                }
+            //            }
+            //        }
+            //    }
+            //} 
             var executionResult = classes.Select(ClassViewData.Create).ToList();
             PrepareJsonData(executionResult, ViewConstants.CLASSES);
             PrepareClassesAdvancedData(classes, mp, getAllAnnouncementTypes);
             PrepareCommonViewData(mp);
-            PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
+            PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
         }
 
         private void PrepareClassesAdvancedData(IEnumerable<ClassDetails> classDetailses, MarkingPeriod mp, bool getAllAnnouncementTypes)
@@ -210,21 +214,16 @@ namespace Chalkable.Web.Controllers
             var classesAdvancedData = new List<object>();
             classDetailses = classDetailses.Where(x => x.MarkingPeriodClasses.Any(y => y.MarkingPeriodRef == mp.Id));
             var classesMaskDic = ClassController.BuildClassesUsageMask(SchoolLocator, mp.Id, SchoolLocator.Context.SchoolTimeZoneId);
-            var baseAnnTypes = SchoolLocator.AnnouncementTypeService.GetAnnouncementTypes(null);
-
-            var standard = new[] { SchoolLocator.AnnouncementTypeService.GetAnnouncementTypeById((int)SystemAnnouncementType.Standard) };
-
+            
             foreach (var classDetails in classDetailses)
             {
-                Guid classId = classDetails.Id;
-                var mpc = classDetails.MarkingPeriodClasses.First(y => y.MarkingPeriodRef == mp.Id).Id;
-                var typesByClasses = getAllAnnouncementTypes ? baseAnnTypes
-                                    : AnnouncementTypeController.GetTypesByClass(SchoolLocator, mpc, standard);
+                int classId = classDetails.Id;
+                var typesByClasses = AnnouncementTypeController.GetTypesByClass(SchoolLocator, classId);
                 classesAdvancedData.Add(new
                 {
                     ClassId = classId,
                     Mask = classesMaskDic.ContainsKey(classId) ? classesMaskDic[classId] : new List<int>(),
-                    TypesByClass = AnnouncementTypeViewData.Create(typesByClasses)
+                    TypesByClass = ClassAnnouncementTypeViewData.Create(typesByClasses)
                 });
             }
             PrepareJsonData(classesAdvancedData, ViewConstants.CLASSES_ADV_DATA);

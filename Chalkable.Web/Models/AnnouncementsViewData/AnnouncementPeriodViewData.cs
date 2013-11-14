@@ -28,13 +28,12 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                                                                Date date, IList<AnnouncementComplex> announcements, IList<Room> rooms)
         {
             var res = new List<AnnouncementPeriodViewData>();
-            var currentDayPeriods = periods.Where(x => x.SectionRef == date.ScheduleSectionRef).ToList();
-            foreach (var period in currentDayPeriods)
+            foreach (var period in periods)
             {
-                var cp = classPeriods.Where(x => x.PeriodRef == period.Id).ToList();
-                var annItems = announcements.Where(x => cp.Any(y => y.ClassRef == x.ClassId) && x.GradableType).ToList();
+                var cp = classPeriods.Where(x => x.PeriodRef == period.Id && date.DayTypeRef == x.DayTypeRef).ToList();
+                var annItems = announcements.Where(x => cp.Any(y => y.ClassRef == x.ClassRef) && x.GradableType).ToList();
                 string roomNumber = cp.Aggregate("", (current, classePeriod) => current + rooms.First(x => x.Id == classePeriod.RoomRef).RoomNumber + " ");
-                res.Add(Create(period, date.DateTime, annItems, roomNumber));
+                res.Add(Create(period, date.Day, annItems, roomNumber));
             }
             return res;
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -11,15 +10,12 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface ICalendarDateService
     {
         Date GetCalendarDateByDate(DateTime date);
-        Date GetById(Guid id);
         DateTime GetDbDateTime();
-        IList<Date> GetDays(Guid markingPeriodId, bool schoolDaysOnly, DateTime? fromDate = null, DateTime? tillDate = null, int count = Int32.MaxValue);
-        IList<DateDetails> GetLastDays(Guid schoolYearId, bool schoolDaysOnly, DateTime? fromDate, DateTime? tillDate, int count = int.MaxValue);
-        void ClearCalendarDates(Guid markingPeriodId);
-        bool CanAssignDate(Guid id, Guid sectionId);
-        void AssignDate(Guid id, Guid sectionId);
-        Date Add(DateTime date, bool schoolDay, Guid? markingPeriodId, Guid? scheduleSectionId, int? sisId);
-        void Delete(Guid id);
+        IList<Date> GetDays(int markingPeriodId, bool schoolDaysOnly, DateTime? fromDate = null, DateTime? tillDate = null, int count = Int32.MaxValue);
+        IList<Date> GetLastDays(int schoolYearId, bool schoolDaysOnly, DateTime? fromDate, DateTime? tillDate, int count = int.MaxValue);
+        Date Add(DateTime date, bool schoolDay, int schoolYearId, int? dateTypeId);
+        void Add(IList<Date> days);
+        void Delete(DateTime date);
     }
 
     //TODO: needs tests
@@ -33,81 +29,25 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                var da = new DateDataAccess(uow);
-                var res = da.GetDateOrNull(new DateQuery {FromDate = date, ToDate = date});
-                if (res == null)
-                {
-                    var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date);
-                    var dates = new List<Date>();
-                    if (mp == null)
-                    {
-                        res = new Date { Id = Guid.NewGuid(), DateTime = date };
-                        dates.Add(res);
-                    }
-                    else
-                    {
-                        //TODO: just regenerate for all MP
-
-                        da.Delete(new DateQuery {MarkingPeriodId = mp.Id});
-
-                        var sections = ServiceLocator.ScheduleSectionService.GetSections(mp.Id);
-                        if (sections.Count == 0)
-                            throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_SHOULD_HAVE_SECTION);
-                       
-                        var sectionIndex = 0;
-                        var startDate = mp.StartDate.Date;
-                        var endDate = mp.EndDate.Date;
-
-                        for (DateTime dt = startDate; dt <= endDate; dt = dt.AddDays(1))
-                        {
-                            var d = new Date
-                            {
-                                Id = Guid.NewGuid(),
-                                MarkingPeriodRef = mp.Id,
-                                IsSchoolDay = false,
-                                DateTime = dt
-                            };
-                            dates.Add(d);
-                            if (((1 << (int)dt.DayOfWeek) & mp.WeekDays) != 0)
-                            {
-                                d.IsSchoolDay = true;
-                                d.ScheduleSectionRef = sections[sectionIndex].Id;
-                                sectionIndex = (sectionIndex + 1) % sections.Count;
-                            }
-                            if (d.DateTime == date) res = d;
-                        }
-                    }
-                    da.Insert(dates);
-                }
-                uow.Commit();
-                return res;
+                var da = new DateDataAccess(uow, Context.SchoolLocalId);
+                return da.GetDateOrNull(new DateQuery {FromDate = date, ToDate = date});
             }
         }
 
-        public Date GetById(Guid id)
-        {
-            using (var uow = Read())
-            {
-                return new DateDataAccess(uow).GetDate(new DateQuery{Id = id});
-            }
-        }
 
         public DateTime GetDbDateTime()
         {
             using (var uow = Read())
             {
-                return new DateDataAccess(uow).GetDbDateTime();
+                return new DateDataAccess(uow, Context.SchoolLocalId).GetDbDateTime();
             }
         }
 
-        public IList<Date> GetDays(Guid markingPeriodId, bool schoolDaysOnly, DateTime? fromDate = null, DateTime? tillDate = null, int count = Int32.MaxValue)
+        public IList<Date> GetDays(int markingPeriodId, bool schoolDaysOnly, DateTime? fromDate = null, DateTime? tillDate = null, int count = Int32.MaxValue)
         {
-            var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId);
-            GetCalendarDateByDate(mp.EndDate);
-
             using (var uow = Read())
             {
-                return new DateDataAccess(uow)
+                return new DateDataAccess(uow, Context.SchoolLocalId)
                     .GetDates(new DateQuery
                         {
                             MarkingPeriodId = markingPeriodId,
@@ -120,22 +60,12 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<DateDetails> GetLastDays(Guid schoolYearId, bool schoolDaysOnly, DateTime? fromDate, DateTime? tillDate, int count = Int32.MaxValue)
+        public IList<Date> GetLastDays(int schoolYearId, bool schoolDaysOnly, DateTime? fromDate, DateTime? tillDate, int count = Int32.MaxValue)
         {
             using (var uow = Read())
             {
-                var markingPeriods = ServiceLocator.MarkingPeriodService.GetMarkingPeriods(schoolYearId);
-                foreach (var markingPeriod in markingPeriods)
-                {
-                    if (!((tillDate.HasValue && markingPeriod.StartDate > tillDate)
-                          || (fromDate.HasValue && markingPeriod.EndDate > fromDate)))
-                    {
-                        ServiceLocator.CalendarDateService.GetCalendarDateByDate(markingPeriod.StartDate.AddDays(1)); 
-                    }
-                }
-
-                var da = new DateDataAccess(uow);
-                return da.GetDatesDetails(new DateQuery
+                var da = new DateDataAccess(uow, Context.SchoolLocalId);
+                return da.GetDates(new DateQuery
                     {
                         SchoolYearId = schoolYearId,
                         FromDate = fromDate,
@@ -146,86 +76,55 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void ClearCalendarDates(Guid markingPeriodId)
+        public void Add(IList<Date> days)
         {
-            Delete(new DateQuery{MarkingPeriodId = markingPeriodId});
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new DateDataAccess(uow, Context.SchoolLocalId).Insert(days);
+                uow.Commit();
+            }
         }
-        public void Delete(Guid id)
+
+        public void Delete(DateTime date)
         {
-            Delete(new DateQuery { Id = id });
+            Delete(new DateQuery { FromDate = date, ToDate = date});
         }
+        
         private void Delete(DateQuery query)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                new DateDataAccess(uow).Delete(query);
+                new DateDataAccess(uow, Context.SchoolLocalId).Delete(query);
                 uow.Commit();
             }
         }
-
-        public bool CanAssignDate(Guid id, Guid sectionId)
+        
+        public Date Add(DateTime date, bool schoolDay, int schoolYearId, int? dateTypeId)
         {
-            var cdDate = GetById(id);
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-
-            var section = ServiceLocator.ScheduleSectionService.GetSectionById(sectionId);
-            if (section.MarkingPeriodRef != cdDate.MarkingPeriodRef)
-                throw new ChalkableException(ChlkResources.ERR_SECTION_NOT_IN_MARKING_PERIOD_FOR_CURRENT_DAY);
-            
-            using (var uow = Read())
-            {
-                var da = new ClassAttendanceDataAccess(uow);
-                //TODO : check discipline existing
-                return !da.Exists(section.MarkingPeriodRef, cdDate.DateTime);   
-            }
-        }
-
-        public void AssignDate(Guid id, Guid sectionId)
-        {
-            if(!CanAssignDate(id,sectionId))
-                throw new ChalkableException(ChlkResources.ERR_CANT_REASSIGN_DAY_TO_DIFFERENT_SECTION);
-
-            using (var uow = Update())
-            {
-                var cdDate = GetById(id);
-                cdDate.ScheduleSectionRef = sectionId;
-                cdDate.IsSchoolDay = true;
-                new DateDataAccess(uow).Update(cdDate);
-                uow.Commit();
-            }
-        }
-
-        public Date Add(DateTime date, bool schoolDay, Guid? markingPeriodId, Guid? scheduleSectionId, int? sisId)
-        {
-            if (!BaseSecurity.IsAdminEditor(Context))
-                throw new ChalkableSecurityException();
-            if(!schoolDay && scheduleSectionId.HasValue)
+            if (!schoolDay && dateTypeId.HasValue)
                 throw new ChalkableException("Incorrect parameters data");
 
             using (var uow = Update())
             {
-                if (scheduleSectionId.HasValue)
-                {
-                    var section = new ScheduleSectionDataAccess(uow).GetById(scheduleSectionId.Value);
-                    if (!markingPeriodId.HasValue)
-                        markingPeriodId = section.MarkingPeriodRef;
-                    if (markingPeriodId.Value != section.MarkingPeriodRef)
-                        throw new ChalkableException(ChlkResources.ERR_SECTION_NOT_IN_MARKING_PERIOD_FOR_CURRENT_DAY);
-                }
-                
+                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetById(schoolYearId);
+                if (dateTypeId.HasValue && !new DayTypeDataAccess(uow).Exists(schoolYearId))
+                    throw new ChalkableException("day type is not assigned to current school year");
+
                 var res = new Date
                     {
-                        Id = Guid.NewGuid(),
-                        DateTime = date,
+                        Day = date,
                         IsSchoolDay = schoolDay,
-                        MarkingPeriodRef = markingPeriodId,
-                        ScheduleSectionRef = scheduleSectionId,
-                        SisId = sisId
+                        SchoolYearRef = schoolYearId,
+                        DayTypeRef = dateTypeId,
+                        SchoolRef = sy.SchoolRef
                     };
-                new DateDataAccess(uow).Insert(res);
+                new DateDataAccess(uow, Context.SchoolLocalId).Insert(res);
                 uow.Commit();
                 return res;
             }

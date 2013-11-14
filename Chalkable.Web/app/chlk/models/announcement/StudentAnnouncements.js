@@ -12,6 +12,9 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('announcementtypeid')],
             Number, 'announcementTypeId',
 
+            [ria.templates.ModelPropertyBind],
+            Number, 'chalkableAnnouncementTypeId',
+
             [ria.serialize.SerializeProperty('announcmenttitel')],
             String, 'announcementTitle',
 

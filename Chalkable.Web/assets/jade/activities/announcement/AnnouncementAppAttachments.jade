@@ -22,7 +22,7 @@ mixin AnnouncementFormApplicationItem(app, i)
 attachments = self.getAnnouncementAttachments() || []
 applications = self.getApplications() || []
 typesEnum = chlk.models.announcement.AnnouncementTypeEnum
-isAnnouncement = (self.getAnnouncementTypeId() == typesEnum.ANNOUNCEMENT.valueOf() || self.getAnnouncementTypeId() == typesEnum.ADMIN.valueOf())
+isAnnouncement = (self.isStandartAnnouncement() || self.isAdminAnnouncement())
 items = self.getSortedAppsAndAttachments();
 
 if self.needButtons

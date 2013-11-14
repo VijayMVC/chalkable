@@ -20,7 +20,7 @@ namespace Chalkable.Web.Controllers
             var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
             if (sysLocator.UserService.GetByLogin(email) == null)
             {
-                var demoSchool = sysLocator.SchoolService.UseDemoSchool();
+                var demoSchool = sysLocator.DistrictService.UseDemoDistrict();
                 if (demoSchool != null)
                 {
                     sysLocator.DeveloperService.Add(email, password, null, null, demoSchool.Id);
@@ -47,7 +47,7 @@ namespace Chalkable.Web.Controllers
             var currentSchool = MasterLocator.SchoolService.GetById(Context.SchoolId.Value);
             var result = new List<ApiExplorerViewData>();
 
-            if (!string.IsNullOrEmpty(currentSchool.DemoPrefix))
+            if (!string.IsNullOrEmpty(currentSchool.District.DemoPrefix))
             {
                 var descriptions = ChalkableApiExplorerLogic.GetApi();
                 var apiRoles = new List<string>();
@@ -58,7 +58,7 @@ namespace Chalkable.Web.Controllers
                     if (loweredDescription == CoreRoles.SUPER_ADMIN_ROLE.LoweredName || loweredDescription == CoreRoles.CHECKIN_ROLE.LoweredName) continue;
 
                     apiRoles.Add(loweredDescription);
-                    var userName = currentSchool.DemoPrefix + PreferenceService.Get("demoschool" + loweredDescription).Value;
+                    var userName = currentSchool.District.DemoPrefix + PreferenceService.Get("demoschool" + loweredDescription).Value;
                     var token = ChalkableApiExplorerLogic.GetAccessTokenFor(userName, MasterLocator);
                     result.Add(ApiExplorerViewData.Create(description.Value, token, description.Key));
                 }

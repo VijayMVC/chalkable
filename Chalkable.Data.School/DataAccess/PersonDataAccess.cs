@@ -6,19 +6,30 @@ using System.Globalization;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class PersonDataAccess : DataAccessBase<Person>
+    public class PersonDataAccess : BaseSchoolDataAccess<Person>
     {
-        public PersonDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public PersonDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
         {
         }
         
         private const string FILTER_FORMAT = "%{0}%";
-        
-       
+
+        protected override QueryCondition FilterBySchool(QueryCondition queryCondition)
+        {
+            return queryCondition;
+        }
+
+        public Person GetPerson(PersonQuery query)
+        {
+            query.Count = 1;
+            return GetPersons(query).Persons.First();
+        }
+
         public PersonQueryResult GetPersons(PersonQuery query)
         {
             
@@ -33,7 +44,7 @@ namespace Chalkable.Data.School.DataAccess
             parameters.Add("@teacherId", query.TeacherId);
             parameters.Add("@classId", query.ClassId);
             parameters.Add("@callerRoleId", query.CallerRoleId);
-            
+            parameters.Add("@schoolId", schoolId);
 
             string filter1 = null;
             string filter2 = null;
@@ -66,13 +77,14 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public PersonDetails GetPersonDetails(Guid personId, Guid callerId, int callerRoleId)
+        public PersonDetails GetPersonDetails(int personId, int callerId, int callerRoleId)
         {
             var parameters = new Dictionary<string, object>
                 {
                     {"personId", personId},
                     {"callerId", callerId},
-                    {"callerRoleId", callerRoleId}
+                    {"callerRoleId", callerRoleId},
+                    {"schoolId", schoolId}
                 };
             using (var reader = ExecuteStoredProcedureReader("spGetPersonDetails", parameters))
             {
@@ -80,7 +92,6 @@ namespace Chalkable.Data.School.DataAccess
                 return reader.Read() ? ReadPersonDetailsData(reader) : null;
             }
         }
-
 
         public static PersonQueryResult ReadPersonQueryResult(DbDataReader reader)
         {
@@ -100,39 +111,28 @@ namespace Chalkable.Data.School.DataAccess
         {
             var res = ReadPersonData(reader);
             reader.NextResult();
-            res.Addresses = reader.ReadList<Address>();
+            res.Address = reader.ReadOrNull<Address>();
             reader.NextResult();
             res.Phones = reader.ReadList<Phone>();
+            reader.NextResult();
+            res.StudentSchoolYears = new List<StudentSchoolYear>();
+            while (reader.Read())
+            {
+                var studentSchoolYear = reader.Read<StudentSchoolYear>();
+                studentSchoolYear.GradeLevel = reader.Read<GradeLevel>();
+                res.StudentSchoolYears.Add(studentSchoolYear);
+            }
             return res;
         }
-
+        
         public static PersonDetails ReadPersonData(DbDataReader reader)
         {
             if (reader != null)
             {
                 var res = reader.Read<PersonDetails>();
-                if (res.RoleRef == CoreRoles.STUDENT_ROLE.Id)
-                {
-                    res.StudentInfo = reader.Read<StudentInfo>();
-                    res.StudentInfo.GradeLevel = reader.Read<GradeLevel>(true);
-                    res.StudentInfo.GradeLevelRef = res.StudentInfo.GradeLevel.Id;
-                }
                 return res;
             }
             return null;
-        }
-
-        public void AddStudent(Guid id, Guid gradeLevelId)
-        {
-            SimpleInsert(new StudentInfo{GradeLevelRef = gradeLevelId, Id = id});
-        }
-
-        public void RepopulateDemoIds(string prefix)
-        {
-            IDictionary<string, object> ps = new Dictionary<string, object> { { "prefix", prefix } };
-            using (var reader = ExecuteStoredProcedureReader("spRepopulatePersonId", ps))
-            {
-            }
         }
     }
 
@@ -141,15 +141,15 @@ namespace Chalkable.Data.School.DataAccess
         public int Start { get; set; }
         public int Count { get; set; }
         public int? RoleId { get; set; }
-        public Guid? ClassId { get; set; }
-        public Guid? TeacherId { get; set; }
-        public Guid? PersonId { get; set; }
-        public Guid? CallerId { get; set; }
+        public int? ClassId { get; set; }
+        public int? TeacherId { get; set; }
+        public int? PersonId { get; set; }
+        public int? CallerId { get; set; }
         public int CallerRoleId { get; set; }
         
         public string StartFrom { get; set; }
         public string Filter { get; set; }
-        public IEnumerable<Guid> GradeLevelIds { get; set; }
+        public IEnumerable<int> GradeLevelIds { get; set; }
         public SortTypeEnum SortType { get; set; }
 
         

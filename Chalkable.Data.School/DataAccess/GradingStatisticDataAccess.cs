@@ -115,7 +115,10 @@ namespace Chalkable.Data.School.DataAccess
                     string.Format(fullFieldNameFormat, mpcType.Name, MarkingPeriodClass.CLASS_REF_FIELD),
                 };
             var resultSetStr = fields.Select(x => string.Format("x.{0} as {0}", x)).JoinString(",");
-            fields.Add(string.Format(fullFieldNameFormat, mpcType.Name, MarkingPeriodClass.ID_FIELD));
+            
+            //fields.Add(string.Format(fullFieldNameFormat, mpcType.Name, MarkingPeriodClass.ID_FIELD)); TODO: fix it
+            
+            
             var groupBySetStr = fields.Select(x => string.Format("x.{0}", x)).JoinString(",");
             var sql = @"select {1}, AVG(x.[Avg]) as StudentGradeAvg_Avg                                
                         from ({0})x  group by {2}";
@@ -178,7 +181,7 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public IList<StudentClassGradeStats> CalcStudentClassGradeStats(Guid classId, Guid markingPeriodId, Guid? studentId, int dayInterval)
+        public IList<StudentClassGradeStats> CalcStudentClassGradeStats(int classId, int markingPeriodId, int? studentId, int dayInterval)
         {
             var parameters = new Dictionary<string, object>
                 {
@@ -189,10 +192,10 @@ namespace Chalkable.Data.School.DataAccess
                 };
             using (var reader = ExecuteStoredProcedureReader("spCalcStudentClassGradeStatsPerDate", parameters))
             {
-                var stDic = new Dictionary<Guid, StudentClassGradeStats>();
+                var stDic = new Dictionary<int, StudentClassGradeStats>();
                 while (reader.Read())
                 {
-                    var stId = SqlTools.ReadGuid(reader, StudentClassGradeStats.STUDENT_ID_FEILD);
+                    var stId = SqlTools.ReadInt32(reader, StudentClassGradeStats.STUDENT_ID_FEILD);
                     if(!stDic.ContainsKey(stId))
                         stDic.Add(stId, new StudentClassGradeStats
                             {
@@ -204,10 +207,10 @@ namespace Chalkable.Data.School.DataAccess
                     stDic[stId].GradeAvgPerDates.Add(reader.Read<GradeAvgPerDate>()); 
                 }
                 reader.NextResult();
-                var anntypeDic = new Dictionary<Guid, IDictionary<int, AnnTypeGradeStats>>();
+                var anntypeDic = new Dictionary<int, IDictionary<int, AnnTypeGradeStats>>();
                 while (reader.Read())
                 {
-                    var stId = SqlTools.ReadGuid(reader, StudentClassGradeStats.STUDENT_ID_FEILD);
+                    var stId = SqlTools.ReadInt32(reader, StudentClassGradeStats.STUDENT_ID_FEILD);
                     var annType = SqlTools.ReadInt32(reader, AnnTypeGradeStats.ANNOUNCEMENT_TYPE_ID_FIELD);
                     if(!anntypeDic.ContainsKey(stId))
                         anntypeDic.Add(stId, new Dictionary<int, AnnTypeGradeStats>());
@@ -226,80 +229,82 @@ namespace Chalkable.Data.School.DataAccess
                 return stDic.Values.ToList();
             }
         }
-   
-        public IList<ClassPersonGradingStats> CalcGradingStats(Guid callerId, int role, Guid studentId, Guid markingPeriodId)
-        {
-            var parameters = new Dictionary<string, object>
-                {
-                    {"studentId", studentId},
-                    {"markingPeriodId", markingPeriodId},
-                    {"callerId", callerId},
-                    {"roleId", role},
-                };
-            using (var reader = ExecuteStoredProcedureReader("spCalcGradingStats", parameters))
-            {
-                var res = reader.ReadList<ClassPersonGradingStats>();
-                reader.NextResult();
 
-                while (reader.Read())
-                {
-                    var attTypeGrading = reader.Read<AnnouncementTypeGrading>();
-                    var cp = res.First(x => x.Id == attTypeGrading.ClassPersonId);
-                    if(cp.GradingsByAnnType == null)
-                        cp.GradingsByAnnType = new List<AnnouncementTypeGrading>();
-                    cp.GradingsByAnnType.Add(attTypeGrading);
-                }
-                return res;
-            }
+        public IList<ClassPersonGradingStats> CalcGradingStats(int callerId, int role, int studentId, int markingPeriodId)
+        {
+            throw new NotImplementedException();
+            //var parameters = new Dictionary<string, object>
+            //    {
+            //        {"studentId", studentId},
+            //        {"markingPeriodId", markingPeriodId},
+            //        {"callerId", callerId},
+            //        {"roleId", role},
+            //    };
+            //using (var reader = ExecuteStoredProcedureReader("spCalcGradingStats", parameters))
+            //{
+            //    var res = reader.ReadList<ClassPersonGradingStats>();
+            //    reader.NextResult();
+
+            //    while (reader.Read())
+            //    {
+            //        var attTypeGrading = reader.Read<AnnouncementTypeGrading>();
+            //        var cp = res.First(x => x.Id == attTypeGrading.ClassPersonId);
+            //        if(cp.GradingsByAnnType == null)
+            //            cp.GradingsByAnnType = new List<AnnouncementTypeGrading>();
+            //        cp.GradingsByAnnType.Add(attTypeGrading);
+            //    }
+            //    return res;
+            //}
         }
     
         
         public IList<StudentGradingRank> GetStudentGradingRank(Guid callerId, int roleId, Guid schoolYearId, Guid? gradeLevelId,
                                                                Guid? studentId, Guid? classId)
         {
-            var dbQuery = new DbQuery();
-            dbQuery.Sql.AppendFormat(@"
-                                select x.* from 
-                                    (select	
-	                                    Person.Id as StudentId,
-	                                    mp.Id as MarkingPeriodId,
-	                                    mp.Name as MarkingPeriodName,
-	                                    si.{1} as GradeLevelId,
-	                                    Avg(sa.GradeValue) as [Avg],
-	                                    Rank() over (partition by mp.Id, si.{1} order by avg(sa.gradeValue) desc) as [Rank]
-                                    from Person   
-                                    join ClassPerson on ClassPerson.PersonRef = Person.Id
-                                    join StudentInfo si on si.Id = Person.Id
-                                    join StudentAnnouncement sa on sa.ClassPersonRef = ClassPerson.Id
-                                    join Announcement a on a.Id = sa.AnnouncementRef
-                                    join MarkingPeriodClass mpc on mpc.Id = a.MarkingPeriodClassRef
-                                    join MarkingPeriod mp on mp.Id = mpc.MarkingPeriodRef 
-                                    where {0} = mp.SchoolYearRef and (@{1} is null or si.{1} = @{1}) 
-		                                    and sa.GradeValue is not null and sa.[State] = 2
-                                    group by si.{1}, mp.Id, mp.Name, Person.Id) x
-                                ", MarkingPeriod.SCHOOL_YEAR_REF, StudentInfo.GRADE_LEVEL_REF_FIELD);
-            dbQuery.Parameters.Add(MarkingPeriod.SCHOOL_YEAR_REF, schoolYearId);
-            dbQuery.Parameters.Add(StudentInfo.GRADE_LEVEL_REF_FIELD, gradeLevelId);
-            dbQuery.Sql.Append(" where ")
-                       .Append(@"(@roleId = 1 or @roleId = 2 or @roleId = 5 or @roleId = 7 or @roleId = 8 
-	                              or (@roleId = 3 and x.[StudentId] = @callerId))");
-            dbQuery.Parameters.Add("@roleId", roleId);
-            dbQuery.Parameters.Add("@callerId", callerId);
-            if (studentId.HasValue)
-            {
-                dbQuery.Sql.Append(" and x.[StudentId] = @studentId ");
-                dbQuery.Parameters.Add("@studentId", studentId);
-            }
-            if (classId.HasValue)
-            {
-                dbQuery.Sql.Append(" and (x.[StudentId] in (select csp.SchoolPersonRef from ClassSchoolPerson csp where csp.ClassRef = @classId))");
-                dbQuery.Parameters.Add("@classId", classId);
-            }
-            if (gradeLevelId.HasValue)
-            {
-                dbQuery.Sql.AppendFormat(" and x.[GradeLevelId] = @{0}", StudentInfo.GRADE_LEVEL_REF_FIELD);
-            }
-            return ReadMany<StudentGradingRank>(dbQuery);
+            throw new NotImplementedException();
+//            var dbQuery = new DbQuery();
+//            dbQuery.Sql.AppendFormat(@"
+//                                select x.* from 
+//                                    (select	
+//	                                    Person.Id as StudentId,
+//	                                    mp.Id as MarkingPeriodId,
+//	                                    mp.Name as MarkingPeriodName,
+//	                                    si.{1} as GradeLevelId,
+//	                                    Avg(sa.GradeValue) as [Avg],
+//	                                    Rank() over (partition by mp.Id, si.{1} order by avg(sa.gradeValue) desc) as [Rank]
+//                                    from Person   
+//                                    join ClassPerson on ClassPerson.PersonRef = Person.Id
+//                                    join StudentInfo si on si.Id = Person.Id
+//                                    join StudentAnnouncement sa on sa.ClassPersonRef = ClassPerson.Id
+//                                    join Announcement a on a.Id = sa.AnnouncementRef
+//                                    join MarkingPeriodClass mpc on mpc.Id = a.MarkingPeriodClassRef
+//                                    join MarkingPeriod mp on mp.Id = mpc.MarkingPeriodRef 
+//                                    where {0} = mp.SchoolYearRef and (@{1} is null or si.{1} = @{1}) 
+//		                                    and sa.GradeValue is not null and sa.[State] = 2
+//                                    group by si.{1}, mp.Id, mp.Name, Person.Id) x
+//                                ", MarkingPeriod.SCHOOL_YEAR_REF, StudentInfo.GRADE_LEVEL_REF_FIELD);
+//            dbQuery.Parameters.Add(MarkingPeriod.SCHOOL_YEAR_REF, schoolYearId);
+//            dbQuery.Parameters.Add(StudentInfo.GRADE_LEVEL_REF_FIELD, gradeLevelId);
+//            dbQuery.Sql.Append(" where ")
+//                       .Append(@"(@roleId = 1 or @roleId = 2 or @roleId = 5 or @roleId = 7 or @roleId = 8 
+//	                              or (@roleId = 3 and x.[StudentId] = @callerId))");
+//            dbQuery.Parameters.Add("@roleId", roleId);
+//            dbQuery.Parameters.Add("@callerId", callerId);
+//            if (studentId.HasValue)
+//            {
+//                dbQuery.Sql.Append(" and x.[StudentId] = @studentId ");
+//                dbQuery.Parameters.Add("@studentId", studentId);
+//            }
+//            if (classId.HasValue)
+//            {
+//                dbQuery.Sql.Append(" and (x.[StudentId] in (select csp.SchoolPersonRef from ClassSchoolPerson csp where csp.ClassRef = @classId))");
+//                dbQuery.Parameters.Add("@classId", classId);
+//            }
+//            if (gradeLevelId.HasValue)
+//            {
+//                dbQuery.Sql.AppendFormat(" and x.[GradeLevelId] = @{0}", StudentInfo.GRADE_LEVEL_REF_FIELD);
+//            }
+//            return ReadMany<StudentGradingRank>(dbQuery);
         } 
     }
 

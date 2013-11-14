@@ -12,7 +12,7 @@ namespace Chalkable.Web.Models
 {
     public class AnnouncementAttachmentViewData
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public DateTime AttachedDate { get; set; }
         public bool IsOwner { get; set; }
@@ -55,7 +55,7 @@ namespace Chalkable.Web.Models
             return res;
         }
 
-        public static IList<AnnouncementAttachmentViewData> Create(IList<AnnouncementAttachmentInfo> announcementAttachments, Guid personId)
+        public static IList<AnnouncementAttachmentViewData> Create(IList<AnnouncementAttachmentInfo> announcementAttachments, int personId)
         {
             var res = announcementAttachments.Select(x => Create(x, x.Attachment.PersonRef == personId));
             return res.ToList();

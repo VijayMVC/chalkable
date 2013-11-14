@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.School;
@@ -14,15 +13,15 @@ namespace Chalkable.Web.Controllers
     {
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult List()
+        public ActionResult List(int classId)
         {
-            var list = SchoolLocator.AnnouncementTypeService.GetAnnouncementTypes(null);
-            var res = AnnouncementTypeViewData.Create(list);
+            var list = SchoolLocator.ClassClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
+            var res = ClassAnnouncementTypeViewData.Create(list);
             return Json(res, 3);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult ListByClass(Guid classId)
+        public ActionResult ListByClass(int classId)
         {
             if (!SchoolLocator.Context.SchoolId.HasValue)
                 throw new UnassignedUserException();
@@ -31,23 +30,14 @@ namespace Chalkable.Web.Controllers
                 markingPeriod = SchoolLocator.MarkingPeriodService.GetNextMarkingPeriodInYear(markingPeriod.Id);
             if (markingPeriod == null)
                 return Json(new NoMarkingPeriodException());
-
-            var standard = new[] {SchoolLocator.AnnouncementTypeService.GetAnnouncementTypeById((int) SystemAnnouncementType.Standard)};
-            var markingPeriodClass = SchoolLocator.MarkingPeriodService.GetMarkingPeriodClass(classId, markingPeriod.Id);
-            var res = GetTypesByClass(SchoolLocator, markingPeriodClass.Id, standard);
-            return Json(AnnouncementTypeViewData.Create(res), 3);
+            var res = GetTypesByClass(SchoolLocator, classId);
+            return Json(ClassAnnouncementTypeViewData.Create(res), 3);
         }
 
-        public static IList<AnnouncementType> GetTypesByClass(IServiceLocatorSchool serviceLocator, Guid markingPeriodClassId, IEnumerable<AnnouncementType> defaults)
+        public static IList<ClassAnnouncementType> GetTypesByClass(IServiceLocatorSchool serviceLocator, int classId)
         {
-            var finalAnnTypes = serviceLocator.FinalGradeService.GetFinalGradeAnnouncementTypes(markingPeriodClassId);
-            var annTypes = finalAnnTypes.Where(x => x.PercentValue > 0).Select(x => x.AnnouncementType).ToList();
-            annTypes.AddRange(defaults);
-            foreach (var announcementType in annTypes)
-            {
-                announcementType.CanCreate = true;
-            }
-            return annTypes;
+            var classAnnTypes = serviceLocator.ClassClassAnnouncementTypeService.GetClassAnnouncementTypes(classId, false).ToList();
+            return classAnnTypes;
         }
     }
 }

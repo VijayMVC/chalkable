@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -13,15 +11,17 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IClassPeriodService
     {
-        ClassPeriod Add(Guid periodId, Guid classId, Guid roomId);
-        void Delete(Guid id);
-        IList<ClassPeriod> GetClassPeriods(Guid markingPeriodId, Guid? classId, Guid? roomId, Guid? periodId, Guid? sectionId, Guid? studentId = null, Guid? teacherId = null, int? time = null);
-        IList<Class> GetAvailableClasses(Guid periodId);
-        IList<Room> GetAvailableRooms(Guid periodId);
+        ClassPeriod Add(int periodId, int classId, int? roomId, int dateTypeId);
+        void Add(IList<ClassPeriod> classPeriods);
+        void Delete(int periodId, int classId, int dayTypeId);
+        IList<ClassPeriod> GetClassPeriods(int schoolYearId,  int? markingPeriodId, int? classId, int? roomId, int? periodId, int? dateTypeId, int? studentId = null, int? teacherId = null, int? time = null);
+        IList<Class> GetAvailableClasses(int periodId);
+        IList<Room> GetAvailableRooms(int periodId);
 
-        ClassPeriod GetClassPeriodForSchoolPersonByDate(Guid personId, DateTime dateTime);
-        ClassPeriod GetNearestClassPeriod(Guid? classId, DateTime dateTime);
-        IList<ClassPeriod> GetClassPeriods(DateTime date, Guid? classId, Guid? roomId, Guid? studentId, Guid? teacherId, int? time = null);
+
+        ClassPeriod GetClassPeriodForSchoolPersonByDate(int personId, DateTime dateTime);
+        ClassPeriod GetNearestClassPeriod(int? classId, DateTime dateTime);
+        IList<ClassPeriod> GetClassPeriods(DateTime date, int? classId, int? roomId, int? studentId, int? teacherId, int? time = null);
   
     }
 
@@ -30,29 +30,22 @@ namespace Chalkable.BusinessLogic.Services.School
         public ClassPeriodService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
         }
-
-
-        public ClassPeriod Add(Guid periodId, Guid classId, Guid roomId)
+        
+        public ClassPeriod Add(int periodId, int classId, int? roomId, int dateTypeId)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
             {
-                var da = new ClassPeriodDataAccess(uow);
-                if (da.Exists( new ClassPeriodQuery{ PeriodId = periodId, RoomId = roomId}))
-                    throw new ChalkableException(ChlkResources.ERR_OTHER_CLASS_ALREADY_ASSIGNED_TO_ROOM);
-                if (da.Exists(new ClassPeriodQuery { ClassIds = new List<Guid> {classId}, PeriodId = periodId }))
-                    throw new ChalkableException(ChlkResources.ERR_CLASS_ALREADY_ASSIGNED_TO_PERIOD);
-                if (da.IsClassStudentsAssignedToPeriod(periodId, classId))
-                    throw new ChalkableException(ChlkResources.ERR_STUDENT_BAD_CLASS_PERIOD);
-
+                var da = new ClassPeriodDataAccess(uow, Context.SchoolLocalId);
                 var res = new ClassPeriod
                 {
-                    Id = Guid.NewGuid(),
                     ClassRef = classId,
                     PeriodRef = periodId,
-                    RoomRef = roomId
+                    RoomRef = roomId,
+                    DayTypeRef = dateTypeId,
+                    SchoolRef = new PeriodDataAccess(uow, Context.SchoolLocalId).GetById(periodId).SchoolRef
                 };
                 da.Insert(res);
                 uow.Commit();
@@ -60,35 +53,48 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void Delete(Guid id)
+        public void Add(IList<ClassPeriod> classPeriods)
         {
-            if(!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
             {
-                new ClassPeriodDataAccess(uow).FullDelete(id);
+                var da = new ClassPeriodDataAccess(uow, Context.SchoolLocalId);
+                da.Insert(classPeriods);
                 uow.Commit();
             }
         }
 
-        public IList<ClassPeriod> GetClassPeriods(Guid markingPeriodId, Guid? classId, Guid? roomId, Guid? periodId, Guid? sectionId,
-                                     Guid? studentId = null, Guid? teacherId = null, int? time = null)
+        public void Delete(int periodId, int classId, int dayTypeId)
+        {
+            if(!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+
+            using (var uow = Update())
+            {
+                new ClassPeriodDataAccess(uow, Context.SchoolLocalId).FullDelete(periodId, classId, dayTypeId);
+                uow.Commit();
+            }
+        }
+
+        public IList<ClassPeriod> GetClassPeriods(int schoolYearId, int? markingPeriodId, int? classId, int? roomId, int? periodId, int? sectionId,
+                                     int? studentId = null, int? teacherId = null, int? time = null)
         {
             using (var uow = Read())
             {
-                var classIds = new List<Guid>();
+                var classIds = new List<int>();
                 if(classId.HasValue)
                     classIds.Add(classId.Value);
 
-                return new ClassPeriodDataAccess(uow)
+                return new ClassPeriodDataAccess(uow, Context.SchoolLocalId)
                             .GetClassPeriods(new ClassPeriodQuery
                                 {
                                     MarkingPeriodId = markingPeriodId,
                                     ClassIds = classIds,
                                     PeriodId = periodId,
                                     RoomId = roomId,
-                                    SectionId = sectionId,
+                                    DateTypeId = sectionId,
                                     StudentId = studentId,
                                     TeacherId = teacherId,
                                     Time = time
@@ -96,44 +102,49 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Class> GetAvailableClasses(Guid periodId)
+        public IList<Class> GetAvailableClasses(int periodId)
         {
             using (var uow = Read())
             {
-                return new ClassPeriodDataAccess(uow).GetAvailableClasses(periodId);
+                return new ClassPeriodDataAccess(uow, Context.SchoolLocalId).GetAvailableClasses(periodId);
             }
         }
 
-        public IList<Room> GetAvailableRooms(Guid periodId)
+        public IList<Room> GetAvailableRooms(int periodId)
         {
             using (var uow = Read())
             {
-                return new ClassPeriodDataAccess(uow).GetAvailableRooms(periodId);
+                return new ClassPeriodDataAccess(uow, Context.SchoolLocalId).GetAvailableRooms(periodId);
             }
         }
 
-        public ClassPeriod GetClassPeriodForSchoolPersonByDate(Guid personId, DateTime dateTime)
+        public ClassPeriod GetClassPeriodForSchoolPersonByDate(int personId, DateTime dateTime)
         {
             using (var uow = Read())
             {
-                var personDa = new PersonDataAccess(uow);
-                var person = personDa.GetById(personId);
-                var teacherId = person.RoleRef == CoreRoles.TEACHER_ROLE.Id ? person.Id : default(Guid?);
-                var studentId = person.RoleRef == CoreRoles.STUDENT_ROLE.Id ? person.Id : default(Guid?);
+                var personDa = new PersonDataAccess(uow, Context.SchoolLocalId);
+                var person = personDa.GetPerson(new PersonQuery
+                    {
+                        CallerId = Context.UserLocalId,
+                        CallerRoleId = Context.Role.Id,
+                        PersonId = personId
+                    });
+                var teacherId = person.RoleRef == CoreRoles.TEACHER_ROLE.Id ? person.Id : default(int?);
+                var studentId = person.RoleRef == CoreRoles.STUDENT_ROLE.Id ? person.Id : default(int?);
                 var time = (int)(dateTime - dateTime.Date).TotalMinutes;
                 return GetClassPeriods(dateTime.Date, null, null, studentId, teacherId, time).FirstOrDefault();    
             }
         }
 
-        public ClassPeriod GetNearestClassPeriod(Guid? classId, DateTime dateTime)
+        public ClassPeriod GetNearestClassPeriod(int? classId, DateTime dateTime)
         {
-            Guid? studentId = null, teacherId = null;
+            int? studentId = null, teacherId = null;
             if (!classId.HasValue)
             {
                 if (Context.Role == CoreRoles.STUDENT_ROLE)
-                    studentId = Context.UserId;
+                    studentId = Context.UserLocalId;
                 if (Context.Role == CoreRoles.TEACHER_ROLE)
-                    teacherId = Context.UserId;
+                    teacherId = Context.UserLocalId;
             }
             var classPeriods = GetClassPeriods(dateTime, classId, null, studentId, teacherId);
 
@@ -151,13 +162,13 @@ namespace Chalkable.BusinessLogic.Services.School
             return result;
         }
 
-        public IList<ClassPeriod> GetClassPeriods(DateTime date, Guid? classId, Guid? roomId, Guid? studentId, Guid? teacherId, int? time = null)
+        public IList<ClassPeriod> GetClassPeriods(DateTime date, int? classId, int? roomId, int? studentId, int? teacherId, int? time = null)
         {
             var d = ServiceLocator.CalendarDateService.GetCalendarDateByDate(date.Date);
-            if (d == null || !d.ScheduleSectionRef.HasValue || !d.MarkingPeriodRef.HasValue)
+            if (d == null || !d.DayTypeRef.HasValue)
                 return new List<ClassPeriod>();
 
-            return GetClassPeriods(d.MarkingPeriodRef.Value, classId, roomId, null, d.ScheduleSectionRef, studentId, teacherId, time);
+            return GetClassPeriods(d.SchoolYearRef, null, classId, roomId, null, d.DayTypeRef, studentId, teacherId, time);
         }
     }
 }

@@ -19,9 +19,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public IList<String> autoGradeApps { get; set; }
 
         public ShortPersonViewData Owner { get; set; }
-        public bool WasSubmittedToAdmin { get; set; }
-
-        private AnnouncementDetailedViewData(AnnouncementDetails announcementDetails, IList<StudentAnnouncement> studentAnnouncements, IGradingStyleMapper mapper, Guid currentSchoolPersonId)
+        
+        private AnnouncementDetailedViewData(AnnouncementDetails announcementDetails, IList<StudentAnnouncement> studentAnnouncements, IGradingStyleMapper mapper, int currentSchoolPersonId)
             : base(announcementDetails, studentAnnouncements, mapper, announcementDetails.Gradable, null)
         {
             if (announcementDetails.AnnouncementQnAs != null)
@@ -29,8 +28,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
 
             Owner = ShortPersonViewData.Create(announcementDetails.Owner);
             AnnouncementReminders = AnnouncementReminderViewData.Create(announcementDetails.AnnouncementReminders, currentSchoolPersonId, Owner.Id);
-            WasSubmittedToAdmin = announcementDetails.WasSubmittedToAdmin;
-
+            
             if (announcementDetails.AnnouncementApplications == null) return;
             //TODO: applicationViewData
             //Applications = new List<AnnouncementApplicationViewData>();
@@ -50,13 +48,13 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             return new AnnouncementDetailedViewData(announcement, isGradable, wasAnnouncementTypeGraded);
         }
 
-        public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, IGradingStyleMapper mapper, Guid currentSchoolPersonId)
+        public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, IGradingStyleMapper mapper, int currentSchoolPersonId)
         {
             var studentAnnouncements = announcementDetails.StudentAnnouncements.Select(x => new StudentAnnouncement
             {
                 Id = x.Id,
                 AnnouncementRef = x.AnnouncementRef,
-                ClassPersonRef = x.ClassPersonRef,
+                PersonRef = x.PersonRef,
                 Comment = x.Comment,
                 Dropped = x.Dropped,
                 ExtraCredit = x.ExtraCredit,
@@ -66,7 +64,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         }
 
         public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, IGradingStyleMapper mapper,
-            Guid currentSchoolPersonId, IList<AnnouncementAttachmentInfo> attachmentInfos)
+            int currentSchoolPersonId, IList<AnnouncementAttachmentInfo> attachmentInfos)
         {
             var res = Create(announcementDetails, mapper, currentSchoolPersonId);
             res.AnnouncementAttachments = AnnouncementAttachmentViewData.Create(attachmentInfos, currentSchoolPersonId);

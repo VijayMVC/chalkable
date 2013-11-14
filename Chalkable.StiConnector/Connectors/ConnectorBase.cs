@@ -4,67 +4,92 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.Serialization.Json;
 using System.Text;
-using System.Threading.Tasks;
 using Chalkable.StiConnector.Connectors.Model;
+using Newtonsoft.Json;
 
 namespace Chalkable.StiConnector.Connectors
 {
     public class ConnectorBase
     {
-        private const string REQ_ON_FORMAT = "Request on: {0}";
-        private string userName;
-        private string password;
-        protected string BaseUrl { get; private set; }
 
-        public ConnectorBase(string userName, string password, string baseUrl)
+        private ConnectorLocator locator;
+        public ConnectorBase(ConnectorLocator locator)
         {
-            this.userName = userName;
-            this.password = password;
-            BaseUrl = baseUrl;
+            this.locator = locator;
         }
 
         public T Call<T>(string url)
         {
-            string credentials = string.Format("{0}:{1}", userName, password);
-            byte[] credentialsBytes = Encoding.UTF8.GetBytes(credentials);
-            string credentialsBase64 = Convert.ToBase64String(credentialsBytes);
             var client = new WebClient();
-            client.Headers[HttpRequestHeader.Authorization] = "Basic " + credentialsBase64;
+            client.Headers[HttpRequestHeader.Authorization] = "Session " + locator.Token;
             client.Encoding = Encoding.UTF8;
-            Debug.WriteLine(REQ_ON_FORMAT, url);
+            Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
             var x = typeof (T);
-            var ser = new DataContractJsonSerializer(x);
-
-            using (var stream = new MemoryStream(client.DownloadData(url)))
+            MemoryStream stream = null;
+            try
             {
-                return (T) ser.ReadObject(stream);
+                stream = new MemoryStream(client.DownloadData(url));
+
+                var serializer = new JsonSerializer();
+                //serializer.Converters.Add(new JavaScriptDateTimeConverter());
+                //serializer.NullValueHandling = NullValueHandling.Ignore;
+                var reader = new StreamReader(stream);
+                var jsonReader = new JsonTextReader(reader);
+                return serializer.Deserialize<T>(jsonReader);
+            }
+            catch (WebException ex)
+            {
+                var reader = new StreamReader(ex.Response.GetResponseStream());
+                var msg = reader.ReadToEnd();
+                throw new Exception(msg);
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Dispose();
             }
         }
-    }
 
-    public class SchoolConnector : ConnectorBase
-    {
-        public SchoolConnector(string userName, string password, string baseUrl) : base(userName, password, baseUrl)
+        public void Post<T>(string url, T obj)
         {
+            var client = new WebClient();
+            client.Headers[HttpRequestHeader.Authorization] = "Session " + locator.Token;
+            client.Encoding = Encoding.UTF8;
+            client.Headers.Add("Content-Type", "application/json");
+
+            Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
+            var x = typeof(T);
+            var stream = new MemoryStream();
+            try
+            {
+                var serializer = new JsonSerializer();
+                var writer = new StreamWriter(stream);
+                serializer.Serialize(writer, obj);
+                writer.Flush();
+                client.UploadData(url, stream.ToArray());
+            }
+            catch (WebException ex)
+            {
+                var reader = new StreamReader(ex.Response.GetResponseStream());
+                var msg = reader.ReadToEnd();
+                throw new Exception(msg);
+            }
+            finally
+            {
+                stream.Dispose();
+            }
         }
 
-        public List<School> GetSchools()
+        protected string BaseUrl
         {
-            return Call<School[]>(BaseUrl + "schools").ToList();
-        }
-
-        public School GetSchoolDetails(int id)
-        {
-            return Call<School>(BaseUrl + "schools/" + id);
+            get { return locator.BaseUrl; }
         }
     }
 
     public class AcadSessionConnector : ConnectorBase
     {
-        public AcadSessionConnector(string userName, string password, string baseUrl)
-            : base(userName, password, baseUrl)
+        public AcadSessionConnector(ConnectorLocator locator) : base(locator)
         {
         }
 
@@ -76,7 +101,7 @@ namespace Chalkable.StiConnector.Connectors
 
     public class StudentConnector : ConnectorBase
     {
-        public StudentConnector(string userName, string password, string baseUrl) : base(userName, password, baseUrl)
+        public StudentConnector(ConnectorLocator locator) : base(locator)
         {
         }
 
@@ -88,7 +113,7 @@ namespace Chalkable.StiConnector.Connectors
 
     public class GradeLevelConnector : ConnectorBase
     {
-        public GradeLevelConnector(string userName, string password, string baseUrl) : base(userName, password, baseUrl)
+        public GradeLevelConnector(ConnectorLocator locator) : base(locator)
         {
         }
 
@@ -100,7 +125,7 @@ namespace Chalkable.StiConnector.Connectors
 
     public class GenderConnector : ConnectorBase
     {
-        public GenderConnector(string userName, string password, string baseUrl) : base(userName, password, baseUrl)
+        public GenderConnector(ConnectorLocator locator) : base(locator)
         {
         }
 
@@ -112,7 +137,7 @@ namespace Chalkable.StiConnector.Connectors
 
     public class ContactConnector : ConnectorBase
     {
-        public ContactConnector(string userName, string password, string baseUrl) : base(userName, password, baseUrl)
+        public ContactConnector(ConnectorLocator locator) : base(locator)
         {
         }
 
@@ -124,6 +149,27 @@ namespace Chalkable.StiConnector.Connectors
         public IList<PersonAddresses> GetAddresses(int personId)
         {
             return Call<PersonAddresses[]>(string.Format("{0}persons/{1}/addresses", BaseUrl, personId)).ToList();
+        }
+    }
+
+    public class AttendanceConnector : ConnectorBase
+    {
+        public AttendanceConnector(ConnectorLocator locator) : base(locator)
+        {
+        }
+
+        public SectionAttendance GetSectionAttendance(int acadSessionId, DateTime date, int sectionId)
+        {
+            return Call<SectionAttendance>(string.Format("{0}Chalkable/{1}/sections/{2}/attendance/{3}", BaseUrl, acadSessionId, sectionId, date.ToString("yyyy-MM-dd")));
+        }
+
+        public void SetSectionAttendance(int acadSessionId, DateTime date, int sectionId, SectionAttendance sectionAttendance)
+        {
+            string url = string.Format("{0}Chalkable/{1}/sections/{2}/attendance/{3}", BaseUrl, acadSessionId, sectionId,
+                                       date.ToString("yyyy-MM-dd"));
+
+            Post(url, sectionAttendance);
+                        
         }
     }
 }

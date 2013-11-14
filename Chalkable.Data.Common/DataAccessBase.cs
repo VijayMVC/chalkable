@@ -4,14 +4,16 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Orm;
 
 namespace Chalkable.Data.Common
 {
-    public class DataAccessBase<TEntity> where TEntity : new()
+    public class DataAccessBase<TEntity, TParam> where TEntity : new()
     {
         protected const string FILTER_FORMAT = "%{0}%";
-        
+        private const string ALL_COUNT_FIELD = "AllCount";
+
         private UnitOfWork unitOfWork;
         public DataAccessBase(UnitOfWork unitOfWork)
         {
@@ -86,6 +88,11 @@ namespace Chalkable.Data.Common
             }
         }
 
+        protected void SimpleUpdate<T>(T obj, QueryCondition condition)
+        {
+            var q = Orm.Orm.SimpleUpdate(obj, condition);
+            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
+        }
 
         protected void SimpleUpdate<T>(IDictionary<string, object> updateParams, QueryCondition conditions)
         {
@@ -104,16 +111,9 @@ namespace Chalkable.Data.Common
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
 
-        protected void SimpleDelete<T>(Guid id)
-        {
-            var conds = new AndQueryCondition {{"id", id}};
-            var q = Orm.Orm.SimpleDelete<T>(conds);
-            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
-        }
-
         protected void SimpleDelete<T>(QueryCondition conds)
         {
-            var q = Orm.Orm.SimpleDelete<T>(conds);
+            var q = Orm.Orm.SimpleDelete<T>(FilterConditions(conds));
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
         protected T Read<T>(DbQuery query, Func<DbDataReader, T> action)
@@ -142,12 +142,12 @@ namespace Chalkable.Data.Common
 
         protected T SelectOne<T>(QueryCondition conditions) where T : new() 
         {
-            var command = Orm.Orm.SimpleSelect<T>(conditions);
+            var command = Orm.Orm.SimpleSelect<T>(FilterConditions(conditions), 1);
             return ReadOne<T>(command);
         }
         protected T SelectOneOrNull<T>(QueryCondition conditions) where T : new()
         {
-            var command = Orm.Orm.SimpleSelect<T>(conditions);
+            var command = Orm.Orm.SimpleSelect<T>(FilterConditions(conditions), 1);
             return ReadOneOrNull<T>(command);
         }
 
@@ -157,7 +157,7 @@ namespace Chalkable.Data.Common
         }
         protected IList<T> SelectMany<T>(QueryCondition conditions) where T : new()
         {
-            var q = Orm.Orm.SimpleSelect<T>(conditions);
+            var q = Orm.Orm.SimpleSelect<T>(FilterConditions(conditions));
             return ReadMany<T>(q);
         }
 
@@ -168,9 +168,9 @@ namespace Chalkable.Data.Common
         }
 
         protected PaginatedList<T> PaginatedSelect<T>(QueryCondition conditions, string orderByColumn,
-                                                      int start, int count, Orm.Orm.OrderType orderType = Orm.Orm.OrderType.Asc) where T : new()
+                                                            int start, int count, Orm.Orm.OrderType orderType = Orm.Orm.OrderType.Asc) where T : new()
         {
-            var q = Orm.Orm.PaginationSelect<T>(conditions, orderByColumn, orderType, start, count);
+            var q = Orm.Orm.PaginationSelect<T>(FilterConditions(conditions), orderByColumn, orderType, start, count);
             return ReadPaginatedResult<T>(q, start, count);
         }
 
@@ -188,7 +188,7 @@ namespace Chalkable.Data.Common
             {
                 if (reader.Read())
                 {
-                    var allCount = SqlTools.ReadInt32(reader, "AllCount");
+                    var allCount = SqlTools.ReadInt32(reader, ALL_COUNT_FIELD);
                     reader.NextResult();
                     var res = readAction(reader);
                     return new PaginatedList<T>(res, start / count, count, allCount);
@@ -204,32 +204,19 @@ namespace Chalkable.Data.Common
 
         protected bool Exists<T>(QueryCondition conditions) where T : new()
         {
-            var resName = "AllCount";
-            var q = Orm.Orm.CountSelect<T>(conditions, resName);
-            return Read(q, reader => reader.Read() && SqlTools.ReadInt32(reader, resName) > 0);
+            var q = Orm.Orm.CountSelect<T>(FilterConditions(conditions), ALL_COUNT_FIELD);
+            return Read(q, reader => reader.Read() && SqlTools.ReadInt32(reader, ALL_COUNT_FIELD) > 0);
         }
 
-        protected bool Exists(DbQuery query, string resName = "AllCount")
+        protected bool Exists(DbQuery query, string resName = ALL_COUNT_FIELD)
         {
             var q = Orm.Orm.CountSelect(query, resName);
             return Read(q, reader => reader.Read() && SqlTools.ReadInt32(reader, resName) > 0);
         }
         protected int Count(DbQuery query)
         {
-            var resName = "AllCount";
-            var q = Orm.Orm.CountSelect(query, resName);
-            return Read(q, reader => reader.Read() ? SqlTools.ReadInt32(reader, resName) : 0);
-        }
-
-
-        public virtual TEntity GetById(Guid id)
-        {
-            return SelectOne<TEntity>(new AndQueryCondition { { "Id", id } });
-        }
-
-        public virtual TEntity GetByIdOrNull(Guid id)
-        {
-            return SelectOneOrNull<TEntity>(new AndQueryCondition { { "Id", id } });
+            var q = Orm.Orm.CountSelect(query, ALL_COUNT_FIELD);
+            return Read(q, reader => reader.Read() ? SqlTools.ReadInt32(reader, ALL_COUNT_FIELD) : 0);
         }
 
         public virtual IList<TEntity> GetAll(QueryCondition conditions = null)
@@ -240,7 +227,7 @@ namespace Chalkable.Data.Common
         public virtual PaginatedList<TEntity> GetPage(int start, int count, string orderBy = null, Orm.Orm.OrderType orderType = Orm.Orm.OrderType.Asc)
         {
             if (string.IsNullOrEmpty(orderBy))
-                orderBy = "Id";
+                orderBy = Orm.Orm.GetPrimaryKeyFields(typeof (TEntity)).First().Name;
             return PaginatedSelect<TEntity>(orderBy, start, count, orderType);
         }
 
@@ -262,9 +249,28 @@ namespace Chalkable.Data.Common
         {
             SimpleUpdate(entities);
         }
-        public virtual void Delete(Guid id)
+
+        public virtual void Delete(TParam key)
         {
-            SimpleDelete<TEntity>(id);
+            SimpleDelete<TEntity>(BuildCondsByKey(key));
+        }
+        public virtual TEntity GetById(TParam key)
+        {
+            return SelectOne<TEntity>(BuildCondsByKey(key));
+        }
+        public virtual TEntity GetByIdOrNull(TParam key)
+        {
+            return SelectOneOrNull<TEntity>(BuildCondsByKey(key));
+        }
+        private QueryCondition BuildCondsByKey(TParam key)
+        {
+            var primaryKeyFields = Orm.Orm.GetPrimaryKeyFields(typeof(TEntity));
+            return new AndQueryCondition {{primaryKeyFields.First().Name, key}};
+        }
+
+        protected virtual QueryCondition FilterConditions(QueryCondition condition)
+        {
+            return condition;
         }
     }
 }

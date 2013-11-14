@@ -21,7 +21,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult Read(Guid id)
+        public ActionResult Read(int id)
         {
             var res = SchoolLocator.PrivateMessageService.GetMessage(id);
             return Json(PrivateMessageViewData.Create(res));
@@ -29,7 +29,7 @@ namespace Chalkable.Web.Controllers
 
         [RequireRequestValue("personId")]
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_PRIVATE_MESSAGES_SEND, true, CallType.Get, new[] { AppPermissionType.Message })]
-        public ActionResult Send(Guid personId, string subject, string body)
+        public ActionResult Send(int personId, string subject, string body)
         {
             var res = SchoolLocator.PrivateMessageService.SendMessage(personId, subject, body);
             //if (res != null)
@@ -40,14 +40,14 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult MarkAsRead(GuidList ids, bool read)
+        public ActionResult MarkAsRead(IntList ids, bool read)
         {
             SchoolLocator.PrivateMessageService.MarkAsRead(ids, read);
             return Json(true);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult Delete(GuidList ids)
+        public ActionResult Delete(IntList ids)
         {
             SchoolLocator.PrivateMessageService.Delete(ids);
             return Json(true);

@@ -9,7 +9,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class PrivateMessageDataAccess : DataAccessBase<PrivateMessage>
+    public class PrivateMessageDataAccess : DataAccessBase<PrivateMessage, int>
     {
         public PrivateMessageDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -17,9 +17,9 @@ namespace Chalkable.Data.School.DataAccess
 
         private const string SENDER_PREFIX = "Sender";
         private const string RECIPIENT_PREFIX = "Recipient";
-    
 
-        private DbQuery BuildGetMessagesQuery(IList<int> roles, string keyword, bool? read, Guid personId, bool isIncome)
+
+        private DbQuery BuildGetMessagesQuery(IList<int> roles, string keyword, bool? read, int personId, bool isIncome)
         {
 
             var field1 = "PrivateMessage_FromPersonRef";
@@ -85,7 +85,7 @@ namespace Chalkable.Data.School.DataAccess
                 };
         }
 
-        public PrivateMessageDetails GetDetailsById(Guid id, Guid callerId)
+        public PrivateMessageDetails GetDetailsById(int id, int callerId)
         {
             var sql = @"select * from vwPrivateMessage where PrivateMessage_Id = @Id 
                         and (PrivateMessage_FromPersonRef = @callerId or PrivateMessage_ToPersonRef = @callerId)";
@@ -97,7 +97,7 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public IList<PrivateMessage> GetNotDeleted(Guid callerId)
+        public IList<PrivateMessage> GetNotDeleted(int callerId)
         {
             var sql = @"select * from PrivateMessage 
                         where (FromPersonRef = @callerId and DeletedBySender = 0) 
@@ -107,12 +107,12 @@ namespace Chalkable.Data.School.DataAccess
         } 
 
         public PaginatedList<PrivateMessageDetails> GetIncomeMessages(IList<int> roles, string keyword, bool? read,
-                                                               Guid personId, int start, int count)
+                                                               int personId, int start, int count)
         {
             var query = BuildGetMessagesQuery(roles, keyword, read, personId, true);
             return ReadPaginatedPrivateMessage(query, start, count);
         }
-        public PaginatedList<PrivateMessageDetails> GetOutComeMessage(IList<int> roles, string keyword, Guid personId,
+        public PaginatedList<PrivateMessageDetails> GetOutComeMessage(IList<int> roles, string keyword, int personId,
                                                                int start, int count)
         {
             var query = BuildGetMessagesQuery(roles, keyword, null, personId, false);

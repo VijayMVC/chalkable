@@ -23,7 +23,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         {
             var res = new List<InstalledApplicationViewData>();
             var dicApp = installedApp.GroupBy(x => x.ApplicationRef).ToDictionary(x => x.Key, x => x.ToList());
-            var personId = person != null ? person.Id : default(Guid?);
+            var personId = person != null ? person.Id : default(int?);
             foreach (var appKey in dicApp.Keys)
             {
                 var appInstalls = dicApp[appKey];
@@ -48,12 +48,12 @@ namespace Chalkable.Web.Models.ApplicationsViewData
 
     public class ApplicationInstallViewData
     {
-        public Guid ApplicationInstallId { get; set; }
-        public Guid InstallationOwnerId { get; set; }
-        public Guid PersonId { get; set; }
+        public int ApplicationInstallId { get; set; }
+        public int InstallationOwnerId { get; set; }
+        public int PersonId { get; set; }
         public bool IsOwner { get; set; }
 
-        public static ApplicationInstallViewData Create(ApplicationInstall applicationInstall, Guid? personId)
+        public static ApplicationInstallViewData Create(ApplicationInstall applicationInstall, int? personId)
         {
             return new ApplicationInstallViewData
             {
@@ -63,7 +63,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                 IsOwner = personId.HasValue && personId.Value == applicationInstall.OwnerRef,
             };
         }
-        public static IList<ApplicationInstallViewData> Create(IList<ApplicationInstall> applicationInstalls, Guid? personId)
+        public static IList<ApplicationInstallViewData> Create(IList<ApplicationInstall> applicationInstalls, int? personId)
         {
             return applicationInstalls.Select(x => Create(x, personId)).ToList();
         }

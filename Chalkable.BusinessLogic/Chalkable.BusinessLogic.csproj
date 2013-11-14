@@ -54,14 +54,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\AppTools.cs" />
-    <Compile Include="Logic\SchoolStateMachine.cs" />
     <Compile Include="Mapping\GradingStyleMapper.cs" />
+    <Compile Include="Model\AddressInfo.cs" />
     <Compile Include="Model\AnnouncementInfo.cs" />
     <Compile Include="Model\ApplicationInfo.cs" />
     <Compile Include="Model\ApplicationTotalPriceInfo.cs" />
     <Compile Include="Model\AttachmentContentInfo.cs" />
     <Compile Include="Model\BlobContainerInfo.cs" />
     <Compile Include="Model\BlobInfo.cs" />
+    <Compile Include="Model\ChalkableAnnouncementType.cs" />
+    <Compile Include="Model\ClassAttendance.cs" />
     <Compile Include="Model\EmailInfo.cs" />
     <Compile Include="Model\RecipientInfo.cs" />
     <Compile Include="Model\UserInfo.cs" />
@@ -100,18 +102,17 @@
     <Compile Include="Services\School\AnnouncementQnAService.cs" />
     <Compile Include="Services\School\AnnouncementReminderService.cs" />
     <Compile Include="Services\School\AnnouncementService.cs" />
-    <Compile Include="Services\School\AnnouncementTypeService.cs" />
+    <Compile Include="Services\School\ClassAnnouncementTypeService.cs" />
     <Compile Include="Services\School\ApplicationSchoolService.cs" />
     <Compile Include="Services\School\AppMarketService.cs" />
     <Compile Include="Services\School\AttendanceReasonService.cs" />
     <Compile Include="Services\School\AttendanceService.cs" />
     <Compile Include="Services\School\CalendarDateService.cs" />
+    <Compile Include="Services\School\DayTypeService.cs" />
     <Compile Include="Services\School\DisciplineService.cs" />
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
-    <Compile Include="Services\School\CourseService.cs" />
     <Compile Include="Services\School\DisciplineTypeService.cs" />
-    <Compile Include="Services\School\FinalGradeService.cs" />
     <Compile Include="Services\School\GradeLevelService.cs" />
     <Compile Include="Services\School\GradingStatisticService.cs" />
     <Compile Include="Services\School\GradingStyleService.cs" />
@@ -124,7 +125,8 @@
     <Compile Include="Services\School\PhoneService.cs" />
     <Compile Include="Services\School\PrivateMessageService.cs" />
     <Compile Include="Services\School\RoomService.cs" />
-    <Compile Include="Services\School\ScheduleSectionService.cs" />
+    <Compile Include="Services\School\SchoolPersonService.cs" />
+    <Compile Include="Services\School\SchoolService.cs" />
     <Compile Include="Services\School\SchoolServiceBase.cs" />
     <Compile Include="Services\School\SchoolYearService.cs" />
     <Compile Include="Services\School\ServiceLocatorSchool.cs" />
@@ -151,6 +153,10 @@
       <Project>{c5753c2a-f2bc-4f96-846b-548fc67191b2}</Project>
       <Name>Chalkable.Data.School</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Chalkable.StiConnector\Chalkable.StiConnector.csproj">
+      <Project>{3D16203E-D19D-41E1-9918-2A9448427BFD}</Project>
+      <Name>Chalkable.StiConnector</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GCObjectRenderer\GCObjectRenderer.csproj">
       <Project>{ccd7266b-94bb-45ef-bc49-0f608da006f3}</Project>
       <Name>GCObjectRenderer</Name>
@@ -159,6 +165,9 @@
       <Project>{3051F268-B03F-42AE-A06C-1D8DD751BDBF}</Project>
       <Name>WindowsAzure.Acs.Oauth2</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Logic\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

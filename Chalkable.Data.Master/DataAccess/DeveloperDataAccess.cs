@@ -6,15 +6,15 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Data.Master.DataAccess
 {
-    public class DeveloperDataAccess : DataAccessBase<Developer>
+    public class DeveloperDataAccess : DataAccessBase<Developer, Guid>
     {
         public DeveloperDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
 
-        public Developer GetDeveloper(Guid schoolId)
+        public Developer GetDeveloper(Guid districtId)
         {
-            var conds = new AndQueryCondition { { Developer.SCHOOL_REF_FIELD, schoolId } };
+            var conds = new AndQueryCondition { { Developer.DISTRICT_REF_FIELD, districtId } };
             return ReadOneOrNull<Developer>(BuildGetDeveloperQuery(conds), true);
         }
         public override Developer GetById(Guid id)

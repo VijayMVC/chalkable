@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Orm;
@@ -11,10 +10,10 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IPhoneService
     {
         IList<Phone> GetPhones();
-        IList<Phone> GetPhones(Guid personId);
-        Phone Add(Guid personId, string value, PhoneType type, bool isPrimary);
-        Phone Edit(Guid id, string value, PhoneType type, bool isPrimary);
-        void Delete(Guid id);
+        IList<Phone> GetPhones(int personId);
+        Phone Add(string digitOnlyValue, int personId, string value, PhoneType type, bool isPrimary);
+        Phone Edit(string digitOnlyValue, int personId, string value, PhoneType type, bool isPrimary);
+        void Delete(string digitOnlyValue, int personId);
         IList<Person> GetUsersByPhone(string phone);
     }
 
@@ -41,7 +40,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Phone> GetPhones(Guid personId)
+        public IList<Phone> GetPhones(int personId)
         {
             using (var uow = Read())
             {
@@ -50,16 +49,15 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public Phone Add(Guid personId, string value, PhoneType type, bool isPrimary)
+        public Phone Add(string digitOnlyValue, int personId, string value, PhoneType type, bool isPrimary)
         {
-            if (!(BaseSecurity.IsAdminOrTeacher(Context) || Context.UserId == personId))//TODO:can teacher do this?
+            if (!(BaseSecurity.IsDistrict(Context)))//TODO:can teacher do this?
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new PhoneDataAccess(uow);
                 var phone = new Phone
                     {
-                        Id = Guid.NewGuid(),
                         Value = value,
                         DigitOnlyValue = DigitsOnly(value),
                         PersonRef = personId,
@@ -72,33 +70,37 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public Phone Edit(Guid id, string value, PhoneType type, bool isPrimary)
+        public Phone Edit(string digitOnlyValue, int personId, string value, PhoneType type, bool isPrimary)
         {
             using (var uow = Update())
             {
                 var da = new PhoneDataAccess(uow);
-                var phone = da.GetById(id);
-                if (!(BaseSecurity.IsAdminOrTeacher(Context) || Context.UserId == phone.PersonRef))//TODO:can teacher do this?
+                var phone = da.GetPhone(personId, digitOnlyValue);
+                if (!(BaseSecurity.IsDistrict(Context)))
                     throw new ChalkableSecurityException();
                 phone.DigitOnlyValue = DigitsOnly(value);
                 phone.Value = value;
                 phone.IsPrimary = isPrimary;
                 phone.Type = type;
-                da.Update(phone);
+                da.Update(phone, new AndQueryCondition
+                    {
+                        {Phone.DIGIT_ONLY_VALUE_FIELD, digitOnlyValue},
+                        {Phone.PERSON_REF_FIELD, personId}
+                    });
                 uow.Commit();
                 return phone;
             }
         }
 
-        public void Delete(Guid id)
+        public void Delete(string digitOnlyValue, int personId)
         {
             using (var uow = Update())
             {
                 var da = new PhoneDataAccess(uow);
-                var phone = da.GetById(id);
-                if (!(BaseSecurity.IsAdminEditor(Context) || Context.UserId == phone.PersonRef))
+                var phone = da.GetPhone(personId, digitOnlyValue);
+                if (!(BaseSecurity.IsDistrict(Context)))
                     throw new ChalkableSecurityException();
-                da.Delete(phone.Id);
+                da.Delete(phone);
                 uow.Commit();
             }
         }
@@ -107,7 +109,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-               return  new PhoneDataAccess(uow).GetUsersByPhone(phone);
+                return new PhoneDataAccess(uow).GetUsersByPhone(phone);
             }
         }
     }

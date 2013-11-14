@@ -1,5 +1,5 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
-REQUIRE('chlk.templates.attendance.ClassAttendance');
+REQUIRE('chlk.templates.attendance.ClassAttendanceTpl');
 REQUIRE('chlk.templates.attendance.ClassList');
 
 NAMESPACE('chlk.activities.attendance', function () {
@@ -12,17 +12,23 @@ NAMESPACE('chlk.activities.attendance', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.attendance.ClassList, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         'ClassListPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
+
             function $(){
                 BASE();
                 this._typesEnum = chlk.models.attendance.AttendanceTypeEnum;
                 this._comboTimer = null;
                 this._gridEvents = chlk.controls.GridEvents;
+                this._LEFT_ARROW = 'left-arrow';
+                this._RIGHT_ARROW = 'right-arrow';
+                this._reasons = null;
+                this._classAttendances = null;
+                this._currentStudentAtt = null;
             },
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.attendance.ClassAttendance)],
+            [ria.mvc.PartialUpdateRule(chlk.templates.attendance.ClassAttendanceTpl)],
             VOID, function doUpdateItem(tpl, model, msg_) {
                 this.dom.find('.keyboard-suggestion').hide();
-                var container = this.dom.find('.container-' + model.getClassPersonId().valueOf());
+                var container = this.dom.find('.container-' + model.getStudent().getId().valueOf());
                 container.empty();
                 tpl.renderTo(container);
                 var row = container.parent('.row');
@@ -36,8 +42,8 @@ NAMESPACE('chlk.activities.attendance', function () {
             VOID, function gridKeyDownSelect(node, event, key_) {
                 switch(key_){
                     case ria.dom.Keys.ENTER.valueOf(): node.trigger(this._gridEvents.SELECT_NEXT_ROW.valueOf());break;
-                    case ria.dom.Keys.LEFT.valueOf(): node.find('.row.selected').find('.left-arrow').trigger('click');break;
-                    case ria.dom.Keys.RIGHT.valueOf(): node.find('.row.selected').find('.right-arrow').trigger('click');break;
+                    case ria.dom.Keys.LEFT.valueOf(): node.find('.row.selected').find('.' + this._LEFT_ARROW).trigger('click');break;
+                    case ria.dom.Keys.RIGHT.valueOf(): node.find('.row.selected').find('.' + this._RIGHT_ARROW).trigger('click');break;
                 }
             },
 
@@ -71,7 +77,7 @@ NAMESPACE('chlk.activities.attendance', function () {
             VOID, function rowSelect(node, event, row_, index_) {
                 if(row_ && row_.find('input[name=type]').getValue() == this._typesEnum.NA.valueOf()){
                     row_.find('input[name=type]').setValue(this._typesEnum.PRESENT.valueOf());
-                    row_.find('form').trigger('submit');
+              //      row_.find('form').trigger('submit');
                 }else{
                     this.showDropDown();
                 }
@@ -118,9 +124,74 @@ NAMESPACE('chlk.activities.attendance', function () {
                         }; break;
                     case ria.dom.Keys.ENTER.valueOf():
                         this.updateReasons();break;
-                    case ria.dom.Keys.LEFT.valueOf(): node.parent('.row.selected').find('.left-arrow').trigger('click');break;
-                    case ria.dom.Keys.RIGHT.valueOf(): node.parent('.row.selected').find('.right-arrow').trigger('click');break;
+                    case ria.dom.Keys.LEFT.valueOf(): node.parent('.row.selected').find('.' + this._LEFT_ARROW).trigger('click');break;
+                    case ria.dom.Keys.RIGHT.valueOf(): node.parent('.row.selected').find('.' + this._RIGHT_ARROW).trigger('click');break;
                 }
+            },
+
+            [ria.mvc.DomEventBind('click', '.left-arrow, .right-arrow')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function arrowClick(node, event){
+                var currentAttN = node.parent().find('.current-attendance');
+                var attendRow = node.parent('.student-attendance-form');
+                var type = attendRow.getData('type');
+                type = this.changeAttendanceType_(node.getAttr('class'), type);
+                this.changeAttendance_(attendRow.getData('person-id'), type, null);
+                this.showDropDown();
+            },
+
+            [[Number, Number, Number]],
+            VOID, function changeAttendance_(personId, type, reasonId){
+               var atts = this._classAttendances.filter(function(item){return item.getStudentId().valueOf() == personId});
+               if(atts && atts.length > 0){
+                   var att = atts[0];
+                   att.setType(type);
+                   if(!reasonId){
+                       var level = att.getLevel();
+                       var reasons = att.getReasons().filter(function(item){return item.isDefaultReason(level);});
+                       if(reasons.length > 0){
+                           reasonId = reasons[0].getId().valueOf();
+                       }
+                   }
+                   if(reasonId){
+                       var reason = this._reasons.filter(function(item){return item.getId().valueOf() == reasonId;})[0];
+                       att.setAttendanceReasonId(reason.getId());
+                       att.setAttendanceReason(reason);
+                   }
+                   this.renderStudentAttendance_(att);
+               }
+            },
+
+            [[String, Number]],
+            Number,  function changeAttendanceType_(arrowClass, currentType){
+                var attTypeEnum = chlk.models.attendance.AttendanceTypeEnum;
+                var types = [
+                    attTypeEnum.PRESENT.valueOf(),
+                    attTypeEnum.ABSENT.valueOf(),
+                    attTypeEnum.LATE.valueOf()
+                ];
+                var index = types.indexOf(currentType);
+                var increment = arrowClass == this._LEFT_ARROW ? -1 : arrowClass == this._RIGHT_ARROW ? 1 : 0;
+                if(increment == -1 && index == 0)
+                    index = types.length;
+                else if(increment == 1 && index == types.length - 1)
+                    index = -1;
+                index += increment;
+                return types[index];
+            },
+
+            [[chlk.models.attendance.ClassAttendance]],
+            VOID, function renderStudentAttendance_(studentAttendance){
+                if(studentAttendance){
+                    this.onPartialRender_(studentAttendance, chlk.activities.lib.DontShowLoader());
+                    this.onPartialRefresh_(studentAttendance, chlk.activities.lib.DontShowLoader());
+                }
+            },
+
+            OVERRIDE, VOID, function onRender_(model){
+                BASE(model);
+                this._reasons = model.getReasons();
+                this._classAttendances = model.getItems();
             },
 
             [ria.mvc.DomEventBind('click', '.current-attendance')],
@@ -143,11 +214,13 @@ NAMESPACE('chlk.activities.attendance', function () {
                 var option = this.dom.find('.option.selected:visible');
                 var id = option.getData('id');
                 var grid = option.parent('.chlk-grid');
-                var form = option.parent('form');
+                var form = option.parent('.student-attendance-form');
                 var row = option.parent('.row');
-                form.find('input[name=attendancereasonid]').setValue(id);
-                id && form.find('input[name=attendanceReasonDescription]').setValue(option.getHTML());
-                form.trigger('submit');
+                this.changeAttendance_(form.getData('person-id'), form.getData('type'), id);
+                //form.find('input[name=attendancereasonid]').setValue(id);
+                //form.setData('reason-id', id);
+        //        id && form.find('input[name=attendanceReasonDescription]').setValue(option.getHTML());
+//                form.trigger('submit');
                 grid.trigger(this._gridEvents.SELECT_NEXT_ROW.valueOf());
             },
 
@@ -155,8 +228,8 @@ NAMESPACE('chlk.activities.attendance', function () {
             [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number]],
             VOID, function onStudentDeselect(grid, event, row, index){
                 var form = row.find('.student-attendance-form');
-                if(form.hasClass('need-present'))
-                    form.trigger('submit');
+//                if(form.hasClass('need-present'))
+//                    form.trigger('submit');
             },
 
             [[Object]],
@@ -179,33 +252,28 @@ NAMESPACE('chlk.activities.attendance', function () {
                     return item.getType() != this._typesEnum.NA.valueOf()
                 }.bind(this)).length == 0)
                     this.dom.find('.keyboard-suggestion').show();
-            }/*,
+            },
 
-            OVERRIDE, VOID, function onCreate_() {
-                BASE();
-                var that = this;
+            Array, function getAttendances_(){
+                var res = [];
+                var attendancesNodes = this.dom.find('[name="attendance"]').valueOf();
+                var len = attendancesNodes.length, i, node;
+                for(i=0;i<len;i++){
+                    node = new ria.dom.Dom(attendancesNodes[i]);
+                    res.push({
+                        personId: node.getData('person-id'),
+                        type: node.getData('type'),
+                        attendanceReasonId: node.getData('reason-id')
+                    });
+                }
+                return res;
+            },
 
-                jQuery(this.dom.valueOf()).on('keydown', '.combo-input', function keyComboArrowsClick(event) {
-                    var node = new ria.dom.Dom(this);
-                    var parent = node.parent('.combo-list'), prev, next;
-                    var selected = parent.find('.option.selected');
-                    switch (event.which){
-                        case ria.dom.Keys.DOWN.valueOf():
-                            next = selected.next('.option');
-                            if(next.exists()){
-                                selected.removeClass('selected');
-                                next.addClass('selected');
-                            }; break;
-                        case ria.dom.Keys.UP.valueOf():
-                            prev = selected.previous('.option');
-                            if(prev.exists()){
-                                selected.removeClass('selected');
-                                prev.addClass('selected');
-                            }; break;
-                        case ria.dom.Keys.ENTER.valueOf():
-                            that.updateReasons();
-                    }
-                });
-            }*/
+            [ria.mvc.DomEventBind('click', '#submit-attendance-button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function submitClick(node, event){
+                var attendancesNode = this.dom.find('input[name="attendancesJson"]');
+                attendancesNode.setValue(JSON.stringify(this.getAttendances_()));
+            }
         ]);
 });

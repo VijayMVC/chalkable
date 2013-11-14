@@ -9,16 +9,16 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class MarkingPeriodDataAccess : DataAccessBase<MarkingPeriod>
+    public class MarkingPeriodDataAccess : BaseSchoolDataAccess<MarkingPeriod>
     {
-        public MarkingPeriodDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public MarkingPeriodDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
         {
         }
 
-        public void DeleteMarkingPeriods(IList<Guid> markingPeriodIds)
+        public void DeleteMarkingPeriods(IList<int> markingPeriodIds)
         {
             var b = new StringBuilder();
-            var mpidsString = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
+            var mpidsString = markingPeriodIds.Select(x => "'" + x + "'").JoinString(",");
             b.Append(@"delete from ClassPeriod where PeriodRef in (select Id from Period where MarkingPeriodRef in ({0})) ");
             b.Append(@"delete from Period where MarkingPeriodRef in ({0}) ");
             b.Append(@"delete from ScheduleSection where MarkingPeriodRef in ({0}) ");
@@ -28,7 +28,7 @@ namespace Chalkable.Data.School.DataAccess
             ExecuteNonQueryParametrized(sql, conds);
         }
         
-        public void ChangeWeekDays(IList<Guid> markingPeriodIds, int weekDays)
+        public void ChangeWeekDays(IList<int> markingPeriodIds, int weekDays)
         {
             var b = new StringBuilder();
             foreach (var markingPeriodId in markingPeriodIds)
@@ -39,22 +39,20 @@ namespace Chalkable.Data.School.DataAccess
             ExecuteNonQueryParametrized(b.ToString(), conds);
         }
 
-        private const string TILL_DATE_PARAM = "tillDate";
-
         public MarkingPeriod GetLast(DateTime tillDate)
         {
-            var q = new DbQuery();
-            var sqlCommand = @"select top 1 * from MarkingPeriod 
-                               where StartDate <= @{0}
-                               order by EndDate desc ";
-            q.Parameters.Add(TILL_DATE_PARAM, tillDate);
-            q.Sql.AppendFormat(sqlCommand, TILL_DATE_PARAM);
+            var q = Orm.SimpleSelect<MarkingPeriod>(
+                FilterBySchool(new AndQueryCondition
+                    {
+                        {MarkingPeriod.START_DATE_FIELD, tillDate, ConditionRelation.LessEqual}
+                    }));
+            q.Sql.AppendFormat("order by {0}  desc", MarkingPeriod.END_DATE_FIELD);
             return ReadOneOrNull<MarkingPeriod>(q);
         }
 
-        public MarkingPeriod GetNextInYear(Guid markingPeriodId)
+        public MarkingPeriod GetNextInYear(int markingPeriodId)
         {
-            var sql = @"declare @schoolYearId uniqueidentifier, @startDate datetime2
+            var sql = @"declare @schoolYearId int, @startDate datetime2
                         select @schoolYearId = SchoolYearRef, @startDate = StartDate
                         from MarkingPeriod where Id = @markingPeriodId
                             
@@ -64,13 +62,14 @@ namespace Chalkable.Data.School.DataAccess
 
             var conds = new Dictionary<string, object>{{"markingPeriodId", markingPeriodId}};
             return ReadOneOrNull<MarkingPeriod>(new DbQuery (sql, conds));
+            //todo filtering by school
         }
 
-        public IList<MarkingPeriod> GetMarkingPeriods(Guid? schoolYearId)
+        public IList<MarkingPeriod> GetMarkingPeriods(int? schoolYearId)
         {
-            var conds = new AndQueryCondition();
+            QueryCondition conds = null;
             if (schoolYearId.HasValue)
-                conds.Add(MarkingPeriod.SCHOOL_YEAR_REF, schoolYearId);
+                conds = new AndQueryCondition {{MarkingPeriod.SCHOOL_YEAR_REF, schoolYearId}};
             return SelectMany<MarkingPeriod>(conds);
         } 
 
@@ -84,12 +83,12 @@ namespace Chalkable.Data.School.DataAccess
             return SelectOneOrNull<MarkingPeriod>(conds);   
         }
 
-        public bool IsOverlaped(DateTime startDate, DateTime endDate, Guid? currentMarkingPeriodId)
+        public bool IsOverlaped(DateTime startDate, DateTime endDate, int? currentMarkingPeriodId)
         {
             var conds = new AndQueryCondition
                 {
-                    {MarkingPeriod.START_DATE_FIELD, endDate, ConditionRelation.LessEqual},
-                    {MarkingPeriod.END_DATE_FIELD, startDate, ConditionRelation.GreaterEqual}
+                    {MarkingPeriod.START_DATE_FIELD, MarkingPeriod.END_DATE_FIELD, endDate, ConditionRelation.LessEqual},
+                    {MarkingPeriod.END_DATE_FIELD, MarkingPeriod.START_DATE_FIELD, startDate, ConditionRelation.GreaterEqual}
                 };
             if (currentMarkingPeriodId.HasValue)
                 conds.Add(MarkingPeriod.ID_FIELD, currentMarkingPeriodId, ConditionRelation.NotEqual);

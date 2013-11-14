@@ -14,24 +14,26 @@ namespace Chalkable.Web.Controllers.CalendarControllers
     public class AttendanceCalendarController : CalendarController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult MonthForClass(Guid classId, DateTime? date)
+        public ActionResult MonthForClass(int classId, DateTime? date)
         {
-            var type = AttendanceTypeEnum.Absent | AttendanceTypeEnum.Excused | AttendanceTypeEnum.Late;
+            throw new NotImplementedException();
+            /*var type = AttendanceTypeEnum.Absent | AttendanceTypeEnum.Excused | AttendanceTypeEnum.Late;
             var attQuery = new ClassAttendanceQuery {ClassId = classId, Type = type};
             return AttendancesForMonth(date, attQuery, (dateTime, isCurrentMonth, atts) =>
-               AttendanceForClassCalendarViewData.Create(dateTime, isCurrentMonth, classId, atts));
+               AttendanceForClassCalendarViewData.Create(dateTime, isCurrentMonth, classId, atts));*/
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult MonthForPerson(Guid personId, DateTime? date)
+        public ActionResult MonthForPerson(int personId, DateTime? date)
         {
-            var attQuery = new ClassAttendanceQuery { StudentId = personId};
+            throw new NotImplementedException();
+            /*var attQuery = new ClassAttendanceQuery { StudentId = personId};
             return AttendancesForMonth(date, attQuery, (dateTime, isCurrentMonth, atts) =>
-                AttendanceForStudentCalendarViewData.Create(dateTime, isCurrentMonth, personId, atts));
+                AttendanceForStudentCalendarViewData.Create(dateTime, isCurrentMonth, personId, atts));*/
         }
 
 
-        private ActionResult AttendancesForMonth(DateTime? date, ClassAttendanceQuery query,
+        /*private ActionResult AttendancesForMonth(DateTime? date, ClassAttendanceQuery query,
                 Func<DateTime, bool, IList<ClassAttendanceDetails>, MonthCalendarViewData> createAction)
         {
             DateTime start, end;
@@ -42,6 +44,6 @@ namespace Chalkable.Web.Controllers.CalendarControllers
             var attendances = SchoolLocator.AttendanceService.GetClassAttendanceDetails(query);
             var res = PrepareMonthCalendar(start, end, date.Value, (time, b) => createAction(time, b, attendances));
             return Json(res, 6);
-        }
+        }*/
     }
 }

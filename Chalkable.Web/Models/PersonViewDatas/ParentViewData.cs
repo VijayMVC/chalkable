@@ -8,7 +8,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
 {
     public class StudentParentViewData 
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public PersonInfoViewData Parent { get; set; }
 
 

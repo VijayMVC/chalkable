@@ -8,7 +8,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
     public class AnnouncementForAdminDataAccess : AnnouncementDataAccess
     {
-        public AnnouncementForAdminDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public AnnouncementForAdminDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
         {
         }
 
@@ -25,7 +25,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return GetAnnouncementsComplex(GET_ADMIN_ANNOUNCEMENTS, parameters, query);
         }
 
-        protected override void BuildConditionForGetSimpleAnnouncement(Common.Orm.DbQuery dbQuery, int role, Guid callerId)
+        protected override void BuildConditionForGetSimpleAnnouncement(Common.Orm.DbQuery dbQuery, int role, int callerId)
         {
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.ClassesViewData
@@ -13,7 +14,7 @@ namespace Chalkable.Web.Models.ClassesViewData
            return new ClassHoverBoxViewData<ClassAttendanceHoverViewData>
                 {
                     Title = possibleAbsents > 0 
-                        ? ((100 * attendances.Count(x => x.Type == AttendanceTypeEnum.Absent)) / possibleAbsents).ToString(CultureInfo.InvariantCulture) 
+                        ? ((100 * attendances.Count(x => x.IsAbsent)) / possibleAbsents).ToString(CultureInfo.InvariantCulture) 
                         : "0",
                     Hover = ClassAttendanceHoverViewData.Create(attendances)
                 };
@@ -43,7 +44,7 @@ namespace Chalkable.Web.Models.ClassesViewData
 
     public class ClassAverageForMpHoverViewData
     {
-        public Guid MarkingPeriodId { get; set; }
+        public int MarkingPeriodId { get; set; }
         public string MarkingPeriodName { get; set; }
         public int? Avg { get; set; }
         public static IList<ClassAverageForMpHoverViewData> Create(IList<MarkingPeriodClassGradeAvg> classGradingStats)
@@ -74,9 +75,9 @@ namespace Chalkable.Web.Models.ClassesViewData
         {
             return new List<ClassAttendanceHoverViewData>
                 {
-                    new ClassAttendanceHoverViewData(attendances.Count(x => x.Type == AttendanceTypeEnum.Absent), ABSENT),
-                    new ClassAttendanceHoverViewData(attendances.Count(x => x.Type == AttendanceTypeEnum.Late),  LATE), 
-                    new ClassAttendanceHoverViewData(attendances.Count(x => x.Type == AttendanceTypeEnum.Excused), EXCUSED),
+                    new ClassAttendanceHoverViewData(attendances.Count(x => x.IsAbsent), ABSENT),
+                    new ClassAttendanceHoverViewData(attendances.Count(x => x.IsLate),  LATE), 
+                    new ClassAttendanceHoverViewData(attendances.Count(x => x.IsExcused), EXCUSED),
                     new ClassAttendanceHoverViewData(attendances.GroupBy(x=>x.Date).Select(x=>x.Key).Count(), CLASSES)
                 };
         }

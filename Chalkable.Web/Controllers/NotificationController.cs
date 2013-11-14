@@ -20,7 +20,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Super Admin,AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult MarkAsShown(Guid id)
+        public ActionResult MarkAsShown(int id)
         {
             SchoolLocator.NotificationService.MarkAsShown(new[] { id });
             return Json(true);

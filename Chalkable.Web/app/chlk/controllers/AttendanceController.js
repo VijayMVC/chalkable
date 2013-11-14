@@ -168,14 +168,15 @@ NAMESPACE('chlk.controllers', function (){
                 JSON.stringify([true, model.getGradeLevelsIds(), model.getCurrentPage(), model.getDate().format('mm-dd-yy')]), true);
         },
 
-        [[chlk.models.id.ClassId, chlk.models.id.ClassPeriodId, chlk.models.common.ChlkDate, Boolean]],
-        function markAllAction(classId, classPeriodId, date, isProfile_){
+        [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean]],
+        function markAllAction(classId, date, isProfile_){
             this.attendanceService
-                .markAllPresent(classPeriodId, date)
+                .markAllPresent(classId, date)
                 .then(function(success){
-                    this.classListAction(classId, date, true, isProfile_);
+                    this.redirect_('attendance', 'classList', [classId, date, false, isProfile_]);
+                  //  this.classListAction(classId, date, true, isProfile_);
                 }, this);
-            return this.ShadeLoader();
+            //return this.ShadeLoader();
         },
 
         [[Boolean, Boolean]],
@@ -225,35 +226,55 @@ NAMESPACE('chlk.controllers', function (){
         },
 
 
-        [[chlk.models.attendance.ClassAttendance]],
-        function setAttendanceAction(model){
-            if(canUpdateStudentAttendance || currentStudentId != model.getClassPersonId()){
-                currentStudentId = model.getClassPersonId();
-                canUpdateStudentAttendance = false;
-                studentAttendanceTimeout = setTimeout(function(){
-                    canUpdateStudentAttendance = true;
-                },5);
-                var activityClass = this.getView().getCurrent().getClass();
-                return this.UpdateView(activityClass, this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
-            }
-            return null;
+//        [[chlk.models.attendance.ClassAttendance]],
+//        function setAttendanceAction(model){
+//            if(canUpdateStudentAttendance || currentStudentId != model.getStudentId()){
+//                currentStudentId = model.getStudentId();
+//                canUpdateStudentAttendance = false;
+//                studentAttendanceTimeout = setTimeout(function(){
+//                    canUpdateStudentAttendance = true;
+//                },5);
+//                var activityClass = this.getView().getCurrent().getClass();
+//                return this.UpdateView(activityClass, this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
+//            }
+//            return null;
+//        },
+
+        [[chlk.models.attendance.SetClassListAttendance]],
+        function setClassAttendanceListAction(model){
+           // var activityClass = this.getView().getCurrent().getClass();
+            this.attendanceService.setAttendance(model)
+                .then(function(res){
+                    this.redirect_('attendance', 'classList', [model.getClassId()]);
+                }, this);
+            //return this.UpdateView(activityClass, this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
         },
 
+
+        [[chlk.models.attendance.ClassAttendance]],
         ria.async.Future, function setAttendance_(model){
             var type = this.changeAttendanceType_(model.getSubmitType(), model.getType());
             var items = this.getContext().getSession().get('attendanceData');
             var item = items.filter(function(item){
-                return item.getClassPersonId() == model.getClassPersonId()
+                return item.getStudentId() == model.getStudentId()
             })[0];
             item.setType(type);
+            var level = item.getLevel();
             var attReasonId = model.getAttendanceReasonId();
+            if(!attReasonId || !attReasonId.valueOf()){
+                var reasons = item.getReasons().filter(function(item){return item.isDefaultReason(level);});
+                if(reasons.length > 0){
+                    attReasonId =  reasons[0].getId();
+                    model.setAttendanceReasonId(attReasonId);
+                }
+            }
             try{
                 if(attReasonId && attReasonId.valueOf() && item.getReasons().filter(function(item){
-                    return item.getAttendanceType() == type && item.getId() == attReasonId;
+                    return item.hasLevel(level) && item.getId() == attReasonId;
                 }).length == 0)
-                    console.info('WARNING setAttendance: type = ' + type + ', reasonId = ' + attReasonId);
+                    console.info('WARNING setAttendance: type = ' + level + ', reasonId = ' + attReasonId);
                 else
-                    this.attendanceService.setAttendance(model.getClassPersonId(), model.getClassPeriodId(), type, attReasonId, model.getDate());
+                    this.attendanceService.setAttendance(model.getStudentId(), model.getClassId(), level, attReasonId, model.getDate());
 
             }catch(e){
                 console.info('ERROR setAttendance: type = ' + type + ', reasonId = ' + attReasonId);
@@ -261,6 +282,7 @@ NAMESPACE('chlk.controllers', function (){
             if(attReasonId && attReasonId.valueOf()){
                 if(item.getAttendanceReason()){
                     item.getAttendanceReason().setId(attReasonId);
+                    item.getAttendanceReason().setName(model.getAttendanceReasonDescription());
                     item.getAttendanceReason().setDescription(model.getAttendanceReasonDescription());
                 }else{
                     var reason = new chlk.models.attendance.AttendanceReason(attReasonId, model.getAttendanceReasonDescription());
@@ -277,7 +299,7 @@ NAMESPACE('chlk.controllers', function (){
             var types = [
                 attTypeEnum.PRESENT.valueOf(),
                 attTypeEnum.ABSENT.valueOf(),
-                attTypeEnum.EXCUSED.valueOf(),
+//                attTypeEnum.EXCUSED.valueOf(),
                 attTypeEnum.LATE.valueOf()
             ];
             var index = types.indexOf(currentType);

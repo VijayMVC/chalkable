@@ -10,8 +10,7 @@ Create Table District
 	TimeZone nvarchar(1024) not null,
 	DemoPrefix nvarchar(256),
 	LastUseDemo DateTime2,
-	ServerUrl nvarchar(256) not null,
-	IsEmpty bit not null
+	ServerUrl nvarchar(256) not null
 )
 GO
 
@@ -24,7 +23,8 @@ Create Table [User]
 	IsSysAdmin bit not null,
 	IsDeveloper bit not null,
 	ConfirmationKey nvarchar(256),
-	DisctrictRef uniqueidentifier Constraint FK_User_District Foreign Key References District(Id)
+	SisUserName nvarchar(256),
+	DistrictRef uniqueidentifier Constraint FK_User_District Foreign Key References District(Id)
 )
 GO
 
@@ -34,6 +34,24 @@ GO
 
 Create Index IX_USER_LOGIN_PASSWORD
 	on [User](Login, Password)
+GO
+
+Create Table School
+(
+	Id uniqueidentifier not null primary key,
+	DistrictRef uniqueidentifier not null Constraint FK_School_District Foreign Key References District(Id),
+	Name nvarchar(256) not null,
+	LocalId int not null
+)
+GO
+
+Create Table SchoolUser
+(
+	Id uniqueidentifier not null primary key,
+	SchoolRef uniqueidentifier not null Constraint FK_SchoolUser_School Foreign Key References School(Id),
+	UserRef uniqueidentifier not null Constraint FK_SchoolUser_User Foreign Key References [User](Id),
+	[Role] int not null
+)
 GO
 
 Create Table BackgroundTask
@@ -92,7 +110,8 @@ CREATE TABLE Developer
 (
 	[Id] uniqueidentifier NOT NULL Primary Key,
 	[Name] [nvarchar](255) NULL,
-	[WebSite] [nvarchar](255) NULL
+	[WebSite] [nvarchar](255) NULL,
+	DistrictRef uniqueidentifier not null Constraint FK_Developer_District Foreign Key References District(Id)
 )
 
 GO
@@ -181,10 +200,6 @@ CREATE TABLE [ApplicationPermission]
 
 GO
 
-Alter Table Developer
-	Add DistrictRef uniqueidentifier not null Constraint FK_Developer_District Foreign Key References District(Id)
-GO
-
 Create Table ApplicationGradeLevel
 (
 	Id uniqueidentifier not null primary key,
@@ -208,7 +223,6 @@ GO
 CREATE TABLE FundRequest
 (
 	[Id] uniqueidentifier NOT NULL primary key,
-	[SchoolRef] int,
 	[UserRef] uniqueidentifier Constraint FK_FUND_REQUEST_USER Foreign Key References [User](Id),
 	[CreatedByRef] uniqueidentifier NOT NULL Constraint FK_FUND_REQUEST_CREATED_BY Foreign Key References [User](Id),
 	[Amount] [money] NOT NULL,
@@ -216,7 +230,7 @@ CREATE TABLE FundRequest
 	[PurchaseOrder] [nvarchar](255),
 	[State] [int],
 	[SignatureRef] uniqueidentifier,
-	DistrictRef uniqueidentifier not null Constraint FK_FundRequest_District Foreign Key References District(Id)
+	SchoolRef uniqueidentifier not null Constraint FK_FundRequest_School Foreign Key References School(Id)
 )
 
 GO
@@ -227,14 +241,14 @@ CREATE TABLE Fund
 	[PerformedDateTime] [datetime2] NOT NULL,
 	[Amount] [money] NOT NULL,
 	[Description] [nvarchar](max) NULL,
-	[FromSchoolRef] int,
-	[ToSchoolRef] int,
-	[FromUserRef] uniqueidentifier Constraint FK_FUND_FROM_USER Foreign Key References [User](Id),
-	[ToUserRef] uniqueidentifier Constraint FK_FUND_TO_USER Foreign Key References [User](Id),
+	[FromSchoolRef] uniqueidentifier Constraint FK_Fund_FromSchool Foreign Key References School(Id),
+	[ToSchoolRef] uniqueidentifier Constraint FK_Fund_ToSchool Foreign Key References School(Id),
+	[FromUserRef] uniqueidentifier Constraint FK_Fund_FromUser Foreign Key References [User](Id),
+	[ToUserRef] uniqueidentifier Constraint FK_Fund_ToUser Foreign Key References [User](Id),
 	[AppInstallActionRef] uniqueidentifier NULL,
 	[IsPrivate] [bit] NOT NULL,
 	[FundRequestRef] uniqueidentifier null Constraint FK_Fund_FundRequest Foreign Key References FundRequest(Id),
-	[DistrictRef] uniqueidentifier not null Constraint FK_FUND_DISTRICT Foreign Key References District(Id),
+	[SchoolRef] uniqueidentifier not null Constraint FK_Fund_School Foreign Key References School(Id),
 )
 
 GO
@@ -254,9 +268,12 @@ as
 	BEGIN TRY
 		BEGIN TRANsACTION
 			delete from BackgroundTask where DistrictRef = @id
-			delete from Fund where DistrictRef = @id
-			delete from FundRequestRoleDistribution where FundRequestRef in (select id from FundRequest where DistrictRef = @id)
-			delete from FundRequest where DistrictRef = @id					
+			delete from Fund where SchoolRef in (select id from School where DistrictRef = @id)
+			delete from SchoolUser where SchoolRef in (select id from School where DistrictRef = @id)			
+			delete from School where DistrictRef = @id
+			delete from FundRequestRoleDistribution where FundRequestRef in (select id from FundRequest where SchoolRef in (select id from School where DistrictRef = @id))
+			delete from FundRequest where SchoolRef in (select id from School where DistrictRef = @id)			
+			delete from District where Id = @id					
 		COMMIT TRANSACTION
 	END TRY
 	BEGIN CATCH

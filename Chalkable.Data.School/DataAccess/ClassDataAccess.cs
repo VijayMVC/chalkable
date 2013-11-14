@@ -6,9 +6,10 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class ClassDataAccess : DataAccessBase<Class>
+    public class ClassDataAccess : BaseSchoolDataAccess<Class>
     {
-        public ClassDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public ClassDataAccess(UnitOfWork unitOfWork, int? schoolId)
+            : base(unitOfWork, schoolId)
         {
         }
 
@@ -24,7 +25,8 @@ namespace Chalkable.Data.School.DataAccess
         private const string FILTER1_PARAM = "filter1";
         private const string FILTER2_PARAM = "filter2";
         private const string FILTER3_PARAM = "filter3";
-        
+        private const string SCHOOL_ID = "schoolId";
+
         public ClassQueryResult GetClassesComplex(ClassQuery query)
         {
             var parameters = new Dictionary<string, object>
@@ -36,7 +38,8 @@ namespace Chalkable.Data.School.DataAccess
                     {CALLER_ID_PARAM, query.CallerId},
                     {START_PARAM, query.Start},
                     {COUNT_PARAM, query.Count},
-                    {CALLER_ROLE_ID_PARAM, query.CallerRoleId}
+                    {CALLER_ROLE_ID_PARAM, query.CallerRoleId},
+                    {SCHOOL_ID, schoolId}
                 };
 
             string filter1 = null;
@@ -61,7 +64,15 @@ namespace Chalkable.Data.School.DataAccess
             {
                 var sourceCount = reader.Read() ? SqlTools.ReadInt32(reader, "SourceCount") : 0;
                 reader.NextResult();
-                var classes = reader.ReadList<ClassDetails>(true);
+                var classes = new List<ClassDetails>();
+                while (reader.Read())
+                {
+                    var c = reader.Read<ClassDetails>(true);
+                    if (c.TeacherRef.HasValue)
+                        c.Teacher = reader.Read<Person>(true);
+                    c.GradeLevel = reader.Read<GradeLevel>(true);
+                    classes.Add(c);
+                }
                 reader.NextResult();
                 var markingPeriodClasses = reader.ReadList<MarkingPeriodClass>();
                 foreach (var classComplex in classes)
@@ -75,17 +86,16 @@ namespace Chalkable.Data.School.DataAccess
 
     public class ClassQuery
     {
-        public Guid CallerId { get; set; }
+        public int CallerId { get; set; }
         public int CallerRoleId { get; set; }
-        public Guid? SchoolYearId { get; set; }
-        public Guid? MarkingPeriodId { get; set; }
-        public Guid? ClassId { get; set; }
-        public Guid? PersonId { get; set; }
+        public int? SchoolYearId { get; set; }
+        public int? MarkingPeriodId { get; set; }
+        public int? ClassId { get; set; }
+        public int? PersonId { get; set; }
         public string Filter { get; set; }
         
         public int Start { get; set; }
         public int Count { get; set; }
-
 
         public ClassQuery()
         {

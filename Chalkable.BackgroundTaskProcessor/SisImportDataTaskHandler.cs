@@ -1,11 +1,8 @@
-using Chalkable.BusinessLogic.Logic;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
-using Chalkable.SisConnector.PublicModel;
-using Chalkable.SisImportFacade;
+using Chalkable.StiConnector.Services;
 
 namespace Chalkable.BackgroundTaskProcessor
 {
@@ -13,35 +10,28 @@ namespace Chalkable.BackgroundTaskProcessor
     {
         public bool Handle(BackgroundTask task, BackgroundTaskService.BackgroundTaskLog log)
         {
+            if (!task.DistrictRef.HasValue)
+                throw new ChalkableException("No district id for district task");
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var data = task.GetData<SisImportTaskData>();
-            var schoolId = data.SchoolId;
-            var school = sl.SchoolService.GetById(schoolId);
-            var type = school.ImportSystemType;
-            if (!school.DistrictRef.HasValue)
-                throw new ChalkableException("School is not assigned to district");
+            if (!sl.DistrictService.IsOnline(task.DistrictRef.Value))
+            {
+                log.LogError(string.Format("district {0} is not online yet", task.DistrictRef.Value));
+                return false;
+            }
 
-            var district = sl.DistrictService.GetById(school.DistrictRef.Value);
+            var districtId = task.DistrictRef.Value;
             
-            var stateMachine = new SchoolStateMachine(schoolId, sl);
-            //TODO: school schould be empty
-            if (!stateMachine.CanApply(StateActionEnum.SisImportAction))
-                throw new InvalidSchoolStatusException(ChlkResources.ERR_CANT_IMPORT_SCHOOL_WITH_CURRENT_STATUS);
-
-
-            var connectionInfo = new SisConnectionInfo
+            var district = sl.DistrictService.GetByIdOrNull(districtId);
+            
+            var info = new SisConnectionInfo
                 {
                     DbName = district.DbName,
                     SisPassword = district.SisPassword,
                     SisUrl = district.SisUrl,
                     SisUserName = district.SisUserName
                 };
-
-            var importService = SisImportProvider.CreateImportService(type, schoolId, data.SisSchoolId, data.SchoolYearIds, connectionInfo, log);
-            importService.ImportPeople(null);
-            importService.ImportSchedule(null);
-            importService.ImportAttendances(null);
-            stateMachine.Apply(StateActionEnum.SisImportAction);
+            var importService = new ImportService(districtId, info, log);
+            importService.Import();
             return true;
         }
     }

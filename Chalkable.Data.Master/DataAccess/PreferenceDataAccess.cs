@@ -1,10 +1,11 @@
-﻿using Chalkable.Data.Common;
+﻿using System;
+using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Data.Master.DataAccess
 {
-    public class PreferenceDataAccess : DataAccessBase<Preference>
+    public class PreferenceDataAccess : DataAccessBase<Preference, Guid>
     {
         public PreferenceDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {

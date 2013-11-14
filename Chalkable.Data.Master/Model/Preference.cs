@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.Master.Model
 {
@@ -18,6 +19,7 @@ namespace Chalkable.Data.Master.Model
 
     public class Preference
     {
+        [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public string Key { get; set; }
         public string Value { get; set; }
@@ -28,7 +30,7 @@ namespace Chalkable.Data.Master.Model
 
 
         //Constants
-        public const string DEMO_SCHOOL_ID = "demoschoolid";
+        public const string DEMO_DISTRICT_ID = "demodistrictid";
         public const string DEMO_SCHOOL_ADMIN_GRADE = "demoschooladmingrade";
         public const string DEMO_SCHOOL_ADMIN_EDIT = "demoschooladminedit";
         public const string DEMO_SCHOOL_ADMIN_VIEW = "demoschooladminview";

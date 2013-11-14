@@ -11,7 +11,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         [SensitiveData]
         public IList<PhoneViewData> Phones { get; set; }
         [SensitiveData]
-        public IList<AddressViewData> Addresses { get; set; }
+        public AddressViewData Address { get; set; }
 
         protected PersonInfoViewData(PersonDetails person) : base(person)
         {
@@ -20,7 +20,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 age = DateTime.UtcNow.Year - person.BirthDate.Value.Year; //TODO: think about
 
             Age = age;
-            Addresses = AddressViewData.Create(person.Addresses);
+            Address = AddressViewData.Create(person.Address);
             Phones = PhoneViewData.Create(person.Phones);
         }
         public static PersonInfoViewData Create(PersonDetails person)

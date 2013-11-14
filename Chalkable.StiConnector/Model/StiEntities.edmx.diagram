@@ -168,6 +168,8 @@
         <AssociationConnector Association="StiModel.FK_School_SchoolLogoID" />
         <AssociationConnector Association="StiModel.FK_Staff_PhotographID" />
         <AssociationConnector Association="StiModel.FK_Student_PhotographID" />
+        <EntityTypeShape EntityType="StiModel.ActivityCategory" Width="1.5" PointX="0.44238859621919158" PointY="10.345981751729726" />
+        <AssociationConnector Association="StiModel.FK_ActivityCategory_SectionID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

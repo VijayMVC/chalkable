@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Chalkable.BusinessLogic.Mapping;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.AnnouncementsViewData;
 using Chalkable.Web.Models.ClassesViewData;
@@ -15,7 +16,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
         public int GradeLevelNumber { get; set; }
         public string CurrentClassName { get; set; }
-        public int? CurrentAttendanceType { get; set; }
+        public string CurrentAttendanceType { get; set; }
         public int MaxPeriodNumber { get; set; }
         public IList<AnnouncementsClassPeriodViewData> PeriodSection { get; set; }
         public IList<ClassViewData> ClassesSection { get; set; } 
@@ -28,8 +29,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
         }
 
         public static StudentSummaryViewData Create(Person person, Room room,  ClassDetails currentClass, IList<ClassDetails> classes
-            , IList<DisciplineTotalPerType> disciplineTotal, IDictionary<AttendanceTypeEnum, int> attendanceTotal, 
-            AttendanceTypeEnum? currentAttendanceType, IList<AnnouncementsClassPeriodViewData> announcementsClassPeriods
+            , IList<DisciplineTotalPerType> disciplineTotal, IDictionary<string, int> attendanceTotal, 
+            string currentAttendanceType, IList<AnnouncementsClassPeriodViewData> announcementsClassPeriods
             , int maxPeriodNumber, IList<StudentAnnouncementGrade> lastGrades, IGradingStyleMapper mapper, IList<StudentGradingRank> studentsRanks)
         {
             var currentStudentRanks = studentsRanks.Where(x => x.StudentId == person.Id).ToList();
@@ -41,7 +42,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                     DisciplineBox = StudentHoverBoxViewData<DisciplineTotalPerTypeViewData>.Create(disciplineTotal),
                     GradesBox = StudentHoverBoxViewData<StudentSummeryGradeViewData>.Create(lastGrades, mapper),
                     RanksBox = StudentHoverBoxViewData<StudentSummeryRankViewData>.Create(currentStudentRanks, studentsRanks),
-                    CurrentAttendanceType = (int?)currentAttendanceType,
+                    CurrentAttendanceType = currentAttendanceType,
                     MaxPeriodNumber = maxPeriodNumber
                 };
             if (currentClass != null)
@@ -82,9 +83,9 @@ namespace Chalkable.Web.Models.PersonViewDatas
             return res;
         }
 
-        public static StudentHoverBoxViewData<AttendanceTotalPerTypeViewData> Create(IDictionary<AttendanceTypeEnum, int> attDic)
+        public static StudentHoverBoxViewData<AttendanceTotalPerTypeViewData> Create(IDictionary<string, int> attDic)
         {
-            var totalAbsentsAndLates = attDic.Where(x => x.Key == AttendanceTypeEnum.Absent || x.Key == AttendanceTypeEnum.Late).Sum(x => x.Value);
+            var totalAbsentsAndLates = attDic.Where(x => ClassAttendance.IsAbsentOrLateLevel(x.Key)).Sum(x => x.Value);
             var res = new StudentHoverBoxViewData<AttendanceTotalPerTypeViewData>
                 {
                     Hover = AttendanceTotalPerTypeViewData.Create(attDic),
@@ -111,7 +112,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
     public class StudentSummeryRankViewData
     {
-        public Guid MarkingPeriodId { get; set; }
+        public int MarkingPeriodId { get; set; }
         public string MarkingPeiordName { get; set; }
         public int? Rank { get; set; }
         public static IList<StudentSummeryRankViewData> Create(IList<StudentGradingRank> currentStudentRanks, IList<StudentGradingRank> allStudentsRanks)
@@ -153,15 +154,15 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
     public class AttendanceTotalPerTypeViewData
     {
-        public int Type { get; set; }
+        public string Level { get; set; }
         public int AttendanceCount { get; set; }
 
-        public static IList<AttendanceTotalPerTypeViewData> Create(IDictionary<AttendanceTypeEnum, int> attTypeDic)
+        public static IList<AttendanceTotalPerTypeViewData> Create(IDictionary<string, int> attTypeDic)
         {
             return attTypeDic.Select(x => new AttendanceTotalPerTypeViewData
                 {
                     AttendanceCount = x.Value,
-                    Type = (int)x.Key
+                    Level = x.Key
                 }).ToList();
         }
     }
@@ -171,7 +172,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
     {
         public int? Grade { get; set; }
         public int GradingStyle { get; set; }
-        public int AnnouncementTypeId { get; set; }
+        public int? AnnouncementTypeId { get; set; }
         public string AnnouncmentTypeName { get; set; }
         public static StudentSummeryGradeViewData Create(StudentAnnouncementGrade studentAnnouncement, IGradingStyleMapper gradingMapper)
         {
@@ -180,8 +181,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
             {
                 GradingStyle = (int)gradingStyle,
                 Grade = gradingMapper.Map(gradingStyle, studentAnnouncement.GradeValue),
-                AnnouncementTypeId = studentAnnouncement.Announcement.AnnouncementTypeRef,
-                AnnouncmentTypeName = studentAnnouncement.Announcement.AnnouncementTypeName
+                AnnouncementTypeId = studentAnnouncement.Announcement.ChalkableAnnouncementType,
+                AnnouncmentTypeName = studentAnnouncement.Announcement.ClassAnnouncementTypeName
             };
             return res;
         }

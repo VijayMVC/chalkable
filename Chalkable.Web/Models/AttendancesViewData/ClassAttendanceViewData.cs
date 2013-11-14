@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 
@@ -8,34 +9,31 @@ namespace Chalkable.Web.Models.AttendancesViewData
 {
     public class ClassAttendanceViewData
     {
-        public Guid Id { get; set; }
-        public Guid ClassPersonId { get; set; }
-        public Guid ClassPeriodId { get; set; }
+        public int Id { get; set; }
+        public int PersonId { get; set; }
+        public int ClassPeriodId { get; set; }
         public DateTime Date { get; set; }
-        public int Type { get; set; }
+        public string Level { get; set; }
         public PeriodViewData Period { get; set; }
         public ShortPersonViewData Student { get; set; }
-        public Guid? AttendanceReasonId { get; set; }
+        public int? AttendanceReasonId { get; set; }
         public AttendanceReasonViewData AttendanceReason { get; set; }
 
-        public Guid TeacherId { get; set; }
-        public Guid ClassId { get; set; }
+        public int TeacherId { get; set; }
+        public int ClassId { get; set; }
         public string ClassName { get; set; }
 
         public static ClassAttendanceViewData Create(ClassAttendanceDetails attendance, AttendanceReason reason)
         {
             var res = new ClassAttendanceViewData
                 {
-                    Id = attendance.Id,
-                    ClassPersonId = attendance.ClassPersonRef,
-                    ClassPeriodId = attendance.ClassPeriodRef,
+                    PersonId = attendance.PersonRef,
                     ClassId = attendance.Class.Id,
                     ClassName = attendance.Class.Name,
                     Date = attendance.Date,
                     AttendanceReasonId = attendance.AttendanceReasonRef,
-                    Period = PeriodViewData.Create(attendance.ClassPeriod.Period),
                     Student = ShortPersonViewData.Create(attendance.Student),
-                    Type = (int)attendance.Type
+                    Level = attendance.Level
                 };
             if (reason != null)
                 res.AttendanceReason = AttendanceReasonViewData.Create(reason);
@@ -55,5 +53,22 @@ namespace Chalkable.Web.Models.AttendancesViewData
             }
             return res;
         }
+    }
+
+
+    //int personId, int classId, DateTime date, string level, int? attendanceReasonId
+    public class SetClassAttendanceViewData
+    {
+        public class SetClassAttendanceViewDataItem
+        {
+            public int PersonId { get; set; }
+            public string Level { get; set; }
+            public int? AttendanceReasonId { get; set; }
+            public string Category { get; set; }
+        }
+
+        public int ClassId { get; set; }
+        public DateTime Date { get; set; }
+        public IList<SetClassAttendanceViewDataItem> Items { get; set; }
     }
 }

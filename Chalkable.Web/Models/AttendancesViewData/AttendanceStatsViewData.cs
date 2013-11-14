@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 
@@ -19,9 +19,9 @@ namespace Chalkable.Web.Models.AttendancesViewData
         {
             return new AttendanceStatsViewData
             {
-                AbsencesCount = attendances.Count(x => x.Type == AttendanceTypeEnum.Absent),
-                ExcusedCount = attendances.Count(x => x.Type == AttendanceTypeEnum.Excused),
-                LatesCount = attendances.Count(x => x.Type == AttendanceTypeEnum.Late),
+                AbsencesCount = attendances.Count(x=>x.IsAbsent),
+                ExcusedCount = attendances.Count(x => x.IsExcused),
+                LatesCount = attendances.Count(x => x.IsLate),
                 Summary = summary,
                 Date = date
             };
@@ -32,22 +32,30 @@ namespace Chalkable.Web.Models.AttendancesViewData
             var res = new AttendanceStatsViewData {Date = date, Summary = summary};
             if (attTotalPerType != null && attTotalPerType.Count > 0)
             {
-                var dic = attTotalPerType.GroupBy(x => x.AttendanceType).ToDictionary(x => x.Key, x => x.Sum(y => y.Total));
-                res.AbsencesCount = dic.ContainsKey(AttendanceTypeEnum.Absent) ? dic[AttendanceTypeEnum.Absent] : 0;
-                res.ExcusedCount = dic.ContainsKey(AttendanceTypeEnum.Excused) ? dic[AttendanceTypeEnum.Excused] : 0;
-                res.LatesCount = dic.ContainsKey(AttendanceTypeEnum.Late) ? dic[AttendanceTypeEnum.Late] : 0;
+                var dic = attTotalPerType.GroupBy(x => x.Level).ToDictionary(x => x.Key, x => x.Sum(y => y.Total));
+                res.AbsencesCount = 0;
+                foreach (var level in ClassAttendance.AbsentLevels)
+                {
+                    res.AbsencesCount = dic.ContainsKey(level) ? dic[level] : 0;
+                }
+                res.LatesCount = 0;
+                foreach (var level in ClassAttendance.LateLevels)
+                {
+                    res.AbsencesCount = dic.ContainsKey(level) ? dic[level] : 0;
+                }
+                res.ExcusedCount = 0;//TODO: what to do?
             }
             return res;
         }
 
         public static IList<AttendanceStatsViewData> BuildStatsPerDate(IDictionary<DateTime, IList<AttendanceTotalPerType>> attsTotalPerDate
-            , IList<DateDetails> dates, string dateFormat)
+            , IList<Date> dates, string dateFormat)
         {
             var res = new List<AttendanceStatsViewData>();
             foreach (var date in dates)
             {
-                var attsTotal = attsTotalPerDate.ContainsKey(date.DateTime) ? attsTotalPerDate[date.DateTime] : null;
-                res.Add(Create(attsTotal, date.DateTime, date.DateTime.ToString(dateFormat)));
+                var attsTotal = attsTotalPerDate.ContainsKey(date.Day) ? attsTotalPerDate[date.Day] : null;
+                res.Add(Create(attsTotal, date.Day, date.Day.ToString(dateFormat)));
             }
             return res;
         }

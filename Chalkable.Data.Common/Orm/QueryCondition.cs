@@ -140,8 +140,8 @@ namespace Chalkable.Data.Common.Orm
 
         public override void BuildSqlWhere(DbQuery result, string tableName, bool first = true)
         {
-            if (first && conditions.Count > 0)
-                result.Sql.Append(" Where ");
+            if (first) result.Sql.Append(" Where ");
+            
             if (conditions.Count > 0)
             {
                 result.Sql.Append("(");
@@ -156,6 +156,8 @@ namespace Chalkable.Data.Common.Orm
                 }
                 result.Sql.Append(")");
             }
+            else result.Sql.Append(" 1=1 ");
+
         }
 
         protected string JoinOperation { get; set; }

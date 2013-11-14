@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
@@ -11,7 +10,7 @@ namespace Chalkable.Web.Models
 {
     public class SearchViewData
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Description { get; set; }
         public int SearchType { get; set; }
 
@@ -49,9 +48,9 @@ namespace Chalkable.Web.Models
             return new PersonSearchViewData
             {
                 Description = person.FullName,
-                Id = person.Id,
-                RoleId = person.RoleRef,
-                Role = CoreRoles.GetById(person.RoleRef).LoweredName,
+                Id = person.Id.ToString(),
+                //RoleId = person.RoleRef,
+                //Role = CoreRoles.GetById(person.RoleRef).LoweredName,
                 Gender = person.Gender,
                 SearchType = (int)SearchTypeEnum.Persons,
             };
@@ -66,7 +65,7 @@ namespace Chalkable.Web.Models
         {
             return new ApplicationSearchViewData
             {
-                Id = application.Id,
+                Id = application.Id.ToString(),
                 Description = application.Name,
                 SmallPictureId = application.SmallPictureRef,
                 BigPictureId = application.BigPictureRef,
@@ -77,25 +76,27 @@ namespace Chalkable.Web.Models
     public class AnnouncementSearchViewData : SearchViewData
     {
         public int? AnnouncementType { get; set; }
+        public bool IsAdminAnnouncement { get; set; }
         public static SearchViewData Create(AnnouncementComplex announcement)
         {
             return new AnnouncementSearchViewData
             {
-                Id = announcement.Id,
-                Description = string.Format("{0} {1} {2}", announcement.Title, announcement.AnnouncementTypeName, announcement.Order),
-                AnnouncementType = announcement.AnnouncementTypeRef,
+                Id = announcement.Id.ToString(),
+                Description = string.Format("{0} {1} {2}", announcement.Title, announcement.ClassAnnouncementTypeName, announcement.Order),
+                AnnouncementType = announcement.ChalkableAnnouncementType,
+                IsAdminAnnouncement = !announcement.ClassAnnouncementTypeRef.HasValue,
                 SearchType = (int)SearchTypeEnum.Announcements
             };
         }
     }
     public class AttachmentSearchViewData : SearchViewData
     {
-        public Guid AnnouncementId { get; set; }
+        public int AnnouncementId { get; set; }
         public static SearchViewData Create(AnnouncementAttachment attachment)
         {
             return new AttachmentSearchViewData
             {
-                Id = attachment.Id,
+                Id = attachment.Id.ToString(),
                 Description = attachment.Name,
                 AnnouncementId = attachment.AnnouncementRef,
                 SearchType = (int)SearchTypeEnum.Attachments
@@ -105,17 +106,17 @@ namespace Chalkable.Web.Models
 
     public class ClassSearchViewData : SearchViewData
     {
-        public Guid CourseId { get; set; }
-        public CourseViewData Course { get; set; }
+        public Guid? DepartmentId { get; set; }
+        //public  Course { get; set; }
         public static SearchViewData Create(ClassDetails cClass)
         {
             return new ClassSearchViewData
             {
-                Id = cClass.Id,
+                Id = cClass.Id.ToString(),
                 Description = cClass.Name,
-                CourseId = cClass.CourseRef,
+                DepartmentId = cClass.ChalkableDepartmentRef,
                 SearchType = (int)SearchTypeEnum.Classes,
-                Course = CourseViewData.Create(cClass.Course)
+                //Course = CourseViewData.Create(cClass.Course)
             };
         }
     }

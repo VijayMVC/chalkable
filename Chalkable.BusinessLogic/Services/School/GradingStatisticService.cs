@@ -9,14 +9,14 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IGradingStatisticService
     {
-        IList<StudentGradeAvgPerMPC> GetStudentsGradePerMPC(Guid teacherId, IList<Guid> markingPeriodIds);
-        IList<StudentGradeAvgPerClass> GetStudentsGradePerClass(Guid teacherId, Guid schoolYearId);
-        IList<MarkingPeriodClassGradeAvg> GetClassGradeAvgPerMP(Guid classId, Guid schoolYearId, List<Guid> markingPeriodIds, Guid? teacherId, Guid? studentId = null);
-        IList<StudentGradeAvgPerDate> GetStudentGradePerDate(Guid studentId, Guid markingPeriodId, Guid? classId);
-        IList<StudentClassGradeStats> GetStudentClassGradeStats(Guid markingPeriodId, Guid classId, Guid? studentId);
-        IList<DepartmentGradeAvg> GetDepartmentGradeAvgPerMp(Guid markingPeriodId, IList<Guid> gradeLevelIds);
-        IList<ClassPersonGradingStats> GetFullGradingStats(Guid markingPeriodId, Guid studentId);
-        IList<StudentGradingRank> GetStudentGradingRanks(Guid schoolYearId, Guid? studentId, Guid? gradeLevelId, Guid? classId);
+        IList<StudentGradeAvgPerMPC> GetStudentsGradePerMPC(int teacherId, IList<int> markingPeriodIds);
+        IList<StudentGradeAvgPerClass> GetStudentsGradePerClass(int teacherId, int schoolYearId);
+        IList<MarkingPeriodClassGradeAvg> GetClassGradeAvgPerMP(int classId, int schoolYearId, List<int> markingPeriodIds, int? teacherId, int? studentId = null);
+        IList<StudentGradeAvgPerDate> GetStudentGradePerDate(int studentId, int markingPeriodId, int? classId);
+        IList<StudentClassGradeStats> GetStudentClassGradeStats(int markingPeriodId, int classId, int? studentId);
+        IList<DepartmentGradeAvg> GetDepartmentGradeAvgPerMp(int markingPeriodId, IList<int> gradeLevelIds);
+        IList<ClassPersonGradingStats> GetFullGradingStats(int markingPeriodId, int studentId);
+        IList<StudentGradingRank> GetStudentGradingRanks(int schoolYearId, int? studentId, int? gradeLevelId, int? classId);
     }
     public class GradingStatisticService : SchoolServiceBase, IGradingStatisticService
     {
@@ -24,110 +24,150 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        //TODO: needs test 
-        private GradingStatisticQuery QueryFiltering(GradingStatisticQuery query)
+        ////TODO: needs test 
+        //private GradingStatisticQuery QueryFiltering(GradingStatisticQuery query)
+        //{
+        //    query.CallerId = Context.UserId;
+        //    query.Role = Context.Role.Id;
+        //    query.Date = Context.NowSchoolTime.Date;
+        //    return query;
+        //}
+
+        //public IList<StudentGradeAvgPerMPC> GetStudentsGradePerMPC(Guid teacherId, IList<Guid> markingPeriodIds)
+        //{
+        //    using (var uow = Read())
+        //    {
+        //        var query = QueryFiltering(new GradingStatisticQuery
+        //            {
+        //                TeacherId = teacherId,
+        //                MarkingPeriodIds = markingPeriodIds
+        //            });
+        //        return new GradingStatisticDataAccess(uow).CalcStudentGradeAvgPerMPC(query);
+        //    }
+        //}
+
+        //public IList<StudentGradeAvgPerClass> GetStudentsGradePerClass(Guid teacherId, Guid schoolYearId)
+        //{
+        //    using (var uow = Read())
+        //    {
+        //        var query = QueryFiltering(new GradingStatisticQuery
+        //            {
+        //                TeacherId = teacherId,
+        //                SchoolYearId = schoolYearId
+        //            });
+        //        var studentGradeAvgPerMpc = new GradingStatisticDataAccess(uow).CalcStudentGradeAvgPerMPC(query);
+        //        var dic = studentGradeAvgPerMpc.GroupBy(x => new Pair<Guid,Guid>(x.MarkingPeriodClass.ClassRef, x.Student.Id))
+        //                                       .ToDictionary(x => x.Key, x => x.ToList());
+        //        var res = new List<StudentGradeAvgPerClass>();
+        //        foreach (var keyValue in dic)
+        //        {
+        //            res.Add(new StudentGradeAvgPerClass
+        //                {
+        //                    Student = keyValue.Value.First().Student,
+        //                    ClassRef = keyValue.Key.First,
+        //                    Avg = (int?)keyValue.Value.Average(x => x.Avg)
+        //                });
+        //        }
+        //        return res;
+        //    }
+        //}
+
+        //public IList<MarkingPeriodClassGradeAvg> GetClassGradeAvgPerMP(Guid classId, Guid schoolYearId, List<Guid> markingPeriodIds, Guid? teacherId, Guid? studentId = null)
+        //{
+        //    using (var uow = Read())
+        //    {
+        //        var query = QueryFiltering(new GradingStatisticQuery
+        //            {
+        //                ClassId = classId,
+        //                SchoolYearId = schoolYearId,
+        //                MarkingPeriodIds = markingPeriodIds,
+        //                TeacherId = teacherId,
+        //                StudentId = studentId
+        //            });
+        //        return new GradingStatisticDataAccess(uow).CalcClassGradingPerMp(query);
+        //    }
+        //}
+
+        //public IList<StudentGradeAvgPerDate> GetStudentGradePerDate(Guid studentId, Guid markingPeriodId, Guid? classId)
+        //{
+        //    using (var uow = Read())
+        //    {
+        //        return   new GradingStatisticDataAccess(uow).CalcStudentGradeStatsPerDate(studentId, markingPeriodId, classId, 7);
+        //    }
+        //}
+
+        //public IList<StudentClassGradeStats> GetStudentClassGradeStats(Guid markingPeriodId, Guid classId, Guid? studentId)
+        //{
+        //    using (var uow = Read())
+        //    {
+        //        return new GradingStatisticDataAccess(uow).CalcStudentClassGradeStats(classId, markingPeriodId, studentId, 7);
+        //    }
+        //}
+
+        //public IList<DepartmentGradeAvg> GetDepartmentGradeAvgPerMp(Guid markingPeriodId, IList<Guid> gradeLevelIds)
+        //{
+        //    using (var uow = Read())
+        //    {
+        //        return new GradingStatisticDataAccess(uow).CalcDepartmentGradeAvgPerMp(markingPeriodId, Context.UserId,
+        //                                                                               Context.Role.Id, gradeLevelIds);
+        //    }
+        //}
+
+
+        //public IList<ClassPersonGradingStats> GetFullGradingStats(Guid markingPeriodId, Guid studentId)
+        //{
+        //    using (var uow = Read())
+        //    {
+        //        return new GradingStatisticDataAccess(uow).CalcGradingStats(Context.UserId, Context.Role.Id, studentId, markingPeriodId);
+        //    }
+        //}
+
+        //public IList<StudentGradingRank> GetStudentGradingRanks(Guid schoolYearId, Guid? studentId, Guid? gradeLevelId, Guid? classId)
+        //{
+        //    using (var uow = Read())
+        //    {
+        //        return new GradingStatisticDataAccess(uow).GetStudentGradingRank(Context.UserId, Context.Role.Id, schoolYearId, gradeLevelId, studentId, classId);
+        //    }
+        //}
+
+        public IList<StudentGradeAvgPerMPC> GetStudentsGradePerMPC(int teacherId, IList<int> markingPeriodIds)
         {
-            query.CallerId = Context.UserId;
-            query.Role = Context.Role.Id;
-            query.Date = Context.NowSchoolTime.Date;
-            return query;
+            throw new NotImplementedException();
         }
 
-        public IList<StudentGradeAvgPerMPC> GetStudentsGradePerMPC(Guid teacherId, IList<Guid> markingPeriodIds)
+        public IList<StudentGradeAvgPerClass> GetStudentsGradePerClass(int teacherId, int schoolYearId)
         {
-            using (var uow = Read())
-            {
-                var query = QueryFiltering(new GradingStatisticQuery
-                    {
-                        TeacherId = teacherId,
-                        MarkingPeriodIds = markingPeriodIds
-                    });
-                return new GradingStatisticDataAccess(uow).CalcStudentGradeAvgPerMPC(query);
-            }
+            throw new NotImplementedException();
         }
 
-        public IList<StudentGradeAvgPerClass> GetStudentsGradePerClass(Guid teacherId, Guid schoolYearId)
+        public IList<MarkingPeriodClassGradeAvg> GetClassGradeAvgPerMP(int classId, int schoolYearId, List<int> markingPeriodIds, int? teacherId, int? studentId = null)
         {
-            using (var uow = Read())
-            {
-                var query = QueryFiltering(new GradingStatisticQuery
-                    {
-                        TeacherId = teacherId,
-                        SchoolYearId = schoolYearId
-                    });
-                var studentGradeAvgPerMpc = new GradingStatisticDataAccess(uow).CalcStudentGradeAvgPerMPC(query);
-                var dic = studentGradeAvgPerMpc.GroupBy(x => new Pair<Guid,Guid>(x.MarkingPeriodClass.ClassRef, x.Student.Id))
-                                               .ToDictionary(x => x.Key, x => x.ToList());
-                var res = new List<StudentGradeAvgPerClass>();
-                foreach (var keyValue in dic)
-                {
-                    res.Add(new StudentGradeAvgPerClass
-                        {
-                            Student = keyValue.Value.First().Student,
-                            ClassRef = keyValue.Key.First,
-                            Avg = (int?)keyValue.Value.Average(x => x.Avg)
-                        });
-                }
-                return res;
-            }
+            throw new NotImplementedException();
         }
 
-        public IList<MarkingPeriodClassGradeAvg> GetClassGradeAvgPerMP(Guid classId, Guid schoolYearId, List<Guid> markingPeriodIds, Guid? teacherId, Guid? studentId = null)
+        public IList<StudentGradeAvgPerDate> GetStudentGradePerDate(int studentId, int markingPeriodId, int? classId)
         {
-            using (var uow = Read())
-            {
-                var query = QueryFiltering(new GradingStatisticQuery
-                    {
-                        ClassId = classId,
-                        SchoolYearId = schoolYearId,
-                        MarkingPeriodIds = markingPeriodIds,
-                        TeacherId = teacherId,
-                        StudentId = studentId
-                    });
-                return new GradingStatisticDataAccess(uow).CalcClassGradingPerMp(query);
-            }
+            throw new NotImplementedException();
         }
 
-        public IList<StudentGradeAvgPerDate> GetStudentGradePerDate(Guid studentId, Guid markingPeriodId, Guid? classId)
+        public IList<StudentClassGradeStats> GetStudentClassGradeStats(int markingPeriodId, int classId, int? studentId)
         {
-            using (var uow = Read())
-            {
-                return   new GradingStatisticDataAccess(uow).CalcStudentGradeStatsPerDate(studentId, markingPeriodId, classId, 7);
-            }
+            throw new NotImplementedException();
         }
 
-        public IList<StudentClassGradeStats> GetStudentClassGradeStats(Guid markingPeriodId, Guid classId, Guid? studentId)
+        public IList<DepartmentGradeAvg> GetDepartmentGradeAvgPerMp(int markingPeriodId, IList<int> gradeLevelIds)
         {
-            using (var uow = Read())
-            {
-                return new GradingStatisticDataAccess(uow).CalcStudentClassGradeStats(classId, markingPeriodId, studentId, 7);
-            }
+            throw new NotImplementedException();
         }
 
-        public IList<DepartmentGradeAvg> GetDepartmentGradeAvgPerMp(Guid markingPeriodId, IList<Guid> gradeLevelIds)
+        public IList<ClassPersonGradingStats> GetFullGradingStats(int markingPeriodId, int studentId)
         {
-            using (var uow = Read())
-            {
-                return new GradingStatisticDataAccess(uow).CalcDepartmentGradeAvgPerMp(markingPeriodId, Context.UserId,
-                                                                                       Context.Role.Id, gradeLevelIds);
-            }
+            throw new NotImplementedException();
         }
 
-
-        public IList<ClassPersonGradingStats> GetFullGradingStats(Guid markingPeriodId, Guid studentId)
+        public IList<StudentGradingRank> GetStudentGradingRanks(int schoolYearId, int? studentId, int? gradeLevelId, int? classId)
         {
-            using (var uow = Read())
-            {
-                return new GradingStatisticDataAccess(uow).CalcGradingStats(Context.UserId, Context.Role.Id, studentId, markingPeriodId);
-            }
-        }
-
-        public IList<StudentGradingRank> GetStudentGradingRanks(Guid schoolYearId, Guid? studentId, Guid? gradeLevelId, Guid? classId)
-        {
-            using (var uow = Read())
-            {
-                return new GradingStatisticDataAccess(uow).GetStudentGradingRank(Context.UserId, Context.Role.Id, schoolYearId, gradeLevelId, studentId, classId);
-            }
+            throw new NotImplementedException();
         }
     }
 }

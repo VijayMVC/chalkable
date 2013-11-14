@@ -12,7 +12,7 @@ namespace Chalkable.Web.Controllers
     public class AnnouncementReminderController : AnnouncementBaseController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult AddReminder(Guid announcementId, int? before)
+        public ActionResult AddReminder(int announcementId, int? before)
         {
             SchoolLocator.AnnouncementReminderService.AddReminder(announcementId, before);
             var view = PrepareFullAnnouncementViewData(announcementId);
@@ -20,7 +20,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult EditReminder(Guid announcementReminderId, int? before)
+        public ActionResult EditReminder(int announcementReminderId, int? before)
         {
             AnnouncementReminder res = SchoolLocator.AnnouncementReminderService.EditReminder(announcementReminderId, before);
             var view = PrepareFullAnnouncementViewData(res.AnnouncementRef);
@@ -28,7 +28,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult DeleteReminder(Guid announcementReminderId)
+        public ActionResult DeleteReminder(int announcementReminderId)
         {
             Announcement res = SchoolLocator.AnnouncementReminderService.DeleteReminder(announcementReminderId);
             var view = PrepareFullAnnouncementViewData(res.Id);

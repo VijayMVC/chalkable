@@ -8,13 +8,13 @@ using Chalkable.Data.School.Model.ApplicationInstall;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class ApplicationInstallDataAccess : DataAccessBase<ApplicationInstall>
+    public class ApplicationInstallDataAccess : DataAccessBase<ApplicationInstall, int>
     {
         public ApplicationInstallDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
 
-        public IList<ApplicationInstall> GetInstalled(Guid personId)
+        public IList<ApplicationInstall> GetInstalled(int personId)
         {
             var sql = string.Format("select * from ApplicationInstall where ({0}=@{0} or {1} = @{1}) and {2}=1",
                                     ApplicationInstall.OWNER_REF_FIELD, ApplicationInstall.PERSON_REF_FIELD, ApplicationInstall.ACTIVE_FIELD);
@@ -43,7 +43,7 @@ namespace Chalkable.Data.School.DataAccess
             return ReadMany<ApplicationInstall>(new DbQuery(sql, ps));
         }
 
-        public IList<ApplicationInstall> GetInstalledByAppId(Guid applicationId, Guid schoolYearId)
+        public IList<ApplicationInstall> GetInstalledByAppId(Guid applicationId, int schoolYearId)
         {
             return SelectMany<ApplicationInstall>(new AndQueryCondition
                 {
@@ -53,8 +53,8 @@ namespace Chalkable.Data.School.DataAccess
                 });
         }
 
-        public IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Guid applicationId, Guid callerId, Guid? personId, IList<int> roles, IList<Guid> departments
-            ,IList<Guid> gradeLevels, IList<Guid> classes, int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach)
+        public IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Guid applicationId, int callerId, int? personId, IList<int> roles, IList<Guid> departments
+            , IList<int> gradeLevels, IList<int> classes, int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
                 {
@@ -71,6 +71,7 @@ namespace Chalkable.Data.School.DataAccess
                     {"hasTeacherMyApps", hasTeacherMyApps},
                     {"hasStudentMyApps", hasStudentMyApps},
                     {"canAttach", canAttach},
+                    {"schoolYearId", schoolYearId}
                 };
             using (var reader = ExecuteStoredProcedureReader("spGetPersonsForApplicationInstall", ps))
             {
@@ -78,8 +79,8 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, Guid callerId, Guid? personId, IList<int> roles, IList<Guid> departments
-            , IList<Guid> gradeLevels, IList<Guid> classes, int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach)
+        public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int callerId, int? personId, IList<int> roles, IList<Guid> departments
+            , IList<int> gradeLevels, IList<int> classes, int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
                 {
@@ -92,6 +93,7 @@ namespace Chalkable.Data.School.DataAccess
                     {"hasTeacherMyApps", hasTeacherMyApps},
                     {"hasStudentMyApps", hasStudentMyApps},
                     {"canAttach", canAttach},
+                    {"schoolYearId", schoolYearId}
                 };
             ps.Add("roleIds", roles == null || roles.Count == 0 ? null : roles.JoinString(","));
             ps.Add("departmentIds", departments == null || departments.Count == 0 ? null : departments.JoinString(","));
@@ -104,7 +106,7 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public IList<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(Guid applicationId, Guid schoolYearId, Guid personId, int roleId)
+        public IList<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(Guid applicationId, int schoolYearId, int personId, int roleId)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
                 {
@@ -120,28 +122,40 @@ namespace Chalkable.Data.School.DataAccess
         }
     }
 
-    public class ApplicationInstallActionDataAccess : DataAccessBase<ApplicationInstallAction>
+    public class ApplicationInstallActionDataAccess : DataAccessBase<ApplicationInstallAction, int>
     {
         public ApplicationInstallActionDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
+
+        public ApplicationInstallAction GetLastAppInstallAction(Guid appId, int ownerId)
+        {
+            var tname = typeof (ApplicationInstallAction).Name;
+            var conds = new AndQueryCondition
+                {
+                    {ApplicationInstallAction.OWNER_REF_FIELD, ownerId},
+                    {ApplicationInstallAction.APPLICATION_REF_FIELD, appId}
+                };
+            var q = Orm.OrderedSelect(tname, conds, ApplicationInstallAction.ID_FIELD, Orm.OrderType.Desc, 1);
+            return ReadOne<ApplicationInstallAction>(q);
+        } 
     }
 
-    public class ApplicationInstallActionClassesDataAccess : DataAccessBase<ApplicationInstallActionClasses>
+    public class ApplicationInstallActionClassesDataAccess : DataAccessBase<ApplicationInstallActionClasses, int>
     {
         public ApplicationInstallActionClassesDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
     }
-    
-    public class ApplicationInstallActionGradeLevelDataAccess : DataAccessBase<ApplicationInstallActionGradeLevel>
+
+    public class ApplicationInstallActionGradeLevelDataAccess : DataAccessBase<ApplicationInstallActionGradeLevel, int>
     {
         public ApplicationInstallActionGradeLevelDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
     }
 
-    public class ApplicationInstallActionDepartmentDataAccess : DataAccessBase<ApplicationInstallActionDepartment>
+    public class ApplicationInstallActionDepartmentDataAccess : DataAccessBase<ApplicationInstallActionDepartment, int>
     {
         public ApplicationInstallActionDepartmentDataAccess(UnitOfWork unitOfWork)
             : base(unitOfWork)
@@ -149,7 +163,7 @@ namespace Chalkable.Data.School.DataAccess
         }
     }
 
-    public class ApplicationInstallActionRoleDataAccess : DataAccessBase<ApplicationInstallActionRole>
+    public class ApplicationInstallActionRoleDataAccess : DataAccessBase<ApplicationInstallActionRole, int>
     {
         public ApplicationInstallActionRoleDataAccess(UnitOfWork unitOfWork)
             : base(unitOfWork)

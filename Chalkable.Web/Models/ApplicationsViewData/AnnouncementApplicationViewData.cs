@@ -11,9 +11,9 @@ namespace Chalkable.Web.Models.ApplicationsViewData
 {
     public class AnnouncementApplicationViewData : BaseApplicationViewData
     {
-        public Guid AnnouncementApplicationId { get; set; }
-        public Guid AnnouncementId { get; set; }
-        public Guid? CurrentPersonId { get; set; }
+        public int AnnouncementApplicationId { get; set; }
+        public int AnnouncementId { get; set; }
+        public int? CurrentPersonId { get; set; }
         public bool Active { get; set; }
         public string ViewUrl { get; set; }
         public string EditUrl { get; set; }
@@ -25,10 +25,10 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         {
         }
 
-        public static AnnouncementApplicationViewData Create(AnnouncementApplication announcementApplication, 
-            Application application, IList<ApplicationInstall> installs, Guid? currentPersonId)
+        public static AnnouncementApplicationViewData Create(AnnouncementApplication announcementApplication,
+            Application application, IList<ApplicationInstall> installs, int? currentPersonId)
         {
-            var appInstallId = installs != null ? installs.First().Id : (Guid?)null;
+            var appInstallId = installs != null ? installs.First().Id : (int?)null;
             var res = new AnnouncementApplicationViewData(application)
                 {
                     AnnouncementApplicationId = announcementApplication.Id,
@@ -46,7 +46,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         }
 
         public static IList<AnnouncementApplicationViewData> Create(IList<AnnouncementApplication> annApps
-            , IList<Application> applications, IList<ApplicationInstall> installs, Guid? currentPersonId)
+            , IList<Application> applications, IList<ApplicationInstall> installs, int? currentPersonId)
         {
             var res = new List<AnnouncementApplicationViewData>();
             foreach (var annApp in annApps)
