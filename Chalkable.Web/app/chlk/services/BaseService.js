@@ -1,7 +1,6 @@
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
 
 REQUIRE('chlk.lib.ajax.ChlkJsonPostTask');
-REQUIRE('chlk.lib.ajax.ChlkJsonGetTask');
 REQUIRE('ria.ajax.JsonGetTask');
 REQUIRE('chlk.lib.ajax.UploadFileTask');
 
