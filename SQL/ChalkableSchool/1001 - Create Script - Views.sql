@@ -24,7 +24,7 @@ FROM
 	--left join GradeLevel on StudentSchoolYear.GradeLevelRef = GradeLevel.Id	
 GO
 
-create VIEW [vwAnnouncement] 
+CREATE VIEW [dbo].[vwAnnouncement] 
 AS 
 SELECT
 	Announcement.Id as Id,
@@ -39,6 +39,7 @@ SELECT
 	Announcement.ClassAnnouncementTypeRef as ClassAnnouncementTypeRef,
 	Announcement.SchoolRef as SchoolRef,
 	ClassAnnouncementType.Name as ClassAnnouncementTypeName,
+	ClassAnnouncementType.ChalkableAnnouncementTypeRef as ChalkableAnnouncementType, 
 	Announcement.PersonRef as PersonRef,
 	Announcement.ClassRef as ClassRef,
 	Person.FirstName + ' ' + Person.LastName as PersonName,
@@ -63,7 +64,10 @@ FROM
 	left join ClassAnnouncementType on Announcement.ClassAnnouncementTypeRef = ClassAnnouncementType.Id
 	left join Class on Class.Id = Announcement.ClassRef
 	left join Person on Person.Id = Announcement.PersonRef
+
+
 GO
+
 
 
 CREATE VIEW [dbo].[vwClass]

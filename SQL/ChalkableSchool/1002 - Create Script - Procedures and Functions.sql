@@ -274,7 +274,7 @@ GO
 --APPLY STARRING ANNOUNCEMENT PROCEDURES
 ----------------------------------------
 
-create procedure [dbo].[spApplyStarringAnnouncementForStudent] @personId int, @currentDate date
+CREATE procedure [dbo].[spApplyStarringAnnouncementForStudent] @personId int, @currentDate date
 as
 
 DECLARE @id int, @classId int,
@@ -288,7 +288,7 @@ DECLARE AnnouncementStCursor CURSOR FOR
 select an.Id,
 	   an.ClassRef,
 	   an.Expires,
-	   ClassAnnouncementType.AnnouncementTypeRef,
+	   ClassAnnouncementType.ChalkableAnnouncementTypeRef,
 	   ard.StarredAutomatically
 from Announcement an
 left join ClassAnnouncementType on ClassAnnouncementType.Id = an.ClassAnnouncementTypeRef
@@ -377,7 +377,9 @@ BEGIN
 END
 CLOSE AnnouncementStCursor;
 DEALLOCATE AnnouncementStCursor;
+
 GO
+
 
 CREATE procedure [dbo].[spApplyStarringAnnouncementForTeacher] @personId int, @currentDate date
 as
@@ -441,7 +443,6 @@ as
 	CLOSE AnnouncementCursorToStar;
 	DEALLOCATE AnnouncementCursorToStar;
 GO
-
 
 ----------------------------------------
 -- GET ANNOUNCEMENTS PROCEDURES
@@ -519,89 +520,8 @@ where
 	order by Created desc				
 	OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
 
-GO
-
-create procedure [dbo].[spGetTeacherAnnouncements]  
-	@id int, @schoolId int, @personId int, @classId int, @roleId int, @staredOnly bit, @ownedOnly bit, @gradedOnly bit
-	,@fromDate DateTime2, @toDate DateTime2, @markingPeriodId int, @start int, @count int, @now DateTime2, @allSchoolItems bit
-as 
-
-exec spApplyStarringAnnouncementForTeacher @personId, @now;
-
-declare @gradeLevelsT table(Id int)
-insert into @gradeLevelsT(Id)
-select GradeLevelRef from Class
-where TeacherRef = @personId
-group by GradeLevelRef 
-
-declare @mpStartDate datetime2, @mpEndDate datetime2
-if(@markingPeriodId is not null)
-	select @mpStartDate = StartDate, @mpEndDate = EndDate from MarkingPeriod where Id = @markingPeriodId
-
-
-declare @allCount int;
-set @allCount = (select COUNT(*) from
-	vwAnnouncement	
-	left join (select * from AnnouncementRecipientData where AnnouncementRecipientData.PersonRef = @personId) ard
-		 on vwAnnouncement.Id = ard.AnnouncementRef
-where
-	(@id is not null  or [State] = 1) and
-	(@id is null or vwAnnouncement.Id = @id)
-	and (@classId is null or ClassRef = @classId)
-	and ((@allSchoolItems = 1 and @roleId = 2) or vwAnnouncement.PersonRef = @personId 
-		or (ClassAnnouncementTypeRef is null 
-				and exists(select AnnouncementRecipient.Id from AnnouncementRecipient
-						   where AnnouncementRef = vwAnnouncement.Id  and (ToAll = 1 or PersonRef = @personId 
-								or (RoleRef = @roleId and (@roleId <> 2 or GradeLevelRef is null or GradeLevelRef in (select Id from @gradeLevelsT))))
-						   )
-		    )
-		)
-	and (@roleId = 1 or (@schoolId is not null and SchoolRef = @schoolId))
-	and (@staredOnly = 0 or Starred = 1)
-	and (@ownedOnly = 0 or vwAnnouncement.PersonRef = @personId)
-	and (@fromDate is null or Expires >= @fromDate)
-	and (@toDate is null or Expires <= @toDate)
-	and (@markingPeriodId is null or (Expires between @mpStartDate and @mpEndDate))
-)
-
-
-Select 
-	vwAnnouncement.*,
-	cast((case vwAnnouncement.PersonRef when @personId then 1 else 0 end) as bit) as IsOwner,
-	ard.PersonRef as RecipientDataPersonId,
-	ard.Starred as Starred,
-	ROW_NUMBER() OVER(ORDER BY vwAnnouncement.Created desc) as RowNumber,
-	--@starredCount as StarredCount,
-	 	@allCount as AllCount
-from 
-	vwAnnouncement	
-	left join (select * from AnnouncementRecipientData where AnnouncementRecipientData.PersonRef = @personId) ard
-			on vwAnnouncement.Id = ard.AnnouncementRef
-where
-	(@id is not null  or [State] = 1) and
-	(@id is null or vwAnnouncement.Id = @id)
-	and (@classId is null or ClassRef = @classId)
-	and ((@allSchoolItems = 1 and @roleId = 2) or vwAnnouncement.PersonRef = @personId 
-		or (ClassAnnouncementTypeRef is null 
-			and exists(select AnnouncementRecipient.Id from AnnouncementRecipient
-						where AnnouncementRef = vwAnnouncement.Id  and (ToAll = 1 or PersonRef = @personId 
-							or (RoleRef = @roleId and (@roleId <> 2 or GradeLevelRef is null or GradeLevelRef in (select Id from @gradeLevelsT))))
-						)
-			)
-		)			
-	and (@roleId = 1 or (@schoolId is not null and SchoolRef = @schoolId))
-	and (@staredOnly = 0 or Starred = 1)
-	and (@ownedOnly = 0 or vwAnnouncement.PersonRef = @personId)
-	and (@fromDate is null or Expires >= @fromDate)
-	and (@toDate is null or Expires <= @toDate)
-	and (@markingPeriodId is null or (Expires between @mpStartDate and @mpEndDate))
-	and (@gradedOnly = 0 or GradingStudentsCount > 0)		
-order by Created desc				
-OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
 
 GO
-
-
 
 
 create procedure [dbo].[spGetStudentAnnouncements]  
@@ -760,7 +680,90 @@ from
 	) x
 where RowNumber > @start and RowNumber <= @start + @count
 order by RowNumber
+
 GO
+
+
+create procedure [dbo].[spGetTeacherAnnouncements]  
+	@id int, @schoolId int, @personId int, @classId int, @roleId int, @staredOnly bit, @ownedOnly bit, @gradedOnly bit
+	,@fromDate DateTime2, @toDate DateTime2, @markingPeriodId int, @start int, @count int, @now DateTime2, @allSchoolItems bit
+as 
+
+exec spApplyStarringAnnouncementForTeacher @personId, @now;
+
+declare @gradeLevelsT table(Id int)
+insert into @gradeLevelsT(Id)
+select GradeLevelRef from Class
+where TeacherRef = @personId
+group by GradeLevelRef 
+
+declare @mpStartDate datetime2, @mpEndDate datetime2
+if(@markingPeriodId is not null)
+	select @mpStartDate = StartDate, @mpEndDate = EndDate from MarkingPeriod where Id = @markingPeriodId
+
+
+declare @allCount int;
+set @allCount = (select COUNT(*) from
+	vwAnnouncement	
+	left join (select * from AnnouncementRecipientData where AnnouncementRecipientData.PersonRef = @personId) ard
+		 on vwAnnouncement.Id = ard.AnnouncementRef
+where
+	(@id is not null  or [State] = 1) and
+	(@id is null or vwAnnouncement.Id = @id)
+	and (@classId is null or ClassRef = @classId)
+	and ((@allSchoolItems = 1 and @roleId = 2) or vwAnnouncement.PersonRef = @personId 
+		or (ClassAnnouncementTypeRef is null 
+				and exists(select AnnouncementRecipient.Id from AnnouncementRecipient
+						   where AnnouncementRef = vwAnnouncement.Id  and (ToAll = 1 or PersonRef = @personId 
+								or (RoleRef = @roleId and (@roleId <> 2 or GradeLevelRef is null or GradeLevelRef in (select Id from @gradeLevelsT))))
+						   )
+		    )
+		)
+	and (@roleId = 1 or (@schoolId is not null and SchoolRef = @schoolId))
+	and (@staredOnly = 0 or Starred = 1)
+	and (@ownedOnly = 0 or vwAnnouncement.PersonRef = @personId)
+	and (@fromDate is null or Expires >= @fromDate)
+	and (@toDate is null or Expires <= @toDate)
+	and (@markingPeriodId is null or (Expires between @mpStartDate and @mpEndDate))
+)
+
+
+Select 
+	vwAnnouncement.*,
+	cast((case vwAnnouncement.PersonRef when @personId then 1 else 0 end) as bit) as IsOwner,
+	ard.PersonRef as RecipientDataPersonId,
+	ard.Starred as Starred,
+	ROW_NUMBER() OVER(ORDER BY vwAnnouncement.Created desc) as RowNumber,
+	--@starredCount as StarredCount,
+	 	@allCount as AllCount
+from 
+	vwAnnouncement	
+	left join (select * from AnnouncementRecipientData where AnnouncementRecipientData.PersonRef = @personId) ard
+			on vwAnnouncement.Id = ard.AnnouncementRef
+where
+	(@id is not null  or [State] = 1) and
+	(@id is null or vwAnnouncement.Id = @id)
+	and (@classId is null or ClassRef = @classId)
+	and ((@allSchoolItems = 1 and @roleId = 2) or vwAnnouncement.PersonRef = @personId 
+		or (ClassAnnouncementTypeRef is null 
+			and exists(select AnnouncementRecipient.Id from AnnouncementRecipient
+						where AnnouncementRef = vwAnnouncement.Id  and (ToAll = 1 or PersonRef = @personId 
+							or (RoleRef = @roleId and (@roleId <> 2 or GradeLevelRef is null or GradeLevelRef in (select Id from @gradeLevelsT))))
+						)
+			)
+		)			
+	and (@roleId = 1 or (@schoolId is not null and SchoolRef = @schoolId))
+	and (@staredOnly = 0 or Starred = 1)
+	and (@ownedOnly = 0 or vwAnnouncement.PersonRef = @personId)
+	and (@fromDate is null or Expires >= @fromDate)
+	and (@toDate is null or Expires <= @toDate)
+	and (@markingPeriodId is null or (Expires between @mpStartDate and @mpEndDate))
+	and (@gradedOnly = 0 or GradingStudentsCount > 0)		
+order by Created desc				
+OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
+
+GO
+
 
 
 CREATE procedure [dbo].[spGetAnnouncementsQnA] @callerId int, @announcementQnAId int
@@ -828,6 +831,9 @@ GO
 
 
 
+----------------------------
+--- GET ANNOUNCEMENT DETAILS 
+----------------------------
 create procedure [dbo].[spGetAnnouncementDetails] @id int, @callerId int, @callerRole int, @schoolId int
 as
 
@@ -845,7 +851,7 @@ declare @announcementTb table
 	[Subject] nvarchar(max),
 	GradingStyle int not null,
 	Dropped bit not null,
-	ClassAnnouncementTypeRef int not null,
+	ClassAnnouncementTypeRef int null,
 	SchoolRef int not null,
 	ClassAnnouncementTypeName nvarchar(max),
 	AnnouncementType int,
@@ -897,15 +903,17 @@ if(@annExists = 1)
 begin
 declare @ownerId int
 declare @classId int
-declare @annTypeId int
-select @ownerId = PersonRef , @classId = a.ClassRef, @annTypeId = cat.AnnouncementTypeRef 
+--declare @annTypeId int
+declare @isGradeble bit = 0, @isGradebleType bit = 0
+
+select @ownerId = PersonRef , @classId = a.ClassRef, @isGradebleType = cat.Gradable 
 from @announcementTb a
 join ClassAnnouncementType cat on cat.Id = a.ClassAnnouncementTypeRef 
 
-declare @isGradeble bit = 0, @isGradebleType bit = 0
-if(@annTypeId = 2 or @annTypeId = 3 or @annTypeId = 4 or @annTypeId = 5
-	or @annTypeId =6 or @annTypeId =7 or @annTypeId =8 or @annTypeId =9 or @annTypeId = 10)
-set @isGradebleType = 1
+
+--if(@annTypeId = 2 or @annTypeId = 3 or @annTypeId = 4 or @annTypeId = 5
+--	or @annTypeId =6 or @annTypeId =7 or @annTypeId =8 or @annTypeId =9 or @annTypeId = 10)
+--set @isGradebleType = 1
 
 if(@ownerId = @callerId and @isGradebleType = 1) set @isGradeble = 1
 
@@ -964,8 +972,7 @@ GO
 -----------------------------
 -- CREATE ANNOUNCEMENT 
 -----------------------------
-
-CREATE procedure [dbo].[spCreateAnnouncement] @schoolId int, @classAnnouncementTypeId int, @personId int, @created datetime2,
+create procedure [dbo].[spCreateAnnouncement] @schoolId int, @classAnnouncementTypeId int, @personId int, @created datetime2,
 											  @expires datetime2, @state int, @gradingStyle int, @classId int
 as
 begin transaction
@@ -1044,8 +1051,8 @@ begin
 end
 else begin
 	/*INSERT TO ANNOUNCEMENT*/
-	insert into Announcement (PersonRef, Created, Expires, ClassAnnouncementTypeRef, [State],GradingStyle,[Order], ClassRef, Dropped)
-	values(@personId, @created, @expires, @classAnnouncementTypeId, @state, @gradingStyle, 1, @classId, 0);
+	insert into Announcement (PersonRef, Created, Expires, ClassAnnouncementTypeRef, [State],GradingStyle,[Order], ClassRef, Dropped, SchoolRef)
+	values(@personId, @created, @expires, @classAnnouncementTypeId, @state, @gradingStyle, 1, @classId, 0, @schoolId);
 	set @announcementId = SCOPE_IDENTITY()
 end
 
@@ -1085,8 +1092,6 @@ commit
 exec spGetAnnouncementDetails @announcementId, @personId, @callerRole, @schoolId
 
 GO
-
-
 
 create procedure [dbo].[spReorderAnnouncements] @schoolYearId int, @classAnnType int, 
 												@ownerId int, @classId int
