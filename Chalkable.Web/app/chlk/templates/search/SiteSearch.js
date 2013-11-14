@@ -32,7 +32,11 @@ NAMESPACE('chlk.templates.search', function () {
             chlk.models.course.Course, 'course',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'announcementType'
+            Number, 'announcementType',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'chalkableAnnouncementType'
+
         ])
 });
 

@@ -69,7 +69,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
 
          //TODO: rewrite this method 
          [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_ANNOUNCEMENT_WEEK, true, CallType.Get, new[] { AppPermissionType.Announcement })]
-         public ActionResult Week(DateTime? date, Guid? classId, GuidList gradeLevelIds, Guid? schoolPersonId)
+         public ActionResult Week(DateTime? date, int? classId, IntList gradeLevelIds, int? schoolPersonId)
          {
              DateTime start, end;
              int? teacherId, studentId;

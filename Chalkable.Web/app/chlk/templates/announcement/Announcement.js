@@ -30,6 +30,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             Number, 'announcementTypeId', // make enum
 
             [ria.templates.ModelPropertyBind],
+            Number, 'chalkableAnnouncementType',
+
+            [ria.templates.ModelPropertyBind],
             String, 'announcementTypeName',
 
             [ria.templates.ModelPropertyBind],

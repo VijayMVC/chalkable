@@ -30,7 +30,7 @@ namespace Chalkable.Web.Controllers
 
         //TODO: add paginated list
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult ListInstalled(Guid personId, int? start, int? count)
+        public ActionResult ListInstalled(int personId, int? start, int? count)
         {
             var st = start ?? 0;
             var cnt = count ?? 9;

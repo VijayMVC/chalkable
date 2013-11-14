@@ -13,6 +13,7 @@ namespace Chalkable.Web.Models
         public int GradingStyle { get; set; }
         public string AnnouncmentTitle { get; set; }
         public int? AnnouncementTypeId { get; set; }
+        public int? ChalkableAnnouncementTypeId { get; set; }
         public int? ClassAvg { get; set; }
         public string ClassName { get; set; }
         public Guid? CourseId { get; set; }
@@ -38,6 +39,7 @@ namespace Chalkable.Web.Models
             //res.CourseId = anouncement.CourseId;
             //res.AnnouncmentTitle = anouncement.Title;
             res.AnnouncementTypeId = anouncement.ClassAnnouncementTypeRef;
+            res.ChalkableAnnouncementTypeId = anouncement.ChalkableAnnouncementType;
             return res;
         }
         private static void CalculateClassAvg(StudentAnnouncementsViewData res, IEnumerable<StudentAnnouncementDetails> items)
