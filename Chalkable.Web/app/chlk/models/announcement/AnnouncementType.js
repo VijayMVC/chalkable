@@ -21,9 +21,22 @@ NAMESPACE('chlk.models.announcement', function () {
     /** @class chlk.models.announcement.AnnouncementType*/
     CLASS(
         'AnnouncementType', [
+
+            function $(){
+                BASE();
+                this._description = null;
+            },
+
             [ria.serialize.SerializeProperty('cancreate')],
             Boolean, 'canCreate',
             String, 'description',
+            [[String]],
+            VOID, function setDescription(description){
+                this._description = description;
+            },
+            String, function getDescription(){
+                return this._description || this.getName()
+            },
 
             [ria.serialize.SerializeProperty('announcementtypeid')],
             Number, 'announcementTypeId',

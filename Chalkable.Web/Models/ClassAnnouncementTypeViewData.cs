@@ -18,6 +18,7 @@ namespace Chalkable.Web.Models
 
         protected ClassAnnouncementTypeViewData(ClassAnnouncementType announcementType)
         {
+            Id = announcementType.Id;
             ChalkableAnnouncementTypeId = announcementType.ChalkableAnnouncementTypeRef;
             CanCreate = true;
             Name = announcementType.Name;

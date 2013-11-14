@@ -42,7 +42,7 @@ namespace Chalkable.Data.School.Model
     public class AnnouncementComplex : Announcement
     {
         public string ClassAnnouncementTypeName { get; set; }
-        public int AnnouncementType { get; set; }
+        public int? ChalkableAnnouncementType { get; set; }
         public string PersonName { get; set; }
         public string Gender { get; set; }
 

@@ -172,7 +172,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
     {
         public int? Grade { get; set; }
         public int GradingStyle { get; set; }
-        public int AnnouncementTypeId { get; set; }
+        public int? AnnouncementTypeId { get; set; }
         public string AnnouncmentTypeName { get; set; }
         public static StudentSummeryGradeViewData Create(StudentAnnouncementGrade studentAnnouncement, IGradingStyleMapper gradingMapper)
         {
@@ -181,7 +181,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
             {
                 GradingStyle = (int)gradingStyle,
                 Grade = gradingMapper.Map(gradingStyle, studentAnnouncement.GradeValue),
-                AnnouncementTypeId = studentAnnouncement.Announcement.AnnouncementType,
+                AnnouncementTypeId = studentAnnouncement.Announcement.ChalkableAnnouncementType,
                 AnnouncmentTypeName = studentAnnouncement.Announcement.ClassAnnouncementTypeName
             };
             return res;

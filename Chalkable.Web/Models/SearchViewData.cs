@@ -82,7 +82,7 @@ namespace Chalkable.Web.Models
             {
                 Id = announcement.Id.ToString(),
                 Description = string.Format("{0} {1} {2}", announcement.Title, announcement.ClassAnnouncementTypeName, announcement.Order),
-                AnnouncementType = announcement.AnnouncementType,
+                AnnouncementType = announcement.ChalkableAnnouncementType,
                 SearchType = (int)SearchTypeEnum.Announcements
             };
         }
