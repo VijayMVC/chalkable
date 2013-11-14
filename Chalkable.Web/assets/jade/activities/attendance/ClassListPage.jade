@@ -32,13 +32,12 @@
             +Hidden('classid', selectedId && selectedId.valueOf())
             items = self.getItems()
             .top.panel-bg
+                BUTTON(href="javascript:", name="submitType", type="submit", id="submit-attendance-button").chlk-button.action-button.message-button.blue-gradient-btn POST IT
                 if(self.getItems().length > 0)
                     +ActionLinkWithPrepend('attendance', 'markAll',
                         [selectedId.valueOf(), self.getItems()[0].getClassId().valueOf(), self.getDate().toStandardFormat()].concat(additionalParams)
                     )#all-present-link=Msg.Mark_all_Present
                 //+Button(href="javascript:", name="submitType", value="POST ATTENDANCES", type="submit", id="submit-attendance-button")
-                BUTTON(href="javascript:", name="submitType", type="submit", id="submit-attendance-button").chlk-button.action-button.message-button.blue-gradient-btn POST IT
-
             .action-bar.buttons.filter
                 .container.panel-bg
                     .left
