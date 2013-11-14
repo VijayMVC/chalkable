@@ -589,6 +589,21 @@ BODY {
             }
           }
 
+          .set-attendance-list-form{
+            #submit-attendance-button{
+              font-weight: bold;
+              font-size: 14px;
+              padding-bottom: 10px;
+              padding-top: 10px;
+              float: right;
+              padding-right: 25px;
+              padding-left: 25px;
+              margin-top: 5px;
+            }
+            #all-present-link{
+              margin-right: 25px;
+            }
+          }
           #class-attendance-list-panel{
 
             .row{
