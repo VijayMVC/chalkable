@@ -64,10 +64,13 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, function getChalkableAnnouncementType(){ return this._chalkableAnnouncementType;},
 
 
+            READONLY, Boolean, 'adminAnnouncement',
             Boolean, function isAdminAnnouncement(){
                 return  this.getChalkableAnnouncementType() == this._annTypeEnum.ADMIN.valueOf()
                     && !this.getAnnouncementTypeId()
             },
+
+            READONLY, Boolean, 'standartAnnouncement',
             Boolean, function isStandartAnnouncement(){
                 return this.getChalkableAnnouncementType() == this._annTypeEnum.ANNOUNCEMENT.valueOf()
             },
