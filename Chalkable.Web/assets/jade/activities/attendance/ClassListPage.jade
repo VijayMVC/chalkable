@@ -22,7 +22,6 @@
                     data-action="classList",
                     data-params=selectedId ? [selectedId.valueOf()].concat(additionalParams) : null
                 )#attendance-date.tb-date-picker
-                -console.log('tests')
             .right
                 +ActionLinkList(self.getLinksDataForRightSide())
     .people-list-container.not-transparent
@@ -35,7 +34,7 @@
                 BUTTON(href="javascript:", name="submitType", type="submit", id="submit-attendance-button").chlk-button.action-button.message-button.blue-gradient-btn POST IT
                 if(self.getItems().length > 0)
                     +ActionLinkWithPrepend('attendance', 'markAll',
-                        [selectedId.valueOf(), self.getItems()[0].getClassId().valueOf(), self.getDate().toStandardFormat()].concat(additionalParams)
+                        [selectedId.valueOf(), self.getDate().toStandardFormat()].concat(additionalParams)
                     )#all-present-link=Msg.Mark_all_Present
                 //+Button(href="javascript:", name="submitType", value="POST ATTENDANCES", type="submit", id="submit-attendance-button")
             .action-bar.buttons.filter

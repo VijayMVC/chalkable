@@ -168,14 +168,15 @@ NAMESPACE('chlk.controllers', function (){
                 JSON.stringify([true, model.getGradeLevelsIds(), model.getCurrentPage(), model.getDate().format('mm-dd-yy')]), true);
         },
 
-        [[chlk.models.id.ClassId, chlk.models.id.ClassPeriodId, chlk.models.common.ChlkDate, Boolean]],
-        function markAllAction(classId, classPeriodId, date, isProfile_){
+        [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean]],
+        function markAllAction(classId, date, isProfile_){
             this.attendanceService
-                .markAllPresent(classPeriodId, date)
+                .markAllPresent(classId, date)
                 .then(function(success){
-                    this.classListAction(classId, date, true, isProfile_);
+                    this.redirect_('attendance', 'classList', [classId, date, false, isProfile_]);
+                  //  this.classListAction(classId, date, true, isProfile_);
                 }, this);
-            return this.ShadeLoader();
+            //return this.ShadeLoader();
         },
 
         [[Boolean, Boolean]],
