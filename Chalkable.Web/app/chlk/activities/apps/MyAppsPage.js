@@ -7,7 +7,7 @@ NAMESPACE('chlk.activities.apps', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.apps.MyApps)],
-
+        [chlk.activities.lib.PartialUpdateClass('partial-update-myapps')],
         'MyAppsPage', EXTENDS(chlk.activities.lib.TemplatePage), [
         ]);
 });

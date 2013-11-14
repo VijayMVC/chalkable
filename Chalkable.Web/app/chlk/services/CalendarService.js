@@ -2,6 +2,7 @@ REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 
 REQUIRE('chlk.models.common.ChlkDate');
+REQUIRE('chlk.models.calendar.announcement.Month');
 REQUIRE('chlk.models.calendar.announcement.MonthItem');
 REQUIRE('chlk.models.calendar.announcement.Week');
 REQUIRE('chlk.models.calendar.announcement.WeekItem');
@@ -29,15 +30,16 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, String]],
-            ria.async.Future, function listForMonth(classId_, date_, gradeLevels_) {
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, String, chlk.models.id.SchoolPersonId]],
+            ria.async.Future, function listForMonth(classId_, date_, gradeLevels_, schoolPersonId_) {
                 return this.get('AnnouncementCalendar/List.json', ArrayOf(chlk.models.calendar.announcement.MonthItem), {
                     classId: classId_ && classId_.valueOf(),
                     date: date_ && date_.toString('mm-dd-yy'),
-                    gradeLevelIds : gradeLevels_ && gradeLevels_.toString()
+                    gradeLevelIds : gradeLevels_ && gradeLevels_.toString(),
+                    schoolPersonId : schoolPersonId_ && schoolPersonId_.valueOf()
                 }).then(function(model){
                     this.getContext().getSession().set('monthCalendarData', model);
-                    return model;
+                    return this.prepareMonthData(model, date_);
                 }, this);
             },
 
@@ -105,12 +107,13 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, String]],
-            ria.async.Future, function getWeekInfo(classId_, date_, gradeLevels_) {
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, String, chlk.models.id.SchoolPersonId]],
+            ria.async.Future, function getWeekInfo(classId_, date_, gradeLevels_, schoolPersonId_) {
                 return this.get('AnnouncementCalendar/Week.json', ArrayOf(chlk.models.calendar.announcement.WeekItem), {
                     classId: classId_ && classId_.valueOf(),
                     date: date_ && date_.toString('mm-dd-yy'),
-                    gradeLevelIds : gradeLevels_
+                    gradeLevelIds : gradeLevels_,
+                    schoolPersonId : schoolPersonId_ && schoolPersonId_.valueOf()
                 }).then(function(data){
                     return this.prepareWeekData(data, date_);
                 }.bind(this));
@@ -118,8 +121,75 @@ NAMESPACE('chlk.services', function () {
 
             //PREPARING INFO
 
+            chlk.models.common.Role, function getCurrentRole(){
+                return this.getContext().getSession().get('role');
+            },
+
+            [[chlk.models.common.RoleEnum]],
+            Boolean, function userInRole(roleId){
+                return this.getCurrentRole().getRoleId() == roleId;
+            },
+
+            Boolean, function userIsAdmin(){
+                return this.userInRole(chlk.models.common.RoleEnum.ADMINEDIT) ||
+                    this.userInRole(chlk.models.common.RoleEnum.ADMINGRADE) ||
+                    this.userInRole(chlk.models.common.RoleEnum.ADMINVIEW);
+            },
+
+            [[ArrayOf(chlk.models.calendar.announcement.MonthItem), chlk.models.common.ChlkDate]],
+            chlk.models.calendar.announcement.Month, function prepareMonthData(days, date_){
+                var isAdmin = this.userIsAdmin();
+                var markingPeriod = this.getContext().getSession().get('markingPeriod');
+                var mpStartDate = markingPeriod.getStartDate();
+                var mpEndDate = markingPeriod.getEndDate();
+                days.forEach(function(day){
+                    var itemsArray = [], itemsObject = {};
+                    var items = day.getItems();
+                    for (var i = 0; i < items.length; i++){
+                        var typeName = items[i].getAnnouncementTypeName();
+                        var title = items[i].getTitle();
+                        var typeId = items[i].getAnnouncementTypeId();
+                        var typesEnum = chlk.models.announcement.AnnouncementTypeEnum;
+                        if (itemsObject[typeName]){
+                            if(typeof itemsObject[typeName] == 'number'){
+                                itemsObject[typeName] = itemsObject[typeName] + 1;
+                            }
+                            else{
+                                itemsObject[typeName] = 2;
+                            }
+                        }
+                        else{
+                            var showSubject = title !== null && typeId == typesEnum.ADMIN || typeId == typesEnum.ANNOUNCEMENT;
+                            itemsObject[typeName] = showSubject ? title + ' ' + typeName : typeName;
+                        }
+                    }
+
+                    for (var a in itemsObject){
+                        if (typeof itemsObject[a] == "number"){
+                            var count = itemsObject[a];
+                            itemsArray.push({ count: count, title: count + ' ' + a + 's'});
+                        }
+                        else{
+                            itemsArray.push({title: itemsObject[a], count: 1});
+                        }
+                    }
+                    day.setItemsArray(itemsArray);
+
+
+                    var date = day.getDate().getDate();
+                    var today = new chlk.models.common.ChlkDate(new Date());
+                    day.setTodayClassName((today.format('mm-dd-yy') == day.getDate().format('mm-dd-yy')) ? 'today' : '');
+                    day.setRole(isAdmin ? 'admin' : 'no-admin');
+                    day.setAnnLimit(isAdmin ? 7 : 3);
+                    day.setClassName((day.isCurrentMonth() && date >= mpStartDate.getDate() &&
+                        date <= mpEndDate.getDate()) ? '' : 'not-current-month');
+                }.bind(this));
+                return new chlk.models.calendar.announcement.Month(date_, mpStartDate, mpEndDate, days);
+                //return res;
+            },
+
             [[ArrayOf(chlk.models.calendar.announcement.WeekItem), chlk.models.common.ChlkDate]],
-            ArrayOf(chlk.models.calendar.announcement.WeekItem), function prepareWeekData(data, date_){
+            chlk.models.calendar.announcement.Week, function prepareWeekData(data, date_){
                 var max = 0, index = 0, kil=0, empty= 0, empty2=0, sun, date, startArray = [], endArray = [];
                 var len = data.length;
                 if(len < 7){
@@ -197,7 +267,11 @@ NAMESPACE('chlk.services', function () {
                 endArray.forEach(function (item){pushEmptyPeriods(item, 0, item.getAnnouncementPeriods(), data[index]);});
                 var res = startArray.concat(data).concat(endArray);
                 this.getContext().getSession().set('weekCalendarData', res);
-                return res;
+                var markingPeriod = this.getContext().getSession().get('markingPeriod');
+                var startDate = markingPeriod.getStartDate();
+                var endDate = markingPeriod.getEndDate();
+                return new chlk.models.calendar.announcement.Week(date_, startDate, endDate, res);
+                //return res;
             },
 
             [[ArrayOf(chlk.models.calendar.announcement.DayItem), chlk.models.common.ChlkDate]],

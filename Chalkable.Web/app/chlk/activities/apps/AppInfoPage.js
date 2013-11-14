@@ -15,7 +15,7 @@ NAMESPACE('chlk.activities.apps', function () {
         [ria.mvc.TemplateBind(chlk.templates.apps.AppInfo)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppPicture, 'icon', '.icon', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppPicture, 'banner', '.banner', ria.mvc.PartialUpdateRuleActions.Replace)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppScreenshots, 'screenshots', '.screenshot-pictures', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppScreenshots, 'screenshots', '.elem.screenshots', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppInfo, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
 
         'AppInfoPage', EXTENDS(chlk.activities.lib.TemplatePage), [
@@ -32,6 +32,7 @@ NAMESPACE('chlk.activities.apps', function () {
                 var submitBtnWrapper = this.dom.find('.submit-btn');
                 submitBtnWrapper.addClass(DISABLED_CLASS);
                 var submitBtn = submitBtnWrapper.find('button');
+                submitBtnWrapper.setAttr('data-tooltip', 'Unsaved changed');
                 submitBtn.setAttr('disabled', true);
                 var isDraftHidden = this.dom.find('input[name=draft]');
                 isDraftHidden.setValue('true');
@@ -41,13 +42,29 @@ NAMESPACE('chlk.activities.apps', function () {
                 updateDraftBtnWrapper.removeAttr("disabled");
                 var updateDraftBtn = updateDraftBtnWrapper.find('button');
                 updateDraftBtn.removeAttr('disabled');
+                jQuery(updateDraftBtn.valueOf()).html("Unsaved changes");
             },
-
 
             [ria.mvc.DomEventBind('click', '.close-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function picturesChanged(node, event){
                 this.onFormChange(node, event);
+            },
+
+            [ria.mvc.DomEventBind('change', 'input[name=attachEnabled]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function attachChanged(node, event){
+
+                var val = node.checked();
+                if (val){
+                    var mdl = new chlk.models.apps.AppPicture(new chlk.models.id.PictureId(''), '', 170, 110, 'banner', true);
+                    var tpl = new chlk.templates.apps.AppPicture();
+                    tpl.assign(mdl);
+                    tpl.renderTo(this.dom.find('.banner').empty());
+                }
+                else
+                    this.dom.find('.banner').empty();
+
             },
 
             [ria.mvc.DomEventBind('keyup', 'input')],

@@ -123,6 +123,9 @@
                     if (ria.__API.isClassOfDescriptor(value))
                         value = value.valueOf();
 
+                    if (ria.__API.isSpecification(value))
+                        value = value.type;
+
                     return checkTypeHint(value, type.valueOf(), genericTypes || [], genericSpecs || []);
                 }
 
@@ -146,7 +149,8 @@
                     }
 
                     if (value instanceof type.type) {
-                        return type.type.__META.genericTypes.every(function (_, index) {
+                        var meta = type.type.__META;
+                        return meta.genericTypes.slice(meta.baseSpecs.length).every(function (_, index) {
                             //return value.getSpecsOf(_.name) == type.specs[index];
                             return checkTypeHint(value.getSpecsOf(_.name), type.specs[index], genericTypes || [], genericSpecs || []);
                         })
@@ -178,7 +182,7 @@
      * @param {Array} [genericTypes]
      * @param {Array} [genericSpecs]
      */
-    ria.__SYNTAX.checkArg = function (name, type, value, genericTypes, genericSpecs) {
+    ria.__SYNTAX.checkArg = function (name, type, value, genericTypes, genericSpecs, isType_) {
         var isOptional = IS_OPTIONAL.test(name);
         if (isOptional && value === undefined)
             return;
@@ -203,7 +207,7 @@
 
         throw new Exception('Argument ' + name + ' expected to be ' + type.map(function (_) {
             return ria.__API.getIdentifierOfType(_, genericTypes || [], genericSpecs || []);
-            }).join(' or ') + ' but received ' + ria.__API.getIdentifierOfValue(value), error);
+            }).join(' or ') + ' but received ' + (isType_ ? ria.__API.getIdentifierOfType(value) : ria.__API.getIdentifierOfValue(value)), error);
     };
 
     /**

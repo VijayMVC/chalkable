@@ -74,45 +74,7 @@ NAMESPACE('chlk.services', function () {
                         filter: filter,
                         filterMode: filterMode_ && filterMode_.valueOf(),
                         sortingMode: sortingMode_ && sortingMode_.valueOf()
-                    })
-                    .then(function(data){
-                        var items = data.getItems();
-                        for(var i = 0; i < 10; ++i){
-                            var app =  new chlk.models.apps.AppMarketApplication();
-                            app.setName("App test");
-                            app.setId(new chlk.models.id.AppId('dab27768-6a5d-41d5-82b1-d943ef002eae'));
-                            app.setShortDescription("rskldfj;alskdfja;skldjfa;sldkfja;sdfsdfsdfsdfsdfldkfjasl;");
-                            app.setSmallPictureId(new chlk.models.id.PictureId("90e359b7-7199-4296-8148-a072bcd67bb3"));
-                            items.push(app);
-                        }
-                        data.setItems(items);
-                        data.setTotalCount(50);
-
-                        return data;
-
-                    }, this);
-
-
-
-                /*
-                var apps = [];
-                var items = [];
-                var data = new chlk.models.common.PaginatedList(chlk.models.apps.AppMarketApplication);
-                for(var i = 0; i < 10; ++i){
-                    var app =  new chlk.models.apps.AppMarketApplication();
-                    app.setName("App test");
-                    app.setId(new chlk.models.id.AppId('dab27768-6a5d-41d5-82b1-d943ef002eae'));
-                    app.setShortDescription("rskldfj;alskdfja;skldjfa;sldkfja;sdfsdfsdfsdfsdfldkfjasl;");
-                    app.setSmallPictureId(new chlk.models.id.PictureId("90e359b7-7199-4296-8148-a072bcd67bb3"));
-                    items.push(app);
-                }
-                data.setItems(items);
-                data.setTotalCount(50);
-                data.setPageSize(10);
-                data.setPageIndex(start_ / 10);
-
-                return ria.async.DeferredData(data);*/
-
+                    });
             },
 
             [[chlk.models.id.SchoolPersonId, Number]],
@@ -122,23 +84,6 @@ NAMESPACE('chlk.services', function () {
                         personId: personId.valueOf(),
                         start: start_ | 0
                     })
-                    .then(function(data){
-                        var items = data.getItems();
-
-                        for(var i = 0; i < 10; ++i){
-                            var app =  new chlk.models.apps.AppMarketApplication();
-                            app.setName("App test");
-                            app.setId(new chlk.models.id.AppId('dab27768-6a5d-41d5-82b1-d943ef002eae'));
-                            app.setShortDescription("rskldfj;alskdfja;skldjfa;sldkfja;sdfsdfsdfsdfsdfldkfjasl;");
-                            app.setSmallPictureId(new chlk.models.id.PictureId("90e359b7-7199-4296-8148-a072bcd67bb3"));
-                            items.push(app);
-                        }
-                        data.setItems(items);
-                        data.setTotalCount(50);
-
-
-                        return data;
-                    }, this);
             },
 
             [[chlk.models.id.SchoolPersonId, Boolean, Number]],

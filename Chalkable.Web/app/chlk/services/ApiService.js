@@ -90,6 +90,7 @@ NAMESPACE('chlk.services', function () {
                     .then(function(data){
                         return data.map(function(item){
                            item.setRole(role);
+                           item.setCategory(item.isMethod() ? "Methods" : "Params");
                            return item;
                         })
                     });

@@ -53,10 +53,18 @@ NAMESPACE('chlk.controllers', function (){
                    })
                    .catchException(chlk.services.DataException, function (error) {
                        console.error(error.toString());
+
+                       var state = this.context.getState();
+                       state.setController('error');
+                       state.setAction('generalError');
+                       state.setParams([]);
+                       state.setPublic(false);
+                       this.context.stateUpdated();
+
                        // todo: scoping !?
                        //me.view.showAlertBox(error.getMessage());
                        return ria.async.BREAK; // failed with exception, stop further processing
-                   });
+                   }, this);
 
                return head;
            },
@@ -163,8 +171,8 @@ NAMESPACE('chlk.controllers', function (){
            },
 
            [[ria.mvc.IActivity]],
-           OVERRIDE, function prepareActivity(activity){
-              activity.setRole(this.getCurrentRole());
+           OVERRIDE, function prepareActivity_(activity){
+              activity.setRole && activity.setRole(this.getCurrentRole());
            }
 
    ])

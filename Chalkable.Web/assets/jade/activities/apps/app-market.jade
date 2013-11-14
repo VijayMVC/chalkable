@@ -22,6 +22,8 @@ mixin AppIconLink(app)
 
     +ActionForm('appmarket', 'list')#app-market-filter
         +Hidden('start',self.apps.getPageIndex()) * self.apps.getPageSize())
+        +Hidden('totalCount', self.apps.getTotalCount())
+        +Hidden('pageSize', self.apps.getPageSize())
         +Hidden('scroll', 0)
         .app-filter
             .subject
@@ -47,6 +49,6 @@ mixin AppIconLink(app)
                     +Option(chlk.models.apps.AppSortingMode.HIGHEST_RATED.valueOf(), 'Highest Rated')
             .app-grade-levels
                 +RangeSlider("gradeLevels", "gradeLevels", 1, 12)
-    .apps
-
-        +RenderWith(self.getModel(), chlk.templates.apps.AppMarketAppsTpl)
+    +ScrollBox('app-market-filter')
+        .apps
+            +RenderWith(self.getModel(), chlk.templates.apps.AppMarketAppsTpl)

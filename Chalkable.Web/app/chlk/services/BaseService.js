@@ -54,6 +54,23 @@ NAMESPACE('chlk.services', function () {
                 return obj ? obj.map(function(item){ return item.valueOf();}).join(',') : "";
             },
 
+            [[Object]],
+            function handleError(data){
+                if(!data.success){
+                    this.redirectToErrorPage();
+                }
+                //throw chlk.services.DataException('Server error', Error(data.message));
+            },
+
+            function redirectToErrorPage(){
+                var state = this.context.getState();
+                state.setController('user');
+                state.setAction('error');
+                state.setParams([]);
+                state.setPublic(false);
+                this.context.stateUpdated();
+            },
+
             [[String, Object, Object]],
             ria.async.Future, function get(uri, clazz_, gParams_) {
 
@@ -61,14 +78,15 @@ NAMESPACE('chlk.services', function () {
                     .params(gParams_ || {})
                     .run()
                     .then(function (data) {
-                        if(!data.success)
-                            throw chlk.services.DataException('Server error', Error(data.message));
+                        this.handleError(data);
 
                         if (!clazz_)
                             return data.data || null;
 
                         return Serializer.deserialize(data.data, clazz_);
-                    });
+                    }.bind(this)).catchError(function(handler, scope_){
+                        this.redirectToErrorPage();
+                    }, this);
             },
 
             [[String, Object, Object, Object]],
@@ -78,14 +96,13 @@ NAMESPACE('chlk.services', function () {
                     .params(gParams_ || {})
                     .run()
                     .then(function (data) {
-                        if(!data.success)
-                            throw chlk.services.DataException('Server error', Error(data.message));
+                        this.handleError(data);
 
                         if (!clazz_)
                             return data.data || null;
 
                         return Serializer.deserialize(data.data, clazz_);
-                    });
+                    }.bind(this));
             },
 
 
@@ -97,11 +114,10 @@ NAMESPACE('chlk.services', function () {
                     .requestHeaders({"Content-Type": "application/json; charset=utf-8"})
                     .run()
                     .then(function (data) {
-                        if(!data.success)
-                            throw chlk.services.DataException('Server error', Error(data.message));
+                        this.handleError(data);
 
                         return Serializer.deserialize(data.data, clazz);
-                    });
+                    }.bind(this));
             },
 
            [[String, Function]],
@@ -144,11 +160,10 @@ NAMESPACE('chlk.services', function () {
                     .requestHeaders({"Content-Type": "application/json; charset=utf-8"})
                     .run()
                     .then(function (data) {
-                        if(!data.success)
-                            throw chlk.services.DataException('Server error', Error(data.message));
+                        this.handleError(data);
 
                         return Serializer.deserialize(data.data, ArrayOf(clazz));
-                    });
+                    }.bind(this));
             },
 
             [[String, Object, Object]],
@@ -158,12 +173,12 @@ NAMESPACE('chlk.services', function () {
                     .params(gParams)
                     .run()
                     .then(function (data) {
-
-                        if(!data.success)
-                            throw chlk.services.DataException('Server error', Error(data.message));
+                        this.handleError(data);
 
                         return Serializer.deserialize(data.data, ArrayOf(clazz));
-                    });
+                    }.bind(this)).catchError(function(handler, scope_){
+                        this.redirectToErrorPage();
+                    }, this);
             },
 
 
@@ -183,7 +198,9 @@ NAMESPACE('chlk.services', function () {
                         model.setHasPreviousPage(Boolean(data.haspreviouspage));
 
                         return model;
-                    });
+                    }).catchError(function(handler, scope_){
+                        this.redirectToErrorPage();
+                    }, this);
             }
         ]);
 });

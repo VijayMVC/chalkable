@@ -3,7 +3,6 @@ REQUIRE('chlk.templates.developer.ApiExplorerTpl');
 REQUIRE('chlk.templates.developer.ApiExplorerResponseTpl');
 REQUIRE('chlk.templates.developer.ApiListTpl');
 REQUIRE('chlk.templates.developer.ApiCallSeqTpl');
-
 REQUIRE('chlk.models.api.ApiParamType');
 
 NAMESPACE('chlk.activities.developer', function () {

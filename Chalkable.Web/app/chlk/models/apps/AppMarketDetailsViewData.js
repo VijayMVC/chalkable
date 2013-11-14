@@ -7,6 +7,7 @@ NAMESPACE('chlk.models.apps', function () {
         'AppMarketDetailsViewData', EXTENDS(chlk.models.apps.AppMarketBaseViewData), [
             chlk.models.apps.AppMarketApplication, 'app',
             String, 'installBtnTitle',
+            Boolean, 'installed',
 
             [[
                 chlk.models.apps.AppMarketApplication,
@@ -15,9 +16,10 @@ NAMESPACE('chlk.models.apps', function () {
                 ArrayOf(chlk.models.apps.AppGradeLevel),
                 Number
             ]],
-            function $(app, installBtnTitle, categories, gradelevels, balance){
+            function $(app, installBtnTitle, categories, gradelevels, balance, isInstalled){
                 BASE(categories, gradelevels, balance);
                 this.setApp(app);
+                this.setInstalled(isInstalled);
                 this.setInstallBtnTitle(installBtnTitle);
             }
         ]);

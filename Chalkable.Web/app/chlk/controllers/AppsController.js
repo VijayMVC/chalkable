@@ -122,7 +122,7 @@ NAMESPACE('chlk.controllers', function (){
                     .getInfo(appId_)
                     .then(function(data){
                         if (!data.getId()){
-                            return this.forward_('apps', 'add', []);
+                            return this.Forward('apps', 'add', []);
                         }
                         else
                             return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data, isReadonly, isDraft));
@@ -212,7 +212,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.appsService
                 .approveApp(appId)
                 .then(function(data){
-                    return this.redirect_('apps', 'list', []);
+                    return this.Redirect('apps', 'list', []);
                 }, this);
         },
 
@@ -224,7 +224,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.appsService
                 .declineApp(appId)
                 .then(function(data){
-                    return this.redirect_('apps', 'list', []);
+                    return this.Redirect('apps', 'list', []);
                 }, this);
         },
 
@@ -236,7 +236,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.appsService
                 .goLive(appId)
                 .then(function(data){
-                    return this.redirect_('apps', 'general', []);
+                    return this.Redirect('apps', 'general', []);
                 }, this);
         },
 
@@ -248,7 +248,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.appsService
                 .unlist(liveAppId)
                 .then(function(data){
-                    return this.redirect_('apps', 'general', []);
+                    return this.Redirect('apps', 'general', []);
                 }, this);
         },
 
@@ -333,7 +333,7 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.appsService
                 .createApp(devId, model.getName())
                 .then(function(){
-                    return this.forward_('apps', 'details', []);
+                    return this.Forward('apps', 'details', []);
                 }, this);
             return result;
         },
@@ -346,7 +346,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.appsService
                 .deleteApp(id)
                 .then(function(){
-                    return this.forward_('apps', 'details', []);
+                    return this.Forward('apps', 'details', []);
                 }, this);
         },
 
@@ -355,7 +355,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.apps.Application]],
         function updateApp(app) {
-            return this.forward_('apps', 'details', [app.getId().valueOf(), true]);
+            return this.Forward('apps', 'details', [app.getId().valueOf(), true]);
         },
 
         [chlk.controllers.AccessForRoles([
@@ -435,10 +435,22 @@ NAMESPACE('chlk.controllers', function (){
                     if (appBannerId.length == 0) appBannerId = null;
                 }
 
-                if (appIconId == null || appBannerId == null){
-                    return this.ShowMsgBox('You need to upload icon and banner picture for you app', 'Error', [{
-                        text: 'Ok'
-                    }], 'center');
+
+
+                if (appAccess.isAttachEnabled()){
+                    if (appIconId == null || appBannerId == null){
+                        return this.ShowMsgBox('You need to upload icon and banner picture for you app', 'Error', [{
+                            text: 'Ok'
+                        }], 'center');
+                    }
+                }
+                else
+                {
+                    if (appIconId == null){
+                        return this.ShowMsgBox('You need to upload icon picture for you app', 'Error', [{
+                            text: 'Ok'
+                        }], 'center');
+                    }
                 }
 
                 var developerWebsite = model.getDeveloperWebSite();
@@ -483,7 +495,7 @@ NAMESPACE('chlk.controllers', function (){
                 .getInfo()
                 .then(function(data){
                     if (!data.getId()){
-                        return this.forward_('apps', 'add', []);
+                        return this.Forward('apps', 'add', []);
                     }
                     else{
                         var pictureUrl = this.pictureService.getPictureUrl(data.getSmallPictureId(), 74);

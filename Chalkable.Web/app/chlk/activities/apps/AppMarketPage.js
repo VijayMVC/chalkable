@@ -10,6 +10,7 @@ NAMESPACE('chlk.activities.apps', function () {
         [ria.mvc.TemplateBind(chlk.templates.apps.AppMarket)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppMarketAppsTpl, 'updateApps', '.apps', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppMarketAppsTpl, 'scrollApps', '.apps', ria.mvc.PartialUpdateRuleActions.Append)],
+        [chlk.activities.lib.PartialUpdateClass('partial-update-market')],
 
         'AppMarketPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
@@ -18,8 +19,8 @@ NAMESPACE('chlk.activities.apps', function () {
             VOID, function togglePriceType(node, event){
                 this.dom.find('.price-type').removeClass('pressed');
                 node.addClass('pressed');
-
                 this.dom.find('input[name=priceType]').setValue(node.getAttr('data-price-type'));
+                this.resetScrolling_();
                 this.dom.find('#app-market-filter').trigger('submit');
             },
 
@@ -32,6 +33,7 @@ NAMESPACE('chlk.activities.apps', function () {
             [ria.mvc.DomEventBind('change', '#app-sort-type')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function sortingChanged(node, event, data){
+                this.resetScrolling_();
                 this.dom.find('#app-market-filter').trigger('submit');
             },
 
@@ -39,10 +41,15 @@ NAMESPACE('chlk.activities.apps', function () {
             [ria.mvc.DomEventBind('sliderChanged', '#gradeLevels')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function gradeLevelsChanged(node, event){
+                this.resetScrolling_();
                 this.dom.find('#app-market-filter').trigger('submit');
             },
 
+            function resetScrolling_(){
+                this.dom.find('input[name=scroll]').setValue(0);
+                this.dom.find('input[name=start]').setValue(0);
 
+            },
 
 
             [ria.mvc.DomEventBind('click', 'input[type=checkbox]')],
@@ -79,6 +86,7 @@ NAMESPACE('chlk.activities.apps', function () {
                 }
                 res = res.join(',');
                 new ria.dom.Dom("input[name=selectedCategories]").setValue(res);
+                this.resetScrolling_();
                 this.dom.find('#app-market-filter').trigger('submit');
 
 

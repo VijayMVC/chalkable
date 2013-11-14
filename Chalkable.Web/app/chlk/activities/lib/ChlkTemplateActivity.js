@@ -13,16 +13,28 @@ NAMESPACE('chlk.activities.lib', function () {
         [[String]],
         function BodyClass(clazz) {});
 
+
+     /** @class chlk.activities.lib.PartialUpdateClass*/
+    ANNOTATION(
+        [[String]],
+        function PartialUpdateClass(partialUpdateCls) {});
+
     var PARTIAL_UPDATE_CLASS = 'partial-update';
 
     /** @class chlk.activities.lib.ChlkTemplateActivity*/
 
-
-
-
     CLASS(
         'ChlkTemplateActivity', EXTENDS(ria.mvc.TemplateActivity), [
-            [[String]],
+            [[ria.reflection.ReflectionClass]],
+            OVERRIDE, VOID, function processAnnotations_(ref) {
+                BASE(ref);
+
+               if (ref.isAnnotatedWith(chlk.activities.lib.PartialUpdateClass)){
+                   this._partialUpdateCls = ref.findAnnotation(chlk.activities.lib.PartialUpdateClass).pop().partialUpdateCls;
+               }else{
+                   this._partialUpdateCls = PARTIAL_UPDATE_CLASS;
+               }
+            },
             OVERRIDE, VOID, function addPartialRefreshLoader(msg_) {
 
                 var actualMsg = msg_ ? msg_ : "";
@@ -33,7 +45,7 @@ NAMESPACE('chlk.activities.lib', function () {
                     msg_ = actualMsg;
                 }
                 else{
-                    this.dom.addClass(PARTIAL_UPDATE_CLASS);
+                    this.dom.addClass(this._partialUpdateCls);
                 }
                 BASE(msg_);
             },
@@ -42,7 +54,7 @@ NAMESPACE('chlk.activities.lib', function () {
 
             [[String]],
             OVERRIDE, VOID, function onModelComplete_(msg_) {
-                this.dom.removeClass(PARTIAL_UPDATE_CLASS);
+                this.dom.removeClass(this._partialUpdateCls);
                 BASE(msg_);
             },
 

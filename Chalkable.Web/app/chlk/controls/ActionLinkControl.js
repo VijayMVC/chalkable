@@ -32,6 +32,35 @@ NAMESPACE('chlk.controls', function () {
                 return encodeURIComponent(values.map(s).join(','));
             },
 
+            [[Array]],
+            String, function parseValues_(values) {
+                var res = [];
+                values.forEach(function(item){
+                    item = item && item.valueOf ? item.valueOf() : item;
+                    if(Array.isArray(item) || typeof item == "number" || typeof item == "string")
+                        res.push(item);
+                    else
+                        res.push(JSON.stringify(item));
+                });
+                return res.join('/');
+            },
+
+            [[Array]],
+            String, function getHref(values) {
+                var res = [], that = this;
+                values.forEach(function(item){
+                    item = item && item.valueOf ? item.valueOf() : item;
+                    if(Array.isArray(item))
+                        res.push(that.parseValues_(item));
+                    else
+                        if(typeof item == "number" || typeof item == "string")
+                            res.push(item);
+                        else
+                            res.push(JSON.stringify(item));
+                });
+                return '#' + res.join('/');
+            },
+
             [[String]],
             Array, function parseLink_(link) {
                 return JSON.parse(String('[' + decodeURIComponent(link) + ']'));
@@ -56,6 +85,12 @@ NAMESPACE('chlk.controls', function () {
                 }
 
                 event.preventDefault();
+                return false;
+            },
+
+            [ria.mvc.DomEventBind('click', 'A[data-link].disabled, A[data-link].pressed, A[data-link][disabled]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            Boolean, function onDisabledActionLinkClick(node, event) {
                 return false;
             },
 

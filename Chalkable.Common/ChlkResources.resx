@@ -315,6 +315,9 @@
   <data name="ERR_APP_SHORT_DESCRIPTION_MISSING" xml:space="preserve">
     <value>Application description is missing</value>
   </data>
+  <data name="ERR_APP_SMALL_ICON_MISSING" xml:space="preserve">
+    <value>Application icon is missing</value>
+  </data>
   <data name="ERR_APP_URL_MISSING" xml:space="preserve">
     <value>Application url is missing</value>
   </data>

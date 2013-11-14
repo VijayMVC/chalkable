@@ -61,9 +61,9 @@ NAMESPACE('ria.mvc', function () {
                     .filter(function (_) { return _.isAnnotatedWith(ria.mvc.PartialUpdateRule)})
                     .map(function(_) {
                         var annotation = _.findAnnotation(ria.mvc.PartialUpdateRule).pop();
-                        var tplRef = new ria.reflection.ReflectionClass(annotation.tpl);
+                        var tplRef = annotation.tpl === null ? null : new ria.reflection.ReflectionClass(annotation.tpl);
                         return {
-                            tpl: tplRef.instantiate(),
+                            tpl: tplRef ? tplRef.instantiate() : null,
                             msg: annotation.msg_ || null,
                             methodRef: _
                         }
@@ -88,14 +88,15 @@ NAMESPACE('ria.mvc', function () {
                         };
                     }).concat(partialUpdateWithMethods);
 
-
-
-                if (this._partialUpdateRules.length < 1 && this._templateClasses.length == 1) {
-                    this._partialUpdateRules.push({
-                        tpl: this._templateClasses[0],
-                        msg: null,
-                        selector: null,
-                        action: ria.mvc.PartialUpdateRuleActions.Replace
+                if (this._partialUpdateRules.length < 1) {
+                    var rules = this._partialUpdateRules;
+                    this._templateClasses.forEach(function (tpl) {
+                        rules.push({
+                            tpl: tpl,
+                            msg: undefined,
+                            selector: null,
+                            action: ria.mvc.PartialUpdateRuleActions.Replace
+                        })
                     })
                 }
             },
@@ -132,10 +133,13 @@ NAMESPACE('ria.mvc', function () {
 
 
 
-            Object, function doFindTemplateForPartialModel_(model, msg) {
+            Object, function doFindTemplateForPartialModel_(model, msg_) {
                 var matches = this._partialUpdateRules.filter(function (_) {
-                    if (_.msg !== null && _.msg != msg)
+                    if (_.msg !== null && _.msg !== msg_)
                         return false;
+
+                    if (!_.tpl)
+                        return true;
 
                     var modelClass = _.tpl.getModelClass();
 
@@ -149,10 +153,10 @@ NAMESPACE('ria.mvc', function () {
                 });
 
                 if (matches.length == 0)
-                    throw new ria.mvc.MvcException('Found no template that can render ' + ria.__API.getIdentifierOfValue(model) + ' with message ' + msg);
+                    throw new ria.mvc.MvcException('Found no template that can render ' + ria.__API.getIdentifierOfValue(model) + ' with message ' + msg_);
 
                 if (matches.length > 1)
-                    throw new ria.mvc.MvcException('Found multiple templates that can render ' + ria.__API.getIdentifierOfValue(model) + ' with message ' + msg
+                    throw new ria.mvc.MvcException('Found multiple templates that can render ' + ria.__API.getIdentifierOfValue(model) + ' with message ' + msg_
                         + ', matches ' + matches.map(function (_) { return ria.__API.getIdentifierOfValue(_) }));
 
                 return matches.pop();
@@ -160,10 +164,10 @@ NAMESPACE('ria.mvc', function () {
 
             OVERRIDE, VOID, function onPartialRender_(model, msg_) {
                 BASE(model, msg_);
-                var rule = this.doFindTemplateForPartialModel_(model, msg_ || '');
+                var rule = this.doFindTemplateForPartialModel_(model, msg_);
                 var tpl = rule.tpl;
-                this.onPrepareTemplate_(tpl, model, msg_);
-                tpl.assign(model);
+                tpl && this.onPrepareTemplate_(tpl, model, msg_);
+                tpl && tpl.assign(model);
                 if(rule.methodRef){
                     rule.methodRef.invokeOn(this, [tpl, model, msg_]);
                 }else{

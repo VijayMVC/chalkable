@@ -1,8 +1,9 @@
-mixin ScrollBox(data)
-    -self.prepareData(data, attributes)
+mixin ScrollBox(formId)
+    -attributes.formId = formId
+    -self.processAttrs(attributes)
     .chlk-scrollbox.with-scroller(attributes)
         block
-
+        .scrollbox-loader.horizontal-loader.x-hidden
 
 
 

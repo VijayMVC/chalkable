@@ -151,7 +151,7 @@ ria.__API = ria.__API || {};
             var meta = ria.__API.getConstructorOf(value).__META;
             var name = meta.name;
             if (meta.genericTypes.length) {
-                name += '.OF(' + meta.genericTypes.map(function (type) {
+                name += '.OF(' + meta.genericTypes.slice(meta.baseSpecs.length).map(function (type) {
                     return ria.__API.getIdentifierOfType(value.getSpecsOf(type.name));
                 }) + ')';
             }
@@ -251,7 +251,7 @@ ria.__API = ria.__API || {};
                             throw Error('Generic type ' + type.name + ' restricts to ' + ria.__API.getIdentifierOfType(typeSpecs[0]));
 
                         try {
-                            ria.__SYNTAX.checkArg(type.name, typeSpecs[0], specSpecs[0]);
+                            ria.__SYNTAX.checkArg(type.name, typeSpecs[0], specSpecs[0], [], [], true);
                         } catch (e) {
                             throw Exception('Generic type ' + type.name + ' restricts to ' + ria.__API.getIdentifierOfType(typeSpecs[0]) + ', but got ' + ria.__API.getIdentifierOfType(specSpecs[0]), e);
                         }
@@ -269,7 +269,7 @@ ria.__API = ria.__API || {};
 
                 } else {
                     typeSpecs.forEach(function (restriction) {
-                        ria.__SYNTAX.checkArg(type.name, restriction, spec);
+                        ria.__SYNTAX.checkArg(type.name, restriction, spec, [], [], true);
                     });
                 }
             });

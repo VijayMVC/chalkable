@@ -1,5 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.calendar.announcement.DayPage');
+REQUIRE('chlk.templates.calendar.announcement.DayCalendarBodyTpl');
 
 NAMESPACE('chlk.activities.calendar.announcement', function () {
 

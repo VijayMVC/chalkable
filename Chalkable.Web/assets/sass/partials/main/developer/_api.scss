@@ -7,6 +7,14 @@ BODY {
             #main {
               DIV.api-explorer{
 
+
+
+                .lr-toolbar{
+                  .arrow{
+                    margin:0;
+                  }
+                }
+
                 .api-key{
                   margin-right: 90px;
                   margin-left: 5px;
@@ -442,12 +450,31 @@ BODY {
                 background-size: 33px;
               }
 
+                .api-calls-seq{
+                  .api-list-control-btn{
+                    width: 36px;
+                    line-height: 90px;
+                    position: absolute;
+                    &.left-btn{
+                      left: 0;
+                    }
+                    &.right-btn{
+                      right: 0;
+                    }
+                    top: 0;
+
+                    &:hover{
+                      background: #E8EAEA;
+                    }
+                  }
+                }
 
                 .call-tree{
                   background: #DBDCDC !important;
                   border: 1px #7DC2CA solid !important;
-                  padding: 10px;
+                  padding: 10px 46px;
                   height: 70px;
+                  position: relative;
                   text-align: center;
                   .way-item{
                     cursor: pointer;
@@ -460,12 +487,18 @@ BODY {
                     color: #30585D;
                     padding: 5px;
                     white-space: nowrap;
+                    max-width: 200px;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    min-width: 200px;
+
                     &.separator{
                       display: inline-block;
                       background: url(images/developer/separator-arrow.png) center center no-repeat;
                       width: 40px;
                       vertical-align: top;
-
+                      min-width: 40px;
+                      max-width: 40px;
                     }
                     &.single{
                       display: block;
@@ -490,4 +523,26 @@ BODY {
      }
     }
   }
+
+  .apiDropdownList  {
+     .ui-autocomplete-category{
+        width: 100%;
+        span{
+          font-weight: bold;
+          font-size: 15px;
+          display: inline-block;
+          float: left;
+          width: 20%;
+          line-height: 32px;
+        }
+
+        hr{
+          margin-top: 15px;
+        }
+
+
+
+     }
+  }
+
 }

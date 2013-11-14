@@ -18,6 +18,15 @@ NAMESPACE('chlk.templates.discipline',function(){
             [ria.templates.ModelPropertyBind],
             Boolean, 'byLastName',
 
+            [ria.templates.ModelPropertyBind],
+            String, 'filter',
+
+            String, function getTotalText(){
+                var disciplines = this.getDisciplines();
+                var res = disciplines.length + ' ' + Msg.Student(disciplines.length != 1);
+                return res;
+            },
+
             Object, function getRedirectData(){
                 return{
                     controller: 'discipline',
@@ -37,8 +46,13 @@ NAMESPACE('chlk.templates.discipline',function(){
                         selected: selectedDisciplineTypes.filter(function(item){return item.getId() == disciplineTypes[i].getId();}).length > 0
                     });
                 }
-                return [res.slice(0, Math.round(res.length / 2))
-                        , res.slice(Math.round(res.length / 2), res.length)
+
+                var half = Math.ceil(res.length / 2);
+                if(res.length < 6)
+                    half = 5;
+
+                return [res.slice(0, half)
+                        , res.slice(half)
                     ];
             }
     ]);

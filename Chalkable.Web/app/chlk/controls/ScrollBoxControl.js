@@ -10,74 +10,42 @@ NAMESPACE('chlk.controls', function () {
                 ASSET('~/assets/jade/controls/scroll-box.jade')(this);
             },
 
-            Object, 'configs',
+            String, 'formId',
 
-            [[Object, Object]],
-            VOID, function prepareData(data, configs_) {
-                var configs = {
-                    itemsName: 'Items',
-                    start: 0,
-                    totalCount: null,
-                    pageSize: 10,
-                    interval: 250
-                };
-                if(configs_){
-                    if(data.getTotalCount){
-                        configs_.totalCount = data.getTotalCount();
-                        configs_.pageSize = data.getPageSize();
-                    }
-                    configs = Object.extend(configs, configs_);
-                }
-                var getItemsMethod = 'get' + configs.itemsName;
-                this.setConfigs(configs);
-                this.context.getDefaultView().getCurrent()
-                    .addRefreshCallback(function (activity, model, msg_) {
-                        var scrollBox = new ria.dom.Dom('.chlk-scrollbox');
-                        this.addInfiniteScroll(scrollBox);
+            [[Object]],
+            Object, function processAttrs(attributes) {
+                attributes.id = attributes.id || ria.dom.NewGID();
+                this.setFormId(attributes.formId);
+                this.context.getDefaultView()
+                    .onActivityRefreshed(function (activity, model) {
+                        this.update(jQuery('#'+attributes.id));
                     }.bind(this));
+                return attributes;
             },
 
-            [[ria.dom.Dom]],
-            VOID, function addInfiniteScroll(scrollBox) {
-                var configs = this.getConfigs();
-                var baseContentHeight = scrollBox.height();
-                var pageHeight = document.documentElement.clientHeight;
-                var contentHeight = baseContentHeight + scrollBox.offset().top;
-                var scrollPosition = 0;
-                configs.currentStart = configs.start + configs.pageSize;
+            [[Object]],
+            VOID, function update(node){
+                var formId = this.getFormId();
+                var that = this;
+                jQuery(window).scroll(function(){
+                    if  (jQuery(window).scrollTop() == jQuery(document).height() - jQuery(window).height()){
+                        jQuery('#' + formId).parent().find('.scrollbox-loader').removeClass('x-hidden');
+                        jQuery('#' + formId).find('input[name=scroll]').val(1);
+                        var totalCount = jQuery('#' + formId).find('input[name=totalCount]').val() | 0;
 
-                var onScrollDown = function(){
-                    if(!scrollBox.hasClass('scroll-freezed')){
-                        scrollPosition = window.pageYOffset;
-                        if(configs.totalCount > configs.currentStart){
-                            if((contentHeight - pageHeight - scrollPosition) < 200){
+                        var start = jQuery('#' + formId).find('input[name=start]').val() | 0;
+                        var pageSize = jQuery('#' + formId).find('input[name=pageSize]').val() | 0;
 
-                                var form = new ria.dom.Dom("#" + configs.formId);
-
-                                form.find('[name=scroll]').setValue(1);
-                                form.trigger('submit');
-
-                                configs.currentStart += configs.pageSize;
-                                form.find('[name=start]').setValue(configs.currentStart);
-                                var div = new ria.dom.Dom('<div class="horizontal-loader"></div>');
-
-                                scrollBox.addClass('scroll-freezed');
-                                scrollBox.appendChild(div);
-                                contentHeight += baseContentHeight;
-                            }
+                        if (start < totalCount){
+                            jQuery('#' + formId).find('input[name=start]').val(start + pageSize);
+                            jQuery('#' + formId).trigger('submit');
                         }
                         else{
-                            clearInterval(interval);
+                            jQuery('#' + formId).parent().find('.scrollbox-loader').addClass('x-hidden');
+                            return false;
                         }
                     }
-                    var node = scrollBox.find('.horizontal-loader');
-                    if(node.exists()){
-                        scrollBox.removeClass('scroll-freezed');
-                        node.remove();
-                    }
-                };
-                var interval = setInterval(onScrollDown, configs.interval);
+                });
             }
-
         ]);
 });

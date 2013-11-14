@@ -83,7 +83,8 @@ apiInfo = self.getApiInfo()
         The user role defines the level of access.
     div#api-search-field
 
-            +SearchBox(chlk.services.ApiService, "getList", chlk.templates.developer.ApiListTpl, apiInfo.getRole())#api-search-box(name="apiSearchbox", triggerBtnId="api-search-btn")
+            +SearchBox(chlk.services.ApiService, "getList", chlk.templates.developer.ApiListTpl, apiInfo.getRole())#api-search-box(name="apiSearchbox",
+            triggerBtnId="api-search-btn", categorized="true", groupingField="category", listCls="apiDropdownList")
             div.search-btn#api-search-btn
     .api-calls-seq.call-tree
     roleControllers = apiInfo.getControllers() || []

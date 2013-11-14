@@ -30,7 +30,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(
                     function(success){
                         if (success)
-                            return this.redirect_('settings', 'dashboardTeacher', []);
+                            return this.Redirect('settings', 'dashboardTeacher', []);
                     }.bind(this)
                 );
         },

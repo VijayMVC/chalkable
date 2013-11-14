@@ -58,6 +58,14 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.DEVELOPER
             ])],
+            function paypalSettingsAction(){
+
+            },
+
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.DEVELOPER
+            ])],
 
             [[String]],
             function apiAction(role_){
@@ -94,7 +102,7 @@ NAMESPACE('chlk.controllers', function (){
                  var result = this.apiService
                      .getRequiredApiCalls(query, isMethod, role)
                      .then(function(data){
-                         var seq= chlk.models.api.ApiCallSequence.$create(data);
+                         var seq = chlk.models.api.ApiCallSequence.$create(data);
                          return seq;
                      });
                  return this.UpdateView(chlk.activities.developer.ApiExplorerPage, result, 'update-api-calls-list');

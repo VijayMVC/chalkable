@@ -43,6 +43,7 @@ REQUIRE('chlk.models.id.SchoolYearId');
 
 REQUIRE('chlk.AppApiHost');
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
+REQUIRE('chlk.controllers.ErrorController');
 
 NAMESPACE('chlk', function (){
 

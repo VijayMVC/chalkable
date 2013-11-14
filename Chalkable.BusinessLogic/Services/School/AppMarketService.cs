@@ -113,7 +113,7 @@ namespace Chalkable.BusinessLogic.Services.School
                                                    , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, schoolYearId);
                 var spIds = persons.Select(x => x.PersonId).Distinct().ToList();
                 var schoolYear = ServiceLocator.SchoolYearService.GetSchoolYearById(schoolYearId);
-                var res = RegistarationInstallationAction(uow, app, personId, roleIds, classIds, departmentIds, gradeLevelIds);
+                var res = RegistrationInstallationAction(uow, app, personId, roleIds, classIds, departmentIds, gradeLevelIds);
                 var appInstalls = new List<ApplicationInstall>();
 
                 foreach (var spId in spIds)

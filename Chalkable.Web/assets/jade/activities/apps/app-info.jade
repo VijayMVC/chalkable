@@ -54,6 +54,12 @@ mixin AppPricing(appPrice, isReadOnly)
             .elem.class-flat-rate(class = !isClassFlatRateEnabled ?  "x-hidden" : undefined)
                 label.hint Class cost:
                 +Textbox('costPerClass', appPrice.getPricePerClass(), isReadOnly, "required, custom[number]").price-box
+            .elem.paypal
+                label.hint Get Paid:
+                .price-elem
+                    span Add your PayPal account info in settings
+                    +ActionLink('settings', 'dashboard').paypal-button
+
 
 
 
@@ -197,9 +203,6 @@ appPermissions = appPermissions.join(',')
                         .banner
                             +RenderWith(app.getBannerPicture(), chlk.templates.apps.AppPicture)
                 .elem.screenshots
-                    label.hint Screenshots:
-
-                    .screenshot-pictures
                         +RenderWith(app.getScreenshotPictures(), chlk.templates.apps.AppScreenshots)
 
         if !self.isReadOnly()

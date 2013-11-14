@@ -102,7 +102,7 @@ NAMESPACE('ria.mvc', function () {
 
             [[ria.async.Future, String]],
             ria.async.Future, function partialRefreshD(future, msg_) {
-                var msg = msg_ || "";
+                var msg = msg_;
                 var me = this;
                 return future
                     .attach(this.getModelEvents_(msg))
@@ -115,8 +115,11 @@ NAMESPACE('ria.mvc', function () {
             VOID, function refresh(model) {
                 this.onModelReady_(model);
                 this.onRender_(model);
-                ria.async.DeferredData(model)
-                    .next(this.onRefresh_)
+                ria.async.Future.$fromData(model)
+                    .then(function (data) {
+                        this.onRefresh_(data);
+                        return data;
+                    }, this);
             },
 
             ABSTRACT, VOID, function onCreate_() {},

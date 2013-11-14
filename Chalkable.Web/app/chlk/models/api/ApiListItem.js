@@ -9,13 +9,15 @@ NAMESPACE('chlk.models.api', function () {
 
             String, 'role',
             Number, 'index',
+            Boolean, 'separator',
+
+            String, 'category',
 
             [ria.serialize.SerializeProperty('requiredparams')],
             ArrayOf(String), 'requiredParams',
 
-
-
             [ria.serialize.SerializeProperty('ismethod')],
             Boolean, 'method'
+
         ])
 });

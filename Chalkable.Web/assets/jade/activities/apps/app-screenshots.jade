@@ -19,10 +19,12 @@ mixin ScreenshotUploadBox(title, dimsX, dimsY, screenshots)
                     +FileUpload('apps', 'uploadScreenshot', [screenshots.ids]).simple-gray-button
                 +ActionLink('apps', 'd', 'b') Download Template
     +Hidden('appScreenshots', screenshots.ids)
-    each item in self.items
+    each item in screenshots.items
         +ScreenshotBox(item.getPictureId(), item.getPictureUrl(), item.getPictureClass(), screenshots.ids, !item.isEditable())
 
-+ScreenshotUploadBox('Screenshots', 640, 390, self)
+label.hint Screenshots:
+.screenshot-pictures(class=self.items.length == 0 || (self.items.length == 1 && self.isReadOnly()) ? "short" : undefined)
+    +ScreenshotUploadBox('Screenshots', 640, 390, self)
 
 
 

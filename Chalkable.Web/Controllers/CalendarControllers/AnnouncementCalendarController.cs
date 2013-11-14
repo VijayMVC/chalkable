@@ -69,12 +69,12 @@ namespace Chalkable.Web.Controllers.CalendarControllers
 
          //TODO: rewrite this method 
          [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_ANNOUNCEMENT_WEEK, true, CallType.Get, new[] { AppPermissionType.Announcement })]
-         public ActionResult Week(DateTime? date, int? classId, IntList gradeLevelIds)
+         public ActionResult Week(DateTime? date, Guid? classId, GuidList gradeLevelIds, Guid? schoolPersonId)
          {
              DateTime start, end;
              int? teacherId, studentId;
              WeekCalendar(ref date, out start, out end);
-             PreperingUsersIdsForCalendar(SchoolLocator, null, out teacherId, out studentId);
+             PreperingUsersIdsForCalendar(SchoolLocator, schoolPersonId, out teacherId, out studentId);
              var anns = SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, gradeLevelIds, classId);
              var rooms = SchoolLocator.RoomService.GetRooms();
              IList<ClassPeriod> classPeriods = new List<ClassPeriod>();
