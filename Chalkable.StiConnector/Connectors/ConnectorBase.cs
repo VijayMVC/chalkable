@@ -66,6 +66,7 @@ namespace Chalkable.StiConnector.Connectors
                 var serializer = new JsonSerializer();
                 var writer = new StreamWriter(stream);
                 serializer.Serialize(writer, obj);
+                writer.Flush();
                 client.UploadData(url, stream.ToArray());
             }
             catch (WebException ex)
