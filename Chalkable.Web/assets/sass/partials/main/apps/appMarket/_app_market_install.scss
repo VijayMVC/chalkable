@@ -1,0 +1,130 @@
+#chlk-dialogs{
+
+  .dialog{
+    &.app-market-install{
+        width: 480px;
+        min-height: 332px;
+
+        left: 90px;
+        top: 75px;
+        background: #e7e7e7;
+        border: 1px solid #adadad;
+        border-radius: 4px;
+        @include box-shadow(0 10px 25px rgba(0, 0, 0, 0.5));
+
+
+        padding: 23px 64px;
+
+
+        .x-window-header{
+          h1{
+            text-transform: uppercase;
+            text-align: center;
+            font: bold 18px Arial;
+            color: #434343;
+            margin-bottom: 29px;
+          }
+        }
+        .x-window-body{
+          .install-for{
+            margin-bottom: 30px;
+            border-bottom: 1px solid #d7d7d7;
+            padding-bottom: 15px;
+            min-height: 15px;
+          }
+
+          .install-info{
+            text-align: center;
+            padding: 0px 40px 0px 40px;
+          }
+
+          .install-btn{
+            float: left;
+          }
+
+          .chlk-button{
+
+            button{
+              width: 100px;
+              font-size: 18px;
+              font-weight: bold;
+            }
+          }
+
+          .paycheck{
+            float: right;
+            overflow: visible;
+            text-align: left;
+
+            .container{
+              margin: 20px 0 0 22px;
+              .top{
+                background: url(images/app/receipt-top.png) 0 0 no-repeat;
+                width: image-width('app/receipt-top.png');
+                height: image-height('app/receipt-top.png');
+                position: relative;
+                .middle{
+                  position: absolute;
+                  top: 2px;
+                  left: 4px;
+                  z-index: 1;
+                  @include background-image(linear-gradient(left top, #e9e9e9, #fefefe, #d6d6d6));
+                  @include box-shadow(0 1px 7px #010101);
+                  min-height: 6px;
+                  width: 153px;
+
+                  .price-info{
+                    background: url(images/app/receipt-line.png) 0 0 repeat-x;
+                    margin-top: 6px;
+                    color: #434343;
+
+                    .total-info{
+                      font: bold 16px Arial;
+                      padding: 0 17px 6px;
+                    }
+
+                    .users-info{
+                      padding: 18px 18px 10px 18px;
+
+                      .line{
+                        &:first-child{
+                          font: normal 12px Arial;
+                        }
+
+                        &:last-child{
+                          font: normal 10px Arial;
+                          border-bottom: 1px solid #e2e2e2;
+                          padding-bottom: 8px;
+                        }
+                      }
+                    }
+
+                    .line{
+                      >DIV{
+                        display: inline-block;
+
+                        &:last-child{
+                          float: right;
+                        }
+                      }
+                    }
+                  }
+
+                  .bottom{
+                    background: url(images/app/receipt-bottom.png) 0 0 no-repeat;
+                    width: image-width('app/receipt-bottom.png');
+                    height: image-height('app/receipt-bottom.png');
+                    bottom: - image-height('app/receipt-bottom.png');
+                    left: -4px;
+                    position: absolute;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+
+    }
+  }
+}

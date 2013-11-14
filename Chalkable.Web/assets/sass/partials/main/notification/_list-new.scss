@@ -1,0 +1,92 @@
+.notifications{
+  A{
+    color: #6a90a2 !important;
+    text-decoration: none;
+  }
+}
+
+
+#chlk-pop-up-container{
+  &.notifications{
+    padding-left: 0px;
+    padding-right: 0px;
+
+    @include box-shadow(0 2px 6px 0px #989897, inset 0 0 0 1px #ededed);
+    background: #E4E4E4;
+    @include border-radius(12px);
+
+    .list-new{
+      border-top: 1px solid #BBB;
+      box-shadow: 0px -1px 0px 0px #fcfcfc;
+
+      .row{
+        border-bottom: 1px solid #BBB;
+        @include box-shadow(inset -1px 0 0px 0px #ececec, inset 0px -1px 0px 0px #fcfcfc, inset 1px 0 0px 0px #e3e3e3, inset 0px 1px 0px 0px #ededed);
+        position: relative;
+        cursor: pointer;
+
+        .image{
+          display: inline-block;
+          vertical-align: middle;
+          margin: 5px 10px 5px 15px;
+          >.notification-person, >.notification-announcement{
+            padding: 1px;
+            text-align: center;
+            >a{
+              display: block;
+              padding: 2px;
+              >div{
+                width: 49px;
+                height: 49px;
+              }
+            }
+            span{
+              font: italic 11px Georgia;
+              color: #969696;
+              text-shadow: 1px 1px 1px white;
+            }
+          }
+
+        }
+        .content{
+          display: inline-block;
+          vertical-align: middle;
+          font: 11px Georgia;
+          color: #969696;
+          text-shadow: 1px 1px 1px white;
+
+          margin-left: 10px;
+          vertical-align: middle;
+          width: 195px !important;
+          word-wrap: break-word !important;
+        }
+
+        .time{
+          position: absolute;
+          bottom: 2px;
+          right: 10px;
+          font: normal 8px Arial;
+          color: #a9a8a8;
+          padding: 1px 0 0 13px;
+          min-height: 10px;
+          background: url(images/icons/time.png) 0 center no-repeat;
+        }
+
+        .unshown
+          {
+          font-weight: bold;
+          color: #525252;
+        }
+      }
+      .see-all-link{
+        text-decoration: none;
+        text-align: center;
+        display: block;
+        font-size: 14px;
+        color: #507484;
+        padding-top: 5px;
+        margin-bottom: -5px;
+      }
+    }
+  }
+}

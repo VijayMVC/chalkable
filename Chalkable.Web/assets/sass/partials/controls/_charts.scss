@@ -1,0 +1,21 @@
+.chart-text{
+  width: 34px;
+  display: inline-block;
+  text-align: center;
+  background: url(images/grading/chart-tooltip.png) 0 0 no-repeat;
+  height: 34px;
+  font: bold 12px/30px Verdana;
+}
+
+.chart-bg2{
+  background: url(images/grading/chart-bg.png) 28px center no-repeat;
+  height: 172px;
+  position: absolute;
+  width: 643px;
+  background-size: 100% 100%;
+  left: -10px;
+
+  .chart-container-1{
+    height: 172px;
+  }
+}
