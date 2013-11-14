@@ -33,6 +33,12 @@ NAMESPACE('chlk.templates.announcement', function () {
             Number, 'chalkableAnnouncementType',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'adminAnnouncement',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'standartAnnouncement',
+
+            [ria.templates.ModelPropertyBind],
             String, 'announcementTypeName',
 
             [ria.templates.ModelPropertyBind],

@@ -48,6 +48,9 @@ BODY {
                   border-top: 1px solid #bbb;
                   margin-top: 1px;
 
+                  &.short{
+                    min-height: 35px;
+                  }
 
                   .app-pricing{
                     .elem{
@@ -294,6 +297,19 @@ BODY {
                         margin-right: 35px;
 
                       }
+                    }
+
+                    .app-platforms{
+                      margin-left: 190px;
+                      margin-top: -17px;
+                      margin-bottom: 8px;
+                      width: 470px;
+
+                      .labeled-checkbox{
+                        width: 69px;
+                        margin-right: 35px;
+                      }
+
                     }
 
 

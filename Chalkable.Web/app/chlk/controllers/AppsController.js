@@ -73,10 +73,13 @@ NAMESPACE('chlk.controllers', function (){
                     var cats = data.getItems();
                     var gradeLevels = this.gradeLevelService.getGradeLevels();
                     var permissions = this.appsService.getAppPermissions();
+                    var platforms = this.appsService.getAppPlatforms();
                     var appGradeLevels = app_.getGradeLevels();
                     if (!appGradeLevels) app_.setGradeLevels([]);
                     var appCategories = app_.getCategories();
                     if (!appCategories) app_.setCategories([]);
+                    var appPlatforms = app_.getPlatforms();
+                    if (!appPlatforms) app_.setPlatforms([]);
 
                     if (!app_.getState()){
                         var appState = new chlk.models.apps.AppState();
@@ -103,8 +106,9 @@ NAMESPACE('chlk.controllers', function (){
                     }, this);
 
                     app_.setScreenshotPictures(new chlk.models.apps.AppScreenshots(screenshotPictures, readOnly));
+		    
 
-                    return new chlk.models.apps.AppInfoViewData(app_, readOnly, cats, gradeLevels, permissions, isDraft);
+                    return new chlk.models.apps.AppInfoViewData(app_, readOnly, cats, gradeLevels, permissions, platforms, isDraft);
 
                 }, this);
 
@@ -126,7 +130,7 @@ NAMESPACE('chlk.controllers', function (){
                         }
                         else
                             return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data, isReadonly, isDraft));
-                    }, this)
+                    }, this);
         },
 
         [chlk.controllers.AccessForRoles([
@@ -418,6 +422,7 @@ NAMESPACE('chlk.controllers', function (){
             var gradeLevels = this.getIdsList(model.getGradeLevels(), chlk.models.id.GradeLevelId);
             var appPermissions = this.getIdsList(model.getPermissions(), chlk.models.apps.AppPermissionTypeEnum);
             var appScreenShots = this.getIdsList(model.getAppScreenshots(), chlk.models.id.PictureId);
+            var appPlatforms = this.getIdsList(model.getPlatforms(), chlk.models.apps.AppPlatformTypeEnum);
 
             if (!model.isDraft()){
                 var appIconId = null;
@@ -475,6 +480,7 @@ NAMESPACE('chlk.controllers', function (){
                      cats,
                      appScreenShots,
                      gradeLevels,
+                     appPlatforms,
                      !model.isDraft()
                  )
                  .then(function(newApp){

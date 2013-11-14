@@ -75,9 +75,11 @@ appPrice = app.getApplicationPrice()
 selectedAppCategories = {}
 selectedAppGradeLevels = {}
 selectedAppPermissions = {}
+selectedAppPlatforms = {}
 appGradeLvls = []
 appCategories = []
 appPermissions = []
+appPlatforms = [];
 
 
 
@@ -86,6 +88,7 @@ appPermissions = []
 actAppCategories = app.getCategories() || []
 actAppGradeLevels = app.getGradeLevels() || []
 actAppPermissions = app.getPermissions() || []
+actAppPlatforms = app.getPlatforms() || []
 
 
 
@@ -102,9 +105,14 @@ each item in actAppPermissions
     -selectedAppPermissions[item.getId()] = true
     -appPermissions.push(item.getId().valueOf())
 
+each item in actAppPlatforms
+    -selectedAppPlatforms[item.getId()] = true
+    -appPlatforms.push(item.getId().valueOf())
+
 appGradeLvls = appGradeLvls.join(',')
 appCategories = appCategories.join(',')
 appPermissions = appPermissions.join(',')
+appPlatforms = appPlatforms.join(',')
 
 .app-info
     if !self.isReadOnly()
@@ -193,6 +201,15 @@ appPermissions = appPermissions.join(',')
                 +Textbox("videoDemoUrl", app.getVideoDemoUrl(), self.isReadOnly(), "required, custom[url]")
         .section
             +AppPricing(appPrice, self.isReadOnly())
+        .section.short
+            .elem
+                label.hint Works on:
+                .app-platforms
+                   +CheckboxList('platforms', 'app-platform', appPlatforms)
+                        each item in self.getSupportedPlatforms()
+                            -isChecked = !!selectedAppPlatforms[item.getId()]
+                            +LabeledCheckbox(item.getName(), 'app-platform' + item.getId(), isChecked, self.isReadOnly())
+
         .section.last
             .pictures
                 .elem.icons

@@ -27,6 +27,9 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.apps.AppPermission), 'permissions',
 
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.apps.AppPlatform), 'supportedPlatforms'
+
 
 
         ])

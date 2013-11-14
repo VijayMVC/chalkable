@@ -53,7 +53,7 @@ NAMESPACE('chlk.models.notification', function () {
             [ria.serialize.SerializeProperty('announcementtype')],
             Number, 'announcementType',
             [ria.serialize.SerializeProperty('isadminannouncement')],
-            Number, 'adminAnnouncement',
+            Boolean, 'adminAnnouncement',
             [ria.serialize.SerializeProperty('announcementtypename')],
             String, 'announcementTypeName',
             chlk.models.common.ChlkDate, 'created',

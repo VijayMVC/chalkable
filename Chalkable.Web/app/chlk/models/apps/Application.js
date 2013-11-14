@@ -6,6 +6,8 @@ REQUIRE('chlk.models.id.AppGradeLevelId');
 REQUIRE('chlk.models.apps.AppPrice');
 REQUIRE('chlk.models.apps.AppAccess');
 REQUIRE('chlk.models.apps.AppPermission');
+REQUIRE('chlk.models.apps.AppPlatform');
+
 REQUIRE('chlk.models.apps.AppCategory');
 REQUIRE('chlk.models.apps.AppPicture');
 REQUIRE('chlk.models.apps.AppState');
@@ -68,7 +70,9 @@ NAMESPACE('chlk.models.apps', function () {
 
             ArrayOf(chlk.models.apps.AppCategory), 'categories',
             [ria.serialize.SerializeProperty('gradelevels')],
-            ArrayOf(chlk.models.id.AppGradeLevelId), 'gradeLevels'
+            ArrayOf(chlk.models.id.AppGradeLevelId), 'gradeLevels',
+
+            ArrayOf(chlk.models.apps.AppPlatform), 'platforms'
         ]);
 
 

@@ -21,7 +21,7 @@ NAMESPACE('chlk.models.search', function () {
             [ria.serialize.SerializeProperty('announcementtype')],
             Number, 'announcementType',
             [ria.serialize.SerializeProperty('isadminannouncement')],
-            Number, 'adminAnnouncement',
+            Boolean, 'adminAnnouncement',
 
             READONLY, Number, 'chalkableAnnouncementType',
             Number, function getChalkableAnnouncementType(){
