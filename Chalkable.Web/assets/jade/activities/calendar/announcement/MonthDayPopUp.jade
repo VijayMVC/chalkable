@@ -1,0 +1,29 @@
+.calendar-popup
+    announcements = self.getAnnouncements();
+    items = self.getItems();
+    if announcements.length > 0
+        h2=Msg.Announcement(true)
+        .announcements-list
+            ul.day-announcements
+                each item in announcements
+                    li.items
+                        //A(href="#announcement/view/" + item.getId().valueOf()).pop-up-announcement
+                        +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getAnnouncementTypeId()).pop-up-announcement
+                            div
+                                p.title=item.getTitle()
+                                p.under=item.getClassName() || item.getPersonName()
+    .items-list
+        if items.length > 0
+            h2=Msg.Item(true)
+            ul.day-items
+                each item in items
+                    li(class="announcement-type-" + item.getAnnouncementTypeId().valueOf()).items
+                        +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getAnnouncementTypeId()).pop-up-item
+                            div
+                                p.item-title=item.getTitle()
+                                p.classname-under=item.getClassName()
+    if !self.getUserRole().isStudent()
+        +ActionLink('announcement', 'add', null, null, self.getDate().format('mm/dd/yy'), true).ann-button.plus-ann
+
+
+

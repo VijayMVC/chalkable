@@ -1,0 +1,226 @@
+mixin Textbox(tName, val, isReadonly, validationRule)
+    rule = validationRule ? "validate[" + validationRule + "]": "validate[required]"
+    if isReadonly
+        -attributes.disabled = isReadonly
+    input(type="text", name=tName, value=val, class=rule)(attributes).text
+
+
+
+mixin TextArea(tName, val, isReadonly, validationRule)
+    //todo: fix duplicate attrs
+    rule = validationRule ? "validate[" + validationRule + "]": "validate[required]"
+    if isReadonly
+        -attributes.disabled = isReadonly
+    textarea(name=tName, class=rule)(attributes)=val
+
+mixin MyAppsPermission(prefix, app, suffix)
+    .myapps-permission
+        label=prefix
+        span.app-name=app + " " + suffix
+
+
+
+
+
+
+
+
+
+mixin AppPricing(appPrice, isReadOnly)
+    isFreeApp = (appPrice.getPrice() || appPrice.getPricePerSchool() || appPrice.getPricePerClass() || 0 ) == 0
+    isSchoolFlatRateEnabled =  appPrice.getPricePerSchool() > 0
+    isClassFlatRateEnabled =  appPrice.getPricePerClass() > 0
+    .app-pricing
+        .elem
+            label.hint Pricing:
+            +SlideCheckbox("free", isFreeApp, isReadOnly).price-checkbox
+        .prices(class = isFreeApp ?  "x-hidden" : undefined)
+            .elem.cost-per-user
+                label.hint Cost per user:
+                +Textbox('costPerUser', appPrice.getPrice(), isReadOnly, "required, custom[number]").price-box
+            .elem
+                label.wide.hint School flat rate:
+                .price-elem
+                    span Is there a flat rate for whole school purchases?
+                    +SlideCheckbox("schoolFlatRateEnabled",isSchoolFlatRateEnabled , isReadOnly)
+            .elem.school-flat-rate(class = !isSchoolFlatRateEnabled ?  "x-hidden" : undefined)
+                label.hint School cost:
+                +Textbox('costPerSchool', appPrice.getPricePerSchool(), isReadOnly, "required, custom[number]").price-box
+            .elem
+                label.wide.hint Class flat rate:
+                .price-elem
+                    span Is there a flat rate for whole class purchases?
+                    +SlideCheckbox("classFlatRateEnabled", isClassFlatRateEnabled, isReadOnly)
+            .elem.class-flat-rate(class = !isClassFlatRateEnabled ?  "x-hidden" : undefined)
+                label.hint Class cost:
+                +Textbox('costPerClass', appPrice.getPricePerClass(), isReadOnly, "required, custom[number]").price-box
+            .elem.paypal
+                label.hint Get Paid:
+                .price-elem
+                    span Add your PayPal account info in settings
+                    +ActionLink('settings', 'dashboard').paypal-button
+
+
+
+
+
+
+
+app = self.app
+myAppsAccess = app.getAppAccess()
+
+
+appPrice = app.getApplicationPrice()
+
+selectedAppCategories = {}
+selectedAppGradeLevels = {}
+selectedAppPermissions = {}
+selectedAppPlatforms = {}
+appGradeLvls = []
+appCategories = []
+appPermissions = []
+appPlatforms = [];
+
+
+
+
+
+actAppCategories = app.getCategories() || []
+actAppGradeLevels = app.getGradeLevels() || []
+actAppPermissions = app.getPermissions() || []
+actAppPlatforms = app.getPlatforms() || []
+
+
+
+
+
+each item in actAppGradeLevels
+    -selectedAppGradeLevels[item.valueOf()] = true
+    -appGradeLvls.push(item.valueOf())
+each item in actAppCategories
+    -selectedAppCategories[item.getId()] = true
+    -appCategories.push(item.getId().valueOf())
+
+each item in actAppPermissions
+    -selectedAppPermissions[item.getId()] = true
+    -appPermissions.push(item.getId().valueOf())
+
+each item in actAppPlatforms
+    -selectedAppPlatforms[item.getId()] = true
+    -appPlatforms.push(item.getId().valueOf())
+
+appGradeLvls = appGradeLvls.join(',')
+appCategories = appCategories.join(',')
+appPermissions = appPermissions.join(',')
+appPlatforms = appPlatforms.join(',')
+
+.app-info
+    if !self.isReadOnly()
+        .action-bar.not-transparent.dev-app-info
+            .container.panel-bg
+                label API key:
+                +Textbox("apikey", app.getSecretKey()).api-key
+                label= "Status: " + app.getState().toString()
+    +ActionForm('apps', 'update').app-info
+        if !self.isReadOnly()
+            +Button()(disabled = self.isDraft(), name="submit-btn", class = self.isDraft() ? "x-item-disabled" : "").blue-tb-right-button.submit-btn  Submit App
+        +Hidden('draft', self.isDraft())
+        +Hidden('id', app.getId())
+        +Hidden('developerName', app.getDeveloperInfo().getName())
+        +Hidden('developerWebSite', app.getDeveloperInfo().getWebSite())
+        .section.first
+            .elem
+                label.hint App Name:
+                +Textbox("name", app.getName(), self.isReadOnly(), "required")
+            .elem
+                label.hint App URL:
+                +Textbox("url", app.getUrl(), self.isReadOnly(), "required, custom[url]")
+        .section
+            .elem
+                label.top.hint My Apps:
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Can Teachers Launch", app.getName(), "in My Apps?")
+                        +SlideCheckbox("teacherMyAppsEnabled", myAppsAccess.isTeacherMyAppsEnabled(), self.isReadOnly())
+                    .permission
+                        +MyAppsPermission("Can Students Launch", app.getName(), "in My Apps?")
+                        +SlideCheckbox("studentMyAppsEnabled", myAppsAccess.isStudentMyAppsEnabled(), self.isReadOnly())
+                    .permission
+                        +MyAppsPermission("Can Admins Launch", app.getName(), "in My Apps?")
+                        +SlideCheckbox("adminMyAppsEnabled", myAppsAccess.isAdminMyAppsEnabled(), self.isReadOnly())
+                    .permission
+                        +MyAppsPermission("Can Parents Launch", app.getName(), "in My Apps?")
+                        +SlideCheckbox("parentMyAppsEnabled", myAppsAccess.isParentMyAppsEnabled(), self.isReadOnly())
+        .section.small
+            .elem.first
+                label.hint New Item:
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Can Teachers Attach", app.getName(), "in New Items?")
+                        +SlideCheckbox("attachEnabled", myAppsAccess.isAttachEnabled(), self.isReadOnly())
+            .elem
+                label.hint Grading View:
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Will be Teachers", '', 'viewing student output')
+                        +SlideCheckbox("showInGradingViewEnabled", myAppsAccess.isVisibleInGradingView(), self.isReadOnly())
+        .section
+            .elem
+                label.hint API Access:
+                .permissions
+                    +CheckboxList('permissions', 'app-permission', appPermissions)
+                        each item in self.getPermissions()
+                            -isChecked = !!selectedAppPermissions[item.getId()]
+                            +LabeledCheckbox(item.getName(), 'app-permission'+ item.getId(), isChecked, self.isReadOnly())
+        .section
+            .elem
+                label.hint Subjects:
+                .categories
+                    +CheckboxList('categories', 'app-category', appCategories)
+                        each item in self.getCategories()
+                            -isChecked = !!selectedAppCategories[item.getId()]
+                            +LabeledCheckbox(item.getName(), 'app-category' + item.getId(), isChecked, self.isReadOnly())
+        .section
+            .elem
+                label.hint Grades:
+                .grade-levels
+                    +CheckboxList('gradeLevels', 'app-grade-level', appGradeLvls)
+                        each item in self.getGradeLevels()
+                            -isChecked = !!selectedAppGradeLevels[item.getId().valueOf()]
+                            +LabeledCheckbox(item.getName(), 'app-grade-level' + item.getId(), isChecked, self.isReadOnly())
+
+        .section
+            .elem
+                label.wide.hint Short Description:
+                +Textbox("shortDescription", app.getShortDescription(), self.isReadOnly(), "required, maxSize[150]")
+            .elem
+                label.wide.hint.top-align Long Description:
+                +TextArea("longDescription", app.getDescription(), self.isReadOnly(), "required, maxSize[1000]")
+            .elem
+                label.wide.hint Video Demo:
+                +Textbox("videoDemoUrl", app.getVideoDemoUrl(), self.isReadOnly(), "required, custom[url]")
+        .section
+            +AppPricing(appPrice, self.isReadOnly())
+        .section.short
+            .elem
+                label.hint Works on:
+                .app-platforms
+                   +CheckboxList('platforms', 'app-platform', appPlatforms)
+                        each item in self.getSupportedPlatforms()
+                            -isChecked = !!selectedAppPlatforms[item.getId()]
+                            +LabeledCheckbox(item.getName(), 'app-platform' + item.getId(), isChecked, self.isReadOnly())
+
+        .section.last
+            .pictures
+                .elem.icons
+                    label.hint Icons:
+                    .icons
+                        .icon
+                            +RenderWith(app.getIconPicture(), chlk.templates.apps.AppPicture)
+                        .banner
+                            +RenderWith(app.getBannerPicture(), chlk.templates.apps.AppPicture)
+                .elem.screenshots
+                        +RenderWith(app.getScreenshotPictures(), chlk.templates.apps.AppScreenshots)
+
+        if !self.isReadOnly()
+            +Button()(disabled = !self.isDraft(),name="submit-draft-btn", class = !self.isDraft() ? "x-item-disabled" : "").submit-draft-btn.special-button.blue-button Update Draft

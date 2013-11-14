@@ -1,0 +1,1422 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ADDED_FUNDS_TO_CLASS" xml:space="preserve">
+    <value>added founds to class</value>
+  </data>
+  <data name="ADDED_FUNDS_TO_PERSON" xml:space="preserve">
+    <value>added founds to person</value>
+  </data>
+  <data name="ADDING_DAYS_FOR_SCHOOL_YEAR" xml:space="preserve">
+    <value>Adding days for school year {0}</value>
+  </data>
+  <data name="ALL_ROWS_ARE_PROCESSED" xml:space="preserve">
+    <value>all rows are processed</value>
+  </data>
+  <data name="APP_WAS_BOUGHT" xml:space="preserve">
+    <value>application was bought</value>
+  </data>
+  <data name="ATTENDANCE_RECORDS_PROCESSED_ADDED" xml:space="preserve">
+    <value>{0} attendace records are processed. {1} records were added</value>
+  </data>
+  <data name="ATTENDANCE_RECORDS_TO_EXPORT" xml:space="preserve">
+    <value>attendance records to export {0}</value>
+  </data>
+  <data name="ATTENDANCE_RECORDS_TO_PROCESS" xml:space="preserve">
+    <value>attendance records to process: {0}</value>
+  </data>
+  <data name="BACKGROUND_TASK_FAILED" xml:space="preserve">
+    <value>Current task was failed</value>
+  </data>
+  <data name="BACKGROUND_TASK_PROCESSING_STARTED" xml:space="preserve">
+    <value>Task processing is started</value>
+  </data>
+  <data name="BACKGROUND_TASK_WAS_CANCELED" xml:space="preserve">
+    <value>{0} task was canceled</value>
+  </data>
+  <data name="BACKGROUND_TASK_WAS_COMPLETED" xml:space="preserve">
+    <value>{0} task was successfully completed</value>
+  </data>
+  <data name="BACKGROUND_TASK_WAS_CREATED" xml:space="preserve">
+    <value>New {0} task was created</value>
+  </data>
+  <data name="BG_PROCESSING_FOR_TIME" xml:space="preserve">
+    <value>Background processing for time {0}</value>
+  </data>
+  <data name="BG_PROCESSOR_ENDED_WORKING_IN" xml:space="preserve">
+    <value>{0} ended working. Work time {1}</value>
+  </data>
+  <data name="BG_PROCESSOR_ENTRY_POINT_CALLED" xml:space="preserve">
+    <value>background processor entry point called</value>
+  </data>
+  <data name="BG_PROCESSOR_STARTED_WORKING_IN" xml:space="preserve">
+    <value>{0} start working in </value>
+  </data>
+  <data name="BG_TASK_ENTRY_POINT_CALLED" xml:space="preserve">
+    <value>background task processor entry point called</value>
+  </data>
+  <data name="BUYING_APP" xml:space="preserve">
+    <value>buying application {0}</value>
+  </data>
+  <data name="CALENDAR_IDS" xml:space="preserve">
+    <value>calendar ids {0}</value>
+  </data>
+  <data name="CHANGES_ARE_SAVED" xml:space="preserve">
+    <value>changes are saved</value>
+  </data>
+  <data name="CHANGES_ARE_SAVING" xml:space="preserve">
+    <value>changes are saving</value>
+  </data>
+  <data name="CLASS_RECORDS_PROCESSED" xml:space="preserve">
+    <value>{0} class records are processed</value>
+  </data>
+  <data name="CLEVER_IMPORTING_SCHOOL_SECTIONS" xml:space="preserve">
+    <value>Importing school sections</value>
+  </data>
+  <data name="CLEVER_IMPORT_STUDENTS_START" xml:space="preserve">
+    <value>Start importing students to chalkable</value>
+  </data>
+  <data name="CLEVER_IMPORT_TEACHERS_START" xml:space="preserve">
+    <value>Start importing teachers to chalkable</value>
+  </data>
+  <data name="CLEVER_STUDENT_WASNT_ADDED" xml:space="preserve">
+    <value>student {0} wasn't added because of {1}</value>
+  </data>
+  <data name="CLEVER_TEACHER_WASNT_ADDED" xml:space="preserve">
+    <value>teacher {0} wasn't added because of {1}</value>
+  </data>
+  <data name="CURRENT_PASSWORD" xml:space="preserve">
+    <value>Current password</value>
+  </data>
+  <data name="DAYS_FOR_SCHOOL_YEAR_IMPORTED" xml:space="preserve">
+    <value>days for school year {0} imported</value>
+  </data>
+  <data name="DELETING_OLD_PERSONAL_DATA" xml:space="preserve">
+    <value>Deleting old personal data</value>
+  </data>
+  <data name="DELETING_OLD_SCHEDULE_DATA" xml:space="preserve">
+    <value>Deleting old schedule data</value>
+  </data>
+  <data name="EMAIL_ANNOUNCEMENT_TYPE_FORMAT" xml:space="preserve">
+    <value>Announcment Type : {0}&lt;br/&gt;</value>
+  </data>
+  <data name="EMAIL_ANNOUNCEMNT_TYPE_NAME_FORMAT" xml:space="preserve">
+    <value>Annuoncement type name : {0}&lt;br/&gt;</value>
+  </data>
+  <data name="EMAIL_APPLICATION_NAME_FORMAT" xml:space="preserve">
+    <value>Application name : {0}&lt;br/&gt;</value>
+  </data>
+  <data name="EMAIL_CHALKABLE_NOTIFICATIONS" xml:space="preserve">
+    <value>Chalkable Notifications</value>
+  </data>
+  <data name="EMAIL_CHALKABLE_PASSWORD_RESET" xml:space="preserve">
+    <value>Chalkable Password Reset</value>
+  </data>
+  <data name="EMAIL_CHALKABLE_PURCHASE_ORDER_CONFIRMATION" xml:space="preserve">
+    <value>Purchase Order Confirmation</value>
+  </data>
+  <data name="EMAIL_CHALKABLE_WELCOME" xml:space="preserve">
+    <value>Subject: Welcome to Chalkable</value>
+  </data>
+  <data name="EMAIL_FROM_PERSON_FORMAT" xml:space="preserve">
+    <value>From person : {0} &lt;br/&gt;</value>
+  </data>
+  <data name="EMAIL_INCORRECT_APP_STATE" xml:space="preserve">
+    <value>Is not corrent application state</value>
+  </data>
+  <data name="EMAIL_MARKING_PERIOD_FORMAT" xml:space="preserve">
+    <value>Marking Period start date : {0} , end date : {1} &lt;br/&gt;</value>
+  </data>
+  <data name="EMAIL_NEW_SCHOOL_REGISTERED" xml:space="preserve">
+    <value>New School has registered</value>
+  </data>
+  <data name="EMAIL_NEW_SCHOOL_SETUP_DATA_UPLOADED" xml:space="preserve">
+    <value>New School setup data uploaded</value>
+  </data>
+  <data name="EMAIL_NEW_SCHOOL_STARTED_REGISTERING" xml:space="preserve">
+    <value>New School was started registering</value>
+  </data>
+  <data name="EMAIL_NOTIFICATION_FORMAT" xml:space="preserve">
+    <value>Notification type : {0}&lt;br/&gt;</value>
+  </data>
+  <data name="EMAIL_NOTIFICATION_MESSAGE_FORMAT" xml:space="preserve">
+    <value>Notification message : {0} &lt;br/&gt;</value>
+  </data>
+  <data name="EMAIL_SUBJECT_FORMAT" xml:space="preserve">
+    <value>Subject : {0} &lt;br/&gt;</value>
+  </data>
+  <data name="EMAIL_TIME_CREATED_FORMAT" xml:space="preserve">
+    <value>Time created : {0} &lt;br/&gt;</value>
+  </data>
+  <data name="EMAIL_TO_PERSON_FORMAT" xml:space="preserve">
+    <value>To person {0} &lt;br/&gt;</value>
+  </data>
+  <data name="ERR_ACCOUNT_LOCKED_FOR" xml:space="preserve">
+    <value>{0} faild attempts. Account locked for {1} mins.</value>
+  </data>
+  <data name="ERR_ACTIVATE_USER_INVALID_STATUS" xml:space="preserve">
+    <value>Current school status doesn't allow to activate user</value>
+  </data>
+  <data name="ERR_ADA_ANNOUNCEMENT_ONE_OWNER" xml:space="preserve">
+    <value>There is only one owner for announcement</value>
+  </data>
+  <data name="ERR_ADA_DUPLICATE_ANNOUNCEMENT_ID" xml:space="preserve">
+    <value>More than one announcement with same id</value>
+  </data>
+  <data name="ERR_ANNOUNCEMENT_NOT_ASSIGNED_TO_CLASS" xml:space="preserve">
+    <value>This annoncement is not assignment to any classes</value>
+  </data>
+  <data name="ERR_APP_DEV_INFO_MISSING" xml:space="preserve">
+    <value>Developer name or website is missing</value>
+  </data>
+  <data name="ERR_APP_DUPLICATE_NAME" xml:space="preserve">
+    <value>An application with this name already exists</value>
+  </data>
+  <data name="ERR_APP_DUPLICATE_URL" xml:space="preserve">
+    <value>An application with this url already exists</value>
+  </data>
+  <data name="ERR_APP_ICONS_MISSING" xml:space="preserve">
+    <value>Application icons and banners are missing</value>
+  </data>
+  <data name="ERR_APP_INVALID_PRICE" xml:space="preserve">
+    <value>price must be &gt;= 0</value>
+  </data>
+  <data name="ERR_APP_INVALID_RIGHTS" xml:space="preserve">
+    <value>Only sysadmin or application owner can manage application codebase</value>
+  </data>
+  <data name="ERR_APP_LONG_DESCRIPTION_MISSING" xml:space="preserve">
+    <value>Application long description is missing</value>
+  </data>
+  <data name="ERR_APP_NAME_MISSING" xml:space="preserve">
+    <value>Application name is missing</value>
+  </data>
+  <data name="ERR_APP_NOT_ENOUGH_MONEY" xml:space="preserve">
+    <value>You do not have enough money in your app budget to buy this app, or it's already installed.</value>
+  </data>
+  <data name="ERR_APP_NOT_ENOUGH_MONEY_OR_ALREADY_INSTALLED" xml:space="preserve">
+    <value>You do not have enough money in your app budget to buy this app, or it's already installed.</value>
+  </data>
+  <data name="ERR_APP_SHORT_DESCRIPTION_MISSING" xml:space="preserve">
+    <value>Application description is missing</value>
+  </data>
+  <data name="ERR_APP_SMALL_ICON_MISSING" xml:space="preserve">
+    <value>Application icon is missing</value>
+  </data>
+  <data name="ERR_APP_URL_MISSING" xml:space="preserve">
+    <value>Application url is missing</value>
+  </data>
+  <data name="ERR_ATTENDANCEMAPPER_INVALID_MINUTES" xml:space="preserve">
+    <value>Present , NotAssigned , Absent can't have minutes value</value>
+  </data>
+  <data name="ERR_ATTENDANCEMAPPER_INVALID_SCORE" xml:space="preserve">
+    <value>Present , NotAssigned can't have score value</value>
+  </data>
+  <data name="ERR_ATTENDANCE_IMPORT_ATTENDANCE_DOESNT_HAVE_DATE" xml:space="preserve">
+    <value>attendance with id {0} does not have date</value>
+  </data>
+  <data name="ERR_ATTENDANCE_IMPORT_ATTENDANCE_IS_NEWER_THAN_SIS" xml:space="preserve">
+    <value>chalkable attendance with id {0} is newer then SIS attendance id {1}. Skip importing</value>
+  </data>
+  <data name="ERR_ATTENDANCE_IMPORT_CANT_FIND_ATTENDANCE_REASON_CODE" xml:space="preserve">
+    <value>can not find code {0} among attendance reasons</value>
+  </data>
+  <data name="ERR_ATTENDANCE_IMPORT_CANT_FIND_CLASS_GENERAL_PERIOD" xml:space="preserve">
+    <value>can not find class general period for class {0} and general period {1}</value>
+  </data>
+  <data name="ERR_ATTENDANCE_IMPORT_CANT_FIND_CLASS_SCHOOL_PERSON" xml:space="preserve">
+    <value>can not find class school person for general period {0} and school person {1}</value>
+  </data>
+  <data name="ERR_ATTENDANCE_IMPORT_DAY_DOES_NOT_BELONG_TO_MARKING_PERIOD" xml:space="preserve">
+    <value>day {0} does not belong to any marking period</value>
+  </data>
+  <data name="ERR_ATTENDANCE_IMPORT_DAY_DOES_NOT_HAVE_SCHEDULE_SECTIONS" xml:space="preserve">
+    <value>day {0} does not have schedule sections</value>
+  </data>
+  <data name="ERR_ATTENDANCE_IMPORT_DAY_INFO_NOT_FOUND" xml:space="preserve">
+    <value>day information for date {0} not found</value>
+  </data>
+  <data name="ERR_ATTENDANCE_IMPORT_GENERAL_PERIOD_REFERS_TO_DIFFERENT_SCHEDULE_SECTION" xml:space="preserve">
+    <value>general period {0} referes to different schedule section than day {1}</value>
+  </data>
+  <data name="ERR_ATTENDANCE_IMPORT_GENERAL_PERIOD_WITH_SIS_ID_NOT_FOUND" xml:space="preserve">
+    <value>can not find general period with sis id {0}</value>
+  </data>
+  <data name="ERR_ATTENDANCE_IMPORT_NO_SCHOOL_PERSON_WITH_SIS_ID" xml:space="preserve">
+    <value>there is no school person with sis id {0}</value>
+  </data>
+  <data name="ERR_ATTENDANCE_IMPORT_NO_STATUS_MAPPING" xml:space="preserve">
+    <value>attendance with id {0} - no status apping for {1}</value>
+  </data>
+  <data name="ERR_ATTENDANCE_TYPE_LISTS_EQUAL_SIZES" xml:space="preserve">
+    <value>[score list], [minutes last list] and [type list] have to have the same sizes</value>
+  </data>
+  <data name="ERR_AUTH_FILTER_UNSUPPORTED_CONTROLLER" xml:space="preserve">
+    <value>only chalkable controller is supported in Authorization filter</value>
+  </data>
+  <data name="ERR_BACKGROUND_TASK_CANT_DELETE_ACTIVE_TASK" xml:space="preserve">
+    <value>You can not delete processing task</value>
+  </data>
+  <data name="ERR_BG_PROCESSOR_CANT_FIND_CONFIG_SECTION" xml:space="preserve">
+    <value>Can't find config section {0}</value>
+  </data>
+  <data name="ERR_BLOB_INVALID_RIGHTS" xml:space="preserve">
+    <value>Only SysAdmin can delete blob from storage account</value>
+  </data>
+  <data name="ERR_BLOB_NOT_FOUND" xml:space="preserve">
+    <value>Blob does not exist</value>
+  </data>
+  <data name="ERR_BLOB_WITH_ADDRESS_NOT_EXISTS" xml:space="preserve">
+    <value>Blob with this address does not exist in current storage account</value>
+  </data>
+  <data name="ERR_BLOB_WITH_NAME_NOT_EXISTS" xml:space="preserve">
+    <value>Blob container with this name does not exist in current storage account</value>
+  </data>
+  <data name="ERR_CANT_CALL_METHOD_AS_API" xml:space="preserve">
+    <value>This method can not be called as API</value>
+  </data>
+  <data name="ERR_CANT_CHANGE_GENERAL_PERIODS" xml:space="preserve">
+    <value>General periods can't be changed because periods are already generated</value>
+  </data>
+  <data name="ERR_CANT_CHANGE_ROLE_TO_SYSADMIN" xml:space="preserve">
+    <value>Only sysadmin can set sysadmin role</value>
+  </data>
+  <data name="ERR_CANT_DELETE_ANNOUNCEMENT_APPLICATION" xml:space="preserve">
+    <value>Error do not make delete AnnoncementApplication Id={0}</value>
+  </data>
+  <data name="ERR_CANT_DETERMINE_SCHOOL_YEAR" xml:space="preserve">
+    <value>Can not determine current year</value>
+  </data>
+  <data name="ERR_CANT_FIND_DESTINATION_MAPPING" xml:space="preserve">
+    <value>Cant find destination column {0} in mapping</value>
+  </data>
+  <data name="ERR_CANT_FIND_VALUE_FOR_QUERY_STRING_PARAM" xml:space="preserve">
+    <value>Unable to locate a valid value for query string parameter '{0}'</value>
+  </data>
+  <data name="ERR_CANT_IMPORT_SCHOOL_WITH_CURRENT_STATUS" xml:space="preserve">
+    <value>School can't be imported in with current status</value>
+  </data>
+  <data name="ERR_CANT_REASSIGN_DAY_TO_DIFFERENT_SECTION" xml:space="preserve">
+    <value>attendance or discipline was marked for this day or for next calendar days. Current day can't be reassigned to some section</value>
+  </data>
+  <data name="ERR_CANT_SET_GRADING_STYLE_FOR_ANNOUNCEMENT_WITHOUT_CLASS" xml:space="preserve">
+    <value>Can not set grading style for announcement that does not belong to any class</value>
+  </data>
+  <data name="ERR_CHALKABLE_EXCEPTION" xml:space="preserve">
+    <value>Chalkable server exception</value>
+  </data>
+  <data name="ERR_CLASS_ALREADY_ASSIGNED_TO_PERIOD" xml:space="preserve">
+    <value>This class is already assigned for this period</value>
+  </data>
+  <data name="ERR_CLASS_ALREADY_ASSIGNED_TO_ROOM_PERIOD" xml:space="preserve">
+    <value>Some class is already assigned for this room - period</value>
+  </data>
+  <data name="ERR_CLASS_IS_NOT_SCHEDULED_FOR_DAY" xml:space="preserve">
+    <value>Current class is not scheduled for this day</value>
+  </data>
+  <data name="ERR_CLASS_IS_NOT_SCHEDULED_FOR_MARKING_PERIOD" xml:space="preserve">
+    <value>This class is not scheduled for the current marking period</value>
+  </data>
+  <data name="ERR_CLASS_YEAR_DIFFERS_FROM_MP_YEAR" xml:space="preserve">
+    <value>class has to belong to the same school year as marking period</value>
+  </data>
+  <data name="ERR_CLEVER_STUDENT_NOT_CHALKABLE_DB" xml:space="preserve">
+    <value>student {0} is not in chalkable DB</value>
+  </data>
+  <data name="ERR_CLEVER_TEACHER_WASNT_IMPORTED" xml:space="preserve">
+    <value>Teacher {0} wasn't imported</value>
+  </data>
+  <data name="ERR_CONTEXT_NO_SCHOOL_INFO_ID" xml:space="preserve">
+    <value>No School Info Id</value>
+  </data>
+  <data name="ERR_CSV_INVALID_ROW_STATE" xml:space="preserve">
+    <value>Invalid Csv row state</value>
+  </data>
+  <data name="ERR_DAYMAPPING_INCORRECT_LIST" xml:space="preserve">
+    <value>must be 7 days in list</value>
+  </data>
+  <data name="ERR_DAYMAPPING_NOT_ENOUGH_RIGHTS" xml:space="preserve">
+    <value>Only systemAdmin can manipulate dayMapping</value>
+  </data>
+  <data name="ERR_DEFAULTMAPPING_NOT_ENOUGH_RIGHTS" xml:space="preserve">
+    <value>Only systemAdmin can manipulate defaultMapping</value>
+  </data>
+  <data name="ERR_DEMO_SCHOOL_INCORRECT_ROLE" xml:space="preserve">
+    <value>This is not correct role</value>
+  </data>
+  <data name="ERR_DEMO_SCHOOL_INVALID_INFO_STRING" xml:space="preserve">
+    <value>Invalid DemoSchoolProcess info string</value>
+  </data>
+  <data name="ERR_DEMO_SCHOOL_INVALID_PREFIX" xml:space="preserve">
+    <value>Invalid prefix</value>
+  </data>
+  <data name="ERR_DEMO_SCHOOL_UNAVAILABLE" xml:space="preserve">
+    <value>No free test school available.  Please try later.</value>
+  </data>
+  <data name="ERR_DEMO_UNAVAILABLE" xml:space="preserve">
+    <value>The DEMO is currently unavailable. We are working on it right now.&lt;br/&gt;Please check back soon.</value>
+  </data>
+  <data name="ERR_DEPARTMENT_INVALID_RIGHTS" xml:space="preserve">
+    <value>Only system admin can manage chalkable department</value>
+  </data>
+  <data name="ERR_DEVELOPER_EDIT_INVALID_RIGHTS" xml:space="preserve">
+    <value>Current schoolPerson has no permission to manage developer info</value>
+  </data>
+  <data name="ERR_DEVELOPER_INVALID_SCHOOL" xml:space="preserve">
+    <value>Developer can be added only to demo school</value>
+  </data>
+  <data name="ERR_DISCIPLINE_TYPES_ARE_USED" xml:space="preserve">
+    <value>You can't delete discipline types, that are used.</value>
+  </data>
+  <data name="ERR_DUPLICATE_LOCAL_ID" xml:space="preserve">
+    <value>duplicate localID:{0}</value>
+  </data>
+  <data name="ERR_EMAIL_ERROR_UPLOADING_ZIP" xml:space="preserve">
+    <value>&lt;br/&gt; Error in server. Zip file was not uploaded</value>
+  </data>
+  <data name="ERR_EMAIL_INVALID" xml:space="preserve">
+    <value>Invalid email {0}</value>
+  </data>
+  <data name="ERR_EMAIL_NOTIFICATION_USER_IS_NOT_ACTIVE" xml:space="preserve">
+    <value>Notification for school person {0} wasn't sent because user is not active</value>
+  </data>
+  <data name="ERR_EMAIL_WASNT_SEND" xml:space="preserve">
+    <value>Email wasn't sent</value>
+  </data>
+  <data name="ERR_FILE_IS_REQUIRED" xml:space="preserve">
+    <value>File is required</value>
+  </data>
+  <data name="ERR_FILE_REQUIRED" xml:space="preserve">
+    <value>File is required</value>
+  </data>
+  <data name="ERR_FINALGRADE_LISTS_NOT_THE_SAME_SIZE" xml:space="preserve">
+    <value>finalGradeAnnouncementTypeIds, percents, dropLowest and gradingStyleBytype have to have the same size</value>
+  </data>
+  <data name="ERR_FINAL_GRADE_INVALID_GRADING_STYLE" xml:space="preserve">
+    <value>Final grade grading style can be Numeric or ABCF only</value>
+  </data>
+  <data name="ERR_FINAL_GRADE_INVALID_PERCENTS_SUM" xml:space="preserve">
+    <value>Sum of all percents should be 100</value>
+  </data>
+  <data name="ERR_FINAL_GRADE_INVALID_STATUS" xml:space="preserve">
+    <value>Final grade does not exist or has invalid state</value>
+  </data>
+  <data name="ERR_FINAL_GRADE_IS_APPROVE" xml:space="preserve">
+    <value>This Final Grade, id:{}, is 'approve'</value>
+  </data>
+  <data name="ERR_FUND_CANT_DETERMINE_SCHOOL" xml:space="preserve">
+    <value>Can't determine to which school belongs this fund</value>
+  </data>
+  <data name="ERR_FUND_CANT_TRANSFER_MONEY_BETWEEN_SCHOOLS" xml:space="preserve">
+    <value>Can't transfer money between schools</value>
+  </data>
+  <data name="ERR_FUND_INVALID_AMOUNT" xml:space="preserve">
+    <value>Amount can't be less than 0</value>
+  </data>
+  <data name="ERR_FUND_INVALID_GROUP" xml:space="preserve">
+    <value>can't add money to this group because it's empty</value>
+  </data>
+  <data name="ERR_FUND_INVALID_ROLE_DISTRIBUTION_AMOUNT" xml:space="preserve">
+    <value>role distribution amount can't be less than 0</value>
+  </data>
+  <data name="ERR_FUND_MANAGE_REQUEST_ILLEGAL_RIGHTS" xml:space="preserve">
+    <value>Only sysadmin can approve or reject fund request</value>
+  </data>
+  <data name="ERR_FUND_PERSON_BALANCE_INVALID_PERMISSION" xml:space="preserve">
+    <value>Current person doesn't have permission to get app payment balance</value>
+  </data>
+  <data name="ERR_FUND_PERSON_NOT_ENOUGH_MONEY" xml:space="preserve">
+    <value>This person has not enough money</value>
+  </data>
+  <data name="ERR_FUND_RESERVE_NOT_ENOUGH_MONEY" xml:space="preserve">
+    <value>Not enough money in reserve</value>
+  </data>
+  <data name="ERR_FUND_ROLE_DISTRIBUTION_TOO_HIGH" xml:space="preserve">
+    <value>role distribution amount can't be greater than total amout</value>
+  </data>
+  <data name="ERR_FUND_ROLE_NOT_ENOUGH_MONEY" xml:space="preserve">
+    <value>No enough money in this role</value>
+  </data>
+  <data name="ERR_FUND_SCHOOL_NOT_ENOUGH_MONEY" xml:space="preserve">
+    <value>School has not enough money</value>
+  </data>
+  <data name="ERR_GET_ANNOUNCEMENT_IS_UNSUPPORTED" xml:space="preserve">
+    <value>Get Announcement is not supported for this role</value>
+  </data>
+  <data name="ERR_GRADING_NO_SCHOOL_IS_ASSIGNED" xml:space="preserve">
+    <value>No school is assigned</value>
+  </data>
+  <data name="ERR_GRADING_STYLE_INVALID_GRADE_VALUE" xml:space="preserve">
+    <value>Invalid grade value {0}</value>
+  </data>
+  <data name="ERR_GRADING_STYLE_REQUIRES_SCHOOL" xml:space="preserve">
+    <value>Grading style requires school</value>
+  </data>
+  <data name="ERR_IMPORT_CLASS_WAS_NOT_FOUND_CHALKABLE_DB" xml:space="preserve">
+    <value>class with sis id {0} was not found in chalkable db</value>
+  </data>
+  <data name="ERR_IMPORT_DATA_INVALID_SCHOOL_STATUS" xml:space="preserve">
+    <value>Import data can't be added in current school status</value>
+  </data>
+  <data name="ERR_IMPORT_DATA_NO_DATA_UPLOADED" xml:space="preserve">
+    <value>No data uploaded for {0}</value>
+  </data>
+  <data name="ERR_IMPORT_FOR_SYSTEM_TYPE_NOT_IMPLEMENTED" xml:space="preserve">
+    <value>Import for system {0} is not implemented</value>
+  </data>
+  <data name="ERR_IMPORT_INVALID_STYPE_FOR_PERSON_IMPORT" xml:space="preserve">
+    <value>Invalid import stype for person import</value>
+  </data>
+  <data name="ERR_IMPORT_NO_SCHEDULE_DATA_UPLOADED" xml:space="preserve">
+    <value>No schedule data uploaded for</value>
+  </data>
+  <data name="ERR_IMPORT_PERSONAL_DATA_CANT_IMPORT" xml:space="preserve">
+    <value>Can't import personal data</value>
+  </data>
+  <data name="ERR_IMPORT_PERSONAL_DATA_INCORRECT_TASK_TYPE" xml:space="preserve">
+    <value>Incorrect task type. Must be ImportPersonalDataByCsv task type for current model</value>
+  </data>
+  <data name="ERR_IMPORT_PERSONAL_DATA_INVALID_RIGHTS" xml:space="preserve">
+    <value>Current user has no permission for importing personal data for this school</value>
+  </data>
+  <data name="ERR_IMPORT_SCHEDULE_INCORRECT_TASK_TYPE" xml:space="preserve">
+    <value>Incorrect task type. Must be ImportScheduleByCsv task type for current model</value>
+  </data>
+  <data name="ERR_IMPORT_SCHEDULE_INVALID_SCHOOL_STATUS" xml:space="preserve">
+    <value>Can't import schedule data because of current school status</value>
+  </data>
+  <data name="ERR_IMPORT_SCHEDULE_NO_SCHOOLYEAR_FOR_SCHOOL" xml:space="preserve">
+    <value>There is no current school year for this school</value>
+  </data>
+  <data name="ERR_IMPORT_SCHOOL_BY_CLEVER_INCORRECT_TASK_TYPE" xml:space="preserve">
+    <value>Incorrect task type. Must be ImportSchoolByClever task type for current model</value>
+  </data>
+  <data name="ERR_IMPORT_SCHOOL_BY_CSV_INCORRECT_TASK_TYPE" xml:space="preserve">
+    <value>Incorrect task type. Must be ImportSchoolByCsv task type for current model</value>
+  </data>
+  <data name="ERR_IMPORT_SCHOOL_PERSON_NOT_FOUND_IN_CHALKABLE_DB" xml:space="preserve">
+    <value>school person with sis id {0} was not found in chalkable db</value>
+  </data>
+  <data name="ERR_IMPORT_SYSTEM_TYPE_INVALID_RIGHTS" xml:space="preserve">
+    <value>Only system admin can manage ImportSystemType</value>
+  </data>
+  <data name="ERR_IMPORT_UNSUPPORTED_TYPE" xml:space="preserve">
+    <value>Unsupported import type</value>
+  </data>
+  <data name="ERR_INCCORRECT_REQUEST_DATE_PARAMS" xml:space="preserve">
+    <value>Incorrect request date params</value>
+  </data>
+  <data name="ERR_INCCORRECT_REQUEST_DATE_PARAMS_START_DATE" xml:space="preserve">
+    <value>Incorrect request date params. startDate must be lower than endDate</value>
+  </data>
+  <data name="ERR_INCORRECT_CODE" xml:space="preserve">
+    <value>Incorrect code. Please try again.</value>
+  </data>
+  <data name="ERR_INCORRECT_EMAIL_OR_PASSWORD" xml:space="preserve">
+    <value>Incorrect Email or password.</value>
+  </data>
+  <data name="ERR_INNER_EXCEPTION" xml:space="preserve">
+    <value>Inner exception: {0}</value>
+  </data>
+  <data name="ERR_INNER_MESSAGE_WITH_STACKTRACE" xml:space="preserve">
+    <value>Inner Exception {0} \n stacktrace: {1}</value>
+  </data>
+  <data name="ERR_INVALID_APPLICATION_MODE" xml:space="preserve">
+    <value>Invalid application mode</value>
+  </data>
+  <data name="ERR_INVALID_CLASSDISCIPLINE_QUERY" xml:space="preserve">
+    <value>Class Discipline Query must contain marking period, school year or current school person information</value>
+  </data>
+  <data name="ERR_INVALID_CLASS_ATTENDANCE_QUERY" xml:space="preserve">
+    <value>Class Attendance Query must contain marking period, school year or current school person information</value>
+  </data>
+  <data name="ERR_INVALID_EMAIL_INFO_STRING" xml:space="preserve">
+    <value>Invalid email info string</value>
+  </data>
+  <data name="ERR_INVALID_FILENAME" xml:space="preserve">
+    <value>invalid file name {0}</value>
+  </data>
+  <data name="ERR_INVALID_NOTIFICATION_BUILDER_FOR_TYPE" xml:space="preserve">
+    <value>Invalid Notification View Builder for such notification type</value>
+  </data>
+  <data name="ERR_INVALID_NOTIFICATION_VIEW_BUILDER" xml:space="preserve">
+    <value>Invalid Notification View Builder for such notification type</value>
+  </data>
+  <data name="ERR_INVALID_PHONE" xml:space="preserve">
+    <value>Not a valid 10 digit number.</value>
+  </data>
+  <data name="ERR_INVALID_PRIVATE_KEY" xml:space="preserve">
+    <value>Invalid private key</value>
+  </data>
+  <data name="ERR_INVALID_PUBLIC_KEY" xml:space="preserve">
+    <value>Invalid public key</value>
+  </data>
+  <data name="ERR_INVALID_REPORT_FORMAT" xml:space="preserve">
+    <value>Invalid report format</value>
+  </data>
+  <data name="ERR_INVALID_REPORT_MAIL_DELIVERY_FREQ" xml:space="preserve">
+    <value>Invalid report mail delivery frequency</value>
+  </data>
+  <data name="ERR_INVALID_SCHOOL_PERSON_DIFFERS_FROM_CONTEXT" xml:space="preserve">
+    <value>Provided school person is not corresponded to curent context</value>
+  </data>
+  <data name="ERR_INVALID_SEARCH_VIEW_BUILDER" xml:space="preserve">
+    <value>Invalid search View Builder for such search type</value>
+  </data>
+  <data name="ERR_INVITE_USER_INVALID_SCHOOL_STATUS" xml:space="preserve">
+    <value>Current school status doesn't allow to invite user</value>
+  </data>
+  <data name="ERR_INVITE_USER_TASK_INCORRECT_TASK_TYPE" xml:space="preserve">
+    <value>Must be InviteUsers task type for current model</value>
+  </data>
+  <data name="ERR_MAPPING_FOR_COLUMN_REQUIRED" xml:space="preserve">
+    <value>mapping for column {0} is required</value>
+  </data>
+  <data name="ERR_MARKING_PERIODS_DONT_BELONG_TO_CURRENT_SCHOOL_YEAR" xml:space="preserve">
+    <value>These markingPeriods don't belong to current school year</value>
+  </data>
+  <data name="ERR_MARKING_PERIOD_ASSIGNED_TO_CLASS" xml:space="preserve">
+    <value>You can't delete marking period because it was assigned to some classes</value>
+  </data>
+  <data name="ERR_MARKING_PERIOD_CANT_DELETE" xml:space="preserve">
+    <value>You can't delete marking period.</value>
+  </data>
+  <data name="ERR_MARKING_PERIOD_CANT_OVERLAP" xml:space="preserve">
+    <value>Marking periods can not overlapp inside one school year</value>
+  </data>
+  <data name="ERR_MARKING_PERIOD_CANT_SET_LATER_DATE" xml:space="preserve">
+    <value>You can't set date that is later than next marking period end</value>
+  </data>
+  <data name="ERR_MARKING_PERIOD_CANT_SET_SOONER_DATE" xml:space="preserve">
+    <value>You can't set date that is sooner than left marking period start</value>
+  </data>
+  <data name="ERR_MARKING_PERIOD_CHANGE_INVALID_STATUS" xml:space="preserve">
+    <value>Marking periods can not be changed in current shool status</value>
+  </data>
+  <data name="ERR_MARKING_PERIOD_HAS_NO_CLASS" xml:space="preserve">
+    <value>Marking period {0} has no class {1}</value>
+  </data>
+  <data name="ERR_MARKING_PERIOD_INVALID_COUNT" xml:space="preserve">
+    <value>Count must be greater than zero</value>
+  </data>
+  <data name="ERR_MARKING_PERIOD_INVALID_SCHOOL_STATUS" xml:space="preserve">
+    <value>Marking period can not be added in current school status</value>
+  </data>
+  <data name="ERR_MARKING_PERIOD_INVALID_SCHOOL_YEAR" xml:space="preserve">
+    <value>This markingPeriod not in this schoolYear</value>
+  </data>
+  <data name="ERR_MARKING_PERIOD_LEFT_RIGHT_MISSING" xml:space="preserve">
+    <value>There must be id for left Marking Period or right Marking Period</value>
+  </data>
+  <data name="ERR_MARKING_PERIOD_NO_MARKING_PERIOD_IN_SCHOOL_YEAR" xml:space="preserve">
+    <value>There is no marking period in current school year</value>
+  </data>
+  <data name="ERR_MARKING_PERIOD_PERSON_DOESNT_BELONG_TO_SCHOOL" xml:space="preserve">
+    <value>this person doesn't belong to current school</value>
+  </data>
+  <data name="ERR_MARKING_PERIOD_RIGHT_NOT_NEXT_TO_LEFT" xml:space="preserve">
+    <value>Right marking period is not next to left</value>
+  </data>
+  <data name="ERR_MARKING_PERIOD_SHOULD_HAVE_SECTION" xml:space="preserve">
+    <value>Marking period should have at least one section</value>
+  </data>
+  <data name="ERR_MEMBERSHIP_INVALID_EMAIL_ADDRESS" xml:space="preserve">
+    <value>The e-mail address provided is invalid. Please check the value and try again.</value>
+  </data>
+  <data name="ERR_MEMBERSHIP_INVALID_PASSWORD" xml:space="preserve">
+    <value>The password provided is invalid. Please enter a valid password value.</value>
+  </data>
+  <data name="ERR_MEMBERSHIP_INVALID_PASS_FORMAT" xml:space="preserve">
+    <value>{0} Password does not match regular expression</value>
+  </data>
+  <data name="ERR_MEMBERSHIP_INVALID_VALUE" xml:space="preserve">
+    <value>Value cannot be null or empty.</value>
+  </data>
+  <data name="ERR_MEMBERSHIP_INVALID_VALUE_WITH_NAME" xml:space="preserve">
+    <value>{0} Value cannot be null or empty.</value>
+  </data>
+  <data name="ERR_MEMBERSHIP_NOT_ENOUGH_NONALPHANUM_CHARS" xml:space="preserve">
+    <value>{0} Password need more non alpha numeric characters. Min alpha numeric charaters is {1}</value>
+  </data>
+  <data name="ERR_MEMBERSHIP_PASSWORD_IS_TOO_SHORT" xml:space="preserve">
+    <value>{0} Password is too short. Min password length is {1}</value>
+  </data>
+  <data name="ERR_MEMBERSHIP_PASSWORD_RETRIEVAL_ANSWER_INVALID" xml:space="preserve">
+    <value>The password retrieval answer provided is invalid. Please check the value and try again.</value>
+  </data>
+  <data name="ERR_MEMBERSHIP_PASSWORD_RETRIEVAL_QUESTION_INVALID" xml:space="preserve">
+    <value>The password retrieval question provided is invalid. Please check the value and try again.</value>
+  </data>
+  <data name="ERR_MEMBERSHIP_PASS_IS_NOT_VALID" xml:space="preserve">
+    <value>Password is not valid.</value>
+  </data>
+  <data name="ERR_MEMBERSHIP_PROVIDER_ERROR" xml:space="preserve">
+    <value>The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator.</value>
+  </data>
+  <data name="ERR_MEMBERSHIP_UNKNOWN_ERROR" xml:space="preserve">
+    <value>An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.</value>
+  </data>
+  <data name="ERR_MEMBERSHIP_USERNAME_ALREADY_EXISTS" xml:space="preserve">
+    <value>Username already exists. Please enter a different user name.</value>
+  </data>
+  <data name="ERR_MEMBERSHIP_USERNAME_FOR_EMAIL_EXISTS" xml:space="preserve">
+    <value>A username for that e-mail address already exists. Please enter a different e-mail address.</value>
+  </data>
+  <data name="ERR_MEMBERSHIP_USERNAME_PROVIDED_INVALID" xml:space="preserve">
+    <value>The user name provided is invalid. Please check the value and try again.</value>
+  </data>
+  <data name="ERR_MEMBERSHIP_USER_REJECTED" xml:space="preserve">
+    <value>The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator.</value>
+  </data>
+  <data name="ERR_MESSAGE_WITH_INNER_AND_STACKTRACE" xml:space="preserve">
+    <value>\n Message: {0}  {1} StackTrace : {2} \n</value>
+  </data>
+  <data name="ERR_MESSAGE_WITH_STACKTRACE" xml:space="preserve">
+    <value>\n Message : {0} \n StackTrace : {1} \n</value>
+  </data>
+  <data name="ERR_METHOD_CALLED_DOESNT_HAVE_PERMISSIONS" xml:space="preserve">
+    <value>Method caller does not have any permissions</value>
+  </data>
+  <data name="ERR_METHOD_CALLER_DOES_NOT_HAVE_PERMISSION" xml:space="preserve">
+    <value>Method caller does not have permission {0}</value>
+  </data>
+  <data name="ERR_NOT_CORRECT_TIME_TO_SYNC_FOR_SCHOOL" xml:space="preserve">
+    <value>it's not time to sync {0} for school {1}</value>
+  </data>
+  <data name="ERR_NOT_CURRENT_USER" xml:space="preserve">
+    <value>This is not current user</value>
+  </data>
+  <data name="ERR_NO_ATTENDANCE_REASONS_FOR_CURRENT_TYPE" xml:space="preserve">
+    <value>There are no attendance reasons for current type</value>
+  </data>
+  <data name="ERR_NO_ATTENDANCE_WITH_TYPE" xml:space="preserve">
+    <value>There is no Attendance with such type</value>
+  </data>
+  <data name="ERR_NO_MARKING_PERIOD_FOUND" xml:space="preserve">
+    <value>No Marking Period found</value>
+  </data>
+  <data name="ERR_NO_RECIPIENTS_IN_DRAFT_STATE" xml:space="preserve">
+    <value>No recipients in draft state</value>
+  </data>
+  <data name="ERR_NO_SCHOOL_INFO_ID" xml:space="preserve">
+    <value>No School Info Id</value>
+  </data>
+  <data name="ERR_NO_STUDENTS_IN_CLASS" xml:space="preserve">
+    <value>There are no students in class</value>
+  </data>
+  <data name="ERR_ONLY_OWNER_CAN_DELETE_ANNOUNCEMENT" xml:space="preserve">
+    <value>Only owner can delete announcement</value>
+  </data>
+  <data name="ERR_OTHER_CLASS_ALREADY_ASSIGNED_TO_ROOM" xml:space="preserve">
+    <value>Some class is already assigned to this room - period</value>
+  </data>
+  <data name="ERR_OUATH_AUTH_NOT_INITIALIZED" xml:space="preserve">
+    <value>OauthAuthenticate is not initialized</value>
+  </data>
+  <data name="ERR_OUATH_DISABLED" xml:space="preserve">
+    <value>To enable OAuth2 support for your web project, configure WindowsAzure.OAuth.RelyingPartyRealm, WindowsAzure.OAuth.ServiceNamespace and WindowsAzure.OAuth.SwtSigningKey in your applications's appSettings.</value>
+  </data>
+  <data name="ERR_PEOPLE_EXPORT_ATTENDANCE_REASON_NOT_FOUND" xml:space="preserve">
+    <value>There is no attendance reason {0} in IC datbase</value>
+  </data>
+  <data name="ERR_PEOPLE_EXPORT_NEWER_ATTENDANCE_RECORD_FOUND" xml:space="preserve">
+    <value>There is newer attendance record in SIS with id {0} for calendar {1}, person {2}, period {3}, date {4}</value>
+  </data>
+  <data name="ERR_PEOPLE_EXPORT_NOT_IMPLEMENTED" xml:space="preserve">
+    <value>people reporting is not implemented for sysadmin</value>
+  </data>
+  <data name="ERR_PEOPLE_EXPORT_NO_ATTENDANCE_REASON_FOR_ATTENDANCE" xml:space="preserve">
+    <value>There is no attendance reason for attendance {0}</value>
+  </data>
+  <data name="ERR_PEOPLE_EXPORT_NO_SIS_CALENDAR_IN_ATTENDANCE" xml:space="preserve">
+    <value>There is no SIS calendar id in attendance {0}</value>
+  </data>
+  <data name="ERR_PEOPLE_EXPORT_NO_SIS_PERIOD_ID" xml:space="preserve">
+    <value>There is no SIS period id in attendance {0}</value>
+  </data>
+  <data name="ERR_PEOPLE_EXPORT_NO_SIS_PERSON_IN_ATTENDANCE" xml:space="preserve">
+    <value>There is no SIS person id in attendance {0}</value>
+  </data>
+  <data name="ERR_PEOPLE_EXPORT_TOO_MANY_CONFLICTED_RECORDS" xml:space="preserve">
+    <value>Too many conflicted records. {0} of {1}. Changes weren't seved</value>
+  </data>
+  <data name="ERR_PEOPLE_IMPORT_CANT_DETERMINE_ROLE_FOR_USER" xml:space="preserve">
+    <value>can not determine role for user with sis id {0}</value>
+  </data>
+  <data name="ERR_PEOPLE_IMPORT_USER_DOESNT_HAVE_PROVIDER_KEY" xml:space="preserve">
+    <value>user {0} does not have provider key</value>
+  </data>
+  <data name="ERR_PEOPLE_IMPORT_USER_WASNT_ADDED" xml:space="preserve">
+    <value>user {0}  wasn't added. status: {1}</value>
+  </data>
+  <data name="ERR_PEOPLE_IMPORT_USER_WASNT_ADDED_TO_MEMBERSHIP" xml:space="preserve">
+    <value>user {0}  was not added to membership</value>
+  </data>
+  <data name="ERR_PERIODS_CANT_OVERLAP" xml:space="preserve">
+    <value>Periods can not overlap during one day</value>
+  </data>
+  <data name="ERR_PERIOD_INVALID_SCHOOL_STATUS" xml:space="preserve">
+    <value>Periods can not be added in current school status</value>
+  </data>
+  <data name="ERR_PERIOD_INVALID_TIME" xml:space="preserve">
+    <value>Invalid period time</value>
+  </data>
+  <data name="ERR_PERIOD_NO_SCHEDULE_SECTION" xml:space="preserve">
+    <value>There are no schedule sections for generating general periods</value>
+  </data>
+  <data name="ERR_PERSON_IMPORT_FIRST_OR_LAST_NAME_REQUIRED" xml:space="preserve">
+    <value>first name or last name is required</value>
+  </data>
+  <data name="ERR_PERSON_IMPORT_ID_CANT_BE_NULL" xml:space="preserve">
+    <value>id field can not be null</value>
+  </data>
+  <data name="ERR_PERSON_IMPORT_USER_EXISTS" xml:space="preserve">
+    <value>User already exists</value>
+  </data>
+  <data name="ERR_PHONE_DOES_NOT_MATCH_STUDENT_NUMBER" xml:space="preserve">
+    <value>Does not match a student number.</value>
+  </data>
+  <data name="ERR_PHONE_REQUIRED" xml:space="preserve">
+    <value>phone is required</value>
+  </data>
+  <data name="ERR_PICTURE_FOR_STUDENT_WITH_LOCAL_ID_NOT_FOUND" xml:space="preserve">
+    <value>picture for student localID:{0} was not found</value>
+  </data>
+  <data name="ERR_PICTURE_UPLOAD_INCORRECT_TASK_TYPE" xml:space="preserve">
+    <value>Incorrect task type. Must be PictureUpload task type for current model</value>
+  </data>
+  <data name="ERR_PREFERENCE_INVALID_RIGHTS" xml:space="preserve">
+    <value>Only system admin can set value to Preference</value>
+  </data>
+  <data name="ERR_PRIVATE_MESSAGE_DELETE_INVALID_RIGHTS" xml:space="preserve">
+    <value>Only sender or recipient can delete a message</value>
+  </data>
+  <data name="ERR_PRIVATE_MESSAGE_INVALID_TYPE" xml:space="preserve">
+    <value>Invalid private message type</value>
+  </data>
+  <data name="ERR_PRIVATE_MESSAGE_MARK_INVALID_RIGHTS" xml:space="preserve">
+    <value>Only recipient can mark message as read</value>
+  </data>
+  <data name="ERR_PROCESSING_FILE" xml:space="preserve">
+    <value>Error in file processing</value>
+  </data>
+  <data name="ERR_REPORT_DEFINITION_FILE_NOT_FOUND" xml:space="preserve">
+    <value>can't find report definition file: {0}</value>
+  </data>
+  <data name="ERR_REPORT_NO_RENDERER_FOR_FORMAT" xml:space="preserve">
+    <value>No renderer for this format</value>
+  </data>
+  <data name="ERR_REQUIRED_PERMISSIONS_NOT_SET_FOR_METHOD" xml:space="preserve">
+    <value>Required permissions aren't set for this API method</value>
+  </data>
+  <data name="ERR_RESET_PASSWORD_INVALID_RIGHTS" xml:space="preserve">
+    <value>Only system admin can reset user password</value>
+  </data>
+  <data name="ERR_ROOM_CANT_DELETE_ROOM_TYPE_ASSIGNED_TO_CLASSPERIOD" xml:space="preserve">
+    <value>You can't delete room that is assigned to class period</value>
+  </data>
+  <data name="ERR_ROOM_CANT_DELETE_ROOM_TYPE_ASSIGNED_TO_ROOM" xml:space="preserve">
+    <value>You can't delete room type that is already assigned to room.</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_CALENDAR_ALREADY_EXISTS" xml:space="preserve">
+    <value>calendar with SIS id {0} already exists. syncing data for this school year</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_CANT_ADD_CLASS_IN_DAY_AT_PERIOD" xml:space="preserve">
+    <value>Can not add class {0} in day {1} at period {2} room {3} because of {4}</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_CANT_PARSE_PERIOD_NUMBER" xml:space="preserve">
+    <value>Can not parse period number</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_CLASS_ALREADY_EXISTS" xml:space="preserve">
+    <value>class with sis id {0} already exists. syncing data</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_DEPARTMENT_OR_TEACHER_NOT_DEFINED" xml:space="preserve">
+    <value>department id or teacher id is not defined</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_END_DATE_IS_NULL" xml:space="preserve">
+    <value>EndDate value of calendar {0} is null</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_GENERAL_PERIOD_ALREADY_EXISTS" xml:space="preserve">
+    <value>General period with sis id {0} and schedule section id {1} already exists. syncing data</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_INVALID_PERIOD_NUMBER" xml:space="preserve">
+    <value>Invalid Period number</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_MARKING_PERIOD_RELATION_ALREADY_EXISTS" xml:space="preserve">
+    <value>class marking period relation for class with sis id {0} and MP {1} already exists</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_NO_PERIOD_FOUND" xml:space="preserve">
+    <value>There is no period with number {0} in {1}</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_PERIOD_END_TIME_NULL" xml:space="preserve">
+    <value>period {0} has end time null</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_PERIOD_START_TIME_NULL" xml:space="preserve">
+    <value>period {0} has start time null</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_ROOM_ALREADY_EXISTS" xml:space="preserve">
+    <value>Room with sis id {0} already exists. syncing data</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_SCHEDULE_SECTION_ALREADY_EXISTS" xml:space="preserve">
+    <value>Schedule section with sis id {0} and MP id {1} already exists. syncing data for this section</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_SECTION_NOT_FOUND" xml:space="preserve">
+    <value>Not found section</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_START_DATE_IS_NULL" xml:space="preserve">
+    <value>StartDate value of calendar {0} is null</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_STUDENT_DUPLICATE_LESSON" xml:space="preserve">
+    <value>Can not assign student {0} to class {1}. The same student can't have a lesson in two classes at the same time</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_TERM_ALREADY_EXISTS" xml:space="preserve">
+    <value>term with SIS id {0} already exists. syncing data for this marking period</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_TERM_HAS_END_DATE_NULL" xml:space="preserve">
+    <value>term with id {0} has end date null</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_TERM_HAS_START_DATE_NULL" xml:space="preserve">
+    <value>term with id {0} has start date null</value>
+  </data>
+  <data name="ERR_SCHEDULE_IMPORT_TERM_REFERS_TO_WRONG_SCHOOL_YEAR" xml:space="preserve">
+    <value>term with SIS id {0} refers to school year {1} but should to {2}</value>
+  </data>
+  <data name="ERR_SCHEDULE_SECTION_CANT_DELETE" xml:space="preserve">
+    <value>attendance or disciplines was marked for this marking periods or selected marking periods are not equivalent. You can't delete these sections</value>
+  </data>
+  <data name="ERR_SCHEDULE_SECTION_INVALID_STATUS" xml:space="preserve">
+    <value>Schedule can not be added in current school status</value>
+  </data>
+  <data name="ERR_SCHEDULE_SECTION_SECTIONS_NOT_EQUIVALENT" xml:space="preserve">
+    <value>Sections are not equivalent</value>
+  </data>
+  <data name="ERR_SCHOOL_BAD_SYNC_STATE" xml:space="preserve">
+    <value>school {0} is in incorrect state for sync. schedule Should be imported at least</value>
+  </data>
+  <data name="ERR_SCHOOL_IS_NOT_SPECIFIED" xml:space="preserve">
+    <value>School is not specified</value>
+  </data>
+  <data name="ERR_SCHOOL_PERSON_HAS_TO_BELONG_TO_SOME_SCHOOL" xml:space="preserve">
+    <value>SchoolPerson has to belong to some school</value>
+  </data>
+  <data name="ERR_SCHOOL_PERSON_LIST_INCORRECT_SIZE" xml:space="preserve">
+    <value>list of school persons and list of roles have to have the same sizes</value>
+  </data>
+  <data name="ERR_SCHOOL_STATUS_INVALID_ACTION" xml:space="preserve">
+    <value>Can not apply current action in current school status</value>
+  </data>
+  <data name="ERR_SCHOOL_WITH_NAME_ALREADY_EXISTS_OR_USER_TYPE_NOT_ADMIN" xml:space="preserve">
+    <value>There is already school with the same name or UserType is not admin</value>
+  </data>
+  <data name="ERR_SCHOOL_YEAR_ALREADY_EXISTS" xml:space="preserve">
+    <value>SchoolYear with current code already exists</value>
+  </data>
+  <data name="ERR_SCHOOL_YEAR_OVERLAPPING_DATA" xml:space="preserve">
+    <value>SchoolYear data is overlaping</value>
+  </data>
+  <data name="ERR_SECTION_NOT_IN_MARKING_PERIOD_FOR_CURRENT_DAY" xml:space="preserve">
+    <value>section is not in marking period for current day</value>
+  </data>
+  <data name="ERR_SECURITY_EXCEPTION" xml:space="preserve">
+    <value>Security Exception</value>
+  </data>
+  <data name="ERR_SIGNUP_INFO_INVALID_RIGHTS" xml:space="preserve">
+    <value>Only sys admin can see sign up info</value>
+  </data>
+  <data name="ERR_SIGNUP_INVALID_DECRYPTON_KEY" xml:space="preserve">
+    <value>Your decryption key is not valid</value>
+  </data>
+  <data name="ERR_SIGNUP_USER_WITH_EMAIL_ALREADY_EXISTS" xml:space="preserve">
+    <value>A user with that Email already exists. Is that you? Sign in</value>
+  </data>
+  <data name="ERR_SIS_IMPORT_INCORRECT_TASK_TYPE" xml:space="preserve">
+    <value>Incorrect task type. Must be ImportInfiniteCampusData task type for current model</value>
+  </data>
+  <data name="ERR_SIS_SYNC_INFO_NOT_DEFINED_FOR_SCHOOL" xml:space="preserve">
+    <value>SIS sync info is not defined for school {0}</value>
+  </data>
+  <data name="ERR_STI_CANT_FIND_ATTENDANCE_REASON_CODE" xml:space="preserve">
+    <value>can not find code {0} among attendance reasons</value>
+  </data>
+  <data name="ERR_STI_CANT_FIND_CLASS_GENERAL_PERIOD" xml:space="preserve">
+    <value>can not find class general period for class {0} and general period {1}</value>
+  </data>
+  <data name="ERR_STI_CANT_FIND_CLASS_SCHOOL_PERSON" xml:space="preserve">
+    <value>can not find class school person for general period {0} and school person {1}</value>
+  </data>
+  <data name="ERR_STI_COURSE_DOESNT_HAVE_PRIMARY_TEACHER_ID" xml:space="preserve">
+    <value>course {0} does not have primary teacher id</value>
+  </data>
+  <data name="ERR_STI_COURSE_DOESNT_HAVE_SESSION_ID" xml:space="preserve">
+    <value>course {0} does not have session id</value>
+  </data>
+  <data name="ERR_STI_DAY_DAY_DOESNT_HAVE_SCHEDULE_SECTIONS" xml:space="preserve">
+    <value>day {0} does not have schedule sections</value>
+  </data>
+  <data name="ERR_STI_DAY_DOESNT_BELONG_TO_MARKING_PERIOD" xml:space="preserve">
+    <value>day {0} does not belong to any marking period</value>
+  </data>
+  <data name="ERR_STI_DAY_INFO_FOR_DATE_NOT_FOUND" xml:space="preserve">
+    <value>day information for date {0} not found</value>
+  </data>
+  <data name="ERR_STI_GENERAL_PERIOD_NOT_FOUND" xml:space="preserve">
+    <value>can not find general period with sis id {0}</value>
+  </data>
+  <data name="ERR_STI_GENERAL_PERIOD_REFERS_TO_DIFFERENT_SCHEDULE" xml:space="preserve">
+    <value>general period {0} referes to different schedule section than day {1}</value>
+  </data>
+  <data name="ERR_STI_NO_ADDRESS_FOR_PERSON" xml:space="preserve">
+    <value>No address for person {0}</value>
+  </data>
+  <data name="ERR_STI_NO_BELL_SCHEDULE" xml:space="preserve">
+    <value>there is no bell schedule for session {0}</value>
+  </data>
+  <data name="ERR_STI_NO_GRADE_LEVEL_FOR_STUDENT" xml:space="preserve">
+    <value>no grade level for student {0}</value>
+  </data>
+  <data name="ERR_STI_SCHEDULE_TIME_SLOT_END_TIME_NULL" xml:space="preserve">
+    <value>schedule time slot {0} {1} has end time null</value>
+  </data>
+  <data name="ERR_STI_SCHEDULE_TIME_SLOT_START_TIME_NULL" xml:space="preserve">
+    <value>schedule time slot {0} {1} has start time null</value>
+  </data>
+  <data name="ERR_STI_SCHOOL_PERSON_NOT_FOUND" xml:space="preserve">
+    <value>there is no school person with sis id {0}</value>
+  </data>
+  <data name="ERR_STI_TEACHER_WITH_SIS_ID_NOT_FOUND" xml:space="preserve">
+    <value>Teacher with sis id {0} was not found</value>
+  </data>
+  <data name="ERR_STUDENT_ANNOUNCEMENT_STUDENT_DOESNT_BELONG_TO_RECIPIENTS" xml:space="preserve">
+    <value>This student does not belong to announcement recipients</value>
+  </data>
+  <data name="ERR_STUDENT_BAD_CLASS_PERIOD" xml:space="preserve">
+    <value>Student can't have lessons in two classes at one time</value>
+  </data>
+  <data name="ERR_STUDENT_DOES_NOT_BELONG_TO_SAME_SCHOOL_AS_CLASS" xml:space="preserve">
+    <value>Student does not belont to the same school as class</value>
+  </data>
+  <data name="ERR_STUDENT_HAS_TO_BELONG_TO_SAME_SCHOOL" xml:space="preserve">
+    <value>Student has to belong to some school</value>
+  </data>
+  <data name="ERR_STUDENT_IS_NOT_ASSIGNED_TO_GRADE_LEVEL" xml:space="preserve">
+    <value>Student is not assigned to any grade level</value>
+  </data>
+  <data name="ERR_STUDENT_NOT_ASSIGNED_TO_CURRENT_CLASS" xml:space="preserve">
+    <value>student is not assigned to current class</value>
+  </data>
+  <data name="ERR_STUDENT_PARENT_SHOULD_BELONG_TO_SAME_SCHOOL" xml:space="preserve">
+    <value>Both Student and Parent have to belong to the same school</value>
+  </data>
+  <data name="ERR_STUDENT_WITH_ID_NOT_FOUND" xml:space="preserve">
+    <value>Student with id {0} not found</value>
+  </data>
+  <data name="ERR_SYNC_WITH_SIS_INCORRECT_TASK_TYPE" xml:space="preserve">
+    <value>Invalid task type for SyncWithSisTaskInfo. should be [sync attendance] or [sync people] or [sync schedule] type</value>
+  </data>
+  <data name="ERR_TASK_INFO_INCORRECT_DATA" xml:space="preserve">
+    <value>Incorrect data for current model</value>
+  </data>
+  <data name="ERR_TASK_PROCESSOR_CANT_SET_FAILED" xml:space="preserve">
+    <value>Can't set failed state to current task</value>
+  </data>
+  <data name="ERR_TASK_PROCESSOR_CANT_SET_PROCESSED" xml:space="preserve">
+    <value>Can't set processed state to current task</value>
+  </data>
+  <data name="ERR_TEACHER_MUST_BE_USING_CHALKABLE" xml:space="preserve">
+    <value>Your teacher must be using Chalkable for you to sign up.</value>
+  </data>
+  <data name="ERR_TEACHER_NOT_APPLICABLE_TO_COURSE" xml:space="preserve">
+    <value>This teacher is not applicable to this course</value>
+  </data>
+  <data name="ERR_TEACHER_NOT_FOUND" xml:space="preserve">
+    <value>Teacher {0} not found</value>
+  </data>
+  <data name="ERR_TRACE_UNSUPPORTED_CONTROLLER" xml:space="preserve">
+    <value>only chackable controller is supported in TraceControllerFilter filter</value>
+  </data>
+  <data name="ERR_UNKNOWN_ROLE" xml:space="preserve">
+    <value>Unknown role</value>
+  </data>
+  <data name="ERR_UPLOADING_STUDENT_PICTURES" xml:space="preserve">
+    <value>Error in uploading student pictures</value>
+  </data>
+  <data name="ERR_USER_INVALID_ROLE_NAME" xml:space="preserve">
+    <value>Invalid roleName name [{0}]</value>
+  </data>
+  <data name="ERR_USER_IS_NOT_ASSIGNED_TO_SCHOOL" xml:space="preserve">
+    <value>User is not assigned to any school</value>
+  </data>
+  <data name="ERR_USER_IS_NOT_FROM_THIS_CLASS" xml:space="preserve">
+    <value>Current user are not from this class</value>
+  </data>
+  <data name="ERR_USER_WITH_EMAIL_ALREADY_EXISTS" xml:space="preserve">
+    <value>User with current email already exists</value>
+  </data>
+  <data name="ERR_USER_WITH_LOCAL_ID_NOT_FOUND" xml:space="preserve">
+    <value>Can not find user with local id {0}</value>
+  </data>
+  <data name="ERR_VALUE_CANT_BE_NULL_OR_EMPTY" xml:space="preserve">
+    <value>Value cannot be null or empty.</value>
+  </data>
+  <data name="ERR_VIEW_INFO_INVALID_RIGHTS" xml:space="preserve">
+    <value>You can't view this information</value>
+  </data>
+  <data name="ERR_WRONG_SECRET_KEY" xml:space="preserve">
+    <value>This is wrong secret key</value>
+  </data>
+  <data name="FEED_ABSENT_STUDENTS_TODAY" xml:space="preserve">
+    <value>{0} Students are absent today.</value>
+  </data>
+  <data name="FUND_ADDED_MONEY_TO_REQUEST" xml:space="preserve">
+    <value>Added money due to fund request</value>
+  </data>
+  <data name="FUND_ADDED_MONEY_TO_ROLE" xml:space="preserve">
+    <value>Added money to role {0} due to fund request</value>
+  </data>
+  <data name="GETTING_ZIP_FROM_STORAGE" xml:space="preserve">
+    <value>Getting zip file from storage</value>
+  </data>
+  <data name="IMPORTING_ADMINS" xml:space="preserve">
+    <value>Admins importing.</value>
+  </data>
+  <data name="IMPORTING_DEPARTMENTS_DATA" xml:space="preserve">
+    <value>Importing departments data</value>
+  </data>
+  <data name="IMPORTING_MARKING_PERIOD_DATA" xml:space="preserve">
+    <value>Importing marking period data</value>
+  </data>
+  <data name="IMPORTING_NEW_PERSONAL_DATA" xml:space="preserve">
+    <value>New Personal data importing.</value>
+  </data>
+  <data name="IMPORTING_NEW_SCHEDULES_DATA" xml:space="preserve">
+    <value>New schedules data importing.</value>
+  </data>
+  <data name="IMPORTING_ROOM_DATA" xml:space="preserve">
+    <value>Importing room data</value>
+  </data>
+  <data name="IMPORTING_SCHEDULE" xml:space="preserve">
+    <value>Schedules importing.</value>
+  </data>
+  <data name="IMPORTING_STUDENTS" xml:space="preserve">
+    <value>Students importing.</value>
+  </data>
+  <data name="IMPORTING_TEACHERS" xml:space="preserve">
+    <value>Teachers importing.</value>
+  </data>
+  <data name="IMPORT_ATTENDANCES" xml:space="preserve">
+    <value>Import attendances</value>
+  </data>
+  <data name="IMPORT_ATTENDANCE_START" xml:space="preserve">
+    <value>Starting import attendances {0}</value>
+  </data>
+  <data name="IMPORT_CLASSES_START" xml:space="preserve">
+    <value>start importing classes</value>
+  </data>
+  <data name="IMPORT_CLASS_SCHOOL_PERSONS_START" xml:space="preserve">
+    <value>start importing class school persons</value>
+  </data>
+  <data name="IMPORT_COURSES_START" xml:space="preserve">
+    <value>start importing courses</value>
+  </data>
+  <data name="IMPORT_GENERAL_PERIODS_FOR_SCHEDULE_SECTION_START" xml:space="preserve">
+    <value>start importing general periods for schedule section {0}</value>
+  </data>
+  <data name="IMPORT_PERSONS_START" xml:space="preserve">
+    <value>start importing persons</value>
+  </data>
+  <data name="IMPORT_ROOMS_START" xml:space="preserve">
+    <value>start importing rooms</value>
+  </data>
+  <data name="IMPORT_SCHEDULE_SECTION_START" xml:space="preserve">
+    <value>start importing schedule sections for marking period {0}</value>
+  </data>
+  <data name="INVITING_USER" xml:space="preserve">
+    <value>Inviting schoolPerson ID:{0}</value>
+  </data>
+  <data name="MARKING_PERIODS_FOR_SCHOOL_YEAR_IMPORT_START" xml:space="preserve">
+    <value>start importing marking periods for school year {0}</value>
+  </data>
+  <data name="NOTIFICATIONS_SENT_TO_MAIL_COUNT" xml:space="preserve">
+    <value>Count of notification sended to mail {0}</value>
+  </data>
+  <data name="NO_CLAASS_NOW" xml:space="preserve">
+    <value>No class now</value>
+  </data>
+  <data name="NO_CLASS_ID" xml:space="preserve">
+    <value>No class Id</value>
+  </data>
+  <data name="NO_CLASS_NAME" xml:space="preserve">
+    <value>No class Name</value>
+  </data>
+  <data name="NO_DAYS_DESCRIPTION" xml:space="preserve">
+    <value>No days description</value>
+  </data>
+  <data name="NO_DEPARTMENT_NAME" xml:space="preserve">
+    <value>No department name</value>
+  </data>
+  <data name="NO_ERRORS" xml:space="preserve">
+    <value>no errors</value>
+  </data>
+  <data name="NO_PERIOD" xml:space="preserve">
+    <value>No period</value>
+  </data>
+  <data name="NO_ROOM_NAME" xml:space="preserve">
+    <value>No room name</value>
+  </data>
+  <data name="NO_STUDENT_ID" xml:space="preserve">
+    <value>No student id</value>
+  </data>
+  <data name="NO_TEACHER_NAME" xml:space="preserve">
+    <value>No teacher name</value>
+  </data>
+  <data name="PERSON_IMPORT_START" xml:space="preserve">
+    <value>Start Person Import</value>
+  </data>
+  <data name="PERSON_IMPORT_START_PROCESSING_ROWS" xml:space="preserve">
+    <value>start processing rows</value>
+  </data>
+  <data name="PREPARING_PERIODS_BY_SECTIONS" xml:space="preserve">
+    <value>preparing periods by sections</value>
+  </data>
+  <data name="PREPARING_SCHOOL_PERSONS_BY_LOCAL_ID" xml:space="preserve">
+    <value>preparing school persons by local id</value>
+  </data>
+  <data name="PROCESSING_RECORDS_UPDATED_AFTER" xml:space="preserve">
+    <value>processing records updated after {0}</value>
+  </data>
+  <data name="PROCESSING_ROWS_FOR_GENERAL_PERIODS_START" xml:space="preserve">
+    <value>start processing rows for class general periods. rows count: {0}</value>
+  </data>
+  <data name="REMOVING_OLD_DAYS" xml:space="preserve">
+    <value>removing old days</value>
+  </data>
+  <data name="REPORT_RENDER_START" xml:space="preserve">
+    <value>Render start</value>
+  </data>
+  <data name="REPORT_START_RENDER_ACTION" xml:space="preserve">
+    <value>start render action {0}, {1}, {2}, {3}, {4}</value>
+  </data>
+  <data name="ROSTER_RECORDS_PROCESSED_ADDED" xml:space="preserve">
+    <value>{0} roster records are processed. {1} records were added</value>
+  </data>
+  <data name="ROWS_ARE_PROCESSED" xml:space="preserve">
+    <value>{0}  rows are processed</value>
+  </data>
+  <data name="ROW_IS_PROCESSED" xml:space="preserve">
+    <value>row {0} is processed</value>
+  </data>
+  <data name="SCHEDULE_IMPORT_START_PROCESSING_ROWS_FOR_CLASS_STUDENTS" xml:space="preserve">
+    <value>start processing rows for class students</value>
+  </data>
+  <data name="SCHOOL_CREATED" xml:space="preserve">
+    <value>School is created</value>
+  </data>
+  <data name="SCHOOL_DATA_BLOCK_SCHEDULING" xml:space="preserve">
+    <value>Data3: Block Scheduling</value>
+  </data>
+  <data name="SCHOOL_DATA_DAILY_PERIODS" xml:space="preserve">
+    <value>Data4: Daily Periods - Valid daily period info</value>
+  </data>
+  <data name="SCHOOL_DATA_GRADELEVELS" xml:space="preserve">
+    <value>Data1: Grade Levels</value>
+  </data>
+  <data name="SCHOOL_DATA_MARKING_PERIODS" xml:space="preserve">
+    <value>Data2: Marking Periods</value>
+  </data>
+  <data name="SCHOOL_ID_SIS_SCHOOL_ID" xml:space="preserve">
+    <value>school id {0}. sis school id {1}</value>
+  </data>
+  <data name="SCHOOL_INVITED_USER" xml:space="preserve">
+    <value>Invited a user</value>
+  </data>
+  <data name="SCHOOL_PAYING_CUSTOMER" xml:space="preserve">
+    <value>Paying customer</value>
+  </data>
+  <data name="SCHOOL_PERSONAL_INFO_IMPORTED" xml:space="preserve">
+    <value>Personal Info is imported</value>
+  </data>
+  <data name="SCHOOL_SCHEDULE_INFO_IMPORTED" xml:space="preserve">
+    <value>Schedule info is imported</value>
+  </data>
+  <data name="SCHOOL_SOME_DATA_IMPORTED_SUCCESSFULLY" xml:space="preserve">
+    <value>Some Data imported successfully</value>
+  </data>
+  <data name="SCHOOL_STUDENT_LOGGED_IN" xml:space="preserve">
+    <value>Student logged in</value>
+  </data>
+  <data name="SCHOOL_STUDENT_WAS_INVITED" xml:space="preserve">
+    <value>Student was invited</value>
+  </data>
+  <data name="SCHOOL_TEACHER_LOGGED_IN" xml:space="preserve">
+    <value>Teacher logged in</value>
+  </data>
+  <data name="SCHOOL_YEAR_IMPORT_START" xml:space="preserve">
+    <value>start importing school years</value>
+  </data>
+  <data name="SIS_ATTENDANCE_SYNC" xml:space="preserve">
+    <value>Attendance sync with SIS {0} successful</value>
+  </data>
+  <data name="STUDENT_CODE_TEXT" xml:space="preserve">
+    <value>Hi. Thank you for signing up for Chalkable. Please enter the code {0} in the box on your screeen. That code again is {1}. Thank you.</value>
+  </data>
+  <data name="STUDENT_IS_DOING_GREAT" xml:space="preserve">
+    <value>{0} is doing great. No discipline issues.</value>
+  </data>
+  <data name="STUDENT_IS_HAVING_DISCIPLINARY_ISSUES" xml:space="preserve">
+    <value>{0} is having disciplinary issues in {1}</value>
+  </data>
+  <data name="SYNC_ATTENDANCE_REASONS" xml:space="preserve">
+    <value>Sync attendance reasons</value>
+  </data>
+  <data name="SYNC_IS_OFF" xml:space="preserve">
+    <value>{0} sync is off</value>
+  </data>
+  <data name="TIME_UTC_LOCAL_TIME" xml:space="preserve">
+    <value>current time UTC: {0}, school local time: {1}</value>
+  </data>
+  <data name="UPDATING_CLASS_GRADE_LEVELS" xml:space="preserve">
+    <value>Update classes grade level</value>
+  </data>
+  <data name="UPDATING_CLASS_GRADE_LEVELS_COMPLETED" xml:space="preserve">
+    <value>Update classes grade level completed</value>
+  </data>
+  <data name="UPLOADING_PICTURE_FOR_STUDENT_WITH_LOCAL_ID" xml:space="preserve">
+    <value>Uploading picture for student localID:{0} ID:{1}</value>
+  </data>
+  <data name="UPLOADING_SECTIONS_FROM_CLEVER" xml:space="preserve">
+    <value>Uploading sections from clever</value>
+  </data>
+  <data name="UPLOADING_STUDENTS_FROM_CLEVER" xml:space="preserve">
+    <value>Uploading students from clever</value>
+  </data>
+  <data name="UPLOADING_STUDENT_PICTURES" xml:space="preserve">
+    <value>Uploading student pictures</value>
+  </data>
+  <data name="UPLOADING_TEACHERS_FROM_CLEVER" xml:space="preserve">
+    <value>Uploading teachers from clever</value>
+  </data>
+  <data name="USERS_PROCESSED" xml:space="preserve">
+    <value>{0} users are processed</value>
+  </data>
+  <data name="USER_NOT_FOUND_IN_DEMO_SCHOOL" xml:space="preserve">
+    <value>User with role {0} is not found in demo school {1}</value>
+  </data>
+  <data name="WORKER_ROLE_WORKING" xml:space="preserve">
+    <value>Working</value>
+  </data>
+</root>
