@@ -1,0 +1,14 @@
+.blobs
+
+    +Grid('storage', 'blobsPage', self.items, [self.containerAddress]).not-transparent
+        +GridHead()
+            .th Name
+            .th Uri
+            .th Size
+        +GridBody()
+            each item in self.items.getItems()
+                +GridRow()
+                    .td= item.getName()
+                    .td= item.getUri()
+                    .td= item.getSize()
+
