@@ -245,7 +245,7 @@ NAMESPACE('chlk.controllers', function (){
            // var activityClass = this.getView().getCurrent().getClass();
             this.attendanceService.setAttendance(model)
                 .then(function(res){
-                    this.Redirect('attendance', 'classList', [model.getClassId(), null, true]);
+                    this.Redirect('attendance', 'classList', [model.getClassId(), model.getDate(), true]);
                 }, this);
             //return this.UpdateView(activityClass, this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
         },
