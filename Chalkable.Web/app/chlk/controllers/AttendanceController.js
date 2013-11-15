@@ -261,13 +261,13 @@ NAMESPACE('chlk.controllers', function (){
             item.setType(type);
             var level = item.getLevel();
             var attReasonId = model.getAttendanceReasonId();
-            if(!attReasonId || !attReasonId.valueOf()){
+            /*if(!attReasonId || !attReasonId.valueOf()){
                 var reasons = item.getReasons().filter(function(item){return item.isDefaultReason(level);});
                 if(reasons.length > 0){
                     attReasonId =  reasons[0].getId();
                     model.setAttendanceReasonId(attReasonId);
                 }
-            }
+            }*/
             try{
                 if(attReasonId && attReasonId.valueOf() && item.getReasons().filter(function(item){
                     return item.hasLevel(level) && item.getId() == attReasonId;

@@ -157,6 +157,9 @@ NAMESPACE('chlk.activities.attendance', function () {
                        var reason = this._reasons.filter(function(item){return item.getId().valueOf() == reasonId;})[0];
                        att.setAttendanceReasonId(reason.getId());
                        att.setAttendanceReason(reason);
+                   }else{
+                       att.setAttendanceReasonId(null);
+                       att.setAttendanceReason(null);
                    }
                    this.renderStudentAttendance_(att);
                }
