@@ -32,7 +32,8 @@ NAMESPACE('chlk.models.announcement', function () {
             function $(){
                 BASE();
                 this._chalkableAnnouncementType = null;
-                this._announcementTypeId = null;
+                this.announcementTypeId = null;
+                this.classId = null;
                 this._annTypeEnum = chlk.models.announcement.AnnouncementTypeEnum;
             },
 
@@ -48,11 +49,11 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'announcementTypeId',
             [[Number]],
             VOID, function setAnnouncementTypeId(announcementTypeId){
-                this._announcementTypeId = announcementTypeId;
+                this.announcementTypeId = announcementTypeId;
                 if(!announcementTypeId)
-                    this.setChalkableAnnouncementType(this._annTypeEnum.ADMIN.valueOf())
+                    this.setChalkableAnnouncementType(this.isAdminAnnouncement() ? this._annTypeEnum.ADMIN.valueOf() : this._annTypeEnum.ANNOUNCEMENT.valueOf())
             },
-            Number, function getAnnouncementTypeId(){return this._announcementTypeId; },
+            //Number, function getAnnouncementTypeId(){return this._announcementTypeId; },
 
             [ria.serialize.SerializeProperty('chalkableannouncementtypeid')], // make enum
             Number, 'chalkableAnnouncementType',
@@ -64,15 +65,11 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, function getChalkableAnnouncementType(){ return this._chalkableAnnouncementType;},
 
 
-            READONLY, Boolean, 'adminAnnouncement',
-            Boolean, function isAdminAnnouncement(){
-                return  this.getChalkableAnnouncementType() == this._annTypeEnum.ADMIN.valueOf()
-                    && !this.getAnnouncementTypeId()
-            },
+            Boolean, 'adminAnnouncement',
 
             READONLY, Boolean, 'standartAnnouncement',
             Boolean, function isStandartAnnouncement(){
-                return this.getChalkableAnnouncementType() == this._annTypeEnum.ANNOUNCEMENT.valueOf()
+                return !this.getAnnouncementTypeId();
             },
 
             [ria.serialize.SerializeProperty('announcementtypename')],
@@ -123,6 +120,11 @@ NAMESPACE('chlk.models.announcement', function () {
 
             [ria.serialize.SerializeProperty('classid')],
             chlk.models.id.ClassId, 'classId',
+
+            chlk.models.id.ClassId, function setClassId(classId){
+                this.classId = classId;
+                this.setAdminAnnouncement(!classId);
+            },
 
             Boolean, 'gradable',
             Number, 'grade',
