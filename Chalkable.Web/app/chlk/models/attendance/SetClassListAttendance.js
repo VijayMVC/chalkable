@@ -58,7 +58,6 @@ NAMESPACE('chlk.models.attendance', function () {
 
         Array, function getPostItems(){
             return this.getItems() && this.getItems().map(function(item){
-                console.log(item.getPostData());
                 return item.getPostData();
             });
         },
@@ -68,7 +67,6 @@ NAMESPACE('chlk.models.attendance', function () {
                 date: this.getDate().toStandardFormat(),
                 items: this.getPostItems()
             };
-            console.log(res);
             return res;
         }
     ]);

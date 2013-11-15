@@ -150,20 +150,22 @@ NAMESPACE('chlk.controllers', function (){
                 if(announcementTypeId_){
                     if(classId_ && classInfo){
                         var types = classInfo.getTypesByClass();
-                        var typeId = null;
+                        if(types.length > 0){
+                            var typeId = null;
 
-                        types.forEach(function(item){
-                            if(item.getId() == announcementTypeId_)
-                                typeId = announcementTypeId_;
-                        });
-                        if (typeId)
-                            model.setSelectedTypeId(typeId);
-                        else
+                            types.forEach(function(item){
+                                if(item.getId() == announcementTypeId_)
+                                    typeId = announcementTypeId_;
+                            });
+                            if (typeId)
+                                model.setSelectedTypeId(typeId);
+                            else
                             if(announcementTypeId_){
                                 announcementTypeId_ = types[0].getId();
                                 announcement.setAnnouncementTypeId(announcementTypeId_);
                                 model.setSelectedTypeId(announcementTypeId_);
                             }
+                        }
                     }
                 }
                 model.setTopData(classesBarData);
