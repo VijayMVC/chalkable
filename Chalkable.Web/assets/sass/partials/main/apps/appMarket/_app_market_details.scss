@@ -1,0 +1,291 @@
+DIV.page {
+  #content {
+    > DIV {
+      #main-wrapper {
+        #main {
+          DIV.app-market-details {
+            .app-price-info {
+              margin: 26px 0 30px 0;
+
+              .app-title {
+                display: inline-block;
+                width: 538px;
+                .dev-web-site{
+                  margin-top: 5px;
+                  font-size: 15px;
+                  font-style: italic;
+                  text-decoration: none;
+                  margin-left: 5px;
+                }
+
+                span{
+                  font-style: italic;
+                }
+              }
+
+              .app-description {
+                padding: 0;
+                font-size: 15px;
+                color: #383838;
+                resize: none;
+                background: none;
+                border: none;
+                width: 100%;
+                outline: none;
+                margin-top: 30px;
+              }
+              .app-buy {
+                width: 122px;
+                display: inline-block;
+                vertical-align: top;
+                .installed{
+                  margin-left: -23px;
+                }
+
+                .action-link{
+                  min-width: 90px;
+                  padding: 0;
+                  font-size: 19px;
+                  text-decoration: none;
+                  text-transform: uppercase;
+                  font-weight: bold;
+                  color: white;
+                  background: none;
+                  line-height: 45px;
+                  display: inline-block;
+
+                }
+              }
+              h1 {
+                font-size: 26px;
+              }
+
+            }
+
+            .app-general-info {
+              border-top: 1px solid #f3f3f3;
+
+              .permissions {
+                vertical-align: top;
+                margin-top: 32px;
+                width: 179px;
+                display: inline-block;
+                min-height: 85px;
+                border-radius: 6px;
+                background: #EEE;
+                border-color: #B7B7B7;
+                @include box-shadow(0 2px 6px 0px #989897);
+                text-shadow: white 0px 1px 1px;
+
+                .permissions-group {
+
+
+                  &.last{
+                    .permission{
+                      &:last-child{
+                        background: none;
+                      }
+                    }
+                  }
+                  .group-header {
+
+
+                    &.first{
+                      margin-top: 7px;
+                    }
+
+                    color: #959595;
+                    font-family: Georgia;
+                    text-align: center;
+                    font-style: italic;
+                    padding: 8px 0 15px;
+                    font-size: 12px;
+                    text-shadow: 0 1px 0 white;
+                    background: url(images/common/dialog-separator.png) bottom no-repeat;
+                  }
+
+                  .permission {
+                    padding: 10px 0 10px 20px;
+                    height: 25px;
+                    margin: 0;
+                    font-size: 15px;
+                    text-align: left;
+
+                    background: url(images/common/dialog-separator.png) bottom no-repeat;
+
+                    .icon{
+                      vertical-align: middle;
+                      display: inline-block;
+                      width: 18px;
+                      height: 18px;
+                      margin-right: 35px;
+
+                      background: url(images/app/info-for.png) 0px -42px no-repeat;
+
+
+                      //todo change to names
+                      &.permission-role-teacher {
+                        background-position: 0px -21px;
+                      }
+
+                      &.permission-role-student{
+                        background-position: 0px 1px;
+                      }
+
+                      &.permission-none {
+                        background-position: 0px -107px;
+                      }
+
+                      &.permission-grade{
+                        background-position: 0px -64px;
+                      }
+
+                      &.permission-attendance {
+                        background-position: 0px -133px;
+                      }
+
+                      &.permission-schedule {
+                        background-position: 0px -159px;
+                      }
+
+                      &.permission-discipline {
+                        background-position: 0px -85px;
+                      }
+
+                      &.permission-message {
+                        background-position: 0px -182px;
+                      }
+                    }
+                    .description{
+                      vertical-align: middle;
+                      display: inline-block;
+                      text-overflow: ellipsis;
+                      font-family: Arial;
+                      color: #9d9d9d;
+                      text-shadow: 1px -1px 1px #fff;
+                      text-transform: capitalize;
+                      font-style: normal;
+                      width: 95px;
+                      overflow: hidden;
+                    }
+                  }
+                }
+
+
+              }
+
+              .reviews{
+                display: inline-block;
+                width: 480px;
+                margin-right: 8px;
+                min-height: 110px;
+                margin-top: 32px;
+
+                .review-link{
+                  font-weight: bold;
+                  color: #383838;
+                  text-decoration: none;
+                  font-size: 22px;
+                  cursor: pointer;
+                }
+
+                .review-area{
+                  position: relative;
+                }
+
+                .review-container{
+                  position: absolute;
+                  bottom: 0;
+                  .rating-hint{
+                    background: url(images/app/rating-hint.png) 0 0 no-repeat;
+                    width: image-width('app/rating-hint.png');
+                    height: image-height('app/rating-hint.png');
+                    position: absolute;
+                    left: 130px;
+                    bottom: 10px;
+                    display: none;
+                  }
+                }
+
+
+                .rating{
+
+                  &.all{
+                    margin-left: 25px;
+                  }
+
+                }
+
+
+                .write-review-btn{
+                  border-radius: 3px;
+                  @include background(linear-gradient(top, #f4f4f4,#d9d9d9));
+                  border-top: 1px solid white;
+                  color: #747272;
+                  font-size: 13px;
+                  cursor: pointer;
+                  text-decoration: none;
+                  padding: 2px 6px 5px;
+                  @include box-shadow(0 1px 2px 1px #aaa);
+                  font-weight: bold;
+                  float: right;
+                  margin-right: 35px;
+                  &:hover{
+                    @include background(linear-gradient(top, #e6e6e6,#d5d5d5));
+                  }
+                }
+
+                .review-text{
+                  width: 435px;
+                  min-height: 50px;
+                  resize: vertical !important;
+                  padding: 5px 5px 40px;
+                  display: block;
+                  margin-top: 0px;
+                  margin-bottom: 0px;
+                  height: 113px;
+                  margin-top: 25px;
+                  margin-bottom: 15px;
+                }
+
+                .cancel-btn{
+                  color: #878787;
+                  text-shadow: 0 1px 0 white;
+                  cursor: pointer;
+                  height: 18px;
+                  line-height: 18px;
+                  margin-left: 20px;
+                  padding: 0;
+                  text-decoration: underline;
+                  font-size: 12px;
+                  font-weight: bold;
+                }
+
+                button{
+                  font-size: 16px;
+                }
+
+                .user-reviews{
+                  margin-top: 17px;
+
+                  .app-rating{
+                    .personcount{
+                      display: inline-block;
+                      float: right;
+                      margin-left: 15px;
+                      vertical-align: middle;
+                      margin-top: 3px;
+                    }
+                  }
+                }
+              }
+
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
