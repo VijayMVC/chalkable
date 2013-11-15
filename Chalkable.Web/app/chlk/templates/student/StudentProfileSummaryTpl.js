@@ -40,8 +40,8 @@ NAMESPACE('chlk.templates.student', function () {
 
             Object, function buildRankGlanceBoxData(){
                 return this.buildGlanceBoxData_(this.getUser().getRankBox()
-                    , function(item){console.log(item.getMarkingPeriodName()); return item.getRank; }
-                    , function(item){console.log(item.getRank()); return  item.getMarkingPeriodName; }
+                    , function(item){ return item.getRank; }
+                    , function(item){ return  item.getMarkingPeriodName; }
                     , Msg.Recent);
             },
 
