@@ -59,12 +59,14 @@ NAMESPACE('chlk.controllers', function (){
 
                 var phones = model.getPhones();
                 var address = model.getAddress();
-                var phonesValue = [];
-                var addressesValue = {
-                    id: address.getId().valueOf(),
-                    type: address.getType(),
-                    value: address.getValue()
-                };
+                var phonesValue = [], addressesValue = null;
+
+                if(address)
+                    addressesValue = {
+                        id: address.getId().valueOf(),
+                        type: address.getType(),
+                        value: address.getValue()
+                    };
                 phones.forEach(function(item){
                     var values = {
                         id: item.getId().valueOf(),

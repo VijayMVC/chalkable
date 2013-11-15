@@ -1,5 +1,5 @@
 mixin ProfileInfoView(model)
-    address = model.getAddress() || [];
+    address = model.getAddress() || null;
     primaryPhone = model.getPrimaryPhone() ? model.getPrimaryPhone().getValue() : '';
     homePhone = model.getHomePhone() ? model.getHomePhone().getValue() : '';
     .info-view
@@ -31,8 +31,9 @@ mixin ProfileInfoView(model)
                         .info-title=Msg.Home_Phone
                         .data-info.big-font-size=homePhone
                     .section-data
-                        .info-title=Msg.Home_Address
-                            .data-info.low-font-size=address.getValue()
+                        if address
+                            .info-title=Msg.Home_Address
+                                .data-info.low-font-size=address.getValue()
 
             block
         .sections-info.other-section
@@ -41,7 +42,7 @@ mixin ProfileInfoView(model)
             +Button().special-button.blue-button#edit-info-button=Msg.Edit
 
 mixin ProfileInfoForm(controller, model)
-    address = model.getAddress() || [];
+    address = model.getAddress() || null;
     primaryPhone = model.getPrimaryPhone() ? model.getPrimaryPhone().getValue() : '';
     homePhone = model.getHomePhone() ? model.getHomePhone().getValue() : '';
     .info-edit
