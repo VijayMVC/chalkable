@@ -57,7 +57,7 @@ NAMESPACE('chlk.activities.apps', function () {
 
                 var val = node.checked();
                 if (val){
-                    var mdl = new chlk.models.apps.AppPicture(new chlk.models.id.PictureId(''), '', 170, 110, 'banner', true);
+                    var mdl = new chlk.models.apps.AppPicture(new chlk.models.id.PictureId(''), '', 170, 110, 'Banner', true);
                     var tpl = new chlk.templates.apps.AppPicture();
                     tpl.assign(mdl);
                     tpl.renderTo(this.dom.find('.banner').empty());
