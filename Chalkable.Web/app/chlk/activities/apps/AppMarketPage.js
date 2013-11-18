@@ -61,8 +61,9 @@ NAMESPACE('chlk.activities.apps', function () {
                 var res = [];
 
                 if (selectedType == 'all'){
+                    if (checkboxes.count() > 1){
                     this.dom.find('input[type=checkbox]:not(:disabled)').filter(function(elem){
-                        return elem.getAttr('name') != node.getAttr('name');
+                    return elem.getAttr('name') != node.getAttr('name');
                     }).setAttr('checked', false);
 
                     checkboxes
@@ -72,6 +73,7 @@ NAMESPACE('chlk.activities.apps', function () {
                         .forEach(function(el){
                             res.push(el.getAttr('name').split('app-category-').pop());
                         });
+                    }
                 }
                 else{
                     this.dom.find('input[name=app-category-all]').setAttr('checked', false);
@@ -87,6 +89,8 @@ NAMESPACE('chlk.activities.apps', function () {
                 res = res.join(',');
                 new ria.dom.Dom("input[name=selectedCategories]").setValue(res);
                 this.resetScrolling_();
+
+
                 this.dom.find('#app-market-filter').trigger('submit');
 
 

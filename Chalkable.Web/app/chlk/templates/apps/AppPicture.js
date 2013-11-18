@@ -20,6 +20,9 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'editable',
             [ria.templates.ModelPropertyBind],
-            String, 'pictureClass'
+            String, 'pictureClass',
+            [ria.templates.ModelPropertyBind],
+            String, 'templateDownloadLink'
+
         ])
 });

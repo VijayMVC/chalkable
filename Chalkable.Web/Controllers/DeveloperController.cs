@@ -14,6 +14,13 @@ namespace Chalkable.Web.Controllers
 {
     public class DeveloperController : UserController
     {
+        private const string ICON_TEMPLATES_URL_FORMAT = "/Content/icons-templates/{0}";
+        private const string ICON_FILENAME = "icon.psd";
+        private const string BANNER_FILENAME = "banner.psd";
+        private const string SCREENSHOT_FILENAME = "screenshot.psd";
+        private const string ATTACHMENT_CONTENT_TYPE = "attachment";
+        private const string CONTENT_LENGTH = "Content-Length";
+
         [HttpPost]
         public ActionResult SignUp(string email, string password, string confirmPassword)
         {
@@ -87,6 +94,39 @@ namespace Chalkable.Web.Controllers
         {
             var developer = MasterLocator.DeveloperService.GetDeveloperById(developerId);
             return Json(DeveloperViewData.Create(developer));
+        }
+
+        public string ApplicationPath
+        {
+            get
+            {
+                string res = Request.ApplicationPath.ToLower();
+                if (res == "/")      //a site
+                    res = "/";
+                else if (!res.EndsWith(@"/")) //a virtual
+                    res += @"/";
+                return res;
+
+            }
+        }
+
+        public ActionResult DownloadPictureTemplate(int type)
+        {
+            var vPath = ApplicationPath + ICON_TEMPLATES_URL_FORMAT;
+            String name;
+            switch (type)
+            {
+                case 1: name = ICON_FILENAME; break;
+                case 2: name = BANNER_FILENAME; break;
+                default: name = SCREENSHOT_FILENAME; break;
+            }
+            vPath = string.Format(vPath, name);
+            var path = HttpContext.Server.MapPath(vPath);
+            var resContent = System.IO.File.ReadAllBytes(path);
+            const string contentType = ATTACHMENT_CONTENT_TYPE;
+            Response.AddHeader(CONTENT_LENGTH, resContent.Length.ToString());
+            var r = File(resContent, contentType, name);
+            return r;
         }
 
 

@@ -10,7 +10,7 @@ NAMESPACE('chlk.models.apps', function () {
 
             String, 'ids',
             Boolean, 'readOnly',
-
+            String, 'templateDownloadLink',
 
             [[ArrayOf(chlk.models.apps.AppPicture), Boolean]],
             function $(screenshots, isReadOnly){
@@ -22,6 +22,7 @@ NAMESPACE('chlk.models.apps', function () {
                 }).join(",");
 
                 this.setIds(scrIds);
+                this.setTemplateDownloadLink('/Developer/DownloadPictureTemplate?type=3');
                 this.setReadOnly(isReadOnly);
             }
 

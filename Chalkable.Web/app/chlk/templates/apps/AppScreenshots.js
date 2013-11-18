@@ -12,6 +12,8 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             String, 'ids',
             [ria.templates.ModelPropertyBind],
-            Boolean, 'readOnly'
+            Boolean, 'readOnly',
+            [ria.templates.ModelPropertyBind],
+            String, 'templateDownloadLink'
         ])
 });
