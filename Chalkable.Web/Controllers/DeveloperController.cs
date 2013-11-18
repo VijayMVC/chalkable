@@ -51,10 +51,10 @@ namespace Chalkable.Web.Controllers
 
         public ActionResult ListApi()
         {
-            var currentSchool = MasterLocator.SchoolService.GetById(Context.SchoolId.Value);
+            var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
             var result = new List<ApiExplorerViewData>();
 
-            if (!string.IsNullOrEmpty(currentSchool.District.DemoPrefix))
+            if (!string.IsNullOrEmpty(district.DemoPrefix))
             {
                 var descriptions = ChalkableApiExplorerLogic.GetApi();
                 var apiRoles = new List<string>();
@@ -65,7 +65,7 @@ namespace Chalkable.Web.Controllers
                     if (loweredDescription == CoreRoles.SUPER_ADMIN_ROLE.LoweredName || loweredDescription == CoreRoles.CHECKIN_ROLE.LoweredName) continue;
 
                     apiRoles.Add(loweredDescription);
-                    var userName = currentSchool.District.DemoPrefix + PreferenceService.Get("demoschool" + loweredDescription).Value;
+                    var userName = district.DemoPrefix + PreferenceService.Get("demoschool" + loweredDescription).Value;
                     var token = ChalkableApiExplorerLogic.GetAccessTokenFor(userName, MasterLocator);
                     result.Add(ApiExplorerViewData.Create(description.Value, token, description.Key));
                 }
