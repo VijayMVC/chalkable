@@ -107,7 +107,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     this.updateItem(node, false);
                 }else{
                     row.find('[name=dropped]').setValue(true);
-                    row.find('.grade-input').setValue('');
+                    //row.find('.grade-input').setValue('');
                     this.updateItem(node, true);
                 }
             },
