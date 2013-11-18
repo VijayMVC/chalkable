@@ -4,6 +4,8 @@ BODY {
       DIV#content-wrapper{
         &.messages{
           #search-message-btn{
+            display: inline-block;
+
             SPAN{
               display: inline-block;
               SPAN{
