@@ -15,7 +15,7 @@ NAMESPACE('chlk.templates.people', function () {
             Boolean, 'active',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.people.Address), 'addresses',
+            chlk.models.people.Address, 'address',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'birthDate',

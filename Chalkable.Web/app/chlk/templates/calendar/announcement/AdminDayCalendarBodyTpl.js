@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.ChlkTemplate');
+REQUIRE('chlk.templates.calendar.announcement.BaseCalendarBodyTpl');
 REQUIRE('chlk.templates.calendar.announcement.AdminDayCalendarPopupTpl');
 REQUIRE('chlk.models.calendar.announcement.AdminDayCalendar');
 
@@ -11,7 +11,7 @@ NAMESPACE('chlk.templates.calendar.announcement', function (){
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/calendar/announcement/AdminDayCalendarBody.jade')],
         [ria.templates.ModelBind(chlk.models.calendar.announcement.AdminDayCalendar)],
-        'AdminDayCalendarBodyTpl', EXTENDS(chlk.templates.ChlkTemplate),[
+        'AdminDayCalendarBodyTpl', EXTENDS(chlk.templates.calendar.announcement.BaseCalendarBodyTpl),[
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.GradeLevel), 'gradeLevels',

@@ -17,4 +17,4 @@ gls = self.getGradeLevels()
                                 each classPeriod in item.getClassPeriods()
                                     .class-info(data-tool-tip = self.getToolTip(classPeriod))
                                         p.class-name=classPeriod.getClazz().getName()
-                                        p.teacher-name.x-hidden=classPeriod.getClazz().getTeacher().getDisplayName()
+                                        p.teacher-name.x-hidden=classPeriod.getClazz().getTeacher() ? classPeriod.getClazz().getTeacher().getDisplayName() : ''
