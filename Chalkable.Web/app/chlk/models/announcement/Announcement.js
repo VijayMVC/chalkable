@@ -86,6 +86,8 @@ NAMESPACE('chlk.models.announcement', function () {
 
             String, 'attachments',
 
+            String, 'applicationsIds',
+
             [ria.serialize.SerializeProperty('attachmentscount')],
             Number, 'attachmentsCount',
 

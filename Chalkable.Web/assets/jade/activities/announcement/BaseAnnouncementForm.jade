@@ -14,7 +14,6 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
     +Hidden('systemtype', announcement.getSystemType())
     +Hidden('personid', announcement.getPersonId().valueOf())
     +Hidden('gradingstyle', announcement.getGradingStyle())
-    +Hidden('attachments', announcement.getAttachments())
     +Hidden('markingperiodid', announcement.getCreated())
     +Hidden('state', announcement.getState())
     +Hidden('isedit', !!announcement.getState())(data-isedit = !!announcement.getState()).is-edit

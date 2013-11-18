@@ -57,6 +57,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'attachments',
 
             [ria.templates.ModelPropertyBind],
+            String, 'applicationsIds',
+
+            [ria.templates.ModelPropertyBind],
             Number, 'attachmentsCount',
 
             [ria.templates.ModelPropertyBind],
