@@ -43,7 +43,9 @@ NAMESPACE('chlk.controllers', function (){
                 var result;
                 if(classId_){
                     result = this.finalGradeService
-                        .getFinalGrades(classId_, false).then(function(result){
+                        .getFinalGrades(classId_, false)
+                        .attach(this.validateResponse_())
+                        .then(function(result){
                             var gradesInfo = result.getFinalGradeAnnType(), sum=0;
                             gradesInfo.forEach(function(item, index){
                                 item.setIndex(index);
@@ -183,6 +185,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.getGradingStyle(),
                         finalGradeAnnouncementTypes,
                         model.isNeedsTypesForClasses())
+                    .attach(this.validateResponse_())
                     .then(function(model){
                         this.Redirect('grading', 'teacherSettings', []);
                     }.bind(this));
