@@ -56,7 +56,7 @@ namespace Chalkable.Web.ActionFilters
             if (!(filterContext.Controller is ChalkableController))
                 throw new NotSupportedException(ChlkResources.ERR_AUTH_FILTER_UNSUPPORTED_CONTROLLER);
             var controller = (filterContext.Controller as ChalkableController);
-            var context = controller.MasterLocator.Context;
+            var context = controller.MasterLocator != null ? controller.MasterLocator.Context : null;
             if (context != null)
             {
                 if (context.IsOAuthUser)
