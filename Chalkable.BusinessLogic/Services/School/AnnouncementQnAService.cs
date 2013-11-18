@@ -52,8 +52,12 @@ namespace Chalkable.BusinessLogic.Services.School
                         State = AnnouncementQnAState.Asked
                     };
                 da.Insert(annQnA);
-                //annQnA = da
                 uow.Commit();
+                annQnA = da.GetAnnouncementQnA(new AnnouncementQnAQuery 
+                                {
+                                    AnnouncementId = announcementId,
+                                    CallerId = annQnA.PersonRef
+                                }).AnnouncementQnAs.OrderByDescending(x=>x.Id).First();
                 ServiceLocator.NotificationService.AddAnnouncementNotificationQnToAuthor(annQnA.Id, ann.Id);
                 return annQnA;
             }
