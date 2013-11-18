@@ -7,6 +7,7 @@ NAMESPACE('chlk.models.apps', function () {
         'AppPicture', [
             chlk.models.id.PictureId, 'pictureId',
             String, 'pictureUrl',
+            String, 'templateDownloadLink',
             String, 'pictureClass',
             Number, 'width',
             Number, 'height',
@@ -28,12 +29,21 @@ NAMESPACE('chlk.models.apps', function () {
                     this.setTitle(title_);
 
                 var cls = "small-icon-item";
+                var tplImgType = 1;
+                var tplDownloadLinkUrl = '/Developer/DownloadPictureTemplate?type=';
 
-                if (this.getWidth() == 170)
+                if (this.getWidth() == 170){
                     cls = "big-icon-item";
-                if (this.getWidth() == 640)
+                    tplImgType = 2;
+                }
+
+                if (this.getWidth() == 640){
                     cls = "screenshot-item";
+                    tplImgType = 3;
+                }
                 this.setPictureClass(cls);
+                this.setTemplateDownloadLink(tplDownloadLinkUrl + tplImgType);
+
                 if (editable_)
                     this.setEditable(editable_);
             }
