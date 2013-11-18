@@ -133,7 +133,7 @@ namespace Chalkable.BusinessLogic.Services
                     developerId = Guid.Parse(sl[DEVELOPER_ID]);
                 if (!string.IsNullOrEmpty(sl[USER_LOCAL_ID]))
                     localId = int.Parse(sl[USER_LOCAL_ID]);
-                sisTokenExpires = DateTime.Parse(sl[SIS_TOKEN]);
+                sisTokenExpires = string.IsNullOrWhiteSpace(sl[SIS_TOKEN]) ? (DateTime?)null : DateTime.Parse(sl[SIS_TOKEN]);
                 sisUrl = sl[SIS_URL];
             }
             var role = CoreRoles.GetById(int.Parse(sl[ROLE_ID]));
