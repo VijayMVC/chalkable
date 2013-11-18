@@ -84,7 +84,7 @@ NAMESPACE('chlk.services', function () {
                             return data.data || null;
 
                         return Serializer.deserialize(data.data, clazz_);
-                    }.bind(this)).catchError(function(handler, scope_){
+                    }, this).catchError(function(handler, scope_){
                         this.redirectToErrorPage();
                     }, this);
             },
@@ -102,7 +102,7 @@ NAMESPACE('chlk.services', function () {
                             return data.data || null;
 
                         return Serializer.deserialize(data.data, clazz_);
-                    }.bind(this));
+                    }, this);
             },
 
 
@@ -117,7 +117,7 @@ NAMESPACE('chlk.services', function () {
                         this.handleError(data);
 
                         return Serializer.deserialize(data.data, clazz);
-                    }.bind(this));
+                    }, this);
             },
 
            [[String, Function]],
@@ -163,7 +163,7 @@ NAMESPACE('chlk.services', function () {
                         this.handleError(data);
 
                         return Serializer.deserialize(data.data, ArrayOf(clazz));
-                    }.bind(this));
+                    }, this);
             },
 
             [[String, Object, Object]],
@@ -176,7 +176,7 @@ NAMESPACE('chlk.services', function () {
                         this.handleError(data);
 
                         return Serializer.deserialize(data.data, ArrayOf(clazz));
-                    }.bind(this)).catchError(function(handler, scope_){
+                    }, this).catchError(function(handler, scope_){
                         this.redirectToErrorPage();
                     }, this);
             },
