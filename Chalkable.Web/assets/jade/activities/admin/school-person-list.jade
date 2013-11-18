@@ -18,4 +18,6 @@
                                 +Option('', 'All Grade Levels', true)
                                 each item in self.gradeLevels
                                     +Option(item.getId().valueOf().toString(), item.getName())
-            +RenderWith(self.getUsersList(), chlk.templates.people.UsersList)
+            +RenderWith(self.getUsersList(), chlk.templates.people.UsersList)(
+                userRole = self.getUserRole()
+            )

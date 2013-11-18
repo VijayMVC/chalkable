@@ -19,6 +19,10 @@ NAMESPACE('chlk.templates.admin', function(){
             ArrayOf(chlk.models.common.Role), 'roles',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.grading.GradeLevel), 'gradeLevels'
+            ArrayOf(chlk.models.grading.GradeLevel), 'gradeLevels',
+
+            OVERRIDE, chlk.models.common.Role, function getUserRole(){
+                return new chlk.models.common.Role(chlk.models.common.RoleEnum.ADMINGRADE, chlk.models.common.RoleNamesEnum.ADMINGRADE.valueOf());
+            }
     ]);
 });
