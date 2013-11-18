@@ -25,6 +25,8 @@ typesEnum = chlk.models.announcement.AnnouncementTypeEnum
 isAnnouncement = (self.isStandartAnnouncement() || self.isAdminAnnouncement())
 items = self.getSortedAppsAndAttachments();
 
++Hidden('attachments', self.getAttachments())
++Hidden('applicationsids', self.getApplicationsIds())
 if self.needButtons
     #attach-file-area.announcement-item.attach-file-area
         if !isAnnouncement
