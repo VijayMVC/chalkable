@@ -12,11 +12,13 @@ namespace Chalkable.StiConnector.Connectors
         public const string REQ_ON_FORMAT = "Request on: {0}";
         public string BaseUrl { get; private set; }
         public string Token { get; private set; }
+        public DateTime TokenExpires { get; private set; }
 
-        public ConnectorLocator(string token, string baseUrl)
+        public ConnectorLocator(string token, string baseUrl, DateTime tokenExpires)
         {
             Token = token;
             BaseUrl = baseUrl;
+            TokenExpires = tokenExpires;
             InitServices();
         }
 
@@ -45,9 +47,9 @@ namespace Chalkable.StiConnector.Connectors
             public int expires_in { get; set; }
         }
 
-        public static string GetToken(string userName, string password, string baseUrl)
+        public static string GetToken(string userName, string password, string baseUrl, out DateTime expires)
         {
-            
+            expires = DateTime.Now;
             var client = new WebClient();
             string credentials = string.Format("{0}:{1}", userName, password);
             byte[] credentialsBytes = Encoding.UTF8.GetBytes(credentials);
@@ -62,6 +64,7 @@ namespace Chalkable.StiConnector.Connectors
             using (var stream = new MemoryStream(client.DownloadData(url)))
             {
                 var tm = (TokenModel)ser.ReadObject(stream);
+                expires = expires.AddSeconds(tm.expires_in);
                 return tm.access_token;
             }
         }
@@ -69,7 +72,9 @@ namespace Chalkable.StiConnector.Connectors
 
         public static ConnectorLocator Create(string userName, string password, string baseUrl)
         {
-            return new ConnectorLocator(GetToken(userName, password, baseUrl), baseUrl);
+            DateTime expires;
+            var token = GetToken(userName, password, baseUrl, out expires);
+            return new ConnectorLocator(token, baseUrl, expires);
         }
     }
 }
