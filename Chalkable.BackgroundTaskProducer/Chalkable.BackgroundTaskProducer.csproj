@@ -88,7 +88,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="app.release.config" />
+    <None Include="app.release.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="app.staging.config" />
     <None Include="packages.config" />
   </ItemGroup>

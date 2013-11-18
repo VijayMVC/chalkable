@@ -39,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.School
             get
             {
                 if (connectorLocator == null)
-                    connectorLocator = new ConnectorLocator(Context.SisToken, Context.SisUrl);
+                    connectorLocator = new ConnectorLocator(Context.SisToken, Context.SisUrl, Context.SisTokenExpires.Value);
                 return connectorLocator;
             }
         }

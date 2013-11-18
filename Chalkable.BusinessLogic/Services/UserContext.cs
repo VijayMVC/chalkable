@@ -25,6 +25,7 @@ namespace Chalkable.BusinessLogic.Services
         public int? UserLocalId { get; set; }
         public string SisToken { get; set; }
         public string SisUrl { get; set; }
+        public DateTime? SisTokenExpires { get; set; }
 
         public DateTime NowSchoolTime
         {
@@ -38,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services
         public string OAuthApplication{ get; set; }
 
         public UserContext(Guid id, Guid? districtId, Guid? schoolId, string login, string schoolTimeZoneId, 
-            string schoolServerUrl, int? schoolLocalId, CoreRole role, Guid? developerId, int? localId, string sisToken, string sisUrl)
+            string schoolServerUrl, int? schoolLocalId, CoreRole role, Guid? developerId, int? localId, DateTime? sisTokenExpires, string sisUrl)
         {
             DistrictServerUrl = schoolServerUrl;
             UserId = id;
@@ -51,7 +52,7 @@ namespace Chalkable.BusinessLogic.Services
             SchoolLocalId = schoolLocalId;
             DeveloperId = developerId;
             UserLocalId = localId;
-            SisToken = sisToken;
+            SisTokenExpires = sisTokenExpires;
             SisUrl = sisUrl;
 
             if (schoolId.HasValue)
@@ -87,7 +88,7 @@ namespace Chalkable.BusinessLogic.Services
                     DistrictId.HasValue ? DistrictId.ToString() : string.Empty,
                     DeveloperId.HasValue ? DeveloperId.ToString() : string.Empty,
                     UserLocalId.HasValue ? UserLocalId.ToString() : string.Empty,
-                    SisToken ?? "",
+                    SisTokenExpires != null ? SisTokenExpires.ToString() : "",
                     SisUrl ?? ""
                 };
             return parameters.JoinString(DELIMITER.ToString(CultureInfo.InvariantCulture));
@@ -120,7 +121,7 @@ namespace Chalkable.BusinessLogic.Services
             Guid? developerId = null;
             int? localId = null;
             int? schoolLocalId = null;
-            string sisToken = null;
+            DateTime? sisTokenExpires = null;
             string sisUrl = null;
             if (schoolId.HasValue)
             {
@@ -132,12 +133,12 @@ namespace Chalkable.BusinessLogic.Services
                     developerId = Guid.Parse(sl[DEVELOPER_ID]);
                 if (!string.IsNullOrEmpty(sl[USER_LOCAL_ID]))
                     localId = int.Parse(sl[USER_LOCAL_ID]);
-                sisToken = sl[SIS_TOKEN];
+                sisTokenExpires = DateTime.Parse(sl[SIS_TOKEN]);
                 sisUrl = sl[SIS_URL];
             }
             var role = CoreRoles.GetById(int.Parse(sl[ROLE_ID]));
             
-            var res = new UserContext(userId, districtId, schoolId, login, schoolTimeZone, schoolServerUrl, schoolLocalId, role, developerId, localId, sisToken, sisUrl);
+            var res = new UserContext(userId, districtId, schoolId, login, schoolTimeZone, schoolServerUrl, schoolLocalId, role, developerId, localId, sisTokenExpires, sisUrl);
             return res;
         }
     }

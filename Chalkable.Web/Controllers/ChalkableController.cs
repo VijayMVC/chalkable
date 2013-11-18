@@ -86,6 +86,11 @@ namespace Chalkable.Web.Controllers
             if (chalkablePrincipal != null && chalkablePrincipal.Identity.IsAuthenticated
                 && !string.IsNullOrEmpty(chalkablePrincipal.Identity.Name))
             {
+                if (chalkablePrincipal.Context.SisTokenExpires < DateTime.Now)
+                {
+                    ChalkableAuthentication.SignOut();
+                    return;
+                }
                 context = chalkablePrincipal.Context;
             }
             InitServiceLocators(context);

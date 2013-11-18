@@ -7,7 +7,6 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 using Chalkable.StiConnector.Connectors;
@@ -106,6 +105,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             CoreRole role;
             Guid? developerId = null;
             string token = null;
+            DateTime? tokenExpires = null;
             string sisUrl = null;
 
             if (user.District != null && user.DistrictRef.HasValue)
@@ -133,6 +133,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                             var cl = ConnectorLocator.Create(user.SisUserName, user.OriginalPassword,
                                                              user.District.SisUrl);
                             token = cl.Token;
+                            tokenExpires = cl.TokenExpires;
                         }
                         sisUrl = user.District.SisUrl;
                     }
@@ -161,7 +162,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                 else
                     throw new Exception("User's role can not be defined");
             }
-            var res = new UserContext(user.Id, districtId, schoolId, user.Login, schoolTimeZone, schoolServerUrl, schoolLocalId, role, developerId, user.LocalId, token, sisUrl);
+            var res = new UserContext(user.Id, districtId, schoolId, user.Login, schoolTimeZone, schoolServerUrl, schoolLocalId, role, developerId, user.LocalId, tokenExpires, sisUrl);
+            res.SisToken = token;
             return res;
         }
 
