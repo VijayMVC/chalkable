@@ -453,7 +453,7 @@ NAMESPACE('chlk.controllers', function (){
                     announcementForm.setAnnouncement(model);
                     result = this.addEditAction(announcementForm, false);
                     this.saveAnnouncement(model);
-                    return this.UpdateView(this.getAnnouncementFormPageType_(), result);
+                    return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());
                 }else{
                     if(submitType == 'saveNoUpdate'){
                         this.saveAnnouncement(model);
@@ -516,18 +516,23 @@ NAMESPACE('chlk.controllers', function (){
                     model.getAttachments()
                 );
             else
-                res = this.announcementService.submitAnnouncement(
-                    model.getId(),
-                    model.getClassId(),
-                    model.getAnnouncementTypeId(),
-                    model.getSubject(),
-                    model.getContent(),
-                    model.getExpiresDate(),
-                    model.getAttachments(),
-                    model.getApplications(),
-                    model.getMarkingPeriodId()
-                );
-            res.then(function(){
+                if((!model.getAttachments() || !model.getAttachments().length) && (!model.getApplications() ||
+                    !model.getApplications().length) && !model.getContent()){
+                        this.ShowMsgBox('You should fill in Assignment\nor add attachment or application', 'whoa.');
+                }else{
+                    res = this.announcementService.submitAnnouncement(
+                        model.getId(),
+                        model.getClassId(),
+                        model.getAnnouncementTypeId(),
+                        model.getSubject(),
+                        model.getContent(),
+                        model.getExpiresDate(),
+                        model.getAttachments(),
+                        model.getApplications(),
+                        model.getMarkingPeriodId()
+                    );
+                }
+            res && res.then(function(){
                 if(isEdit)
                     this.Redirect('announcement', 'view', [model.getId()]);
                 else{

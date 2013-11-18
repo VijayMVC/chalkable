@@ -2,7 +2,7 @@
 @import "compass/css3/images";
 @import "compass/css3/box-shadow";
 
-.hasDatepicker:not(.no-marker){
+.hasDatepicker:not(.no-marker), .date-picker-container input{
   font: bold 16px Arial;
   padding-left: 6px;
   color: #808080;

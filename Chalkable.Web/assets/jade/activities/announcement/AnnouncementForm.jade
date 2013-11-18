@@ -24,7 +24,7 @@ classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
                     value="save"
                     ).action-button= item.getDescription()
         .ann-form-container(class=(classId && typeId ? '' : 'x-hidden'))
-            +BaseAnnouncementFormContainer(announcement, classId)
+            +BaseAnnouncementFormContainer(announcement, classId, null, null, self.getUserRole())
         .choose-type(class=(classId && !typeId ? '' : 'x-hidden'))
         .choose-class(class=(classId ? 'x-hidden' : ''))
     +AddEditReminderForm(announcement, self.reminders)
