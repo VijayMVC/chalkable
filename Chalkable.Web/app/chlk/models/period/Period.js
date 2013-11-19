@@ -23,6 +23,12 @@ NAMESPACE('chlk.models.period', function () {
             String, function getSerialOrder(){
                 var order = this.getOrder();
                 return order && getSerial(order);
+            },
+            [[String, Boolean]],
+            String, function displayPeriodTimeRange(separatorBetweenTimes_, isRegularTime_){
+                separatorBetweenTimes_ = separatorBetweenTimes_ || ' - ';
+                return this.getStartTime().format(isRegularTime_) + separatorBetweenTimes_
+                    + this.getEndTime().format(isRegularTime_);
             }
         ]);
 });
