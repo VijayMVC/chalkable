@@ -54,7 +54,7 @@ NAMESPACE('chlk.controllers', function (){
                         case 3: str = 'r&#100;';break;
                         default: str = 'st';
                     }
-                    res = 'M d' + str + ' y';
+                    res = 'M d' + str + ' yy';
                 }
 
                 var phones = model.getPhones();
