@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
+using Chalkable.Web.ActionFilters;
 
 namespace Chalkable.Web
 {
@@ -7,7 +8,7 @@ namespace Chalkable.Web
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            filters.Add(new AjaxHandleErrorAttribute());
         }
     }
 }

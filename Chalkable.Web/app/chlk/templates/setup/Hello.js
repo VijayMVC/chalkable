@@ -1,7 +1,7 @@
 REQUIRE('chlk.templates.ChlkTemplate');
 
 REQUIRE('chlk.models.people.User');
-REQUIRE('chlk.templates.people.User');
+REQUIRE('chlk.templates.people.UserTpl');
 
 NAMESPACE('chlk.templates.setup', function () {
 
@@ -9,5 +9,5 @@ NAMESPACE('chlk.templates.setup', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/setup/Hello.jade')],
         [ria.templates.ModelBind(chlk.models.people.User)],
-        'Hello', EXTENDS(chlk.templates.people.User), [])
+        'Hello', EXTENDS(chlk.templates.people.UserTpl), [])
 });
