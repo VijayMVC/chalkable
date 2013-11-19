@@ -27,10 +27,22 @@
                                             .course-icon
                                                 +ClassImg(null, 24, 48).avatar.course-icon
                                             .text-container
-                                                p.typename=anns[0].getAnnouncementTypeName()
-                                                p.title=anns[0].getClassName()
+                                                p(
+                                                    data-tooltip = anns[0].getAnnouncementTypeName(),
+                                                    data-tooltip-type = 'overflow'
+                                                ).typename=anns[0].getAnnouncementTypeName()
+                                                p(
+                                                    data-tooltip = anns[0].getClassName(),
+                                                    data-tooltip-type = 'overflow'
+                                                ).title=anns[0].getClassName()
                                 if anns.length > 1
                                     li
                                         .more-announcements-item
-                                            p.typename #{anns.length} #{Msg.Item(true)}
-                                            p.title=anns[0].getTitle()
+                                            p(
+                                                data-tooltip = anns.length + ' ' + Msg.Item(true),
+                                                data-tooltip-type = 'overflow'
+                                            ).typename #{anns.length} #{Msg.Item(true)}
+                                            p(
+                                                data-tooltip = anns[0].getTitle(),
+                                                data-tooltip-type = 'overflow'
+                                            ).title=anns[0].getTitle()
