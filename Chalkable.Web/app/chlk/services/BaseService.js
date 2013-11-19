@@ -59,7 +59,12 @@ NAMESPACE('chlk.services', function () {
                 if(!data.success){
                     this.redirectToErrorPage();
                 }
-                //throw chlk.services.DataException('Server error', Error(data.message));
+            },
+
+            function prepareDefaultHeaders(headers){
+                var result = headers || {};
+                result["X-Requested-With"] = "XMLHttpRequest";
+                return result;
             },
 
             function redirectToErrorPage(){
@@ -76,6 +81,7 @@ NAMESPACE('chlk.services', function () {
 
                 return new ria.ajax.JsonGetTask(this.resolveUri(uri))
                     .params(gParams_ || {})
+                    .requestHeaders(this.prepareDefaultHeaders({}))
                     .run()
                     .then(function (data) {
                         this.handleError(data);
@@ -94,10 +100,10 @@ NAMESPACE('chlk.services', function () {
 
                 return new chlk.lib.ajax.UploadFileTask(this.resolveUri(uri), files)
                     .params(gParams_ || {})
+                    .requestHeaders(this.prepareDefaultHeaders({}))
                     .run()
                     .then(function (data) {
                         this.handleError(data);
-
                         if (!clazz_)
                             return data.data || null;
 
@@ -111,7 +117,7 @@ NAMESPACE('chlk.services', function () {
 
                 return new chlk.lib.ajax.ChlkJsonPostTask(this.resolveUri(uri))
                     .params(gParams)
-                    .requestHeaders({"Content-Type": "application/json; charset=utf-8"})
+                    .requestHeaders(this.prepareDefaultHeaders({"Content-Type": "application/json; charset=utf-8"}))
                     .run()
                     .then(function (data) {
                         this.handleError(data);
@@ -133,10 +139,10 @@ NAMESPACE('chlk.services', function () {
 
                 return new chlk.lib.ajax.ChlkJsonPostTask(this.resolveUri(uri))
                     .params(gParams)
-                    .requestHeaders({
+                    .requestHeaders(this.prepareDefaultHeaders({
                         "Content-Type": "application/json; charset=utf-8",
                         "Authorization": "Bearer:" + token
-                    })
+                    }))
                     .run()
                     .then(function (data) {
                         var result = {};
@@ -157,7 +163,7 @@ NAMESPACE('chlk.services', function () {
 
                 return new chlk.lib.ajax.ChlkJsonPostTask(this.resolveUri(uri))
                     .params(gParams)
-                    .requestHeaders({"Content-Type": "application/json; charset=utf-8"})
+                    .requestHeaders(this.prepareDefaultHeaders({"Content-Type": "application/json; charset=utf-8"}))
                     .run()
                     .then(function (data) {
                         this.handleError(data);
@@ -171,6 +177,7 @@ NAMESPACE('chlk.services', function () {
 
                 return new ria.ajax.JsonGetTask(this.resolveUri(uri))
                     .params(gParams)
+                    .requestHeaders(this.prepareDefaultHeaders({}))
                     .run()
                     .then(function (data) {
                         this.handleError(data);
@@ -186,6 +193,7 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function getPaginatedList(uri, clazz, gParams) {
                 return new ria.ajax.JsonGetTask(this.resolveUri(uri))
                     .params(gParams)
+                    .requestHeaders(this.prepareDefaultHeaders({}))
                     .run()
                     .then(function (data) {
                         var model = new chlk.models.common.PaginatedList(clazz);
