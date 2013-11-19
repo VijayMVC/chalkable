@@ -1,0 +1,23 @@
+.school-person-list
+    +ActionForm('admins', 'updateList')#people-list-form
+        +Button()(type="submit").x-hidden
+        .loader-container
+            .loader
+            .action-bar.not-transparent.buttons.people-top-bar
+                .container.panel-bg
+                    .left
+                        +ActionLink('report', 'peopleExport').export-btn
+                    .right
+                        .action-button.select-btn
+                            +Select('roleId')#roleId
+                                +Option('', 'All Roles', true)
+                                each item in self.roles
+                                    +Option(item.getRoleId().valueOf(), item.getRoleName())
+                        .action-button.select-btn
+                            +Select('gradeLevelsIds')#gradeLevelId
+                                +Option('', 'All Grade Levels', true)
+                                each item in self.gradeLevels
+                                    +Option(item.getId().valueOf().toString(), item.getName())
+            +RenderWith(self.getUsersList(), chlk.templates.people.UsersList)(
+                userRole = self.getUserRole()
+            )
