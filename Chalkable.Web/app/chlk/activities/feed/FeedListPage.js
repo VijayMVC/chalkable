@@ -33,6 +33,7 @@ NAMESPACE('chlk.activities.feed', function () {
             Boolean, function announcementClick(node, event){
                 var item = node.parent('.feed-item');
                 var clone = item.clone();
+                clone.addClass('animated-item');
                 clone = clone.wrap('<div class="moving-wrapper"></div>').parent();
                 clone.setCss('left', item.offset().left - 4);
                 clone.setCss('top', item.offset().top);

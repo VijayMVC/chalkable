@@ -113,6 +113,20 @@ $star-size: 18px;
   background: url(images/feed/item-bg.png) 0 top repeat-x;
   @include border-radius(7px);
 
+  &.animated-item{
+    DIV.item-type{
+      DIV.attachment{
+        h2{
+          padding-top: 33px;
+        }
+
+        .animated{
+          opacity: 0;
+        }
+      }
+    }
+  }
+
   &.is-admin{
     padding-left: 15px;
     width: 643px;
