@@ -1,6 +1,6 @@
 REQUIRE('chlk.activities.person.PersonGrid');
-REQUIRE('chlk.templates.people.UsersForGrid');
-REQUIRE('chlk.templates.people.UsersGrid');
+REQUIRE('chlk.templates.people.UsersForGridTpl');
+REQUIRE('chlk.templates.people.UsersGridTpl');
 REQUIRE('chlk.templates.admin.SchoolPersonListTpl');
 
 NAMESPACE('chlk.activities.admin', function (){
@@ -9,8 +9,8 @@ NAMESPACE('chlk.activities.admin', function (){
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.admin.SchoolPersonListTpl)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.people.UsersGrid, '', '.grid-container', ria.mvc.PartialUpdateRuleActions.Replace)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.people.UsersForGrid, chlk.activities.lib.DontShowLoader(), '.people-list', ria.mvc.PartialUpdateRuleActions.Append)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.people.UsersGridTpl, '', '.grid-container', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.people.UsersForGridTpl, chlk.activities.lib.DontShowLoader(), '.people-list', ria.mvc.PartialUpdateRuleActions.Append)],
         'PeoplePage', EXTENDS(chlk.activities.person.PersonGrid), [
 
             [ria.mvc.DomEventBind('change', '#roleId')],

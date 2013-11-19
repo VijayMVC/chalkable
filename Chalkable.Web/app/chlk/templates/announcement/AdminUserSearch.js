@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.people.User');
+REQUIRE('chlk.templates.people.UserTpl');
 
 NAMESPACE('chlk.templates.announcement', function () {
 
@@ -6,5 +6,5 @@ NAMESPACE('chlk.templates.announcement', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AdminUserSearch.jade')],
         [ria.templates.ModelBind(chlk.models.people.User)],
-        'AdminUserSearch', EXTENDS(chlk.templates.people.User), [])
+        'AdminUserSearch', EXTENDS(chlk.templates.people.UserTpl), [])
 });

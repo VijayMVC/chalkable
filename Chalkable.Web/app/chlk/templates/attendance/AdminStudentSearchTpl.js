@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.people.User');
+REQUIRE('chlk.templates.people.UserTpl');
 
 NAMESPACE('chlk.templates.attendance', function () {
 
@@ -6,5 +6,5 @@ NAMESPACE('chlk.templates.attendance', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/attendance/AdminStudentSearch.jade')],
         [ria.templates.ModelBind(chlk.models.people.User)],
-        'AdminStudentSearchTpl', EXTENDS(chlk.templates.people.User), [])
+        'AdminStudentSearchTpl', EXTENDS(chlk.templates.people.UserTpl), [])
 });
