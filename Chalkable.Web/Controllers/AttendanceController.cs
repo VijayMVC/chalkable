@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
@@ -78,6 +79,20 @@ namespace Chalkable.Web.Controllers
             }
             listClassAttendance.Sort((x, y) => string.CompareOrdinal(x.Student.LastName, y.Student.LastName));
             return Json(new PaginatedList<ClassAttendanceViewData>(listClassAttendance, 0, int.MaxValue));
+        }
+
+        public ActionResult AttendanceTest()
+        {
+            if (Session["CONTEXT"] == null)
+            {
+                var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
+                var c = serviceLocator.UserService.Login("user1195_6cf8e8ab-2cae-4d17-8b7c-59bc3b1134fe@chalkable.com",
+                                                         "Qwerty1@");
+                Session["CONTEXT"] = c;
+            }
+            var context = Session["CONTEXT"] as UserContext;
+            InitServiceLocators(context);
+            return ClassList(new DateTime(2013, 11, 18), 635);
         }
 
 
