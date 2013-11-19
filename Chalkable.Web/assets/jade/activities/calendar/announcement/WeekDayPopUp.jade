@@ -12,7 +12,7 @@
                 a Rm #{roomNumber}
             br
         p.day-down
-            a #{period.getStartTime()} #{period.getEndTime()}
+            a #{period.displayPeriodTimeRange()}
         br
         p.day-down
             a=self.getDate().format('DD, MM d')
