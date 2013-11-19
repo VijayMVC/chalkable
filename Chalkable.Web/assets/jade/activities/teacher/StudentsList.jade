@@ -16,7 +16,7 @@
         input(type="hidden", name="my", value=(self.isMy() ? 'true' : 'false')))
         input(type="hidden", name="classId", value=self.getTopData().getSelectedItemId()))
         .users-list-container
-            +RenderWith(self.getUsersList(), chlk.templates.people.UsersList)(
+            +RenderWith(self.getUsersList(), chlk.templates.people.UsersListTpl)(
                 my = self.isMy(),
                 userRole = self.getUserRole()
             )

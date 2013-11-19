@@ -71,7 +71,7 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.calendarService
                 .getDayInfo(date_)
                 .attach(this.validateResponse_());
-            return this.PushView(chlk.activities.calendar.announcement.DayPage, result);
+            return this.PushOrUpdateView(chlk.activities.calendar.announcement.DayPage, result);
         },
 
         [[chlk.models.common.ChlkDate, String]],
@@ -85,7 +85,7 @@ NAMESPACE('chlk.controllers', function (){
                     data.setGradeLevelsInputData(glsInputData);
                     return data;
                 }, this);
-            return this.PushView(chlk.activities.calendar.announcement.AdminDayCalendarPage, result);
+            return this.PushOrUpdateView(chlk.activities.calendar.announcement.AdminDayCalendarPage, result);
         },
 
         [[chlk.models.common.ChlkDate, String]],
@@ -100,7 +100,6 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.common.ChlkDate, chlk.models.id.ClassId, String]],
         function week(date_, classId_, gradeLevels_){
-            var markingPeriod = this.getCurrentMarkingPeriod();
             var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);
             var glsInputData = new chlk.models.grading.GradeLevelsForTopBar(gradeLevels, gradeLevels_);
 
@@ -116,7 +115,7 @@ NAMESPACE('chlk.controllers', function (){
                     return new ria.async.DeferredData(model);
                 }.bind(this));
 
-            return this.PushView(chlk.activities.calendar.announcement.WeekPage, result);
+            return this.PushOrUpdateView(chlk.activities.calendar.announcement.WeekPage, result);
         },
 
         [chlk.controllers.SidebarButton('calendar')],
@@ -150,7 +149,7 @@ NAMESPACE('chlk.controllers', function (){
                     return new ria.async.DeferredData(model);
                 }.bind(this));
 
-            return this.PushView(chlk.activities.calendar.announcement.MonthPage, result);
+            return this.PushOrUpdateView(chlk.activities.calendar.announcement.MonthPage, result);
         }
     ])
 });

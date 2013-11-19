@@ -275,6 +275,7 @@ NAMESPACE('chlk.activities.attendance', function () {
             [ria.mvc.DomEventBind('click', '#submit-attendance-button')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function submitClick(node, event){
+                jQuery(node.valueOf()[0]).text('SAVING');
                 var attendancesNode = this.dom.find('input[name="attendancesJson"]');
                 attendancesNode.setValue(JSON.stringify(this.getAttendances_()));
             }

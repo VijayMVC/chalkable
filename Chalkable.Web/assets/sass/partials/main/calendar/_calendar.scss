@@ -692,18 +692,20 @@ BODY {
                           }
 
                           P.title{
-                            color: white !important;
-                            text-align: center;
-                            font-family: Arial;
                             font-size: 8.67px;
                           }
 
                           P.typename{
+                            font-weight: bold;
+                            font-size: 12px;
+                          }
+
+                          P.title, P.typename{
                             color: white !important;
                             text-align: center;
                             font-family: Arial;
-                            font-weight: bold;
-                            font-size: 12px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
                           }
 
                           >DIV{

@@ -4,11 +4,11 @@ REQUIRE('chlk.models.people.User');
 
 NAMESPACE('chlk.templates.people', function () {
 
-    /** @class chlk.templates.people.UsersForGrid*/
+    /** @class chlk.templates.people.UsersForGridTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/people/UsersForGrid.jade')],
         [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
-        'UsersForGrid', EXTENDS(chlk.templates.PaginatedList), [
+        'UsersForGridTpl', EXTENDS(chlk.templates.PaginatedList), [
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.people.User), 'items'
         ])

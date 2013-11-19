@@ -2,11 +2,11 @@ REQUIRE('chlk.models.people.UsersList');
 
 NAMESPACE('chlk.templates.people', function () {
 
-    /** @class chlk.templates.people.UsersList*/
+    /** @class chlk.templates.people.UsersListTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/people/UsersList.jade')],
         [ria.templates.ModelBind(chlk.models.people.UsersList)],
-        'UsersList', EXTENDS(chlk.templates.ChlkTemplate), [
+        'UsersListTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.common.PaginatedList, 'users',
             [ria.templates.ModelPropertyBind],

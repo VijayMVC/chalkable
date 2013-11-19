@@ -173,6 +173,13 @@ NAMESPACE('chlk.controllers', function (){
            [[ria.mvc.IActivity]],
            OVERRIDE, function prepareActivity_(activity){
               activity.setRole && activity.setRole(this.getCurrentRole());
+           },
+
+           [[ImplementerOf(ria.mvc.IActivity), ria.async.Future, String]],
+           function PushOrUpdateView(clazz, data, msg_){
+               if(this.view.contains(clazz))
+                   return this.UpdateView(clazz, data, msg_);
+               return this.PushView(clazz, data);
            }
 
    ])

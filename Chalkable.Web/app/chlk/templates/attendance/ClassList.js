@@ -47,9 +47,14 @@ NAMESPACE('chlk.templates.attendance', function () {
             ArrayOf(chlk.models.common.ActionLinkModel), function getLinksDataForRightSide(){
                 return [
                     new this.createActionLinkModel_('classList', Msg.List, true),
-                    new this.createActionLinkModel_('classList', Msg.Room),
-                    new this.createActionLinkModel_('classList', Msg.Card)
+                    new this.createActionLinkModel_('classList', 'Seat chart')
                 ];
+            },
+
+            ArrayOf(chlk.models.attendance.ClassAttendance), function getPresentStudents(){
+                return this.getItems().filter(function(_){
+                    return _.getType() == chlk.models.attendance.AttendanceTypeEnum.PRESENT.valueOf();
+                });
             }
         ]);
 });

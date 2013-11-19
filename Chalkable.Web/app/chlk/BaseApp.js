@@ -124,9 +124,16 @@ NAMESPACE('chlk', function (){
 
                 //TODO Remove jQuery
                 jQuery(document).on('mouseover', '[data-tooltip]', function(){
-                    var node = jQuery(this), tooltip = jQuery('#chlk-tooltip-item'), offset = node.offset();
+                    var node = jQuery(this),
+                        tooltip = jQuery('#chlk-tooltip-item'),
+                        offset = node.offset(),
+                        showTooltip = true;
                     var value = node.data('tooltip');
-                    if(value){
+                    var type = node.data('tooltip-type');
+                    if(type == "overflow"){
+                        showTooltip = this.scrollWidth > node.width();
+                    }
+                    if(value && showTooltip){
                         tooltip.show();
                         tooltip.find('.tooltip-content').html(node.data('tooltip'));
                         tooltip.css('left', offset.left + (node.width() - tooltip.width())/2)

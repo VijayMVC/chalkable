@@ -33,4 +33,4 @@
                             +Select('gradeLevelId')#gradeLevelId
                                 each item in gradeLevels
                                     +Option(item.getId(), item.getName())
-                +RenderWith(self.getUsersList(), chlk.templates.people.UsersList)
+                +RenderWith(self.getUsersList(), chlk.templates.people.UsersListTpl)

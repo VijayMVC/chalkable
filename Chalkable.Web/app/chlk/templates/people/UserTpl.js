@@ -6,11 +6,11 @@ REQUIRE('chlk.models.id.SchoolId');
 
 NAMESPACE('chlk.templates.people', function () {
 
-    /** @class chlk.templates.people.User*/
+    /** @class chlk.templates.people.UserTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/profile/InfoView.jade')],
         [ria.templates.ModelBind(chlk.models.people.User)],
-        'User', EXTENDS(chlk.templates.ChlkTemplate), [
+        'UserTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             Boolean, 'active',
 

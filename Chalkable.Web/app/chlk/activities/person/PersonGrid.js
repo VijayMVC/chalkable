@@ -1,14 +1,14 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
-REQUIRE('chlk.templates.people.UsersList');
-REQUIRE('chlk.templates.people.UsersForGrid');
-REQUIRE('chlk.templates.people.UsersGrid');
+REQUIRE('chlk.templates.people.UsersListTpl');
+REQUIRE('chlk.templates.people.UsersForGridTpl');
+REQUIRE('chlk.templates.people.UsersGridTpl');
 
 NAMESPACE('chlk.activities.person', function () {
 
     /** @class chlk.activities.person.PersonGrid */
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
-        [ria.mvc.TemplateBind(chlk.templates.people.UsersList)],
+        [ria.mvc.TemplateBind(chlk.templates.people.UsersListTpl)],
         'PersonGrid', EXTENDS(chlk.activities.lib.TemplatePage), [
             [ria.mvc.DomEventBind('mouseover mouseleave', '.people-search-img')],
             [[ria.dom.Dom, ria.dom.Event]],
