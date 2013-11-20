@@ -118,6 +118,7 @@ namespace Chalkable.Data.Master.DataAccess
             return GetUser(conds);
         }
 
+        
         public User GetUser(string login, string password, Guid? id)
         {
             var conds = new Dictionary<string, object>();

@@ -18,6 +18,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         UserContext Login(string login, string password);
         UserContext Login(string confirmationKey);
         UserContext LoginToDemo(string roleName, string demoPrefix);
+        UserContext SisLogIn(Guid districtId, string token, DateTime tokenExpiresTime);
         UserContext ReLogin(Guid id);
         User GetByLogin(string login);
         User GetById(Guid id);
@@ -103,7 +104,30 @@ namespace Chalkable.BusinessLogic.Services.Master
             return null;
         }
 
-        private UserContext Login(User user, UnitOfWork uow)
+
+        public UserContext SisLogIn(Guid districtId, string token, DateTime tokenExpiresTime)
+        {
+            using (var uow = Update())
+            {
+                var district = new DistrictDataAccess(uow).GetById(districtId);
+                var iNowCl = new ConnectorLocator(token, district.SisUrl, tokenExpiresTime);
+                var iNowUser = iNowCl.UsersConnector.GetMe();
+                UserContext res = null;
+                if (!string.IsNullOrEmpty(iNowUser.Username))
+                {
+                    var chlkUser = new UserDataAccess(uow).GetUser(new Dictionary<string, object>
+                    {
+                        {User.SIS_USER_NAME_FIELD, iNowUser.Username},
+                        {User.DISTRICT_REF_FIELD, districtId}
+                    });
+                    res = Login(chlkUser, uow, iNowCl);
+                }
+                uow.Commit();
+                return res;
+            }
+        }
+
+        private UserContext Login(User user, UnitOfWork uow, ConnectorLocator iNowConnector = null)
         {
             if (user == null) return null;
             Guid? schoolId = null;
@@ -137,12 +161,14 @@ namespace Chalkable.BusinessLogic.Services.Master
                         }
                         if (user.SisUserName != null)
                         {
-                            if (user.OriginalPassword == null)
-                                throw new ChalkableException("Sis connection requires not encripted password");
-                            var cl = ConnectorLocator.Create(user.SisUserName, user.OriginalPassword,
-                                                             user.District.SisUrl);
-                            token = cl.Token;
-                            tokenExpires = cl.TokenExpires;
+                            if (iNowConnector == null)
+                            {
+                                if (user.OriginalPassword == null)
+                                    throw new ChalkableException("Sis connection requires not encripted password");
+                                iNowConnector = ConnectorLocator.Create(user.SisUserName, user.OriginalPassword, user.District.SisUrl);   
+                            }
+                            token = iNowConnector.Token;
+                            tokenExpires = iNowConnector.TokenExpires;
                         }
                         sisUrl = user.District.SisUrl;
                     }
@@ -323,5 +349,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 return new UserDataAccess(uow).GetSysAdmin();
             }
         }
+
+
     }
 }

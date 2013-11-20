@@ -31,9 +31,9 @@ namespace Chalkable.StiConnector.Connectors
             MemoryStream stream = null;
             try
             {
-                //var data = client.DownloadData(url);
+                var data = client.DownloadData(url);
                 Thread.Sleep(500);
-                var data = Encoding.UTF8.GetBytes(mockResp);
+               // var data = Encoding.UTF8.GetBytes(mockResp);
                 stream = new MemoryStream(data);
 
                 var serializer = new JsonSerializer();
@@ -90,6 +90,17 @@ namespace Chalkable.StiConnector.Connectors
         protected string BaseUrl
         {
             get { return locator.BaseUrl; }
+        }
+    }
+
+    public class UsersConnector: ConnectorBase
+    {
+        public UsersConnector(ConnectorLocator locator) : base(locator)
+        {
+        }
+        public User GetMe()
+        {
+            return Call<User>(string.Format("{0}{1}/me", BaseUrl, "users"));
         }
     }
 

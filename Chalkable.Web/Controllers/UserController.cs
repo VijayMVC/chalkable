@@ -13,6 +13,15 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class UserController : ChalkableController
     {
+        public ActionResult SisLogIn(string token, Guid district, DateTime? tokenExpiresTime)
+        {
+            var expiresTime = tokenExpiresTime ?? DateTime.UtcNow.AddDays(2);
+            var context = LogOn(false, us => us.SisLogIn(district, token, expiresTime));
+            if(context != null)
+                return Json(new { Success = true, data = new { Role = context.Role.LoweredName } }, JsonRequestBehavior.AllowGet);
+            return Json(new { Success = false, Message = "Invalid user token" }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult LogOn(string userName, string password, bool remember)
         {
             var context = LogOn(remember, us => us.Login(userName, password));

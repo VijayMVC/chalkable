@@ -24,6 +24,7 @@ namespace Chalkable.StiConnector.Connectors
 
         private void InitServices()
         {
+            UsersConnector = new UsersConnector(this);
             SchoolConnector = new SchoolConnector(this);
             AcadSessionConnector = new AcadSessionConnector(this);
             StudentConnector = new StudentConnector(this);
@@ -33,6 +34,7 @@ namespace Chalkable.StiConnector.Connectors
             AttendanceConnector = new AttendanceConnector(this);
         }
 
+        public UsersConnector UsersConnector { get; private set; }
         public SchoolConnector SchoolConnector { get; private set; }
         public AcadSessionConnector AcadSessionConnector { get; private set; }
         public StudentConnector StudentConnector { get; private set; }

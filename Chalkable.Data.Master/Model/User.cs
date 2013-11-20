@@ -12,6 +12,7 @@ namespace Chalkable.Data.Master.Model
         public const string IS_SYS_ADMIN_FIELD = "IsSysAdmin";
         public const string LOGIN_FIELD = "Login";
         public const string PASSWORD_FIELD = "Password";
+        public const string SIS_USER_NAME_FIELD = "SisUserName";
 
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
