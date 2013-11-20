@@ -15,6 +15,7 @@ REQUIRE('chlk.models.apps.AppTotalPrice');
 
 REQUIRE('chlk.models.apps.AppPriceType');
 REQUIRE('chlk.models.apps.AppSortingMode');
+REQUIRE('chlk.models.funds.PersonBalance');
 
 
 
@@ -210,9 +211,16 @@ NAMESPACE('chlk.services', function () {
                         classids: this.arrayToCsv(classes),
                         roleIds: this.arrayToCsv(roles),
                         gradelevelids: this.arrayToCsv(gradeLevels)
-                    });
+                    })
+                    .then(function(totalPrice){
+                        this.getContext().getSession().set('selectedAppTotalPrice', totalPrice);
+                        return totalPrice;
+                    }, this);
             },
 
+            chlk.models.apps.AppTotalPrice, function getSelectedAppTotalPrice(){
+                return this.getContext().getSession().get('selectedAppTotalPrice', new chlk.models.apps.AppTotalPrice);
+            },
 
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function getPersonBalance(personId, refresh_) {

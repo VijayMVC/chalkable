@@ -287,27 +287,34 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.apps.AppInstallPostData]],
         function installAction(appInstallData) {
-            var userBalance = this.appMarketService.getPersonBalance(this.getCurrentPerson().getId());
-
+            var totalAppPrice = this.appMarketService.getSelectedAppTotalPrice().getTotalPrice() || 0;
 
             return this.appMarketService
-                .installApp(
-                    appInstallData.getAppId(),
-                    this.getIdsList(appInstallData.getDepartments(), chlk.models.id.AppInstallGroupId),
-                    this.getIdsList(appInstallData.getClasses(), chlk.models.id.AppInstallGroupId),
-                    this.getIdsList(appInstallData.getRoles(), chlk.models.id.AppInstallGroupId),
-                    this.getIdsList(appInstallData.getGradeLevels(), chlk.models.id.AppInstallGroupId),
-                    appInstallData.getCurrentPerson()
-                )
-                .then(function(result){
-                    var title = result ? "Installation successful" : "Error while installing app.";
-                       return this.ShowMsgBox(title, '', [{
-                           text: 'Ok',
-                           controller: 'appmarket',
-                           action: 'myApps',
-                           params: [],
-                           color: chlk.models.common.ButtonColor.GREEN.valueOf()
-                       }], 'center');
+                .getPersonBalance(this.getCurrentPerson().getId())
+                .then(function(personBalance){
+                    var userBalance = personBalance.getBalance();
+                    if (totalAppPrice > userBalance){
+                       return this.ShowMsgBox('You have insufficient funds to buy this app', 'Error');
+                    }
+                    return this.appMarketService
+                        .installApp(
+                            appInstallData.getAppId(),
+                            this.getIdsList(appInstallData.getDepartments(), chlk.models.id.AppInstallGroupId),
+                            this.getIdsList(appInstallData.getClasses(), chlk.models.id.AppInstallGroupId),
+                            this.getIdsList(appInstallData.getRoles(), chlk.models.id.AppInstallGroupId),
+                            this.getIdsList(appInstallData.getGradeLevels(), chlk.models.id.AppInstallGroupId),
+                            appInstallData.getCurrentPerson()
+                        )
+                        .then(function(result){
+                            var title = result ? "Installation successful" : "Error while installing app.";
+                               return this.ShowMsgBox(title, '', [{
+                                   text: 'Ok',
+                                   controller: 'appmarket',
+                                   action: 'myApps',
+                                   params: [],
+                                   color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                               }], 'center');
+                        }, this);
                 }, this)
                 .attach(this.validateResponse_());
         },
