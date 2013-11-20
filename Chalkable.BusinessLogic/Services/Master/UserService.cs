@@ -7,6 +7,7 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 using Chalkable.StiConnector.Connectors;
@@ -115,7 +116,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 UserContext res = null;
                 if (!string.IsNullOrEmpty(iNowUser.Username))
                 {
-                    var chlkUser = new UserDataAccess(uow).GetUser(new Dictionary<string, object>
+                    var chlkUser = new UserDataAccess(uow).GetUser(new AndQueryCondition
                     {
                         {User.SIS_USER_NAME_FIELD, iNowUser.Username},
                         {User.DISTRICT_REF_FIELD, districtId}

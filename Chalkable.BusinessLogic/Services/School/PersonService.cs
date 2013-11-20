@@ -23,6 +23,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Person GetPerson(int id);
         PersonDetails GetPersonDetails(int id);
         void ActivatePerson(int id);
+        Person EditEmail(int id, string email);
     }
     
     public class PersonService : SchoolServiceBase, IPersonService
@@ -200,6 +201,35 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
                 return res;
             }
+        }
+
+        public Person EditEmail(int id, string email)
+        {
+            using (var uow = Update())
+            {
+                var res = EditEmail(new PersonDataAccess(uow, Context.SchoolLocalId), id, email);
+                uow.Commit();
+                return res;
+            }
+        }
+
+        private Person EditEmail(PersonDataAccess dataAccess, int id, string email)
+        {
+            var res = GetPerson(id);
+            if (!(BaseSecurity.IsAdminEditorOrCurrentPerson(id, Context) || Context.Role == CoreRoles.TEACHER_ROLE && res.RoleRef == CoreRoles.STUDENT_ROLE.Id))
+                throw new ChalkableSecurityException();
+            var otherUser = ServiceLocator.ServiceLocatorMaster.UserService.GetByLogin(res.Email);
+            if (res.Email != email)
+            {
+                if (otherUser != null && otherUser.LocalId != id)
+                    return null;
+                ServiceLocator.ServiceLocatorMaster.EmailService.SendChangedEmailToPerson(res, email);
+                var user = ServiceLocator.ServiceLocatorMaster.UserService.GetByLogin(res.Email);
+                ServiceLocator.ServiceLocatorMaster.UserService.ChangeUserLogin(user.Id, email);
+                res.Email = email;
+                dataAccess.Update(res);
+            }
+            return res;
         }
 
         private Person Edit(PersonDataAccess dataAccess, int localId, string email, string firstName

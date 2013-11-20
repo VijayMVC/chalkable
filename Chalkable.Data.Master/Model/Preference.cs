@@ -103,6 +103,7 @@ namespace Chalkable.Data.Master.Model
         public const string ACTION_LINK_EMAIL_BODY = "actionlinkemailbody";
         public const string STUDENT_INVITE_EMAIL_BODY = "studentinviteemailbody";
         public const string TEACHER_INVITE_EMAIL_BODY = "teacherinviteemailbody";
+        public const string EMAIL_CHANGE_EMAIL_BODY = "emailchangeemailbody";
 
         public const string ATTENDANCE_SYNC_FAIL_EMAIL_BODY = "attendacesyncfailemailbody";
 

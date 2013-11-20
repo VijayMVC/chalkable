@@ -57,7 +57,7 @@ NAMESPACE('chlk.controllers', function (){
                     res = 'M d' + str + ' yy';
                 }
 
-                var phones = model.getPhones();
+                var phones = model.getPhones() || [];
                 var address = model.getAddress();
                 var phonesValue = [], addressesValue = null;
 
@@ -169,8 +169,18 @@ NAMESPACE('chlk.controllers', function (){
                         return new chlk.models.people.UserProfileAppsViewData(this.getCurrentRole(), model);
                     }, this);
                 return this.PushView(chlk.activities.profile.SchoolPersonAppsPage, res);
+            },
+
+            [[chlk.models.people.User]],
+            function infoEditAction(model){
+                var result;
+                result = this.personService
+                    .updateInfo(model.getId(), model.getEmail(), model.getPhonesValue())
+                    .attach(this.validateResponse_())
+                    .then(function(model){
+                    return this.prepareUserProfileModel_(model);
+                }.bind(this));
+                return this.UpdateView(chlk.activities.profile.SchoolPersonInfoPage, result);
             }
-
-
         ])
 });

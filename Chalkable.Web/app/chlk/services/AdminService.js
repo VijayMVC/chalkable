@@ -28,21 +28,6 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.SchoolPersonId, String, String, String, String, String, String, String, chlk.models.common.ChlkDate]],
-            ria.async.Future, function updateInfo(personId, addresses, email, firstName, lastName, gender, phones, salutation, birthDate) {
-                return this.post('Admin/UpdateInfo.json', chlk.models.people.User, {
-                    personId: personId.valueOf(),
-                    addresses: addresses && JSON.parse(addresses),
-                    email: email,
-                    firstName: firstName,
-                    lastName: lastName,
-                    gender: gender,
-                    phones: phones && JSON.parse(phones),
-                    salutation: salutation,
-                    birthdayDate: birthDate && JSON.stringify(birthDate.getDate()).slice(1,-1)
-                });
-            },
-
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function getSummary(personId){
                 return this.get('Admin/Info.json', chlk.models.people.PersonSummary,{

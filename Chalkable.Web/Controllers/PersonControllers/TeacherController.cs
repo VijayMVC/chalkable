@@ -28,13 +28,13 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(res);
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        /*[AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult UpdateInfo(AdminTeacherInputModel model)
         {
             var teacher = UpdateTeacherOrAdmin(model);
             //MixPanelService.ChangedEmail(SchoolLocator.Context., email);
             return Json(GetInfo(teacher.Id, TeacherInfoViewData.Create));
-        }
+        }*/
 
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]

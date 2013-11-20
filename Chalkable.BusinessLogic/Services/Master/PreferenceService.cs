@@ -179,6 +179,13 @@ namespace Chalkable.BusinessLogic.Services.Master
                 Hint = "{0}-school id;\n{1}- school name;\n{2},{3},{4} - admin id, username, email",
                 Value = "New School was just registered. ID: {0}, Name: {1}, Administrator: {2} {3} {4}"
             });
+            res.Add(Preference.EMAIL_CHANGE_EMAIL_BODY, new PreferenceInfo
+            {
+                Category = PreferenceCategoryEnum.EmailText,
+                Type = PreferenceTypeEnum.LongText,
+                Hint = "{0}-first name;\n{1}- new email",
+                Value = "Hi {0},<br/><br/>Your email address has been updated for Chalkable. {1} will be your username for signing in at <a href=\"http://chalkable.com\">http://chalkable.com</a>."
+            });
             res.Add(Preference.SCHOOL_REGISTRATION_BEGIN_EMAIL_BODY, new PreferenceInfo
             {
                 Category = PreferenceCategoryEnum.EmailText,

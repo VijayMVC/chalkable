@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Text;
 using System.Linq;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Data.Master.DataAccess
@@ -12,116 +14,59 @@ namespace Chalkable.Data.Master.DataAccess
         public UserDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-        private static string BuildSql(Dictionary<string, object> conditions)
+        private static DbQuery BuildSql(QueryCondition conditions)
         {
-            var p1 = new StringBuilder();
-            var p2 = new StringBuilder();
-            p1.Append(@"select 
-                    [User].Id as [User_Id],
-                    [User].LocalId as User_LocalId,
-                    [User].Login as User_Login,
-                    [User].Password as User_Password,
-                    [User].IsSysAdmin as User_IsSysAdmin,
-                    [User].IsDeveloper as User_IsDeveloper,
-                    [User].ConfirmationKey as User_ConfirmationKey,
-                    [User].Districtref as User_DistrictRef,
-                    [User].SisUserName as User_SisUserName,                       
-                    [User].SisToken as User_SisToken,
-                    [User].SisTokenExpires as User_SisTokenExpires,     
-                    District.Id as District_Id,
-                    District.Name as District_Name,
-                    District.SisUrl as District_SisUrl,
-                    District.DbName as District_DbName,
-                    District.SisUserName as District_SisUserName,
-                    District.SisPassword as District_SisPassword,
-                    District.Status as District_Status,
-                    District.TimeZone as District_TimeZone,
-                    District.DemoPrefix as District_DemoPrefix,
-                    District.LastUseDemo as District_LastUseDemo,
-                    District.ServerUrl as District_ServerUrl
-                    from [User]
-                    left join District on [User].DistrictRef = District.Id");
-            p2.Append(@"select 
-                              [User].Id as User_Id,
-                              [User].LocalId as User_LocalId,
-                              [User].Login as User_Login,
-                              [User].Password as User_Password,
-                              [User].IsSysAdmin as User_IsSysAdmin,
-                              [User].IsDeveloper as User_IsDeveloper,
-                              [User].ConfirmationKey as User_ConfirmationKey,
-                              [User].Districtref as User_DistrictRef,
-                              [User].SisUserName as User_SisUserName, 
-                              [User].SisToken as User_SisToken,
-                              [User].SisTokenExpires as User_SisTokenExpires,                                                 
-                              SchoolUser.Id as SchoolUser_Id,
-                              SchoolUser.UserRef as SchoolUser_UserRef,
-                              SchoolUser.SchoolRef as SchoolUser_SchoolRef,
-                              SchoolUser.Role as SchoolUser_Role,
-                              School.Id as School_Id,
-                              School.Name as School_Name,
-                              School.DistrictRef as School_DistrictRef,
-                              School.LocalId as School_LocalId                             
-                        from [User]
-                        join SchoolUser on [User].Id = SchoolUser.UserRef
-                        join School on SchoolUser.SchoolRef = School.Id");
-            if (conditions.Count > 0)
-            {
-                p1.Append(" where ");
-                p2.Append(" where ");
-            }
-            bool first = true;
-            foreach (var condition in conditions)
-            {
-                if (first)
-                {
-                    first = false;
-                }
-                else
-                {
-                    p1.Append(" and ");
-                    p2.Append(" and ");
-                }
-                p1.Append("[User].").Append(condition.Key).Append("=").Append("@").Append(condition.Key);
-                p2.Append("[User].").Append(condition.Key).Append("=").Append("@").Append(condition.Key);
-            }
+            var userQuery = new DbQuery();
+            var suQuery = new DbQuery();
+            var typesL1 = new List<Type> { typeof(User), typeof(District) };
+            var typesL2 = new List<Type> { typesL1[0], typeof(SchoolUser), typeof(School) };
+            userQuery.Sql.AppendFormat(@"select {0} from [{1}] left join [{2}] on [{1}].{3} = [{2}].{4}"
+                                       , Orm.ComplexResultSetQuery(typesL1), typesL1[0].Name, typesL1[1].Name,
+                                       User.DISTRICT_REF_FIELD, District.ID_FIELD);
+            conditions.BuildSqlWhere(userQuery, typesL1[0].Name);
 
-            var sql = p1.Append(";").Append(p2).ToString();
-            return sql;
+            suQuery.Sql.AppendFormat(@"select {0} from [User]
+                                       join SchoolUser on [User].Id = SchoolUser.UserRef
+                                       join School on SchoolUser.SchoolRef = School.Id", Orm.ComplexResultSetQuery(typesL2));
+            conditions.BuildSqlWhere(suQuery, typesL1[0].Name);
+            return new DbQuery(new List<DbQuery> { userQuery, suQuery });
+        } 
+
+
+
+        public User GetUser(QueryCondition conditions)
+        {
+            var dbQuery = BuildSql(conditions);
+            return Read(dbQuery, ReadGetUserQueryResult);
         }
-
-        public User GetUser(Dictionary<string, object> conditions)
+        private User ReadGetUserQueryResult(DbDataReader reader)
         {
-            var sql = BuildSql(conditions);
-            using (var reader = ExecuteReaderParametrized(sql, conditions))
+            User res = null;
+            if (reader.Read())
             {
-                User res = null;
-                if (reader.Read())
+                res = reader.Read<User>(true);
+                if (res.DistrictRef.HasValue)
+                    res.District = reader.Read<District>(true);
+                reader.NextResult();
+                var sul = reader.ReadList<SchoolUser>(true);
+                foreach (var schoolUser in sul)
                 {
-                    res = reader.Read<User>(true);
-                    if (res.DistrictRef.HasValue)
-                        res.District = reader.Read<District>(true);
-                    reader.NextResult();
-                    var sul = reader.ReadList<SchoolUser>(true);
-                    foreach (var schoolUser in sul)
-                    {
-                        schoolUser.User = res;
-                    }
-                    res.SchoolUsers = sul;
+                    schoolUser.User = res;
+                    schoolUser.School.District = res.District;
                 }
-                return res;
+                res.SchoolUsers = sul;
             }
+            return res;
         }
 
         public User GetSysAdmin()
         {
-            var conds = new Dictionary<string, object> {{User.IS_SYS_ADMIN_FIELD, true}};
+            var conds = new AndQueryCondition{{User.IS_SYS_ADMIN_FIELD, true}};
             return GetUser(conds);
         }
-
-        
         public User GetUser(string login, string password, Guid? id)
         {
-            var conds = new Dictionary<string, object>();
+            var conds = new AndQueryCondition();
             if (login != null)
                 conds.Add(User.LOGIN_FIELD, login);
             if (password != null)
@@ -133,47 +78,47 @@ namespace Chalkable.Data.Master.DataAccess
 
         public User GetUser(string confirmationKey)
         {
-            var conds = new Dictionary<string, object>();
+            var conds = new AndQueryCondition();
             if(string.IsNullOrEmpty(confirmationKey))
                 conds.Add(User.CONFIRMATION_KEY_FIELD, confirmationKey);
             return GetUser(conds);
         }
 
-
-        private IList<User> GetUsers(Dictionary<string, object> conds)
-        {
-            var sql = BuildSql(conds);
-            using (var reader = ExecuteReaderParametrized(sql, conds))
-            {
-                var res = new List<User>();
-                while (reader.Read())
-                {
-                    var u = reader.Read<User>(true);
-                    if (u.DistrictRef.HasValue)
-                        u.District = reader.Read<District>(true);
-                }
-                reader.NextResult();
-                var sul = reader.ReadList<SchoolUser>(true);
-                var sulDic = res.ToDictionary(x => x.Id, x => new List<SchoolUser>());
-                foreach (var schoolUser in sul)
-                {
-                    sulDic[schoolUser.UserRef].Add(schoolUser);
-                }
-                foreach (var user in res)
-                {
-                    user.SchoolUsers = sulDic[user.Id];
-                }
-                return res;
-            }
-        } 
-
         public IList<User> GetUsers()
         {
-            return GetUsers(new Dictionary<string, object>());
+            return GetUsers(new AndQueryCondition());
         }
         public IList<User> GetUsers(Guid districtId)
         {
-            return GetUsers(new Dictionary<string, object> {{User.DISTRICT_REF_FIELD, districtId}});
+            return GetUsers(new AndQueryCondition { { User.DISTRICT_REF_FIELD, districtId } });
+        } 
+        private IList<User> GetUsers(QueryCondition conds)
+        {
+            var dbQeury = BuildSql(conds);
+            return Read(dbQeury, ReadGetUsersQueryResult);
+        }
+        private IList<User> ReadGetUsersQueryResult(DbDataReader reader)
+        {
+            var res = new List<User>();
+            while (reader.Read())
+            {
+                var u = reader.Read<User>(true);
+                if (u.DistrictRef.HasValue)
+                    u.District = reader.Read<District>(true);
+                res.Add(u);
+            }
+            reader.NextResult();
+            var sul = reader.ReadList<SchoolUser>(true);
+            var sulDic = res.ToDictionary(x => x.Id, x => new List<SchoolUser>());
+            foreach (var schoolUser in sul)
+            {
+                sulDic[schoolUser.UserRef].Add(schoolUser);
+            }
+            foreach (var user in res)
+            {
+                user.SchoolUsers = sulDic[user.Id];
+            }
+            return res;
         } 
     }
 }

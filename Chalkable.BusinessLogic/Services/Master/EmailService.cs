@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void SendMailToFriend(string fromMail, string toMail, string message, string subject = null);
         void SendApplicationEmailToDeveloper(Application application);
         void SendApplicationEmailToSysadmin(Application application);
-   
+        void SendChangedEmailToPerson(Person person, string newEmail);
     }
 
     public class EmailService : MasterServiceBase, IEmailService
@@ -51,6 +51,23 @@ namespace Chalkable.BusinessLogic.Services.Master
             mail.Body = string.Format(bodyTemplate, person.FirstName, person.LastName, url);
             SendMail(mail, fromEmail);
             person.LastPasswordReset = DateTime.UtcNow;
+        }
+
+        public void SendChangedEmailToPerson(Person person, string newEmail)
+        {
+            var sysEMail = PreferenceService.GetTyped<EmailInfo>(Preference.SYSTEM_EMAIL);
+            var personMail = person.Email;
+            var mail = PrepareDefaultMail(sysEMail);
+            if (EmailTools.IsValidEmailAddress(personMail))
+                mail.To.Add(personMail);
+            else
+            {
+                Trace.TraceWarning(ChlkResources.ERR_EMAIL_INVALID, personMail);
+                return;
+            }
+            var bodyTemplate = PreferenceService.Get(Preference.EMAIL_CHANGE_EMAIL_BODY).Value;
+            mail.Body = string.Format(bodyTemplate, person.FirstName, newEmail);
+            SendMail(mail, sysEMail);
         }
 
         public void SendInviteToPerson(Person person, string confirmationKey, string message, string messageTemplate)

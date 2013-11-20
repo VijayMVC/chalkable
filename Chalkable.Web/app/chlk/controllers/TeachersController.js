@@ -44,20 +44,6 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.profile.SchoolPersonInfoPage, result);
             },
 
-            [[chlk.models.people.User]],
-            function infoEditAction(model){
-                var result;
-                result = this.teacherService
-                    .updateInfo(model.getId(), model.getAddressesValue(), model.getEmail(), model.getFirstName(),
-                        model.getLastName(), model.getGender(), model.getPhonesValue(), model.getSalutation(), model.getBirthDate())
-                    .attach(this.validateResponse_())
-                    .then(function(model){
-                        return this.prepareUserProfileModel_(model);
-                    }.bind(this));
-                return this.UpdateView(chlk.activities.profile.SchoolPersonInfoPage, result);
-            },
-
-
             [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
             function scheduleAction(personId, date_){
                 //return BASE(personId, chlk.models.common.RoleNamesEnum.TEACHER);

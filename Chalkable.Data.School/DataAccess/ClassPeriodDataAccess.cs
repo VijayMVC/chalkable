@@ -73,8 +73,7 @@ namespace Chalkable.Data.School.DataAccess
             conds.BuildSqlWhere(dbQuery, typeof(ClassPeriod).Name);
             return ReadMany<Room>(dbQuery);
         } 
-
-
+        
         public IList<ClassPeriod> GetClassPeriods(ClassPeriodQuery query)
         {
             var res = BuildGetClassPeriodsQuery(query);
@@ -91,6 +90,7 @@ namespace Chalkable.Data.School.DataAccess
                                      , Period.ID_FIELD, ClassPeriod.PERIOD_REF_FIELD);
             return BuildGetClassPeriodsConditions(dbQuery, query);
         }
+       
         private DbQuery BuildGetClassPeriodsConditions(DbQuery dbQuery, ClassPeriodQuery query)
         {
             var conds = new AndQueryCondition();

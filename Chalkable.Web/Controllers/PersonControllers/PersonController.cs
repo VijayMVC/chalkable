@@ -107,5 +107,14 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var roleName = roleId.HasValue ? CoreRoles.GetById(roleId.Value).Name : null;
             return Json(PersonLogic.GetPersons(SchoolLocator, start, count, byLastName, filter, roleName, null, gradeLevelIds));
         }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult UpdateInfo(int personId, string email)
+        {
+            var res = SchoolLocator.PersonService.EditEmail(personId, email);
+            if (res == null)
+                return Json(new { data = "There is user with that email in Chalkable", success = false });
+            return Json(res);
+        }
     }
 }

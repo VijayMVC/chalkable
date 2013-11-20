@@ -27,6 +27,15 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.SchoolPersonId, String, String]],
+            ria.async.Future, function updateInfo(personId, email, phones) {
+                return this.post('Person/UpdateInfo.json', chlk.models.people.User, {
+                    personId: personId.valueOf(),
+                    email: email,
+                    phones: phones && JSON.parse(phones)
+                });
+            },
+
             [[chlk.models.id.SchoolPersonId, Number]],
             String, function getPictureURL(personId, size_){
                 var url = window.azurePictureUrl + personId.valueOf();

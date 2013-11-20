@@ -46,6 +46,11 @@ namespace Chalkable.Tests.Services.Master
             return;
         }
 
+        public void SendChangedEmailToPerson(Person person, string newEmail)
+        {
+            return;
+        }
+
         public void SendResettedPasswordToPerson(Person person, string confirmationKey)
         {
             return;
