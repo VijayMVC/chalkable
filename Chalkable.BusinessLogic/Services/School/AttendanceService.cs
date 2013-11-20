@@ -88,7 +88,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
             var sa = ConnectorLocator.AttendanceConnector.GetSectionAttendance(sy.Id, date, classId);
             var clazz = ServiceLocator.ClassService.GetClassById(classId);
-            var persons = ServiceLocator.PersonService.GetPersons();//TODO: get class persons only
+            var persons = ServiceLocator.ClassService.GetStudents(classId);
             var attendances = new List<ClassAttendanceDetails>();
             foreach (var ssa in sa.StudentAttendance)
             {
