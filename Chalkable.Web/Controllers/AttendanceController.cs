@@ -69,15 +69,14 @@ namespace Chalkable.Web.Controllers
         public ActionResult ClassList(DateTime? date, int classId)
         {
             date = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
-            var cps = SchoolLocator.ClassPeriodService.GetClassPeriods(date.Value, classId, null, null, null);
             var listClassAttendance = new List<ClassAttendanceViewData>();
-            if (cps.Count > 0)
+            var attendances = SchoolLocator.AttendanceService.GetClassAttendances(date.Value, classId);
+            if (attendances != null)
             {
-                var attendances = SchoolLocator.AttendanceService.GetClassAttendances(date.Value, classId);
                 IList<AttendanceReason> attendanceReason = SchoolLocator.AttendanceReasonService.List();
                 listClassAttendance = ClassAttendanceViewData.Create(attendances, attendanceReason).ToList();
+                listClassAttendance.Sort((x, y) => string.CompareOrdinal(x.Student.LastName, y.Student.LastName));
             }
-            listClassAttendance.Sort((x, y) => string.CompareOrdinal(x.Student.LastName, y.Student.LastName));
             return Json(new PaginatedList<ClassAttendanceViewData>(listClassAttendance, 0, int.MaxValue));
         }
 

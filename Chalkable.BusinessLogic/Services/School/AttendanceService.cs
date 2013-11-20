@@ -87,24 +87,28 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
             var sa = ConnectorLocator.AttendanceConnector.GetSectionAttendance(sy.Id, date, classId);
-            var clazz = ServiceLocator.ClassService.GetClassById(classId);
-            var persons = ServiceLocator.ClassService.GetStudents(classId);
-            var attendances = new List<ClassAttendanceDetails>();
-            foreach (var ssa in sa.StudentAttendance)
+            if (sa != null)
             {
-                attendances.Add(new ClassAttendanceDetails
+                var clazz = ServiceLocator.ClassService.GetClassById(classId);
+                var persons = ServiceLocator.ClassService.GetStudents(classId);
+                var attendances = new List<ClassAttendanceDetails>();
+                foreach (var ssa in sa.StudentAttendance)
                 {
-                    ClassRef = ssa.SectionId,
-                    AttendanceReasonRef = ssa.ReasonId,
-                    Date = date,
-                    PersonRef = ssa.StudentId,
-                    Level = ssa.Level,
-                    Class = clazz,
-                    Student = persons.First(x => x.Id == ssa.StudentId),
-                    Category = ssa.Category
-                });
+                    attendances.Add(new ClassAttendanceDetails
+                    {
+                        ClassRef = ssa.SectionId,
+                        AttendanceReasonRef = ssa.ReasonId,
+                        Date = date,
+                        PersonRef = ssa.StudentId,
+                        Level = ssa.Level,
+                        Class = clazz,
+                        Student = persons.First(x => x.Id == ssa.StudentId),
+                        Category = ssa.Category
+                    });
+                }
+                return attendances;    
             }
-            return attendances;
+            return null;
         }
 
         public IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, string level, Guid? attendanceReasonId = null, int? sisId = null)
