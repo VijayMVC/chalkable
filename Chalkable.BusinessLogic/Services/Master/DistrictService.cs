@@ -111,6 +111,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             var prototype = GetByIdOrNull(prototypeId);
             var server = prototype.ServerUrl;
             IList<Data.Master.Model.School> schools;
+            IList<User> oldUsers;
             using (var uow = Update())
             {
                 district = new District
@@ -134,6 +135,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         Name = x.Name
                     }).ToList();
                 schoolDa.Insert(schools);
+                oldUsers = new UserDataAccess(uow).GetUsers(prototypeId);
                 uow.Commit();
             }
 
@@ -169,9 +171,11 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
             IList<User> users = new List<User>();
             IList<SchoolUser> schoolUsers = new List<SchoolUser>();
+            var demoUserPassword = PreferenceService.Get(Preference.DEMO_USER_PASSWORD).Value;
             foreach (var person in persons)
             {
-                var u = ServiceLocator.UserService.CreateSchoolUser(person.Email, "tester", district.Id, person.Id, null);
+                var oldUser = oldUsers.First(x => x.LocalId == person.Id);
+                var u = ServiceLocator.UserService.CreateSchoolUser(person.Email, demoUserPassword, district.Id, person.Id, oldUser.SisUserName);
                 users.Add(u);
                 var sps = schoolPersons.Where(x => x.PersonRef == person.Id).ToList();
                 foreach (var schoolPerson in sps)

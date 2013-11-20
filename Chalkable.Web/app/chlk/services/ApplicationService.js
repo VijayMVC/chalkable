@@ -57,6 +57,7 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.apps.Application]],
             function switchApp(app){
                 this.getContext().getSession().set('currentAppId', app.getId());
+                this.getContext().getSession().set('currentApp', app);
                 return app;
             },
 

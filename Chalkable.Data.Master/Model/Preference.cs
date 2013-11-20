@@ -37,7 +37,8 @@ namespace Chalkable.Data.Master.Model
         public const string DEMO_SCHOOL_TEACHER = "demoschoolteacher";
         public const string DEMO_SCHOOL_STUDENT = "demoschoolstudent";
         public const string DEMO_SCHOOL_PROCESSING_PARAMETERS = "demoshoolprocessingparameters";
-        
+        public const string DEMO_USER_PASSWORD = "demouserpassword";
+
         public const string SERVER_PORT = "serverport";
 
         public const string NOTIFICATIONS_POST_TIME = "notificationsposttime";

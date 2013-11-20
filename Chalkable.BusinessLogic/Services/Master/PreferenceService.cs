@@ -131,6 +131,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             res.Add(Preference.DEMO_SCHOOL_ADMIN_VIEW, new PreferenceInfo { Value = "" });
             res.Add(Preference.DEMO_SCHOOL_TEACHER, new PreferenceInfo { Value = "user1195_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com" });
             res.Add(Preference.DEMO_SCHOOL_STUDENT, new PreferenceInfo { Value = "user19_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com" });
+            res.Add(Preference.DEMO_USER_PASSWORD, new PreferenceInfo {Value = "Qwerty1@"});
             res.Add(Preference.DEMO_SCHOOL_PROCESSING_PARAMETERS, new PreferenceInfo { Value = "20|10|10|5000|3600" });
             res.Add(Preference.SERVER_NAME, new PreferenceInfo { Value = "smtp.sendgrid.net" });
             res.Add(Preference.SERVER_PORT, new PreferenceInfo { Value = "587" });

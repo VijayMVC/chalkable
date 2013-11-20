@@ -66,6 +66,7 @@ namespace Chalkable.Web.Controllers
 
                     apiRoles.Add(loweredDescription);
                     var userName = district.DemoPrefix + PreferenceService.Get("demoschool" + loweredDescription).Value;
+                    MasterLocator.UserService.LoginToDemo(loweredDescription, district.DemoPrefix);
                     var token = ChalkableApiExplorerLogic.GetAccessTokenFor(userName, MasterLocator);
                     result.Add(ApiExplorerViewData.Create(description.Value, token, description.Key));
                 }

@@ -69,28 +69,27 @@ namespace Chalkable.Web.Controllers
         public ActionResult ClassList(DateTime? date, int classId)
         {
             date = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
-            var cps = SchoolLocator.ClassPeriodService.GetClassPeriods(date.Value, classId, null, null, null);
             var listClassAttendance = new List<ClassAttendanceViewData>();
-            if (cps.Count > 0)
+            var attendances = SchoolLocator.AttendanceService.GetClassAttendances(date.Value, classId);
+            if (attendances != null)
             {
-                var attendances = SchoolLocator.AttendanceService.GetClassAttendances(date.Value, classId);
                 IList<AttendanceReason> attendanceReason = SchoolLocator.AttendanceReasonService.List();
                 listClassAttendance = ClassAttendanceViewData.Create(attendances, attendanceReason).ToList();
+                listClassAttendance.Sort((x, y) => string.CompareOrdinal(x.Student.LastName, y.Student.LastName));
             }
-            listClassAttendance.Sort((x, y) => string.CompareOrdinal(x.Student.LastName, y.Student.LastName));
             return Json(new PaginatedList<ClassAttendanceViewData>(listClassAttendance, 0, int.MaxValue));
         }
 
         public ActionResult AttendanceTest()
         {
-            if (Session["CONTEXT"] == null)
+            if (HttpContext.Cache["CONTEXT"] == null)
             {
                 var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
                 var c = serviceLocator.UserService.Login("user1195_6cf8e8ab-2cae-4d17-8b7c-59bc3b1134fe@chalkable.com",
                                                          "Qwerty1@");
-                Session["CONTEXT"] = c;
+                HttpContext.Cache["CONTEXT"] = c;
             }
-            var context = Session["CONTEXT"] as UserContext;
+            var context = HttpContext.Cache["CONTEXT"] as UserContext;
             InitServiceLocators(context);
             return ClassList(new DateTime(2013, 11, 18), 635);
         }

@@ -12,6 +12,7 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
+using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionResults;
 using Chalkable.Web.Authentication;
 using Microsoft.IdentityModel.Claims;
@@ -71,11 +72,14 @@ namespace Chalkable.Web.Controllers
             bool isAuthenticatedByToken = OauthAuthenticate.Instance.TryAuthenticateByToken(requestContext);
             if (isAuthenticatedByToken)
             {
-                InitServiceLocators(User.Identity.Name);
+                var user = ServiceLocatorFactory.CreateMasterSysAdmin().UserService.GetByLogin(User.Identity.Name);
+                InitServiceLocators(user);
                 var claims = (User.Identity as ClaimsIdentity).Claims;
                 var actor = claims.First(x => x.ClaimType.EndsWith(ACTOR_SUFFIX)).Value;
 
                 SchoolLocator.Context.IsOAuthUser = true;
+                SchoolLocator.Context.SisToken = user.SisToken;
+                SchoolLocator.Context.SisTokenExpires = user.SisTokenExpires;
                 var app = MasterLocator.ApplicationService.GetApplicationByUrl(actor);
                 SchoolLocator.Context.IsInternalApp = app != null && app.IsInternal;
                 SchoolLocator.Context.OAuthApplication = actor;
@@ -96,14 +100,19 @@ namespace Chalkable.Web.Controllers
             InitServiceLocators(context);
         }
 
+        private void InitServiceLocators(User user)
+        {
+            if (user.SchoolUsers == null || user.SchoolUsers.Count == 0)
+                throw new ChalkableException(ChlkResources.ERR_USER_IS_NOT_ASSIGNED_TO_SCHOOL);
+            SchoolLocator = ServiceLocatorFactory.CreateSchoolLocator(user.SchoolUsers.First());
+            MasterLocator = SchoolLocator.ServiceLocatorMaster;       
+        }
+
         private void InitServiceLocators(string userName)
         {
             var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
             var user = serviceLocator.UserService.GetByLogin(userName);
-            if(user.SchoolUsers == null || user.SchoolUsers.Count == 0)
-                throw new ChalkableException(ChlkResources.ERR_USER_IS_NOT_ASSIGNED_TO_SCHOOL);
-            SchoolLocator = ServiceLocatorFactory.CreateSchoolLocator(user.SchoolUsers.First());
-            MasterLocator = SchoolLocator.ServiceLocatorMaster;
+            InitServiceLocators(user);
         }
 
         protected void InitServiceLocators(UserContext context)

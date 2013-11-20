@@ -4,6 +4,12 @@ using System.Threading.Tasks;
 
 namespace Chalkable.StiConnector.Connectors.Model
 {
+    public class User
+    {
+        public int Id { get; set; }
+        public string Username { get; set; }
+    }
+
     public class School
     {
         public int Id { get; set;}
