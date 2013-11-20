@@ -18,6 +18,12 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.SettingsService, 'settingsService',
 
+            [ria.mvc.Inject],
+            chlk.services.ApplicationService, 'appsService',
+
+
+
+
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.SYSADMIN
             ])],
@@ -87,10 +93,6 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.settings.StudentPage, ria.async.DeferredData(studentSettings));
             },
 
-            function getCurrentApp() {
-                return this.getContext().getSession().get('currentApp');
-            },
-
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.DEVELOPER
             ])],
@@ -99,7 +101,7 @@ NAMESPACE('chlk.controllers', function (){
 
                 var devSettings = new chlk.models.settings.DeveloperSettings();
                 devSettings.setDeveloperId(this.getCurrentPerson().getId());
-                var app = this.getCurrentApp();
+                var app = this.appsService.getCurrentApp();
                 if (app){
                     devSettings.setCurrentAppId(app.getId());
                     devSettings.setCurrentAppName(app.getName());
