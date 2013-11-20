@@ -1,0 +1,135 @@
+@import "compass/css3/text-shadow";
+
+@import "partials/sidebar/_controls";
+@import "partials/sidebar/_week";
+
+$sidebar-width: 300px;
+
+BODY {
+  font-family: Arial, serif;
+
+  DIV.page {
+    #sidebar {
+      $padding: 47px;
+
+      float:left;
+      width: $sidebar-width - 4px - $padding * 2;
+      padding: 154px $padding 0;
+      position: relative;
+
+      font-size: 12px;
+      color: #ffffff;
+
+      > P {
+        > IMG {
+          margin: 0 7px 3px 0;
+        }
+
+        margin-bottom: 30px;
+        line-height: 16px;
+        font-weight: 400;
+        font-family: HelveticaNeue, Arial;
+
+        text-shadow: #999 1px 1px 1px;
+      }
+
+      h2{
+        color: #7e684e;
+        font-size: 13px;
+        text-transform: uppercase;
+        text-shadow: white 1px 1px 2px;
+        font-family: "HelveticaNeue Bold", Arial;
+        margin-bottom: 14px;
+      }
+
+      #home-logo {
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 125px;
+        position: absolute;
+        background: url(images/common/Chlk-logo-new.png) 0 13px no-repeat;
+      }
+
+      #sidebar-controls {
+        $controls-width: 230px;
+        width: $controls-width;
+        margin-bottom: 30px;
+
+        >DIV.search-wrapper{
+          background: url(images/common/sidebar-controls-bg-top.png) 0 0 no-repeat;
+          padding: 7px 0 0;
+
+          #search-bar {
+            height: 62px;
+            position: relative;
+
+            INPUT {
+              position: absolute;
+              top: 21px;
+              left: 29px;
+
+              background: transparent;
+              border: none;
+            }
+
+            IMG {
+              background: none;
+              position: absolute;
+              top: 21px;
+              left: 170px;
+              width: 30px;
+              border: none;
+            }
+          }
+        }
+
+        .wrapper {
+          background: url(images/common/sidebar-controls-bg-bottom.png) 0 100% no-repeat;
+          padding: 0 7px 7px;
+
+          .buttons-row {
+            height: 63px;
+
+            &:last-child{
+              height: 61px;
+
+              .one-third-button {
+                height: 61px;
+              }
+            }
+          }
+    
+          .fullwidth-button {
+            display: block;
+            height: 63px;
+          }
+
+          .one-third-button {
+            display: inline-block;
+            height: 63px;
+            width: ($controls-width - 14px) / 3;
+            margin: 0px;
+            padding: 0px;
+            vertical-align: top;
+            text-align: center;
+            line-height: 102px;
+            font: normal 10px/102px Arial;
+            color: #5a4429;
+            text-shadow: 1px 1px white;
+
+            &:hover, &.pressed{
+              color: white;
+              text-shadow: 1px 1px #5a4429;
+            }
+          }
+        }
+      }
+
+      #schedule {
+        background: url(images/mocks/schedule.png) 0px 0 no-repeat;
+        height: 364px;
+      }
+    }
+  }
+}
