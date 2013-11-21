@@ -171,16 +171,14 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.profile.SchoolPersonAppsPage, res);
             },
 
-            [[chlk.models.people.User]],
-            function infoEditAction(model){
-                var result;
-                result = this.personService
+            [[chlk.models.people.User, Object]],
+            ria.async.Future, function infoEdit_(model, modelClass){
+                return this.personService
                     .updateInfo(model.getId(), model.getEmail(), model.getPhonesValue())
                     .attach(this.validateResponse_())
-                    .then(function(model){
-                    return this.prepareUserProfileModel_(model);
-                }.bind(this));
-                return this.UpdateView(chlk.activities.profile.SchoolPersonInfoPage, result);
+                    .then(function(data){
+                        return new modelClass(this.getCurrentRole(), this.prepareProfileData(data));
+                    }, this);
             }
         ])
 });

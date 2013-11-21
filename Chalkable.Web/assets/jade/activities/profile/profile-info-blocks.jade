@@ -43,7 +43,8 @@ mixin ProfileInfoView(model)
 
 mixin ProfileInfoForm(controller, model)
     address = model.getAddress() || null;
-    primaryPhone = model.getPrimaryPhone() ? model.getPrimaryPhone().getValue() : '';
+    primaryPhone = model.getPrimaryPhone()
+    primaryPhoneValue = model.getPrimaryPhone() ? model.getPrimaryPhone().getValue() : '';
     homePhone = model.getHomePhone() ? model.getHomePhone().getValue() : '';
     .info-edit
         +ActionForm(controller, 'infoEdit')#info-edit-form.with-ok
@@ -71,7 +72,7 @@ mixin ProfileInfoForm(controller, model)
                             data-id=primaryPhone && model.getPrimaryPhone().getId().valueOf(),
                             data-type=2,
                             data-isPrimary=true,
-                            value=primaryPhone,
+                            value=primaryPhoneValue,
                             class="primary-phone"
                             readonly
                             )
@@ -97,7 +98,7 @@ mixin ProfileInfoForm(controller, model)
                             input(
                             value=homePhone,
                             class="home-phone",
-                            data-id=homePhone && model.getHomePhone().getId().valueOf(),
+                            data-id=model.getHomePhone() && model.getHomePhone().getId().valueOf(),
                             data-type=0,
                             data-isPrimary=false,
                             readonly

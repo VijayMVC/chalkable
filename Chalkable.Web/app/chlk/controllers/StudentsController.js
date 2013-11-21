@@ -134,11 +134,16 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(model){
                         var userData = this.prepareProfileData(model);
                         var res = new chlk.models.student.StudentProfileInfoViewData(this.getCurrentRole(), userData);
-//                        var res = chlk.models.people.UserProfileViewData(chlk.models.student.StudentInfo, userData, this.getCurrentRole());
                         this.setUserToSession(res);
                         return res;
                     }.bind(this));
                 return this.PushView(chlk.activities.profile.StudentInfoPage, result);
+            },
+
+            [[chlk.models.people.User]],
+            function infoEditAction(model){
+                var res = this.infoEdit_(model, chlk.models.student.StudentProfileInfoViewData);
+                return this.UpdateView(chlk.activities.profile.StudentInfoPage, result);
             },
 
             [[chlk.models.id.SchoolPersonId]],
