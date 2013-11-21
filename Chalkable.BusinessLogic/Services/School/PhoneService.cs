@@ -51,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Phone Add(string digitOnlyValue, int personId, string value, PhoneType type, bool isPrimary)
         {
-            if (!(BaseSecurity.IsDistrict(Context)))//TODO:can teacher do this?
+            if (!(BaseSecurity.IsDistrict(Context)))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {

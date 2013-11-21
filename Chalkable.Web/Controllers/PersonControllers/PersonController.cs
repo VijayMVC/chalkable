@@ -114,7 +114,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var res = SchoolLocator.PersonService.EditEmail(personId, email);
             if (res == null)
                 return Json(new { data = "There is user with that email in Chalkable", success = false });
-            return Json(res);
+            return Json(PersonViewData.Create(res));
         }
     }
 }

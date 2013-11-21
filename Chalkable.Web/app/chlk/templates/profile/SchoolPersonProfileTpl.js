@@ -22,6 +22,7 @@ NAMESPACE('chlk.templates.profile', function(){
 
             String, function getControllerName(){
                 var roleEnums = chlk.models.common.RoleEnum;
+                console.log(this.getUser().getRole());
                 var roleId = this.getUser().getRole().getId();
                 if(roleId == roleEnums.ADMINGRADE.valueOf()
                     || roleId == roleEnums.ADMINEDIT.valueOf()

@@ -43,7 +43,11 @@ NAMESPACE('chlk.controllers', function (){
                     }.bind(this));
                 return this.PushView(chlk.activities.profile.SchoolPersonInfoPage, result);
             },
-
+            [[chlk.models.people.User]],
+            function infoEditAction(model){
+                var res = this.infoEdit_(model, chlk.models.people.UserProfileInfoViewData);
+                return this.UpdateView(chlk.activities.profile.SchoolPersonInfoPage, res);
+            },
             [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
             function scheduleAction(personId, date_){
                 //return BASE(personId, chlk.models.common.RoleNamesEnum.TEACHER);
