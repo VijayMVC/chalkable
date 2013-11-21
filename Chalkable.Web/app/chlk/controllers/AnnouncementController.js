@@ -335,8 +335,7 @@ NAMESPACE('chlk.controllers', function (){
         function addAppAttachmentAction(announcement) {
             announcement.setNeedButtons(true);
             announcement.setNeedDeleteButton(true);
-            var attachments = announcement.getAnnouncementAttachments() || [];
-            this.prepareAttachments(attachments);
+            this.prepareAttachments(announcement);
             return this.UpdateView(this.getAnnouncementFormPageType_(), new ria.async.DeferredData(announcement), 'update-attachments');
         },
 
