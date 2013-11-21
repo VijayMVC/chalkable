@@ -77,8 +77,15 @@ namespace Chalkable.BusinessLogic.Services.School
                         Active = false,
                         Order = ServiceLocator.AnnouncementService.GetNewAnnouncementItemOrder(ann)
                     };
-                new AnnouncementApplicationDataAccess(uow).Insert(aa);
+                var da = new AnnouncementApplicationDataAccess(uow);
+                da.Insert(aa);
                 uow.Commit();
+                aa = da.GetAll(new AndQueryCondition
+                    {
+                        {AnnouncementApplication.ANNOUNCEMENT_REF_FIELD, announcementId},
+                        {AnnouncementApplication.APPLICATION_REF_FIELD, applicationId},
+                        {AnnouncementApplication.ACTIVE_FIELD, false}
+                    }).OrderByDescending(x=>x.Id).First();
                 return aa;
             }
         }
