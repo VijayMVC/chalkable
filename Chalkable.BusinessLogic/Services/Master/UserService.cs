@@ -128,86 +128,54 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
+
         private UserContext Login(User user, UnitOfWork uow, ConnectorLocator iNowConnector = null)
         {
             if (user == null) return null;
-            Guid? schoolId = null;
-            Guid? districtId = null;
-            string schoolServerUrl = null;
-            string schoolTimeZone = null;
-            int? schoolLocalId = null;
-            CoreRole role;
-            Guid? developerId = null;
-            string token = null;
-            DateTime? tokenExpires = null;
-            string sisUrl = null;
-
-            if (user.District != null && user.DistrictRef.HasValue)
+            
+            if (user.SchoolUsers.Count > 1)
+                throw new NotSupportedException(ChlkResources.ERR_MULTIPLE_SCHOOL_ARE_NOT_SUPPORTED);
+            if (user.IsSysAdmin)
+                return new UserContext(user, CoreRoles.SUPER_ADMIN_ROLE, user.District, null, null);
+            if (user.IsDeveloper && user.DistrictRef.HasValue)
             {
-                if (user.SchoolUsers.Count <= 1)
+                var developer = new DeveloperDataAccess(uow).GetDeveloper(user.DistrictRef.Value);
+                var school = ServiceLocator.SchoolService.GetSchools(developer.DistrictRef, 0, 10).OrderBy(x => x.LocalId).First(); //todo rewrite this later
+                return new UserContext(user, CoreRoles.DEVELOPER_ROLE, user.District, school, developer.Id);
+            }
+            if (user.IsSchoolUser)
+            {
+                var su = user.SchoolUsers[0];
+                Guid? developerId = null;
+                if (!string.IsNullOrEmpty(user.District.DemoPrefix))
                 {
-                    if (user.SchoolUsers.Count == 1)
-                    {
-                        var su = user.SchoolUsers[0];
-                        schoolId = su.SchoolRef;
-                        districtId = user.DistrictRef;
-                        schoolServerUrl = user.District.ServerUrl;
-                        schoolTimeZone = user.District.TimeZone;
-                        schoolLocalId = su.School.LocalId;
-                        role = CoreRoles.GetById(su.Role);
-                        if (!string.IsNullOrEmpty(user.District.DemoPrefix))
-                        {
-                            var developer = new DeveloperDataAccess(uow).GetDeveloper(su.SchoolRef);
-                            if (developer != null) developerId = developer.Id;
-                        }
-                        if (user.SisUserName != null)
-                        {
-                            if (iNowConnector == null)
-                            {
-                                if (user.OriginalPassword == null)
-                                    throw new ChalkableException("Sis connection requires not encripted password");
-                                iNowConnector = ConnectorLocator.Create(user.SisUserName, user.OriginalPassword, user.District.SisUrl);   
-                            }
-                            token = iNowConnector.Token;
-                            tokenExpires = iNowConnector.TokenExpires;
-                        }
-                        sisUrl = user.District.SisUrl;
-                    }
-                    else if (user.IsDeveloper)
-                    {
-                        role = CoreRoles.DEVELOPER_ROLE;
-                        var developer = new DeveloperDataAccess(uow).GetDeveloper(user.DistrictRef.Value);
-                        developerId = developer.Id;
-                        var school = ServiceLocator.SchoolService.GetSchools(developer.DistrictRef, 0, 10).OrderBy(x=>x.LocalId).First(); //todo rewrite this later
-                        schoolId = school.Id;
-                        schoolLocalId = school.LocalId;
-                        districtId = school.DistrictRef;
-                        schoolServerUrl = user.District.ServerUrl;
-                        schoolTimeZone = user.District.TimeZone;
-                    }
-                    else
-                        throw new Exception("User's role can not be defined");
+                    var developer = new DeveloperDataAccess(uow).GetDeveloper(su.SchoolRef);
+                    if (developer != null) developerId = developer.Id;
                 }
-                else
-                    throw new NotSupportedException("multiple school users are not supported yet");
+                user = SaveSisToken(user, uow, iNowConnector);
+                return new UserContext(user, CoreRoles.GetById(su.Role), user.District, su.School, developerId);
             }
-            else
+            throw new UnknownRoleException();
+        }
+
+        private User SaveSisToken(User user, UnitOfWork uow, ConnectorLocator iNowConnector)
+        {
+            if (user.SisUserName == null)
             {
-                if (user.IsSysAdmin)
-                    role = CoreRoles.SUPER_ADMIN_ROLE;
-                else
-                    throw new Exception("User's role can not be defined");
+                if (iNowConnector == null)
+                {
+                    if (user.OriginalPassword == null)
+                        throw new ChalkableException(ChlkResources.ERR_SIS_CONNECTION_REQUERED_NOT_ENCRYPED_PASSWORD);
+                    iNowConnector = ConnectorLocator.Create(user.SisUserName, user.OriginalPassword, user.District.SisUrl);
+                }
+                if (!string.IsNullOrEmpty(iNowConnector.Token))
+                {
+                    user.SisToken = iNowConnector.Token;
+                    user.SisTokenExpires = iNowConnector.TokenExpires;
+                    new UserDataAccess(uow).Update(user);
+                }
             }
-            var res = new UserContext(user.Id, districtId, schoolId, user.Login, schoolTimeZone, schoolServerUrl, schoolLocalId, role, developerId, user.LocalId, tokenExpires, sisUrl);
-            res.SisToken = token;
-            if (!string.IsNullOrEmpty(token))
-            {
-                user.SisToken = token;
-                user.OriginalPassword = null;
-                user.SisTokenExpires = tokenExpires;
-                new UserDataAccess(uow).Update(user);
-            }
-            return res;
+            return user;
         }
 
         private string BuildDemoUserName(string roleName, string prefix)

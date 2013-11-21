@@ -9,6 +9,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
 using Chalkable.Data.Common.Enums;
+using Chalkable.Data.Master.Model;
 using Newtonsoft.Json;
 
 namespace Chalkable.BusinessLogic.Services
@@ -54,35 +55,40 @@ namespace Chalkable.BusinessLogic.Services
         [JsonIgnore]
         public string OAuthApplication{ get; set; }
 
-        public UserContext(){}
-
-        public UserContext(Guid id, Guid? districtId, Guid? schoolId, string login, string schoolTimeZoneId, 
-            string schoolServerUrl, int? schoolLocalId, CoreRole role, Guid? developerId, int? localId, DateTime? sisTokenExpires, string sisUrl)
+        public UserContext()
         {
-            DistrictServerUrl = schoolServerUrl;
-            UserId = id;
-            SchoolId = schoolId;
-            Login = login;
+            MasterConnectionString = Settings.MasterConnectionString;     
+        }
+
+        public UserContext(User user, CoreRole role, District district, Data.Master.Model.School school, Guid? developerId) : this()
+        {
+            UserId = user.Id;
+            Login = user.Login;
+            UserLocalId = user.LocalId;
+            SisTokenExpires = user.SisTokenExpires;
+            SisToken = user.SisToken;
             Role = role;
             RoleId = role.Id;
-            DistrictId = districtId;
-
-            SchoolTimeZoneId = schoolTimeZoneId;
-            SchoolLocalId = schoolLocalId;
             DeveloperId = developerId;
-            UserLocalId = localId;
-            SisTokenExpires = sisTokenExpires;
-            SisUrl = sisUrl;
-
-            if (schoolId.HasValue)
-                SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, DistrictServerUrl, districtId);
-            MasterConnectionString = Settings.MasterConnectionString;
+            if (district != null)
+            {
+                DistrictId = district.Id;
+                SchoolTimeZoneId = district.TimeZone;
+                DistrictServerUrl = district.ServerUrl;
+                SisUrl = district.SisUrl;
+                if (school != null)
+                {
+                    SchoolLocalId = school.LocalId;
+                    SchoolId = school.Id;
+                    SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, DistrictServerUrl, DistrictId);
+                }
+            }
         }
 
         public void SwitchSchool(Guid? schoolId, Guid districtId, string schoolName, string schoolTimeZoneId, int? schoolLocalId, string districtServerUrl, Guid? developerId)
         {
             if (Role != CoreRoles.SUPER_ADMIN_ROLE && !(Role == CoreRoles.DISTRICT_ROLE && districtId == DistrictId))
-                throw new ChalkableSecurityException("Only sys admin or district is able to switch between schools");
+                throw new ChalkableSecurityException(ChlkResources.ERR_SWITCH_SCHOOL_INVALID_RIGTHS);
             DistrictServerUrl = districtServerUrl;
             SchoolId = schoolId;
             SchoolTimeZoneId = schoolTimeZoneId;
@@ -116,7 +122,6 @@ namespace Chalkable.BusinessLogic.Services
 
                 if (res.SchoolId.HasValue)
                     res.SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, res.DistrictServerUrl, res.DistrictId);
-                res.MasterConnectionString = Settings.MasterConnectionString;
                 return res;
             }
         }

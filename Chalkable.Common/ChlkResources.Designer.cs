@@ -2095,6 +2095,15 @@ namespace Chalkable.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Multiple school users are not supported yet.
+        /// </summary>
+        public static string ERR_MULTIPLE_SCHOOL_ARE_NOT_SUPPORTED {
+            get {
+                return ResourceManager.GetString("ERR_MULTIPLE_SCHOOL_ARE_NOT_SUPPORTED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no attendance reasons for current type.
         /// </summary>
         public static string ERR_NO_ATTENDANCE_REASONS_FOR_CURRENT_TYPE {
@@ -2842,6 +2851,15 @@ namespace Chalkable.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sis connection requires not encripted password.
+        /// </summary>
+        public static string ERR_SIS_CONNECTION_REQUERED_NOT_ENCRYPED_PASSWORD {
+            get {
+                return ResourceManager.GetString("ERR_SIS_CONNECTION_REQUERED_NOT_ENCRYPED_PASSWORD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Incorrect task type. Must be ImportInfiniteCampusData task type for current model.
         /// </summary>
         public static string ERR_SIS_IMPORT_INCORRECT_TASK_TYPE {
@@ -3081,6 +3099,15 @@ namespace Chalkable.Common {
         public static string ERR_STUDENT_WITH_ID_NOT_FOUND {
             get {
                 return ResourceManager.GetString("ERR_STUDENT_WITH_ID_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only sys admin or district is able to switch between schools.
+        /// </summary>
+        public static string ERR_SWITCH_SCHOOL_INVALID_RIGTHS {
+            get {
+                return ResourceManager.GetString("ERR_SWITCH_SCHOOL_INVALID_RIGTHS", resourceCulture);
             }
         }
         

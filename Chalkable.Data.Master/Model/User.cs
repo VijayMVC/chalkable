@@ -22,6 +22,12 @@ namespace Chalkable.Data.Master.Model
         public string OriginalPassword { get; set; }
         [NotDbFieldAttr]
         public IList<SchoolUser> SchoolUsers { get; set; }
+        [NotDbFieldAttr]
+        public bool IsSchoolUser
+        {
+            get { return DistrictRef.HasValue && SchoolUsers != null && SchoolUsers.Count > 0; }
+        }
+
         public bool IsSysAdmin { get; set;}
         public bool IsDeveloper { get; set; }
         public string ConfirmationKey { get; set; }
@@ -37,12 +43,13 @@ namespace Chalkable.Data.Master.Model
     public class School
     {
         public const string ID_FIELD = "Id";
+        public const string DISTRICT_REF_FIELD = "DistrictRef";
+        public const string LOCAL_ID_FIELD = "LocalId";
+     
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public const string DISTRICT_REF_FIELD = "DistrictRef";
         public Guid DistrictRef { get; set; }
-        public const string LOCAL_ID_FIELD = "LocalId";
         public int LocalId { get; set; }
         [NotDbFieldAttr]
         public District District { get; set; }

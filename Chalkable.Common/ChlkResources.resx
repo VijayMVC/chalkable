@@ -795,6 +795,9 @@
   <data name="ERR_METHOD_CALLER_DOES_NOT_HAVE_PERMISSION" xml:space="preserve">
     <value>Method caller does not have permission {0}</value>
   </data>
+  <data name="ERR_MULTIPLE_SCHOOL_ARE_NOT_SUPPORTED" xml:space="preserve">
+    <value>Multiple school users are not supported yet</value>
+  </data>
   <data name="ERR_NOT_CORRECT_TIME_TO_SYNC_FOR_SCHOOL" xml:space="preserve">
     <value>it's not time to sync {0} for school {1}</value>
   </data>
@@ -1044,6 +1047,9 @@
   <data name="ERR_SIGNUP_USER_WITH_EMAIL_ALREADY_EXISTS" xml:space="preserve">
     <value>A user with that Email already exists. Is that you? Sign in</value>
   </data>
+  <data name="ERR_SIS_CONNECTION_REQUERED_NOT_ENCRYPED_PASSWORD" xml:space="preserve">
+    <value>Sis connection requires not encripted password</value>
+  </data>
   <data name="ERR_SIS_IMPORT_INCORRECT_TASK_TYPE" xml:space="preserve">
     <value>Incorrect task type. Must be ImportInfiniteCampusData task type for current model</value>
   </data>
@@ -1124,6 +1130,9 @@
   </data>
   <data name="ERR_STUDENT_WITH_ID_NOT_FOUND" xml:space="preserve">
     <value>Student with id {0} not found</value>
+  </data>
+  <data name="ERR_SWITCH_SCHOOL_INVALID_RIGTHS" xml:space="preserve">
+    <value>Only sys admin or district is able to switch between schools</value>
   </data>
   <data name="ERR_SYNC_WITH_SIS_INCORRECT_TASK_TYPE" xml:space="preserve">
     <value>Invalid task type for SyncWithSisTaskInfo. should be [sync attendance] or [sync people] or [sync schedule] type</value>

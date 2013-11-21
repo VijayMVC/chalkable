@@ -7,6 +7,10 @@ namespace Chalkable.Data.Master.Model
     public class District
     {
         public const string ID_FIELD = "Id";
+        public const string DEMO_PREFIX_FIELD = "DemoPrefix";
+        public const string LAST_USED_DEMO_FIELD = "LastUseDemo";
+        public const string SERVER_URL_FIELD = "ServerUrl";
+      
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -16,11 +20,8 @@ namespace Chalkable.Data.Master.Model
         public string SisPassword { get; set; }
         public int Status { get; set; }
         public string TimeZone { get; set; }
-        public const string DEMO_PREFIX_FIELD = "DemoPrefix";
         public string DemoPrefix { get; set; }
-        public const string LAST_USED_DEMO_FIELD = "LastUseDemo";
         public DateTime? LastUseDemo { get; set; }
-        public const string SERVER_URL_FIELD = "ServerUrl";
         public string ServerUrl { get; set; }
     }
 
