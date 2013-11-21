@@ -267,8 +267,14 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var container = this.dom.find('#top-content-' + model.getId().valueOf());
                 container.empty();
                 tpl.renderTo(container.removeClass('loading'));
-                var gradedCount = this.dom.find('.grade-input[value]').count();
+                var grades = this.dom.find('.grade-input[value]').valueOf()
+                    .map(function(_){return parseInt((new ria.dom.Dom(_)).getValue());});
+                var gradedCount = grades.length;
                 this.dom.find('#graded-count').setHTML(gradedCount.toString());
+                var classAvg = 0;
+                for(var i = 0; i < gradedCount; i++)
+                    classAvg += grades[i];
+                this.dom.find('#class-avg').setHTML(Math.round(classAvg / gradedCount).toString());
             }
         ]
     );

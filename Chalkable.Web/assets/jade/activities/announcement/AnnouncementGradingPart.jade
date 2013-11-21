@@ -23,7 +23,7 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                 TD
                     span#graded-count=self.getGradedStudentCount()
                     ='/' + studentAnnouncements.length
-                TD=getGrade(self.getClassAvg())
+                TD#class-avg=getGrade(self.getClassAvg())
             TR
                 TD.small=Msg.Students_graded(studentAnnouncements.length)
                 TD.small=Msg.Class_average

@@ -180,17 +180,5 @@ NAMESPACE('chlk.controllers', function (){
                         return new modelClass(this.getCurrentRole(), this.prepareProfileData(data));
                     }, this);
             }
-
-//            [[chlk.models.people.User]],
-//            function infoEditAction(model){
-//                var result;
-//                result = this.personService
-//                    .updateInfo(model.getId(), model.getEmail(), model.getPhonesValue())
-//                    .attach(this.validateResponse_())
-//                    .then(function(model){
-//                    return this.prepareUserProfileModel_(model);
-//                }.bind(this));
-//                return this.UpdateView(chlk.activities.profile.SchoolPersonInfoPage, result);
-//            }
         ])
 });
