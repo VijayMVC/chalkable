@@ -1,42 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Xml;
+using System.Xml.Serialization;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Common.Web;
 using Chalkable.Data.Common.Enums;
+using Newtonsoft.Json;
 
 namespace Chalkable.BusinessLogic.Services
 {
     public class UserContext
     {
+        [JsonIgnore]
         public string MasterConnectionString { get; private set; }
+        [JsonIgnore]
         public string SchoolConnectionString { get; private set; }
         
-        public Guid UserId { get; private set; }
-        public Guid? SchoolId { get; private set; }
-        public Guid? DistrictId { get; private set; }
-        public string Login { get; private set; }
-        public CoreRole Role { get; private set; }
-        public string DistrictServerUrl { get; private set; }
-        public string SchoolTimeZoneId { get; private set; }
+        public Guid UserId { get; set; }
+        public Guid? SchoolId { get; set; }
+        public Guid? DistrictId { get; set; }
+        public string Login { get; set; }
+        public int RoleId { get; set; }
+        [JsonIgnore]
+        public CoreRole Role { get; set; }
+        public string DistrictServerUrl { get; set; }
+        public string SchoolTimeZoneId { get; set; }
 
         public int? SchoolLocalId { get; set; }
-        public Guid? DeveloperId { get; private set; }
+        public Guid? DeveloperId { get; set; }
         public int? UserLocalId { get; set; }
+        [JsonIgnore]
         public string SisToken { get; set; }
+        
         public string SisUrl { get; set; }
         public DateTime? SisTokenExpires { get; set; }
 
+        [JsonIgnore]
         public DateTime NowSchoolTime
         {
             get { return DateTime.UtcNow.ConvertFromUtc(SchoolTimeZoneId ?? "UTC"); }
         }
-
+        
+        [JsonIgnore]
         public bool IsOAuthUser { get; set; }
+        [JsonIgnore]
         public IList<AppPermissionType> AppPermissions { get; set; }
-
+        [JsonIgnore]
         public bool IsInternalApp{ get; set; }
+        [JsonIgnore]
         public string OAuthApplication{ get; set; }
+
+        public UserContext(){}
 
         public UserContext(Guid id, Guid? districtId, Guid? schoolId, string login, string schoolTimeZoneId, 
             string schoolServerUrl, int? schoolLocalId, CoreRole role, Guid? developerId, int? localId, DateTime? sisTokenExpires, string sisUrl)
@@ -46,6 +64,7 @@ namespace Chalkable.BusinessLogic.Services
             SchoolId = schoolId;
             Login = login;
             Role = role;
+            RoleId = role.Id;
             DistrictId = districtId;
 
             SchoolTimeZoneId = schoolTimeZoneId;
@@ -73,73 +92,33 @@ namespace Chalkable.BusinessLogic.Services
             SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, DistrictServerUrl, districtId);   
         }
 
-        private const char DELIMITER = '\n';
         public override string ToString()
         {
-            var parameters = new []
-                {
-                    UserId.ToString(),
-                    SchoolId.HasValue ? SchoolId.ToString() : string.Empty,
-                    Login,
-                    Role.Id.ToString(CultureInfo.InvariantCulture),
-                    DistrictServerUrl ?? string.Empty,
-                    SchoolTimeZoneId ?? string.Empty,
-                    SchoolLocalId.HasValue ? SchoolLocalId.ToString() : string.Empty,
-                    DistrictId.HasValue ? DistrictId.ToString() : string.Empty,
-                    DeveloperId.HasValue ? DeveloperId.ToString() : string.Empty,
-                    UserLocalId.HasValue ? UserLocalId.ToString() : string.Empty,
-                    SisTokenExpires != null ? SisTokenExpires.ToString() : "",
-                    SisUrl ?? ""
-                };
-            return parameters.JoinString(DELIMITER.ToString(CultureInfo.InvariantCulture));
+            var serialiser = new JsonSerializer();
+            using (var stream = new MemoryStream())
+            {
+                var writer = new StreamWriter(stream);
+                serialiser.Serialize(writer, this);
+                writer.Flush();
+                var res = Encoding.UTF8.GetString(stream.ToArray());
+                return res;
+            }
         }
-
-
-        private const int USER_ID = 0;
-        private const int SCHOOL_ID = 1;
-        private const int LOGIN = 2;
-        private const int ROLE_ID = 3;
-        private const int SCHOOL_SERVER_URL = 4;
-        private const int SCHOOL_TIMEZONE_ID = 5;
-        private const int SHOOL_LOCAL_ID = 6;
-        private const int DISTRICT_ID = 7;
-        private const int DEVELOPER_ID = 8;
-        private const int USER_LOCAL_ID = 9;
-        private const int SIS_TOKEN = 10;
-        private const int SIS_URL = 11;
-
         public static UserContext FromString(string s)
         {
-            var sl = s.Split(DELIMITER);
-            var userId = Guid.Parse(sl[USER_ID]);
-            var schoolId = string.IsNullOrEmpty(sl[SCHOOL_ID]) ? (Guid?)null : Guid.Parse(sl[SCHOOL_ID]);
-            var districtId = string.IsNullOrEmpty(sl[DISTRICT_ID]) ? (Guid?)null : Guid.Parse(sl[DISTRICT_ID]);
-            var login = sl[LOGIN];
-
-            string schoolTimeZone = null;
-            string schoolServerUrl = null;
-            Guid? developerId = null;
-            int? localId = null;
-            int? schoolLocalId = null;
-            DateTime? sisTokenExpires = null;
-            string sisUrl = null;
-            if (schoolId.HasValue)
+            var serialiser = new JsonSerializer();
+            var data = Encoding.UTF8.GetBytes(s);
+            using (var stream = new MemoryStream(data))
             {
-                schoolServerUrl = sl[SCHOOL_SERVER_URL];
-                schoolTimeZone = sl[SCHOOL_TIMEZONE_ID];
-                schoolLocalId = string.IsNullOrEmpty(sl[SHOOL_LOCAL_ID]) ? (int?)null : int.Parse(sl[SHOOL_LOCAL_ID]);
+                var reader = new StreamReader(stream);
+                var res =  serialiser.Deserialize<UserContext>(new JsonTextReader(reader));
+                res.Role = CoreRoles.GetById(res.RoleId);
 
-                if (!string.IsNullOrEmpty(sl[DEVELOPER_ID]))
-                    developerId = Guid.Parse(sl[DEVELOPER_ID]);
-                if (!string.IsNullOrEmpty(sl[USER_LOCAL_ID]))
-                    localId = int.Parse(sl[USER_LOCAL_ID]);
-                sisTokenExpires = string.IsNullOrWhiteSpace(sl[SIS_TOKEN]) ? (DateTime?)null : DateTime.Parse(sl[SIS_TOKEN]);
-                sisUrl = sl[SIS_URL];
+                if (res.SchoolId.HasValue)
+                    res.SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, res.DistrictServerUrl, res.DistrictId);
+                res.MasterConnectionString = Settings.MasterConnectionString;
+                return res;
             }
-            var role = CoreRoles.GetById(int.Parse(sl[ROLE_ID]));
-            
-            var res = new UserContext(userId, districtId, schoolId, login, schoolTimeZone, schoolServerUrl, schoolLocalId, role, developerId, localId, sisTokenExpires, sisUrl);
-            return res;
         }
     }
 }
