@@ -111,10 +111,13 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult UpdateInfo(int personId, string email)
         {
-            var res = SchoolLocator.PersonService.EditEmail(personId, email);
-            if (res == null)
-                return Json(new { data = "There is user with that email in Chalkable", success = false });
+            string errorMessage;
+            var res = SchoolLocator.PersonService.EditEmail(personId, email, out errorMessage);
+            if (!string.IsNullOrEmpty(errorMessage))
+                return Json(new { data = errorMessage, success = false });
+            ReLogOn(res);
             return Json(PersonViewData.Create(res));
         }
+
     }
 }

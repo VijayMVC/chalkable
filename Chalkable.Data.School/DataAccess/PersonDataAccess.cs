@@ -30,6 +30,14 @@ namespace Chalkable.Data.School.DataAccess
             return GetPersons(query).Persons.First();
         }
 
+        public bool Exists(string email, int? currentPersonId)
+        {
+            var conds = new AndQueryCondition {{Person.EMAIL_FIELD, email}};
+            if(currentPersonId.HasValue)
+                conds.Add(Person.ID_FIELD, currentPersonId, ConditionRelation.NotEqual);
+            return Exists<Person>(conds);
+        }
+
         public PersonQueryResult GetPersons(PersonQuery query)
         {
             

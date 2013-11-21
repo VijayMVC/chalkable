@@ -299,6 +299,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public void ChangeUserLogin(Guid id, string login)
         {
+            //todo : check login existing
             var user = GetById(id);
             if(!UserSecurity.CanModify(Context, user))
                 throw new ChalkableSecurityException();

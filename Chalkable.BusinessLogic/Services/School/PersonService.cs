@@ -23,7 +23,8 @@ namespace Chalkable.BusinessLogic.Services.School
         Person GetPerson(int id);
         PersonDetails GetPersonDetails(int id);
         void ActivatePerson(int id);
-        Person EditEmail(int id, string email);
+        Person EditEmail(int id, string email, out string error);
+
     }
     
     public class PersonService : SchoolServiceBase, IPersonService
@@ -203,33 +204,42 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public Person EditEmail(int id, string email)
+        public Person EditEmail(int id, string email, out string error)
         {
             using (var uow = Update())
             {
-                var res = EditEmail(new PersonDataAccess(uow, Context.SchoolLocalId), id, email);
+                var res = EditEmail(new PersonDataAccess(uow, Context.SchoolLocalId), id, email, out  error);
                 uow.Commit();
                 return res;
             }
         }
 
-        private Person EditEmail(PersonDataAccess dataAccess, int id, string email)
+        private Person EditEmail(PersonDataAccess dataAccess, int id, string email, out string error)
         {
             var res = GetPerson(id);
-            if (!(BaseSecurity.IsAdminEditorOrCurrentPerson(id, Context) || Context.Role == CoreRoles.TEACHER_ROLE && res.RoleRef == CoreRoles.STUDENT_ROLE.Id))
+            error = null;
+            if (!(CanChangeEmail(res)))
                 throw new ChalkableSecurityException();
-            var otherUser = ServiceLocator.ServiceLocatorMaster.UserService.GetByLogin(res.Email);
+            var user = ServiceLocator.ServiceLocatorMaster.UserService.GetByLogin(res.Email);
             if (res.Email != email)
             {
-                if (otherUser != null && otherUser.LocalId != id)
-                    return null;
-                ServiceLocator.ServiceLocatorMaster.EmailService.SendChangedEmailToPerson(res, email);
-                var user = ServiceLocator.ServiceLocatorMaster.UserService.GetByLogin(res.Email);
-                ServiceLocator.ServiceLocatorMaster.UserService.ChangeUserLogin(user.Id, email);
-                res.Email = email;
-                dataAccess.Update(res);
+                if (dataAccess.Exists(email, res.Id))
+                    error = "There is user with that email in Chalkable";
+                else
+                {
+                    ServiceLocator.ServiceLocatorMaster.UserService.ChangeUserLogin(user.Id, email);
+                    res.Email = email;
+                    dataAccess.Update(res);
+                    ServiceLocator.ServiceLocatorMaster.EmailService.SendChangedEmailToPerson(res, email);         
+                }
             }
             return res;
+        }
+
+        private bool CanChangeEmail(Person person)
+        {
+            return BaseSecurity.IsAdminEditorOrCurrentPerson(person.Id, Context)
+                   || (Context.Role == CoreRoles.TEACHER_ROLE && person.RoleRef == CoreRoles.STUDENT_ROLE.Id);
         }
 
         private Person Edit(PersonDataAccess dataAccess, int localId, string email, string firstName
