@@ -21,6 +21,17 @@ namespace Chalkable.Web.Controllers
                 return Json(new { Success = true, data = new { Role = context.Role.LoweredName } }, JsonRequestBehavior.AllowGet);
             return Json(new { Success = false, Message = "Invalid user token" }, JsonRequestBehavior.AllowGet);
         }
+        
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult RedirectToINow()
+        {
+            var schoolYearId = GetCurrentSchoolYearId();
+            var sisUrl = Context.SisUrl;
+            var url = string.Format(
+                    "{0}InformationNow/TokenLogin.aspx?Token={1}&AcadSessionId={2}"
+                    , sisUrl, Context.SisToken, schoolYearId);
+            return Redirect(url);
+        }
 
         public ActionResult LogOn(string userName, string password, bool remember)
         {
@@ -119,6 +130,8 @@ namespace Chalkable.Web.Controllers
             }
             return Json(false);
         }
+
+
 
     }
 }

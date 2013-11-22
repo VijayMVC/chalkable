@@ -55,7 +55,9 @@
             Revision: @Chalkable.Web.Tools.CompilerHelper.Version
         </div>
 
-        <div id="logout-block"></div>
+        <div id="logout-block">
+            @Html.ActionLink("Go to INOW", "RedirectToINow", "User", null, new {style = "visibility: hidden;"})
+        </div>
    
 
         @{

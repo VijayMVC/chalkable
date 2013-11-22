@@ -8,8 +8,6 @@ REQUIRE('chlk.models.developer.DeveloperInfo');
 REQUIRE('chlk.models.account.ChangePassword');
 
 
-
-
 NAMESPACE('chlk.controllers', function (){
 
     /** @class chlk.controllers.AccountController*/
@@ -44,6 +42,10 @@ NAMESPACE('chlk.controllers', function (){
                     }
                  }, this);
          },
+
+//         function redirectToINOWAction(){
+//            this.accountService.redirectToINOW().attach(this.validateResponse_());
+//         },
 
 
         [chlk.controllers.AccessForRoles([
