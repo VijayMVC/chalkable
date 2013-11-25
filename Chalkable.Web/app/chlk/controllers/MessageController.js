@@ -22,7 +22,7 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.PersonService, 'personService',
 
-            [chlk.controllers.SidebarButton('message')],
+            [chlk.controllers.SidebarButton('messages')],
             [[Boolean, Boolean, String, String, Number]],
             function pageAction(postback_, inbox_, role_, keyword_, start_) {
                 inbox_ = inbox_ !== false;
@@ -41,7 +41,7 @@ NAMESPACE('chlk.controllers', function (){
                     this.PushView(chlk.activities.messages.MessageListPage, result);
             },
 
-            [chlk.controllers.SidebarButton('message')],
+            [chlk.controllers.SidebarButton('messages')],
             [[chlk.models.messages.MessageList]],
             function doAction(model) {
                 if (model.getSubmitType() == "search")
@@ -76,6 +76,7 @@ NAMESPACE('chlk.controllers', function (){
                 return new ria.async.DeferredData(result);
             },
 
+            [chlk.controllers.SidebarButton('messages')],
             [[chlk.models.id.MessageId]],
             function sendPageAction(replayOnId_)
             {
@@ -123,6 +124,7 @@ NAMESPACE('chlk.controllers', function (){
                     }.bind(this));
             },
 
+            [chlk.controllers.SidebarButton('messages')],
             [[chlk.models.id.MessageId]],
             function viewPageAction(id)
             {
