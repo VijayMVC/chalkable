@@ -1,5 +1,5 @@
 #attach-file-area.announcement-item.attach-file-area
-    button.simple-gray-button.file Attach File
+    div.simple-gray-button.file Attach File
         +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
 each attachment, i in self.getAnnouncementAttachments()
     if attachment.isOwner()
