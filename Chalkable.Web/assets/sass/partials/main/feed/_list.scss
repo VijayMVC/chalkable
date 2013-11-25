@@ -388,3 +388,10 @@ $star-size: 18px;
     }
   }
 }
+
+.school-person-list{
+  .people-top-bar{
+    z-index: 1001;
+    position: relative;
+  }
+}

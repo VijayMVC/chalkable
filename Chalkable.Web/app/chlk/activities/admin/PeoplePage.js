@@ -13,16 +13,12 @@ NAMESPACE('chlk.activities.admin', function (){
         [ria.mvc.PartialUpdateRule(chlk.templates.people.UsersForGridTpl, chlk.activities.lib.DontShowLoader(), '.people-list', ria.mvc.PartialUpdateRuleActions.Append)],
         'PeoplePage', EXTENDS(chlk.activities.person.PersonGrid), [
 
-            [ria.mvc.DomEventBind('change', '#roleId')],
-            [[ria.dom.Dom, ria.dom.Event, Object]],
-            VOID, function roleSelect(node, event, arg) {
-                this.dom.find('#people-list-form').trigger('submit');
-            },
-
-            [ria.mvc.DomEventBind('change', '#gradeLevelId')],
-            [[ria.dom.Dom, ria.dom.Event, Object]],
-            VOID, function gradeLevelSelect(node, event, arg) {
-                this.dom.find('#people-list-form').trigger('submit');
+            [ria.mvc.DomEventBind('change', '[name="rolesId"], [name="gradeLevelsIds"]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function roleSelect(node, event) {
+                var form = this.dom.find('#people-list-form');
+                form.find('input[name="start"]').setValue(0);
+                form.trigger('submit');
             }
     ]);
 });

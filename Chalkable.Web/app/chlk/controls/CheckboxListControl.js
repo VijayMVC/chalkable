@@ -29,7 +29,7 @@ NAMESPACE('chlk.controls', function () {
                 var newNode = $target.find("input[name=" + name + "]");
                 if(! newNode.exists())
                     newNode = new ria.dom.Dom("input[name=" + name + "]");
-                newNode.setValue(res);
+                newNode.setValue(res).trigger('change');
             },
 
             [ria.mvc.DomEventBind('click', '.checkbox-list label[for]')],

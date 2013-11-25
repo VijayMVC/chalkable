@@ -102,9 +102,9 @@ namespace Chalkable.Web.Controllers.PersonControllers
         }
         
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult GetPersons(int? roleId, IntList gradeLevelIds, int? start, int? count, bool? byLastName, string filter)
+        public ActionResult GetPersons(IntList rolesId, IntList gradeLevelIds, int? start, int? count, bool? byLastName, string filter)
         {
-            var roleName = roleId.HasValue ? CoreRoles.GetById(roleId.Value).Name : null;
+            var roleName = rolesId != null && rolesId.Count > 0 ? CoreRoles.GetById(rolesId[0]).Name : null;
             return Json(PersonLogic.GetPersons(SchoolLocator, start, count, byLastName, filter, roleName, null, gradeLevelIds));
         }
 
