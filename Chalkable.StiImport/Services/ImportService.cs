@@ -46,6 +46,10 @@ namespace Chalkable.StiConnector.Services
             if (ServiceLocatorSchool.SchoolPersonService.GetAll().Count > 0)
                 return;
 
+            var district = ServiceLocatorMaster.DistrictService.GetByIdOrNull(ServiceLocatorSchool.Context.DistrictId.Value);
+            district.SisDistrictId = stiEntities.Schools.First().DistrictGuid;
+            ServiceLocatorMaster.DistrictService.Update(district);
+
             ImportSchools();
             Log.LogInfo(ChlkResources.IMPORT_PERSONS_START);
             ImportAddresses();

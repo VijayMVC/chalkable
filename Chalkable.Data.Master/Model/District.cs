@@ -24,6 +24,7 @@ namespace Chalkable.Data.Master.Model
         public string DemoPrefix { get; set; }
         public DateTime? LastUseDemo { get; set; }
         public string ServerUrl { get; set; }
+        public Guid? SisDistrictId { get; set; }
     }
 
     public enum DistrictStatus
