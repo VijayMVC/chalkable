@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using Chalkable.StiConnector.Connectors.Model;
 using Newtonsoft.Json;
 
@@ -31,6 +32,7 @@ namespace Chalkable.StiConnector.Connectors
             try
             {
                 var data = client.DownloadData(url);
+                //Thread.Sleep(500);
                 //var data = Encoding.UTF8.GetBytes(mockResp);
                 stream = new MemoryStream(data);
 

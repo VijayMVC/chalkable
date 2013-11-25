@@ -326,6 +326,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="app\api\chlk-post-message-api.js" />
     <Content Include="Global.asax" />
+    <Content Include="loaderio-5b599a813535f4cd31553b713ccbec90.html" />
     <Content Include="loaderio-e721e158fdd474be0e20e8973ea389f0.html" />
     <Content Include="pathfinder\adminedit_methods.xml" />
     <Content Include="pathfinder\admingrade_methods.xml" />
