@@ -1,0 +1,29 @@
+mixin AttendanceDayBlock(num)
+    if num == 1
+        .attendance-students.whole-day
+            +StudentsTpl(self.getStudentsAbsentWholeDay(), Msg.Absent_from_school, 2, date).absent-from-school
+    if num == 2
+        div(type=valuesEnum.EXCUSED.valueOf()).attendance-students.bytype.excused-students
+            +StudentsTpl(self.getExcusedStudents(), Msg.Excused, 2, date)(
+                class = 'attendance-' + valuesEnum.EXCUSED.valueOf()
+            )
+    if num == 3
+        div(type=valuesEnum.ABSENT.valueOf()).attendance-students.bytype.absent-students
+            +StudentsTpl(self.getAbsentStudents(), Msg.Absent_from_a_class, 2, date)(
+                class = 'attendance-' + valuesEnum.ABSENT.valueOf()
+            )
+    if num == 4
+        div(index="3", type=valuesEnum.LATE.valueOf()).attendance-students.bytype.late-students
+            +StudentsTpl(self.getLateStudents(), Msg.Late, 2, date)(
+                class = 'attendance-' + valuesEnum.LATE.valueOf()
+            )
+
+valuesEnum = chlk.models.attendance.AttendanceTypeEnum
+date = self.getDate()
+.big-chart-containner
+    +AdminAtteddanceChart(self.getAttendancesStats())
++AddStudentTpl(2, date)
+sortedArray = self.getSortedBlocksInfo()
+each item in sortedArray
+    if item[1]
+        +AttendanceDayBlock(item[0])

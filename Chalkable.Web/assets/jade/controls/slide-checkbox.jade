@@ -1,0 +1,11 @@
+mixin SlideCheckbox(name, val, isReadOnly)
+    .slide-checkbox(attributes)
+        .wrapper
+            -attributes.checked = val
+            +Checkbox(name, val)(attributes)
+            if !isReadOnly
+                label(for=name)
+            else
+                label
+
+
