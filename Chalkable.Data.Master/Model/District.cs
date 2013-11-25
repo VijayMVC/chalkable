@@ -10,7 +10,8 @@ namespace Chalkable.Data.Master.Model
         public const string DEMO_PREFIX_FIELD = "DemoPrefix";
         public const string LAST_USED_DEMO_FIELD = "LastUseDemo";
         public const string SERVER_URL_FIELD = "ServerUrl";
-      
+        public const string SIS_URL_FIELD = "SisUrl";
+
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public string Name { get; set; }

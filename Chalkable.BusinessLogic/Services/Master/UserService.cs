@@ -19,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         UserContext Login(string login, string password);
         UserContext Login(string confirmationKey);
         UserContext LoginToDemo(string roleName, string demoPrefix);
-        UserContext SisLogIn(Guid districtId, string token, DateTime tokenExpiresTime);
+        UserContext SisLogIn(string sisUrl, string token, DateTime tokenExpiresTime);
         UserContext ReLogin(Guid id);
         User GetByLogin(string login);
         User GetById(Guid id);
@@ -106,12 +106,12 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        public UserContext SisLogIn(Guid districtId, string token, DateTime tokenExpiresTime)
+        public UserContext SisLogIn(string sisUrl, string token, DateTime tokenExpiresTime)
         {
             using (var uow = Update())
             {
-                var district = new DistrictDataAccess(uow).GetById(districtId);
-                var iNowCl = new ConnectorLocator(token, district.SisUrl, tokenExpiresTime);
+                var district = new DistrictDataAccess(uow).GetDistrict(sisUrl);
+                var iNowCl = new ConnectorLocator(token, sisUrl, tokenExpiresTime);
                 var iNowUser = iNowCl.UsersConnector.GetMe();
                 UserContext res = null;
                 if (!string.IsNullOrEmpty(iNowUser.Username))
@@ -119,7 +119,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                     var chlkUser = new UserDataAccess(uow).GetUser(new AndQueryCondition
                     {
                         {User.SIS_USER_NAME_FIELD, iNowUser.Username},
-                        {User.DISTRICT_REF_FIELD, districtId}
+                        {User.DISTRICT_REF_FIELD, district.Id}
                     });
                     res = Login(chlkUser, uow, iNowCl);
                 }
