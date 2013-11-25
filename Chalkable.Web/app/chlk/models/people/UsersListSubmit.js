@@ -9,7 +9,7 @@ NAMESPACE('chlk.models.people', function () {
             String, 'filter',
             Number, 'start',
             String, 'submitType',
-            Number, 'roleId',
+            String, 'rolesId',
             chlk.models.id.ClassId, 'classId',
 
             Boolean, function isScroll(){

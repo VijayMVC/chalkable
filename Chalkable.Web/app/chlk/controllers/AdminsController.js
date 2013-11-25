@@ -54,7 +54,7 @@ NAMESPACE('chlk.controllers', function (){
             function updateListAction(model){
                 var isScroll = model.isScroll(), start = model.getStart();
                 var res = this.adminService
-                    .getUsers(model.getFilter(), model.getRoleId(), model.getGradeLevelsIds(), model.isByLastName(), start)
+                    .getUsers(model.getFilter(), model.getRolesId(), model.getGradeLevelsIds(), model.isByLastName(), start)
                     .then(function(usersData){
                         if(isScroll)  return this.prepareUsers(usersData, start);
                         return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter());

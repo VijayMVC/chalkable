@@ -20,17 +20,19 @@
             +GlanceBox(null, null, {value: school.getStudentsCount(), title: 'Sudents'})
             +GlanceBox(null, null, {value: school.getInvitesCount(), title: 'Invites'})
         h2 People
-        +ActionForm('schools', 'setPeopleFilter')#people-form
+        +ActionForm('schools', 'setPeopleFilter')#people-list-form
             +Button()(type="submit").x-hidden
             .loader-container
                 .loader
                 .action-bar.not-transparent.people-tb
                     .container.panel-bg
                         .right
-                            +Select('roleId')#roleId
-                                each item in roles
-                                    +Option(item.getId(), item.getName())
-                            +Select('gradeLevelId')#gradeLevelId
-                                each item in gradeLevels
-                                    +Option(item.getId(), item.getName())
+                            .action-button.select-btn
+                                +MultipleSelect('All Roles', 'rolesId')#roles-select
+                                    each item in self.roles
+                                        +LabeledCheckbox(item.getRoleName(), item.getRoleId().valueOf().toString(), false)
+                            .action-button.select-btn
+                                +MultipleSelect('All Grade Levels', 'gradeLevelsIds')#grade-levels-select
+                                    each item in self.gradeLevels
+                                        +LabeledCheckbox(self.getSerial(parseInt(item.getName(), 10)), item.getId().valueOf().toString(), false)
                 +RenderWith(self.getUsersList(), chlk.templates.people.UsersListTpl)

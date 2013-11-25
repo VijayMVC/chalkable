@@ -10,11 +10,11 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.AdminService */
     CLASS(
         'AdminService', EXTENDS(chlk.services.BaseService), [
-            [[String, Number, String, Boolean, Number]],
+            [[String, String, String, Boolean, Number]],
             ria.async.Future, function getUsers(filter_, roleId_, gradeLevelIds_, byLastName_, start_) {
                 return this.getPaginatedList('Admin/GetPersons.json', chlk.models.people.User, {
                     start: start_,
-                    roleId: roleId_ || null,
+                    rolesId: roleId_ || null,
                     gradeLevelIds: gradeLevelIds_,
                     byLastName: byLastName_,
                     filter: filter_
