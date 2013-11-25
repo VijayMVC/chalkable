@@ -1,25 +1,22 @@
-REQUIRE('ria.ajax.JsonPostTask');
+REQUIRE('ria.ajax.JsonGetTask');
 REQUIRE('chlk.lib.exception.NotAuthorizedException');
 
 NAMESPACE('chlk.lib.ajax', function () {
     "use strict";
 
-    /** @class chlk.lib.ajax.ChlkJsonPostTask */
+    /** @class chlk.lib.ajax.ChlkJsonGetTask */
     CLASS(
-        'ChlkJsonPostTask', EXTENDS(ria.ajax.JsonPostTask), [
+        'ChlkJsonGetTask', EXTENDS(ria.ajax.JsonGetTask), [
             function $(url) {
                 BASE(url);
             },
 
-            OVERRIDE, Object, function getBody_() {
-                return this._method != ria.ajax.Method.GET ? JSON.stringify(this._params) : '';
-            },
-
             OVERRIDE, VOID, function transferComplete_(evt) {
-                if (this._xhr.getResponseHeader('REQUIRES_AUTH') === 1)   {
+                if (this._xhr.getResponseHeader('REQUIRES_AUTH') != null)   {
                     this._completer.completeError(chlk.lib.exception.NotAuthorizedException());
                     return;
                 }
+
                 BASE(evt);
             }
         ]);

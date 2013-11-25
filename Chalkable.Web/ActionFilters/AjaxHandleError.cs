@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Web.ActionResults;
-using Chalkable.Web.Controllers;
 
 
 namespace Chalkable.Web.ActionFilters
@@ -27,7 +21,8 @@ namespace Chalkable.Web.ActionFilters
                 filterContext.ExceptionHandled = true;
                 filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
                 filterContext.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                var jsonResponse = new { Data = filterContext.Exception, Success = false };
+
+                var jsonResponse = ExceptionViewData.Create(filterContext.Exception, filterContext.Exception.InnerException);
                 var jsonresult = new ChalkableJsonResult(false)
                 {
                     Data = jsonResponse,

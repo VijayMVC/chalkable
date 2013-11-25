@@ -156,14 +156,7 @@ NAMESPACE('chlk', function (){
                     return false;
                 });
 
-                var cb = function(node, response, settings){
-                    if (response.getResponseHeader('REQUIRES_AUTH') === '1'){
-                            document.location.href = WEB_SITE_ROOT;
-                    };
-                };
 
-                jQuery(document).ajaxError(cb);
-                jQuery(document).ajaxSuccess(cb);
 
                 this.apiHost_.onStart(this.context);
 
