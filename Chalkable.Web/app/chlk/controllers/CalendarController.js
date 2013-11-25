@@ -66,6 +66,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.calendar.announcement.WeekBarPopUp, result);
         },
 
+        [chlk.controllers.SidebarButton('calendar')],
         [[chlk.models.common.ChlkDate, String]],
         function dayAction(date_, gradeLevels_){
             var result = this.calendarService
@@ -74,6 +75,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushOrUpdateView(chlk.activities.calendar.announcement.DayPage, result);
         },
 
+        [chlk.controllers.SidebarButton('calendar')],
         [[chlk.models.common.ChlkDate, String]],
         function dayAdminAction(date_, gradeLevels_){
             var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);
@@ -88,16 +90,19 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushOrUpdateView(chlk.activities.calendar.announcement.AdminDayCalendarPage, result);
         },
 
+        [chlk.controllers.SidebarButton('calendar')],
         [[chlk.models.common.ChlkDate, String]],
         function weekAdminAction(date_, gradeLevels_){
             return this.week(date_, null, gradeLevels_);
         },
 
+        [chlk.controllers.SidebarButton('calendar')],
         [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
         function weekAction(date_, classId_){
             return this.week(date_, classId_);
         },
 
+        [chlk.controllers.SidebarButton('calendar')],
         [[chlk.models.common.ChlkDate, chlk.models.id.ClassId, String]],
         function week(date_, classId_, gradeLevels_){
             var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);

@@ -192,6 +192,7 @@ NAMESPACE('chlk.services', function () {
             chlk.models.calendar.announcement.Week, function prepareWeekData(data, date_){
                 var max = 0, index = 0, kil=0, empty= 0, empty2=0, sun, date, startArray = [], endArray = [];
                 var len = data.length;
+                date_ = date_ || new chlk.models.common.ChlkDate(getDate());
                 if(len < 7){
                     var dt = len ? data[0].getDate() : date_;
                     kil = dt.getDate().getDay();
