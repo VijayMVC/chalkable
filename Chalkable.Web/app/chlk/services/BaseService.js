@@ -1,7 +1,7 @@
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
 
 REQUIRE('chlk.lib.ajax.ChlkJsonPostTask');
-REQUIRE('ria.ajax.JsonGetTask');
+REQUIRE('chlk.lib.ajax.ChlkJsonGetTask');
 REQUIRE('chlk.lib.ajax.UploadFileTask');
 
 
@@ -79,7 +79,7 @@ NAMESPACE('chlk.services', function () {
             [[String, Object, Object]],
             ria.async.Future, function get(uri, clazz_, gParams_) {
 
-                return new ria.ajax.JsonGetTask(this.resolveUri(uri))
+                return new chlk.lib.ajax.ChlkJsonGetTask(this.resolveUri(uri))
                     .params(gParams_ || {})
                     .requestHeaders(this.prepareDefaultHeaders({}))
                     .run()
@@ -175,7 +175,7 @@ NAMESPACE('chlk.services', function () {
             [[String, Object, Object]],
             ria.async.Future, function getArray(uri, clazz, gParams) {
 
-                return new ria.ajax.JsonGetTask(this.resolveUri(uri))
+                return new chlk.lib.ajax.ChlkJsonGetTask(this.resolveUri(uri))
                     .params(gParams)
                     .requestHeaders(this.prepareDefaultHeaders({}))
                     .run()

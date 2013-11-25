@@ -24,14 +24,6 @@ namespace Chalkable.Data.Master.DataAccess
             return SelectMany<District>(conds);
         }
 
-        public District GetDistrict(string sisUrl)
-        {
-            var conds = new AndQueryCondition();
-            if (!string.IsNullOrEmpty(sisUrl))
-                conds.Add(District.SIS_URL_FIELD, sisUrl);
-            return SelectOne<District>(conds);
-        }
-
         public IDictionary<string, int> CalcServersLoading()
         {
             var res = Settings.Servers.ToDictionary(server => server, server => 0);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Security;
 using System.Web;
 using System.Web.Mvc;
@@ -7,6 +8,7 @@ using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
+using Chalkable.Web.ActionResults;
 using Chalkable.Web.Controllers;
 
 namespace Chalkable.Web.ActionFilters
@@ -106,15 +108,21 @@ namespace Chalkable.Web.ActionFilters
             }
             if (!allow)
             {
-                
                 if (controller.RouteData.Values.ContainsKey(format) &&
                     controller.RouteData.Values[format].ToString().ToLower() != htmlFormat
                     && controller.RouteData.Values[format].ToString().ToLower() != aspxFormat)
                 {
                     filterContext.RequestContext.HttpContext.Response.AddHeader(requiresAuth, "1");
+
+                    filterContext.Result = new ChalkableJsonResult(false)
+                    {
+                        Data = new { Data = "User is not authorized" },
+                        SerializationDepth = 4
+                    };
                 }                   
                 else
                     filterContext.Result = controller.Redirect<HomeController>(c => c.Index());
+
             }
             base.OnActionExecuting(filterContext);
         }

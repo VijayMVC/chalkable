@@ -8,6 +8,7 @@ REQUIRE('chlk.activities.lib.PendingActionDialog');
 REQUIRE('chlk.models.common.InfoMsg');
 REQUIRE('chlk.models.common.Button');
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
+REQUIRE('chlk.lib.exception.NotAuthorizedException');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -34,36 +35,23 @@ NAMESPACE('chlk.controllers', function (){
    CLASS(ABSTRACT,
        'BaseController', EXTENDS(ria.mvc.Controller), [
 
-
-
            ria.async.Future, function validateResponse_() {
                var head
                    , me = this;
 
                (head = new ria.async.Future)
+                   .catchException(chlk.lib.exception.NotAuthorizedException, function (exception) {
+                       document.location.href = WEB_SITE_ROOT;
+                   })
                    .catchError(function (error) {
-                       throw chlk.services.DataException('Failed to load data', error);
-                   })
-                   .then(function (data) {
-                       // TODO: check response here
-                       /*if (!data.isOkResponse())
-                        throw chlk.services.DataException('Failed to load data: ' + $L(data.getErrorCode()));*/
-
-                       return data;
-                   })
-                   .catchException(chlk.services.DataException, function (error) {
                        console.error(error.toString());
-
                        var state = this.context.getState();
                        state.setController('error');
                        state.setAction('generalError');
                        state.setParams([]);
                        state.setPublic(false);
                        this.context.stateUpdated();
-
-                       // todo: scoping !?
-                       //me.view.showAlertBox(error.getMessage());
-                       return ria.async.BREAK; // failed with exception, stop further processing
+                       return ria.async.BREAK;
                    }, this);
 
                return head;

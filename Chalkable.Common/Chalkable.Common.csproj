@@ -64,6 +64,7 @@
     <Compile Include="Exceptions\BlobNotFoundException.cs" />
     <Compile Include="Exceptions\ChalkableException.cs" />
     <Compile Include="Exceptions\ChalkableSecurityException.cs" />
+    <Compile Include="Exceptions\ExceptionViewData.cs" />
     <Compile Include="Exceptions\IncorrectTaskDataException.cs" />
     <Compile Include="Exceptions\InvalidSchoolStatusException.cs" />
     <Compile Include="Exceptions\NoMarkingPeriodException.cs" />
