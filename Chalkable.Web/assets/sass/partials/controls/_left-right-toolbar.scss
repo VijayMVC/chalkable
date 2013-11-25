@@ -173,6 +173,9 @@
           .text-container{
             text-align: center;
             display: inline-block;
+            width: 56px;
+            text-overflow: ellipsis;
+            overflow: hidden;
             padding-top: 35px;
             font-size: 12px;
             line-height: 14px;
