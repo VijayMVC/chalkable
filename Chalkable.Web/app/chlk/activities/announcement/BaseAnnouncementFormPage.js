@@ -22,6 +22,14 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.dom.find('.new-reminder').removeClass('x-hidden');
             },
 
+            [ria.mvc.DomEventBind('change', '#expiresdate')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function dueDateChange(node, event){
+                var dt = new Date(node.getValue());
+                if(!dt.valueOf())
+                    node.setValue('');
+            },
+
             [ria.mvc.DomEventBind('click', '#reminders-button')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function showRemindersClick(node, event){
