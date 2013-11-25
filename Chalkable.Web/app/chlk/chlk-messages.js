@@ -418,6 +418,7 @@ var Msg = {
     Select_file: 'Select a file',
     Select_file_to_upload: 'Select file to upload...',
     Searching_text: 'Searching...',
+    Send_message: 'Send message',
     Sent_today: 'Sent today',
     Sent_in_date: function(date){
         return String.format('Sent {0}', date)

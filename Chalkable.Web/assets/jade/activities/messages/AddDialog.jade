@@ -25,6 +25,6 @@
                                 =self.body
 
                     .form-buttons
-                        +Button()(type="submit").special-button.blue-button.submit-btn#submitbtn Submit
-                        +Button.special-button.red-button.close Cancel
+                        +Button()(type="submit").special-button.blue-button.submit-btn#submitbtn=Msg.Send_message.toUpperCase()
+                        +Button.special-button.cancel-button.close=Msg.Cancel
     .bg-bottom
