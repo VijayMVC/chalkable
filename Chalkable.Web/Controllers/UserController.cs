@@ -17,9 +17,9 @@ namespace Chalkable.Web.Controllers
         {
             var expiresTime = tokenExpiresTime ?? DateTime.UtcNow.AddDays(2);
             var context = LogOn(false, us => us.SisLogIn(districtUrl, token, expiresTime));
-            if(context != null)
-                return Json(new { Success = true, data = new { Role = context.Role.LoweredName } }, JsonRequestBehavior.AllowGet);
-            return Json(new { Success = false, Message = "Invalid user token" }, JsonRequestBehavior.AllowGet);
+            if (context != null)
+               return RedirectToHome(context.Role);
+            return Redirect<HomeController>(x => x.Index());
         }
         
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]

@@ -187,5 +187,21 @@ namespace Chalkable.Web.Controllers
             }
             return markingPeriodId.Value;
         }
+
+
+        protected ActionResult RedirectToHome(CoreRole role)
+        {
+            if (role == CoreRoles.SUPER_ADMIN_ROLE)
+                return Redirect<HomeController>(x => x.SysAdmin());
+            if(role == CoreRoles.ADMIN_GRADE_ROLE 
+                || role == CoreRoles.ADMIN_EDIT_ROLE 
+                || role == CoreRoles.ADMIN_VIEW_ROLE)
+                return Redirect<HomeController>(x => x.Admin(null));
+            if (role == CoreRoles.TEACHER_ROLE)
+                return Redirect<HomeController>(x => x.Teacher(false));
+            if (role == CoreRoles.STUDENT_ROLE)
+                return Redirect<HomeController>(x => x.Student(false));
+            return Redirect<HomeController>(x => x.Index());
+        }
     }
 }
