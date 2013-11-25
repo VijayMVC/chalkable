@@ -19,6 +19,7 @@ REQUIRE('chlk.models.apps.AppInstallGroup');
 REQUIRE('chlk.models.apps.AppInstallPostData');
 REQUIRE('chlk.models.apps.AppDeletePostData');
 REQUIRE('chlk.models.apps.AppMarketPostData');
+REQUIRE('chlk.models.apps.MyAppsViewData');
 REQUIRE('chlk.models.apps.AppRating');
 REQUIRE('chlk.models.apps.AppReviewPostData');
 
@@ -133,30 +134,21 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('apps')],
-        function myAppsAction() {
+        function myAppsAction(isEdit_) {
+            var isEdit = isEdit_ ? isEdit_ : false;
+            var currentPersonId = this.getCurrentPerson().getId();
             var result = this.appMarketService
-                .getMyApps(this.getCurrentPerson().getId(), false)
+                .getMyApps(currentPersonId, isEdit)
                 .then(function(apps){
-                    return new chlk.models.apps.MyAppsViewData(apps, false);
+                    return new chlk.models.apps.MyAppsViewData(apps, false, currentPersonId);
                 })
                 .attach(this.validateResponse_());
-            return this.PushView(chlk.activities.apps.MyAppsPage, result);
+
+            if (isEdit_)
+                return this.UpdateView(chlk.activities.apps.MyAppsPage, result);
+            else
+                return this.PushView(chlk.activities.apps.MyAppsPage, result);
         },
-
-
-
-        [chlk.controllers.SidebarButton('apps')],
-        [[Boolean]],
-        function updateMyAppsAction(isEdit) {
-            var result = this.appMarketService
-                .getMyApps(this.getCurrentPerson().getId(), isEdit)
-                .then(function(data){
-                    return new chlk.models.apps.MyAppsViewData(data, isEdit);
-                }, this)
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.apps.MyAppsPage, result);
-        },
-
 
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.id.AppId]],

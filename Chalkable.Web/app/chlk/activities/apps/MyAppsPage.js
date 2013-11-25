@@ -1,5 +1,7 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.apps.MyApps');
+REQUIRE('chlk.templates.apps.MyAppsSearchBoxTpl');
+
 
 NAMESPACE('chlk.activities.apps', function () {
 

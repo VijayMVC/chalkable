@@ -39,8 +39,6 @@ NAMESPACE('chlk.services', function () {
                                 return result.getItems();
                             });
                     }, this);
-
-
             },
 
             [[
@@ -78,19 +76,20 @@ NAMESPACE('chlk.services', function () {
                     });
             },
 
-            [[chlk.models.id.SchoolPersonId, Number]],
-            ria.async.Future, function getInstalledApps(personId, start_) {
+            [[chlk.models.id.SchoolPersonId, Number, String]],
+            ria.async.Future, function getInstalledApps(personId, start_, filter_) {
                 return this
                     .getPaginatedList('AppMarket/ListInstalled.json', chlk.models.apps.AppMarketApplication, {
                         personId: personId.valueOf(),
-                        start: start_ | 0
+                        start: start_ | 0,
+                        filter: filter_ || ""
                     })
             },
 
-            [[chlk.models.id.SchoolPersonId, Boolean, Number]],
-            ria.async.Future, function getMyApps(personId, forEdit, start_) {
+            [[chlk.models.id.SchoolPersonId, Boolean, Number, String]],
+            ria.async.Future, function getMyApps(personId, forEdit, start_, filter_) {
                 return this
-                    .getInstalledApps(personId, start_)
+                    .getInstalledApps(personId, start_, filter_)
                     .then(function(data){
 
                         var apps = data && data.getItems() || [];
@@ -125,6 +124,12 @@ NAMESPACE('chlk.services', function () {
                         this.getContext().getSession().set('myAppsCached', apps);
                         return data;
                     }, this);
+            },
+
+            [[String]],
+            ria.async.Future, function getMyAppsByFilter(filter) {
+                var personId = this.getContext().getSession().get('currentPerson').getId();
+                return this.getMyApps(personId, false, 0, filter);
             },
 
 
