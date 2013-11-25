@@ -9,6 +9,7 @@ NAMESPACE('chlk.models.school', function () {
         'SchoolPeoplePart', EXTENDS(chlk.models.people.UsersList), [
             chlk.models.id.SchoolId, 'schoolId',
             Number, 'roleId',
+            String, 'rolesId',
             Number, 'gradeLevelId'
         ]);
 });

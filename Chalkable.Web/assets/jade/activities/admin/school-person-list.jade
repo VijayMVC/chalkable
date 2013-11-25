@@ -9,15 +9,13 @@
                         +ActionLink('report', 'peopleExport').export-btn
                     .right
                         .action-button.select-btn
-                            +Select('roleId')#roleId
-                                +Option('', 'All Roles', true)
+                            +MultipleSelect('All People', 'rolesId')#roles-select
                                 each item in self.roles
-                                    +Option(item.getRoleId().valueOf(), item.getRoleName())
+                                    +LabeledCheckbox(item.getRoleName().capitalize() + 's', item.getRoleId().valueOf().toString(), false)
                         .action-button.select-btn
-                            +Select('gradeLevelsIds')#gradeLevelId
-                                +Option('', 'All Grade Levels', true)
+                            +MultipleSelect('All Grades', 'gradeLevelsIds')(data-suffix-if-one=" Grade")#grade-levels-select
                                 each item in self.gradeLevels
-                                    +Option(item.getId().valueOf().toString(), item.getName())
+                                    +LabeledCheckbox(self.getSerial(parseInt(item.getName(), 10)), item.getId().valueOf().toString(), false)
             +RenderWith(self.getUsersList(), chlk.templates.people.UsersListTpl)(
                 userRole = self.getUserRole()
             )
