@@ -9,14 +9,10 @@ NAMESPACE('ria.async', function () {
             READONLY, ria.async.Future, 'future',
             READONLY, Boolean, 'completed',
 
-            ria.async.Future, function getFuture() {
-                return this.future.getWrapper();
-            },
-
             [[ria.async.ICancelable]],
             function $(canceler_) {
                 BASE();
-                this.future = new ria.async.FutureImpl(canceler_);
+                this.future = new ria.async.Future(canceler_).getImpl();
                 this.completed = false;
             },
 
@@ -25,11 +21,15 @@ NAMESPACE('ria.async', function () {
             },
 
             VOID, function complete(data) {
+                Assert(!this.completed, 'Can not complete completed completer');
+
                 this.future.finish(data);
                 this.completed = true;
             },
 
             VOID, function completeError(error) {
+                Assert(!this.completed, 'Can not completeError completed completer');
+
                 this.future.completeError(error);
                 this.completed = true;
             },
