@@ -27,8 +27,9 @@ NAMESPACE('chlk.activities.lib', function () {
                 }
             },
 
-            OVERRIDE, VOID, function onRender_(model){
-                BASE(model);
+            [[String]],
+            OVERRIDE, VOID, function onModelWait_(msg_) {
+                BASE(msg_);
 
                 this._pageClass && this._wrapper.addClass(this._pageClass);
                 this._bodyClass && this._body.addClass(this._bodyClass);
