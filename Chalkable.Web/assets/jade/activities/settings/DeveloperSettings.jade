@@ -1,18 +1,14 @@
 .settings
-    .developer
-    .search-wrapper
-        #search-bar
-    .wrapper
-        .row
-            +ActionLink('account', 'profile', self.developerId) Profile
-        .row
-            +ActionLink('developer', 'paypalSettings', self.developerId) PayPal
-        .row
-            id = self.currentAppId ? self.currentAppId.valueOf() : null
-            appName = self.getCurrentAppName() || ''
-            if id
-                +ActionLink('apps', 'tryDeleteApplication', id, appName) Delete application
-
-
-
-
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('settings', 'dashboard').pressed General
+            .right
+                +ActionLink('account', 'profile', self.developerId) Profile
+    .row
+        +ActionLinkButton('developer', 'paypalSettings', self.developerId).special-button.yellow-button PayPal
+    .row
+        id = self.currentAppId ? self.currentAppId.valueOf() : null
+        appName = self.getCurrentAppName() || ''
+        if id
+            +ActionLinkButton('apps', 'tryDeleteApplication', id, appName).special-button.yellow-button Delete application
