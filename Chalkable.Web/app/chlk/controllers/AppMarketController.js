@@ -145,7 +145,7 @@ NAMESPACE('chlk.controllers', function (){
                 })
                 .attach(this.validateResponse_());
 
-            if (isEdit_)
+            if (isEdit_ != null)
                 return this.UpdateView(chlk.activities.apps.MyAppsPage, result);
             else
                 return this.PushView(chlk.activities.apps.MyAppsPage, result);
