@@ -16,8 +16,13 @@ announcementId = self.announcementId.valueOf()
         a.close.close-btn
     .x-window-body
         .header Attach an App
-        .apps
-            each app in self.apps.getItems()
-                +AppIconLink(announcementId, app)
-        .paging
-            +Paginator('announcement', 'attachApp', self.apps, [announcementId])
+
+
+        if self.apps.getItems().length > 0
+            .apps
+                each app in self.apps.getItems()
+                    +AppIconLink(announcementId, app)
+            .paging
+                +Paginator('announcement', 'attachApp', self.apps, [announcementId])
+        else
+            .no-apps No Apps Installed, try one now in the App Store
