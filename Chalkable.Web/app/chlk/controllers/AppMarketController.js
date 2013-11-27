@@ -134,13 +134,14 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('apps')],
+        [[Boolean]],
         function myAppsAction(isEdit_) {
             var isEdit = isEdit_ ? isEdit_ : false;
             var currentPersonId = this.getCurrentPerson().getId();
             var result = this.appMarketService
                 .getMyApps(currentPersonId, isEdit)
                 .then(function(apps){
-                    return new chlk.models.apps.MyAppsViewData(apps, false, currentPersonId);
+                    return new chlk.models.apps.MyAppsViewData(apps, isEdit, currentPersonId);
                 })
                 .attach(this.validateResponse_());
 
@@ -317,7 +318,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.appMarketService
                 .uninstallApps(ids)
                 .then(function(result){
-                    return this.Redirect('appmarket', 'updateMyApps', [false]);
+                    return this.Redirect('appmarket', 'myApps', [false]);
                 }, this)
                 .attach(this.validateResponse_());
         },
