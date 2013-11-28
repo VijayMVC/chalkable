@@ -6,7 +6,7 @@ each student,i in students
                 .plus-container.for-plus +
                 .name.for-plus= Msg.Add_student
         else
-            .student(data-id = ria.dom.NewGID()).grey
+            .student(data-id = ria.dom.Dom.GID()).grey
                 .name
     else
         .student(data-id = student.getId().valueOf())

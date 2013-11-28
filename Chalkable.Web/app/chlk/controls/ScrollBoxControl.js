@@ -14,7 +14,7 @@ NAMESPACE('chlk.controls', function () {
 
             [[Object]],
             Object, function processAttrs(attributes) {
-                attributes.id = attributes.id || ria.dom.NewGID();
+                attributes.id = attributes.id || ria.dom.Dom.GID();
                 this.setFormId(attributes.formId);
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {

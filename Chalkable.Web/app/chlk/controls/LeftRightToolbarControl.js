@@ -70,7 +70,7 @@ NAMESPACE('chlk.controls', function () {
                 [Object, Object]
             ],
             Object, function processAttrs(attributes, configs) {
-                attributes.id = attributes.id || ria.dom.NewGID();
+                attributes.id = attributes.id || ria.dom.Dom.GID();
                 attributes['data-configs'] = configs;
                 var that = this;
                 this.context.getDefaultView()

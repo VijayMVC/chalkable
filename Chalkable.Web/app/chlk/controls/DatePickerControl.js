@@ -15,7 +15,7 @@ NAMESPACE('chlk.controls', function () {
 
             [[String, Object, Object]],
             Object, function processAttrs(name, value, attrs) {
-                attrs.id = attrs.id || ria.dom.NewGID();
+                attrs.id = attrs.id || ria.dom.Dom.GID();
                 attrs.name = name;
                 if (value)
                     attrs.value = value.format('mm/dd/yy');

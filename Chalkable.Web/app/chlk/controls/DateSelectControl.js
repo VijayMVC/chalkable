@@ -18,7 +18,7 @@ NAMESPACE('chlk.controls', function () {
 
             [[Object]],
             Object, function processAttrs(attributes) {
-                attributes.id = attributes.id || ria.dom.NewGID();
+                attributes.id = attributes.id || ria.dom.Dom.GID();
                 var value = attributes.value;
                 console.info(value);
                 delete attributes.name;

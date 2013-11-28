@@ -154,7 +154,7 @@ NAMESPACE('chlk.controls', function () {
 
             [[Object]],
             VOID, function prepareData(attributes){
-                attributes.id = attributes.id || ria.dom.NewGID();
+                attributes.id = attributes.id || ria.dom.Dom.GID();
                 if(attributes.onlySubmitValidate){
                     this.setOnlySubmitValidate(true);
                 }else{

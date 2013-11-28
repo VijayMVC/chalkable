@@ -13,7 +13,7 @@ NAMESPACE('chlk.controls', function () {
 
             [[Object]],
             Object, function processAttrs(attrs) {
-                attrs.id = attrs.id || ria.dom.NewGID();
+                attrs.id = attrs.id || ria.dom.Dom.GID();
                 var options = attrs['data-options'];
                 this.queueReanimation_(attrs.id, options);
                 delete attrs['data-options'];

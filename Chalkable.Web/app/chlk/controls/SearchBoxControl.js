@@ -21,7 +21,7 @@ NAMESPACE('chlk.controls', function () {
             [[Object, ClassOf(chlk.services.BaseService), String, ClassOf(ria.templates.Template), Array]],
             VOID, function initialize(attrs, service, method, tpl, prependArgs)
             {
-                attrs.id = attrs.id || ria.dom.NewGID();
+                attrs.id = attrs.id || ria.dom.Dom.GID();
 
                 if (attrs.triggerBtnId)
                     this.setTriggerBtnId(attrs.triggerBtnId);
@@ -76,7 +76,7 @@ NAMESPACE('chlk.controls', function () {
                         fixedInstance[k] = item[k];
                     tpl.assign(fixedInstance);
                     var li = jQuery.parseHTML(tpl.render());
-                    var id = ria.dom.NewGID();
+                    var id =ria.dom.Dom.GID();
                     jQuery(li).attr("data-id", id);
                     item.dataId = id;
                     return jQuery(li).appendTo(ul);

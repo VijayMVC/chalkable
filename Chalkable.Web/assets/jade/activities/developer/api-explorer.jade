@@ -20,7 +20,7 @@ mixin ApiCallForm(controllerInfo, role)
                     .details
                         .det-content
                             methodParams = cntMethod.getParams() || []
-                            apiFormId = ria.dom.NewGID()
+                            apiFormId = ria.dom.Dom.GID()
                             +ActionForm('developer', 'makeApiCall')(id = apiFormId)
                                 +Hidden('apiCallRole', role)
                                 +Hidden('controllerName', controllerInfo.getName())
