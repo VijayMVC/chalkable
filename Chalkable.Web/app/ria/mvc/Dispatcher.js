@@ -151,29 +151,29 @@ NAMESPACE('ria.mvc', function () {
                     return this.cache[name];
                 }
 
-                var instanse = this.cache[name] = ref.instantiate();
+                var instance = this.cache[name] = ref.instantiate();
 
                 if (ref.implementsIfc(ria.mvc.IContextable)) {
-                    ref.getPropertyReflector('context').invokeSetterOn(instanse, context);
+                    ref.getPropertyReflector('context').invokeSetterOn(instance, context);
                 }
 
-                return instanse;
+                return instance;
             },
 
             [[ria.reflection.ReflectionClass, ria.mvc.IContext]],
             Class, function prepareInstance_(ref, context) {
-                var instanse = ref.instantiate();
+                var instance = ref.instantiate();
 
                 ref.getPropertiesReflector().forEach(function (_) {
                     if (!_.isReadonly() && _.isAnnotatedWith(ria.mvc.Inject)) {
-                        _.invokeSetterOn(instanse, this.getCached_(_.getType(), context));
+                        _.invokeSetterOn(instance, this.getCached_(_.getType(), context));
                     }
                 }.bind(this));
 
                 if (ref.implementsIfc(ria.mvc.IContextable)) {
-                    ref.getPropertyReflector('context').invokeSetterOn(instanse, context);
+                    ref.getPropertyReflector('context').invokeSetterOn(instance, context);
                 }
-                return instanse;
+                return instance;
             },
 
             [[ClassOf(Class), ria.mvc.IContext]],
@@ -190,54 +190,44 @@ NAMESPACE('ria.mvc', function () {
                 var index;
                 try {
                     this.dispatching = true;
-                    try {
+                    for(index = this.plugins.length; index > 0; index--)
+                        this.plugins[index - 1].dispatchStartup();
+
+                    state.setController(state.getController() || this.defaultControllerId);
+                    state.setAction(state.getAction() || this.defaultControllerAction);
+
+                    this.setState(state);
+
+                    do {
+                        state.setDispatched(true);
+
                         for(index = this.plugins.length; index > 0; index--)
-                            this.plugins[index - 1].dispatchStartup();
+                            this.plugins[index - 1].preDispatch(state);
 
-                        state.setController(state.getController() || this.defaultControllerId);
-                        state.setAction(state.getAction() || this.defaultControllerAction);
+                        if (!state.isDispatched())
+                            continue;
 
-                        this.setState(state);
+                        if (!this.controllers.hasOwnProperty(state.getController())) {
+                            throw new ria.mvc.MvcException('Controller with id "' + state.getController() + '" not found');
+                        }
 
-                        do {
-                            state.setDispatched(true);
+                        var ref = this.controllers[state.getController()];
+                        var instance = this.prepareInstance_(ref, context);
 
-                            for(index = this.plugins.length; index > 0; index--)
-                                this.plugins[index - 1].preDispatch(state);
+                        instance.onInitialize();
+                        instance.dispatch(state);
 
-                            if (!state.isDispatched())
-                                continue;
+                        if (!state.isDispatched())
+                            continue;
 
-                            if (!this.controllers.hasOwnProperty(state.getController())) {
-                                //noinspection ExceptionCaughtLocallyJS
-                                throw new ria.mvc.MvcException('Controller with id "' + state.getController() + '" not found');
-                            }
-
-                            var ref = this.controllers[state.getController()];
-                            var instanse = this.prepareInstance_(ref, context);
-
-                            instanse.onInitialize();
-                            instanse.dispatch(state);
-
-                            if (!state.isDispatched())
-                                continue;
-
-                            for(index = this.plugins.length; index > 0; index--)
-                                this.plugins[index - 1].postDispatch(state);
-
-                        } while (!state.isDispatched());
-
-                    } catch (e) {
-                        throw new ria.mvc.MvcException('Dispatch failed.', e);
-                    }
-
-                    try {
                         for(index = this.plugins.length; index > 0; index--)
-                            this.plugins[index - 1].dispatchShutdown();
+                            this.plugins[index - 1].postDispatch(state);
 
-                    } catch (e) {
-                        throw new ria.mvc.MvcException('Dispatch failed.', e);
-                    }
+                    } while (!state.isDispatched());
+
+                    for(index = this.plugins.length; index > 0; index--)
+                        this.plugins[index - 1].dispatchShutdown();
+
                 } finally {
                     this.dispatching = false;
                 }
