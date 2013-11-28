@@ -178,6 +178,19 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.apps.AppInfoPage, result, msg.toLowerCase());
         },
 
+
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DEVELOPER
+        ])],
+        [[Object]],
+        function toggleBannerAction(data){
+            if (data.bannerEnabled){
+                var mdl = new chlk.models.apps.AppPicture(new chlk.models.id.PictureId(''), '', 170, 110, 'Banner', true);
+                return this.UpdateView(chlk.activities.apps.AppInfoPage, ria.async.DeferredData(mdl), 'banner');
+            }
+        },
+
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
@@ -398,6 +411,20 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.apps.AppPostData]],
         function updateDeveloperAction(model){
 
+
+
+
+            var appAccess = new chlk.models.apps.AppAccess(
+                model.isStudentMyAppsEnabled(),
+                model.isTeacherMyAppsEnabled(),
+                model.isAdminMyAppsEnabled(),
+                model.isParentMyAppsEnabled(),
+                model.isAttachEnabled(),
+                model.isShowInGradingViewEnabled()
+            );
+
+
+
              var shortAppData = new chlk.models.apps.ShortAppInfo(
                 model.getName(),
                 model.getUrl(),
@@ -408,14 +435,7 @@ NAMESPACE('chlk.controllers', function (){
                 model.getAppBannerId()
              );
 
-             var appAccess = new chlk.models.apps.AppAccess(
-                 model.isStudentMyAppsEnabled(),
-                 model.isTeacherMyAppsEnabled(),
-                 model.isAdminMyAppsEnabled(),
-                 model.isParentMyAppsEnabled(),
-                 model.isAttachEnabled(),
-                 model.isShowInGradingViewEnabled()
-             );
+
 
              var isFreeApp = model.isFree();
 
