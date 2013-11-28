@@ -48,6 +48,16 @@ NAMESPACE('chlk.templates.apps', function () {
                 return result;
             },
 
+            [[Number]],
+            function getPlatformTypeClass(typeId){
+                var result = 'platform-type-none';
+                switch (typeId){
+                    case chlk.models.apps.AppPlatformTypeEnum.WEB.valueOf(): result = "platform-web";break;
+                    case chlk.models.apps.AppPlatformTypeEnum.IOS.valueOf(): result = "platform-ios";break;
+                    case chlk.models.apps.AppPlatformTypeEnum.ANDROID.valueOf(): result = "platform-android";break;
+                }
+                return result;
+            },
 
             [[String]],
             function getVideoUrl(url){

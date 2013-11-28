@@ -171,6 +171,17 @@ NAMESPACE('chlk.services', function () {
                         roles.push(teacherRole);
 
                         app.setValidRoles(roles);
+
+                        var platforms = [];
+                        var web = new chlk.models.apps.AppPlatform(chlk.models.apps.AppPlatformTypeEnum.WEB, 'Web');
+                        var ios = new chlk.models.apps.AppPlatform(chlk.models.apps.AppPlatformTypeEnum.IOS, 'IOS');
+                        var android = new chlk.models.apps.AppPlatform(chlk.models.apps.AppPlatformTypeEnum.ANDROID, 'Android');
+
+                        platforms.push(web);
+                        platforms.push(ios);
+                        platforms.push(android);
+                        app.setPlatforms(platforms);
+
                         return app;
                     });
             },
