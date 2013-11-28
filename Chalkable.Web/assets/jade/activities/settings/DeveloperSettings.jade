@@ -6,7 +6,7 @@
             .right
                 +ActionLink('account', 'profile', self.developerId) Profile
     .row
-        +ActionLinkButton('developer', 'paypalSettings', self.developerId).special-button.yellow-button PayPal
+        +ActionLinkButton('developer', 'paypalSettings').special-button.yellow-button PayPal
     .row
         id = self.currentAppId ? self.currentAppId.valueOf() : null
         appName = self.getCurrentAppName() || ''

@@ -10,7 +10,7 @@ user = self.getUser()
                         +PersonImg(user, 64)
                 h1.profile-person-name=user.getDisplayName()
             h2.mp-conteiner
-                lable=self.getMarkingPeriod().getName()
+                label=self.getMarkingPeriod().getName()
             .grading-info
                 +LeftRightToolbar(user.getStudentGradings(), chlk.templates.student.StudentClassGradingTpl)(
                     itemsCount = 6,
