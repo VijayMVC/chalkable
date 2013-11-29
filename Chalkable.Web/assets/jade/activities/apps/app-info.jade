@@ -121,6 +121,8 @@ appPlatforms = appPlatforms.join(',')
                 label API key:
                 +Textbox("apikey", app.getSecretKey()).api-key
                 label= "Status: " + app.getState().toString()
+    +ActionForm('apps', 'toggleBanner')#toggle-banner-form
+        +Hidden('bannerEnabled', myAppsAccess.isAttachEnabled())
     +ActionForm('apps', 'update').app-info
         if !self.isReadOnly()
             +Button()(disabled = self.isDraft(), name="submit-btn", class = self.isDraft() ? "x-item-disabled" : "").blue-tb-right-button.submit-btn  Submit App

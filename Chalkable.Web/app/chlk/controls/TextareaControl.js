@@ -12,7 +12,7 @@ NAMESPACE('chlk.controls', function () {
 
             [[Object]],
             Object, function processAttrs(attributes) {
-                attributes.id = attributes.id || ria.dom.NewGID();
+                attributes.id = attributes.id || ria.dom.Dom.GID();
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         jQuery('textarea#'+attributes.id).autosize();

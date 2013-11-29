@@ -17,6 +17,70 @@ REQUIRE('ria.dom.Events');
 NAMESPACE('ria.dom', function () {
     "use strict";
 
+    var addWheelListener = function(window,document) {
+
+        var prefix = "", _addEventListener, onwheel, support;
+
+        // detect event model
+        if (window.addEventListener ) {
+            _addEventListener = "addEventListener";
+        } else {
+            _addEventListener = "attachEvent";
+            prefix = "on";
+        }
+
+        // detect available wheel event
+        support = "onwheel" in document.createElement("div") ? "wheel" : // Modern browsers support "wheel"
+                  document.onmousewheel !== undefined ? "mousewheel" : // Webkit and IE support at least "mousewheel"
+                  "DOMMouseScroll"; // let's assume that remaining browsers are older Firefox
+
+        function addWheelListener ( elem, callback, useCapture ) {
+            _addWheelListener( elem, support, callback, useCapture );
+
+            // handle MozMousePixelScroll in older Firefox
+            if( support == "DOMMouseScroll" ) {
+                _addWheelListener( elem, "MozMousePixelScroll", callback, useCapture );
+            }
+        };
+
+        function _addWheelListener( elem, eventName, callback, useCapture ) {
+            elem[ _addEventListener ]( prefix + eventName, support == "wheel" ? callback : function( originalEvent ) {
+                !originalEvent && ( originalEvent = window.event );
+
+                // create a normalized event object
+                var event = {
+                    // keep a ref to the original event object
+                    originalEvent: originalEvent,
+                    target: originalEvent.target || originalEvent.srcElement,
+                    type: "wheel",
+                    deltaMode: originalEvent.type == "MozMousePixelScroll" ? 0 : 1,
+                    deltaX: 0,
+                    delatZ: 0,
+                    preventDefault: function() {
+                        originalEvent.preventDefault ?
+                            originalEvent.preventDefault() :
+                            originalEvent.returnValue = false;
+                    }
+                };
+
+                // calculate deltaY (and deltaX) according to the event
+                if ( support == "mousewheel" ) {
+                    event.deltaY = - 1/40 * originalEvent.wheelDelta;
+                    // Webkit also support wheelDeltaX
+                    originalEvent.wheelDeltaX && ( event.deltaX = - 1/40 * originalEvent.wheelDeltaX );
+                } else {
+                    event.deltaY = originalEvent.detail;
+                }
+
+                // it's time to fire the callback
+                return callback( event );
+
+            }, useCapture || false );
+        }
+
+        return addWheelListener;
+    }(window, document);
+
 
     var global = ('undefined' !== typeof window ? window.document : null),
         docElem = global.documentElement,
@@ -83,24 +147,27 @@ NAMESPACE('ria.dom', function () {
         });
 
 
-    var GID = new Date().getTime();
     /**
      * @class ria.dom.NewGID
      * @returns {String}
      */
     ria.dom.NewGID = function () {
-        return 'gid-' + (GID++).toString(36);
+        console.info('ria.dom.NewGID() is deprecated, please use ria.dom.Dom.GID() instead.');
+        return ria.dom.Dom.GID();
     };
+
+    var GID_ = new Date().getTime(),
+        DomImpl_ = null;
 
     /** @class ria.dom.Dom */
     CLASS(
         'Dom', [
             // $$ - instance factory
             function $$(instance, clazz, ctor, args) {
-                if (DomImpl == SELF)
+                if (DomImpl_ == SELF)
                     throw Error('');
 
-                instance = DomImpl.apply(undefined, args);
+                instance = DomImpl_.apply(undefined, args);
                 ria.__SYNTAX && ria.__SYNTAX.checkReturn(ria.dom.Dom, instance);
                 return instance;
             },
@@ -306,6 +373,7 @@ NAMESPACE('ria.dom', function () {
 
             [[String]],
             SELF, function descendants(selector__) {},
+
             [[String]],
             SELF, function parent(selector_) {
                 if(selector_){
@@ -350,13 +418,17 @@ NAMESPACE('ria.dom', function () {
             Number, function height() {
                 return this._dom[0] ? this._dom[0].getBoundingClientRect().height : null;
             },
+
             Number, function width() {
                 return this._dom[0] ? this._dom[0].getBoundingClientRect().width : null;
             },
+
             [[String]],
             SELF, function next(selector_) {},
+
             [[String]],
             SELF, function previous(selector_) {},
+
             [[String]],
             SELF, function first(selector_) {
                 if (!selector_)
@@ -364,6 +436,7 @@ NAMESPACE('ria.dom', function () {
 
                 throw new Exception('not implemented');
             },
+
             [[String]],
             SELF, function last(selector_) {
                 if (!selector_)
@@ -371,12 +444,14 @@ NAMESPACE('ria.dom', function () {
 
                 throw new Exception('not implemented');
             },
+
             [[String]],
             Boolean, function is(selector) {
                 return this._dom.some(function (el) {
                     return __is.call(el, selector);
                 });
             },
+
             [[Object]],
             Boolean, function contains(node) {
                 VALIDATE_ARG('node', [Node, SELF, ArrayOf(Node)], node);
@@ -394,6 +469,7 @@ NAMESPACE('ria.dom', function () {
                     return nodes.some(function (_) { return el.contains(_); });
                 });
             },
+
             Boolean, function exists() {
                 return !!this._dom[0];
             },
@@ -401,11 +477,13 @@ NAMESPACE('ria.dom', function () {
             Object, function getValue() {
                 return this._dom.map(function (_) { return _.value; }).shift() || null;
             },
+
             [[Object]],
             SELF, function setValue(value) {
                 this._dom.forEach(function (_) { _.value = value; });
                 return this;
             },
+
             [[Object]],
             SELF, function setFormValues(values) {
                 for(var valueName in values){
@@ -445,6 +523,7 @@ NAMESPACE('ria.dom', function () {
                 Object.getOwnPropertyNames(obj).forEach(function (k) { f(k, obj[k]); });
                 return this;
             },
+
             [[String, Object]],
             SELF, function setAttr(name, value) {
                 this._dom.forEach(function (node) { node.setAttribute(name, value); });
@@ -487,10 +566,12 @@ NAMESPACE('ria.dom', function () {
             },
 
             Object, function getAllData() {},
+
             [[String]],
             Object, function getData(name) {
                 return this.getAttr('data-' + name);
             },
+
             [[Object]],
             SELF, function setAllData(obj) {
                 var f = this.setData;
@@ -525,10 +606,12 @@ NAMESPACE('ria.dom', function () {
             Boolean, function hasClass(clazz) {
                 return (' ' + this.getAttr('class') + ' ').replace(/\s+/g, ' ').indexOf(' ' + clazz + ' ') >= 0;
             },
+
             [[String]],
             SELF, function addClass(clazz) {
                 return this.toggleClass(clazz, true);
             },
+
             [[String]],
             SELF, function removeClass(clazz) {
                return this.toggleClass(clazz, false);
@@ -569,6 +652,7 @@ NAMESPACE('ria.dom', function () {
                 this._dom.forEach(function (_) { _.style[property] = value; });
                 return this;
             },
+
             [[Object]],
             SELF, function updateCss(props) {
                 var f = this.setCss;
@@ -602,6 +686,15 @@ NAMESPACE('ria.dom', function () {
 
             ArrayOf(Node), function valueOf() {
                 return this._dom.slice();
+            },
+
+            [[SELF]],
+            VOID, function SET_IMPL(impl) {
+                DomImpl_ = impl;
+            },
+
+            String, function GID() {
+                return 'gid-' + (GID_++).toString(36);
             }
         ]);
 
@@ -613,9 +706,9 @@ NAMESPACE('ria.dom', function () {
             }
         ]);
 
-    var DomImpl = ria.dom.SimpleDom;
-
+    ria.dom.Dom.SET_IMPL(ria.dom.SimpleDom);
     ria.dom.setDomImpl = function (impl) {
-        DomImpl = impl;
+        console.warn('ria.dom.setDomImpl is deprecated. User ria.dom.Dom.SET_IMPL() instead');
+        ria.dom.Dom.SET_IMPL(impl);
     };
 });

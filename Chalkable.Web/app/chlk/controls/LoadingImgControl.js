@@ -29,7 +29,7 @@ NAMESPACE('chlk.controls', function () {
 
             [[Object]],
             Object, function processAttrs(attrs){
-                attrs.id = attrs.id || ria.dom.NewGID();
+                attrs.id = attrs.id || ria.dom.Dom.GID();
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         var img = new ria.dom.Dom('#' + attrs.id);

@@ -32,12 +32,18 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
                         .permission
                             .icon(class=self.getRoleTypeClass(validRole.getId()))
                             .description=validRole.getName()
-                .permissions-group.last
+                .permissions-group
                     .group-header Info this app uses:
                     each permission in app.getPermissions()
                         .permission
                             .icon(class=self.getPermissionTypeClass(permission.getId().valueOf()))
                             .description=permission.getName()
+                .permissions-group.last
+                    .group-header.first Works on:
+                    each platform in app.getPlatforms()
+                        .permission
+                            .icon(class=self.getPlatformTypeClass(platform.getId().valueOf()))
+                            .description=platform.getName()
 
 
 

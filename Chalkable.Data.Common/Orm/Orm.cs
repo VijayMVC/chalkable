@@ -145,9 +145,6 @@ namespace Chalkable.Data.Common.Orm
 
         public static DbQuery SimpleUpdate<T>(T obj)
         {
-            //var t = typeof(T);
-            //var fields = Fields(t, false);
-            //return SimpleUpdate(t, fields, GetPrimaryKeyFields(t), obj);
             return SimpleUpdate<T>(new List<T> {obj});
         }
 
@@ -183,18 +180,16 @@ namespace Chalkable.Data.Common.Orm
          public static DbQuery SimpleUpdate<T>(IDictionary<string, object> updateParams, QueryCondition conditions)
          {
              var t = typeof(T);
-             //var fields = Fields(t).Select(x => x.ToLower()).ToList();
              return SimpleUpdate(t,  updateParams, conditions);
          }
 
          private static DbQuery SimpleUpdate<T>(Type t, IList<string> fields, IList<PropertyInfo> primaryKeyFields, T obj, int index = 0)
          {
-              var updateParams = new Dictionary<string, object>();
+             var updateParams = new Dictionary<string, object>();
              foreach (var field in fields)
              {
                  var value = t.GetProperty(field).GetValue(obj);
-                 //if(value != null)
-                     updateParams.Add(field, value);
+                 updateParams.Add(field, value);
              }
              return SimpleUpdate(t, updateParams, BuildCondsByProperties(t, obj, primaryKeyFields, index + "_"), index);
          }
@@ -254,13 +249,6 @@ namespace Chalkable.Data.Common.Orm
             {
                queries.Add(SimpleDelete<T>(BuildCondsByProperties(t, objs[i], primaryKeyFields, i + "_")));
             }
-            //var idProperty = t.GetProperty(ID_FIELD);
-            //var ids = objs.Select(x => idProperty.GetValue(x)).ToList();
-            //for (int i = 0; i < ids.Count; i++)
-            //{
-            //    res.Parameters.Add("@" + ID_FIELD + "_" + i, ids[0]);
-            //}
-            //res.Sql.AppendFormat(" where Id in ({0})", res.Parameters.Select(x=>x.Key).JoinString(","));
             return new DbQuery(queries);
         }
 

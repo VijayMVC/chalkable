@@ -26,7 +26,7 @@ personId = summaryInfo.getId()
                         .img-container
                             +PersonImg(summaryInfo, 64)
                     h1.profile-person-name=summaryInfo.getDisplayName()
-                    lable=summaryInfo.getSummary()
+                    label=summaryInfo.getSummary()
                 h2.mp-conteiner.profile-drop-down-container
                     +MarkingPeriodSelect(self.getMarkingPeriods(), personId, summaryInfo.getMarkingPeriod())
                 .glance-section.discipline-info

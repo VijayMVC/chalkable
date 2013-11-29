@@ -162,7 +162,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         private User SaveSisToken(User user, UnitOfWork uow, ConnectorLocator iNowConnector)
         {
-            if (user.SisUserName == null)
+            if (user.SisUserName != null)
             {
                 if (iNowConnector == null)
                 {

@@ -31,7 +31,7 @@ NAMESPACE('chlk.controls', function () {
             //todo: make base method
             [[Object]],
             Object, function processAttrs(attributes){
-                attributes.id = attributes.id || ria.dom.NewGID();
+                attributes.id = attributes.id || ria.dom.Dom.GID();
                 if(!attributes.alternativeSrc && attributes.defaultSrc){
                     attributes.alternativeSrc = attributes.defaultSrc;
                     delete attributes.defaultSrc;

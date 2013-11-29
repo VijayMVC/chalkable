@@ -20,7 +20,15 @@ NAMESPACE('chlk.controls.developer', function () {
                     var selected = node.find('option:selected');
                     var controller = selected.data('controller');
 
-                    node.find('option[selected]').attr('selected', false);
+
+                    if (selected.data('action') == 'add'){
+                        node.find('option').attr('selected', false);
+                    }
+                    else
+                        node.find('option[selected]').attr('selected', false);
+
+
+
 
                     if(controller){
                         var action = selected.data('action');

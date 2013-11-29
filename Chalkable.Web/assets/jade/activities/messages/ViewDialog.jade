@@ -12,7 +12,7 @@
                 br
                 .form-buttons
                     +ActionLink('message', 'sendPage', self.id)= self.isReplay() ? 'Replay' : 'Send'
-                    +Button.special-button.red-button.close Cancel
+                    +Button.special-button.cancel-button.close=Msg.Cancel
 
     .bg-bottom
 

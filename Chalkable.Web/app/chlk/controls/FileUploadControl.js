@@ -12,7 +12,7 @@ NAMESPACE('chlk.controls', function () {
 
             [[Object]],
             Object, function prepareData(attrs) {
-                attrs.id = attrs.id || ria.dom.NewGID();
+                attrs.id = attrs.id || ria.dom.Dom.GID();
                 var that = this, params = attrs['data-params'] || [],
                     controller = attrs['data-controller'],
                     action = attrs['data-action'];

@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
+using System.Reflection;
 using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Common.Web;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
-using Newtonsoft.Json;
 
 namespace Chalkable.BusinessLogic.Services
 {
     public class UserContext
     {
-        [JsonIgnore]
+        private class Ignore : Attribute
+        {
+             
+        }
+
+        [Ignore]
         public string MasterConnectionString { get; private set; }
-        [JsonIgnore]
+        [Ignore]
         public string SchoolConnectionString { get; private set; }
         
         public Guid UserId { get; set; }
@@ -26,7 +26,7 @@ namespace Chalkable.BusinessLogic.Services
         public Guid? DistrictId { get; set; }
         public string Login { get; set; }
         public int RoleId { get; set; }
-        [JsonIgnore]
+        [Ignore]
         public CoreRole Role { get; set; }
         public string DistrictServerUrl { get; set; }
         public string SchoolTimeZoneId { get; set; }
@@ -34,25 +34,25 @@ namespace Chalkable.BusinessLogic.Services
         public int? SchoolLocalId { get; set; }
         public Guid? DeveloperId { get; set; }
         public int? UserLocalId { get; set; }
-        [JsonIgnore]
+        [Ignore]
         public string SisToken { get; set; }
         
         public string SisUrl { get; set; }
         public DateTime? SisTokenExpires { get; set; }
 
-        [JsonIgnore]
+        [Ignore]
         public DateTime NowSchoolTime
         {
             get { return DateTime.UtcNow.ConvertFromUtc(SchoolTimeZoneId ?? "UTC"); }
         }
-        
-        [JsonIgnore]
+
+        [Ignore]
         public bool IsOAuthUser { get; set; }
-        [JsonIgnore]
+        [Ignore]
         public IList<AppPermissionType> AppPermissions { get; set; }
-        [JsonIgnore]
+        [Ignore]
         public bool IsInternalApp{ get; set; }
-        [JsonIgnore]
+        [Ignore]
         public string OAuthApplication{ get; set; }
 
         public UserContext()
@@ -100,30 +100,55 @@ namespace Chalkable.BusinessLogic.Services
 
         public override string ToString()
         {
-            var serialiser = new JsonSerializer();
-            using (var stream = new MemoryStream())
-            {
-                var writer = new StreamWriter(stream);
-                serialiser.Serialize(writer, this);
-                writer.Flush();
-                var res = Encoding.UTF8.GetString(stream.ToArray());
-                return res;
-            }
+            var t = typeof (UserContext);
+            var props = t.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            var res = new StringBuilder();
+            bool first = true;
+            foreach (var propertyInfo in props)
+                if (propertyInfo.CanWrite && propertyInfo.CanRead && propertyInfo.GetCustomAttribute<Ignore>() == null)
+                {
+                    if (first)
+                        first = false;
+                    else
+                        res.Append("\n");
+                    var v = propertyInfo.GetValue(this);
+                    if (v != null)
+                        res.Append(v);
+
+                }
+            return res.ToString();
         }
+
         public static UserContext FromString(string s)
         {
-            var serialiser = new JsonSerializer();
-            var data = Encoding.UTF8.GetBytes(s);
-            using (var stream = new MemoryStream(data))
-            {
-                var reader = new StreamReader(stream);
-                var res =  serialiser.Deserialize<UserContext>(new JsonTextReader(reader));
-                res.Role = CoreRoles.GetById(res.RoleId);
+            var sl = s.Split('\n');
 
-                if (res.SchoolId.HasValue)
-                    res.SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, res.DistrictServerUrl, res.DistrictId);
-                return res;
-            }
+            var t = typeof(UserContext);
+            var props = t.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            var res = new UserContext();
+            int i = 0;
+            foreach (var propertyInfo in props)
+                if (propertyInfo.CanWrite && propertyInfo.CanRead && propertyInfo.GetCustomAttribute<Ignore>() == null)
+                {
+                    if (!string.IsNullOrEmpty(sl[i]))
+                    {
+                        object v;
+                        if (propertyInfo.PropertyType == typeof(int) || propertyInfo.PropertyType == typeof(int?))
+                            v = int.Parse(sl[i]);
+                        else if (propertyInfo.PropertyType == typeof(Guid) || propertyInfo.PropertyType == typeof(Guid?))
+                            v = Guid.Parse(sl[i]);
+                        else if (propertyInfo.PropertyType == typeof (DateTime) || propertyInfo.PropertyType == typeof (DateTime?))
+                            v = DateTime.Parse(sl[i]);
+                        else
+                            v = sl[i];
+                        propertyInfo.SetValue(res, v);
+                    }
+                    i++;
+                }
+            if (res.SchoolId.HasValue)
+                res.SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, res.DistrictServerUrl, res.DistrictId);
+            res.Role = CoreRoles.GetById(res.RoleId);
+            return res;
         }
     }
 }

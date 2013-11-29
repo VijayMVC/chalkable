@@ -38,7 +38,7 @@ NAMESPACE('chlk.controls', function () {
             //TODO: make base jquery control method
             [[Object]],
             Object, function processAttrs(attributes) {
-                attributes.id = attributes.id || ria.dom.NewGID();
+                attributes.id = attributes.id || ria.dom.Dom.GID();
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         this.updateSelect(jQuery('#'+attributes.id), attributes);
