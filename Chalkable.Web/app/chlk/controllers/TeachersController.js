@@ -48,9 +48,14 @@ NAMESPACE('chlk.controllers', function (){
                 var res = this.infoEdit_(model, chlk.models.people.UserProfileInfoViewData);
                 return this.UpdateView(chlk.activities.profile.SchoolPersonInfoPage, res);
             },
-            [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
-            function scheduleAction(personId, date_){
-                //return BASE(personId, chlk.models.common.RoleNamesEnum.TEACHER);
+
+            [[chlk.models.id.SchoolPersonId]],
+            function scheduleAction(personId){
+                return this.Redirect('teacher', 'daySchedule', [null, personId]);
+            },
+
+            [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
+            function dayScheduleAction(date_, personId){
                 return this.scheduleByRole(personId, date_, chlk.models.common.RoleNamesEnum.TEACHER.valueOf());
             }
         ])
