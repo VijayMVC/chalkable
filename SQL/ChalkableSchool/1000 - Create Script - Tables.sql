@@ -501,3 +501,7 @@ CREATE TABLE AttendanceLevelReason
 )
 
 GO
+
+alter table AnnouncementRecipientData
+add constraint UQ_AnnouncementRecipientData_Announcement_Person unique (AnnouncementRef, PersonRef)
+go

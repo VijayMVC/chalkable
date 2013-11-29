@@ -207,9 +207,11 @@ join GradeLevel on GradeLevel.Id = StudentSchoolYear.GradeLevelRef
 where StudentSchoolYear.StudentRef = @personId
 GO
 
-CREATE procedure [dbo].[spUpdateAnnouncemetRecipientData] @personId int, @announcementId int,
+
+create procedure [dbo].[spUpdateAnnouncemetRecipientData] @personId int, @announcementId int,
 @starred bit, @starredAutomatically int, @currentDate date
 as
+begin transaction
 
 declare @id int, @oldStarredAutomatically bit
 select @id = anr.id, @oldStarredAutomatically = anr.StarredAutomatically
@@ -231,7 +233,10 @@ begin
 	insert into AnnouncementRecipientData (AnnouncementRef, PersonRef, Starred, StarredAutomatically, LastModifiedDate)
 	values (@announcementId, @personId, @starred, @starredAutomatically, @currentDate)
 end
+
+commit transaction 
 GO
+
 
 create procedure [dbo].[spGetDueDays] @AnnTypeId int, @dueDays1 int output, @dueDays2 int output
 as

@@ -51,7 +51,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.SchoolPersonId]],
             function scheduleAction(personId){
-                return this.Redirect('teacher', 'daySchedule', [null, personId]);
+                return this.Redirect('teachers', 'daySchedule', [null, personId]);
             },
 
             [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
