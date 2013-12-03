@@ -218,7 +218,7 @@ NAMESPACE('chlk.controllers', function (){
                         announcement.setExpiresDate(date_);
                     }
                     return this.addEditAction(model, false);
-                }.bind(this));
+                },this);
             return this.PushView(this.getAnnouncementFormPageType_(), result);
         },
 
@@ -248,7 +248,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(model){
                     return this.addEditAction(model, true);
-                }.bind(this));
+                }, this);
             return this.PushView(this.getAnnouncementFormPageType_(), result);
         },
 
@@ -282,7 +282,7 @@ NAMESPACE('chlk.controllers', function (){
                     model.setNeedDeleteButton(true);
                     this.prepareAttachments(model);
                     return model;
-                }.bind(this));
+                }, this);
             return this.UpdateView(this.getView().getCurrent().getClass(), result, 'update-attachments');
         },
 
@@ -376,7 +376,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(model){
                     return this.Redirect('feed', 'list', []);
-                }.bind(this));
+                }, this);
         },
 
         [[chlk.models.id.AttachmentId]],
@@ -389,7 +389,7 @@ NAMESPACE('chlk.controllers', function (){
                     model.setNeedDeleteButton(true);
                     this.prepareAttachments(model);
                     return model;
-                }.bind(this));
+                }, this);
             return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'update-attachments');
         },
 
@@ -402,7 +402,7 @@ NAMESPACE('chlk.controllers', function (){
                     var announcementForm = new chlk.models.announcement.AnnouncementForm();
                     announcementForm.setAnnouncement(model);
                     return this.addEditAction(announcementForm, true);
-                }.bind(this));
+                }, this);
             return this.UpdateView(this.getAnnouncementFormPageType_(), result);
         },
 
@@ -540,7 +540,7 @@ NAMESPACE('chlk.controllers', function (){
                     chlk.controls.updateWeekCalendar();
                     this.Redirect('feed', 'list', []);
                 }
-            }.bind(this));
+            }, this);
             return res;
         },
 
