@@ -28,6 +28,14 @@ NAMESPACE('chlk.services', function () {
                         this.userInfoChange.notify([result.getName()]);
                         return result;
                     }, this);
+            },
+
+            [[chlk.models.id.SchoolPersonId, String]],
+            ria.async.Future, function updatePaymentInfo(id ,email){
+                //todo: response from server
+                var mdl = new chlk.models.developer.PayPalInfo();
+                mdl.setEmail(email);
+                return ria.async.DeferredData(mdl);
             }
         ])
 });
