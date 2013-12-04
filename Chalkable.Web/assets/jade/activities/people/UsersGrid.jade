@@ -1,0 +1,8 @@
+.loader
+input(type="hidden", name="start", value=(self.getStart() || 0))
+Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
++ListView(self.getUsers())(
+    selectedIndex = selectedIndex, infiniteScroll = true).people-list
+    +RenderWith(self.getUsers(), chlk.templates.people.UsersForGridTpl)
+
+
