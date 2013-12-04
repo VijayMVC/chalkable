@@ -50,19 +50,19 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(feedItems){
                     if(!postback_ && starredOnly_ && feedItems.getItems().length == 0)
                         return this.getFeedItems(postback_, false, classId_, pageIndex_);
-                    var classes = this.classService.getClassesForTopBar(true);
-                    var topModel = new chlk.models.classes.ClassesForTopBar(classes, classId_);
 
-                    var feedModel = new chlk.models.feed.Feed(feedItems);
-                    feedModel.setTopData(topModel);
-                    feedModel.setStarredOnly(starredOnly_);
-                    feedModel.setImportantCount(this.announcementService.getImportantCount());
-                    return feedModel;
-                }.bind(this))
+                    var classes = this.classService.getClassesForTopBar(true);
+                    var classBarItemsMdl = new chlk.models.classes.ClassesForTopBar(classes, classId_);
+
+                    return new chlk.models.feed.Feed.$create(
+                        feedItems,
+                        classBarItemsMdl,
+                        starredOnly_,
+                        this.announcementService.getImportantCount()
+                    );
+                }, this)
         },
 
-
-        //TODO: refactor
         [[Boolean, String]],
         function listAdminAction(update_, gradeLevels_) {
             var res = ria.async.wait([
@@ -72,18 +72,17 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(result){
                     var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);
-                    var topModel = new chlk.models.grading.GradeLevelsForTopBar();
-                    topModel.setTopItems(gradeLevels);
-                    topModel.setSelectedIds(gradeLevels_ ? gradeLevels_.split(',') : []);
+                    var gradeLevelsBarMdl = new chlk.models.grading.GradeLevelsForTopBar(gradeLevels, gradeLevels_);
+                    var markingPeriod = this.getContext().getSession().get('markingPeriod', null); //todo: move to base controller
+
                     var model = result[0];
-                    model.setTopData(topModel);
-                    var markingPeriod = this.getContext().getSession().get('markingPeriod', null);
-                    model.setMarkingPeriodName(markingPeriod.getName());
-                    model.setBudgetBalance(result[1]);
-                    gradeLevels_ && model.setForGradeLevels(true);
+                    model.prepareBaseInfo(gradeLevelsBarMdl, markingPeriod.getName(), result[1], gradeLevels_);
                     return model;
                 }, this);
-            return this[update_ ? 'UpdateView' : 'PushView'](chlk.activities.admin.HomePage, res);
+            if (update_)
+                return this.UpdateView(chlk.activities.admin.HomePage, res);
+            else
+                return this.PushView(chlk.activities.admin.HomePage, res);
         }
 
 
