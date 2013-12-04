@@ -14,7 +14,7 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function getUsers(filter_, roleId_, gradeLevelIds_, byLastName_, start_) {
                 return this.getPaginatedList('Admin/GetPersons.json', chlk.models.people.User, {
                     start: start_,
-                    rolesId: roleId_ || null,
+                    roleIds: roleId_ || null,
                     gradeLevelIds: gradeLevelIds_,
                     byLastName: byLastName_,
                     filter: filter_
