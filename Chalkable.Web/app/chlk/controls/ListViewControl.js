@@ -26,6 +26,11 @@ NAMESPACE('chlk.controls', function () {
 
             Object, 'configs',
 
+            Number, 'currentIndex',
+            Number, 'count',
+            ria.dom.Dom, 'grid',
+
+
             [[Object, Object]],
             VOID, function prepareData(data,configs_) {
                 var configs = {
@@ -35,7 +40,11 @@ NAMESPACE('chlk.controls', function () {
                     start: 0,
                     totalCount: null,
                     pageSize: 10,
-                    interval: 250
+                    interval: 250,
+                    goTopButton: false,
+                    loadAllButtonTitle: 'LOAD ALL',
+                    loadAllPopUpTitle: '',
+                    showLoadAllInPage: 4
                 };
                 if(configs_){
                     if(data.getTotalCount){
@@ -65,6 +74,18 @@ NAMESPACE('chlk.controls', function () {
                             }
                             if(configs.infiniteScroll && !grid.hasClass('with-scroller'))
                                 this.addInfiniteScroll(grid);
+
+
+//                            if(configs.goTopButton){
+//                                //todo : add go top button
+//                            }
+                        }
+                        if(configs.showLoadAllInPage < (configs.currentStart / configs.pageSize)){
+                            this.showLoadAllPopUp_(this.getGrid());
+                        }
+                        if((configs.currentStart + configs.pageSize) >= configs.totalCount){
+                            this.hideLoadAllPopUp_(this.getGrid());
+                            this.showGoTopButton_(this.getGrid());
                         }
                     }.bind(this));
             },
@@ -114,6 +135,41 @@ NAMESPACE('chlk.controls', function () {
             },
 
             [[ria.dom.Dom]],
+            VOID, function hideLoadAllPopUp_(grid){
+                var popupNode = grid.find('.load-all-popup');
+                popupNode.addClass('x-hidden');
+            },
+
+            [[ria.dom.Dom]],
+            VOID, function showLoadAllPopUp_(grid){
+               var popupNode = grid.find('.load-all-popup');
+               popupNode.removeClass('x-hidden');
+            },
+            [[ria.dom.Dom]],
+            VOID, function hideGoTopButton_(grid){
+                var backTopNode = grid.find('.back-top');
+                backTopNode.addClass('x-hidden');
+            },
+            [[ria.dom.Dom]],
+            VOID, function showGoTopButton_(grid){
+               var backTopNode = grid.find('.back-top');
+               backTopNode.removeClass('x-hidden');
+            },
+
+            [[ria.dom.Dom]],
+            VOID, function scrollAction_(grid){
+                //todo: trigger form submit
+                var configs = this.getConfigs();
+                configs.currentStart += configs.pageSize;
+                var div = new ria.dom.Dom('<div class="horizontal-loader"></div>');
+                var form = grid.parent('form');
+                form.find('[name=start]').setValue(configs.currentStart);
+                jQuery(grid.valueOf()).parents('form').find('.scroll-start-button').click();
+                grid.addClass('scroll-freezed');
+                grid.appendChild(div);
+            },
+
+            [[ria.dom.Dom]],
             VOID, function addInfiniteScroll(grid) {
                 grid.addClass('with-scroller');
                 var baseContentHeight = grid.height();
@@ -131,16 +187,7 @@ NAMESPACE('chlk.controls', function () {
                         scrollPosition = window.pageYOffset;
                         if(configs.totalCount > configs.currentStart){
                             if((contentHeight - pageHeight - scrollPosition) < 400){
-                                var form = grid.parent('form');
-                                form.find('[name=start]').setValue(configs.currentStart);
-
-                                //todo: trigger form submit
-                                jQuery(grid.valueOf()).parents('form').find('.scroll-start-button').click();
-
-                                configs.currentStart += configs.pageSize;
-                                var div = new ria.dom.Dom('<div class="horizontal-loader"></div>');
-                                grid.addClass('scroll-freezed');
-                                grid.appendChild(div);
+                                this.scrollAction_(grid);
                                 contentHeight += baseContentHeight;
                             }
                         }
@@ -153,12 +200,8 @@ NAMESPACE('chlk.controls', function () {
                         grid.removeClass('scroll-freezed');
                         node.remove();
                     }
-                }, configs.interval);
+                }.bind(this), configs.interval);
             },
-
-            Number, 'currentIndex',
-            Number, 'count',
-            ria.dom.Dom, 'grid',
 
             [ria.mvc.DomEventBind('click', '.chlk-grid .row')],
             [[ria.dom.Dom, ria.dom.Event]],
