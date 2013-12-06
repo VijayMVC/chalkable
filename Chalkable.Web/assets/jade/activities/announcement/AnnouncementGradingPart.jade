@@ -1,0 +1,72 @@
+mixin AppAttachmentBlock(item, pictureHref, i)
+    +LoadingImage(src=pictureHref, id="loading-image-" + i)
+        .title
+            div=item.getName()
+
+autoCount = self.getAutoGradeCount()
+studentAnnouncements = self.getItems()
+selectedIndex = autoCount ? null : 0
+gradingMapping = self.getMapping()
+gradingStyle = self.getGradingStyle()
+getGrade = function(value){return GradingStyler.getLetterByGrade(value, gradingMapping, gradingStyle)}
+getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, gradingMapping, gradingStyle)}
+
+.silver-panel.student-announcements-top-panel
+    .auto-grade-buttons.right
+        +ActionLinkButton('announcement', 'applyAutoGrade', self.getAnnouncementId())(disabled = autoCount == 0).special-button2.green
+            =Msg.Auto_grade
+        +ActionLinkButton('announcement', 'applyManualGrade', self.getAnnouncementId())(disabled = autoCount == 0).special-button2.red
+            =Msg.Grade_manually
+    //.grades-info.right
+        TABLE
+            TR
+                TD
+                    span#graded-count=self.getGradedStudentCount()
+                    ='/' + studentAnnouncements.length
+                TD#class-avg=getGrade(self.getClassAvg())
+            TR
+                TD.small=Msg.Students_graded(studentAnnouncements.length)
+                TD.small=Msg.Class_average
+    div(data-tooltip=Msg.Class_Avg).class-avg=getGrade(self.getClassAvg())
+    div(class=self.isShowToStudents() ? "" : "not-show", data-value="#{self.isShowToStudents()}").show-student-grades
+        .chlk-pop-up-container.popup-top
+            .pop-up-triangle
+            .show-student-grades-container
+                .text=Msg.Show_grades_to_students
+                .show-grade-checkbox-container
+                    +ActionForm('announcement', 'setShowGradesToStudents')
+                        +SlideCheckbox("showGradesToStudents", self.isShowToStudents())
+                        +Hidden('showToStudents', self.isShowToStudents()).show-grades-input
+                        +Hidden('announcementId', self.getAnnouncementId())
+    div(data-tooltip=self.getGradedStudentCount() + '/' + studentAnnouncements.length + " " + Msg.Graded).graded-student
+        div(style="width:#{self.getGradedWidth()};").graded-bg
+    .clear-right
++ListView(self)(
+    selectedIndex = selectedIndex
+).grades-individual.people-list
+    items = self.getSortedStudentAnnouncements()
+    if autoCount > 0
+        div(class=(autoCount == 1 ? 'double' : '')).grid-modal
+            div Accept auto-grades from #{self.getAutoGradeApps().length == 1 ? self.getAutoGradeApps()[0] : 'apps'}#
+    each item, i in items
+        .row(class=(i == selectedIndex ? 'selected ' : ' ') + (item.getState() == 0 ? 'z-0' : 'z-10'), index=i).fixed-bg
+            +Hidden('readonly', self.isReadonly())
+            +Hidden('gradingStyle', gradingStyle)
+            .top-content(id = "top-content-" + item.getId())
+                -item.setOwner(self.getOwner());
+                +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
+                    readonly = self.isReadonly(),
+                    applicationsInGradeView = self.getGradeViewApps(),
+                    gradingStyle = gradingStyle,
+                    gradingMapping = self.getMapping(),
+                    userRole = self.getUserRole()
+                )
+        .attachments-container.z-10
+            .attachments-container-2
+                each attachment, i in item.getAttachments()
+                    +ActionLink('announcement', 'viewAttachment', attachment.getId()).announcement-item.attachment
+                        +AppAttachmentBlock(attachment, attachment.getThumbnailUrl(), i)
+                each app, i in self.getApplications()
+                    +ActionLink('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId()).announcement-item.application
+                        +AppAttachmentBlock(app, self.getPictureURL(app.getSmallPictureId(), 74, 74), i)
+                    
