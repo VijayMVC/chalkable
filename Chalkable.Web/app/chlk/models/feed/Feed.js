@@ -30,7 +30,7 @@ NAMESPACE('chlk.models.feed', function () {
 
             [[chlk.models.common.PaginatedList, chlk.models.classes.ClassesForTopBar, Boolean, Number]],
             function $create(list, classBarItems, starredOnly, importantCount){
-                BASE(list);
+                BASE(list.getItemClass());
                 this.setItems(list.getItems());
                 this.setPageIndex(list.getPageIndex());
                 this.setPageSize(list.getPageSize());
