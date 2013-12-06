@@ -26,7 +26,23 @@ NAMESPACE('chlk.models.feed', function () {
 
             chlk.models.classes.ClassesForTopBar, 'topData',
             Boolean, 'starredOnly',
-            Number, 'importantCount'
+            Number, 'importantCount',
+
+            [[chlk.models.common.PaginatedList, chlk.models.classes.ClassesForTopBar, Boolean, Number]],
+            function $create(list, classBarItems, starredOnly, importantCount){
+                BASE(list);
+                this.setItems(list.getItems());
+                this.setPageIndex(list.getPageIndex());
+                this.setPageSize(list.getPageSize());
+                this.setTotalCount(list.getTotalCount());
+                this.setTotalPages(list.getTotalPages());
+                this.setHasNextPage(list.isHasNextPage());
+                this.setHasPreviousPage(list.isHasPreviousPage());
+
+                this.setTopData(classBarItems);
+                this.setStarredOnly(starredOnly);
+                this.setImportantCount(importantCount);
+            }
         ]);
 });
 

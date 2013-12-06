@@ -5,11 +5,42 @@ BODY {
         #main-wrapper {
           #main {
             DIV.payment {
+                h3{
+                  font-size: 16px;
+                  margin-bottom: 12px;
+                }
+                .paypal-btn{
+                  button{
+                    width: 167px;
+                  }
+                }
 
+                .save-btn{
+                  height: 28px;
+                  button{
+                    line-height: 10px;
+                    height: 28px;
+                  }
+                }
+               .cancel-btn{
+                 color: #532f18;
+                 font-size: 14px;
+                 text-decoration: underline;
+                 margin-left: 13px;
+               }
+
+                input{
+                  border-radius: 3px;
+                  width: 167px;
+                  display: block;
+                  margin-bottom: 5px;
+                }
+
+              }
              }
             }
           }
         }
       }
     }
-  }
+

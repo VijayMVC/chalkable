@@ -31,6 +31,16 @@ NAMESPACE('chlk.models.admin', function () {
 
             Boolean, 'forGradeLevels',
 
-            String, 'markingPeriodName'
+            String, 'markingPeriodName',
+
+
+            [[chlk.models.grading.GradeLevelsForTopBar, String, chlk.models.funds.BudgetBalance, Boolean]],
+            function prepareBaseInfo(gradeLvlBarItems, mpName, balance, forGradeLevels_){
+                this.setTopData(gradeLvlBarItems);
+                this.setMarkingPeriodName(mpName);
+                this.setBudgetBalance(balance);
+                if (forGradeLevels_)
+                    this.setForGradeLevels(true);
+            }
         ]);
 });

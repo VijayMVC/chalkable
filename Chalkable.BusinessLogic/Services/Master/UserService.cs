@@ -120,7 +120,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 {
                     var chlkUser = new UserDataAccess(uow).GetUser(new AndQueryCondition
                     {
-                        {User.SIS_USER_NAME_FIELD, iNowUser.Username},
+                        {User.LOCAL_ID, iNowUser.Id},
                         {User.DISTRICT_REF_FIELD, district.Id}
                     });
                     res = Login(chlkUser, uow, iNowCl);

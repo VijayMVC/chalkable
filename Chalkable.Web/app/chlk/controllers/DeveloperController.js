@@ -1,15 +1,17 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.ApplicationService');
 REQUIRE('chlk.services.ApiService');
-
+REQUIRE('chlk.services.DeveloperService');
 
 REQUIRE('chlk.templates.common.footers.DeveloperFooter');
 
 REQUIRE('chlk.activities.developer.DeveloperDocsPage');
 REQUIRE('chlk.activities.developer.ApiExplorerPage');
+REQUIRE('chlk.activities.developer.PayPalSettingsPage');
 
 REQUIRE('chlk.models.common.footers.DeveloperFooter');
 REQUIRE('chlk.models.api.ApiExplorerViewData');
+REQUIRE('chlk.models.developer.PayPalInfo');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -19,6 +21,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.ApplicationService, 'appsService',
+
+            [ria.mvc.Inject],
+            chlk.services.DeveloperService, 'developerService',
 
             [ria.mvc.Inject],
             chlk.services.ApiService, 'apiService',
@@ -59,9 +64,23 @@ NAMESPACE('chlk.controllers', function (){
                 chlk.models.common.RoleEnum.DEVELOPER
             ])],
             function paypalSettingsAction(){
-
+                var paypalSettings = new chlk.models.developer.PayPalInfo();
+                //todo: get info from server
+                return this.PushView(chlk.activities.developer.PayPalSettingsPage, new ria.async.DeferredData(paypalSettings));
             },
 
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.DEVELOPER
+            ])],
+            [[chlk.models.developer.PayPalInfo]],
+            function updatePaymentInfoAction(info){
+                var result = this.developerService.updatePaymentInfo(
+                    this.getCurrentPerson().getId(),
+                    info.getEmail()
+                );
+                return this.UpdateView(chlk.activities.developer.PayPalSettingsPage, result);
+            },
 
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.DEVELOPER
