@@ -54,6 +54,8 @@ namespace Chalkable.BusinessLogic.Services
         public bool IsInternalApp{ get; set; }
         [Ignore]
         public string OAuthApplication{ get; set; }
+        [Ignore]
+        public IList<StiConnector.Connectors.Model.Claim> Claims { get; set; } 
 
         public UserContext()
         {

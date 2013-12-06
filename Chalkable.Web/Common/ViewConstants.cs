@@ -38,6 +38,6 @@ namespace Chalkable.Web.Common
         public const string ERROR_MESSAGE_KEY = "ErrorMessage";
         public const string DEMO_PREFIX_KEY = "DemoPrefix";
 
-
+        public const string USER_CLAIMS = "Claims";
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,7 +9,17 @@ namespace Chalkable.StiConnector.Connectors.Model
     {
         public int Id { get; set; }
         public string Username { get; set; }
+        public int? PersonId { get; set; }
+        public int? StaffId { get; set; }
+        public int? StudentId { get; set; }
+        public IList<Claim> Claims { get; set; } 
     }
+
+   public class Claim 
+   {
+       public string Type { get; set; }
+       public IEnumerable<string> Values { get; set; }
+   }
 
     public class School
     {

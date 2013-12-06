@@ -32,6 +32,7 @@ namespace Chalkable.StiConnector.Connectors
             try
             {
                 var data = client.DownloadData(url);
+                Debug.WriteLine(Encoding.UTF8.GetString(data));
                 //Thread.Sleep(500);
                 //var data = Encoding.UTF8.GetBytes(mockResp);
                 stream = new MemoryStream(data);
@@ -100,7 +101,7 @@ namespace Chalkable.StiConnector.Connectors
         }
         public User GetMe()
         {
-            return Call<User>(string.Format("{0}{1}/me", BaseUrl, "users"));
+            return Call<User>(string.Format("{0}chalkable/{1}/me", BaseUrl, "users"));
         }
     }
 
