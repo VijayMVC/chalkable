@@ -98,7 +98,8 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('people')],
             [[chlk.models.teacher.StudentsList]],
             function updateListAction(model){
-                var isScroll = model.isScroll(), start = model.getStart();
+                var isScroll = model.isScroll()
+                    , start = model.getStart();
                 var result, isStudent = this.getCurrentRole().isStudent();
                 if(isStudent && !model.isMy()){
                     result = this.teacherService.getTeachers(
@@ -106,7 +107,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.getFilter(),
                         model.isByLastName(),
                         start,
-                        10
+                        model.getCount()
                     );
                 }else{
                     result = this.studentService.getStudents(
@@ -115,7 +116,7 @@ NAMESPACE('chlk.controllers', function (){
                         !isStudent && model.isMy(),
                         model.isByLastName(),
                         start,
-                        10
+                        model.getCount()
                     )
                 }
 

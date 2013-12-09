@@ -52,9 +52,11 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.people.UsersList]],
             function updateListAction(model){
-                var isScroll = model.isScroll(), start = model.getStart();
+                var isScroll = model.isScroll(),
+                    start = model.getStart(),
+                    count = model.getCount();
                 var res = this.adminService
-                    .getUsers(model.getFilter(), model.getRolesId(), model.getGradeLevelsIds(), model.isByLastName(), start)
+                    .getUsers(model.getFilter(), model.getRolesId(), model.getGradeLevelsIds(), model.isByLastName(), start, count)
                     .then(function(usersData){
                         if(isScroll)  return this.prepareUsers(usersData, start);
                         return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter());
