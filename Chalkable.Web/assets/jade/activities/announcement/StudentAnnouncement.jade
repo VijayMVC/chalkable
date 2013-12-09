@@ -1,20 +1,32 @@
-getGrade = function(value){return GradingStyler.getLetterByGrade(value, self.getGradingMapping(), self.getGradingStyle())};
-getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, self.getGradingMapping(), self.getGradingStyle())};
-value = self.getGradeValue();
-normalValue = self.getNormalValue();
-isDrop = self.isDropped();
-res = (self.getGradingStyle()) ? (!isNaN(value) ? getGrade(value) : '') : ((value >= 0) ? value : '');
-lbl = 'A - F';
-itemCls = (isDrop ? 'dropped' :'');
-selectedCls = (!self.isReadonly() ? 'not-selected' : '');
+getGrade = function(value){return GradingStyler.getLetterByGrade(value, self.getGradingMapping(), self.getGradingStyle())}
+getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, self.getGradingMapping(), self.getGradingStyle())}
+value = self.getGradeValue()
+normalValue = self.getNormalValue()
+isDrop = self.isDropped()
+res = (self.getGradingStyle()) ? (!isNaN(value) ? getGrade(value) : '') : ((value >= 0) ? value : '')
+lbl = 'A - F'
+itemCls = (isDrop ? 'dropped' :'')
+selectedCls = (!self.isReadonly() ? 'not-selected' : '')
 student = self.getStudentInfo();
-owner = self.getOwner();
+owner = self.getOwner()
+alertsEnum = chlk.models.grading.AlertsEnum
 +ActionForm('announcement', 'updateAnnouncementGrade')
     input(type="submit").x-hidden
     +Hidden('id', self.getId())
     +Hidden('dropped', isDrop)
     +ActionLink('students', 'info', student.getId())(data-tooltip=student.getFullName()).left.image-container.white.shadow
         +PersonImg(student, 47)
+    .chlk-pop-up-container.popup-bottom.alerts-pop-up
+        .pop-up-triangle.big
+        .alerts-pop-up-content
+            div(data-type=alertsEnum.DROP.valueOf()).alerts-pop-up-item=Msg.Drop
+            div(
+                data-type=alertsEnum.FILL.valueOf(),
+                class=(!normalValue || self.isGradeDisabled()) ? 'disabled' : ''
+            ).alerts-pop-up-item.fill-item=Msg.Fill
+            div(data-type=alertsEnum.LATE.valueOf()).alerts-pop-up-item=Msg.Late
+            div(data-type=alertsEnum.INCOMPLETE.valueOf()).alerts-pop-up-item=Msg.Incomplete
+            div(data-type=alertsEnum.EXEMPT.valueOf()).alerts-pop-up-item=Msg.Exempt
     .i-b.name-block
         p= student.getFullName()
         if !self.isReadonly()
@@ -49,5 +61,5 @@ owner = self.getOwner();
                                         +Option(currentValue, item, res == item)
                         .letters=lbl
                 .input-container
-                    INPUT(type="text", autofill="off", value=normalValue, name="gradevalue", data-value=normalValue).no-padding.grade-input.with-grid-focus
+                    INPUT(type="text", autofill="off", value=normalValue, name="gradevalue", data-value=normalValue, class=self.isGradeDisabled() ? "disabled-grade" : "with-grid-focus").no-padding.grade-input
                     .letters 100 - 0

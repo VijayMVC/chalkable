@@ -341,7 +341,11 @@ TEXTAREA.animated-textarea{
   #pop-up-triangle, .pop-up-triangle{
     position: absolute;
     height: 10px;
-    background: url(images/common/window-triangle-top.png) center center no-repeat;
+    background: url(images/common/window-triangle-top.png) center 0 no-repeat;
+
+    &.big{
+      height: 16px;
+    }
   }
 
   &.popup-bottom, &.popup-top{
@@ -354,12 +358,16 @@ TEXTAREA.animated-textarea{
   &.popup-bottom{
     #pop-up-triangle, .pop-up-triangle{
       top: -10px;
+
+      &.big{
+        top: -14px;
+      }
     }
   }
 
   &.popup-top{
     #pop-up-triangle, .pop-up-triangle{
-      bottom: -10px;
+      bottom: -12px;
       @include transform(rotate(180deg));
     }
   }

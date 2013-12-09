@@ -6,6 +6,7 @@ REQUIRE('chlk.templates.announcement.AnnouncementGradingPartTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementQnAs');
 REQUIRE('chlk.templates.classes.TopBar');
 REQUIRE('chlk.models.grading.Mapping');
+REQUIRE('chlk.models.grading.AlertsEnum');
 
 NAMESPACE('chlk.activities.announcement', function () {
 
@@ -48,12 +49,21 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.DomEventBind('keypress', '.grade-input')],
             [[ria.dom.Dom, ria.dom.Event]],
-            function inputClick(node, event){
+            function inputKeyPress(node, event){
                 if(event.keyCode == ria.dom.Keys.ENTER){
                     var row = node.parent('.row');
                     this.selectRow(this.dom.find('.grades-individual').find('.row:eq(' + (parseInt(row.getAttr('index'),10) + 1) + ')'));
                     this.setGrade(node);
                 }
+            },
+
+            [ria.mvc.DomEventBind('keyup', '.grade-input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function inputKeyUp(node, event){
+                if(!node.getValue())
+                    node.parent('.row').find('.fill-item').addClass('disabled');
+                else
+                    node.removeClass('disabled');
             },
 
             [ria.mvc.DomEventBind('click', '.show-student-grades')],
@@ -214,12 +224,36 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }, 10);
             },
 
+            [ria.mvc.DomEventBind('click', '.grade-input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function gradeClick(node, event){
+                if(!node.hasClass('with-grid-focus'))
+                    node.addClass('with-grid-focus');
+            },
+
+            [ria.mvc.DomEventBind('click', '.grade-triangle')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function gradeTriangleClick(node, event){
+                setTimeout(function(){
+                    node.parent('.row').find('.alerts-pop-up').show();
+                }, 10);
+            },
+
+            [ria.mvc.DomEventBind('blur', '.disabled-grade')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function gradeBlur(node, event){
+                node.removeClass('with-grid-focus');
+            },
+
             [ria.mvc.DomEventBind('click')],
             [[ria.dom.Dom, ria.dom.Event]],
             function wholeDomClick(node, event){
                 var target = new ria.dom.Dom(event.target);
                 if(!target.hasClass('comment-grade') && !target.parent('.comment-grade').exists())
                     this.dom.find(('.small-pop-up:visible')).hide();
+                var popUp = new ria.dom.Dom('.alerts-pop-up:visible');
+                if(popUp.exists() && !target.isOrInside('.alerts-pop-up'))
+                    popUp.hide();
             },
 
             [[ria.dom.Dom, Boolean]],
@@ -236,7 +270,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                         if(next.exists()){
                             row.removeClass('selected');
                             next.addClass('selected');
-                            jQuery(next.find('.grade-input').valueOf()).focus();
+                            jQuery(next.find('.grade-input:not(.with-grid-focus)').valueOf()).focus();
                         }
                     },1);
                 }
