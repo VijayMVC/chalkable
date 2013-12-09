@@ -113,7 +113,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var district = new DistrictDataAccess(uow)
                     .GetAll(new AndQueryCondition{{District.SIS_DISTRICT_IF_FIELD, sisDistrictId}})
                     .First();
-                var iNowCl = new ConnectorLocator(token, district.SisUrl, tokenExpiresTime);
+                var sisUrl = district.SisUrl;
+                var iNowCl = new ConnectorLocator(token, sisUrl, tokenExpiresTime);
                 var iNowUser = iNowCl.UsersConnector.GetMe();
                 UserContext res = null;
                 if (!string.IsNullOrEmpty(iNowUser.Username))
@@ -123,7 +124,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         {User.LOCAL_ID, iNowUser.Id},
                         {User.DISTRICT_REF_FIELD, district.Id}
                     });
-                    res = Login(chlkUser, uow, iNowCl);
+                    res = Login(chlkUser, uow, iNowCl, iNowUser);
                 }
                 uow.Commit();
                 return res;
@@ -131,7 +132,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        private UserContext Login(User user, UnitOfWork uow, ConnectorLocator iNowConnector = null)
+        private UserContext Login(User user, UnitOfWork uow, ConnectorLocator iNowConnector = null
+            , StiConnector.Connectors.Model.User iNowUser = null)
         {
             if (user == null) return null;
             
@@ -154,13 +156,17 @@ namespace Chalkable.BusinessLogic.Services.Master
                     var developer = new DeveloperDataAccess(uow).GetDeveloper(su.SchoolRef);
                     if (developer != null) developerId = developer.Id;
                 }
-                user = SaveSisToken(user, uow, iNowConnector);
-                return new UserContext(user, CoreRoles.GetById(su.Role), user.District, su.School, developerId);
+                user = SaveSisToken(user, uow, ref iNowConnector);
+                var res = new UserContext(user, CoreRoles.GetById(su.Role), user.District, su.School, developerId);
+                if (iNowUser == null && iNowConnector != null)
+                    iNowUser = iNowConnector.UsersConnector.GetMe();          
+                if(iNowUser != null) res.Claims = iNowUser.Claims;
+                return res;
             }
             throw new UnknownRoleException();
         }
 
-        private User SaveSisToken(User user, UnitOfWork uow, ConnectorLocator iNowConnector)
+        private User SaveSisToken(User user, UnitOfWork uow, ref ConnectorLocator iNowConnector)
         {
             if (user.SisUserName != null)
             {
