@@ -228,6 +228,7 @@ var Msg = {
 
     //END Simple words-----------------------------------------------------
 
+
     Absent_Average_MP: function(mp_name){
         return String.format('Absent Average {0}', mp_name)
     },
@@ -366,6 +367,7 @@ var Msg = {
     Long_Description: 'Long Description',
     Long_description_empty_text : 'Between 500-1500 characters works well',
     Lose_Changes: 'Lose Changes',
+    Max_score: 'Max score',
     Mark_all_Present: 'Mark all Present',
     Marking_Period: oneOrMany('Marking Period'),
     Marking_Period_shortcut: 'Mp',
