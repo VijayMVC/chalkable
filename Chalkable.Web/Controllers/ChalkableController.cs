@@ -14,6 +14,7 @@ using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionResults;
 using Chalkable.Web.Authentication;
 using Microsoft.IdentityModel.Claims;
+using Newtonsoft.Json;
 
 namespace Chalkable.Web.Controllers
 {
@@ -38,6 +39,13 @@ namespace Chalkable.Web.Controllers
                 (res as JsonResult).ContentType = contentType;
             }
             return res;
+        }
+
+        public ActionResult FakeJson(string filename)
+        {
+            var fullName = HttpContext.Server.MapPath(filename);
+            var jsonF = System.IO.File.ReadAllText(fullName);
+            return Content(jsonF, "application/json");
         }
 
 
