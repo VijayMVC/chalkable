@@ -245,6 +245,107 @@ BODY {
                 padding: 41px 0 30px;
               }
 
+              .max-score-container{
+                margin-top: 30px;
+                input{
+                  padding: 7px;
+                  display: inline-block;
+                }
+                .question-mark{
+                  display: inline-block;
+                }
+              }
+
+              .question-mark{
+                font-family: Arial;
+                color: white;
+                font-size: 11px;
+                @include border-radius(5px);
+                background-color: #ababab !important;
+                border-radius: 8px;
+                width: 15px;
+                height: 15px;
+                padding: 0px !important;
+                margin-left: 10px;
+                text-align: center;
+              }
+
+
+              .advanced-options{
+                position: relative;
+                color: #7A7A7A;
+
+                .advanced-options-btn{
+                  @include border-radius(5px);
+                  background-color: #BDBDBD;
+                  cursor: pointer;
+                  text-align: center;
+                  text-shadow: 1px 1px 0 white;
+                  padding: 8px;
+                  font-size: 12px;
+                  margin-top: 30px;
+                  width: 160px;
+                }
+                .separator{
+                  z-index: 1000;
+                  width: 176px;
+                  height: 10px;
+                  position: absolute;
+                  left: 0px;
+                  top: 21px;
+                }
+
+                .advanced-options-btn.selected, .separator, .advanced-options-container{
+                  background-color: #E5E5E5 !important;
+                }
+                .advanced-options-btn.selected{
+                  @include box-shadow(rgba(0, 0, 0, 0.4) 0 0 6px, white 0px 1px 0px 0px inset);
+                }
+                .advanced-options-container{
+                  @include box-shadow(rgba(0, 0, 0, 0.4) 0 0 6px, white 0px 1px 0px 0px inset);
+                  top: 25px;
+                  position: absolute;
+                  @include border-radius(5px);
+                  font-size: 12px;
+                  width: 245px;
+                  .new-input-container{
+                    input{
+                      margin-left: 10px;
+                      width: 60px !important;
+                      padding-left: 15px !important;
+                    }
+                  }
+                  .check-box-container{
+                    .slide-checkbox{
+                      position: relative;
+                      top: 5px;
+                      margin-bottom: 5px;
+                    }
+                    .question-mark{
+                      margin-left: 4px !important;
+                    }
+                  }
+                  .title{
+                    font-weight: bold;
+                    width: 110px;
+                    margin-left: 5px;
+                    text-shadow: 1px 1px 0 white;
+                  }
+                  .title, .question-mark, input, .slide-checkbox{
+                    display: inline-block;
+                    padding: 5px;
+                    margin-top: 10px;
+                  }
+                  .question-mark{
+                    //float: right;
+                  }
+                  input, .slide-checkbox{
+                    //float: right;
+                    //margin-right: 10px;
+                  }
+                }
+              }
+
               .reminders-container{
                 background: url(images/announcement/reminder-bg.png) -11px 20px no-repeat;
                 padding-top: 50px;
