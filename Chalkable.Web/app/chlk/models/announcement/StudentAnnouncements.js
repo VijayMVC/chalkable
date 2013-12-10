@@ -41,6 +41,8 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('showtostudents')],
             Boolean, 'showToStudents',
 
+            chlk.models.announcement.StudentAnnouncement, 'currentItem',
+
             Number, 'selectedIndex'
         ]);
 });

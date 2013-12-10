@@ -201,6 +201,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
 
             [ria.templates.ModelPropertyBind],
-            String, 'annRecipients'
+            String, 'annRecipients',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'maxScore'
         ])
 });

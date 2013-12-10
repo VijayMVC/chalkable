@@ -60,10 +60,16 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('keyup', '.grade-input')],
             [[ria.dom.Dom, ria.dom.Event]],
             function inputKeyUp(node, event){
-                if(!node.getValue())
-                    node.parent('.row').find('.fill-item').addClass('disabled');
-                else
-                    node.removeClass('disabled');
+                var item = node.parent('.row').find('.fill-item');
+                if(!node.getValue()){
+                    item.addClass('disabled');
+                    node.addClass('empty-grade');
+                }
+                else{
+                    item.removeClass('disabled');
+                    node.removeClass('empty-grade');
+                }
+
             },
 
             [ria.mvc.DomEventBind('click', '.show-student-grades')],
@@ -82,6 +88,21 @@ NAMESPACE('chlk.activities.announcement', function () {
                         }
                     }
                 }
+            },
+
+            [ria.mvc.DomEventBind('click', '.alerts-pop-up-item:not(.disabled)')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function alertClick(node, event){
+                var alertsEnum = chlk.models.grading.AlertsEnum;
+                var type = new alertsEnum(node.getData('type'));
+                switch(type){
+                    case alertsEnum.FILL: var gradeNode = this.dom.find('.empty-grade');
+                        this.dom.find('.empty-grade').setValue(node.parent('.row').find('.grade-input').getValue());
+                        this.setGrade(gradeNode);
+                        break;
+                    case alertsEnum.DROP: this.dropItem(node); break;
+                }
+                new ria.dom.Dom('.alerts-pop-up:visible').hide();
             },
 
             [[ria.dom.Dom]],
@@ -133,6 +154,13 @@ NAMESPACE('chlk.activities.announcement', function () {
                     this.updateItem(node, false);
                     node.parent('.small-pop-up').addClass('x-hidden');
                 }
+            },
+
+            [[ria.dom.Dom]],
+            function dropItem(node){
+                var row = node.parent('.row');
+                row.find('[name=dropped]').setValue(true);
+                this.updateItem(node, true);
             },
 
             /*[ria.mvc.DomEventBind('click', '.drop-link')],
@@ -266,7 +294,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 form.trigger('submit');
                 if(selectNext_){
                     setTimeout(function(){
-                        var next = row.next();
+                        var next = row.next().next();
                         if(next.exists()){
                             row.removeClass('selected');
                             next.addClass('selected');
@@ -309,18 +337,28 @@ NAMESPACE('chlk.activities.announcement', function () {
                 //new ria.dom.Dom().off('click', this.wholeDomClick);
             },
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.StudentAnnouncement, chlk.activities.lib.DontShowLoader())],
-            VOID, function doUpdateItem(tpl, model, msg_) {
-                tpl.setOwner(this.getOwner());
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, chlk.activities.lib.DontShowLoader())],
+            VOID, function doUpdateItem(allTpl, allModel, msg_) {
+                var tpl = new chlk.templates.announcement.StudentAnnouncementsTpl;
+                var model = allModel.getStudentAnnouncements();
+                tpl.assign(model);
                 tpl.options({
+                    announcementId: this.getAnnouncementId()
+                });
+                tpl.renderTo(this.dom.find('.student-announcements-top-panel').empty());
+                var itemModel = model.getCurrentItem();
+                var itemTpl = new chlk.templates.announcement.StudentAnnouncement;
+                itemTpl.assign(itemModel);
+                itemTpl.setOwner(this.getOwner());
+                itemTpl.options({
                     gradingMapping: this.getMapping(),
                     applicationsInGradeView: this.getApplicationsInGradeView(),
                     readonly: false,
                     gradingStyle: parseInt(this.dom.find('[name=gradingStyle]').getValue(), 10)
                 });
-                var container = this.dom.find('#top-content-' + model.getId().valueOf());
+                var container = this.dom.find('#top-content-' + itemModel.getId().valueOf());
                 container.empty();
-                tpl.renderTo(container.removeClass('loading'));
+                itemTpl.renderTo(container.removeClass('loading'));
                 var grades = this.dom.find('.grade-input[value]').valueOf()
                     .map(function(_){return parseInt((new ria.dom.Dom(_)).getValue());});
                 var gradedCount = grades.length;

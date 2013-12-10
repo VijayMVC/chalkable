@@ -122,7 +122,17 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.StudentAnnouncement]],
         function updateAnnouncementGradeAction(model){
-            var result = this.gradingService.updateItem(model.getId(), model.getGradeValue(), model.getComment(), model.isDropped());
+            var result = this.gradingService.updateItem(model.getId(), model.getGradeValue(), model.getComment(), model.isDropped())
+                .attach(this.validateResponse_());
+            result.then(function(item){
+                return this.announcementService
+                    .getAnnouncement(item.getAnnouncementId())
+                    .attach(this.validateResponse_())
+                    .then(function(announcement){
+                        announcement.getStudentAnnouncements().setCurrentItem(item);
+                        return announcement;
+                    }, this);
+            }, this);
             return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, result, chlk.activities.lib.DontShowLoader());
         },
 
@@ -275,12 +285,17 @@ NAMESPACE('chlk.controllers', function (){
                     announcement.setCurrentUser(this.getCurrentPerson());
 
                     //TODO Remove fake data
+                    announcement.setMaxScore(100);
                     var studentAnnouncements = announcement.getStudentAnnouncements();
                     studentAnnouncements.setShowToStudents(Math.random() > 0.5);
                     studentAnnouncements.getItems().forEach(function(item){
                         item.setLate(Math.random() > 0.5);
-                        if(!item.getGradeValue())
-                            item.setExempt(Math.random() > 0.5);
+                        if(!item.getGradeValue()){
+                            var val = Math.random() > 0.5;
+                            item.setExempt(val);
+                            if(!val)
+                                item.setAbsent(Math.random() > 0.5);
+                        }
                         item.setIncomplete(Math.random() > 0.5);
                     });
 

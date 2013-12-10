@@ -201,8 +201,8 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'studentsWithoutAttachmentsCount',
 
             String, 'subject',
-            [ria.serialize.SerializeProperty('systemtype')],
 
+            [ria.serialize.SerializeProperty('systemtype')],
             Number, 'systemType',
 
             String, 'title',
@@ -223,6 +223,9 @@ NAMESPACE('chlk.models.announcement', function () {
 
             [ria.serialize.SerializeProperty('announcementqnas')],
             ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
+
+            [ria.serialize.SerializeProperty('maxscore')],
+            Number, 'maxScore',
 
             String, 'annRecipients',
 

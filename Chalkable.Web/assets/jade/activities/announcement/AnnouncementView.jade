@@ -58,6 +58,7 @@ mixin AppAttachmentBlock(item, pictureHref, i)
                 )
             .grading-part
                 if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length
+                    +Hidden('maxScore', self.getMaxScore())#max-score
                     +RenderWith(studentAnnouncementsInfo, chlk.templates.announcement.AnnouncementGradingPartTpl)(
                         autoGradeApps = self.getAutoGradeApps(),
                         readonly = isReadonly,

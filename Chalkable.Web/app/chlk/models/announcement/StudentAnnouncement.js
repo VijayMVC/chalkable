@@ -31,6 +31,9 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('islate')],
             Boolean, 'late',
 
+            [ria.serialize.SerializeProperty('isabsent')],
+            Boolean, 'absent',
+
             [ria.serialize.SerializeProperty('isincomplete')],
             Boolean, 'incomplete',
 

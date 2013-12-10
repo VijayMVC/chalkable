@@ -556,8 +556,16 @@ $red-color: #842727;
               background-image: url(images/grading/orange-flag.png);
             }
 
+            &.absent{
+              background-image: url(images/grading/blue-flag.png);
+            }
+
             &.multiple{
               background-image: url(images/grading/alerts.png);
+            }
+
+            &.error{
+              background-image: url(images/grading/red-flag.png);
             }
           }
 

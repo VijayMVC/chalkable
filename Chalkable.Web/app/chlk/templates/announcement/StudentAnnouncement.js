@@ -47,6 +47,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'late',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'absent',
+
+            [ria.templates.ModelPropertyBind],
             Boolean, 'incomplete',
 
             [ria.templates.ModelPropertyBind],
@@ -62,10 +65,22 @@ NAMESPACE('chlk.templates.announcement', function () {
                 else
                     if(this.isIncomplete())
                         return Msg.Incomplete.toLowerCase();
+                    else
+                        if(this.isAbsent())
+                            return Msg.Absent.toLowerCase();
                 return '';
             },
 
             Object, function getNormalValue(){
+                var value = this.getGradeValue();
+                if(this.isDropped())
+                    return Msg.Dropped;
+                if(this.isExempt())
+                    return Msg.Exempt;
+                return (value >= 0) ? value : '';
+            },
+
+            Object, function getDisplayValue(){
                 var value = this.getGradeValue();
                 if(this.isDropped())
                     return Msg.Dropped;

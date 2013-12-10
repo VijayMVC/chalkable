@@ -13,20 +13,33 @@ alertsEnum = chlk.models.grading.AlertsEnum
 +ActionForm('announcement', 'updateAnnouncementGrade')
     input(type="submit").x-hidden
     +Hidden('id', self.getId())
+    +Hidden('announcementId', self.getAnnouncementId())
     +Hidden('dropped', isDrop)
     +ActionLink('students', 'info', student.getId())(data-tooltip=student.getFullName()).left.image-container.white.shadow
         +PersonImg(student, 47)
     .chlk-pop-up-container.popup-bottom.alerts-pop-up
         .pop-up-triangle.big
         .alerts-pop-up-content
-            div(data-type=alertsEnum.DROP.valueOf()).alerts-pop-up-item=Msg.Drop
+            div(
+                data-type=alertsEnum.DROP.valueOf(),
+                class=isDrop ? 'disabled' : ''
+            ).alerts-pop-up-item=Msg.Drop
             div(
                 data-type=alertsEnum.FILL.valueOf(),
-                class=(!normalValue || self.isGradeDisabled()) ? 'disabled' : ''
+                class=(!normalValue && normalValue != 0 || self.isGradeDisabled()) ? 'disabled' : ''
             ).alerts-pop-up-item.fill-item=Msg.Fill
-            div(data-type=alertsEnum.LATE.valueOf()).alerts-pop-up-item=Msg.Late
-            div(data-type=alertsEnum.INCOMPLETE.valueOf()).alerts-pop-up-item=Msg.Incomplete
-            div(data-type=alertsEnum.EXEMPT.valueOf()).alerts-pop-up-item=Msg.Exempt
+            div(
+                data-type=alertsEnum.LATE.valueOf(),
+                class=self.isLate() ? 'disabled' : ''
+            ).alerts-pop-up-item=Msg.Late
+            div(
+                data-type=alertsEnum.INCOMPLETE.valueOf(),
+                class=self.isIncomplete() ? 'disabled' : ''
+            ).alerts-pop-up-item=Msg.Incomplete
+            div(
+                data-type=alertsEnum.EXEMPT.valueOf(),
+                class=self.isExempt() ? 'disabled' : ''
+            ).alerts-pop-up-item=Msg.Exempt
     .i-b.name-block
         p= student.getFullName()
         if !self.isReadonly()
@@ -41,14 +54,11 @@ alertsEnum = chlk.models.grading.AlertsEnum
                                 div
                                     +TextArea(name="comment").comment-input=self.getComment()
                                     span.enter=Msg.Enter_when_done
-                //if !self.isReadonly()
-                    |&nbsp;
-                    A(id="drop-"+self.getId(), class="drop-link " + (isDrop ? "undrop" : ""))=(isDrop ? Msg.Undrop :Msg.Drop)
     .i-b.grade-block
         //if(self.getApplicationsInGradeView().length || self.getAttachments().length)
         .grade-triangle
         div(class=self.getAlertClass()).alert-flag
-        div(class=selectedCls + ' ' + itemCls).i-b=isDrop ? Msg.Drop :res
+        div(class=selectedCls + ' ' + itemCls).i-b=res
         div(class="selected " + itemCls, rowIndex=i, recId=self.getId()).i-b
             if !self.isReadonly()
                 if self.getGradingStyle()
@@ -61,5 +71,12 @@ alertsEnum = chlk.models.grading.AlertsEnum
                                         +Option(currentValue, item, res == item)
                         .letters=lbl
                 .input-container
-                    INPUT(type="text", autofill="off", value=normalValue, name="gradevalue", data-value=normalValue, class=self.isGradeDisabled() ? "disabled-grade" : "with-grid-focus").no-padding.grade-input
+                    INPUT(
+                        type="text",
+                        autofill="off",
+                        value=normalValue,
+                        name="gradevalue",
+                        data-value=normalValue,
+                        class=self.isGradeDisabled() ? "disabled-grade" : "with-grid-focus" + ((!normalValue && normalValue != 0) ? " empty-grade" : "")
+                    ).no-padding.grade-input
                     .letters 100 - 0
