@@ -46,6 +46,10 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
         if isAnnouncement
             TEXTAREA(id="subject",name="subject",placeholder="Subject",class="validate[required]")=announcement.getSubject()
         +TextArea(id="content",name="content",placeholder=isAnnouncement ? "Message" : "Assignment")=announcement.getContent()
+        .add-standards
+            .standards-list
+            .title CLICK TO ADD STANDARDS
+            +ActionLink('announcement', 'addStandards').add-standards-btn.x-hidden
         .drop-down-container
         input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
         if !announcement.getState()

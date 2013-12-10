@@ -422,7 +422,7 @@ BODY {
               width: 370px;
               font-size: 14px;
               margin-bottom: 15px;
-
+              border: 1px solid #a1a1a1;
               &#subject{
                 height: 17px;
               }
@@ -431,18 +431,37 @@ BODY {
                 height: 133px;
               }
             }
+            .add-standards{
+              border-top: dashed 3px #e0e0e0;
+              background-color: white;
+              width: 359px;
+              position: relative;
+              top: -62px;
+              left: 11px;
+              text-align: center;
+              @include border-radius(0px 0px 5px 5px);
+              .standards-list{
+              }
+              .title{
+                color: #e0e0e0;
+                font-weight: bold;
+                font-size: 12px;
+                padding-top: 12px;
+                padding-bottom: 12px;
+                cursor: pointer;
+              }
+            }
 
             .new-item-dropdown{
               position: absolute;
               background: white;
-              width: 240px;
+              width: 375px;
               z-index: 999;
-              border-left: 1px solid #a9a9a9;
-              border-right: 1px solid #a9a9a9;
-              border-bottom: 1px solid #a9a9a9;
+              border: 1px solid #a9a9a9;
               font-size: 14px;
               font-family: "Arial Narrow", Arial;
               color: #000;
+              padding-left: 6px;
 
               >DIV{
                 height: 20px;
@@ -452,11 +471,10 @@ BODY {
               }
 
               H1{
-                background: #e1e2e2;
+                background: white;
                 margin: 0;
-                color: #888;
+                color: #bfbfbf;
                 padding: 3px;
-                color: #8b8b8b;
                 height: 20px;
                 font-size: 16px;
                 font-weight: normal;

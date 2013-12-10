@@ -13,6 +13,7 @@ REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.AnnouncementViewPage');
 REQUIRE('chlk.activities.apps.AttachAppDialog');
 REQUIRE('chlk.activities.common.attachments.AttachmentDialog');
+REQUIRE('chlk.activities.announcement.AddStandardsDialog');
 
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.Reminder');
@@ -29,7 +30,7 @@ REQUIRE('chlk.models.id.AttachmentId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.announcement.QnAForm');
 REQUIRE('chlk.models.common.attachments.BaseAttachmentViewData');
-
+REQUIRE('chlk.models.announcement.ItemStandards');
 
 
 NAMESPACE('chlk.controllers', function (){
@@ -634,8 +635,6 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, ann, 'update-qna');
         },
 
-
-
         //TODO: refactor
         [[chlk.models.announcement.AnnouncementForm]],
         function prepareRecipientsData(model){
@@ -657,6 +656,11 @@ NAMESPACE('chlk.controllers', function (){
             recipientsData[studentsId] = studentsData;
             recipientsData[teachersId] = teachersData;
             model.setAdminRecipients(new chlk.models.announcement.AdminRecipients([], recipientsData));
-         }
+         },
+
+        function addStandardsAction(){
+            var res = new ria.async.DeferredData(new chlk.models.announcement.ItemStandards);
+            this.ShadeView(chlk.activities.announcement.AddStandardsDialog, res);
+        }
     ])
 });

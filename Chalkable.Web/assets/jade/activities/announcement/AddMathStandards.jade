@@ -1,0 +1,9 @@
+.dialog.add-standards
+    .header
+        h1 STANDARDS
+        span Choose a standard that describe the item
+    +ActionForm('announcement', 'addStandards').add-standards-form
+        .standards-list-container
+        .buttons-container
+            +Button()(type="submit").special-button2.blue.add Submit
+            +Button.special-button2.blue.cancel.close Cancel
