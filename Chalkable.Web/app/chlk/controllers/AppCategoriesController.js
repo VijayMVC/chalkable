@@ -60,7 +60,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function (data) {
                     this.view.getCurrent().close();
                     return this.appCategoryService.getCategories(0);
-                }.bind(this));
+                }, this);
 
             return this.UpdateView(chlk.activities.apps.AppCategoryListPage, result);
         },
@@ -74,7 +74,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function (data) {
                     return this.appCategoryService.getCategories(0)
-                },this);
+                }, this);
             return this.UpdateView(chlk.activities.apps.AppCategoryListPage, result);
         }
     ])

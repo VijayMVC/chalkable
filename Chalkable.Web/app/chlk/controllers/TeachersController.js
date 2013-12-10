@@ -40,7 +40,7 @@ NAMESPACE('chlk.controllers', function (){
                         var res = new chlk.models.people.UserProfileInfoViewData(this.getCurrentRole(), userData);
                         this.setUserToSession(res);
                         return res;
-                    }.bind(this));
+                    }, this);
                 return this.PushView(chlk.activities.profile.SchoolPersonInfoPage, result);
             },
             [[chlk.models.people.User]],

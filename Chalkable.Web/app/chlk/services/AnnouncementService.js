@@ -41,11 +41,10 @@ NAMESPACE('chlk.services', function () {
                     starredOnly: starredOnly_
                 })
                 .then(function(announcements){
-                       if (starredOnly_)
-                        this.setImportantCount(announcements.getTotalCount());
-                       return announcements;
-                    }.bind(this)
-                );
+                   if (starredOnly_)
+                    this.setImportantCount(announcements.getTotalCount());
+                   return announcements;
+                }, this);
 
             },
 
@@ -63,12 +62,12 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.AnnouncementAttachmentId, Boolean, Number, Number]],
-            String, function getAttachmentUri(announcementAttachmentId, needsDownload, width, heigh) {
+            String, function getAttachmentUri(announcementAttachmentId, needsDownload, width, height) {
                 return this.getUrl('AnnouncementAttachment/DownloadAttachment', {
                     announcementAttachmentId: announcementAttachmentId.valueOf(),
                     needsDownload: needsDownload,
                     width: width,
-                    heigh: heigh
+                    heigh: height
                 });
             },
 
@@ -202,15 +201,13 @@ NAMESPACE('chlk.services', function () {
                     announcementId: id.valueOf()
                 })
                 .then(function(announcement){
-                      this.cache[announcement.getId().valueOf()] = announcement;
-                      return announcement;
-                    }.bind(this)
-                );
+                  this.cache[announcement.getId().valueOf()] = announcement;
+                  return announcement;
+                }, this);
             },
 
             [[chlk.models.id.AnnouncementId, Boolean]],
             ria.async.Future, function star(announcementId, starred_) {
-
                 this.setImportantCount(this.getImportantCount() + (starred_ ? 1 : -1));
                 return this.post('Announcement/Star', chlk.models.announcement.Announcement, {
                     announcementId: announcementId.valueOf()
@@ -223,11 +220,10 @@ NAMESPACE('chlk.services', function () {
                     announcementId: announcementId.valueOf(),
                     question: question
                 }).then(function(qna){
-                        var result =this.cache[qna.getAnnouncementId().valueOf()];
-                        result.getAnnouncementQnAs().push(qna);
-                        return result;
-                    }.bind(this)
-                );
+                    var result =this.cache[qna.getAnnouncementId().valueOf()];
+                    result.getAnnouncementQnAs().push(qna);
+                    return result;
+                }, this);
             },
 
             [[chlk.models.id.AnnouncementQnAId, String, String]],
@@ -245,8 +241,7 @@ NAMESPACE('chlk.services', function () {
                             break;
                         }
                     return result;
-                }.bind(this)
-                );
+                }, this);
             },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementQnAId]],
@@ -254,11 +249,10 @@ NAMESPACE('chlk.services', function () {
                 return this.post('AnnouncementQnA/Delete', ArrayOf(chlk.models.announcement.AnnouncementQnA), {
                     announcementQnAId: announcementQnAId.valueOf()
                 }).then(function(qnas){
-                        var result =this.cache[announcementId.valueOf()];
-                        result.setAnnouncementQnAs(qnas);
-                        return result;
-                    }.bind(this)
-                );
+                    var result =this.cache[announcementId.valueOf()];
+                    result.setAnnouncementQnAs(qnas);
+                    return result;
+                }, this);
             }
         ])
 });

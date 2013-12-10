@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.apps.AppGeneralInfoViewData');
 REQUIRE('chlk.models.apps.Application');
+REQUIRE('chlk.models.apps.AppRating');
 
 NAMESPACE('chlk.templates.apps', function () {
 
@@ -27,6 +28,11 @@ NAMESPACE('chlk.templates.apps', function () {
             Boolean, 'approved',
 
             [ria.templates.ModelPropertyBind],
-            String, 'appThumbnail'
+            String, 'appThumbnail',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.apps.AppRating, 'appRating'
+
+
         ])
 });

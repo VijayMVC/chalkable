@@ -78,7 +78,7 @@ NAMESPACE('chlk.controllers', function (){
                 var result = this.developerService.updatePaymentInfo(
                     this.getCurrentPerson().getId(),
                     info.getEmail()
-                );
+                )
                 return this.UpdateView(chlk.activities.developer.PayPalSettingsPage, result);
             },
 
@@ -97,6 +97,7 @@ NAMESPACE('chlk.controllers', function (){
                         var apiRoles = this.apiService.getApiRoles();
                         return chlk.models.api.ApiExplorerViewData.$create(data, secretKey, apiRoles);
                     }, this)
+                    .attach(this.validateResponse_());
                 return this.PushView(chlk.activities.developer.ApiExplorerPage, result);
             },
 
@@ -123,7 +124,8 @@ NAMESPACE('chlk.controllers', function (){
                      .then(function(data){
                          var seq = chlk.models.api.ApiCallSequence.$create(data);
                          return seq;
-                     });
+                     })
+                     .attach(this.validateResponse_());
                  return this.UpdateView(chlk.activities.developer.ApiExplorerPage, result, 'update-api-calls-list');
             }
         ])

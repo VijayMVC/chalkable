@@ -69,16 +69,20 @@ NAMESPACE('chlk.controllers', function (){
             function showStudentsList(isMy, classId_){
                 var result, isStudent = this.getCurrentRole().isStudent();
                 if(isStudent && !isMy){
-                    result = this.teacherService.getTeachers(classId_, null, true, 0, 10);
+                    result = this.teacherService
+                        .getTeachers(classId_, null, true, 0, 10)
+                        .attach(this.validateResponse_());
                 }else{
-                    result = this.studentService.getStudents(classId_, null, !isStudent && isMy, true, 0, 10);
+                    result = this.studentService
+                        .getStudents(classId_, null, !isStudent && isMy, true, 0, 10)
+                        .attach(this.validateResponse_());
                 }
                 result.then(function(users){
                         var usersModel = this.prepareUsersModel(users, 0, true);
                         var classes = this.classService.getClassesForTopBar(true);
                         var topModel = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                         return new chlk.models.teacher.StudentsList(usersModel, topModel, isMy);
-                    }.bind(this));
+                    }, this);
                 return this.PushView(chlk.activities.person.ListPage, result);
             },
 
@@ -98,32 +102,36 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('people')],
             [[chlk.models.teacher.StudentsList]],
             function updateListAction(model){
-                var isScroll = model.isScroll()
-                    , start = model.getStart();
+                var isScroll = model.isScroll(),
+                    start = model.getStart();
                 var result, isStudent = this.getCurrentRole().isStudent();
                 if(isStudent && !model.isMy()){
-                    result = this.teacherService.getTeachers(
-                        model.getClassId(),
-                        model.getFilter(),
-                        model.isByLastName(),
-                        start,
-                        model.getCount()
-                    );
+                    result = this.teacherService
+                        .getTeachers(
+                            model.getClassId(),
+                            model.getFilter(),
+                            model.isByLastName(),
+                            start,
+                            model.getCount()
+                        )
+                        .attach(this.validateResponse_());
                 }else{
-                    result = this.studentService.getStudents(
-                        model.getClassId(),
-                        model.getFilter(),
-                        !isStudent && model.isMy(),
-                        model.isByLastName(),
-                        start,
-                        model.getCount()
-                    )
+                    result = this.studentService
+                        .getStudents(
+                            model.getClassId(),
+                            model.getFilter(),
+                            !isStudent && model.isMy(),
+                            model.isByLastName(),
+                            start,
+                            model.getCount()
+                        )
+                        .attach(this.validateResponse_());
                 }
 
                 result.then(function(usersData){
-                        if(isScroll)  return this.prepareUsers(usersData, start);
-                        return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter());
-                    }.bind(this));
+                    if(isScroll)  return this.prepareUsers(usersData, start);
+                    return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter());
+                }, this);
                 return this.UpdateView(chlk.activities.person.ListPage, result, isScroll ? chlk.activities.lib.DontShowLoader() : '');
             },
 
@@ -137,7 +145,7 @@ NAMESPACE('chlk.controllers', function (){
                         var res = new chlk.models.student.StudentProfileInfoViewData(this.getCurrentRole(), userData);
                         this.setUserToSession(res);
                         return res;
-                    }.bind(this));
+                    }, this);
                 return this.PushView(chlk.activities.profile.StudentInfoPage, result);
             },
 
@@ -182,7 +190,7 @@ NAMESPACE('chlk.controllers', function (){
                         var schedule = results[0];
                         schedule.setRoleName(chlk.models.common.RoleNamesEnum.STUDENT.valueOf());
                         return new chlk.models.people.UserProfileScheduleViewData(chlk.models.calendar.announcement.Week, this.getCurrentRole(), schedule, results[1]);
-                    }.bind(this));
+                    }, this);
                 return this.PushView(chlk.activities.profile.ScheduleWeekPage, result);
             },
 
@@ -197,7 +205,7 @@ NAMESPACE('chlk.controllers', function (){
                         var schedule = results[0];
                         schedule.setRoleName(chlk.models.common.RoleNamesEnum.STUDENT.valueOf());
                         return new chlk.models.people.UserProfileScheduleViewData(chlk.models.calendar.announcement.Month, this.getCurrentRole(), schedule, results[1]);
-                    }.bind(this));
+                    }, this);
                 return this.PushView(chlk.activities.profile.ScheduleMonthPage, result);
             },
 

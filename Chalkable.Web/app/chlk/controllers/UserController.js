@@ -37,7 +37,7 @@ NAMESPACE('chlk.controllers', function (){
                 var start = start_ || 0;
                 usersData.getItems().forEach(function(item, index){
                     item.setIndex(start_ + index);
-                }.bind(this));
+                }, this);
                 return usersData;
             },
 
@@ -136,7 +136,7 @@ NAMESPACE('chlk.controllers', function (){
                         var schedule = results[0];
                         schedule.setRoleName(role);
                         return new chlk.models.people.UserProfileScheduleViewData(chlk.models.calendar.announcement.Day, this.getCurrentRole(), schedule, results[1]);
-                    }.bind(this));
+                    }, this);
                 return this.PushView(chlk.activities.profile.SchedulePage, result);
             },
 
@@ -156,7 +156,7 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(loaded){
                         var res = this.getUserFromSession();
                         return new chlk.models.people.UserProfileViewData(this.getCurrentRole(), res);
-                    }.bind(this));
+                    }, this);
                 return this.UpdateView(this.getInfoPageClass(), result);
             },
 

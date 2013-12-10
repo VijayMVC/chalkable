@@ -24,7 +24,8 @@ NAMESPACE('chlk.controllers', function (){
                             this.getView().pop();
                             this.getView().pop();
                             return this.Redirect('announcement', 'addAppAttachment', [result]);
-                        }, this);
+                        }, this)
+                        .attach(this.validateResponse_());
                 }
                 else {
                      return this.ShowMsgBox(

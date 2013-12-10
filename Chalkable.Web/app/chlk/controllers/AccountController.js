@@ -23,24 +23,24 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.account.ChangePassword]],
         function teacherChangePasswordAction(model){
-            this.accountService
+            return this.accountService
                 .changePassword(model.getOldPassword(), model.getNewPassword(), model.getNewPasswordConfirmation())
-                .then(
-                    function(success){
-                        if (success)
-                            return this.Redirect('settings', 'dashboardTeacher', []);
-                    }.bind(this)
-                );
+                .then(function(success){
+                    if (success)
+                        return this.Redirect('settings', 'dashboardTeacher', []);
+                }, this)
+                .attach(this.validateResponse_());
         },
 
          function logoutAction(){
-             this.accountService
+             return this.accountService
                  .logOut()
                  .then(function(res){
                     if (res.isSuccess()){
                         location.href = this.getContext().getSession().get('webSiteRoot');
                     }
-                 }, this);
+                 }, this)
+                 .attach(this.validateResponse_());
          },
 
 //         function redirectToINOWAction(){
@@ -54,7 +54,9 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('settings')],
          [[chlk.models.id.SchoolPersonId]],
          function profileDeveloperAction(id){
-             var result = this.developerService.getInfo(id);
+             var result = this.developerService
+                 .getInfo(id)
+                 .attach(this.validateResponse_());
              return this.PushView(chlk.activities.profile.DeveloperPage, result);
          },
 

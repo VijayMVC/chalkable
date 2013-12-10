@@ -20,19 +20,24 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(model){
                         this.getContext().getSession().set('listBackups', model);
                         return model;
-                    }.bind(this));
+                    }, this);
                 return this.PushView(chlk.activities.storage.DbMaintenancePage, result);
             },
 
             [[chlk.models.storage.DatabaseUpdate]],
             function updateDbAction(model_){
-                model_ = model_ || new chlk.models.storage.DatabaseUpdate;
+                model_ = model_ || new chlk.models.storage.DatabaseUpdate();
                 return this.PushView(chlk.activities.storage.DatabaseUpdatePage, new ria.async.DeferredData(model_));
             },
 
             [[chlk.models.storage.DatabaseUpdate]],
             function runSqlAction(model){
-                this.dbMaintenanceService.databaseUpdate(model.getMasterSql(), model.getSchoolSql());
+                this.dbMaintenanceService
+                    .databaseUpdate(
+                        model.getMasterSql(),
+                        model.getSchoolSql()
+                    )
+                    .attach(this.validateResponse_());
                 this.ShowMsgBox('Db update task is started.', 'fyi.', [{
                     text: Msg.GOT_IT.toUpperCase(),
                     controller: "settings",
@@ -45,7 +50,8 @@ NAMESPACE('chlk.controllers', function (){
                     .backup()
                     .then(function(success){
                         return this.getContext().getSession().get('listBackups');
-                    }.bind(this));
+                    }, this)
+                    .attach(this.validateResponse_());
                 return this.UpdateView(chlk.activities.storage.DbMaintenancePage, result);
             },
 
@@ -55,7 +61,7 @@ NAMESPACE('chlk.controllers', function (){
                     .restore(ticks)
                     .then(function(success){
                         return this.getContext().getSession().get('listBackups');
-                    }.bind(this));
+                    }, this);
                 return this.UpdateView(chlk.activities.storage.DbMaintenancePage, result);
             }
         ])

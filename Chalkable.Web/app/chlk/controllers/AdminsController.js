@@ -56,11 +56,17 @@ NAMESPACE('chlk.controllers', function (){
                     start = model.getStart(),
                     count = model.getCount();
                 var res = this.adminService
-                    .getUsers(model.getFilter(), model.getRolesId(), model.getGradeLevelsIds(), model.isByLastName(), start, count)
+                    .getUsers(model.getFilter(),
+                        model.getRolesId(),
+                        model.getGradeLevelsIds(),
+                        model.isByLastName(),
+                        start,
+                        count
+                    )
                     .then(function(usersData){
                         if(isScroll)  return this.prepareUsers(usersData, start);
                         return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter());
-                }.bind(this));
+                    }, this);
                 return this.UpdateView(chlk.activities.admin.PeoplePage, res, isScroll ? chlk.activities.lib.DontShowLoader() : '');
             },
 
@@ -86,7 +92,7 @@ NAMESPACE('chlk.controllers', function (){
                         var res = new chlk.models.people.UserProfileInfoViewData(this.getCurrentRole(), userData);
                         this.setUserToSession(res);
                         return res;
-                    }.bind(this));
+                    }, this);
                 return this.PushView(chlk.activities.profile.SchoolPersonInfoPage, result);
             },
 

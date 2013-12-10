@@ -37,7 +37,8 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(model){
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
                     return model;
-                });
+                })
+                .attach(this.validateResponse_());
             return this.ShadeView(chlk.activities.calendar.announcement.MonthDayPopUp, result);
         },
 
@@ -48,7 +49,8 @@ NAMESPACE('chlk.controllers', function (){
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
                     model.setDate(date);
                     return model;
-                });
+                })
+                .attach(this.validateResponse_());
             return this.ShadeView(chlk.activities.calendar.announcement.DayPeriodPopUp, result);
         },
 
@@ -60,7 +62,8 @@ NAMESPACE('chlk.controllers', function (){
                     if(periodNumber_ >= 0)
                         model.setDate(date);
                     return model;
-                });
+                })
+                .attach(this.validateResponse_());
             if(periodNumber_ >= 0)
                 return this.ShadeView(chlk.activities.calendar.announcement.WeekDayPopUp, result);
             return this.ShadeView(chlk.activities.calendar.announcement.WeekBarPopUp, result);
@@ -118,8 +121,7 @@ NAMESPACE('chlk.controllers', function (){
                     model.setGradeLevelsForToolBar(glsInputData);
                     model.setAdmin(this.userIsAdmin());
                     return new ria.async.DeferredData(model);
-                }.bind(this));
-
+                }, this);
             return this.PushOrUpdateView(chlk.activities.calendar.announcement.WeekPage, result);
         },
 
@@ -152,8 +154,7 @@ NAMESPACE('chlk.controllers', function (){
                     model.setGradeLevelsForToolBar(glsInputData);
                     model.setAdmin(this.userIsAdmin());
                     return new ria.async.DeferredData(model);
-                }.bind(this));
-
+                }, this);
             return this.PushOrUpdateView(chlk.activities.calendar.announcement.MonthPage, result);
         }
     ])
