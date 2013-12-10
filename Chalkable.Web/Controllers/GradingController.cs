@@ -17,7 +17,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher")]
         public ActionResult TeacherSummary(int teacherId)
         {
-            throw new NotImplementedException();
+            return FakeJson("../fakeData/gradingSummary.json");
             //var schoolYearId = GetCurrentSchoolYearId();
             //var gradingStats = SchoolLocator.GradingStatisticService.GetStudentsGradePerClass(teacherId, schoolYearId);
             //gradingStats = gradingStats.Where(x => x.Avg.HasValue).ToList();
