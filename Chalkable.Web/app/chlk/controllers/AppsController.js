@@ -532,21 +532,16 @@ NAMESPACE('chlk.controllers', function (){
                         var isAppLive = data.getLiveAppId() != null && data.getLiveAppId().valueOf() != "";
                         var isApproved = data.getState().getStateId() == chlk.models.apps.AppStateEnum.APPROVED;
 
-                        var appInfo = this.appsService
-                            .getAppRating(data.getId())
-                            .then(function(marketDetails){
-                                var appRating = marketDetails.getApplicationRating() || new chlk.models.apps.AppRating();
-                                return new chlk.models.apps.AppGeneralInfoViewData(
-                                    data.getName(),
-                                    data.getId(),
-                                    data.getLiveAppId(),
-                                    data.getState().toString(isAppLive),
-                                    isApproved,
-                                    pictureUrl,
-                                    appRating
-                                );
-                            }, this);
-                        return this.PushView(chlk.activities.apps.AppGeneralInfoPage, appInfo);
+                        var appInfo = new chlk.models.apps.AppGeneralInfoViewData(
+                            data.getName(),
+                            data.getId(),
+                            data.getLiveAppId(),
+                            data.getState().toString(isAppLive),
+                            isApproved,
+                            pictureUrl,
+                            new chlk.models.apps.AppRating()
+                        );
+                        return this.PushView(chlk.activities.apps.AppGeneralInfoPage, new ria.async.DeferredData(appInfo));
                     }
                 }, this)
                 .attach(this.validateResponse_());
