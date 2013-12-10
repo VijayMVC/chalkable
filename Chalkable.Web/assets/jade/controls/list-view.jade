@@ -5,11 +5,11 @@ mixin ListView(data)
         input.grid-focus
         .back-top.x-hidden
             .back-top-arrow
-            A(href="#top").new-popup
+            A.new-popup
         .load-all-popup.x-hidden
             .outer-container.new-popup
             .inner-container
                 .title=config.totalCount + ' ' + config.loadAllPopUpTitle
                 .load-all-button
-                    +ActionLinkButton().blue-gradient-btn=config.loadAllButtonTitle
+                    +Button(name="loadAll").blue-gradient-btn=config.loadAllButtonTitle
         block

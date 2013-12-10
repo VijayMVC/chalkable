@@ -8,6 +8,7 @@ NAMESPACE('chlk.models.people', function () {
             Boolean, 'byLastName',
             String, 'filter',
             Number, 'start',
+            Number, 'count',
             String, 'submitType',
             String, 'rolesId',
             chlk.models.id.ClassId, 'classId',

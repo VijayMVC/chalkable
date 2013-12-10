@@ -22,7 +22,7 @@ mixin IconBox(pict)
         .upload-img-block
             .top=dimsX + "px x " + dimsY + "px"
             .bottom
-                button.simple-gray-button.file=title
+                div.simple-gray-button.file=title
                     +FileUpload('apps', 'uploadPicture', [dimsX, dimsY, title]).simple-gray-button
                 a(href=tplLink).download-link Download Template
 

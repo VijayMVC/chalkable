@@ -76,18 +76,32 @@ NAMESPACE('chlk.controls', function () {
                                 this.addInfiniteScroll(grid);
 
 
-//                            if(configs.goTopButton){
+//                          if(configs.goTopButton){
 //                                //todo : add go top button
-//                            }
+//                          }
                         }
+                        this.initScrollAction_();
                         if(configs.showLoadAllInPage < (configs.currentStart / configs.pageSize)){
                             this.showLoadAllPopUp_(this.getGrid());
                         }
                         if((configs.currentStart + configs.pageSize) >= configs.totalCount){
                             this.hideLoadAllPopUp_(this.getGrid());
-                            this.showGoTopButton_(this.getGrid());
+                            this.scrollToBottom_();
                         }
                     }.bind(this));
+            },
+            VOID, function initScrollAction_(){
+                jQuery(window).scroll(function () {
+                    var grid = this.getGrid();
+                    var backTopNode = jQuery(grid.find('.back-top').valueOf());
+                    var showAllButton = grid.find('.load-all-popup');
+                    if (jQuery(window).scrollTop() > 100 && showAllButton.hasClass('x-hidden')) {
+                        this.showGoTopButton_(grid);
+                        backTopNode.fadeIn();
+                    } else {
+                        backTopNode.fadeOut();
+                    }
+                }.bind(this));
             },
 
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.SELECT_ROW.valueOf(), '.chlk-grid')],
@@ -137,13 +151,16 @@ NAMESPACE('chlk.controls', function () {
             [[ria.dom.Dom]],
             VOID, function hideLoadAllPopUp_(grid){
                 var popupNode = grid.find('.load-all-popup');
-                popupNode.addClass('x-hidden');
+                jQuery(popupNode.valueOf()).fadeOut(function(){
+                    popupNode.addClass('x-hidden');
+                });
             },
 
             [[ria.dom.Dom]],
             VOID, function showLoadAllPopUp_(grid){
                var popupNode = grid.find('.load-all-popup');
                popupNode.removeClass('x-hidden');
+               jQuery(popupNode.valueOf()).fadeIn();
             },
             [[ria.dom.Dom]],
             VOID, function hideGoTopButton_(grid){
@@ -156,11 +173,34 @@ NAMESPACE('chlk.controls', function () {
                backTopNode.removeClass('x-hidden');
             },
 
+            [ria.mvc.DomEventBind('click', 'button[name="loadAll"]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function loadAllButtonClick(node, event){
+                var grid = this.getGrid();
+                var form = grid.parent('form');
+                var configs = this.getConfigs();
+                configs.currentStart = 0;
+                form.find('[name=count]').setValue(configs.totalCount);
+                this.scrollAction_(grid);
+            },
+
+            VOID, function scrollToBottom_(){
+                jQuery('body').animate({ scrollTop: jQuery(document).height() }, 1000);
+            },
+            VOID, function scrollToTop_(){
+                jQuery('body').animate({scrollTop: 0}, 1000);
+            },
+
+            [ria.mvc.DomEventBind('click', '.back-top A,.back-top-arrow')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function backTopAction(node, event){
+                this.scrollToTop_();
+            },
+
             [[ria.dom.Dom]],
             VOID, function scrollAction_(grid){
                 //todo: trigger form submit
                 var configs = this.getConfigs();
-                configs.currentStart += configs.pageSize;
                 var div = new ria.dom.Dom('<div class="horizontal-loader"></div>');
                 var form = grid.parent('form');
                 form.find('[name=start]').setValue(configs.currentStart);
@@ -187,6 +227,7 @@ NAMESPACE('chlk.controls', function () {
                         scrollPosition = window.pageYOffset;
                         if(configs.totalCount > configs.currentStart){
                             if((contentHeight - pageHeight - scrollPosition) < 400){
+                                configs.currentStart += configs.pageSize;
                                 this.scrollAction_(grid);
                                 contentHeight += baseContentHeight;
                             }

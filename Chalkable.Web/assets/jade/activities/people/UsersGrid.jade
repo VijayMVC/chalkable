@@ -1,6 +1,6 @@
 .loader
 input(type="hidden", name="start", value=(self.getStart() || 0))
-//input(type="hidden", name="count", value=(self.getCount() || 10))
+input(type="hidden", name="count", value=10)
 Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
 +ListView(self.getUsers())(
     selectedIndex = selectedIndex, infiniteScroll = true,
