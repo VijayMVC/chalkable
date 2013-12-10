@@ -28,19 +28,21 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ClassSummary(int classId)
         {
-            if (!SchoolLocator.Context.SchoolId.HasValue)
-                throw new UnassignedUserException();
-            var teacherId = Context.UserLocalId;
-            return Json(ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), teacherId), 7);
+            return FakeJson("../fakeData/gradingClassSummary.json");
+            //if (!SchoolLocator.Context.SchoolId.HasValue)
+            //    throw new UnassignedUserException();
+            //var teacherId = Context.UserLocalId;
+            //return Json(ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), teacherId), 7);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ItemGradingStat(int announcementId)
         {
-            var ann = SchoolLocator.AnnouncementService.GetAnnouncementById(announcementId);
-            var studentAnns = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
-            var mapper = SchoolLocator.GradingStyleService.GetMapper();
-            return Json(ItemGradigStatViewData.Create(studentAnns, ann, mapper));
+            return FakeJson("../fakeData/itemGradingStat.json");
+            //var ann = SchoolLocator.AnnouncementService.GetAnnouncementById(announcementId);
+            //var studentAnns = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
+            //var mapper = SchoolLocator.GradingStyleService.GetMapper();
+            //return Json(ItemGradigStatViewData.Create(studentAnns, ann, mapper));
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]

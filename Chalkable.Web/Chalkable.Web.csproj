@@ -428,6 +428,7 @@
   <ItemGroup>
     <Content Include="fakeData\gradingClassSummary.json" />
     <Content Include="fakeData\gradingSummary.json" />
+    <Content Include="fakeData\itemGradingStat.json" />
     <None Include="Web.staging.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

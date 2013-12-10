@@ -1,4 +1,4 @@
-REQUIRE('chlk.models.announcement.AnnouncementType');
+REQUIRE('chlk.models.announcement.ClassAnnouncementType');
 REQUIRE('chlk.models.announcement.Announcement');
 
 NAMESPACE('chlk.models.grading', function () {
@@ -6,7 +6,7 @@ NAMESPACE('chlk.models.grading', function () {
     /** @class chlk.models.grading.GradingClassSummaryItem*/
     CLASS(
         'GradingClassSummaryItem', [
-            chlk.models.announcement.AnnouncementType, 'type',
+            chlk.models.announcement.ClassAnnouncementType, 'type',
             ArrayOf(chlk.models.announcement.Announcement), 'announcements',
             Number, 'percent',
             Number, 'avg',
