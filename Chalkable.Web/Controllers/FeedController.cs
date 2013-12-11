@@ -33,7 +33,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
         public ActionResult Admin(IntList gradeLevelIds)
         {
-            return FakeJson("~/app/data/departments.json");
+            return FakeJson("~/fakeData/adminFeed.json");
             throw new NotImplementedException();
             //if (!Context.SchoolId.HasValue)
             //    throw new UnassignedUserException();

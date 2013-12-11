@@ -199,20 +199,21 @@ namespace Chalkable.Web.Controllers
         public ActionResult AdminAttendanceSummary(bool renderNow, bool renderDay, bool renderMp, GuidList gradeLevelsIds, 
             DateTime? nowDateTime, Guid? fromMarkingPeriodId, Guid? toMarkingPeriodId, DateTime? startDate, DateTime? endDate)
         {
-            var date = (nowDateTime ?? Context.NowSchoolTime).Date;
-            var res = new AdminAttendanceSummaryViewData();
+            return FakeJson("~/fakeData/adminAttendanceSummary.json");
+            //var date = (nowDateTime ?? Context.NowSchoolTime).Date;
+            //var res = new AdminAttendanceSummaryViewData();
             
-            var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(date.Date);
-            renderNow = renderNow && markingPeriod != null;
-            IList<Person> allStudents = SchoolLocator.PersonService.GetPaginatedPersons(new PersonQuery {RoleId = CoreRoles.STUDENT_ROLE.Id});
+            //var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(date.Date);
+            //renderNow = renderNow && markingPeriod != null;
+            //IList<Person> allStudents = SchoolLocator.PersonService.GetPaginatedPersons(new PersonQuery {RoleId = CoreRoles.STUDENT_ROLE.Id});
 
-            if (renderNow)
-                res.NowAttendanceData = GetNowAttendanceData(gradeLevelsIds, allStudents);
-            if (renderDay)
-                res.AttendanceByDayData = GetAdminAttendanceByDate(gradeLevelsIds, markingPeriod, date, allStudents);
-            if (renderMp)
-                res.AttendanceByMpData = GetAdminAttendanceByMp(gradeLevelsIds, fromMarkingPeriodId, toMarkingPeriodId, startDate, endDate, allStudents);
-            return Json(res, 8);
+            //if (renderNow)
+            //    res.NowAttendanceData = GetNowAttendanceData(gradeLevelsIds, allStudents);
+            //if (renderDay)
+            //    res.AttendanceByDayData = GetAdminAttendanceByDate(gradeLevelsIds, markingPeriod, date, allStudents);
+            //if (renderMp)
+            //    res.AttendanceByMpData = GetAdminAttendanceByMp(gradeLevelsIds, fromMarkingPeriodId, toMarkingPeriodId, startDate, endDate, allStudents);
+            //return Json(res, 8);
         }
         
         private NowAttendanceViewData GetNowAttendanceData(GuidList gradeLevelsIds, IList<Person> students)

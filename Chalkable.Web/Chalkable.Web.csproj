@@ -429,6 +429,9 @@
     <Content Include="fakeData\gradingClassSummary.json" />
     <Content Include="fakeData\gradingSummary.json" />
     <Content Include="fakeData\itemGradingStat.json" />
+    <Content Include="fakeData\adminAttendanceSummary.json" />
+    <Content Include="fakeData\adminFeed.json" />
+    <Content Include="fakeData\appBudget.json" />
     <None Include="Web.staging.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

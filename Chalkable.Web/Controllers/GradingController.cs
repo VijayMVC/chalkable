@@ -17,7 +17,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher")]
         public ActionResult TeacherSummary(int teacherId)
         {
-            return FakeJson("../fakeData/gradingSummary.json");
+            return FakeJson("~/fakeData/gradingSummary.json");
             //var schoolYearId = GetCurrentSchoolYearId();
             //var gradingStats = SchoolLocator.GradingStatisticService.GetStudentsGradePerClass(teacherId, schoolYearId);
             //gradingStats = gradingStats.Where(x => x.Avg.HasValue).ToList();
@@ -28,7 +28,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ClassSummary(int classId)
         {
-            return FakeJson("../fakeData/gradingClassSummary.json");
+            return FakeJson("~/fakeData/gradingClassSummary.json");
             //if (!SchoolLocator.Context.SchoolId.HasValue)
             //    throw new UnassignedUserException();
             //var teacherId = Context.UserLocalId;
@@ -38,7 +38,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ItemGradingStat(int announcementId)
         {
-            return FakeJson("../fakeData/itemGradingStat.json");
+            return FakeJson("~/fakeData/itemGradingStat.json");
             //var ann = SchoolLocator.AnnouncementService.GetAnnouncementById(announcementId);
             //var studentAnns = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
             //var mapper = SchoolLocator.GradingStyleService.GetMapper();
