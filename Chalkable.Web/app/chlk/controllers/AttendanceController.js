@@ -226,7 +226,8 @@ NAMESPACE('chlk.controllers', function (){
                         items,
                         date_,
                         true,
-                        this.getContext().getSession().get('attendanceReasons', [])
+                        this.getContext().getSession().get('attendanceReasons', []),
+                        this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE)
                     );
                     this.getContext().getSession().set('attendancePageData', model);
                     return model;

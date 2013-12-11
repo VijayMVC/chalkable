@@ -129,7 +129,11 @@ NAMESPACE('chlk.models.attendance', function () {
 
             String, 'submitType',
 
-            String, 'attendanceReasonDescription'//,
+            String, 'attendanceReasonDescription',
+            [ria.serialize.SerializeProperty('isposted')],
+            Boolean, 'posted'
+            //,
            // String, 'attendanceReasonName'
+
         ]);
 });

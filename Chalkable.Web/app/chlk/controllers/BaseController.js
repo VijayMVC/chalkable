@@ -1,6 +1,7 @@
 REQUIRE('ria.mvc.Controller');
 REQUIRE('chlk.models.common.Role');
 REQUIRE('chlk.models.people.User');
+REQUIRE('chlk.models.people.Claim');
 
 REQUIRE('chlk.activities.common.InfoMsgDialog');
 REQUIRE('chlk.activities.lib.PendingActionDialog');
@@ -116,6 +117,16 @@ NAMESPACE('chlk.controllers', function (){
                return this.getContext().getSession().get('currentSchoolYearId');
            },
 
+           ArrayOf(chlk.models.people.Claim), function getUserClaims_(){
+                return this.getContext().getSession().get('userClaims');
+           },
+           [[chlk.models.people.UserPermissionEnum]],
+           Boolean, function hasUserPermission_(userPermission){
+                var claims = this.getUserClaims_();
+                return claims && claims.length > 0
+                    && claims.filter(function(claim){return claim.hasPermission(userPermission); }).length > 0;
+           },
+
            OVERRIDE, ria.reflection.ReflectionMethod, function resolveRoleAction_(state){
                var ref = new ria.reflection.ReflectionClass(this.getClass());
 
@@ -169,7 +180,6 @@ NAMESPACE('chlk.controllers', function (){
                    return this.UpdateView(clazz, data, msg_);
                return this.PushView(clazz, data);
            }
-
    ])
 
 });

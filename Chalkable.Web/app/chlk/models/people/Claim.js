@@ -61,6 +61,13 @@ NAMESPACE('chlk.models.people', function () {
     /** @class chlk.models.people.Claim*/
     CLASS('Claim',  [
         String, 'type',
-        ArrayOf(chlk.models.people.UserPermissionEnum), 'values'
+        ArrayOf(chlk.models.people.UserPermissionEnum), 'values',
+
+        [[chlk.models.people.UserPermissionEnum]],
+        Boolean, function hasPermission(permission){
+            var values = this.getValues();
+            return values && values.length > 0
+                && values.filter(function(value){return value == permission}).length > 0;
+        }
     ]);
 });

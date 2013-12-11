@@ -17,9 +17,10 @@ NAMESPACE('chlk.models.attendance', function () {
 
             Boolean, 'byLastName',
 
+
             [[chlk.models.classes.ClassesForTopBar, chlk.models.id.ClassId, ArrayOf(chlk.models.attendance.ClassAttendance), chlk.models.common.ChlkDate,
-                Boolean,  ArrayOf(chlk.models.attendance.AttendanceReason)]],
-            function $(topData_, selectedId_, items_, date_, byLastName_, reasons_){
+                Boolean,  ArrayOf(chlk.models.attendance.AttendanceReason), Boolean]],
+            function $(topData_, selectedId_, items_, date_, byLastName_, reasons_, canRePost_){
                 BASE(topData_, selectedId_);
                 if(items_)
                     this.setItems(items_);
@@ -29,6 +30,20 @@ NAMESPACE('chlk.models.attendance', function () {
                     this.setReasons(reasons_);
                 if(byLastName_)
                     this.setByLastName(byLastName_);
+                if(canRePost_)
+                    this._canRePost = canRePost_;
+            },
+
+            READONLY, Boolean, 'posted',
+            Boolean, function isPosted(){
+                var items = this.getItems();
+                return items && items.length > 0
+                    && items.filter(function(item){return item.isPosted()}).length > 0;
+            },
+
+            Boolean, function canPost(){
+                return !this.isPosted() || this._canRePost;
             }
+
         ]);
 });

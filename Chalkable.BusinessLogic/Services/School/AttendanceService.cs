@@ -103,7 +103,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         Level = ssa.Level,
                         Class = clazz,
                         Student = persons.First(x => x.Id == ssa.StudentId),
-                        Category = ssa.Category
+                        Category = ssa.Category,
+                        IsPosted = sa.IsPosted
                     });
                 }
                 return attendances;    
