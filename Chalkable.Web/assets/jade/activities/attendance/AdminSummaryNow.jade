@@ -14,7 +14,7 @@ if self.getAbsentNowStudents()
                     .number=self.getAbsentUsually()
                     .title=Msg.Usually
         .now-chart-block.i-b
-            +AdminAtteddanceChart(self.getAttendanceStats(), 550)
+            +AdminAttendanceChart(self.getAttendanceStats(), 550)
     +AddStudentTpl(1)
     if self.getAbsentNowStudents().length
         .attendance-students

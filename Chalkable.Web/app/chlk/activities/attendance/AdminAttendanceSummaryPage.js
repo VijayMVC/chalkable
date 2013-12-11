@@ -71,9 +71,6 @@ NAMESPACE('chlk.activities.attendance', function () {
                     var chart = node.parent().find('.top-chart').getData('chart'), that = this;
                     chart.series.forEach(function(ser, i){
                         if(i == num){
-                            //ser.options.color = colors[i];
-                            //ser.options.marker = that.getMarkerConfigs_(true, colors[i]);
-                            //ser.graph.attr({ stroke: colors[i] });
                             ser.update({
                                 marker : that.getMarkerConfigs_(true, colors[i]),
                                 color: colors[i],
@@ -82,9 +79,6 @@ NAMESPACE('chlk.activities.attendance', function () {
                             });
                         }
                         else{
-                            //ser.options.color = "#c1c1c1";
-                            //ser.options.marker = that.getMarkerConfigs_(false);
-                            //ser.graph.attr({ stroke: "#c1c1c1" });
                             ser.update({
                                 marker : that.getMarkerConfigs_(false),
                                 color: "#c1c1c1",
@@ -99,7 +93,6 @@ NAMESPACE('chlk.activities.attendance', function () {
                         .removeClass('absent')
                         .removeClass('excused')
                         .addClass(types[num]);
-                    //chart.redraw();
             },
 
             [ria.mvc.DomEventBind('blur', '.student-search-input')],

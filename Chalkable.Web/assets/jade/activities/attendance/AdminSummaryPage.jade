@@ -1,4 +1,4 @@
-mixin AdminAtteddanceChart(attendancestats, width)
+mixin AdminAttendanceChart(attendancestats, width)
     typesEnum = chlk.models.attendance.AttendanceTypeEnum
     .relative
         .chart-bg2
@@ -12,7 +12,7 @@ mixin AdminAtteddanceChart(attendancestats, width)
                     data-options = self.getMainChartConfigs(attendancestats, width)
                 ).top-chart
 
-mixin AdminAtteddanceMpChart(attendancestats)
+mixin AdminAttendanceMpChart(attendancestats)
     .relative
         .chart-bg2
         .chart-container-1

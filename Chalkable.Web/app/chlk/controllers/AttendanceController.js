@@ -103,7 +103,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.attendance.AttendanceList]],
         function setAttendanceForListAction(model){
             if(model.getClassPersonIds()){
-                this.attendanceService.setAttendanceForList(model.getClassPersonIds(), model.getClassPeriodIds(), model.getAttendanceTypes(), model.getAttReasons(), model.getDate())
+                this.attendanceService.setAttendanceForList(model.getPersonIds(), model.getClassIds(), model.getAttendanceTypes(), model.getAttReasons(), model.getDate())
                     .attach(this.validateResponse_())
                     .then(function(){
                         var controller = model.getController();
@@ -144,7 +144,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate, String, String, String, Boolean]],
-        VOID, function showStudentAttendanceAction(studentId, date_, controller_, action_, params_, isNew_) {
+        function showStudentAttendanceAction(studentId, date_, controller_, action_, params_, isNew_) {
             var result = this.attendanceService.getStudentAttendance(studentId, date_)
                 .then(function(model){
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
@@ -165,8 +165,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.attendance.AttendanceStudentBox]],
         VOID, function showStudentBoxAction(model) {
+            var date = model.getDate() ? model.getDate().format('mm-dd-yy') : '';
             this.showStudentAttendanceAction(model.getId(), model.getDate(), 'attendance', 'summary',
-                JSON.stringify([true, model.getGradeLevelsIds(), model.getCurrentPage(), model.getDate().format('mm-dd-yy')]), true);
+                JSON.stringify([true, model.getGradeLevelsIds(), model.getCurrentPage(), date]), true);
         },
 
         [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean]],

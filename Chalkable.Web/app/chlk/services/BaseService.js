@@ -92,6 +92,7 @@ NAMESPACE('chlk.services', function () {
                         return Serializer.deserialize(data.data, clazz_);
                     }, this).catchError(function(handler, scope_){
                         this.redirectToErrorPage();
+                        throw(new Exception(handler.getMessage()));
                     }, this);
             },
 
@@ -185,6 +186,7 @@ NAMESPACE('chlk.services', function () {
                         return Serializer.deserialize(data.data, ArrayOf(clazz));
                     }, this).catchError(function(handler, scope_){
                         this.redirectToErrorPage();
+                        throw(new Exception(handler.getMessage()));
                     }, this);
             },
 
@@ -208,6 +210,7 @@ NAMESPACE('chlk.services', function () {
                         return model;
                     }).catchError(function(handler, scope_){
                         this.redirectToErrorPage();
+                        throw(new Exception(handler.getMessage()));
                     }, this);
             }
         ]);

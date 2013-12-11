@@ -35,7 +35,7 @@ namespace Chalkable.Web.Controllers
 
         //TODO : think how to rewrite for better performence 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
-        public ActionResult SetAttendanceForList(GuidList classPersonIds, GuidList classPeriodIds, IntList attendanceTypes, StringList attReasons, DateTime date)
+        public ActionResult SetAttendanceForList(IntList personIds, IntList classIds, IntList attendanceTypes, StringList attReasons, DateTime date)
         {
             /*for (int i = 0; i < classPersonIds.Count; ++i)
             {
@@ -146,9 +146,9 @@ namespace Chalkable.Web.Controllers
 
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult GetAttendanceForStudent(DateTime? datetime, Guid studentId)
+        public ActionResult GetAttendanceForStudent(DateTime? datetime, int studentId)
         {
-            throw new NotImplementedException();
+            return FakeJson("~/fakeData/getAttendanceForStudent.json");
             //if (!SchoolLocator.Context.SchoolId.HasValue)
             //    throw new UnassignedUserException();
             //var date = (datetime ?? SchoolLocator.Context.NowSchoolTime).Date;

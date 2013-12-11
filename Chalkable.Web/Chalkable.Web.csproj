@@ -432,6 +432,7 @@
     <Content Include="fakeData\adminAttendanceSummary.json" />
     <Content Include="fakeData\adminFeed.json" />
     <Content Include="fakeData\appBudget.json" />
+    <Content Include="fakeData\getAttendanceForStudent.json" />
     <None Include="Web.staging.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

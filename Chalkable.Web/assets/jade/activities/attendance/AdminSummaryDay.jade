@@ -21,7 +21,7 @@ mixin AttendanceDayBlock(num)
 valuesEnum = chlk.models.attendance.AttendanceTypeEnum
 date = self.getDate()
 .big-chart-containner
-    +AdminAtteddanceChart(self.getAttendancesStats())
+    +AdminAttendanceChart(self.getAttendancesStats())
 +AddStudentTpl(2, date)
 sortedArray = self.getSortedBlocksInfo()
 each item in sortedArray

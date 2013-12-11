@@ -39,10 +39,10 @@ NAMESPACE('chlk.templates.attendance', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'ableEdit',
 
-            [[Number]],
-            ArrayOf(chlk.models.attendance.AttendanceReason), function getReasonsForType(id){
+            [[String]],
+            ArrayOf(chlk.models.attendance.AttendanceReason), function getReasonsForType(level){
                 return this.getReasons().filter(function(item){
-                    return item.getAttendanceType() == id;
+                    return item.hasLevel(level);;
                 });
             },
 

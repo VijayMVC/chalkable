@@ -40,10 +40,10 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[String, String, String, String, chlk.models.common.ChlkDate]],
-            ria.async.Future, function setAttendanceForList(classPersonIds, classPeriodIds, attendanceTypes, attReasons, date_) {
+            ria.async.Future, function setAttendanceForList(personIds, classIds, attendanceTypes, attReasons, date_) {
                 return this.get('Attendance/SetAttendanceForList.json', Boolean, {
-                    classPersonIds: classPersonIds,
-                    classPeriodIds: classPeriodIds,
+                    personIds: personIds,
+                    classIds: classIds,
                     attendanceTypes: attendanceTypes,
                     attReasons: attReasons,
                     date: date_ && date_.toString('mm-dd-yy')

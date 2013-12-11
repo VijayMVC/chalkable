@@ -6,9 +6,9 @@ NAMESPACE('chlk.models.attendance', function () {
     /** @class chlk.models.attendance.AttendanceList*/
     CLASS(
         'AttendanceList', [
-            String, 'classPersonIds',
+            String, 'personIds',
 
-            String, 'classPeriodIds',
+            String, 'classIds',
 
             String, 'attendanceTypes',
 
