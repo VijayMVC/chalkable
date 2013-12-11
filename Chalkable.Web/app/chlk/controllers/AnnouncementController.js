@@ -23,6 +23,7 @@ REQUIRE('chlk.models.announcement.StudentAnnouncement');
 REQUIRE('chlk.models.apps.InstalledAppsViewData');
 REQUIRE('chlk.models.announcement.ShowGradesToStudents');
 
+
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.ReminderId');
@@ -30,8 +31,7 @@ REQUIRE('chlk.models.id.AttachmentId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.announcement.QnAForm');
 REQUIRE('chlk.models.common.attachments.BaseAttachmentViewData');
-REQUIRE('chlk.models.announcement.ItemStandards');
-
+REQUIRE('chlk.models.announcement.AddStandardViewData');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -658,8 +658,10 @@ NAMESPACE('chlk.controllers', function (){
             model.setAdminRecipients(new chlk.models.announcement.AdminRecipients([], recipientsData));
          },
 
+
         function addStandardsAction(){
-            var res = new ria.async.DeferredData(new chlk.models.announcement.ItemStandards);
+            var data = new chlk.models.announcement.AddStandardViewData('test', []);
+            var res = new ria.async.DeferredData(data);
             this.ShadeView(chlk.activities.announcement.AddStandardsDialog, res);
         }
     ])

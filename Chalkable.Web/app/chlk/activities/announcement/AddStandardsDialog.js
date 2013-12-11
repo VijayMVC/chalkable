@@ -8,6 +8,5 @@ NAMESPACE('chlk.activities.announcement', function(){
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AddStandardsTpl)],
         'AddStandardsDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
-
-    ]);
+        ]);
 });

@@ -285,6 +285,20 @@ BODY {
                   font-size: 12px;
                   margin-top: 30px;
                   width: 160px;
+                  position: relative;
+                  .triangle-icon{
+                    position: absolute;
+                    right: 7px;
+                    top: 14px;
+                    width: 10px;
+                    height: 10px;
+                    background: url(images/attendance/button-triangle.png) 0 0 no-repeat;
+                  }
+                  &.selected{
+                    .triangle-icon{
+                      background: url(images/grading/smal-pic-triangle-grey.png) 0 0 no-repeat;
+                    }
+                  }
                 }
                 .separator{
                   z-index: 1000;
@@ -455,13 +469,14 @@ BODY {
             .new-item-dropdown{
               position: absolute;
               background: white;
-              width: 375px;
+              width: 372px;
               z-index: 999;
               border: 1px solid #a9a9a9;
               font-size: 14px;
               font-family: "Arial Narrow", Arial;
               color: #000;
               padding-left: 6px;
+              top: 294px;
 
               >DIV{
                 height: 20px;
