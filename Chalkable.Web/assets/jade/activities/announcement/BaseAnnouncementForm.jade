@@ -46,6 +46,10 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
         if isAnnouncement
             TEXTAREA(id="subject",name="subject",placeholder="Subject",class="validate[required]")=announcement.getSubject()
         +TextArea(id="content",name="content",placeholder=isAnnouncement ? "Message" : "Assignment")=announcement.getContent()
+        .add-standards
+            .standards-list
+            .title CLICK TO ADD STANDARDS
+            +ActionLink('announcement', 'addStandards').add-standards-btn.x-hidden
         .drop-down-container
         input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
         if !announcement.getState()
@@ -60,8 +64,33 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                 placeholder=Msg.Due_date,
                 class="validate[required]"
             )#expiresdate
-        SPAN#reminders-button.small-gray-link=Msg.Reminder(true)
-        .reminders-container.x-hidden
+        .max-score-container
+            input(placeholder=Msg.Max_score, class="validate[required]")
+            .question-mark ?
+        .advanced-options
+            .advanced-options-btn.title.btn Advanced options...
+                span.triangle-icon
+            .separator.x-hidden
+            .advanced-options-container.x-hidden
+                .weight-multiplier.new-input-container
+                    .title Weight Multiplier
+                    input(placeholder="1.00")
+                    .question-mark ?
+                .weight-addition.new-input-container
+                    .title Weight Addition
+                    input(placeholder="1.00")
+                    .question-mark ?
+                .check-box-container
+                    .title Hide from Students
+                    +SlideCheckbox('hidefromstudents', true, false)
+                    .question-mark ?
+                .check-box-container
+                    .title Can drop student score
+                    +SlideCheckbox('candropstudentscore', true, false)
+                    .question-mark ?
+
+        //SPAN#reminders-button.small-gray-link=Msg.Reminder(true)
+        //.reminders-container.x-hidden
             .reminders
                 reminders = announcement.getAnnouncementReminders() || [];
                 each reminder in reminders

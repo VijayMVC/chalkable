@@ -72,7 +72,8 @@ NAMESPACE('chlk.controllers', function(){
                 var start = 0;
                 if(pageIndex_ && pageSize_)
                     start = pageIndex_ * pageSize_;
-                return this.disciplineService.list(date_, start)
+                return this.disciplineService
+                    .list(date_, start)
                     .attach(this.validateResponse_())
                     .then(function(data){
                         date_ = date_ || new chlk.models.common.ChlkDate(getDate());

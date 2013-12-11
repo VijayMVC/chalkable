@@ -59,33 +59,43 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
             function scheduleUpdateAction(classId, date){
                 var res = this.schedule_(classId, date)
-                    .then(function(data){ return data.getScheduleCalendar(); });
+                    .then(function(data){
+                        return data.getScheduleCalendar();
+                    })
+                    .attach(this.validateResponse_());
                 return this.UpdateView(chlk.activities.classes.ClassSchedulePage, res);
             },
             ria.async.Future, function schedule_(classId, date_){
                 var mp = this.getCurrentMarkingPeriod();
-                var res = this.classService
+                return this.classService
                     .getSchedule(classId, date_)
                     .attach(this.validateResponse_())
                     .then(function (data){
-                        var scheduleCalendar = new chlk.models.calendar.announcement.Day(date_, mp.getStartDate()
-                            , mp.getEndDate(), data.getCalendarDayItems());
-                        return new chlk.models.classes.ClassScheduleViewData(this.getCurrentRole(), data.getClazz(), scheduleCalendar);
+                        var scheduleCalendar = new chlk.models.calendar.announcement.Day(
+                            date_,
+                            mp.getStartDate(),
+                            mp.getEndDate(),
+                            data.getCalendarDayItems()
+                        );
+                        return new chlk.models.classes.ClassScheduleViewData(
+                            this.getCurrentRole(),
+                            data.getClazz(),
+                            scheduleCalendar
+                        );
                     }, this);
-                return res;
             },
             [[chlk.models.id.ClassId]],
             ria.async.Future, function attendanceAction(classId){
-                var res =
-                    ria.async.wait(
+                var res = ria.async.wait(
                         this.classService.getAttendance(classId),
                         this.attendanceCalendarService.getClassAttendancePerMonth(classId, null)
                     )
                     .attach(this.validateResponse_())
                     .then(function(result){
                         var mp = this.getCurrentMarkingPeriod();
-                        var attCalendar = new chlk.models.calendar.attendance.ClassAttendanceMonthCalendar(null
-                            , mp.getStartDate(), mp.getEndDate(), result[1], classId);
+                        var attCalendar = new chlk.models.calendar.attendance.ClassAttendanceMonthCalendar(
+                            null, mp.getStartDate(), mp.getEndDate(), result[1], classId
+                        );
                         return new chlk.models.classes.ClassProfileAttendanceViewData(this.getCurrentRole(), result[0], attCalendar);
                     }, this);
                 return this.PushView(chlk.activities.classes.ClassProfileAttendancePage, res);

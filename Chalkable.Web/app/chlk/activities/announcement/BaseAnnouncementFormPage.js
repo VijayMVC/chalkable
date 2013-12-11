@@ -61,6 +61,20 @@ NAMESPACE('chlk.activities.announcement', function () {
              VOID, function focusContent(node, event){
              node.triggerEvent('focus');
              },*/
+            [ria.mvc.DomEventBind('click', '.add-standards .title')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function addStandardsClick(node, event){
+                jQuery(node.parent('.add-standards').find('.add-standards-btn').valueOf()).click();
+            },
+
+            [ria.mvc.DomEventBind('click', '.advanced-options-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function advancedOptionsButtonClick(node, event){
+                var parentNode = node.parent('.advanced-options');
+                node.toggleClass('selected');
+                parentNode.find('.separator').toggleClass('x-hidden');
+                parentNode.find('.advanced-options-container').toggleClass('x-hidden');
+            },
 
 
             [ria.mvc.DomEventBind('focus keydown keyup', '#content')],

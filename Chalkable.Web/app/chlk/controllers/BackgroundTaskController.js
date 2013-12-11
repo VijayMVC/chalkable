@@ -43,8 +43,11 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('settings')],
             [[chlk.models.id.BgTaskId]],
             function deleteAction(id){
-                this.bgTaskService.deleteTask(id)
-                    .then(function(data){this.pageAction(true, 0);}.bind(this));
+                return this.bgTaskService.deleteTask(id)
+                    .then(function(data){
+                        return this.pageAction(true, 0);
+                    }, this)
+                    .attach(this.validateResponse_());
             }
         ])
 });

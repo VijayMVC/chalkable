@@ -83,7 +83,7 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(model){
                         return this.prepareProfileData(model);
-                    }.bind(this));
+                    }, this);
                 return this.PushView(chlk.activities.setup.HelloPage, result);
             },
 
@@ -97,7 +97,7 @@ NAMESPACE('chlk.controllers', function (){
                         var classes = this.classService.getClassesForTopBar();
                         model.setType(classes.length);
                         return model;
-                    }.bind(this));
+                    }, this);
                 return this.PushView(chlk.activities.setup.VideoPage, result);
             },
 
@@ -119,33 +119,31 @@ NAMESPACE('chlk.controllers', function (){
                 var classId = classes[index].getId();
 
                 var result = ria.async.wait([
-                    this.finalGradeService.getFinalGrades(classId, false),
-                    this.calendarService.getTeacherClassWeek(classId)
-                ]).then(function(result){
-                    var model = new chlk.models.setup.TeacherSettings();
-                    var topModel = new chlk.models.classes.ClassesForTopBar();
-                    topModel.setTopItems(classes);
-                    topModel.setDisabled(true);
-                    topModel.setSelectedItemId(classId);
-                    model.setTopData(topModel);
-                    model.setCalendarInfo(result[1]);
-                    var gradesInfo = result[0].getFinalGradeAnnType(), sum=0;
-                    gradesInfo.forEach(function(item, index){
-                        item.setIndex(index);
-                        sum+=(item.getValue() || 0);
-                    });
-                    gradesInfo.sort(function(a,b){
-                        return b.getValue() > a.getValue();
-                    });
-                    result[0].setNextClassNumber(++index);
-                    this.getContext().getSession().set('settingsModel', result[0]);
-                    sum+=(result[0].getAttendance() || 0);
-                    sum+=(result[0].getParticipation() || 0);
-                    sum+=(result[0].getDiscipline() || 0);
-                    model.setPercentsSum(sum);
-                    model.setGradingInfo(result[0]);
-                    return model;
-                    }.bind(this));
+                        this.finalGradeService.getFinalGrades(classId, false),
+                        this.calendarService.getTeacherClassWeek(classId)
+                    ])
+                    .then(function(result){
+                        var model = new chlk.models.setup.TeacherSettings();
+                        var topModel = new chlk.models.classes.ClassesForTopBar(classes, classId, true);
+                        model.setTopData(topModel);
+                        model.setCalendarInfo(result[1]);
+                        var gradesInfo = result[0].getFinalGradeAnnType(), sum=0;
+                        gradesInfo.forEach(function(item, index){
+                            item.setIndex(index);
+                            sum+=(item.getValue() || 0);
+                        });
+                        gradesInfo.sort(function(a,b){
+                            return b.getValue() > a.getValue();
+                        });
+                        result[0].setNextClassNumber(++index);
+                        this.getContext().getSession().set('settingsModel', result[0]);
+                        sum+=(result[0].getAttendance() || 0);
+                        sum+=(result[0].getParticipation() || 0);
+                        sum+=(result[0].getDiscipline() || 0);
+                        model.setPercentsSum(sum);
+                        model.setGradingInfo(result[0]);
+                        return model;
+                    }, this);
                 return this.PushView(chlk.activities.setup.TeacherSettingsPage, result);
             },
 

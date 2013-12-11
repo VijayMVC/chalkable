@@ -44,8 +44,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(summary){
                     var classes = this.classService.getClassesForTopBar(true);
                     var topModel = new chlk.models.classes.ClassesForTopBar(classes);
-                    var model = new chlk.models.attendance.SummaryPage(topModel, summary);
-                    return model;
+                    return new chlk.models.attendance.SummaryPage(topModel, summary);
                 }, this);
             return this.PushView(chlk.activities.attendance.SummaryPage, result);
         },
@@ -186,9 +185,19 @@ NAMESPACE('chlk.controllers', function (){
         function sortStudentsAction(byLastName, isProfile_){
             var model = this.getContext().getSession().get('attendancePageData');
             model.getItems().sort(function(item1, item2){
-                //todo : change this... it will not work on production
-                var method = byLastName ? 'getLastName' : 'getFirstName';
-                return item1.getStudent()[method]() > item2.getStudent()[method]();
+                var sortField1 = "";
+                var sortField2 = "";
+
+                if (byLastName){
+                    sortField1 = item1.getStudent().getLastName();
+                    sortField2 = item2.getStudent().getLastName();
+                }
+                else{
+                    sortField1 = item1.getStudent().getFirstName();
+                    sortField2 = item2.getStudent().getFirstName();
+                }
+
+                return sortField1 > sortField2;
             });
             model.setByLastName(byLastName);
             var result = new ria.async.DeferredData(model);
@@ -212,7 +221,15 @@ NAMESPACE('chlk.controllers', function (){
                     this.getContext().getSession().set('attendanceData', items);
                     var classes = this.classService.getClassesForTopBar(true);
                     var topModel = new chlk.models.classes.ClassesForTopBar(classes);
-                    var model = new chlk.models.attendance.ClassList(topModel, classId, items, date_, true, this.getContext().getSession().get('attendanceReasons', []));
+                    var model = new chlk.models.attendance.ClassList(
+                        topModel,
+                        classId,
+                        items,
+                        date_,
+                        true,
+                        this.getContext().getSession().get('attendanceReasons', []),
+                        this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE)
+                    );
                     this.getContext().getSession().set('attendancePageData', model);
                     return model;
                 }, this);

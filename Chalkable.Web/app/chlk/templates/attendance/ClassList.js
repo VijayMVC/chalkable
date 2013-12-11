@@ -55,6 +55,9 @@ NAMESPACE('chlk.templates.attendance', function () {
                 return this.getItems().filter(function(_){
                     return _.getType() == chlk.models.attendance.AttendanceTypeEnum.PRESENT.valueOf();
                 });
+            },
+            Boolean, function canPost(){
+                return this.getModel().canPost();
             }
         ]);
 });

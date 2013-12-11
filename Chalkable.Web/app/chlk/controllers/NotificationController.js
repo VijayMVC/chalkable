@@ -26,7 +26,7 @@ NAMESPACE('chlk.controllers', function (){
                         res.setNotifications(model);
                         res.setTarget(chlk.controls.getActionLinkControlLastNode());
                         return res;
-                    }.bind(this));
+                    }, this);
 
                 this.notificationService.markAllAsShown();
                 return this.ShadeView(chlk.activities.notification.ListNewPopup, result);
@@ -35,7 +35,8 @@ NAMESPACE('chlk.controllers', function (){
             [[Number, Number, Boolean]],
             function listByDaysAction(start_, count_){
                 var activityCls = chlk.activities.notification.NotificationsByDayListPage;
-                var res = this.notificationService.getNotificationsByDays(start_, count_)
+                var res = this.notificationService
+                    .getNotificationsByDays(start_, count_)
                     .attach(this.validateResponse_());
                 return this.isPushed_(activityCls)
                     ? this.UpdateView(activityCls, res)

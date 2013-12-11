@@ -35,11 +35,8 @@ NAMESPACE('chlk.controllers', function (){
             function teacherSettingsAction(classId_){
                 var classes = this.classService.getClassesForTopBar();
                 var model = new chlk.models.setup.TeacherSettings();
-                var topModel = new chlk.models.classes.ClassesForTopBar();
-                topModel.setTopItems(classes);
-                topModel.setDisabled(true);
-                classId_ && topModel.setSelectedItemId(classId_);
-                model.setTopData(topModel);
+                var classBarMdl= new chlk.models.classes.ClassesForTopBar(classes, classId_, true);
+                model.setTopData(classBarMdl);
                 var result;
                 if(classId_){
                     result = this.finalGradeService
@@ -60,7 +57,7 @@ NAMESPACE('chlk.controllers', function (){
                             model.setPercentsSum(sum);
                             model.setGradingInfo(result);
                             return model;
-                        }.bind(this));
+                        }, this);
                 }else{
                     result = new ria.async.DeferredData(model);
                 }
@@ -85,7 +82,7 @@ NAMESPACE('chlk.controllers', function (){
                         });
                         model.setSummaryPart(new chlk.models.grading.GradingClassSummaryPart(result));
                         return model;
-                    }.bind(this));
+                    }, this);
                 return this.PushView(chlk.activities.grading.GradingClassSummaryPage, result);
             },
 
@@ -96,7 +93,8 @@ NAMESPACE('chlk.controllers', function (){
                     return this.Redirect('grading', 'summaryAll', []);
                 var studentId = this.getContext().getSession().get('currentPerson').getId();
                 var result = this.gradingService
-                    .getStudentsClassSummary(studentId, classId_).then(function(model){
+                    .getStudentsClassSummary(studentId, classId_)
+                    .then(function(model){
                         model.getItems().forEach(function(mpData){
                             mpData.getByAnnouncementTypes().forEach(function(item){
                                 item.setClassId(classId_);
@@ -108,7 +106,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.setTopData(topData);
                         model.setSummaryPart(new chlk.models.grading.GradingClassSummaryPart(model.getItems()));
                         return model;
-                    }.bind(this));
+                    }, this);
                 return this.PushView(chlk.activities.grading.GradingStudentClassSummaryPage, result);
             },
 
@@ -121,7 +119,7 @@ NAMESPACE('chlk.controllers', function (){
                         var topData = new chlk.models.classes.ClassesForTopBar(classes, null);
                         var model = new chlk.models.grading.GradingTeacherClassSummaryViewDataList(topData, items);
                         return model;
-                    }.bind(this));
+                    }, this);
                 return this.PushView(chlk.activities.grading.GradingTeacherClassSummaryPage, result);
             },
 
@@ -130,12 +128,13 @@ NAMESPACE('chlk.controllers', function (){
             function summaryAllStudentAction(classId_, update_){
                 var studentId = this.getContext().getSession().get('currentPerson').getId();
                 var result = this.gradingService
-                    .getStudentSummary(studentId, classId_).then(function(model){
+                    .getStudentSummary(studentId, classId_)
+                    .then(function(model){
                         var classes = this.classService.getClassesForTopBar(true);
                         var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                         model.setTopData(topData);
                         return model;
-                    }.bind(this));
+                    }, this);
                 return update_ ? this.UpdateView(chlk.activities.grading.GradingStudentSummaryPage, result, 'chart-update') :
                     this.PushView(chlk.activities.grading.GradingStudentSummaryPage, result);
             },
@@ -188,7 +187,7 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(model){
                         this.Redirect('grading', 'teacherSettings', []);
-                    }.bind(this));
+                    }, this);
                 return this.ShadeLoader();
             }
         ])

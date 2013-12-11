@@ -61,7 +61,7 @@ namespace Chalkable.BusinessLogic.Model
     {
         public Person Student { get; set; }
         public Class Class { get; set; }
-
+        public bool IsPosted { get; set; }
     }
 
     public class AttendanceTotalPerType

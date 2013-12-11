@@ -21,9 +21,6 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.ApplicationService, 'appsService',
 
-
-
-
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.SYSADMIN
             ])],

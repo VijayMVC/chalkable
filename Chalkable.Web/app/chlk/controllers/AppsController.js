@@ -235,7 +235,8 @@ NAMESPACE('chlk.controllers', function (){
                 .approveApp(appId)
                 .then(function(data){
                     return this.Redirect('apps', 'list', []);
-                }, this);
+                }, this)
+                .attach(this.validateResponse_());
         },
 
         [chlk.controllers.AccessForRoles([
@@ -423,8 +424,6 @@ NAMESPACE('chlk.controllers', function (){
                 model.isShowInGradingViewEnabled()
             );
 
-
-
              var shortAppData = new chlk.models.apps.ShortAppInfo(
                 model.getName(),
                 model.getUrl(),
@@ -434,8 +433,6 @@ NAMESPACE('chlk.controllers', function (){
                 model.getAppIconId(),
                 model.getAppBannerId()
              );
-
-
 
              var isFreeApp = model.isFree();
 
@@ -457,7 +454,6 @@ NAMESPACE('chlk.controllers', function (){
 
             if (!model.isDraft()){
                 var appIconId = null;
-
 
                 if (model.getAppIconId()){
                     appIconId = model.getAppIconId().valueOf();
@@ -535,17 +531,17 @@ NAMESPACE('chlk.controllers', function (){
                         var pictureUrl = this.pictureService.getPictureUrl(data.getSmallPictureId(), 74);
                         var isAppLive = data.getLiveAppId() != null && data.getLiveAppId().valueOf() != "";
                         var isApproved = data.getState().getStateId() == chlk.models.apps.AppStateEnum.APPROVED;
+
                         var appInfo = new chlk.models.apps.AppGeneralInfoViewData(
                             data.getName(),
                             data.getId(),
                             data.getLiveAppId(),
                             data.getState().toString(isAppLive),
                             isApproved,
-                            pictureUrl
+                            pictureUrl,
+                            new chlk.models.apps.AppRating()
                         );
-                        return this.PushView(chlk.activities.apps.AppGeneralInfoPage,
-                            new ria.async.DeferredData(appInfo)
-                        );
+                        return this.PushView(chlk.activities.apps.AppGeneralInfoPage, new ria.async.DeferredData(appInfo));
                     }
                 }, this)
                 .attach(this.validateResponse_());

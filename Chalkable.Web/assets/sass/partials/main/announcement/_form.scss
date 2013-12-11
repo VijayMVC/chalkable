@@ -245,6 +245,121 @@ BODY {
                 padding: 41px 0 30px;
               }
 
+              .max-score-container{
+                margin-top: 30px;
+                input{
+                  padding: 7px;
+                  display: inline-block;
+                }
+                .question-mark{
+                  display: inline-block;
+                }
+              }
+
+              .question-mark{
+                font-family: Arial;
+                color: white;
+                font-size: 11px;
+                @include border-radius(5px);
+                background-color: #ababab !important;
+                border-radius: 8px;
+                width: 15px;
+                height: 15px;
+                padding: 0px !important;
+                margin-left: 10px;
+                text-align: center;
+              }
+
+
+              .advanced-options{
+                position: relative;
+                color: #7A7A7A;
+
+                .advanced-options-btn{
+                  @include border-radius(5px);
+                  background-color: #BDBDBD;
+                  cursor: pointer;
+                  text-align: center;
+                  text-shadow: 1px 1px 0 white;
+                  padding: 8px;
+                  font-size: 12px;
+                  margin-top: 30px;
+                  width: 160px;
+                  position: relative;
+                  .triangle-icon{
+                    position: absolute;
+                    right: 7px;
+                    top: 14px;
+                    width: 10px;
+                    height: 10px;
+                    background: url(images/attendance/button-triangle.png) 0 0 no-repeat;
+                  }
+                  &.selected{
+                    .triangle-icon{
+                      background: url(images/grading/smal-pic-triangle-grey.png) 0 0 no-repeat;
+                    }
+                  }
+                }
+                .separator{
+                  z-index: 1000;
+                  width: 176px;
+                  height: 10px;
+                  position: absolute;
+                  left: 0px;
+                  top: 21px;
+                }
+
+                .advanced-options-btn.selected, .separator, .advanced-options-container{
+                  background-color: #E5E5E5 !important;
+                }
+                .advanced-options-btn.selected{
+                  @include box-shadow(rgba(0, 0, 0, 0.4) 0 0 6px, white 0px 1px 0px 0px inset);
+                }
+                .advanced-options-container{
+                  @include box-shadow(rgba(0, 0, 0, 0.4) 0 0 6px, white 0px 1px 0px 0px inset);
+                  top: 25px;
+                  position: absolute;
+                  @include border-radius(5px);
+                  font-size: 12px;
+                  width: 245px;
+                  .new-input-container{
+                    input{
+                      margin-left: 10px;
+                      width: 60px !important;
+                      padding-left: 15px !important;
+                    }
+                  }
+                  .check-box-container{
+                    .slide-checkbox{
+                      position: relative;
+                      top: 5px;
+                      margin-bottom: 5px;
+                    }
+                    .question-mark{
+                      margin-left: 4px !important;
+                    }
+                  }
+                  .title{
+                    font-weight: bold;
+                    width: 110px;
+                    margin-left: 5px;
+                    text-shadow: 1px 1px 0 white;
+                  }
+                  .title, .question-mark, input, .slide-checkbox{
+                    display: inline-block;
+                    padding: 5px;
+                    margin-top: 10px;
+                  }
+                  .question-mark{
+                    //float: right;
+                  }
+                  input, .slide-checkbox{
+                    //float: right;
+                    //margin-right: 10px;
+                  }
+                }
+              }
+
               .reminders-container{
                 background: url(images/announcement/reminder-bg.png) -11px 20px no-repeat;
                 padding-top: 50px;
@@ -321,27 +436,56 @@ BODY {
               width: 370px;
               font-size: 14px;
               margin-bottom: 15px;
-
+              border: 1px solid #a1a1a1;
               &#subject{
                 height: 17px;
               }
 
               &#content{
-                height: 133px;
+                height: 100px !important;
+                padding-bottom: 53px;
+              }
+            }
+            .add-standards{
+              border-top: dashed 3px #e0e0e0;
+              background-color: white;
+              width: 359px;
+              position: relative;
+              top: -62px;
+              left: 11px;
+              text-align: center;
+              @include border-radius(0px 0px 5px 5px);
+              .standards-list{
+              }
+              .title{
+                color: #e0e0e0;
+                font-weight: bold;
+                font-size: 12px;
+                padding-top: 12px;
+                padding-bottom: 12px;
+                cursor: pointer;
               }
             }
 
             .new-item-dropdown{
+              .all-filles-icon{
+                position: absolute;
+                background: url(images/announcement/all-files-icon.png) 0 0 no-repeat;
+                width: 10px;
+                right: 5px;
+                top: -22px;
+              }
+
               position: absolute;
               background: white;
-              width: 240px;
+              width: 372px;
               z-index: 999;
-              border-left: 1px solid #a9a9a9;
-              border-right: 1px solid #a9a9a9;
-              border-bottom: 1px solid #a9a9a9;
+              border: 1px solid #a9a9a9;
               font-size: 14px;
               font-family: "Arial Narrow", Arial;
               color: #000;
+              padding-left: 6px;
+              top: 294px;
 
               >DIV{
                 height: 20px;
@@ -351,11 +495,10 @@ BODY {
               }
 
               H1{
-                background: #e1e2e2;
+                background: white;
                 margin: 0;
-                color: #888;
+                color: #bfbfbf;
                 padding: 3px;
-                color: #8b8b8b;
                 height: 20px;
                 font-size: 16px;
                 font-weight: normal;

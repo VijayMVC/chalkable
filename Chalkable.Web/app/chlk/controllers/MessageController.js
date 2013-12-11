@@ -35,7 +35,7 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(model){
                         this.getContext().getSession().set('currentMessages', model.getItems());
                         return this.convertModel(model, inbox_, role_, keyword_);
-                    }.bind(this));
+                    }, this);
                 return postback_ ?
                     this.UpdateView(chlk.activities.messages.MessageListPage, result) :
                     this.PushView(chlk.activities.messages.MessageListPage, result);
@@ -50,17 +50,17 @@ NAMESPACE('chlk.controllers', function (){
                     this.messageService.del(model.getSelectedIds())
                         .then(function(x){
                             this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
-                        }.bind(this));
+                        }, this);
                 if (model.getSubmitType() == "markAsRead")
                     this.messageService.markAs(model.getSelectedIds(), true)
                         .then(function(x){
                             this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
-                        }.bind(this));
+                        }, this);
                 if (model.getSubmitType() == "markAsUnread")
                     this.messageService.markAs(model.getSelectedIds(), false)
                         .then(function(x){
                             this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
-                        }.bind(this));
+                        }, this);
 
             },
 
@@ -94,7 +94,7 @@ NAMESPACE('chlk.controllers', function (){
                             ));
                         }
                         return model;
-                    }.bind(this));
+                    }, this);
 
                 }
                 else
@@ -121,19 +121,20 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(x){
                         this.view.getCurrent().close();
                         this.pageAction(true);
-                    }.bind(this));
+                    }, this);
             },
 
             [chlk.controllers.SidebarButton('messages')],
             [[chlk.models.id.MessageId]],
             function viewPageAction(id)
             {
-                var res = this.getMessageFromSession(id);
-                res.then(function(model){
-                    var isReplay = this.getContext().getSession().get('currentPerson').getId() == model.getRecipient().getId();
-                    model.setReplay(isReplay);
-                    return model;
-                }.bind(this));
+                var res = this
+                    .getMessageFromSession(id)
+                    .then(function(model){
+                        var isReplay = this.getContext().getSession().get('currentPerson').getId() == model.getRecipient().getId();
+                        model.setReplay(isReplay);
+                        return model;
+                    }, this);
                 return this.ShadeView(chlk.activities.messages.ViewDialog, res);
             },
 

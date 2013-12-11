@@ -1,4 +1,5 @@
 REQUIRE('chlk.models.id.AppId');
+REQUIRE('chlk.models.apps.AppRating');
 
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
@@ -12,9 +13,10 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'appThumbnail',
             String, 'appStatus',
             String, 'appName',
+            chlk.models.apps.AppRating, 'appRating',
 
-            [[String, chlk.models.id.AppId, chlk.models.id.AppId, String, Boolean, String]],
-            function $(appName, draftId, liveId_, appStatus, isApproved, appThumbnail){
+            [[String, chlk.models.id.AppId, chlk.models.id.AppId, String, Boolean, String, chlk.models.apps.AppRating]],
+            function $(appName, draftId, liveId_, appStatus, isApproved, appThumbnail, appRating){
                 BASE();
                 this.setAppName(appName);
                 this.setDraftAppId(draftId);
@@ -24,6 +26,7 @@ NAMESPACE('chlk.models.apps', function () {
                 this.setAppLive(liveId_ && liveId_.valueOf() != null);
                 this.setAppStatus(appStatus);
                 this.setApproved(isApproved);
+                this.setAppRating(appRating);
             }
         ]);
 });

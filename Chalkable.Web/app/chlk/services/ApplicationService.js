@@ -244,6 +244,12 @@ NAMESPACE('chlk.services', function () {
             },
 
 
+            [[chlk.models.id.AppId]],
+            ria.async.Future, function getAppRating(appId){
+                var appRating = new chlk.models.apps.AppRating();
+                appRating.setAverage(5);
+               return new ria.async.DeferredData(appRating);
+            },
 
             [[chlk.models.id.AppId, chlk.models.id.AnnouncementId]],
             ria.async.Future, function addAppToAnnouncement(appId, announcementId){
