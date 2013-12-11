@@ -442,7 +442,8 @@ BODY {
               }
 
               &#content{
-                height: 133px;
+                height: 100px !important;
+                padding-bottom: 53px;
               }
             }
             .add-standards{
@@ -467,6 +468,14 @@ BODY {
             }
 
             .new-item-dropdown{
+              .all-filles-icon{
+                position: absolute;
+                background: url(images/announcement/all-files-icon.png) 0 0 no-repeat;
+                width: 10px;
+                right: 5px;
+                top: -22px;
+              }
+
               position: absolute;
               background: white;
               width: 372px;

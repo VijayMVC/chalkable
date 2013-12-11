@@ -1,6 +1,7 @@
 -length=self.getItems().length
 if(length > 1)
     .new-item-dropdown(data-length=length)
+        .all-filles-icon
         h1 Recent #{self.getAnnouncementTypeName()} Assignments
         each item,i in self.getItems()
             div(class = i ? "" : "current", data-value=item,data-index=i).autofill-item=item
