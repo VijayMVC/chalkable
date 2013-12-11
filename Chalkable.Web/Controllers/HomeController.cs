@@ -152,7 +152,7 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
             var gradeLevels = SchoolLocator.GradeLevelService.GetGradeLevels();
             PrepareJsonData(GradeLevelViewData.Create(gradeLevels), ViewConstants.GRADE_LEVELS);
-            PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
+            PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
             PrepareCommonViewData(mp);
         }
 

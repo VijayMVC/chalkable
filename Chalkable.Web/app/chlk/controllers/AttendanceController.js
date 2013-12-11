@@ -100,9 +100,9 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.attendance.AttendanceList]],
-        function setAttendanceForListAction(model){
-            if(model.getClassPersonIds()){
-                this.attendanceService.setAttendanceForList(model.getPersonIds(), model.getClassIds(), model.getAttendanceTypes(), model.getAttReasons(), model.getDate())
+        VOID, function setAttendanceForListAction(model){
+            if(model.getClassIds()){
+                this.attendanceService.setAttendanceForList(model.getPersonId(), model.getClassIds(), model.getAttendanceTypes(), model.getAttReasons(), model.getDate())
                     .attach(this.validateResponse_())
                     .then(function(){
                         var controller = model.getController();

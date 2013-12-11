@@ -1,4 +1,5 @@
 REQUIRE('chlk.models.common.ChlkDate');
+REQUIRE('chlk.models.id.SchoolPersonId');
 
 NAMESPACE('chlk.models.attendance', function () {
     "use strict";
@@ -6,7 +7,7 @@ NAMESPACE('chlk.models.attendance', function () {
     /** @class chlk.models.attendance.AttendanceList*/
     CLASS(
         'AttendanceList', [
-            String, 'personIds',
+            chlk.models.id.SchoolPersonId, 'personId',
 
             String, 'classIds',
 

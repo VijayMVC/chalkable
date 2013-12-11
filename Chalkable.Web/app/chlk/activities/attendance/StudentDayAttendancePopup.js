@@ -36,7 +36,7 @@ NAMESPACE('chlk.activities.attendance', function () {
             VOID, function typeChange(node, event, options){
                 var value = node.getValue();
                 var currentReasons = this.getReasons().filter(function(item){
-                    return item.getAttendanceType() == value;
+                    return item.hasLevel(value);
                 });
                 this.setCurrentReasons(currentReasons);
                 var row = node.parent('.row');
@@ -63,6 +63,8 @@ NAMESPACE('chlk.activities.attendance', function () {
                             .setValue(node.getValue())
                             .trigger('change', {})
                             .trigger('liszt:updated');
+                    }else{
+                        console.info(item, item.getValue(), node, node.getValue())
                     }
                 })
             },
@@ -81,18 +83,15 @@ NAMESPACE('chlk.activities.attendance', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function saveClick(node, event){
                 var changed = this.dom.find('.row.changed:not(.all-row)');
-                var classPersonIds = [];
-                var classPeriodIds = [];
+                var classIds = [];
                 var attendanceTypes = [];
                 var attReasons = [];
                 changed.forEach(function(node){
-                    classPersonIds.push(node.getData('classpersonid'));
-                    classPeriodIds.push(node.getData('classperiodid'));
+                    classIds.push(node.getData('classid'));
                     attendanceTypes.push(node.find('.attendance-type-select').getValue());
                     attReasons.push(node.find('.attendance-reason-select').getValue() || -1);
                 });
-                this.dom.find('[name="classPersonIds"]').setValue(classPersonIds.join(','));
-                this.dom.find('[name="classPeriodIds"]').setValue(classPeriodIds.join(','));
+                this.dom.find('[name="classIds"]').setValue(classIds.join(','));
                 this.dom.find('[name="attendanceTypes"]').setValue(attendanceTypes.join(','));
                 this.dom.find('[name="attReasons"]').setValue(attReasons.join(','));
                 this.dom.find('form').trigger('submit');

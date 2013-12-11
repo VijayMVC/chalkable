@@ -1,5 +1,7 @@
 mixin TypeOption(typeId, item)
-    +Option(typeId, self.getTypeName(typeId), item && item.getType() == typeId)(class="attendance-" + typeId)
+    mapper = new chlk.models.attendance.AttendanceTypeMapper()
+    id = mapper.mapBack(new chlk.models.attendance.AttendanceTypeEnum(typeId))
+    +Option(id, self.getTypeName(typeId), item && item.getType() == typeId)(class="attendance-" + typeId)
 
 dailyAttendance = self.getDailyAttendance()
 attendances = self.getAttendances()
@@ -12,7 +14,7 @@ typesEnum = chlk.models.attendance.AttendanceTypeEnum
     +ActionForm('attendance', 'setAttendanceForList')
         if attendances.length
             +Hidden('date', attendances[0].getDate().format('mm-dd-yy'))
-            +Hidden('personIds', '')
+            +Hidden('personId', student.getId().valueOf())
             +Hidden('classIds', '')
             +Hidden('attendanceTypes', '')
             +Hidden('attReasons', '')
@@ -37,8 +39,7 @@ typesEnum = chlk.models.attendance.AttendanceTypeEnum
             each item in attendances
                 currentReasons = self.getReasonsForType(item.getLevel())
                 div(
-                    data-classPeriodId = item.getClassId().valueOf(),
-                    data-classPersonId = student.getId().valueOf()
+                    data-classId = item.getClassId().valueOf()
                 ).row
                     //.name-container #{self.getSerial(item.getPeriod().getOrder())} - #{item.getClassName()}
                     .name-container #{item.getClassName()}
@@ -47,7 +48,6 @@ typesEnum = chlk.models.attendance.AttendanceTypeEnum
                             +Select('attendanceTypes').attendance-type-select.grey-select
                                 +TypeOption(typesEnum.ABSENT.valueOf(), item)
                                 +TypeOption(typesEnum.LATE.valueOf(), item)
-                                +TypeOption(typesEnum.EXCUSED.valueOf(), item)
                                 +TypeOption(typesEnum.PRESENT.valueOf(), item)
                         else
                             |#{self.getTypeName(item.getType())}
