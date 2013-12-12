@@ -1,0 +1,10 @@
+.dialog.add-standards
+    .header
+        h1=self.getAnnouncementTypeName() + ' STANDARDS'
+        span Choose a standard that describe the item
+    +ActionForm('announcement', 'addStandards').add-standards-form
+        .standards-list-container
+        .buttons-container
+            +Button.special-button2.cancel.close Cancel
+            +Button()(type="submit").special-button2.blue.add Submit
+
