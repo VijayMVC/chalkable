@@ -42,7 +42,7 @@ NAMESPACE('chlk.templates.attendance', function () {
             [[String]],
             ArrayOf(chlk.models.attendance.AttendanceReason), function getReasonsForType(level){
                 return this.getReasons().filter(function(item){
-                    return item.hasLevel(level);;
+                    return item.hasLevel(level);
                 });
             },
 

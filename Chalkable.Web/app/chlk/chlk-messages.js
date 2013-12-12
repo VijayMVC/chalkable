@@ -153,6 +153,7 @@ var Msg = {
     PO_header: 'PO#',
     Popular: 'Popular',
     Pricing: 'Pricing',
+    Profile: 'Profile',
     Question: 'Question',
     Ready: 'Ready',
     Reason: 'Reason',
