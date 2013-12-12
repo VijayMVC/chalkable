@@ -47,16 +47,18 @@ NAMESPACE('chlk.controllers', function(){
 
             [chlk.controllers.SidebarButton('discipline')],
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
-            function classListAction(classId, date_){
+            function classListAction(classId_, date_){
+                if(!classId_ || !classId_.valueOf())
+                    return this.Redirect('discipline', 'list', [date_]);
                 var res = ria.async.wait([
-                        this.disciplineService.getClassDisciplines(classId, date_, 0),
+                        this.disciplineService.getClassDisciplines(classId_, date_, 0),
                         this.disciplineTypeService.getDisciplineTypes()
                     ])
                     .attach(this.validateResponse_())
                     .then(function(result){
                         var classes = this.classService.getClassesForTopBar(true);
                         var classBarData = new chlk.models.classes.ClassesForTopBar(classes);
-                        return new chlk.models.discipline.ClassDisciplinesViewData(classBarData, classId, result[0], result[1], date_, true);
+                        return new chlk.models.discipline.ClassDisciplinesViewData(classBarData, classId_, result[0], result[1], date_, true);
                     }, this);
 
                 var activityClass = chlk.activities.discipline.ClassDisciplinesPage;
@@ -77,8 +79,10 @@ NAMESPACE('chlk.controllers', function(){
                     .attach(this.validateResponse_())
                     .then(function(data){
                         date_ = date_ || new chlk.models.common.ChlkDate(getDate());
-                        return new ria.async.DeferredData(new chlk.models.discipline.PaginatedListByDateModel(data, date_));
-                    });
+                        var classes = this.classService.getClassesForTopBar(true);
+                        var classBarData = new chlk.models.classes.ClassesForTopBar(classes);
+                        return new ria.async.DeferredData(new chlk.models.discipline.PaginatedListByDateModel(classBarData, data, date_));
+                    }, this);
             },
 
             [[chlk.models.discipline.DisciplineInputModel]],

@@ -21,33 +21,35 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST, true, CallType.Get, new[] { AppPermissionType.Discipline })]
         public ActionResult List(DateTime? date, int? start, int? count)
         {
-            start = start ?? 0;
-            count = count ?? DEFAULT_PAGE_SIZE;
-            //var res = GetDisciplines(null, null, classId, date);
-            //return Json(new PaginatedList<DisciplineView>(res, start.Value/count.Value, count.Value));
-            int currentYearId = GetCurrentSchoolYearId();
-            var datev = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
-            var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineDetails(currentYearId, datev);
-            var list = StudentDisciplineSummaryViewData.Create(disciplines);
-            return Json(new PaginatedList<StudentDisciplineSummaryViewData>(list, start.Value / count.Value, count.Value));
+            return FakeJson("~/fakeData/disciplineList.json");
+            //start = start ?? 0;
+            //count = count ?? DEFAULT_PAGE_SIZE;
+            ////var res = GetDisciplines(null, null, classId, date);
+            ////return Json(new PaginatedList<DisciplineView>(res, start.Value/count.Value, count.Value));
+            //int currentYearId = GetCurrentSchoolYearId();
+            //var datev = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
+            //var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineDetails(currentYearId, datev);
+            //var list = StudentDisciplineSummaryViewData.Create(disciplines);
+            //return Json(new PaginatedList<StudentDisciplineSummaryViewData>(list, start.Value / count.Value, count.Value));
         }
 
         [AuthorizationFilter("Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST, true, CallType.Get, new[] { AppPermissionType.Discipline })]
         public ActionResult ClassList(DateTime? date, int classId, int? start, int? count)
         {
-            start = start ?? 0;
-            count = count ?? int.MaxValue;
-            var currentDate = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
-            var teacherId = SchoolLocator.Context.Role == CoreRoles.TEACHER_ROLE ? SchoolLocator.Context.UserLocalId : default(int?);
-            var cps = SchoolLocator.ClassPeriodService.GetClassPeriods(currentDate, classId, null, null, teacherId);
-            var cp = cps.OrderBy(x => x.Period.StartTime).LastOrDefault();
-            var res = new List<DisciplineView>();
-            if (cp != null)
-            {
-                res = GetDisciplines(null, null, classId, currentDate);   
-            }
-            res = res.OrderBy(x => x.Student.LastName).ThenBy(x=>x.Student.FirstName).ToList();
-            return Json(new PaginatedList<DisciplineView>(res, start.Value / count.Value, count.Value));
+            return FakeJson("~/fakeData/disciplineClassList.json");
+            //start = start ?? 0;
+            //count = count ?? int.MaxValue;
+            //var currentDate = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
+            //var teacherId = SchoolLocator.Context.Role == CoreRoles.TEACHER_ROLE ? SchoolLocator.Context.UserLocalId : default(int?);
+            //var cps = SchoolLocator.ClassPeriodService.GetClassPeriods(currentDate, classId, null, null, teacherId);
+            //var cp = cps.OrderBy(x => x.Period.StartTime).LastOrDefault();
+            //var res = new List<DisciplineView>();
+            //if (cp != null)
+            //{
+            //    res = GetDisciplines(null, null, classId, currentDate);   
+            //}
+            //res = res.OrderBy(x => x.Student.LastName).ThenBy(x=>x.Student.FirstName).ToList();
+            //return Json(new PaginatedList<DisciplineView>(res, start.Value / count.Value, count.Value));
         }
 
 
@@ -80,24 +82,24 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult SetClassDiscipline(DisciplineListInputModel disciplineList)
         {
-            foreach (var discInputModel in disciplineList.Disciplines)
-            {
-                if (discInputModel.DisciplineTypeIds != null && discInputModel.DisciplineTypeIds.Count > 0)
-                {
-                    ISet<int> discplineTypesSet = new HashSet<int>();
-                    foreach (var discplineTypeId in discInputModel.DisciplineTypeIds)
-                    {
-                        if (!discplineTypesSet.Contains(discplineTypeId))
-                            discplineTypesSet.Add(discplineTypeId);
-                    }
-                    SchoolLocator.DisciplineService.SetClassDiscipline(discInputModel.ClassPersonId, discInputModel.ClassPeriodId, discInputModel.Date,
-                                                                       discplineTypesSet, discInputModel.Description);
-                }
-                else
-                {
-                    SchoolLocator.DisciplineService.DeleteClassDiscipline(discInputModel.ClassPersonId, discInputModel.ClassPeriodId, discInputModel.Date);
-                }
-            }
+            //foreach (var discInputModel in disciplineList.Disciplines)
+            //{
+            //    if (discInputModel.DisciplineTypeIds != null && discInputModel.DisciplineTypeIds.Count > 0)
+            //    {
+            //        ISet<int> discplineTypesSet = new HashSet<int>();
+            //        foreach (var discplineTypeId in discInputModel.DisciplineTypeIds)
+            //        {
+            //            if (!discplineTypesSet.Contains(discplineTypeId))
+            //                discplineTypesSet.Add(discplineTypeId);
+            //        }
+            //        SchoolLocator.DisciplineService.SetClassDiscipline(discInputModel.ClassPersonId, discInputModel.ClassPeriodId, discInputModel.Date,
+            //                                                           discplineTypesSet, discInputModel.Description);
+            //    }
+            //    else
+            //    {
+            //        SchoolLocator.DisciplineService.DeleteClassDiscipline(discInputModel.ClassPersonId, discInputModel.ClassPeriodId, discInputModel.Date);
+            //    }
+            //}
             return Json(true);
         }
 

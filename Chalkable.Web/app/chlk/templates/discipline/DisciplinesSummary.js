@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.ChlkTemplate');
+REQUIRE('chlk.templates.common.PageWithClasses');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.common.PaginatedList');
 REQUIRE('chlk.models.discipline.DisciplineSummary');
@@ -11,7 +11,7 @@ NAMESPACE('chlk.templates.discipline', function(){
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/discipline/disciplines-summary.jade')],
         [ria.templates.ModelBind(chlk.models.discipline.PaginatedListByDateModel)],
-        'DisciplinesSummary', EXTENDS(chlk.templates.ChlkTemplate), [
+        'DisciplinesSummary', EXTENDS(chlk.templates.common.PageWithClasses), [
             [ria.templates.ModelPropertyBind],
             chlk.models.common.PaginatedList, 'items',
 

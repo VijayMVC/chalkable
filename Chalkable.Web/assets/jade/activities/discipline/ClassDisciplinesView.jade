@@ -67,9 +67,10 @@ redirectData = self.getRedirectData()
                                     if column.length > 0
                                         .column
                                             each discType in column
+                                                -console.info(discType.disciplineTypeData.getName(),discType.disciplineTypeData.getId().valueOf(),discType.selected,false)
                                                 +LabeledCheckbox(
                                                 discType.disciplineTypeData.getName(),
-                                                    discType.disciplineTypeData.getId().valueOf(),
+                                                    discType.disciplineTypeData.getId().valueOf().toString(),
                                                     discType.selected,
                                                     false).change-discipline
                             .discipline-desciption-container

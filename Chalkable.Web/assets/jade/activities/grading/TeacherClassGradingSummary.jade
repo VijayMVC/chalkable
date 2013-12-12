@@ -5,4 +5,9 @@
     +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summary')(
         selectedItemId=selectedId
     ).classes-bar
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                .grading-button
+                .grading-button
     +RenderWith(self.getSummaryPart(), chlk.templates.grading.GradingClassSummaryPartTpl)
