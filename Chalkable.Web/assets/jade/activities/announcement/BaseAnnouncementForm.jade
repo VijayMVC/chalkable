@@ -104,8 +104,9 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
             .chlk-add#add-reminder.opacity-button=Msg.Add_reminder
     .attachments-and-applications
         ann = announcement
-        -ann.setNeedButtons(true);
-        -ann.setNeedDeleteButton(true);
+        -ann.setNeedButtons(true)
+        -ann.setNeedDeleteButton(true)
+        -console.info(userRole)
             +RenderWith(ann, chlk.templates.announcement.Announcement)(
                 userRole = userRole
             )

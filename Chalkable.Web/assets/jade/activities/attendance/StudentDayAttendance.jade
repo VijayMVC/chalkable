@@ -23,8 +23,11 @@ typesEnum = chlk.models.attendance.AttendanceTypeEnum
             +Hidden('params', self.getParams())
             +Hidden('newStudent', self.isNewStudent()).is-new-student
         .top-container
-            +PersonImg(student, 47)
+            if self.isNewStudent()
+                +PersonImg(student, 47)
             h1=student.getDisplayName()
+            if !self.isNewStudent()
+                +ActionLink('students', 'info', student.getId().valueOf()).profile-link.small-grey-text=Msg.Profile.toLowerCase() + ' »'
         .blocks
             if(canEdit)
                 .row.all-row
@@ -42,7 +45,7 @@ typesEnum = chlk.models.attendance.AttendanceTypeEnum
                     data-classId = item.getClassId().valueOf()
                 ).row
                     //.name-container #{self.getSerial(item.getPeriod().getOrder())} - #{item.getClassName()}
-                    .name-container #{item.getClassName()}
+                    .name-container.small-grey-text #{item.getClassName()}
                     .type-container
                         if(canEdit)
                             +Select('attendanceTypes').attendance-type-select.grey-select

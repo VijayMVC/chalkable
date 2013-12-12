@@ -830,6 +830,12 @@ BODY {
       }
     }
 
+    .small-grey-text{
+      font: normal 12px/30px Georgia italic;
+      color: #7c7c7c;
+      text-shadow: 0 1px 0 white;
+    }
+
     .chzn-container{
       >A{
         border-color: #d1d1d1 #bbbbbb #a4a4a4 #bbbbbb;
@@ -872,6 +878,11 @@ BODY {
         text-shadow: 0 1px 0 white;
       }
 
+      .profile-link{
+        display: inline-block;
+        margin: 4px 8px;
+      }
+
       .avatar-wrapper, h1{
         display: inline-block;
         vertical-align: top;
@@ -890,9 +901,6 @@ BODY {
 
         .name-container{
           width: 148px;
-          font: normal 12px/30px Georgia italic;
-          color: #7c7c7c;
-          text-shadow: 0 1px 0 white;
         }
 
         .type-container{
