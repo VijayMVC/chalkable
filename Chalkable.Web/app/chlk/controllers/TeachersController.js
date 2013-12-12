@@ -25,7 +25,7 @@ NAMESPACE('chlk.controllers', function (){
                     .getSummary(personId)
                     .attach(this.validateResponse_())
                     .then(function(model){
-                        return new chlk.models.people.UserProfileSummaryViewData(this.getCurrentRole(), model);
+                        return new chlk.models.people.UserProfileSummaryViewData(this.getCurrentRole(), model, this.getUserClaims_());
                     }, this);
                 return this.PushView(chlk.activities.profile.PersonProfileSummaryPage, res);
             },
@@ -37,7 +37,7 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(model){
                         var userData = this.prepareProfileData(model);
-                        var res = new chlk.models.people.UserProfileInfoViewData(this.getCurrentRole(), userData);
+                        var res = new chlk.models.people.UserProfileInfoViewData(this.getCurrentRole(), userData, this.getUserClaims_());
                         this.setUserToSession(res);
                         return res;
                     }, this);

@@ -13,9 +13,9 @@ NAMESPACE('chlk.models.calendar.attendance', function(){
 
         [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate
             , ArrayOf(chlk.models.calendar.attendance.ClassAttendanceCalendarMonthItem)
-            , chlk.models.id.ClassId
+            , chlk.models.id.ClassId, ArrayOf(chlk.models.people.Claim)
         ]],
-        function $(date_, minDate_, maxDate_, calendarItems_, classId_){
+        function $(date_, minDate_, maxDate_, calendarItems_, classId_, claims_){
             BASE(date_, minDate_, maxDate_);
             if(calendarItems_)
                 this.setCalendarItems(calendarItems_);

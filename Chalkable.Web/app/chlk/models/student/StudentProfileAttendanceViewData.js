@@ -18,9 +18,10 @@ NAMESPACE('chlk.models.student', function(){
             chlk.models.attendance.StudentAttendanceSummary
             , chlk.models.calendar.attendance.StudentAttendanceMonthCalendar
             , ArrayOf(chlk.models.schoolYear.MarkingPeriod)
+            , ArrayOf(chlk.models.people.Claim)
         ]],
-        function $(role, summaryInfo, attendanceCalendar, markingPeriods){
-            BASE(role, summaryInfo);
+        function $(role, summaryInfo, attendanceCalendar, markingPeriods, claims_){
+            BASE(role, summaryInfo, claims_);
             this.setAttendanceCalendar(attendanceCalendar);
             this.setMarkingPeriods(markingPeriods);
         }

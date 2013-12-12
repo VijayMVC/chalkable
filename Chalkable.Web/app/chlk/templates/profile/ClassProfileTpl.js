@@ -21,12 +21,14 @@ NAMESPACE('chlk.templates.profile', function(){
                 var role = this.getCurrentRoleId();
                 var isAdminOrTeacher = this.isAdmin()
                     || role == chlk.models.common.RoleEnum.TEACHER;
+
+                var permissionEnum = chlk.models.people.UserPermissionEnum;
                 return [
-                    this.buildActionLinkModelForClass('details', 'Now', pressedActionName, classId_),
+                    this.buildActionLinkModelForClass('details', 'Now', pressedActionName, classId_, !this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_ROSTER)),
                     this.buildActionLinkModelForClass('info', 'Info', pressedActionName, classId_),
                     this.buildActionLinkModelForClass('schedule', 'Schedule', pressedActionName, classId_),
-                    this.buildActionLinkModelForClass('grading', 'Grading', pressedActionName, classId_),
-                    this.buildActionLinkModelForClass('attendance', 'Attendance', pressedActionName, classId_, !isAdminOrTeacher),
+                    this.buildActionLinkModelForClass('grading', 'Grading', pressedActionName, classId_, !this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_GRADES)),
+                    this.buildActionLinkModelForClass('attendance', 'Attendance', pressedActionName, classId_, !isAdminOrTeacher && !this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_ATTENDANCE)),
                     this.buildActionLinkModelForClass('apps', 'Apps', pressedActionName, classId_)
                 ]
             },

@@ -13,11 +13,13 @@ NAMESPACE('chlk.models.people', function(){
         VOID, function setUser_(user){
                 return this._user = user;
         },
-        [[chlk.models.common.Role, TUser]],
-        function $(role_, user_){
+        [[chlk.models.common.Role, TUser, ArrayOf(chlk.models.people.Claim)]],
+        function $(role_, user_, claims_){
             BASE(role_);
             if(user_)
                 this._user = user_;
+            if(claims_)
+                this.setClaims(claims_);
         }
     ]);
 });

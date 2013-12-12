@@ -13,6 +13,17 @@ NAMESPACE('chlk.templates.profile', function(){
             [ria.templates.ModelPropertyBind],
             chlk.models.common.RoleEnum, 'currentRoleId',
 
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.people.Claim), 'claims',
+
+            //
+            [[chlk.models.people.UserPermissionEnum]],
+            Boolean, function hasUserPermission_(userPermission){
+                var claims = this.getClaims();
+                return claims && claims.length > 0
+                    && claims.filter(function(claim){return claim.hasPermission(userPermission); }).length > 0;
+            },
+
             Boolean, function isAdmin(){return this.getModel().isAdmin();},
 
             [[String]],

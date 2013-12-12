@@ -39,6 +39,7 @@ NAMESPACE('chlk.templates.profile', function(){
             OVERRIDE, ArrayOf(chlk.models.common.ActionLinkModel), function buildActionLinkModels(pressedLinkName){
                 var controller = this.getControllerName();
                 var userId = this.getUser().getId().valueOf();
+                var permissionEnum = chlk.models.people.UserPermissionEnum;
                 var res = [
                     this.createActionLinkModel_(controller, 'details', 'Now', pressedLinkName, [userId]),
                     this.createActionLinkModel_(controller, 'info', 'Info', pressedLinkName, [userId])
@@ -50,8 +51,8 @@ NAMESPACE('chlk.templates.profile', function(){
                     res.push(this.createActionLinkModel_(controller, 'schedule', 'Schedule', pressedLinkName, [userId]));
                 }
                 if(controller == this._studentControllerName){
-                    res.push(this.createActionLinkModel_(controller, 'attendance', 'Attendance', pressedLinkName, [null, userId]));
-                    res.push(this.createActionLinkModel_(controller, 'discipline', 'Discipline', pressedLinkName, [null, userId]));
+                    res.push(this.createActionLinkModel_(controller, 'attendance', 'Attendance', pressedLinkName, [null, userId], !this.hasUserPermission_(permissionEnum.VIEW_ATTENDANCE)));
+                    res.push(this.createActionLinkModel_(controller, 'discipline', 'Discipline', pressedLinkName, [null, userId], !this.hasUserPermission_(permissionEnum.VIEW_DISCIPLINE)));
                 }
                 res.push(this.createActionLinkModel_(controller, 'apps', 'Apps', pressedLinkName, [userId]));
                 return res;

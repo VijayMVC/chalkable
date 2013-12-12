@@ -20,9 +20,9 @@ NAMESPACE('chlk.models.people', function () {
 
             TCalendar, 'calendar',
 
-            [[chlk.models.common.Role, chlk.models.people.Schedule, TCalendar]],
-            function $(role, schedule_, calendar_){
-                BASE(role, schedule_);
+            [[chlk.models.common.Role, chlk.models.people.Schedule, TCalendar, ArrayOf(chlk.models.people.Claim)]],
+            function $(role, schedule_, calendar_, claims_){
+                BASE(role, schedule_, claims_);
                 if(calendar_)
                     this.setCalendar(calendar_);
             }

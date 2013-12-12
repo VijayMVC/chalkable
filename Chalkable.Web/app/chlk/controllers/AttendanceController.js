@@ -43,6 +43,9 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(summary){
                     var classes = this.classService.getClassesForTopBar(true);
+                    if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_ATTENDANCE)){
+                        classes = classes.filter(function(item){return item.getName() == 'All';});
+                    }
                     var topModel = new chlk.models.classes.ClassesForTopBar(classes);
                     return new chlk.models.attendance.SummaryPage(topModel, summary);
                 }, this);

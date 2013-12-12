@@ -12,9 +12,10 @@ NAMESPACE('chlk.models.student', function(){
         [[chlk.models.common.Role
             , chlk.models.student.StudentGradingInfo
             , chlk.models.schoolYear.MarkingPeriod
+            , ArrayOf(chlk.models.people.Claim)
         ]],
-        function $(role_, studentGradingInfo_, markingPeriod_){
-            BASE(role_, studentGradingInfo_);
+        function $(role_, studentGradingInfo_, markingPeriod_, claims_){
+            BASE(role_, studentGradingInfo_, claims_);
             if(markingPeriod_)
                 this.setMarkingPeriod(markingPeriod_);
         }

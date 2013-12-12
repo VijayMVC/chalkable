@@ -10,9 +10,10 @@ NAMESPACE('chlk.models.classes', function(){
         chlk.models.calendar.attendance.ClassAttendanceMonthCalendar, 'monthCalendar',
 
         [[chlk.models.common.Role, chlk.models.classes.ClassAttendanceSummary
-            , chlk.models.calendar.attendance.ClassAttendanceMonthCalendar]],
-        function $(role_, classAttSummary_, monthCalendar_){
-            BASE(role_, classAttSummary_);
+            , chlk.models.calendar.attendance.ClassAttendanceMonthCalendar
+            , ArrayOf(chlk.models.people.Claim)]],
+        function $(role_, classAttSummary_, monthCalendar_, claims_){
+            BASE(role_, classAttSummary_, claims_);
             if(monthCalendar_)
                 this.setMonthCalendar(monthCalendar_);
         }

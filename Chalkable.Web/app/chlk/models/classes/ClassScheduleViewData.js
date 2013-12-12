@@ -10,9 +10,12 @@ NAMESPACE('chlk.models.classes', function(){
 
         chlk.models.calendar.announcement.Day, 'scheduleCalendar',
 
-        [[chlk.models.common.Role, chlk.models.classes.Class, chlk.models.calendar.announcement.Day]],
-        function $(role_, clazz_, scheduleCalendar_){
-            BASE(role_, clazz_);
+        [[chlk.models.common.Role, chlk.models.classes.Class
+            , chlk.models.calendar.announcement.Day
+            , ArrayOf(chlk.models.people.Claim)
+        ]],
+        function $(role_, clazz_, scheduleCalendar_, claims_){
+            BASE(role_, clazz_, claims_);
             if(scheduleCalendar_)
                 this.setScheduleCalendar(scheduleCalendar_);
         }

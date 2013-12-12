@@ -142,7 +142,7 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(model){
                         var userData = this.prepareProfileData(model);
-                        var res = new chlk.models.student.StudentProfileInfoViewData(this.getCurrentRole(), userData);
+                        var res = new chlk.models.student.StudentProfileInfoViewData(this.getCurrentRole(), userData, this.getUserClaims_());
                         this.setUserToSession(res);
                         return res;
                     }, this);
@@ -164,7 +164,7 @@ NAMESPACE('chlk.controllers', function (){
                         var role = new chlk.models.people.Role();
                         role.setId(chlk.models.common.RoleEnum.STUDENT.valueOf());
                         data.setRole(role);
-                        return new chlk.models.student.StudentProfileSummaryViewData(this.getCurrentRole(), data);
+                        return new chlk.models.student.StudentProfileSummaryViewData(this.getCurrentRole(), data, this.getUserClaims_());
                     }, this);
                 return this.PushView(chlk.activities.student.StudentProfileSummaryPage, result);
             },
@@ -189,7 +189,8 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(results){
                         var schedule = results[0];
                         schedule.setRoleName(chlk.models.common.RoleNamesEnum.STUDENT.valueOf());
-                        return new chlk.models.people.UserProfileScheduleViewData(chlk.models.calendar.announcement.Week, this.getCurrentRole(), schedule, results[1]);
+                        return new chlk.models.people.UserProfileScheduleViewData(chlk.models.calendar.announcement.Week
+                            , this.getCurrentRole(), schedule, results[1], this.getUserClaims_());
                     }, this);
                 return this.PushView(chlk.activities.profile.ScheduleWeekPage, result);
             },
@@ -204,7 +205,8 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(results){
                         var schedule = results[0];
                         schedule.setRoleName(chlk.models.common.RoleNamesEnum.STUDENT.valueOf());
-                        return new chlk.models.people.UserProfileScheduleViewData(chlk.models.calendar.announcement.Month, this.getCurrentRole(), schedule, results[1]);
+                        return new chlk.models.people.UserProfileScheduleViewData(chlk.models.calendar.announcement.Month,
+                            this.getCurrentRole(), schedule, results[1], this.getUserClaims_());
                     }, this);
                 return this.PushView(chlk.activities.profile.ScheduleMonthPage, result);
             },
@@ -223,7 +225,8 @@ NAMESPACE('chlk.controllers', function (){
                             var endDate = currentMp.getEndDate();
                             var startDate = currentMp.getStartDate();
                             var calendarModel = new chlk.models.calendar.attendance.StudentAttendanceMonthCalendar(date_, startDate, endDate, result[1], personId);
-                            return new chlk.models.student.StudentProfileAttendanceViewData(this.getCurrentRole(), result[0], calendarModel, result[2]);
+                            return new chlk.models.student.StudentProfileAttendanceViewData(this.getCurrentRole()
+                                , result[0], calendarModel, result[2], this.getUserClaims_());
                         }, this);
                 return this.PushView(chlk.activities.student.StudentProfileAttendancePage, res);
             },
@@ -242,7 +245,8 @@ NAMESPACE('chlk.controllers', function (){
                         var endDate = currentMp.getEndDate();
                         var startDate = currentMp.getStartDate();
                         var calendarModel = new chlk.models.calendar.discipline.StudentDisciplineMonthCalendar(date_, startDate, endDate, result[1], personId);
-                        return new chlk.models.student.StudentProfileDisciplineViewData(this.getCurrentRole(), result[0], calendarModel, result[2]);
+                        return new chlk.models.student.StudentProfileDisciplineViewData(this.getCurrentRole()
+                            , result[0], calendarModel, result[2], this.getUserClaims_());
                     }, this);
                 return this.PushView(chlk.activities.student.StudentProfileDisciplinePage, res);
             },
@@ -284,7 +288,8 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(result){
                         var mp = result[1].filter(function (el){return el.getId() == markingPeriodId_})[0];
-                        return new chlk.models.student.StudentProfileGradingViewData(this.getCurrentRole(), result[0], mp);
+                        return new chlk.models.student.StudentProfileGradingViewData(this.getCurrentRole()
+                            , result[0], mp, this.getUserClaims_());
                     }, this);
                 return this.PushView(chlk.activities.student.StudentProfileGradingPage, res);
             }

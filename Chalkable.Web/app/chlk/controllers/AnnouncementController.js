@@ -298,7 +298,9 @@ NAMESPACE('chlk.controllers', function (){
                     announcement.setGradeViewApps(gradeViewApps);
                     announcement.prepareExpiresDateText();
                     announcement.setCurrentUser(this.getCurrentPerson());
-
+                    if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_GRADES)){
+                        announcement.setGradable(false);
+                    }
                     //TODO Remove fake data
                     announcement.setMaxScore(100);
                     var studentAnnouncements = announcement.getStudentAnnouncements();

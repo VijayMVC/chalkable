@@ -6,9 +6,9 @@ NAMESPACE('chlk.models.classes', function(){
     /**@class chlk.models.classes.ClassProfileAppsViewData*/
     CLASS('ClassProfileAppsViewData', EXTENDS(chlk.models.classes.BaseClassProfileViewData), [
 
-        [[chlk.models.common.Role, chlk.models.classes.ClassApps]],
-        function $(role_, classApps_){
-            BASE(role_, classApps_);
+        [[chlk.models.common.Role, chlk.models.classes.ClassApps, ArrayOf(chlk.models.people.Claim)]],
+        function $(role_, classApps_, claims_){
+            BASE(role_, classApps_, claims_);
         }
     ]);
 });

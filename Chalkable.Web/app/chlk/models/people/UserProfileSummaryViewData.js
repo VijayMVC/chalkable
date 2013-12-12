@@ -7,9 +7,9 @@ NAMESPACE('chlk.models.people', function(){
 
     CLASS('UserProfileSummaryViewData', EXTENDS(chlk.models.people.UserProfileViewData.OF(chlk.models.people.PersonSummary)),[
 
-        [[chlk.models.common.Role, chlk.models.people.PersonSummary]],
-        function $(role_, userSummary_){
-            BASE(role_, userSummary_);
+        [[chlk.models.common.Role, chlk.models.people.PersonSummary, ArrayOf(chlk.models.people.Claim)]],
+        function $(role_, userSummary_, claims_){
+            BASE(role_, userSummary_, claims_);
         }
     ]);
 });

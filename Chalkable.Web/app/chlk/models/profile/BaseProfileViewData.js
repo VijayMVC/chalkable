@@ -1,4 +1,5 @@
 REQUIRE('chlk.models.common.Role');
+REQUIRE('chlk.models.people.Claim');
 
 NAMESPACE('chlk.models.profile', function(){
    "use strict";
@@ -7,6 +8,7 @@ NAMESPACE('chlk.models.profile', function(){
     CLASS('BaseProfileViewData',[
 
         chlk.models.common.RoleEnum, 'currentRoleId',
+        ArrayOf(chlk.models.people.Claim), 'claims',
 
         Boolean, function isAdmin(){
             var role = this.getCurrentRoleId();
@@ -15,7 +17,7 @@ NAMESPACE('chlk.models.profile', function(){
                 || role == this._roleEnums.ADMINVIEW;
         },
 
-        [[chlk.models.common.Role]],
+        [[chlk.models.common.Role, ArrayOf(chlk.models.people.Claim)]],
         function $(role_){
             BASE();
             this._roleEnums = chlk.models.common.RoleEnum;

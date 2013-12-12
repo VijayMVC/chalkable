@@ -35,7 +35,8 @@ NAMESPACE('chlk.controllers', function (){
                     .getSummary(classId)
                     .attach(this.validateResponse_())
                     .then(function(data){
-                        return new chlk.models.classes.ClassProfileSummaryViewData(this.getCurrentRole(), data);
+                        return new chlk.models.classes.ClassProfileSummaryViewData(this.getCurrentRole()
+                            , data, this.getUserClaims_());
                     }, this);
                 return this.PushView(chlk.activities.classes.SummaryPage, result);
             },
@@ -46,7 +47,8 @@ NAMESPACE('chlk.controllers', function (){
                     .getInfo(classId)
                     .attach(this.validateResponse_())
                     .then(function (data){
-                        return new chlk.models.classes.ClassProfileInfoViewData(this.getCurrentRole(), data);
+                        return new chlk.models.classes.ClassProfileInfoViewData(this.getCurrentRole()
+                            , data, this.getUserClaims_());
                     }, this);
                 return this.PushView(chlk.activities.classes.ClassInfoPage, res);
             },
@@ -80,7 +82,8 @@ NAMESPACE('chlk.controllers', function (){
                         return new chlk.models.classes.ClassScheduleViewData(
                             this.getCurrentRole(),
                             data.getClazz(),
-                            scheduleCalendar
+                            scheduleCalendar,
+                            this.getUserClaims_()
                         );
                     }, this);
             },
@@ -96,7 +99,8 @@ NAMESPACE('chlk.controllers', function (){
                         var attCalendar = new chlk.models.calendar.attendance.ClassAttendanceMonthCalendar(
                             null, mp.getStartDate(), mp.getEndDate(), result[1], classId
                         );
-                        return new chlk.models.classes.ClassProfileAttendanceViewData(this.getCurrentRole(), result[0], attCalendar);
+                        return new chlk.models.classes.ClassProfileAttendanceViewData(this.getCurrentRole()
+                            , result[0], attCalendar, this.getUserClaims_());
                     }, this);
                 return this.PushView(chlk.activities.classes.ClassProfileAttendancePage, res);
             },
@@ -113,7 +117,7 @@ NAMESPACE('chlk.controllers', function (){
                                     item.setClassId(classId);
                                 });
                             });
-                            return new chlk.models.classes.ClassProfileGradingViewData(this.getCurrentRole(), model);
+                            return new chlk.models.classes.ClassProfileGradingViewData(this.getCurrentRole(), model, this.getUserClaims_());
                         }, this);
                 return this.PushView(chlk.activities.classes.ClassProfileGradingPage, res);
             },
@@ -135,7 +139,7 @@ NAMESPACE('chlk.controllers', function (){
                 var res = this.classService.getAppsInfo(classId)
                     .attach(this.validateResponse_())
                     .then(function(data){
-                        return new chlk.models.classes.ClassProfileAppsViewData(this.getCurrentRole(), data);
+                        return new chlk.models.classes.ClassProfileAppsViewData(this.getCurrentRole(), data, this.getUserClaims_());
                     }, this);
                 return this.PushView(chlk.activities.classes.ClassProfileAppsPage, res);
             }
