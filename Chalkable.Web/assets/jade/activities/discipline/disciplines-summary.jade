@@ -1,4 +1,7 @@
 .disciplines
+    +LeftRightToolbar(self.getTopData().getTopItems(), chlk.templates.classes.TopBar, 'discipline', 'classList')(
+        selectedItemId=""
+    ).classes-bar
     .action-bar.not-transparent.buttons
         .container.panel-bg
             +ActionForm('discipline', 'listStudentDiscipline')

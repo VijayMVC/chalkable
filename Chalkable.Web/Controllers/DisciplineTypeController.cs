@@ -17,8 +17,9 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_DISCIPLINE_TYPE_LIST, true, CallType.Get, new[] { AppPermissionType.Discipline })]
         public ActionResult List(int? start, int? count)
         {
-            var res = SchoolLocator.DisciplineTypeService.GetDisciplineTypes(start ?? 0, count ?? 10);
-            return Json(res.Transform(DisciplineTypeViewData.Create), 3);
+            return FakeJson("~/fakeData/disciplineTypes.json");
+            //var res = SchoolLocator.DisciplineTypeService.GetDisciplineTypes(start ?? 0, count ?? 10);
+            //return Json(res.Transform(DisciplineTypeViewData.Create), 3);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit")]
