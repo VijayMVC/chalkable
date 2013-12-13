@@ -3,13 +3,15 @@ mixin ListView(data)
     -config=self.getConfigs()
     .chlk-grid(attributes)
         input.grid-focus
-        .back-top.x-hidden
-            .back-top-arrow
-            A.new-popup
-        .load-all-popup.x-hidden
-            .outer-container.new-popup
-            .inner-container
-                .title=config.totalCount + ' ' + config.loadAllPopUpTitle
-                .load-all-button
-                    +Button(name="loadAll").blue-gradient-btn=config.loadAllButtonTitle
+        if config.needGoToButton
+            .back-top.x-hidden
+                .back-top-arrow
+                A.new-popup
+        if config.needLoadAllButton
+            .load-all-popup.x-hidden
+                .outer-container.new-popup
+                .inner-container
+                    .title=config.totalCount + ' ' + config.loadAllPopUpTitle
+                    .load-all-button
+                        +Button(name="loadAll").blue-gradient-btn=config.loadAllButtonTitle
         block
