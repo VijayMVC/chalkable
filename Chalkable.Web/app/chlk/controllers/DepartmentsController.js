@@ -59,7 +59,9 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function (data) {
                         this.view.getCurrent().close();
-                        return this.departmentService.getDepartments(0);
+                        return this.departmentService
+                            .getDepartments(0)
+                            .attach(this.validateResponse_());
                     }, this);
 
                 return this.UpdateView(chlk.activities.departments.DepartmentsListPage, result);
@@ -71,7 +73,9 @@ NAMESPACE('chlk.controllers', function (){
                     .removeDepartment(id)
                     .attach(this.validateResponse_())
                     .then(function (data) {
-                        return this.departmentService.getDepartments(0)
+                        return this.departmentService
+                            .getDepartments(0)
+                            .attach(this.validateResponse_());
                     }, this);
                 return this.UpdateView(chlk.activities.departments.DepartmentsListPage, result);
             }

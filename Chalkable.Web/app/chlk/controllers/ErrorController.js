@@ -13,7 +13,8 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             function appErrorAction(){
-
+                var result = new ria.async.DeferredData(new chlk.models.apps.AppErrorViewData());
+                return this.ShadeView(chlk.activities.apps.AppErrorDialog, result);
             }
     ])
 });

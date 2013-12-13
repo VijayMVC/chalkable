@@ -81,6 +81,7 @@ NAMESPACE('chlk.controllers', function (){
 
             var result = this.appCategoryService
                 .getCategories()
+                .attach(this.validateResponse_())
                 .then(function(data){
                     return data.getItems();
                 })
@@ -98,6 +99,7 @@ NAMESPACE('chlk.controllers', function (){
                             selectedSortingMode,
                             start
                         )
+                        .attach(this.validateResponse_())
                         .then(function(apps){
                             var items = apps.getItems();
 
@@ -113,6 +115,7 @@ NAMESPACE('chlk.controllers', function (){
                         .then(function(apps){
                             return this.appMarketService
                                 .getPersonBalance(this.getCurrentPerson().getId())
+                                .attach(this.validateResponse_())
                                 .then(function(personBalance){
                                     return new chlk.models.apps.AppMarketViewData(
                                         apps,
@@ -123,7 +126,7 @@ NAMESPACE('chlk.controllers', function (){
                                 });
                         }, this)
                 }, this)
-                .attach(this.validateResponse_());
+
 
             if (filterData_) {
                 var msg = filterData_.isScroll() ? "scrollApps" : "updateApps";
@@ -140,11 +143,10 @@ NAMESPACE('chlk.controllers', function (){
             var currentPersonId = this.getCurrentPerson().getId();
             var result = this.appMarketService
                 .getMyApps(currentPersonId, isEdit)
+                .attach(this.validateResponse_())
                 .then(function(apps){
                     return new chlk.models.apps.MyAppsViewData(apps, isEdit, currentPersonId);
-                })
-                .attach(this.validateResponse_());
-
+                });
             if (isEdit_ != null)
                 return this.UpdateView(chlk.activities.apps.MyAppsPage, result);
             else
@@ -156,6 +158,7 @@ NAMESPACE('chlk.controllers', function (){
         function detailsAction(id) {
             var result = this.appMarketService
                 .getDetails(id)
+                .attach(this.validateResponse_())
                 .then(function(app){
                     //todo: make picture dimensions constants
                     var screenshots = this.pictureService.getAppPicturesByIds(app.getScreenshotIds(), 640, 390);
@@ -206,9 +209,11 @@ NAMESPACE('chlk.controllers', function (){
                     }
                     return this.appCategoryService
                         .getCategories()
+                        .attach(this.validateResponse_())
                         .then(function(categories){
                             return this.appMarketService
                                 .getPersonBalance(this.getCurrentPerson().getId())
+                                .attach(this.validateResponse_())
                                 .then(function(personBalance){
                                     return new chlk.models.apps.AppMarketDetailsViewData(
                                         app,
@@ -221,8 +226,7 @@ NAMESPACE('chlk.controllers', function (){
                                 }, this)
                         }, this)
 
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
             return this.PushView(chlk.activities.apps.AppMarketDetailsPage, result);
         },
 
@@ -242,6 +246,7 @@ NAMESPACE('chlk.controllers', function (){
         function tryToInstallAction(appId) {
             var appInfo = this.appMarketService
                 .getDetails(appId)
+                .attach(this.validateResponse_())
                 .then(function(app){
                     var installedForGroups = app.getInstalledForGroups() || [];
                     installedForGroups.unshift(new chlk.models.apps.AppInstallGroup(
@@ -271,9 +276,7 @@ NAMESPACE('chlk.controllers', function (){
 
 
                     return new chlk.models.apps.AppMarketInstallViewData(app, installedCount == installedForGroups.length);
-                }, this)
-                .attach(this.validateResponse_())
-
+                }, this);
             return this.ShadeView(chlk.activities.apps.InstallAppDialog, appInfo);
         },
 
@@ -284,6 +287,7 @@ NAMESPACE('chlk.controllers', function (){
 
             return this.appMarketService
                 .getPersonBalance(this.getCurrentPerson().getId())
+                .attach(this.validateResponse_())
                 .then(function(personBalance){
                     var userBalance = personBalance.getBalance();
                     if (totalAppPrice > userBalance){
@@ -298,6 +302,7 @@ NAMESPACE('chlk.controllers', function (){
                             this.getIdsList(appInstallData.getGradeLevels(), chlk.models.id.AppInstallGroupId),
                             appInstallData.getCurrentPerson()
                         )
+                        .attach(this.validateResponse_())
                         .then(function(result){
                             var title = result ? "Installation successful" : "Error while installing app.";
                                return this.ShowMsgBox(title, '', [{
@@ -308,8 +313,7 @@ NAMESPACE('chlk.controllers', function (){
                                    color: chlk.models.common.ButtonColor.GREEN.valueOf()
                                }], 'center');
                         }, this);
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
         },
 
         [chlk.controllers.SidebarButton('apps')],
@@ -317,10 +321,10 @@ NAMESPACE('chlk.controllers', function (){
         function uninstallAction(ids) {
             return this.appMarketService
                 .uninstallApps(ids)
+                .attach(this.validateResponse_())
                 .then(function(result){
                     return this.Redirect('appmarket', 'myApps', [false]);
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
         },
 
         [chlk.controllers.SidebarButton('apps')],
@@ -363,7 +367,9 @@ NAMESPACE('chlk.controllers', function (){
                     reviewData.getAppId(),
                     reviewData.getRating(),
                     reviewData.getReview()
-                ).then(function(data){
+                )
+                .attach(this.validateResponse_())
+                .then(function(data){
                    var appRating = data.getApplicationRating();
                     if (!appRating)   {
                         appRating = new chlk.models.apps.AppRating();
@@ -372,8 +378,7 @@ NAMESPACE('chlk.controllers', function (){
                         data.setApplicationRating(appRating);
                     }
                     return data;
-                })
-                .attach(this.validateResponse_());
+                });
             return this.UpdateView(chlk.activities.apps.AppMarketDetailsPage, result, 'updateReviews');
         }
 

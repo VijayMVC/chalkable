@@ -25,28 +25,23 @@ NAMESPACE('chlk.controllers', function (){
         function teacherChangePasswordAction(model){
             return this.accountService
                 .changePassword(model.getOldPassword(), model.getNewPassword(), model.getNewPasswordConfirmation())
+                .attach(this.validateResponse_())
                 .then(function(success){
                     if (success)
                         return this.Redirect('settings', 'dashboardTeacher', []);
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
         },
 
          function logoutAction(){
              return this.accountService
                  .logOut()
+                 .attach(this.validateResponse_())
                  .then(function(res){
                     if (res.isSuccess()){
                         location.href = this.getContext().getSession().get('webSiteRoot');
                     }
-                 }, this)
-                 .attach(this.validateResponse_());
+                 }, this);
          },
-
-//         function redirectToINOWAction(){
-//            this.accountService.redirectToINOW().attach(this.validateResponse_());
-//         },
-
 
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER

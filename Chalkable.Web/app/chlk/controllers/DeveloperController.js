@@ -91,13 +91,13 @@ NAMESPACE('chlk.controllers', function (){
                 var showForRole = role_ ? role_ : "teacher";
                 var result = this.apiService
                     .listApiForRole(showForRole)
+                    .attach(this.validateResponse_())
                     .then(function(data){
                         var currentApp = this.appsService.getCurrentApp();
                         var secretKey = currentApp.getSecretKey() || 'no-key';
                         var apiRoles = this.apiService.getApiRoles();
                         return chlk.models.api.ApiExplorerViewData.$create(data, secretKey, apiRoles);
-                    }, this)
-                    .attach(this.validateResponse_());
+                    }, this);
                 return this.PushView(chlk.activities.developer.ApiExplorerPage, result);
             },
 
@@ -121,11 +121,11 @@ NAMESPACE('chlk.controllers', function (){
             function getRequiredApiCallsAction(query, isMethod, role){
                  var result = this.apiService
                      .getRequiredApiCalls(query, isMethod, role)
+                     .attach(this.validateResponse_())
                      .then(function(data){
                          var seq = chlk.models.api.ApiCallSequence.$create(data);
                          return seq;
-                     })
-                     .attach(this.validateResponse_());
+                     });
                  return this.UpdateView(chlk.activities.developer.ApiExplorerPage, result, 'update-api-calls-list');
             }
         ])

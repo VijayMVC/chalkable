@@ -1,11 +1,7 @@
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
-
 REQUIRE('chlk.lib.ajax.ChlkJsonPostTask');
 REQUIRE('chlk.lib.ajax.ChlkJsonGetTask');
 REQUIRE('chlk.lib.ajax.UploadFileTask');
-
-
-
 REQUIRE('chlk.models.common.PaginatedList');
 
 NAMESPACE('chlk.services', function () {
@@ -25,7 +21,6 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.BaseService*/
     CLASS(
         'BaseService', IMPLEMENTS(ria.mvc.IContextable), [
-
 
             ria.mvc.IContext, 'context',
 
@@ -54,75 +49,46 @@ NAMESPACE('chlk.services', function () {
                 return obj ? obj.map(function(item){ return item.valueOf();}).join(',') : "";
             },
 
-            [[Object]],
-            function handleError(data){
-                if(!data.success){
-                    this.redirectToErrorPage();
-                }
-            },
-
             function prepareDefaultHeaders(headers){
                 var result = headers || {};
                 result["X-Requested-With"] = "XMLHttpRequest";
                 return result;
             },
 
-            function redirectToErrorPage(){
-                var state = this.context.getState();
-                state.setController('error');
-                state.setAction('generalError');
-                state.setParams([]);
-                state.setPublic(false);
-                this.context.stateUpdated();
-            },
-
             [[String, Object, Object]],
             ria.async.Future, function get(uri, clazz_, gParams_) {
-
                 return new chlk.lib.ajax.ChlkJsonGetTask(this.resolveUri(uri))
                     .params(gParams_ || {})
                     .requestHeaders(this.prepareDefaultHeaders({}))
                     .run()
                     .then(function (data) {
-                        this.handleError(data);
-
                         if (!clazz_)
                             return data.data || null;
-
                         return Serializer.deserialize(data.data, clazz_);
-                    }, this).catchError(function(handler, scope_){
-                        this.redirectToErrorPage();
                         throw(new Exception(handler.getMessage()));
                     }, this);
             },
 
             [[String, Object, Object, Object]],
             ria.async.Future, function uploadFiles(uri, files, clazz_, gParams_) {
-
                 return new chlk.lib.ajax.UploadFileTask(this.resolveUri(uri), files)
                     .params(gParams_ || {})
                     .requestHeaders(this.prepareDefaultHeaders({}))
                     .run()
                     .then(function (data) {
-                        this.handleError(data);
                         if (!clazz_)
                             return data.data || null;
-
                         return Serializer.deserialize(data.data, clazz_);
                     }, this);
             },
 
-
             [[String, Object, Object]],
             ria.async.Future, function post(uri, clazz, gParams) {
-
                 return new chlk.lib.ajax.ChlkJsonPostTask(this.resolveUri(uri))
                     .params(gParams)
                     .requestHeaders(this.prepareDefaultHeaders({"Content-Type": "application/json; charset=utf-8"}))
                     .run()
                     .then(function (data) {
-                        this.handleError(data);
-
                         return Serializer.deserialize(data.data, clazz);
                     }, this);
             },
@@ -137,7 +103,6 @@ NAMESPACE('chlk.services', function () {
 
             [[String, String, Object]],
             ria.async.Future, function makeApiCall(uri, token, gParams) {
-
                 return new chlk.lib.ajax.ChlkJsonPostTask(this.resolveUri(uri))
                     .params(gParams)
                     .requestHeaders(this.prepareDefaultHeaders({
@@ -161,35 +126,26 @@ NAMESPACE('chlk.services', function () {
 
             [[String, Object, Object]],
             ria.async.Future, function postArray(uri, clazz, gParams) {
-
                 return new chlk.lib.ajax.ChlkJsonPostTask(this.resolveUri(uri))
                     .params(gParams)
                     .requestHeaders(this.prepareDefaultHeaders({"Content-Type": "application/json; charset=utf-8"}))
                     .run()
                     .then(function (data) {
-                        this.handleError(data);
-
                         return Serializer.deserialize(data.data, ArrayOf(clazz));
                     }, this);
             },
 
             [[String, Object, Object]],
             ria.async.Future, function getArray(uri, clazz, gParams) {
-
                 return new chlk.lib.ajax.ChlkJsonGetTask(this.resolveUri(uri))
                     .params(gParams)
                     .requestHeaders(this.prepareDefaultHeaders({}))
                     .run()
                     .then(function (data) {
-                        this.handleError(data);
-
                         return Serializer.deserialize(data.data, ArrayOf(clazz));
-                    }, this).catchError(function(handler, scope_){
-                        this.redirectToErrorPage();
                         throw(new Exception(handler.getMessage()));
                     }, this);
             },
-
 
             [[String, Object, Object]],
             ria.async.Future, function getPaginatedList(uri, clazz, gParams) {
@@ -206,12 +162,9 @@ NAMESPACE('chlk.services', function () {
                         model.setTotalPages(Number(data.totalpages));
                         model.setHasNextPage(Boolean(data.hasnextpage));
                         model.setHasPreviousPage(Boolean(data.haspreviouspage));
-
                         return model;
-                    }).catchError(function(handler, scope_){
-                        this.redirectToErrorPage();
+                    });
                         throw(new Exception(handler.getMessage()));
-                    }, this);
             }
         ]);
 });

@@ -63,6 +63,7 @@ NAMESPACE('chlk.controllers', function (){
                         start,
                         count
                     )
+                    .attach(this.validateResponse_())
                     .then(function(usersData){
                         if(isScroll)  return this.prepareUsers(usersData, start);
                         return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter());

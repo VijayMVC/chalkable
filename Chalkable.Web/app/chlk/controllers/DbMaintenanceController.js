@@ -48,10 +48,10 @@ NAMESPACE('chlk.controllers', function (){
             function backupAction(){
                 var result = this.dbMaintenanceService
                     .backup()
+                    .attach(this.validateResponse_())
                     .then(function(success){
                         return this.getContext().getSession().get('listBackups');
-                    }, this)
-                    .attach(this.validateResponse_());
+                    }, this);
                 return this.UpdateView(chlk.activities.storage.DbMaintenancePage, result);
             },
 
@@ -59,6 +59,7 @@ NAMESPACE('chlk.controllers', function (){
             function restoreAction(ticks){
                 var result = this.dbMaintenanceService
                     .restore(ticks)
+                    .attach(this.validateResponse_())
                     .then(function(success){
                         return this.getContext().getSession().get('listBackups');
                     }, this);

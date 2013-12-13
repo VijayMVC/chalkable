@@ -74,7 +74,9 @@ NAMESPACE('chlk.controllers', function (){
                 var model = new chlk.models.grading.GradingClassSummary();
                 model.setTopData(topData);
                 var result = this.gradingService
-                    .getClassSummary(classId_).then(function(result){
+                    .getClassSummary(classId_)
+                    .attach(this.validateResponse_())
+                    .then(function(result){
                         result.forEach(function(mpData){
                             mpData.getByAnnouncementTypes().forEach(function(item){
                                 item.setClassId(classId_);
@@ -114,7 +116,9 @@ NAMESPACE('chlk.controllers', function (){
             function summaryAllTeacherAction(){
                 var teacherId = this.getContext().getSession().get('currentPerson').getId();
                 var result = this.gradingService
-                    .getTeacherSummary(teacherId).then(function(items){
+                    .getTeacherSummary(teacherId)
+                    .attach(this.validateResponse_())
+                    .then(function(items){
                         var classes = this.classService.getClassesForTopBar(true);
                         var topData = new chlk.models.classes.ClassesForTopBar(classes, null);
                         var model = new chlk.models.grading.GradingTeacherClassSummaryViewDataList(topData, items);
@@ -129,6 +133,7 @@ NAMESPACE('chlk.controllers', function (){
                 var studentId = this.getContext().getSession().get('currentPerson').getId();
                 var result = this.gradingService
                     .getStudentSummary(studentId, classId_)
+                    .attach(this.validateResponse_())
                     .then(function(model){
                         var classes = this.classService.getClassesForTopBar(true);
                         var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);

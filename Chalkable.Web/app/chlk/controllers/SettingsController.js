@@ -43,7 +43,9 @@ NAMESPACE('chlk.controllers', function (){
             ])],
             [chlk.controllers.SidebarButton('settings')],
             function preferencesAction() {
-                 var result = this.settingsService.getPreferences();
+                 var result = this.settingsService
+                     .getPreferences()
+                     .attach(this.validateResponse_());
                  return this.PushView(chlk.activities.settings.PreferencesPage, result);
             },
 

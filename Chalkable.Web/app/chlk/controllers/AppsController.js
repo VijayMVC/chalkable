@@ -69,6 +69,7 @@ NAMESPACE('chlk.controllers', function (){
         ria.async.Future, function prepareAppInfo(app_, readOnly, isDraft) {
             var result = this.categoryService
                 .getCategories()
+                .attach(this.validateResponse_())
                 .then(function(data){
                     var cats = data.getItems();
                     var gradeLevels = this.gradeLevelService.getGradeLevels();
@@ -110,8 +111,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     return new chlk.models.apps.AppInfoViewData(app_, readOnly, cats, gradeLevels, permissions, platforms, isDraft);
 
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
 
             return result;
         },
@@ -125,14 +125,14 @@ NAMESPACE('chlk.controllers', function (){
             var isDraft = !(!!isSubmit_);
             var app = this.appsService
                 .getInfo(appId_)
+                .attach(this.validateResponse_())
                 .then(function(data){
                     if (!data.getId()){
                         return this.Forward('apps', 'add', []);
                     }
                     else
                         return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data, isReadonly, isDraft));
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
         },
 
         [chlk.controllers.AccessForRoles([
@@ -142,11 +142,11 @@ NAMESPACE('chlk.controllers', function (){
         function uploadPictureDeveloperAction(width, height, msg, file) {
             var result = this.appsService
                 .uploadPicture(file, width, height)
+                .attach(this.validateResponse_())
                 .then(function(id){
                     var pictureUrl = this.pictureService.getPictureUrl(id, width, height);
                     return new chlk.models.apps.AppPicture(id, pictureUrl, width, height, msg, true);
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
             return this.UpdateView(chlk.activities.apps.AppInfoPage, result, msg.toLowerCase());
         },
 
@@ -160,6 +160,7 @@ NAMESPACE('chlk.controllers', function (){
             var msg = "Screenshots";
             var result = this.appsService
                 .uploadPicture(file, width, height)
+                .attach(this.validateResponse_())
                 .then(function(id){
                     var screenshots = (screenshots_ || "").split(",");
                     screenshots.push(id.valueOf());
@@ -173,8 +174,7 @@ NAMESPACE('chlk.controllers', function (){
                             return new chlk.models.apps.AppPicture(pictureId, pictureUrl, width, height, msg, true);
                         }, this);
                     return new chlk.models.apps.AppScreenshots(screenshots, false);
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
             return this.UpdateView(chlk.activities.apps.AppInfoPage, result, msg.toLowerCase());
         },
 
@@ -233,10 +233,10 @@ NAMESPACE('chlk.controllers', function (){
         function approveSysAdminAction(appId) {
             return this.appsService
                 .approveApp(appId)
+                .attach(this.validateResponse_())
                 .then(function(data){
                     return this.Redirect('apps', 'list', []);
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
         },
 
         [chlk.controllers.AccessForRoles([
@@ -246,10 +246,10 @@ NAMESPACE('chlk.controllers', function (){
         function declineSysAdminAction(appId) {
             return this.appsService
                 .declineApp(appId)
+                .attach(this.validateResponse_())
                 .then(function(data){
                     return this.Redirect('apps', 'list', []);
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
         },
 
         [chlk.controllers.AccessForRoles([
@@ -259,10 +259,10 @@ NAMESPACE('chlk.controllers', function (){
         function goLiveDeveloperAction(appId) {
             return this.appsService
                 .goLive(appId)
+                .attach(this.validateResponse_())
                 .then(function(data){
                     return this.Redirect('apps', 'general', []);
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
         },
 
         [chlk.controllers.AccessForRoles([
@@ -272,10 +272,10 @@ NAMESPACE('chlk.controllers', function (){
         function unlistDeveloperAction(liveAppId) {
             return this.appsService
                 .unlist(liveAppId)
+                .attach(this.validateResponse_())
                 .then(function(data){
                     return this.Redirect('apps', 'general', []);
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
         },
 
         [chlk.controllers.AccessForRoles([
@@ -286,14 +286,17 @@ NAMESPACE('chlk.controllers', function (){
 
             var result = this.appsService
                 .addToAnnouncement(appId, announcementId)
+                .catchError(function(error_){
+                    throw new chlk.lib.exception.AppErrorException(error_);
+                }, this)
+                .attach(this.validateResponse_())
                 .then(function(app){
                     var apps = this.getContext().getSession().get('AnnoucementApplications', []);
                     apps.push(app);
                     this.getContext().getSession().set('AnnoucementApplications', apps);
                     app.setCurrentModeUrl(app.getEditUrl());
                     return new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.EDIT);
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
 
@@ -301,8 +304,8 @@ NAMESPACE('chlk.controllers', function (){
         function viewAppAction(url, viewUrl, mode, announcementAppId_) {
             var result = this.appsService
                 .getOauthCode(url)
+                .attach(this.validateResponse_())
                 .then(function(code){
-
                     var appData = null;
                     if (mode == chlk.models.apps.AppModes.MYAPPSVIEW){
                         appData =  this.appMarketService.getMyAppByUrl(url);
@@ -324,8 +327,7 @@ NAMESPACE('chlk.controllers', function (){
                         appData
                     );
                     return new chlk.models.apps.AppWrapperViewData(app, mode);
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
 
@@ -337,10 +339,10 @@ NAMESPACE('chlk.controllers', function (){
             var isReadonly = true;
             var app = this.appsService
                 .getInfo(appId)
+                .attach(this.validateResponse_())
                 .then(function(data){
                         return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data, isReadonly, true));
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
         },
 
         [chlk.controllers.AccessForRoles([
@@ -360,10 +362,10 @@ NAMESPACE('chlk.controllers', function (){
             var devId = this.getCurrentPerson().getId();
             return this.appsService
                 .createApp(devId, model.getName())
+                .attach(this.validateResponse_())
                 .then(function(){
                     return this.Forward('apps', 'details', []);
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
         },
 
         [chlk.controllers.AccessForRoles([
@@ -373,10 +375,10 @@ NAMESPACE('chlk.controllers', function (){
         function deleteDeveloperAction(id) {
             return this.appsService
                 .deleteApp(id)
+                .attach(this.validateResponse_())
                 .then(function(){
                     return this.Forward('apps', 'details', []);
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
         },
 
         [chlk.controllers.AccessForRoles([
@@ -411,10 +413,6 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.apps.AppPostData]],
         function updateDeveloperAction(model){
-
-
-
-
             var appAccess = new chlk.models.apps.AppAccess(
                 model.isStudentMyAppsEnabled(),
                 model.isTeacherMyAppsEnabled(),
@@ -508,10 +506,10 @@ NAMESPACE('chlk.controllers', function (){
                      appPlatforms,
                      !model.isDraft()
                  )
+                 .attach(this.validateResponse_())
                  .then(function(newApp){
                      return this.updateApp(newApp);
-                 }, this)
-                 .attach(this.validateResponse_())
+                 }, this);
              return result;
         },
 
@@ -523,6 +521,7 @@ NAMESPACE('chlk.controllers', function (){
         function generalDeveloperAction(){
             return this.appsService
                 .getInfo()
+                .attach(this.validateResponse_())
                 .then(function(data){
                     if (!data.getId()){
                         return this.Forward('apps', 'add', []);
@@ -543,8 +542,7 @@ NAMESPACE('chlk.controllers', function (){
                         );
                         return this.PushView(chlk.activities.apps.AppGeneralInfoPage, new ria.async.DeferredData(appInfo));
                     }
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
         }
     ])
 });

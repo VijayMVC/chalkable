@@ -71,7 +71,9 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function (data) {
                     this.view.getCurrent().close();
-                    return this.districtService.getDistricts(0);
+                    return this.districtService
+                        .getDistricts(0)
+                        .attach(this.validateResponse_());
                 }, this);
 
             return this.UpdateView(chlk.activities.district.DistrictListPage, result);
@@ -83,7 +85,9 @@ NAMESPACE('chlk.controllers', function (){
                 .removeDistrict(id)
                 .attach(this.validateResponse_())
                 .then(function (data) {
-                    return this.districtService.getDistricts(0)
+                    return this.districtService
+                        .getDistricts(0)
+                        .attach(this.validateResponse_());
                 }, this);
             return this.UpdateView(chlk.activities.district.DistrictListPage, result);
         }

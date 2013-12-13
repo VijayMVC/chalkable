@@ -35,8 +35,9 @@ NAMESPACE('chlk.controllers', function (){
                     .getSummary(classId)
                     .attach(this.validateResponse_())
                     .then(function(data){
-                        return new chlk.models.classes.ClassProfileSummaryViewData(this.getCurrentRole()
-                            , data, this.getUserClaims_());
+                        return new chlk.models.classes.ClassProfileSummaryViewData(
+                            this.getCurrentRole(), data, this.getUserClaims_()
+                        );
                     }, this);
                 return this.PushView(chlk.activities.classes.SummaryPage, result);
             },
@@ -47,8 +48,9 @@ NAMESPACE('chlk.controllers', function (){
                     .getInfo(classId)
                     .attach(this.validateResponse_())
                     .then(function (data){
-                        return new chlk.models.classes.ClassProfileInfoViewData(this.getCurrentRole()
-                            , data, this.getUserClaims_());
+                        return new chlk.models.classes.ClassProfileInfoViewData(
+                            this.getCurrentRole(), data, this.getUserClaims_()
+                        );
                     }, this);
                 return this.PushView(chlk.activities.classes.ClassInfoPage, res);
             },
@@ -60,11 +62,11 @@ NAMESPACE('chlk.controllers', function (){
             },
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
             function scheduleUpdateAction(classId, date){
-                var res = this.schedule_(classId, date)
-                    .then(function(data){
-                        return data.getScheduleCalendar();
-                    })
-                    .attach(this.validateResponse_());
+                var res = this
+                        .schedule_(classId, date)
+                        .then(function(data){
+                            return data.getScheduleCalendar();
+                        });
                 return this.UpdateView(chlk.activities.classes.ClassSchedulePage, res);
             },
             ria.async.Future, function schedule_(classId, date_){
@@ -99,8 +101,9 @@ NAMESPACE('chlk.controllers', function (){
                         var attCalendar = new chlk.models.calendar.attendance.ClassAttendanceMonthCalendar(
                             null, mp.getStartDate(), mp.getEndDate(), result[1], classId
                         );
-                        return new chlk.models.classes.ClassProfileAttendanceViewData(this.getCurrentRole()
-                            , result[0], attCalendar, this.getUserClaims_());
+                        return new chlk.models.classes.ClassProfileAttendanceViewData(
+                            this.getCurrentRole(), result[0], attCalendar, this.getUserClaims_()
+                        );
                     }, this);
                 return this.PushView(chlk.activities.classes.ClassProfileAttendancePage, res);
             },
@@ -124,12 +127,14 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
             ria.async.Future, function attendanceMonthAction(date, classId){
-                var res =  this.attendanceCalendarService.getClassAttendancePerMonth(classId, date)
+                var res =  this.attendanceCalendarService
+                    .getClassAttendancePerMonth(classId, date)
                     .attach(this.validateResponse_())
                     .then(function(data){
                         var mp = this.getCurrentMarkingPeriod();
-                        return new chlk.models.calendar.attendance.ClassAttendanceMonthCalendar(date
-                            , mp.getStartDate(), mp.getEndDate(), data, classId);
+                        return new chlk.models.calendar.attendance.ClassAttendanceMonthCalendar(
+                            date, mp.getStartDate(), mp.getEndDate(), data, classId
+                        );
                     }, this);
                 return this.UpdateView(chlk.activities.classes.ClassProfileAttendancePage, res);
             },
@@ -139,7 +144,9 @@ NAMESPACE('chlk.controllers', function (){
                 var res = this.classService.getAppsInfo(classId)
                     .attach(this.validateResponse_())
                     .then(function(data){
-                        return new chlk.models.classes.ClassProfileAppsViewData(this.getCurrentRole(), data, this.getUserClaims_());
+                        return new chlk.models.classes.ClassProfileAppsViewData(
+                            this.getCurrentRole(), data, this.getUserClaims_()
+                        );
                     }, this);
                 return this.PushView(chlk.activities.classes.ClassProfileAppsPage, res);
             }
