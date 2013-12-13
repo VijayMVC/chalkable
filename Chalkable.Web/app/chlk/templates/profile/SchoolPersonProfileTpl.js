@@ -40,19 +40,23 @@ NAMESPACE('chlk.templates.profile', function(){
                 var controller = this.getControllerName();
                 var userId = this.getUser().getId().valueOf();
                 var permissionEnum = chlk.models.people.UserPermissionEnum;
+                var isStudentController = controller == this._studentControllerName;
                 var res = [
                     this.createActionLinkModel_(controller, 'details', 'Now', pressedLinkName, [userId]),
-                    this.createActionLinkModel_(controller, 'info', 'Info', pressedLinkName, [userId])
+                    this.createActionLinkModel_(controller, 'info', 'Info', pressedLinkName
+                        , [userId], isStudentController && !this.hasUserPermission_(permissionEnum.VIEW_ADDRESS))
                 ];
-                if(controller == this._studentControllerName){
+                if(isStudentController){
                     res.push(this.createActionLinkModel_(controller, 'grading', 'Grading', pressedLinkName, [userId]));
                 }
                 if(controller == this._teacherControllerName || controller == this._studentControllerName){
                     res.push(this.createActionLinkModel_(controller, 'schedule', 'Schedule', pressedLinkName, [userId]));
                 }
-                if(controller == this._studentControllerName){
-                    res.push(this.createActionLinkModel_(controller, 'attendance', 'Attendance', pressedLinkName, [null, userId], !this.hasUserPermission_(permissionEnum.VIEW_ATTENDANCE)));
-                    res.push(this.createActionLinkModel_(controller, 'discipline', 'Discipline', pressedLinkName, [null, userId], !this.hasUserPermission_(permissionEnum.VIEW_DISCIPLINE)));
+                if(isStudentController){
+                    res.push(this.createActionLinkModel_(controller, 'attendance', 'Attendance'
+                        , pressedLinkName, [null, userId], !this.hasUserPermission_(permissionEnum.VIEW_ATTENDANCE)));
+                    res.push(this.createActionLinkModel_(controller, 'discipline', 'Discipline'
+                        , pressedLinkName, [null, userId], !this.hasUserPermission_(permissionEnum.VIEW_DISCIPLINE)));
                 }
                 res.push(this.createActionLinkModel_(controller, 'apps', 'Apps', pressedLinkName, [userId]));
                 return res;
