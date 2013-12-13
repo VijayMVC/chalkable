@@ -8,5 +8,13 @@ NAMESPACE('chlk.templates.profile', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/profile/student-info-page.jade')],
         [ria.templates.ModelBind(chlk.models.student.StudentProfileInfoViewData)],
-        'StudentInfoPageTpl', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl.OF(chlk.models.student.StudentInfo)), [])
+        'StudentInfoPageTpl', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl.OF(chlk.models.student.StudentInfo)), [
+
+            OVERRIDE, String, function render() {
+                var res = BASE();
+                var user = this.getModel().getUser();
+                user.setAbleEdit(user.isAbleEdit() && this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_ADDRESS));
+                return res;
+            }
+        ])
 });
