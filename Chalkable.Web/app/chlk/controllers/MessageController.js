@@ -47,17 +47,23 @@ NAMESPACE('chlk.controllers', function (){
                 if (model.getSubmitType() == "search")
                     return this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
                 if (model.getSubmitType() == "delete")
-                    this.messageService.del(model.getSelectedIds())
+                    this.messageService
+                        .del(model.getSelectedIds())
+                        .attach(this.validateResponse_())
                         .then(function(x){
                             this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
                         }, this);
                 if (model.getSubmitType() == "markAsRead")
-                    this.messageService.markAs(model.getSelectedIds(), true)
+                    this.messageService
+                        .markAs(model.getSelectedIds(), true)
+                        .attach(this.validateResponse_())
                         .then(function(x){
                             this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
                         }, this);
                 if (model.getSubmitType() == "markAsUnread")
-                    this.messageService.markAs(model.getSelectedIds(), false)
+                    this.messageService
+                        .markAs(model.getSelectedIds(), false)
+                        .attach(this.validateResponse_())
                         .then(function(x){
                             this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
                         }, this);
@@ -81,8 +87,7 @@ NAMESPACE('chlk.controllers', function (){
             function sendPageAction(replayOnId_)
             {
                 var res;
-                if (replayOnId_)
-                {
+                if (replayOnId_) {
                     res = this.getMessageFromSession(replayOnId_);
                     res.then(function(model){
                         if(this.getContext().getSession().get('currentPerson').getId() == model.getRecipient().getId()){
@@ -117,7 +122,9 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.messages.SendMessage]],
             function sendAction(model)
             {
-                this.messageService.send(model)
+                this.messageService
+                    .send(model)
+                    .attach(this.validateResponse_())
                     .then(function(x){
                         this.view.getCurrent().close();
                         this.pageAction(true);
@@ -146,7 +153,9 @@ NAMESPACE('chlk.controllers', function (){
                     })[0];
                 if (res)
                     return new ria.async.DeferredData(res);
-                return this.messageService.getMessage(id);
+                return this.messageService
+                    .getMessage(id)
+                    .attach(this.validateResponse_());
             }
         ])
 });

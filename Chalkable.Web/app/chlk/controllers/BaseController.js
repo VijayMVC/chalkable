@@ -37,25 +37,30 @@ NAMESPACE('chlk.controllers', function (){
        'BaseController', EXTENDS(ria.mvc.Controller), [
 
            ria.async.Future, function validateResponse_() {
-               var head
-                   , me = this;
-
+               var head, me = this;
                (head = new ria.async.Future)
                    .catchException(chlk.lib.exception.NotAuthorizedException, function (exception) {
                        document.location.href = WEB_SITE_ROOT;
                    })
+                   .catchException(chlk.lib.exception.AppErrorException, function(exception){
+                       return this.redirectToErrorPage_(exception.toString(), 'error', 'appError', []);
+                   }, this)
                    .catchError(function (error) {
-                       console.error(error.toString());
-                       var state = this.context.getState();
-                       state.setController('error');
-                       state.setAction('generalError');
-                       state.setParams([]);
-                       state.setPublic(false);
-                       this.context.stateUpdated();
-                       return ria.async.BREAK;
+                       return this.redirectToErrorPage_(error.toString(), 'error', 'generalError', []);
                    }, this);
-
                return head;
+           },
+
+           [[String, String, String, Array]],
+           function redirectToErrorPage_(error, controller, action, params){
+               console.error(error);
+               var state = this.context.getState();
+               state.setController(controller);
+               state.setAction(action);
+               state.setParams(params);
+               state.setPublic(false);
+               this.context.stateUpdated();
+               return ria.async.BREAK;
            },
 
            [[String, Function]],

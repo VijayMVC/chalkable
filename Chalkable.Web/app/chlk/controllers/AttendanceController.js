@@ -147,7 +147,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate, String, String, String, Boolean]],
         function showStudentAttendanceAction(studentId, date_, controller_, action_, params_, isNew_) {
-            var result = this.attendanceService.getStudentAttendance(studentId, date_)
+            var result = this.attendanceService
+                .getStudentAttendance(studentId, date_)
+                .attach(this.validateResponse_())
                 .then(function(model){
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
                     model.setReasons(this.getContext().getSession().get('attendanceReasons', []));
@@ -257,84 +259,5 @@ NAMESPACE('chlk.controllers', function (){
                 return chlk.activities.classes.ClassProfileAttendanceListPage;
             return chlk.activities.attendance.ClassListPage;
         }
-
-
-//        [[chlk.models.attendance.ClassAttendance]],
-//        function setAttendanceAction(model){
-//            if(canUpdateStudentAttendance || currentStudentId != model.getStudentId()){
-//                currentStudentId = model.getStudentId();
-//                canUpdateStudentAttendance = false;
-//                studentAttendanceTimeout = setTimeout(function(){
-//                    canUpdateStudentAttendance = true;
-//                },5);
-//                var activityClass = this.getView().getCurrent().getClass();
-//                return this.UpdateView(activityClass, this.setAttendance_(model), chlk.activities.lib.DontShowLoader());
-//            }
-//            return null;
-//        },
-
-
-
-
-//        [[chlk.models.attendance.ClassAttendance]],
-//        ria.async.Future, function setAttendance_(model){
-//            var type = this.changeAttendanceType_(model.getSubmitType(), model.getType());
-//            var items = this.getContext().getSession().get('attendanceData');
-//            var item = items.filter(function(item){
-//                return item.getStudentId() == model.getStudentId()
-//            })[0];
-//            item.setType(type);
-//            var level = item.getLevel();
-//            var attReasonId = model.getAttendanceReasonId();
-//            /*if(!attReasonId || !attReasonId.valueOf()){
-//                var reasons = item.getReasons().filter(function(item){return item.isDefaultReason(level);});
-//                if(reasons.length > 0){
-//                    attReasonId =  reasons[0].getId();
-//                    model.setAttendanceReasonId(attReasonId);
-//                }
-//            }*/
-//            try{
-//                if(attReasonId && attReasonId.valueOf() && item.getReasons().filter(function(item){
-//                    return item.hasLevel(level) && item.getId() == attReasonId;
-//                }).length == 0)
-//                    console.info('WARNING setAttendance: type = ' + level + ', reasonId = ' + attReasonId);
-//                else
-//                    this.attendanceService.setAttendance(model.getStudentId(), model.getClassId(), level, attReasonId, model.getDate());
-//
-//            }catch(e){
-//                console.info('ERROR setAttendance: type = ' + type + ', reasonId = ' + attReasonId);
-//            }
-//            if(attReasonId && attReasonId.valueOf()){
-//                if(item.getAttendanceReason()){
-//                    item.getAttendanceReason().setId(attReasonId);
-//                    item.getAttendanceReason().setName(model.getAttendanceReasonDescription());
-//                    item.getAttendanceReason().setDescription(model.getAttendanceReasonDescription());
-//                }else{
-//                    var reason = new chlk.models.attendance.AttendanceReason(attReasonId, model.getAttendanceReasonDescription());
-//                    item.setAttendanceReason(reason);
-//                }
-//            }else{
-//                item.setAttendanceReason(null);
-//            }
-//            return new ria.async.DeferredData(item);
-//        },
-//
-//        Number,  function changeAttendanceType_(submitType, currentType){
-//            var attTypeEnum = chlk.models.attendance.AttendanceTypeEnum;
-//            var types = [
-//                attTypeEnum.PRESENT.valueOf(),
-//                attTypeEnum.ABSENT.valueOf(),
-////                attTypeEnum.EXCUSED.valueOf(),
-//                attTypeEnum.LATE.valueOf()
-//            ];
-//            var index = types.indexOf(currentType);
-//            var increment = submitType == 'leftArrow' ? -1 : submitType == 'rightArrow' ? 1 : 0;
-//            if(increment == -1 && index == 0)
-//                index = types.length;
-//            else if(increment == 1 && index == types.length - 1)
-//                index = -1;
-//            index += increment;
-//            return types[index];
-//        }
     ])
 });
