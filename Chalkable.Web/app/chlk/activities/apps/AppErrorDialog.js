@@ -1,6 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplateDialog');
 REQUIRE('chlk.activities.common.attachments.AttachmentDialog');
-REQUIRE('chlk.templates.common.AttachmentDialogTpl');
+REQUIRE('chlk.templates.common.attachments.AttachmentDialogTpl');
 REQUIRE('chlk.AppApiHost');
 
 NAMESPACE('chlk.activities.apps', function () {
@@ -9,7 +9,7 @@ NAMESPACE('chlk.activities.apps', function () {
     CLASS(
         [ria.mvc.ActivityGroup('AppWrapperDialog')],
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
-        [ria.mvc.TemplateBind(chlk.templates.apps.AttachmentDialogTpl)],
+        [ria.mvc.TemplateBind(chlk.templates.common.attachments.AttachmentDialogTpl)],
         'AppErrorDialog', EXTENDS(chlk.activities.common.attachments.AttachmentDialog), [
         ]);
 });

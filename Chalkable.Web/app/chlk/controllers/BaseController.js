@@ -43,8 +43,8 @@ NAMESPACE('chlk.controllers', function (){
                        document.location.href = WEB_SITE_ROOT;
                    })
                    .catchException(chlk.lib.exception.AppErrorException, function(exception){
-                       return this.redirectToErrorPage(exception.toString(), 'error', 'appError', []);
-                   })
+                       return this.redirectToErrorPage_(exception.toString(), 'error', 'appError', []);
+                   }, this)
                    .catchError(function (error) {
                        return this.redirectToErrorPage_(error.toString(), 'error', 'generalError', []);
                    }, this);
