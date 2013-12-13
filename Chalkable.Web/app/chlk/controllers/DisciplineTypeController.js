@@ -19,8 +19,9 @@ NAMESPACE('chlk.controllers', function(){
         [[Number, Number, Boolean]],
         function listAction(isPageAction_, pageSize_, pageIndex_){
             var start = pageIndex_ && pageSize_ ? (pageIndex_ / pageSize_) : null
-            var res = this.disciplineTypeService.getPaginatedDisciplineTypes(start, pageSize_)
-                                                .attach(this.validateResponse_());
+            var res = this.disciplineTypeService
+                .getPaginatedDisciplineTypes(start, pageSize_)
+                .attach(this.validateResponse_());
             return isPageAction_ ? this.UpdateView(chlk.activities.discipline.DisciplineTypePage, res)
                                  : this.PushView(chlk.activities.discipline.DisciplineTypePage, res);
         },
@@ -32,13 +33,15 @@ NAMESPACE('chlk.controllers', function(){
 
         [[chlk.models.id.DisciplineTypeId]],
         function updateAction(disciplineTypeId){
-            var res = this.disciplineTypeService.getDisciplineTypeInfo(disciplineTypeId)
+            var res = this.disciplineTypeService
+                .getDisciplineTypeInfo(disciplineTypeId)
                 .attach(this.validateResponse_());
             return this.ShadeView(chlk.activities.discipline.AddDisciplineTypeDialog, res);
         },
         [[chlk.models.discipline.DisciplineType]],
         function saveAction(model){
-            var res = this.disciplineTypeService.saveDisciplineType(model.getId(), model.getName(), model.getScore())
+            var res = this.disciplineTypeService
+                .saveDisciplineType(model.getId(), model.getName(), model.getScore())
                 .attach(this.validateResponse_())
                 .then(function(data){
                     this.view.getCurrent().close();
@@ -49,7 +52,8 @@ NAMESPACE('chlk.controllers', function(){
 
         [[chlk.models.id.DisciplineTypeId]],
         function deleteAction(id){
-            var res = this.disciplineTypeService.removeDisciplineType(id)
+            var res = this.disciplineTypeService
+                .removeDisciplineType(id)
                 .attach(this.validateResponse_())
                 .then(function (data){
                     return this.disciplineTypeService.getPaginatedDisciplineTypes(0, null);

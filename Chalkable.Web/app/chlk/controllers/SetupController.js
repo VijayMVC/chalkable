@@ -216,13 +216,14 @@ NAMESPACE('chlk.controllers', function (){
             function infoEditAction(model){
                 this.personService
                     .changePassword(model.getId(), model.getPassword())
+                    .attach(this.validateResponse_())
                     .then(function(changed){
                         return this.teacherService
                             .updateInfo(model.getId(), model.getAddressesValue(), model.getEmail(), model.getFirstName(),
                                 model.getLastName(), model.getGender(), model.getPhonesValue(), model.getSalutation(),
-                                model.getBirthDate());
+                                model.getBirthDate())
+                            .attach(this.validateResponse_());
                     }, this)
-                    .attach(this.validateResponse_())
                     .then(function(model){
                         return this.Redirect('setup', 'video', [model.getId().valueOf()]);
                     }, this);

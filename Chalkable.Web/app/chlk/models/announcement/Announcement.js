@@ -229,6 +229,9 @@ NAMESPACE('chlk.models.announcement', function () {
 
             String, 'annRecipients',
 
+            Boolean, 'ableEdit',
+
+
             function prepareExpiresDateText(){
                 var now = getDate();
                 var days = 0;
@@ -254,7 +257,6 @@ NAMESPACE('chlk.models.announcement', function () {
                     this.setExpiresDateText(expTxt);
                 }
             }
-
 
         ]);
 });

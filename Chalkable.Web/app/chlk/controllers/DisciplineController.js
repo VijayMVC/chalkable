@@ -58,7 +58,9 @@ NAMESPACE('chlk.controllers', function(){
                     .then(function(result){
                         var classes = this.classService.getClassesForTopBar(true);
                         var classBarData = new chlk.models.classes.ClassesForTopBar(classes);
-                        return new chlk.models.discipline.ClassDisciplinesViewData(classBarData, classId_, result[0], result[1], date_, true);
+                        return new chlk.models.discipline.ClassDisciplinesViewData(
+                            classBarData, classId_, result[0], result[1], date_, true
+                        );
                     }, this);
 
                 var activityClass = chlk.activities.discipline.ClassDisciplinesPage;
@@ -104,9 +106,10 @@ NAMESPACE('chlk.controllers', function(){
             ria.async.Future, function listStudentDiscipline_(studentId, date){
                 //todo move disciplineTypes to session
                 return ria.async.wait([
-                    this.disciplineTypeService.getDisciplineTypes(),
-                    this.disciplineService.listStudentDiscipline(null, studentId, date)
-                ]).attach(this.validateResponse_())
+                        this.disciplineTypeService.getDisciplineTypes(),
+                        this.disciplineService.listStudentDiscipline(null, studentId, date)
+                    ])
+                    .attach(this.validateResponse_())
                     .then(function(result){
                         date = date || new chlk.models.common.ChlkDate(getDate());
                         return new chlk.models.discipline.DisciplineList(result[1], result[0], date);
@@ -115,7 +118,9 @@ NAMESPACE('chlk.controllers', function(){
 
             [[chlk.models.discipline.SetDisciplineListModel]],
             function setDisciplinesAction(model){
-                var result = this.disciplineService.setDisciplines(model).attach(this.validateResponse_())
+                var result = this.disciplineService
+                    .setDisciplines(model)
+                    .attach(this.validateResponse_())
                     .then(function(data){
                         /*var controller = model.getController() || 'discipline';
                         var action = model.getAction() || 'list';

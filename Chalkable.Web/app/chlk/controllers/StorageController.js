@@ -56,7 +56,7 @@ NAMESPACE('chlk.controllers', function (){
                         blobsListViewData.setItems(data);
                         blobsListViewData.setContainerAddress(uri);
                         return new ria.async.DeferredData(blobsListViewData);
-                });
+                    });
                 return this.UpdateView(chlk.activities.storage.StorageBlobsPage, result);
             }
         ])

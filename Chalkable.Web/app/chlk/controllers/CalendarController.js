@@ -33,37 +33,40 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.common.ChlkDate]],
         function showMonthDayPopUpAction(date) {
-            var result = this.calendarService.getMonthDayInfo(date)
+            var result = this.calendarService
+                .getMonthDayInfo(date)
+                .attach(this.validateResponse_())
                 .then(function(model){
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
                     return model;
-                })
-                .attach(this.validateResponse_());
+                });
             return this.ShadeView(chlk.activities.calendar.announcement.MonthDayPopUp, result);
         },
 
         [[chlk.models.common.ChlkDate, Number]],
         function showDayPopUpAction(date, periodNumber) {
-            var result = this.calendarService.getDayPopupInfo(date, periodNumber)
+            var result = this.calendarService
+                .getDayPopupInfo(date, periodNumber)
+                .attach(this.validateResponse_())
                 .then(function(model){
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
                     model.setDate(date);
                     return model;
-                })
-                .attach(this.validateResponse_());
+                });
             return this.ShadeView(chlk.activities.calendar.announcement.DayPeriodPopUp, result);
         },
 
         [[chlk.models.common.ChlkDate, Number]],
         function showWeekBarPopUpAction(date, periodNumber_) {
-            var result = this.calendarService.getWeekDayInfo(date, periodNumber_)
+            var result = this.calendarService
+                .getWeekDayInfo(date, periodNumber_)
+                .attach(this.validateResponse_())
                 .then(function(model){
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
                     if(periodNumber_ >= 0)
                         model.setDate(date);
                     return model;
-                })
-                .attach(this.validateResponse_());
+                });
             if(periodNumber_ >= 0)
                 return this.ShadeView(chlk.activities.calendar.announcement.WeekDayPopUp, result);
             return this.ShadeView(chlk.activities.calendar.announcement.WeekBarPopUp, result);

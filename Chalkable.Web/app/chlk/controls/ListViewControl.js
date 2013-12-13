@@ -34,7 +34,7 @@ NAMESPACE('chlk.controls', function () {
             [[Object, Object]],
             VOID, function prepareData(data,configs_) {
                 var configs = {
-                    selectedIndex:null,
+                    selectedIndex: null,
                     infiniteScroll: false,
                     itemsName: 'Items',
                     start: 0,
@@ -44,7 +44,9 @@ NAMESPACE('chlk.controls', function () {
                     goTopButton: false,
                     loadAllButtonTitle: 'LOAD ALL',
                     loadAllPopUpTitle: '',
-                    showLoadAllInPage: 4
+                    showLoadAllInPage: 4,
+                    needGoToButton: false,
+                    needLoadAllButton: false
                 };
                 if(configs_){
                     if(data.getTotalCount){

@@ -20,12 +20,12 @@ NAMESPACE('chlk.controllers', function (){
                     var announcementId = new chlk.models.id.AnnouncementId(data.announcementId);
                     return this.appsService
                         .attachApp(announcementAppId)
+                        .attach(this.validateResponse_())
                         .then(function(result){
                             this.getView().pop();
                             this.getView().pop();
                             return this.Redirect('announcement', 'addAppAttachment', [result]);
-                        }, this)
-                        .attach(this.validateResponse_());
+                        }, this);
                 }
                 else {
                      return this.ShowMsgBox(
@@ -57,7 +57,6 @@ NAMESPACE('chlk.controllers', function (){
                 }
             },
 
-
             function closeCurrentAppAction(){
                  this.getView().getCurrent().close();
             },
@@ -83,7 +82,6 @@ NAMESPACE('chlk.controllers', function (){
                  IWindow.find('.chalkable-app-action-button').fadeIn();
                 * */
             },
-
 
             [[Object]],
             function appError(data){

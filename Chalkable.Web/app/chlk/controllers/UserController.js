@@ -135,8 +135,13 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(results){
                         var schedule = results[0];
                         schedule.setRoleName(role);
-                        return new chlk.models.people.UserProfileScheduleViewData(chlk.models.calendar.announcement.Day
-                            , this.getCurrentRole(), schedule, results[1], this.getUserClaims_());
+                        return new chlk.models.people.UserProfileScheduleViewData(
+                            chlk.models.calendar.announcement.Day,
+                            this.getCurrentRole(),
+                            schedule,
+                            results[1],
+                            this.getUserClaims_()
+                        );
                     }, this);
                 return this.PushView(chlk.activities.profile.SchedulePage, result);
             },

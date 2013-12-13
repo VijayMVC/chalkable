@@ -23,7 +23,7 @@ mixin AppAttachmentBlock(item, pictureHref, i)
                 .left
                     +ActionLink('feed', 'list').back-button
                 .right
-                    +ActionLink('announcement', 'edit', self.getId())(class = self.isAnnOwner() ? "" : "disabled").edit-button Edit
+                    +ActionLink('announcement', 'edit', self.getId())(class = self.isAbleEdit() ? "" : "disabled").edit-button Edit
         .announcement-details-panel
             .details-container.silver-panel
                 if self.getUserRole().isStudent()

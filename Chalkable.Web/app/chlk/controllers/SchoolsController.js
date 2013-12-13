@@ -129,12 +129,14 @@ NAMESPACE('chlk.controllers', function (){
             roles.push(serializer.deserialize({name: 'All Roles', id: null}, chlk.models.common.NameId));
 
             var result = ria.async.wait([
-                this.schoolService.getPeopleSummary(id),
-                this.schoolService.getUsers(id, null, null,0, null, false)
-            ]).then(function(result){
-                var users = new chlk.models.people.UsersList(result[1], true);
-                return new chlk.models.school.SchoolPeople(users, roles, newGradeLevels, result[0]);
-            });
+                    this.schoolService.getPeopleSummary(id),
+                    this.schoolService.getUsers(id, null, null,0, null, false)
+                ])
+                .attach(this.validateResponse_())
+                .then(function(result){
+                    var users = new chlk.models.people.UsersList(result[1], true);
+                    return new chlk.models.school.SchoolPeople(users, roles, newGradeLevels, result[0]);
+                });
             return this.PushView(chlk.activities.school.SchoolPeoplePage, result);
         },
 
@@ -165,14 +167,14 @@ NAMESPACE('chlk.controllers', function (){
         VOID, function actionButtonsAction(id) {
             var result =  this.schoolService
                 .getDetails(id)
+                .attach(this.validateResponse_())
                 .then(function(data){
                         return new chlk.models.school.ActionButtons(
                             data.getButtons(),
                             data.getEmails(),
                             chlk.controls.getActionLinkControlLastNode()
                         );
-                })
-                .attach(this.validateResponse_());
+                });
             return this.ShadeView(chlk.activities.school.ActionButtonsPopup, result);
         },
 
@@ -186,6 +188,7 @@ NAMESPACE('chlk.controllers', function (){
         VOID, function deleteAction(id, districtId){
                 this.schoolService
                     .del(id)
+                    .attach(this.validateResponse_())
                     .then(function(){
                         this.ShowMsgBox("School will be deleted", "School delete task is created");
                         this.pageAction(districtId);

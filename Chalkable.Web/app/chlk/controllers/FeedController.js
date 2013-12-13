@@ -36,7 +36,8 @@ NAMESPACE('chlk.controllers', function (){
         [[Boolean, Boolean, chlk.models.id.ClassId, Number]],
         function listAction(postback_, starredOnly_, classId_, pageIndex_) {
             starredOnly_ = starredOnly_ != false;
-            var result = this.getFeedItems(postback_, starredOnly_, classId_, pageIndex_)
+            var result = this
+                .getFeedItems(postback_, starredOnly_, classId_, pageIndex_)
                 .attach(this.validateResponse_());
             return postback_
                     ? this.UpdateView(chlk.activities.feed.FeedListPage, result)
@@ -47,6 +48,7 @@ NAMESPACE('chlk.controllers', function (){
         function getFeedItems(postback_, starredOnly_, classId_, pageIndex_){
             return this.announcementService
                 .getAnnouncements(pageIndex_ | 0, classId_, starredOnly_)
+                .attach(this.validateResponse_())
                 .then(function(feedItems){
                     if(!postback_ && starredOnly_ && feedItems.getItems().length == 0)
                         return this.getFeedItems(postback_, false, classId_, pageIndex_);
@@ -60,7 +62,7 @@ NAMESPACE('chlk.controllers', function (){
                         starredOnly_,
                         this.announcementService.getImportantCount()
                     );
-                }, this)
+                }, this);
         },
 
         [[Boolean, String]],

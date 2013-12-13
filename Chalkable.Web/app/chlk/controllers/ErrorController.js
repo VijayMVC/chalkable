@@ -1,5 +1,7 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.activities.chlkerror.Error404Page');
+REQUIRE('chlk.models.apps.AppErrorViewData');
+REQUIRE('chlk.activities.apps.AppErrorDialog');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -13,7 +15,8 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             function appErrorAction(){
-
+                var result = new ria.async.DeferredData(new chlk.models.apps.AppErrorViewData());
+                return this.ShadeView(chlk.activities.apps.AppErrorDialog, result);
             }
     ])
 });

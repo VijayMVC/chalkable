@@ -37,7 +37,9 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(model){
                         var userData = this.prepareProfileData(model);
-                        var res = new chlk.models.people.UserProfileInfoViewData(this.getCurrentRole(), userData, this.getUserClaims_());
+                        var res = new chlk.models.people.UserProfileInfoViewData(
+                            this.getCurrentRole(), userData, this.getUserClaims_()
+                        );
                         this.setUserToSession(res);
                         return res;
                     }, this);

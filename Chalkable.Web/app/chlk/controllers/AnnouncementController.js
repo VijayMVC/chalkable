@@ -33,6 +33,8 @@ REQUIRE('chlk.models.announcement.QnAForm');
 REQUIRE('chlk.models.common.attachments.BaseAttachmentViewData');
 REQUIRE('chlk.models.announcement.AddStandardViewData');
 
+REQUIRE('chlk.lib.exception.AppErrorException');
+
 NAMESPACE('chlk.controllers', function (){
 
     /** @class chlk.controllers.AttachmentTypeEnum */
@@ -90,14 +92,14 @@ NAMESPACE('chlk.controllers', function (){
                 }else{
                     var result = this.announcementReminderService
                         .addReminder(model.getAnnouncementId(), before)
+                        .attach(this.validateResponse_())
                         .then(function(announcement){
                             var reminders = announcement.getAnnouncementReminders(), res;
                             res = reminders.filter(function(item){
                                 return item.getBefore() == before;
                             });
                             return res[0];
-                        })
-                        .attach(this.validateResponse_());
+                        });
                     return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());
                 }
             }
@@ -132,7 +134,8 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.StudentAnnouncement]],
         function updateAnnouncementGradeAction(model){
-            var result = this.gradingService.updateItem(
+            var result = this.gradingService
+                .updateItem(
                     model.getId(),
                     model.getGradeValue(),
                     model.getComment(),
@@ -261,11 +264,12 @@ NAMESPACE('chlk.controllers', function (){
         function attachAppAction(announcementId, pageIndex_) {
             var userId = this.getCurrentPerson().getId();
 
-            var result = this.appMarketService.getInstalledApps(userId, pageIndex_ | 0)
+            var result = this.appMarketService
+                .getInstalledApps(userId, pageIndex_ | 0)
+                .attach(this.validateResponse_())
                 .then(function(data){
                     return new chlk.models.apps.InstalledAppsViewData(userId, announcementId, data);
-                })
-                .attach(this.validateResponse_());
+                });
             if (pageIndex_)
                 return this.UpdateView(chlk.activities.apps.AttachAppDialog, result);
             else
@@ -298,9 +302,13 @@ NAMESPACE('chlk.controllers', function (){
                     announcement.setGradeViewApps(gradeViewApps);
                     announcement.prepareExpiresDateText();
                     announcement.setCurrentUser(this.getCurrentPerson());
-                    if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_GRADES)){
+                    if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_GRADES)
+                        || !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_GRADING)
+                        || !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_STUDENT_AVERAGES)){
                         announcement.setGradable(false);
                     }
+                    announcement.setAbleEdit(announcement.isAnnOwner()
+                        && this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHANGE_ACTIVITY_DATES));
                     //TODO Remove fake data
                     announcement.setMaxScore(100);
                     var studentAnnouncements = announcement.getStudentAnnouncements();
@@ -328,13 +336,13 @@ NAMESPACE('chlk.controllers', function (){
         function uploadAttachmentAction(announcementId, files) {
             var result = this.announcementService
                 .uploadAttachment(announcementId, files)
+                .attach(this.validateResponse_())
                 .then(function(model){
                     model.setNeedButtons(true);
                     model.setNeedDeleteButton(true);
                     this.prepareAttachments(model);
                     return model;
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
             return this.UpdateView(this.getView().getCurrent().getClass(), result, 'update-attachments');
         },
 
@@ -571,20 +579,23 @@ NAMESPACE('chlk.controllers', function (){
         function submitAnnouncement(model, isEdit){
             var res;
             if(this.userIsAdmin())
-                res = this.announcementService.submitAdminAnnouncement(
-                    model.getId(),
-                    model.getAnnRecipients(),
-                    model.getSubject(),
-                    model.getContent(),
-                    model.getExpiresDate(),
-                    model.getAttachments()
-                );
+                res = this.announcementService
+                    .submitAdminAnnouncement(
+                        model.getId(),
+                        model.getAnnRecipients(),
+                        model.getSubject(),
+                        model.getContent(),
+                        model.getExpiresDate(),
+                        model.getAttachments()
+                    )
+                    .attach(this.validateResponse_());
             else{
                 var apps = this.getContext().getSession().get('AnnoucementApplications', []);
                 if((!model.getAttachments() || !model.getAttachments().length) && (!apps.length) && !model.getContent()){
                         this.ShowMsgBox('You should fill in Assignment\nor add attachment or application', 'whoa.');
                 }else{
-                    res = this.announcementService.submitAnnouncement(
+                    res = this.announcementService
+                        .submitAnnouncement(
                         model.getId(),
                         model.getClassId(),
                         model.getAnnouncementTypeId(),
@@ -594,7 +605,8 @@ NAMESPACE('chlk.controllers', function (){
                         model.getAttachments(),
                         model.getApplicationsIds(),
                         model.getMarkingPeriodId()
-                    );
+                    )
+                    .attach(this.validateResponse_());
                 }
             }
             res && res.then(function(){
@@ -649,19 +661,21 @@ NAMESPACE('chlk.controllers', function (){
                 gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(),
                 studentsData = [new nameIdModel('0|' + studentsId + '|-1|-1', Msg.All_students)],
                 teachersData = [new nameIdModel('0|' + teachersId + '|-1|-1', Msg.All_teachers)];
+
             gradeLevels.forEach(function(item){
                 studentsData.push(new nameIdModel('0|' + studentsId + '|' + item.getId().valueOf() + '|-1', Msg.Student(true) + ' - ' + item.getFullText()));
                 teachersData.push(new nameIdModel('0|' + teachersId + '|' + item.getId().valueOf() + '|-1', Msg.Teacher(true) + ' - ' + item.getFullText()));
             });
+
             model.setAdminRecipientId('0|' + rolesEnum.ADMINEDIT.valueOf() + '|-1|-1,0|'
                 + rolesEnum.ADMINGRADE.valueOf() + '|-1|-1,0|'
                 + rolesEnum.ADMINVIEW.valueOf() + '|-1|-1');
+
             var recipientsData = {};
             recipientsData[studentsId] = studentsData;
             recipientsData[teachersId] = teachersData;
             model.setAdminRecipients(new chlk.models.announcement.AdminRecipients([], recipientsData));
          },
-
 
         function addStandardsAction(){
             var data = new chlk.models.announcement.AddStandardViewData('test', []);
