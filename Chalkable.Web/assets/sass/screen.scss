@@ -1,0 +1,517 @@
+// This import applies a global reset to any page that imports this stylesheet.
+//@import "blueprint/reset";
+
+// To configure blueprint, edit the partials/_base.sass file.
+
+// Import all the default blueprint modules so that we can access their mixins.
+//@import "blueprint";
+
+// Import the non-default scaffolding module.
+//@import "blueprint/scaffolding";
+
+@import "compass/css3/border-radius";
+@import "compass/css3/background-size";
+@import "compass/css3/box-shadow";
+@import "compass/css3/images";
+@import "compass/css3/transition";
+@import "compass/css3/opacity";
+
+// Generate the blueprint framework according to your configuration:
+//@include blueprint;
+
+//@include blueprint-scaffolding;
+
+$margin: 15px;
+$sidebar-width: 300px;
+$column-width: 802px;
+
+$background: #a1d1e8; /*#4985a6;*/
+$panel-bg: #ecf6f9;
+
+$button-bg: #ecf6f9;
+$button-border: #bfcfdc;
+
+$link-color: #155c97;
+$border-color: #a1a1a1;
+
+h1,h2,h3,h4,h5,h6,strong {
+  color: #2f424b;
+}
+
+@font-face {
+    font-family: 'Jrhand';
+    src: url('fonts/jrhand-webfont.eot');
+    src: url('fonts/jrhand-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/jrhand-webfont.woff') format('woff'),
+         url('fonts/jrhand-webfont.ttf') format('truetype'),
+         url('fonts/jrhand-webfont.svg#jrhandregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'HelveticaNeue UltraLite';
+    src: url('fonts/helveticaneue-ultralight-webfont.eot');
+    src: url('fonts/helveticaneue-ultralight-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/helveticaneue-ultralight-webfont.woff') format('woff'),
+         url('fonts/helveticaneue-ultralight-webfont.ttf') format('truetype'),
+         url('fonts/helveticaneue-ultralight-webfont.svg#helvetica_neueregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Saginaw Bold';
+    src: url('fonts/saginawbold-webfont.eot');
+    src: url('fonts/saginawbold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/saginawbold-webfont.woff') format('woff'),
+         url('fonts/saginawbold-webfont.ttf') format('truetype'),
+         url('fonts/saginawbold-webfont.svg#saginaw_bold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Futura Heavy';
+    src: url('fonts/futura-webfont.eot');
+    src: url('fonts/futura-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/futura-webfont.woff') format('woff'),
+         url('fonts/futura-webfont.ttf') format('truetype'),
+         url('fonts/futura-webfont.svg#futura_hv_btheavy') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'HelveticaNeue';
+  src: url('fonts/HelveticaNeue.ttf') as "font/ttf";
+}
+
+@font-face {
+  font-family: 'Myriad Pro';
+  src: url(fonts/Myriad.ttf);
+}
+
+@font-face {
+  font-family: 'HelveticaNeue-CondensedBold', Helvetica;
+  src: url(fonts/HelveticaNeue-CondensedBold.ttf);
+}
+
+html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, p, blockquote, th, td {
+  margin: 0;
+  padding: 0;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+a{
+  text-decoration: none;
+}
+
+.clear{clear:both;}
+
+.clear-right{clear:right;}
+
+.clear-left{clear:left;}
+
+.clear-right{clear:right;}
+
+.clear-left{clear:left;}
+
+.left{
+  float: left;
+}
+.right{
+  float: right;
+}
+.center{
+  text-align: center;
+}
+.i-b{
+  display: inline-block;
+  vertical-align: top;
+}
+
+.d-b{
+  display: block;
+}
+
+.t-d{
+  text-decoration: none;
+}
+
+.v-t{
+  vertical-align: top;
+}
+
+.relative{
+  position: relative;
+}
+
+.absolute{
+  position: absolute;
+}
+
+.small-gray-link{
+  font: normal 13px "Helvetica Neue";
+  font-style: italic;
+  text-decoration: underline;
+  color: #797979;
+  cursor: pointer;
+}
+
+.opacity0{
+  opacity: 0;
+}
+
+overflow-hidden{
+  overflow: hidden;
+}
+
+.no-padding{
+  padding: 0;
+}
+
+.blue-arrow {
+  font: bold 22px 'Saginaw Bold';
+  color: #407d9b;
+  display: inline-block;
+  position: absolute;
+  word-spacing: 5px;
+  text-shadow: 1px -1px 0 white;
+
+  &.left-arrow{
+    padding-left: 45px !important;
+    background: url(images/arrows/blue-left-arrow.png) left center no-repeat;
+    top: -6px;
+    margin-left: 30px;
+  }
+  &.bottom-arrow{
+    padding-bottom: 58px !important;
+    background: url(images/arrows/blue-bottom-arrow.png) 50px bottom no-repeat;
+    top: -42px;
+    margin-left: 30px;
+  }
+
+  &.right-arrow{
+    padding-right: 52px !important;
+    background: url(images/arrows/blue-right-arrow.png) right center no-repeat;
+    margin-right: 30px;
+  }
+
+  &.right-up-arrow {
+    padding: 9px 59px 0 0;
+    background: url(images/arrows/blue-right-up-arrow.png) right top no-repeat;
+    margin-right: 41px;
+    min-height: 26px;
+  }
+
+  &.left-up-arrow{
+    padding: 9px 0 0 59px !important;
+	background: url(images/arrows/blue-left-up-arrow.png) left top no-repeat;
+	min-height: 26px;
+  }
+
+  &.div {
+    text-align: center;
+    display: block;
+    position: relative;
+    font-size: 30px;
+    word-spacing: 9px;
+    letter-spacing: 2px;
+  }
+
+  &.gray{
+    color: #7D7D7D !important;
+    text-decoration: underline;
+    font-size: 23px !important;
+  }
+}
+
+.chlk-tooltip {
+  position: absolute;
+  min-width: 55px;
+  display: none;
+  z-index: 99999;
+
+  .tooltip-content {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    text-shadow: none;
+    text-align: center;
+    @include border-radius(5px);
+    font-size: 13px;
+    padding: 3px 5px;
+    line-height: 15px;
+  }
+
+  .tooltip-triangle {
+    height: 7px;
+    background: url(images/feed/triangle.png) center 0 no-repeat;
+  }
+}
+
+
+.gradient{
+  @include border-radius(6px);
+  @include background(linear-gradient(top, #ffffff, #f0f0f0));
+  border: 1px solid #c1c1c1;
+  border-bottom-width: 2px;
+}
+
+a, a:visited, a:link {
+  &:not(.not-blue){
+    color: $link-color;
+    outline: none !important;
+  }
+}
+.x-hidden{
+  display: none !important;
+}
+.x-zero{
+  position: absolute;
+  z-index: 0;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+input{
+  resize: none !important;
+}
+
+a:active, a:hover {
+  &:not(.not-blue){
+    color: lighten($link-color, 10%);
+    outline: none !important;
+  }
+}
+
+a.grey-link, .grey-link{
+  font: normal 13px "Helvetica Neue";
+  font-style: italic;
+  text-decoration: underline;
+  color: #797979;
+}
+
+HTML {
+  background: url(images/common/page-bg.gif);
+  height: 100%;
+}
+
+BODY {
+  background: url(images/common/body-bg.gif) 300px 0 repeat-y;
+  color: #51595d;
+  //text-align: center;
+  height: 100%;
+  width: 100%;
+  display: table;
+  position: relative;
+  margin: 0;
+
+  &.demo{
+    >DIV.application-preview-window{
+      bottom: 93px !important;
+    }
+  }
+
+  #logout-block{
+    position: absolute;
+    right: 0;
+    z-index: 100000;
+
+    .logout-area{
+      cursor: pointer;
+    }
+
+    >DIV, >A{
+      margin-right: 1px;
+      padding-left: 9px;
+      padding-right: 13px;
+    }
+
+    >SPAN{
+      background: url(images/common/logout-arrow.png) center 10px no-repeat, rgba(255, 255, 255, 0.6);
+      width: 19px;
+
+      &:hover{
+        background: url(images/common/logout-arrow.png) center 10px no-repeat, rgba(255, 255, 255, 0.75);
+      }
+
+      &:active{
+        background: url(images/common/logout-arrow.png) center 10px no-repeat, rgba(255, 255, 255, 0.9);
+      }
+    }
+
+    >*{
+      padding-top: 5px;
+      background: rgba(255, 255, 255, 0.6);
+      height: 21px;
+      line-height: 21px;
+      text-align: center;
+      font: normal 13px 'Myriad Pro';
+      color: #1c5166;
+      text-decoration: none;
+    }
+
+    >DIV, >SPAN{
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    >SPAN, >A{
+      display: inline-block;
+      @include transition-property("all");
+      @include transition-duration("0.2s");
+    }
+
+    >A.logout{
+      margin-top: 1px;
+      opacity: 0;
+      display: block;
+      visibility: hidden;
+      text-transform: capitalize;
+
+      &:hover{
+        background: rgba(255, 255, 255, 0.75);
+      }
+
+      &:active{
+        background: rgba(255, 255, 255, 0.9);
+      }
+    }
+  }
+
+  #page-header {
+    text-align:right;
+    color: #333;
+    padding: 1px 7px;
+    font-size: 12px;
+    font-family: Arial;
+
+    background: #e7e7e7;
+    border: 1px solid #adadad;
+    border-top: none;
+
+    @include border-bottom-radius(10px);
+    @include box-shadow(#ccc, 0px, 0px);
+
+    position: absolute;
+    left: 5px;
+    top: 0;
+
+    z-index: 5;
+  }
+
+  DIV.page {
+    background: url(images/common/sidebar-bg.gif) 0 0 repeat-y;
+    height: 100%;
+    display: table;
+
+    text-align: left;
+    //padding: $margin 0;
+    width: 100%;
+
+    &.demo{
+      >DIV#content, >DIV#sidebar{
+        margin-bottom: 90px;
+      }
+    }
+
+    >DIV#content {
+      padding-left: $sidebar-width + $margin;
+      padding-top: 11px;
+
+      .new-item{
+        #main-top {
+          background: url(images/common/paper-bg-top.gif) 1px 0 no-repeat;
+        }
+
+        #main-wrapper {
+          background: url(images/common/paper-bg-new.gif) 0 0 repeat-y;
+        }
+
+        #footer {
+          background: url(images/common/paper-bg-bottom.gif) 0 0 no-repeat;
+        }
+      }
+
+      .attendance{
+        #main-top {
+          background: url(images/attendance/paper-top-bg.png) 0 0 no-repeat;
+        }
+
+        #main-wrapper {
+          background: url(images/attendance/paper-bg.png) 0 0 repeat-y;
+        }
+
+        #footer {
+          background: url(images/attendance/paper-bottom-bg.png) 0 0 no-repeat;
+        }
+      }
+
+      .app-market{
+        #main-top {
+          background: url(images/app/paper-top-bottom.jpg) 0 0 no-repeat;
+        }
+
+        #main-wrapper {
+          background: url(images/app/paper-bg.jpg) 0 0 repeat-y;
+        }
+      }
+
+
+
+      > DIV:not(.developer-docs-page) {
+        text-align: left;
+        width: $column-width;
+
+        #main-top {
+          height: 11px;
+          background: url(images/common/paper-top-bg.png) 0 0 no-repeat;
+        }
+
+        #main-wrapper {
+          background: url(images/common/paper-bg.gif) 0 0 repeat-y;
+          position: relative;
+
+          #main {
+            background: url(images/common/paper-pin.png) 0 0 repeat-y;
+            min-height: 700px;
+            padding: 32px 74px 32px 61px;
+            position: relative;
+          }
+        }
+
+        #footer {
+          @include border-bottom-radius(10px);
+
+          background: url(images/common/paper-top-bottom.gif) 0 -11px no-repeat;
+          padding-top: 16px;
+          font-size: 12px;
+          color: lighten(#81919a, 25%);
+          text-align:center;
+          position: relative;
+        }
+      }
+    }
+  }
+}
+
+:focus {
+  outline: none;
+}
+
+@import "partials/_sidebar";
+@import "partials/_icons";
+@import "partials/_demo";
+@import "partials/_controls";
+@import "partials/_main";
+
+
