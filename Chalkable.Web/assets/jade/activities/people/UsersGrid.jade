@@ -5,7 +5,8 @@ Button(type="submit", class="scroll-start-button x-hidden", name="submitType", v
 +ListView(self.getUsers())(
     selectedIndex = selectedIndex, infiniteScroll = true,
     goTopButton = true, loadAllButtonTitle = 'LOAD ALL STUDENTS',
-    loadAllPopUpTitle = 'Students').people-list
+    loadAllPopUpTitle = 'Students',
+    needGoToButton = true, needLoadAllButton = true).people-list
     +RenderWith(self.getUsers(), chlk.templates.people.UsersForGridTpl)
 
 

@@ -621,6 +621,10 @@ $red-color: #842727;
               background: white;
               text-align: center;
               overflow: hidden;
+
+              &.error{
+                border: 1px solid red;
+              }
             }
 
             A.chzn-single{

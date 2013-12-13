@@ -117,6 +117,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'annOwner',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'ableEdit',
+
+            [ria.templates.ModelPropertyBind],
             Number, 'nonGradingStudentsCount',
 
             [ria.templates.ModelPropertyBind],

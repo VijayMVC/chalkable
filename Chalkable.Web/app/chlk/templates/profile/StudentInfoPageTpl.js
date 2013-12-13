@@ -13,7 +13,9 @@ NAMESPACE('chlk.templates.profile', function () {
             OVERRIDE, String, function render() {
                 var res = BASE();
                 var user = this.getModel().getUser();
-                user.setAbleEdit(user.isAbleEdit() && this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_ADDRESS));
+                user.setAbleEdit(user.isAbleEdit()
+                    && this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_ADDRESS)
+                    && this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_PERSON));
                 return res;
             }
         ])

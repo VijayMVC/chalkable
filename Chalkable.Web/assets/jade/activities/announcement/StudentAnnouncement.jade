@@ -1,9 +1,8 @@
-getGrade = function(value){return GradingStyler.getLetterByGrade(value, self.getGradingMapping(), self.getGradingStyle())}
 getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, self.getGradingMapping(), self.getGradingStyle())}
 value = self.getGradeValue()
 normalValue = self.getNormalValue()
 isDrop = self.isDropped()
-res = (self.getGradingStyle()) ? (!isNaN(value) ? getGrade(value) : '') : ((value >= 0) ? value : '')
+res = self.getDisplayValue()
 lbl = 'A - F'
 itemCls = (isDrop ? 'dropped' :'')
 selectedCls = (!self.isReadonly() ? 'not-selected' : '')

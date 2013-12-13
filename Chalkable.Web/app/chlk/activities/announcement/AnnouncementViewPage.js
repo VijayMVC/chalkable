@@ -28,6 +28,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             Array, 'autoGradeApps',
             chlk.models.people.User, 'owner',
             chlk.models.id.AnnouncementId, 'announcementId',
+            Number, 'maxScore',
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementGradingPartTpl)],
             VOID, function updateGradingPart(tpl, model, msg_) {
@@ -51,23 +52,53 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function inputKeyPress(node, event){
                 if(event.keyCode == ria.dom.Keys.ENTER){
-                    var row = node.parent('.row');
-                    this.selectRow(this.dom.find('.grades-individual').find('.row:eq(' + (parseInt(row.getAttr('index'),10) + 1) + ')'));
-                    this.setGrade(node);
+                    if(!node.hasClass('error')){
+                        var row = node.parent('.row');
+                        this.selectRow(this.dom.find('.grades-individual').find('.row:eq(' + (parseInt(row.getAttr('index'),10) + 1) + ')'));
+                        this.setGrade(node);
+                    }
                 }
+            },
+
+            function getGradeNumber(value){
+                return GradingStyler.getGradeNumberValue(value.toUpperCase(), this.getMapping(), 1)
             },
 
             [ria.mvc.DomEventBind('keyup', '.grade-input')],
             [[ria.dom.Dom, ria.dom.Event]],
             function inputKeyUp(node, event){
-                var item = node.parent('.row').find('.fill-item');
-                if(!node.getValue()){
+                var row = node.parent('.row');
+                var value = node.getValue();
+                var item = row.find('.fill-item');
+                if(parseInt(value, 10) == value){
+                    if(value > this.getMaxScore()){
+                        row.find('.alert-flag').addClass('error');
+                    }else{
+                        row.find('.alert-flag').removeClass('error');
+                    }
+                }else{
+                    row.find('.alert-flag').removeClass('error');
+                }
+                if(!value){
                     item.addClass('disabled');
                     node.addClass('empty-grade');
+                    node.removeClass('error');
                 }
                 else{
                     item.removeClass('disabled');
                     node.removeClass('empty-grade');
+                    var valueFromLetter = this.getGradeNumber(value);
+                    if(parseInt(value, 10) != value && !valueFromLetter && value != Msg.Dropped && value != Msg.Exempt || parseInt(value, 10) == value && value > this.getMaxScore()){
+                        node.addClass('error');
+                        if(value > this.getMaxScore()){
+                            row.find('.alert-flag').addClass('error');
+                        }
+                    }
+                    else{
+                        node.removeClass('error');
+                        if(valueFromLetter)
+                            node.setValue(valueFromLetter);
+                    }
                 }
 
             },
@@ -107,21 +138,23 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [[ria.dom.Dom]],
             function setGrade(node){
-                var value = node.getValue();
-                if(value == node.getData('value'))
-                    return;
-                value = parseInt(value, 10);
-                if(!value && value != 0)
-                    value = '';
-                if(value){
-                    if(value > 100)
-                        value = 100;
-                    if(value < 0)
-                        value = 0;
+                if(!node.hasClass('error')){
+                    var value = node.getValue();
+                    if(value == node.getData('value'))
+                        return;
+                    value = parseInt(value, 10);
+                    if(!value && value != 0)
+                        value = '';
+                    if(value){
+                        if(value > 100)
+                            value = 100;
+                        if(value < 0)
+                            value = 0;
+                    }
+                    node.setValue(value);
+                    if(value != node.getData('value'))
+                        this.updateItem(node, true);
                 }
-                node.setValue(value);
-                if(value != node.getData('value'))
-                    this.updateItem(node, true);
             },
 
             function selectRow(row){
@@ -308,6 +341,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 BASE(model);
                 model.getStudentAnnouncements() && this.setMapping(model.getStudentAnnouncements().getMapping());
                 this.setOwner(model.getOwner());
+                this.setMaxScore(model.getMaxScore());
                 this.setApplicationsInGradeView(model.getGradeViewApps());
                 this.setApplications(model.getApplications());
                 this.setAutoGradeApps(model.getAutoGradeApps());

@@ -71,6 +71,10 @@ NAMESPACE('chlk.templates.announcement', function () {
                 return '';
             },
 
+            Object, function getGrade(value){
+                return GradingStyler.getLetterByGrade(value, this.getGradingMapping(), this.getGradingStyle())
+            },
+
             Object, function getNormalValue(){
                 var value = this.getGradeValue();
                 if(this.isDropped())
@@ -83,7 +87,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             Object, function getDisplayValue(){
                 var value = this.getGradeValue();
                 if(this.isDropped())
-                    return Msg.Dropped;
+                    return Msg.Drop;
                 if(this.isExempt())
                     return Msg.Exempt;
                 return (value >= 0) ? value : '';
