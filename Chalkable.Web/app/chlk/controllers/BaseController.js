@@ -10,6 +10,7 @@ REQUIRE('chlk.models.common.InfoMsg');
 REQUIRE('chlk.models.common.Button');
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
 REQUIRE('chlk.lib.exception.NotAuthorizedException');
+REQUIRE('chlk.lib.exception.AppErrorException');
 
 NAMESPACE('chlk.controllers', function (){
 
