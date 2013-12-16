@@ -62,10 +62,10 @@ NAMESPACE('chlk.controls', function () {
                 this.setCount(data.length != undefined ? data.length : data[getItemsMethod]().length);
                 this.context.getDefaultView().getCurrent()
                     .addRefreshCallback(function (activity, model) {
+                        configs = this.getConfigs();
                         if(!this.getGrid()){
                             var grid = new ria.dom.Dom('.chlk-grid');
                             this.setGrid(grid);
-
                             if((this.getCurrentIndex() || this.getCurrentIndex() == 0)
                                 && !new ria.dom.Dom(':focus').exists())
                                 this.focusGrid();
