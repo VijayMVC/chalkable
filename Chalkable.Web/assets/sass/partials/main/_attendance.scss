@@ -1,0 +1,926 @@
+$blue-color: #2f7790;
+
+BODY {
+  .add-student-list{
+    max-height: 384px;
+    overflow-y: auto;
+
+    .ui-menu-item.add-student{
+      a.ui-corner-all{
+        &.ui-state-focus{
+          background: #f6f6f6;
+          color: #383838;
+          border-bottom: 1px solid #eaeaea;
+          border-top: 1px solid #eaeaea;
+        }
+
+        font: normal 16px Arial;
+        padding: 10px 18px;
+        cursor: pointer;
+
+        .avatar-wrapper{
+          display: inline-block;
+          vertical-align: middle;
+          background: #ccc;
+          margin-right: 13px;
+
+          >DIV{
+            width: 35px;
+            height: 35px;
+          }
+
+          >SPAN{
+
+          }
+        }
+      }
+    }
+  }
+
+  DIV.page{
+    >DIV#content {
+      DIV#content-wrapper{
+        .export-btn {
+          background: url(images/buttons/export.png) center center no-repeat;
+          height: 26px;
+          width: 28px;
+        }
+
+        &.attendance{
+          #main{
+            .big-chart-containner{
+              position: relative;
+            }
+
+            .attendance-type-chart-select{
+              width: 115px;
+
+              &+ .chzn-container{
+                width: 115px;
+                position: absolute;
+                z-index: 100;
+                top: 12px;
+                left: 55px;
+
+                A.chzn-single{
+                  >SPAN{
+                    background: url(images/attendance/late-small-box.png) 3px center no-repeat;
+                    padding-left: 27px;
+                    font: bold 11px/27px Arial;
+                    text-shadow: 1px 1px 0 white;
+                    color: #3d3d3d;
+                    text-align: left;
+
+                    &.absent{
+                      background-image: url(images/attendance/absent-small-box.png);
+                    }
+
+                    &.present{
+                      background-image: url(images/attendance/present-small-box.png);
+                    }
+
+                    &.excused{
+                      background-image: url(images/attendance/excused-small-box.png);
+                    }
+                  }
+                }
+
+                .chzn-drop{
+                  .chzn-results{
+                    li{
+                      padding: 9px 5px 9px 32px;
+                      font: bold 11px Arial;
+                      text-shadow: 1px 1px 0 white;
+                      color: #3d3d3d;
+                      position: relative;
+                      display: inline-block;
+                      width: 76px;
+
+                      &.highlighted{
+                        background: #dedede;
+                      }
+
+                      &:after{
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        z-index: 101;
+                        position: absolute;
+                        content: '';
+                      }
+
+                      &.late-option:after{
+                        background: url(images/attendance/late-small-box.png) 7px center no-repeat;
+                      }
+
+                      &.absent-option:after{
+                        background: url(images/attendance/absent-small-box.png) 7px center no-repeat;
+                      }
+
+                      &.excused-option:after{
+                        background: url(images/attendance/excused-small-box.png) 7px center no-repeat;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+            .admin-attendance-summary-page{
+              position: relative;
+
+              .now-chart-block{
+                width: 550px;
+                margin-left: 20px;
+
+                .chart-bg2{
+                  width: 550px;
+                }
+              }
+
+              .attendance-students{
+                width: 670px;
+
+                .all-button{
+                  font: bold 24px Arial;
+                  margin: 2px;
+                  text-transform: uppercase;
+                  width: 100px;
+                  height: 100px;
+                  position: absolute;
+                  right: 1px;
+                  bottom: 9px;
+                }
+              }
+
+              .all-button.new{
+                opacity: 0;
+              }
+
+              .student{
+                display: inline-block;
+                background: #ccc;
+                border: 2px solid white;
+                @include border-radius(2px);
+                vertical-align: top;
+                text-align: center;
+                position: relative;
+                margin-bottom: 9px;
+                @include transition-property("all");
+                @include transition-duration("0.2s");
+                overflow: hidden;
+                cursor: pointer;
+                width: 100px;
+                height: 100px;
+
+                &.new{
+                  opacity: 0;
+                  position: absolute;
+                }
+
+                &.hidden{
+                  //height: 0;
+                  display: none;
+                }
+
+                &:not(:nth-child(6n)){
+                  margin-right: 9px;
+                }
+
+                .img-container{
+                  height: 100px;
+                  width: 100px;
+                  display: inline-block;
+                  overflow: hidden;
+
+                  .avatar-wrapper >div{
+                    height: 100px;
+                    width: 100px;
+                  }
+                }
+
+                .name{
+                  position: absolute;
+                  bottom: 0;
+                  white-space: nowrap;
+                  left: 0;
+                  right: 0;
+                  background: rgba(0, 0, 0, 0.6);
+                  height: 24px;
+                  line-height: 24px;
+                  color: white;
+                  font-size: 12px;
+                  text-align: center;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                }
+              }
+            }
+
+            .admin-attendance{
+              .action-bar{
+                display: none;
+
+                .start-end-picker{
+                  opacity: 0;
+                  position: absolute;
+                  max-width: 0;
+                  padding: 0 !important;
+                  z-index: -5;
+                }
+
+                &.page-2{
+                  .choose-date-icon{
+                    cursor: pointer;
+                  }
+                }
+
+                .choose-date-icon{
+                  vertical-align: middle;
+                }
+
+                SELECT{
+                  width: 90px;
+                }
+
+                .chzn-container.chzn-container-single {
+                  margin: 3px;
+
+                  &:not(:hover){
+                    overflow: hidden;
+
+                    .chzn-single{
+                      background: transparent;
+                      border: none;
+                      box-shadow: none;
+                      height: 27px;
+                      margin-top: 1px;
+
+                      div{
+                        background: transparent;
+                        b{
+                          background: transparent;
+                        }
+                      }
+                    }
+                  }
+                }
+
+                &.active-part{
+                  display: block;
+                }
+
+                .hasDatepicker{
+                  width: 77px;
+                  vertical-align: middle;
+                  padding: 3px 3px 1px;
+                  font: normal 11px arial, tahoma, helvetica, sans-serif;
+                  color: black;
+                  margin: 7px 3px;
+                  border: 1px solid #7eadd9;
+                }
+              }
+
+              .attendance-boxes-admin{
+                height: 190px;
+                margin-top: 32px;
+
+                .boxes-container{
+                  text-align: center;
+                  wwidth: 668px;
+                }
+              }
+
+              .top-number-box, .add-student-btn{
+                background: #eeeeee;
+                cursor: pointer;
+                @include box-shadow(0 1px 3px 0 grey, 0 1px 0 white inset);
+                text-align: center;
+                color: $blue-color;
+              }
+
+              .add-student-btn{
+                display: block;
+                font: bold 14px Arial;
+                text-transform: uppercase;
+                padding: 18px 0;
+                position: relative;
+
+                .add-popup{
+                  position: absolute;
+                  display: none;
+                  @include border-radius(3px);
+                  @include box-shadow(0 1px 4px 0 #555);
+                  background: #eaeaea;
+                  padding: 17px;
+                  left: 164px;
+                  top: -101px;
+
+                  input{
+                    width: 302px;
+                    height: 46px;
+                    padding: 5px;
+                    border: 1px solid #c0c0c0;
+                    @include box-shadow(0 1px 1px 0 #c0c0c0);
+                    color: #b7b7b7;
+                    font: normal 16px/56px Arial;
+                  }
+
+                  .big-triangle {
+                    left: 137px;
+                  }
+                }
+
+                &:active{
+                  @include box-shadow(0 0 8px 0 grey inset);
+                }
+              }
+
+              .top-number-box{
+                display: inline-block;
+                vertical-align: top;
+                width: 201px;
+                height: 158px;
+
+                position: relative;
+
+                &:not(:first-child){
+                  margin-left: 31px;
+                }
+
+                .number{
+                  color: $blue-color;
+                  text-shadow: 0 -1px 0 #173b48, 0 1px 0 white;
+                  font: bold 110px/108px Arial;
+                  text-align: center;
+                }
+
+                .title{
+                  color: #6c6c6c;
+                  text-shadow: 0 1px 0 white;
+                  text-align: center;
+                  font-size: 12px;
+                  margin-top: 20px;
+                }
+
+                .triangle{
+                  display: none;
+                  position: absolute;
+                  left: 86px;
+                  bottom: -18px;
+                  width: 0px;
+                  height: 0px;
+                  border-style: solid;
+                  border-width: 18px 18px 0 18px;
+                  border-color: $blue-color transparent transparent transparent;
+                }
+
+                &.active-part{
+                  background: $blue-color;
+                  @include border-radius(3px);
+                  @include box-shadow(0 1px 2px #1f4f60 inset);
+
+                  .number, .title{
+                    color: white;
+                  }
+
+                  .triangle{
+                    display: inline-block;
+                  }
+                }
+              }
+
+              .attendance-box{
+                display: inline-block;
+                background: url(images/attendance/box-bg.png) 0 0 no-repeat;
+                background-size: 100% 100%;
+                vertical-align: top;
+                text-align: center;
+                color: #6c6c6c;
+                text-shadow: 0 1px 0 white;
+                position: relative;
+
+                .box-container{
+                  width: 76px;
+                  margin: 0 2px;
+                  position: relative;
+                  height: 82px;
+
+                  &:first-child{
+                    border-bottom: 1px solid #b7b7b7;
+                  }
+
+                  &:last-child{
+                    border-top: 1px solid #f0f0f0;
+                  }
+
+                  .title{
+                    padding-bottom: 5px;
+                  }
+                }
+
+                &.active-part{
+                  .number{
+                    color: #4e7c9a;
+                  }
+                }
+
+                .number{
+                  font-size: 48px;
+                  line-height: 75px;
+                  height: 75px;
+                  @include transition-duration("0.5s");
+                  @include transition-property("all");
+                }
+
+                .title{
+                  position: absolute;
+                  bottom: 5px;
+                  font-size: 12px;
+                  width: 100%;
+                }
+              }
+
+              .attendance-content{
+                .students-statistic{
+                  display: none;
+
+                  &.active-part{
+                    display: block;
+                  }
+                }
+
+                H2 {
+                  color: #6c6c6c;
+                  font-weight: normal;
+                  text-shadow: 0 1px 0 white;
+                  //background: url(images/attendance/header-bg.png) 0 bottom repeat-x;
+                  padding-bottom: 2px;
+                  margin: 14px 0 18px 0;
+                  font-size: 18px;
+                  border-bottom: 1px solid #cecece;
+                  box-shadow: 0 1px 0 white;
+                }
+
+                .more-container{
+                  text-align: center;
+
+                  A{
+                    cursor: pointer;
+                    font-size: 13px;
+                  }
+                }
+
+                .all-students{
+                  .hidden-students-block{
+                    height: 0;
+                    overflow: hidden;
+                    @include transition-duration("0.5s");
+                    @include transition-property("all");
+                  }
+
+                  .visible-block{
+                    .hidden-students-block-2{
+                      &.animate{
+                        &.expanded{
+                          .student:nth-child(12){
+                            top: 113px;
+                            left: -452px;
+                          }
+                        }
+
+                        &:not(.expanded){
+                          .student:nth-child(12){
+                            opacity: 0;
+                          }
+                        }
+
+                        .student:not(.new){
+                          &:nth-child(7){
+                            top: 113px;
+                            left: -556px;
+                          }
+
+                          &:nth-child(13){
+                            opacity: 0;
+                          }
+
+                          &:not(:nth-child(7)):not(:nth-child(12)):not(:nth-child(13)){
+                            left: 113px;
+                          }
+                        }
+
+                        &.need-big-height{
+                          height: 226px;
+                        }
+
+                        .student.new, .all-button.new{
+                          opacity: 1;
+                        }
+                      }
+
+                      &.need-big-height:not(.animate){
+                        height: 113px;
+                      }
+                    }
+                  }
+
+                  .hidden-students-block-2{
+                    position: relative;
+                    @include transition-duration("0.2s");
+                    @include transition-property("all");
+
+                    &.hidden-students.animate{
+                      .student{
+                        &:nth-child(6n){
+                          top: 113px;
+                          left: -565px;
+                        }
+
+                        &:not(:nth-child(6n)){
+                          left: 113px;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        #main{
+          .well-trouble-items{
+            >DIV{
+              min-height: 25px;
+              padding: 6px 10px 4px 10px;
+              @include background(linear-gradient(top, #f6f6f6, #e5e5e5));
+              border-top: 1px solid white;
+              border-bottom: 1px solid #979797;
+              @include border-radius(5px);
+
+              P{
+                padding-left: 27px;
+                font-size: 14px;
+                color: #5f5f5f;
+                text-shadow: 0 1px 1px white;
+                width: 230px;
+              }
+
+              .avatar-container{
+                background: #F4F4F4;
+                padding: 2px;
+                border-bottom: 1px solid #ACACAC;
+                @include border-radius(0);
+                border-width: 0 0 1px 0;
+                @include box-shadow(none);
+              }
+
+              >DIV, >P{
+                display: inline-block;
+                vertical-align: middle;
+                word-break: break-word;
+              }
+            }
+            >P{
+              padding: 5px;
+              font-weight: bold;
+            }
+
+            IMG{
+              margin: -1px;
+            }
+          }
+
+          .set-attendance-list-form{
+            .summary-info{
+              display: inline-block;
+              margin: 15px;
+              float: left;
+              .title{
+                font-size: 12px;
+                font-weight: bold;
+                margin-bottom: 5px;
+                text-shadow: 1px 1px 0 white;
+              }
+              .slide-bar, .inner-bar{
+                @include border-radius(4px);
+              }
+              .slide-bar{
+                width: 100px;
+                height: 8px;
+                background-color: #c6c6c6;
+                @include box-shadow(0px 1px 1px 0.2px #666666 inset);
+                .inner-bar{
+                  background-color: #3f724b;
+                  @include box-shadow(0px 1px 1px 0.2px #2d5236 inset);
+                  height: 100%;
+                  height: 8px;
+                }
+              }
+            }
+            #submit-attendance-button{
+              font-weight: bold;
+              font-size: 14px;
+              padding-bottom: 10px;
+              padding-top: 10px;
+              float: right;
+              padding-right: 25px;
+              padding-left: 25px;
+              margin-top: 10px;
+              margin-right: 20px;
+            }
+            #all-present-link{
+              margin-right: 25px;
+            }
+          }
+          #class-attendance-list-panel{
+
+            .row{
+              P {
+                width: 240px;
+              }
+
+              >.right{
+                margin-top: 22px;
+              }
+            }
+
+            .keyboard-suggestion{
+              position: absolute;
+              z-index: 9999;
+              background: url(images/attendance/keyboard-suggestion.png) center center no-repeat;
+              width: image-width('attendance/keyboard-suggestion.png');
+              height: image-height('attendance/keyboard-suggestion.png');
+              top: -21px;
+            }
+
+            .student-attendance-container{
+              text-shadow: 1px 1px 0 white;
+              position: relative;
+
+              &.active{
+                .attendance-combo{
+                  .current-attendance{
+                    height: 29px;
+                    background: #ebebeb;
+                  }
+                }
+              }
+
+              .attendance-option{
+                display: inline-block;
+                padding-right: 25px;
+                width: 150px;
+                text-align: right;
+                font: bold 12px Arial;
+                color: #a7a7a7;
+              }
+              .attendance-text, .attendance-option{
+                vertical-align: top;
+                height: 27px;
+                line-height: 27px !important;
+              }
+              .attendance-text, .current-attendance{
+                font: bold 14px Arial;
+              }
+              .attendance-text{
+                display: inline-block;
+                width: 157px;
+                text-align: center;
+
+                &.present{
+                  color: #276435;
+                }
+
+                &.absent{
+                  color: #880909;
+                }
+
+                &.excused{
+                  color: #619bae;
+                }
+
+                &.late{
+                  color: #c97d11;
+                }
+
+                &.n-a{
+                  color: #bcbcbc;
+                }
+              }
+              .attendance-combo{
+                display: none;
+                position: relative;
+                width: 157px;
+
+                .left-arrow, .right-arrow{
+                  width: 36px;
+                  height: 27px;
+
+                  SPAN{
+                    border-top: 5px solid transparent;
+                    border-bottom: 5px solid transparent;
+                    display: inline-block;
+                  }
+                }
+                .left-arrow{
+                  @include border-radius(3px 0 0 3px);
+
+                  span{
+                    border-right: 10px solid #181818;
+                  }
+                }
+                .right-arrow{
+                  span{
+                    border-left: 10px solid #181818;
+                  }
+                }
+                .current-attendance, .left-arrow, .right-arrow, .combo-list{
+                  @include box-shadow(0 1px 2px #a3a3a3);
+                  display: inline-block;
+                  border-top: 1px solid white;
+                  vertical-align: top;
+                }
+                .current-attendance, .left-arrow, .right-arrow{
+                  line-height: 26px;
+                  text-align: center;
+                  border-width: 1px 0 0 0;
+                  color: #2e2e2e;
+                  @include background(linear-gradient(top, #f5f5f5, #e0e0e0));
+
+                  &:hover, &:active{
+                    @include box-shadow(0 1px 2px #c0c0c0);
+                  }
+                }
+                .current-attendance{
+                  height: 26px;
+                  min-width: 74px;
+                  margin: 0 4px;
+                }
+                .combo-list{
+                  display: none;
+                  position: absolute;
+                  top: 30px;
+                  left: 0;
+                  right: 3px;
+                  padding-top: 3px;
+                  border-radius: 3px;
+                  background: #ebebeb;
+                  z-index: 1;
+                  text-align: center;
+
+                  .connector{
+                    position: absolute;
+                    height: 3px;
+                    background: beige;
+                    top: -1px;
+                    left: 39px;
+                    width: 76px;
+                    background: #ebebeb;
+                  }
+
+                  .option{
+                    padding: 7px 8px;
+                    font: normal 12px Arial;
+                    color: #383838;
+                    text-align: left;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+
+                    &.selected{
+                      font: bold 12px Arial;
+                      background: #e1e1e1;
+                      color: $blue-color;
+                    }
+                  }
+                }
+              }
+            }
+
+            .row.selected{
+              .student-attendance-container{
+                .attendance-text{
+                  display: none;
+                }
+                .attendance-combo{
+                  display: inline-block;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#chlk-pop-up-container{
+  .big-triangle {
+    left: 200px;
+  }
+
+  .add-student-popup{
+    .attendance-reason-select + .chzn-container{
+      .chzn-drop{
+        width: 175px;
+        @include border-radius(0 4px 4px 4px);
+        border-color: #a4a4a4;
+      }
+    }
+
+    .small-grey-text{
+      font: normal 12px/30px Georgia italic;
+      color: #7c7c7c;
+      text-shadow: 0 1px 0 white;
+    }
+
+    .chzn-container{
+      >A{
+        border-color: #d1d1d1 #bbbbbb #a4a4a4 #bbbbbb;
+      }
+
+      .chzn-drop{
+        border-color: #a4a4a4;
+        overflow: hidden;
+
+        LI{
+          background: #e7e7e7;
+          color: #3a3a3a;
+
+          &.highlighted, &.result-selected{
+            background: #f5f5f5;
+            color: #3a3a3a;
+          }
+        }
+      }
+    }
+
+    width: 390px;
+    padding: 8px 36px 20px;
+
+    .top-container{
+      border-bottom: 1px solid #d7d7d7;
+      height: 50px;
+
+      .avatar-wrapper{
+        >DIV{
+          width: 35px;
+          height: 35px;
+        }
+      }
+
+      h1{
+        margin-left: 22px;
+        font: bold 18px/35px Arial;
+        color: #434343;
+        text-shadow: 0 1px 0 white;
+      }
+
+      .profile-link{
+        display: inline-block;
+        margin: 4px 8px;
+      }
+
+      .avatar-wrapper, h1{
+        display: inline-block;
+        vertical-align: top;
+      }
+    }
+
+    .blocks{
+      margin-top: 20px;
+
+      .row{
+        margin-bottom: 9px;
+
+        >DIV{
+          display: inline-block;
+        }
+
+        .name-container{
+          width: 148px;
+        }
+
+        .type-container{
+          width: 133px;
+        }
+
+        SELECT{
+          width: 109px;
+        }
+      }
+    }
+
+    .save-btn{
+      margin-top: 15px;
+
+      BUTTON{
+        text-transform: uppercase;
+        font: bold 14px Arial;
+        height: 37px;
+      }
+    }
+  }
+}

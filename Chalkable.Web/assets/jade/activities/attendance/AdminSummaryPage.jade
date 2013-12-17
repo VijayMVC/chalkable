@@ -1,0 +1,176 @@
+mixin AdminAttendanceChart(attendancestats, width)
+    typesEnum = chlk.models.attendance.AttendanceTypeEnum
+    .relative
+        .chart-bg2
+        .chart-container-1
+            if attendancestats && attendancestats.length
+                +Select('attendanceTypesForChart').attendance-type-chart-select
+                    +Option(typesEnum.LATE.valueOf(), Msg.Late, true)(data-color="#e49e3c").late-option
+                    +Option(typesEnum.ABSENT.valueOf(), Msg.Absent)(data-color="#b93838").absent-option
+                    +Option(typesEnum.EXCUSED.valueOf(), Msg.Excused)(data-color="#5093a7").excused-option
+                +Chart()(
+                    data-options = self.getMainChartConfigs(attendancestats, width)
+                ).top-chart
+
+mixin AdminAttendanceMpChart(attendancestats)
+    .relative
+        .chart-bg2
+        .chart-container-1
+            +Chart()(
+                data-options = self.getMpChartConfigs(attendancestats)
+            )
+
+mixin AddStudentTpl(currentPage, date)
+    isDay = currentPage == 2
+    nowDate = self.getAttendanceByDayData().getDate()
+    date = date ? date.format('mm/dd/yy') : null
+    +ActionLink('attendance', 'addStudentClick').add-student-btn + #{Msg.Add_student}
+        .add-popup
+            .student-search-container
+                +SearchBox(chlk.services.AdminService, "getUsers", chlk.templates.attendance.AdminStudentSearchTpl)(
+                    textValue = 'displayName',
+                    idValue = 'id',
+                    listCls = 'add-student-list'
+                ).plus-user-search.student-search-input
+                +ActionForm('attendance', 'showStudentBox').show-student-form
+                    +Hidden('id')
+                    +Hidden('gradeLevelsIds', self.getGradeLevelsIds())
+                    +Hidden('currentPage', currentPage)
+                    +Hidden('date', date)
+            .big-triangle
+
+mixin StudentsTpl(students, header, currentPage, date)
+    length = students.length
+    isDay = currentPage == 2
+    blockCount = 12
+    date = date ? date.format('mm/dd/yy') : null
+    h2 #{header} (#{length})
+    div(attributes).all-students
+        needButtonAfterAdd = length == 12
+        needButton = length > 12
+        visibleStudents = students.slice(0, needButton ? 11 :12)
+        visibleLen = visibleStudents.length
+        hiddenStudents = needButton ? students.slice(11) : []
+        div(class=needButtonAfterAdd ? 'need-button' : '').visible-block
+            div(class=visibleLen == 6 ? "need-big-height" : "").hidden-students-block-2
+                each student, i in visibleStudents
+                    div(
+                        index=i,
+                        data-id=student.getId().valueOf(),
+                        data-count=student.getAbsentsCount && student.getAbsentsCount(),
+                        data-name=student.getFirstName()
+                    ).student
+                        +ActionLink('attendance', 'showStudentAttendance', student.getId(),
+                                date, 'attendance', 'summary', JSON.stringify([true, self.getGradeLevelsIds(), currentPage, date])).img-container
+                            +PersonImg(student, 128)
+                        +ActionLink('students', 'details', student.getId()).name=student.getDisplayName()
+                if needButton
+                    button.all-button=Msg.All
+        div.hidden-students-block
+            div(class=hiddenStudents.length % 6 == 0 ? "need-big-height" : "").hidden-students-block-2.hidden-students
+                each student, i in hiddenStudents
+                    div(
+                        index=i + visibleLen,
+                        data-id=student.getId().valueOf(),
+                        data-count=student.getAbsentsCount && student.getAbsentsCount(),
+                        data-name=student.getFirstName()
+                    ).student
+                        +ActionLink('attendance', 'showStudentAttendance', student.getId(),
+                                date, 'attendance', 'summary', JSON.stringify([true, self.getGradeLevelsIds(), currentPage, date])).img-container
+                            +PersonImg(student, 128)
+                        +ActionLink('students', 'details', student.getId()).name=student.getDisplayName()
+
+topData = self.getTopData()
+topItems = topData.getTopItems()
+selectedIds = topData.getSelectedIds()
+nowData = self.getNowAttendanceData()
+dayData = self.getAttendanceByDayData()
+mpData = self.getAttendanceByMpData()
+valuesEnum = chlk.models.attendance.AttendanceTypeEnum
+currentPage = self.getCurrentPage() || 1
+.admin-attendance.loader-container
+    .loader
+    +LeftRightToolbar(topItems, chlk.templates.grading.GradeLevelForTopBar, 'attendance', 'summary', [true])(
+        selectedIds=selectedIds,
+        multiple
+    ).classes-bar
+    div(class=currentPage == 1 ? "active-part" : "").action-bar.not-transparent.buttons.page-1
+        .container.panel-bg
+            .left
+                .action-button
+                    .export-btn
+    div(class=currentPage == 2 ? "active-part" : "").action-bar.not-transparent.buttons.page-2
+        .container.panel-bg
+            .left
+                .action-button
+                    .export-btn
+            .right.no-border
+                +ActionForm('attendance', 'updateSummary').update-summary.day
+                    +DatePicker('nowDateTime', self.getAttendanceByDayData().getDate())(
+                        data-options={
+                          showOtherMonths: true,
+                          selectOtherMonths: true
+                        }
+                        readonly="readonly"
+                    )#nowDateTime.no-marker
+                    label.choose-date-icon.for-date-picker
+                    +Hidden('gradeLevelsIds', self.getGradeLevelsIds())
+                    +Hidden('renderDay', 'true')
+    div(class=currentPage == 3 ? "active-part" : "").action-bar.not-transparent.buttons.page-3
+        .container.panel-bg
+            .left
+                .action-button
+                    .export-btn
+            .right.no-border
+                +ActionForm('attendance', 'updateSummary').update-summary.mp
+                    markingPeriods = self.getMarkingPeriods()
+                    +Select('fromMarkingPeriodId')#fromMarkingPeriodId.mp-select
+                        each mp in markingPeriods
+                            +Option(mp.getId().valueOf(), mp.getName(), mp.getId() == self.getFromMarkingPeriodId())
+                        +Option('', Msg.Choose_date)(data-picker-id="start-date-picker").choose-date-option
+                    +DatePicker('startDate', self.getStartDate() || '')(
+                        data-options={
+                          showOtherMonths: true,
+                          selectOtherMonths: true
+                        },
+                        data-select-id="fromMarkingPeriodId_chzn"
+                    )#start-date-picker.startDate.start-end-picker
+                    label -
+                    +Select('toMarkingPeriodId')#toMarkingPeriodId.mp-select
+                        each mp in markingPeriods
+                            +Option(mp.getId().valueOf(), mp.getName(), mp.getId() == self.getToMarkingPeriodId())
+                        +Option('', Msg.Choose_date)(data-picker-id="end-date-picker").choose-date-option
+                    +DatePicker('endDate', self.getEndDate())(
+                        data-options={
+                          showOtherMonths: true,
+                          selectOtherMonths: true
+                        },
+                        data-select-id="toMarkingPeriodId_chzn"
+                    )#end-date-picker.endDate.start-end-picker
+                    label.choose-date-icon
+                    +Hidden('gradeLevelsIds', self.getGradeLevelsIds())
+                    +Hidden('renderMp', 'true')
+    .attendance-boxes-admin
+        .boxes-container
+            div(left="0px", text=Msg.Now, data-index="1", class=currentPage == 1 ? "active-part" : "").top-number-box.now-box
+                .title=Msg.Not_in_class_right_now
+                .number=self.getNowAttendanceData().getAbsentNowCount()
+                .triangle
+            div(left="192px", text=Msg.Today, data-index="2", class=currentPage == 2 ? "active-part" : "").top-number-box.day-box
+                .title=Msg.Attendance_today
+                .number=self.getAttendanceByDayData().getStudentsCountAbsentWholeDay()
+                .triangle
+            div(left="381px", text=Msg.Marking_Period_shortcut, data-index="3", class=currentPage == 3 ? "active-part" : "").top-number-box.mp-box
+                .title=Msg.Attendance_MP
+                .number=self.getAttendanceByMpData().getAbsentStudentsCountAvg()
+                .triangle
+    .attendance-content
+        +Hidden('attendanceTypes').add-new-student
+        div(class=currentPage == 1 ? "active-part" : "").attendance-now.students-statistic.page-1
+            +RenderWith(nowData, chlk.templates.attendance.AdminAttendanceNowTpl)
+        div(class=currentPage == 2 ? "active-part" : "").attendance-day.students-statistic.page-2
+            +RenderWith(dayData, chlk.templates.attendance.AdminAttendanceDayTpl)
+        div(class=currentPage == 3 ? "active-part" : "").attendance-mp.students-statistic.page-3
+            +RenderWith(mpData, chlk.templates.attendance.AdminAttendanceMpTpl)
+
+
