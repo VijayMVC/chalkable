@@ -505,3 +505,25 @@ GO
 alter table AnnouncementRecipientData
 add constraint UQ_AnnouncementRecipientData_Announcement_Person unique (AnnouncementRef, PersonRef)
 go
+
+alter table Announcement
+add SisActivityId int null
+go
+alter table Announcement 
+add MaxScore decimal null
+go
+alter table Announcement
+add	WeightAddition decimal null 
+go
+alter table Announcement 
+add WeightMultiplier decimal null
+go
+alter table Announcement 
+add MayBeDropped bit null
+go
+update Announcement
+set MayBeDropped = 0
+go
+alter table Announcement
+alter column MayBeDropped bit not null
+go

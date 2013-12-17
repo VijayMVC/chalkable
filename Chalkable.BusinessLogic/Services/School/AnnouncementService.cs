@@ -75,7 +75,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 query.RoleId = Context.Role.Id;
                 query.PersonId = Context.UserLocalId;
                 query.Now = Context.NowSchoolTime.Date;
-                return da.GetAnnouncements(query);
+                var res = da.GetAnnouncements(query);
+                return res;
             }
         }
 
@@ -100,6 +101,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 OwnedOnly = ownerOnly,
             };
             var res = GetAnnouncements(q);
+            if (classId.HasValue)
+            {
+                var activities = ConnectorLocator.ActivityConnector.GetActivities(classId.Value);
+                MapActivitiesToAnnouncements(res.Announcements, activities);
+            }
             return new PaginatedList<AnnouncementComplex>(res.Announcements, start / count, count, res.SourceCount);
         }
 
@@ -112,9 +118,37 @@ namespace Chalkable.BusinessLogic.Services.School
                     GradeLevelIds = gradeLevelsIds,
                     ClassId = classId
                 };
-            return GetAnnouncements(q).Announcements; 
+            var anns = GetAnnouncements(q).Announcements;
+            if (classId.HasValue)
+            {
+                var activities = ConnectorLocator.ActivityConnector.GetActivities(classId.Value);
+                MapActivitiesToAnnouncements(anns, activities);
+            }
+            return anns;
         }
 
+        private void MapActivitiesToAnnouncements(IList<AnnouncementComplex> anns, IList<Activity> activities)
+        {
+            foreach (var activity in activities)
+            {
+                var ann = anns.FirstOrDefault(x => x.SisActivityId == activity.Id);
+                if (ann != null)
+                {
+                    MapActivityToAnnouncement(ann, activity);
+                }
+            }
+        }
+        private void MapActivityToAnnouncement(Announcement ann, Activity activity)
+        {
+            ann.Content = activity.Unit;
+            ann.MaxScore = activity.MaxScore;
+            ann.ClassRef = activity.SectionId;
+            ann.Expires = activity.Date;
+            ann.MayBeDropped = activity.MayBeDropped;
+            ann.WeightAddition = activity.WeightAddition;
+            ann.WeightMultiplier = activity.WeightMultiplier;
+            ann.Dropped = activity.IsDropped;
+        }
 
         public IList<AnnouncementComplex> GetAnnouncements(string filter)
         {
