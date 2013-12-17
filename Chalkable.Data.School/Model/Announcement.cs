@@ -35,6 +35,12 @@ namespace Chalkable.Data.School.Model
         public int Order { get; set; }
         public bool Dropped { get; set; }
 
+        public int? SisActivityId { get; set; }
+        public decimal? MaxScore { get; set; }
+        public decimal? WeightAddition { get; set; }
+        public decimal? WeightMultiplier { get; set; }
+        public bool MayBeDropped { get; set; }
+
         public int SchoolRef { get; set; }
     }
 

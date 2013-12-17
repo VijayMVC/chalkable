@@ -14,6 +14,11 @@ namespace Chalkable.StiConnector.Connectors
     public class ConnectorBase
     {
 
+        public const string GET = "GET";
+        public const string POST = "POST";
+        public const string PUT = "PUT";
+        public const string DELETE = "DELETE";
+
         private ConnectorLocator locator;
         public ConnectorBase(ConnectorLocator locator)
         {
@@ -58,23 +63,29 @@ namespace Chalkable.StiConnector.Connectors
             }
         }
 
-        public void Post<T>(string url, T obj)
+        public T Post<T>(string url, T obj, string method = POST)
         {
             var client = new WebClient();
             client.Headers[HttpRequestHeader.Authorization] = "Session " + locator.Token;
             client.Encoding = Encoding.UTF8;
             client.Headers.Add("Content-Type", "application/json");
-
+            
             Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
-            var x = typeof(T);
             var stream = new MemoryStream();
+            MemoryStream stream2 = null;
             try
             {
                 var serializer = new JsonSerializer();
                 var writer = new StreamWriter(stream);
                 serializer.Serialize(writer, obj);
                 writer.Flush();
-                client.UploadData(url, stream.ToArray());
+                var data = client.UploadData(url, method, stream.ToArray());
+                if (data != null && data.Length > 0)
+                {
+                    stream2 = new MemoryStream(data);
+                    return serializer.Deserialize<T>(new JsonTextReader(new StreamReader(stream2)));
+                }
+                return default(T);
             }
             catch (WebException ex)
             {
@@ -85,6 +96,8 @@ namespace Chalkable.StiConnector.Connectors
             finally
             {
                 stream.Dispose();
+                if(stream2 != null)
+                    stream2.Dispose();
             }
         }
 
@@ -188,6 +201,44 @@ namespace Chalkable.StiConnector.Connectors
 
             Post(url, sectionAttendance);
                         
+        }
+    }
+
+    public class ActivityConnector : ConnectorBase
+    {
+        private string urlFormat;
+        public ActivityConnector(ConnectorLocator locator) : base(locator)
+        {
+            urlFormat = BaseUrl + "Chalkable/sections/{0}/activities";
+        }
+
+        public Activity GetActivity(int sectionId, int id)
+        {
+            string url = string.Format(urlFormat + "/{1}", sectionId, id);
+            return Call<Activity>(url);
+        }
+
+        public IList<Activity> GetActivities(int sectionId, DateTime? endDate = null, DateTime? startDate = null)
+        {
+            string url = string.Format(urlFormat, sectionId);
+            return  Call<IList<Activity>>(url); //todo optional params endDate and startDate
+        } 
+
+        public void DeleteActivity(int sectionId, int id)
+        {
+            string url = string.Format(urlFormat + "/{1}", sectionId, id);
+            Post<Activity>(url, null, DELETE);
+            
+        }
+        public Activity CreateActivity(int sectionId, Activity activity)
+        {
+            string url = string.Format(urlFormat, sectionId);
+            return Post(url, activity);
+        }
+        public void UpdateActivity(int sectionId, int id, Activity activity)
+        {
+            string url = string.Format(urlFormat + "/{1}", sectionId, id);
+            Post(url, activity, PUT);
         }
     }
 }

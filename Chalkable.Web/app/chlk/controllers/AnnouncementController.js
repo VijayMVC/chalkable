@@ -567,7 +567,12 @@ NAMESPACE('chlk.controllers', function (){
                         model.getExpiresDate(),
                         model.getAttachments(),
                         model.getApplications(),
-                        model.getMarkingPeriodId()
+                        model.getMarkingPeriodId(),
+                        model.getMaxScore(),
+                        model.getWeightAddition(),
+                        model.getWeightMultiplier(),
+                        model.isAbleHideFromStudents(),
+                        model.isAbleDropStudentScore()
                     )
                     .attach(this.validateResponse_());
         },
@@ -604,7 +609,12 @@ NAMESPACE('chlk.controllers', function (){
                         model.getExpiresDate(),
                         model.getAttachments(),
                         model.getApplicationsIds(),
-                        model.getMarkingPeriodId()
+                        model.getMarkingPeriodId(),
+                        model.getMaxScore(),
+                        model.getWeightAddition(),
+                        model.getWeightMultiplier(),
+                        model.isAbleHideFromStudents(),
+                        model.isAbleDropStudentScore()
                     )
                     .attach(this.validateResponse_());
                 }
