@@ -9,6 +9,6 @@ NAMESPACE('chlk.templates.chlkerror', function () {
         'AppErrorDialogTpl', EXTENDS(chlk.templates.ChlkTemplate),  [
 
             [ria.templates.ModelPropertyBind],
-            String, 'developerEmail'
+            String, 'url'
         ])
 });
