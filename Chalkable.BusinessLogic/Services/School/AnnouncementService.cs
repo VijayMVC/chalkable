@@ -9,6 +9,8 @@ using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors;
+using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -47,7 +49,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
     }
 
-    public class AnnouncementService : SchoolServiceBase, IAnnouncementService
+    public class AnnouncementService : SisConnectedService, IAnnouncementService
     {
         public AnnouncementService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
@@ -182,6 +184,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 var announcement = da.GetById(announcementId);
                 if (!AnnouncementSecurity.CanDeleteAnnouncement(announcement, Context))
                     throw new ChalkableSecurityException();
+
+                if(announcement.ClassRef.HasValue && announcement.SisActivityId.HasValue)
+                    ConnectorLocator.ActivityConnector.DeleteActivity(announcement.ClassRef.Value, announcement.SisActivityId.Value);
                 da.Delete(announcementId, null, null, null, null);
                 uow.Commit();
             }
@@ -244,7 +249,14 @@ namespace Chalkable.BusinessLogic.Services.School
                 res.Content = announcement.Content;
                 res.Subject = announcement.Subject;
                 if (Context.Role == CoreRoles.TEACHER_ROLE && announcement.ClassAnnouncementTypeId.HasValue)
+                {
                     res.ClassAnnouncementTypeRef = announcement.ClassAnnouncementTypeId.Value;
+                    res.MaxScore = announcement.MaxScore;
+                    res.WeightAddition = announcement.WeightAddition;
+                    res.WeightMultiplier = announcement.WeightMultiplier;
+                    res.MayBeDropped = announcement.CanDropStudentScore;
+                    
+                }
                 if (BaseSecurity.IsAdminViewer(Context))
                     res.ClassAnnouncementTypeRef = null;
 
@@ -295,7 +307,24 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = CreateAnnoucnementDataAccess(uow);
                 var res = Submit(da, uow, announcementId, recipientId);
                 var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(res.Expires);
-                da.ReorderAnnouncements(sy.Id, res.ClassAnnouncementTypeRef.Value, res.PersonRef, recipientId);
+                if(res.ClassAnnouncementTypeRef.HasValue)
+                    da.ReorderAnnouncements(sy.Id, res.ClassAnnouncementTypeRef.Value, res.PersonRef, recipientId);
+                var annDetails = GetAnnouncements(new AnnouncementsQuery {Id = res.Id}).Announcements.First();
+                var activity = ConnectorLocator.ActivityConnector.CreateActivity(recipientId, new Activity
+                        {
+                            MaxScore = res.MaxScore,
+                            WeightAddition = res.WeightAddition,
+                            WeightMultiplier = res.WeightMultiplier,
+                            CategoryId = res.ClassAnnouncementTypeRef,
+                            SectionId = recipientId,
+                            Date = res.Expires,
+                            Name = annDetails.Title + "_" + annDetails.Id,
+                            Unit = res.Content,
+                            IsScored = res.ClassAnnouncementTypeRef.HasValue,
+                            MayBeDropped = res.MayBeDropped,                    
+                        });
+                res.SisActivityId = activity.Id;
+                CreateAnnoucnementDataAccess(uow).Update(res);
                 uow.Commit();
             }
         }

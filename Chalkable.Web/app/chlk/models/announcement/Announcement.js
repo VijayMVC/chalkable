@@ -227,10 +227,21 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('maxscore')],
             Number, 'maxScore',
 
+            [ria.serialize.SerializeProperty('weightmultiplier')],
+            Number, 'weightMultiplier',
+
+            [ria.serialize.SerializeProperty('weightaddition')],
+            Number, 'weightAddition',
+
+            [ria.serialize.SerializeProperty('hidefromstudents')],
+            Boolean, 'ableHideFromStudents',
+
+            [ria.serialize.SerializeProperty('candropstudentscore')],
+            Boolean, 'ableDropStudentScore',
+
             String, 'annRecipients',
 
             Boolean, 'ableEdit',
-
 
             function prepareExpiresDateText(){
                 var now = getDate();
