@@ -238,6 +238,7 @@ var Msg = {
     Absent_Today: 'Absent Today',
     Add_reminder: 'Add Reminder',
     Add_student: 'Add student',
+    Advanced_options: 'Advanced options...',
     All_day: 'All day',
     All_students: 'All students',
     All_subjects: 'All subjects',
@@ -281,6 +282,7 @@ var Msg = {
     Basic_info: 'Basic info',
     Best_Class: 'Best Class',
     Biggest_improvement: 'Biggest improvement',
+    Can_drop_student_score: 'Can drop student score',
     Choose_date: 'Choose date',
     Choose_picture: 'Choose picture',
     Class_Avg: 'Class Avg',
@@ -293,6 +295,7 @@ var Msg = {
     Class_Of: 'Class of',
     Class_Ranking: 'Class Ranking',
     Classmates: 'Classmates',
+    Click_to_add_standard: 'CLICK TO ADD STANDARDS',
     Code_examples: 'Code examples',
     Coming_soon: 'Coming soon',
     Comments_for: 'Comments for',
@@ -342,6 +345,7 @@ var Msg = {
     Grade_type: oneOrMany('Grade type'),
     Grading_view: 'Grading view',
     Grading_style: 'Grading style',
+    Hide_from_Students: 'Hide from Students',
     Highest_rated: 'Highest rated',
     hours_ago: function(hrs){
         if(hrs == 1)
@@ -486,12 +490,19 @@ var Msg = {
     Weeks_ago: function(n){
         String.format('{0} week{1} ago', n, (n==1 ? '' : 's'));
     },
+    Weight_Addition: 'Weight Addition',
+    Weight_Multiplier :'Weight Multiplier',
     Whole_day: 'Whole day',
     Whole_School: 'Whole School',
     Will_teachers_be_viewing_student_output: 'Will teachers be viewing student output?',
     Write_a_review: 'Write a review',
     You_vs_Peers: 'You vs. Peers',
     Your_grade: 'Your grade',
+
+    Weight_Multiplier_Tooltip_Message: 'For this item to be part of the marking period average, a number greater than 0 must be entered.',
+    Weight_Addition_Tooltip_Message: 'Enter a number here if points are to be added to each student’s grade for this item.',
+    Hide_From_Student_Tooltip_Message: 'This is will hide the item from students',
+    Can_Drop_Student_Score_Tooltip_Message: 'Check this box if a score may be dropped for this item',
 
     //Window titles----------------------------------------------------------------------------------------------------------\
 

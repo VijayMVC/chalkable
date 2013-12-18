@@ -127,29 +127,6 @@ namespace Chalkable.BusinessLogic.Services.School
             return anns;
         }
 
-        private void MapActivitiesToAnnouncements(IList<AnnouncementComplex> anns, IList<Activity> activities)
-        {
-            foreach (var activity in activities)
-            {
-                var ann = anns.FirstOrDefault(x => x.SisActivityId == activity.Id);
-                if (ann != null)
-                {
-                    MapActivityToAnnouncement(ann, activity);
-                }
-            }
-        }
-        private void MapActivityToAnnouncement(Announcement ann, Activity activity)
-        {
-            ann.Content = activity.Unit;
-            ann.MaxScore = activity.MaxScore;
-            ann.ClassRef = activity.SectionId;
-            ann.Expires = activity.Date;
-            ann.MayBeDropped = activity.MayBeDropped;
-            ann.WeightAddition = activity.WeightAddition;
-            ann.WeightMultiplier = activity.WeightMultiplier;
-            ann.Dropped = activity.IsDropped;
-        }
-
         public IList<AnnouncementComplex> GetAnnouncements(string filter)
         {
             //TODO : rewrite impl for better performance
@@ -302,13 +279,56 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 if(announcement.ExpiresDate.HasValue)
                    res.Expires = announcement.ExpiresDate.Value;
+
                 res = SetClassToAnnouncement(res, classId, res.Expires);
-                res = PreperingReminderData(uow, res);
+                res = PreperingReminderData(uow, res); //todo : remove this later 
                 res = ReCreateRecipients(uow, res, recipients);
                 da.Update(res);
+                
+                if (res.State == AnnouncementState.Created && res.ClassRef.HasValue && res.SisActivityId.HasValue)
+                {
+                    var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value, res.SisActivityId.Value);
+                    MapAnnouncementToActivity(res, activity);
+                    ConnectorLocator.ActivityConnector.UpdateActivity(res.ClassRef.Value, res.SisActivityId.Value, activity);
+                }
                 uow.Commit();
                 return res;
             }
+        }
+
+        private void MapActivitiesToAnnouncements(IList<AnnouncementComplex> anns, IList<Activity> activities)
+        {
+            foreach (var activity in activities)
+            {
+                var ann = anns.FirstOrDefault(x => x.SisActivityId == activity.Id);
+                if (ann != null)
+                {
+                    MapActivityToAnnouncement(ann, activity);
+                }
+            }
+        }
+        private void MapActivityToAnnouncement(Announcement ann, Activity activity)
+        {
+            ann.Content = activity.Unit;
+            ann.MaxScore = activity.MaxScore;
+            ann.ClassRef = activity.SectionId;
+            ann.Expires = activity.Date;
+            ann.MayBeDropped = activity.MayBeDropped;
+            ann.WeightAddition = activity.WeightAddition;
+            ann.WeightMultiplier = activity.WeightMultiplier;
+            ann.Dropped = activity.IsDropped;
+        }
+        private void MapAnnouncementToActivity(Announcement ann, Activity activity)
+        {
+            activity.Date = ann.Expires;
+            activity.CategoryId = ann.ClassAnnouncementTypeRef;
+            activity.IsDropped = ann.Dropped;
+            activity.IsScored = ann.ClassAnnouncementTypeRef.HasValue;
+            activity.MaxScore = ann.MaxScore;
+            activity.WeightAddition = ann.WeightAddition;
+            activity.WeightMultiplier = ann.WeightMultiplier;
+            activity.MayBeDropped = ann.MayBeDropped;
+            activity.Unit = ann.Content;
         }
 
 
@@ -325,6 +345,19 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 res.State = AnnouncementState.Created;
                 res.Created = dateNow;
+                if (classId.HasValue)
+                {
+                    var annDetails = GetAnnouncements(new AnnouncementsQuery {Id = res.Id}).Announcements.First();
+                    var activity = new Activity
+                        {
+                            SectionId = classId.Value,
+                            CategoryId = res.ClassAnnouncementTypeRef,
+                            Name = annDetails.Title + "_" + annDetails.Id,
+                        };
+                    MapAnnouncementToActivity(res, activity);
+                    activity = ConnectorLocator.ActivityConnector.CreateActivity(classId.Value, activity);
+                    res.SisActivityId = activity.Id;
+                }
             }
             res = PreperingReminderData(unitOfWork, res);
             res.GradingStyle = GradingStyleEnum.Numeric100;
@@ -349,22 +382,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(res.Expires);
                 if(res.ClassAnnouncementTypeRef.HasValue)
                     da.ReorderAnnouncements(sy.Id, res.ClassAnnouncementTypeRef.Value, res.PersonRef, recipientId);
-                var annDetails = GetAnnouncements(new AnnouncementsQuery {Id = res.Id}).Announcements.First();
-                var activity = ConnectorLocator.ActivityConnector.CreateActivity(recipientId, new Activity
-                        {
-                            MaxScore = res.MaxScore,
-                            WeightAddition = res.WeightAddition,
-                            WeightMultiplier = res.WeightMultiplier,
-                            CategoryId = res.ClassAnnouncementTypeRef,
-                            SectionId = recipientId,
-                            Date = res.Expires,
-                            Name = annDetails.Title + "_" + annDetails.Id,
-                            Unit = res.Content,
-                            IsScored = res.ClassAnnouncementTypeRef.HasValue,
-                            MayBeDropped = res.MayBeDropped,                    
-                        });
-                res.SisActivityId = activity.Id;
-                CreateAnnoucnementDataAccess(uow).Update(res);
                 uow.Commit();
             }
         }
