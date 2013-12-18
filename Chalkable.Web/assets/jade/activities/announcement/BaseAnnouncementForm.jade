@@ -46,10 +46,11 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
         if isAnnouncement
             TEXTAREA(id="subject",name="subject",placeholder="Subject",class="validate[required]")=announcement.getSubject()
         +TextArea(id="content",name="content",placeholder=isAnnouncement ? "Message" : "Assignment")=announcement.getContent()
-        .add-standards
-            .standards-list
-            .title=Msg.Click_to_add_standard
-            +ActionLink('announcement', 'addStandards').add-standards-btn.x-hidden
+        if !isAdminAnnouncement
+            .add-standards
+                .standards-list
+                .title=Msg.Click_to_add_standard
+                +ActionLink('announcement', 'addStandards').add-standards-btn.x-hidden
         .drop-down-container
         input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
         if !announcement.getState()
@@ -64,30 +65,31 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                 placeholder=Msg.Due_date,
                 class="validate[required]"
             )#expiresdate
-        .max-score-container
-            input(name="maxscore", placeholder=Msg.Max_score + ' 100', class="validate[required]", value=announcement.getMaxScore())
-            .question-mark ?
-        .advanced-options
-            .advanced-options-btn.title.btn=Msg.Advanced_options
-                span.triangle-icon
-            .separator.x-hidden
-            .advanced-options-container.x-hidden
-                .weight-multiplier.new-input-container
-                    .title=Msg.Weight_Multiplier
-                    input(name='weightmultiplier', placeholder="1.00", value=announcement.getWeightMultiplier())
-                    div(data-tooltip="").question-mark ?
-                .weight-addition.new-input-container
-                    .title=Msg.Weight_Addition
-                    input(name='weightaddition', placeholder="1.00", value=announcement.getWeightAddition())
-                    div(data-tooltip="").question-mark ?
-                .check-box-container
-                    .title=Msg.Hide_from_Students
-                    +SlideCheckbox('hidefromstudents', announcement.isAbleHideFromStudents(), false)
-                    div(data-tooltip="").question-mark ?
-                .check-box-container
-                    .title=Msg.Can_drop_student_score
-                    +SlideCheckbox('candropstudentscore', announcement.isAbleDropStudentScore(), false)
-                    div(data-tooltip="").question-mark ?
+        if !isAdminAnnouncement
+            .max-score-container
+                input(name="maxscore", placeholder=Msg.Max_score + ' 100', class="validate[required]", value=announcement.getMaxScore())
+                .question-mark ?
+            .advanced-options
+                .advanced-options-btn.title.btn=Msg.Advanced_options
+                    span.triangle-icon
+                .separator.x-hidden
+                .advanced-options-container.x-hidden
+                    .weight-multiplier.new-input-container
+                        .title=Msg.Weight_Multiplier
+                        input(name='weightmultiplier', placeholder="1.00", value=announcement.getWeightMultiplier())
+                        div(data-tooltip="").question-mark ?
+                    .weight-addition.new-input-container
+                        .title=Msg.Weight_Addition
+                        input(name='weightaddition', placeholder="1.00", value=announcement.getWeightAddition())
+                        div(data-tooltip="").question-mark ?
+                    .check-box-container
+                        .title=Msg.Hide_from_Students
+                        +SlideCheckbox('hidefromstudents', announcement.isAbleHideFromStudents(), false)
+                        div(data-tooltip="").question-mark ?
+                    .check-box-container
+                        .title=Msg.Can_drop_student_score
+                        +SlideCheckbox('candropstudentscore', announcement.isAbleDropStudentScore(), false)
+                        div(data-tooltip="").question-mark ?
 
         //SPAN#reminders-button.small-gray-link=Msg.Reminder(true)
         //.reminders-container.x-hidden
