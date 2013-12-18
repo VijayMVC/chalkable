@@ -205,7 +205,13 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                return da.GetDetails(announcementId, Context.UserLocalId ?? 0, Context.Role.Id);
+                var res = da.GetDetails(announcementId, Context.UserLocalId ?? 0, Context.Role.Id);
+                if (res.ClassRef.HasValue && res.SisActivityId.HasValue)
+                {
+                    var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value, res.SisActivityId.Value);
+                    MapActivityToAnnouncement(res, activity);
+                }
+                return res;
             }
         }
 

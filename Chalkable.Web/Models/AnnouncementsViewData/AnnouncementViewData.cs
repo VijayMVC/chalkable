@@ -22,7 +22,13 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public int? RecipientId { get; set; }
         public string Content { get; set; }
         public string ShortContent { get; set; }
-        
+
+        public decimal? MaxScore { get; set; }
+        public decimal? WeightMultiplier { get; set; }
+        public decimal? WeightAddition { get; set; }
+        public bool HideFromStudents { get; set; }
+        public bool CanDropStudentScore { get; set; }
+
         public int? Grade { get; set; }
         public int? StudentAnnouncementId { get; set; }
         public int StudentsCount { get; set; }
@@ -64,6 +70,10 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             var content = announcement.Content ?? "";
             ShortContent = StringTools.BuildShortText(content, SHORT_LENGHT);
 
+            CanDropStudentScore = announcement.MayBeDropped;
+            MaxScore = announcement.MaxScore;
+            WeightAddition = announcement.WeightAddition;
+            WeightMultiplier = announcement.WeightMultiplier;
             Created = announcement.Created;  
             StudentsCount = announcement.StudentsCount;
             StudentsCountWithAttachments = announcement.StudentsCountWithAttachments;
