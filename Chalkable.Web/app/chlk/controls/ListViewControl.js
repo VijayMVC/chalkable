@@ -97,7 +97,7 @@ NAMESPACE('chlk.controls', function () {
                     var grid = this.getGrid();
                     var backTopNode = jQuery(grid.find('.back-top').valueOf());
                     var showAllButton = grid.find('.load-all-popup');
-                    if (jQuery(window).scrollTop() > 100 && showAllButton.hasClass('x-hidden')) {
+                    if (jQuery(window).scrollTop() > 100) {
                         this.showGoTopButton_(grid);
                         backTopNode.fadeIn();
                     } else {
