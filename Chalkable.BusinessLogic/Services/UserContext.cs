@@ -77,7 +77,7 @@ namespace Chalkable.BusinessLogic.Services
                 DistrictId = district.Id;
                 SchoolTimeZoneId = district.TimeZone;
                 DistrictServerUrl = district.ServerUrl;
-                SisUrl = "http://localhost/"; //district.SisUrl;
+                SisUrl = "http://localhost/"; //district.SisUrl; //
                 if (school != null)
                 {
                     SchoolLocalId = school.LocalId;

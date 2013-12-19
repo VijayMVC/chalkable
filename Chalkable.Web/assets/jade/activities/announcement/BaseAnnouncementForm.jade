@@ -68,7 +68,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
         if !isAdminAnnouncement
             .max-score-container
                 input(name="maxscore", placeholder=Msg.Max_score + ' 100', class="validate[required]", value=announcement.getMaxScore())
-                .question-mark ?
+                div(data-tooltip=Msg.Max_Score_Tooltip_Message).question-mark ?
             .advanced-options
                 .advanced-options-btn.title.btn=Msg.Advanced_options
                     span.triangle-icon
@@ -77,19 +77,19 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                     .weight-multiplier.new-input-container
                         .title=Msg.Weight_Multiplier
                         input(name='weightmultiplier', placeholder="1.00", value=announcement.getWeightMultiplier())
-                        div(data-tooltip="").question-mark ?
+                        div(data-tooltip=Msg.Weight_Multiplier_Tooltip_Message).question-mark ?
                     .weight-addition.new-input-container
                         .title=Msg.Weight_Addition
                         input(name='weightaddition', placeholder="1.00", value=announcement.getWeightAddition())
-                        div(data-tooltip="").question-mark ?
+                        div(data-tooltip=Msg.Weight_Addition_Tooltip_Message).question-mark ?
                     .check-box-container
                         .title=Msg.Hide_from_Students
                         +SlideCheckbox('hidefromstudents', announcement.isAbleHideFromStudents(), false)
-                        div(data-tooltip="").question-mark ?
+                        div(data-tooltip=Msg.Hide_From_Student_Tooltip_Message).question-mark ?
                     .check-box-container
                         .title=Msg.Can_drop_student_score
                         +SlideCheckbox('candropstudentscore', announcement.isAbleDropStudentScore(), false)
-                        div(data-tooltip="").question-mark ?
+                        div(data-tooltip=Msg.Can_Drop_Student_Score_Tooltip_Message).question-mark ?
 
         //SPAN#reminders-button.small-gray-link=Msg.Reminder(true)
         //.reminders-container.x-hidden

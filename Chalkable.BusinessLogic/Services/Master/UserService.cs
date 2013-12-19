@@ -175,7 +175,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 {
                     if (user.OriginalPassword == null)
                         throw new ChalkableException(ChlkResources.ERR_SIS_CONNECTION_REQUERED_NOT_ENCRYPED_PASSWORD);
-                    iNowConnector = ConnectorLocator.Create(user.SisUserName, user.OriginalPassword, "http://localhost/"); //user.District.SisUrl);
+                    iNowConnector = ConnectorLocator.Create(user.SisUserName, user.OriginalPassword, "http://localhost/"); //user.District.SisUrl); //
                 }
                 if (!string.IsNullOrEmpty(iNowConnector.Token))
                 {
