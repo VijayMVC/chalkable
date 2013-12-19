@@ -12,6 +12,7 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.apps.AppModes, 'appMode',
             chlk.models.apps.AppAttachment, 'app',
             Boolean, 'myAppsError',
+            Boolean, 'banned',
             String, 'errorTitle',
             String, 'errorMessage',
 
@@ -49,6 +50,12 @@ NAMESPACE('chlk.models.apps', function () {
                     }break;
                 }
                 BASE(fullUrl, buttons);
+            },
+
+            [[String]],
+            function $createAppBannedViewData(url){
+                BASE(url, []);
+                this.setBanned(true);
             }
 
         ]);

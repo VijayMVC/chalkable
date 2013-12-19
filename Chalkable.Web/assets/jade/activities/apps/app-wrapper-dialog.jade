@@ -3,9 +3,10 @@ announcementId = self.app.getAnnouncementId() ? self.app.getAnnouncementId().val
 
 if self.isMyAppsError()
     +AttachmentDialogMsg(self.getErrorTitle(), self.getErrorMessage())
+else if self.isBanned()
+    +AppBannedDialog()
 else
     +AttachmentDialog(self.getUrl(), self.getToolbarButtons(), announcementId, announcementAppId).app-wrapper
 
 
 
-//todo: app banner app error page

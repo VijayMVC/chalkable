@@ -13,7 +13,8 @@ NAMESPACE('chlk.models.common', function () {
             STUDENT: 3,
             PARENT: 4,
             DEVELOPER: 9,
-            CHECKIN: 6
+            CHECKIN: 6,
+            DISTRICTADMIN: 7
         });
 
     /** @class chlk.models.common.RoleNamesEnum*/
@@ -27,7 +28,8 @@ NAMESPACE('chlk.models.common', function () {
             STUDENT: 'student',
             PARENT: 'parent',
             DEVELOPER: 'developer',
-            CHECKIN: 'checkin'
+            CHECKIN: 'checkin',
+            DISTRICTADMIN: 'districtadmin'
         });
 
     /** @class chlk.models.common.Role*/

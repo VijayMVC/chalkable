@@ -32,3 +32,14 @@ mixin AttachmentDialogMsg(title, text)
             .window-error-message
                 h2.error-title=title
                 span.error-text=text
+
+
+mixin AppBannedDialog()
+    .base-attachment-dialog.app-error-dialog
+        .x-window-header
+            .toolbar
+                .x-close-btn.close
+        .iframe-wrap
+            .window-error-message
+                h2.error-title ooops!
+                span.error-text this app has been banned.
