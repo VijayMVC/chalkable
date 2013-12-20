@@ -115,6 +115,14 @@
           &:hover, &.pressed{
             background: none;
           }
+          #roles-select{
+            .chlk-multiple-select-text{
+              width: 87px;
+            }
+            .labeled-checkbox{
+              width: 100px;
+            }
+          }
         }
       }
 
