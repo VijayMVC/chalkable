@@ -71,7 +71,7 @@ NAMESPACE('chlk.activities.person', function () {
                 BASE(model, msg_);
                 if(model.getUsers){
                     var count = model.getUsers().getTotalCount();
-                    this.dom.find('.total-count').setHTML( count + Msg.Person(count != 1));
+                    this.dom.find('.total-count').setHTML( count + ' ' + Msg.Person(count != 1));
                 }
             }
         ]);

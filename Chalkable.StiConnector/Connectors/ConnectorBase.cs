@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -8,16 +9,19 @@ using System.Text;
 using System.Threading;
 using Chalkable.StiConnector.Connectors.Model;
 using Newtonsoft.Json;
+using System.Configuration;
 
 namespace Chalkable.StiConnector.Connectors
 {
     public class ConnectorBase
     {
-
         public const string GET = "GET";
         public const string POST = "POST";
         public const string PUT = "PUT";
         public const string DELETE = "DELETE";
+
+        private const string STI_APPLICATION_KEY = "sti.application.key";
+
 
         private ConnectorLocator locator;
         public ConnectorBase(ConnectorLocator locator)
@@ -27,15 +31,23 @@ namespace Chalkable.StiConnector.Connectors
 
         //private string mockResp = "{\"Date\":\"2013-11-18T00:00:00\",\"IsDailyAttendancePeriod\":true,\"IsPosted\":true,\"MergeRosters\":true,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"SectionId\":635,\"StudentAttendance\":[{\"AbsentPreviousDay\":false,\"Category\":\"Excused\",\"ClassroomLevel\":\"Absent\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":\"A\",\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":1,\"SectionId\":635,\"StudentId\":19},{\"AbsentPreviousDay\":false,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":21},{\"AbsentPreviousDay\":true,\"Category\":\"Excused\",\"ClassroomLevel\":\"Absent\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":\"A\",\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":1,\"SectionId\":635,\"StudentId\":23},{\"AbsentPreviousDay\":false,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":25},{\"AbsentPreviousDay\":false,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":29},{\"AbsentPreviousDay\":false,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":30},{\"AbsentPreviousDay\":false,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":977},{\"AbsentPreviousDay\":false,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":1116},{\"AbsentPreviousDay\":false,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":1147},{\"AbsentPreviousDay\":true,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":1158},{\"AbsentPreviousDay\":false,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":1163},{\"AbsentPreviousDay\":false,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":1171},{\"AbsentPreviousDay\":true,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":1181},{\"AbsentPreviousDay\":true,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":1505},{\"AbsentPreviousDay\":true,\"Category\":\"Unexcused\",\"ClassroomLevel\":\"Tardy\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":\"T\",\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":10,\"SectionId\":635,\"StudentId\":1839},{\"AbsentPreviousDay\":false,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":1924},{\"AbsentPreviousDay\":false,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":1951},{\"AbsentPreviousDay\":false,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":2152},{\"AbsentPreviousDay\":false,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":2285},{\"AbsentPreviousDay\":true,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":2293},{\"AbsentPreviousDay\":true,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":2498},{\"AbsentPreviousDay\":true,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":2569},{\"AbsentPreviousDay\":false,\"Category\":null,\"ClassroomLevel\":\"Present\",\"Date\":\"2013-11-18T00:00:00\",\"Level\":null,\"ReadOnly\":false,\"ReadOnlyReason\":null,\"ReasonId\":null,\"SectionId\":635,\"StudentId\":2623}]}";
 
-        public T Call<T>(string url)
+        private WebClient InitWebClient()
         {
             var client = new WebClient();
             client.Headers[HttpRequestHeader.Authorization] = "Session " + locator.Token;
+            client.Headers.Add("ApplicationKey", string.Format("chalkable {0}", ConfigurationManager.AppSettings[STI_APPLICATION_KEY]));
+            client.Headers.Add("Content-Type", "application/json");
             client.Encoding = Encoding.UTF8;
-            Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
+            return client;
+        }
+
+        public T Call<T>(string url, NameValueCollection parameters = null)
+        {
+            var client = InitWebClient();
             MemoryStream stream = null;
             try
             {
+                client.QueryString = parameters ?? new NameValueCollection();
                 var data = client.DownloadData(url);
                 Debug.WriteLine(Encoding.UTF8.GetString(data));
                 //Thread.Sleep(500);
@@ -65,11 +77,7 @@ namespace Chalkable.StiConnector.Connectors
 
         public T Post<T>(string url, T obj, string method = POST)
         {
-            var client = new WebClient();
-            client.Headers[HttpRequestHeader.Authorization] = "Session " + locator.Token;
-            client.Encoding = Encoding.UTF8;
-            client.Headers.Add("Content-Type", "application/json");
-            
+            var client = InitWebClient();           
             Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
             var stream = new MemoryStream();
             MemoryStream stream2 = null;
@@ -114,7 +122,8 @@ namespace Chalkable.StiConnector.Connectors
         }
         public User GetMe()
         {
-            return Call<User>(string.Format("{0}chalkable/{1}/me", BaseUrl, "users"));
+            var url = string.Format("{0}chalkable/{1}/me", BaseUrl, "users"); //"http://localhost/Api/chalkable/users/me"; //
+            return Call<User>(url); 
         }
     }
 
@@ -209,7 +218,7 @@ namespace Chalkable.StiConnector.Connectors
         private string urlFormat;
         public ActivityConnector(ConnectorLocator locator) : base(locator)
         {
-            urlFormat = BaseUrl + "Chalkable/sections/{0}/activities";
+            urlFormat = BaseUrl + "Chalkable/sections/{0}/activities"; //"http://localhost/Api/chalkable/sections/{0}/activities"; //
         }
 
         public Activity GetActivity(int sectionId, int id)
@@ -221,8 +230,28 @@ namespace Chalkable.StiConnector.Connectors
         public IList<Activity> GetActivities(int sectionId, DateTime? endDate = null, DateTime? startDate = null)
         {
             string url = string.Format(urlFormat, sectionId);
-            return  Call<IList<Activity>>(url); //todo optional params endDate and startDate
+            var optionalParams = new NameValueCollection();
+            if(endDate.HasValue)
+                optionalParams.Add("endDate", endDate.Value.ToString());
+            if(startDate.HasValue)
+                optionalParams.Add("startDate", startDate.Value.ToString());
+            return  Call<IList<Activity>>(url, optionalParams);
         } 
+
+        public IList<Activity> GetTeacherActivities(int acadSessionId, int teacherId, int? start = null, int? end = null, DateTime? endDate = null, DateTime? startDate = null)
+        {
+            string url = string.Format(BaseUrl + "Chalkable/{0}/teachers/{1}/activities", acadSessionId, teacherId);
+            var optinalParams = new NameValueCollection();
+            if(start.HasValue)
+                optinalParams.Add("start", start.Value.ToString());
+            if(end.HasValue)
+                optinalParams.Add("end", end.Value.ToString());
+            if(startDate.HasValue)
+                optinalParams.Add("startDate", startDate.Value.ToString());
+            if(endDate.HasValue)
+                optinalParams.Add("endDate", endDate.Value.ToString());
+            return Call<IList<Activity>>(url, optinalParams);
+        }
 
         public void DeleteActivity(int sectionId, int id)
         {

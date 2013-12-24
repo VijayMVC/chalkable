@@ -100,13 +100,15 @@ namespace Chalkable.BusinessLogic.Services.School
                 MarkingPeriodId = markingPeriodId,
                 OwnedOnly = ownerOnly,
             };
-            var res = GetAnnouncements(q);
-            if (classId.HasValue)
-            {
-                var activities = ConnectorLocator.ActivityConnector.GetActivities(classId.Value);
-                MapActivitiesToAnnouncements(res.Announcements, activities);
-            }
-            return new PaginatedList<AnnouncementComplex>(res.Announcements, start / count, count, res.SourceCount);
+            //var res = GetAnnouncements(q);
+            //if (classId.HasValue)
+            //{
+            //    var activities = ConnectorLocator.ActivityConnector.GetActivities(classId.Value);
+            //    MapActivitiesToAnnouncements(res.Announcements, activities);
+            //}
+            //return new PaginatedList<AnnouncementComplex>(res.Announcements, start / count, count, res.SourceCount);
+            var res = GetAnnouncementsComplex(q);
+            return new PaginatedList<AnnouncementComplex>(res, start / count, count);
         }
 
         public IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, IList<int> gradeLevelsIds = null, int? classId = null)
@@ -118,14 +120,37 @@ namespace Chalkable.BusinessLogic.Services.School
                     GradeLevelIds = gradeLevelsIds,
                     ClassId = classId
                 };
-            var anns = GetAnnouncements(q).Announcements;
-            if (classId.HasValue)
-            {
-                var activities = ConnectorLocator.ActivityConnector.GetActivities(classId.Value);
-                MapActivitiesToAnnouncements(anns, activities);
-            }
-            return anns;
+            //var anns = GetAnnouncements(q).Announcements;
+            //if (classId.HasValue)
+            //{
+            //    var activities = ConnectorLocator.ActivityConnector.GetActivities(classId.Value);
+            //    MapActivitiesToAnnouncements(anns, activities);
+            //}
+            return GetAnnouncementsComplex(q);
         }
+
+
+        private IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query)
+        {
+            var anns = GetAnnouncements(query).Announcements;
+            var classId = query.ClassId ?? (anns.Count > 0 && query.Id.HasValue ? anns.First().ClassRef : default(int?));
+            var activities = GetActivities(query.Id, classId, query.FromDate, query.ToDate, query.Start, query.Count);
+            return MapActivitiesToAnnouncements(anns, activities);
+        }
+        private IList<Activity> GetActivities(int? id, int? classId, DateTime? fromDate, DateTime? toDate, int start, int count)
+        {
+            if (id.HasValue && classId.HasValue)
+                return new List<Activity> { ConnectorLocator.ActivityConnector.GetActivity(classId.Value, id.Value) };
+            if (classId.HasValue && count == int.MaxValue && start == 0)
+                return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, toDate, fromDate);
+            if (Context.Role == CoreRoles.TEACHER_ROLE)
+            {
+                var schoolYear = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+                var end = start + count;
+                return ConnectorLocator.ActivityConnector.GetTeacherActivities(schoolYear.Id, Context.UserLocalId.Value, start, end, toDate, fromDate);
+            }
+            return new List<Activity>();
+        } 
 
         public IList<AnnouncementComplex> GetAnnouncements(string filter)
         {
@@ -161,7 +186,6 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
-
         public AnnouncementDetails CreateAnnouncement(int? classAnnouncementTypeId, int? classId = null)
         {
             if (!AnnouncementSecurity.CanCreateAnnouncement(Context))
@@ -191,7 +215,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 return res;
             }
         }
-
 
         public void DeleteAnnouncement(int announcementId)
         {
@@ -296,16 +319,29 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        private void MapActivitiesToAnnouncements(IList<AnnouncementComplex> anns, IList<Activity> activities)
+        private IList<AnnouncementComplex> MapActivitiesToAnnouncements(IList<AnnouncementComplex> anns, IList<Activity> activities)
         {
+            var res = new List<AnnouncementComplex>();
+            var addTodbAnns = new List<Announcement>();
             foreach (var activity in activities)
             {
                 var ann = anns.FirstOrDefault(x => x.SisActivityId == activity.Id);
-                if (ann != null)
+                if (ann == null)
                 {
-                    MapActivityToAnnouncement(ann, activity);
+                    ann = new AnnouncementComplex{Created = Context.NowSchoolTime, State = AnnouncementState.Created};
+                    addTodbAnns.Add(ann);
+                }
+                MapActivityToAnnouncement(ann, activity);
+                res.Add(ann);
+            }
+            if (addTodbAnns.Count > 0)
+            {
+                using (var uow = Update())
+                {
+                    CreateAnnoucnementDataAccess(uow).Insert(addTodbAnns);
                 }
             }
+            return res;
         }
         private void MapActivityToAnnouncement(Announcement ann, Activity activity)
         {
@@ -317,6 +353,7 @@ namespace Chalkable.BusinessLogic.Services.School
             ann.WeightAddition = activity.WeightAddition;
             ann.WeightMultiplier = activity.WeightMultiplier;
             ann.Dropped = activity.IsDropped;
+            ann.ClassAnnouncementTypeRef = activity.CategoryId;
         }
         private void MapAnnouncementToActivity(Announcement ann, Activity activity)
         {
