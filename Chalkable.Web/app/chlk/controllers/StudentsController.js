@@ -277,7 +277,7 @@ NAMESPACE('chlk.controllers', function (){
 
             chlk.models.id.MarkingPeriodId, function prepareMarkingPeriodId(markingPeriodId_){
                 var markingPeriod = this.getCurrentMarkingPeriod();
-                return markingPeriodId_ || markingPeriod.getId();
+                return markingPeriodId_ && markingPeriodId_.valueOf() ? markingPeriodId_ :  markingPeriod.getId();
             },
 
             [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],

@@ -170,29 +170,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher", Preference.API_DESCR_ATTENDANCE_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Attendance })]
         public ActionResult AttendanceSummary(DateTime? date)
         {
-            //throw new NotImplementedException();
-            date = date ?? SchoolLocator.Context.NowSchoolTime;
-            var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(date.Value);
-            if (markingPeriod == null)
-                throw new NoMarkingPeriodException();
-            var trouble = new List<Person>();
-            var well = new List<Person>();
-            
-            var studentsList = SchoolLocator.PersonService.GetPersons().Where(x => x.RoleRef == CoreRoles.STUDENT_ROLE.Id).ToList();
-
-
-            var all = new List<ClassAttendanceDetails>();
-            foreach (var student in studentsList)
-            {
-                var attendances = all.Where(x => x.Student.Id == student.Id).ToList();
-                var stat = attendances.Where(t => t.IsAbsentOrLate).ToList();
-                if (stat.Count >= 5)
-                    trouble.Add(student);
-                else if (stat.Count <= 1)
-                    well.Add(student);
-            }
-
-            return Json(AttendanceSummaryViewData.Create(trouble, well.Take(10).ToList(), all, markingPeriod), 5);
+            return FakeJson("~/fakeData/attendanceSummary.json");
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]

@@ -13,12 +13,12 @@ selectedId = topData.getSelectedItemId()
         .mp-info
             -mp=self.getCurrentMarkingPeriod()
             =Msg.Marking_Period_shortcut.toUpperCase() + ' ' + mp.getName() + mp.getStartDate().format(' M d - ') + mp.getEndDate().format('M d')
-    .item-types
+    .chart-top-legend
         each item,i in self.getAnnTypesGradeStats()
-            div(data-color=self.getColor(i), data-opacity-color=self.getColor(i, 0.2), data-index=i).item-type
+            div(data-color=self.getColor(i), data-opacity-color=self.getColor(i, 0.2), data-index=i).legend-item
                 div(style="background:" + self.getColor(i) + ";").box
                 .name=item.getTypeName()
-        .item-type.hovered.avg
+        .legend-item.hovered.avg
             .box
             .name
                 |#{Msg.Avg} (#{self.getAvg()})

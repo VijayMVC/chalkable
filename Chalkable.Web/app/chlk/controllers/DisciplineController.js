@@ -2,6 +2,7 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.DisciplineService');
 REQUIRE('chlk.services.DisciplineTypeService');
 REQUIRE('chlk.services.ClassService');
+REQUIRE('chlk.services.GradeLevelService');
 
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.discipline.DisciplineList');
@@ -10,6 +11,7 @@ REQUIRE('chlk.models.discipline.SetDisciplineListModel');
 REQUIRE('chlk.models.discipline.PaginatedListByDateModel');
 
 REQUIRE('chlk.activities.discipline.DisciplineSummaryPage');
+REQUIRE('chlk.activities.discipline.AdminDisciplineSummaryPage');
 REQUIRE('chlk.activities.discipline.SetDisciplineDialog');
 REQUIRE('chlk.activities.discipline.DayDisciplinePopup');
 REQUIRE('chlk.activities.discipline.ClassDisciplinesPage');
@@ -28,6 +30,9 @@ NAMESPACE('chlk.controllers', function(){
             chlk.services.DisciplineTypeService, 'disciplineTypeService',
 
             [ria.mvc.Inject],
+            chlk.services.GradeLevelService, 'gradeLevelService',
+
+            [ria.mvc.Inject],
             chlk.services.ClassService, 'classService',
 
 
@@ -36,6 +41,24 @@ NAMESPACE('chlk.controllers', function(){
             function listAction(date_, pageSize_, pageIndex_){
                 var res = this.disciplineList_(pageIndex_, pageSize_, date_);
                 return this.PushView(chlk.activities.discipline.DisciplineSummaryPage, res);
+            },
+
+            [chlk.controllers.SidebarButton('discipline')],
+            [[Boolean, String, chlk.models.common.ChlkDate]],
+            function listAdminAction(update_, gradeLevelsIds_, date_){
+                var res = this.disciplineService
+                    .summary(date_, gradeLevelsIds_)
+                    .attach(this.validateResponse_())
+                    .then(function(model){
+                        var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);
+                        var topModel = new chlk.models.grading.GradeLevelsForTopBar(gradeLevels, gradeLevelsIds_);
+                        model.setTopData(topModel);
+                        if(gradeLevelsIds_)
+                            model.setGradeLevelsIds(gradeLevelsIds_);
+                        return model;
+                    }, this);
+                return update_ ? this.UpdateView(chlk.activities.discipline.AdminDisciplineSummaryPage, res) :
+                    this.PushView(chlk.activities.discipline.AdminDisciplineSummaryPage, res);
             },
 
             [chlk.controllers.SidebarButton('discipline')],

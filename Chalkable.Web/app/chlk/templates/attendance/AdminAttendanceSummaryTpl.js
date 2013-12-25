@@ -194,25 +194,11 @@ NAMESPACE('chlk.templates.attendance', function () {
                     visible: false
                 }];
                 return {
-                    backgroundColor: 'transparent',
                     chart: {
-                        backgroundColor: 'transparent',
-                        width: 660,
-                        type: 'column',
-                        height: 215,
-                        style: {
-                            fontFamily: 'Arial',
-                            fontSize: '10px',
-                            color: '#a6a6a6'
-                        }
-
+                        type: 'column'
                     },
-                    labels: {
-                        style: {
-                            color: '#a6a6a6',
-                            textOverflow: 'ellipsis',
-                            fontSize: '9px'
-                        }
+                    legend:{
+                         enabled: true
                     },
                     plotOptions: {
                         series: {
@@ -229,21 +215,10 @@ NAMESPACE('chlk.templates.attendance', function () {
                             }
                         }
                     },
-                    credits: {
-                        enabled: false
-                    },
-                    title: {
-                        text: ''
-                    },
                     xAxis: {
                         categories: categories
                     },
                     yAxis: {
-                        title: {
-                            text: ''
-                        },
-                        lineWidth:0,
-                        gridLineDashStyle: 'dot',
                         min: 0
                     },
                     colors: ['#e49e3c', '#b93838', '#5093a7'],

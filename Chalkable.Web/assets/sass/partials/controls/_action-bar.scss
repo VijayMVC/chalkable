@@ -103,6 +103,12 @@ DIV#content-wrapper{
         }
       }
 
+      >.center:not(.no-border){
+        >.action-link:first-child, >.action-button:first-child{
+          box-shadow: -1px 0 0 #d0d0d0;
+        }
+      }
+
       >.left, >.right{
         height: 34px;
       }

@@ -1,5 +1,4 @@
-REQUIRE('chlk.models.people.User');
-REQUIRE('chlk.models.attendance.AbsentMonthStat');
+REQUIRE('chlk.models.attendance.AbsentLateSummaryItem');
 
 NAMESPACE('chlk.models.attendance', function () {
     "use strict";
@@ -7,11 +6,8 @@ NAMESPACE('chlk.models.attendance', function () {
     /** @class chlk.models.attendance.AttendanceSummary*/
     CLASS(
         'AttendanceSummary', [
-            ArrayOf(chlk.models.people.User), 'trouble',
+            chlk.models.attendance.AbsentLateSummaryItem, 'late',
 
-            ArrayOf(chlk.models.people.User), 'well',
-
-            [ria.serialize.SerializeProperty('absentstat')],
-            ArrayOf(chlk.models.attendance.AbsentMonthStat), 'absentStat' //todo: rename
+            chlk.models.attendance.AbsentLateSummaryItem, 'absent'
         ]);
 });

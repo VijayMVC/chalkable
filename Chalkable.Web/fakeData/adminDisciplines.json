@@ -1,0 +1,378 @@
+{"data":{
+    "nowcount": 2,
+    "daycount": 13,
+    "mpcount": 2,
+    "markingperiodname": "2",
+    "date": "12-30-2013",
+    "daystats": [
+        {"summary":"Fighting","value":43,"avg":33},
+        {"summary":"Cursing","value":69,"avg":10},
+        {"summary":"Talking In Class","value":18,"avg":62},
+        {"summary":"Weapon","value":84,"avg":99},
+        {"summary":"Dress code","value":49,"avg":77},
+        {"summary":"Dreaming","value":12,"avg":88},
+        {"summary":"Swimming","value":78,"avg":58}
+    ],
+    "mpstats": [
+        {"summary":"12-10-2013","value":22},
+        {"summary":"12-11-2013","value":50},
+        {"summary":"12-12-2013","value":37},
+        {"summary":"12-13-2013","value":16},
+        {"summary":"12-14-2013","value":98},
+        {"summary":"12-15-2013","value":64},
+        {"summary":"12-16-2013","value":24}
+    ],
+    "disciplinesbytype": [{
+        "type": {
+            "name":"Fighting",
+            "id":1,
+            "count":0,
+            "periodorder":0,
+            "score":10,
+            "schoolinfoid":1
+        },
+        "students": [{
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }]
+    }, {
+        "type": {
+            "name":"Talking In Class",
+            "id":3,
+            "count":0,
+            "periodorder":0,
+            "score":1,
+            "schoolinfoid":1
+        },
+        "students": [{
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }]
+    }, {
+        "type": {
+            "name":"Dress code",
+            "id":5,
+            "count":0,
+            "periodorder":0,
+            "score":5,
+            "schoolinfoid":1
+        },
+        "students": [{
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }, {
+            "displayname":"Mister X2",
+            "fullname":"Mister X2",
+            "gender":"M",
+            "id":2,
+            "firstname":"Mister",
+            "lastname":"X2"
+        }]
+    }]
+},"success":true}

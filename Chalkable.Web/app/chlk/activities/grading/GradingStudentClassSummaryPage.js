@@ -9,14 +9,14 @@ NAMESPACE('chlk.activities.grading', function () {
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.grading.GradingStudentClassSummaryTpl)],
         'GradingStudentClassSummaryPage', EXTENDS(chlk.activities.grading.BaseGradingPage), [
-            [ria.mvc.DomEventBind('mouseover mouseleave', '.item-type:not(.hovered)')],
+            [ria.mvc.DomEventBind('mouseover mouseleave', '.legend-item:not(.hovered)')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function itemTypeHover(node, event){
                 var needOpacity = event.type == 'mouseleave';
                 this.changeLineOpacity(node, needOpacity);
             },
 
-            [ria.mvc.DomEventBind('click', '.item-type:not(.avg)')],
+            [ria.mvc.DomEventBind('click', '.legend-item:not(.avg)')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function itemTypeClick(node, event){
                 var needOpacity = node.hasClass('hovered');
