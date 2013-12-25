@@ -59,7 +59,7 @@ mixin StudentsTpl(students, header, currentPage, date)
                         data-id=student.getId().valueOf(),
                         data-count=student.getAbsentsCount && student.getAbsentsCount(),
                         data-name=student.getFirstName()
-                    ).student
+                    ).student-with-picture
                         +ActionLink('attendance', 'showStudentAttendance', student.getId(),
                                 date, 'attendance', 'summary', JSON.stringify([true, self.getGradeLevelsIds(), currentPage, date])).img-container
                             +PersonImg(student, 128)
@@ -74,7 +74,7 @@ mixin StudentsTpl(students, header, currentPage, date)
                         data-id=student.getId().valueOf(),
                         data-count=student.getAbsentsCount && student.getAbsentsCount(),
                         data-name=student.getFirstName()
-                    ).student
+                    ).student-with-picture
                         +ActionLink('attendance', 'showStudentAttendance', student.getId(),
                                 date, 'attendance', 'summary', JSON.stringify([true, self.getGradeLevelsIds(), currentPage, date])).img-container
                             +PersonImg(student, 128)
@@ -150,7 +150,7 @@ currentPage = self.getCurrentPage() || 1
                     label.choose-date-icon
                     +Hidden('gradeLevelsIds', self.getGradeLevelsIds())
                     +Hidden('renderMp', 'true')
-    .attendance-boxes-admin
+    .boxes-admin
         .boxes-container
             div(left="0px", text=Msg.Now, data-index="1", class=currentPage == 1 ? "active-part" : "").top-number-box.now-box
                 .title=Msg.Not_in_class_right_now
@@ -164,7 +164,7 @@ currentPage = self.getCurrentPage() || 1
                 .title=Msg.Attendance_MP
                 .number=self.getAttendanceByMpData().getAbsentStudentsCountAvg()
                 .triangle
-    .attendance-content
+    .statistic-content
         +Hidden('attendanceTypes').add-new-student
         div(class=currentPage == 1 ? "active-part" : "").attendance-now.students-statistic.page-1
             +RenderWith(nowData, chlk.templates.attendance.AdminAttendanceNowTpl)

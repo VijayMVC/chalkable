@@ -25,6 +25,14 @@ NAMESPACE('chlk.services', function(){
                 });
             },
 
+            [[chlk.models.common.ChlkDate, String]],
+            ria.async.Future, function summary(date_, gradeLevelsIds_){
+                return this.get('Discipline/Summary.json', chlk.models.discipline.AdminDisciplineSummary,{
+                    date: date_,
+                    gradeLevelsIds: gradeLevelsIds_
+                });
+            },
+
             [[chlk.models.id.SchoolYearId, chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
             ria.async.Future, function listStudentDiscipline(schoolYearId_, schoolPersonId, date_){
                 return this.get('Discipline/ListStudentDiscipline.json', ArrayOf(chlk.models.discipline.Discipline),{

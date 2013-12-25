@@ -17,7 +17,7 @@ if self.getAbsentNowStudents()
             +AdminAttendanceChart(self.getAttendanceStats(), 550)
     +AddStudentTpl(1)
     if self.getAbsentNowStudents().length
-        .attendance-students
+        .summary-students
             +StudentsTpl(self.getAbsentNowStudents(), Msg.Absent + " " + Msg.Right_now.toLowerCase(), 1)(
                 class = 'attendance-' + valuesEnum.ABSENT.valueOf()
             )

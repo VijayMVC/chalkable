@@ -21,8 +21,22 @@ BODY {
               }
             }
 
+            #admin-home-charts{
+              .panel-header{
+                padding-left: 30px;
+              }
+            }
+
             #admin-second-block{
-              margin-top: 55px;
+              margin-top: 35px;
+              margin-left: -7px;
+
+              .button-block{
+                &:hover, &.hovered{
+                  position: relative;
+                  top: -1px;
+                }
+              }
 
               .budget-block{
 
@@ -116,34 +130,28 @@ BODY {
 
             .button-block{
               cursor: pointer;
-              display: inline-block;
-              position: relative;
 
-              &:hover{
+              &:not(.block){
+                display: inline-block;
+              }
+
+              &.with-padding{
+                padding: 10px 0;
+              }
+
+              &:hover, &.hovered{
                 box-shadow: 0 1px 4px 1px #C8C8C8;
                 border-top: 1px solid white;
                 top: -1px;
               }
             }
 
-            .chart-bg {
-              background: url(images/feed/chart-bg-2.png) 9px center no-repeat;
-              position: absolute;
-              width: 670px;
-              height: 235px;
-              z-index: 1;
-              top: -18px;
-              left: -3px;
-              font-size: 110px;
-              font-weight: bold;
-              text-align: center;
-              color: #2F7790;
-              text-decoration: none;
-              @include transition(color, text-shadow 0.4s);
-              text-shadow: 0 -1px 0 #173b48, 0 1px 0 white;
-            }
-
             .admin-home{
+              .chart-bg {
+                z-index: 1;
+                position: absolute;
+              }
+
               .chart-bg:hover{
                 color: transparent;
                 text-shadow: none;
@@ -152,8 +160,11 @@ BODY {
             }
 
             #grades-chart-container{
+              margin-left: -6px;
+              margin-top: 16px;
+
               .chart-bg{
-                background-size: 650px 235px;
+                background-size: 644px 235px;
               }
 
               .panel-header{
@@ -162,10 +173,10 @@ BODY {
             }
 
             #admin-home-charts{
+              margin-left: -25px;
+
               .chart-container {
                 position: relative;
-                left: -7px;
-                //margin-top: 10px;
                 height: 166px;
                 overflow: hidden;
               }
@@ -180,7 +191,7 @@ BODY {
                 width: 212px;
                 z-index: 1;
                 top: -7px;
-                left: 2px;
+                left: 20px;
                 line-height: 176px;
 
                 &:hover{
@@ -190,10 +201,10 @@ BODY {
             }
 
             .third-blocks-container {
-              width: 663px;
+              width: 684px;
 
               .block{
-                width:221px;
+                width:228px;
                 display: inline-block;
                 text-align: center;
                 vertical-align: top;

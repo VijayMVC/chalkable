@@ -127,9 +127,10 @@ NAMESPACE('chlk.controllers', function (){
            },
            [[chlk.models.people.UserPermissionEnum]],
            Boolean, function hasUserPermission_(userPermission){
-                var claims = this.getUserClaims_();
+                return true;
+                /*var claims = this.getUserClaims_();
                 return claims && claims.length > 0
-                    && claims.filter(function(claim){return claim.hasPermission(userPermission); }).length > 0;
+                    && claims.filter(function(claim){return claim.hasPermission(userPermission); }).length > 0;*/
            },
 
            OVERRIDE, ria.reflection.ReflectionMethod, function resolveRoleAction_(state){

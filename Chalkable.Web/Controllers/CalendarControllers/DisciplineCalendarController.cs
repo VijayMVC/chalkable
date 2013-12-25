@@ -14,7 +14,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult MonthForStudent(int studentId, DateTime? date)
         {
-            throw new NotImplementedException();
+            return FakeJson("~/fakeData/disciplinesCalendar.json");
             //DateTime start, end;
             //MonthCalendar(ref date, out start, out end);
             //var currentSchoolYearId = GetCurrentSchoolYearId();

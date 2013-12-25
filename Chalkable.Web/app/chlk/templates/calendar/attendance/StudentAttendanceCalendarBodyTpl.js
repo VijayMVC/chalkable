@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.ChlkTemplate');
+REQUIRE('chlk.templates.calendar.announcement.BaseCalendarBodyTpl');
 REQUIRE('chlk.models.calendar.attendance.StudentAttendanceMonthCalendar');
 
 
@@ -10,7 +10,7 @@ NAMESPACE('chlk.templates.calendar.attendance', function (){
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/calendar/attendance/StudentAttendanceMonthCalendarBody.jade')],
         [ria.templates.ModelBind(chlk.models.calendar.attendance.StudentAttendanceMonthCalendar)],
-        'StudentAttendanceCalendarBodyTpl', EXTENDS(chlk.templates.ChlkTemplate),[
+        'StudentAttendanceCalendarBodyTpl', EXTENDS(chlk.templates.calendar.announcement.BaseCalendarBodyTpl),[
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.SchoolPersonId, 'studentId',

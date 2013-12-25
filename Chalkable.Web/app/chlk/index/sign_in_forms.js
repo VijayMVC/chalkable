@@ -1,68 +1,35 @@
-$(function(){
-	// Checking for CSS 3D transformation support
-	$.support.css3d = supportsCSS3D();
-	var formContainer = $('#formContainer');
-	// Listening for clicks on the ribbon links
-	$('.flipLink').click(function(e){
-		// Flipping the forms
-		formContainer.toggleClass('flipped');
-		// If there is no CSS3 3D support, simply
-		// hide the login form (exposing the recover one)
-		if(!$.support.css3d){
-			$('#login').toggle();
-		}
-		e.preventDefault();
-	});
-	// A helper function that checks for the
-	// support of the 3D CSS3 transformations.
-	function supportsCSS3D() {
-		var props = [
-			'perspectiveProperty', 'WebkitPerspective', 'MozPerspective'
-		], testDom = document.createElement('a');
-		for(var i=0; i<props.length; i++){
-			if(props[i] in testDom.style){
-				return true;
-			}
-		}
-		return false;
-	}
-});
-
-
 $(document).ready(function () {
 
-    var fieldPassword = $('.field-password');
-    var thePassword = $('.the-password');
     var options = { distance: 13, times: 3 };
-    var optionslock = { distance: 13, times: 3 };
-    var errorField  = $('.sign-in-errors');
     function unSuccessLogIn() {
-        var divEl = $('div.the-password');
-        if (!divEl.hasClass('shaking')){
-            divEl.addClass('shaking');
-            divEl.effect('shake', options, 100, function () {
+        var fieldPassword = $('#login-form').find('input[type=password]');
+        if (!fieldPassword.hasClass('shaking')){
+            fieldPassword.addClass('shaking');
+            fieldPassword.effect('shake', options, 650, function () {
                 fieldPassword.focus();
-                divEl.removeClass('shaking');
+                fieldPassword.removeClass('shaking');
             });
         }
-        
-    }
 
+    }
 
     $('form').validationEngine({ scroll: false });
 
-    $('form#login').on('submit.logon', function () {
+    $('form#login-form').on('submit.logon', function () {
         var form = jQuery(this);
         if (!form.validationEngine('validate')) {
             unSuccessLogIn();
         } else {
-         var options = {
+
+         jQuery.ajax({
               url: WEB_SITE_ROOT + 'User/LogOn.json',
               type: "post",
               dataType: "json",
               data: form.serialize(),
               success:function (response) {
+
                 if (response.Success !== true) {
+                    form.find('input[type=submit]').attr('disabled', false);
                     unSuccessLogIn();
                     var text = response.data && response.data.errormessage || '';
                     if(text != '') $('div.the-password').validationEngine('showPrompt',text, 'red','topRight', false);
@@ -74,43 +41,21 @@ $(document).ready(function () {
                     window.location.href = WEB_SITE_ROOT + 'Home/' + role + '.aspx';
                 }
             } .bind(this)
-         };
-         jQuery.ajax(options);
+         });
+            form.find('input[type=submit]').attr('disabled', true);
         }
         return false;
     });
 
 
-    $('form#recover').on('submit.reset', function () {
+    $('form#reset-form').on('submit.reset', function () {
         var form = jQuery(this);
         if (!form.validationEngine('validate')) { return; }
-        var value = jQuery('#recovery-email').val(), container = jQuery('.signin_button_container.recovery');
-        container.addClass('container-ajax-loader');
+        var value = form.find('input[name=email]').val();
+        form.find('input[type=submit]').attr('disabled', true);
         jQuery.getJSON(WEB_SITE_ROOT + 'Account/ResetPassword.json', { email: value }, function (response, data) {
-            container.removeClass('container-ajax-loader');
-            var msg = (response.data) ? 'Check your email and click the link.' : 'Sorry, there is no account with that email address, or there are too many password resets in a short time.';
-            addMessage({
-                html: '<h2>password.</h2>' +
-                    ((response.data) ? '<p></p>' : '') +
-                    '<p style="text-align: center;">' + msg + '</p>' +
-                    '<p></p>',
-                height: 160,
-                width: 300,
-                buttons: [{
-                    text: 'GOT IT'
-                }]
-            });
+            form.find('input[type=submit]').attr('disabled', false);
         });
-        return false;
-    });
-
-    $('.sign_in_button').click(function () {
-        $('#login').submit();
-        return false;
-    });
-
-    $('.email_me_button').click(function () {
-        $('#recover').submit();
         return false;
     });
 
@@ -124,7 +69,7 @@ $(document).ready(function () {
         var form = jQuery(this);
         if (!form.validationEngine('validate')) { return; }
         var options = {
-            url: WEB_SITE_ROOT + 'Developer/SignUp.json',
+            url: WEB_SITE_ROOT + 'User/LogOn.json',
             type: "post",
             dataType: "json",
             data: form.serialize(),

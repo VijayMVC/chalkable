@@ -3,6 +3,100 @@ REQUIRE('chlk.controls.Base');
 NAMESPACE('chlk.controls', function () {
     var charts = {};
 
+    var defaultConfigs = {
+        backgroundColor: 'transparent',
+        chart: {
+            backgroundColor: 'transparent',
+            width: 630,
+            height: 178,
+            style: {
+                fontFamily: 'Arial',
+                fontSize: '10px',
+                color: '#a6a6a6'
+            }
+
+        },
+        labels: {
+            style: {
+                color: '#a6a6a6',
+                textOverflow: 'ellipsis',
+                fontSize: '9px',
+                width: '1000px'
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: ''
+        },
+        xAxis: {
+            categories: [],
+            lineWidth:0,
+            labels: {
+                formatter: function(){
+                    return '<div class="chart-label">' + this.value + '</div>';
+                },
+                useHTML: true
+            }
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            showFirstLabel: false,
+            gridLineDashStyle: 'dot',
+            labels: {
+                formatter: function(){
+                    return '<div class="chart-label-y">' + this.value + '</div>';
+                },
+                useHTML: true
+            }
+        },
+        legend:{
+             enabled: false
+        },
+        tooltip: {
+            headerFormat: '',
+            pointFormat: '<b class="chart-text">{point.y}</b>',
+            borderWidth: 0,
+            borderRadius: 2,
+            useHTML: true,
+            positioner: function (labelWidth, labelHeight, point) {
+                return { x: point.plotX + 7, y: point.plotY - 37 };
+            },
+            style: {
+                display: 'none'
+            }
+        },
+        plotOptions:{
+            area: {
+                marker: {
+                    enabled: true,
+                    symbol: 'circle',
+                    radius: 3,
+                    fillColor: '#ffffff',
+                    lineWidth: 2,
+                    lineColor: '#a6a6a6',
+                    states: {
+                        hover: {
+                            radius: 6,
+                            lineWidth: 2,
+                            enabled: true,
+                            lineColor: '#2F7790'
+                        }
+                    }
+                }
+            }
+        },
+        colors: ['#d8d8d8'],
+
+        series: [{
+            name: '',
+            data: []
+        }]
+    };
+
     /** @class chlk.controls.ChartControl */
     CLASS(
         'ChartControl', EXTENDS(ria.mvc.DomControl), [
@@ -15,7 +109,23 @@ NAMESPACE('chlk.controls', function () {
             Object, function processAttrs(attrs) {
                 attrs.id = attrs.id || ria.dom.Dom.GID();
                 var options = attrs['data-options'];
-                this.queueReanimation_(attrs.id, options);
+                var res = {};
+                jQuery.extend(true, res, defaultConfigs,options);
+                var interval = res.yAxis.tickInterval;
+                if(interval && !res.yAxis.max){
+                    var max = 0;
+                    res.series.forEach(function(s){
+                        s.data.forEach(function(item){
+                            if(item > max)
+                                max = item;
+                        });
+                    });
+                    max = Math.ceil(max/interval) * interval;
+                    res.yAxis.max = max;
+                }
+                if(res.legend.enabled && !options.chart.height)
+                    res.chart.height = 215;
+                this.queueReanimation_(attrs.id, res);
                 delete attrs['data-options'];
                 return attrs;
             },
