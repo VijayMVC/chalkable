@@ -1,0 +1,27 @@
+#chlk-dialogs{
+  .base-attachment-dialog{
+      &.app-error-dialog{
+        .broken-link{
+          background: url(images/app/broken-link.png);
+          display: inline-block;
+          width: 118px;
+          height: 118px;
+          background-repeat: no-repeat;
+          margin-top: 300px;
+          opacity: 0.3;
+        }
+        .window-error-message{
+          top: 0px;
+        }
+        .report-btn{
+          border-radius: 5px;
+          color: gray;
+          margin-top: 50px;
+        }
+
+        .iframe-wrap{
+          text-align: center;
+        }
+      }
+  }
+}
