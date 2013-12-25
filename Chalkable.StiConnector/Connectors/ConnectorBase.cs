@@ -227,7 +227,7 @@ namespace Chalkable.StiConnector.Connectors
             return Call<Activity>(url);
         }
 
-        public IList<Activity> GetActivities(int sectionId, DateTime? endDate = null, DateTime? startDate = null)
+        public IList<Activity> GetActivities(int sectionId, int? start, int? end, DateTime? endDate = null, DateTime? startDate = null)
         {
             string url = string.Format(urlFormat, sectionId);
             var optionalParams = new NameValueCollection();
@@ -235,7 +235,12 @@ namespace Chalkable.StiConnector.Connectors
                 optionalParams.Add("endDate", endDate.Value.ToString());
             if(startDate.HasValue)
                 optionalParams.Add("startDate", startDate.Value.ToString());
-            return  Call<IList<Activity>>(url, optionalParams);
+            var res =  Call<IList<Activity>>(url, optionalParams);
+            if (start.HasValue)
+                res = res.Skip(start.Value).ToList();
+            if (end.HasValue)
+                res = res.Take(end.Value).ToList();
+            return res;
         } 
 
         public IList<Activity> GetTeacherActivities(int acadSessionId, int teacherId, int? start = null, int? end = null, DateTime? endDate = null, DateTime? startDate = null)

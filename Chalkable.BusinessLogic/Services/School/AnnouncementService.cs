@@ -100,12 +100,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 MarkingPeriodId = markingPeriodId,
                 OwnedOnly = ownerOnly,
             };
-            //var res = GetAnnouncements(q);
-            //if (classId.HasValue)
-            //{
-            //    var activities = ConnectorLocator.ActivityConnector.GetActivities(classId.Value);
-            //    MapActivitiesToAnnouncements(res.Announcements, activities);
-            //}
             //return new PaginatedList<AnnouncementComplex>(res.Announcements, start / count, count, res.SourceCount);
             var res = GetAnnouncementsComplex(q);
             return new PaginatedList<AnnouncementComplex>(res, start / count, count);
@@ -120,37 +114,107 @@ namespace Chalkable.BusinessLogic.Services.School
                     GradeLevelIds = gradeLevelsIds,
                     ClassId = classId
                 };
-            //var anns = GetAnnouncements(q).Announcements;
-            //if (classId.HasValue)
-            //{
-            //    var activities = ConnectorLocator.ActivityConnector.GetActivities(classId.Value);
-            //    MapActivitiesToAnnouncements(anns, activities);
-            //}
             return GetAnnouncementsComplex(q);
         }
 
 
         private IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query)
         {
+            //var classId =  ?? (anns.Count > 0 && query.Id.HasValue ? anns.First().ClassRef : default(int?));
+            var activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count);
+            if (Context.Role == CoreRoles.TEACHER_ROLE)
+            {
+                query.SisActivitiesIds = activities.Select(x => x.Id).ToList();
+                query.OwnedOnly = false;
+                query.GradedOnly = false;
+                query.StarredOnly = false;
+            }
             var anns = GetAnnouncements(query).Announcements;
-            var classId = query.ClassId ?? (anns.Count > 0 && query.Id.HasValue ? anns.First().ClassRef : default(int?));
-            var activities = GetActivities(query.Id, classId, query.FromDate, query.ToDate, query.Start, query.Count);
+            if (anns.Count < activities.Count && Context.Role == CoreRoles.TEACHER_ROLE)
+            {
+                var noInDbActivities = activities.Where(x => anns.All(y => y.SisActivityId != x.Id)).ToList();
+                AddActivitiesToChalkable(noInDbActivities);
+                anns = GetAnnouncements(query).Announcements;
+            }
             return MapActivitiesToAnnouncements(anns, activities);
         }
-        private IList<Activity> GetActivities(int? id, int? classId, DateTime? fromDate, DateTime? toDate, int start, int count)
+        private void AddActivitiesToChalkable(IEnumerable<Activity> activities)
         {
-            if (id.HasValue && classId.HasValue)
-                return new List<Activity> { ConnectorLocator.ActivityConnector.GetActivity(classId.Value, id.Value) };
-            if (classId.HasValue && count == int.MaxValue && start == 0)
-                return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, toDate, fromDate);
+            IList<Announcement> addToChlkAnns = new List<Announcement>();
+            foreach (var activity in activities)
+            {
+                var ann = new Announcement()
+                {
+                    Created = Context.NowSchoolTime,
+                    State = AnnouncementState.Created,
+                    SchoolRef = Context.SchoolLocalId.Value,
+                    SisActivityId = activity.Id,
+                    PersonRef = Context.UserLocalId.Value
+                };
+                MapActivityToAnnouncement(ann, activity);
+                addToChlkAnns.Add(ann);
+            }
+            if (addToChlkAnns.Count > 0)
+            {
+                using (var uow = Update())
+                {
+                    CreateAnnoucnementDataAccess(uow).Insert(addToChlkAnns);
+                    uow.Commit();
+                }
+            }
+        }
+
+        private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count)
+        {
+            if (classId.HasValue)
+                return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, start, start + count,toDate, fromDate);
             if (Context.Role == CoreRoles.TEACHER_ROLE)
             {
                 var schoolYear = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
-                var end = start + count;
-                return ConnectorLocator.ActivityConnector.GetTeacherActivities(schoolYear.Id, Context.UserLocalId.Value, start, end, toDate, fromDate);
+                return ConnectorLocator.ActivityConnector.GetTeacherActivities(schoolYear.Id, Context.UserLocalId.Value, start + 1, start + count, toDate, fromDate);
             }
             return new List<Activity>();
-        } 
+        }
+ 
+        private IList<AnnouncementComplex> MapActivitiesToAnnouncements(IList<AnnouncementComplex> anns, IEnumerable<Activity> activities)
+        {
+            var res = new List<AnnouncementComplex>();
+            foreach (var activity in activities)
+            {
+                var ann = anns.FirstOrDefault(x => x.SisActivityId == activity.Id);
+                if (ann != null)
+                {
+                    MapActivityToAnnouncement(ann, activity);
+                    res.Add(ann);       
+                }
+            }
+            return res;
+        }
+        private void MapActivityToAnnouncement(Announcement ann, Activity activity)
+        {
+            ann.Content = activity.Unit;
+            ann.MaxScore = activity.MaxScore;
+            ann.ClassRef = activity.SectionId;
+            ann.Expires = activity.Date;
+            ann.MayBeDropped = activity.MayBeDropped;
+            ann.WeightAddition = activity.WeightAddition;
+            ann.WeightMultiplier = activity.WeightMultiplier;
+            ann.Dropped = activity.IsDropped;
+            ann.ClassAnnouncementTypeRef = activity.CategoryId;
+        }
+        private void MapAnnouncementToActivity(Announcement ann, Activity activity)
+        {
+            activity.Date = ann.Expires;
+            activity.CategoryId = ann.ClassAnnouncementTypeRef;
+            activity.IsDropped = ann.Dropped;
+            activity.IsScored = ann.ClassAnnouncementTypeRef.HasValue;
+            activity.MaxScore = ann.MaxScore;
+            activity.WeightAddition = ann.WeightAddition;
+            activity.WeightMultiplier = ann.WeightMultiplier;
+            activity.MayBeDropped = ann.MayBeDropped;
+            activity.Unit = ann.Content;
+        }
+
 
         public IList<AnnouncementComplex> GetAnnouncements(string filter)
         {
@@ -209,14 +273,17 @@ namespace Chalkable.BusinessLogic.Services.School
                 var res = da.GetDetails(announcementId, Context.UserLocalId ?? 0, Context.Role.Id);
                 if (res.ClassRef.HasValue && res.SisActivityId.HasValue)
                 {
-                    var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value, res.SisActivityId.Value);
+                    var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value,
+                                                                                  res.SisActivityId.Value);
                     MapActivityToAnnouncement(res, activity);
                 }
                 return res;
             }
+
         }
 
-        public void DeleteAnnouncement(int announcementId)
+
+        public void DeleteAnnouncement (int announcementId)
         {
             using (var uow = Update())
             {
@@ -319,54 +386,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        private IList<AnnouncementComplex> MapActivitiesToAnnouncements(IList<AnnouncementComplex> anns, IList<Activity> activities)
-        {
-            var res = new List<AnnouncementComplex>();
-            var addTodbAnns = new List<Announcement>();
-            foreach (var activity in activities)
-            {
-                var ann = anns.FirstOrDefault(x => x.SisActivityId == activity.Id);
-                if (ann == null)
-                {
-                    ann = new AnnouncementComplex{Created = Context.NowSchoolTime, State = AnnouncementState.Created};
-                    addTodbAnns.Add(ann);
-                }
-                MapActivityToAnnouncement(ann, activity);
-                res.Add(ann);
-            }
-            if (addTodbAnns.Count > 0)
-            {
-                using (var uow = Update())
-                {
-                    CreateAnnoucnementDataAccess(uow).Insert(addTodbAnns);
-                }
-            }
-            return res;
-        }
-        private void MapActivityToAnnouncement(Announcement ann, Activity activity)
-        {
-            ann.Content = activity.Unit;
-            ann.MaxScore = activity.MaxScore;
-            ann.ClassRef = activity.SectionId;
-            ann.Expires = activity.Date;
-            ann.MayBeDropped = activity.MayBeDropped;
-            ann.WeightAddition = activity.WeightAddition;
-            ann.WeightMultiplier = activity.WeightMultiplier;
-            ann.Dropped = activity.IsDropped;
-            ann.ClassAnnouncementTypeRef = activity.CategoryId;
-        }
-        private void MapAnnouncementToActivity(Announcement ann, Activity activity)
-        {
-            activity.Date = ann.Expires;
-            activity.CategoryId = ann.ClassAnnouncementTypeRef;
-            activity.IsDropped = ann.Dropped;
-            activity.IsScored = ann.ClassAnnouncementTypeRef.HasValue;
-            activity.MaxScore = ann.MaxScore;
-            activity.WeightAddition = ann.WeightAddition;
-            activity.WeightMultiplier = ann.WeightMultiplier;
-            activity.MayBeDropped = ann.MayBeDropped;
-            activity.Unit = ann.Content;
-        }
 
 
         private Announcement Submit(AnnouncementDataAccess dataAccess, UnitOfWork unitOfWork, int announcementId,
