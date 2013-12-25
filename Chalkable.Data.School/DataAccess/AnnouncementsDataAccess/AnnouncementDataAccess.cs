@@ -239,6 +239,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public bool AllSchoolItems { get; set; }
 
         public IList<int> GradeLevelIds { get; set; }
+        public IList<int> SisActivitiesIds { get; set; } 
 
         public AnnouncementsQuery()
         {

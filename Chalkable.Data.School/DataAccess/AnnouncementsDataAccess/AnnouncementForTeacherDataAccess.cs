@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using Chalkable.Common;
 using Chalkable.Data.Common;
+using System.Linq;
 
 namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
@@ -17,7 +19,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var parameters = new Dictionary<string, object>
                 {
                     {GRADED_ONLY_PARAM, query.GradedOnly},
-                    {ALL_SCHOOL_ITEMS_PARAM, query.AllSchoolItems}
+                    {ALL_SCHOOL_ITEMS_PARAM, query.AllSchoolItems},
+                    {"@sisActivitiesIds", query.SisActivitiesIds.Select(x=>x.ToString()).JoinString(",")}
                 };
             return GetAnnouncementsComplex(GET_TEACHER_ANNOUNCEMENTS, parameters, query);
         }

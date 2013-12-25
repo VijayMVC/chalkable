@@ -692,9 +692,19 @@ GO
 create procedure [dbo].[spGetTeacherAnnouncements]  
 	@id int, @schoolId int, @personId int, @classId int, @roleId int, @staredOnly bit, @ownedOnly bit, @gradedOnly bit
 	,@fromDate DateTime2, @toDate DateTime2, @markingPeriodId int, @start int, @count int, @now DateTime2, @allSchoolItems bit
+	, @sisActivitiesIds nvarchar(max)
 as 
 
 exec spApplyStarringAnnouncementForTeacher @personId, @now;
+
+
+declare @sisActivitiesIdsT table(Id int)
+if(@sisActivitiesIds is not null and LTRIM(@sisActivitiesIds) <> '')
+begin
+	insert into @sisActivitiesIdsT(Id)
+	select cast(s as int) from dbo.split(',', @sisActivitiesIds)
+end
+
 
 declare @gradeLevelsT table(Id int)
 insert into @gradeLevelsT(Id)
@@ -730,6 +740,7 @@ where
 	and (@fromDate is null or Expires >= @fromDate)
 	and (@toDate is null or Expires <= @toDate)
 	and (@markingPeriodId is null or (Expires between @mpStartDate and @mpEndDate))
+	and (@sisActivitiesIds is null or (SisActivityId is not null and SisActivityId in (select Id from @sisActivitiesIdsT)))
 )
 
 
@@ -763,11 +774,14 @@ where
 	and (@fromDate is null or Expires >= @fromDate)
 	and (@toDate is null or Expires <= @toDate)
 	and (@markingPeriodId is null or (Expires between @mpStartDate and @mpEndDate))
-	and (@gradedOnly = 0 or GradingStudentsCount > 0)		
+	and (@gradedOnly = 0 or GradingStudentsCount > 0)	
+	and (@sisActivitiesIds is null or (SisActivityId is not null and SisActivityId in (select Id from @sisActivitiesIdsT)))
+	
 order by Created desc				
 OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
 
 GO
+
 
 
 
@@ -834,8 +848,6 @@ GO
 
 
 
-
-
 ----------------------------
 --- GET ANNOUNCEMENT DETAILS 
 ----------------------------
@@ -858,6 +870,11 @@ declare @announcementTb table
 	Dropped bit not null,
 	ClassAnnouncementTypeRef int null,
 	SchoolRef int not null,
+	SisActivityId int null,
+    MaxScore decimal null,
+    WeightAddition decimal null,
+    WeightMultiplier decimal null,
+    MayBeDropped bit,
 	ClassAnnouncementTypeName nvarchar(max),
 	AnnouncementType int,
 	PersonRef int not null,
@@ -896,7 +913,7 @@ end
 if(@callerRole = 2)
 begin
 insert into @announcementTb
-exec spGetTeacherAnnouncements @id, @schoolId, @callerId, null,  @callerRole, 0, 0, 0, null, null, null, 0, 1, null, 1
+exec spGetTeacherAnnouncements @id, @schoolId, @callerId, null,  @callerRole, 0, 0, 0, null, null, null, 0, 1, null, 1, null
 end
 
 declare @annExists bit
@@ -972,6 +989,9 @@ where aa.AnnouncementRef = @id and (@annExists = 1) and aa.Active = 1
 exec spGetPersons @schoolId, @ownerId, @callerId, null, 0, 1, null,null,null,null,null,null,null, 1, @callerRole
 end
 GO
+
+
+
 
 
 -----------------------------
