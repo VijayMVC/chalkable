@@ -20,7 +20,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 {
                     {GRADED_ONLY_PARAM, query.GradedOnly},
                     {ALL_SCHOOL_ITEMS_PARAM, query.AllSchoolItems},
-                    {"@sisActivitiesIds", query.SisActivitiesIds.Select(x=>x.ToString()).JoinString(",")}
+                    {"@sisActivitiesIds", query.SisActivitiesIds != null ? query.SisActivitiesIds.Select(x => x.ToString()).JoinString(",") : null}
                 };
             return GetAnnouncementsComplex(GET_TEACHER_ANNOUNCEMENTS, parameters, query);
         }

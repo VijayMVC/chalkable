@@ -117,10 +117,8 @@ namespace Chalkable.BusinessLogic.Services.School
             return GetAnnouncementsComplex(q);
         }
 
-
         private IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query)
         {
-            //var classId =  ?? (anns.Count > 0 && query.Id.HasValue ? anns.First().ClassRef : default(int?));
             var activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count);
             if (Context.Role == CoreRoles.TEACHER_ROLE)
             {
@@ -202,6 +200,7 @@ namespace Chalkable.BusinessLogic.Services.School
             ann.Dropped = activity.IsDropped;
             ann.ClassAnnouncementTypeRef = activity.CategoryId;
         }
+       
         private void MapAnnouncementToActivity(Announcement ann, Activity activity)
         {
             activity.Date = ann.Expires;
@@ -214,7 +213,6 @@ namespace Chalkable.BusinessLogic.Services.School
             activity.MayBeDropped = ann.MayBeDropped;
             activity.Unit = ann.Content;
         }
-
 
         public IList<AnnouncementComplex> GetAnnouncements(string filter)
         {
@@ -275,13 +273,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value,
                                                                                   res.SisActivityId.Value);
-                    MapActivityToAnnouncement(res, activity);
+                        MapActivityToAnnouncement(res, activity);
                 }
                 return res;
             }
-
         }
-
 
         public void DeleteAnnouncement (int announcementId)
         {
@@ -344,6 +340,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             throw new NotImplementedException();
         }
+      
         public Announcement EditAnnouncement(AnnouncementInfo announcement, int? classId = null, IList<RecipientInfo> recipients = null)
         {
             using (var uow = Update())
@@ -386,10 +383,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-
-
-        private Announcement Submit(AnnouncementDataAccess dataAccess, UnitOfWork unitOfWork, int announcementId,
-            int? classId)
+        private Announcement Submit(AnnouncementDataAccess dataAccess, UnitOfWork unitOfWork, int announcementId, int? classId)
         {
 
             var res = dataAccess.GetById(announcementId);
@@ -428,7 +422,6 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
-
         public void SubmitAnnouncement(int announcementId, int recipientId)
         {
             using (var uow = Update())
@@ -441,6 +434,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
             }
         }
+        
         public void SubmitForAdmin(int announcementId)
         {
             using (var uow = Update())
@@ -527,7 +521,6 @@ namespace Chalkable.BusinessLogic.Services.School
             throw new NotImplementedException();
         }
 
-
         public Announcement GetAnnouncementById(int id)
         {
             using (var ouw = Read())
@@ -539,7 +532,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 return res;
             }
         }
-
 
         public int GetNewAnnouncementItemOrder(AnnouncementDetails announcement)
         {
@@ -567,7 +559,6 @@ namespace Chalkable.BusinessLogic.Services.School
             return order;
         }
 
-
         public Announcement Star(int id, bool starred)
         {
             var ann = GetAnnouncementById(id);
@@ -580,7 +571,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-
         public Announcement GetLastDraft()
         {
             using (var uow = Read())
@@ -589,7 +579,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 return da.GetLastDraft(Context.UserLocalId ?? 0);
             }
         }
-
 
         public IList<Person> GetAnnouncementRecipientPersons(int announcementId)
         {
@@ -609,6 +598,5 @@ namespace Chalkable.BusinessLogic.Services.School
                 return CreateAnnoucnementDataAccess(uow).GetLastFieldValues(personId, classId, classAnnouncementType, 10);
             }
         }
-
     }
 }
