@@ -84,7 +84,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                         div(data-tooltip=Msg.Weight_Addition_Tooltip_Message).question-mark ?
                     .check-box-container
                         .title=Msg.Hide_from_Students
-                        +SlideCheckbox('hidefromstudents', announcement.isAbleHideFromStudents(), false)
+                        +SlideCheckbox('hidefromstudents', announcement.isHiddenFromStudents(), false)
                         div(data-tooltip=Msg.Hide_From_Student_Tooltip_Message).question-mark ?
                     .check-box-container
                         .title=Msg.Can_drop_student_score

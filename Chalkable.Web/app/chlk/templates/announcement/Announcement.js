@@ -207,6 +207,12 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'annRecipients',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'maxScore'
-        ])
+            Number, 'maxScore',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'hiddenFromStudents',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'ableDropStudentScore'
+        ]);
 });

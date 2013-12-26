@@ -243,10 +243,8 @@ $red-color: #842727;
       >DIV{
         display: inline-block;
 
-        &.comment-grade-container{
-          margin: 4px 4px 12px 4px;
-
-          .comment-grade{
+        &.announcement-view-tooltip{
+          .comment-container{
             padding: 5px 21px 4px 26px;
             background: white;
             @include border-radius(10px);
@@ -266,17 +264,8 @@ $red-color: #842727;
                 white-space: nowrap;
                 text-overflow: ellipsis;
               }
-
-              &.grade-value{
-                font-family: 'Reenie Beanie';
-                color: #c81616;
-                font-size: 45px;
-                margin-left: 30px;
-                letter-spacing: 5px;
-              }
             }
           }
-
           .comment-triangle{
             width: 0px;
             height: 0px;
@@ -293,7 +282,35 @@ $red-color: #842727;
               margin: -11px 0 0 -9px;
             }
           }
+
+          &.comment-grade-container{
+            margin: 4px 4px 12px 4px;
+            .grade-value{
+              font-family: 'Reenie Beanie';
+              color: #c81616;
+              font-size: 45px;
+              margin-left: 30px;
+              letter-spacing: 5px;
+            }
+          }
+
+          &.make-visible-container{
+            .comment-container{
+              padding: 20px 21px 20px 26px;
+              .make-visible-btn{
+                float: right;
+                padding-left: 130px;
+                font-size: 14px;
+                font-weight: bold;
+                color: #3B758C;
+                text-decoration: underline;
+              }
+            }
+          }
         }
+
+
+
 
         P{
           margin: 2px 0 38px;

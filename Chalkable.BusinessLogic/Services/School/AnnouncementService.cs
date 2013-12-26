@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -44,6 +45,7 @@ namespace Chalkable.BusinessLogic.Services.School
         int GetNewAnnouncementItemOrder(AnnouncementDetails announcement);
 
         Announcement Star(int id, bool starred);
+        Announcement SetVisibleForStudent(int id, bool visible);
 
         IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType);
 
@@ -199,6 +201,7 @@ namespace Chalkable.BusinessLogic.Services.School
             ann.WeightMultiplier = activity.WeightMultiplier;
             ann.Dropped = activity.IsDropped;
             ann.ClassAnnouncementTypeRef = activity.CategoryId;
+            ann.VisibleForStudent = activity.DisplayInHomePortal;
         }
        
         private void MapAnnouncementToActivity(Announcement ann, Activity activity)
@@ -212,6 +215,7 @@ namespace Chalkable.BusinessLogic.Services.School
             activity.WeightMultiplier = ann.WeightMultiplier;
             activity.MayBeDropped = ann.MayBeDropped;
             activity.Unit = ann.Content;
+            activity.DisplayInHomePortal = ann.VisibleForStudent;
         }
 
         public IList<AnnouncementComplex> GetAnnouncements(string filter)
@@ -359,7 +363,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     res.WeightAddition = announcement.WeightAddition;
                     res.WeightMultiplier = announcement.WeightMultiplier;
                     res.MayBeDropped = announcement.CanDropStudentScore;
-                    
+                    res.VisibleForStudent = !announcement.HideFromStudents;
+
                 }
                 if (BaseSecurity.IsAdminViewer(Context))
                     res.ClassAnnouncementTypeRef = null;
@@ -571,6 +576,27 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
+        public Announcement SetVisibleForStudent(int id, bool visible)
+        {
+            var ann = GetAnnouncementById(id);
+            if(ann.PersonRef != Context.UserLocalId)
+                throw new ChalkableSecurityException();
+            if (ann.ClassRef.HasValue)
+            {
+                //using (var uow = Update())
+                //{
+                //    //ann.VisibleForStudent = visible;
+                //    //CreateAnnoucnementDataAccess(uow).Update(ann);
+                //    //uow.Commit();
+                //}
+                var activity = ConnectorLocator.ActivityConnector.GetActivity(ann.ClassRef.Value, ann.SisActivityId.Value);
+                activity.DisplayInHomePortal = visible;
+                ConnectorLocator.ActivityConnector.UpdateActivity(ann.ClassRef.Value, ann.SisActivityId.Value, activity);
+                ann.VisibleForStudent = visible;
+            }
+            return ann;
+        }
+
         public Announcement GetLastDraft()
         {
             using (var uow = Read())
@@ -598,5 +624,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 return CreateAnnoucnementDataAccess(uow).GetLastFieldValues(personId, classId, classAnnouncementType, 10);
             }
         }
+
     }
 }

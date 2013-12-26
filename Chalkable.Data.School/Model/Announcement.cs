@@ -40,6 +40,7 @@ namespace Chalkable.Data.School.Model
         public decimal? WeightAddition { get; set; }
         public decimal? WeightMultiplier { get; set; }
         public bool MayBeDropped { get; set; }
+        public bool VisibleForStudent { get; set; }
 
         public int SchoolRef { get; set; }
     }
