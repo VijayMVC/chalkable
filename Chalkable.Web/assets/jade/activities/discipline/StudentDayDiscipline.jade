@@ -49,6 +49,6 @@ date = self.getDate().format('mm-dd-yy')
                     .items-container
                         div
                             +DisciplinesContainer(self.prepareItemForDisciplinesContainer(item), item)
-                            +TextArea(name='description').notes=item.getDescription()
+                            +TextArea(name='description', placeholder="Add a comment").notes=item.getDescription()
         if(canEdit)
             +Button().blue-gradient-btn.save-btn=Msg.Save
