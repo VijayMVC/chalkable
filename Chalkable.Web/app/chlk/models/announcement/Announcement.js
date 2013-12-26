@@ -234,7 +234,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'weightAddition',
 
             [ria.serialize.SerializeProperty('hidefromstudents')],
-            Boolean, 'ableHideFromStudents',
+            Boolean, 'hiddenFromStudents',
 
             [ria.serialize.SerializeProperty('candropstudentscore')],
             Boolean, 'ableDropStudentScore',

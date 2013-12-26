@@ -30,6 +30,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             chlk.models.id.AnnouncementId, 'announcementId',
             Number, 'maxScore',
 
+
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementGradingPartTpl)],
             VOID, function updateGradingPart(tpl, model, msg_) {
                 tpl.options({
@@ -46,6 +47,13 @@ NAMESPACE('chlk.activities.announcement', function () {
                 tpl.renderTo(container.removeClass('loading'));
                 var grid = this.dom.find('.grades-individual');
                 grid.trigger(chlk.controls.GridEvents.SELECT_ROW.valueOf(), [grid.find('.row:eq(0)'), 0]);
+            },
+
+
+            [ria.mvc.DomEventBind('click', '.make-visible-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function makeVisibleClick(node, event){
+                node.parent().parent().addClass('x-hidden');
             },
 
             [ria.mvc.DomEventBind('keypress', '.grade-input')],
