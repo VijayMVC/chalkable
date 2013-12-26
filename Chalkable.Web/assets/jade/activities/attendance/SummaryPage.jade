@@ -1,0 +1,35 @@
+mixin AbsentLatePage(data, header)
+    .chart-container
+        .panel-header=header
+        .chart-block.relative
+            .chart-bg
+            +Chart()(
+                data-options=self.getChartOptions(data)
+            )
+    .students-container
+        items = self.getGroupedStudents(data.getStudents())
+        each item,i in items
+            div(class = i==0 ? "visible-block" : "hidden-students-block")
+                div(class = i==0 ? "" : "hidden-students").hidden-students-block-2
+                    each info in item
+                        student = info.getStudentInfo()
+                        .student-with-picture
+                            .img-container
+                                +PersonImg(student, 128)
+
+.attendance-summary
+    topData = self.getTopData();
+    topItems = topData.getTopItems();
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'classList')(
+        selectedItemId=""
+    ).classes-bar
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .center.absent-late-buttons
+                a(data-page=1).action-button.absent-late-button.absent-button.pressed=Msg.Absent
+                a(data-page=2).action-button.absent-late-button.late-button=Msg.Late
+    summary = self.getSummary();
+    div(data-page=1).absent-late-page.absent-page
+        +AbsentLatePage(summary.getAbsent(), Msg.Absent_students)
+    div(data-page=2).absent-late-page.late-page
+        +AbsentLatePage(summary.getLate(), Msg.Late_students)

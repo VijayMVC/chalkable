@@ -1,0 +1,23 @@
+valuesEnum = chlk.models.attendance.AttendanceTypeEnum
+if self.getAbsentNowStudents()
+    .top-container
+        .stats.i-b
+            div(
+                data-rightnow=self.getAbsentNowCount(),
+                data-usually=self.getAbsentUsually(),
+                data-avg=self.getAvgOfAbsentsInYear()
+            ).attendance-box.rightnow-usually.usually
+                .box-container
+                    .number=self.getAbsentNowCount()
+                    .title=Msg.Right_now
+                .box-container
+                    .number=self.getAbsentUsually()
+                    .title=Msg.Usually
+        .now-chart-block.i-b
+            +AdminAttendanceChart(self.getAttendanceStats(), 550)
+    +AddStudentTpl(1)
+    if self.getAbsentNowStudents().length
+        .summary-students
+            +StudentsTpl(self.getAbsentNowStudents(), Msg.Absent + " " + Msg.Right_now.toLowerCase(), 1)(
+                class = 'attendance-' + valuesEnum.ABSENT.valueOf()
+            )

@@ -1,0 +1,54 @@
+mixin DisciplinesContainer(disciplineTypes, item)
+    .disciplines-container
+        .editable-list
+            each discType in disciplineTypes
+                div(
+                class = discType.visible ? '' : 'x-hidden',
+                data-disciplineTypeId= discType.id.valueOf()
+                ).list-item
+                    .title=discType.name
+                    //if item.isEditable()
+                    .del X
+
+canEdit = self.isAbleEdit()
+student = self.getStudent()
+disciplines = self.getDisciplines()
+date = self.getDate().format('mm-dd-yy')
+.add-student-triangle.big-triangle
+.add-student-popup.disciplines
+    +ActionForm('discipline', 'setDisciplinesForList')
+        if disciplines.length
+            input(name="disciplinesJson", type="hidden")
+            +Hidden('controller', self.getController())
+            +Hidden('action', self.getAction())
+            +Hidden('params', self.getParams())
+            +Hidden('newStudent', self.isNewStudent()).is-new-student
+            +Hidden('date', date)
+        .top-container
+            if self.isNewStudent()
+                +PersonImg(student, 47)
+            h1=student.getDisplayName()
+            if !self.isNewStudent()
+                +ActionLink('students', 'info', student.getId().valueOf()).profile-link.small-grey-text=Msg.Profile.toLowerCase() + ' »'
+        .blocks
+            each item in disciplines
+                div(
+                    name="discipline",
+                    data-class-period-id = item.getClassPeriodId().valueOf(),
+                    data-class-person-id = item.getClassPersonId().valueOf(),
+                    data-date = date
+                ).row.dsc-row
+                    //.name-container #{self.getSerial(item.getPeriod().getOrder())} - #{item.getClassName()}
+                    .name-container.small-grey-text #{item.getPeriod().getSerialOrder()} - #{item.getClassName()}
+                    .type-container
+                        if(canEdit)
+                            .discipline-dropdown
+                                +Select('disciplineTypes').discipline-type-select.grey-select
+                                    each discType in self.getDisciplineTypes()
+                                        +Option(discType.getId(), discType.getName())
+                    .items-container
+                        div
+                            +DisciplinesContainer(self.prepareItemForDisciplinesContainer(item), item)
+                            +TextArea(name='description').notes=item.getDescription()
+        if(canEdit)
+            +Button().blue-gradient-btn.save-btn=Msg.Save

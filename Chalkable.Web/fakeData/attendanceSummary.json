@@ -1,0 +1,1810 @@
+{"data":{
+    "late": {
+        "stat":[{
+            "studentcount":10,"summary":"1"
+        },{
+            "studentcount":7,"summary":"2"
+        },{
+            "studentcount":15,"summary":"3"
+        },{
+            "studentcount":4,"summary":"4"
+        },{
+            "studentcount":22,"summary":"5"
+        },{
+            "studentcount":9,"summary":"6"
+        },{
+            "studentcount":17,"summary":"7"
+        },{
+            "studentcount":25,"summary":"8"
+        },{
+            "studentcount":1,"summary":"9"
+        },{
+            "studentcount":9,"summary":"10"
+        }],
+        "students":[{
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }]
+    },
+    "absent":{
+        "stat":[{
+            "studentcount":5,"summary":"1"
+        },{
+            "studentcount":14,"summary":"2"
+        },{
+            "studentcount":7,"summary":"3"
+        },{
+            "studentcount":8,"summary":"4"
+        },{
+            "studentcount":11,"summary":"5"
+        },{
+            "studentcount":18,"summary":"6"
+        },{
+            "studentcount":8,"summary":"7"
+        },{
+            "studentcount":5,"summary":"8"
+        },{
+            "studentcount":10,"summary":"9"
+        },{
+            "studentcount":15,"summary":"10"
+        }],
+        "students":[{
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }, {
+            "studentinfo":{
+                "displayname":"Mister X",
+                "fullname":"Mister X",
+                "gender":"M",
+                "id":1,
+                "firstname":"Mister",
+                "lastname":"X"
+            },
+            "alerts":["Absent yesterday", "Has disability"],
+            "statbyclass":[{
+                "classname": "Math",
+                "value": 4
+            }, {
+                "classname": "English",
+                "value": 2
+            }, {
+                "classname": "Chemistry",
+                "value": 6
+            }]
+        }]
+    }
+},"success":true}
