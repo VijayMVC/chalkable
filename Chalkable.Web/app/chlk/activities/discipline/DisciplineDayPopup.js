@@ -9,6 +9,7 @@ NAMESPACE('chlk.activities.discipline', function(){
         [ria.mvc.DomAppendTo('#chlk-pop-up-container')],
         [chlk.activities.lib.IsHorizontalAxis(false)],
         [chlk.activities.lib.isTopLeftPosition(true)],
+        [chlk.activities.lib.isConstantPosition(true)],
         [ria.mvc.ActivityGroup('DayDisciplinePopup')],
         [ria.mvc.TemplateBind(chlk.templates.discipline.DisciplineDayPopupTpl)],
 

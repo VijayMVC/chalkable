@@ -29,6 +29,11 @@ NAMESPACE('chlk.activities.lib', function () {
         [[Boolean]],
         function isTopLeftPosition(isTopLeft) {});
 
+    /** @class chlk.activities.lib.isConstantPosition */
+    ANNOTATION(
+        [[Boolean]],
+        function isConstantPosition(isConstant) {});
+
     /** @class chlk.activities.lib.TemplatePopup*/
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-pop-up-container')],
@@ -60,6 +65,8 @@ NAMESPACE('chlk.activities.lib', function () {
                 }
                 this._isTopLeft = ref.isAnnotatedWith(chlk.activities.lib.isTopLeftPosition) ? ref.findAnnotation(chlk.activities.lib.isTopLeftPosition)[0].isTopLeft : true;
 
+                this._isConstantPosition = ref.isAnnotatedWith(chlk.activities.lib.isConstantPosition) ? ref.findAnnotation(chlk.activities.lib.isConstantPosition)[0].isConstant : false;
+
                 this._popupClass = null;
                 if(ref.isAnnotatedWith(chlk.activities.lib.PopupClass)){
                     this._popupClass = ref.findAnnotation(chlk.activities.lib.PopupClass)[0].clazz;
@@ -84,9 +91,10 @@ NAMESPACE('chlk.activities.lib', function () {
                 var container = this.getContainer(), res;
                 if(this._isHorizontal){
                     this._popupHolder.setCss('top', offset.top - 10);
-                    if(this._isTopLeft && (offset.left - container.offset().left > this._popupHolder.width())){
+                    var notOver = offset.left - container.offset().left > this._popupHolder.width();
+                    if(this._isTopLeft && (notOver || this._isConstantPosition)){
                     //if(this._isTopLeft && (container.offset().left + container.width()) > (this._popupHolder.offset().left + this._popupHolder.width())){
-                        this._popupHolder.setCss('left', offset.left - 10 - this._popupHolder.width());
+                        this._popupHolder.setCss('left', notOver ? offset.left - 10 - this._popupHolder.width() : 0);
                         res = positionClasses.left;
                     }else{
                         this._popupHolder.setCss('left', offset.left + 10 + target.width());
@@ -94,9 +102,11 @@ NAMESPACE('chlk.activities.lib', function () {
                     }
                 }else{
                     this._popupHolder.setCss('left', offset.left - (this._popupHolder.width() - target.width())/2);
-                    if(this._isTopLeft && (offset.top - container.offset().top > this._popupHolder.height())){
+                    var notOver = offset.top - container.offset().top > this._popupHolder.height();
+                    if(this._isTopLeft && (notOver || this._isConstantPosition)){
                     //if(this._isTopLeft && (container.offset().top + container.height()) > (this._popupHolder.offset().top + this._popupHolder.height())){
-                        this._popupHolder.setCss('top', offset.top - 10 - this._popupHolder.height());
+
+                        this._popupHolder.setCss('top', notOver ? offset.top - 10 - this._popupHolder.height() : 0);
                         res = positionClasses.top;
                     }else{
                         this._popupHolder.setCss('top', offset.top + 10 + target.height());

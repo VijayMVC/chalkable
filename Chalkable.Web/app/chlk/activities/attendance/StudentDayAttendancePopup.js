@@ -9,6 +9,7 @@ NAMESPACE('chlk.activities.attendance', function () {
         [ria.mvc.DomAppendTo('#chlk-pop-up-container')],
         [chlk.activities.lib.IsHorizontalAxis(false)],
         [chlk.activities.lib.isTopLeftPosition(true)],
+        [chlk.activities.lib.isConstantPosition(true)],
         [ria.mvc.ActivityGroup('StudentDayAttendancesPopUp')],
         [ria.mvc.TemplateBind(chlk.templates.attendance.StudentDayAttendanceTpl)],
         'StudentDayAttendancePopup', EXTENDS(chlk.activities.lib.TemplatePopup), [
