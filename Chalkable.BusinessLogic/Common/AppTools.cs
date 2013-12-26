@@ -52,7 +52,9 @@ namespace Chalkable.BusinessLogic.Common
                 paramsBuilder.AppendFormat("{0}={1}&", ANNOUNCEMENT_APPLICATION_ID_PARAM, announcementAppId.Value);
             if (appInstallId.HasValue)
                 paramsBuilder.AppendFormat("{0}={1}", APPLICATION_INSTALL_ID_PARAM, appInstallId.Value);
-            return paramsBuilder.Length == 0 ? url : string.Format("{0}?{1}", url, paramsBuilder);
+
+            var fmt = url.Contains("?") ? "{0}&{1}" : "{0}?{1}";
+            return paramsBuilder.Length == 0 ? url : string.Format(fmt, url, paramsBuilder);
         }
 
         public static string BuildIconUrl(Application application, bool large)
