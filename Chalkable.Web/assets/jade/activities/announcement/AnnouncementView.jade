@@ -3,6 +3,14 @@ mixin AppAttachmentBlock(item, pictureHref, i)
         .title
             div=item.getName()
 
+
+mixin AnnouncementTooltip()
+    div(attributes).announcement-view-tooltip
+        .comment-container
+            block
+        .comment-triangle
+            .white.comment-triangle
+
 .announcement-view.not-transparent
     isNotStudent = true
     isReadonly = !self.isAnnOwner()
@@ -27,12 +35,13 @@ mixin AppAttachmentBlock(item, pictureHref, i)
         .announcement-details-panel
             .details-container.silver-panel
                 if self.getUserRole().isStudent()
-                    .comment-grade-container
-                        .comment-grade
-                            .comment=self.getComment() || Msg.Your_grade + ":"
-                            .grade-value= self.isDropped() ? Msg.Dropped : (self.getGradeLetter() || '')
-                        .comment-triangle
-                            .white.comment-triangle
+                    +AnnouncementTooltip().comment-grade-container
+                        .comment=self.getComment() || Msg.Your_grade + ":"
+                        .grade-value= self.isDropped() ? Msg.Dropped : (self.getGradeLetter() || '')
+                if self.getUserRole().isTeacher() && self.isHiddenFromStudents()
+                    +AnnouncementTooltip().make-visible-container
+                        .comment This item is hidden from students.
+                        +ActionLink('announcement', 'makeVisible', self.getId()).make-visible-btn Make visible
                 br
                 .left-block
                     +ActionLink('teachers', 'info', self.getOwner().getId())(data-tooltip=self.getOwner().getFullName()).image-container

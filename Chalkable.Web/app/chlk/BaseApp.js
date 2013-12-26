@@ -158,8 +158,6 @@ NAMESPACE('chlk', function (){
                     return false;
                 });
 
-
-
                 this.apiHost_.onStart(this.context);
 
                 return BASE()

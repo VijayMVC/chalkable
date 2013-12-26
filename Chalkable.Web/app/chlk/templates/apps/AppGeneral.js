@@ -4,6 +4,7 @@ REQUIRE('chlk.models.apps.AppRating');
 
 NAMESPACE('chlk.templates.apps', function () {
 
+    ASSET('~/assets/jade/activities/apps/app-rating.jade')();
     /** @class chlk.templates.apps.AppGeneral*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/apps/app-general-info.jade')],

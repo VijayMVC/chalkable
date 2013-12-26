@@ -571,7 +571,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.getMaxScore(),
                         model.getWeightAddition(),
                         model.getWeightMultiplier(),
-                        model.isAbleHideFromStudents(),
+                        model.isHiddenFromStudents(),
                         model.isAbleDropStudentScore()
                     )
                     .attach(this.validateResponse_());
@@ -613,7 +613,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.getMaxScore(),
                         model.getWeightAddition(),
                         model.getWeightMultiplier(),
-                        model.isAbleHideFromStudents(),
+                        model.isHiddenFromStudents(),
                         model.isAbleDropStudentScore()
                     )
                     .attach(this.validateResponse_());
@@ -635,6 +635,15 @@ NAMESPACE('chlk.controllers', function (){
         {
             this.announcementService
                 .star(id, starred_)
+                .attach(this.validateResponse_());
+            return null;
+        },
+
+        [[chlk.models.id.AnnouncementId]],
+        function makeVisibleAction(id)
+        {
+            this.announcementService
+                .makeVisible(id)
                 .attach(this.validateResponse_());
             return null;
         },

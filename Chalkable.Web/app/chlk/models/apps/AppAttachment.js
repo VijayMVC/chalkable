@@ -36,6 +36,12 @@ NAMESPACE('chlk.models.apps', function () {
                 if (announcementAppId_) {
                     this.setAnnouncementApplicationId(announcementAppId_);
                 }
+                else
+                    this.setAnnouncementApplicationId(new chlk.models.id.AnnouncementApplicationId(''));
+
+                if (!this.getAnnouncementId()){
+                    this.setAnnouncementId(new chlk.models.id.AnnouncementId(''));
+                }
 
                 if (appData_){
                     this.setPersonal(appData_.isPersonal());

@@ -116,6 +116,13 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        public ActionResult MakeVisible(int announcementId)
+        {
+            SchoolLocator.AnnouncementService.SetVisibleForStudent(announcementId, true);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult SaveAnnouncement(AnnouncementInfo announcementInfo, int? classId)
         {
             Save(announcementInfo, classId);

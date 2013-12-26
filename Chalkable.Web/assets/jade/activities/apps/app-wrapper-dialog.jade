@@ -1,5 +1,8 @@
-announcementAppId = self.app.getAnnouncementApplicationId() ? self.app.getAnnouncementApplicationId().valueOf() : ""
-announcementId = self.app.getAnnouncementId() ? self.app.getAnnouncementId().valueOf() : ""
+
+
+
+announcementAppId = self.app && self.app.getAnnouncementApplicationId() ? self.app.getAnnouncementApplicationId().valueOf() : ""
+announcementId = self.app && self.app.getAnnouncementId() ? self.app.getAnnouncementId().valueOf() : ""
 
 if self.isMyAppsError()
     +AttachmentDialogMsg(self.getErrorTitle(), self.getErrorMessage())

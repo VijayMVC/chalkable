@@ -91,9 +91,8 @@ NAMESPACE('chlk.models.people', function () {
 
         [[chlk.models.people.UserPermissionEnum]],
         Boolean, function hasPermission(permission){
-            var permissions = this.getPermissions();
-            return permissions && permissions.length > 0
-                && permissions.filter(function(item){return item == permission}).length > 0;
+            var permissions = this.getPermissions() || [];
+            return permissions.filter(function(item){return item == permission}).length > 0;
         }
     ]);
 });

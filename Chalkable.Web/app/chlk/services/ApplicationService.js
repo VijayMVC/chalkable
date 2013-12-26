@@ -109,7 +109,6 @@ NAMESPACE('chlk.services', function () {
                     .post('Application/Decline.json', Boolean, {applicationId: appId.valueOf()});
             },
 
-
             [[chlk.models.id.AppId]],
             ria.async.Future, function goLive(appId) {
                 return this

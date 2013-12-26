@@ -9,6 +9,7 @@ REQUIRE('chlk.templates.apps.AppMarketSearchBoxTpl');
 NAMESPACE('chlk.templates.apps', function () {
 
     ASSET('~/assets/jade/activities/apps/AppMarketBase.jade')();
+    ASSET('~/assets/jade/activities/apps/app-rating.jade')();
     /** @class chlk.templates.apps.AppMarketBaseTpl*/
     CLASS(
 

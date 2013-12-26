@@ -1,3 +1,5 @@
+@import "partials/main/apps/_app_ratings";
+
 BODY {
   DIV.page {
      #content {
@@ -16,6 +18,7 @@ BODY {
                     }
 
                   }
+
                   .app-description{
                     margin-left: 5px;
                     display: inline-block;
@@ -43,6 +46,12 @@ BODY {
                     text-align: center;
                     font-size: 14px;
                     margin-top: 40px;
+                  }
+                }
+
+                .reviews{
+                  .review-link{
+                    display: inline-block;
                   }
                 }
               }

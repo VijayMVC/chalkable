@@ -26,6 +26,10 @@ NAMESPACE('chlk.models.apps', function () {
                 this.setAppLive(liveId_ && liveId_.valueOf() != null);
                 this.setAppStatus(appStatus);
                 this.setApproved(isApproved);
+                if (!appRating.getRoleRatings())
+                    appRating.setRoleRatings([]);
+                if (!appRating.getPersonRatings())
+                    appRating.setPersonRatings([]);
                 this.setAppRating(appRating);
             }
         ]);

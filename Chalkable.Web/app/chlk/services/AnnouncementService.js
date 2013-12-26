@@ -113,7 +113,7 @@ NAMESPACE('chlk.services', function () {
                     maxscore: maxScore_,
                     weightaddition: weightAddition_,
                     weightmultiplier: weighMultiplier_,
-                    hidefromstudent: hideFromStudent_ || false,
+                    hidefromstudents: hideFromStudent_ || false,
                     candropstudentscore: canDropStudentScore_ || false
                 });
             },
@@ -162,7 +162,7 @@ NAMESPACE('chlk.services', function () {
                     maxscore: maxScore_,
                     weightaddition: weightAddition_,
                     weightmultiplier: weighMultiplier_,
-                    hidefromstudent: hideFromStudent_ || false,
+                    hidefromstudents: hideFromStudent_ || false,
                     candropstudentscore: canDropStudentScore_ || false
                 });
             },
@@ -227,6 +227,13 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function star(announcementId, starred_) {
                 this.setImportantCount(this.getImportantCount() + (starred_ ? 1 : -1));
                 return this.post('Announcement/Star', chlk.models.announcement.Announcement, {
+                    announcementId: announcementId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.AnnouncementId]],
+            ria.async.Future, function makeVisible(announcementId) {
+                return this.post('Announcement/MakeVisible', chlk.models.announcement.Announcement, {
                     announcementId: announcementId.valueOf()
                 });
             },

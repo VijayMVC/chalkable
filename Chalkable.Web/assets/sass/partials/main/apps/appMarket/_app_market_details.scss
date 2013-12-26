@@ -1,3 +1,5 @@
+@import "partials/main/apps/_app_ratings";
+
 DIV.page {
   #content {
     > DIV {
@@ -174,111 +176,7 @@ DIV.page {
 
               }
 
-              .reviews{
-                display: inline-block;
-                width: 480px;
-                margin-right: 8px;
-                min-height: 110px;
-                margin-top: 32px;
 
-                .review-link{
-                  font-weight: bold;
-                  color: #383838;
-                  text-decoration: none;
-                  font-size: 22px;
-                  cursor: pointer;
-                }
-
-                .review-area{
-                  position: relative;
-                }
-
-                .review-container{
-                  position: absolute;
-                  bottom: 0;
-                  .rating-hint{
-                    background: url(images/app/rating-hint.png) 0 0 no-repeat;
-                    width: image-width('app/rating-hint.png');
-                    height: image-height('app/rating-hint.png');
-                    position: absolute;
-                    left: 130px;
-                    bottom: 10px;
-                    display: none;
-                  }
-                }
-
-
-                .rating{
-
-                  &.all{
-                    margin-left: 25px;
-                  }
-
-                }
-
-
-                .write-review-btn{
-                  border-radius: 3px;
-                  @include background(linear-gradient(top, #f4f4f4,#d9d9d9));
-                  border-top: 1px solid white;
-                  color: #747272;
-                  font-size: 13px;
-                  cursor: pointer;
-                  text-decoration: none;
-                  padding: 2px 6px 5px;
-                  @include box-shadow(0 1px 2px 1px #aaa);
-                  font-weight: bold;
-                  float: right;
-                  margin-right: 35px;
-                  &:hover{
-                    @include background(linear-gradient(top, #e6e6e6,#d5d5d5));
-                  }
-                }
-
-                .review-text{
-                  width: 435px;
-                  min-height: 50px;
-                  resize: vertical !important;
-                  padding: 5px 5px 40px;
-                  display: block;
-                  margin-top: 0px;
-                  margin-bottom: 0px;
-                  height: 113px;
-                  margin-top: 25px;
-                  margin-bottom: 15px;
-                }
-
-                .cancel-btn{
-                  color: #878787;
-                  text-shadow: 0 1px 0 white;
-                  cursor: pointer;
-                  height: 18px;
-                  line-height: 18px;
-                  margin-left: 20px;
-                  padding: 0;
-                  text-decoration: underline;
-                  font-size: 12px;
-                  font-weight: bold;
-                }
-
-                button{
-                  font-size: 16px;
-                }
-
-                .user-reviews{
-                  margin-top: 17px;
-
-                  .app-rating{
-                    .personcount{
-                      display: inline-block;
-                      float: right;
-                      margin-left: 15px;
-                      vertical-align: middle;
-                      margin-top: 3px;
-                    }
-                  }
-                }
-              }
 
             }
           }

@@ -71,6 +71,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             ShortContent = StringTools.BuildShortText(content, SHORT_LENGHT);
 
             CanDropStudentScore = announcement.MayBeDropped;
+            HideFromStudents = !announcement.VisibleForStudent;
             MaxScore = announcement.MaxScore;
             WeightAddition = announcement.WeightAddition;
             WeightMultiplier = announcement.WeightMultiplier;

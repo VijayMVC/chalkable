@@ -11,16 +11,3 @@ mixin AppMarketToolbar(balance, categories, gradelevels)
 
 
 
-mixin Rating(elemId, value, isEditable)
-    fieldset.rating(class = isEditable ? "editable" : undefined)(attributes)
-        items = [5, 4, 3, 2, 1]
-        each item in items
-            input(
-                type = "radio",
-                id = "#{elemId + item}",
-                value = item,
-                name = elemId,
-                disabled = !isEditable ? "disabled" : undefined,
-                checked = value == item ? "checked" : undefined
-                )
-            label(for="#{elemId + item}")

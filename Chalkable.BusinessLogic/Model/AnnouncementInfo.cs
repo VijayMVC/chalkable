@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Model
@@ -18,7 +15,7 @@ namespace Chalkable.BusinessLogic.Model
         public decimal? WeightAddition { get; set; }
         public decimal? WeightMultiplier { get; set; }
         public bool CanDropStudentScore { get; set; }
-        public bool HideFromStudent { get; set; }
+        public bool HideFromStudents { get; set; }
 
         public static AnnouncementInfo Create(Announcement announcement)
         {
@@ -32,7 +29,8 @@ namespace Chalkable.BusinessLogic.Model
                     MaxScore = announcement.MaxScore,
                     WeightAddition = announcement.WeightAddition,
                     WeightMultiplier = announcement.WeightMultiplier,
-                    CanDropStudentScore = announcement.MayBeDropped
+                    CanDropStudentScore = announcement.MayBeDropped,
+                    HideFromStudents = !announcement.VisibleForStudent
                 };
         }
     }
