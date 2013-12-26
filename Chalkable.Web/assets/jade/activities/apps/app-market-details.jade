@@ -1,0 +1,51 @@
+app = self.getApp()
+devName = app.getDeveloperInfo().getName()
+webSiteLink = app.getDeveloperInfo().getWebSite()
+
+.app-market-details
+    +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels)
+    .app-screenshots-panel
+        +Carousel()
+            -videoUrl = app.getVideoDemoUrl() || ''
+            if videoUrl
+                +CarouselItem().img(data-page = 1)
+                    +Video(true)(src=videoUrl, width="640", height="390")
+            each picture, index in app.getScreenshotPictures().getItems()
+                +CarouselItem().img(data-page= index + 2)
+                    img(src=picture.getPictureUrl())
+    .app-price-info
+        .app-title
+            h1=app.getName()
+            span="by "
+            a(href = webSiteLink).dev-web-site=devName
+        .app-buy
+            +ActionLinkButton('appmarket', 'tryToInstall', app.getId()).special-button.blue-button(class=self.isInstalled()? "installed" : undefined)=self.installBtnTitle
+
+        textarea(name = "app-description", class ="app-description", readonly)=app.getDescription()
+        .app-general-info
+            .reviews
+                +RenderWith(app, chlk.templates.apps.AppMarketReviewsTpl)
+            .permissions
+                .permissions-group
+                    .group-header.first This app is for:
+                    each validRole in app.getValidRoles()
+                        .permission
+                            .icon(class=self.getRoleTypeClass(validRole.getId()))
+                            .description=validRole.getName()
+                .permissions-group
+                    .group-header Info this app uses:
+                    each permission in app.getPermissions()
+                        .permission
+                            .icon(class=self.getPermissionTypeClass(permission.getId().valueOf()))
+                            .description=permission.getName()
+                .permissions-group.last
+                    .group-header.first Works on:
+                    each platform in app.getPlatforms()
+                        .permission
+                            .icon(class=self.getPlatformTypeClass(platform.getId().valueOf()))
+                            .description=platform.getName()
+
+
+
+
+
