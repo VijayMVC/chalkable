@@ -1,0 +1,15 @@
+students = self.getStudents()
+each student,i in students
+    if !student.getId()
+        if i == 0
+            .student(data-id = 1111).grey.plus
+                .plus-container.for-plus +
+                .name.for-plus= Msg.Add_student
+        else
+            .student(data-id = ria.dom.Dom.GID()).grey
+                .name
+    else
+        .student(data-id = student.getId().valueOf())
+            a.img-container
+                +PersonImg(student, 128)
+            a.name=student.getDisplayName()
