@@ -24,6 +24,7 @@ date = self.getDate()
     +AdminAttendanceChart(self.getAttendancesStats())
 +AddStudentTpl(2, date)
 sortedArray = self.getSortedBlocksInfo()
-each item in sortedArray
-    if item[1]
-        +AttendanceDayBlock(item[0])
+.students-grid
+    each item in sortedArray
+        if item[1]
+            +AttendanceDayBlock(item[0])

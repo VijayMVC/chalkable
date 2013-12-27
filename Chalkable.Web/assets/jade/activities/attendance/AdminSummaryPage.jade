@@ -104,7 +104,7 @@ currentPage = self.getCurrentPage() || 1
             .left
                 .action-button
                     .export-btn
-            .right.no-border
+            .right
                 +ActionForm('attendance', 'updateSummary').update-summary.day
                     +DatePicker('nowDateTime', self.getAttendanceByDayData().getDate())(
                         data-options={
@@ -112,7 +112,7 @@ currentPage = self.getCurrentPage() || 1
                           selectOtherMonths: true
                         }
                         readonly="readonly"
-                    )#nowDateTime.no-marker
+                    )#nowDateTime.no-marker.transparent
                     label.choose-date-icon.for-date-picker
                     +Hidden('gradeLevelsIds', self.getGradeLevelsIds())
                     +Hidden('renderDay', 'true')

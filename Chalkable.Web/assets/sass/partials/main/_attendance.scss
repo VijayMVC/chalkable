@@ -192,16 +192,6 @@ BODY {
                 &.active-part{
                   display: block;
                 }
-
-                .hasDatepicker{
-                  width: 77px;
-                  vertical-align: middle;
-                  padding: 3px 3px 1px;
-                  font: normal 11px arial, tahoma, helvetica, sans-serif;
-                  color: black;
-                  margin: 7px 3px;
-                  border: 1px solid #7eadd9;
-                }
               }
             }
           }
@@ -387,7 +377,15 @@ BODY {
             }
           }
 
+          .students-grid{
+            margin-top: 30px;
+          }
+
           .statistic-content{
+            &.mt15{
+              margin-top: 15px;
+            }
+
             .students-statistic{
               display: none;
 
@@ -406,6 +404,7 @@ BODY {
               font-size: 18px;
               border-bottom: 1px solid #cecece;
               box-shadow: 0 1px 0 white;
+              height: 27px;
             }
 
             .more-container{

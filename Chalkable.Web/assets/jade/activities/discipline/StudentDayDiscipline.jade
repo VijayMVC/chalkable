@@ -43,12 +43,12 @@ date = self.getDate().format('mm-dd-yy')
                     .type-container
                         if(canEdit)
                             .discipline-dropdown
-                                +Select('disciplineTypes').discipline-type-select.grey-select
+                                +Select('disciplineTypes')(data-placeholder=Msg.Add_discipline).discipline-type-select.grey-select
                                     each discType in self.getDisciplineTypes()
                                         +Option(discType.getId(), discType.getName())
                     .items-container
                         div
                             +DisciplinesContainer(self.prepareItemForDisciplinesContainer(item), item)
-                            +TextArea(name='description', placeholder="Add a comment").notes=item.getDescription()
+                            +TextArea(name='description', placeholder=Msg.Add_a_comment + '...').notes=item.getDescription()
         if(canEdit)
             +Button().blue-gradient-btn.save-btn=Msg.Save

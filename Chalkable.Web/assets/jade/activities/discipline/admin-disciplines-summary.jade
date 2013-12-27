@@ -82,7 +82,7 @@ date = self.getDate()
             .left
                 .action-button
                     .export-btn
-            .right.no-border
+            .right
                 +ActionForm('discipline', 'updateSummary').update-summary
                     +DatePicker('nowDateTime', date)(
                         data-options={
@@ -90,7 +90,7 @@ date = self.getDate()
                           selectOtherMonths: true
                         }
                         readonly="readonly"
-                    )#nowDateTime.no-marker
+                    )#nowDateTime.no-marker.transparent
                     label.choose-date-icon.for-date-picker
                     +Hidden('gradeLevelsIds', self.getGradeLevelsIds())
     .boxes-admin
@@ -100,14 +100,14 @@ date = self.getDate()
                 .number=self.getNowCount()
                 .triangle
             div(data-index="2").top-number-box.day-box.active-part
-                .title=Msg.Discipline_today
+                .title=self.isNowHidden() ? Msg.Discipline_on_date(date) : Msg.Discipline_today
                 .number=self.getDayCount()
                 .triangle
             div(data-index="3").top-number-box.mp-box
                 .title=Msg.Discipline_MP
                 .number=self.getMpCount()
                 .triangle
-    .statistic-content
+    .statistic-content.mt15
         .students-statistic.page-1
         .students-statistic.page-2.active-part
             .relative.button-block.hovered.block.with-padding

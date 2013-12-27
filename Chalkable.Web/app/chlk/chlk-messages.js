@@ -237,6 +237,8 @@ var Msg = {
     Absent_from_a_class: 'Absent from a class',
     Absent_students: 'Absent students',
     Absent_Today: 'Absent Today',
+    Add_a_comment: 'Add a comment',
+    Add_discipline: 'Add discipline',
     Add_reminder: 'Add Reminder',
     Add_student: 'Add student',
     Advanced_options: 'Advanced options...',
@@ -312,6 +314,9 @@ var Msg = {
     Developer_Website: 'Developer Website',
     Destination_Name: 'Destination Name',
     Discipline_count: 'Discipline count',
+    Discipline_on_date: function(date){
+        return String.format('Discipline on {0}',date.format('mm/dd/yy'));
+    },
     Discipline_today: 'Discipline today',
     Discipline_MP: 'Discipline MP',
     Document_Attached: 'Document Attached',

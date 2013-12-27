@@ -26,6 +26,27 @@
   }
 }
 
+.hasDatepicker{
+  cursor: pointer;
+}
+
+.hasDatepicker.no-marker{
+  &.transparent{
+    border: none;
+    background: transparent;
+    vertical-align: middle;
+    font: normal 13px/24px Arial;
+    color: #a0a0a0;
+    text-shadow: 0 1px 0 white;
+    width: 70px;
+    padding-left: 15px;
+  }
+
+  &+.choose-date-icon{
+    vertical-align: middle;
+  }
+}
+
 .ui-datepicker.ui-widget{
   width: 210px;
   overflow: hidden;
