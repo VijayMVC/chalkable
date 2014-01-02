@@ -4,6 +4,7 @@ REQUIRE('chlk.services.AppMarketService');
 REQUIRE('chlk.services.AppCategoryService');
 REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.PictureService');
+REQUIRE('chlk.services.ApplicationService');
 
 REQUIRE('chlk.activities.apps.AppMarketPage');
 REQUIRE('chlk.activities.apps.AppMarketDetailsPage');
@@ -33,6 +34,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.AppMarketService, 'appMarketService',
+
+        [ria.mvc.Inject],
+        chlk.services.ApplicationService, 'appsService',
 
         [ria.mvc.Inject],
         chlk.services.AppCategoryService, 'appCategoryService',
@@ -380,7 +384,36 @@ NAMESPACE('chlk.controllers', function (){
                     return data;
                 });
             return this.UpdateView(chlk.activities.apps.AppMarketDetailsPage, result, 'updateReviews');
-        }
+        },
 
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.ADMINGRADE,
+            chlk.models.common.RoleEnum.DISTRICTADMIN
+        ])],
+        [[chlk.models.id.AppId]],
+        function banAppAction(appId){
+            var result = this.appsService
+                .banApp(appId)
+                .attach(this.validateResponse_())
+                .then(function(res){
+                  return res;
+                });
+            return this.UpdateView(chlk.activities.apps.AppMarketDetailsPage, result, 'banApp');
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.ADMINGRADE,
+            chlk.models.common.RoleEnum.DISTRICTADMIN
+        ])],
+        [[chlk.models.id.AppId]],
+        function unbanAppAction(appId){
+            var result = this.appsService
+                .unbanApp(appId)
+                .attach(this.validateResponse_())
+                .then(function(res){
+                    return res;
+                });
+            return this.UpdateView(chlk.activities.apps.AppMarketDetailsPage, result, 'banApp');
+        }
     ])
 });
