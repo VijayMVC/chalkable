@@ -443,6 +443,7 @@
     <Content Include="fakeData\studentDisciplinesSummary.json" />
     <Content Include="fakeData\bannedAppData.json" />
     <Content Include="fakeData\unbannedAppData.json" />
+    <Content Include="Views\Shared\_IndexLayout.cshtml" />
     <None Include="Web.staging.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
