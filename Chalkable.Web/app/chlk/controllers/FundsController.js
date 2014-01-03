@@ -1,6 +1,7 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.FundsService');
 REQUIRE('chlk.activities.funds.FundsListPage');
+REQUIRE('chlk.activities.funds.SchoolPersonFundsPage');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -30,7 +31,22 @@ NAMESPACE('chlk.controllers', function (){
         [[Number]],
         function exportAction(id) {
 
+        },
+
+        function viewTeacherAction(){
+            this.Redirect('funds','schoolPersonFunds',[]);
+        },
+        function viewStudentAction(){
+            this.Redirect('funds', 'schoolPersonFunds', []);
+        },
+        function viewParentAction(){
+            this.Redirect('funds','schoolPersonFunds',[]);
+        },
+
+        function schoolPersonFundsAction(){
+            var res = this.fundsService.getPersonFunds().attach(this.validateResponse_());
+            return this.PushView(chlk.activities.funds.SchoolPersonFundsPage, res);
         }
 
-        ])
+    ])
 });

@@ -30,7 +30,11 @@ namespace Chalkable.Web.Controllers
             return Json(new {balance = 0});
         }
 
-
+        [AuthorizationFilter("Teacher, Student")]
+        public ActionResult PersonFunds()
+        {
+            return FakeJson("~/fakeData/personFunds.json");
+        }
 
     }
 }
