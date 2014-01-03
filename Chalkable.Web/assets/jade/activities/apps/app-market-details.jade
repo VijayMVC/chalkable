@@ -44,8 +44,5 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
                         .permission
                             .icon(class=self.getPlatformTypeClass(platform.getId().valueOf()))
                             .description=platform.getName()
-
-
-
-
-
+            .ban-app
+                +RenderWith(app, chlk.templates.apps.AppMarketBanTpl)
