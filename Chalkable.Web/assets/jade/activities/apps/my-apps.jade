@@ -1,5 +1,6 @@
 mixin MyAppsIconLink(app, editable)
     appId = app.getId().valueOf()
+    isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
     if editable
         +ActionForm('appmarket', 'tryToUninstall').my-app-icon-link
 
@@ -15,7 +16,7 @@ mixin MyAppsIconLink(app, editable)
             +Hidden('selfInstalled', app.isSelfInstalled())
             +Hidden('uninstallable', app.isUninstallable())
     else
-        +ActionLink('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW).my-app-icon-link
+        +ActionLink('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned).my-app-icon-link
             .app-list-item
                 .icon(class=editable ? "jiggly" : undefined)
                     pictureUrl = self.getPictureURL(app.getSmallPictureId(), 74, 74)

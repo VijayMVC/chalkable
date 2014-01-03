@@ -300,8 +300,8 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
 
-        [[String, String, chlk.models.apps.AppModes, chlk.models.id.AnnouncementApplicationId]],
-        function viewAppAction(url, viewUrl, mode, announcementAppId_) {
+        [[String, String, chlk.models.apps.AppModes, chlk.models.id.AnnouncementApplicationId, Boolean]],
+        function viewAppAction(url, viewUrl, mode, announcementAppId_, isBanned) {
             var result = this.appsService
                 .getOauthCode(url)
                 .catchError(function(error_){
@@ -309,6 +309,10 @@ NAMESPACE('chlk.controllers', function (){
                 }, this)
                 .attach(this.validateResponse_())
                 .then(function(code){
+                    if (isBanned){
+                        return chlk.models.apps.AppWrapperViewData.$createAppBannedViewData(url);
+                    }
+
                     var appData = null;
                     if (mode == chlk.models.apps.AppModes.MYAPPSVIEW){
                         appData =  this.appMarketService.getMyAppByUrl(url);

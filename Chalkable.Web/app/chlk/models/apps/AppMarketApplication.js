@@ -3,7 +3,7 @@ REQUIRE('chlk.models.developer.DeveloperInfo');
 REQUIRE('chlk.models.apps.AppInstallGroup');
 REQUIRE('chlk.models.apps.AppInstallInfo');
 REQUIRE('chlk.models.apps.AppRating');
-REQUIRE('chlk.models.apps.BannedAppData');
+
 
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
@@ -26,9 +26,7 @@ NAMESPACE('chlk.models.apps', function () {
             String,  'applicationInstallIds',
 
             [ria.serialize.SerializeProperty('applicationrating')],
-            chlk.models.apps.AppRating, 'applicationRating',
-
-            chlk.models.apps.BannedAppData, 'banInfo'
+            chlk.models.apps.AppRating, 'applicationRating'
 
         ]);
 
