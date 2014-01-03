@@ -88,6 +88,18 @@ namespace Chalkable.Web.Controllers
             return PrepareAppInfo(res, true, true);
         }
 
+        [AuthorizationFilter("District, AdminGrade")]
+        public ActionResult BanApp(Guid applicationId)
+        {
+            return FakeJson("~/fakeData/bannedAppData.json");
+        }
+
+        [AuthorizationFilter("District, AdminGrade")]
+        public ActionResult UnbanApp(Guid applicationId)
+        {
+            return FakeJson("~/fakeData/unbannedAppData.json");
+        }
+
         [AuthorizationFilter("SysAdmin, Developer")]
         public ActionResult Delete(Guid applicationId)
         {
@@ -179,6 +191,7 @@ namespace Chalkable.Web.Controllers
             var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(applicationUrl, MasterLocator.Context.Login);
             authorizationCode = HttpUtility.UrlEncode(authorizationCode);
             return Json(authorizationCode);
+            
         }
 
         private const string contentType = "text/html";

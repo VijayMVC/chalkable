@@ -176,7 +176,33 @@ DIV.page {
 
               }
 
+              .ban-app-btn{
+                border-radius: 3px;
+                @include background(linear-gradient(top, #f4f4f4,#d9d9d9));
+                border-top: 1px solid white;
+                color: #747272;
+                font-size: 13px;
+                cursor: pointer;
+                text-decoration: none;
+                padding: 2px 6px 5px;
+                @include box-shadow(0 1px 2px 1px #aaa);
+                font-weight: bold;
+                float: right;
+                margin-right: 35px;
+                &:hover{
+                  @include background(linear-gradient(top, #e6e6e6,#d5d5d5));
+                }
 
+                &.pressed-btn{
+                  @include background(linear-gradient(top, #B65B5E, #953C3F));
+                  color: #CDBCBC;
+                }
+                display: inline-block;
+                width: 166px;
+                margin-right: 0;
+                margin-top: 14px;
+                text-align: center;
+              }
 
             }
           }

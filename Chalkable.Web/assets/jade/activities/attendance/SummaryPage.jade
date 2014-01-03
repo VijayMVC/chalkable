@@ -2,20 +2,32 @@ mixin AbsentLatePage(data, header)
     .chart-container
         .panel-header=header
         .chart-block.relative
-            .chart-bg
+            .wide-chart-bg
             +Chart()(
                 data-options=self.getChartOptions(data)
             )
-    .students-container
+    .students-container.relative
         items = self.getGroupedStudents(data.getStudents())
         each item,i in items
-            div(class = i==0 ? "visible-block" : "hidden-students-block")
+            div(class = i==0 ? "visible-block" : "hidden-students-block height-0")
                 div(class = i==0 ? "" : "hidden-students").hidden-students-block-2
                     each info in item
-                        student = info.getStudentInfo()
                         .student-with-picture
-                            .img-container
-                                +PersonImg(student, 128)
+                            if info
+                                alerts = info.getAlerts()
+                                student = info.getStudentInfo()
+                                if alerts && alerts.length > 0
+                                    div(data-tooltip='<div class="p7">' + alerts.join('<hr>') + '</div>').alerts
+                                .chlk-pop-up-container.popup-top
+                                    .pop-up-triangle
+                                    .info-container
+                                        h1=student.getDisplayName()
+                                        .stats
+                                            each stat in info.getStatByClass()
+                                                p #{stat.getClassName()}: #{stat.getValue()}
+                                        a(href="javascript:").grey-button=Msg.Parent_info
+                                .img-container
+                                    +PersonImg(student, 128)
 
 .attendance-summary
     topData = self.getTopData();

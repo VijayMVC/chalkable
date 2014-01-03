@@ -13,7 +13,8 @@ NAMESPACE('chlk.controls', function () {
                 fontFamily: 'Arial',
                 fontSize: '10px',
                 color: '#a6a6a6'
-            }
+            },
+            plotBorderWidth: 0
 
         },
         labels: {
@@ -63,7 +64,7 @@ NAMESPACE('chlk.controls', function () {
             borderRadius: 2,
             useHTML: true,
             positioner: function (labelWidth, labelHeight, point) {
-                return { x: point.plotX + 7, y: point.plotY - 37 };
+                return { x: point.plotX + 18, y: point.plotY - 37 };
             },
             style: {
                 display: 'none'

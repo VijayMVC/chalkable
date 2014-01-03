@@ -418,6 +418,7 @@ var Msg = {
     Not_Graded: 'Not Graded',
     Number_of_students: 'Number of students',
     Password_reset: 'Password reset',
+    Parent_info: 'Parent Info',
     Old_Password: 'Old Password',
     New_Password: 'New Password',
     New_Password_Confirm: 'Confirm New Password',
