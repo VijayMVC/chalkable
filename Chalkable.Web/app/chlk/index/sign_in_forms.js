@@ -5,7 +5,7 @@ $(document).ready(function () {
         var fieldPassword = $('#login-form').find('input[type=password]');
         if (!fieldPassword.hasClass('shaking')){
             fieldPassword.addClass('shaking');
-            fieldPassword.effect('shake', options, 650, function () {
+            fieldPassword.effect('shake', options, 250, function () {
                 fieldPassword.focus();
                 fieldPassword.removeClass('shaking');
             });
