@@ -1,0 +1,41 @@
+mixin TooltipWithOverflow(text)
+    -attributes['data-tooltip'] = text
+    -attributes['data-tooltip-type'] = 'overflow'
+    p(attributes)=text
+
+.week-calendar-body
+    .day-names
+        each item,i in self.getItems()
+            div(class=item.getTodayClassName()).week
+                p=item.getDate().format('DD')
+                p=item.getDay()
+    .tb-announcements
+        each item,i in self.getItems()
+            div
+                anns = item.getAnnouncements();
+                if anns && anns.length
+                    +ActionLink('calendar', 'showWeekBarPopUp', item.getDate().format('mm-dd-yy'))(class = self.isMainCalendar() ? '' : 'disabled').bar-item
+    .items
+        each item in self.getItems()
+            div(class = item.getTodayClassName(), data-day = item.getDay()).gradient-cnt.item.week-day.week
+                ul
+                    each announcementPeriod,i in item.getAnnouncementPeriods()
+                        +ActionLink('calendar', 'showWeekBarPopUp', item.getDate().format('mm-dd-yy'), i)(class = self.isMainCalendar() ? '' : 'disabled').period-item
+                            if item.getDate().format('DD') == Msg.Sunday
+                                .period-info=i+1
+                            else
+                                anns = announcementPeriod.getAnnouncements();
+                                if anns.length == 1
+                                    li
+                                        .announcement-calendar-item
+                                            //TODO add course
+                                            .course-icon
+                                                +ClassImg(null, 24, 48).avatar.course-icon
+                                            .text-container
+                                                +TooltipWithOverflow(anns[0].getAnnouncementTypeName()).typename
+                                                +TooltipWithOverflow(anns[0].getClassName()).title
+                                if anns.length > 1
+                                    li
+                                        .more-announcements-item
+                                            +TooltipWithOverflow(anns.length + ' ' + Msg.Item(true)).typename
+                                            +TooltipWithOverflow(anns[0].getTitle()).title

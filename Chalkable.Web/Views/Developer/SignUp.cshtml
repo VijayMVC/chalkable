@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "Developer Signup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link href="@Url.StaticContent("/Content/index.css")" rel="stylesheet" type="text/css" /> 
+}
+
+@section ContentSection {
+    <a id="start"></a>
+
+    <div id="demo_top_wrapper" class="faq_sticky_navigation developers">
+        <div id="sticky_navigation" class="developers">
+	        <div class="demo_container">
+                <ul id="nav1">
+                    <li><a href="@Url.Content("~/#start")"><img src="@Url.StaticContent("/Content/images/common/nav-logo-150.png")" class="navlogo_faq developers"></a></li>
+                    <li><a href="@Url.Content("~/Developer/Info")"><h3 class="dev_nav_logo">Developers</h3></a></li>
+                    <li class="loginnav dev one"><a href="@Url.Content("~/")" class="noscroll" style="width:100px !important;">Sign in</a></li>
+                </ul>
+	        </div>
+        </div>
+    </div>       
+	<div id="wrapper">
+        <section id="faq">
+	        <div id="main_body_container">
+		        <div class="wrapper">
+			        <div id="body_container">
+				         @RenderDeveloperSignupForm(Html, Url, (string)ViewData["SignUpError"])
+			        </div>
+		        </div>
+	        </div>
+	    </section>
+    </div>
+      <a id="footer" style="visibility: hidden;"></a>
+        <div id="footer_container" style="margin-top: 100px;">
+          <div class="wrapper">
+            <div id="footer">
+              <div><span class="tape"><img src="@Url.StaticContent("/Content/images/index/tape.png")" alt=""/></span></div>
+              <div class="coll">
+                <h3>Some Links.</h3>
+                  <ul>
+                      <li ><a href="@Url.Content("~/#features")" class="scroll">Feature tour</a></li>
+                      <li><a href="@Url.Content("~/#pricing")" class="scroll">Pricing &amp; Signup</a></li>
+                      <li><a href="@Url.Content("~/#faq")">FAQ</a></li>
+                      <li><a href="@Url.Content("~/Account/Developers")">Developers</a></li>
+                      <li><a href="https://blog.chalkable.com/">Blog</a></li>
+                      <li><a href="https://chalkable.uservoice.com/">Feedback</a></li>
+                  </ul>
+                  <a href="https://mixpanel.com/f/partner"><img src="https://cdn.mxpnl.com/site_media/images/partner/badge_light.png" alt="Mobile Analytics" /></a>
+              </div>
+              <div class="coll">
+                <h3>Say Hi.</h3>
+                <ul>
+                  <li>Chalkable</li>
+                  <li>304 Hudson St.</li>
+                  <li>6th Floor</li>
+                  <li>New York NY 10013</li>
+                  <li><a href="mailto:info@chalkable.com">Email Us</a></li>
+                  <li><a href="mailto:jobs@chalkable.com">Jobs</a></li>
+                </ul>
+              </div>
+              <div class="coll ">
+                <h3>Don&#39;t Be Shy.</h3>
+                <ul class="social">
+                  <li><img src="@Url.StaticContent("/Content/images/index/icon1.png")" alt="" /><a href="https://twitter.com/#!/chalkable">Follow us</a></li>
+                  <li><img src="@Url.StaticContent("/Content/images/index/icon2.png")" alt="" /><a href="https://www.facebook.com/chalkable">Like us</a></li>
+                  <span class="call_us"><img src="@Url.StaticContent("/Content/images/index/phone_icon.png")" alt="phone"><li>Call us</li></span>
+                  <li class="phone_number"><a href="tel:6464943464">646.494.3464</a></li>
+                </ul>
+              </div>
+              <div class="coll last">
+                <h3>Fine Print.</h3>
+                <ul>
+                  <li><a href="https://cl.ly/361V222N3T213e1m1J0Z">Press</a></li>
+                  <li><a href="@Url.Content("~/Account/Terms#developer")">Terms</a></li>
+                </ul>
+              </div>
+              <div><span class="email_us"><a href="mailto:info@chalkable.com"><img src="@Url.StaticContent("/Content/images/index/email_us_img.png")" alt=""/></a></span></div>
+            </div>
+          </div>
+        </div>
+}
+
+@helper RenderDeveloperSignupForm(HtmlHelper Html, UrlHelper Url, String errors)
+{
+    using (Html.BeginForm("Signup", "Developer", FormMethod.Post, new {id = "developer-signup"}))
+    {
+        <div id="signup">
+            <div class="faq_content" style="position: relative">
+                <h3>Get Schools. Get Paid.</h3>
+                <div class = "sign-in-errors" style="text-align: center; width: 100%; top: -20px;">
+                    
+                </div>
+                <ul id="form" class="developers">
+                    <li>
+                        <label>Email </label>
+                        <div><input id="Email" name="Email" type="email" spellcheck="false" class="fieldtext validate[required, custom[email]]" value="" maxlength="31" tabindex="2" required/></div>
+                    </li>
+                    <li>
+                        <label class="desc" id="title126" for="Field126">Password </label>
+                        <div><input id="Password" name="Password" type="password" class="fieldtext validate[required]" value="" maxlength="31" tabindex="4" onkeyup=" " required/></div>
+                    </li>
+                    <li>
+                        <label class="desc">Password Again</label>
+                        <div><input id="ConfirmPassword" name="ConfirmPassword" type="password" class="fieldtext validate[required,equals[Password]]" value="" maxlength="31" tabindex="5" onkeyup=" " required/></div>
+                    </li>
+                    <li>
+                        <p class="instruct terms">
+                            By clicking this button you agree to the <a href="@Url.Content("~/Account/Terms")">Terms.</a>
+                        </p>
+                    </li>
+                    <li class="button_container dev">
+                        <a href="#" class="signupbutton dev-signup-btn"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <input type="submit" style="visibility:hidden;"/>   
+    }
+}
