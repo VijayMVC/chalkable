@@ -5,15 +5,18 @@ NAMESPACE('chlk.activities.funds', function () {
 
     var creditCardCssClasses = {
         amex: 'amex-icon',
+        amazon: '',
+
         diners_club_carte_blanche: 'simple-card-icon',
         diners_club_international: 'simple-card-icon',
+        discover: 'discover-icon',
         jcb: 'simple-card-icon',
         laser: 'simple-card-icon',
         visa_electron: 'visa-electron-icon',
         visa: 'visa-icon',
         mastercard: 'mastercard-icon',
         maestro: 'maestro-icon',
-        discover: 'discover-icon'
+
     };
 
     chlk.activities.funds.BuyCreditMethods = {
@@ -40,11 +43,16 @@ NAMESPACE('chlk.activities.funds', function () {
                 var methods_types = chlk.activities.funds.BuyCreditMethods;
                 var formsNodes = node.parent().parent().parent().parent().find('.funds-payment-form').valueOf();
                 var formClass = null;
-                if(method == methods_types.CREDIT_CARD){
-                    formClass = 'add-credit-card-form';
-                }
-                if(method == methods_types.PAY_PAL){
-                    formClass = 'pay-pal-form';
+                switch (parseInt(method)){
+                    case  methods_types.CREDIT_CARD:
+                        formClass = 'add-credit-card-form';
+                        break;
+                    case methods_types.PAY_PAL:
+                        formClass = 'pay-pal-form';
+                        break;
+                    case methods_types.ASK_ADMIN:
+                        formClass = 'send-message-form';
+                        break;
                 }
                 for(var i = 0; i < formsNodes.length; i++){
                     if(jQuery(formsNodes[i]).hasClass(formClass)){
@@ -54,8 +62,9 @@ NAMESPACE('chlk.activities.funds', function () {
                         jQuery(formsNodes[i]).addClass('x-hidden');
                     }
                 }
-
             },
+
+
 
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);

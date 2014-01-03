@@ -41,7 +41,7 @@ mixin ProfileInfoView(model)
         if model.isAbleEdit()
             +Button().special-button.blue-button#edit-info-button=Msg.Edit
 
-mixin ProfileInfoForm(controller, model, canEdit)
+mixin ProfileInfoForm(controller, model)
     address = model.getAddress() || null;
     primaryPhone = model.getPrimaryPhone()
     primaryPhoneValue = model.getPrimaryPhone() ? model.getPrimaryPhone().getValue() : '';
@@ -112,6 +112,6 @@ mixin ProfileInfoForm(controller, model, canEdit)
                             +RenderWith(addressesModel, chlk.templates.people.Addresses)
                 block
             .section-buttons
-                if canEdit
+                if model.isAbleEdit()
                     +Button()(type="submit").special-button.blue-button#submit-info-button=Msg.Save
                 +Button()(type="button").special-button.blue-button#cancell-edit-info-button=Msg.Cancel

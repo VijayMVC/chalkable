@@ -144,6 +144,15 @@ BODY {
                             }
                           }
                         }
+                        &.send-message-form{
+                          .send-message-icon{
+                            display: inline-block;
+                            height: 23px;
+                            width: 40px;
+                            vertical-align: middle;
+                            background: url('images/common/send-mail-icon.png') 0px 0px no-repeat;
+                          }
+                        }
                       }
                     }
                   }

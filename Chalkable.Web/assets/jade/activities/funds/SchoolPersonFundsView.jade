@@ -34,6 +34,10 @@ mixin PayPalContainer()
 
 mixin SendMessageContainer()
     .funds-payment-form.send-message-form(attributes)
+        +Button().blue-gradient-btn Send Message
+        .funds-payment-form-title
+            .send-message-icon
+            .text We'll send a request message to
 
 
 .funds-view.school-person-funds-view
@@ -61,5 +65,6 @@ mixin SendMessageContainer()
                     +RadioButton('method', chlk.activities.funds.BuyCreditMethods.ASK_ADMIN, 'Ask Admin', false, false)
             +CreditCardContainer(self.getCreditCardInfo()).credit-card-container
             +PayPalContainer().x-hidden
+            +SendMessageContainer().x-hidden
     .funds-history-container.funds-container
 
