@@ -1,6 +1,7 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.funds.Fund');
+REQUIRE('chlk.models.funds.SchoolPersonFundsViewData');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -17,6 +18,9 @@ NAMESPACE('chlk.services', function () {
 
             ria.async.Future, function getBalance() {
                 return this.get('Fund/GetAppBudgetBalance.json', chlk.models.funds.BudgetBalance, {});
+            },
+            ria.async.Future, function getPersonFunds(){
+                return this.get('Fund/PersonFunds.json', chlk.models.funds.SchoolPersonFundsViewData,{});
             }
         ])
 });
