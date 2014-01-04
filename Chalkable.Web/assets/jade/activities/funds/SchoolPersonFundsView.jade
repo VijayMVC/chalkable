@@ -5,12 +5,9 @@ mixin RadioButtonsList(listName, defaultVal)
         block
 
 mixin RadioButton(name, val, text, checked, isReadOnly)
-    -attributes.value = val;
-    -attributes.checked=checked
-    -attributes.disabled = isReadOnly
     .chlk-radio-button(attributes)
         +Hidden(name, false)(data-value=val, class="hidden-radio-button")
-        input(name = name, type="radio")
+        input(name = name, type="radio", value = val, checked=checked, disabled=isReadOnly)
         label(for=name)=text
 
 mixin CreditCardContainer(cardData)
@@ -70,4 +67,8 @@ mixin SendMessageContainer()
             +PayPalContainer().x-hidden
             +SendMessageContainer().x-hidden
     .funds-history-container.funds-container
-
+        .title History
+        .separator
+        -console.log(chlk.templates.funds.FundsHistoryTpl)
+        .inner-container
+            +RenderWith(self.getFundsHistory(), chlk.templates.funds.FundsHistoryTpl)

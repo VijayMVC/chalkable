@@ -1,5 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.funds.SchoolPersonFundsTpl');
+REQUIRE('chlk.templates.funds.FundsHistoryTpl');
 
 NAMESPACE('chlk.activities.funds', function () {
 
@@ -53,11 +54,10 @@ NAMESPACE('chlk.activities.funds', function () {
             [ria.mvc.DomEventBind('click', '.method-container .chlk-radio-button input[type="radio"]')],
             [[ria.dom.Dom, ria.dom.Event]],
             function changeMethodClick(node, event){
-                var method = node.getValue();
                 var methods_types = chlk.activities.funds.BuyCreditMethods;
-                var formsNodes = node.parent().parent().parent().parent().find('.funds-payment-form').valueOf();
+                var fundForms = node.parent().parent().parent().parent().find('.funds-payment-form');
                 var formClass = null;
-                switch (parseInt(method)){
+                switch (parseInt(node.getValue())){
                     case  methods_types.CREDIT_CARD:
                         formClass = 'add-credit-card-form';
                         break;
@@ -68,14 +68,21 @@ NAMESPACE('chlk.activities.funds', function () {
                         formClass = 'send-message-form';
                         break;
                 }
-                for(var i = 0; i < formsNodes.length; i++){
-                    if(jQuery(formsNodes[i]).hasClass(formClass)){
-                        jQuery(formsNodes[i]).removeClass('x-hidden');
-                    }
-                    if(!jQuery(formsNodes[i]).hasClass('x-hidden') && !jQuery(formsNodes[i]).hasClass(formClass)){
-                        jQuery(formsNodes[i]).addClass('x-hidden');
-                    }
-                }
+                fundForms.forEach(function(item){
+                    if(item.hasClass(formClass))
+                        item.removeClass('x-hidden');
+                    else if (!item.hasClass('x-hidden'))
+                        item.addClass('x-hidden');
+                }.bind(this));
+//
+//                for(var i = 0; i < formsNodes.length; i++){
+//                    if(jQuery(formsNodes[i]).hasClass(formClass)){
+//                        jQuery(formsNodes[i]).removeClass('x-hidden');
+//                    }
+//                    if(!jQuery(formsNodes[i]).hasClass('x-hidden') && !jQuery(formsNodes[i]).hasClass(formClass)){
+//                        jQuery(formsNodes[i]).addClass('x-hidden');
+//                    }
+//                }
             },
 
             [ria.mvc.DomEventBind('click', '.amount-container .chlk-radio-button input[type="radio"]')],

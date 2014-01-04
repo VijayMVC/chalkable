@@ -15,7 +15,7 @@ BODY {
 
               .summary-info{
                 display: inline-block;
-                margin: 50px 0px;
+                margin: 30px 0px;
                 h1{
                   color: #2f7790;
                   text-shadow: 1px 1px 0 white;
@@ -29,6 +29,7 @@ BODY {
                   height: 0px;
                   border-top: 1px solid #d3d3d3;
                   border-bottom: 1px solid #ffffff;
+                  margin: 5px 0px;
                 }
                 .funds-container{
                   >.title{
@@ -58,7 +59,7 @@ BODY {
                           .chlk-radio-button{
                             display: inline-block;
                             input[type="radio"]{
-                              margin-left: 50px;
+                              margin-left: 30px;
                             }
                             label{
                               font-size: 14px;
@@ -71,7 +72,7 @@ BODY {
 
                       .amount-container{
                         .other-field{
-                          margin-left: 50px;
+                          margin-left: 30px;
                           .funds-text-field{
                             width: 40px;
                           }
@@ -168,6 +169,57 @@ BODY {
                             vertical-align: middle;
                             background: url('images/common/send-mail-icon.png') 0px 0px no-repeat;
                           }
+                        }
+                      }
+                    }
+                  }
+
+                  &.funds-history-container{
+                    margin-top: 45px;
+
+                    .funds-history-view{
+                      .grid{
+                        background: none;
+                        border: none;
+                        .body{
+                          .row{
+                            @include border-radius(5px);
+                            background: #f6f6f6;
+                            padding: 10px;
+                            margin: 5px 0px;
+                            height: 38px;
+                            &.separator{
+                              height: 10px !important;
+                            }
+                            .td{
+                              &.title{
+                                color: #959595;
+                                font-style: italic;
+                                font-family: Georgia;
+                                font-size: 13px;
+                              }
+                              &.amount, &.balance{
+                                text-align: right;
+                                color: #6f6f6f;
+                                font-size: 14px;
+                                font-weight: bold;
+                              }
+                              &.balance{
+                                width: 80px;
+                              }
+                            }
+                          }
+                        }
+                      }
+                      .show-more-btn{
+                        button{
+                          width: 100%;
+                          @include border-radius(5px);
+                          background: #f6f6f6;
+                          border: 1px solid #cbcbcb;
+                          padding: 10px 0px;
+                          font-size: 14px;
+                          color: #a5a5a5;
                         }
                       }
                     }

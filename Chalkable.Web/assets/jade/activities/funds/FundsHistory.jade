@@ -1,0 +1,11 @@
+.funds-history-view
+    +Grid().not-transparent
+        +GridBody()
+            each item in self.items
+                .row.separator
+                +GridRow()
+                    .td.title=item.getTitle()
+                    .td.amount='$' + item.getAmount()
+                    .td.balance='$' + item.getBalance()
+    if self.isHasNextPage()
+        +Button().show-more-btn Show More

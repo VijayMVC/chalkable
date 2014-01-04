@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.funds', function () {
         [ria.templates.ModelBind(chlk.models.funds.SchoolPersonFundsViewData)],
         'SchoolPersonFundsTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.funds.FundsHistory), 'fundsHistory',
+            chlk.models.common.PaginatedList, 'fundsHistory',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.funds.CreditCardInfo, 'creditCardInfo',
