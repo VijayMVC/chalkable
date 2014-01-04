@@ -85,10 +85,11 @@ NAMESPACE('ria.mvc', function () {
                 context.setSession(this.initSession_());
                 context.setDefaultView(this.initView_());
                 context.setServiceCreateDelegate(this._dispatcher.createService);
+                context.getDefaultView().setContext(context);
                 return context;
             },
 
-            [[HashChangeEvent]],
+            //[[HashChangeEvent]],
             VOID, function onHashChanged_(event) {
                 this.dispatch(event.newUrl);
             },
