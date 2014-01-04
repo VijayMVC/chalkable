@@ -174,18 +174,6 @@ NAMESPACE('chlk.controllers', function (){
                    var buttonCls = methodReflector.findAnnotation(chlk.controllers.SidebarButton)[0].clazz;
                    new ria.dom.Dom(SIDEBAR_CONTROLS_ID + ' .' + buttonCls).addClass(PRESSED_CLS);
                }
-           },
-
-           [[ria.mvc.IActivity]],
-           OVERRIDE, function prepareActivity_(activity){
-              activity.setRole && activity.setRole(this.getCurrentRole());
-           },
-
-           [[ImplementerOf(ria.mvc.IActivity), ria.async.Future, String]],
-           function PushOrUpdateView(clazz, data, msg_){
-               if(this.view.contains(clazz))
-                   return this.UpdateView(clazz, data, msg_);
-               return this.PushView(clazz, data);
            }
    ])
 

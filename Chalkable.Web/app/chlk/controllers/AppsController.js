@@ -123,7 +123,7 @@ NAMESPACE('chlk.controllers', function (){
         function detailsDeveloperAction(appId_, isSubmit_) {
             var isReadonly = false;
             var isDraft = !(!!isSubmit_);
-            var app = this.appsService
+            return this.appsService
                 .getInfo(appId_)
                 .attach(this.validateResponse_())
                 .then(function(data){
@@ -344,12 +344,13 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AppId]],
         function detailsSysAdminAction(appId) {
             var isReadonly = true;
-            var app = this.appsService
+            var result = this.appsService
                 .getInfo(appId)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                        return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data, isReadonly, true));
+                    return this.prepareAppInfo(data, isReadonly, true);
                 }, this);
+            return this.PushView(chlk.activities.apps.AppInfoPage, result);
         },
 
         [chlk.controllers.AccessForRoles([
@@ -526,7 +527,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AppId]],
         function generalDeveloperAction(){
-            return this.appsService
+            var result = this.appsService
                 .getInfo()
                 .attach(this.validateResponse_())
                 .then(function(data){
@@ -547,9 +548,11 @@ NAMESPACE('chlk.controllers', function (){
                             pictureUrl,
                             new chlk.models.apps.AppRating()
                         );
-                        return this.PushView(chlk.activities.apps.AppGeneralInfoPage, new ria.async.DeferredData(appInfo));
+                        return appInfo;
                     }
                 }, this);
+
+            return this.PushView(chlk.activities.apps.AppGeneralInfoPage, result);
         }
     ])
 });
