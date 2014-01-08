@@ -1,0 +1,20 @@
+.class-grading
+    topData = self.getTopData()
+    topItems = topData.getTopItems()
+    selectedId = topData.getSelectedItemId()
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summaryGrid')(
+        selectedItemId=selectedId
+    ).classes-bar
+    .action-bar.not-transparent
+        .container.panel-bg
+            .left.no-border
+                .small-grey-buttons-block
+                    +ActionLink('grading', 'summary', selectedId)(data-tooltip=Msg.Box(true)).no-action-link-styles.small-grey-button.boxes
+                    +ActionLink('grading', 'summaryGrid', selectedId)(data-tooltip=Msg.Grid).no-action-link-styles.small-grey-button.grid.pressed
+    .mps-container
+        each item,i in self.getItems()
+            div(class=(i==0) ? "open" : "", data-index=i).marking-period-container
+                div(data-tooltip=(item.getAvg() != null ? Msg.Avg + " " + item.getAvg() : 'No grades yet')).mp-title=Msg.Marking_Period + ' ' +  item.getMarkingPeriod().getName()
+                    .collapse
+                .mp-data
+                    .ann-types-container
