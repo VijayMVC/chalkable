@@ -34,13 +34,13 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         function viewTeacherAction(){
-            this.Redirect('funds','schoolPersonFunds',[]);
+           return this.Redirect('funds','schoolPersonFunds',[]);
         },
         function viewStudentAction(){
-            this.Redirect('funds', 'schoolPersonFunds', []);
+           return this.Redirect('funds', 'schoolPersonFunds', []);
         },
         function viewParentAction(){
-            this.Redirect('funds','schoolPersonFunds',[]);
+           return this.Redirect('funds','schoolPersonFunds',[]);
         },
 
         function schoolPersonFundsAction(){

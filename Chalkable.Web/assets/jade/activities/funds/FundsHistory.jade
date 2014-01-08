@@ -4,8 +4,8 @@
             each item in self.items
                 .row.separator
                 +GridRow()
-                    .td.title=item.getTitle()
-                    .td.amount='$' + item.getAmount()
-                    .td.balance='$' + item.getBalance()
+                    .td.title=item.getTitle() + ' - ' + item.getCreated().format('mm/dd/yy')
+                    .td.amount=self.convertNumberToMoney(item.getAmount())
+                    .td.balance=self.convertNumberToMoney(item.getBalance())
     if self.isHasNextPage()
         +Button().show-more-btn Show More

@@ -13,6 +13,12 @@ NAMESPACE('chlk.templates.funds', function () {
         'FundsHistoryTpl', EXTENDS(chlk.templates.PaginatedList), [
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.funds.FundsHistory), 'items'
+            ArrayOf(chlk.models.funds.FundsHistory), 'items',
+
+            [[Number]],
+            String, function convertNumberToMoney(value){
+                var res = value > 0 ? '+' : '-';
+                return res + '$' + Math.abs(value);
+            }
         ]);
 });
