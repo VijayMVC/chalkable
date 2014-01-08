@@ -166,6 +166,14 @@ appPlatforms = appPlatforms.join(',')
                     .permission
                         +MyAppsPermission("Will be Teachers", '', 'viewing student output')
                         +SlideCheckbox("showInGradingViewEnabled", myAppsAccess.isVisibleInGradingView(), self.isReadOnly())
+        .section.small
+            .elem.standarts
+                label.hint Standarts:
+                .info
+                    label.description Is your app aligned with common core standarts?
+                    +SlideCheckbox("adjustedToStandarts", myAppsAccess.isAdjustedToStandarts(), self.isReadOnly()).toggle-standarts
+                .add-standarts(class = myAppsAccess.isAdjustedToStandarts() ?  "x-hidden" : undefined)
+                    .title Standarts
         .section
             .elem
                 label.hint API Access:

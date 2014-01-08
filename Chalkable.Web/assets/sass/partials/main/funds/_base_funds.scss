@@ -1,0 +1,330 @@
+BODY {
+  DIV.page{
+    >DIV#content {
+      DIV#content-wrapper{
+        #main-wrapper {
+          #main{
+
+            .funds-view{
+
+              .toolbar-btn{
+                &.app-store{
+                  margin-left: 190px;
+                }
+              }
+
+              .summary-info{
+                display: inline-block;
+                margin: 30px 0px;
+                h1{
+                  color: #2f7790;
+                  text-shadow: 1px 1px 0 white;
+                  font-size: 24px;
+                }
+              }
+
+              &.school-person-funds-view{
+
+                .separator{
+                  height: 0px;
+                  border-top: 1px solid #d3d3d3;
+                  border-bottom: 1px solid #ffffff;
+                  margin: 5px 0px;
+                }
+                .funds-container{
+                  >.title{
+                    font-weight: bold;
+                    font-size: 18px;
+                    font-family: Arial;
+                    text-shadow: 1px 1px 0 white;
+                  }
+
+                  &.buy-credit-container{
+
+                    .inner-container{
+
+                      .amount-container,.method-container{
+                        margin-top: 30px;
+                        .title,.radiobutton-group{
+                          display: inline-block;
+                        }
+                        .title{
+                          color: #959595;
+                          font-family: Georgia;
+                          font-size: 13px;
+                          font-style: italic;
+                          text-shadow: 1px 1px 0 white;
+                        }
+                        .radiobutton-group{
+                          .chlk-radio-button{
+                            display: inline-block;
+                            input[type="radio"]{
+                              margin-left: 30px;
+                            }
+                            label{
+                              font-size: 14px;
+                              font-weight: bold;
+                              padding-left: 5px;
+                            }
+                          }
+                        }
+                      }
+
+                      .amount-container{
+                        .other-field{
+                          margin-left: 30px;
+                          .funds-text-field{
+                            width: 40px;
+                          }
+                        }
+                      }
+                      .method-container{
+                      }
+
+                      .funds-payment-form{
+
+                        width: 350px;
+                        background: #fff;
+                        padding: 15px 15px 0px 15px;
+                        margin-top: 30px;
+                        @include border-radius(3px);
+
+                        .funds-text-field{
+                          font-size: 16px;
+                          padding: 10px 10px 10px 10px;
+                          border: 1px solid #bbbbbb;
+                          margin: 0px 15px 20px 0px;
+                        }
+
+                        .chlk-button{
+                          button{
+                            font-size: 18px;
+                            font-weight: bold;
+                            padding: 8px 0px 8px 0px;
+                          }
+                        }
+
+                        .funds-payment-form-title{
+                          font-size: 12px;
+                          color: #959595;
+                          text-shadow: 1px 1px 0 white;
+                          text-align: center;
+                          padding: 4px 0px 4px 0px;
+                        }
+
+                        .credit-card-icon{
+                          vertical-align: middle;
+                          width: 45px;
+                          margin-left: 64px;
+                        }
+
+                        &.add-credit-card-form{
+                          .card-number{
+                            width: 329px;
+                            display: block;
+                          }
+                          .card-month{
+                            margin-right: 10px;
+                            text-align: center;
+                          }
+                          .card-year{
+                            margin-left: 10px;
+                            text-align: center;
+                          }
+
+                          .card-cvc-number{
+                            margin-right: 0px !important;
+                            text-align: center;
+                          }
+                        }
+
+                        &.pay-pal-form{
+                          .funds-payment-form-title{
+                            text-align: left;
+                            padding: 10px 0px 10px 0px;
+
+                            .pay-pal-1icon{
+                              width: 40px;
+                            }
+                            .text{
+                              display: inline-block;
+                            }
+                          }
+                          .chlk-button{
+                            button{
+                              position: relative;
+                              span{
+                                padding-left: 19px;
+                                font-size: 24px;
+                                font-style: italic;
+                              }
+                            }
+                          }
+                        }
+                        &.send-message-form{
+                          .send-message-icon{
+                            display: inline-block;
+                            height: 23px;
+                            width: 40px;
+                            vertical-align: middle;
+                            background: url('images/common/send-mail-icon.png') 0px 0px no-repeat;
+                          }
+                          .text{
+                            display: inline-block;
+                          }
+                        }
+                      }
+                    }
+                  }
+
+                  &.funds-history-container{
+                    margin-top: 45px;
+
+                    .funds-history-view{
+                      .grid{
+                        background: none;
+                        border: none;
+                        .body{
+                          .row{
+                            @include border-radius(5px);
+                            background: #f6f6f6;
+                            padding: 10px;
+                            margin: 5px 0px;
+                            height: 38px;
+                            &.separator{
+                              height: 10px !important;
+                            }
+                            .td{
+                              &.title{
+                                color: #959595;
+                                font-style: italic;
+                                font-family: Georgia;
+                                font-size: 13px;
+                              }
+                              &.amount, &.balance{
+                                text-align: right;
+                                color: #6f6f6f;
+                                font-size: 14px;
+                                font-weight: bold;
+                              }
+                              &.balance{
+                                width: 80px;
+                              }
+                            }
+                          }
+                        }
+                      }
+                      .show-more-btn{
+                        button{
+                          width: 100%;
+                          @include border-radius(5px);
+                          background: #f6f6f6;
+                          border: 1px solid #cbcbcb;
+                          padding: 10px 0px;
+                          font-size: 14px;
+                          color: #a5a5a5;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.funds-text-field{
+  border: 1px solid #bbbbbb;
+}
+
+.credit-card-icon{
+  display: inline-block;
+  height: 23px;
+  width: 23px;
+
+  &.simple-card-icon{
+    background: url('images/funds/credit-card-icons/simple.png') 0px 0px no-repeat;
+  }
+
+  &.pay-pal-1icon{
+    background: url('images/funds/credit-card-icons/PayPal-1.png') 0px 0px no-repeat;
+  }
+  &.amex-icon{
+    background: url('images/funds/credit-card-icons/Amex.png') 0px 0px no-repeat;
+  }
+  &.apple-icon{
+    background: url('images/funds/credit-card-icons/Apple.png') 0px 0px no-repeat;
+  }
+  &.amazon-icon{
+    background: url('images/funds/credit-card-icons/Amazon.png') 0px 0px no-repeat;
+  }
+  &.card-2co-icon{
+    background: url('images/funds/credit-card-icons/2CO.png') 0px 0px no-repeat;
+  }
+  &.cirrus-icon{
+    background: url('images/funds/credit-card-icons/Cirrus.png') 0px 0px no-repeat;
+  }
+  &.delta-icon{
+    background: url('images/funds/credit-card-icons/Delta.png') 0px 0px no-repeat;
+  }
+  &.dicover-icon{
+    background: url('images/funds/credit-card-icons/Dicover.png') 0px 0px no-repeat;
+  }
+  &.direct-debit-icon{
+    background: url('images/funds/credit-card-icons/Direct Debit.png') 0px 0px no-repeat;
+  }
+  &.google-icon{
+    background: url('images/funds/credit-card-icons/google.png') 0px 0px no-repeat;
+  }
+  &.maestro-icon{
+    background: url('images/funds/credit-card-icons/Maestro.png') 0px 0px no-repeat;
+  }
+  &.mastercard-icon{
+    background: url('images/funds/credit-card-icons/Mastercard.png') 0px 0px no-repeat;
+  }
+  &.money-bookers-icon{
+    background: url('images/funds/credit-card-icons/Moneybookers.png') 0px 0px no-repeat;
+  }
+  &.money-gram-icon{
+    background: url('images/funds/credit-card-icons/Moneygram.png') 0px 0px no-repeat;
+  }
+  &.novus-icon{
+    background: url('images/funds/credit-card-icons/NOVUS.png') 0px 0px no-repeat;
+  }
+  &.pay-pal-2icon{
+    background: url('images/funds/credit-card-icons/PayPal-2.png') 0px 0px no-repeat;
+  }
+  &.plain-icon{
+    background: url('images/funds/credit-card-icons/Plain.png') 0px 0px no-repeat;
+  }
+  &.sage-icon{
+    background: url('images/funds/credit-card-icons/Sage.png') 0px 0px no-repeat;
+  }
+  &.solo-icon{
+    background: url('images/funds/credit-card-icons/Solo.png') 0px 0px no-repeat;
+  }
+  &.switch-icon{
+    background: url('images/funds/credit-card-icons/Switch.png') 0px 0px no-repeat;
+  }
+  &.visa-debit-icon{
+    background: url('images/funds/credit-card-icons/Visa Debit.png') 0px 0px no-repeat;
+  }
+  &.visa-electron-icon{
+    background: url('images/funds/credit-card-icons/Visa Electron.png') 0px 0px no-repeat;
+  }
+  &.visa-icon{
+    background: url('images/funds/credit-card-icons/Visa.png') 0px 0px no-repeat;
+  }
+  &.western-union-icon{
+    background: url('images/funds/credit-card-icons/Western Union.png') 0px 0px no-repeat;
+  }
+  &.world-pay-icon{
+    background: url('images/funds/credit-card-icons/WorldPay.png') 0px 0px no-repeat;
+  }
+}
+
+

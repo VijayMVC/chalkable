@@ -104,6 +104,26 @@ BODY {
 
                     }
 
+                    &.standarts{
+                      margin-top: 20px;
+                      .description{
+                        margin-right: 6px;
+                      }
+
+                      .add-standarts{
+                        margin: 10px 190px;
+                        text-align: center;
+                        height: 60px;
+                        line-height: 60px;
+                      }
+                      .info{
+                        display: inline-block;
+                        .title{
+                          border: 1px dashed black;
+                        }
+                      }
+                    }
+
                     &.screenshots{
                       margin-top: 60px;
                       margin-bottom: 25px;

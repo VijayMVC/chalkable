@@ -14,7 +14,7 @@ REQUIRE('chlk.models.apps.AppState');
 REQUIRE('chlk.models.apps.AppScreenshots');
 REQUIRE('chlk.models.common.NameId');
 REQUIRE('chlk.models.developer.DeveloperInfo');
-
+REQUIRE('chlk.models.apps.BannedAppData');
 
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
@@ -72,7 +72,9 @@ NAMESPACE('chlk.models.apps', function () {
             [ria.serialize.SerializeProperty('gradelevels')],
             ArrayOf(chlk.models.id.AppGradeLevelId), 'gradeLevels',
 
-            ArrayOf(chlk.models.apps.AppPlatform), 'platforms'
+            ArrayOf(chlk.models.apps.AppPlatform), 'platforms',
+
+            chlk.models.apps.BannedAppData, 'banInfo'
         ]);
 
 

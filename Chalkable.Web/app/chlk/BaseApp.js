@@ -35,6 +35,7 @@ REQUIRE('chlk.controls.VideoControl');
 REQUIRE('chlk.controls.PayCheckControl');
 REQUIRE('chlk.controls.ScrollBoxControl');
 REQUIRE('chlk.controls.MultipleSelectControl');
+REQUIRE('chlk.controls.MaskedInputControl');
 
 REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.Role');
@@ -45,6 +46,7 @@ REQUIRE('chlk.models.people.Claim');
 
 REQUIRE('chlk.AppApiHost');
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
+REQUIRE('chlk.lib.mvc.ChlkView');
 REQUIRE('chlk.controllers.ErrorController');
 
 NAMESPACE('chlk', function (){
@@ -69,6 +71,10 @@ NAMESPACE('chlk', function (){
             function $(){
                 BASE();
                 this.apiHost_ = new chlk.AppApiHost();
+            },
+
+            OVERRIDE, ria.mvc.IView, function initView_() {
+                return new chlk.lib.mvc.ChlkView;
             },
 
             OVERRIDE, ria.mvc.ISession, function initSession_() {

@@ -17,6 +17,7 @@ NAMESPACE('chlk.models.apps', function () {
             [ria.serialize.SerializeProperty('showingradeview')],
             Boolean, 'visibleInGradingView',
 
+            Boolean, 'adjustedToStandarts',
 
             Boolean, 'myAppsForCurrentRoleEnabled',
 
@@ -27,12 +28,13 @@ NAMESPACE('chlk.models.apps', function () {
                     hasadminmyapps: this.isAdminMyAppsEnabled(),
                     hasparentmyapps: this.isParentMyAppsEnabled(),
                     canattach: this.isAttachEnabled(),
-                    showingradeview: this.isVisibleInGradingView()
+                    showingradeview: this.isVisibleInGradingView(),
+                    adjustedtostandarts: this.isAdjustedToStandarts()
                 }
             },
 
-            [[Boolean, Boolean, Boolean, Boolean, Boolean, Boolean]],
-            function $(hasStudentMyApps_, hasTeacherMyApps_, hasAdminMyApps_, hasParentMyApps_, canAttach_, showInGradeView_){
+            [[Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean]],
+            function $(hasStudentMyApps_, hasTeacherMyApps_, hasAdminMyApps_, hasParentMyApps_, canAttach_, showInGradeView_, adjustedToStandarts_){
                 BASE();
                 if (hasStudentMyApps_)
                     this.setStudentMyAppsEnabled(hasStudentMyApps_);
@@ -46,6 +48,8 @@ NAMESPACE('chlk.models.apps', function () {
                     this.setAttachEnabled(canAttach_);
                 if (showInGradeView_)
                     this.setVisibleInGradingView(showInGradeView_);
+                if (adjustedToStandarts_)
+                    this.setAdjustedToStandarts(adjustedToStandarts_);
             }
 
         ]);

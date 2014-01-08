@@ -27,6 +27,13 @@ NAMESPACE('chlk.activities.apps', function () {
                 appPricing.toggleClass(HIDDEN_CLASS, node.checked());
             },
 
+            [ria.mvc.DomEventBind('click', 'input.toggle-standarts')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function toggleStandarts(node, event){
+                var addStandartsBlock = this.dom.find('.add-standarts');
+                addStandartsBlock.toggleClass(HIDDEN_CLASS, node.checked());
+            },
+
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function onFormChange(node, event){
                 var submitBtnWrapper = this.dom.find('.submit-btn');

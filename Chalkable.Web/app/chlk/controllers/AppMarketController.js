@@ -157,6 +157,9 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.apps.MyAppsPage, result);
         },
 
+
+
+        //todo: refactor
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.id.AppId]],
         function detailsAction(id) {

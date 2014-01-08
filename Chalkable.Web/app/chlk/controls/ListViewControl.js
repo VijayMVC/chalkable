@@ -19,6 +19,12 @@ NAMESPACE('chlk.controls', function () {
     /** @class chlk.controls.ListView */
     CLASS(
         'ListViewControl', EXTENDS(chlk.controls.Base), [
+
+            function $(){
+               BASE();
+               this._loadAllButtonClicked = false;
+            },
+
             OVERRIDE, VOID, function onCreate_() {
                 BASE();
                 ASSET('~/assets/jade/controls/list-view.jade')(this);
@@ -29,7 +35,6 @@ NAMESPACE('chlk.controls', function () {
             Number, 'currentIndex',
             Number, 'count',
             ria.dom.Dom, 'grid',
-
 
             [[Object, Object]],
             VOID, function prepareData(data,configs_) {
@@ -86,9 +91,12 @@ NAMESPACE('chlk.controls', function () {
                         if(configs.showLoadAllInPage < (configs.currentStart / configs.pageSize)){
                             this.showLoadAllPopUp_(this.getGrid());
                         }
-                        if((configs.currentStart + configs.pageSize) >= configs.totalCount){
-                            this.hideLoadAllPopUp_(this.getGrid());
+                        if(this._loadAllButtonClicked){
                             this.scrollToBottom_();
+                            this._loadAllButtonClicked = false;
+                        }
+                        if((configs.currentStart + configs.pageSize) > configs.totalCount){
+                            this.hideLoadAllPopUp_(this.getGrid());
                         }
                     }.bind(this));
             },
@@ -183,6 +191,7 @@ NAMESPACE('chlk.controls', function () {
                 var configs = this.getConfigs();
                 configs.currentStart = 0;
                 form.find('[name=count]').setValue(configs.totalCount);
+                this._loadAllButtonClicked = true;
                 this.scrollAction_(grid);
             },
 
@@ -215,18 +224,20 @@ NAMESPACE('chlk.controls', function () {
             VOID, function addInfiniteScroll(grid) {
                 grid.addClass('with-scroller');
                 var baseContentHeight = grid.height();
-                var configs = this.getConfigs();
 
                 var pageHeight = document.documentElement.clientHeight;
                 var scrollPosition;
                 var contentHeight = baseContentHeight + grid.offset().top;
                 var interval;
 
+                var configs = this.getConfigs();
                 configs.currentStart = configs.start + configs.pageSize;
+                this.setConfigs(configs);
 
                 interval = setInterval(function(){
                     if(!grid.hasClass('scroll-freezed')){
                         scrollPosition = window.pageYOffset;
+                        configs = this.getConfigs();
                         if(configs.totalCount > configs.currentStart){
                             if((contentHeight - pageHeight - scrollPosition) < 400){
                                 configs.currentStart += configs.pageSize;
@@ -238,12 +249,22 @@ NAMESPACE('chlk.controls', function () {
                             clearInterval(interval);
                         }
                     }
-                    var node = grid.find('.horizontal-loader');
-                    if(node.exists() && node.next().exists()){
-                        grid.removeClass('scroll-freezed');
-                        node.remove();
-                    }
+                    this.removeLoader_(grid);
                 }.bind(this), configs.interval);
+            },
+            [[ria.dom.Dom]],
+            VOID, function removeLoader_(grid){
+                var node = grid.find('.horizontal-loader');
+                if(grid.hasClass('scroll-freezed')){
+                    grid.removeClass('scroll-freezed');
+                }
+//                if(node.exists()){
+//                    node.remove();
+//                }
+                if(node.exists() && node.next().exists()){
+                    grid.removeClass('scroll-freezed');
+                    node.remove();
+                }
             },
 
             [ria.mvc.DomEventBind('click', '.chlk-grid .row')],
