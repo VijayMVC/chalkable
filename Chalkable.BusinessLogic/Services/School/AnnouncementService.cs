@@ -167,7 +167,7 @@ namespace Chalkable.BusinessLogic.Services.School
                                     {
                                         {Class.TEACHER_REF_FIELD, Context.UserLocalId},
                                     });
-                        if (addToChlkAnns.Any(x => classes.Any(y => y.Id != x.ClassRef)))
+                        if (addToChlkAnns.Any(x => classes.All(y => y.Id != x.ClassRef)))
                             throw new SecurityException();
                     }
                     CreateAnnoucnementDataAccess(uow).Insert(addToChlkAnns);
