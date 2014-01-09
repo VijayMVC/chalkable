@@ -1,0 +1,81 @@
+mixin RadioButtonsList(listName, defaultVal)
+    -attributes['data-name'] = escape(listName);
+    .radiobutton-group(attributes)
+        +Hidden(listName, defaultVal)
+        block
+
+mixin RadioButton(name, val, text, checked, isReadOnly)
+    .chlk-radio-button(attributes)
+        +Hidden(name, false)(data-value=val, class="hidden-radio-button")
+        input(name = name, type="radio", value = val, checked=checked, disabled=isReadOnly)
+        label(for=name)=text
+
+mixin CreditCardContainer(cardData, amount)
+    +ActionForm('funds', 'addCredit').funds-payment-form.add-credit-card-form(attributes)
+        +Hidden('amount', amount)
+        +MaskedInput('cardnumber','9999 9999 9999 9999')(placeholder="Card Number", value=cardData ? cardData.getCardNumber() : '').card-number.funds-text-field
+        +MaskedInput('month', '99')(placeholder="MM", size="1", maxlength="2", value=cardData ? cardData.getMonth() : '').card-month.funds-text-field
+        span /
+        +MaskedInput('year', '9999')(placeholder="YY", size="1", maxlength="4", value=cardData ? cardData.getYear() : '').card-year.funds-text-field
+        .credit-card-icon.simple-card-icon
+        +MaskedInput('cvcnumber', '9999')(placeholder="CVC", size="2", maxlength="4", value=cardData ? cardData.getCvcNumber() : '').card-cvc-number.funds-text-field
+        +Button().blue-gradient-btn.add-credit-btn
+            span Add
+            span.amount-btn-text= '$' + amount
+            span Credits
+        .funds-payment-form-title Click the button to complete the transaction
+
+mixin PayPalContainer(amount)
+    +ActionForm('funds', 'addCredit').funds-payment-form.pay-pal-form(attributes)
+        +Hidden('amount', amount)
+        +Button().blue-gradient-btn
+            span Add Credits via
+            span.amount-btn-text= '$' + amount
+            span.pay-pal-btn-text PayPal
+        .funds-payment-form-title
+            .credit-card-icon.pay-pal-1icon
+            .text You'll be redirected to secure Paypal form
+
+mixin SendMessageContainer()
+    .funds-payment-form.send-message-form(attributes)
+        +Button().blue-gradient-btn Send Message
+        .funds-payment-form-title
+            .send-message-icon
+            .text We'll send a request message to
+
+
+.funds-view.school-person-funds-view.apps-funds
+    +AppMarketToolbar(null, null, null)
+    .summary-info
+        .balance
+            h1='Your Balance: $' + self.getCurrentBalance()
+    .buy-credit-container.funds-container
+        .title Buy Credit
+        .separator
+        .buy-credit-info.inner-container
+            .amount-container
+                .title Amount:
+                +RadioButtonsList('amount_radio_grup', null)
+                    +RadioButton('amount_radio_btn', 10, '$10', true, false)
+                    +RadioButton('amount_radio_btn', 20, '$20', false, false)
+                    +RadioButton('amount_radio_btn', 50, '$50', false, false)
+                    +RadioButton('amount_radio_btn', 100, '$100', false, false)
+                    +RadioButton('amount_radio_btn', '', 'Other', false, false)#amount-others
+                    .chlk-radio-button.other-field.x-hidden
+                        lable $
+                        input(placeholder="Other").funds-text-field#other-input-field
+            .method-container
+                .title Method:
+                +RadioButtonsList('method', null)
+                    +RadioButton('method', chlk.activities.funds.BuyCreditMethods.CREDIT_CARD, 'Credit Card', true, false)
+                    +RadioButton('method', chlk.activities.funds.BuyCreditMethods.PAY_PAL, 'PayPal', false, false)
+                    +RadioButton('method', chlk.activities.funds.BuyCreditMethods.ASK_ADMIN, 'Ask Admin', false, false)
+            +CreditCardContainer(self.getCreditCardInfo(), 10).credit-card-container
+            +PayPalContainer(10).x-hidden
+            +SendMessageContainer().x-hidden
+    .funds-history-container.funds-container
+        .title History
+        .separator
+        -console.log(chlk.templates.funds.FundsHistoryTpl)
+        .inner-container
+            +RenderWith(self.getFundsHistory(), chlk.templates.funds.FundsHistoryTpl)
