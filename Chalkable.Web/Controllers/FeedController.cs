@@ -23,10 +23,12 @@ namespace Chalkable.Web.Controllers
         {
             if (!SchoolLocator.Context.SchoolId.HasValue)
                 throw new UnassignedUserException();
-
-            var list = SchoolLocator.AnnouncementService.GetAnnouncements(starredOnly ?? false, start ?? 0, count ?? 10, 
+            start = start ?? 0;
+            count = count ?? 10;
+            var list = SchoolLocator.AnnouncementService.GetAnnouncements(starredOnly ?? false, start.Value, count.Value, 
                 classId, null, BaseSecurity.IsAdminViewer(SchoolLocator.Context));
-            return Json(list.Transform(x => AnnouncementViewData.Create(x)));
+            return Json(list.Select(x => AnnouncementViewData.Create(x)).ToList());
+            //Json(list.Transform(x => AnnouncementViewData.Create(x)));
         }
 
 
