@@ -87,34 +87,40 @@ NAMESPACE('chlk.activities.funds', function () {
 
             [ria.mvc.DomEventBind('click', '.amount-container .chlk-radio-button input[type="radio"]')],
             [[ria.dom.Dom, ria.dom.Event]],
-            function changeAmountClick(node, event){
+            function changeAmountBtnClick(node, event){
                 if(node.parent().getAttr('id') != 'amount-others'){
                     node.parent().parent().find('.chlk-radio-button')
                         .filter(function(item){
                             return item.getAttr('id') == 'amount-others'
                         }).removeClass('x-hidden');
                     node.parent().parent().find('.other-field').addClass('x-hidden');
+                    this.changeAmount_(parseInt(node.getValue()));
                 }else{
                     this.otherRadioBtnClick_(node);
                 }
-
             },
 
+            [[ria.dom.Dom]],
             VOID, function otherRadioBtnClick_(node){
                 node.parent().parent().find('.other-field').removeClass('x-hidden');
                 node.parent().addClass('x-hidden');
             },
 
+            [[Number]],
+            VOID, function changeAmount_(amount){
+                this.getDom().find('.funds-payment-form [name="amount"]')
+                    .forEach(function(item){ item.setValue(amount)});
+                this.getDom().find('.funds-payment-form .amount-btn-text')
+                    .forEach(function(item){
+                        jQuery(item.valueOf()).text("$" + amount);
+                    });
+            },
+
             [ria.mvc.DomEventBind('change', '#other-input-field')],
             [[ria.dom.Dom, ria.dom.Event]],
             function otherInputFieldChange(node, event){
-
+                this.changeAmount_(parseInt(node.getValue()));
             },
-
-            VOID, function changeAmount_(){
-
-            },
-
 
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);

@@ -46,6 +46,10 @@ NAMESPACE('chlk.controllers', function (){
         function schoolPersonFundsAction(){
             var res = this.fundsService.getPersonFunds().attach(this.validateResponse_());
             return this.PushView(chlk.activities.funds.SchoolPersonFundsPage, res);
+        },
+
+        function addCreditAction(){
+
         }
 
     ])

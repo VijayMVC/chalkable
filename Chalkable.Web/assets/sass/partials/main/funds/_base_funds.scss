@@ -118,6 +118,17 @@ BODY {
                           margin-left: 64px;
                         }
 
+                        .chlk-button{
+                          button{
+                            span{
+                              display: inline-block;
+                              &.amount-btn-text{
+                                padding: 0px 6px;
+                              }
+                            }
+                          }
+                        }
+
                         &.add-credit-card-form{
                           .card-number{
                             width: 329px;
@@ -153,8 +164,8 @@ BODY {
                           .chlk-button{
                             button{
                               position: relative;
-                              span{
-                                padding-left: 19px;
+                              .pay-pal-btn-text{
+                                padding-left: 8px;
                                 font-size: 24px;
                                 font-style: italic;
                               }
