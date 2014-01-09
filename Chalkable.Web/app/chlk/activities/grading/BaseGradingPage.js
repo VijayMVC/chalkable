@@ -3,7 +3,7 @@ REQUIRE('chlk.templates.grading.GradingClassSummaryTpl');
 REQUIRE('chlk.templates.grading.GradingClassSummaryItemTpl');
 REQUIRE('chlk.templates.grading.AnnouncementForGradingPopup');
 REQUIRE('chlk.templates.grading.ItemGradingStatTpl');
-REQUIRE('chlk.templates.announcement.Announcement');
+REQUIRE('chlk.templates.announcement.ShortAnnouncementTpl');
 REQUIRE('chlk.templates.grading.GradingClassSummaryPartTpl');
 REQUIRE('chlk.models.announcement.Announcement');
 
@@ -116,7 +116,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 popUp.setCss('top', target.offset().top - 17);
             },
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, chlk.activities.lib.DontShowLoader())],
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.ShortAnnouncementTpl, chlk.activities.lib.DontShowLoader())],
             VOID, function removeDisabled(tpl, model, msg_) {
                 new ria.dom.Dom('.grey-button.disabled').removeClass('disabled');
             },
@@ -130,7 +130,7 @@ NAMESPACE('chlk.activities.grading', function () {
             },
 
             [[ria.dom.Dom]],
-            chlk.models.announcement.Announcement, function getAnnouncementInfo(node){
+            chlk.models.announcement.ShortAnnouncementViewData, function getAnnouncementInfo(node){
                 var annIndex = node.parent('.announcements-type-item').getData('index');
                 var typeIndex = node.parent('.ann-type-container').getData('index');
                 this.setCurrentIndex(typeIndex);

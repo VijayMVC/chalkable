@@ -12,7 +12,7 @@ NAMESPACE('chlk.templates.grading', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.announcement.AnnouncementType, 'type',
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.Announcement), 'announcements',
+            ArrayOf(chlk.models.announcement.ShortAnnouncementViewData), 'announcements',
             [ria.templates.ModelPropertyBind],
             Number, 'percent',
             [ria.templates.ModelPropertyBind],
