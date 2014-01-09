@@ -30,8 +30,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         Announcement GetAnnouncementById(int id);
         IList<AnnouncementComplex> GetAnnouncements(int count, bool gradedOnly);
-        PaginatedList<AnnouncementComplex> GetAnnouncements(int start, int count, bool onlyOwners = false);
-        PaginatedList<AnnouncementComplex> GetAnnouncements(bool starredOnly, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false);
+        IList<AnnouncementComplex> GetAnnouncements(int start, int count, bool onlyOwners = false);
+        IList<AnnouncementComplex> GetAnnouncements(bool starredOnly, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false);
         IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, IList<int> gradeLevelsIds = null, int? classId = null);
         IList<AnnouncementComplex> GetAnnouncements(string filter);
         Announcement GetLastDraft();
@@ -88,11 +88,11 @@ namespace Chalkable.BusinessLogic.Services.School
             return GetAnnouncements(new AnnouncementsQuery {Count = count, GradedOnly = gradedOnly}).Announcements;
         }
 
-        public PaginatedList<AnnouncementComplex> GetAnnouncements(int start, int count, bool onlyOwners = false)
+        public IList<AnnouncementComplex> GetAnnouncements(int start, int count, bool onlyOwners = false)
         {
             return GetAnnouncements(false, start, count, null, null, onlyOwners);
         }
-        public PaginatedList<AnnouncementComplex> GetAnnouncements(bool starredOnly, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false)
+        public IList<AnnouncementComplex> GetAnnouncements(bool starredOnly, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false)
         {
             var q = new AnnouncementsQuery
             {
@@ -104,8 +104,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 OwnedOnly = ownerOnly,
             };
             //return new PaginatedList<AnnouncementComplex>(res.Announcements, start / count, count, res.SourceCount);
-            var res = GetAnnouncementsComplex(q);
-            return new PaginatedList<AnnouncementComplex>(res, start / count, count);
+            return GetAnnouncementsComplex(q);
         }
 
         public IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, IList<int> gradeLevelsIds = null, int? classId = null)
