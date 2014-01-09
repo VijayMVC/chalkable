@@ -65,12 +65,31 @@ namespace Chalkable.StiConnector.Connectors
             Debug.WriteLine(REQ_ON_FORMAT, url);
             var x = typeof(TokenModel);
             var ser = new DataContractJsonSerializer(x);
-            using (var stream = new MemoryStream(client.DownloadData(url)))
+            MemoryStream stream = null;
+            try
             {
+                stream = new MemoryStream(client.DownloadData(url));
                 var tm = (TokenModel)ser.ReadObject(stream);
                 expires = expires.AddSeconds(tm.expires_in);
                 return tm.access_token;
             }
+            catch (WebException ex)
+            {
+                var reader = new StreamReader(ex.Response.GetResponseStream());
+                var msg = reader.ReadToEnd();
+                throw new Exception(msg);
+            }
+            finally
+            {
+                if(stream != null)
+                    stream.Close();
+            }
+            //using (var stream = new MemoryStream(client.DownloadData(url)))
+            //{
+            //    var tm = (TokenModel)ser.ReadObject(stream);
+            //    expires = expires.AddSeconds(tm.expires_in);
+            //    return tm.access_token;
+            //}
         }
 
 
