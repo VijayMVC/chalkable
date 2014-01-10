@@ -1,7 +1,7 @@
 REQUIRE('chlk.models.feed.Feed');
 REQUIRE('chlk.models.classes.ClassesForTopBar');
 REQUIRE('chlk.models.announcement.Announcement');
-REQUIRE('chlk.templates.ChlkTemplate');
+REQUIRE('chlk.templates.common.PageWithClasses');
 
 
 NAMESPACE('chlk.templates.feed', function () {
@@ -10,30 +10,14 @@ NAMESPACE('chlk.templates.feed', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/feed/Feed.jade')],
         [ria.templates.ModelBind(chlk.models.feed.Feed)],
-        'Feed', EXTENDS(chlk.templates.ChlkTemplate), [
+        'Feed', EXTENDS(chlk.templates.common.PageWithClasses), [
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.announcement.Announcement), 'items',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.classes.ClassesForTopBar, 'topData',
 
             [ria.templates.ModelPropertyBind],
             Boolean, 'starredOnly',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'importantCount',
-
-            [ria.templates.ModelPropertyBind],
-            Number, 'pageIndex',
-            [ria.templates.ModelPropertyBind],
-            Number, 'pageSize',
-            [ria.templates.ModelPropertyBind],
-            Number, 'totalCount',
-            [ria.templates.ModelPropertyBind],
-            Number, 'totalPages',
-            [ria.templates.ModelPropertyBind],
-            Boolean, 'hasNextPage',
-            [ria.templates.ModelPropertyBind],
-            Boolean, 'hasPreviousPage'
+            Number, 'importantCount'
         ])
 });

@@ -1,5 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.feed.Feed');
+REQUIRE('chlk.templates.announcement.FeedItemTpl');
 
 NAMESPACE('chlk.activities.feed', function () {
 
@@ -40,7 +41,7 @@ NAMESPACE('chlk.activities.feed', function () {
                 clone.appendTo(new ria.dom.Dom('body'));
                 setTimeout(function(){
                     clone.setCss('top', 54);
-                    this.dom.addClass('opacity0');
+                    this.dom.remove();
                     jQuery(document).scrollTop(0);
                 }.bind(this), 1);
                 setTimeout(function(){

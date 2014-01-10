@@ -50,17 +50,16 @@ NAMESPACE('chlk.controllers', function (){
                 .getAnnouncements(pageIndex_ | 0, classId_, starredOnly_)
                 .attach(this.validateResponse_())
                 .then(function(feedItems){
-                    if(!postback_ && starredOnly_ && feedItems.getItems().length == 0)
+                    if(!postback_ && starredOnly_ && feedItems.length == 0)
                         return this.getFeedItems(postback_, false, classId_, pageIndex_);
 
                     var classes = this.classService.getClassesForTopBar(true);
                     var classBarItemsMdl = new chlk.models.classes.ClassesForTopBar(classes, classId_);
 
-                    return new chlk.models.feed.Feed.$create(
+                    return new chlk.models.feed.Feed(
                         feedItems,
                         classBarItemsMdl,
-                        starredOnly_,
-                        this.announcementService.getImportantCount()
+                        starredOnly_
                     );
                 }, this);
         },

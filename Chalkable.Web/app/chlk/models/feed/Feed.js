@@ -1,7 +1,5 @@
-REQUIRE('chlk.models.calendar.announcement.MonthItem');
-REQUIRE('chlk.models.classes.ClassesForTopBar');
-REQUIRE('chlk.models.common.ChlkDate');
-REQUIRE('chlk.models.common.PaginatedList');
+REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.models.common.PageWithClasses');
 
 
 NAMESPACE('chlk.models.feed', function () {
@@ -9,52 +7,20 @@ NAMESPACE('chlk.models.feed', function () {
 
     /** @class chlk.models.feed.Feed*/
     CLASS(
-        'Feed', EXTENDS(chlk.models.common.PaginatedList), [
-
-            [[chlk.models.common.PaginatedList]],
-            function $(list) {
-                BASE(list.getItemClass());
-
-                this.setItems(list.getItems());
-                this.setPageIndex(list.getPageIndex());
-                this.setPageSize(list.getPageSize());
-                this.setTotalCount(list.getTotalCount());
-                this.setTotalPages(list.getTotalPages());
-                this.setHasNextPage(list.isHasNextPage());
-                this.setHasPreviousPage(list.isHasPreviousPage());
+        'Feed', EXTENDS(chlk.models.common.PageWithClasses), [
+            [[ArrayOf(chlk.models.announcement.Announcement), chlk.models.classes.ClassesForTopBar, Boolean]],
+            function $(items_, classes_, starredOnly_){
+                BASE(classes_);
+                if(items_)
+                    this.setItems(items_);
+                if(starredOnly_)
+                    this.setStarredOnly(starredOnly_);
             },
 
-            chlk.models.classes.ClassesForTopBar, 'topData',
+            ArrayOf(chlk.models.announcement.Announcement), 'items',
+
             Boolean, 'starredOnly',
-            Number, 'importantCount',
 
-            [[chlk.models.common.PaginatedList, chlk.models.classes.ClassesForTopBar, Boolean, Number]],
-            function $create(list, classBarItems, starredOnly, importantCount){
-                BASE(list.getItemClass());
-                this.setItems(list.getItems());
-                this.setPageIndex(list.getPageIndex());
-                this.setPageSize(list.getPageSize());
-                this.setTotalCount(list.getTotalCount());
-                this.setTotalPages(list.getTotalPages());
-                this.setHasNextPage(list.isHasNextPage());
-                this.setHasPreviousPage(list.isHasPreviousPage());
-
-                this.setTopData(classBarItems);
-                this.setStarredOnly(starredOnly);
-                this.setImportantCount(importantCount);
-            }
+            Number, 'importantCount'
         ]);
 });
-
-
-/*
- READONLY, Function, 'itemClass',
-
- ArrayOf(Object), 'items',
- Number, 'pageIndex',
- Number, 'pageSize',
- Number, 'totalCount',
- Number, 'totalPages',
- Boolean, 'hasNextPage',
- Boolean, 'hasPreviousPage',
-    */

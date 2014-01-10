@@ -4,6 +4,7 @@ NAMESPACE('chlk.controls', function () {
     var otherInputWithFocusClass = 'with-grid-focus';
     var selectedRowClass = 'selected';
     var noRowClickEventClass = 'no-row-click';
+    var interval;
 
     /** @class chlk.controls.GridEvents */
     ENUM('GridEvents', {
@@ -51,12 +52,20 @@ NAMESPACE('chlk.controls', function () {
                     loadAllPopUpTitle: '',
                     showLoadAllInPage: 4,
                     needGoToButton: false,
-                    needLoadAllButton: false
+                    needLoadAllButton: false,
+                    isPaggingModel: false,
+                    length: null,
+                    service: null,
+                    method: null,
+                    paramsPrepend: []
                 };
                 if(configs_){
                     if(data.getTotalCount){
                         configs_.totalCount = data.getTotalCount();
                         configs_.pageSize = data.getPageSize();
+                        configs_.isPaggingModel = true;
+                    }else{
+                        configs_.length = data.length;
                     }
                     configs = Object.extend(configs, configs_);
                 }
@@ -214,10 +223,38 @@ NAMESPACE('chlk.controls', function () {
                 var configs = this.getConfigs();
                 var div = new ria.dom.Dom('<div class="horizontal-loader"></div>');
                 var form = grid.parent('form');
-                form.find('[name=start]').setValue(configs.currentStart);
-                jQuery(grid.valueOf()).parents('form').find('.scroll-start-button').click();
                 grid.addClass('scroll-freezed');
                 grid.appendChild(div);
+                if(configs.service){
+                    var serviceIns = this.getContext().getService(configs.service);
+                    var ref = ria.reflection.ReflectionClass(configs.service);
+                    var methodRef = ref.getMethodReflector(configs.method);
+                    var params = ria.__API.clone(configs.paramsPrepend) || [];
+                    if(configs.isPaggingModel)
+                        params.unshift(configs.pageSize);
+                    params.unshift(configs.currentStart);
+                    var tpl = new configs.tpl();
+                    var dom = new ria.dom.Dom('.chlk-grid');
+                    methodRef.invokeOn(serviceIns, params)
+                        .then(function(model){
+                            if(Array.isArray(model)){
+                                if(!model.length || model.length < configs.length)
+                                    clearInterval(interval);
+                                model.forEach(function(item){
+                                    tpl.assign(item);
+                                    tpl.renderTo(dom);
+                                });
+                            }
+                            else{
+                                tpl.assign(model);
+                                tpl.renderTo(dom);
+                            }
+                            this.removeLoader_(grid);
+                        }, this);
+                }else{
+                    form.find('[name=start]').setValue(configs.currentStart);
+                    jQuery(grid.valueOf()).parents('form').find('.scroll-start-button').click();
+                }
             },
 
             [[ria.dom.Dom]],
@@ -228,20 +265,21 @@ NAMESPACE('chlk.controls', function () {
                 var pageHeight = document.documentElement.clientHeight;
                 var scrollPosition;
                 var contentHeight = baseContentHeight + grid.offset().top;
-                var interval;
 
                 var configs = this.getConfigs();
-                configs.currentStart = configs.start + configs.pageSize;
+                var size = configs.isPaggingModel ? configs.pageSize : configs.length;
+                configs.currentStart = configs.start + size;
                 this.setConfigs(configs);
+                interval && clearInterval(interval);
 
                 interval = setInterval(function(){
                     if(!grid.hasClass('scroll-freezed')){
                         scrollPosition = window.pageYOffset;
                         configs = this.getConfigs();
-                        if(configs.totalCount > configs.currentStart){
+                        if(!configs.isPaggingModel || configs.totalCount > configs.currentStart){
                             if((contentHeight - pageHeight - scrollPosition) < 400){
-                                configs.currentStart += configs.pageSize;
                                 this.scrollAction_(grid);
+                                configs.currentStart += size;
                                 contentHeight += baseContentHeight;
                             }
                         }

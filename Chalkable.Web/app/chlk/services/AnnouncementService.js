@@ -35,16 +35,11 @@ NAMESPACE('chlk.services', function () {
 
             [[Number, chlk.models.id.ClassId, Boolean]],
             ria.async.Future, function getAnnouncements(pageIndex_, classId_, starredOnly_) {
-                return this.getPaginatedList('Feed/List.json', chlk.models.announcement.Announcement, {
+                return this.get('Feed/List.json', ArrayOf(chlk.models.announcement.Announcement), {
                     start: pageIndex_|0,
                     classId: classId_ ? classId_.valueOf() : null,
                     starredOnly: starredOnly_
-                })
-                .then(function(announcements){
-                   if (starredOnly_)
-                    this.setImportantCount(announcements.getTotalCount());
-                   return announcements;
-                }, this);
+                });
 
             },
 
@@ -67,7 +62,7 @@ NAMESPACE('chlk.services', function () {
                     announcementAttachmentId: announcementAttachmentId.valueOf(),
                     needsDownload: needsDownload,
                     width: width,
-                    heigh: height
+                    height: height
                 });
             },
 
