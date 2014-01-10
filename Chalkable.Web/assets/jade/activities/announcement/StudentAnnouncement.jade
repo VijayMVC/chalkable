@@ -1,0 +1,81 @@
+getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, self.getGradingMapping(), self.getGradingStyle())}
+value = self.getGradeValue()
+normalValue = self.getNormalValue()
+isDrop = self.isDropped()
+res = self.getDisplayValue()
+lbl = 'A - F'
+itemCls = (isDrop ? 'dropped' :'')
+selectedCls = (!self.isReadonly() ? 'not-selected' : '')
+student = self.getStudentInfo();
+owner = self.getOwner()
+alertsEnum = chlk.models.grading.AlertsEnum
++ActionForm('announcement', 'updateAnnouncementGrade')
+    input(type="submit").x-hidden
+    +Hidden('id', self.getId())
+    +Hidden('announcementId', self.getAnnouncementId())
+    +Hidden('dropped', isDrop)
+    +ActionLink('students', 'info', student.getId())(data-tooltip=student.getFullName()).left.image-container.white.shadow
+        +PersonImg(student, 47)
+    .chlk-pop-up-container.popup-bottom.alerts-pop-up
+        .pop-up-triangle.big
+        .alerts-pop-up-content
+            div(
+                data-type=alertsEnum.DROP.valueOf(),
+                class=isDrop ? 'disabled' : ''
+            ).alerts-pop-up-item=Msg.Drop
+            div(
+                data-type=alertsEnum.FILL.valueOf(),
+                class=(!normalValue && normalValue != 0 || self.isGradeDisabled()) ? 'disabled' : ''
+            ).alerts-pop-up-item.fill-item=Msg.Fill
+            div(
+                data-type=alertsEnum.LATE.valueOf(),
+                class=self.isLate() ? 'disabled' : ''
+            ).alerts-pop-up-item=Msg.Late
+            div(
+                data-type=alertsEnum.INCOMPLETE.valueOf(),
+                class=self.isIncomplete() ? 'disabled' : ''
+            ).alerts-pop-up-item=Msg.Incomplete
+            div(
+                data-type=alertsEnum.EXEMPT.valueOf(),
+                class=self.isExempt() ? 'disabled' : ''
+            ).alerts-pop-up-item=Msg.Exempt
+    .i-b.name-block
+        p= student.getFullName()
+        if !self.isReadonly()
+            SPAN.container
+                SPAN.comment-grade=(self.getComment() ? Msg.Commented : Msg.Comment)
+                    .small-pop-up
+                        .container
+                            .triangle
+                            div
+                                div
+                                    +PersonImg(owner, 24)
+                                div
+                                    +TextArea(name="comment").comment-input=self.getComment()
+                                    span.enter=Msg.Enter_when_done
+    .i-b.grade-block
+        //if(self.getApplicationsInGradeView().length || self.getAttachments().length)
+        .grade-triangle
+        div(class=self.getAlertClass()).alert-flag
+        div(class=selectedCls + ' ' + itemCls).i-b=res
+        div(class="selected " + itemCls, rowIndex=i, recId=self.getId()).i-b
+            if !self.isReadonly()
+                if self.getGradingStyle()
+                    .select-container
+                        .select-container2
+                            +Select('gradeLetter')(id='grade-select-' + self.getId(), data-placeholder=" ").grade-select
+                                each item in GradingStyler.getGradeLetters()
+                                    -currentValue = getGradeNumber(item);
+                                    if currentValue != -1
+                                        +Option(currentValue, item, res == item)
+                        .letters=lbl
+                .input-container
+                    INPUT(
+                        type="text",
+                        autofill="off",
+                        value=normalValue,
+                        name="gradevalue",
+                        data-value=normalValue,
+                        class=self.isGradeDisabled() ? "disabled-grade" : "with-grid-focus" + ((!normalValue && normalValue != 0) ? " empty-grade" : "")
+                    ).no-padding.grade-input
+                    .letters 100 - 0
