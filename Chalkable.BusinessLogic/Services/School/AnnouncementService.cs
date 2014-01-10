@@ -128,6 +128,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 query.OwnedOnly = false;
                 query.GradedOnly = false;
                 query.StarredOnly = false;
+                query.Start = 0;
             }
             var anns = GetAnnouncements(query).Announcements;
             if (anns.Count < activities.Count && (Context.Role == CoreRoles.TEACHER_ROLE))
@@ -143,7 +144,7 @@ namespace Chalkable.BusinessLogic.Services.School
             IList<Announcement> addToChlkAnns = new List<Announcement>();
             foreach (var activity in activities)
             {
-                var ann = new Announcement()
+                var ann = new Announcement
                 {
                     Created = Context.NowSchoolTime,
                     State = AnnouncementState.Created,
