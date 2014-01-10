@@ -20,7 +20,7 @@ div(class = noStarred ? "no-starred" : "").feed-container
         .not-transparent
             +ListView(self.items)(
                 infiniteScroll = true,
-                goTopButton = true,
+                needGoToButton = true,
                 service = chlk.services.AnnouncementService,
                 method = "getAnnouncements",
                 tpl = chlk.templates.announcement.FeedItemTpl,
