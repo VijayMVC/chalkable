@@ -129,6 +129,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 query.GradedOnly = false;
                 query.StarredOnly = false;
                 query.Start = 0;
+                query.Count = int.MaxValue;
             }
             var anns = GetAnnouncements(query).Announcements;
             if (anns.Count < activities.Count && (Context.Role == CoreRoles.TEACHER_ROLE))
