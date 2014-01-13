@@ -1,38 +1,9 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.funds.SchoolPersonFundsTpl');
 REQUIRE('chlk.templates.funds.FundsHistoryTpl');
+REQUIRE('chlk.templates.funds.CreditCardTpl');
 
 NAMESPACE('chlk.activities.funds', function () {
-
-    var creditCardCssClasses = {
-        amex: 'amex-icon',
-        amazon: 'amazon-icon',
-        apple: 'apple-icon',
-        cirrus: 'cirrus-icon',
-        delta: 'delta-icon',
-        discover: 'discover-icon',
-        direct_debit: 'direct-debit-icon',
-        google: 'google-icon',
-        mastercard: 'mastercard-icon',
-        maestro: 'maestro-icon',
-        money_bookers: 'money-bookers-icon',
-        money_gram: 'money-gram',
-        novus: 'novus-icon',
-        pay_pal: 'pay-pal-1icon',
-        plain: 'plain-icon',
-        sage: 'sage-icon',
-        solo: 'solo-icon',
-        switch_card: 'switch-icon',
-        visa_electron: 'visa-electron-icon',
-        visa: 'visa-icon',
-        visa_debit: 'visa-debit-icon',
-        western_union: 'western-union-icon',
-        world_pay: 'world-pay-icon',
-        diners_club_carte_blanche: 'simple-card-icon',
-        diners_club_international: 'simple-card-icon',
-        jcb: 'simple-card-icon',
-        laser: 'simple-card-icon'
-    };
 
     chlk.activities.funds.BuyCreditMethods = {
         CREDIT_CARD: 0,
@@ -44,11 +15,15 @@ NAMESPACE('chlk.activities.funds', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.funds.SchoolPersonFundsTpl)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.funds.SchoolPersonFundsTpl, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.funds.CreditCardTpl, '', '.add-credit-card-container', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.funds.FundsHistoryTpl, '', '.funds-history-grid', ria.mvc.PartialUpdateRuleActions.Replace)],
         'SchoolPersonFundsPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
             function $(){
                 BASE();
                 this._lastCardClass = null;
+                this._creditCardMapper = new chlk.models.funds.CreditCardTypeMapper();
             },
 
             [ria.mvc.DomEventBind('click', '.method-container .chlk-radio-button input[type="radio"]')],
@@ -74,15 +49,6 @@ NAMESPACE('chlk.activities.funds', function () {
                     else if (!item.hasClass('x-hidden'))
                         item.addClass('x-hidden');
                 }.bind(this));
-//
-//                for(var i = 0; i < formsNodes.length; i++){
-//                    if(jQuery(formsNodes[i]).hasClass(formClass)){
-//                        jQuery(formsNodes[i]).removeClass('x-hidden');
-//                    }
-//                    if(!jQuery(formsNodes[i]).hasClass('x-hidden') && !jQuery(formsNodes[i]).hasClass(formClass)){
-//                        jQuery(formsNodes[i]).addClass('x-hidden');
-//                    }
-//                }
             },
 
             [ria.mvc.DomEventBind('click', '.amount-container .chlk-radio-button input[type="radio"]')],
@@ -122,6 +88,20 @@ NAMESPACE('chlk.activities.funds', function () {
                 this.changeAmount_(parseInt(node.getValue()));
             },
 
+            [ria.mvc.DomEventBind('click', '.saved-card-form .close-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function closeBtnClick(node, event){
+                node.parent().addClass('x-hidden');
+                node.parent().parent().find('.edit-form').removeClass('x-hidden');
+            },
+
+            [ria.mvc.DomEventBind('click', '.funds-transaction-result-view .redirect-link')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function tryAgainClick(node, event){
+                this.getDom().find('.action-forms').removeClass('x-hidden');
+                this.getDom().find('.funds-transaction-result-view').addClass('x-hidden');
+            },
+
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
                 this._lastCardClass = null;
@@ -136,8 +116,9 @@ NAMESPACE('chlk.activities.funds', function () {
                             if(this._lastCardClass && creditCardIcon.hasClass(this._lastCardClass)){
                                 creditCardIcon.removeClass(this._lastCardClass);
                             }
-                            this._lastCardClass = creditCardCssClasses[result.card_type.name];
+                            this._lastCardClass =  this._creditCardMapper.getCardCssClass(result.card_type.name);
                             creditCardIcon.addClass(this._lastCardClass);
+                            creditCardForm.find('[name="cardtype"]').setValue(result.card_type);
                         }
                 }.bind(this));
             }

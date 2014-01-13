@@ -1,0 +1,19 @@
++ActionForm('funds', 'addCredit').funds-payment-form.add-credit-card-form
+    +Hidden('amount', self.getAmount())
+    +Hidden('cardtype', self.getCardType())
+    div(class=self.hasCardData() ? "x-hidden" : "").edit-form
+        +MaskedInput('cardnumber','9999 9999 9999 9999')(placeholder="Card Number", value=self.getCardNumber()).card-number.funds-text-field
+        +MaskedInput('month', '99')(placeholder="MM", size="1", maxlength="2", value=self.getMonth()).card-month.funds-text-field
+        span /
+        +MaskedInput('year', '9999')(placeholder="YY", size="1", maxlength="4", value=self.getYear()).card-year.funds-text-field
+        div(class=self.getCardCssClass()).credit-card-icon
+        +MaskedInput('cvcnumber', '9999')(placeholder="CVC", size="2", maxlength="4", value=self.getCvcNumber()).card-cvc-number.funds-text-field
+    div(class=!self.hasCardData() ? "x-hidden" : "").saved-card-form
+        div(class=self.getCardCssClass()).credit-card-icon
+        +MaskedInput('cardviewnumber', '^^^^ ^^^^ ^^^^ 9999')(value=self.getHiddenCreditNumber(), readonly).view-text-field
+        .close-btn.close-icon
+    +Button()(type="submit").blue-gradient-btn.add-credit-btn
+        span=Msg.Add
+        span.amount-btn-text= '$' + self.getAmount()
+        span=Msg.Credits
+    .funds-payment-form-title=Msg.Click_to_complete_transaction

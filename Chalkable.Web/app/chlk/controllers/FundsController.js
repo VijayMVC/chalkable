@@ -2,6 +2,7 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.FundsService');
 REQUIRE('chlk.activities.funds.FundsListPage');
 REQUIRE('chlk.activities.funds.SchoolPersonFundsPage');
+REQUIRE('chlk.models.funds.AddCreditCardModel');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -44,13 +45,34 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         function schoolPersonFundsAction(){
-            var res = this.fundsService.getPersonFunds().attach(this.validateResponse_());
+            var res = this.fundsService.getPersonFunds()
+                .then(function(res){
+                    return res;
+                })
+                .attach(this.validateResponse_());
             return this.PushView(chlk.activities.funds.SchoolPersonFundsPage, res);
         },
 
-        function addCreditAction(){
-
+        [[chlk.models.funds.AddCreditCardModel]],
+        function addCreditAction(model){
+            var res = this.fundsService.addCredit(
+                model.getAmount(),
+                model.getCardNumber(),
+                model.getMonth(),
+                model.getYear(),
+                model.getCvcNumber(),
+                model.getCardType()
+            )
+            .attach(this.validateResponse_())
+            .then(function(result1){
+                return this.fundsService.getPersonFunds()
+                    .attach(this.validateResponse_())
+                    .then(function(result2){
+                         result2.setTransactionSuccess(result1);
+                         return result2;
+                    });
+            }, this);
+            return this.UpdateView(chlk.activities.funds.SchoolPersonFundsPage, res);
         }
-
     ])
 });

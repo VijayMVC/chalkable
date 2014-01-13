@@ -15,6 +15,7 @@ NAMESPACE('chlk.controls', function () {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                     var input = activity.getDom().find('input[name=' + name + ']');
+                    $.mask.definitions['^']='[*]';
                     if(mask){
                         jQuery(input.valueOf()).mask(mask);
                     }

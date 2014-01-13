@@ -21,6 +21,17 @@ NAMESPACE('chlk.services', function () {
             },
             ria.async.Future, function getPersonFunds(){
                 return this.get('Fund/PersonFunds.json', chlk.models.funds.SchoolPersonFundsViewData,{});
+            },
+            [[Number, String, Number, Number, Number, String]],
+            ria.async.Future, function addCredit(amount, cardNumber, month, year, cvcNumber, cardType){
+                return this.post("Fund/AddCredit.json", Boolean, {
+                    amount: amount,
+                    cardNumber: cardNumber,
+                    month: month,
+                    year: year,
+                    cvcNumber: cvcNumber,
+                    cardType: cardType
+                });
             }
         ])
 });
