@@ -249,7 +249,7 @@ NAMESPACE('chlk.controls', function () {
                                 tpl.assign(model);
                                 tpl.renderTo(dom);
                             }
-                            this.removeLoader_(grid);
+                            this.removeLoader_(grid, true);
                         }, this);
                 }else{
                     form.find('[name=start]').setValue(configs.currentStart);
@@ -290,8 +290,8 @@ NAMESPACE('chlk.controls', function () {
                     this.removeLoader_(grid);
                 }.bind(this), configs.interval);
             },
-            [[ria.dom.Dom]],
-            VOID, function removeLoader_(grid){
+            [[ria.dom.Dom, Boolean]],
+            VOID, function removeLoader_(grid, forceRemove){
                 var node = grid.find('.horizontal-loader');
                 if(grid.hasClass('scroll-freezed')){
                     grid.removeClass('scroll-freezed');
@@ -299,7 +299,7 @@ NAMESPACE('chlk.controls', function () {
 //                if(node.exists()){
 //                    node.remove();
 //                }
-                if(node.exists() && node.next().exists()){
+                if(node.exists() && (node.next().exists() || forceRemove)){
                     grid.removeClass('scroll-freezed');
                     node.remove();
                 }
