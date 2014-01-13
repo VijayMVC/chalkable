@@ -291,7 +291,7 @@ NAMESPACE('chlk.controls', function () {
                 }.bind(this), configs.interval);
             },
             [[ria.dom.Dom, Boolean]],
-            VOID, function removeLoader_(grid, forceRemove){
+            VOID, function removeLoader_(grid, forceRemove_){
                 var node = grid.find('.horizontal-loader');
                 if(grid.hasClass('scroll-freezed')){
                     grid.removeClass('scroll-freezed');
@@ -299,7 +299,7 @@ NAMESPACE('chlk.controls', function () {
 //                if(node.exists()){
 //                    node.remove();
 //                }
-                if(node.exists() && (node.next().exists() || forceRemove)){
+                if(node.exists() && (node.next().exists() || forceRemove_)){
                     grid.removeClass('scroll-freezed');
                     node.remove();
                 }
