@@ -30,11 +30,17 @@ namespace Chalkable.Web.Controllers
             return Json(new {balance = 0});
         }
 
-        [AuthorizationFilter("Teacher, Student")]
+        [AuthorizationFilter("Teacher, Student, Parent")]
         public ActionResult PersonFunds()
         {
             return FakeJson("~/fakeData/personFunds.json");
         }
 
+        [AuthorizationFilter("Teacher, Student, Parent")]
+        public ActionResult AddCredit(decimal amount, string cardNumber,int month,int year, int cvcNumber, string cardType)
+        {
+            var res = cardNumber.Replace(" ", "") != "1324982345234523";
+            return Json(res);
+        }
     }
 }
