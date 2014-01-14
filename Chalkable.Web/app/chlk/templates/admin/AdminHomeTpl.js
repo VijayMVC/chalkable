@@ -69,6 +69,60 @@ NAMESPACE('chlk.templates.admin', function () {
                 }
             },
 
+            [[Object]],
+            function prepareSmallChartOptions(configs){
+                return {
+                    backgroundColor: 'transparent',
+                    chart: {
+                        type: 'area',
+                            backgroundColor: 'transparent',
+                            width: 224,
+                            height: 181,
+                            style: {
+                            fontFamily: 'Arial',
+                                fontSize: '10px',
+                                color: '#a6a6a6'
+                        }
+
+                    },
+                    labels: {
+                        style: {
+                            color: '#a6a6a6',
+                                textOverflow: 'ellipsis',
+                                fontSize: '9px'
+                        }
+                    },
+                    credits: {enabled: false},
+                    title: {text: ''},
+                    xAxis: {categories: configs.categories},
+                    yAxis: {
+                        title: {text: ''},
+                        lineWidth:0,
+                        showFirstLabel: false,
+                        showLastLabel: false,
+                        gridLineDashStyle: 'dot',
+                        tickInterval: Math.floor((configs.max + 10) / 30) * 10,
+                        max: configs.max + 10
+                    },
+                    legend:{enabled: false},
+                    tooltip: {enabled: false},
+                    plotOptions: {
+                        area: {
+                            marker: {
+                                enabled: false,
+                                states: {hover: {enabled: false}}
+                            }
+                        }
+                    },
+                    colors: ['#d8d8d8'],
+                    series: [{
+                        name: '',
+                        lineWidth: 0,
+                        data: configs.data
+                    }]
+                };
+            },
+
             function getGradingChartData(){
                 var gradingStats = this.getGradingStats();
                 var names = [], values = [], allValues = [];
@@ -94,6 +148,78 @@ NAMESPACE('chlk.templates.admin', function () {
                     names : names,
                     series : series
                 }
+            },
+
+
+            [[Object]],
+            function prepareGradingChartOptions(configs){
+                return {
+                    backgroundColor: 'transparent',
+                        chart: {
+                        type: 'column',
+                        backgroundColor: 'transparent',
+                        width: 630,
+                        height: 216,
+                        plotBorderWidth: 0
+                    },
+                    credits: {enabled: false},
+                    title: {text: ''},
+                    xAxis: {
+                        categories: configs.names,
+                        lineWidth:0
+                    },
+                    yAxis: {
+                        title: {text: ''},
+                        showFirstLabel: false,
+                        showLastLabel: false,
+                        gridLineDashStyle: 'dot',
+                        tickInterval: 20
+                    },
+                    legend:{enabled: false},
+                    tooltip: {enabled: false},
+                    plotOptions: {
+                        area: {
+                            marker: {
+                                enabled: false,
+                                states: {hover: {enabled: false}}
+                            }
+                        },
+                        series:{lineWidth: 0}
+                    },
+                    colors: ['#2f7790', '#d8d8d8'],
+                    series: configs.series
+                };
+            },
+
+            [[chlk.models.funds.BudgetBalance]],
+            function prepareBudgetChartOptions(budget){
+                return {
+                    chart: {
+                        type: 'pie',
+                            backgroundColor: 'transparent',
+                            width: 250,
+                            height: 250
+                    },
+                    credits: {enabled: false},
+                    title: {text: ''},
+                    yAxis: {
+                        lineWidth:0,
+                        title: {text: Msg.Total_percent_market_share}
+                    },
+                    plotOptions: {
+                        pie: {
+                            shadow: false,
+                            dataLabels: {enabled: false}
+                        }
+                    },
+                    tooltip: {valueSuffix: '%'},
+                    series: [{
+                        name: '',
+                        data: this.getBudgetChartData(budget),
+                        innerSize: '72%',
+                        size: '81%'
+                    }]
+                };
             },
 
             [[chlk.models.funds.BudgetBalance]],
@@ -145,5 +271,6 @@ NAMESPACE('chlk.templates.admin', function () {
                 }
                 return versionsData;
             }
+
         ])
 });

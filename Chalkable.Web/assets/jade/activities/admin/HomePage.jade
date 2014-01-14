@@ -1,79 +1,15 @@
 mixin SmallChart(data, header, chartId)
-    configs = self.getChartData(data);
+    configs = self.getChartData(data)
+    smallChartOptions = self.prepareSmallChartOptions(configs)
+    chartTitle = (data.getStat() ? data.getDisplayNumber() || "0" : "0")
     .block(attributes)
         .panel-header=header
         .chart-block.relative
-            .chart-bg.button-block=(data.getStat() ? data.getDisplayNumber() || "0" : "0")
+            .chart-bg.button-block=chartTitle
             +Chart()(
                 id = chartId,
                 data-showmarkeronhover = true,
-                data-options = {
-                    backgroundColor: 'transparent',
-                    chart: {
-                        type: 'area',
-                        backgroundColor: 'transparent',
-                        width: 224,
-                        height: 181,
-                        style: {
-                            fontFamily: 'Arial',
-                            fontSize: '10px',
-                            color: '#a6a6a6'
-                        }
-
-                    },
-                    labels: {
-                        style: {
-                            color: '#a6a6a6',
-                            textOverflow: 'ellipsis',
-                            fontSize: '9px'
-                        }
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    title: {
-                        text: ''
-                    },
-                    xAxis: {
-                        categories: configs.categories
-                    },
-                    yAxis: {
-                        title: {
-                            text: ''
-                        },
-                        lineWidth:0,
-                        showFirstLabel: false,
-                        showLastLabel: false,
-                        gridLineDashStyle: 'dot',
-                        tickInterval: Math.floor((configs.max + 10) / 30) * 10,
-                        max: configs.max + 10
-                    },
-                    legend:{
-                        enabled: false
-                    },
-                    tooltip: {
-                        enabled: false
-                    },
-                    plotOptions: {
-                        area: {
-                            marker: {
-                                enabled: false,
-                                states: {
-                                    hover: {
-                                        enabled: false
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    colors: ['#d8d8d8'],
-
-                    series: [{
-                        name: '',
-                        lineWidth: 0,
-                        data: configs.data
-                    }]
-                })
+                data-options = smallChartOptions)
 
 mixin If3Block_(items, i, index)
     if index == 0 || i + index < items.length
@@ -95,9 +31,10 @@ mixin StudentsBlock_(data, header, controller, action)
                                     +If3Block_(data, i, 1)
                                     +If3Block_(data, i, 2)
 
-topData = self.getTopData();
-topItems = topData.getTopItems();
-selectedIds = topData.getSelectedIds();
+topData = self.getTopData()
+topItems = topData.getTopItems()
+selectedIds = topData.getSelectedIds()
+
 .admin-home.loader-container
     .loader
     +LeftRightToolbar(topItems, chlk.templates.grading.GradeLevelForTopBar, 'feed', 'list', [true])(
@@ -111,7 +48,8 @@ selectedIds = topData.getSelectedIds();
     #admin-second-block.third-blocks-container
         +StudentsBlock_(self.getDisciplines(), Msg.Discipline, 'feed', 'list').discipline-block
         .block.budget-block.relative
-            budget = self.getBudgetBalance();
+            budget = self.getBudgetBalance()
+            budgetChartOptions = self.prepareBudgetChartOptions(budget)
             .absolute
                 .panel-header=Msg.App_budget
                 .budget-chart-container.relative
@@ -120,105 +58,12 @@ selectedIds = topData.getSelectedIds();
                         .small $#{budget.getStartSchoolBalance()}
                     .outside
                     +ActionLink('feed', 'list').hover-area.button-block
-            +Chart()(
-                data-options = {
-                    chart: {
-                        type: 'pie',
-                        backgroundColor: 'transparent',
-                        width: 250,
-                        height: 250
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    title: {
-                        text: ''
-                    },
-                    yAxis: {
-                        lineWidth:0,
-                        title: {
-                            text: Msg.Total_percent_market_share
-                        }
-                    },
-                    plotOptions: {
-                        pie: {
-                            shadow: false,
-                            dataLabels: {
-                                enabled: false
-                            }
-                        }
-                    },
-                    tooltip: {
-                        valueSuffix: '%'
-                    },
-                    series: [{
-                        name: '',
-                        data: self.getBudgetChartData(budget),
-                        innerSize: '72%',
-                        size: '81%'
-                    }]
-                }
-            )#budget-chart
+            +Chart()(data-options = budgetChartOptions)#budget-chart
         +StudentsBlock_(self.getAttendances(), Msg.Attendance, 'feed', 'list').attendance-block
     #grades-chart-container
         .panel-header=Msg.Grade(true)
         .chart-block.relative
             .chart-bg.button-block
-            configs = self.getGradingChartData();
-            +Chart()(
-                data-options = {
-                    backgroundColor: 'transparent',
-                    chart: {
-                        type: 'column',
-                        backgroundColor: 'transparent',
-                        width: 630,
-                        height: 216,
-                        plotBorderWidth: 0
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    title: {
-                        text: ''
-                    },
-                    xAxis: {
-                        categories: configs.names,
-                        lineWidth:0
-                    },
-                    yAxis: {
-                        title: {
-                            text: ''
-                        },
-                        showFirstLabel: false,
-                        showLastLabel: false,
-                        gridLineDashStyle: 'dot',
-                        tickInterval: 20
-                    },
-                    legend:{
-                         enabled: false
-                    },
-                    tooltip: {
-                        enabled: false
-                    },
-                    plotOptions: {
-                        area: {
-                            marker: {
-                                enabled: false,
-                                states: {
-                                    hover: {
-                                        enabled: false
-                                    }
-                                }
-                            }
-                        },
-                        series:{
-                            lineWidth: 0
-                        }
-                    },
-                    colors: ['#2f7790', '#d8d8d8'],
-
-                    series: configs.series
-                }
-            )#grading-chart
-
-
+            configs = self.getGradingChartData()
+            gradingChartOptions = self.prepareGradingChartOptions(configs)
+            +Chart()(data-options = gradingChartOptions)#grading-chart
