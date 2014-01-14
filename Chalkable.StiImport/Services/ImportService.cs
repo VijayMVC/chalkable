@@ -162,6 +162,7 @@ namespace Chalkable.StiConnector.Services
 
         private void ImportCourses()
         {
+            var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToList();
             var departments = ServiceLocatorMaster.ChalkableDepartmentService.GetChalkableDepartments();
             var sep = new[] { ',' };
             var departmenPairs = new List<Pair<string, Guid>>();
@@ -172,7 +173,8 @@ namespace Chalkable.StiConnector.Services
                     .Select(x => new Pair<string, Guid>(x, chalkableDepartment.Id)));
             }
 
-            var courses = stiEntities.Courses.ToList();
+            var courses = stiEntities.Courses.ToList()
+                .Where(x=>years.Any(y=>x.AcadSessionID == y.Id));
             var classes = new List<Class>();
             foreach (var course in courses)
             {
@@ -212,7 +214,11 @@ namespace Chalkable.StiConnector.Services
 
         private void ImportMarkingPeriodClasses()
         {
+            var classes = ServiceLocatorSchool.ClassService.GetClasses(null);
+            var mps = ServiceLocatorSchool.MarkingPeriodService.GetMarkingPeriods(null);
             var cts = stiEntities.SectionTerms.ToList()
+                .Where(x=>classes.Any(y=>y.Id == x.SectionID))
+                .Where(x=>mps.Any(y=>y.Id == x.TermID))
                 .Select(x=> new MarkingPeriodClass
                     {
                         ClassRef = x.SectionID,
@@ -224,7 +230,9 @@ namespace Chalkable.StiConnector.Services
 
         private void ImportClassPeriods()
         {
+            var classes = ServiceLocatorSchool.ClassService.GetClasses(null);
             var scheduledSections = stiEntities.ScheduledSections.ToList()
+                .Where(x=>classes.Any(y=>y.Id == x.SectionID))
                 .Select(x=>new ClassPeriod
                     {
                         ClassRef = x.SectionID,
@@ -264,9 +272,18 @@ namespace Chalkable.StiConnector.Services
                 if (counter % 100 == 0)
                     Log.LogWarning(string.Format(ChlkResources.USERS_PROCESSED, counter));
                 var email = string.Format(USER_EMAIL_FMT, person.PersonID, ServiceLocatorSchool.Context.DistrictId);
+
+                var personAssignments =
+                    stiEntities.StaffSchools.Where(x => x.StaffID == person.PersonID).Select(x => new SchoolPerson() { RoleRef = CoreRoles.TEACHER_ROLE.Id, SchoolRef = x.SchoolID, PersonRef = person.PersonID })
+                               .ToList();
+
+                personAssignments.AddRange(
+                    stiEntities.StudentSchools.Where(x => x.StudentID == person.PersonID).ToList()
+                    .Where(x=>!personAssignments.Any(y=>x.StudentID == y.PersonRef && x.SchoolID == y.SchoolRef))
+                    .Select(x => new SchoolPerson { RoleRef = CoreRoles.STUDENT_ROLE.Id, SchoolRef = x.SchoolID, PersonRef = person.PersonID})
+                );
+                assignments.AddRange(personAssignments);
                 
-                assignments.AddRange(stiEntities.StudentSchools.Where(x => x.StudentID == person.PersonID).Select(x => new SchoolPerson { RoleRef = CoreRoles.STUDENT_ROLE.Id, SchoolRef = x.SchoolID, PersonRef = person.PersonID}));
-                assignments.AddRange(stiEntities.StaffSchools.Where(x => x.StaffID == person.PersonID).Select(x => new SchoolPerson() { RoleRef = CoreRoles.TEACHER_ROLE.Id, SchoolRef = x.SchoolID, PersonRef = person.PersonID }));
                 //TODO: what about admins? probably will be resolved by API
                 string userName = null;
                 if (person.Staff != null && person.Staff.User != null)
@@ -294,9 +311,11 @@ namespace Chalkable.StiConnector.Services
 
         private void ImportStudentSchoolYears()
         {
+            var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToList();
             var assignments = stiEntities.StudentAcadSessions
                 .Where(x=>x.GradeLevelID.HasValue)
                 .ToList()
+                .Where(x=>years.Any(y=>y.Id == x.AcadSessionID))
                 .Select(x=>new StudentSchoolYear
                     {
                         GradeLevelRef = x.GradeLevelID.Value,
@@ -357,15 +376,17 @@ namespace Chalkable.StiConnector.Services
                     Log.LogWarning(string.Format(ChlkResources.ERR_SCHEDULE_IMPORT_END_DATE_IS_NULL, calendar.AcadSessionID));
                     continue;
                 }
-                ServiceLocatorSchool.SchoolYearService.Add(calendar.AcadSessionID, calendar.SchoolID, calendar.AcadYear.ToString(CultureInfo.InvariantCulture),
-                                                           calendar.Name, calendar.StartDate.Value, calendar.EndDate.Value);
+                ServiceLocatorSchool.SchoolYearService.Add(calendar.AcadSessionID, calendar.SchoolID, calendar.Name,
+                                                           calendar.Description, calendar.StartDate.Value, calendar.EndDate.Value);
             }
         }
 
         private void ImportDays()
         {
+            var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToList();
             var days = stiEntities.CalendarDays
                 .ToList()
+                .Where(x=>years.Any(y=>y.Id == x.AcadSessionID))
                 .Select(x=>new Date
                     {
                         DayTypeRef = x.DayTypeID,
@@ -408,7 +429,10 @@ namespace Chalkable.StiConnector.Services
 
         private void ImportDayTypes()
         {
-            var dayTypes = stiEntities.DayTypes.ToList();
+            var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToList();
+            var dayTypes = stiEntities.DayTypes
+                                      .ToList()
+                                      .Where(x => years.Any(y => y.Id == x.AcadSessionID));
             foreach (var dayType in dayTypes)
             {
                 var dt = ServiceLocatorSchool.DayTypeService.Add(dayType.DayTypeID, dayType.Sequence, dayType.Name, dayType.AcadSessionID);
@@ -418,7 +442,10 @@ namespace Chalkable.StiConnector.Services
 
         private void ImportPeriods()
         {
-            var periods = stiEntities.TimeSlots.ToList();
+            var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToList();
+            var periods = stiEntities.TimeSlots.ToList()
+                .Where(x=>years.Any(y=>y.Id == x.AcadSessionID));
+            
             foreach (var timeSlot in periods)
             {
                 var sts = timeSlot.ScheduledTimeSlots.FirstOrDefault();

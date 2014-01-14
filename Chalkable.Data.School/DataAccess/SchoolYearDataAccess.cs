@@ -21,13 +21,13 @@ namespace Chalkable.Data.School.DataAccess
                     {SchoolYear.START_DATE_FIELD, date, ConditionRelation.LessEqual},
                     {SchoolYear.END_DATE_FIELD, date, ConditionRelation.GreaterEqual}
                 };
-            return SelectOneOrNull<SchoolYear>(conds);
+            return SelectOneOrNull<SchoolYear>(FilterBySchool(conds));
         }
 
         public bool Exists(string name)
         {
             var conds = new AndQueryCondition { { SchoolYear.NAME_FIELD, name } };
-            return Exists<SchoolYear>(conds);
+            return Exists<SchoolYear>(FilterBySchool(conds));
         }
 
         public bool IsOverlaped(DateTime startDate, DateTime endDate, int? currentSchoolYearId)
@@ -40,7 +40,7 @@ namespace Chalkable.Data.School.DataAccess
             if(currentSchoolYearId.HasValue)
                 conds.Add(SchoolYear.ID_FIELD, currentSchoolYearId.Value, ConditionRelation.NotEqual);
             
-            return Exists<SchoolYear>(conds);
+            return Exists<SchoolYear>(FilterBySchool(conds));
         }
     }
 }

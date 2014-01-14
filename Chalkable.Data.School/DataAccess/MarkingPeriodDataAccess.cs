@@ -83,10 +83,11 @@ namespace Chalkable.Data.School.DataAccess
             return SelectOneOrNull<MarkingPeriod>(conds);   
         }
 
-        public bool IsOverlaped(DateTime startDate, DateTime endDate, int? currentMarkingPeriodId)
+        public bool IsOverlaped(int schoolYearId, DateTime startDate, DateTime endDate, int? currentMarkingPeriodId)
         {
             var conds = new AndQueryCondition
                 {
+                    {MarkingPeriod.SCHOOL_YEAR_REF, schoolYearId},
                     {MarkingPeriod.START_DATE_FIELD, MarkingPeriod.END_DATE_FIELD, endDate, ConditionRelation.LessEqual},
                     {MarkingPeriod.END_DATE_FIELD, MarkingPeriod.START_DATE_FIELD, startDate, ConditionRelation.GreaterEqual}
                 };
