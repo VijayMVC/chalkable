@@ -45,18 +45,21 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         function schoolPersonFundsAction(){
-            var res =
-                ria.async.wait([
+            var res = this.getPersonFunds_();
+            return this.PushView(chlk.activities.funds.SchoolPersonFundsPage, res);
+        },
+
+        ria.async.Future, function getPersonFunds_(){
+            return ria.async.wait([
                     this.fundsService.getPersonFunds(),
                     this.fundsService.getCreditCardInfo()
                 ])
                 .then(function(res){
-                    var addCreditCardData = new chlk.models.funds.AddCreditCardModel(res[1]);
+                    var addCreditCardData = new chlk.models.funds.AddCreditCardModel.$create(res[1]);
                     res[0].setAddCreditCardData(addCreditCardData);
                     return res[0];
                 }, this)
                 .attach(this.validateResponse_());
-            return this.PushView(chlk.activities.funds.SchoolPersonFundsPage, res);
         },
 
         [[chlk.models.funds.AddCreditCardModel]],
@@ -71,8 +74,7 @@ NAMESPACE('chlk.controllers', function (){
             )
             .attach(this.validateResponse_())
             .then(function(result1){
-                return this.fundsService.getPersonFunds()
-                    .attach(this.validateResponse_())
+                return this.getPersonFunds_()
                     .then(function(result2){
                          result2.setTransactionSuccess(result1);
                          return result2;

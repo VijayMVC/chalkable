@@ -65,6 +65,11 @@ NAMESPACE('chlk.models.funds', function(){
         function $create(cardNumber, month, year, cvcNumber, cardType){
             BASE();
             this._creditCardMapper = new chlk.models.funds.CreditCardTypeMapper();
+            this.initData_(cardNumber, month, year, cvcNumber, cardType);
+        },
+
+        [[String, Number, Number, Number, String]],
+        VOID, function initData_(cardNumber, month, year, cvcNumber, cardType){
             this.setCardNumber(cardNumber);
             this.setMonth(month);
             this.setYear(year);

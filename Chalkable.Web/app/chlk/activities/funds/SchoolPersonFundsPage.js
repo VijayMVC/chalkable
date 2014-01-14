@@ -88,13 +88,6 @@ NAMESPACE('chlk.activities.funds', function () {
                 this.changeAmount_(parseInt(node.getValue()));
             },
 
-//            [ria.mvc.DomEventBind('click', '.saved-card-form .close-btn')],
-//            [[ria.dom.Dom, ria.dom.Event]],
-//            function closeBtnClick(node, event){
-//                node.parent().addClass('x-hidden');
-//                node.parent().parent().find('.edit-form').removeClass('x-hidden');
-//            },
-
             [ria.mvc.DomEventBind('click', '.funds-transaction-result-view .redirect-link')],
             [[ria.dom.Dom, ria.dom.Event]],
             function tryAgainClick(node, event){
@@ -128,6 +121,9 @@ NAMESPACE('chlk.activities.funds', function () {
 
             OVERRIDE, VOID, function onPartialRender_(model, msg_) {
                 BASE(model, msg_);
+                if(model.getClass() == chlk.models.funds.SchoolPersonFundsViewData){
+                    this.onPartialRender_(model.getAddCreditCardData(), chlk.activities.lib.DontShowLoader());
+                }
                 if(model.getClass() == chlk.models.funds.AddCreditCardModel){
                     var dom = this.getDom();
                     var amount = parseInt(dom.find('.amount-container input[checked="checked"]').getValue());

@@ -33,7 +33,7 @@ NAMESPACE('chlk.services', function () {
                     cardType: cardType
                 })
                 .then(function(data){
-                    var cardData = new chlk.models.funds.CreditCardInfo(cardNumber, month, year, cvcNumber, cardType);
+                    var cardData = new chlk.models.funds.CreditCardInfo.$create(cardNumber, month, year, cvcNumber, cardType);
                     this.setCardDataToSession_(cardData);
                     return data;
                 }, this);

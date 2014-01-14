@@ -11,61 +11,60 @@ NAMESPACE('chlk.templates.funds', function () {
         [ria.templates.ModelBind(chlk.models.funds.AddCreditCardModel)],
         'CreditCardTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
-//            [ria.templates.ModelPropertyBind],
-//            String, 'cardNumber',
-//
-//            [ria.templates.ModelPropertyBind],
-//            Number, 'month',
-//
-//            [ria.templates.ModelPropertyBind],
-//            Number, 'year',
-//
-//            [ria.templates.ModelPropertyBind],
-//            Number, 'cvcNumber',
-//
-//            [ria.templates.ModelPropertyBind],
-//            String, 'cardType',
-//
-//            [ria.templates.ModelPropertyBind],
-//            Object, 'mappedCardType',
+            [ria.templates.ModelPropertyBind],
+            String, 'cardNumber',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.funds.CreditCardInfo, 'creditCardInfo',
+            Number, 'month',
 
-            String, function getCardNumber(){
-                return this.getCreditCardInfo() ? this.getCreditCardInfo().getCardNumber() : null;
-            },
-            Number, function getMonth(){
-                return this.getCreditCardInfo() ? this.getCreditCardInfo().getMonth() : null;
-            },
-            Number, function getYear(){
-                return this.getCreditCardInfo() ? this.getCreditCardInfo().getYear() : null;
-            },
-            Number, function getCvcNumber(){
-                return this.getCreditCardInfo() ? this.getCreditCardInfo().getCvcNumber() : null;
-            },
-            String, function getCardType(){
-                return this.getCreditCardInfo() ? this.getCreditCardInfo().getCardType() : null;
-            },
+            [ria.templates.ModelPropertyBind],
+            Number, 'year',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'cvcNumber',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'cardType',
+
+            [ria.templates.ModelPropertyBind],
+            Object, 'mappedCardType',
+
+//            [ria.templates.ModelPropertyBind],
+//            chlk.models.funds.CreditCardInfo, 'creditCardInfo',
+//
+//            String, function getCardNumber(){
+//                return this.getCreditCardInfo() ? this.getCreditCardInfo().getCardNumber() : null;
+//            },
+//            Number, function getMonth(){
+//                return this.getCreditCardInfo() ? this.getCreditCardInfo().getMonth() : null;
+//            },
+//            Number, function getYear(){
+//                return this.getCreditCardInfo() ? this.getCreditCardInfo().getYear() : null;
+//            },
+//            Number, function getCvcNumber(){
+//                return this.getCreditCardInfo() ? this.getCreditCardInfo().getCvcNumber() : null;
+//            },
+//            String, function getCardType(){
+//                return this.getCreditCardInfo() ? this.getCreditCardInfo().getCardType() : null;
+//            },
 
             [ria.templates.ModelPropertyBind],
             Number, 'amount',
 
             Boolean, function hasCardData(){
-                return !!this.getCreditCardInfo();
+                return !!(this.getYear() && this.getMonth()
+                    && this.getCardNumber() && this.getCvcNumber());
             },
 
             String, function getCardCssClass(){
-                var card = this.getCreditCardInfo();
-                if(card && card.getMappedCardType() && card.getMappedCardType().cssClass)
-                    return card.getMappedCardType().cssClass;
+                //var card = this.getCreditCardInfo();
+                if(this.getMappedCardType() && this.getMappedCardType().cssClass)
+                    return this.getMappedCardType().cssClass;
                 return 'simple-card-icon';
             },
 
             String, function getHiddenCreditNumber(){
-                var card = this.getCreditCardInfo();
-                if(!card) return null;
-                var number = card.getCardNumber();
+                var number = this.getCardNumber();
                 var arr = [];
                 if(!number) return null;
                 number = number.toString();
