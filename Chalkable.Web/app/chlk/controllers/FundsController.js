@@ -45,10 +45,16 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         function schoolPersonFundsAction(){
-            var res = this.fundsService.getPersonFunds()
+            var res =
+                ria.async.wait([
+                    this.fundsService.getPersonFunds(),
+                    this.fundsService.getCreditCardInfo()
+                ])
                 .then(function(res){
-                    return res;
-                })
+                    var addCreditCardData = new chlk.models.funds.AddCreditCardModel(res[1]);
+                    res[0].setAddCreditCardData(addCreditCardData);
+                    return res[0];
+                }, this)
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.funds.SchoolPersonFundsPage, res);
         },
@@ -73,6 +79,16 @@ NAMESPACE('chlk.controllers', function (){
                     });
             }, this);
             return this.UpdateView(chlk.activities.funds.SchoolPersonFundsPage, res);
+        },
+
+        function removeCreditCardAction(){
+            var res = this.fundsService.deleteCreditCardInfo()
+                .attach(this.validateResponse_())
+                .then(function(res){
+                    return new chlk.models.funds.AddCreditCardModel();
+                });
+            return this.UpdateView(chlk.activities.funds.SchoolPersonFundsPage, res, chlk.activities.lib.DontShowLoader());
         }
+
     ])
 });

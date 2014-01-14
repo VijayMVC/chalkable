@@ -27,8 +27,8 @@ NAMESPACE('chlk.models.funds', function(){
 
         READONLY, chlk.models.common.PaginatedList, 'fundsHistory',
 
-        [ria.serialize.SerializeProperty('creditcardinfo')],
-        chlk.models.funds.AddCreditCardModel, 'creditCardInfo',
+
+        chlk.models.funds.AddCreditCardModel, 'addCreditCardData',
 
         [ria.serialize.SerializeProperty('currentbalance')],
         Number, 'currentBalance',

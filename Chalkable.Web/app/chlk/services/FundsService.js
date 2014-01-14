@@ -31,7 +31,42 @@ NAMESPACE('chlk.services', function () {
                     year: year,
                     cvcNumber: cvcNumber,
                     cardType: cardType
-                });
+                })
+                .then(function(data){
+                    var cardData = new chlk.models.funds.CreditCardInfo(cardNumber, month, year, cvcNumber, cardType);
+                    this.setCardDataToSession_(cardData);
+                    return data;
+                }, this);
+            },
+
+            ria.async.Future, function getCreditCardInfo(){
+                var cardData = this.getCardFromSession_();
+                return cardData
+                    ? new ria.async.DeferredData(cardData)
+                    : this.get("Fund/GetCreditCardInfo", chlk.models.funds.CreditCardInfo,{
+                        needCardInfo : true
+                    })
+                    .then(function(data){
+                        this.setCardDataToSession_(data);
+                        return data;
+                    }, this);
+            },
+
+            ria.async.Future, function deleteCreditCardInfo(){
+                return this.post("Fund/DeleteCreditCardInfo", Boolean, { })
+                    .then(function(data){
+                        if(data)
+                            this.setCardDataToSession_(null);
+                        return data;
+                    }, this);
+            },
+
+            [[chlk.models.funds.CreditCardInfo]],
+            VOID, function setCardDataToSession_(creditCardData){
+                this.getContext().getSession().set('creditCardData', creditCardData);
+            },
+            chlk.models.funds.CreditCardInfo, function getCardFromSession_(){
+                return this.getContext().getSession().get('creditCardData');
             }
         ])
 });

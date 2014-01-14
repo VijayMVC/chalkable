@@ -10,27 +10,6 @@ mixin RadioButton(name, val, text, checked, isReadOnly)
         input(name = name, type="radio", value = val, checked=checked, disabled=isReadOnly)
         label(for=name)=text
 
-
-//mixin CreditCardContainer(tpl, cardData, amount)
-//    +ActionForm('funds', 'addCredit').funds-payment-form.add-credit-card-form(attributes)
-//        +Hidden('amount', amount)
-//        div(class=cardData ? "x-hidden" : "").edit-form
-//            +MaskedInput('cardnumber','9999 9999 9999 9999')(placeholder="Card Number", value=cardData ? cardData.getCardNumber() : '').card-number.funds-text-field
-//            +MaskedInput('month', '99')(placeholder="MM", size="1", maxlength="2", value=cardData ? cardData.getMonth() : '').card-month.funds-text-field
-//            span /
-//            +MaskedInput('year', '9999')(placeholder="YY", size="1", maxlength="4", value=cardData ? cardData.getYear() : '').card-year.funds-text-field
-//            div(class=cardData ? cardData.getMappedCardType().cssClass : '.simple-card-icon').credit-card-icon
-//            +MaskedInput('cvcnumber', '9999')(placeholder="CVC", size="2", maxlength="4", value=cardData ? cardData.getCvcNumber() : '').card-cvc-number.funds-text-field
-//        div(class=!cardData ? "x-hidden" : "").saved-card-form
-//            div(class=cardData.getMappedCardType().cssClass || '.simple-card-icon').credit-card-icon
-//            +MaskedInput('cardviewnumber', '^^^^ ^^^^ ^^^^ 9999')(value=tpl.getHiddenCreditNumber(), readonly).view-text-field
-//            .close-btn.close-icon
-//        +Button()(type="submit").blue-gradient-btn.add-credit-btn
-//            span Add
-//            span.amount-btn-text= '$' + amount
-//            span Credits
-//        .funds-payment-form-title Click the button to complete the transaction
-
 mixin PayPalContainer(amount)
     +ActionForm('funds', 'payPal').funds-payment-form.pay-pal-form(attributes)
         +Hidden('amount', amount)

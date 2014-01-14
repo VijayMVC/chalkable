@@ -42,5 +42,17 @@ namespace Chalkable.Web.Controllers
             var res = cardNumber.Replace(" ", "") != "1324982345234523";
             return Json(res);
         }
+        
+        [AuthorizationFilter("Teacher, Student, Parent")]
+        public ActionResult GetCreditCardInfo(bool needCardInfo)
+        {
+            return needCardInfo ? FakeJson("~/fakeData/creditCardData.json") : Json(null);
+        }
+
+        [AuthorizationFilter("Teacher, Student, Parent")]
+        public ActionResult DeleteCreditCardInfo()
+        {
+            return Json(true);
+        }
     }
 }

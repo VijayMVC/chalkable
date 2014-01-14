@@ -61,6 +61,17 @@ NAMESPACE('chlk.models.funds', function(){
             this._creditCardMapper = new chlk.models.funds.CreditCardTypeMapper();
         },
 
+        [[String, Number, Number, Number, String]],
+        function $create(cardNumber, month, year, cvcNumber, cardType){
+            BASE();
+            this._creditCardMapper = new chlk.models.funds.CreditCardTypeMapper();
+            this.setCardNumber(cardNumber);
+            this.setMonth(month);
+            this.setYear(year);
+            this.setCvcNumber(cvcNumber);
+            this.setCardType(cardType);
+        },
+
         [ria.serialize.SerializeProperty("cardnumber")],
         String, 'cardNumber',
 

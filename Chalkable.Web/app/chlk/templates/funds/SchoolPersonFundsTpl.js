@@ -11,15 +11,10 @@ NAMESPACE('chlk.templates.funds', function () {
             chlk.models.common.PaginatedList, 'fundsHistory',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.funds.AddCreditCardModel, 'creditCardInfo',
+            chlk.models.funds.AddCreditCardModel, 'addCreditCardData',
 
             chlk.models.funds.AddCreditCardModel, function getCreditCardInfo(){
-                var res = this.creditCardInfo;
-                if(!res){
-                    res = chlk.models.funds.AddCreditCardModel();
-                    res.setAmount(10);
-                }
-                return res
+                return this.getAddCreditCardData();
             },
 
             [ria.templates.ModelPropertyBind],
@@ -32,19 +27,5 @@ NAMESPACE('chlk.templates.funds', function () {
                 var res = this.isTransactionSuccess();
                 return res === true || res === false;
             }
-
-
-
-//            String, function getHiddenCreditNumber(){
-//                var card = this.getCreditCardInfo();
-//                if(card){
-//                    var number = card.getCardNumber().toString();
-//                    var arr = [];
-//                    for(var i = 0; i < number.length - 4; i++)
-//                        arr[i] = '*';
-//                    return number.replace(number.substr(0, number.length - 4), arr.join(''));
-//                }
-//                return "";
-//            }
         ]);
 });
