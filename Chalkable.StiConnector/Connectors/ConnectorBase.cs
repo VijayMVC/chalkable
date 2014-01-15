@@ -194,9 +194,9 @@ namespace Chalkable.StiConnector.Connectors
         {
         }
 
-        public SectionAttendance GetSectionAttendance(int acadSessionId, DateTime date, int sectionId)
+        public SectionAttendance GetSectionAttendance(DateTime date, int sectionId)
         {
-            return Call<SectionAttendance>(string.Format("{0}Chalkable/{1}/sections/{2}/attendance/{3}", BaseUrl, acadSessionId, sectionId, date.ToString("yyyy-MM-dd")));
+            return Call<SectionAttendance>(string.Format("{0}Chalkable/sections/{1}/attendance/{2}", BaseUrl, sectionId, date.ToString("yyyy-MM-dd")));
         }
 
         public void SetSectionAttendance(int acadSessionId, DateTime date, int sectionId, SectionAttendance sectionAttendance)
