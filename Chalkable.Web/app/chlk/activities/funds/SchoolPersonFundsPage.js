@@ -86,7 +86,7 @@ NAMESPACE('chlk.activities.funds', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function creditFormCloseBtnClick(node, event){
                 node.addClass('x-hidden');
-                node.parent().find('.remove-credit-card-btn').removeClass('x-hidden');
+                node.parent().find('#remove-credit-card-btn').removeClass('x-hidden');
             },
 
             [ria.mvc.DomEventBind('change', '#other-input-field')],

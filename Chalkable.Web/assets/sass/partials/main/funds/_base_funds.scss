@@ -142,9 +142,22 @@ BODY {
                           position: absolute;
                           top: 7px;
                           right: 5px;
-
                         }
-
+                        .saved-card-form{
+                          margin-bottom: 15px;
+                          .credit-card-icon{
+                            margin-left: 0px;
+                          }
+                          .remove-credit-btn{
+                            position: absolute;
+                            margin: 5px 0px;
+                            color: #000000;
+                            font-size: 14px;
+                            top: 6px;
+                            padding: 7px;
+                            right: 16px;
+                          }
+                        }
                         .funds-text-field{
                           font-size: 16px;
                           padding: 10px 10px 10px 10px;
