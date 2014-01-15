@@ -1,6 +1,7 @@
 REQUIRE('chlk.models.funds.FundsHistory');
 REQUIRE('chlk.models.funds.AddCreditCardModel');
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
+REQUIRE('chlk.models.people.ShortUserInfo');
 
 NAMESPACE('chlk.models.funds', function(){
     "use strict";
@@ -32,6 +33,8 @@ NAMESPACE('chlk.models.funds', function(){
 
         [ria.serialize.SerializeProperty('currentbalance')],
         Number, 'currentBalance',
+
+        ArrayOf(chlk.models.people.User), 'sendToPersons',
 
         Boolean, 'transactionSuccess'
     ]);

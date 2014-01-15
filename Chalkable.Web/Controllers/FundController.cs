@@ -24,6 +24,7 @@ namespace Chalkable.Web.Controllers
             //return Json(BudgetBalanceViewData.Craete(toSchoolPayment, paymentforApp));
         }
 
+        //TODO: implementation for those methods 
         [AuthorizationFilter("Teacher, Student, AdminGrade, AdminEdit, AdminView")]
         public ActionResult GetPersonBudgetBalance(int personId)
         {
@@ -41,6 +42,12 @@ namespace Chalkable.Web.Controllers
         {
             var res = cardNumber.Replace(" ", "") != "1324982345234523";
             return Json(res);
+        }
+
+        [AuthorizationFilter("Teacher, Student, Parent")]
+        public ActionResult AddViaPayPal(decimal amount)
+        {
+            return Json(true);
         }
         
         [AuthorizationFilter("Teacher, Student, Parent")]

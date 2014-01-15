@@ -10,6 +10,15 @@ mixin RadioButton(name, val, text, checked, isReadOnly)
         input(name = name, type="radio", value = val, checked=checked, disabled=isReadOnly)
         label(for=name)=text
 
+mixin RadioButtonWithModel(name, model)
+    +RadioButton(name, model.method, model.title, model.checked, model.readOnly)
+
+mixin RadioButtonsListWithModel(name, list)
+    +RadioButtonsList(name, null)
+        each item in list
+            +RadioButtonWithModel(name, item)
+
+
 mixin PayPalContainer(amount)
     +ActionForm('funds', 'payPal').funds-payment-form.pay-pal-form(attributes)
         +Hidden('amount', amount)
@@ -21,13 +30,27 @@ mixin PayPalContainer(amount)
             .credit-card-icon.pay-pal-1icon
             .text You'll be redirected to secure Paypal form
 
-mixin SendMessageContainer()
+mixin SendMessageContainer(data)
+    -isTeacher = data.getUserRole().isTeacher()
+    -isStudent = data.getUserRole().isStudent()
+    -console.log(isStudent)
+    -console.log(isTeacher)
+    -persons = data.getSendToPersons()
+    -index = 0
     .funds-payment-form.send-message-form(attributes)
         +Button().blue-gradient-btn Send Message
-        .funds-payment-form-title
-            .send-message-icon
-            .text We'll send a request message to
-
+        if (isTeacher || isStudent) && persons.length > 0
+            .funds-payment-form-title
+                .send-message-icon
+                .text
+                     span We'll send a request message to
+                     span.send-to-text= ' ' + (isStudent ? 'your parent' : persons[0].getDisplayName())
+            if  isTeacher
+                .persons-select-list
+                    +Select('persons', null, null)
+                        each person in persons
+                            +Option(person.getId(), String.format("{0} - {1}",person.getDisplayName(), person.getEmail()), index == 0)
+                            -index++
 
 mixin TransactionResultView(transactionSuccess, balance)
     .funds-transaction-result-view
@@ -62,15 +85,12 @@ mixin TransactionResultView(transactionSuccess, balance)
                         input(placeholder="Other").funds-text-field#other-input-field
             .method-container
                 .title Method:
-                +RadioButtonsList('method', null)
-                    +RadioButton('method', chlk.activities.funds.BuyCreditMethods.CREDIT_CARD, 'Credit Card', true, false)
-                    +RadioButton('method', chlk.activities.funds.BuyCreditMethods.PAY_PAL, 'PayPal', false, false)
-                    +RadioButton('method', chlk.activities.funds.BuyCreditMethods.ASK_ADMIN, 'Ask Admin', false, false)
+                +RadioButtonsListWithModel('method', self.prepareMethodObjList())
             div(class=self.showTransactionResultForm() ? 'x-hidden' : '').action-forms
                 .add-credit-card-container
                     +RenderWith(self.getCreditCardInfo(), chlk.templates.funds.CreditCardTpl)
                 +PayPalContainer(10).x-hidden
-                +SendMessageContainer().x-hidden
+                +SendMessageContainer(self).x-hidden
             if self.showTransactionResultForm()
                 +TransactionResultView(self.isTransactionSuccess(), self.getCurrentBalance())
     .funds-history-container.funds-container

@@ -104,6 +104,7 @@ BODY {
                           font-size: 18px;
                           font-weight: bold;
                           text-shadow: 1px 1px 0 white;
+                          padding: 2px 0px;
                         }
                         .redirect-link{
                           margin-top: 30px;
@@ -114,11 +115,14 @@ BODY {
                         .transaction-success-view{
                           .text{
                             color: green;
+                            background: url('images/funds/success-icon.png') 45px 0px no-repeat;
+
                           }
                         }
                         .transaction-fail-view{
                           .text{
                             color: red;
+                            background: url("images/funds/unsuccess-icon.png") 45px 0px no-repeat;
                           }
                         }
                       }
@@ -225,6 +229,15 @@ BODY {
                           }
                         }
                         &.send-message-form{
+
+                          .persons-select-list{
+                            text-align: center;
+                            padding-bottom: 10px;
+                            .chzn-container{
+                              width: 220px;
+                            }
+                          }
+
                           .send-message-icon{
                             display: inline-block;
                             height: 23px;

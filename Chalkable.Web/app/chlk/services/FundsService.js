@@ -39,6 +39,11 @@ NAMESPACE('chlk.services', function () {
                 }, this);
             },
 
+            [[Number]],
+            ria.async.Future, function addCreditViaPayPal(amount){
+                return this.post("Fund/AddViaPayPal", Boolean,{amount: amount});
+            },
+
             ria.async.Future, function getCreditCardInfo(){
                 var cardData = this.getCardFromSession_();
                 return cardData

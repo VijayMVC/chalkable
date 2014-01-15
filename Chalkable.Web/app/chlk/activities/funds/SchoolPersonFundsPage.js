@@ -8,7 +8,7 @@ NAMESPACE('chlk.activities.funds', function () {
     chlk.activities.funds.BuyCreditMethods = {
         CREDIT_CARD: 0,
         PAY_PAL: 1,
-        ASK_ADMIN: 2
+        SEND_MESSAGE: 2
     };
 
     /** @class chlk.activities.funds.SchoolPersonFundsPage*/
@@ -39,7 +39,7 @@ NAMESPACE('chlk.activities.funds', function () {
                     case methods_types.PAY_PAL:
                         formClass = 'pay-pal-form';
                         break;
-                    case methods_types.ASK_ADMIN:
+                    case methods_types.SEND_MESSAGE:
                         formClass = 'send-message-form';
                         break;
                 }
@@ -80,6 +80,13 @@ NAMESPACE('chlk.activities.funds', function () {
                     .forEach(function(item){
                         jQuery(item.valueOf()).text("$" + amount);
                     });
+            },
+
+            [ria.mvc.DomEventBind('click', '.saved-card-form .close-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function creditFormCloseBtnClick(node, event){
+                node.addClass('x-hidden');
+                node.parent().find('.remove-credit-card-btn').removeClass('x-hidden');
             },
 
             [ria.mvc.DomEventBind('change', '#other-input-field')],

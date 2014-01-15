@@ -11,7 +11,8 @@
     div(class=!self.hasCardData() ? "x-hidden" : "").saved-card-form
         div(class=self.getCardCssClass()).credit-card-icon
         +MaskedInput('cardviewnumber', '^^^^ ^^^^ ^^^^ 9999')(value=self.getHiddenCreditNumber(), readonly).view-text-field
-        +ActionLink('funds', 'removeCreditCard').close-btn.close-icon
+        .close-btn.close-icon
+        +ActionLinkButton('funds', 'removeCreditCard').special-button.remove-credit-card-btn.x-hidden Remove
     +Button()(type="submit").blue-gradient-btn.add-credit-btn
         span=Msg.Add
         span.amount-btn-text= '$' + self.getAmount()
