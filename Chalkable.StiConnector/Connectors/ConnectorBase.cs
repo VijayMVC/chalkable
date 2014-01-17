@@ -201,9 +201,7 @@ namespace Chalkable.StiConnector.Connectors
 
         public void SetSectionAttendance(int acadSessionId, DateTime date, int sectionId, SectionAttendance sectionAttendance)
         {
-            string url = string.Format("{0}Chalkable/{1}/sections/{2}/attendance/{3}", BaseUrl, acadSessionId, sectionId,
-                                       date.ToString("yyyy-MM-dd"));
-
+            string url = string.Format("{0}Chalkable/sections/{1}/attendance/{2}", BaseUrl, sectionId, date.ToString("yyyy-MM-dd"));
             Post(url, sectionAttendance);
                         
         }
