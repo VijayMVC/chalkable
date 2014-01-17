@@ -1,0 +1,92 @@
+mixin ApiCallForm(controllerInfo, role)
+    .controller
+        .controller-header
+            .name=controllerInfo.getName()
+            .fill
+                div
+            .collapse-all
+        .content
+            methods = controllerInfo.getMethods() || []
+            each cntMethod in methods
+                .method
+                    methodType = cntMethod.getMethodType().toLowerCase()
+                    .header(class=methodType)
+                        span.header-line
+                        .header-body
+                            .call-type(class=methodType)
+                            .action(data-method-name=controllerInfo.getName() + "/" + cntMethod.getName())=cntMethod.getName()
+                            .toggle
+                            .description=cntMethod.getDescription()
+                    .details
+                        .det-content
+                            methodParams = cntMethod.getParams() || []
+                            apiFormId = ria.dom.Dom.GID()
+                            +ActionForm('developer', 'makeApiCall')(id = apiFormId)
+                                +Hidden('apiCallRole', role)
+                                +Hidden('controllerName', controllerInfo.getName())
+                                +Hidden('methodName', cntMethod.getName())
+                                +Hidden('apiFormId', apiFormId)
+                                if methodParams.length > 0
+                                    table
+                                        thead
+                                            th Parameter
+                                            th Value
+                                            th Description
+                                        tbody
+                                            each methodParam in methodParams
+                                                tr
+                                                    td.param-name=methodParam.getName()
+                                                    td.param-value
+                                                        input(type="text",
+                                                            data-param-type = methodParam.getParamType().valueOf(),
+                                                            data-formid = apiFormId,
+                                                            name = methodParam.getName()).value-field(class = methodParam.isOptional() ? "optional" : undefined)
+                                                    td.param-description=methodParam.getDescription()
+                                else
+                                    .no-params No parameters required
+                                .code-examples
+                                    tabContentId = "tab-" + apiFormId
+                                    .text-title Code Examples
+                                    .tab-headers(tabId=tabContentId)
+                                        .tab-header.active(data-example-type="0")
+                                            span.triangle
+                                            |cUrl
+                                        .tab-header(data-example-type="1")
+                                            span.triangle
+                                            |ruby
+                                        .tab-header(data-example-type="2")
+                                            span.triangle
+                                            |python
+                                    .tab-content(formId = apiFormId, id="tab-" + apiFormId)
+                                        pre
+
+                                +Button()(type="submit").submit-draft-btn.special-button.blue-button.try-btn Try it out
+                                .response
+
+apiInfo = self.getApiInfo()
+
+.api-explorer
+    .action-bar.not-transparent
+        .container.panel-bg.buttons-toolbar
+            label API key:
+            input(type="text", name="app-secret-key", value=self.getAppSecretKey()).api-key
+
+            each apiRole in self.getApiRoles()
+                +ActionLink('developer', 'api', apiRole).toolbar-btn(class = apiInfo.getRole() == apiRole ? "selected" : undefined)=apiRole
+    h4.text-title Chalkable REST API
+    .api-description
+        The API allows you to access real-time data from schools. All methods return JSON. There are user roles on the bar above.
+        Choosing a role, for example teacher, displays all of the methods available to your app if a teacher had installed it.
+    h4.text-title  OAuth
+    .api-description
+        OAuth 2.0 is used for authentication. The authentication token you receive, after making your request, includes a user role.
+        The user role defines the level of access.
+    div#api-search-field
+
+            +SearchBox(chlk.services.ApiService, "getList", chlk.templates.developer.ApiListTpl, apiInfo.getRole())#api-search-box(name="apiSearchbox",
+            triggerBtnId="api-search-btn", categorized="true", groupingField="category", listCls="apiDropdownList")
+            div.search-btn#api-search-btn
+    .api-calls-seq.call-tree
+    roleControllers = apiInfo.getControllers() || []
+        each contr in roleControllers
+            +ApiCallForm(contr, apiInfo.getRole())

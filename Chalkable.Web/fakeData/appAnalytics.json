@@ -1,0 +1,25 @@
+{"data": {
+		"appInstalls":{
+			"totalCount":1,
+			"stats":[
+				{"installCount":0, "summary":"Jan 1"},
+				{"installCount":10, "summary":"5"},
+				{"installCount":500, "summary":"10"},
+				{"installCount":15, "summary":"15"},
+				{"installCount":0, "summary":"20"},
+				{"installCount":0, "summary":"25"},
+				{"installCount":0, "summary":"Jan 30"}
+			]
+		},
+		"appViews":{
+			"stats":[
+				{"viewsCount":0, "summary":"Jan 1"},
+				{"viewsCount":10, "summary":"5"},
+				{"viewsCount":21, "summary":"10"},
+				{"viewsCount":15, "summary":"15"},
+				{"viewsCount":1, "summary":"20"},
+				{"viewsCount":2, "summary":"25"},
+				{"viewsCount":3, "summary":"Jan 30"}
+			]
+		}
+}, "success":true}
