@@ -21,7 +21,7 @@ NAMESPACE('chlk.controls', function () {
             [
                 [Object, Object, String, String, Object]
             ],
-            Object, function prepareData(data, attributes_, controller_, action_, params_) {
+            Object, function prepareData(attributes_, data_, controller_, action_, params_) {
                 var configs = {
                     //width: 630,
                     itemsCount: 8,
@@ -32,27 +32,35 @@ NAMESPACE('chlk.controls', function () {
                     disableNextButton: true,
                     needDots: true,
                     pressedClass: 'pressed',
-                    pressAfterClick: true
+                    pressAfterClick: true,
+                    equalItems: true,
+                    padding: 0
                 };
                 if (attributes_) {
                     configs = Object.extend(configs, attributes_);
                 }
                 if (configs.hideArrows)
                     configs.disabledClass = hideClass;
-                if (data.length > configs.itemsCount) {
-                    configs.disableNextButton = false;
-                    if (configs.needDots) {
-                        var dots = [],
-                            dotsCount = Math.ceil(data.length / configs.itemsCount);
-                        for (var i = 0; i < dotsCount; i++)
-                            dots.push(i == 0);
-                        configs.dots = dots;
-                    }
-                } else {
-                    configs.needDots = false
-                }
 
-                configs.pagesCount = Math.ceil(data.length / configs.itemsCount);
+                if(data_){
+                    if (data_.length > configs.itemsCount) {
+                        configs.disableNextButton = false;
+                        if (configs.needDots) {
+                            var dots = [],
+                                dotsCount = Math.ceil(data_.length / configs.itemsCount);
+                            for (var i = 0; i < dotsCount; i++)
+                                dots.push(i == 0);
+                            configs.dots = dots;
+                        }
+                    } else {
+                        configs.needDots = false
+                    }
+
+                    configs.pagesCount = Math.ceil(data_.length / configs.itemsCount);
+                }else{
+                    configs.equalItems = false;
+                    configs.pressAfterClick = attributes_.pressAfterClick;
+                }
 
                 if (configs.multiple) {
                     configs.controller = controller_;
@@ -78,6 +86,21 @@ NAMESPACE('chlk.controls', function () {
                         var toolbar = activity.getDom().find('#' + attributes.id);
                         if (toolbar.exists()) {
                             toolbar.setData('currentIndex', 0);
+                            if(!configs.equalItems){
+                                var t2 = toolbar.find('.second-container');
+                                var t3 = toolbar.find('.third-container');
+                                if(t3.exists() && t3.width() > t2.width()){
+                                    toolbar.find('.next-button').removeClass(configs.disabledClass);
+                                    var dotsK = Math.ceil(t3.width()/t2.width());
+                                    configs.pagesCount = dotsK;
+                                    toolbar.setData('configs', configs);
+                                    var res = '<a class="current" index="0"></a>';
+                                    for(var i = 0; i < dotsK - 1; i++){
+                                        res += '<a index="' + (i + 1) + '"></a>';
+                                    }
+                                    toolbar.find('.paginator').setHTML(res);
+                                }
+                            }
                             if (configs.pressAfterClick) {
                                 var pressedIndex = parseInt(toolbar.find('.pressed').getAttr('index'), 10);
                                 var pageIndex = Math.floor(pressedIndex / configs.itemsCount) || 0;
@@ -144,7 +167,8 @@ NAMESPACE('chlk.controls', function () {
                 var prevButton = toolbar.find('.prev-button');
                 var width = toolbar.find('.first-container').width();
                 var secondContainer = toolbar.find('.second-container');
-                secondContainer.setCss('left', -width * index_);
+                var left = (configs.padding - width) * index_;
+                secondContainer.setCss('left', left);
                 if (index_ == 0) {
                     prevButton.addClass(configs.disabledClass);
                 } else {

@@ -240,6 +240,7 @@ var Msg = {
     Absent_from_a_class: 'Absent from a class',
     Absent_students: 'Absent students',
     Absent_Today: 'Absent Today',
+    Add_comment: 'Add comment',
     Add_a_comment: 'Add a comment',
     Add_discipline: 'Add discipline',
     Add_reminder: 'Add Reminder',

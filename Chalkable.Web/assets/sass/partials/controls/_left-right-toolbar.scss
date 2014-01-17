@@ -96,6 +96,10 @@
       @include transition-property("all");
       @include transition-duration("0.5s");
 
+      .third-container{
+        display: table;
+      }
+
       .item{
         height: 82px;
         display: inline-block;

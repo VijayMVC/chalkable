@@ -66,12 +66,11 @@
 INPUT, TEXTAREA, .text-field{
   @include border-radius(5px);
   background: #fff;
-  border-color: #9e9e9e transparent transparent transparent;
-  border-width: 1px 0 0 0;
-  border-style: solid;
+  border: 1px solid #c5c5c5;
   padding: 5px;
   color: #6e6e6e;
   margin: 0;
+  @include box-shadow(0 1px 1px #c5c5c5 inset);
   //padding: 1px 3px;
 
   &:focus{
@@ -487,26 +486,46 @@ TEXTAREA.animated-textarea{
     font: normal 12px Georgia;
     font-style: italic;
   }
+}
 
-  .grey-button{
-    min-width: 57px;
-    height: 12px;
+.grey-button, .blue-button{
+  text-decoration: none;
+  font-size: 11px;
+  text-align: center;
+  display: inline-block;
+  min-width: 57px;
+  height: 12px;
+  padding: 10px;
+  margin: 5px auto 0;
+  @include border-radius(4px);
+
+  &.small{
+    padding: 5px 13px 8px;
+    line-height: 15px;
+    min-width: 43px;
+    font-size: 12px;
+  }
+}
+
+.blue-button{
+  color: #fff !important;
+  text-shadow: none !important;
+  @include background(linear-gradient(top, #558da7, #2f667d));
+  @include box-shadow(0 1px 0 0 #9abbcb inset, 0 1px 2px 0px #999);
+  border: 1px solid #29596e;
+
+  &:hover{
+    @include background(linear-gradient(top, #457d97, #1f566d));
   }
 }
 
 .grey-button{
-
-
-  padding: 10px;
-  margin: 5px auto 0;
-
-
-  @include border-radius(4px);
+  color: #51595d !important;
   @include background(linear-gradient(top, #f5f5f5, #e0e0e0));
   @include box-shadow(0 1px 0 0 #fff inset, 0 1px 2px 0px #999);
-  display: inline-block;
+    
   border: 1px solid #b3b3b3;
-  cursor: pointer;
+    
   color: #51595d;
   text-decoration: none;
   font-size: 11px;
@@ -517,8 +536,8 @@ TEXTAREA.animated-textarea{
   }
 
   &.disabled{
-    opacity: 0.7;
     @include background(linear-gradient(top, #f5f5f5, #e0e0e0));
+   
   }
 }
 

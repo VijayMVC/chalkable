@@ -885,9 +885,9 @@ BODY {
     position: absolute;
     top: 3px;
     right: 2px;
-    width: image-width($alerts_image);
-    height: image-height($alerts_image);
-    background: image-url($alerts_image) 0 0 no-repeat;
+    width: 25px;
+    height: 27px;
+    background: url(images/attendance/alerts.png) 0 0 no-repeat;
     z-index: 10;
   }
 

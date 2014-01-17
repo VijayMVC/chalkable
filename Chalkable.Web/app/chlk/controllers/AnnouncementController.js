@@ -133,15 +133,32 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.announcement.StudentAnnouncement]],
-        function updateAnnouncementGradeAction(model){
+        function setAnnouncementGrade(model){
             var result = this.gradingService
                 .updateItem(
                     model.getId(),
                     model.getGradeValue(),
                     model.getComment(),
-                    model.isDropped()
+                    model.isDropped(),
+                    model.isLate(),
+                    model.isAbsent(),
+                    model.isIncomplete(),
+                    model.isExempt(),
+                    model.isPassed(),
+                    model.isComplete()
                 )
-                .attach(this.validateResponse_())
+                .attach(this.validateResponse_());
+            return result;
+        },
+
+        [[chlk.models.announcement.StudentAnnouncement]],
+        function updateAnnouncementGradeFromGridAction(model){
+            this.setAnnouncementGrade(model);
+        },
+
+        [[chlk.models.announcement.StudentAnnouncement]],
+        function updateAnnouncementGradeAction(model){
+            var result = this.setAnnouncementGrade(model)
                 .then(function(item){
                     return this.announcementService
                         .getAnnouncement(item.getAnnouncementId())

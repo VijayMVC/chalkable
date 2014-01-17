@@ -18,9 +18,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'comment',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'dropped',
-
-            [ria.templates.ModelPropertyBind],
             Number, 'gradeValue',
 
             [ria.templates.ModelPropertyBind],
@@ -54,6 +51,15 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             [ria.templates.ModelPropertyBind],
             Boolean, 'exempt',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'dropped',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'passed',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'complete',
 
             String, function getAlertClass(){
                 if(this.isLate()){

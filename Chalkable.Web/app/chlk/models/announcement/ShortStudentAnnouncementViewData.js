@@ -34,6 +34,12 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'incomplete',
 
             [ria.serialize.SerializeProperty('isexempt')],
-            Boolean, 'exempt'
+            Boolean, 'exempt',
+
+            [ria.serialize.SerializeProperty('ispassed')],
+            Boolean, 'passed',
+
+            [ria.serialize.SerializeProperty('iscomplete')],
+            Boolean, 'complete'
         ]);
 });

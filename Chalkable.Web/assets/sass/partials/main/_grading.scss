@@ -4,6 +4,64 @@ BODY {
       DIV#content-wrapper{
         #main-wrapper {
           #main{
+            .autocomplete-list {
+              display: none;
+              background: #fff;
+              position: absolute;
+              z-index: 9999;
+              border: 1px solid #d1d1d1;
+
+              .autocomplete-item{
+                line-height: 28px;
+                font-size: 13px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                padding: 0 2px;
+                width: 72px;
+                white-space: nowrap;
+                cursor: pointer;
+                text-align: center;
+
+                &.hovered{
+                  background: #f2f2f2;
+                }
+
+                &:not(:last-child){
+                  border-bottom: 1px solid #ececec;
+                }
+
+                &.see-all{
+                  color: #2f7790;
+                  text-decoration: underline;
+                }
+              }
+            }
+
+            .chlk-pop-up-container.comment{
+              @include border-radius(3px);
+              padding: 8px 18px;
+              display: none;
+
+              h5{
+                font: normal 10px Georgia italic;
+                text-align: center;
+                margin-bottom: 6px;
+              }
+
+              textarea{
+                width: 137px;
+                min-height: 54px;
+              }
+
+              a{
+                margin-top: 1px;
+              }
+            }
+
+            .comment-button{
+              display: none;
+            }
+
             .student-grading-summary{
 
               &.student-grading-class-summary{
@@ -338,6 +396,15 @@ BODY {
                   background: url(images/grading/mp-title-bg.png);
                   position: relative;
 
+                  .grey-button{
+                    position: absolute;
+                    left: 20px;
+                    top: 13px;
+                    padding: 5px 13px 8px;
+                    font-size: 12px;
+                    color: #3a3a3a;
+                  }
+
                   .collapse{
                     position: absolute;
                     right: 22px;
@@ -389,22 +456,147 @@ BODY {
                       }
                     }
 
-                    .ann-type-container{
+                    .ann-type-container, .dotted-container{
                       display: table-cell;
                       text-align: center;
-                      min-width: 125px;
                       vertical-align: top;
                       height: 288px;
-
-                      &:not(:last-child):not(:nth-child(5n)){
-                        background: url(images/grading/dot.png) right 0 repeat-y;
-                      }
 
                       .type-name{
                         font: bold 16px Arial;
                         color: #4d4d4d;
-                        margin: 5px 0 20px 0;
                         position: relative;
+                      }
+
+                      .dotted-h{
+                        font-size: 14px;
+                        margin-right: 1px;
+                        height: 47px;
+                        line-height: 46px;
+                        background: url(images/grading/dot-h.png) 0 bottom repeat-x;
+                        position: relative;
+
+                        &.grade-value{
+                          cursor: pointer;
+
+                          .with-comment{
+                            position: absolute;
+                            top: 7px;
+                            left: 6px;
+                            width: 11px;
+                            height: 12px;
+                            background: url(images/grading/comment-icon2.png) 0 0 no-repeat;
+                            z-index: 2;
+                          }
+
+                          &.letter{
+                            font-style: italic;
+                            font-family: Georgia;
+                          }
+
+                          .alert-flag{
+                            top: -1px;
+                            right: 5px;
+                            z-index: 10;
+                          }
+
+                          .edit-cell{
+                            position: absolute;
+                            left: 0;
+                            right: 1px;
+                            top: 0;
+                            bottom: 1px;
+                            background: url(images/grading/edit-cell.png) center center no-repeat, #eeeeee;
+                            z-index: 0;
+                            opacity: 0;
+
+                            &:hover{
+                              opacity: 1;
+                            }
+                          }
+
+                          input{
+                            position: absolute;
+                            left: -1px;
+                            right: 0px;
+                            top: -1px;
+                            bottom: 0px;
+                            width: 66px;
+                            @include border-radius(0);
+                            border: 1px solid #d1d1d1;
+                            display: none;
+                            text-align: center;
+                            z-index: 3;
+
+                            &.error{
+                              border-color: #d16060;
+                            }
+                          }
+
+                          &.active-cell{
+                            input{
+                              display: block;
+                            }
+
+                            .edit-cell{
+                              display: none;
+                            }
+                          }
+                        }
+
+                        &.avg{
+                          font-weight: bold;
+                        }
+
+                        &:nth-child(2){
+                          line-height: 57px;
+                        }
+                      }
+
+                      .active-row{
+                        background: #f1f1f1;
+
+                        &.dotted-h{
+                          background: url(images/grading/dot-h.png) 0 bottom repeat-x, #f1f1f1;
+                        }
+                      }
+
+                      &.name-container{
+                        min-width: 177px;
+                        text-align: left;
+
+                        >DIV{
+                          padding-left: 8px;
+                          margin-right: 1px;
+
+                          >DIV.dotted-h{
+                            margin: 0;
+                          }
+                        }
+                      }
+                    }
+
+                    .ann-type-container:not(:last-child):not(:nth-child(5n)), .dotted-container{
+                      background: url(images/grading/dot.png) right 0 repeat-y;
+                    }
+
+                    .dotted-container{
+                      min-width: 77px;
+
+                      .type-name{
+                        margin: 5px 0 -1px 0;
+                      }
+                    }
+
+                    .ann-type-container{
+                      min-width: 125px;
+
+                      .type-name{
+                        margin: 5px 0 20px 0;
+                      }
+
+                      &:not(:last-child):not(:nth-child(5n)){
+                        background: url(images/grading/dot.png) right 0 repeat-y;
                       }
 
                       .announcements-type-item{
