@@ -85,8 +85,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ClassAttendanceDetails> GetClassAttendances(DateTime date, int classId)
         {
-            var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
-            var sa = ConnectorLocator.AttendanceConnector.GetSectionAttendance(sy.Id, date, classId);
+            var sa = ConnectorLocator.AttendanceConnector.GetSectionAttendance(date, classId);
             if (sa != null)
             {
                 var clazz = ServiceLocator.ClassService.GetClassById(classId);

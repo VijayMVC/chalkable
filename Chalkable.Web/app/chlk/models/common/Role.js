@@ -64,6 +64,11 @@ NAMESPACE('chlk.models.common', function () {
                 var roleEnums = chlk.models.common.RoleEnum;
                 var roleId = this.getRoleId();
                 return roleId == roleEnums.STUDENT;
+            },
+
+            ArrayOf(Number), function GET_ADMIN_ROLES_IDS(){
+                var roleEnum = chlk.models.common.RoleEnum;
+                return [roleEnum.ADMINGRADE.valueOf(), roleEnum.ADMINEDIT.valueOf(), roleEnum.ADMINVIEW.valueOf()];
             }
         ]);
 });

@@ -87,6 +87,7 @@ var Msg = {
     Created: 'Created',
     Created_by: 'Created by',
     Created_on: 'Created on',
+    Credits: 'Credits',
     Daily: 'Daily',
     Day: oneOrMany('Day'),
     Decline: 'Decline',
@@ -302,6 +303,7 @@ var Msg = {
     Class_Ranking: 'Class Ranking',
     Classmates: 'Classmates',
     Click_to_add_standard: 'CLICK TO ADD STANDARDS',
+    Click_to_complete_transaction: 'Click the button to complete the transaction',
     Code_examples: 'Code examples',
     Coming_soon: 'Coming soon',
     Comments_for: 'Comments for',
@@ -518,6 +520,11 @@ var Msg = {
     Weight_Addition_Tooltip_Message: 'Enter a number here if points are to be added to each student’s grade for this item.',
     Hide_From_Student_Tooltip_Message: 'This is will hide the item from students',
     Can_Drop_Student_Score_Tooltip_Message: 'Check this box if a score may be dropped for this item',
+
+    Add_Credit_Transaction_Success: function(balance){
+        return String.format("Success! Your new balance is ${0}", balance)
+    },
+    Add_Credit_Transaction_Fail: "The transaction was unsuccessful",
 
     //Window titles----------------------------------------------------------------------------------------------------------\
 

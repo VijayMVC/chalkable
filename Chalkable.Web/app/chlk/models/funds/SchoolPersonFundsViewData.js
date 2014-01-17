@@ -1,6 +1,7 @@
 REQUIRE('chlk.models.funds.FundsHistory');
-REQUIRE('chlk.models.funds.CreditCardInfo');
+REQUIRE('chlk.models.funds.AddCreditCardModel');
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
+REQUIRE('chlk.models.people.ShortUserInfo');
 
 NAMESPACE('chlk.models.funds', function(){
     "use strict";
@@ -27,10 +28,14 @@ NAMESPACE('chlk.models.funds', function(){
 
         READONLY, chlk.models.common.PaginatedList, 'fundsHistory',
 
-        [ria.serialize.SerializeProperty('creditcardinfo')],
-        chlk.models.funds.CreditCardInfo, 'creditCardInfo',
+
+        chlk.models.funds.AddCreditCardModel, 'addCreditCardData',
 
         [ria.serialize.SerializeProperty('currentbalance')],
-        Number, 'currentBalance'
+        Number, 'currentBalance',
+
+        ArrayOf(chlk.models.people.User), 'sendToPersons',
+
+        Boolean, 'transactionSuccess'
     ]);
 });

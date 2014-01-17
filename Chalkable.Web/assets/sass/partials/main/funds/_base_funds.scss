@@ -70,6 +70,17 @@ BODY {
                         }
                       }
 
+                      .view-text-field{
+                        border: none;
+                        background: none;
+                        font-size: 16px;
+                        font-weight: bold;
+                      }
+
+                      .close-icon{
+                        background: url('images/funds/close-icon.png') 0px 0px no-repeat;
+                      }
+                      
                       .amount-container{
                         .other-field{
                           margin-left: 30px;
@@ -81,6 +92,41 @@ BODY {
                       .method-container{
                       }
 
+                      .funds-transaction-result-view{
+                        border-bottom: 1px solid #d7d7d7;
+                        border-top: 1px solid #d7d7d7;
+                        padding: 45px 0px 30px 0px;
+                        text-align: center;
+                        width: 470px;
+                        margin-top: 30px;
+
+                        .text{
+                          font-size: 18px;
+                          font-weight: bold;
+                          text-shadow: 1px 1px 0 white;
+                          padding: 2px 0px;
+                        }
+                        .redirect-link{
+                          margin-top: 30px;
+                          cursor: pointer;
+                          color: #336a82;
+                          text-decoration: underline;
+                        }
+                        .transaction-success-view{
+                          .text{
+                            color: green;
+                            background: url('images/funds/success-icon.png') 45px 0px no-repeat;
+
+                          }
+                        }
+                        .transaction-fail-view{
+                          .text{
+                            color: red;
+                            background: url("images/funds/unsuccess-icon.png") 45px 0px no-repeat;
+                          }
+                        }
+                      }
+
                       .funds-payment-form{
 
                         width: 350px;
@@ -88,7 +134,30 @@ BODY {
                         padding: 15px 15px 0px 15px;
                         margin-top: 30px;
                         @include border-radius(3px);
+                        position: relative;
 
+                        .close-icon{
+                          width: 15px;
+                          height: 15px;
+                          position: absolute;
+                          top: 7px;
+                          right: 5px;
+                        }
+                        .saved-card-form{
+                          margin-bottom: 15px;
+                          .credit-card-icon{
+                            margin-left: 0px;
+                          }
+                          .remove-credit-btn{
+                            position: absolute;
+                            margin: 5px 0px;
+                            color: #000000;
+                            font-size: 14px;
+                            top: 6px;
+                            padding: 7px;
+                            right: 16px;
+                          }
+                        }
                         .funds-text-field{
                           font-size: 16px;
                           padding: 10px 10px 10px 10px;
@@ -114,7 +183,7 @@ BODY {
 
                         .credit-card-icon{
                           vertical-align: middle;
-                          width: 45px;
+                          width: 42px;
                           margin-left: 64px;
                         }
 
@@ -173,6 +242,15 @@ BODY {
                           }
                         }
                         &.send-message-form{
+
+                          .persons-select-list{
+                            text-align: center;
+                            padding-bottom: 10px;
+                            .chzn-container{
+                              width: 220px;
+                            }
+                          }
+
                           .send-message-icon{
                             display: inline-block;
                             height: 23px;

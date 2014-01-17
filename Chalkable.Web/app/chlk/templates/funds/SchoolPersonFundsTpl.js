@@ -11,9 +11,38 @@ NAMESPACE('chlk.templates.funds', function () {
             chlk.models.common.PaginatedList, 'fundsHistory',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.funds.CreditCardInfo, 'creditCardInfo',
+            chlk.models.funds.AddCreditCardModel, 'addCreditCardData',
+
+            chlk.models.funds.AddCreditCardModel, function getCreditCardInfo(){
+                return this.getAddCreditCardData();
+            },
 
             [ria.templates.ModelPropertyBind],
-            Number, 'currentBalance'
+            Number, 'currentBalance',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'transactionSuccess',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.people.User), 'sendToPersons',
+
+            Boolean, function showTransactionResultForm(){
+                var res = this.isTransactionSuccess();
+                return res === true || res === false;
+            },
+
+            ArrayOf(Object), function prepareMethodObjList(){
+                var methods = chlk.activities.funds.BuyCreditMethods;
+                var res = [
+                    { method: methods.CREDIT_CARD, title: 'Credit Card', checked: true, readOnly: false},
+                    { method: methods.PAY_PAL, title: 'PayPal', checked: false, readOnly: false}
+                ];
+                var role = this.getUserRole();
+                if(role.isTeacher())
+                    res.push({method: methods.SEND_MESSAGE, title: 'Ask Admin', checked: false, readOnly: false});
+                if(role.isStudent())
+                    res.push({method: methods.SEND_MESSAGE, title: 'Ask Parent', checked: false, readOnly: false});
+                return res;
+            }
         ]);
 });

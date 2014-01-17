@@ -133,15 +133,17 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              periods = locator.PeriodService.GetPeriods(schoolYearId);
                     
              var days = locator.CalendarDateService.GetLastDays(schoolYearId, false, start, end);
-             foreach (var d in days)
+             while (start <= end)
              {
-                 if (d.DayTypeRef.HasValue)
+                 var d = days.FirstOrDefault(x => x.Day.Date == start.Date);
+                 if (d != null && d.DayTypeRef.HasValue)
                  {
                      var currentDayAnns = announcements.Where(x => x.Expires.Date == d.Day).ToList();
                      var currentDayClassPeriods = classPeriods.Where(x => periods.Any(y => y.Id == x.PeriodRef) && x.DayTypeRef == d.DayTypeRef).ToList();
                      res.Add(AnnouncementDayCalendarViewData.Create(periods, d.Day, currentDayClassPeriods, classes, currentDayAnns, rooms));
                  }
-                 else res.Add(AnnouncementDayCalendarViewData.Create(null, d.Day, null, null, null, null));
+                 else res.Add(AnnouncementDayCalendarViewData.Create(null, start.Date, null, null, null, null));
+                 start = start.AddDays(1);
              }
              return res;
          }

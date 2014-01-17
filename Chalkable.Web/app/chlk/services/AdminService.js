@@ -22,6 +22,14 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            ria.async.Future, function getAdmins(byLastName_){
+                var adminsRoles = chlk.models.common.Role.GET_ADMIN_ROLES_IDS().join(',');
+                return this.getUsers(null, adminsRoles, null, byLastName_, 0, 1000)
+                    .then(function(data){
+                        return data.getItems();
+                    });
+            },
+
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function getInfo(personId) {
                 return this.get('Admin/Info.json', chlk.models.people.User, {

@@ -24,17 +24,42 @@ namespace Chalkable.Web.Controllers
             //return Json(BudgetBalanceViewData.Craete(toSchoolPayment, paymentforApp));
         }
 
+        //TODO: implementation for those methods 
         [AuthorizationFilter("Teacher, Student, AdminGrade, AdminEdit, AdminView")]
         public ActionResult GetPersonBudgetBalance(int personId)
         {
             return Json(new {balance = 0});
         }
 
-        [AuthorizationFilter("Teacher, Student")]
+        [AuthorizationFilter("Teacher, Student, Parent")]
         public ActionResult PersonFunds()
         {
             return FakeJson("~/fakeData/personFunds.json");
         }
 
+        [AuthorizationFilter("Teacher, Student, Parent")]
+        public ActionResult AddCredit(decimal amount, string cardNumber,int month,int year, int cvcNumber, string cardType)
+        {
+            var res = cardNumber.Replace(" ", "") != "1324982345234523";
+            return Json(res);
+        }
+
+        [AuthorizationFilter("Teacher, Student, Parent")]
+        public ActionResult AddViaPayPal(decimal amount)
+        {
+            return Json(true);
+        }
+        
+        [AuthorizationFilter("Teacher, Student, Parent")]
+        public ActionResult GetCreditCardInfo(bool needCardInfo)
+        {
+            return needCardInfo ? FakeJson("~/fakeData/creditCardData.json") : Json(null);
+        }
+
+        [AuthorizationFilter("Teacher, Student, Parent")]
+        public ActionResult DeleteCreditCardInfo()
+        {
+            return Json(true);
+        }
     }
 }

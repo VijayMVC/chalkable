@@ -17,7 +17,7 @@ NAMESPACE('chlk.templates.funds', function () {
 
             [[Number]],
             String, function convertNumberToMoney(value){
-                var res = value > 0 ? '+' : '-';
+                var res = value > 0 ? '+' : value != 0 ? '-' : '';
                 return res + '$' + Math.abs(value);
             }
         ]);

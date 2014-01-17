@@ -40,8 +40,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
                 if(IsOverlaped(startDate, endDate, da))
                     throw new ChalkableException(ChlkResources.ERR_SCHOOL_YEAR_OVERLAPPING_DATA);
-                if (da.Exists(name))
-                    throw new ChalkableException(ChlkResources.ERR_SCHOOL_YEAR_ALREADY_EXISTS);
                 
                 var schoolYear = new SchoolYear
                     {
@@ -61,8 +59,9 @@ namespace Chalkable.BusinessLogic.Services.School
         
         private bool IsOverlaped(DateTime startDate, DateTime endDate, SchoolYearDataAccess dataAccess, SchoolYear schoolYear = null)
         {
-            var id = schoolYear != null ? schoolYear.Id : (int?) null;
-            return startDate >= endDate || (dataAccess.IsOverlaped(startDate, endDate, id));
+            //var id = schoolYear != null ? schoolYear.Id : (int?) null;
+            //return startDate >= endDate || (dataAccess.IsOverlaped(startDate, endDate, id));
+            return false;//TODO: isn't supported in INOW
         }
 
         public SchoolYear Edit(int id, string name, string description, DateTime startDate, DateTime endDate)
