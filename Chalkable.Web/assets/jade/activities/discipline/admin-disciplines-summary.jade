@@ -1,0 +1,147 @@
+mixin AddStudentTpl(date)
+    date = date ? date.format('mm/dd/yy') : null
+    +ActionLink('discipline', 'addStudentClick').add-student-btn + #{Msg.Add_student}
+        .add-popup
+            .student-search-container
+                +SearchBox(chlk.services.AdminService, "getUsers", chlk.templates.attendance.AdminStudentSearchTpl)(
+                    textValue = 'displayName',
+                    idValue = 'id',
+                    listCls = 'add-student-list'
+                ).plus-user-search.student-search-input
+                +ActionForm('discipline', 'showStudentBox').show-student-form
+                    +Hidden('id')
+                    +Hidden('gradeLevelsIds', self.getGradeLevelsIds())
+                    +Hidden('date', date)
+            .big-triangle
+
+mixin StudentWithDiscipline(student, index)
+    date = date ? date.format('mm/dd/yy') : null
+    div(
+        index=index,
+        data-id=student.getId().valueOf(),
+        data-name=student.getFirstName()
+    ).student-with-picture
+        +ActionLink('discipline', 'showStudentDiscipline', student.getId(),
+                date, 'discipline', 'list', JSON.stringify([true, self.getGradeLevelsIds(), date])).img-container
+            +PersonImg(student, 128)
+        +ActionLink('students', 'details', student.getId()).name=student.getDisplayName()
+
+mixin StudentsTpl(studentsBlock)
+    students = studentsBlock.getStudents()
+    length = students.length
+    blockCount = 12
+    date = date ? date.format('mm/dd/yy') : null
+    h2 #{studentsBlock.getType().getName()} (#{length})
+    div(attributes).all-students
+        needButtonAfterAdd = length == 12
+        needButton = length > 12
+        visibleStudents = students.slice(0, needButton ? 11 :12)
+        visibleLen = visibleStudents.length
+        hiddenStudents = needButton ? students.slice(11) : []
+        div(class=needButtonAfterAdd ? 'need-button' : '').visible-block
+            div(class=visibleLen == 6 ? "need-big-height" : "").hidden-students-block-2
+                each student, i in visibleStudents
+                    +StudentWithDiscipline(student, i)
+                if needButton
+                    button.all-button=Msg.All
+        div.hidden-students-block
+            div(class=hiddenStudents.length % 6 == 0 ? "need-big-height" : "").hidden-students-block-2.hidden-students
+                each student, i in hiddenStudents
+                    +StudentWithDiscipline(student, i + visibleLen)
+
+mixin AddStudentTpl()
+    date = self.getDate()
+    date = date ? date.format('mm/dd/yy') : null
+    +ActionLink('discipline', 'addStudentClick').add-student-btn + #{Msg.Add_student}
+        .add-popup
+            .student-search-container
+                +SearchBox(chlk.services.AdminService, "getUsers", chlk.templates.attendance.AdminStudentSearchTpl)(
+                    textValue = 'displayName',
+                    idValue = 'id',
+                    listCls = 'add-student-list'
+                ).plus-user-search.student-search-input
+                +ActionForm('discipline', 'showStudentBox').show-student-form
+                    +Hidden('id')
+                    +Hidden('gradeLevelsIds', self.getTopData().getSelectedIds())
+                    +Hidden('date', date)
+            .big-triangle
+
+topData = self.getTopData()
+topItems = topData.getTopItems()
+selectedIds = topData.getSelectedIds()
+date = self.getDate()
+
+.admin-discipline.loader-container
+    .loader
+    +LeftRightToolbar(topItems, chlk.templates.grading.GradeLevelForTopBar, 'discipline', 'list', [true])(
+        selectedIds=selectedIds,
+        multiple
+    ).classes-bar
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                .action-button
+                    .export-btn
+            .right
+                +ActionForm('discipline', 'updateSummary').update-summary
+                    +DatePicker('nowDateTime', date)(
+                        data-options={
+                          showOtherMonths: true,
+                          selectOtherMonths: true
+                        }
+                        readonly="readonly"
+                    )#nowDateTime.no-marker.transparent
+                    label.choose-date-icon.for-date-picker
+                    +Hidden('gradeLevelsIds', self.getGradeLevelsIds())
+    .boxes-admin
+        .boxes-container
+            div(data-index="1", class=self.isNowHidden() ? "x-hidden" : "").top-number-box.now-box
+                .title=Msg.Issues_right_now
+                .number=self.getNowCount()
+                .triangle
+            div(data-index="2").top-number-box.day-box.active-part
+                .title=self.isNowHidden() ? Msg.Discipline_on_date(date) : Msg.Discipline_today
+                .number=self.getDayCount()
+                .triangle
+            div(data-index="3").top-number-box.mp-box
+                .title=Msg.Discipline_MP
+                .number=self.getMpCount()
+                .triangle
+    .statistic-content.mt15
+        .students-statistic.page-1
+            .relative.button-block.hovered.block.with-padding
+                .chart-bg2
+                .chart-container-1
+                    +Chart()(
+                        data-options = self.getNowChartConfigs()
+                    )
+        .students-statistic.page-2.active-part
+            .relative.button-block.hovered.block.with-padding
+                .right
+                    .legend-item
+                        div(style="background:#2f7790;").box
+                        .name=Msg.Today
+                    .legend-item
+                        div(style="background:#d8d8d8;").box
+                        .name=Msg.Avg
+                .chart-bg2
+                .chart-container-1
+                    +Chart()(
+                        data-options = self.getDayChartConfigs()
+                    )
+        .students-statistic.page-3
+            .relative
+                .chart-bg2
+                .chart-container-1
+                    +Chart()(
+                        data-options = self.getMpChartConfigs()
+                    )
+        +AddStudentTpl()
+        .students-grid
+            each studentBlock in self.getDisciplinesByType()
+                .summary-students
+                    +StudentsTpl(studentBlock)
+
+
+
+
