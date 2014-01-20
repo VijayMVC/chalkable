@@ -1,0 +1,30 @@
+noStarred = self.starredOnly && !self.items.length
+div(class = noStarred ? "no-starred" : "").feed-container
+    topData = self.getTopData();
+    topItems = topData.getTopItems();
+    selectedId = topData.getSelectedItemId();
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'feed', 'list', [true, self.starredOnly])(
+        selectedItemId=selectedId
+        ).classes-bar
+    .action-bar.not-transparent
+        .container.panel-bg
+            .i-b
+                +ActionLink('feed', 'list', true, !self.starredOnly, selectedId, 0)(class=self.starredOnly ? 'pr' : 'unpr')
+                    span#importan-count= self.importantCount
+            .feed-notifications Notifications
+                +ActionLink('notification', 'listNew')
+    if noStarred
+        label#feed-arrow.blue-arrow.left-up-arrow=Msg.See_more_items
+        label#no-items.blue-arrow.gray.div=Msg.No_items_marked_important
+    else
+        .not-transparent
+            +ListView(self.items)(
+                infiniteScroll = true,
+                needGoToButton = true,
+                service = chlk.services.AnnouncementService,
+                method = "getAnnouncements",
+                tpl = chlk.templates.announcement.FeedItemTpl,
+                paramsPrepend = [selectedId, self.starredOnly]
+            )
+                each item in self.items
+                    +FeedItem(item)
