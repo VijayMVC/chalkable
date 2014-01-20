@@ -488,7 +488,7 @@ TEXTAREA.animated-textarea{
   }
 }
 
-.grey-button, .blue-button{
+.grey-button, .blue-button:not(.special-button){
   text-decoration: none;
   font-size: 11px;
   text-align: center;
@@ -507,7 +507,7 @@ TEXTAREA.animated-textarea{
   }
 }
 
-.blue-button{
+.blue-button:not(.special-button){
   color: #fff !important;
   text-shadow: none !important;
   @include background(linear-gradient(top, #558da7, #2f667d));

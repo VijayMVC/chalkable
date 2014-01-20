@@ -34,7 +34,7 @@ NAMESPACE('chlk.controls', function () {
                 var ref = ria.reflection.ReflectionClass(service);
                 var methodRef = ref.getMethodReflector(method);
                 var stub = function () { return methodRef.invokeOn(serviceIns, [].concat(prependArgs, ria.__API.clone(arguments))); };
-                this.queueReanimation_(attrs.id, attrs["default-value"] ? attrs["default-value"].valueOf() : null, stub, tpl, attrs);
+                this.queueReanimation_(attrs.id, attrs["default-value"] ? attrs["default-value"].valueOf().toString() : null, stub, tpl, attrs);
             },
 
             [[String, String, Function, ClassOf(ria.templates.Template), Object]],
