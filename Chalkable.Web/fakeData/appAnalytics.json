@@ -1,4 +1,7 @@
 {"data": {
+        "devBalance": {
+          "balance": "400"
+        },
 		"appInstalls":{
 			"totalCount":1,
 			"stats":[

@@ -100,7 +100,17 @@ BODY {
 
                   .app-store-current-balance{
                     width: 35%;
+                    float: right;
+                    margin-top: 40px;
                     display: inline-block;
+
+                    .budget-chart-container{
+                      .chart-container{
+                        position: absolute;
+                        top: -20px;
+                        left: -10px;
+                      }
+                    }
                   }
                 }
 
@@ -121,6 +131,8 @@ BODY {
                       margin-top: 10px;
                     }
                   }
+
+
 
                   .absolute{
                     top: 20px;
