@@ -39,12 +39,13 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.developer.HomeAnalytics, 'appAnalytics',
 
-            [[Number]],
-            function getCurrentBalanceChartData(val){
-                var percentSpent = (val > 100) ? 100 : val;
+            [[chlk.models.developer.DeveloperBalance]],
+            function getCurrentBalanceChartData(devBalance){
+
+                var percent = Math.floor(devBalance.getDaysToPayout() / devBalance.getDaysInMonth() * 100);
 
                 var data = [{
-                    y: 100 - percentSpent,
+                    y: 100 - percent,
                     color: {
                         radialGradient: { cx: 0.5, cy: 0.3, r: 0.7 },
                         stops: [
@@ -56,18 +57,18 @@ NAMESPACE('chlk.templates.apps', function () {
                     drilldown: {
                         name: 'MSIE versions',
                         categories: [''],
-                        data: [100 - percentSpent],
+                        data: [100 - percent],
                         color: '#30708a',
                         border: 'black'
                     }
                 }, {
-                    y: percentSpent,
+                    y: percent,
                     color: 'transparent',
                     borderWidth: 0,
                     drilldown: {
                         name: 'MSIE versions',
                         categories: [''],
-                        data: [percentSpent],
+                        data: [percent],
                         color: 'transparent'
                     }
                 }];
@@ -87,9 +88,9 @@ NAMESPACE('chlk.templates.apps', function () {
                 return versionsData;
             },
 
-            [[Number]],
-            function prepareChartOptions(balance){
-                var balanceData = this.getCurrentBalanceChartData(balance);
+            [[chlk.models.developer.DeveloperBalance]],
+            function prepareBalanceChartOptions(devBalance){
+                var balanceData = this.getCurrentBalanceChartData(devBalance);
                 return {
                     chart: {
                         type: 'pie',
@@ -99,7 +100,6 @@ NAMESPACE('chlk.templates.apps', function () {
                     },
                     credits: {enabled: false },
                     title: {text: ''},
-                    yAxis: {lineWidth:0, title: {text: Msg.Total_percent_market_share}},
                     plotOptions: {
                         pie: {shadow: false, dataLabels: {enabled: false}}
                     },
@@ -107,7 +107,7 @@ NAMESPACE('chlk.templates.apps', function () {
                     series: [{
                         name: '',
                         data: balanceData,
-                        innerSize: '72%',
+                        innerSize: '74%',
                         size: '81%'
                     }]
                 };
@@ -229,7 +229,7 @@ NAMESPACE('chlk.templates.apps', function () {
                         max: configs.max + 10
                     },
                     legend:{enabled: false},
-                    tooltip: {enabled: false},
+                    tooltip: {enabled: true},
                     plotOptions: {
                         area: {
                             marker: {

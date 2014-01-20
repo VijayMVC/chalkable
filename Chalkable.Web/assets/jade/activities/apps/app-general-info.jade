@@ -1,15 +1,15 @@
-mixin CurrentBalance(balance)
-    chartOptions = self.prepareChartOptions(balance)
+mixin CurrentBalance(devBalance)
+    chartOptions = self.prepareBalanceChartOptions(devBalance)
+
     .block.budget-block.relative
+        .panel-header Current Balance
         .absolute
-            .budget-chart-container.relative
+            .budget-chart-container
                 .inside
-                    .big $#{balance}
-                    .small #{balance} days to payout
+                    .big $#{devBalance.getBalance()}
+                    .small #{devBalance.getDaysToPayout()} days to payout
                 .outside
-        +Chart()(data-options = chartOptions)
-
-
+                +Chart()(data-options = chartOptions)
 
 mixin AppInstallsChart(data, header, chartId)
     configs = self.prepareAppInstallsChartData(data)
@@ -107,8 +107,7 @@ mixin AppStatus(appState, appDraftId, liveAppId)
          .app-store-views
               +AppViewsChart(self.getAppAnalytics().getAppViewStats(), "App Store Views", "appViews").app-views
          .app-store-current-balance
-              .header Current Balance
-                    //+CurrentBalance(50)
+              +CurrentBalance(self.getAppAnalytics().getDevBalance())
     +AppReviews()
 
 
