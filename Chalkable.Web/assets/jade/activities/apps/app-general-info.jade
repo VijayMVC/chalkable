@@ -1,0 +1,113 @@
+mixin CurrentBalance(devBalance)
+    chartOptions = self.prepareBalanceChartOptions(devBalance)
+
+    .block.budget-block.relative
+        .panel-header Current Balance
+        .absolute
+            .budget-chart-container
+                .inside
+                    .big $#{devBalance.getBalance()}
+                    .small #{devBalance.getDaysToPayout()} days to payout
+                .outside
+                +Chart()(data-options = chartOptions)
+
+mixin AppInstallsChart(data, header, chartId)
+    configs = self.prepareAppInstallsChartData(data)
+    appInstallChartOptions = self.prepareAppInstallsChartOptions(configs)
+    chartTitle = (data.getStats() ? data.getTotalCount() || "0" : "0")
+    .block(attributes)
+        .panel-header=header
+        .chart-block.relative
+            .chart-bg=chartTitle
+            +Chart()(
+                id = chartId,
+                data-showmarkeronhover = true,
+                data-options = appInstallChartOptions
+            )
+
+mixin AppViewsChart(data, header, chartId)
+    configs = self.prepareAppViewsChartData(data)
+    appViewsChartOptions = self.prepareAppViewsChartOptions(configs)
+    .block(attributes)
+        .panel-header=header
+        .chart-block.relative
+
+            +Chart()(
+                id = chartId,
+                data-showmarkeronhover = true,
+                data-options = appViewsChartOptions
+            )
+
+
+mixin AppReviews()
+    .app-reviews.reviews
+        appRating = self.getAppRating()
+        .review-link Reviews
+        +Rating("appRating", appRating.getAverage(), false).all
+        .user-reviews
+            .rating-roles.x-hidden
+                each item in appRating.getRoleRatings()
+                    .rating-role-item
+                        role = item.getRole()
+                    .rolename=role.getName()
+                    .app-rating
+                        +Rating( 'role-' + role.getName(), item.getRating())
+                        .personcount=item.getPersonCount()
+            .rating-persons
+                each item in appRating.getPersonRatings()
+                    .rating-person-item
+                        person = item.getPerson()
+                    p=item.getReview() + ' - ' + person.getFullName()
+                        +Rating('person-rating-' + person.getId().valueOf(), item.getRating())
+
+mixin AppStatus(appState, appDraftId, liveAppId)
+    stateId = appState.getStateId()
+    isApproved = stateId == chlk.models.apps.AppStateEnum.APPROVED
+    isSubmitted = stateId == chlk.models.apps.AppStateEnum.SUBMIT_FOR_APPROVE
+    isRejected = stateId == chlk.models.apps.AppStateEnum.REJECTED
+    isAppLive = liveAppId != null && liveAppId.valueOf() != ""
+
+    appStatus = "You app is live in Chalkable app store"
+
+    if isAppLive
+        if isApproved || isRejected
+            +ActionLinkButton('apps', 'goLive', self.draftAppId).special-button.blue-button.go-live-btn(disabled = !isApproved? "disabled" : undefined) Go Live
+            if isApproved
+               appStatus = "Click to GO LIVE in the App Store!"
+            if isRejected
+               appStatus = "Your app update was not approved, please address any issues and resubmit."
+        if isSubmitted
+           appStatus = "Your app update has been submitted and is awaiting approval."
+        .app-status=appStatus
+    else
+        if isApproved || isRejected
+            +ActionLinkButton('apps', 'goLive', self.draftAppId).special-button.blue-button.go-live-btn(disabled = !isApproved? "disabled" : undefined) Go Live
+            if isApproved
+                appStatus = "Click to GO LIVE in the App Store!"
+            if isRejected
+                appStatus = "Your app was not approved, please address any issues and resubmit."
+        if isSubmitted
+           appStatus = "Your app has been submitted and is awaiting approval."
+        .app-status=appStatus
+
+.app-general-info
+    .action-bar.not-transparent.dev-app-info
+        .container.panel-bg
+    .app-header
+        .app-icon
+            img(src=self.appThumbnail, width=80, height=80)
+        .app-description
+            .title=self.appName
+            +AppStatus(self.appState, self.draftAppId, self.liveAppId)
+
+    .app-installs
+        +AppInstallsChart(self.getAppAnalytics().getAppInstallStats(), "App Installs", 'appInstalls').app-installs
+
+    .app-store-balance
+         .app-store-views
+              +AppViewsChart(self.getAppAnalytics().getAppViewStats(), "App Store Views", "appViews").app-views
+         .app-store-current-balance
+              +CurrentBalance(self.getAppAnalytics().getDevBalance())
+    +AppReviews()
+
+
