@@ -64,10 +64,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connectors\ActivityAttachmentsConnector.cs" />
     <Compile Include="Connectors\ActivityConnector.cs" />
     <Compile Include="Connectors\ConnectorBase.cs" />
     <Compile Include="Connectors\ConnectorLocator.cs" />
     <Compile Include="Connectors\Model\Activity.cs" />
+    <Compile Include="Connectors\Model\ActivityAttachment.cs" />
     <Compile Include="Connectors\Model\School.cs" />
     <Compile Include="Connectors\Model\SectionAttendance.cs" />
     <Compile Include="Connectors\SchoolConnector.cs" />

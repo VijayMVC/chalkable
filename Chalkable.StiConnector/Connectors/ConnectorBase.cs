@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
+using Chalkable.Common.Web;
 using Chalkable.StiConnector.Connectors.Model;
 using Newtonsoft.Json;
 using System.Configuration;
@@ -32,11 +33,16 @@ namespace Chalkable.StiConnector.Connectors
         private WebClient InitWebClient()
         {
             var client = new WebClient();
-            client.Headers[HttpRequestHeader.Authorization] = "Session " + locator.Token;
-            client.Headers.Add("ApplicationKey", string.Format("chalkable {0}", ConfigurationManager.AppSettings[STI_APPLICATION_KEY]));
-            client.Headers.Add("Content-Type", "application/json");
+            InitHeaders(client.Headers);
             client.Encoding = Encoding.UTF8;
+            client.Headers.Add("Content-Type", "application/json");
             return client;
+        }
+
+        private void InitHeaders(WebHeaderCollection headers)
+        {
+            headers[HttpRequestHeader.Authorization] = "Session " + locator.Token;
+            headers["ApplicationKey"] = string.Format("chalkable {0}", ConfigurationManager.AppSettings[STI_APPLICATION_KEY]);
         }
 
         public T Call<T>(string url, NameValueCollection parameters = null)
@@ -102,6 +108,82 @@ namespace Chalkable.StiConnector.Connectors
                 stream.Dispose();
                 if(stream2 != null)
                     stream2.Dispose();
+            }
+        }
+
+        //public T UploadFile<T>(string url, byte[] fileContent, string method = POST)
+        //{
+        //    var client = InitWebClient();
+        //    Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
+        //    var stream = new MemoryStream();
+        //    try
+        //    {
+        //        client.UploadFileTaskAsync( new Uri(url), method,)
+        //    }
+        //    catch (Exception)
+        //    {
+                
+        //        throw;
+        //    }
+        //}
+
+
+        protected HttpWebRequest InitWebRequest(string url, string fileName, byte[] fileContent, string method = POST)
+        {
+            string boundary = "----" + DateTime.UtcNow.Ticks.ToString("x");
+            byte[] boundarybytes = Encoding.ASCII.GetBytes("\r\n--" + boundary + "\r\n");
+
+            HttpWebRequest wr = (HttpWebRequest)WebRequest.Create(url); //sVal is id for the webService
+            InitHeaders(wr.Headers);
+            wr.KeepAlive = true;
+            wr.Method = method;
+            wr.ContentType = string.Format("multipart/form-data; boundary={0}", boundary);
+            wr.Credentials = CredentialCache.DefaultCredentials;
+            Stream rs = wr.GetRequestStream();
+
+            rs.Write(boundarybytes, 0, boundarybytes.Length);
+
+            string headerTemplate = "Content-Disposition: form-data; name=\"{0}\"; filename=\"{1}\"\r\nContent-Type: {2}\r\n\r\n";
+            string header = string.Format(headerTemplate, "file", fileName, MimeHelper.GetContentTypeByName(fileName));
+            byte[] headerbytes = Encoding.UTF8.GetBytes(header);
+            rs.Write(headerbytes, 0, headerbytes.Length);
+
+            byte[] buffer = new byte[4096];
+            int bytesRead = 0;
+            using (var fileStream = new MemoryStream(fileContent))
+            {
+                while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0)
+                {
+                    rs.Write(buffer, 0, bytesRead);
+                }
+            }
+            byte[] trailer = Encoding.ASCII.GetBytes("\r\n--" + boundary + "--\r\n");
+            rs.Write(trailer, 0, trailer.Length);
+            rs.Close();
+            return wr;
+        }
+
+        public T PostWithFile<T>(string url, string fileName, byte[] fileContent, string method = POST) 
+        {
+            try
+            {
+                var wr = InitWebRequest(url, fileName, fileContent, method);
+                WebResponse wresp = wr.GetResponse();
+                Stream stream2 = wresp.GetResponseStream();
+                if (stream2 != null)
+                {
+                    var reader2 = new StreamReader(stream2);
+                    string resp = reader2.ReadToEnd();
+                    if(!string.IsNullOrEmpty(resp))
+                        return new JsonSerializer().Deserialize<T>(new JsonTextReader(new StringReader(resp)));
+                }
+                return default(T);
+            }
+            catch (WebException ex)
+            {
+                var reader = new StreamReader(ex.Response.GetResponseStream());
+                var msg = reader.ReadToEnd();
+                throw new Exception(msg);
             }
         }
 
