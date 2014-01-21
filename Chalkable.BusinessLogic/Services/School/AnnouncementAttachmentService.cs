@@ -8,7 +8,10 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Storage;
 using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors;
+using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -16,13 +19,13 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         Announcement AddAttachment(int announcementId, byte[] content, string name, string uuid);
         void DeleteAttachment(int announcementAttachmentId);
-        PaginatedList<AnnouncementAttachment> GetAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true);
+        IList<AnnouncementAttachment> GetAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true);
         IList<AnnouncementAttachment> GetAttachments(string filter);
         AnnouncementAttachment GetAttachmentById(int announcementAttachmentId);
         AttachmentContentInfo GetAttachmentContent(int announcementAttachmentId);
     }
 
-    public class AnnouncementAttachmentService : SchoolServiceBase, IAnnouncementAttachmentService
+    public class AnnouncementAttachmentService : SisConnectedService, IAnnouncementAttachmentService
     {
         public AnnouncementAttachmentService(IServiceLocatorSchool serviceLocator)
             : base(serviceLocator)
@@ -41,8 +44,17 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                var da = new AnnouncementAttachmentDataAccess(uow);
-                da.Insert(new AnnouncementAttachment
+
+                IList<AnnouncementAttachment> atts;
+                if (CoreRoles.TEACHER_ROLE == Context.Role && ann.SisActivityId.HasValue)
+                {
+                    var activityAtts = ConnectorLocator.ActivityAttachmentsConnector.CreateAttachments(ann.SisActivityId.Value, name, content);
+                    atts = MapActivityAttsToAnnAtts(activityAtts);
+                }
+                else
+                {
+                    var da = new AnnouncementAttachmentDataAccess(uow);
+                    da.Insert(new AnnouncementAttachment
                     {
                         AnnouncementRef = ann.Id,
                         PersonRef = Context.UserLocalId.Value,
@@ -51,9 +63,11 @@ namespace Chalkable.BusinessLogic.Services.School
                         Uuid = uuid,
                         Order = ServiceLocator.AnnouncementService.GetNewAnnouncementItemOrder(ann)
                     });
-                var atts =  da.GetList(Context.UserLocalId.Value, Context.Role.Id, name);
+                    atts = da.GetList(Context.UserLocalId.Value, Context.Role.Id, name);
+                }
                 ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, atts.Last().Id.ToString(), content);
                 uow.Commit();
+                
                 if (ann.State != AnnouncementState.Draft)
                 {
                     if (Context.UserLocalId == ann.PersonRef)
@@ -78,20 +92,51 @@ namespace Chalkable.BusinessLogic.Services.School
                 var annAtt = GetAttachmentById(announcementAttachmentId);
                 if(!AnnouncementSecurity.CanDeleteAttachment(annAtt, Context))
                     throw new ChalkableSecurityException();
-              
+                
                 da.Delete(annAtt.Id);
                 ServiceLocator.StorageBlobService.DeleteBlob(ATTACHMENT_CONTAINER_ADDRESS, annAtt.Id.ToString()); 
                 uow.Commit();
             }
         }
 
-        public PaginatedList<AnnouncementAttachment> GetAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true)
+        public IList<AnnouncementAttachment> GetAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true)
         {
             using (var uow = Read())
             {
+                if (CoreRoles.TEACHER_ROLE == Context.Role)
+                {
+                    var ann = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId)
+                        .GetAnnouncement(announcementId, Context.RoleId, Context.UserLocalId.Value);
+                    return MapActivityAttsToAnnAtts(GetActivityAttachments(ann.SisActivityId.Value));
+                }
                 var da = new AnnouncementAttachmentDataAccess(uow);
-                return da.GetPaginatedList(announcementId, Context.UserLocalId ?? 0, Context.Role.Id, start, count, needsAllAttachments);
+                return da.GetPaginatedList(announcementId, Context.UserLocalId ?? 0, Context.Role.Id, start, count, needsAllAttachments).ToList();
             }
+        }
+
+        private IList<AnnouncementAttachment> MapActivityAttsToAnnAtts(IEnumerable<ActivityAttachment> activityAtts)
+        {
+            var res = new List<AnnouncementAttachment>();
+            foreach (var activityAttachment in activityAtts)
+            {
+                var atts = MapActivityAttachmentToAnnAttachment(new AnnouncementAttachment(), activityAttachment);
+                if (atts.Uuid == null)
+                {
+                 //   ConnectorLocator.ActivityAttachmentsConnector.
+                }
+                res.Add(atts);
+            }
+            return res;
+        } 
+
+        private AnnouncementAttachment MapActivityAttachmentToAnnAttachment(
+            AnnouncementAttachment announcementAttachment, ActivityAttachment activityAttachment)
+        {
+            announcementAttachment.Name = activityAttachment.Name;
+            announcementAttachment.Uuid = activityAttachment.Uuid;
+            announcementAttachment.Id = activityAttachment.Id;
+            announcementAttachment.SisActivityId = activityAttachment.ActivityId;
+            return announcementAttachment;
         }
 
         public AnnouncementAttachment GetAttachmentById(int announcementAttachmentId)
@@ -113,12 +158,22 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new AnnouncementAttachmentDataAccess(uow).GetList(Context.UserLocalId ?? 0, Context.Role.Id, filter);
+                var res = new AnnouncementAttachmentDataAccess(uow).GetList(Context.UserLocalId ?? 0, Context.Role.Id, filter);
+                //if (CoreRoles.TEACHER_ROLE == Context.Role)
+                //{
+                //    var atts = GetActivityAttachments()
+                //}
+                return res;
             }
         }
         public static string GetAttachmentRelativeAddress()
         {
             return (new BlobHelper()).GetBlobsRelativeAddress(ATTACHMENT_CONTAINER_ADDRESS);
         }
+
+        private IList<ActivityAttachment> GetActivityAttachments(int activityId)
+        {
+            return ConnectorLocator.ActivityAttachmentsConnector.GetAttachments(activityId);
+        } 
     }
 }

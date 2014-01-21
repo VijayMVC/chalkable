@@ -78,7 +78,6 @@ namespace Chalkable.Web.Controllers
                 byte[] formitembytes = Encoding.UTF8.GetBytes(formitem);
                 rs.Write(formitembytes, 0, formitembytes.Length);
             }
-
             rs.Write(boundarybytes, 0, boundarybytes.Length);
             string header = string.Format(HEADER_CONTENT_DISPOSITION, paramName, file, contentType);
             byte[] headerbytes = Encoding.UTF8.GetBytes(header);
