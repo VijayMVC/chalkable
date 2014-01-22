@@ -2,35 +2,4 @@
     +LeftRightToolbar(self.getTopData().getTopItems(), chlk.templates.classes.TopBar, 'discipline', 'classList')(
         selectedItemId=""
     ).classes-bar
-    .action-bar.not-transparent.buttons
-        .container.panel-bg
-            +ActionForm('discipline', 'listStudentDiscipline')
-                .left
-                    +DatePicker('disciplineDate', self.date)(
-                        data-options={
-                          showOtherMonths: true,
-                          selectOtherMonths: true
-                        },
-                        data-controller="discipline",
-                        data-action="list"
-                    )#discipline-date
-                    label Search Students
-                    +SearchBox(chlk.services.StudentService, "getStudentsByFilter", chlk.templates.messages.RecipientAutoComplete)#personId(
-                        name="personId",
-                        value=""
-                        default-value="")
-                    +Button()(type="submit").action-link   GO
-
-    +Grid('discipline', 'page', self.items, [self.date, self.items.getPageSize()]).not-transparent
-        +GridHead()
-            .th First
-            .th Last
-            .th Total
-            .th Summary
-        +GridBody()
-            each item in self.items.getItems()
-                +GridRow()
-                    .td= item.getStudent().getFirstName()
-                    .td= item.getStudent().getLastName()
-                    .td= item.getTotal()
-                    .td= item.getSummary()
+    .choose-class

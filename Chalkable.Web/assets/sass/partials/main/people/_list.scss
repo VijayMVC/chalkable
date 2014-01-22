@@ -8,6 +8,7 @@
   .people-search{
     background: transparent;
     border: none;
+    @include box-shadow(none);
     width: 410px;
     height: 28px !important;
     text-align: right;
