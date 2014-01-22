@@ -27,7 +27,6 @@ namespace Chalkable.Web.Controllers
         private const string CONTENT_DISPOSITION = "Content-Disposition";
         
         private const string TOKEN = "token";
-        private const string FILE_CONTENT_TYPE = "file";
         private const string HTML_CONTENT_TYPE = "text/html";
         private const string UUID = "uuid";
         private const string ADMIN = "ADMIN";
@@ -55,60 +54,13 @@ namespace Chalkable.Web.Controllers
             public string session { get; set; }
         }
 
-        private const string BOUNDARY_CONTENT_TYPE_FMT = "multipart/form-data; boundary={0}";
-        private const string FORM_ITEM_CONTENT_DISPOSITION = "Content-Disposition: form-data; name=\"{0}\"\r\n\r\n{1}";
-        private const string HEADER_CONTENT_DISPOSITION =
-            "Content-Disposition: form-data; name=\"{0}\"; filename=\"{1}\"\r\nContent-Type: {2}\r\n\r\n";
-        
-        private static DocumentUploadResponse HttpUploadFile(string url, string file, string paramName, string contentType, NameValueCollection nvc, byte[] bytes)
+        private static DocumentUploadResponse UploadFileToCrocodoc(string fileName, byte[] fileContent)
         {
-            string boundary = "----" + DateTime.UtcNow.Ticks.ToString("x");
-            byte[] boundarybytes = Encoding.ASCII.GetBytes("\r\n--" + boundary + "\r\n");
-
-            HttpWebRequest wr = (HttpWebRequest)WebRequest.Create(url);
-            wr.ContentType = string.Format(BOUNDARY_CONTENT_TYPE_FMT, boundary);
-            wr.Method = "POST";
-            wr.KeepAlive = true;
-            wr.Credentials = CredentialCache.DefaultCredentials;
-            Stream rs = wr.GetRequestStream();
-            foreach (string key in nvc.Keys)
-            {
-                rs.Write(boundarybytes, 0, boundarybytes.Length);
-                string formitem = string.Format(FORM_ITEM_CONTENT_DISPOSITION, key, nvc[key]);
-                byte[] formitembytes = Encoding.UTF8.GetBytes(formitem);
-                rs.Write(formitembytes, 0, formitembytes.Length);
-            }
-            rs.Write(boundarybytes, 0, boundarybytes.Length);
-            string header = string.Format(HEADER_CONTENT_DISPOSITION, paramName, file, contentType);
-            byte[] headerbytes = Encoding.UTF8.GetBytes(header);
-            rs.Write(headerbytes, 0, headerbytes.Length);
-            Stream fileStream = new MemoryStream(bytes);
-            byte[] buffer = new byte[4096];
-            int bytesRead = 0;
-            while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0)
-            {
-                rs.Write(buffer, 0, bytesRead);
-            }
-            fileStream.Close();
-            byte[] trailer = Encoding.ASCII.GetBytes("\r\n--" + boundary + "--\r\n");
-            rs.Write(trailer, 0, trailer.Length);
-            rs.Close();
-            WebResponse wresp = null;
-            try
-            {
-                wresp = wr.GetResponse();
-                Stream stream2 = wresp.GetResponseStream();
-                var reader2 = new StreamReader(stream2);
-                string resp = reader2.ReadToEnd();
-                var res = Serializer<DocumentUploadResponse>(resp);
-                return res;
-            }
-            catch (Exception)
-            {
-                if (wresp != null)
-                    wresp.Close();
-            }
-            return null;
+            var nvc = new NameValueCollection {{TOKEN, PreferenceService.Get(Preference.CROCODOC_TOKEN).Value}};
+            var storagedocUrl = PreferenceService.Get(Preference.CROCODOC_API_URL).Value;
+            var fileType = MimeHelper.GetContentTypeByName(fileName);
+            return ChalkableHttpFileLoader.HttpUploadFile(UrlTools.UrlCombine(storagedocUrl, DOCUMENT_UPLOAD)
+                , fileName, fileContent, fileType, null, Serializer<DocumentUploadResponse>, nvc);            
         }
         
         [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
@@ -123,10 +75,7 @@ namespace Chalkable.Web.Controllers
             string uuid = null;
             if (MimeHelper.GetTypeByName(name) == MimeHelper.AttachmenType.Document)
             {
-                var nvc = new NameValueCollection {{TOKEN, PreferenceService.Get(Preference.CROCODOC_TOKEN).Value}};
-                var storagedocUrl = PreferenceService.Get(Preference.CROCODOC_API_URL).Value;
-                var uploadRes = HttpUploadFile(UrlTools.UrlCombine(storagedocUrl, DOCUMENT_UPLOAD), name, FILE_CONTENT_TYPE,
-                                               MimeHelper.GetContentTypeByName(name), nvc, bin);
+                var uploadRes = UploadFileToCrocodoc(name, bin);
                 if (uploadRes == null)
                 {
                     return Json(new ChalkableException(ChlkResources.ERR_PROCESSING_FILE));

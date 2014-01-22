@@ -120,10 +120,12 @@ namespace Chalkable.BusinessLogic.Services.School
             foreach (var activityAttachment in activityAtts)
             {
                 var atts = MapActivityAttachmentToAnnAttachment(new AnnouncementAttachment(), activityAttachment);
-                if (atts.Uuid == null)
-                {
-                 //   ConnectorLocator.ActivityAttachmentsConnector.
-                }
+                //if (atts.Uuid == null)
+                //{
+                    var content = ConnectorLocator.ActivityAttachmentsConnector
+                        .GetAttachmentContent(activityAttachment.ActivityId, activityAttachment.Id);
+
+                //}
                 res.Add(atts);
             }
             return res;
