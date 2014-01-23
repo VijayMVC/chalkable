@@ -456,6 +456,9 @@
     <Content Include="Views\Shared\_IndexLayout.cshtml" />
     <Content Include="fakeData\appGeneralReviews.json" />
     <Content Include="fakeData\appAnalytics.json" />
+    <Content Include="fakeData\creditCardData.json" />
+    <Content Include="fakeData\personFunds.json" />
+    <Content Include="fakeData\teacherGradingGrid.json" />
     <None Include="Web.staging.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

@@ -16,6 +16,7 @@
     text-shadow: 0 0 1px #b7b7b7;
     height: 21px;
     border: none;
+    @include box-shadow(none);
     background: url(images/announcement/due-icon.png) 8px center no-repeat;
     padding-left: 28px;
     cursor: pointer;
@@ -33,6 +34,7 @@
 .hasDatepicker.no-marker{
   &.transparent{
     border: none;
+    @include box-shadow(none);
     background: transparent;
     vertical-align: middle;
     font: normal 13px/24px Arial;
