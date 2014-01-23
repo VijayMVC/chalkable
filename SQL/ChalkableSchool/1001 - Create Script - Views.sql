@@ -38,6 +38,11 @@ SELECT
 	Announcement.Dropped as Dropped,
 	Announcement.ClassAnnouncementTypeRef as ClassAnnouncementTypeRef,
 	Announcement.SchoolRef as SchoolRef,
+	Announcement.SisActivityId as SisActivityId,
+    Announcement.MaxScore as MaxScore,
+    Announcement.WeightAddition as WeightAddition,
+    Announcement.WeightMultiplier as WeightMultiplier,
+    Announcement.MayBeDropped as MayBeDropped,
 	ClassAnnouncementType.Name as ClassAnnouncementTypeName,
 	ClassAnnouncementType.ChalkableAnnouncementTypeRef as ChalkableAnnouncementType, 
 	Announcement.PersonRef as PersonRef,
@@ -64,7 +69,6 @@ FROM
 	left join ClassAnnouncementType on Announcement.ClassAnnouncementTypeRef = ClassAnnouncementType.Id
 	left join Class on Class.Id = Announcement.ClassRef
 	left join Person on Person.Id = Announcement.PersonRef
-
 
 GO
 
