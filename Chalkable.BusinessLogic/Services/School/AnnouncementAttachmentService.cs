@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Storage;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
-using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -120,12 +117,13 @@ namespace Chalkable.BusinessLogic.Services.School
             foreach (var activityAttachment in activityAtts)
             {
                 var atts = MapActivityAttachmentToAnnAttachment(new AnnouncementAttachment(), activityAttachment);
-                //if (atts.Uuid == null)
-                //{
+                if (string.IsNullOrEmpty(atts.Uuid))
+                {
                     var content = ConnectorLocator.ActivityAttachmentsConnector
                         .GetAttachmentContent(activityAttachment.ActivityId, activityAttachment.Id);
-
-                //}
+                    atts.Uuid = ServiceLocator.CrocodocService.UploadDocument(activityAttachment.Name, content).uuid;
+                    ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, atts.Id.ToString(), content);
+                }
                 res.Add(atts);
             }
             return res;

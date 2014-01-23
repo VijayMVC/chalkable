@@ -9,6 +9,7 @@ namespace Chalkable.BusinessLogic.Services
     public interface IServiceLocator
     {
         IStorageBlobService StorageBlobService { get; }
+        ICrocodocService CrocodocService { get; }
     }
 
     public class ServiceLocator : IServiceLocator
@@ -20,6 +21,7 @@ namespace Chalkable.BusinessLogic.Services
         {
             Context = context;
             StorageBlobService = new StorageBlobService();
+            CrocodocService = new CrocodocService();
         }
 
         public IStorageBlobService StorageBlobService
@@ -27,6 +29,9 @@ namespace Chalkable.BusinessLogic.Services
             get { return storageBlobService; }
             protected set { storageBlobService = value; }
         }
+
+
+        public ICrocodocService CrocodocService { get; protected set; }
     }
 
     public static class ServiceLocatorFactory

@@ -82,6 +82,7 @@
     <Compile Include="Security\NotificationSecurity.cs" />
     <Compile Include="Security\PrivateMessageSecurity.cs" />
     <Compile Include="Security\UserSecurity.cs" />
+    <Compile Include="Services\CrocodocService.cs" />
     <Compile Include="Services\Master\AccessControlService.cs" />
     <Compile Include="Services\Master\ApplicationService.cs" />
     <Compile Include="Services\Master\ApplicationUploadService.cs" />

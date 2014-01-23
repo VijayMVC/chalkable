@@ -8,6 +8,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -24,45 +25,9 @@ namespace Chalkable.Web.Controllers
     public class AnnouncementAttachmentController : AnnouncementBaseController
     {
         private const string headerFormat = "inline; filename={0}";
-        private const string CONTENT_DISPOSITION = "Content-Disposition";
-        
-        private const string TOKEN = "token";
+        private const string CONTENT_DISPOSITION = "Content-Disposition";       
         private const string HTML_CONTENT_TYPE = "text/html";
-        private const string UUID = "uuid";
-        private const string ADMIN = "ADMIN";
-        private const string USER = "USER";
-        private const string EDITABLE = "EDITABLE";
-        private const string SESSION_CREATE = "session/create";
-        private const string DOCUMENT_UPLOAD = "document/upload";
 
-
-
-
-        private static T Serializer<T>(string response)
-        {
-            var s = new JavaScriptSerializer();
-            var jsonResponse = s.Deserialize<T>(response);
-            return jsonResponse;
-        }
-
-        private class DocumentUploadResponse
-        {
-            public string uuid { get; set; }
-        }
-        private class StartSessionResponse
-        {
-            public string session { get; set; }
-        }
-
-        private static DocumentUploadResponse UploadFileToCrocodoc(string fileName, byte[] fileContent)
-        {
-            var nvc = new NameValueCollection {{TOKEN, PreferenceService.Get(Preference.CROCODOC_TOKEN).Value}};
-            var storagedocUrl = PreferenceService.Get(Preference.CROCODOC_API_URL).Value;
-            var fileType = MimeHelper.GetContentTypeByName(fileName);
-            return ChalkableHttpFileLoader.HttpUploadFile(UrlTools.UrlCombine(storagedocUrl, DOCUMENT_UPLOAD)
-                , fileName, fileContent, fileType, null, Serializer<DocumentUploadResponse>, nvc);            
-        }
-        
         [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult AddAttachment(int announcementId)
         {
@@ -73,14 +38,16 @@ namespace Chalkable.Web.Controllers
                 return Json(new ChalkableException(ChlkResources.ERR_FILE_REQUIRED));
             }
             string uuid = null;
-            if (MimeHelper.GetTypeByName(name) == MimeHelper.AttachmenType.Document)
+            if (SchoolLocator.CrocodocService.IsDocument(name))
             {
-                var uploadRes = UploadFileToCrocodoc(name, bin);
-                if (uploadRes == null)
+                try
                 {
-                    return Json(new ChalkableException(ChlkResources.ERR_PROCESSING_FILE));
+                    uuid = SchoolLocator.CrocodocService.UploadDocument(name, bin).uuid;
                 }
-                uuid = uploadRes.uuid;
+                catch (ChalkableException exception)
+                {
+                    return Json(exception);
+                }
             }
             var announcement = SchoolLocator.AnnouncementAttachmentService.AddAttachment(announcementId, bin, name, uuid);
             AnnouncementViewData res = PrepareFullAnnouncementViewData(announcement.Id);
@@ -127,27 +94,22 @@ namespace Chalkable.Web.Controllers
         public ActionResult StartViewSession(int announcementAttachmentId)
         {
             var att = SchoolLocator.AnnouncementAttachmentService.GetAttachmentById(announcementAttachmentId);
-            var attinfo = AttachmentLogic.PrepareAttachmentInfo(att);
             try
             {
-                var wc = new WebClient();
                 var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.UserLocalId ?? 0);
                 bool isOwner = (person.Id == att.PersonRef);
                 var canAnnotate = isOwner || person.RoleRef != CoreRoles.STUDENT_ROLE.Id;
-                var nameValue = new NameValueCollection
-                    {
-                        {TOKEN, attinfo.Token},
-                        {UUID, att.Uuid},
-                        {EDITABLE, canAnnotate.ToString().ToLower()}
-                    };
                 string name = person.FirstName;
                 if (string.IsNullOrEmpty(name))
                     name = person.Email;
-                nameValue.Add(USER, string.Format("{0},{1}", person.Id, name));
-                nameValue.Add(ADMIN, isOwner.ToString().ToLower());
-
-                var str = Encoding.ASCII.GetString(wc.UploadValues(UrlTools.UrlCombine(attinfo.StorageUrl, SESSION_CREATE), nameValue));
-                var res = Serializer<StartSessionResponse>(str);
+                var res = SchoolLocator.CrocodocService.StartViewSession(new StartViewSessionRequestModel
+                    {
+                        Uuid = att.Uuid,
+                        CanAnnotate = canAnnotate,
+                        PersonId = person.Id,
+                        PersonName = name,
+                        IsOwner = isOwner
+                    });
                 return Json(res.session);
             }
             catch (Exception ex)
