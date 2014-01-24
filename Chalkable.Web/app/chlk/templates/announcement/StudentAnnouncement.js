@@ -77,6 +77,19 @@ NAMESPACE('chlk.templates.announcement', function () {
                 return '';
             },
 
+            String, function getTooltipText(){
+                var res = [];
+                if(this.isLate())
+                    res.push(Msg.Late);
+                if(this.isIncomplete())
+                    res.push(Msg.Incomplete);
+                if(this.isAbsent())
+                    res.push(Msg.Student_marked_absent);
+                if(!res.length)
+                    return '';
+                return res.join('<hr>');
+            },
+
             Object, function getGrade(value){
                 return GradingStyler.getLetterByGrade(value, this.getGradingMapping(), this.getGradingStyle())
             },

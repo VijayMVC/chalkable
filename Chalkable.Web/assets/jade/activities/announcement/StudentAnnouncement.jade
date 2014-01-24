@@ -56,7 +56,7 @@ alertsEnum = chlk.models.grading.AlertsEnum
     .i-b.grade-block
         //if(self.getApplicationsInGradeView().length || self.getAttachments().length)
         .grade-triangle
-        div(class=self.getAlertClass()).alert-flag
+        div(class=self.getAlertClass(), data-tooltip=self.getTooltipText()).alert-flag
         div(class=selectedCls + ' ' + itemCls).i-b=res
         div(class="selected " + itemCls, rowIndex=i, recId=self.getId()).i-b
             if !self.isReadonly()

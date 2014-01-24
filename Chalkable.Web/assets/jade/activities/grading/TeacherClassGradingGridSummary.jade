@@ -50,7 +50,7 @@
                                         div(row-index=i, class=(parseInt(normalValue, 10) ? '' : 'letter')).dotted-h.grade-value=normalValue
                                             cls = self.getAlertClass(info)
                                             if cls
-                                                div(class=cls, data-tooltip='<div class="p7">Absent yesterday<hr>Has disability</div>').alert-flag
+                                                div(class=cls, data-tooltip=self.getTooltipText(info)).alert-flag
                                             if info.getComment()
                                                 .with-comment
                                             .edit-cell

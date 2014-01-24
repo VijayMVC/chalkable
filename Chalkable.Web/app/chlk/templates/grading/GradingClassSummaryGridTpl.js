@@ -23,6 +23,19 @@ NAMESPACE('chlk.templates.grading', function () {
                 ];
             },
 
+            String, function getTooltipText(item){
+                var res = [];
+                if(item.isLate())
+                    res.push(Msg.Late);
+                if(item.isIncomplete())
+                    res.push(Msg.Incomplete);
+                if(item.isAbsent())
+                    res.push(Msg.Student_marked_absent);
+                if(!res.length)
+                    return '';
+                return res.join('<hr>');
+            },
+
             String, function getAlertClass(item){
                 if(item.isLate()){
                     if(!item.isIncomplete())

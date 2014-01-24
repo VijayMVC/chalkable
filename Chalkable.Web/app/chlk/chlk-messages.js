@@ -460,6 +460,7 @@ var Msg = {
         return 'Step ' + a + ' of ' + b;
     },
     Student: oneOrMany('Student'),
+    Student_marked_absent: 'Student marked as absent on the date of that item',
     Students_are_in_trouble: function(count){
         return count > 1 ? 'Students are in trouble' : 'Student is in trouble';
     },
