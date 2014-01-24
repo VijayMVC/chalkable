@@ -7,6 +7,7 @@ namespace Chalkable.BusinessLogic.Model
     {
         public int AnnouncementId { get; set; }
         public string Subject { get; set; }
+        public string Title { get; set; }
         public string Content { get; set; }
         public DateTime? ExpiresDate { get; set; }
         public int? ClassAnnouncementTypeId { get; set; }
@@ -30,7 +31,8 @@ namespace Chalkable.BusinessLogic.Model
                     WeightAddition = announcement.WeightAddition,
                     WeightMultiplier = announcement.WeightMultiplier,
                     CanDropStudentScore = announcement.MayBeDropped,
-                    HideFromStudents = !announcement.VisibleForStudent
+                    HideFromStudents = !announcement.VisibleForStudent,
+                    Title = announcement.Title
                 };
         }
     }

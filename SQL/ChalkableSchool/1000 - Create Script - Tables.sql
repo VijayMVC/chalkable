@@ -527,3 +527,7 @@ go
 alter table Announcement
 alter column MayBeDropped bit not null
 go
+alter table Announcement
+add Title nvarchar(30)
+go
+

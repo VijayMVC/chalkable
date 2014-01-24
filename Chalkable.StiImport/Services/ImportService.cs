@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
@@ -274,13 +273,13 @@ namespace Chalkable.StiConnector.Services
                 var email = string.Format(USER_EMAIL_FMT, person.PersonID, ServiceLocatorSchool.Context.DistrictId);
 
                 var personAssignments =
-                    stiEntities.StaffSchools.Where(x => x.StaffID == person.PersonID).Select(x => new SchoolPerson() { RoleRef = CoreRoles.TEACHER_ROLE.Id, SchoolRef = x.SchoolID, PersonRef = person.PersonID })
+                    stiEntities.StudentSchools.Where(x => x.StudentID == person.PersonID).Select(x => new SchoolPerson() { RoleRef = CoreRoles.STUDENT_ROLE.Id, SchoolRef = x.SchoolID, PersonRef = person.PersonID })
                                .ToList();
 
                 personAssignments.AddRange(
-                    stiEntities.StudentSchools.Where(x => x.StudentID == person.PersonID).ToList()
-                    .Where(x=>!personAssignments.Any(y=>x.StudentID == y.PersonRef && x.SchoolID == y.SchoolRef))
-                    .Select(x => new SchoolPerson { RoleRef = CoreRoles.STUDENT_ROLE.Id, SchoolRef = x.SchoolID, PersonRef = person.PersonID})
+                    stiEntities.StaffSchools.Where(x => x.StaffID == person.PersonID).ToList()
+                    .Where(x=>!personAssignments.Any(y=>x.StaffID == y.PersonRef && x.SchoolID == y.SchoolRef))
+                    .Select(x => new SchoolPerson { RoleRef = CoreRoles.TEACHER_ROLE.Id, SchoolRef = x.SchoolID, PersonRef = person.PersonID})
                 );
                 assignments.AddRange(personAssignments);
                 
