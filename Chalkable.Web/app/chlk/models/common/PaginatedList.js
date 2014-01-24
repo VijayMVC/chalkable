@@ -16,6 +16,7 @@ NAMESPACE('chlk.models.common', function () {
             Number, 'pageIndex',
             Number, 'pageSize',
             Number, 'totalCount',
+            Number, 'actualCount',
             Number, 'totalPages',
             Boolean, 'hasNextPage',
             Boolean, 'hasPreviousPage',
