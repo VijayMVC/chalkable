@@ -1,0 +1,184 @@
+{
+   "data":{
+         "ratingbyroles":[
+            {
+               "role":{
+                  "id":2,
+                  "name":"Teacher",
+                  "description":"Teacher",
+                  "namelowered":"teacher"
+               },
+               "avgrating":3,
+               "personcount":4
+            },
+             {
+                 "role":{
+                     "id":2,
+                     "name":"Teacher",
+                     "description":"Teacher",
+                     "namelowered":"teacher"
+                 },
+                 "avgrating":3,
+                 "personcount":4
+             },
+             {
+                 "role":{
+                     "id":2,
+                     "name":"Teacher",
+                     "description":"Teacher",
+                     "namelowered":"teacher"
+                 },
+                 "avgrating":3,
+                 "personcount":4
+             }
+         ],
+         "ratingbyperson":[
+            {
+               "person":{
+                  "id":1195,
+                  "displayname":"Mr. STEIN",
+                  "fullname":"ROCKY STEIN",
+                  "firstname":"ROCKY",
+                  "lastname":"STEIN",
+                  "gender":"M",
+                  "role":{
+                     "id":2,
+                     "name":"Teacher",
+                     "description":"Teacher",
+                     "namelowered":"teacher"
+                  }
+               },
+               "rating":5,
+               "review":"This looks cool"
+            },
+            {
+               "person":{
+                  "id":1195,
+                  "displayname":"Mr. STEIN",
+                  "fullname":"ROCKY STEIN",
+                  "firstname":"ROCKY",
+                  "lastname":"STEIN",
+                  "gender":"M",
+                  "role":{
+                     "id":2,
+                     "name":"Teacher",
+                     "description":"Teacher",
+                     "namelowered":"teacher"
+                  }
+               },
+               "rating":4,
+               "review":"3"
+            },
+            {
+               "person":{
+                  "id":1195,
+                  "displayname":"Mr. STEIN",
+                  "fullname":"ROCKY STEIN",
+                  "firstname":"ROCKY",
+                  "lastname":"STEIN",
+                  "gender":"M",
+                  "role":{
+                     "id":2,
+                     "name":"Teacher",
+                     "description":"Teacher",
+                     "namelowered":"teacher"
+                  }
+               },
+               "rating":1,
+               "review":"4"
+            },
+            {
+               "person":{
+                  "id":1195,
+                  "displayname":"Mr. STEIN",
+                  "fullname":"ROCKY STEIN",
+                  "firstname":"ROCKY",
+                  "lastname":"STEIN",
+                  "gender":"M",
+                  "role":{
+                     "id":2,
+                     "name":"Teacher",
+                     "description":"Teacher",
+                     "namelowered":"teacher"
+                  }
+               },
+               "rating":5,
+               "review":"2"
+            },
+             {
+                 "person":{
+                     "id":1195,
+                     "displayname":"Mr. STEIN",
+                     "fullname":"ROCKY STEIN",
+                     "firstname":"ROCKY",
+                     "lastname":"STEIN",
+                     "gender":"M",
+                     "role":{
+                         "id":2,
+                         "name":"Teacher",
+                         "description":"Teacher",
+                         "namelowered":"teacher"
+                     }
+                 },
+                 "rating":5,
+                 "review":"1"
+             },
+             {
+                 "person":{
+                     "id":1195,
+                     "displayname":"Mr. STEIN",
+                     "fullname":"ROCKY STEIN",
+                     "firstname":"ROCKY",
+                     "lastname":"STEIN",
+                     "gender":"M",
+                     "role":{
+                         "id":2,
+                         "name":"Teacher",
+                         "description":"Teacher",
+                         "namelowered":"teacher"
+                     }
+                 },
+                 "rating":4,
+                 "review":"3"
+             },
+             {
+                 "person":{
+                     "id":1195,
+                     "displayname":"Mr. STEIN",
+                     "fullname":"ROCKY STEIN",
+                     "firstname":"ROCKY",
+                     "lastname":"STEIN",
+                     "gender":"M",
+                     "role":{
+                         "id":2,
+                         "name":"Teacher",
+                         "description":"Teacher",
+                         "namelowered":"teacher"
+                     }
+                 },
+                 "rating":1,
+                 "review":"4"
+             },
+             {
+                 "person":{
+                     "id":1195,
+                     "displayname":"Mr. STEIN",
+                     "fullname":"ROCKY STEIN",
+                     "firstname":"ROCKY",
+                     "lastname":"STEIN",
+                     "gender":"M",
+                     "role":{
+                         "id":2,
+                         "name":"Teacher",
+                         "description":"Teacher",
+                         "namelowered":"teacher"
+                     }
+                 },
+                 "rating":5,
+                 "review":"2"
+             }
+         ],
+         "avg":3.75
+   },
+   "success": true
+}

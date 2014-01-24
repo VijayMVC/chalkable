@@ -1,0 +1,250 @@
+@import "partials/main/apps/_app_ratings";
+
+BODY {
+  DIV.page {
+     #content {
+        > DIV {
+          #main-wrapper {
+            #main {
+              DIV.app-general-info{
+                .app-header{
+                  margin-bottom: 55px;
+                  .app-icon{
+                    display: inline-block;
+                    padding: 5px 5px 1px 5px;
+                    background: white;
+                    border-radius: 3px;
+                    border: 1px solid #c7c7c7;
+                    margin-left: 17px;
+                    img{
+                      width: 74px;
+                      height: 74px;
+                    }
+
+                  }
+
+                  .app-description{
+                    margin-left: 25px;
+                    display: inline-block;
+                    vertical-align: top;
+
+                    .title{
+                      color: #51595d;
+                      font-size: 22px;
+                      font-family: 'Futura Heavy';
+                      margin-bottom: 9px;
+
+                      .chlk-button{
+                        font-size: 18px;
+                        margin-top: 10px;
+                        width: 90px;
+                      }
+                    }
+                    .app-status{
+                      font: bold 15px 'Saginaw Bold';
+                      display: inline-block;
+                    }
+                    .go-live-btn{
+                      margin-right: 10px;
+                    }
+                  }
+                }
+                .header{
+                  margin-top: 40px;
+                  color: #989898;
+                  text-shadow: 1px 1px 0 white;
+                  font: normal 13px Arial;
+                  text-align: center;
+                  padding: 5px 3px 4px 5px;
+                }
+                .app-installs{
+                  .button-block:hover{
+                    top: -19px !important;
+                    width: 660px;
+                  }
+                  .block{
+                    .panel-header{
+                      margin-bottom: 20px;
+                    }
+                  }
+                  .chart-block{
+                    margin-left: -20px;
+                  }
+                  .chart-bg{
+                    background: url(images/feed/chart-bg-2.png) center center no-repeat;
+                    background-size: 699px 144px;
+                    width: 699px;
+                    height: 160px;
+                    top: -30px;
+                    left: 12px;
+                    padding-top: 27px;
+                  }
+                }
+
+                .app-store-views{
+                  .app-views{
+                    .chart-bg{
+                      width:350px;
+                    }
+                  }
+                }
+
+                .app-store-balance{
+                  height: 400px;
+                  .app-store-views{
+                    text-align: center;
+                    margin-top: 40px;
+                    width: 65%;
+                    display: inline-block;
+                  }
+
+                  .app-store-current-balance{
+                    width: 35%;
+                    float: right;
+                    margin-top: 40px;
+                    display: inline-block;
+
+                    .budget-chart-container{
+                      .chart-container{
+                        position: absolute;
+                        top: -20px;
+                        left: -10px;
+                      }
+                    }
+
+                    .ticks{
+                      position: absolute;
+                      left: 55px;
+                      top: 1px;
+
+                      .tick{
+                        height: 130px;
+                        font-size: 12px;
+                        margin-right: 5px;
+                        position: absolute;
+                        width: 20px;
+                        left: 0;
+                        top: 0;
+                        @include transform-origin(bottom center);
+
+                       &.month-type-31, &.month-type-28, &.month-type-29, &.month-type-30 {
+                         &.tick1{
+                           @include transform(rotate(20deg));
+                         }
+                         &.tick5{
+                           @include transform(rotate(67deg));
+                         }
+                         &.tick10{
+                           @include transform(rotate(123deg));
+                         }
+                         &.tick15{
+                           @include transform(rotate(182deg));
+                         }
+
+                         &.tick20{
+                           @include transform(rotate(240deg));
+                         }
+
+                         &.tick25{
+                           @include transform(rotate(297deg));
+                         }
+
+                         &.tick31, &.tick28, &.tick29, &.tick30{
+                           @include transform(rotate(350deg));
+                         }
+                       }
+                      }
+                    }
+                  }
+                }
+
+                .reviews{
+                  .review-link{
+                    display: inline-block;
+                  }
+                }
+
+
+
+                //todo: move to partial
+                .budget-block{
+
+                  #budget-chart{
+                    >DIV{
+                      margin-left: -10px;
+                      margin-top: 10px;
+                    }
+                  }
+
+
+
+                  .absolute{
+                    top: 20px;
+                    left: 9px;
+                    right: 0;
+                    bottom: 0;
+
+                    .inside{
+                      display: inline-block;
+                      position: absolute;
+                      background: url(images/feed/budget-inner.png) -2px -2px no-repeat;
+                      width: 130px;
+                      height: 131px;
+                      z-index: 3;
+                      border-radius: 200px;
+                      top: 36px;
+                      left: 49px;
+                      border: 1px solid #9C9C9C;
+                      box-shadow: 0 0 11px 1px #9C9C9C;
+
+                      >DIV{
+                        text-align: center;
+
+                        &.big{
+                          margin: 40px 0 -6px 0;
+                          font: bold 30px Arial;
+                          color: $blue-color;
+                        }
+
+                        &.small{
+                          color: $gray-color;
+                          font-size: 14px;
+                          font-family: Georgia;
+                          font-style: italic;
+                        }
+                      }
+                    }
+
+                    .outside{
+                      display: inline-block;
+                      position: absolute;
+                      background: #D9D9D9;
+                      width: 170px;
+                      height: 169px;
+                      z-index: 0;
+                      border-radius: 300px;
+                      top: 17px;
+                      left: 29px;
+                      border: 1px solid #9C9C9C;
+                      box-shadow: inset 0 0 11px 1px #9C9C9C;
+                    }
+
+                    .hover-area{
+                      position: absolute;
+                      left: 16px;
+                      padding: 0;
+                      top: 3px;
+                      height: 197px;
+                      width: 197px;
+                      z-index: 5;
+                      @include border-radius(1000px);
+                    }
+                  }
+                }
+              }
+            }
+        }
+     }
+    }
+  }
+}

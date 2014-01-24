@@ -1,0 +1,14 @@
+mixin ScrollBox(formId, mustScrollId, pageSizeId, actualCountId, startId)
+    -attributes.formId = formId
+    -attributes.mustScrollField = mustScrollId
+    -attributes.pageSizeId = pageSizeId
+    -attributes.actualCountField = actualCountId
+    -attributes.startField = startId
+    -self.processAttrs(attributes)
+    .chlk-scrollbox.with-scroller(attributes)
+        block
+        .scrollbox-loader.horizontal-loader.x-hidden
+
+
+
+
