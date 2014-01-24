@@ -70,6 +70,24 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.AnnouncementService.DeleteAnnouncements(personId);
             return Json(true);
         }
+        
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        public ActionResult EditTitle(int announcementId, string title)
+        {
+            if (!SchoolLocator.AnnouncementService.Exists(title))
+            {
+                SchoolLocator.AnnouncementService.EditTitle(announcementId, title);
+                return Json(true);
+            }
+            return Json(false);
+        }
+        
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        public ActionResult Exists(string title)
+        {
+            return Json(SchoolLocator.AnnouncementService.Exists(title));
+        }
+
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult Edit(int announcementId)

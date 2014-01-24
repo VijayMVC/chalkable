@@ -19,6 +19,7 @@ namespace Chalkable.Data.School.Model
         public const string STATE_FIELD = "State";
         public const string CLASS_REF_FIELD = "ClassRef";
         public const string CLASS_ANNOUNCEMENT_TYPE_REF_FIELD = "ClassAnnouncementTypeRef";
+        public const string TITLE_FIELD = "Title";
 
         [PrimaryKeyFieldAttr]
         [IdentityFieldAttr]
@@ -43,6 +44,8 @@ namespace Chalkable.Data.School.Model
         public bool VisibleForStudent { get; set; }
 
         public int SchoolRef { get; set; }
+
+        public string Title { get; set; }
     }
 
 
@@ -75,15 +78,25 @@ namespace Chalkable.Data.School.Model
             get { return State == AnnouncementState.Draft; }
         }
 
-        public string Title
+        //public string Title
+        //{
+        //    get
+        //    {
+        //        if (!ClassAnnouncementTypeRef.HasValue)
+        //        {
+        //            return Subject;
+        //        }
+        //        return !string.IsNullOrEmpty(ClassName) ? ClassName : "All";
+        //    }
+        //}
+
+        public string DefaultTitle
         {
             get
             {
-                if (!ClassAnnouncementTypeRef.HasValue)
-                {
-                    return Subject;
-                }
-                return !string.IsNullOrEmpty(ClassName) ? ClassName : "All";
+                return ClassAnnouncementTypeRef.HasValue
+                    ? string.Format("{0} {1}", ClassAnnouncementTypeName, Order) 
+                    : null;
             }
         }
 

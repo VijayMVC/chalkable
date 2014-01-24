@@ -219,6 +219,15 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             if(anns.Count == 0) return new List<string>();
             return anns.Select(x => x.Content).ToList();
         }
+
+        public bool Exists(string title)
+        {
+            return Exists<Announcement>(new AndQueryCondition
+                {
+                    {Announcement.TITLE_FIELD, title},
+                    //{Announcement.CLASS_REF_FIELD, classId}
+                });
+        }
     }
 
     public class AnnouncementsQuery
