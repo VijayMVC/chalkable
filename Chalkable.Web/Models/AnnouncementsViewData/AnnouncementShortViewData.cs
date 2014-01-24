@@ -10,6 +10,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
     {
         public int Id { get; set; }
         public string Title { get; set; }
+        public string DefaultTitle { get; set; }
         public string AnnouncementTypeName { get; set; }
         public int? AnnouncementTypeId { get; set; }
         public int? ChalkableAnnouncementTypeId { get; set; }
@@ -29,7 +30,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         protected AnnouncementShortViewData(AnnouncementComplex announcement)
         {
             Id = announcement.Id;
-            Title = announcement.Title;
+            DefaultTitle = announcement.DefaultTitle;
+            Title = announcement.Title ?? DefaultTitle;
             AnnouncementTypeId = announcement.ClassAnnouncementTypeRef;
             AnnouncementTypeName = announcement.ClassAnnouncementTypeName;
             ChalkableAnnouncementTypeId = announcement.ChalkableAnnouncementType;

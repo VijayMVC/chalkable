@@ -23,6 +23,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string Content { get; set; }
         public string ShortContent { get; set; }
 
+
         public decimal? MaxScore { get; set; }
         public decimal? WeightMultiplier { get; set; }
         public decimal? WeightAddition { get; set; }
