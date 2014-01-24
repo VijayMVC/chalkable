@@ -158,6 +158,7 @@ NAMESPACE('chlk.services', function () {
                         model.setItems(Serializer.deserialize(data.data, ArrayOf(clazz)));
                         model.setPageIndex(Number(data.pageindex));
                         model.setPageSize(Number(data.pagesize));
+                        model.setActualCount(Number((data.data || []).length));
                         model.setTotalCount(Number(data.totalcount));
                         model.setTotalPages(Number(data.totalpages));
                         model.setHasNextPage(Boolean(data.hasnextpage));

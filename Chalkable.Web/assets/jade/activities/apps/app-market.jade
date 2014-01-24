@@ -22,7 +22,7 @@ mixin AppIconLink(app)
 
     +ActionForm('appmarket', 'list')#app-market-filter
         +Hidden('start',self.apps.getPageIndex()) * self.apps.getPageSize())
-        +Hidden('totalCount', self.apps.getTotalCount())
+        +Hidden('actualCount', self.apps.getActualCount())
         +Hidden('pageSize', self.apps.getPageSize())
         +Hidden('scroll', 0)
         .app-filter
