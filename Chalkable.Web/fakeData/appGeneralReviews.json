@@ -1,38 +1,5 @@
 {
-   "data":{
-         "ratingbyroles":[
-            {
-               "role":{
-                  "id":2,
-                  "name":"Teacher",
-                  "description":"Teacher",
-                  "namelowered":"teacher"
-               },
-               "avgrating":3,
-               "personcount":4
-            },
-             {
-                 "role":{
-                     "id":2,
-                     "name":"Teacher",
-                     "description":"Teacher",
-                     "namelowered":"teacher"
-                 },
-                 "avgrating":3,
-                 "personcount":4
-             },
-             {
-                 "role":{
-                     "id":2,
-                     "name":"Teacher",
-                     "description":"Teacher",
-                     "namelowered":"teacher"
-                 },
-                 "avgrating":3,
-                 "personcount":4
-             }
-         ],
-         "ratingbyperson":[
+   "data":[
             {
                "person":{
                   "id":1195,
@@ -176,9 +143,49 @@
                  },
                  "rating":5,
                  "review":"2"
-             }
+             },
+               {
+           "person":{
+               "id":1195,
+               "displayname":"Mr. STEIN",
+               "fullname":"ROCKY STEIN",
+               "firstname":"ROCKY",
+               "lastname":"STEIN",
+               "gender":"M",
+               "role":{
+                   "id":2,
+                   "name":"Teacher",
+                   "description":"Teacher",
+                   "namelowered":"teacher"
+               }
+           },
+           "rating":5,
+           "review":"2"
+       },
+       {
+           "person":{
+               "id":1195,
+               "displayname":"Mr. STEIN",
+               "fullname":"ROCKY STEIN",
+               "firstname":"ROCKY",
+               "lastname":"STEIN",
+               "gender":"M",
+               "role":{
+                   "id":2,
+                   "name":"Teacher",
+                   "description":"Teacher",
+                   "namelowered":"teacher"
+               }
+           },
+           "rating":5,
+           "review":"2"
+       }
          ],
-         "avg":3.75
-   },
+   "pageindex":0,
+   "pagesize":10,
+   "totalcount":50,
+   "totalpages":5,
+   "haspreviouspage":false,
+   "hasnextpage":false,
    "success": true
 }

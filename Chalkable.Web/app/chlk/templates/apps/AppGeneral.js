@@ -34,7 +34,10 @@ NAMESPACE('chlk.templates.apps', function () {
             String, 'appThumbnail',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.apps.AppRating, 'appRating',
+            Number, 'appRating',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.common.PaginatedList, 'appReviews',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.developer.HomeAnalytics, 'appAnalytics',

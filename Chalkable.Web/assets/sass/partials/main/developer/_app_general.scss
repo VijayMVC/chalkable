@@ -159,6 +159,11 @@ BODY {
                 }
 
                 .reviews{
+                  .chlk-scrollbox{
+                    position: relative;
+                  }
+                  display: block;
+                  width: auto !important;
                   .review-link{
                     display: inline-block;
                   }
