@@ -144,11 +144,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult SaveAnnouncement(AnnouncementInfo announcementInfo, int? classId)
         {
             var ann = Save(announcementInfo, classId);
-            return Json(new CreateAnnouncementViewData
-                {
-                    IsDraft = ann.IsDraft,
-                    Announcement = AnnouncementViewData.Create(ann)
-                });
+            return Json(AnnouncementViewData.Create(ann));
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
