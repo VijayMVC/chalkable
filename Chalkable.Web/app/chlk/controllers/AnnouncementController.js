@@ -446,7 +446,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(model){
                     chlk.controls.updateWeekCalendar();
-                    return this.Redirect('feed', 'list', []);
+                    return this.BackgroundNavigate('feed', 'list', []);
                 }, this);
         },
 
@@ -457,7 +457,7 @@ NAMESPACE('chlk.controllers', function (){
                 .deleteDrafts(schoolPersonId)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    return this.Redirect('feed', 'list', []);
+                    return this.BackgroundNavigate('feed', 'list', []);
                 }, this);
         },
 
@@ -637,10 +637,10 @@ NAMESPACE('chlk.controllers', function (){
             }
             res && res.then(function(){
                 if(isEdit)
-                    this.Redirect('announcement', 'view', [model.getId()]);
+                    return this.BackgroundNavigate('announcement', 'view', [model.getId()]);
                 else{
                     chlk.controls.updateWeekCalendar();
-                    this.Redirect('feed', 'list', []);
+                    return this.BackgroundNavigate('feed', 'list', []);
                 }
             }, this);
             return res;

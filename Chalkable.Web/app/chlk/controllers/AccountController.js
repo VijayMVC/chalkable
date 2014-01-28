@@ -28,7 +28,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(success){
                     if (success)
-                        return this.Redirect('settings', 'dashboardTeacher', []);
+                        return this.BackgroundNavigate('settings', 'dashboardTeacher', []);
                 }, this);
         },
 

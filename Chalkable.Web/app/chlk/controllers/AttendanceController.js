@@ -103,7 +103,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.attendance.AttendanceList]],
-        VOID, function setAttendanceForListAction(model){
+        function setAttendanceForListAction(model){
             if(model.getClassIds()){
                 this.attendanceService.setAttendanceForList(model.getPersonId(), model.getClassIds(), model.getAttendanceTypes(), model.getAttReasons(), model.getDate())
                     .attach(this.validateResponse_())
@@ -115,7 +115,7 @@ NAMESPACE('chlk.controllers', function (){
                             if(model.isNewStudent()){
                                 params.push(model.getAttendanceTypes());
                             }
-                            this.Redirect(controller, action, params);
+                            return this.BackgroundNavigate(controller, action, params);
                         }
                     }, this);
             }
@@ -180,7 +180,7 @@ NAMESPACE('chlk.controllers', function (){
                 .markAllPresent(classId, date)
                 .attach(this.validateResponse_())
                 .then(function(success){
-                    this.Redirect('attendance', 'classList', [classId, date, true, isProfile_]);
+                    return this.BackgroundNavigate('attendance', 'classList', [classId, date, true, isProfile_]);
                   //  this.classListAction(classId, date, true, isProfile_);
                 }, this);
             //return this.ShadeLoader();
@@ -213,7 +213,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean, Boolean]],
         function classListAction(classId, date_, isUpdate_, isProfile_) {
             if(!classId.valueOf())
-                return this.Redirect('attendance', 'summary', []);
+                return this.BackgroundNavigate('attendance', 'summary', []);
             var result = this.attendanceService
                 .getClassList(classId, date_)
                 .attach(this.validateResponse_())

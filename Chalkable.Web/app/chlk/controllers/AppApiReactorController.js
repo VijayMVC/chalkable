@@ -27,7 +27,7 @@ NAMESPACE('chlk.controllers', function (){
                         .then(function(result){
                             this.getView().pop();
                             this.getView().pop();
-                            return this.Redirect('announcement', 'addAppAttachment', [result]);
+                            return this.BackgroundNavigate('announcement', 'addAppAttachment', [result]);
                         }, this);
                 }
                 else {
