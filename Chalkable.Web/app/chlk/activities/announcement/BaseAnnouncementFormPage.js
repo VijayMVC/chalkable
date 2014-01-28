@@ -50,6 +50,12 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }, 10);
             },
 
+            [ria.mvc.DomEventBind('click', '.submit-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function submitClick(node, event){
+                this.dom.find('#save-form-button').remove();
+            },
+
             [ria.mvc.DomEventBind('change', '.reminder-input')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function inputChange(node, event){
