@@ -158,7 +158,7 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function submitAnnouncement(id, classId_, announcementTypeId_, title_, content_
                 , expiresdate_, attachments_, applications_, markingPeriodId_, maxScore_, weightAddition_, weighMultiplier_
                 , hideFromStudent_, canDropStudentScore_) {
-                return this.get('Announcement/SubmitAnnouncement.json', chlk.models.announcement.AnnouncementForm, {
+                return this.get('Announcement/SubmitAnnouncement.json', Boolean, {
                     announcementid:id.valueOf(),
                     classannouncementtypeid:announcementTypeId_,
                     classId: classId_ ? classId_.valueOf() : null,
