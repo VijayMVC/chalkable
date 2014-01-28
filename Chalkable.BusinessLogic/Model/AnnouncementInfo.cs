@@ -18,6 +18,14 @@ namespace Chalkable.BusinessLogic.Model
         public bool CanDropStudentScore { get; set; }
         public bool HideFromStudents { get; set; }
 
+
+        public AnnouncementInfo()
+        {
+            MaxScore = 100;
+            WeightAddition = 0;
+            WeightMultiplier = 1;
+        }
+
         public static AnnouncementInfo Create(Announcement announcement)
         {
             return new AnnouncementInfo
