@@ -47,9 +47,9 @@ namespace Chalkable.StiConnector.Connectors
             if(end.HasValue)
                 optinalParams.Add("end", end.Value.ToString());
             if(startDate.HasValue)
-                optinalParams.Add("startDate", startDate.Value.ToString());
+                optinalParams.Add("startDate", startDate.Value.ToString("yyyy-MM-dd"));
             if(endDate.HasValue)
-                optinalParams.Add("endDate", endDate.Value.ToString());
+                optinalParams.Add("endDate", endDate.Value.ToString("yyyy-MM-dd"));
             return Call<IList<Activity>>(url, optinalParams);
         }
 
