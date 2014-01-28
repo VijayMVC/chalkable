@@ -207,6 +207,10 @@ NAMESPACE('chlk.models.announcement', function () {
 
             String, 'title',
 
+            String, function getNormalTitle(){
+                return this.getTitle() || (this.getAnnouncementTypeName() + ' ' + this.getOrder());
+            },
+
             [ria.serialize.SerializeProperty('wasannouncementtypegraded')],
             Boolean, 'wasAnnouncementTypeGraded',
 

@@ -18,12 +18,24 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
     +Hidden('state', announcement.getState())
     +Hidden('isedit', !!announcement.getState())(data-isedit = !!announcement.getState()).is-edit
     +Hidden('classid', classId)
+    +Hidden('order', announcement.getOrder()).order-value
     +Hidden('announcementtypename', announcement.getAnnouncementTypeName())
 
     //+AnnouncementFormDescriptionBlock(announcement)
     typesEnum = chlk.models.announcement.AnnouncementTypeEnum
     isAdminAnnouncement = adminRecipients && announcement.isAdminAnnouncement()
     isAnnouncement = (announcement.isStandartAnnouncement() || isAdminAnnouncement)
+    if !isAdminAnnouncement
+        .title-block-container
+            .title-block
+                .title-text=announcement.getNormalTitle()
+                .edit-icon
+                .input-container
+                    INPUT(id="title",name="title",class="validate[required]", value=announcement.getNormalTitle())
+                    div(data-tooltip=Msg.Name_already_taken).exists-icon
+                BUTTON(disabled, name="submitType", value="saveTitle", type="submit").validate-skip.big-button.blue-gradient-btn.save-title-btn=Msg.Save
+                BUTTON(name="submitType", value="checkTitle", type="submit")#check-title-button.validate-skip.x-hidden
+
     .left-block
         if isAdminAnnouncement
             .buttons-container
@@ -43,7 +55,6 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                     ).admin-gray.new-input=text
             .recipient-part
                 +RenderWith(adminRecipients, chlk.templates.announcement.AdminRecipients)
-        TEXTAREA(id="title",name="title",class="validate[required]")=announcement.getTitle()
         +TextArea(id="content",name="content",placeholder=isAnnouncement ? "Message" : "Assignment")=announcement.getContent()
         if !isAdminAnnouncement
             .add-standards

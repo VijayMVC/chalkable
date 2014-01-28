@@ -188,6 +188,10 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             String, 'title',
 
+            String, function getNormalTitle(){
+                return this.getTitle() || (this.getAnnouncementTypeName() + ' ' + this.getOrder());
+            },
+
             [ria.templates.ModelPropertyBind],
             Boolean, 'wasAnnouncementTypeGraded',
 

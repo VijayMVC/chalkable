@@ -53,3 +53,9 @@
   #{$property}: -webkit-calc(#{$expression}); 
   #{$property}: calc(#{$expression}); 
 }
+
+@mixin transparent-item() {
+  background: transparent;
+  border: none !important;
+  @include box-shadow(none);
+}

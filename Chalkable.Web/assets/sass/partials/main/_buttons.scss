@@ -2,6 +2,10 @@
   background: url(images/icons/add-item.png) 5px 50% no-repeat;
 }
 
+button.disabled, button[disabled]{
+  opacity: 0.6;
+}
+
 .small-grey-buttons-block{
   .small-grey-button{
     width:29px;
@@ -440,6 +444,14 @@
       background: transparent;
       border: 0;
       color: white;
+      margin: 0;
+    }
+
+    &.big-button{
+      vertical-align: top;
+      font-size: 14px;
+      text-transform: uppercase;
+      padding: 7px 19px;
     }
 
     @include background(linear-gradient(top, #568da7, #2f667d));

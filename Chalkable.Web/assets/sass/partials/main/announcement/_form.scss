@@ -3,6 +3,8 @@
 @import "compass/css3/transform";
 @import "compass/css3/box-shadow";
 
+@import "partials/_mixins";
+
 .attachments-and-applications {
   width: 600px;
 
@@ -433,18 +435,99 @@ BODY {
               }
             }
 
+            .title-block{
+              padding-bottom: 14px;
+              display: inline-block;
+
+              input, button{
+                vertical-align: top;
+              }
+
+              button{
+                margin: 0 18px;
+              }
+
+              .title-text{
+                max-width: 362px;
+                padding: 8px 10px 4px;
+                margin-bottom: 0;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                cursor: pointer;
+                display: none;
+              }
+
+              .input-container{
+                position: relative;
+                display: inline-block;
+
+                .exists-icon{
+                  position: absolute;
+                  display: none;
+                  background: url(images/grading/exists.png) 0px 0px no-repeat;
+                  width: 25px;
+                  height: 27px;
+                  top: 6px;
+                  right: 6px;
+                }
+              }
+
+              .edit-icon{
+                display: none;
+                background: url(images/announcement/edit-title.png) 0px 0px no-repeat;
+                width: 14px;
+                height: 15px;
+                vertical-align: top;
+                margin-top: 10px;
+              }
+
+              .title-text, #title{
+                font: bold 16px Arial;
+                height: 20px;
+                color: #808080;
+              }
+
+              #title{
+                padding: 7px 9px;
+              }
+
+              input#title{
+                width: 267px;
+              }
+
+              &.exists{
+                .exists-icon{
+                  display: inline-block;
+                }
+              }
+
+              &:not(.active){
+                &:hover{
+                  .edit-icon{
+                    display: inline-block;
+                  }
+                }
+
+                button{
+                  display: none;
+                }
+
+                input{
+                  display: none;
+                }
+
+                .title-text{
+                  display: inline-block;
+                }
+              }
+            }
+
             TEXTAREA, .text-field{
               padding: 4px 4px 8px;
               width: 370px;
               font-size: 14px;
               margin-bottom: 15px;
               border: 1px solid #a1a1a1;
-
-              &#title{
-                height: 22px;
-                width: 277px;
-                font: bold 16px Arial;
-              }
 
               &#content{
                 height: 100px !important;

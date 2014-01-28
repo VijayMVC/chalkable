@@ -4,9 +4,11 @@ REQUIRE('chlk.templates.announcement.Announcement');
 REQUIRE('chlk.templates.announcement.AnnouncementReminder');
 REQUIRE('chlk.templates.announcement.LastMessages');
 REQUIRE('chlk.templates.classes.TopBar');
+REQUIRE('chlk.templates.SuccessTpl');
 
 NAMESPACE('chlk.activities.announcement', function () {
 
+    var titleTimeout;
 
     /** @class chlk.activities.announcement.AnnouncementFormPage*/
     CLASS(
@@ -28,6 +30,23 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
+            [ria.mvc.DomEventBind('click', '.title-text')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function titleClick(node, event){
+                var parent = node.parent('.title-block');
+                parent.addClass('active');
+                setTimeout(function(){
+                    parent.find('#title').trigger('focus');
+                }, 1)
+            },
+
+            [ria.mvc.DomEventBind('click', '.save-title-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function saveClick(node, event){
+                this.dom.find('.title-text').setHTML(this.dom.find('#title').getValue());
+                node.setAttr('disabled', true);
+            },
+
             [ria.mvc.DomEventBind('click', '.action-button')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function typeClick(node, event){
@@ -35,6 +54,53 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var typeName = node.getAttr('typeName');
                 this.dom.find('input[name=announcementtypeid]').setValue(typeId);
                 this.dom.find('input[name=announcementtypename]').setValue(typeName);
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, chlk.activities.lib.DontShowLoader())],
+            VOID, function doUpdateTitle(tpl, model, msg_) {
+                if(!model.isData()){
+                    this.dom.find('.save-title-btn').setAttr('disabled', false);
+                    this.dom.find('.title-block').removeClass('exists');
+                }else{
+                    this.dom.find('.save-title-btn').setAttr('disabled', true);
+                    this.dom.find('.title-block').addClass('exists');
+                }
+            },
+
+            [ria.mvc.DomEventBind('keyup', '#title')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function titleKeyUp(node, event){
+                var dom = this.dom, node = node;
+                if(!node.getValue() || !node.getValue().trim()){
+                    dom.find('.save-title-btn').setAttr('disabled', true);
+                }else{
+                    if(node.getValue() == node.parent('.title-block').find('.title-text').getHTML()){
+                        dom.find('.title-block').removeClass('exists');
+                        dom.find('.save-title-btn').setAttr('disabled', true);
+                    }else{
+                        titleTimeout && clearTimeout(titleTimeout);
+                        titleTimeout = setTimeout(function(){
+                            dom.find('#check-title-button').trigger('click');
+                        }, 100);
+                    }
+                }
+
+            },
+
+            OVERRIDE, VOID, function onRender_(model){
+                BASE(model);
+                var dom = this.dom;
+                new ria.dom.Dom().on('click.title', function(node, event){
+                    var target = new ria.dom.Dom(event.target);
+                    if(!target.parent('.title-block').exists() || target.hasClass('save-title-btn'))
+                        dom.find('.title-block')
+                            .removeClass('active');
+                });
+            },
+
+            OVERRIDE, VOID, function onStop_() {
+                BASE();
+                new ria.dom.Dom().off('click.title');
             }
          ]
     );

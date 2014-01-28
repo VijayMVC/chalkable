@@ -514,47 +514,46 @@ NAMESPACE('chlk.controllers', function (){
             var classId = model.getClassId();
             model.setMarkingPeriodId(session.get('markingPeriod').getId());
 
-            if(submitType == 'listLast'){
-                if(!this.userIsAdmin()){
-                    result = this.announcementService
-                        .listLast(classId, announcementTypeId,schoolPersonId)
-                        .attach(this.validateResponse_())
-                        .then(function(data){
-                            var model = new chlk.models.announcement.LastMessages();
-                            model.setItems(data);
-                            model.setAnnouncementTypeName(announcementTypeName);
-                            return new ria.async.DeferredData(model);
-                        }, this);
-                    return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());
-                }
-            }else{
-                if(submitType == 'save'){
-                    model.setAnnouncementAttachments(this.getContext().getSession().get('AnnouncementAttachments'));
+            switch(submitType){
+                case 'listLast': if(!this.userIsAdmin()){
+                        result = this.announcementService
+                            .listLast(classId, announcementTypeId,schoolPersonId)
+                            .attach(this.validateResponse_())
+                            .then(function(data){
+                                var model = new chlk.models.announcement.LastMessages();
+                                model.setItems(data);
+                                model.setAnnouncementTypeName(announcementTypeName);
+                                return new ria.async.DeferredData(model);
+                            }, this);
+                        return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());
+                    };break;
+                case 'saveTitle': this.announcementService
+                    .editTitle(model.getId(), model.getTitle());break;
+                case 'checkTitle': var res = this.announcementService
+                    .existsTitle(model.getTitle())
+                    .then(function(success){
+                        return new chlk.models.Success(success);
+                    });
+                    return this.UpdateView(this.getAnnouncementFormPageType_(), res, chlk.activities.lib.DontShowLoader());break;
+                case 'save': model.setAnnouncementAttachments(this.getContext().getSession().get('AnnouncementAttachments'));
                     model.setApplications(this.getContext().getSession().get('AnnoucementApplications'));
                     var announcementForm = new chlk.models.announcement.AnnouncementForm();
                     announcementForm.setAnnouncement(model);
                     result = this.addEditAction(announcementForm, false);
                     this.saveAnnouncement(model);
-                    return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());
-                }else{
-                    if(submitType == 'saveNoUpdate'){
-                        this.saveAnnouncement(model);
+                    return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());break;
+                case 'saveNoUpdate': this.saveAnnouncement(model);break;
+                default: if(!this.userInRole(chlk.models.common.RoleEnum.ADMINEDIT) && !this.userInRole(chlk.models.common.RoleEnum.ADMINVIEW)
+                        && session.get('finalizedClassesIds').indexOf(classId.valueOf()) > -1){
+                            var nextMp = model.setMarkingPeriodId(session.get('nextMarkingPeriod'));
+                            if(nextMp){
+                                if(this.submitAnnouncement(model, submitType == 'submitOnEdit'))
+                                    return this.ShadeLoader();
+                            }
                     }else{
-                    //TODO nextMarkingPeriod
-
-                        if(!this.userInRole(chlk.models.common.RoleEnum.ADMINEDIT) && !this.userInRole(chlk.models.common.RoleEnum.ADMINVIEW)
-                            && session.get('finalizedClassesIds').indexOf(classId.valueOf()) > -1){
-                                var nextMp = model.setMarkingPeriodId(session.get('nextMarkingPeriod'));
-                                if(nextMp){
-                                    if(this.submitAnnouncement(model, submitType == 'submitOnEdit'))
-                                        return this.ShadeLoader();
-                                }
-                        }else{
-                            if(this.submitAnnouncement(model, submitType == 'submitOnEdit'))
-                                return this.ShadeLoader();
-                        }
+                        if(this.submitAnnouncement(model, submitType == 'submitOnEdit'))
+                            return this.ShadeLoader();
                     }
-                }
             }
         },
 

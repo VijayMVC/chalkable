@@ -402,6 +402,7 @@ var Msg = {
     My_Apps: 'My Apps',
     My_Students: 'My Students',
     My_Teachers: 'My Teachers',
+    Name_already_taken: 'Name already taken',
     Needs_improvement: 'Needs improvement',
     Next_Class: 'Next Class',
     New_Item: 'New Item',

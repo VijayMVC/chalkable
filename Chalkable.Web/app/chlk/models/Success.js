@@ -3,6 +3,13 @@ NAMESPACE('chlk.models', function () {
     /** @class chlk.models.Success*/
     CLASS(
         'Success', [
-            Boolean, 'data'
+            Boolean, 'data',
+
+            [[Boolean]],
+            function $(success_){
+                BASE();
+                if(success_ !== undefined)
+                    this.setData(success_);
+            }
         ]);
 });

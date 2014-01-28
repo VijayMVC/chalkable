@@ -52,7 +52,6 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId, Boolean]],
             ria.async.Future, function setShowGradesToStudents(announcementId, value) {
-                console.info('setShowGradesToStudents', announcementId, value);
                 return ria.async.DeferredData(true);
             },
 
@@ -63,6 +62,21 @@ NAMESPACE('chlk.services', function () {
                     needsDownload: needsDownload,
                     width: width,
                     height: height
+                });
+            },
+
+            [[chlk.models.id.AnnouncementId, String]],
+            ria.async.Future, function editTitle(announcementId, title) {
+                return this.get('Announcement/EditTitle.json', Boolean, {
+                    announcementId: announcementId.valueOf(),
+                    title: title
+                });
+            },
+
+            [[String]],
+            ria.async.Future, function existsTitle(title) {
+                return this.get('Announcement/Exists.json', Boolean, {
+                    title: title
                 });
             },
 
