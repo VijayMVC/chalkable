@@ -10,6 +10,7 @@ REQUIRE('chlk.models.apps.AppAccess');
 REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.apps.ShortAppInfo');
 REQUIRE('chlk.models.apps.BannedAppData');
+REQUIRE('chlk.models.apps.AppPersonRating');
 
 REQUIRE('chlk.models.id.GradeLevelId');
 REQUIRE('chlk.models.id.SchoolPersonId');
@@ -268,11 +269,12 @@ NAMESPACE('chlk.services', function () {
                     });
             },
 
-            [[chlk.models.id.AppId]],
-            ria.async.Future, function getAppReviews(appId){
+            [[chlk.models.id.AppId, Number]],
+            ria.async.Future, function getAppReviews(appId, start_){
                 return this
-                    .post('Application/GetAppReviews.json', chlk.models.apps.AppRating, {
-                        applicationId: appId.valueOf()
+                    .getPaginatedList('Application/GetAppReviews.json', chlk.models.apps.AppPersonRating, {
+                        applicationId: appId.valueOf(),
+                        start: start_ || 0
                     });
             },
 

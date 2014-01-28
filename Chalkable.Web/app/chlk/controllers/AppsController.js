@@ -22,6 +22,7 @@ REQUIRE('chlk.models.apps.AppScreenshots');
 REQUIRE('chlk.models.apps.AppGeneralInfoViewData');
 REQUIRE('chlk.models.apps.AppWrapperViewData');
 REQUIRE('chlk.models.developer.HomeAnalytics');
+REQUIRE('chlk.models.apps.AppPersonReviewPostData');
 
 REQUIRE('chlk.models.id.AppId');
 REQUIRE('chlk.models.id.AppPermissionId');
@@ -517,6 +518,32 @@ NAMESPACE('chlk.controllers', function (){
              return result;
         },
 
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DEVELOPER
+        ])],
+
+        [[chlk.models.apps.AppPersonReviewPostData]],
+        function getAppReviewsAction(data){
+            var scroll = data.isScroll();
+            var result = this.appsService
+                .getAppReviews(data.getAppId(), data.getStart())
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return new chlk.models.apps.AppGeneralInfoViewData(
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        0,
+                        data,
+                        new chlk.models.developer.HomeAnalytics()
+                    );
+                })
+            return this.UpdateView(chlk.activities.apps.AppGeneralInfoPage, result, 'loadReviews');
+        },
+
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
@@ -539,7 +566,7 @@ NAMESPACE('chlk.controllers', function (){
                             )
                             .attach(this.validateResponse_())
                             .then(function(res){
-                               var appReview = res[1];
+                               var appReviews = res[1];
                                var analytics = res[0];
 
                                return new chlk.models.apps.AppGeneralInfoViewData(
@@ -548,7 +575,8 @@ NAMESPACE('chlk.controllers', function (){
                                     data.getLiveAppId(),
                                     data.getState(),
                                     pictureUrl,
-                                    appReview || new chlk.models.apps.AppRating(),
+                                    5, //todo: pass rating,
+                                    appReviews,
                                     analytics || new chlk.models.developer.HomeAnalytics()
                                );
                             });

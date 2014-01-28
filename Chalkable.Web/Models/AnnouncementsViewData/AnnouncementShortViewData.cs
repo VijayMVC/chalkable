@@ -41,7 +41,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             ClassId = announcement.ClassRef;
             ClassName = announcement.ClassName;
             Dropped = announcement.Dropped;
-            ExpiresDate = announcement.Expires;
+            ExpiresDate = announcement.Expires == DateTime.MinValue ? (DateTime?)null : announcement.Expires;
             Order = announcement.Order;
             IsOwner = announcement.IsOwner;
             Subject = announcement.Subject;

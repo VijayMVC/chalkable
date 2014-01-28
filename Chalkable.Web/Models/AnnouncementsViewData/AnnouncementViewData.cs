@@ -57,14 +57,9 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             AttachmentsCount = announcement.AttachmentsCount;
             OwnerAttachmentsCount = announcement.OwnerAttachmentsCount;
             QnACount = announcement.QnACount;
-            ExpiresDate = announcement.Expires == DateTime.MinValue ? (DateTime?)null : announcement.Expires;
-            IsOwner = announcement.IsOwner;
             Gradable = isGradable;
             Starred = announcement.Starred ?? false;
-            Id = announcement.Id;
-            Order = announcement.Order;
             State = (int)announcement.State;
-            Title = announcement.Title;
             RecipientId = announcement.ClassRef;
             Content = announcement.Content;
 
@@ -86,7 +81,6 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             WasAnnouncementTypeGraded = wasAnnouncementTypeGraded;
             ShowGradingIcon = StudentsCount > 0 && StudentsCountWithAttachments * 4 > StudentsCount || GradingStudentsCount > 0;
             //ApplicationName = announcement.ApplicationName;
-            Dropped = announcement.Dropped;
         }
 
 

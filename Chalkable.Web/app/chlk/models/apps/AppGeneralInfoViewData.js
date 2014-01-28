@@ -1,5 +1,4 @@
 REQUIRE('chlk.models.id.AppId');
-REQUIRE('chlk.models.apps.AppRating');
 REQUIRE('chlk.models.developer.HomeAnalytics');
 
 NAMESPACE('chlk.models.apps', function () {
@@ -13,8 +12,9 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'appThumbnail',
             String, 'appStatus',
             String, 'appName',
+            Number, 'appRating',
             chlk.models.apps.AppState,  'appState',
-            chlk.models.apps.AppRating, 'appRating',
+            chlk.models.common.PaginatedList, 'appReviews',
             chlk.models.developer.HomeAnalytics, 'appAnalytics',
 
             [[
@@ -23,10 +23,11 @@ NAMESPACE('chlk.models.apps', function () {
                 chlk.models.id.AppId,
                 chlk.models.apps.AppState,
                 String,
-                chlk.models.apps.AppRating,
+                Number,
+                chlk.models.common.PaginatedList,
                 chlk.models.developer.HomeAnalytics
             ]],
-            function $(appName, draftId, liveId_, appState, appThumbnail, appRating, appAnalytics){
+            function $(appName, draftId, liveId_, appState, appThumbnail, appRating, appReviews, appAnalytics){
                 BASE();
                 this.setAppName(appName);
                 this.setDraftAppId(draftId);
@@ -35,12 +36,9 @@ NAMESPACE('chlk.models.apps', function () {
                 this.setAppThumbnail(appThumbnail);
                 this.setAppLive(liveId_ && liveId_.valueOf() != null);
                 this.setAppState(appState);
-                if (!appRating.getRoleRatings())
-                    appRating.setRoleRatings([]);
-                if (!appRating.getPersonRatings())
-                    appRating.setPersonRatings([]);
-                this.setAppRating(appRating);
                 this.setAppAnalytics(appAnalytics);
+                this.setAppRating(appRating);
+                this.setAppReviews(appReviews);
             }
         ]);
 });

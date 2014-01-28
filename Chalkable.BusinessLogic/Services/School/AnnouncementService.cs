@@ -235,6 +235,7 @@ namespace Chalkable.BusinessLogic.Services.School
             activity.Description = ann.Content;
             activity.DisplayInHomePortal = ann.VisibleForStudent;
             activity.Name = ann.Title;
+            activity.Unit = string.Empty;
         }
 
         public IList<AnnouncementComplex> GetAnnouncements(string filter)
@@ -389,7 +390,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     res.WeightMultiplier = announcement.WeightMultiplier;
                     res.MayBeDropped = announcement.CanDropStudentScore;
                     res.VisibleForStudent = !announcement.HideFromStudents;
-
                 }
                 if (BaseSecurity.IsAdminViewer(Context))
                     res.ClassAnnouncementTypeRef = null;
