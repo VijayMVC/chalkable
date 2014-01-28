@@ -52,6 +52,16 @@ NAMESPACE('chlk.controllers', function (){
                return head;
            },
 
+           function BackgroundNavigate(controller, action, args_) {
+               this.context.getDefaultView().queueViewResult(this.Redirect(controller, action, args_));
+               return null;
+           },
+
+           function BackgroundCloseView(activityClass) {
+               this.context.getDefaultView().queueViewResult(this.CloseView(activityClass));
+               return null;
+           },
+
            [[String, String, String, Array]],
            function redirectToErrorPage_(error, controller, action, params){
                console.error(error);

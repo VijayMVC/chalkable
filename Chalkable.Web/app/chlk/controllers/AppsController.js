@@ -232,7 +232,7 @@ NAMESPACE('chlk.controllers', function (){
                 .approveApp(appId)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    return this.Redirect('apps', 'list', []);
+                    return this.BackgroundNavigate('apps', 'list', []);
                 }, this);
         },
 
@@ -245,7 +245,7 @@ NAMESPACE('chlk.controllers', function (){
                 .declineApp(appId)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    return this.Redirect('apps', 'list', []);
+                    return this.BackgroundNavigate('apps', 'list', []);
                 }, this);
         },
 
@@ -258,7 +258,7 @@ NAMESPACE('chlk.controllers', function (){
                 .goLive(appId)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    return this.Redirect('apps', 'general', []);
+                    return this.BackgroundNavigate('apps', 'general', []);
                 }, this);
         },
 
@@ -271,7 +271,7 @@ NAMESPACE('chlk.controllers', function (){
                 .unlist(liveAppId)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    return this.Redirect('apps', 'general', []);
+                    return this.BackgroundNavigate('apps', 'general', []);
                 }, this);
         },
 

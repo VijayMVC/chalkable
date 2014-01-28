@@ -201,9 +201,9 @@ NAMESPACE('chlk.controllers', function (){
                             .then(function(model){
 
                                 if(index < classes.length){
-                                    this.Redirect('setup', 'teacherSettings', [index]);
+                                    return this.BackgroundNavigate('setup', 'teacherSettings', [index]);
                                 }else{
-                                    this.Redirect('setup', 'start', []);
+                                    return this.BackgroundNavigate('setup', 'start', []);
                                 }
 
                             }.bind(this));

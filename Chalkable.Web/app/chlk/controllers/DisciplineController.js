@@ -74,7 +74,7 @@ NAMESPACE('chlk.controllers', function(){
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
             function classListAction(classId_, date_){
                 if(!classId_ || !classId_.valueOf())
-                    return this.Redirect('discipline', 'list', [date_]);
+                    return this.BackgroundNavigate('discipline', 'list', [date_]);
                 var res = ria.async.wait([
                         this.disciplineService.getClassDisciplines(classId_, date_, 0),
                         this.disciplineTypeService.getDisciplineTypes()
@@ -154,7 +154,7 @@ NAMESPACE('chlk.controllers', function(){
             },
 
             [[chlk.models.discipline.SetDisciplineListModel]],
-            VOID, function setDisciplinesForListAction(model){
+            function setDisciplinesForListAction(model){
                 this.disciplineService
                     .setDisciplines(model)
                     .attach(this.validateResponse_())
@@ -166,7 +166,7 @@ NAMESPACE('chlk.controllers', function(){
                                 if(model.isNewStudent()){
 
                                 }
-                                this.Redirect(controller, action, params);
+                                return this.BackgroundNavigate(controller, action, params);
                             }
                         }, this);
             },

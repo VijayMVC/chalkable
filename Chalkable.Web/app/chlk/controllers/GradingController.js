@@ -69,7 +69,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.ClassId]],
             function summaryTeacherAction(classId_){
                 if(!classId_ || !classId_.valueOf())
-                    return this.Redirect('grading', 'summaryAll', []);
+                    return this.BackgroundNavigate('grading', 'summaryAll', []);
                 var classes = this.classService.getClassesForTopBar(true);
                 var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                 var model = new chlk.models.grading.GradingClassSummary();
@@ -93,7 +93,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.ClassId]],
             function summaryGridTeacherAction(classId_){
                 if(!classId_ || !classId_.valueOf())
-                    return this.Redirect('grading', 'summaryAll', []);
+                    return this.BackgroundNavigate('grading', 'summaryAll', []);
                 var classes = this.classService.getClassesForTopBar(true);
                 var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                 var model = new chlk.models.grading.GradingClassSummaryGridViewData();
@@ -112,7 +112,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.ClassId]],
             function summaryStudentAction(classId_){
                 if(!classId_ || !classId_.valueOf())
-                    return this.Redirect('grading', 'summaryAll', []);
+                    return this.BackgroundNavigate('grading', 'summaryAll', []);
                 var studentId = this.getContext().getSession().get('currentPerson').getId();
                 var result = this.gradingService
                     .getStudentsClassSummary(studentId, classId_)
@@ -211,7 +211,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.isNeedsTypesForClasses())
                     .attach(this.validateResponse_())
                     .then(function(model){
-                        this.Redirect('grading', 'teacherSettings', []);
+                        return this.BackgroundNavigate('grading', 'teacherSettings', []);
                     }, this);
                 return this.ShadeLoader();
             }
