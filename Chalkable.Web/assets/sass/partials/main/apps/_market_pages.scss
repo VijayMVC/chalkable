@@ -1,0 +1,73 @@
+@import "partials/main/apps/appMarket/_app_market";
+@import "partials/main/apps/appMarket/_app_market_details";
+@import "partials/main/apps/appMarket/_app_market_install";
+@import "partials/main/apps/_app_ratings";
+
+.app-market, .my-apps, .app-market-details, .apps-funds{
+  .buttons-toolbar{
+    .toolbar-btn{
+      padding: 0 7px;
+      color: #828282;
+      font-size: 12px;
+      margin: 0;
+      display: inline-block;
+      font-style: normal !important;
+      border-left: 1px solid white;
+      text-align: center;
+      border-right: 1px solid #cfcfcf;
+      @include background(linear, 50% 0%, 50% 100%, color-stop(0%, #f6f6f6), color-stop(100%, #d8d8d8));
+
+      &:hover{
+        @include background(linear-gradient(top, #f6f6f6,#d8d8d8));
+      }
+      &.app-store{
+        margin-left: 190px;
+      }
+    }
+
+    .user-balance{
+      width: 250px;
+      display: inline-block;
+      color: #868686;
+      font-size: 18px;
+      padding-left: 10px;
+      height: 36px;
+      border-right: 1px solid #cfcfcf;
+      line-height: 30px;
+    }
+
+    form{
+      display: inline-block;
+    }
+    .search-btn{
+      border: none;
+      width: 32px;
+      height: 32px;
+      background-image: url(images/app/search-button.png);
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-color: transparent;
+      vertical-align: top;
+      cursor: pointer;
+      outline: none;
+      margin-top: -3px;
+      padding: 0;
+    }
+  }
+
+
+  #app-market-searchbox{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-left: 50px;
+    width: 115px;
+  }
+
+
+
+
+  .app-screenshots-panel{
+    margin-left: 3px;
+    margin-bottom: 30px;
+  }
+}
