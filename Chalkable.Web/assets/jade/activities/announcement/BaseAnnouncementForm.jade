@@ -110,7 +110,6 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
         ann = announcement
         -ann.setNeedButtons(true)
         -ann.setNeedDeleteButton(true)
-        -console.info(userRole)
             +RenderWith(ann, chlk.templates.announcement.Announcement)(
                 userRole = userRole
             )
