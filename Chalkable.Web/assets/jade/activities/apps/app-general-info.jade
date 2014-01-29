@@ -100,7 +100,7 @@ mixin AppStatus_(appState, appDraftId, liveAppId)
               +CurrentBalance_(self.getAppAnalytics().getDevBalance())
 
 
-    .app-reviews.reviews
+    .app-reviews.reviews.developer
        .review-link Reviews
            devAppReviews = self.getAppReviews()
            +Rating("appRating", self.getAppRating(), false).all
