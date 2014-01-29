@@ -28,15 +28,19 @@
   right: 0;
   top: -12px;
   bottom: -12px;
-  z-index: 10000;
+
+  > DIV {
+      z-index: 10001;
+      position: relative
+  }
 
   &.x-hidden{
     display: none;
   }
 
   .under-overlay{
-      z-index: 100;
-      opacity: 0.7;
+      z-index: 9991;
+      opacity: 0.85;
   }
 
   .dialog{
