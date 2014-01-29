@@ -158,13 +158,15 @@ NAMESPACE('chlk.activities.developer', function () {
                         var authHeader = ' -H "Authorization: Bearer:' + token + '"';
                         result = 'curl -X POST -H "Content-Type: application/json"\n' + authHeader + '\n -d ' + params + ' \n' + url;
                     }  break;
-                    case 1:{
-
-                        result = "import json import urllib2" + "\n" +
-
-                        "data = {\n" +
-                            "'ids': [12, 3, 4, 5, 6]";
-
+                    case 2:{
+                        result =
+                            "import json \n" +
+                            "import urllib2\n" +
+                            "req = urllib2.Request('" + url + "')\n" +
+                            "req.add_header('Content-Type', 'application/json')\n" +
+                            "req.add_header('Authorization', 'Bearer:" + token + "')\n" +
+                            "response = urllib2.urlopen(req, '" + params + "')\n" +
+                            "print response.read()"
                     } break;
                 }
                 return result;
