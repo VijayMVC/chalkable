@@ -180,6 +180,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'showGradingIcon',
 
             Boolean, 'starred',
+
             Number, 'state',
 
             [ria.serialize.SerializeProperty('statetyped')],
@@ -206,10 +207,6 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'systemType',
 
             String, 'title',
-
-            String, function getNormalTitle(){
-                return this.getTitle() || (this.getAnnouncementTypeName() + ' ' + this.getOrder());
-            },
 
             [ria.serialize.SerializeProperty('wasannouncementtypegraded')],
             Boolean, 'wasAnnouncementTypeGraded',
@@ -271,6 +268,11 @@ NAMESPACE('chlk.models.announcement', function () {
                     }
                     this.setExpiresDateText(expTxt);
                 }
+            },
+
+            function getTitleModel(){
+                var title = this.getTitle();
+                return new chlk.models.announcement.AnnouncementTitleViewData(title);
             }
 
         ]);

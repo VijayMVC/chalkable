@@ -15,6 +15,7 @@ REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.AnnouncementAttachmentId');
 REQUIRE('chlk.models.announcement.AnnouncementQnA');
 REQUIRE('chlk.models.id.AnnouncementQnAId');
+REQUIRE('chlk.models.announcement.AnnouncementTitleViewData');
 
 
 NAMESPACE('chlk.services', function () {
@@ -109,12 +110,11 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function saveAnnouncement(id, classId_, classAnnouncementTypeId_, title_, content_
                 , expiresdate_, attachments_, applications_, markingPeriodId_, maxScore_, weightAddition_, weighMultiplier_
                 , hideFromStudent_, canDropStudentScore_) {
-                return this.get('Announcement/SaveAnnouncement.json', chlk.models.announcement.AnnouncementForm, {
+                return this.get('Announcement/SaveAnnouncement.json', chlk.models.announcement.AnnouncementTitleViewData, {
                     announcementId:id.valueOf(),
                     classAnnouncementTypeId:classAnnouncementTypeId_,
                     classId: classId_ ? classId_.valueOf() : null,
                     markingPeriodId:markingPeriodId_ ? markingPeriodId_.valueOf() : null,
-                    title: title_,
                     content: content_,
                     attachments: attachments_,
                     applications: applications_,
@@ -129,9 +129,8 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId, String,String, String, chlk.models.common.ChlkDate,  String]],
             ria.async.Future, function saveAdminAnnouncement(id, recipients,title_, content_, expiresdate_, attachments_) {
-                return this.get('Announcement/SaveForAdmin.json', chlk.models.announcement.AnnouncementForm, {
+                return this.get('Announcement/SaveForAdmin.json', chlk.models.announcement.AnnouncementTitleViewData, {
                     announcementId:id.valueOf(),
-                    title: title_,
                     content: content_,
                     attachments: attachments_,
                     expiresdate: expiresdate_,
