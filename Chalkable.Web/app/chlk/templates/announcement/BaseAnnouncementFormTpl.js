@@ -1,5 +1,6 @@
 REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.announcement.AnnouncementForm');
+REQUIRE('chlk.models.announcement.AnnouncementTitleViewData');
 
 NAMESPACE('chlk.templates.announcement', function () {
     "use strict";

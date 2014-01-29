@@ -27,15 +27,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
     isAnnouncement = (announcement.isStandartAnnouncement() || isAdminAnnouncement)
     if !isAdminAnnouncement
         .title-block-container
-            .title-block
-                .title-text=announcement.getNormalTitle()
-                .edit-icon
-                .input-container
-                    INPUT(id="title",name="title",class="validate[required]", value=announcement.getNormalTitle())
-                    div(data-tooltip=Msg.Name_already_taken).exists-icon
-                BUTTON(disabled, name="submitType", value="saveTitle", type="submit").validate-skip.big-button.blue-gradient-btn.save-title-btn=Msg.Save
-                BUTTON(name="submitType", value="checkTitle", type="submit")#check-title-button.validate-skip.x-hidden
-
+            +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
     .left-block
         if isAdminAnnouncement
             .buttons-container

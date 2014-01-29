@@ -539,9 +539,8 @@ NAMESPACE('chlk.controllers', function (){
                     model.setApplications(this.getContext().getSession().get('AnnoucementApplications'));
                     var announcementForm = new chlk.models.announcement.AnnouncementForm();
                     announcementForm.setAnnouncement(model);
-                    result = this.addEditAction(announcementForm, false);
-                    this.saveAnnouncement(model);
-                    return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());break;
+                    return this.saveAnnouncement(model, announcementForm);break;
+                    //return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());break;
                 case 'saveNoUpdate': this.saveAnnouncement(model);break;
                 default: if(!this.userInRole(chlk.models.common.RoleEnum.ADMINEDIT) && !this.userInRole(chlk.models.common.RoleEnum.ADMINVIEW)
                         && session.get('finalizedClassesIds').indexOf(classId.valueOf()) > -1){
@@ -559,8 +558,8 @@ NAMESPACE('chlk.controllers', function (){
 
 
         //TODO: refactor
-        [[chlk.models.announcement.Announcement]],
-        VOID, function saveAnnouncement(model){
+        [[chlk.models.announcement.Announcement, chlk.models.announcement.AnnouncementForm]],
+        function saveAnnouncement(model, form_){
             if(this.userIsAdmin())
                 this.announcementService
                     .saveAdminAnnouncement(
@@ -572,8 +571,8 @@ NAMESPACE('chlk.controllers', function (){
                         model.getAttachments()
                     )
                     .attach(this.validateResponse_());
-            else
-                this.announcementService
+            else{
+                var res = this.announcementService
                     .saveAnnouncement(
                         model.getId(),
                         model.getClassId(),
@@ -591,6 +590,14 @@ NAMESPACE('chlk.controllers', function (){
                         model.isAbleDropStudentScore()
                     )
                     .attach(this.validateResponse_());
+                if(form_){
+                    res.then(function(titleModel){
+                        form_.getAnnouncement().setTitle(titleModel.getTitle());
+                        return this.addEditAction(form_, false);
+                    }, this);
+                    return this.UpdateView(this.getAnnouncementFormPageType_(), res);
+                }
+            }
         },
 
 
