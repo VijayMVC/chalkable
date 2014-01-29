@@ -136,6 +136,7 @@ namespace Chalkable.BusinessLogic.Services.School
             announcementAttachment.Uuid = activityAttachment.Uuid;
             announcementAttachment.Id = activityAttachment.Id;
             announcementAttachment.SisActivityId = activityAttachment.ActivityId;
+            announcementAttachment.PersonRef = Context.UserLocalId.Value; //todo get PersonRef from activityAttachment 
             return announcementAttachment;
         }
 
