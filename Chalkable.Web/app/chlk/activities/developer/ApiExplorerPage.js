@@ -168,6 +168,19 @@ NAMESPACE('chlk.activities.developer', function () {
                             "response = urllib2.urlopen(req, '" + params + "')\n" +
                             "print response.read()"
                     } break;
+
+                    case 1:{
+                        result =
+                            "require 'rest-client' \n" +
+                            "require 'json' \n" +
+                            "response = RestClient::Request.execute(\n" +
+                            "   :method => :post,\n" +
+                            "   :url => '" + url + "',\n" +
+                            "   :payload => '" + params + "',\n" +
+                            "   :headers => {:authorization => 'Bearer:" + token + "'}\n" +
+                            ")\n" +
+                            "puts response.inspect"
+                    } break;
                 }
                 return result;
             },
