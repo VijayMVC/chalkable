@@ -29,6 +29,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                 if(!this.dom.find('.is-edit').getData('isedit')){
                     var classId = node.getAttr('classId');
                     this.dom.find('input[name=classid]').setValue(classId);
+                    var defaultType = node.getData('default-announcement-type-id');
+                    if(defaultType)
+                        this.dom.find('input[name=announcementtypeid]').setValue(defaultType);
                 }
             },
 

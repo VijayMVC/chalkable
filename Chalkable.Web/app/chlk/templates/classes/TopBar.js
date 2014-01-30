@@ -27,6 +27,8 @@ NAMESPACE('chlk.templates.classes', function () {
             [ria.templates.ModelPropertyBind],
             String, 'action',
             [ria.templates.ModelPropertyBind],
-            Array, 'params'
+            Array, 'params',
+            [ria.templates.ModelPropertyBind],
+            Number, 'defaultAnnouncementTypeId'
         ])
 });
