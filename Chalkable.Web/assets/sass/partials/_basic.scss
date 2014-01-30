@@ -1,0 +1,53 @@
+// basic styling
+
+html, html a {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+}
+
+*, *:after, *:before {
+	@include box-sizing(border-box);
+}
+
+html, body {
+	// height: 100%;
+	min-height: 100%;
+	position: relative;
+}
+
+body {
+	font: {
+		size: 100%;
+		family: $sans;
+	}
+	color: $mainText;
+	background: #f7f7f5;
+}
+
+img,embed,object,video {
+	max-width: 100%;
+}
+
+a {
+	color: $blue;
+}
+
+%speed { // Force Hardware Acceleration in WebKit 
+	-webkit-transform: translate3d(0, 0, 0);
+	-webkit-backface-visibility: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: $darkGrey;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+
