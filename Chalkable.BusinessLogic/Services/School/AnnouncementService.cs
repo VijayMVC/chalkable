@@ -366,54 +366,51 @@ namespace Chalkable.BusinessLogic.Services.School
       
         public AnnouncementComplex EditAnnouncement(AnnouncementInfo announcement, int? classId = null, IList<RecipientInfo> recipients = null)
         {
-            AnnouncementComplex res = GetAnnouncementDetails(announcement.AnnouncementId);
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                if (!AnnouncementSecurity.CanModifyAnnouncement(res, Context))
+                var ann = da.GetAnnouncement(announcement.AnnouncementId, Context.RoleId, Context.UserLocalId.Value);
+                if (!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
                     throw new ChalkableSecurityException();
-                
-                if (string.IsNullOrEmpty(announcement.Title))
-                    announcement.Title = res.DefaultTitle;
-                
-                if (res.Title != announcement.Title)
-                {
-                    if (res.State == AnnouncementState.Created && da.Exists(announcement.Title))
-                        throw new ChalkableException("The item with current title already exists");
-                    res.Title = announcement.Title;
-                }
-                res.Content = announcement.Content;
-                res.Subject = announcement.Subject;
+
+                ann.Content = announcement.Content;
+                ann.Subject = announcement.Subject;
                 if (Context.Role == CoreRoles.TEACHER_ROLE && announcement.ClassAnnouncementTypeId.HasValue)
                 {
-                    res.ClassAnnouncementTypeRef = announcement.ClassAnnouncementTypeId.Value;
-                    res.MaxScore = announcement.MaxScore;
-                    res.WeightAddition = announcement.WeightAddition;
-                    res.WeightMultiplier = announcement.WeightMultiplier;
-                    res.MayBeDropped = announcement.CanDropStudentScore;
-                    res.VisibleForStudent = !announcement.HideFromStudents;
+                    ann.ClassAnnouncementTypeRef = announcement.ClassAnnouncementTypeId.Value;
+                    ann.MaxScore = announcement.MaxScore;
+                    ann.WeightAddition = announcement.WeightAddition;
+                    ann.WeightMultiplier = announcement.WeightMultiplier;
+                    ann.MayBeDropped = announcement.CanDropStudentScore;
+                    ann.VisibleForStudent = !announcement.HideFromStudents;
                 }
                 if (BaseSecurity.IsAdminViewer(Context))
-                    res.ClassAnnouncementTypeRef = null;
+                    ann.ClassAnnouncementTypeRef = null;
 
                 if(announcement.ExpiresDate.HasValue)
-                   res.Expires = announcement.ExpiresDate.Value;
+                    ann.Expires = announcement.ExpiresDate.Value;
 
-                res = (AnnouncementComplex)SetClassToAnnouncement(res, classId, res.Expires);
-                res = (AnnouncementComplex)PreperingReminderData(uow, res); //todo : remove this later 
-                res = (AnnouncementComplex)ReCreateRecipients(uow, res, recipients);
-                da.Update(res);
-                
+                ann = SetClassToAnnouncement(ann, classId, ann.Expires);
+                ann = PreperingReminderData(uow, ann); //todo : remove this later 
+                ann = ReCreateRecipients(uow, ann, recipients);
+                da.Update(ann);
+                uow.Commit();
 
+                var res = GetAnnouncementDetails(announcement.AnnouncementId);
+                if (string.IsNullOrEmpty(announcement.Title))
+                    announcement.Title = res.DefaultTitle;
+                var isCreated = res.State == AnnouncementState.Created;
+                res = (AnnouncementDetails)EditTitle(res, announcement.Title, (annDa, t) => annDa.Exists(t) && isCreated);
                 if (res.State == AnnouncementState.Created && res.ClassRef.HasValue && res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value, res.SisActivityId.Value);
                     MapAnnouncementToActivity(res, activity);
                     ConnectorLocator.ActivityConnector.UpdateActivity(res.ClassRef.Value, res.SisActivityId.Value, activity);
                 }
-                uow.Commit();
                 return res;
-            }
+            }                
+            
+            //TODO: rewrite this for better performens
         }
 
         private Announcement Submit(AnnouncementDataAccess dataAccess, UnitOfWork unitOfWork, int announcementId, int? classId)
@@ -556,9 +553,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Announcement GetAnnouncementById(int id)
         {
-            using (var ouw = Read())
+            using (var uow = Read())
             {
-                var da = CreateAnnoucnementDataAccess(ouw);
+                var da = CreateAnnoucnementDataAccess(uow);
                 var res = da.GetAnnouncement(id, Context.Role.Id, Context.UserLocalId ?? 0); // security here 
                 if(res == null)
                     throw new ChalkableSecurityException();
@@ -655,21 +652,28 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Announcement EditTitle(int announcementId, string title)
         {
-            if(!Context.UserLocalId.HasValue)
+            return EditTitle(GetAnnouncementById(announcementId), title, (da, t) => da.Exists(t));
+        }
+
+        private Announcement EditTitle(Announcement announcement, string title, Func<AnnouncementDataAccess, string, bool> existsTitleAction)
+        {
+            if (!Context.UserLocalId.HasValue)
                 throw new UnassignedUserException();
-            using (var uow = Update())
+            if (announcement == null || announcement.PersonRef != Context.UserLocalId)
+                throw new ChalkableSecurityException();
+            if (announcement.Title != title)
             {
-                var da = CreateAnnoucnementDataAccess(uow);
-                var ann = da.GetAnnouncement(announcementId, Context.RoleId, Context.UserLocalId.Value);
-                if(ann == null || ann.PersonRef != Context.UserLocalId)
-                    throw new ChalkableSecurityException();
-                if(da.Exists(title))
-                    throw new ChalkableException("The item with current title already exists");
-                ann.Title = title;
-                da.Update(ann);
-                uow.Commit();
-                return ann;
-            }
+                using (var uow = Update())
+                {
+                    var da = CreateAnnoucnementDataAccess(uow);
+                    if (existsTitleAction(da, title))
+                        throw new ChalkableException("The item with current title already exists");
+                    announcement.Title = title;
+                    da.Update(announcement);               
+                    uow.Commit();
+                }
+            } 
+            return announcement;
         }
 
 
