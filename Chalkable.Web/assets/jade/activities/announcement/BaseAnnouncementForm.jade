@@ -9,7 +9,7 @@ mixin AddEditReminderForm(announcement, reminders)
 //TODO refactor
 mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adminRecipients, userRole)
     +Hidden('id', announcement.getId().valueOf())
-    +Hidden('announcementtypeid', announcement.getAnnouncementTypeId())
+    +Hidden('announcementtypeid', announcement.getAnnouncementTypeId())#announcement-type-id
     +Hidden('statetyped', announcement.getStateTyped())
     +Hidden('systemtype', announcement.getSystemType())
     +Hidden('personid', announcement.getPersonId().valueOf())
@@ -118,15 +118,16 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
         type="submit",
         name="submitType",
         value=announcement.getState() ? "submitOnEdit" : "submit"
-        ).special-button.blue-button.submit-btn
+        ).special-button.blue-button.submit-btn.add-loader-btn
             =(announcement.getState() ? Msg.Save : Msg.Submit)
         if announcement.getState()
             +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName())
                 +Button()(
                 type="submit",
                 name="submitType",
-                value="submit"
-                ).special-button.red-button.submit-btn
+                value="submit",
+                disabled=announcement.getNonGradingStudentsCount() != announcement.getStudentsCount()
+                ).special-button.red-button.submit-btn.add-loader-btn
                     =Msg.Delete
         else
-            +ActionLink('announcement', 'discard', announcement.getPersonId()).grey-link.not-blue=Msg.Discard
+            +ActionLink('announcement', 'discard', announcement.getPersonId()).grey-link.not-blue.add-loader-btn=Msg.Discard

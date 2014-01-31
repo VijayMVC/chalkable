@@ -29,6 +29,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                 if(!this.dom.find('.is-edit').getData('isedit')){
                     var classId = node.getAttr('classId');
                     this.dom.find('input[name=classid]').setValue(classId);
+                    var defaultType = node.getData('default-announcement-type-id');
+                    if(defaultType)
+                        this.dom.find('input[name=announcementtypeid]').setValue(defaultType);
                 }
             },
 
@@ -55,11 +58,19 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.dom.find('#title').setValue(this.dom.find('.title-text').getHTML());
             },
 
-            [ria.mvc.DomEventBind('click', '.action-button')],
+            [ria.mvc.DomEventBind('click', '.add-loader-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function addLoaderOnSubmitClick(node, event){
+                this.addPartialRefreshLoader();
+            },
+
+            [ria.mvc.DomEventBind('click', '.announcement-type-button:not(.pressed)')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function typeClick(node, event){
-                var typeId = node.getAttr('typeId');
-                var typeName = node.getAttr('typeName');
+                node.parent().find('.pressed').removeClass('pressed');
+                node.addClass('pressed');
+                var typeId = node.getData('typeid');
+                var typeName = node.getData('typename');
                 this.dom.find('input[name=announcementtypeid]').setValue(typeId);
                 this.dom.find('input[name=announcementtypename]').setValue(typeName);
             },

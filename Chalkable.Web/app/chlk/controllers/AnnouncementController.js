@@ -188,7 +188,18 @@ NAMESPACE('chlk.controllers', function (){
             }
             else{
                 var classes = this.classService.getClassesForTopBar();
-                var classId_ = announcement.getClassId();
+                var classId_ = announcement.getClassId(), classInfo, types;
+                classes.forEach(function(item){
+                    var currentClassInfo = this.classService.getClassAnnouncementInfo(item.getId());
+                    types = currentClassInfo.getTypesByClass();
+                    if(types.length)
+                        item.setDefaultAnnouncementTypeId(types[0].getId());
+                    if(classId_ && classId_ == item.getId()){
+                        classInfo = currentClassInfo;
+                        model.setClassInfo(classInfo);
+                    }
+
+                }, this);
 
                 var classesBarData = new chlk.models.classes.ClassesForTopBar(
                     classes,
@@ -196,14 +207,10 @@ NAMESPACE('chlk.controllers', function (){
                     isEdit
                 );
 
-                if(classId_){
-                    var classInfo = this.classService.getClassAnnouncementInfo(classId_);
-                    model.setClassInfo(classInfo);
-                }
                 var announcementTypeId_ = announcement.getAnnouncementTypeId();
                 if(announcementTypeId_){
                     if(classId_ && classInfo){
-                        var types = classInfo.getTypesByClass();
+                        types = classInfo.getTypesByClass();
                         if(types.length > 0){
                             var typeId = null;
 

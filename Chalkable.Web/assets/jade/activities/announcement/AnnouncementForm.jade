@@ -16,13 +16,13 @@ classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
             .container.panel-bg.overflow-hidden
                 each item in classes
                     BUTTON(
-                    class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
-                    typeId=item.getId(),
-                    typeName=item.getName(),
-                    type = "submit",
-                    name="submitType",
-                    value="save"
-                    ).action-button= item.getDescription()
+                        class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
+                        data-typeid=item.getId(),
+                        data-typename=item.getName(),
+                        type = announcement.getState() ? "button" : "submit",
+                        name="submitType",
+                        value="save"
+                    ).action-button.announcement-type-button= item.getDescription()
         .ann-form-container(class=(classId && typeId ? '' : 'x-hidden'))
             +BaseAnnouncementFormContainer(announcement, classId, null, null, self.getUserRole())
         .choose-type(class=(classId && !typeId ? '' : 'x-hidden'))

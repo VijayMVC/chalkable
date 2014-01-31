@@ -25,6 +25,8 @@ NAMESPACE('chlk.models.classes', function () {
 
             String, 'name',
 
-            chlk.models.people.User, 'teacher'
+            chlk.models.people.User, 'teacher',
+
+            Number, 'defaultAnnouncementTypeId'
         ]);
 });

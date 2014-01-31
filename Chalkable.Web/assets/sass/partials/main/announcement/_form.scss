@@ -438,6 +438,7 @@ BODY {
             .title-block{
               padding-bottom: 14px;
               display: inline-block;
+              position: relative;
 
               input, button{
                 vertical-align: top;
@@ -449,12 +450,14 @@ BODY {
 
               .title-text{
                 max-width: 362px;
-                padding: 8px 10px 4px;
+                padding: 8px 24px 4px 10px;
                 margin-bottom: 0;
                 text-overflow: ellipsis;
                 overflow: hidden;
                 cursor: pointer;
                 display: none;
+                position: relative;
+                z-index: 1;
               }
 
               .input-container{
@@ -479,6 +482,8 @@ BODY {
                 height: 15px;
                 vertical-align: top;
                 margin-top: 10px;
+                position: absolute;
+                right: 0;
               }
 
               .title-text, #title{
