@@ -8,14 +8,15 @@ mixin Ticks_(devBalance)
 
 mixin CurrentBalance_(devBalance)
     chartOptions = self.prepareBalanceChartOptions(devBalance)
-
+    suffix = devBalance.getDaysToPayout() == 1 ? "day" : "days"
     .block.budget-block.relative
         .panel-header Current Balance
         .absolute
             .budget-chart-container
                 .inside
                     .big $#{devBalance.getBalance()}
-                    .small #{devBalance.getDaysToPayout()} days to payout
+                    if devBalance.getDaysToPayout() > 0
+                       .small #{devBalance.getDaysToPayout() + " " + suffix} to payout
                     +Ticks_(devBalance)
                 .outside
                 +Chart()(data-options = chartOptions)
