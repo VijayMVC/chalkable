@@ -12,6 +12,6 @@ namespace Chalkable.Web.Common
         public const string SCHEDULE_URL_FORMAT = "schools/schedule/{0}";
         public const string ATTENDANCE_CLASS_LIST_URL_FORMAT = "attendances/class-list/{0}";
         public const string DEV_APP_INFO_URL = "applications/devAppInfo/";
-
+        public const string FUNDS_URL = "funds/schoolPersonFunds";
     }
 }

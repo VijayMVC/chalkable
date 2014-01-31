@@ -31,7 +31,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         {
             Id = announcement.Id;
             DefaultTitle = announcement.DefaultTitle;
-            Title = announcement.Title ?? DefaultTitle;
+            Title = announcement.Title;
             AnnouncementTypeId = announcement.ClassAnnouncementTypeRef;
             AnnouncementTypeName = announcement.ClassAnnouncementTypeName;
             ChalkableAnnouncementTypeId = announcement.ChalkableAnnouncementType;

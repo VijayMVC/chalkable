@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using Chalkable.Common.Exceptions;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Common;
 using Chalkable.Web.Models;
 using PayPal;
 using PayPal.Api.Payments;
@@ -65,7 +66,7 @@ namespace Chalkable.Web.Controllers
                 });
             System.Web.HttpContext.Current.Response.Cookies.Set(new HttpCookie(URL_REFERRER_PARAM, Request.UrlReferrer.AbsoluteUri));   
             var returnUrl = GetBaseAppUrlReferrer() + "Fund/ExecutePayPalPayment.json";
-            var cancelUrl = Request.UrlReferrer.AbsoluteUri + "#funds/schoolPersonFunds";
+            var cancelUrl = string.Format("{0}#{1}", Request.UrlReferrer.AbsoluteUri, UrlsConstants.FUNDS_URL);
             var payment = CreatePayment(amount, returnUrl, cancelUrl, accessToken);
             var approvalUrl = payment.links.First(x => x.rel == APPROVAL_URL_PARAM);
             System.Web.HttpContext.Current.Response.Cookies.Set(new HttpCookie(PAYMENT_ID_PARAM, payment.id));
@@ -85,11 +86,10 @@ namespace Chalkable.Web.Controllers
                     id = paymentId, 
                     intent = "update",
                     payer = new Payer { payment_method = PAYPAL_PAYMENT_METHOD }
-                }
-                .Execute(apiContex, paymentEx);
+                }.Execute(apiContex, paymentEx);
             var isCompleted = payment.transactions.Last().related_resources.First().sale.state == "completed";
             var urlReferrer = System.Web.HttpContext.Current.Request.Cookies.Get(URL_REFERRER_PARAM).Value;
-            return Redirect(string.Format(urlReferrer + "#funds/schoolPersonFunds/{0}", isCompleted.ToString().ToLower()));
+            return Redirect(string.Format("{0}#{1}/{2}", urlReferrer, UrlsConstants.FUNDS_URL, isCompleted.ToString().ToLower()));
         }
 
 
