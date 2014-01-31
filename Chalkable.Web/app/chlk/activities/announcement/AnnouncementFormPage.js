@@ -49,7 +49,9 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function saveClick(node, event){
                 this.dom.find('.title-text').setHTML(this.dom.find('#title').getValue());
-                node.setAttr('disabled', true);
+                setTimeout(function(){
+                    node.setAttr('disabled', true);
+                }, 1);
             },
 
             [ria.mvc.DomEventBind('click', '.submit-btn')],
