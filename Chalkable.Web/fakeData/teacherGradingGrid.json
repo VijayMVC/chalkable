@@ -1,0 +1,725 @@
+{"data":[{
+    "avg": 71,
+    "students":[{
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }],
+    "announcements":[{
+        "announcementtypename": "Essay",
+        "order": 2,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":true,"isincomplete":true,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000034,"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":true,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":true,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":true,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":true,"isincomplete":true,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":true,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":true,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":true,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":true,"isincomplete":true,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":true,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":true,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":true,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":true,"isincomplete":true,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }, {
+        "announcementtypename": "Essay",
+        "order": 1,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":false,"isincomplete":false,"isabsent":true,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000034,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":false,"isabsent":true,"isexempt":true,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":true,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":true,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":true,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":true,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":true,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":true,"isexempt":true,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":true,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":true,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }, {
+        "announcementtypename": "Quiz",
+        "order": 1,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000034,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }, {
+        "announcementtypename": "Test",
+        "order": 1,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000034,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }, {
+        "announcementtypename": "HW",
+        "order": 2,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000034,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }, {
+        "announcementtypename": "HW",
+        "order": 1,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000034,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }],
+    "markingperiod": {
+        "description": "Default",
+        "enddate": "2014-03-25",
+        "id": 15156,
+        "name": "Default",
+        "startdate": "2012-09-25"
+    }
+}, {
+    "avg": 71,
+    "students":[{
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }],
+    "announcements":[{
+        "announcementtypename": "Essay",
+        "order": 2,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000034,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }, {
+        "announcementtypename": "Essay",
+        "order": 1,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000034,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }, {
+        "announcementtypename": "Quiz",
+        "order": 1,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000034,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }, {
+        "announcementtypename": "Test",
+        "order": 1,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000034,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }, {
+        "announcementtypename": "HW",
+        "order": 2,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000034,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }, {
+        "announcementtypename": "HW",
+        "order": 1,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000034,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }],
+    "markingperiod": {
+        "description": "Default2",
+        "enddate": "2014-03-25",
+        "id": 15156,
+        "name": "Default2",
+        "startdate": "2012-09-25"
+    }
+}, {
+    "avg": 71,
+    "students":[{
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }, {
+        "avg": 92,
+        "studentinfo": {
+            "id":987,
+            "displayname":"Samantha Hartsmith",
+            "fullname":"Samantha Hartsmith",
+            "firstname":"Samantha",
+            "lastname":"Hartsmith",
+            "gender":"M"
+        }
+    }],
+    "announcements":[{
+        "announcementtypename": "Essay",
+        "order": 2,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000034,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }, {
+        "announcementtypename": "Essay",
+        "order": 1,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000034,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }, {
+        "announcementtypename": "Quiz",
+        "order": 1,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000034,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }, {
+        "announcementtypename": "Test",
+        "order": 1,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000034,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }, {
+        "announcementtypename": "HW",
+        "order": 2,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000034,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }, {
+        "announcementtypename": "HW",
+        "order": 1,
+        "studentannouncements":{
+            "items":[{"gradevalue":92,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000034,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":50,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000030,"announcementid":1000000004,"attachments":[],"comment":"qwerty","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000045,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":44,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000043,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":true,"raw":null,"extracredits":null,"id":1000000031,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000037,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000039,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":12,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000027,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000026,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000042,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000035,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000036,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000044,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":88,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000032,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000029,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000033,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000041,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":65,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000038,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000028,"announcementid":1000000004,"attachments":[],"comment":"","state":2},{"gradevalue":null,"islate":false,"isincomplete":false,"isabsent":false,"isexempt":false,"alerts":[],"dropped":false,"raw":null,"extracredits":null,"id":1000000040,"announcementid":1000000004,"attachments":[],"comment":"","state":2}]}
+    }],
+    "markingperiod": {
+        "description": "Default3",
+        "enddate": "2014-03-25",
+        "id": 15156,
+        "name": "Default3",
+        "startdate": "2012-09-25"
+    }
+}],"success":true}
+
