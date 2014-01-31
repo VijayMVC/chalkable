@@ -851,7 +851,7 @@ GO
 ----------------------------
 --- GET ANNOUNCEMENT DETAILS 
 ----------------------------
-create procedure [dbo].[spGetAnnouncementDetails] @id int, @callerId int, @callerRole int, @schoolId int
+CREATE procedure [dbo].[spGetAnnouncementDetails] @id int, @callerId int, @callerRole int, @schoolId int
 as
 
 if @callerRole is null
@@ -866,6 +866,7 @@ declare @announcementTb table
 	[Order] int not null,
 	Content nvarchar(max),
 	[Subject] nvarchar(max),
+	[Title] nvarchar(max),
 	GradingStyle int not null,
 	Dropped bit not null,
 	ClassAnnouncementTypeRef int null,
@@ -988,6 +989,7 @@ where aa.AnnouncementRef = @id and (@annExists = 1) and aa.Active = 1
 
 exec spGetPersons @schoolId, @ownerId, @callerId, null, 0, 1, null,null,null,null,null,null,null, 1, @callerRole
 end
+
 GO
 
 

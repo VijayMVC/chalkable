@@ -45,7 +45,7 @@ namespace Chalkable.Data.School.Model
 
         public int SchoolRef { get; set; }
 
-        public string Title { get; set; }
+        public virtual string Title { get; set; }
     }
 
 
@@ -78,17 +78,14 @@ namespace Chalkable.Data.School.Model
             get { return State == AnnouncementState.Draft; }
         }
 
-        //public string Title
-        //{
-        //    get
-        //    {
-        //        if (!ClassAnnouncementTypeRef.HasValue)
-        //        {
-        //            return Subject;
-        //        }
-        //        return !string.IsNullOrEmpty(ClassName) ? ClassName : "All";
-        //    }
-        //}
+        public override string Title
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(base.Title) ? base.Title : DefaultTitle;
+            }
+            set { base.Title = value; }
+        }
 
         public string DefaultTitle
         {

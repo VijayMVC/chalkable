@@ -34,6 +34,7 @@ SELECT
 	Announcement.[Order] as [Order],
 	Announcement.Content as Content,
 	Announcement.[Subject] as [Subject],
+	Announcement.Title as [Title],
 	Announcement.GradingStyle as GradingStyle,
 	Announcement.Dropped as Dropped,
 	Announcement.ClassAnnouncementTypeRef as ClassAnnouncementTypeRef,
@@ -71,6 +72,7 @@ FROM
 	left join Person on Person.Id = Announcement.PersonRef
 
 GO
+
 
 
 

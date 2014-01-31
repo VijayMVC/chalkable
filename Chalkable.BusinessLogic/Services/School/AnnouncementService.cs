@@ -221,7 +221,7 @@ namespace Chalkable.BusinessLogic.Services.School
             ann.Title = activity.Name;
         }
        
-        private void MapAnnouncementToActivity(Announcement ann, Activity activity)
+        private void MapAnnouncementToActivity(AnnouncementComplex ann, Activity activity)
         {
             activity.Date = ann.Expires;
             activity.CategoryId = ann.ClassAnnouncementTypeRef;
@@ -397,10 +397,10 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
 
                 var res = GetAnnouncementDetails(announcement.AnnouncementId);
-                if (string.IsNullOrEmpty(announcement.Title))
-                    announcement.Title = res.DefaultTitle;
-                var isCreated = res.State == AnnouncementState.Created;
-                res = (AnnouncementDetails)EditTitle(res, announcement.Title, (annDa, t) => annDa.Exists(t) && isCreated);
+                //if (string.IsNullOrEmpty(announcement.Title) && string.IsNullOrEmpty(res.Title))
+                //    announcement.Title = res.DefaultTitle;
+                //var isCreated = res.State == AnnouncementState.Created;
+                //res = (AnnouncementDetails)EditTitle(res, announcement.Title, (annDa, t) => annDa.Exists(t) && isCreated);
                 if (res.State == AnnouncementState.Created && res.ClassRef.HasValue && res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value, res.SisActivityId.Value);
@@ -416,7 +416,8 @@ namespace Chalkable.BusinessLogic.Services.School
         private Announcement Submit(AnnouncementDataAccess dataAccess, UnitOfWork unitOfWork, int announcementId, int? classId)
         {
 
-            var res = dataAccess.GetById(announcementId);
+            AnnouncementComplex res =
+                GetAnnouncements(new AnnouncementsQuery {Id = announcementId}).Announcements.First();
             if (!AnnouncementSecurity.CanModifyAnnouncement(res, Context))
                 throw new ChalkableSecurityException();
             var dateNow = Context.NowSchoolTime.Date;
@@ -425,21 +426,21 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 res.State = AnnouncementState.Created;
                 res.Created = dateNow;
+                if (string.IsNullOrEmpty(res.Title) || res.DefaultTitle == res.Title)
+                    res.Title = res.DefaultTitle;
                 if (classId.HasValue)
                 {
-                    var annDetails = GetAnnouncements(new AnnouncementsQuery {Id = res.Id}).Announcements.First();
                     var activity = new Activity
                         {
                             SectionId = classId.Value,
                             CategoryId = res.ClassAnnouncementTypeRef,
-                            Name = annDetails.Title
                         };
                     MapAnnouncementToActivity(res, activity);
                     activity = ConnectorLocator.ActivityConnector.CreateActivity(classId.Value, activity);
                     res.SisActivityId = activity.Id;
                 }
             }
-            res = PreperingReminderData(unitOfWork, res);
+            res = (AnnouncementComplex)PreperingReminderData(unitOfWork, res);
             res.GradingStyle = GradingStyleEnum.Numeric100;
             //TODO : add gradingStyle to ClassAnnouncementtype
             //if (res.ClassAnnouncementTypeRef.HasValue)
