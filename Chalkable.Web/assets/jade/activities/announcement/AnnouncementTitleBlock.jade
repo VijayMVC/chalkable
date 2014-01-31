@@ -2,7 +2,7 @@
     .title-text=self.getTitle()
     .edit-icon
     .input-container
-        INPUT(id="title",name="title",class="validate[required]", value=self.getTitle())
+        INPUT(id="title",name="title",class="validate[required]", value=self.getTitle(), maxlength="30")
         div(data-tooltip=Msg.Name_already_taken).exists-icon
     BUTTON(disabled, name="submitType", value="saveTitle", type="submit").validate-skip.big-button.blue-gradient-btn.save-title-btn=Msg.Save
     BUTTON(name="submitType", value="checkTitle", type="submit")#check-title-button.validate-skip.x-hidden

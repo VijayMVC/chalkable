@@ -111,9 +111,14 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var dom = this.dom;
                 new ria.dom.Dom().on('click.title', function(node, event){
                     var target = new ria.dom.Dom(event.target);
-                    if(!target.parent('.title-block').exists() || target.hasClass('save-title-btn'))
-                        dom.find('.title-block')
-                            .removeClass('active');
+                    if(!target.parent('.title-block').exists() || target.hasClass('save-title-btn')){
+                        var titleBlock = dom.find('.title-block');
+                        titleBlock.removeClass('active');
+                        if(titleBlock.hasClass('exists')){
+                            titleBlock.removeClass('exists');
+                            titleBlock.find('#title').setValue(titleBlock.find('.title-text').getHTML());
+                        }
+                    }
                 });
             },
 
