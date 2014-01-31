@@ -142,7 +142,6 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function submitAdminAnnouncement(id, recipients,title_, content_, expiresdate_, attachments_) {
                 return this.get('Announcement/SubmitForAdmin.json', chlk.models.announcement.AnnouncementForm, {
                     announcementId:id.valueOf(),
-                    title: title_,
                     content: content_,
                     attachments: attachments_,
                     expiresdate: expiresdate_,
@@ -162,7 +161,6 @@ NAMESPACE('chlk.services', function () {
                     classannouncementtypeid:announcementTypeId_,
                     classId: classId_ ? classId_.valueOf() : null,
                     markingperiodid: markingPeriodId_ ? markingPeriodId_.valueOf() : null,
-                    title: title_,
                     content: content_,
                     attachments: attachments_,
                     applications: applications_,
