@@ -1,6 +1,7 @@
 @import "compass";
 @import "compass/css3";
 @include global-reset;
+@import 'animation';
 @import "partials/variables";
 @import "partials/mixins";
 @import "partials/basic";
@@ -272,6 +273,10 @@ header[role='banner'] {
       img {
         max-width: 100%;
         height: auto;
+
+        &.move-left {
+            @include animation(move-left .8s);
+        }
       }
 
     }
@@ -319,6 +324,10 @@ header[role='banner'] {
       figure {
         left: 0;
         right: auto;
+
+        .move-right {
+          @include animation(move-right .8s);
+        }
       }
       .description {
         left: auto;
@@ -535,5 +544,90 @@ footer {
   }
 }
 
-// animations 
+// animations
 
+@-moz-keyframes move-right {
+  0% {
+    -moz-transform: translateX(-100%);
+    transform: translateX(-100%); }
+
+  100% {
+    -moz-transform: translateX(0);
+    transform: translateX(0); } }
+
+@-webkit-keyframes move-right {
+  0% {
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%); }
+
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0); } }
+
+@-o-keyframes move-right {
+  0% {
+    -o-transform: translateX(-100%);
+    transform: translateX(-100%); }
+
+  100% {
+    -o-transform: translateX(0);
+    transform: translateX(0); } }
+
+@-ms-keyframes move-right {
+  0% {
+    -ms-transform: translateX(-100%);
+    transform: translateX(-100%); }
+
+  100% {
+    -ms-transform: translateX(0);
+    transform: translateX(0); } }
+
+@keyframes move-right {
+  0% {
+    transform: translateX(-100%); }
+
+  100% {
+    transform: translateX(0); } }
+
+@-moz-keyframes move-left {
+  0% {
+    -moz-transform: translateX(100%);
+    transform: translateX(100%); }
+
+  100% {
+    -moz-transform: translateX(0);
+    transform: translateX(0); } }
+
+@-webkit-keyframes move-left {
+  0% {
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%); }
+
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0); } }
+
+@-o-keyframes move-left {
+  0% {
+    -o-transform: translateX(100%);
+    transform: translateX(100%); }
+
+  100% {
+    -o-transform: translateX(0);
+    transform: translateX(0); } }
+
+@-ms-keyframes move-left {
+  0% {
+    -ms-transform: translateX(100%);
+    transform: translateX(100%); }
+
+  100% {
+    -ms-transform: translateX(0);
+    transform: translateX(0); } }
+
+@keyframes move-left {
+  0% {
+    transform: translateX(100%); }
+
+  100% {
+    transform: translateX(0); } }
