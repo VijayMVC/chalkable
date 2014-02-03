@@ -85,6 +85,59 @@ $(document).ready(function(){
     	$resetPassword.addClass('hide');
     	$makeLogin.removeClass('hide');
     });
+
+     /*--------------------------*
+     *	insert and animate GIF  *
+     *--------------------------*/
+    var $divFeature=$('div.feature'),
+    	$imageGif=$divFeature.find('img');
+
+    //hide image and sustitute .png with .svg if laptop
+    loadFeaturedImage($imageGif);
+    $(window).on('resize', function(){
+    	loadFeaturedImage($imageGif);
+    });
+
+    //show and animate gif on scrolling or if the page if already scrolled
+    animateGif($divFeature);
+    $(window).on('scroll resize', function(){
+    	animateGif($divFeature);
+    });
+
+    function loadFeaturedImage($images){
+    	$images.each(function(){
+	    	$this=$(this);
+	    	var srcTot=$this.attr('src'),
+	    		imgExtencion=srcTot.substring(srcTot.length - 3, srcTot.length),
+	    		srcNew=srcTot.substring(0, srcTot.length - 3);
+	    	console.log(imgExtencion);
+	    	if($(window).width()>1024 && imgExtencion=='png'){
+	    		$this.hide();
+	    		$this.attr('src',srcNew+'gif');
+	    	}else if($(window).width()<=1024 && imgExtencion=='gif'){
+	    		$this.show();
+	    		$this.attr('src',srcNew+'png');
+	    	}
+	    });
+    }
+
+    function animateGif($container){
+    	if($(window).width()>1024){
+    		$container.each(function(){
+				if($(this).offset().top-$(window).scrollTop()<$(window).height()*0.6){
+                    var img = $(this).find('img');
+                    var src = img.attr('src'), b = false;
+                    if(!img.hasClass('move-right') && !img.hasClass('move-left'))
+                        b = true;
+					($(this).hasClass('feature1')) ? img.addClass('move-right').show():img.addClass('move-left').show();
+                    if(b)
+                        setTimeout(function(){
+                            img.addClass('move-right').attr('src', src);
+                        }, 1);
+				}
+    		});
+    	}
+    }
 });
 
 //Add Message
