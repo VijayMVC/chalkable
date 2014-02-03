@@ -1,5 +1,8 @@
 # Require any additional compass plugins here.
 # Set this to the root of your project when deployed:
+
+require "animation"
+
 http_path = "/"
 css_dir = "Content"
 sass_dir = "assets/sass"
