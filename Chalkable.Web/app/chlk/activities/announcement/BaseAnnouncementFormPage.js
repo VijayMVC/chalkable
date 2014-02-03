@@ -70,6 +70,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function addLoaderOnSubmitClick(node, event){
                 this.addPartialRefreshLoader();
+                this.dom.find('#save-form-button').remove();
             },
 
             [ria.mvc.DomEventBind('change', '.reminder-input')],

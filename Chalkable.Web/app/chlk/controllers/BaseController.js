@@ -37,6 +37,13 @@ NAMESPACE('chlk.controllers', function (){
    CLASS(ABSTRACT,
        'BaseController', EXTENDS(ria.mvc.Controller), [
 
+           function $() {
+               BASE();
+               this.notAblePressSidebarButton = null;
+           },
+
+           Boolean, 'notAblePressSidebarButton',
+
            ria.async.Future, function validateResponse_() {
                var head, me = this;
                (head = new ria.async.Future)
@@ -180,10 +187,11 @@ NAMESPACE('chlk.controllers', function (){
                var state = this.context.getState();
                new ria.dom.Dom(SIDEBAR_CONTROLS_ID + ' .' + PRESSED_CLS).removeClass(PRESSED_CLS);
                var methodReflector = this.resolveRoleAction_(state);
-               if (methodReflector.isAnnotatedWith(chlk.controllers.SidebarButton)){
+               if (methodReflector.isAnnotatedWith(chlk.controllers.SidebarButton) && !this.isNotAblePressSidebarButton()){
                    var buttonCls = methodReflector.findAnnotation(chlk.controllers.SidebarButton)[0].clazz;
                    new ria.dom.Dom(SIDEBAR_CONTROLS_ID + ' .' + buttonCls).addClass(PRESSED_CLS);
                }
+               this.setNotAblePressSidebarButton(false);
            }
    ])
 
