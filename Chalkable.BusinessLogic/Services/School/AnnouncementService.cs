@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
+using Chalkable.BusinessLogic.Mapping;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -156,7 +157,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     SisActivityId = activity.Id,
                     PersonRef = Context.UserLocalId.Value
                 };
-                MapActivityToAnnouncement(ann, activity);
+                ModelMapper.GetMapper().Map(ann, activity);
                 addToChlkAnns.Add(ann);
                 
             }
@@ -200,96 +201,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 var ann = anns.FirstOrDefault(x => x.SisActivityId == activity.Id);
                 if (ann != null)
                 {
-                    MapActivityToAnnouncement(ann, activity);
+                    ModelMapper.GetMapper().Map(activity, ann);
                     res.Add(ann);       
                 }
             }
             return res;
         }
-        private void MapActivityToAnnouncement(Announcement ann, Activity activity)
-        {
-            ann.Content = activity.Description;
-            ann.MaxScore = activity.MaxScore;
-            ann.ClassRef = activity.SectionId;
-            ann.Expires = activity.Date;
-            ann.MayBeDropped = activity.MayBeDropped;
-            ann.WeightAddition = activity.WeightAddition;
-            ann.WeightMultiplier = activity.WeightMultiplier;
-            ann.Dropped = activity.IsDropped;
-            ann.ClassAnnouncementTypeRef = activity.CategoryId;
-            ann.VisibleForStudent = activity.DisplayInHomePortal;
-            ann.Title = activity.Name;
-
-            if (ann is AnnouncementDetails && activity.Attachments != null && activity.Attachments.Any())
-            {
-                var annDetails = ann as AnnouncementDetails;
-                if(annDetails.AnnouncementAttachments == null)
-                    annDetails.AnnouncementAttachments = new List<AnnouncementAttachment>();
-                foreach (var att in activity.Attachments)
-                {
-                    var annAtt = annDetails.AnnouncementAttachments.FirstOrDefault(x => x.SisAttachmentId == att.AttachmentId);
-                    if (annAtt == null)
-                    {
-                        annAtt = new AnnouncementAttachment
-                            {
-                                AttachedDate = Context.NowSchoolTime, 
-                                AnnouncementRef = annDetails.Id,
-                                PersonRef = Context.UserLocalId.Value,
-                                SisAttachmentId = att.AttachmentId
-                            };
-                        annDetails.AnnouncementAttachments.Add(annAtt);
-                    }
-                    annAtt.Name = att.Name;
-                    annAtt.Uuid = att.CrocoDocId.ToString();
-                }
-            }
-        }
-
-        private void MapAnnouncementToActivity(AnnouncementComplex ann, Activity activity)
-        {
-            activity.Date = ann.Expires;
-            activity.CategoryId = ann.ClassAnnouncementTypeRef;
-            activity.IsDropped = ann.Dropped;
-            activity.IsScored = ann.ClassAnnouncementTypeRef.HasValue;
-            activity.MaxScore = ann.MaxScore;
-            activity.WeightAddition = ann.WeightAddition;
-            activity.WeightMultiplier = ann.WeightMultiplier;
-            activity.MayBeDropped = ann.MayBeDropped;
-            //activity.Unit = ann.Content;
-            activity.Description = ann.Content;
-            activity.DisplayInHomePortal = ann.VisibleForStudent;
-            activity.Name = ann.Title;
-            activity.Unit = string.Empty;
-            if(ann.ClassRef.HasValue)
-                activity.SectionId = ann.ClassRef.Value;
-        }
-
-        private void MapAnnDetailsToActivity(AnnouncementDetails ann, Activity activity)
-        {
-            MapAnnouncementToActivity(ann, activity);
-            if (ann.AnnouncementAttachments != null && ann.AnnouncementAttachments.Count > 0)
-            {
-                if(activity.Attachments == null)
-                    activity.Attachments = new List<ActivityAttachment>();
-                var newAtts = new List<ActivityAttachment>();
-                foreach (var annAtt in ann.AnnouncementAttachments)
-                {
-                    if (annAtt.SisAttachmentId.HasValue)
-                    {
-                        var att = activity.Attachments.FirstOrDefault(x => x.AttachmentId == annAtt.SisAttachmentId);
-                        if (att == null)
-                        {
-                            att = new ActivityAttachment{ActivityId = activity.Id, AttachmentId = annAtt.SisAttachmentId.Value};
-                            newAtts.Add(att);
-                        }
-                        att.CrocoDocId = new Guid(annAtt.Uuid);
-                        att.Name = annAtt.Name;
-                    }
-                }
-                activity.Attachments = activity.Attachments.Concat(newAtts);
-            }
-        }
-
+        
         public IList<AnnouncementComplex> GetAnnouncements(string filter)
         {
             //TODO : rewrite impl for better performance
@@ -348,7 +266,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (res.ClassRef.HasValue && res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value, res.SisActivityId.Value);
-                    MapActivityToAnnouncement(res, activity);
+                    ModelMapper.GetMapper().Map(res, activity);
                 }
                 return res;
             }
@@ -456,7 +374,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (res.State == AnnouncementState.Created && res.ClassRef.HasValue && res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value, res.SisActivityId.Value);
-                    MapAnnouncementToActivity(res, activity);
+                    ModelMapper.GetMapper().Map(activity, res); 
                     ConnectorLocator.ActivityConnector.UpdateActivity(res.ClassRef.Value, res.SisActivityId.Value, activity);
                 }
                 return res;
@@ -482,7 +400,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (classId.HasValue)
                 {
                     var activity = new Activity();
-                    MapAnnDetailsToActivity(res, activity);
+                    //MapAnnDetailsToActivity(res, activity);
+                    ModelMapper.GetMapper().Map(activity, res);
                     activity = ConnectorLocator.ActivityConnector.CreateActivity(classId.Value, activity);
                     res.SisActivityId = activity.Id;
                 }
