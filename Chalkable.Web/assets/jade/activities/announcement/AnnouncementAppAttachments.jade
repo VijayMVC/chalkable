@@ -1,0 +1,45 @@
+mixin AnnouncementFormAttachmentItem(attachment, i)
+    .announcement-item.attachment
+        if self.needDeleteButton
+            +ActionLink('announcement', 'deleteAttachment', attachment.getId()).close-btn
+        +ActionLink('announcement', 'viewAttachment', attachment.getId())
+            +LoadingImage(src=attachment.getPictureHref(), id="loading-image-" + i)
+            .title
+                div=attachment.getName()
+
+mixin AnnouncementFormApplicationItem(app, i)
+    viewUrl = self.isGradable() && !self.needDeleteButton ? app.getGradingViewUrl() : app.getViewUrl()
+    appMode = self.isGradable() && !self.needDeleteButton ? chlk.models.apps.AppModes.GRADINGVIEW : chlk.models.apps.AppModes.VIEW
+    appUrl = app.getUrl()
+    isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
+
+    div.announcement-item.application
+        if self.needDeleteButton
+            +ActionLink('announcement', 'deleteApp', app.getId()).close-btn
+        +ActionLink('apps', 'viewApp', appUrl, viewUrl, appMode, app.getId(), null, isBanned)
+            +LoadingImage(src=app.getPictureHref(), id="loading-image-" + i)
+            .title
+                div=app.getName()
+
+attachments = self.getAnnouncementAttachments() || []
+applications = self.getApplications() || []
+typesEnum = chlk.models.announcement.AnnouncementTypeEnum
+isAnnouncement = (self.isStandartAnnouncement() || self.isAdminAnnouncement())
+items = self.getSortedAppsAndAttachments();
+
++Hidden('attachments', self.getAttachments())
++Hidden('applicationsids', self.getApplicationsIds())
+if self.needButtons
+    #attach-file-area.announcement-item.attach-file-area
+        if !isAnnouncement
+            +ActionLink('announcement', 'attachApp', self.getId())#add-application.simple-gray-button Attach App
+        if self.getState()
+            div.simple-gray-button.file Attach File
+                +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
+each item, i in items
+    if item.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION
+        +AnnouncementFormApplicationItem(item, i)
+    else
+        -console.info(self.getUserRole().isTeacher(), item.isOwner(), self.getUserRole().isStudent(), !item.isOwner())
+        if self.getUserRole().isTeacher() && item.isOwner() || self.getUserRole().isStudent() && !item.isOwner()
+            +AnnouncementFormAttachmentItem(item, i)
