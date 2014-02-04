@@ -245,12 +245,13 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(this.getActivityClass_(isProfile_), result);
         },
 
+        [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.attendance.SetClassListAttendance]],
         function setClassAttendanceListAction(model){
-            this.attendanceService.setAttendance(model)
+            return this.attendanceService.setAttendance(model)
                 .attach(this.validateResponse_())
                 .then(function(res){
-                    this.classListAction(model.getClassId(), model.getDate(), true);
+                    this.BackgroundNavigate('attendance', 'classList', [model.getClassId(), model.getDate(), true]);
                 }, this);
         },
 
