@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
@@ -41,42 +42,45 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-
+                var annAtt = new AnnouncementAttachment
+                {
+                    AnnouncementRef = ann.Id,
+                    PersonRef = Context.UserLocalId.Value,
+                    AttachedDate = Context.NowSchoolTime,
+                    Name = name,
+                    Uuid = uuid,
+                    Order = ServiceLocator.AnnouncementService.GetNewAnnouncementItemOrder(ann)
+                };
                 IList<AnnouncementAttachment> atts;
-                if (CoreRoles.TEACHER_ROLE == Context.Role && ann.SisActivityId.HasValue)
+                if (CoreRoles.TEACHER_ROLE == Context.Role)
                 {
-                    var activityAtts = ConnectorLocator.ActivityAttachmentsConnector.CreateAttachments(ann.SisActivityId.Value, name, content);
-                    atts = MapActivityAttsToAnnAtts(activityAtts);
-                }
-                else
-                {
-                    var da = new AnnouncementAttachmentDataAccess(uow);
-                    da.Insert(new AnnouncementAttachment
+                    var stiAtts = ConnectorLocator.AttachmentConnector.DownloadAttachment(name, content);
+                    atts = MapStiAttsToAnnAtts(stiAtts.ToList());
+                    var lastStiAtts = stiAtts.Last();
+                    lastStiAtts.CrocoDocId = Guid.Parse(uuid);
+                    if (ann.SisActivityId.HasValue)
                     {
-                        AnnouncementRef = ann.Id,
-                        PersonRef = Context.UserLocalId.Value,
-                        AttachedDate = Context.NowSchoolTime,
-                        Name = name,
-                        Uuid = uuid,
-                        Order = ServiceLocator.AnnouncementService.GetNewAnnouncementItemOrder(ann)
-                    });
-                    atts = da.GetList(Context.UserLocalId.Value, Context.Role.Id, name);
+                        var activityAtt = ActivityAttachment.Create(ann.SisActivityId.Value, lastStiAtts, null);
+                        activityAtt = ConnectorLocator.ActivityAttachmentsConnector
+                            .CreateActivityAttachments(ann.SisActivityId.Value, activityAtt);
+                    }
+                    annAtt.SisAttachmentId = lastStiAtts.AttachmentId;
                 }
-                ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, atts.Last().Id.ToString(), content);
+                var da = new AnnouncementAttachmentDataAccess(uow);
+                da.Insert(annAtt);
                 uow.Commit();
+                
+                atts = da.GetList(Context.UserLocalId.Value, Context.Role.Id, name);
+                if(CoreRoles.TEACHER_ROLE != Context.Role)
+                    ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, atts.Last().Id.ToString(), content);
                 
                 if (ann.State != AnnouncementState.Draft)
                 {
                     if (Context.UserLocalId == ann.PersonRef)
-                    {
                         ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotification(announcementId);
-                    }
                     else
-                    {
                         ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToPerson(announcementId, Context.UserLocalId.Value);
-                    }
                 }
-
             }
             return ann;
         }
@@ -104,24 +108,23 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     var ann = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId)
                         .GetAnnouncement(announcementId, Context.RoleId, Context.UserLocalId.Value);
-                    return MapActivityAttsToAnnAtts(GetActivityAttachments(ann.SisActivityId.Value));
+                    return MapStiAttsToAnnAtts(GetActivityAttachments(ann.SisActivityId.Value));
                 }
                 var da = new AnnouncementAttachmentDataAccess(uow);
                 return da.GetPaginatedList(announcementId, Context.UserLocalId ?? 0, Context.Role.Id, start, count, needsAllAttachments).ToList();
             }
         }
 
-        private IList<AnnouncementAttachment> MapActivityAttsToAnnAtts(IEnumerable<ActivityAttachment> activityAtts)
+        private IList<AnnouncementAttachment> MapStiAttsToAnnAtts(IEnumerable<StiAttachment> activityAtts)
         {
             var res = new List<AnnouncementAttachment>();
-            foreach (var activityAttachment in activityAtts)
+            foreach (var stiAttachment in activityAtts)
             {
-                var atts = MapActivityAttachmentToAnnAttachment(new AnnouncementAttachment(), activityAttachment);
+                var atts = MapStiAttachmentToAnnAttachment(new AnnouncementAttachment(), stiAttachment);
                 if (string.IsNullOrEmpty(atts.Uuid))
                 {
-                    var content = ConnectorLocator.ActivityAttachmentsConnector
-                        .GetAttachmentContent(activityAttachment.ActivityId, activityAttachment.Id);
-                    atts.Uuid = ServiceLocator.CrocodocService.UploadDocument(activityAttachment.Name, content).uuid;
+                    var content = ConnectorLocator.AttachmentConnector.GetAttachmentContent(stiAttachment.AttachmentId);
+                    atts.Uuid = ServiceLocator.CrocodocService.UploadDocument(stiAttachment.Name, content).uuid;
                     ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, atts.Id.ToString(), content);
                 }
                 res.Add(atts);
@@ -129,13 +132,14 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         } 
 
-        private AnnouncementAttachment MapActivityAttachmentToAnnAttachment(
-            AnnouncementAttachment announcementAttachment, ActivityAttachment activityAttachment)
+        private AnnouncementAttachment MapStiAttachmentToAnnAttachment(
+            AnnouncementAttachment announcementAttachment, StiAttachment stiAttachment, int? activityId = null)
         {
-            announcementAttachment.Name = activityAttachment.Name;
-            announcementAttachment.Uuid = activityAttachment.Uuid;
-            announcementAttachment.Id = activityAttachment.Id;
-            announcementAttachment.SisActivityId = activityAttachment.ActivityId;
+            announcementAttachment.Name = stiAttachment.Name;
+            announcementAttachment.Uuid = stiAttachment.CrocoDocId.ToString();
+            announcementAttachment.Id = stiAttachment.AttachmentId;
+            if(activityId.HasValue)
+                announcementAttachment.SisActivityId = activityId.Value;
             announcementAttachment.PersonRef = Context.UserLocalId.Value; //todo get PersonRef from activityAttachment 
             return announcementAttachment;
         }

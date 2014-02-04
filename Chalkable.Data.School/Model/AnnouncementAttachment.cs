@@ -27,7 +27,9 @@ namespace Chalkable.Data.School.Model
         public int Order { get; set; }
 
         [NotDbFieldAttr]
-        public int SisActivityId { get; set; }
+        public int? SisActivityId { get; set; }
+
+        public int? SisAttachmentId { get; set; }
 
     }
 }

@@ -219,8 +219,32 @@ namespace Chalkable.BusinessLogic.Services.School
             ann.ClassAnnouncementTypeRef = activity.CategoryId;
             ann.VisibleForStudent = activity.DisplayInHomePortal;
             ann.Title = activity.Name;
+
+            if (ann is AnnouncementDetails && activity.Attachments != null && activity.Attachments.Any())
+            {
+                var annDetails = ann as AnnouncementDetails;
+                if(annDetails.AnnouncementAttachments == null)
+                    annDetails.AnnouncementAttachments = new List<AnnouncementAttachment>();
+                foreach (var att in activity.Attachments)
+                {
+                    var annAtt = annDetails.AnnouncementAttachments.FirstOrDefault(x => x.SisAttachmentId == att.AttachmentId);
+                    if (annAtt == null)
+                    {
+                        annAtt = new AnnouncementAttachment
+                            {
+                                AttachedDate = Context.NowSchoolTime, 
+                                AnnouncementRef = annDetails.Id,
+                                PersonRef = Context.UserLocalId.Value,
+                                SisAttachmentId = att.AttachmentId
+                            };
+                        annDetails.AnnouncementAttachments.Add(annAtt);
+                    }
+                    annAtt.Name = att.Name;
+                    annAtt.Uuid = att.CrocoDocId.ToString();
+                }
+            }
         }
-       
+
         private void MapAnnouncementToActivity(AnnouncementComplex ann, Activity activity)
         {
             activity.Date = ann.Expires;
@@ -236,6 +260,34 @@ namespace Chalkable.BusinessLogic.Services.School
             activity.DisplayInHomePortal = ann.VisibleForStudent;
             activity.Name = ann.Title;
             activity.Unit = string.Empty;
+            if(ann.ClassRef.HasValue)
+                activity.SectionId = ann.ClassRef.Value;
+        }
+
+        private void MapAnnDetailsToActivity(AnnouncementDetails ann, Activity activity)
+        {
+            MapAnnouncementToActivity(ann, activity);
+            if (ann.AnnouncementAttachments != null && ann.AnnouncementAttachments.Count > 0)
+            {
+                if(activity.Attachments == null)
+                    activity.Attachments = new List<ActivityAttachment>();
+                var newAtts = new List<ActivityAttachment>();
+                foreach (var annAtt in ann.AnnouncementAttachments)
+                {
+                    if (annAtt.SisAttachmentId.HasValue)
+                    {
+                        var att = activity.Attachments.FirstOrDefault(x => x.AttachmentId == annAtt.SisAttachmentId);
+                        if (att == null)
+                        {
+                            att = new ActivityAttachment{ActivityId = activity.Id, AttachmentId = annAtt.SisAttachmentId.Value};
+                            newAtts.Add(att);
+                        }
+                        att.CrocoDocId = new Guid(annAtt.Uuid);
+                        att.Name = annAtt.Name;
+                    }
+                }
+                activity.Attachments = activity.Attachments.Concat(newAtts);
+            }
         }
 
         public IList<AnnouncementComplex> GetAnnouncements(string filter)
@@ -416,8 +468,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private Announcement Submit(AnnouncementDataAccess dataAccess, UnitOfWork unitOfWork, int announcementId, int? classId)
         {
 
-            AnnouncementComplex res =
-                GetAnnouncements(new AnnouncementsQuery {Id = announcementId}).Announcements.First();
+            var res = GetAnnouncementDetails(announcementId);
             if (!AnnouncementSecurity.CanModifyAnnouncement(res, Context))
                 throw new ChalkableSecurityException();
             var dateNow = Context.NowSchoolTime.Date;
@@ -430,17 +481,13 @@ namespace Chalkable.BusinessLogic.Services.School
                     res.Title = res.DefaultTitle;
                 if (classId.HasValue)
                 {
-                    var activity = new Activity
-                        {
-                            SectionId = classId.Value,
-                            CategoryId = res.ClassAnnouncementTypeRef,
-                        };
-                    MapAnnouncementToActivity(res, activity);
+                    var activity = new Activity();
+                    MapAnnDetailsToActivity(res, activity);
                     activity = ConnectorLocator.ActivityConnector.CreateActivity(classId.Value, activity);
                     res.SisActivityId = activity.Id;
                 }
             }
-            res = (AnnouncementComplex)PreperingReminderData(unitOfWork, res);
+            res = (AnnouncementDetails)PreperingReminderData(unitOfWork, res);
             res.GradingStyle = GradingStyleEnum.Numeric100;
             //TODO : add gradingStyle to ClassAnnouncementtype
             //if (res.ClassAnnouncementTypeRef.HasValue)
@@ -459,6 +506,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = CreateAnnoucnementDataAccess(uow);
                 var res = Submit(da, uow, announcementId, recipientId);
+
                 var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(res.Expires);
                 if(res.ClassAnnouncementTypeRef.HasValue)
                     da.ReorderAnnouncements(sy.Id, res.ClassAnnouncementTypeRef.Value, res.PersonRef, recipientId);
