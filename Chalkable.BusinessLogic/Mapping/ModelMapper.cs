@@ -23,15 +23,25 @@ namespace Chalkable.BusinessLogic.Mapping
         void Map(Object returnObj, Object sourceObj);
     }
 
-    public class ActivityToAnnouncementMapper : IMapper
+    public abstract class BaseMapper<TReturn, TSource> : IMapper 
+        where TReturn : class 
+        where TSource : class 
     {
-        public virtual void Map(object returnObj, object sourceObj)
+        public void Map(object returnObj, object sourceObj)
         {
-            var ann = returnObj as Announcement;
-            var activity = sourceObj as Activity;
-            if (!(ann != null && activity != null))
+            var obj1 = returnObj as TReturn;
+            var obj2 = sourceObj as TSource;
+            if(obj1 == null || obj2 == null)
                 throw new ChalkableException("Invalid param type");
+            InnerMap(obj1, obj2);
+        }
+        protected abstract void InnerMap(TReturn returnObj, TSource sourceObj);
+    }
 
+    public class ActivityToAnnouncementMapper : BaseMapper<Announcement, Activity>
+    {
+        protected override void InnerMap(Announcement ann, Activity activity)
+        {
             ann.Content = activity.Description;
             ann.MaxScore = activity.MaxScore;
             ann.ClassRef = activity.SectionId;
@@ -61,23 +71,16 @@ namespace Chalkable.BusinessLogic.Mapping
                         };
                         annDetails.AnnouncementAttachments.Add(annAtt);
                     }
-                    ModelMapper.GetMapper().Map(annAtt, att);
-                    annAtt.Name = att.Name;
-                    annAtt.Uuid = att.CrocoDocId.ToString();
+                    MapperFactory.GetMapper<AnnouncementAttachment, ActivityAttachment>().Map(annAtt, att);
                 }
             }
         }
     }
 
-    public class AnnouncementComplexToActivity : IMapper
+    public class AnnouncementComplexToActivityMapper : BaseMapper<Activity, AnnouncementComplex>
     {
-        public void Map(object returnObj, object sourceObj)
+        protected override void InnerMap(Activity activity, AnnouncementComplex ann)
         {
-            var ann = sourceObj as AnnouncementComplex;
-            var activity = returnObj  as Activity;
-            if (!(ann != null && activity != null))
-                throw new ChalkableException("Invalid param type");
-
             activity.Date = ann.Expires;
             activity.CategoryId = ann.ClassAnnouncementTypeRef;
             activity.IsDropped = ann.Dropped;
@@ -109,7 +112,7 @@ namespace Chalkable.BusinessLogic.Mapping
                             att = new ActivityAttachment { ActivityId = activity.Id };
                             newAtts.Add(att);
                         }
-                        ModelMapper.GetMapper().Map(att, annAtt);
+                        MapperFactory.GetMapper<ActivityAttachment, AnnouncementAttachment>().Map(att, annAtt);
                     }
                 }
                 activity.Attachments = activity.Attachments.Concat(newAtts);
@@ -117,79 +120,60 @@ namespace Chalkable.BusinessLogic.Mapping
         }
     }
 
-    public class AnnouncementAttToActivityAttMapper : IMapper
+    public class AnnouncementAttToActivityAttMapper : BaseMapper<ActivityAttachment, AnnouncementAttachment>
     {
-        public void Map(object returnObj, object sourceObj)
+        protected override void InnerMap(ActivityAttachment activityAtt, AnnouncementAttachment announcementAtt)
         {
-            var activityAtt = returnObj as ActivityAttachment;
-            var announcementAtt = sourceObj as AnnouncementAttachment;
-            if (!(activityAtt != null && announcementAtt != null))
-                throw new ChalkableException("Invalid param type");
-
-            if(announcementAtt.SisAttachmentId.HasValue)
+            if (announcementAtt.SisAttachmentId.HasValue)
                 activityAtt.AttachmentId = announcementAtt.SisAttachmentId.Value;
-            activityAtt.CrocoDocId = new Guid(announcementAtt.Uuid);
+            if(!string.IsNullOrEmpty(announcementAtt.Uuid))
+                activityAtt.CrocoDocId = new Guid(announcementAtt.Uuid);
             activityAtt.Name = announcementAtt.Name;
         }
     }
 
-    public class StiAttachmentToAnnouncementAttMapper: IMapper
+    public class StiAttachmentToAnnouncementAttMapper: BaseMapper<AnnouncementAttachment, StiAttachment>
     {
-        public void Map(object returnObj, object sourceObj)
+        protected override void InnerMap(AnnouncementAttachment announcementAtt, StiAttachment activityAtt)
         {
-            var activityAtt = sourceObj as StiAttachment;
-            var announcementAtt = returnObj  as AnnouncementAttachment;
-            if (!(activityAtt != null && announcementAtt != null))
-                throw new ChalkableException("Invalid param type");
-
             announcementAtt.Name = activityAtt.Name;
             announcementAtt.SisAttachmentId = activityAtt.AttachmentId;
             if (activityAtt.CrocoDocId.HasValue)
                 announcementAtt.Uuid = activityAtt.CrocoDocId.Value.ToString();
-
-            if (sourceObj is ActivityAttachment)
-                announcementAtt.SisActivityId = (sourceObj as ActivityAttachment).ActivityId;
+            if (activityAtt is ActivityAttachment)
+                announcementAtt.SisActivityId = (activityAtt as ActivityAttachment).ActivityId;
         }
     }
 
-    public class ModelMapper : IModelMapper
+    public class MapperFactory 
     {
-        private static IDictionary<Pair<Type,Type>, IMapper> _customMappers 
-            = new Dictionary<Pair<Type, Type>, IMapper>();
+        private static IDictionary<Pair<Type,Type>, IMapper> _customMappers;
 
-        private static ModelMapper _modelMapper;
-        private  ModelMapper()
+        static MapperFactory()
         {
-            BuildMapperDictionary();    
+            BuildMapperDictionary();
         }
+
         private static void BuildMapperDictionary()
         {
-            _customMappers = new Dictionary<Pair<Type, Type>, IMapper>
-                {
-                    {new Pair<Type, Type>(typeof(Announcement), typeof(Activity)), new ActivityToAnnouncementMapper()},
-                    {new Pair<Type, Type>(typeof(AnnouncementComplex), typeof(Activity)), new ActivityToAnnouncementMapper()},
-                    {new Pair<Type, Type>(typeof(AnnouncementDetails), typeof(Activity)), new ActivityToAnnouncementMapper()},
-                    {new Pair<Type, Type>(typeof(Activity), typeof(AnnouncementComplex)), new AnnouncementComplexToActivity()},
-                    {new Pair<Type, Type>(typeof(Activity), typeof(AnnouncementDetails)), new AnnouncementComplexToActivity()},
-                    {new Pair<Type, Type>(typeof(ActivityAttachment), typeof(AnnouncementAttachment)), new AnnouncementAttToActivityAttMapper()},
-                    {new Pair<Type, Type>(typeof(AnnouncementAttachment), typeof(ActivityAttachment)), new StiAttachmentToAnnouncementAttMapper()},
-                    {new Pair<Type, Type>(typeof(AnnouncementAttachment), typeof(StiAttachment)), new StiAttachmentToAnnouncementAttMapper()},
-               
-                };
+                _customMappers = new Dictionary<Pair<Type, Type>, IMapper>
+                    {
+                        {new Pair<Type, Type>(typeof(Announcement), typeof(Activity)), new ActivityToAnnouncementMapper()},
+                        {new Pair<Type, Type>(typeof(AnnouncementComplex), typeof(Activity)), new ActivityToAnnouncementMapper()},
+                        {new Pair<Type, Type>(typeof(AnnouncementDetails), typeof(Activity)), new ActivityToAnnouncementMapper()},
+                        {new Pair<Type, Type>(typeof(Activity), typeof(AnnouncementComplex)), new AnnouncementComplexToActivityMapper()},
+                        {new Pair<Type, Type>(typeof(Activity), typeof(AnnouncementDetails)), new AnnouncementComplexToActivityMapper()},
+                        {new Pair<Type, Type>(typeof(ActivityAttachment), typeof(AnnouncementAttachment)), new AnnouncementAttToActivityAttMapper()},
+                        {new Pair<Type, Type>(typeof(AnnouncementAttachment), typeof(ActivityAttachment)), new StiAttachmentToAnnouncementAttMapper()},
+                        {new Pair<Type, Type>(typeof(AnnouncementAttachment), typeof(StiAttachment)), new StiAttachmentToAnnouncementAttMapper()},
+                    };
         }
-
-        public static ModelMapper GetMapper()
+        public static IMapper GetMapper<TReturn, TSource>()
         {
-            return _modelMapper ?? (_modelMapper = new ModelMapper());
-        }
-
-        public void Map<TReturn, TSource>(TReturn returnObj, TSource sourceObj) where TReturn : class where TSource : class
-        {
-            var typesObj = new Pair<Type, Type>(returnObj.GetType(), sourceObj.GetType());
+            var typesObj = new Pair<Type, Type>(typeof(TReturn), typeof(TSource));
             if (!_customMappers.ContainsKey(typesObj))
                 throw new ChalkableException("There are no mapper with such source and return types");
-
-            _customMappers[typesObj].Map(returnObj, sourceObj);
+            return _customMappers[typesObj];
         }
     }
 }

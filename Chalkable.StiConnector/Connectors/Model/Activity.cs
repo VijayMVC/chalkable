@@ -9,6 +9,7 @@ namespace Chalkable.StiConnector.Connectors.Model
     public class Activity
     {
         public IEnumerable<ActivityAttachment> Attachments { get; set; }
+        public IEnumerable<ActivityStandard> Standards { get; set; }
         public int? CategoryId { get; set; }
         public DateTime Date { get; set; }
         public string Description { get; set; }
@@ -24,36 +25,6 @@ namespace Chalkable.StiConnector.Connectors.Model
         public string Unit { get; set; }
         public decimal? WeightAddition { get; set; }
         public decimal? WeightMultiplier { get; set; }
-
-    }
-
-    public class ActivityAssignedAttribute
-    {
-
-        /// <summary>
-        /// The Id of the activity attribute.
-        /// </summary>
-        public short ActivityAttributeId { get; set; }
-
-        /// <summary>
-        /// The Id of the activity
-        /// </summary>
-        public int ActivityId { get; set; }
-
-        /// <summary>
-        /// Indicates whether or not this attribute should be visible in home portal.  A teacher might want to enter private notes about an activity that students should not see.
-        /// </summary>
-        public bool DisplayInHomePortal { get; set; }
-
-        /// <summary>
-        /// The id of the ActivityAssignedAttribute. 
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// The text of the attribute
-        /// </summary>
-        public string Text { get; set; }
 
     }
 }

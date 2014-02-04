@@ -157,7 +157,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     SisActivityId = activity.Id,
                     PersonRef = Context.UserLocalId.Value
                 };
-                ModelMapper.GetMapper().Map(ann, activity);
+                MapperFactory.GetMapper<Announcement, Activity>().Map(ann, activity);
                 addToChlkAnns.Add(ann);
                 
             }
@@ -201,7 +201,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var ann = anns.FirstOrDefault(x => x.SisActivityId == activity.Id);
                 if (ann != null)
                 {
-                    ModelMapper.GetMapper().Map(activity, ann);
+                    MapperFactory.GetMapper<AnnouncementComplex, Activity>().Map(ann, activity);
                     res.Add(ann);       
                 }
             }
@@ -266,7 +266,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (res.ClassRef.HasValue && res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value, res.SisActivityId.Value);
-                    ModelMapper.GetMapper().Map(res, activity);
+                    MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
                 }
                 return res;
             }
@@ -374,7 +374,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (res.State == AnnouncementState.Created && res.ClassRef.HasValue && res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value, res.SisActivityId.Value);
-                    ModelMapper.GetMapper().Map(activity, res); 
+                    MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res); 
                     ConnectorLocator.ActivityConnector.UpdateActivity(res.ClassRef.Value, res.SisActivityId.Value, activity);
                 }
                 return res;
@@ -401,7 +401,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     var activity = new Activity();
                     //MapAnnDetailsToActivity(res, activity);
-                    ModelMapper.GetMapper().Map(activity, res);
+                    MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
                     activity = ConnectorLocator.ActivityConnector.CreateActivity(classId.Value, activity);
                     res.SisActivityId = activity.Id;
                 }

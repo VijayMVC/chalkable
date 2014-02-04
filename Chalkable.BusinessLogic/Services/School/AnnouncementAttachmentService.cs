@@ -141,7 +141,7 @@ namespace Chalkable.BusinessLogic.Services.School
             foreach (var stiAttachment in activityAtts)
             {
                 var atts = new AnnouncementAttachment {PersonRef = Context.UserLocalId.Value};
-                ModelMapper.GetMapper().Map(atts, stiAttachment);
+                MapperFactory.GetMapper<AnnouncementAttachment, StiAttachment>().Map(atts, stiAttachment);
                 if (string.IsNullOrEmpty(atts.Uuid))
                 {
                     var content = ConnectorLocator.AttachmentConnector.GetAttachmentContent(stiAttachment.AttachmentId);
