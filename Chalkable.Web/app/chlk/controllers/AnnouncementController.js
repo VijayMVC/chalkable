@@ -506,6 +506,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         //TODO refactor!!!!
+        [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.announcement.Announcement]],
         function saveAction(model) {
             if(this.isAnnouncementSavingDisabled())
@@ -548,7 +549,7 @@ NAMESPACE('chlk.controllers', function (){
                     announcementForm.setAnnouncement(model);
                     return this.saveAnnouncement(model, announcementForm);break;
                     //return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());break;
-                case 'saveNoUpdate': this.saveAnnouncement(model);break;
+                case 'saveNoUpdate': this.setNotAblePressSidebarButton(true);this.saveAnnouncement(model);break;
                 default: if(!this.userInRole(chlk.models.common.RoleEnum.ADMINEDIT) && !this.userInRole(chlk.models.common.RoleEnum.ADMINVIEW)
                         && session.get('finalizedClassesIds').indexOf(classId.valueOf()) > -1){
                             var nextMp = model.setMarkingPeriodId(session.get('nextMarkingPeriod'));

@@ -60,12 +60,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.dom.find('#title').setValue(this.dom.find('.title-text').getHTML());
             },
 
-            [ria.mvc.DomEventBind('click', '.add-loader-btn')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function addLoaderOnSubmitClick(node, event){
-                this.addPartialRefreshLoader();
-            },
-
             [ria.mvc.DomEventBind('click', '.announcement-type-button:not(.pressed)')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function typeClick(node, event){

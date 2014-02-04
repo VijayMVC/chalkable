@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
+using Chalkable.BusinessLogic.Mapping;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -156,7 +157,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     SisActivityId = activity.Id,
                     PersonRef = Context.UserLocalId.Value
                 };
-                MapActivityToAnnouncement(ann, activity);
+                ModelMapper.GetMapper().Map(ann, activity);
                 addToChlkAnns.Add(ann);
                 
             }
@@ -200,44 +201,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 var ann = anns.FirstOrDefault(x => x.SisActivityId == activity.Id);
                 if (ann != null)
                 {
-                    MapActivityToAnnouncement(ann, activity);
+                    ModelMapper.GetMapper().Map(activity, ann);
                     res.Add(ann);       
                 }
             }
             return res;
         }
-        private void MapActivityToAnnouncement(Announcement ann, Activity activity)
-        {
-            ann.Content = activity.Description;
-            ann.MaxScore = activity.MaxScore;
-            ann.ClassRef = activity.SectionId;
-            ann.Expires = activity.Date;
-            ann.MayBeDropped = activity.MayBeDropped;
-            ann.WeightAddition = activity.WeightAddition;
-            ann.WeightMultiplier = activity.WeightMultiplier;
-            ann.Dropped = activity.IsDropped;
-            ann.ClassAnnouncementTypeRef = activity.CategoryId;
-            ann.VisibleForStudent = activity.DisplayInHomePortal;
-            ann.Title = activity.Name;
-        }
-       
-        private void MapAnnouncementToActivity(AnnouncementComplex ann, Activity activity)
-        {
-            activity.Date = ann.Expires;
-            activity.CategoryId = ann.ClassAnnouncementTypeRef;
-            activity.IsDropped = ann.Dropped;
-            activity.IsScored = ann.ClassAnnouncementTypeRef.HasValue;
-            activity.MaxScore = ann.MaxScore;
-            activity.WeightAddition = ann.WeightAddition;
-            activity.WeightMultiplier = ann.WeightMultiplier;
-            activity.MayBeDropped = ann.MayBeDropped;
-            //activity.Unit = ann.Content;
-            activity.Description = ann.Content;
-            activity.DisplayInHomePortal = ann.VisibleForStudent;
-            activity.Name = ann.Title;
-            activity.Unit = string.Empty;
-        }
-
+        
         public IList<AnnouncementComplex> GetAnnouncements(string filter)
         {
             //TODO : rewrite impl for better performance
@@ -296,7 +266,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (res.ClassRef.HasValue && res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value, res.SisActivityId.Value);
-                    MapActivityToAnnouncement(res, activity);
+                    ModelMapper.GetMapper().Map(res, activity);
                 }
                 return res;
             }
@@ -404,7 +374,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (res.State == AnnouncementState.Created && res.ClassRef.HasValue && res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value, res.SisActivityId.Value);
-                    MapAnnouncementToActivity(res, activity);
+                    ModelMapper.GetMapper().Map(activity, res); 
                     ConnectorLocator.ActivityConnector.UpdateActivity(res.ClassRef.Value, res.SisActivityId.Value, activity);
                 }
                 return res;
@@ -416,8 +386,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private Announcement Submit(AnnouncementDataAccess dataAccess, UnitOfWork unitOfWork, int announcementId, int? classId)
         {
 
-            AnnouncementComplex res =
-                GetAnnouncements(new AnnouncementsQuery {Id = announcementId}).Announcements.First();
+            var res = GetAnnouncementDetails(announcementId);
             if (!AnnouncementSecurity.CanModifyAnnouncement(res, Context))
                 throw new ChalkableSecurityException();
             var dateNow = Context.NowSchoolTime.Date;
@@ -430,17 +399,14 @@ namespace Chalkable.BusinessLogic.Services.School
                     res.Title = res.DefaultTitle;
                 if (classId.HasValue)
                 {
-                    var activity = new Activity
-                        {
-                            SectionId = classId.Value,
-                            CategoryId = res.ClassAnnouncementTypeRef,
-                        };
-                    MapAnnouncementToActivity(res, activity);
+                    var activity = new Activity();
+                    //MapAnnDetailsToActivity(res, activity);
+                    ModelMapper.GetMapper().Map(activity, res);
                     activity = ConnectorLocator.ActivityConnector.CreateActivity(classId.Value, activity);
                     res.SisActivityId = activity.Id;
                 }
             }
-            res = (AnnouncementComplex)PreperingReminderData(unitOfWork, res);
+            res = (AnnouncementDetails)PreperingReminderData(unitOfWork, res);
             res.GradingStyle = GradingStyleEnum.Numeric100;
             //TODO : add gradingStyle to ClassAnnouncementtype
             //if (res.ClassAnnouncementTypeRef.HasValue)
@@ -459,6 +425,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = CreateAnnoucnementDataAccess(uow);
                 var res = Submit(da, uow, announcementId, recipientId);
+
                 var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(res.Expires);
                 if(res.ClassAnnouncementTypeRef.HasValue)
                     da.ReorderAnnouncements(sy.Id, res.ClassAnnouncementTypeRef.Value, res.PersonRef, recipientId);

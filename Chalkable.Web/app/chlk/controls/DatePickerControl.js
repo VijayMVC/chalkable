@@ -37,6 +37,13 @@ NAMESPACE('chlk.controls', function () {
                         that.context.stateUpdated();
                     }
                 }
+
+                if(options.inCurrentMp){
+                    var mp = this.getContext().getSession().get('markingPeriod');
+                    options.minDate = mp.getStartDate().getDate();
+                    options.maxDate = mp.getEndDate().getDate();
+                }
+
                 this.queueReanimation_(attrs.id, options, value);
                 value && this.setValue(value.getDate());
 

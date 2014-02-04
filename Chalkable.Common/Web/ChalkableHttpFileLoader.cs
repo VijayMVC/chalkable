@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +19,6 @@ namespace Chalkable.Common.Web
         private const string FILE_CONTENT_TYPE = "file";
 
 
-        
         private static void AddHeaders(WebRequest request, ICollection<KeyValuePair<string, string>> headers)
         {
             if (request == null) throw new ArgumentNullException("request");
@@ -30,7 +30,7 @@ namespace Chalkable.Common.Web
         }
 
         private static HttpWebRequest InitWebRequest(string url, string file, byte[] fileContent, 
-            string contentType, NameValueCollection nvc, IDictionary<string, string> headers, string method)
+            string contentType, NameValueCollection nvc, IDictionary<string, string> headers, HttpMethod httpMethod)
         {
             string boundary = "----" + DateTime.UtcNow.Ticks.ToString("x");
             byte[] boundarybytes = Encoding.ASCII.GetBytes("\r\n--" + boundary + "\r\n");
@@ -38,7 +38,7 @@ namespace Chalkable.Common.Web
             var wr = (HttpWebRequest)WebRequest.Create(url);
             AddHeaders(wr, headers);
             wr.ContentType = string.Format(BOUNDARY_CONTENT_TYPE_FMT, boundary);
-            wr.Method = method;
+            wr.Method = httpMethod.Method;
             wr.KeepAlive = true;
             wr.Credentials = CredentialCache.DefaultCredentials;
             Stream rs = wr.GetRequestStream();
@@ -72,9 +72,10 @@ namespace Chalkable.Common.Web
 
         public static T HttpUploadFile<T>(string url, string file, byte[] fileContent, 
             string contentType, Action<WebException> exAction, Func<WebResponse, T> resultAction, NameValueCollection nvc = null
-            , IDictionary<string, string> headers = null, string method = "POST")
+            , IDictionary<string, string> headers = null, HttpMethod httpMethod = null)
         {
-            var wr = InitWebRequest(url, file, fileContent, contentType, nvc, headers, method);
+            httpMethod = httpMethod ?? HttpMethod.Post;
+            var wr = InitWebRequest(url, file, fileContent, contentType, nvc, headers, httpMethod);
             WebResponse wresp = null;
             try
             {
@@ -95,8 +96,15 @@ namespace Chalkable.Common.Web
         }
 
         public static T HttpUploadFile<T>(string url, string file, byte[] fileContent, string contentType
-            ,Action<WebException> exAction, Func<string, T> deserializeAction, NameValueCollection nvc = null
-            , IDictionary<string, string> headers = null, string method = "POST")
+            , Action<WebException> exAction, Func<string, T> deserializeAction, NameValueCollection nvc)
+        {
+            return HttpUploadFile(url, file, fileContent, contentType
+                , exAction, response => GetUploadFileResult(response, deserializeAction), nvc);
+        }
+
+        public static T HttpUploadFile<T>(string url, string file, byte[] fileContent, string contentType
+            ,Action<WebException> exAction, Func<string, T> deserializeAction, NameValueCollection nvc
+            , IDictionary<string, string> headers, HttpMethod method)
         {
             return HttpUploadFile(url, file, fileContent, contentType
                 , exAction, response => GetUploadFileResult(response, deserializeAction), nvc, headers, method);

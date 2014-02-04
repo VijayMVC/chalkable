@@ -62,7 +62,8 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
             +DatePicker('expiresdate', announcement.getExpiresDate())(
                 data-options={
                     showOtherMonths: true,
-                    selectOtherMonths: true
+                    selectOtherMonths: true,
+                    inCurrentMp: true
                 },
                 placeholder=Msg.Due_date,
                 class="validate[required]"
@@ -118,7 +119,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
         type="submit",
         name="submitType",
         value=announcement.getState() ? "submitOnEdit" : "submit"
-        ).special-button.blue-button.submit-btn.add-loader-btn
+        ).special-button.blue-button.submit-btn
             =(announcement.getState() ? Msg.Save : Msg.Submit)
         if announcement.getState()
             +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName())

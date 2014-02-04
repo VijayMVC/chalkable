@@ -99,6 +99,7 @@ NAMESPACE('chlk.controls', function () {
             [ria.mvc.DomEventBind('submit', 'FORM')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submit($target, event) {
+                $target.removeClass('cancelled-submit');
                 if ($target.hasClass('disabled'))
                     return false;
                 var controller = $target.getData('controller');
@@ -132,6 +133,7 @@ NAMESPACE('chlk.controls', function () {
 
                         $target.setData('submit-name', null);
                         $target.setData('submit-value', null);
+                        $target.setData('submit-type', value);
 
                         var isPublic = !!$target.getData('public');
                         setTimeout(function () {
@@ -142,6 +144,8 @@ NAMESPACE('chlk.controls', function () {
                             state.setPublic(isPublic);
                             this.context.stateUpdated();
                         }.bind(this), 1);
+                    }else{
+                        $target.addClass('cancelled-submit');
                     }
 
                     return false;
