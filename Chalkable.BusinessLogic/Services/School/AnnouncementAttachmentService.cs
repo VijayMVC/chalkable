@@ -104,10 +104,17 @@ namespace Chalkable.BusinessLogic.Services.School
                         throw new UnassignedUserException();
                     var ann = (new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId))
                         .GetAnnouncement(annAtt.AnnouncementRef, Context.RoleId, Context.UserLocalId.Value);
-                    if(ann.SisActivityId.HasValue)
-                        ConnectorLocator.AttachmentConnector.DeleteAttachment(ann.SisActivityId.Value, annAtt.SisAttachmentId.Value);
-                    else 
-                        ConnectorLocator.AttachmentConnector.DeleteAttachment(annAtt.SisAttachmentId.Value);
+                    if (ann.SisActivityId.HasValue)
+                    {
+                        var atts = ConnectorLocator.ActivityAttachmentsConnector.GetAttachments(ann.SisActivityId.Value);
+                        var att = atts.FirstOrDefault(x => x.AttachmentId == annAtt.SisAttachmentId.Value);
+                        if(att != null)
+                            ConnectorLocator.ActivityAttachmentsConnector.Delete(ann.SisActivityId.Value, att.Id);
+                    }
+                    else ConnectorLocator.AttachmentConnector.DeleteAttachment(annAtt.SisAttachmentId.Value);
+
+                    //else 
+                    //    ConnectorLocator.AttachmentConnector.DeleteAttachment(annAtt.SisAttachmentId.Value);
                 }
                 uow.Commit();
             }
