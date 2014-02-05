@@ -459,7 +459,9 @@
     <Content Include="fakeData\creditCardData.json" />
     <Content Include="fakeData\personFunds.json" />
     <Content Include="fakeData\teacherGradingGrid.json" />
-    <None Include="Web.qa.config" />
+    <None Include="Web.qa.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web.staging.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

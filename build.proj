@@ -8,10 +8,12 @@
         <StackTraceEnabled>False</StackTraceEnabled>
 		<BackgroundProcessorConfigRelease>Chalkable.BackgroundTaskProducer\app.Release.config</BackgroundProcessorConfigRelease>
 		<BackgroundProcessorConfigStaging>Chalkable.BackgroundTaskProducer\app.Staging.config</BackgroundProcessorConfigStaging>
+		<BackgroundProcessorConfigQa>Chalkable.BackgroundTaskProducer\app.qa.config</BackgroundProcessorConfigQa>
 		<BackgroundProcessorConfig>Chalkable.BackgroundTaskProducer\app.config</BackgroundProcessorConfig>
 		
 		<BackgroundTaskProcessorConfigRelease>Chalkable.BackgroundTaskProcessor\app.Release.config</BackgroundTaskProcessorConfigRelease>
 		<BackgroundTaskProcessorConfigStaging>Chalkable.BackgroundTaskProcessor\app.Staging.config</BackgroundTaskProcessorConfigStaging>
+		<BackgroundTaskProcessorConfigQa>Chalkable.BackgroundTaskProcessor\app.qa.config</BackgroundTaskProcessorConfigQa>
 		<BackgroundTaskProcessorConfig>Chalkable.BackgroundTaskProcessor\app.config</BackgroundTaskProcessorConfig>
     </PropertyGroup>
 	
@@ -39,5 +41,18 @@
 		<Message Text="Using cspack create a package for deployment..."/>		
 		<MSBuild Projects="Chalkable.Azure\Chalkable.Azure.ccproj" Targets="publish" Properties="configuration=release" />
 		<Move SourceFiles="Chalkable.Azure\bin\Release\app.publish\Chalkable.Azure.cspkg" DestinationFiles="Chalkable.Azure\obj\Release\Package\ReleasePackage.cspkg"/>
+	</Target>      	
+	
+	<Target Name="Qa">		
+		<MakeDir Directories="Chalkable.Azure\obj\Release\Package"></MakeDir>
+		<Delete Files="$(BackgroundProcessorConfig)" />
+		<Move SourceFiles="$(BackgroundProcessorConfigQa)" DestinationFiles="$(BackgroundProcessorConfig)"/>
+		
+		<Delete Files="$(BackgroundTaskProcessorConfig)" />
+		<Move SourceFiles="$(BackgroundTaskProcessorConfigQa)" DestinationFiles="$(BackgroundTaskProcessorConfig)"/>
+		
+		<Message Text="Using cspack create a package for deployment..."/>		
+		<MSBuild Projects="Chalkable.Azure\Chalkable.Azure.ccproj" Targets="publish" Properties="configuration=QA" />
+		<Move SourceFiles="Chalkable.Azure\bin\QA\app.publish\Chalkable.Azure.cspkg" DestinationFiles="Chalkable.Azure\obj\Release\Package\QAPackage.cspkg"/>
 	</Target>      	
 </Project>
