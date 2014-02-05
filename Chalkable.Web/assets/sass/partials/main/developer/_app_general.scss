@@ -8,14 +8,16 @@ BODY {
             #main {
               DIV.app-general-info{
                 .app-header{
-                  margin-bottom: 55px;
+                  margin-bottom: 46px;
+                  margin-top: 36px;
                   .app-icon{
                     display: inline-block;
                     padding: 5px 5px 1px 5px;
                     background: white;
                     border-radius: 3px;
                     border: 1px solid #c7c7c7;
-                    margin-left: 17px;
+                    margin-left: 12px;
+                    margin-top: -1px;
                     img{
                       width: 74px;
                       height: 74px;
@@ -58,42 +60,84 @@ BODY {
                   padding: 5px 3px 4px 5px;
                 }
                 .app-installs{
+                  margin-left: 4px;
                   .button-block:hover{
                     top: -19px !important;
                     width: 660px;
                   }
+
+                  .chart-block{
+                    height: 158px;
+                    margin-bottom: 60px;
+                  }
                   .block{
                     .panel-header{
                       margin-bottom: 20px;
+                      padding: 0 !important;
                     }
                   }
-                  .chart-block{
-                    margin-left: -20px;
-                  }
                   .chart-bg{
-                    background: url(images/feed/chart-bg-2.png) center center no-repeat;
-                    background-size: 699px 144px;
-                    width: 699px;
-                    height: 160px;
-                    top: -30px;
-                    left: 12px;
-                    padding-top: 27px;
+                    &.app-install-chart-bg{
+                        background: url(images/feed/chart-bg-2.png) -11px 2px no-repeat;
+                        width: 690px;
+                        height: 190px;
+                        top: -18px;
+                        left: -14px;
+                        background-size: 709px 188px;
+                        line-height: 190px;
+                        z-index: 1;
+
+                        &:hover{
+                          width: 690px;
+                        }
+                      }
+
+
+                    &:hover{
+                      color: transparent;
+                      text-shadow: none;
+                    }
+
+                  }
+
+                  .chart-container{
+                    position: absolute;
+                    left: -37px;
+                    top: 31px;
                   }
                 }
 
                 .app-store-views{
                   .app-views{
                     .chart-bg{
-                      width:350px;
+                      left: 15px;
+                      top: 0px;
+                      width: 400px;
+                      z-index: 1;
+                      background: url(images/feed/chart-bg-2.png) -8px -16px no-repeat;
+                      height: 165px;
+                      background-size: 415px 187px;
+
+                    }
+                    .chart-block{
+                      height: 171px;
+                      width: 434px;
+                      margin-top: 25px;
+                    }
+
+                    .chart-container{
+                      left: -17px;
+                      position: absolute;
+                      top: 18px;
+                      width: 423px;
                     }
                   }
                 }
 
                 .app-store-balance{
-                  height: 400px;
+                  height: 245px;
                   .app-store-views{
                     text-align: center;
-                    margin-top: 40px;
                     width: 65%;
                     display: inline-block;
                   }
@@ -101,7 +145,7 @@ BODY {
                   .app-store-current-balance{
                     width: 35%;
                     float: right;
-                    margin-top: 40px;
+                    margin-top: 4px;
                     display: inline-block;
 
                     .budget-chart-container{
@@ -159,13 +203,15 @@ BODY {
                 }
 
                 .reviews.developer{
-                  .chlk-scrollbox{
-                    position: relative;
-                  }
+
                   display: block;
                   width: auto !important;
+                  margin-left: 14px;
                   .review-link{
                     display: inline-block;
+                  }
+                  .chlk-scrollbox{
+                    position: relative;
                   }
                 }
 
