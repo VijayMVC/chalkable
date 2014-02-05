@@ -44,7 +44,7 @@
 	</Target>      	
 	
 	<Target Name="Qa">		
-		<MakeDir Directories="Chalkable.Azure\obj\Release\Package"></MakeDir>
+		<MakeDir Directories="Chalkable.Azure\obj\Qa\Package"></MakeDir>
 		<Delete Files="$(BackgroundProcessorConfig)" />
 		<Move SourceFiles="$(BackgroundProcessorConfigQa)" DestinationFiles="$(BackgroundProcessorConfig)"/>
 		
@@ -53,6 +53,6 @@
 		
 		<Message Text="Using cspack create a package for deployment..."/>		
 		<MSBuild Projects="Chalkable.Azure\Chalkable.Azure.ccproj" Targets="publish" Properties="configuration=QA" />
-		<Move SourceFiles="Chalkable.Azure\bin\QA\app.publish\Chalkable.Azure.cspkg" DestinationFiles="Chalkable.Azure\obj\Release\Package\QAPackage.cspkg"/>
+		<Move SourceFiles="Chalkable.Azure\bin\Qa\app.publish\Chalkable.Azure.cspkg" DestinationFiles="Chalkable.Azure\obj\Qa\Package\QAPackage.cspkg"/>
 	</Target>      	
 </Project>
