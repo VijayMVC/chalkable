@@ -25,7 +25,9 @@ Create Table [User]
 	IsDeveloper bit not null,
 	ConfirmationKey nvarchar(256),
 	SisUserName nvarchar(256),
-	DistrictRef uniqueidentifier Constraint FK_User_District Foreign Key References District(Id)
+	DistrictRef uniqueidentifier Constraint FK_User_District Foreign Key References District(Id),
+	[SisToken] [nvarchar](max) NULL,
+	[SisTokenExpires] [datetime2](7) NULL
 )
 GO
 
