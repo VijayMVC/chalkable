@@ -40,12 +40,8 @@ mixin AppViewsChart_(data, header, chartId)
     .block(attributes)
         .panel-header=header
         .chart-block.relative
-
-            +Chart()(
-                id = chartId,
-                data-showmarkeronhover = true,
-                data-options = appViewsChartOptions
-            )
+            .chart-bg.button-block.app-views-chart-bg
+            +Chart()(id = chartId, data-showmarkeronhover = true, data-options = appViewsChartOptions)
 
 mixin AppStatus_(appState, appDraftId, liveAppId)
     stateId = appState.getStateId()

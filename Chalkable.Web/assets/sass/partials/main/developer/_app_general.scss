@@ -110,7 +110,26 @@ BODY {
                 .app-store-views{
                   .app-views{
                     .chart-bg{
-                      width:350px;
+                      left: 15px;
+                      top: 0px;
+                      width: 400px;
+                      z-index: 1;
+                      background: url(images/feed/chart-bg-2.png) -8px -16px no-repeat;
+                      height: 165px;
+                      background-size: 415px 187px;
+
+                    }
+                    .chart-block{
+                      height: 171px;
+                      width: 434px;
+                      margin-top: 25px;
+                    }
+
+                    .chart-container{
+                      left: -17px;
+                      position: absolute;
+                      top: 18px;
+                      width: 423px;
                     }
                   }
                 }
@@ -119,7 +138,6 @@ BODY {
                   height: 245px;
                   .app-store-views{
                     text-align: center;
-                    margin-top: 40px;
                     width: 65%;
                     display: inline-block;
                   }
@@ -127,7 +145,7 @@ BODY {
                   .app-store-current-balance{
                     width: 35%;
                     float: right;
-                    margin-top: 0px;
+                    margin-top: 4px;
                     display: inline-block;
 
                     .budget-chart-container{
