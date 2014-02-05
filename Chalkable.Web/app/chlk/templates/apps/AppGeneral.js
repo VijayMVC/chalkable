@@ -257,7 +257,7 @@ NAMESPACE('chlk.templates.apps', function () {
                     chart: {
                         type: 'area',
                         backgroundColor: 'transparent',
-                        width: 690,
+                        width: 698,
                         height: 145,
                         style: {
                             fontFamily: 'Arial',

@@ -62,22 +62,44 @@ BODY {
                     top: -19px !important;
                     width: 660px;
                   }
+
+                  .chart-block{
+                    height: 158px;
+                    margin-bottom: 60px;
+                  }
                   .block{
                     .panel-header{
                       margin-bottom: 20px;
                     }
                   }
-                  .chart-block{
-                    margin-left: -20px;
-                  }
                   .chart-bg{
-                    background: url(images/feed/chart-bg-2.png) center center no-repeat;
-                    background-size: 699px 144px;
-                    width: 699px;
-                    height: 160px;
-                    top: -30px;
-                    left: 12px;
-                    padding-top: 27px;
+                    &.app-install-chart-bg{
+                        background: url(images/feed/chart-bg-2.png) -11px 2px no-repeat;
+                        width: 690px;
+                        height: 190px;
+                        top: -18px;
+                        left: -14px;
+                        background-size: 709px 188px;
+                        line-height: 190px;
+                        z-index: 1;
+
+                        &:hover{
+                          width: 690px;
+                        }
+                      }
+
+
+                    &:hover{
+                      color: transparent;
+                      text-shadow: none;
+                    }
+
+                  }
+
+                  .chart-container{
+                    position: absolute;
+                    left: -37px;
+                    top: 31px;
                   }
                 }
 
