@@ -120,6 +120,19 @@ Alter Table MarkingPeriodClass
 
 GO
 
+CREATE TABLE ClassAnnouncementType
+(
+	Id int not null primary key,
+	Name nvarchar(255),
+	[Description] nvarchar(1024),
+	Gradable bit null,
+	Percentage int not null,
+	ClassRef int not null constraint FK_ClassAnnouncementType_Class foreign key references Class(Id),
+	ChalkableAnnouncementTypeRef int
+)
+GO
+
+
 CREATE TABLE [dbo].[Announcement](
 	[Id] INT PRIMARY KEY IDENTITY(1000000000, 1) NOT NULL,
 	[PersonRef] INT NOT NULL CONSTRAINT [FK_Announcement_Person] FOREIGN KEY REFERENCES Person(Id),
@@ -292,6 +305,7 @@ CREATE TABLE Period
 	[Order] INT NOT NULL
 )
 GO
+
 CREATE TABLE ClassPeriod
 (
 	PeriodRef INT NOT NULL CONSTRAINT FK_ClassPeriod_Period FOREIGN KEY REFERENCES Period(Id),
@@ -426,18 +440,6 @@ create table SchoolGradeLevel
 	SchoolRef int not null constraint FK_SchoolGradeLevel_School foreign key references School(Id),
 	GradeLevelRef int not null constraint FK_SchoolGradeLevel_GradeLevel foreign key references GradeLevel(Id),
 	constraint PK_SchoolGradeLevelId primary key (SchoolRef, GradeLevelRef)
-)
-go
-
-create table ClassAnnouncementType
-(
-	Id int not null primary key,
-	Name nvarchar(255),
-	[Description] nvarchar(1024),
-	Gradable bit null,
-	Percentage int not null,
-	ClassRef int not null constraint FK_ClassAnnouncementType_Class foreign key references Class(Id),
-	ChalkableAnnouncementTypeRef int
 )
 go
 
