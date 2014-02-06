@@ -33,9 +33,8 @@ if self.needButtons
     #attach-file-area.announcement-item.attach-file-area
         if !isAnnouncement
             +ActionLink('announcement', 'attachApp', self.getId())#add-application.simple-gray-button Attach App
-        if self.getState()
-            div.simple-gray-button.file Attach File
-                +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
+        .simple-gray-button.file Attach File
+            +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
 each item, i in items
     if item.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION
         +AnnouncementFormApplicationItem(item, i)

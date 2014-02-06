@@ -6,16 +6,34 @@ using System.Threading.Tasks;
 
 namespace Chalkable.StiConnector.Connectors.Model
 {
-    public class ActivityAttachment
+    public class ActivityAttachment : StiAttachment
     {
+        /// <summary>
+        /// The Id of the activity
+        /// </summary>
         public int ActivityId { get; set; }
+
+        /// <summary>
+        /// The id of the ActivityAssignedAttribute. 
+        /// </summary>
         public int Id { get; set; }
-        public string MimeType { get; set; }
-        public string Name { get; set; }
+
+        /// <summary>
+        /// The text of the attribute
+        /// </summary>
         public string Text { get; set; }
-        public string Uuid
+
+        public static ActivityAttachment Create(int activityId, StiAttachment attachment, string text)
         {
-            get { return Text; }
+            return new ActivityAttachment
+                {
+                    ActivityId = activityId,
+                    AttachmentId = attachment.AttachmentId,
+                    CrocoDocId = attachment.CrocoDocId,
+                    MimeType = attachment.MimeType,
+                    Name = attachment.Name,
+                    Text = text
+                };
         }
     }
 }

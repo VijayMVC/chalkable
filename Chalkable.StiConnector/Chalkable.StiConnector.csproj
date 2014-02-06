@@ -40,6 +40,15 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <OutputPath>bin\QA\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
@@ -53,6 +62,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web" />
@@ -66,12 +76,15 @@
   <ItemGroup>
     <Compile Include="Connectors\ActivityAttachmentsConnector.cs" />
     <Compile Include="Connectors\ActivityConnector.cs" />
+    <Compile Include="Connectors\AttachmentConnector.cs" />
     <Compile Include="Connectors\ConnectorBase.cs" />
     <Compile Include="Connectors\ConnectorLocator.cs" />
     <Compile Include="Connectors\Model\Activity.cs" />
     <Compile Include="Connectors\Model\ActivityAttachment.cs" />
+    <Compile Include="Connectors\Model\ActivityStandard.cs" />
     <Compile Include="Connectors\Model\School.cs" />
     <Compile Include="Connectors\Model\SectionAttendance.cs" />
+    <Compile Include="Connectors\Model\StiAttachment.cs" />
     <Compile Include="Connectors\SchoolConnector.cs" />
     <Compile Include="Model\AbsenceLevelReason.cs">
       <DependentUpon>StiEntities.tt</DependentUpon>

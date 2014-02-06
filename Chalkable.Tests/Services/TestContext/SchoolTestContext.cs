@@ -175,6 +175,7 @@ namespace Chalkable.Tests.Services.TestContext
                     Gender = DEFAULT_GENDER,
                     Password = DEFAULT_PASSWORD,
                     Role = role,
+                    SchoolId = School.LocalId
                 };
         }
        

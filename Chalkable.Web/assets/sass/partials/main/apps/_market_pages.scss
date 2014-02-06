@@ -3,6 +3,22 @@
 @import "partials/main/apps/appMarket/_app_market_install";
 @import "partials/main/apps/_app_ratings";
 
+
+
+.app-market{
+  .buttons-toolbar{
+    .toolbar-btn.app-store{
+      margin-left: 230px;
+    }
+  }
+
+
+  .market-search-box{
+    margin-left: 75px;
+  }
+
+}
+
 .app-market, .my-apps, .app-market-details, .apps-funds{
   .buttons-toolbar{
     .toolbar-btn{
@@ -19,9 +35,6 @@
 
       &:hover{
         @include background(linear-gradient(top, #f6f6f6,#d8d8d8));
-      }
-      &.app-store{
-        margin-left: 190px;
       }
     }
 
@@ -56,10 +69,9 @@
   }
 
 
-  #app-market-searchbox{
+  .market-search-box{
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    margin-left: 50px;
     width: 115px;
   }
 
@@ -71,3 +83,5 @@
     margin-bottom: 30px;
   }
 }
+
+

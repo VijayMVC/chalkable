@@ -203,8 +203,8 @@ NAMESPACE('chlk.templates.apps', function () {
                     chart: {
                         type: 'area',
                         backgroundColor: 'transparent',
-                        width: 350,
-                        height: 181,
+                        width: 435,
+                        height: 158,
                         style: {
                             fontFamily: 'Arial',
                             fontSize: '10px',
@@ -257,7 +257,7 @@ NAMESPACE('chlk.templates.apps', function () {
                     chart: {
                         type: 'area',
                         backgroundColor: 'transparent',
-                        width: 690,
+                        width: 698,
                         height: 145,
                         style: {
                             fontFamily: 'Arial',

@@ -31,12 +31,8 @@ mixin AppInstallsChart_(data, header, chartId)
     .block(attributes)
         .panel-header=header
         .chart-block.relative
-            .chart-bg=chartTitle
-            +Chart()(
-                id = chartId,
-                data-showmarkeronhover = true,
-                data-options = appInstallChartOptions
-            )
+            .chart-bg.button-block.app-install-chart-bg=chartTitle
+            +Chart()(id = chartId, data-showmarkeronhover = true, data-options = appInstallChartOptions)
 
 mixin AppViewsChart_(data, header, chartId)
     configs = self.prepareAppViewsChartData(data)
@@ -44,12 +40,8 @@ mixin AppViewsChart_(data, header, chartId)
     .block(attributes)
         .panel-header=header
         .chart-block.relative
-
-            +Chart()(
-                id = chartId,
-                data-showmarkeronhover = true,
-                data-options = appViewsChartOptions
-            )
+            .chart-bg.button-block.app-views-chart-bg
+            +Chart()(id = chartId, data-showmarkeronhover = true, data-options = appViewsChartOptions)
 
 mixin AppStatus_(appState, appDraftId, liveAppId)
     stateId = appState.getStateId()
@@ -95,24 +87,26 @@ mixin AppStatus_(appState, appDraftId, liveAppId)
         +AppInstallsChart_(self.getAppAnalytics().getAppInstallStats(), "App Installs", 'appInstalls').app-installs
 
     .app-store-balance
-         .app-store-views
-              +AppViewsChart_(self.getAppAnalytics().getAppViewStats(), "App Store Views", "appViews").app-views
-         .app-store-current-balance
-              +CurrentBalance_(self.getAppAnalytics().getDevBalance())
-
+        .app-store-views
+            +AppViewsChart_(self.getAppAnalytics().getAppViewStats(), "App Store Views", "appViews").app-views
+        .app-store-current-balance
+            +CurrentBalance_(self.getAppAnalytics().getDevBalance())
 
     .app-reviews.reviews.developer
-       .review-link Reviews
-           devAppReviews = self.getAppReviews()
-           +Rating("appRating", self.getAppRating(), false).all
+        .review-link Reviews
+            devAppReviews = self.getAppReviews()
+        +Rating("appRating", self.getAppRating(), false).all
         +ActionForm('apps', 'getAppReviews')#appReviews
             +Hidden('start',devAppReviews.getPageIndex()) * devAppReviews.getPageSize())
             +Hidden('totalCount', devAppReviews.getTotalCount())
             +Hidden('pageSize', devAppReviews.getPageSize())
             +Hidden('appId', self.liveAppId)
             +Hidden('scroll', 0)
-       +ScrollBox('appReviews', 50)
-           .user-reviews
-               .rating-persons
-                   +RenderWith(self.getModel(), chlk.templates.developer.AppReviewsTpl)
+        +ScrollBox('appReviews', 50)
+            .user-reviews
+                .rating-persons
+                    +RenderWith(self.getModel(), chlk.templates.developer.AppReviewsTpl)
+
+
+
 

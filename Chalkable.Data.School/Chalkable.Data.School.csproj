@@ -38,6 +38,15 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <OutputPath>bin\QA\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -48,6 +57,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\AlphaGradeDataAccess.cs" />
+    <Compile Include="DataAccess\AlternateScoreDataAccess.cs" />
     <Compile Include="DataAccess\BaseDataAccess.cs" />
     <Compile Include="DataAccess\AddressDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementApplicationDataAccess.cs" />
@@ -71,6 +82,7 @@
     <Compile Include="DataAccess\NotificationDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
     <Compile Include="DataAccess\SchoolPersonDataAccess.cs" />
+    <Compile Include="DataAccess\StandardDataAccess.cs" />
     <Compile Include="DataAccess\StudentDailyAttendanceDataAccess.cs" />
     <Compile Include="DataAccess\DateDataAccess.cs" />
     <Compile Include="DataAccess\ClassDataAccess.cs" />
@@ -90,6 +102,8 @@
     <Compile Include="DataAccess\StudentSchoolYearDataAccess.cs" />
     <Compile Include="DataAccess\StudentParentDataAccess.cs" />
     <Compile Include="Model\Address.cs" />
+    <Compile Include="Model\AlphaGrade.cs" />
+    <Compile Include="Model\AlternateScore.cs" />
     <Compile Include="Model\Announcement.cs" />
     <Compile Include="Model\AnnouncementApplication.cs" />
     <Compile Include="Model\AnnouncementAttachment.cs" />
@@ -97,6 +111,7 @@
     <Compile Include="Model\AnnouncementRecipient.cs" />
     <Compile Include="Model\AnnouncementRecipientData.cs" />
     <Compile Include="Model\AnnouncementReminder.cs" />
+    <Compile Include="Model\AnnouncementStandard.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstall.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstallAction.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstallActionClasses.cs" />
@@ -110,6 +125,7 @@
     <Compile Include="Model\ClassDisciplineType.cs" />
     <Compile Include="Model\ClassPeriod.cs" />
     <Compile Include="Model\ClassPerson.cs" />
+    <Compile Include="Model\ClassStandard.cs" />
     <Compile Include="Model\Date.cs" />
     <Compile Include="Model\DisciplineType.cs" />
     <Compile Include="Model\GradeLevel.cs" />
@@ -131,6 +147,8 @@
     <Compile Include="Model\SchoolGradeLevel.cs" />
     <Compile Include="Model\SchoolPerson.cs" />
     <Compile Include="Model\SchoolYear.cs" />
+    <Compile Include="Model\Standard.cs" />
+    <Compile Include="Model\StandardSubject.cs" />
     <Compile Include="Model\StudentAnnouncement.cs" />
     <Compile Include="Model\StudentDailyAttendance.cs" />
     <Compile Include="Model\StudentSchoolYear.cs" />

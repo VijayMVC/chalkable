@@ -120,6 +120,18 @@ Alter Table MarkingPeriodClass
 
 GO
 
+create table ClassAnnouncementType
+(
+	Id int not null primary key,
+	Name nvarchar(255),
+	[Description] nvarchar(1024),
+	Gradable bit null,
+	Percentage int not null,
+	ClassRef int not null constraint FK_ClassAnnouncementType_Class foreign key references Class(Id),
+	ChalkableAnnouncementTypeRef int
+)
+go
+
 CREATE TABLE [dbo].[Announcement](
 	[Id] INT PRIMARY KEY IDENTITY(1000000000, 1) NOT NULL,
 	[PersonRef] INT NOT NULL CONSTRAINT [FK_Announcement_Person] FOREIGN KEY REFERENCES Person(Id),
@@ -429,18 +441,6 @@ create table SchoolGradeLevel
 )
 go
 
-create table ClassAnnouncementType
-(
-	Id int not null primary key,
-	Name nvarchar(255),
-	[Description] nvarchar(1024),
-	Gradable bit null,
-	Percentage int not null,
-	ClassRef int not null constraint FK_ClassAnnouncementType_Class foreign key references Class(Id),
-	ChalkableAnnouncementTypeRef int
-)
-go
-
 alter table Room 
 add SchoolRef int not null constraint FK_Room_School foreign key references School(Id)
 go
@@ -530,4 +530,61 @@ go
 alter table Announcement
 add Title nvarchar(30)
 go
+
+
+create table StandardSubject(
+	Id int not null primary key,
+	[Name] [varchar](100) NOT NULL,
+	[Description] [varchar](200) NOT NULL,
+	[AdoptionYear] [int] NULL,
+	[IsActive] [bit] NOT NULL,
+)
+Go
+CREATE TABLE [Standard](
+	[Id] [int] NOT NULL primary key,
+	[ParentStandardRef] [int] NULL constraint FK_Standard_ParentStandard foreign key references [Standard](Id),
+	[Name] [varchar](100) NOT NULL,
+	[Description] [varchar](max) NOT NULL,
+	[StandardSubjectRef] int not null constraint [FK_Standard_StandardSubject] foreign key references StandardSubject(Id),
+	[LowerGradeLevelRef] [int] NULL constraint [FK_Standard_LowerGradeLevel] foreign key references GradeLevel(Id),
+	[UpperGradeLevelRef] [int] NULL constraint [FK_Standard_UpperGradeLevel] foreign key references GradeLevel(Id),
+	[IsActive] [bit] NOT NULL,
+)
+GO
+
+
+create table AnnouncementStandard(
+	[StandardRef] int not null constraint FK_AnnouncementStandard_Standard foreign key references [Standard](Id),
+	[AnnouncementRef] int not null constraint FK_AnnouncementStandard_Announcement foreign key references Announcement(Id)
+)
+ALTER TABLE AnnouncementStandard
+	ADD CONSTRAINT PK_AnnouncementStandard PRIMARY KEY (StandardRef, AnnouncementRef)
+GO
+
+create table ClassStandard(
+	ClassRef int not null constraint FK_ClassStandard_Class foreign key references Class(Id),
+	StandardRef int not null constraint FK_ClassStandard_Standard foreign key references [Standard](Id)
+)
+Go
+alter table ClassStandard
+	add constraint PK_ClassStandard primary key (ClassRef, StandardRef)
+go
+
+
+CREATE TABLE [dbo].[AlphaGrade](
+	[Id] [int] NOT NULL primary key,
+	[SchoolRef] [int] NOT NULL constraint FK_AlphaGrade_School foreign key references School(Id),
+	[Name] [varchar](5) NOT NULL,
+	[Description] [varchar](255) NOT NULL,
+)
+GO
+
+CREATE TABLE [dbo].[AlternateScore](
+	[Id] [int] NOT NULL primary key,
+	[Name] [varchar](3) NOT NULL,
+	[Description] [varchar](255) NOT NULL,
+	[IncludeInAverage] [bit] NOT NULL,
+	[PercentOfMaximumScore] [decimal](6, 2) NULL,
+)
+GO
 

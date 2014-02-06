@@ -8,7 +8,7 @@ mixin AppMarketToolbar(balance, categories, gradelevels)
             +ActionLink('funds', 'view').toolbar-btn App Funds
             +ActionForm('', '')
                 +SearchBox(chlk.services.AppMarketService, "getAppsByFilter",
-                chlk.templates.apps.AppMarketSearchBoxTpl)#app-market-searchbox(name="appMarketSearch", triggerBtnId="app-market-search-btn")
+                chlk.templates.apps.AppMarketSearchBoxTpl)#app-market-searchbox.market-search-box(name="appMarketSearch", triggerBtnId="app-market-search-btn")
                 button(type="submit").search-btn#app-market-search-btn
 
 
