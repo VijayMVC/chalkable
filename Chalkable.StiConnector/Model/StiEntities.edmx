@@ -18,6 +18,7 @@
           <EntitySet Name="CalendarDay" EntityType="INOWDEMOModel.Store.CalendarDay" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Course" EntityType="INOWDEMOModel.Store.Course" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="CourseSchool" EntityType="INOWDEMOModel.Store.CourseSchool" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CourseStandard" EntityType="INOWDEMOModel.Store.CourseStandard" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="CourseType" EntityType="INOWDEMOModel.Store.CourseType" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="DayType" EntityType="INOWDEMOModel.Store.DayType" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Document" EntityType="INOWDEMOModel.Store.Document" store:Type="Tables" Schema="dbo" />
@@ -44,6 +45,8 @@
           <EntitySet Name="StaffContact" EntityType="INOWDEMOModel.Store.StaffContact" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="StaffRole" EntityType="INOWDEMOModel.Store.StaffRole" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="StaffSchool" EntityType="INOWDEMOModel.Store.StaffSchool" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Standard" EntityType="INOWDEMOModel.Store.Standard" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="StandardSubject" EntityType="INOWDEMOModel.Store.StandardSubject" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Student" EntityType="INOWDEMOModel.Store.Student" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="StudentAcadSession" EntityType="INOWDEMOModel.Store.StudentAcadSession" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="StudentAttendanceMinute" EntityType="INOWDEMOModel.Store.StudentAttendanceMinute" store:Type="Tables" Schema="dbo" />
@@ -146,6 +149,14 @@
           <AssociationSet Name="FK_CourseSchool_SchoolID" Association="INOWDEMOModel.Store.FK_CourseSchool_SchoolID">
             <End Role="School" EntitySet="School" />
             <End Role="CourseSchool" EntitySet="CourseSchool" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CourseStandard_CourseID" Association="INOWDEMOModel.Store.FK_CourseStandard_CourseID">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="CourseStandard" EntitySet="CourseStandard" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CourseStandard_StandardID" Association="INOWDEMOModel.Store.FK_CourseStandard_StandardID">
+            <End Role="Standard" EntitySet="Standard" />
+            <End Role="CourseStandard" EntitySet="CourseStandard" />
           </AssociationSet>
           <AssociationSet Name="FK_DayType_AcadSessionID" Association="INOWDEMOModel.Store.FK_DayType_AcadSessionID">
             <End Role="AcadSession" EntitySet="AcadSession" />
@@ -334,6 +345,22 @@
           <AssociationSet Name="FK_StaffSchool_StaffID" Association="INOWDEMOModel.Store.FK_StaffSchool_StaffID">
             <End Role="Staff" EntitySet="Staff" />
             <End Role="StaffSchool" EntitySet="StaffSchool" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Standard_LowerGradeLevelID" Association="INOWDEMOModel.Store.FK_Standard_LowerGradeLevelID">
+            <End Role="GradeLevel" EntitySet="GradeLevel" />
+            <End Role="Standard" EntitySet="Standard" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Standard_ParentStandardID" Association="INOWDEMOModel.Store.FK_Standard_ParentStandardID">
+            <End Role="Standard" EntitySet="Standard" />
+            <End Role="Standard1" EntitySet="Standard" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Standard_StandardSubjectID" Association="INOWDEMOModel.Store.FK_Standard_StandardSubjectID">
+            <End Role="StandardSubject" EntitySet="StandardSubject" />
+            <End Role="Standard" EntitySet="Standard" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Standard_UpperGradeLevelID" Association="INOWDEMOModel.Store.FK_Standard_UpperGradeLevelID">
+            <End Role="GradeLevel" EntitySet="GradeLevel" />
+            <End Role="Standard" EntitySet="Standard" />
           </AssociationSet>
           <AssociationSet Name="FK_Student_CaseManagerID" Association="INOWDEMOModel.Store.FK_Student_CaseManagerID">
             <End Role="Staff" EntitySet="Staff" />
@@ -730,6 +757,15 @@
           <Property Name="SchoolID" Type="int" Nullable="false" />
           <Property Name="RowVersion" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
+        <EntityType Name="CourseStandard">
+          <Key>
+            <PropertyRef Name="CourseID" />
+            <PropertyRef Name="StandardID" />
+          </Key>
+          <Property Name="CourseID" Type="int" Nullable="false" />
+          <Property Name="StandardID" Type="int" Nullable="false" />
+          <Property Name="DistrictGuid" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
         <EntityType Name="CourseType">
           <Key>
             <PropertyRef Name="CourseTypeID" />
@@ -1033,6 +1069,8 @@
           <Property Name="RowVersion" Type="uniqueidentifier" Nullable="false" />
           <Property Name="DistrictGuid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="CourseRequestSessionID" Type="int" />
+          <Property Name="IsLEEnabled" Type="bit" Nullable="false" />
+          <Property Name="IsLESyncComplete" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="SchoolGradeLevel">
           <Key>
@@ -1165,6 +1203,36 @@
           <Property Name="SchoolID" Type="int" Nullable="false" />
           <Property Name="DistrictGuid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="RowVersion" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Standard">
+          <Key>
+            <PropertyRef Name="StandardID" />
+          </Key>
+          <Property Name="StandardID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ParentStandardID" Type="int" />
+          <Property Name="AssessmentStandardID" Type="int" />
+          <Property Name="AssessmentParentStandardID" Type="int" />
+          <Property Name="StandardSubjectID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="Description" Type="varchar(max)" Nullable="false" />
+          <Property Name="LowerGradeLevelID" Type="smallint" />
+          <Property Name="UpperGradeLevelID" Type="smallint" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="RowVersion" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DistrictGuid" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StandardSubject">
+          <Key>
+            <PropertyRef Name="StandardSubjectID" />
+          </Key>
+          <Property Name="StandardSubjectID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="AssessmentSubjectID" Type="int" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="Description" Type="varchar" Nullable="false" MaxLength="200" />
+          <Property Name="AdoptionYear" Type="smallint" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="RowVersion" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DistrictGuid" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="Student">
           <Key>
@@ -1766,6 +1834,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_CourseStandard_CourseID">
+          <End Role="Course" Type="INOWDEMOModel.Store.Course" Multiplicity="1" />
+          <End Role="CourseStandard" Type="INOWDEMOModel.Store.CourseStandard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseID" />
+            </Principal>
+            <Dependent Role="CourseStandard">
+              <PropertyRef Name="CourseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CourseStandard_StandardID">
+          <End Role="Standard" Type="INOWDEMOModel.Store.Standard" Multiplicity="1" />
+          <End Role="CourseStandard" Type="INOWDEMOModel.Store.CourseStandard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Standard">
+              <PropertyRef Name="StandardID" />
+            </Principal>
+            <Dependent Role="CourseStandard">
+              <PropertyRef Name="StandardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_DayType_AcadSessionID">
           <End Role="AcadSession" Type="INOWDEMOModel.Store.AcadSession" Multiplicity="1" />
           <End Role="DayType" Type="INOWDEMOModel.Store.DayType" Multiplicity="*" />
@@ -2327,6 +2419,54 @@
             </Principal>
             <Dependent Role="StaffSchool">
               <PropertyRef Name="StaffID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Standard_LowerGradeLevelID">
+          <End Role="GradeLevel" Type="INOWDEMOModel.Store.GradeLevel" Multiplicity="0..1" />
+          <End Role="Standard" Type="INOWDEMOModel.Store.Standard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GradeLevel">
+              <PropertyRef Name="GradeLevelID" />
+            </Principal>
+            <Dependent Role="Standard">
+              <PropertyRef Name="LowerGradeLevelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Standard_ParentStandardID">
+          <End Role="Standard" Type="INOWDEMOModel.Store.Standard" Multiplicity="0..1" />
+          <End Role="Standard1" Type="INOWDEMOModel.Store.Standard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Standard">
+              <PropertyRef Name="StandardID" />
+            </Principal>
+            <Dependent Role="Standard1">
+              <PropertyRef Name="ParentStandardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Standard_StandardSubjectID">
+          <End Role="StandardSubject" Type="INOWDEMOModel.Store.StandardSubject" Multiplicity="1" />
+          <End Role="Standard" Type="INOWDEMOModel.Store.Standard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StandardSubject">
+              <PropertyRef Name="StandardSubjectID" />
+            </Principal>
+            <Dependent Role="Standard">
+              <PropertyRef Name="StandardSubjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Standard_UpperGradeLevelID">
+          <End Role="GradeLevel" Type="INOWDEMOModel.Store.GradeLevel" Multiplicity="0..1" />
+          <End Role="Standard" Type="INOWDEMOModel.Store.Standard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GradeLevel">
+              <PropertyRef Name="GradeLevelID" />
+            </Principal>
+            <Dependent Role="Standard">
+              <PropertyRef Name="UpperGradeLevelID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3352,6 +3492,33 @@
             <End Role="Course" EntitySet="Courses" />
             <End Role="ActivityCategory" EntitySet="ActivityCategories" />
           </AssociationSet>
+          <EntitySet Name="CourseStandards" EntityType="StiModel.CourseStandard" />
+          <EntitySet Name="Standards" EntityType="StiModel.Standard" />
+          <EntitySet Name="StandardSubjects" EntityType="StiModel.StandardSubject" />
+          <AssociationSet Name="FK_CourseStandard_CourseID" Association="StiModel.FK_CourseStandard_CourseID">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="CourseStandard" EntitySet="CourseStandards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CourseStandard_StandardID" Association="StiModel.FK_CourseStandard_StandardID">
+            <End Role="Standard" EntitySet="Standards" />
+            <End Role="CourseStandard" EntitySet="CourseStandards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Standard_LowerGradeLevelID" Association="StiModel.FK_Standard_LowerGradeLevelID">
+            <End Role="GradeLevel" EntitySet="GradeLevels" />
+            <End Role="Standard" EntitySet="Standards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Standard_UpperGradeLevelID" Association="StiModel.FK_Standard_UpperGradeLevelID">
+            <End Role="GradeLevel" EntitySet="GradeLevels" />
+            <End Role="Standard" EntitySet="Standards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Standard_ParentStandardID" Association="StiModel.FK_Standard_ParentStandardID">
+            <End Role="Standard" EntitySet="Standards" />
+            <End Role="Standard1" EntitySet="Standards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Standard_StandardSubjectID" Association="StiModel.FK_Standard_StandardSubjectID">
+            <End Role="StandardSubject" EntitySet="StandardSubjects" />
+            <End Role="Standard" EntitySet="Standards" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="AbsenceLevelReason">
           <Key>
@@ -3611,6 +3778,7 @@
           <NavigationProperty Name="StudentPeriodAbsences" Relationship="StiModel.FK_StudentPeriodAbsence_SectionID" FromRole="Course" ToRole="StudentPeriodAbsence" />
           <Property Type="Boolean" Name="MergeRostersForAttendance" Nullable="false" />
           <NavigationProperty Name="ActivityCategories" Relationship="StiModel.FK_ActivityCategory_SectionID" FromRole="Course" ToRole="ActivityCategory" />
+          <NavigationProperty Name="CourseStandards" Relationship="StiModel.FK_CourseStandard_CourseID" FromRole="Course" ToRole="CourseStandard" />
         </EntityType>
         <EntityType Name="CourseSchool">
           <Key>
@@ -3723,6 +3891,8 @@
           <NavigationProperty Name="SchoolGradeLevels" Relationship="StiModel.FK_SchoolGradeLevel_GradeLevelID" FromRole="GradeLevel" ToRole="SchoolGradeLevel" />
           <NavigationProperty Name="StudentAcadSessions" Relationship="StiModel.FK_StudentAcadSession_GradeLevelID" FromRole="GradeLevel" ToRole="StudentAcadSession" />
           <NavigationProperty Name="StudentGradeLevels" Relationship="StiModel.FK_StudentGradeLevel_GradeLevelID" FromRole="GradeLevel" ToRole="StudentGradeLevel" />
+          <NavigationProperty Name="Standards" Relationship="StiModel.FK_Standard_LowerGradeLevelID" FromRole="GradeLevel" ToRole="Standard" />
+          <NavigationProperty Name="Standards1" Relationship="StiModel.FK_Standard_UpperGradeLevelID" FromRole="GradeLevel" ToRole="Standard" />
         </EntityType>
         <EntityType Name="Person">
           <Key>
@@ -3922,6 +4092,8 @@
           <NavigationProperty Name="Staffs" Relationship="StiModel.FK_Staff_PrimarySchoolID" FromRole="School" ToRole="Staff" />
           <NavigationProperty Name="Staffs1" Relationship="StiModel.FK_Staff_ResidentSchoolZoneID" FromRole="School" ToRole="Staff" />
           <NavigationProperty Name="Document" Relationship="StiModel.FK_School_SchoolLogoID" FromRole="School" ToRole="Document" />
+          <Property Type="Boolean" Name="IsLEEnabled" Nullable="false" />
+          <Property Type="Boolean" Name="IsLESyncComplete" Nullable="false" />
         </EntityType>
         <EntityType Name="SchoolGradeLevel">
           <Key>
@@ -5915,6 +6087,126 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CourseStandard">
+          <Key>
+            <PropertyRef Name="CourseID" />
+            <PropertyRef Name="StandardID" />
+          </Key>
+          <Property Type="Int32" Name="CourseID" Nullable="false" />
+          <Property Type="Int32" Name="StandardID" Nullable="false" />
+          <Property Type="Guid" Name="DistrictGuid" Nullable="false" />
+          <NavigationProperty Name="Course" Relationship="StiModel.FK_CourseStandard_CourseID" FromRole="CourseStandard" ToRole="Course" />
+          <NavigationProperty Name="Standard" Relationship="StiModel.FK_CourseStandard_StandardID" FromRole="CourseStandard" ToRole="Standard" />
+        </EntityType>
+        <EntityType Name="Standard">
+          <Key>
+            <PropertyRef Name="StandardID" />
+          </Key>
+          <Property Type="Int32" Name="StandardID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="ParentStandardID" />
+          <Property Type="Int32" Name="AssessmentStandardID" />
+          <Property Type="Int32" Name="AssessmentParentStandardID" />
+          <Property Type="Int32" Name="StandardSubjectID" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Description" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="LowerGradeLevelID" />
+          <Property Type="Int16" Name="UpperGradeLevelID" />
+          <Property Type="Boolean" Name="IsActive" Nullable="false" />
+          <Property Type="Guid" Name="RowVersion" Nullable="false" />
+          <Property Type="Guid" Name="DistrictGuid" Nullable="false" />
+          <NavigationProperty Name="CourseStandards" Relationship="StiModel.FK_CourseStandard_StandardID" FromRole="Standard" ToRole="CourseStandard" />
+          <NavigationProperty Name="GradeLevel" Relationship="StiModel.FK_Standard_LowerGradeLevelID" FromRole="Standard" ToRole="GradeLevel" />
+          <NavigationProperty Name="GradeLevel1" Relationship="StiModel.FK_Standard_UpperGradeLevelID" FromRole="Standard" ToRole="GradeLevel" />
+          <NavigationProperty Name="Standard1" Relationship="StiModel.FK_Standard_ParentStandardID" FromRole="Standard" ToRole="Standard1" />
+          <NavigationProperty Name="Standard2" Relationship="StiModel.FK_Standard_ParentStandardID" FromRole="Standard1" ToRole="Standard" />
+          <NavigationProperty Name="StandardSubject" Relationship="StiModel.FK_Standard_StandardSubjectID" FromRole="Standard" ToRole="StandardSubject" />
+        </EntityType>
+        <EntityType Name="StandardSubject">
+          <Key>
+            <PropertyRef Name="StandardSubjectID" />
+          </Key>
+          <Property Type="Int32" Name="StandardSubjectID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="AssessmentSubjectID" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Description" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="AdoptionYear" />
+          <Property Type="Boolean" Name="IsActive" Nullable="false" />
+          <Property Type="Guid" Name="RowVersion" Nullable="false" />
+          <Property Type="Guid" Name="DistrictGuid" Nullable="false" />
+          <NavigationProperty Name="Standards" Relationship="StiModel.FK_Standard_StandardSubjectID" FromRole="StandardSubject" ToRole="Standard" />
+        </EntityType>
+        <Association Name="FK_CourseStandard_CourseID">
+          <End Type="StiModel.Course" Role="Course" Multiplicity="1" />
+          <End Type="StiModel.CourseStandard" Role="CourseStandard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseID" />
+            </Principal>
+            <Dependent Role="CourseStandard">
+              <PropertyRef Name="CourseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CourseStandard_StandardID">
+          <End Type="StiModel.Standard" Role="Standard" Multiplicity="1" />
+          <End Type="StiModel.CourseStandard" Role="CourseStandard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Standard">
+              <PropertyRef Name="StandardID" />
+            </Principal>
+            <Dependent Role="CourseStandard">
+              <PropertyRef Name="StandardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Standard_LowerGradeLevelID">
+          <End Type="StiModel.GradeLevel" Role="GradeLevel" Multiplicity="0..1" />
+          <End Type="StiModel.Standard" Role="Standard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GradeLevel">
+              <PropertyRef Name="GradeLevelID" />
+            </Principal>
+            <Dependent Role="Standard">
+              <PropertyRef Name="LowerGradeLevelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Standard_UpperGradeLevelID">
+          <End Type="StiModel.GradeLevel" Role="GradeLevel" Multiplicity="0..1" />
+          <End Type="StiModel.Standard" Role="Standard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GradeLevel">
+              <PropertyRef Name="GradeLevelID" />
+            </Principal>
+            <Dependent Role="Standard">
+              <PropertyRef Name="UpperGradeLevelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Standard_ParentStandardID">
+          <End Type="StiModel.Standard" Role="Standard" Multiplicity="0..1" />
+          <End Type="StiModel.Standard" Role="Standard1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Standard">
+              <PropertyRef Name="StandardID" />
+            </Principal>
+            <Dependent Role="Standard1">
+              <PropertyRef Name="ParentStandardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Standard_StandardSubjectID">
+          <End Type="StiModel.StandardSubject" Role="StandardSubject" Multiplicity="1" />
+          <End Type="StiModel.Standard" Role="Standard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StandardSubject">
+              <PropertyRef Name="StandardSubjectID" />
+            </Principal>
+            <Dependent Role="Standard">
+              <PropertyRef Name="StandardSubjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -6358,6 +6650,8 @@
           <EntitySetMapping Name="Schools">
             <EntityTypeMapping TypeName="StiModel.School">
               <MappingFragment StoreEntitySet="School">
+                <ScalarProperty Name="IsLESyncComplete" ColumnName="IsLESyncComplete" />
+                <ScalarProperty Name="IsLEEnabled" ColumnName="IsLEEnabled" />
                 <ScalarProperty Name="SchoolID" ColumnName="SchoolID" />
                 <ScalarProperty Name="SchoolGUID" ColumnName="SchoolGUID" />
                 <ScalarProperty Name="SchoolNumber" ColumnName="SchoolNumber" />
@@ -6939,6 +7233,47 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="SectionID" ColumnName="SectionID" />
                 <ScalarProperty Name="ActivityCategoryID" ColumnName="ActivityCategoryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CourseStandards">
+            <EntityTypeMapping TypeName="StiModel.CourseStandard">
+              <MappingFragment StoreEntitySet="CourseStandard">
+                <ScalarProperty Name="DistrictGuid" ColumnName="DistrictGuid" />
+                <ScalarProperty Name="StandardID" ColumnName="StandardID" />
+                <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Standards">
+            <EntityTypeMapping TypeName="StiModel.Standard">
+              <MappingFragment StoreEntitySet="Standard">
+                <ScalarProperty Name="DistrictGuid" ColumnName="DistrictGuid" />
+                <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UpperGradeLevelID" ColumnName="UpperGradeLevelID" />
+                <ScalarProperty Name="LowerGradeLevelID" ColumnName="LowerGradeLevelID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="StandardSubjectID" ColumnName="StandardSubjectID" />
+                <ScalarProperty Name="AssessmentParentStandardID" ColumnName="AssessmentParentStandardID" />
+                <ScalarProperty Name="AssessmentStandardID" ColumnName="AssessmentStandardID" />
+                <ScalarProperty Name="ParentStandardID" ColumnName="ParentStandardID" />
+                <ScalarProperty Name="StandardID" ColumnName="StandardID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StandardSubjects">
+            <EntityTypeMapping TypeName="StiModel.StandardSubject">
+              <MappingFragment StoreEntitySet="StandardSubject">
+                <ScalarProperty Name="DistrictGuid" ColumnName="DistrictGuid" />
+                <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="AdoptionYear" ColumnName="AdoptionYear" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AssessmentSubjectID" ColumnName="AssessmentSubjectID" />
+                <ScalarProperty Name="StandardSubjectID" ColumnName="StandardSubjectID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

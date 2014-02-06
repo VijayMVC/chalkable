@@ -8,6 +8,8 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Model;
+using Standard = Chalkable.Data.School.Model.Standard;
+using StandardSubject = Chalkable.Data.School.Model.StandardSubject;
 
 namespace Chalkable.StiConnector.Services
 {
@@ -69,6 +71,7 @@ namespace Chalkable.StiConnector.Services
             ImportRooms();
             Log.LogInfo(ChlkResources.IMPORT_COURSES_START);
             ImportCourses();
+            ImportStandards();
             ImportMarkingPeriodClasses();
             Log.LogInfo("Import class announcement types");
             ImportClassAnnouncementTypes();
@@ -80,6 +83,42 @@ namespace Chalkable.StiConnector.Services
             ImportClassPersons();
             Log.LogInfo("Import attendance reasons");
             ImportAttendanceReasons();
+        }
+
+        private void ImportStandards()
+        {
+            var ss = stiEntities.StandardSubjects.ToList().Select(x=>new StandardSubject
+                {
+                    AdoptionYear = x.AdoptionYear,
+                    Id = x.StandardSubjectID,
+                    Description = x.Description,
+                    IsActive = x.IsActive,
+                    Name = x.Name
+                }).ToList();
+            ServiceLocatorSchool.StandardService.AddStandardSubjects(ss);
+
+            var sts = stiEntities.Standards.ToList().Select(x => new Standard
+                {
+                    Description = x.Description,
+                    Id = x.StandardID,
+                    IsActive = x.IsActive,
+                    LowerGradeLevelRef = x.LowerGradeLevelID,
+                    Name = x.Name,
+                    ParentStandardRef = x.ParentStandardID,
+                    StandardSubjectRef = x.StandardSubjectID,
+                    UpperGradeLevelRef = x.UpperGradeLevelID
+                }).ToList();
+            ServiceLocatorSchool.StandardService.AddStandards(sts);
+
+            var classes = ServiceLocatorSchool.ClassService.GetClasses(null);
+            var cs = stiEntities.CourseStandards.ToList()
+                .Where(x=>classes.Any(y=>y.Id == x.CourseID))
+                .Select(x => new ClassStandard
+                {
+                    ClassRef = x.CourseID,
+                    StandardRef = x.StandardID
+                }).ToList();
+            
         }
 
         private void ImportClassAnnouncementTypes()

@@ -78,5 +78,8 @@ namespace Chalkable.StiConnector.Model
         public DbSet<StudentPeriodAbsence> StudentPeriodAbsences { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<ActivityCategory> ActivityCategories { get; set; }
+        public DbSet<CourseStandard> CourseStandards { get; set; }
+        public DbSet<Standard> Standards { get; set; }
+        public DbSet<StandardSubject> StandardSubjects { get; set; }
     }
 }

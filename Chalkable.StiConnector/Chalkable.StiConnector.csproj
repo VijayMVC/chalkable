@@ -122,6 +122,9 @@
     <Compile Include="Model\CourseSchool.cs">
       <DependentUpon>StiEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\CourseStandard.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model\CourseType.cs">
       <DependentUpon>StiEntities.tt</DependentUpon>
     </Compile>
@@ -198,6 +201,12 @@
       <DependentUpon>StiEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\StaffSchool.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Standard.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\StandardSubject.cs">
       <DependentUpon>StiEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\StiEntities.Context.cs">

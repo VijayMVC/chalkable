@@ -170,6 +170,15 @@
         <AssociationConnector Association="StiModel.FK_Student_PhotographID" />
         <EntityTypeShape EntityType="StiModel.ActivityCategory" Width="1.5" PointX="0.44238859621919158" PointY="10.345981751729726" />
         <AssociationConnector Association="StiModel.FK_ActivityCategory_SectionID" />
+        <EntityTypeShape EntityType="StiModel.CourseStandard" Width="1.5" PointX="2.3279523320160584" PointY="11.94249432345037" />
+        <EntityTypeShape EntityType="StiModel.Standard" Width="1.5" PointX="7.7775974607922116" PointY="7.3283069316895242" />
+        <EntityTypeShape EntityType="StiModel.StandardSubject" Width="1.5" PointX="8.831801012545732" PointY="9.2997318996580933" />
+        <AssociationConnector Association="StiModel.FK_CourseStandard_CourseID" />
+        <AssociationConnector Association="StiModel.FK_CourseStandard_StandardID" />
+        <AssociationConnector Association="StiModel.FK_Standard_LowerGradeLevelID" />
+        <AssociationConnector Association="StiModel.FK_Standard_UpperGradeLevelID" />
+        <AssociationConnector Association="StiModel.FK_Standard_ParentStandardID" />
+        <AssociationConnector Association="StiModel.FK_Standard_StandardSubjectID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -54,6 +54,8 @@ namespace Chalkable.StiConnector.Model
         public System.Guid RowVersion { get; set; }
         public System.Guid DistrictGuid { get; set; }
         public Nullable<int> CourseRequestSessionID { get; set; }
+        public bool IsLEEnabled { get; set; }
+        public bool IsLESyncComplete { get; set; }
     
         public virtual ICollection<AcadSession> AcadSessions { get; set; }
         public virtual AcadSession AcadSession { get; set; }
