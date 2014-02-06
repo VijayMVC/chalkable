@@ -73,6 +73,26 @@ namespace Chalkable.BusinessLogic.Mapping
                     }
                     MapperFactory.GetMapper<AnnouncementAttachment, ActivityAttachment>().Map(annAtt, att);
                 }
+
+                if (activity.Standards != null && activity.Standards.Any())
+                {
+                    if (annDetails.AnnouncementStandards == null)
+                        annDetails.AnnouncementStandards = new List<AnnouncementStandardDetails>();
+                    foreach (var activityStandard in activity.Standards)
+                    {
+                        var annStandard = annDetails.AnnouncementStandards.FirstOrDefault(x => x.StandardRef == activityStandard.StandardId);
+                        if (annStandard == null)
+                        {
+                            annStandard = new AnnouncementStandardDetails() {AnnouncementRef = annDetails.Id};
+                            annDetails.AnnouncementStandards.Add(annStandard);
+                        }
+                        annStandard.StandardRef = activityStandard.StandardId;
+                        if(annStandard.Standard == null)
+                            annStandard.Standard = new Standard();
+                        annStandard.Standard.Id = activityStandard.StandardId;
+                        annStandard.Standard.Name = activityStandard.StandardName;
+                    }                    
+                }
             }
         }
     }
@@ -97,25 +117,49 @@ namespace Chalkable.BusinessLogic.Mapping
                 activity.SectionId = ann.ClassRef.Value;
 
             var annDetails = ann as AnnouncementDetails;
-            if (annDetails != null && annDetails.AnnouncementAttachments != null && annDetails.AnnouncementAttachments.Count > 0)
+            if (annDetails != null)
             {
-                if (activity.Attachments == null)
-                    activity.Attachments = new List<ActivityAttachment>();
-                var newAtts = new List<ActivityAttachment>();
-                foreach (var annAtt in annDetails.AnnouncementAttachments)
+                if (annDetails.AnnouncementAttachments != null && annDetails.AnnouncementAttachments.Count > 0)
                 {
-                    if (annAtt.SisAttachmentId.HasValue)
+                    if (activity.Attachments == null)
+                        activity.Attachments = new List<ActivityAttachment>();
+                    var newAtts = new List<ActivityAttachment>();
+                    foreach (var annAtt in annDetails.AnnouncementAttachments)
                     {
-                        var att = activity.Attachments.FirstOrDefault(x => x.AttachmentId == annAtt.SisAttachmentId);
-                        if (att == null)
+                        if (annAtt.SisAttachmentId.HasValue)
                         {
-                            att = new ActivityAttachment { ActivityId = activity.Id };
-                            newAtts.Add(att);
+                            var att = activity.Attachments.FirstOrDefault(x => x.AttachmentId == annAtt.SisAttachmentId);
+                            if (att == null)
+                            {
+                                att = new ActivityAttachment { ActivityId = activity.Id };
+                                newAtts.Add(att);
+                            }
+                            MapperFactory.GetMapper<ActivityAttachment, AnnouncementAttachment>().Map(att, annAtt);
                         }
-                        MapperFactory.GetMapper<ActivityAttachment, AnnouncementAttachment>().Map(att, annAtt);
                     }
+                    activity.Attachments = activity.Attachments.Concat(newAtts);
                 }
-                activity.Attachments = activity.Attachments.Concat(newAtts);
+                if (annDetails.AnnouncementStandards != null && annDetails.AnnouncementStandards.Count > 0)
+                {
+                    if(activity.Standards == null)
+                        activity.Standards = new LinkedList<ActivityStandard>();
+                    var newStandards = new List<ActivityStandard>();
+                    foreach (var annStandard in annDetails.AnnouncementStandards)
+                    {
+                        if (annStandard.Standard != null)
+                        {
+                            var activitySt = activity.Standards.FirstOrDefault(x => x.StandardId == annStandard.StandardRef);
+                            if (activitySt == null)
+                            {
+                                activitySt = new ActivityStandard();
+                                newStandards.Add(activitySt);
+                            }
+                            activitySt.StandardId = annStandard.Standard.Id;
+                            activitySt.StandardName = annStandard.Standard.Name;
+                        }
+                    }
+                    activity.Standards = activity.Standards.Concat(newStandards);
+                }
             }
         }
     }
