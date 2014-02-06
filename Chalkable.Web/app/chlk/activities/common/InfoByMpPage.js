@@ -14,8 +14,9 @@ NAMESPACE('chlk.activities.common', function () {
                     var parent = node.parent('.marking-period-container');
 
                     var mpData = parent.find('.mp-data');
+                    var container = mpData.find('.ann-types-container');
                     jQuery(mpData.valueOf()).animate({
-                        height: parent.hasClass('open') ? 0 : mpData.find('.ann-types-container').height() + 30
+                        height: parent.hasClass('open') ? 0 : (container.height() + parseInt(container.getCss('margin-bottom'), 10))
                     }, 500);
 
                     if(parent.hasClass('open')){

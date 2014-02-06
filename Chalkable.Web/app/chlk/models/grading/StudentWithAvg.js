@@ -5,6 +5,8 @@ NAMESPACE('chlk.models.grading', function () {
         'StudentWithAvg', [
             [ria.serialize.SerializeProperty('studentinfo')],
             chlk.models.people.ShortUserInfo, 'studentInfo',
-            Number, 'avg'
+
+            [ria.serialize.SerializeProperty('iswithdrawn')],
+            Boolean, 'withdrawn'
         ]);
 });

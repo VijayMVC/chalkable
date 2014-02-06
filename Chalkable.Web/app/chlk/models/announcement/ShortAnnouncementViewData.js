@@ -12,11 +12,21 @@ NAMESPACE('chlk.models.announcement', function () {
 
             Number, 'order',
 
+            String, 'title',
+
+            [ria.serialize.SerializeProperty('expiresdate')],
+            chlk.models.common.ChlkDate, 'expiresDate',
+
+            Number, 'avg',
+
             chlk.models.id.AnnouncementId, 'id',
 
             Boolean, 'dropped',
 
             [ria.serialize.SerializeProperty('studentannouncements')],
-            chlk.models.announcement.ShortStudentAnnouncementsViewData, 'studentAnnouncements'
+            chlk.models.announcement.ShortStudentAnnouncementsViewData, 'studentAnnouncements',
+
+            [ria.serialize.SerializeProperty('maxscore')],
+            Number, 'maxScore'
         ]);
 });

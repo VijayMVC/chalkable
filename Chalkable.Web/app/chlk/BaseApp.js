@@ -149,8 +149,10 @@ NAMESPACE('chlk', function (){
                             tooltip.find('.tooltip-content').html(node.data('tooltip'));
                             tooltip.css('left', offset.left + (node.width() - tooltip.width())/2)
                                 .css('top', offset.top - tooltip.height());
+                            e.stopPropagation();
                         }
                     }
+
                 });
 
                 jQuery(document).on('mouseleave click', '[data-tooltip]', function(e){
