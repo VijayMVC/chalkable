@@ -18,7 +18,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Standard GetStandardById(int id);
         IList<Standard> GetStandardes();
 
-        IList<ClassStandard> AddClassStandards(int standardId, IList<int> classesIds); 
+        IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards); 
         void AddStandardSubjects(IList<StandardSubject> standardSubjects);
         IList<StandardSubject> GetStandardSubjects();
 
@@ -115,21 +115,16 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<ClassStandard> AddClassStandards(int standardId, IList<int> classesIds)
+        public IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards)
         {
             if(!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
             
             using (var uow = Update())
             {
-                var res = classesIds.Select(classesId => new ClassStandard
-                    {
-                        ClassRef = classesId, 
-                        StandardRef = standardId
-                    }).ToList();
-                new ClassStandardDataAccess(uow).Insert(res);
+                new ClassStandardDataAccess(uow).Insert(classStandards);
                 uow.Commit();
-                return res;
+                return classStandards;
             }
         }
     }

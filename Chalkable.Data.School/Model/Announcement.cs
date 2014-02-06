@@ -117,7 +117,8 @@ namespace Chalkable.Data.School.Model
         public IList<AnnouncementAttachment> AnnouncementAttachments { get; set; }
         public IList<AnnouncementReminder> AnnouncementReminders { get; set; }
         public IList<AnnouncementQnAComplex> AnnouncementQnAs { get; set; } 
-        public Person Owner { get; set; } 
+        public Person Owner { get; set; }
+        public IList<AnnouncementStandardDetails> AnnouncementStandards { get; set; } 
     }
 
 

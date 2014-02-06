@@ -54,6 +54,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType);
 
+        Standard AddAnnouncementStandard(int announcementId, int standardId);
     }
 
     public class AnnouncementService : SisConnectedService, IAnnouncementService
@@ -650,6 +651,25 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 return CreateAnnoucnementDataAccess(uow).Exists(title);
+            }
+        }
+
+
+        public Standard AddAnnouncementStandard(int announcementId, int standardId)
+        {
+            var ann = GetAnnouncementById(announcementId);
+            if(!AnnouncementSecurity.CanModifyAnnouncement(ann,Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new AnnouncementStandardDataAccess(uow)
+                    .Insert(new AnnouncementStandard
+                        {
+                            AnnouncementRef = announcementId,
+                            StandardRef = standardId
+                        });
+                uow.Commit();
+                return new StandardDataAccess(uow).GetById(standardId);
             }
         }
     }

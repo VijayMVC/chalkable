@@ -12,4 +12,9 @@ namespace Chalkable.Data.School.Model
         [PrimaryKeyFieldAttr]
         public int StandardRef { get; set; }
     }
+
+    public class AnnouncementStandardDetails : AnnouncementStandard
+    {
+        public Standard Standard { get; set; }
+    }
 }
