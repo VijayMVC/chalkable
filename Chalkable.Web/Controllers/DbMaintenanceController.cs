@@ -12,7 +12,7 @@ namespace Chalkable.Web.Controllers
 {
     public class DbMaintenanceController : ChalkableController
     {
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult Backup()
         {
             var data = new DatabaseBackupRestoreTaskData(DateTime.UtcNow.Ticks, true);
@@ -20,7 +20,7 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult Restore(long time)
         {
             var sl = SchoolLocator.ServiceLocatorMaster;
@@ -29,7 +29,7 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult DatabaseUpdate(string masterSql, string schoolSql)
         {
             var sqls = new List<UpdateSql>();
@@ -43,7 +43,7 @@ namespace Chalkable.Web.Controllers
 
         }
 
-        [AuthorizationFilter("System Admin")]
+        [AuthorizationFilter("SysAdmin")]
         public ActionResult ListBackups(int start, int count)
         {
             var delim = new []{"/" + BackupHelper.BACKUP_CONTAINER + "/"};
