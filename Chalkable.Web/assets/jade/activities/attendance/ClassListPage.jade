@@ -1,7 +1,7 @@
 mixin SummaryInfo(presentCount, allStudentsCount)
     -presentPersent = Math.round((presentCount * 100) / allStudentsCount)
     .summary-info
-        .title= presentCount + '/' + allStudentsCount + ' PRESENT'
+        .title= presentCount + '/' + allStudentsCount + ' ' + Msg.Present.toUpperCase()
         .slide-bar
             div(style="width: " + presentPersent + "%").inner-bar
 
@@ -42,7 +42,7 @@ mixin SummaryInfo(presentCount, allStudentsCount)
             .top.panel-bg
                 +SummaryInfo(self.getPresentStudents().length, items.length)
                 if self.canPost()
-                    BUTTON(href="javascript:", name="submitType", type="submit", id="submit-attendance-button").chlk-button.action-button.message-button.blue-gradient-btn POST IT
+                    BUTTON(href="javascript:", name="submitType", value="submit", type="submit", id="submit-attendance-button").chlk-button.action-button.message-button.blue-gradient-btn POST IT
                 if(self.getItems().length > 0)
                     +ActionLinkWithPrepend('attendance', 'markAll',
                         [selectedId.valueOf(), self.getDate().toStandardFormat()].concat(additionalParams)

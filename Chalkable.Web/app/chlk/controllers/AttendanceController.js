@@ -248,11 +248,13 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.attendance.SetClassListAttendance]],
         function setClassAttendanceListAction(model){
-            return this.attendanceService.setAttendance(model)
-                .attach(this.validateResponse_())
-                .then(function(res){
-                    this.BackgroundNavigate('attendance', 'classList', [model.getClassId(), model.getDate(), true]);
-                }, this);
+            if(model.getSubmitType() == 'submit')
+                return this.attendanceService.setAttendance(model)
+                    .attach(this.validateResponse_())
+                    .then(function(res){
+                        this.BackgroundNavigate('attendance', 'classList', [model.getClassId(), model.getDate(), true]);
+                    }, this);
+            return null;
         },
 
         Object, function getActivityClass_(isProfile_){

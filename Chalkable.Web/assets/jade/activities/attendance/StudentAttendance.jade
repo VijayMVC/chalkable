@@ -33,11 +33,10 @@ div(
             .combo-list.no-row-click
                 input.combo-input.x-zero
                 .connector
-                firstSelected = !reason || reasons.filter(function(item){return item.getId() == reason.getId()}).length == 0;
+                firstSelected = true
                 div(class=(firstSelected ? "selected" : "")).option=name
                 each reasonItem in reasons
                     div(
-                        class=(reason && reasonItem.getId() == reason.getId() ? "selected" : ""),
                         data-id=reasonItem.getId().valueOf()
                     ).option=reasonItem.getDescription()
                 .press-enter=Msg.Press_enter
