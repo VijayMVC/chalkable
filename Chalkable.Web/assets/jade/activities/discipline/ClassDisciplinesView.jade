@@ -31,11 +31,9 @@ redirectData = self.getRedirectData()
                         label.people-search-img
                         label.people-search-close.opacity0
         .grid-container.disciplines-individual.loader-container
-            +ListView(self.getDisciplines())(
-                selectedIndex = 0
-            )#class-attendance-list-panel.people-list
+            +ListView(self.getDisciplines())#class-attendance-list-panel.people-list
                 each item, i in self.getDisciplines()
-                    .row(class=(i == 0 ? 'selected' : ''), index=i)
+                    .row(index=i)
                         student = item.getStudent();
                         +ActionLink('students', 'info', student.getId()).left.image-container.white.shadow
                             +PersonImg(student, 47)
