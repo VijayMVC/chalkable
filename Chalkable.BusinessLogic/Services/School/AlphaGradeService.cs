@@ -14,7 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void AddAlphaGrades(IList<AlphaGrade> alphaGrades);
         void Delete(int id);
-        IList<AlphaGrade> GetAlphaGrade();
+        IList<AlphaGrade> GetAlphaGrades();
     }
 
     public class AlphaGradeService : SchoolServiceBase, IAlphaGradeService
@@ -47,7 +47,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<AlphaGrade> GetAlphaGrade()
+        public IList<AlphaGrade> GetAlphaGrades()
         {
             using (var uow = Read())
             {
