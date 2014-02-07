@@ -53,13 +53,11 @@ mixin SummaryInfo(presentCount, allStudentsCount)
                         +ActionLinkWithPrepend('attendance', 'sortStudents', ['false'].concat(additionalParams))(class=self.isByLastName()?"":"pressed").action-button.first-last=Msg.First_name
                         +ActionLinkWithPrepend('attendance', 'sortStudents', [true].concat(additionalParams))(class=self.isByLastName()?"pressed":"").action-button.first-last=Msg.Last_name
             .grid-container.loader-container
-                +ListView(self.getItems())(
-                    selectedIndex = 0
-                )#class-attendance-list-panel.people-list
+                +ListView(self.getItems())#class-attendance-list-panel.people-list
                     needSuggestion = self.getItems().filter(function(item){return item.getType() > valuesEnum.NA.valueOf()}).length == 0;
                     each item, i in self.getItems()
                         needPresent = (i == 0 && item.getType() == valuesEnum.NA.valueOf());
-                        .row(class=(i == 0 ? 'selected' : ''), index=i)
+                        .row(index=i)
                             if needPresent
                                 -item.setType(valuesEnum.PRESENT.valueOf());
                             student = item.getStudent();
