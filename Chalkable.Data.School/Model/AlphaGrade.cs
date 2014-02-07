@@ -8,6 +8,8 @@ namespace Chalkable.Data.School.Model
 {
     public class AlphaGrade
     {
+        public const string SCHOOL_ID_FIELD = "SchoolRef";
+
         public int Id { get; set; }
         public int SchoolRef { get; set; }
         public string Name { get; set; }

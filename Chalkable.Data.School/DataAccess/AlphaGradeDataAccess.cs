@@ -8,9 +8,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class AlphaGradeDataAccess : DataAccessBase<AlphaGrade,int>
+    public class AlphaGradeDataAccess : BaseSchoolDataAccess<AlphaGrade>
     {
-        public AlphaGradeDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        public AlphaGradeDataAccess(UnitOfWork unitOfWork, int? localSchoolId) : base(unitOfWork, localSchoolId)
         {
         }
     }
