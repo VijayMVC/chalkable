@@ -385,7 +385,10 @@ NAMESPACE('chlk.controls', function () {
             VOID, function scrollToElement(){
                 var el = this.getGrid().find('.row.selected');
                 var demo = new ria.dom.Dom('#demo-footer');
-                window.scrollTo(0, el.offset().top + el.height()/2 - (window.innerHeight - (demo.height() || 0))/2);
+                //window.scrollTo(0, el.offset().top + el.height()/2 - (window.innerHeight - (demo.height() || 0))/2);
+                $("html, body").stop( true, true ).animate({
+                    scrollTop: el.offset().top + el.height()/2 - (window.innerHeight - (demo.height() || 0))/2
+                }, 300, 'linear');
             }
         ]);
 });
