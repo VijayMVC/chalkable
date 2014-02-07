@@ -220,6 +220,8 @@
     <Compile Include="Logic\StudentAnnouncementLogic.cs" />
     <Compile Include="Models\AddressViewData.cs" />
     <Compile Include="Models\AdminFeedViewData.cs" />
+    <Compile Include="Models\AlphaGradeViewData.cs" />
+    <Compile Include="Models\AlternateScoreViewData.cs" />
     <Compile Include="Models\AnnouncementAttachmentViewData.cs" />
     <Compile Include="Models\AnnouncementQnAViewData.cs" />
     <Compile Include="Models\AnnouncementReminderViewData.cs" />
