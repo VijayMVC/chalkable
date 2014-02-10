@@ -16,6 +16,9 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             returnObj.Dropped = sourceObj.Dropped;
             returnObj.GradeValue = (int?) sourceObj.NumericScore;
             returnObj.PersonRef = sourceObj.StudentId;
+            returnObj.StiScoreValue = sourceObj.ScoreValue;
+            returnObj.AlphaGradeId = sourceObj.AlphaGradeId;
+            returnObj.AlternateScoreId = sourceObj.AlternateScoreId;
         }
     }
 }

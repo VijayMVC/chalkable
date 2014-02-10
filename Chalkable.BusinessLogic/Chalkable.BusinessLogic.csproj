@@ -70,8 +70,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\AppTools.cs" />
-    <Compile Include="Mapping\ModelMapper.cs" />
     <Compile Include="Mapping\GradingStyleMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\ActivityToAnnouncementMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\AnnouncementAttToActivityAttMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\AnnouncementComplexToActivityMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\BaseMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\MapperFactory.cs" />
+    <Compile Include="Mapping\ModelMappers\ScoreToStudentAnnMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\StiAttachmentToAnnouncementAttMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\StudentAnnouncementToScoreMapper.cs" />
     <Compile Include="Model\AddressInfo.cs" />
     <Compile Include="Model\AnnouncementInfo.cs" />
     <Compile Include="Model\ApplicationInfo.cs" />

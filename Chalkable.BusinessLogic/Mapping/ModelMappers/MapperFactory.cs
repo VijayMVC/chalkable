@@ -31,6 +31,10 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                         {new Pair<Type, Type>(typeof(ActivityAttachment), typeof(AnnouncementAttachment)), new AnnouncementAttToActivityAttMapper()},
                         {new Pair<Type, Type>(typeof(AnnouncementAttachment), typeof(ActivityAttachment)), new StiAttachmentToAnnouncementAttMapper()},
                         {new Pair<Type, Type>(typeof(AnnouncementAttachment), typeof(StiAttachment)), new StiAttachmentToAnnouncementAttMapper()},
+                        {new Pair<Type, Type>(typeof(StudentAnnouncement), typeof(Score)), new ScoreToStudentAnnMapper()},
+                        {new Pair<Type, Type>(typeof(StudentAnnouncementDetails), typeof(Score)), new ScoreToStudentAnnMapper()},
+                        {new Pair<Type, Type>(typeof(Score), typeof(StudentAnnouncementDetails)), new StudentAnnouncementToScoreMapper()},
+                        {new Pair<Type, Type>(typeof(Score), typeof(StudentAnnouncement)), new StudentAnnouncementToScoreMapper()},
                     };
         }
         public static IMapper GetMapper<TReturn, TSource>()

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -26,7 +28,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<StudentAnnouncementGrade> GetLastGrades(int studentId, int? classId = null, int count = int.MaxValue);
     }
 
-    public class StudentAnnouncementService : SchoolServiceBase, IStudentAnnouncementService
+    public class StudentAnnouncementService : SisConnectedService, IStudentAnnouncementService
     {
         public StudentAnnouncementService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
@@ -58,7 +60,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 ann.Dropped = dropped && !ann.StudentAnnouncements.Any(x => !x.Dropped && x.Id != studentAnnouncementId);
                 
                 saDa.Update(sa);
+                sa.StiScoreValue = value.HasValue ? value.Value.ToString() : null;
                 annDa.Update(ann);
+                var score = new Score {ActivityId = ann.SisActivityId.Value};
+                MapperFactory.GetMapper<Score, StudentAnnouncement>().Map(score, sa);
+                ConnectorLocator.ActivityScoreConnector.UpdateScore(score.ActivityId, score.StudentId, score);
                 uow.Commit();
                 var recipientId =  ann.StudentAnnouncements.First(x=>x.Id == sa.Id).Person.Id;
                 ServiceLocator.NotificationService.AddAnnouncementSetGradeNotificationToPerson(sa.AnnouncementRef, recipientId);
@@ -68,10 +74,22 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId)
         {
+            var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
             using (var uow = Read())
             {
-               return  new StudentAnnouncementDataAccess(uow)
+                var res = new StudentAnnouncementDataAccess(uow)
                    .GetStudentAnnouncementsDetails(announcementId, Context.UserLocalId ?? 0);
+                if (ann.SisActivityId.HasValue)
+                {
+                    var scores = ConnectorLocator.ActivityScoreConnector.GetSores(ann.SisActivityId.Value);
+                    foreach (var score in scores)
+                    {
+                        var stAnn = res.FirstOrDefault(x => x.PersonRef == score.StudentId);
+                        if (stAnn != null)
+                            MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAnn, score);
+                    }
+                }
+                return res;
             }
         }
 
