@@ -119,21 +119,25 @@ NAMESPACE('chlk.controls', function () {
                     }
                 }
                 var res = {};
-                jQuery.extend(true, res, defaultConfigs,options);
-                var interval = res.yAxis.tickInterval;
-                if(interval && !res.yAxis.max){
-                    var max = 0;
-                    res.series.forEach(function(s){
-                        s.data.forEach(function(item){
-                            if(item > max)
-                                max = item;
+                if(!attrs.noExtends){
+                    jQuery.extend(true, res, defaultConfigs,options);
+                    var interval = res.yAxis.tickInterval;
+                    if(interval && !res.yAxis.max){
+                        var max = 0;
+                        res.series.forEach(function(s){
+                            s.data.forEach(function(item){
+                                if(item > max)
+                                    max = item;
+                            });
                         });
-                    });
-                    max = Math.ceil(max/interval) * interval;
-                    res.yAxis.max = max;
+                        max = Math.ceil(max/interval) * interval;
+                        res.yAxis.max = max;
+                    }
+                    if(res.legend.enabled && !options.chart.height)
+                        res.chart.height = 215;
+                }else{
+                    res = options;
                 }
-                if(res.legend.enabled && !options.chart.height)
-                    res.chart.height = 215;
                 this.queueReanimation_(attrs.id, res);
                 delete attrs['data-options'];
                 return attrs;

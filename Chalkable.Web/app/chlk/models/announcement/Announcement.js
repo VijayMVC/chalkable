@@ -1,3 +1,4 @@
+REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.classes.Class');
@@ -5,7 +6,6 @@ REQUIRE('chlk.models.attachment.Attachment');
 
 REQUIRE('chlk.models.announcement.AnnouncementType');
 REQUIRE('chlk.models.announcement.StudentAnnouncements');
-REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.StudentAnnouncementId');
@@ -27,7 +27,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
     /** @class chlk.models.announcement.Announcement*/
     CLASS(
-        'Announcement', [
+        'Announcement', EXTENDS(chlk.models.announcement.BaseAnnouncementViewData), [
 
             function $(){
                 BASE();
@@ -36,8 +36,6 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.classId = null;
                 this._annTypeEnum = chlk.models.announcement.AnnouncementTypeEnum;
             },
-
-            chlk.models.id.AnnouncementId, 'id',
 
             [ria.serialize.SerializeProperty('announcementattachments')],
             ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
@@ -72,9 +70,6 @@ NAMESPACE('chlk.models.announcement', function () {
                 return !this.getAnnouncementTypeId();
             },
 
-            [ria.serialize.SerializeProperty('announcementtypename')],
-            String, 'announcementTypeName',
-
             ArrayOf(chlk.models.apps.AppAttachment), 'applications',
             ArrayOf(chlk.models.apps.AppAttachment), 'gradeViewApps',
 
@@ -97,8 +92,6 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('autogradeapps')],
             ArrayOf(String), 'autoGradeApps',
 
-            Number, 'avg',
-
             [ria.serialize.SerializeProperty('avgnumeric')],
             Number ,'avgNumeric',
 
@@ -109,12 +102,8 @@ NAMESPACE('chlk.models.announcement', function () {
             String, 'className',
 
             String, 'comment',
-            String, 'content',
-            chlk.models.common.ChlkDate, 'created',
-            Boolean, 'dropped',
 
-            [ria.serialize.SerializeProperty('expiresdate')],
-            chlk.models.common.ChlkDate, 'expiresDate',
+            String, 'content',
 
             String, 'expiresDateColor',
 
@@ -140,13 +129,8 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('gradingstyle')],
             Number, 'gradingStyle',
 
-            [ria.serialize.SerializeProperty('isowner')],
-            Boolean, 'annOwner',
-
             [ria.serialize.SerializeProperty('nongradingstudentscount')],
             Number, 'nonGradingStudentsCount',
-
-            Number, 'order',
 
             [ria.serialize.SerializeProperty('ownerattachmentscount')],
             Number, 'ownerAttachmentsCount',
@@ -206,8 +190,6 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('systemtype')],
             Number, 'systemType',
 
-            String, 'title',
-
             [ria.serialize.SerializeProperty('wasannouncementtypegraded')],
             Boolean, 'wasAnnouncementTypeGraded',
 
@@ -224,9 +206,6 @@ NAMESPACE('chlk.models.announcement', function () {
 
             [ria.serialize.SerializeProperty('announcementqnas')],
             ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
-
-            [ria.serialize.SerializeProperty('maxscore')],
-            Number, 'maxScore',
 
             [ria.serialize.SerializeProperty('weightmultiplier')],
             Number, 'weightMultiplier',

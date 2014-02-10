@@ -16,12 +16,24 @@ NAMESPACE('chlk.templates.announcement', function () {
             Number, 'order',
 
             [ria.templates.ModelPropertyBind],
+            String, 'title',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.common.ChlkDate, 'expiresDate',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'avg',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.id.AnnouncementId, 'id',
 
             [ria.templates.ModelPropertyBind],
             Boolean, 'dropped',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.announcement.ShortStudentAnnouncementsViewData, 'studentAnnouncements'
+            Number, 'maxScore',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'annOwner'
         ]);
 });

@@ -91,9 +91,10 @@ NAMESPACE('chlk.templates.grading', function () {
                             startOnTick: true,
                             tickPositions: tickPositions,
                             labels: {
-                                formatter : function(){
-                                    return ticksLetters[this.value];
-                                }
+                                formatter: function(){
+                                    return '<div class="chart-label">' + ticksLetters[this.value] + '</div>';
+                                },
+                                useHTML: true
                             },
                             tickInterval: (graphpoints[0].getEndInterval() -  graphpoints[0].getStartInterval()),
                             min: graphpoints[0].getStartInterval()
