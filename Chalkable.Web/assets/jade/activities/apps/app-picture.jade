@@ -1,0 +1,29 @@
+mixin Thumbnail(url, title, dimsX, dimsY, pictureCls, readOnly)
+    .thumbnail(class=pictureCls)
+        if !readOnly
+            +ActionLink('apps', 'deletePicture', title, dimsX, dimsY).close-btn
+        +LoadingImage(src=url)
+
+
+mixin IconBox(pict)
+    id = pict.pictureId
+    url = pict.pictureUrl
+    title = pict.title
+    dimsX = pict.width
+    dimsY = pict.height
+    pictureCls = pict.pictureClass
+    readOnly = !pict.editable
+    tplLink = self.templateDownloadLink
+
+    +Hidden('app' + title + 'Id', id.valueOf())
+    if id.valueOf() || readOnly
+        +Thumbnail(url, title, dimsX, dimsY, pictureCls, readOnly)
+    else
+        .upload-img-block
+            .top=dimsX + "px x " + dimsY + "px"
+            .bottom
+                div.simple-gray-button.file=title
+                    +FileUpload('apps', 'uploadPicture', [dimsX, dimsY, title]).simple-gray-button
+                a(href=tplLink).download-link Download Template
+
++IconBox(self)
