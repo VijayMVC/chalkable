@@ -25,9 +25,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     'd': ['D+', 'D', 'D-', 'D (fill all)', 'Dropped', 'Dropped (fill all)'],
                     'd+': ['D+', 'D+ (fill all)'],
                     'd-': ['D-', 'D- (fill all)'],
-                    'f': ['F+', 'F', 'F-',' F (fill all)'],
-                    'f+': ['F+', 'F+ (fill all)'],
-                    'f-': ['F-', 'F- (fill all)'],
+                    'f': ['F', ' F (fill all)'],
                     'e': ['Exempt', 'Exempt (fill all)'],
                     'x': ['Exempt', 'Exempt (fill all)']
                 };
