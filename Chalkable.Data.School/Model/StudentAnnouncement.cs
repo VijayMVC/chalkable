@@ -35,7 +35,14 @@ namespace Chalkable.Data.School.Model
         public int? AlternateScoreId { get; set; }
         [NotDbFieldAttr]
         public int? AlphaGradeId { get; set; }
-
+        [NotDbFieldAttr]
+        public bool Exempt { get; set; }
+        [NotDbFieldAttr]
+        public bool Incomplete { get; set; }
+        [NotDbFieldAttr]
+        public bool Late { get; set; }
+        [NotDbFieldAttr]
+        public bool Absent { get; set; }
     }
 
     public class StudentAnnouncementGrade : StudentAnnouncement

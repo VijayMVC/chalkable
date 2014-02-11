@@ -19,6 +19,10 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             returnObj.StiScoreValue = sourceObj.ScoreValue;
             returnObj.AlphaGradeId = sourceObj.AlphaGradeId;
             returnObj.AlternateScoreId = sourceObj.AlternateScoreId;
+            returnObj.Exempt = sourceObj.Exempt;
+            returnObj.Absent = sourceObj.Absent;
+            returnObj.Late = sourceObj.Late;
+            returnObj.Incomplete = sourceObj.Incomplete;
         }
     }
 }
