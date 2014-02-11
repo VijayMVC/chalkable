@@ -66,10 +66,10 @@ namespace Chalkable.Web.Models
         public ShortPersonViewData StudentInfo { get; set; }
         public string GradeValue { get; set; }
         public bool Dropped { get; set; }
-        public bool Exempt { get; set; }
-        public bool Incomplete { get; set; }
-        public bool Late { get; set; }
-        public bool Absent { get; set; }
+        public bool IsExempt { get; set; }
+        public bool IsIncomplete { get; set; }
+        public bool IsLate { get; set; }
+        public bool IsAbsent { get; set; }
         public string Raw { get; set; }
         public string ExtraCredits { get; set; }
         public int Id { get; set; }
@@ -101,10 +101,10 @@ namespace Chalkable.Web.Models
                 AnnouncementId = studentAnnouncements.AnnouncementRef,
                 Comment = studentAnnouncements.Comment,
                 State = (int)studentAnnouncements.State,
-                Absent = studentAnnouncements.Absent,
-                Exempt = studentAnnouncements.Exempt,
-                Incomplete = studentAnnouncements.Incomplete,
-                Late = studentAnnouncements.Late
+                IsAbsent = studentAnnouncements.Absent,
+                IsExempt = studentAnnouncements.Exempt,
+                IsIncomplete = studentAnnouncements.Incomplete,
+                IsLate = studentAnnouncements.Late
             };
             if (string.IsNullOrEmpty(res.GradeValue))
                 res.GradeValue = studentAnnouncements.GradeValue.ToString();

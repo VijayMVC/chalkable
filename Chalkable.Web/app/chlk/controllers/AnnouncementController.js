@@ -338,16 +338,16 @@ NAMESPACE('chlk.controllers', function (){
                     var studentAnnouncements = announcement.getStudentAnnouncements();
                     if(studentAnnouncements){
                         studentAnnouncements.setShowToStudents(Math.random() > 0.5);
-                        studentAnnouncements.getItems().forEach(function(item){
-                            item.setLate(Math.random() > 0.5);
-                            if(!item.getGradeValue()){
-                                var val = Math.random() > 0.5;
-                                item.setExempt(val);
-                                if(!val)
-                                    item.setAbsent(Math.random() > 0.5);
-                            }
-                            item.setIncomplete(Math.random() > 0.5);
-                        });
+//                        studentAnnouncements.getItems().forEach(function(item){
+//                            item.setLate(Math.random() > 0.5);
+//                            if(!item.getGradeValue()){
+//                                var val = Math.random() > 0.5;
+//                                item.setExempt(val);
+//                                if(!val)
+//                                    item.setAbsent(Math.random() > 0.5);
+//                            }
+//                            item.setIncomplete(Math.random() > 0.5);
+//                        });
                     }
 
                     return new ria.async.DeferredData(announcement);

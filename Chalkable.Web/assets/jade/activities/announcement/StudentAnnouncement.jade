@@ -14,6 +14,10 @@ alertsEnum = chlk.models.grading.AlertsEnum
     +Hidden('id', self.getId())
     +Hidden('announcementId', self.getAnnouncementId())
     +Hidden('dropped', isDrop)
+    +Hidden('isincomplete', self.isIncomplete())
+    +Hidden('islate', self.isLate())
+    +Hidden('isabsent', self.isAbsent())
+    +Hidden('isexempt', self.isExempt())
     +ActionLink('students', 'info', student.getId())(data-tooltip=student.getFullName()).left.image-container.white.shadow
         +PersonImg(student, 47)
     .chlk-pop-up-container.popup-bottom.alerts-pop-up

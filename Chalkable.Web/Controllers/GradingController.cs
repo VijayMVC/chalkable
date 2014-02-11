@@ -99,7 +99,7 @@ namespace Chalkable.Web.Controllers
             , string comment, bool dropped, bool? exempt, bool? incomplete, bool? late, bool? absent)
         {
             var studentAnn = SchoolLocator.StudentAnnouncementService.SetGrade(studentAnnouncementId, gradeValue, extraCredits
-                , comment, dropped, exempt ?? false, incomplete ?? false, late ?? false, absent ?? false
+                , comment, dropped, late ?? false, absent ?? false, exempt ?? false, incomplete ?? false
                 , (int)GradingStyleEnum.Numeric100);
             return PrepareStudentAnnouncementResponse(studentAnn);
         }
