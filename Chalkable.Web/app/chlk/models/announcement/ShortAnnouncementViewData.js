@@ -1,32 +1,13 @@
 REQUIRE('chlk.models.announcement.ShortStudentAnnouncementsViewData');
-REQUIRE('chlk.models.id.AnnouncementId');
+REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
 
     /** @class chlk.models.announcement.ShortAnnouncementViewData*/
     CLASS(
-        'ShortAnnouncementViewData', [
-            [ria.serialize.SerializeProperty('announcementtypename')],
-            String, 'announcementTypeName',
-
-            Number, 'order',
-
-            String, 'title',
-
-            [ria.serialize.SerializeProperty('expiresdate')],
-            chlk.models.common.ChlkDate, 'expiresDate',
-
-            Number, 'avg',
-
-            chlk.models.id.AnnouncementId, 'id',
-
-            Boolean, 'dropped',
-
+        'ShortAnnouncementViewData', EXTENDS(chlk.models.announcement.BaseAnnouncementViewData), [
             [ria.serialize.SerializeProperty('studentannouncements')],
-            chlk.models.announcement.ShortStudentAnnouncementsViewData, 'studentAnnouncements',
-
-            [ria.serialize.SerializeProperty('maxscore')],
-            Number, 'maxScore'
+            chlk.models.announcement.ShortStudentAnnouncementsViewData, 'studentAnnouncements'
         ]);
 });
