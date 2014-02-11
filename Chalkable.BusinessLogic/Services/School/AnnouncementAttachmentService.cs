@@ -7,6 +7,7 @@ using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Common.Web;
 using Chalkable.Data.Common.Storage;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
@@ -143,7 +144,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var atts = new AnnouncementAttachment {PersonRef = Context.UserLocalId.Value};
                 MapperFactory.GetMapper<AnnouncementAttachment, StiAttachment>().Map(atts, stiAttachment);
-                if (string.IsNullOrEmpty(atts.Uuid))
+                if (string.IsNullOrEmpty(atts.Uuid) && MimeHelper.GetTypeByName(atts.Name) == MimeHelper.AttachmenType.Document)
                 {
                     var content = ConnectorLocator.AttachmentConnector.GetAttachmentContent(stiAttachment.AttachmentId);
                     atts.Uuid = ServiceLocator.CrocodocService.UploadDocument(stiAttachment.Name, content).uuid;

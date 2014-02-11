@@ -5,8 +5,8 @@ NAMESPACE('chlk.templates.announcement', function () {
 
     /** @class chlk.templates.announcement.ApplicationsAndAttachments*/
     CLASS(
-        //[ria.templates.TemplateBind('~/assets/jade/activities/announcement/StudentAnnouncement.jade')],
-        //[ria.templates.ModelBind(chlk.models.announcement.ApplicationsAndAttachments)],
+        [ria.templates.TemplateBind('~/assets/jade/activities/announcement/StudentAnnouncement.jade')],
+        [ria.templates.ModelBind(chlk.models.announcement.ApplicationOrAttachment)],
         'ApplicationsAndAttachments', EXTENDS(chlk.templates.ChlkTemplate), [
             [[ArrayOf(chlk.models.apps.Application), ArrayOf(chlk.models.attachment.Attachment)]],
             ArrayOf(chlk.models.announcement.ApplicationOrAttachment), function getSortedAppsAndAttachments(applications_, attachments_){
