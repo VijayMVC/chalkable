@@ -11,7 +11,7 @@ NAMESPACE('chlk.templates.apps', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/apps/app-general-info.jade')],
         [ria.templates.ModelBind(chlk.models.apps.AppGeneralInfoViewData)],
-        'AppGeneral', EXTENDS(chlk.templates.ChlkTemplate), [
+        'AppGeneralTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AppId, 'draftAppId',
 
@@ -133,20 +133,6 @@ NAMESPACE('chlk.templates.apps', function () {
                 var max0 = 20;
                 var maxLength = 30;
                 var dataLen = data.length;
-                if(dataLen > maxLength){
-                    var resData = [],
-                        resCategories = [];
-
-                    for(var i = 0; i < maxLength; i++){
-                        resData.push(data[parseInt(dataLen * i / maxLength, 10)]);
-                        resCategories.push(categories[parseInt(dataLen * i / maxLength, 10)]);
-                    }
-                    resData.push(data[dataLen - 1]);
-                    resCategories.push(categories[dataLen - 1]);
-                    data = resData;
-                    categories = resCategories;
-                }
-
                 data.forEach(function(item, i){
                     if(item > max0)
                         max0 = item;
@@ -173,19 +159,6 @@ NAMESPACE('chlk.templates.apps', function () {
                 var max0 = 1000;
                 var maxLength = 30;
                 var dataLen = data.length;
-                if(dataLen > maxLength){
-                    var resData = [],
-                        resCategories = [];
-
-                    for(var i = 0; i < maxLength; i++){
-                        resData.push(data[parseInt(dataLen * i / maxLength, 10)]);
-                        resCategories.push(categories[parseInt(dataLen * i / maxLength, 10)]);
-                    }
-                    resData.push(data[dataLen - 1]);
-                    resCategories.push(categories[dataLen - 1]);
-                    data = resData;
-                    categories = resCategories;
-                }
 
                 data.forEach(function(item, i){
                     if(item > max0)
@@ -291,7 +264,7 @@ NAMESPACE('chlk.templates.apps', function () {
                         showFirstLabel: false,
                         showLastLabel: false,
                         gridLineDashStyle: 'dot',
-                        tickInterval: Math.floor((configs.max + 10) / 30) * 10,
+                        //tickInterval: Math.floor((configs.max + 10) / 30) * 10,
                         max: configs.max + 10
                     },
                     legend:{enabled: false},
