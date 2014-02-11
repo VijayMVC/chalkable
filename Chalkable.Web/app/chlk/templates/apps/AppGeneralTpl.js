@@ -37,6 +37,9 @@ NAMESPACE('chlk.templates.apps', function () {
             Number, 'appRating',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.common.ChlkDate, 'reportDate',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.common.PaginatedList, 'appReviews',
 
             [ria.templates.ModelPropertyBind],
@@ -167,7 +170,7 @@ NAMESPACE('chlk.templates.apps', function () {
                     categories.push(item.getSummary());
                     data.push(item.getViewsCount());
                 });
-                var max0 = 20;
+                var max0 = 1000;
                 var maxLength = 30;
                 var dataLen = data.length;
                 if(dataLen > maxLength){
@@ -192,7 +195,16 @@ NAMESPACE('chlk.templates.apps', function () {
                 return {
                     categories : categories,
                     data : data,
-                    max : max
+                    max : max,
+                    series: [{
+                            name: 'test',
+                            data: data
+                      }, {
+                        name: 'test2',
+                        data: data
+                      }
+
+                    ]
                 }
             },
 
@@ -228,13 +240,14 @@ NAMESPACE('chlk.templates.apps', function () {
                         showFirstLabel: false,
                         showLastLabel: false,
                         gridLineDashStyle: 'dot',
-                        tickInterval: Math.floor((configs.max + 10) / 30) * 10,
+                        tickInterval: Math.floor((configs.max + 1000) / 30) * 10,
                         max: configs.max + 10
                     },
                     legend:{enabled: false},
                     tooltip: {enabled: true},
                     plotOptions: {
                         area: {
+                            stacking: 'normal',
                             marker: {
                                 enabled: false,
                                 states: {hover: {enabled: false}}
@@ -242,11 +255,7 @@ NAMESPACE('chlk.templates.apps', function () {
                         }
                     },
                     colors: ['#d8d8d8'],
-                    series: [{
-                        name: '',
-                        lineWidth: 0,
-                        data: configs.data
-                    }]
+                    series: configs.series
                 };
             },
 
@@ -295,6 +304,8 @@ NAMESPACE('chlk.templates.apps', function () {
                             }
                         }
                     },
+
+
                     colors: ['#d8d8d8'],
                     series: [{
                         name: '',

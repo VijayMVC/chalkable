@@ -530,16 +530,7 @@ NAMESPACE('chlk.controllers', function (){
                 .getAppReviews(data.getAppId(), data.getStart())
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    return new chlk.models.apps.AppGeneralInfoViewData(
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        0,
-                        data,
-                        new chlk.models.developer.HomeAnalytics()
-                    );
+                    return new chlk.models.apps.AppGeneralInfoViewData.$createFromReviews(data);
                 })
             return this.UpdateView(chlk.activities.apps.AppGeneralInfoPage, result, 'loadReviews');
         },
@@ -576,6 +567,7 @@ NAMESPACE('chlk.controllers', function (){
                                     data.getState(),
                                     pictureUrl,
                                     5, //todo: pass rating,
+                                    new chlk.models.common.ChlkDate(new Date()),
                                     appReviews,
                                     analytics || new chlk.models.developer.HomeAnalytics()
                                );

@@ -7,6 +7,17 @@ BODY {
           #main-wrapper {
             #main {
               DIV.app-general-info{
+
+                .chart-bg{
+                  &:hover{
+                    color: transparent;
+                    text-shadow: none;
+                    box-shadow: none !important;
+                    border-top: 0 !important;
+                    cursor: default !important;
+                  }
+                }
+
                 .app-header{
                   margin-bottom: 46px;
                   margin-top: 36px;
@@ -66,6 +77,8 @@ BODY {
                     width: 660px;
                   }
 
+
+
                   .chart-block{
                     height: 158px;
                     margin-bottom: 60px;
@@ -93,10 +106,7 @@ BODY {
                       }
 
 
-                    &:hover{
-                      color: transparent;
-                      text-shadow: none;
-                    }
+
 
                   }
 
@@ -113,7 +123,6 @@ BODY {
                       left: 15px;
                       top: 0px;
                       width: 400px;
-                      z-index: 1;
                       background: url(images/feed/chart-bg-2.png) -8px -16px no-repeat;
                       height: 165px;
                       background-size: 415px 187px;
