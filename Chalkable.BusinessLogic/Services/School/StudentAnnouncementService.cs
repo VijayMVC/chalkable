@@ -18,7 +18,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId);
         void ResolveAutoGrading(int announcementId, bool apply);
         //IList<StudentAnnouncement> GetStudentAnnouncements(int schoolPersonId, int classId);
-        StudentAnnouncement SetGrade(int studentAnnouncementId, int? value, string extraCredits, string comment, bool dropped, GradingStyleEnum? gradingStyle = null);
+        StudentAnnouncement SetGrade(int studentAnnouncementId, string value, string extraCredits, string comment
+            , bool dropped, bool late, bool absent, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null);
         StudentAnnouncement SetAutoGrade(int studentAnnouncementId, int value, Guid applicationId);
         //IList<StudentGradingComplex> GetStudentGradedAnnouncements(int schoolPersonId, int markingPeriodId);
 
@@ -36,8 +37,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         //TODO : needs testing 
-        public StudentAnnouncement SetGrade(int studentAnnouncementId, int? value, string extraCredits, string comment, bool dropped,
-                                            GradingStyleEnum? gradingStyle = null)
+        public StudentAnnouncement SetGrade(int studentAnnouncementId, string value, string extraCredits, string comment, bool dropped,
+                                            bool late, bool absent, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
         {
             using (var uow = Update())
             {
@@ -53,14 +54,28 @@ namespace Chalkable.BusinessLogic.Services.School
                 sa.Comment = comment;
                 sa.State = StudentAnnouncementStateEnum.Manual;
 
-                var mapper = ServiceLocator.GradingStyleService.GetMapper();
-                sa.GradeValue = gradingStyle.HasValue ? mapper.MapBack(gradingStyle.Value, value)
-                                                      : mapper.MapBack(ann.GradingStyle, value);
+
                 sa.Dropped = dropped;
+                sa.Incomplete = incomplete;
+                sa.Late = late;
+                sa.Exempt = exempt;
+                sa.Absent = absent;
                 ann.Dropped = dropped && !ann.StudentAnnouncements.Any(x => !x.Dropped && x.Id != studentAnnouncementId);
                 
                 saDa.Update(sa);
-                sa.StiScoreValue = value.HasValue ? value.Value.ToString() : null;
+                if (!string.IsNullOrEmpty(value))
+                {
+                    sa.StiScoreValue = value;
+                    int number;
+                    if (int.TryParse(value, out number))
+                    {
+                        //TODO:remove this later
+                        var mapper = ServiceLocator.GradingStyleService.GetMapper();
+                        sa.GradeValue = gradingStyle.HasValue ? mapper.MapBack(gradingStyle.Value, number)
+                                                              : mapper.MapBack(ann.GradingStyle, number);
+                    }
+
+                }
                 annDa.Update(ann);
                 var score = new Score {ActivityId = ann.SisActivityId.Value};
                 MapperFactory.GetMapper<Score, StudentAnnouncement>().Map(score, sa);
