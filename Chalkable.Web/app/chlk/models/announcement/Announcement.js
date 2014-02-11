@@ -105,6 +105,8 @@ NAMESPACE('chlk.models.announcement', function () {
 
             String, 'content',
 
+            chlk.models.common.ChlkDate, 'created',
+
             String, 'expiresDateColor',
 
             String, 'expiresDateText',
