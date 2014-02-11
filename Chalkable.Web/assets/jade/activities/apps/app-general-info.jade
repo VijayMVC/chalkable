@@ -76,11 +76,7 @@ mixin AppStatus_(appState, appDraftId, liveAppId)
 .app-general-info
     .action-bar.not-transparent.dev-app-info
         .container.panel-bg
-            .date-picker-container
-                +DatePicker('expiresdate', self.getReportDate())(data-options={showOtherMonths: true, selectOtherMonths: true},
-                placeholder="Date",
-                class="validate[required]"
-                )#period
+
     .app-header
         .app-icon
             img(src=self.appThumbnail, width=80, height=80)

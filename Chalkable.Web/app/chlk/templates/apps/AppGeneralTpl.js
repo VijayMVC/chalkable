@@ -130,9 +130,7 @@ NAMESPACE('chlk.templates.apps', function () {
                     categories.push(item.getSummary());
                     data.push(item.getInstallCount());
                 });
-                var max0 = 20;
-                var maxLength = 30;
-                var dataLen = data.length;
+                var max0 = 500;
                 data.forEach(function(item, i){
                     if(item > max0)
                         max0 = item;
@@ -145,39 +143,114 @@ NAMESPACE('chlk.templates.apps', function () {
                 }
             },
 
+            [[Object]],
+            function prepareAppInstallsChartOptions(configs){
+                return {
+                    backgroundColor: 'transparent',
+                    chart: {
+                        type: 'area',
+                        backgroundColor: 'transparent',
+                        width: 698,
+                        height: 145,
+                        style: {
+                            fontFamily: 'Arial',
+                            fontSize: '10px',
+                            color: '#a6a6a6'
+                        }
+
+                    },
+                    labels: {
+                        style: {
+                            color: '#a6a6a6',
+                            textOverflow: 'ellipsis',
+                            fontSize: '9px'
+                        }
+                    },
+                    credits: {enabled: false},
+                    title: {text: ''},
+                    xAxis: {
+                        categories: configs.categories
+                    },
+                    yAxis: {
+                        title: {text: ''},
+                        lineWidth:0,
+                        showFirstLabel: false,
+                        showLastLabel: false,
+                        gridLineDashStyle: 'dot',
+                        max: configs.max + 10,
+                        tickInterval: Math.floor((configs.max) / 30) * 10
+                    },
+                    legend:{enabled: false},
+                    plotOptions: {
+                        area: {
+                            marker: {
+                                enabled: true,
+                                states: {hover: {enabled: true}}
+                            }
+                        }
+                    },
+
+
+                    colors: ['#d8d8d8'],
+                    series: [{
+                        name: '',
+                        lineWidth: 0,
+                        data: configs.data
+                    }]
+                };
+            },
+
             [[chlk.models.apps.AppViewStats]],
             function prepareAppViewsChartData(appViewStats){
-                var categories = [],
-                    data = [];
+                var categories = [], data = [];
+
+
+                var roles = {
+                    teacher: [],
+                    student: [],
+                    admin: [],
+                    parent: [],
+                    public: []
+                };
+
+                var colors = {
+                    "student": "#B29E8F",
+                    "teacher": "#BEACAC",
+                    "admin": "#D9CFAC",
+                    "parent": "#C2A996",
+                    "public": "#7C3D3F"
+                }
 
                 var stats = appViewStats.getStats() || [];
 
                 stats.forEach(function(item){
                     categories.push(item.getSummary());
                     data.push(item.getViewsCount());
+                    roles[item.getType()].push(item.getViewsCount());
                 });
                 var max0 = 1000;
-                var maxLength = 30;
-                var dataLen = data.length;
 
                 data.forEach(function(item, i){
                     if(item > max0)
                         max0 = item;
                 });
                 var max = Math.ceil(max0 / 10) * 10;
+
+                var series = [];
+                for(var it in roles){
+                    if (roles.hasOwnProperty(it)){
+                        series.push({
+                            name: it,
+                            data: roles[it],
+                            color: colors[it]
+                        });
+                    }
+                }
                 return {
                     categories : categories,
                     data : data,
                     max : max,
-                    series: [{
-                            name: 'test',
-                            data: data
-                      }, {
-                        name: 'test2',
-                        data: data
-                      }
-
-                    ]
+                    series: series
                 }
             },
 
@@ -213,7 +286,7 @@ NAMESPACE('chlk.templates.apps', function () {
                         showFirstLabel: false,
                         showLastLabel: false,
                         gridLineDashStyle: 'dot',
-                        tickInterval: Math.floor((configs.max + 1000) / 30) * 10,
+                        tickInterval: Math.floor((configs.max) / 30) * 10,
                         max: configs.max + 10
                     },
                     legend:{enabled: false},
@@ -222,71 +295,17 @@ NAMESPACE('chlk.templates.apps', function () {
                         area: {
                             stacking: 'normal',
                             marker: {
-                                enabled: false,
-                                states: {hover: {enabled: false}}
+                                enabled: true,
+                                states: {hover: {enabled: true}}
                             }
                         }
                     },
                     colors: ['#d8d8d8'],
                     series: configs.series
                 };
-            },
-
-            [[Object]],
-            function prepareAppInstallsChartOptions(configs){
-                return {
-                    backgroundColor: 'transparent',
-                    chart: {
-                        type: 'area',
-                        backgroundColor: 'transparent',
-                        width: 698,
-                        height: 145,
-                        style: {
-                            fontFamily: 'Arial',
-                            fontSize: '10px',
-                            color: '#a6a6a6'
-                        }
-
-                    },
-                    labels: {
-                        style: {
-                            color: '#a6a6a6',
-                            textOverflow: 'ellipsis',
-                            fontSize: '9px'
-                        }
-                    },
-                    credits: {enabled: false},
-                    title: {text: ''},
-                    xAxis: {categories: configs.categories},
-                    yAxis: {
-                        title: {text: ''},
-                        lineWidth:0,
-                        showFirstLabel: false,
-                        showLastLabel: false,
-                        gridLineDashStyle: 'dot',
-                        //tickInterval: Math.floor((configs.max + 10) / 30) * 10,
-                        max: configs.max + 10
-                    },
-                    legend:{enabled: false},
-                    tooltip: {enabled: false},
-                    plotOptions: {
-                        area: {
-                            marker: {
-                                enabled: false,
-                                states: {hover: {enabled: false}}
-                            }
-                        }
-                    },
-
-
-                    colors: ['#d8d8d8'],
-                    series: [{
-                        name: '',
-                        lineWidth: 0,
-                        data: configs.data
-                    }]
-                };
             }
+
+
 
         ])
 });

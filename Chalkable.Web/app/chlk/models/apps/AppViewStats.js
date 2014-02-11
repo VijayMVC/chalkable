@@ -6,13 +6,12 @@ NAMESPACE('chlk.models.apps', function () {
         'AppViewStatsItem', [
             Number, 'viewsCount',
             String, 'summary',
-            String, 'role'
+            String, 'type'
         ]);
 
     /** @class chlk.models.apps.AppViewStats*/
     CLASS(
         'AppViewStats', [
-            Number, 'totalCount',
             ArrayOf(chlk.models.apps.AppViewStatsItem), 'stats'
         ])
 
