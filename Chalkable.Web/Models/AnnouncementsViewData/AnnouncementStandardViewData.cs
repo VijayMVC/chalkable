@@ -7,14 +7,11 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
     public class AnnouncementStandardViewData
     {
         public int StandardId { get; set; }
-        public int? ParentStandardRef { get; set; }
+        public int? ParentStandardId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int StandardSubjectRef { get; set; }
-        public int? LowerGradeLevelRef { get; set; }
-        public int? UpperGradeLevelRef { get; set; }
-        public bool IsActive { get; set; } 
-
+        public int StandardSubjectId { get; set; }
+ 
         public static AnnouncementStandardViewData Create(Standard standard)
         {
             return new AnnouncementStandardViewData
@@ -22,7 +19,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                     StandardId = standard.Id,
                     Description = standard.Description,
                     Name = standard.Name,
-                    ParentStandardRef = standard.ParentStandardRef
+                    ParentStandardId = standard.ParentStandardRef, 
+                    StandardSubjectId = standard.StandardSubjectRef
                 };
         }
 
