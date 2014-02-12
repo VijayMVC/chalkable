@@ -202,6 +202,7 @@
     <Compile Include="Controllers\SchoolController.cs" />
     <Compile Include="Controllers\SchoolYearController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\StandardController.cs" />
     <Compile Include="Controllers\StorageMonitorController.cs" />
     <Compile Include="Controllers\PersonControllers\PersonController.cs" />
     <Compile Include="Controllers\UserController.cs" />
