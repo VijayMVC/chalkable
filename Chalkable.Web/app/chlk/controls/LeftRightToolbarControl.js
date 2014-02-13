@@ -4,6 +4,23 @@ NAMESPACE('chlk.controls', function () {
 
     var hideClass = 'x-hidden';
 
+    /** @class chlk.controls.LRToolbarEvents */
+    ENUM('LRToolbarEvents', {
+        //ria.dom.Dom arrow, Number index, Boolean hasLeft, Boolean hasRight
+        AFTER_ANIMATION: 'afteranimation',
+
+        //ria.dom.Dom arrow, Boolean isLeft, Number index
+        ARROW_CLICK: 'arrowclick',
+
+        //ria.dom.Dom arrow, Number index
+        BEFORE_ANIMATION: 'beforeanimation',
+
+        //ria.dom.Dom dot, Boolean isLeft, Number index
+        DOT_CLICK: 'dotclick',
+
+        AFTER_RENDER: 'afterrender'
+    });
+
     /** @class chlk.controls.LeftRightToolbarControl */
     CLASS(
         'LeftRightToolbarControl', EXTENDS(chlk.controls.Base), [
@@ -91,7 +108,7 @@ NAMESPACE('chlk.controls', function () {
                                 var t3 = toolbar.find('.third-container');
                                 if(t3.exists() && t3.width() > t2.width()){
                                     toolbar.find('.next-button').removeClass(configs.disabledClass);
-                                    var dotsK = Math.ceil(t3.width()/t2.width());
+                                    var dotsK = Math.ceil(t3.width()/(t2.width() - configs.padding));
                                     configs.pagesCount = dotsK;
                                     toolbar.setData('configs', configs);
                                     var res = '<a class="current" index="0"></a>';
@@ -134,34 +151,43 @@ NAMESPACE('chlk.controls', function () {
                                 });
                             }
                             toolbar.on('click', '.arrow:not(.disabled)', function (node, event) {
-                                var index = toolbar.getData('currentIndex');
+                                var index = toolbar.getData('currentIndex'), isLeft = false;
                                 if (node.hasClass('prev-button')) {
                                     toolbar.setData('currentIndex', --index);
+                                    isLeft = true;
                                 } else {
                                     toolbar.setData('currentIndex', ++index);
                                 }
-                                that.setPageByCurrentDot(null, toolbar, index);
+                                toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_CLICK.valueOf(), [node, isLeft, index]);
+                                that.setPageByCurrentDot(null, toolbar, index, isLeft);
                             });
                             toolbar.find('.paginator').on('click', 'a:not(.current)', function (node, event) {
                                 that.setPageByCurrentDot(node, toolbar);
                                 return false;
-                            })
+                            });
+                            toolbar.trigger(chlk.controls.LRToolbarEvents.AFTER_RENDER.valueOf());
                         }
                     }.bind(this));
                 return attributes;
             },
 
             [
-                [ria.dom.Dom, ria.dom.Dom, Number]
+                [ria.dom.Dom, ria.dom.Dom, Number, Boolean]
             ],
-            VOID, function setPageByCurrentDot(node_, toolbar, index_) {
+            VOID, function setPageByCurrentDot(node_, toolbar, index_, isLeft_) {
                 var configs = toolbar.getData('configs'), node;
                 index_ = (index_ || index_ >= 0) ? index_ : parseInt(node_.getAttr('index'), 10);
                 if (configs.needDots) {
                     node = node_ || toolbar.find('.paginator A[index="' + index_ + '"]');
-                    toolbar.find('.paginator .current').removeClass('current');
+                    var current =  toolbar.find('.paginator .current');
+                    current.removeClass('current');
                     node.addClass('current');
+                    if(node_){
+                        isLeft_ = current.getAttr('index') < node.getAttr('index');
+                        toolbar.trigger(chlk.controls.LRToolbarEvents.DOT_CLICK.valueOf(), [node, isLeft_, index_]);
+                    }
                 }
+                toolbar.trigger(chlk.controls.LRToolbarEvents.BEFORE_ANIMATION.valueOf(), [isLeft_, index_]);
                 toolbar.setData('currentIndex', index_);
                 var nextButton = toolbar.find('.next-button');
                 var prevButton = toolbar.find('.prev-button');
@@ -169,16 +195,26 @@ NAMESPACE('chlk.controls', function () {
                 var secondContainer = toolbar.find('.second-container');
                 var left = (configs.padding - width) * index_;
                 secondContainer.setCss('left', left);
+                var hasLeft = false, hasRight = false;
                 if (index_ == 0) {
                     prevButton.addClass(configs.disabledClass);
                 } else {
                     prevButton.removeClass(configs.disabledClass);
+                    hasLeft = true;
                 }
                 if (index_ == configs.pagesCount - 1) {
                     nextButton.addClass(configs.disabledClass);
                 } else {
                     nextButton.removeClass(configs.disabledClass);
+                    hasRight = true;
                 }
+                var interval = setInterval(function(){
+                    var eps = 10, curLeft = parseInt(secondContainer.getCss('left'), 10);
+                    if(curLeft > left - eps && curLeft < left + eps){
+                        toolbar.trigger(chlk.controls.LRToolbarEvents.AFTER_ANIMATION.valueOf(), [isLeft_, index_, hasLeft, hasRight]);
+                        clearInterval(interval);
+                    }
+                }, 10)
             }
         ]);
 });

@@ -14,7 +14,7 @@ mixin ApiCallForm(controllerInfo, role)
                         span.header-line
                         .header-body
                             .call-type(class=methodType)
-                            .action(data-method-name=controllerInfo.getName() + "/" + cntMethod.getName())=cntMethod.getName()
+                            .action(data-method-name=controllerInfo.getName() + "/" + cntMethod.getName())="/" + controllerInfo.getName() + "/" + cntMethod.getName() + ".json"
                             .toggle
                             .description=cntMethod.getDescription()
                     .details

@@ -48,6 +48,8 @@ NAMESPACE('chlk.models.attendance', function () {
 
         String, 'attendancesJson',
 
+        String, 'submitType',
+
         [[String]],
         VOID, function setAttendancesJson(attendancesJson){
             var serializer = new chlk.lib.serialize.ChlkJsonSerializer();

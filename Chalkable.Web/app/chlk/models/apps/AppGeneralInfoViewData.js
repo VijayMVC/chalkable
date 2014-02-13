@@ -16,6 +16,7 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.apps.AppState,  'appState',
             chlk.models.common.PaginatedList, 'appReviews',
             chlk.models.developer.HomeAnalytics, 'appAnalytics',
+            chlk.models.common.ChlkDate, 'reportDate',
 
             [[
                 String,
@@ -24,13 +25,36 @@ NAMESPACE('chlk.models.apps', function () {
                 chlk.models.apps.AppState,
                 String,
                 Number,
+                chlk.models.common.ChlkDate,
                 chlk.models.common.PaginatedList,
                 chlk.models.developer.HomeAnalytics
             ]],
-            function $(appName, draftId, liveId_, appState, appThumbnail, appRating, appReviews, appAnalytics){
+            function $(appName, draftId, liveId_, appState, appThumbnail, appRating,  reportDate, appReviews, appAnalytics){
                 BASE();
+                this.prepareFields_(appName, draftId, liveId_, appState, appThumbnail, appRating, reportDate, appReviews, appAnalytics);
+            },
+
+            [[chlk.models.common.PaginatedList]],
+            function $createFromReviews(reviews){
+                BASE();
+                this.prepareFields_("", null, null, null, "", null, null, reviews, new chlk.models.developer.HomeAnalytics());
+            },
+
+            [[
+                String,
+                chlk.models.id.AppId,
+                chlk.models.id.AppId,
+                chlk.models.apps.AppState,
+                String,
+                Number,
+                chlk.models.common.ChlkDate,
+                chlk.models.common.PaginatedList,
+                chlk.models.developer.HomeAnalytics
+            ]],
+            function prepareFields_(appName, draftId, liveId_, appState, appThumbnail, appRating,  reportDate, appReviews, appAnalytics){
                 this.setAppName(appName);
                 this.setDraftAppId(draftId);
+                this.setReportDate(reportDate);
                 if (liveId_)
                     this.setLiveAppId(liveId_);
                 this.setAppThumbnail(appThumbnail);

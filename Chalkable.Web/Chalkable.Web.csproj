@@ -202,6 +202,7 @@
     <Compile Include="Controllers\SchoolController.cs" />
     <Compile Include="Controllers\SchoolYearController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\StandardController.cs" />
     <Compile Include="Controllers\StorageMonitorController.cs" />
     <Compile Include="Controllers\PersonControllers\PersonController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -220,6 +221,8 @@
     <Compile Include="Logic\StudentAnnouncementLogic.cs" />
     <Compile Include="Models\AddressViewData.cs" />
     <Compile Include="Models\AdminFeedViewData.cs" />
+    <Compile Include="Models\AlphaGradeViewData.cs" />
+    <Compile Include="Models\AlternateScoreViewData.cs" />
     <Compile Include="Models\AnnouncementAttachmentViewData.cs" />
     <Compile Include="Models\AnnouncementQnAViewData.cs" />
     <Compile Include="Models\AnnouncementReminderViewData.cs" />
@@ -228,6 +231,7 @@
     <Compile Include="Models\AnnouncementsViewData\AnnouncementPeriodViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementsClassPeriodViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementShortViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\AnnouncementStandardViewData.cs" />
     <Compile Include="Models\ClassAnnouncementTypeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\AppsBudgetViewData.cs" />
@@ -321,6 +325,7 @@
     <Compile Include="Models\SchoolsViewData\ShortSchoolViewData.cs" />
     <Compile Include="Models\SchoolYearViewData.cs" />
     <Compile Include="Models\SearchViewData.cs" />
+    <Compile Include="Models\StandardSubjectViewData.cs" />
     <Compile Include="Models\StorageMonitorViewData.cs" />
     <Compile Include="Models\StudentAnnouncementViewData.cs" />
     <Compile Include="Models\HoverBoxesViewData.cs" />

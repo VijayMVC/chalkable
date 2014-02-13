@@ -62,14 +62,14 @@ namespace Chalkable.Tests.Services.School
             standards[1].LowerGradeLevelRef = 3;
 
             SysAdminFirstSchoolLocator.StandardService.AddStandards(standards);
-            var standards2 =  SysAdminFirstSchoolLocator.StandardService.GetStandardes();
+            var standards2 =  SysAdminFirstSchoolLocator.StandardService.GetStandardes(null, null, null);
             AssertAreEqual(standards, standards2);
 
             SysAdminFirstSchoolLocator.StandardService.DeleteStandard(standards[1].Id);
-            standards2 = SysAdminFirstSchoolLocator.StandardService.GetStandardes();
+            standards2 = SysAdminFirstSchoolLocator.StandardService.GetStandardes(null, null, null);
             Assert.AreEqual(standards2.Count, 1);
             SysAdminFirstSchoolLocator.StandardService.DeleteStandard(standards[0].Id);
-            Assert.AreEqual(SysAdminFirstSchoolLocator.StandardService.GetStandardes().Count, 0);
+            Assert.AreEqual(SysAdminFirstSchoolLocator.StandardService.GetStandardes(null, null, null).Count, 0);
         }
     }
 }

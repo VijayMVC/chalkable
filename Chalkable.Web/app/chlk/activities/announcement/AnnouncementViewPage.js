@@ -140,6 +140,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                         this.setGrade(gradeNode);
                         break;
                     case alertsEnum.DROP: this.dropItem(node); break;
+                    case alertsEnum.INCOMPLETE: this.setItemState_(node, 'isincomplete'); break;
+                    case alertsEnum.LATE: this.setItemState_(node, 'islate'); break;
+                    case alertsEnum.ABSENT: this.setItemState_(node, 'isabsent'); break;
+                    case alertsEnum.EXEMPT: this.setItemState_(node, 'isexempt'); break;
                 }
                 new ria.dom.Dom('.alerts-pop-up:visible').hide();
             },
@@ -203,6 +207,14 @@ NAMESPACE('chlk.activities.announcement', function () {
                 row.find('[name=dropped]').setValue(true);
                 this.updateItem(node, true);
             },
+
+            [[ria.dom.Dom, String]],
+            function setItemState_(node, stateName){
+                var row = node.parent('.row');
+                row.find('[name=' + stateName +']').setValue(true);
+                this.updateItem(node, true);
+            },
+
 
             /*[ria.mvc.DomEventBind('click', '.drop-link')],
             [[ria.dom.Dom, ria.dom.Event]],

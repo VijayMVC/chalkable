@@ -1,21 +1,12 @@
 REQUIRE('chlk.models.announcement.ShortStudentAnnouncementsViewData');
-REQUIRE('chlk.models.id.AnnouncementId');
+REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
 
     /** @class chlk.models.announcement.ShortAnnouncementViewData*/
     CLASS(
-        'ShortAnnouncementViewData', [
-            [ria.serialize.SerializeProperty('announcementtypename')],
-            String, 'announcementTypeName',
-
-            Number, 'order',
-
-            chlk.models.id.AnnouncementId, 'id',
-
-            Boolean, 'dropped',
-
+        'ShortAnnouncementViewData', EXTENDS(chlk.models.announcement.BaseAnnouncementViewData), [
             [ria.serialize.SerializeProperty('studentannouncements')],
             chlk.models.announcement.ShortStudentAnnouncementsViewData, 'studentAnnouncements'
         ]);

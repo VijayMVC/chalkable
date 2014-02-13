@@ -44,6 +44,9 @@ REQUIRE('chlk.models.attendance.AttendanceReason');
 REQUIRE('chlk.models.id.SchoolYearId');
 REQUIRE('chlk.models.people.Claim');
 REQUIRE('chlk.models.grading.Mapping');
+REQUIRE('chlk.models.grading.AlternateScore');
+REQUIRE('chlk.models.grading.AlphaGrade');
+
 
 REQUIRE('chlk.AppApiHost');
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
@@ -89,6 +92,9 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, 'currentSchoolYearId', chlk.models.id.SchoolYearId);
                 this.saveInSession(session, 'attendanceReasons', ArrayOf(chlk.models.attendance.AttendanceReason));
                 this.saveInSession(session, 'userClaims', ArrayOf(chlk.models.people.Claim));
+                this.saveInSession(session, 'alphaGrades', ArrayOf(chlk.models.grading.AlphaGrade));
+                this.saveInSession(session, 'alternateScores', ArrayOf(chlk.models.grading.AlternateScore));
+
                 window.gradeLevels.forEach(function(item){
                     var numberPart = parseInt(item.name, 10);
                     if(numberPart){
@@ -149,8 +155,10 @@ NAMESPACE('chlk', function (){
                             tooltip.find('.tooltip-content').html(node.data('tooltip'));
                             tooltip.css('left', offset.left + (node.width() - tooltip.width())/2)
                                 .css('top', offset.top - tooltip.height());
+                            e.stopPropagation();
                         }
                     }
+
                 });
 
                 jQuery(document).on('mouseleave click', '[data-tooltip]', function(e){

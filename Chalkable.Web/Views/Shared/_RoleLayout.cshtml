@@ -232,6 +232,9 @@
             var attendanceReasons = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ATTENDANCE_REASONS)');
             var gradeLevels = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.GRADE_LEVELS)');
             var userClaims = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.USER_CLAIMS)');
+            var alphaGrades = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ALPHA_GRADES)');
+            var alternateScores = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ALTERNATE_SCORES)');
+            
         </script>
     
     @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)

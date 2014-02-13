@@ -64,8 +64,12 @@ namespace Chalkable.Web.Models
     public class StudentAnnouncementViewData
     {
         public ShortPersonViewData StudentInfo { get; set; }
-        public int? GradeValue { get; set; }
+        public string GradeValue { get; set; }
         public bool Dropped { get; set; }
+        public bool IsExempt { get; set; }
+        public bool IsIncomplete { get; set; }
+        public bool IsLate { get; set; }
+        public bool IsAbsent { get; set; }
         public string Raw { get; set; }
         public string ExtraCredits { get; set; }
         public int Id { get; set; }
@@ -86,18 +90,25 @@ namespace Chalkable.Web.Models
         }
         public static StudentAnnouncementViewData Create(StudentAnnouncementDetails studentAnnouncements, IList<AnnouncementAttachmentInfo> attachments)
         {
-            return new StudentAnnouncementViewData
+            var res = new StudentAnnouncementViewData
             {
                 StudentInfo = ShortPersonViewData.Create(studentAnnouncements.Person),
                 Dropped = studentAnnouncements.Dropped,
-                GradeValue = studentAnnouncements.GradeValue,
+                GradeValue = studentAnnouncements.StiScoreValue,
                 ExtraCredits = studentAnnouncements.ExtraCredit,
                 Id = studentAnnouncements.Id,
                 Attachments = attachments.Select(x => AnnouncementAttachmentViewData.Create(x, true)).ToList(),
                 AnnouncementId = studentAnnouncements.AnnouncementRef,
                 Comment = studentAnnouncements.Comment,
-                State = (int)studentAnnouncements.State
+                State = (int)studentAnnouncements.State,
+                IsAbsent = studentAnnouncements.Absent,
+                IsExempt = studentAnnouncements.Exempt,
+                IsIncomplete = studentAnnouncements.Incomplete,
+                IsLate = studentAnnouncements.Late
             };
+            if (string.IsNullOrEmpty(res.GradeValue))
+                res.GradeValue = studentAnnouncements.GradeValue.ToString();
+            return res;
         }
     }
 }

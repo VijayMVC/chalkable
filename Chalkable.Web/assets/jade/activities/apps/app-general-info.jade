@@ -31,7 +31,7 @@ mixin AppInstallsChart_(data, header, chartId)
     .block(attributes)
         .panel-header=header
         .chart-block.relative
-            .chart-bg.button-block.app-install-chart-bg=chartTitle
+            .chart-bg.app-install-chart-bg=chartTitle
             +Chart()(id = chartId, data-showmarkeronhover = true, data-options = appInstallChartOptions)
 
 mixin AppViewsChart_(data, header, chartId)
@@ -40,7 +40,7 @@ mixin AppViewsChart_(data, header, chartId)
     .block(attributes)
         .panel-header=header
         .chart-block.relative
-            .chart-bg.button-block.app-views-chart-bg
+            .chart-bg.app-views-chart-bg
             +Chart()(id = chartId, data-showmarkeronhover = true, data-options = appViewsChartOptions)
 
 mixin AppStatus_(appState, appDraftId, liveAppId)
@@ -76,6 +76,7 @@ mixin AppStatus_(appState, appDraftId, liveAppId)
 .app-general-info
     .action-bar.not-transparent.dev-app-info
         .container.panel-bg
+
     .app-header
         .app-icon
             img(src=self.appThumbnail, width=80, height=80)

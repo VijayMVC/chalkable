@@ -113,6 +113,8 @@ NAMESPACE('chlk.activities.attendance', function () {
                         if(next.exists()){
                             selected.removeClass('selected');
                             next.addClass('selected');
+                        }else{
+                            this.dom.find('.chlk-grid').trigger(this._gridEvents.SELECT_NEXT_ROW.valueOf());
                         }; break;
                     case ria.dom.Keys.UP.valueOf():
                         prev = selected.previous('.option');
@@ -123,7 +125,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                             this.dom.find('.chlk-grid').trigger(this._gridEvents.SELECT_PREV_ROW.valueOf());
                         }; break;
                     case ria.dom.Keys.ENTER.valueOf():
-                        this.updateReasons();break;
+                        this.updateReasons();event.preventDefault();break;
                     case ria.dom.Keys.LEFT.valueOf(): node.parent('.row.selected').find('.' + this._LEFT_ARROW).trigger('click');break;
                     case ria.dom.Keys.RIGHT.valueOf(): node.parent('.row.selected').find('.' + this._RIGHT_ARROW).trigger('click');break;
                 }
@@ -230,9 +232,8 @@ NAMESPACE('chlk.activities.attendance', function () {
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.DESELECT_ROW.valueOf(), '#class-attendance-list-panel')],
             [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number]],
             VOID, function onStudentDeselect(grid, event, row, index){
-                var form = row.find('.student-attendance-form');
-//                if(form.hasClass('need-present'))
-//                    form.trigger('submit');
+                row.find('.student-attendance-container').removeClass('active');
+                row.find('.combo-list').hide();
             },
 
             [[Object]],

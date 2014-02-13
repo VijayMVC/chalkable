@@ -115,6 +115,32 @@ NAMESPACE('chlk.models.common', function () {
             [[Number]],
             String, function timepartToStr(t) {
                 return "" + ((t - t % 10) / 10) + (t % 10);
+            },
+
+            Number, function getDaysInMonth(month_, year_) {
+                var month = this.getDate().getMonth() || month_;
+                var year = this.getDate().getFullYear() || year_;
+                return new Date(year, month + 1, 0).getDate();
+            },
+
+            [[SELF, SELF]],
+            function getDateDiffInDays(d1, d2) {
+                var a = d1.getDate();
+                var b = d2.getDate();
+                var _MS_PER_DAY = 1000 * 60 * 60 * 24;
+                // Discard the time and time-zone information.
+                var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+                var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+                return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+            },
+
+            [[Date]],
+            SELF, function getLastDay(date_){
+                var date = date_ || this.getDate();
+                var y = date.getFullYear();
+                var m = date.getMonth();
+                var lastDay = new Date(y, m + 1, 0);
+                return new chlk.models.common.ChlkDate(lastDay);
             }
 
         ]);

@@ -247,6 +247,8 @@ var Msg = {
     Add_student: 'Add student',
     Advanced_options: 'Advanced options...',
     All_day: 'All day',
+    All_categories: 'All categories',
+    All_standards: 'All standards',
     All_students: 'All students',
     All_subjects: 'All subjects',
     All_teachers: 'All teachers',

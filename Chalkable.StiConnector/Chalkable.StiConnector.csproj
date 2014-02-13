@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="Connectors\ActivityAttachmentsConnector.cs" />
     <Compile Include="Connectors\ActivityConnector.cs" />
+    <Compile Include="Connectors\ActivityScoreConnector.cs" />
     <Compile Include="Connectors\AttachmentConnector.cs" />
     <Compile Include="Connectors\ConnectorBase.cs" />
     <Compile Include="Connectors\ConnectorLocator.cs" />
@@ -83,9 +84,11 @@
     <Compile Include="Connectors\Model\ActivityAttachment.cs" />
     <Compile Include="Connectors\Model\ActivityStandard.cs" />
     <Compile Include="Connectors\Model\School.cs" />
+    <Compile Include="Connectors\Model\Score.cs" />
     <Compile Include="Connectors\Model\SectionAttendance.cs" />
     <Compile Include="Connectors\Model\StiAttachment.cs" />
     <Compile Include="Connectors\SchoolConnector.cs" />
+    <Compile Include="Connectors\SectionStandardConnector.cs" />
     <Compile Include="Model\AbsenceLevelReason.cs">
       <DependentUpon>StiEntities.tt</DependentUpon>
     </Compile>

@@ -174,16 +174,16 @@ NAMESPACE('chlk.controllers', function (){
                 JSON.stringify([true, model.getGradeLevelsIds(), model.getCurrentPage(), date]), true);
         },
 
+        [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean]],
         function markAllAction(classId, date, isProfile_){
-            this.attendanceService
+            return this.attendanceService
                 .markAllPresent(classId, date)
                 .attach(this.validateResponse_())
                 .then(function(success){
                     return this.BackgroundNavigate('attendance', 'classList', [classId, date, true, isProfile_]);
                   //  this.classListAction(classId, date, true, isProfile_);
                 }, this);
-            //return this.ShadeLoader();
         },
 
         [[Boolean, Boolean]],
@@ -248,11 +248,13 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.attendance.SetClassListAttendance]],
         function setClassAttendanceListAction(model){
-            return this.attendanceService.setAttendance(model)
-                .attach(this.validateResponse_())
-                .then(function(res){
-                    this.BackgroundNavigate('attendance', 'classList', [model.getClassId(), model.getDate(), true]);
-                }, this);
+            if(model.getSubmitType() == 'submit')
+                return this.attendanceService.setAttendance(model)
+                    .attach(this.validateResponse_())
+                    .then(function(res){
+                        this.BackgroundNavigate('attendance', 'classList', [model.getClassId(), model.getDate(), true]);
+                    }, this);
+            return null;
         },
 
         Object, function getActivityClass_(isProfile_){

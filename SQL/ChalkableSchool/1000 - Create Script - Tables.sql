@@ -571,3 +571,20 @@ alter table ClassStandard
 go
 
 
+CREATE TABLE [dbo].[AlphaGrade](
+	[Id] [int] NOT NULL primary key,
+	[SchoolRef] [int] NOT NULL constraint FK_AlphaGrade_School foreign key references School(Id),
+	[Name] [varchar](5) NOT NULL,
+	[Description] [varchar](255) NOT NULL,
+)
+GO
+
+CREATE TABLE [dbo].[AlternateScore](
+	[Id] [int] NOT NULL primary key,
+	[Name] [varchar](3) NOT NULL,
+	[Description] [varchar](255) NOT NULL,
+	[IncludeInAverage] [bit] NOT NULL,
+	[PercentOfMaximumScore] [decimal](6, 2) NULL,
+)
+GO
+

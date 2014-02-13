@@ -25,9 +25,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     'd': ['D+', 'D', 'D-', 'D (fill all)', 'Dropped', 'Dropped (fill all)'],
                     'd+': ['D+', 'D+ (fill all)'],
                     'd-': ['D-', 'D- (fill all)'],
-                    'f': ['F+', 'F', 'F-',' F (fill all)'],
-                    'f+': ['F+', 'F+ (fill all)'],
-                    'f-': ['F-', 'F- (fill all)'],
+                    'f': ['F', ' F (fill all)'],
                     'e': ['Exempt', 'Exempt (fill all)'],
                     'x': ['Exempt', 'Exempt (fill all)']
                 };
@@ -160,12 +158,39 @@ NAMESPACE('chlk.activities.grading', function () {
                 return false;
             },
 
+            [ria.mvc.DomEventBind('click', '.grading-select + .chzn-container')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function clickSelect(node, event){
+                event.stopPropagation();
+            },
+
             [ria.mvc.DomEventBind('mouseover', '.autocomplete-item')],
             [[ria.dom.Dom, ria.dom.Event]],
-            Boolean, function itemHover(node, event){
+            function itemHover(node, event){
                 if(!node.hasClass('hovered'))
                     node.parent().find('.hovered').removeClass('hovered');
                 node.addClass('hovered');
+            },
+
+            [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.AFTER_RENDER.valueOf(), '.grid-toolbar')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function afterTbRender(node, event){
+                this.beforeTbAnimation(node);
+            },
+
+            [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.BEFORE_ANIMATION.valueOf(), '.grid-toolbar')],
+            [[ria.dom.Dom, ria.dom.Event, Boolean, Number]],
+            function beforeTbAnimation(toolbar, event_, isLeft_, index_){
+                this.dom.find('.transparent-container').removeClass('transparent-container').removeClass('delay');
+                var startIndex = index_ ? index_ * 5 + 5 : 5;
+                var node = toolbar.find('.dotted-container:eq(' + startIndex + ')');
+                if(!node.is(':last-child')){
+                    if(isLeft_)
+                        node.addClass('delay');
+                    setTimeout(function(){
+                        node.addClass('transparent-container');
+                    },1);
+                }
             },
 
             [ria.mvc.DomEventBind('click', '.comment-button')],

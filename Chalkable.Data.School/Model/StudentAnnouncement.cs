@@ -29,7 +29,20 @@ namespace Chalkable.Data.School.Model
         public StudentAnnouncementStateEnum State { get; set; }
         public Guid? ApplicationRef { get; set; }
 
-
+        [NotDbFieldAttr]
+        public string StiScoreValue { get; set; }
+        [NotDbFieldAttr]
+        public int? AlternateScoreId { get; set; }
+        [NotDbFieldAttr]
+        public int? AlphaGradeId { get; set; }
+        [NotDbFieldAttr]
+        public bool Exempt { get; set; }
+        [NotDbFieldAttr]
+        public bool Incomplete { get; set; }
+        [NotDbFieldAttr]
+        public bool Late { get; set; }
+        [NotDbFieldAttr]
+        public bool Absent { get; set; }
     }
 
     public class StudentAnnouncementGrade : StudentAnnouncement

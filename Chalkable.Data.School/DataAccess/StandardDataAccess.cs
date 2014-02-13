@@ -25,6 +25,28 @@ namespace Chalkable.Data.School.DataAccess
                 });
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
+
+        public IList<Standard> GetStandards(StandardQuery query)
+        {
+            var condition = new AndQueryCondition();
+            if(query.StandardSubjectId.HasValue)
+                condition.Add(Standard.STANDARD_SUBJECT_ID_FIELD, query.StandardSubjectId);
+            if (query.GradeLavelId.HasValue)
+            {
+                condition.Add(Standard.LOWER_GRADE_LEVEL_REF_FIELD, query.GradeLavelId, ConditionRelation.LessEqual);
+                condition.Add(Standard.UPPER_GRADE_LEVEL_REF_FIELD, query.GradeLavelId, ConditionRelation.GreaterEqual);
+            }
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.Append("select [Standard].* from [Standard]");
+            condition.BuildSqlWhere(dbQuery, "Standard");
+            if (query.ClassId.HasValue)
+            {
+                dbQuery.Parameters.Add("classId", query.ClassId);
+                dbQuery.Sql.AppendFormat(" and [{0}][{1}] in (select [{2}] from [{3}] where [{4}] = @classId)", "Standard"
+                    , Standard.ID_FIELD , ClassStandard.STANDARD_REF_FIELD, "ClassStandard", ClassStandard.CLASS_REF_FIELD);
+            }
+            return ReadMany<Standard>(dbQuery);
+        } 
     }
 
     public class StandardSubjectDataAccess : DataAccessBase<StandardSubject, int>
@@ -48,5 +70,21 @@ namespace Chalkable.Data.School.DataAccess
         public AnnouncementStandardDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
+
+        public void Delete(int announcementId, int standardId)
+        {
+            SimpleDelete(new AndQueryCondition
+                {
+                    {AnnouncementStandard.ANNOUNCEMENT_REF_FIELD, announcementId},
+                    {AnnouncementStandard.STANDARD_REF_FIELD, standardId}
+                });
+        }
+    }
+
+    public class StandardQuery
+    {
+        public int? ClassId { get; set; }
+        public int? GradeLavelId { get; set; }
+        public int? StandardSubjectId { get; set; }
     }
 }

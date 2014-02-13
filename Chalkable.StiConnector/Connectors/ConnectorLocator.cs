@@ -35,6 +35,8 @@ namespace Chalkable.StiConnector.Connectors
             ActivityConnector = new ActivityConnector(this);
             ActivityAttachmentsConnector = new ActivityAttachmentsConnector(this);
             AttachmentConnector = new AttachmentConnector(this);
+            SectionStandardConnector = new SectionStandardConnector(this);
+            ActivityScoreConnector = new ActivityScoreConnector(this);
         }
 
         public UsersConnector UsersConnector { get; private set; }
@@ -48,6 +50,8 @@ namespace Chalkable.StiConnector.Connectors
         public ActivityConnector ActivityConnector { get; private set; }
         public ActivityAttachmentsConnector ActivityAttachmentsConnector { get; private set; }
         public AttachmentConnector AttachmentConnector { get; private set; }
+        public SectionStandardConnector SectionStandardConnector { get; private set; }
+        public ActivityScoreConnector ActivityScoreConnector { get; private set; }
 
         public class TokenModel
         {

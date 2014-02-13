@@ -15,6 +15,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public IList<AnnouncementQnAViewData> AnnouncementQnAs { get; set; }
         public IList<AnnouncementReminderViewData> AnnouncementReminders { get; set; }
         public IList<AnnouncementApplicationViewData> Applications { get; set; }
+        public IList<AnnouncementStandardViewData> Standards { get; set; }
         public StudentAnnouncementsViewData StudentAnnouncements { get; set; }
         public IList<String> autoGradeApps { get; set; }
 
@@ -28,7 +29,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
 
             Owner = ShortPersonViewData.Create(announcementDetails.Owner);
             AnnouncementReminders = AnnouncementReminderViewData.Create(announcementDetails.AnnouncementReminders, currentSchoolPersonId, Owner.Id);
-            
+            if(announcementDetails.AnnouncementStandards != null)
+                Standards = AnnouncementStandardViewData.Create(announcementDetails.AnnouncementStandards);
             if (announcementDetails.AnnouncementApplications == null) return;
             //TODO: applicationViewData
             //Applications = new List<AnnouncementApplicationViewData>();

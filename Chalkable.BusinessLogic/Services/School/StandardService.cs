@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -16,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void AddStandards(IList<Standard> standards);
         void DeleteStandard(int id);
         Standard GetStandardById(int id);
-        IList<Standard> GetStandardes();
+        IList<Standard> GetStandardes(int? classId, int? gradeLevelId, int? subjectId);
 
         IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards); 
         void AddStandardSubjects(IList<StandardSubject> standardSubjects);
@@ -86,12 +87,17 @@ namespace Chalkable.BusinessLogic.Services.School
                 return new StandardDataAccess(uow).GetById(id);
             }
         }
-        
-        public IList<Standard> GetStandardes()
+
+        public IList<Standard> GetStandardes(int? classId, int? gradeLevelId, int? subjectId)
         {
             using (var uow = Read())
             {
-                return new StandardDataAccess(uow).GetAll();
+                return new StandardDataAccess(uow).GetStandards( new StandardQuery
+                    {
+                        ClassId = classId,
+                        GradeLavelId = gradeLevelId,
+                        StandardSubjectId = subjectId
+                    });
             }
         }
 

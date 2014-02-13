@@ -4,6 +4,12 @@ BODY {
       DIV#content-wrapper{
         #main-wrapper {
           #main{
+            .grading-class-summary-grid-page{
+              .mps-container .marking-period-container .mp-data .ann-types-container {
+                margin-bottom: -30px;
+              }
+            }
+
             .autocomplete-list {
               display: none;
               background: #fff;
@@ -369,6 +375,12 @@ BODY {
                   .collapse{
                     @include transform(rotate(90deg));
                   }
+
+                  .mp-title{
+                    .grading-selects{
+                      display: block;
+                    }
+                  }
                 }
 
                 &:not(.open){
@@ -383,7 +395,7 @@ BODY {
                   overflow: visible;
 
                   .paginator{
-                    bottom: -22px;
+                    bottom: -11px;
                   }
                 }
 
@@ -395,14 +407,47 @@ BODY {
                   cursor: pointer;
                   background: url(images/grading/mp-title-bg.png);
                   position: relative;
+                  height: 20px;
+
+                  >SPAN{
+                    min-width: 100px;
+                    max-width: 220px;
+                    display: inline-block;
+                    left: 278px;
+                    text-align: center;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    position: absolute;
+                  }
 
                   .grey-button{
                     position: absolute;
-                    left: 20px;
+                    right: 72px;
                     top: 13px;
                     padding: 5px 13px 8px;
                     font-size: 12px;
                     color: #3a3a3a;
+                  }
+
+                  .grading-selects{
+                    position: absolute;
+                    display: none;
+                    top: 18px;
+                    left: 23px;
+
+                    .chzn-container{
+                      width: 121px !important;
+
+                      .chzn-single{
+                        background: #ededed;
+                        color: #3a3a3a;
+                        text-shadow: 0 1px 0 white;
+                      }
+
+                      &:nth-child(2){
+                        margin-right: 6px;
+                      }
+                    }
                   }
 
                   .collapse{
@@ -418,8 +463,7 @@ BODY {
                 .mp-data{
                   background: url(images/grading/mp-title-bottom.png) 0px bottom no-repeat;
                   overflow: hidden;
-                  //@include transition-property("height");
-                  //@include transition-duration("0.5s");
+                  padding-bottom: 20px;
 
                   .ann-types-container{
                     border: 1px solid #c8c8c8;
@@ -427,24 +471,38 @@ BODY {
                     margin: 0 17px 0 14px;
                     white-space: nowrap;
 
-                    .lr-toolbar{
+                    .grid-toolbar{
                       margin-bottom: 30px;
+                      width: 462px;
+
+                      .arrow.prev-button {
+                        left: -159px;
+                      }
+
+                      .paginator{
+                        left: -151px;
+                      }
                     }
 
                     .arrow{
-                      height: 281px;
+                      height: auto;
                       width: 34px;
                       top: 7px;
+                      background-position: center center;
+                      background-repeat: no-repeat;
+                      background-color: rgba(160, 160, 160, 0.2);
+                      bottom: 7px;
                       z-index: 2;
+                      @include border-radius(3px);
 
                       &.next-button {
                         right: 8px;
-                        background: url(images/grading/right-arrow.png) 0 0 no-repeat;
+                        background-image: url(images/grading/right-arrow-triangle.png);
                       }
 
                       &.prev-button {
                         left: 8px;
-                        background: url(images/grading/left-arrow.png) 0 0 no-repeat;
+                        background-image: url(images/grading/left-arrow-triangle.png);
                       }
 
                       &:hover{
@@ -456,16 +514,35 @@ BODY {
                       }
                     }
 
-                    .ann-type-container, .dotted-container{
+                    .dotted-container{
+                      display: inline-block;
+                    }
+
+                    .ann-type-container{
                       display: table-cell;
+                      height: 288px;
+                    }
+
+                    .ann-type-container, .dotted-container{
                       text-align: center;
                       vertical-align: top;
-                      height: 288px;
 
                       .type-name{
                         font: bold 16px Arial;
                         color: #4d4d4d;
                         position: relative;
+                        height: 20px;
+                      }
+
+                      .time{
+                        font: normal 12px Arial italic;
+                        color: #b1b1b1;
+                        height: 28px;
+                        line-height: 28px;
+                      }
+
+                      .dotted-h:not(:last-child), .student-name:not(:last-child) .dotted-h{
+                        background: url(images/grading/dot-h.png) 0 bottom repeat-x;
                       }
 
                       .dotted-h{
@@ -473,7 +550,6 @@ BODY {
                         margin-right: 1px;
                         height: 47px;
                         line-height: 46px;
-                        background: url(images/grading/dot-h.png) 0 bottom repeat-x;
                         position: relative;
 
                         &.grade-value{
@@ -553,6 +629,11 @@ BODY {
                         }
                       }
 
+                      .max-score{
+                        height: 26px;
+                        line-height: normal;
+                      }
+
                       .active-row{
                         background: #f1f1f1;
 
@@ -562,15 +643,29 @@ BODY {
                       }
 
                       &.name-container{
-                        min-width: 177px;
                         text-align: left;
 
                         >DIV{
                           padding-left: 8px;
                           margin-right: 1px;
+                          width: 158px;
+                          position: relative;
+
+                          .withdrawn{
+                            position: absolute;
+                            background: #d45151;
+                            height: 6px;
+                            width: 6px;
+                            @include border-radius(3px);
+                            top: 21px;
+                            right: 15px;
+                          }
 
                           >DIV.dotted-h{
+                            padding-right: 25px;
                             margin: 0;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
                           }
                         }
                       }
@@ -585,6 +680,27 @@ BODY {
 
                       .type-name{
                         margin: 5px 0 -1px 0;
+                      }
+
+                      &.transparent-container{
+                        >DIV, .type-name{
+                          color: transparent;
+                        }
+
+                        .dotted-h.grade-value {
+                          cursor: default;
+                        }
+
+                        >DIV>DIV, >DIV>FORM{
+                          display: none;
+                        }
+
+                        &.delay{
+                          >*{
+                            @include transition-property("all");
+                            @include transition-duration("0.5s");
+                          }
+                        }
                       }
                     }
 
@@ -731,6 +847,7 @@ BODY {
 
       &.small{
         background: url(images/grading/small-chart.png) 20px 8px no-repeat;
+        text-align: left;
       }
     }
   }
