@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -22,6 +18,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards); 
         void AddStandardSubjects(IList<StandardSubject> standardSubjects);
         IList<StandardSubject> GetStandardSubjects();
+        //IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId);
 
     }
     public class StandardService : SchoolServiceBase, IStandardService
@@ -133,5 +130,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 return classStandards;
             }
         }
+        
+        //public IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId)
+        //{
+        //    using (var uow = Read())
+        //    {
+        //       new AnnouncementStandardDataAccess(uow).
+        //    }
+        //}
     }
 }
