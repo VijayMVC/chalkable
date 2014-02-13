@@ -156,6 +156,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'showGradingIcon',
 
             [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.standard.Standard), 'standards',
+
+            [ria.templates.ModelPropertyBind],
             Boolean, 'starred',
 
             [ria.templates.ModelPropertyBind],

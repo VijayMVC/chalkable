@@ -534,7 +534,7 @@ TEXTAREA.animated-textarea{
   font-size: 11px;
   text-align: center;
 
-  &:hover{
+  &:not(.same-on-hover):hover{
     @include background(linear-gradient(top, #e5e5e5, #d0d0d0));
   }
 
