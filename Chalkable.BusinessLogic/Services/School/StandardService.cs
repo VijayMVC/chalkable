@@ -13,7 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void AddStandards(IList<Standard> standards);
         void DeleteStandard(int id);
         Standard GetStandardById(int id);
-        IList<Standard> GetStandardes(int? classId, int? gradeLevelId, int? subjectId);
+        IList<Standard> GetStandardes(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true);
 
         IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards); 
         void AddStandardSubjects(IList<StandardSubject> standardSubjects);
@@ -85,7 +85,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Standard> GetStandardes(int? classId, int? gradeLevelId, int? subjectId)
+        public IList<Standard> GetStandardes(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true)
         {
             using (var uow = Read())
             {
@@ -93,7 +93,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     {
                         ClassId = classId,
                         GradeLavelId = gradeLevelId,
-                        StandardSubjectId = subjectId
+                        StandardSubjectId = subjectId,
+                        ParentStandardId = parentStandardId
                     });
             }
         }

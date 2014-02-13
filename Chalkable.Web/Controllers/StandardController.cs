@@ -9,9 +9,10 @@ namespace Chalkable.Web.Controllers
     public class StandardController : ChalkableController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult GetStandards(int? classId, int? subjectId, int? gradeLevelId)
+        public ActionResult GetStandards(int? classId, int? subjectId, int? gradeLevelId, int? parentStandardId, bool? allStandards)
         {
-            var standards = SchoolLocator.StandardService.GetStandardes(classId, gradeLevelId, subjectId);
+            var standards = SchoolLocator.StandardService.GetStandardes(classId, gradeLevelId
+                , subjectId, parentStandardId, allStandards ?? false);
             return Json(AnnouncementStandardViewData.Create(standards));
         }
 
