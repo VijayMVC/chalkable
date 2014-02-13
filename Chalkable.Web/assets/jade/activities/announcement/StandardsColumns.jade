@@ -1,0 +1,12 @@
+standards = self.getItemStandards() || []
+if standards.length
+    td.name-td
+        .standards-names.column
+            each standard in standards
+                div(data-description=standard.getDescription()).standard-name.column-cell
+                    .name=standard.getName()
+                    .right-triangle
+else
+    td
+        .standards-description=self.getDescription()
+
