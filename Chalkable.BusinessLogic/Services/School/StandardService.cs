@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -17,11 +13,12 @@ namespace Chalkable.BusinessLogic.Services.School
         void AddStandards(IList<Standard> standards);
         void DeleteStandard(int id);
         Standard GetStandardById(int id);
-        IList<Standard> GetStandardes(int? classId, int? gradeLevelId, int? subjectId);
+        IList<Standard> GetStandardes(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true);
 
         IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards); 
         void AddStandardSubjects(IList<StandardSubject> standardSubjects);
         IList<StandardSubject> GetStandardSubjects();
+        //IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId);
 
     }
     public class StandardService : SchoolServiceBase, IStandardService
@@ -88,7 +85,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Standard> GetStandardes(int? classId, int? gradeLevelId, int? subjectId)
+        public IList<Standard> GetStandardes(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true)
         {
             using (var uow = Read())
             {
@@ -96,7 +93,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     {
                         ClassId = classId,
                         GradeLavelId = gradeLevelId,
-                        StandardSubjectId = subjectId
+                        StandardSubjectId = subjectId,
+                        ParentStandardId = parentStandardId
                     });
             }
         }
@@ -133,5 +131,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 return classStandards;
             }
         }
+        
+        //public IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId)
+        //{
+        //    using (var uow = Read())
+        //    {
+        //       new AnnouncementStandardDataAccess(uow).
+        //    }
+        //}
     }
 }

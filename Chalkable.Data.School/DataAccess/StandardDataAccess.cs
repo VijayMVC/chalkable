@@ -36,13 +36,16 @@ namespace Chalkable.Data.School.DataAccess
                 condition.Add(Standard.LOWER_GRADE_LEVEL_REF_FIELD, query.GradeLavelId, ConditionRelation.LessEqual);
                 condition.Add(Standard.UPPER_GRADE_LEVEL_REF_FIELD, query.GradeLavelId, ConditionRelation.GreaterEqual);
             }
+            if(!query.AllStandards || query.ParentStandardId.HasValue)
+                condition.Add(Standard.PARENT_STANDARD_REF_FIELD, query.ParentStandardId);
+
             var dbQuery = new DbQuery();
             dbQuery.Sql.Append("select [Standard].* from [Standard]");
             condition.BuildSqlWhere(dbQuery, "Standard");
             if (query.ClassId.HasValue)
             {
                 dbQuery.Parameters.Add("classId", query.ClassId);
-                dbQuery.Sql.AppendFormat(" and [{0}][{1}] in (select [{2}] from [{3}] where [{4}] = @classId)", "Standard"
+                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in (select [{2}] from [{3}] where [{4}] = @classId)", "Standard"
                     , Standard.ID_FIELD , ClassStandard.STANDARD_REF_FIELD, "ClassStandard", ClassStandard.CLASS_REF_FIELD);
             }
             return ReadMany<Standard>(dbQuery);
@@ -86,5 +89,7 @@ namespace Chalkable.Data.School.DataAccess
         public int? ClassId { get; set; }
         public int? GradeLavelId { get; set; }
         public int? StandardSubjectId { get; set; }
+        public int? ParentStandardId { get; set; }
+        public bool AllStandards { get; set; }
     }
 }

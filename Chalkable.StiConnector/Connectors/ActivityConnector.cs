@@ -19,7 +19,7 @@ namespace Chalkable.StiConnector.Connectors
         private string urlFormat;
         public ActivityConnector(ConnectorLocator locator) : base(locator)
         {
-            urlFormat = BaseUrl + "Chalkable/activities"; //"http://localhost/Api/chalkable/sections/{0}/activities"; //
+            urlFormat = BaseUrl + "Chalkable/activities";
         }
 
         public Activity GetActivity(int sectionId, int id)
@@ -30,7 +30,7 @@ namespace Chalkable.StiConnector.Connectors
 
         public IList<Activity> GetActivities(int sectionId, int? start, int? end, DateTime? endDate = null, DateTime? startDate = null)
         {
-            string url = string.Format(urlFormat, sectionId);
+            var url = string.Format(BaseUrl + "chalkable/sections/{0}/activities", sectionId);
             var optionalParams = new NameValueCollection();
             if(endDate.HasValue)
                 optionalParams.Add(END_DATE_PARAM, endDate.Value.ToString(Constants.DATE_FORMAT));
@@ -44,12 +44,10 @@ namespace Chalkable.StiConnector.Connectors
             return res;
         } 
 
-        public IList<Activity> GetTeacherActivities(int acadSessionId, int teacherId, int? sectionId, int? start = null, int? end = null, DateTime? endDate = null, DateTime? startDate = null)
+        public IList<Activity> GetTeacherActivities(int acadSessionId, int teacherId, int? start = null, int? end = null, DateTime? endDate = null, DateTime? startDate = null)
         {
-            string url = string.Format(BaseUrl + "Chalkable/{0}/teachers/{1}/activities", acadSessionId, teacherId);
+            var url = string.Format(BaseUrl + "Chalkable/{0}/teachers/{1}/activities", acadSessionId, teacherId);
             var optinalParams = new NameValueCollection();
-            if (sectionId.HasValue)
-                optinalParams.Add(SECTION_ID_PARAM, sectionId.Value.ToString());
             if(start.HasValue)
                 optinalParams.Add(START_PARAM, start.Value.ToString());
             if(end.HasValue)
@@ -61,12 +59,10 @@ namespace Chalkable.StiConnector.Connectors
             return Call<IList<Activity>>(url, optinalParams);
         }
 
-        public IList<Activity> GetStudentAcivities(int acadSessionId, int studentId, int? sectionId, int? start = null, int? end = null, DateTime? endDate = null, DateTime? startDate = null)
+        public IList<Activity> GetStudentAcivities(int acadSessionId, int studentId, int? start = null, int? end = null, DateTime? endDate = null, DateTime? startDate = null)
         {
-            string url = string.Format(BaseUrl + "Chalkable/{0}/students/{1}/activities", acadSessionId, studentId);
+            var url = string.Format(BaseUrl + "Chalkable/{0}/students/{1}/activities", acadSessionId, studentId);
             var optinalParams = new NameValueCollection();
-            if (sectionId.HasValue)
-                optinalParams.Add(SECTION_ID_PARAM, sectionId.Value.ToString());
             if (start.HasValue)
                 optinalParams.Add(START_PARAM, start.Value.ToString());
             if (end.HasValue)
