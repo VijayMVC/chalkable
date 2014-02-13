@@ -244,17 +244,17 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult AddStandard(int announcemntId, int standardId)
+        public ActionResult AddStandard(int announcementId, int standardId)
         {
-            SchoolLocator.AnnouncementService.AddAnnouncementStandard(announcemntId, standardId);
-            return Json(PrepareFullAnnouncementViewData(announcemntId, true, true));
+            SchoolLocator.AnnouncementService.AddAnnouncementStandard(announcementId, standardId);
+            return Json(PrepareFullAnnouncementViewData(announcementId, true, true));
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult RemoveStandard(int announcemntId, int standardId)
+        public ActionResult RemoveStandard(int announcementId, int standardId)
         {
-            SchoolLocator.AnnouncementService.AddAnnouncementStandard(announcemntId, standardId);
-            return Json(PrepareFullAnnouncementViewData(announcemntId, true, true));
+            SchoolLocator.AnnouncementService.AddAnnouncementStandard(announcementId, standardId);
+            return Json(PrepareFullAnnouncementViewData(announcementId, true, true));
         }
     }
 

@@ -9,14 +9,20 @@ NAMESPACE('chlk.models.announcement', function(){
 
         ArrayOf(chlk.models.standard.StandardSubject), 'itemStandards',
 
+        chlk.models.id.AnnouncementId, 'announcementId',
+
         chlk.models.id.ClassId, 'classId',
 
-        [[String, chlk.models.id.ClassId, ArrayOf(chlk.models.standard.StandardSubject)]],
-        function $(announcementTypeName, classId, itemStandards){
+        Array, 'standardIds',
+
+        [[String, chlk.models.id.AnnouncementId, chlk.models.id.ClassId, ArrayOf(chlk.models.standard.StandardSubject), Array]],
+        function $(announcementTypeName, announcementId, classId, itemStandards, standardIds){
             BASE();
+            this.setAnnouncementId(announcementId);
             this.setAnnouncementTypeName(announcementTypeName);
             this.setClassId(classId);
             this.setItemStandards(itemStandards);
+            this.setStandardIds(standardIds);
         }
     ]);
 });

@@ -19,6 +19,9 @@ NAMESPACE('chlk.templates.standard', function(){
             chlk.models.id.StandardSubjectId, 'subjectId',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.id.AnnouncementId, 'announcementId',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.standard.Standard), 'itemStandards'
     ]);
 });

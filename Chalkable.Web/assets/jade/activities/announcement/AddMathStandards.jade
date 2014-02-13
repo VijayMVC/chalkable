@@ -3,6 +3,9 @@
         h1=self.getAnnouncementTypeName() + ' STANDARDS'
         span Choose a standard that describe the item
     +ActionForm('announcement', 'addStandards').add-standards-form
+        +Hidden('announcementId', self.getAnnouncementId())
+        +Hidden('standardid', null)
+        +Hidden('standardIds', self.getStandardIds().join(',')).standard-ids
         .standards-list-container
             standardSubjects = self.getItemStandards() || []
             table
@@ -17,5 +20,5 @@
                         .standards-description
         .buttons-container
             +Button.special-button2.cancel.close Cancel
-            +Button()(type="submit").special-button2.blue.add Submit
+            +Button()(type="submit", disabled).special-button2.blue.add.add-standard-btn Submit
 
