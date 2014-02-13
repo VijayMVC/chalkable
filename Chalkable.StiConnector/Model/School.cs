@@ -29,6 +29,7 @@ namespace Chalkable.StiConnector.Model
             this.UserSchools = new HashSet<UserSchool>();
             this.Staffs = new HashSet<Staff>();
             this.Staffs1 = new HashSet<Staff>();
+            this.AlphaGrades = new HashSet<AlphaGrade>();
         }
     
         public int SchoolID { get; set; }
@@ -54,6 +55,8 @@ namespace Chalkable.StiConnector.Model
         public System.Guid RowVersion { get; set; }
         public System.Guid DistrictGuid { get; set; }
         public Nullable<int> CourseRequestSessionID { get; set; }
+        public bool IsLEEnabled { get; set; }
+        public bool IsLESyncComplete { get; set; }
     
         public virtual ICollection<AcadSession> AcadSessions { get; set; }
         public virtual AcadSession AcadSession { get; set; }
@@ -72,5 +75,6 @@ namespace Chalkable.StiConnector.Model
         public virtual ICollection<Staff> Staffs { get; set; }
         public virtual ICollection<Staff> Staffs1 { get; set; }
         public virtual Document Document { get; set; }
+        public virtual ICollection<AlphaGrade> AlphaGrades { get; set; }
     }
 }

@@ -21,6 +21,8 @@ namespace Chalkable.StiConnector.Model
             this.SchoolGradeLevels = new HashSet<SchoolGradeLevel>();
             this.StudentAcadSessions = new HashSet<StudentAcadSession>();
             this.StudentGradeLevels = new HashSet<StudentGradeLevel>();
+            this.Standards = new HashSet<Standard>();
+            this.Standards1 = new HashSet<Standard>();
         }
     
         public short GradeLevelID { get; set; }
@@ -40,5 +42,7 @@ namespace Chalkable.StiConnector.Model
         public virtual ICollection<SchoolGradeLevel> SchoolGradeLevels { get; set; }
         public virtual ICollection<StudentAcadSession> StudentAcadSessions { get; set; }
         public virtual ICollection<StudentGradeLevel> StudentGradeLevels { get; set; }
+        public virtual ICollection<Standard> Standards { get; set; }
+        public virtual ICollection<Standard> Standards1 { get; set; }
     }
 }
