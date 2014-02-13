@@ -31,7 +31,8 @@ namespace Chalkable.Web.Controllers
             {
                 if (SchoolLocator.Context.Role.Id == CoreRoles.TEACHER_ROLE.Id)
                 {
-                    var lastAnnouncement = SchoolLocator.AnnouncementService.GetAnnouncements(0, 1, true).FirstOrDefault();
+                    var lastAnnouncement =
+                        SchoolLocator.AnnouncementService.GetAnnouncements(0, 1, true).FirstOrDefault();
                     if (lastAnnouncement != null)
                         classAnnouncementTypeId = lastAnnouncement.ClassAnnouncementTypeRef;
                 }
@@ -70,18 +71,18 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.AnnouncementService.DeleteAnnouncements(personId);
             return Json(true);
         }
-        
+
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult EditTitle(int announcementId, string title)
         {
-            if (!SchoolLocator.AnnouncementService.Exists(title))
+            if (!SchoolLocator.AnnouncementService.Exists(title) && !string.IsNullOrEmpty(title))
             {
                 SchoolLocator.AnnouncementService.EditTitle(announcementId, title);
                 return Json(true);
             }
             return Json(false);
         }
-        
+
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult Exists(string title)
         {
@@ -94,9 +95,9 @@ namespace Chalkable.Web.Controllers
         {
             var viewData = PrepareFullAnnouncementViewData(announcementId, false);
             var res = new CreateAnnouncementViewData
-            {
-                Announcement = viewData,
-            };
+                {
+                    Announcement = viewData,
+                };
             if (BaseSecurity.IsAdminViewer(SchoolLocator.Context))
             {
                 var announcementRecipients = SchoolLocator.AnnouncementService.GetAnnouncementRecipients(announcementId);
@@ -105,14 +106,16 @@ namespace Chalkable.Web.Controllers
             return Json(res, 6);
         }
 
-        private AnnouncementComplex Save(AnnouncementInfo announcementInfo, int? classId, IList<RecipientInfo> recipientInfos = null)
+        private AnnouncementComplex Save(AnnouncementInfo announcementInfo, int? classId,
+                                         IList<RecipientInfo> recipientInfos = null)
         {
-            if(!announcementInfo.ExpiresDate.HasValue)
-                announcementInfo.ExpiresDate =  SchoolLocator.Context.NowSchoolTime;
+            if (!announcementInfo.ExpiresDate.HasValue)
+                announcementInfo.ExpiresDate = SchoolLocator.Context.NowSchoolTime;
             return SchoolLocator.AnnouncementService.EditAnnouncement(announcementInfo, classId, recipientInfos);
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_READ, true, CallType.Get, new[] { AppPermissionType.Announcement })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student",
+            Preference.API_DESCR_ANNOUNCEMENT_READ, true, CallType.Get, new[] {AppPermissionType.Announcement})]
         public ActionResult Read(int announcementId)
         {
             var res = PrepareFullAnnouncementViewData(announcementId, true, true);
@@ -151,7 +154,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult SaveForAdmin(AnnouncementInfo announcement, ListOfStringList annRecipients)
         {
             var recipients = annRecipients != null ? RecipientInfo.Create(annRecipients) : null;
-            Save(announcement,  null, recipients);
+            Save(announcement, null, recipients);
             return Json(true);
         }
 
@@ -162,7 +165,9 @@ namespace Chalkable.Web.Controllers
             if (markingPeriodId.HasValue)
             {
                 var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId.Value);
-                return markingPeriod.StartDate <= expiresDate && markingPeriod.EndDate >= expiresDate ? markingPeriod : null;
+                return markingPeriod.StartDate <= expiresDate && markingPeriod.EndDate >= expiresDate
+                           ? markingPeriod
+                           : null;
             }
             return SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(expiresDate);
         }
@@ -180,8 +185,9 @@ namespace Chalkable.Web.Controllers
 
             var res = Save(announcement, classId);
             SchoolLocator.AnnouncementService.SubmitAnnouncement(res.Id, classId);
-            SchoolLocator.AnnouncementService.DeleteAnnouncements(classId, res.ClassAnnouncementTypeRef.Value, AnnouncementState.Draft);
-            
+            SchoolLocator.AnnouncementService.DeleteAnnouncements(classId, res.ClassAnnouncementTypeRef.Value,
+                                                                  AnnouncementState.Draft);
+
 
             //TODO: mixpanelService
             // var submittedAnn = SchoolLocator.AnnouncementService.GetAnnouncementDetails(res.Id);
@@ -205,12 +211,12 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
         public ActionResult SubmitForAdmin(AnnouncementInfo announcement, ListOfStringList annRecipients)
         {
-            if(!Context.UserLocalId.HasValue)
+            if (!Context.UserLocalId.HasValue)
                 throw new UnassignedUserException();
             if (annRecipients.Count == 0)
                 throw new ChalkableException();
             var recipientInfos = RecipientInfo.Create(annRecipients);
-            var res = Save(announcement, null,  recipientInfos);
+            var res = Save(announcement, null, recipientInfos);
             SchoolLocator.AnnouncementService.SubmitForAdmin(res.Id);
             SchoolLocator.AnnouncementService.DeleteAnnouncements(Context.UserLocalId.Value);
             return Json(true, 5);
@@ -243,5 +249,13 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.AnnouncementService.AddAnnouncementStandard(announcemntId, standardId);
             return Json(PrepareFullAnnouncementViewData(announcemntId, true, true));
         }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        public ActionResult RemoveStandard(int announcemntId, int standardId)
+        {
+            SchoolLocator.AnnouncementService.AddAnnouncementStandard(announcemntId, standardId);
+            return Json(PrepareFullAnnouncementViewData(announcemntId, true, true));
+        }
     }
+
 }

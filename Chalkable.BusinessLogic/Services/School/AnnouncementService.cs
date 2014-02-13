@@ -56,6 +56,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType);
 
         Standard AddAnnouncementStandard(int announcementId, int standardId);
+        Standard RemoveStandard(int announcementId, int standardId);
     }
 
     public class AnnouncementService : SisConnectedService, IAnnouncementService
@@ -636,6 +637,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 using (var uow = Update())
                 {
                     var da = CreateAnnoucnementDataAccess(uow);
+                    if(string.IsNullOrEmpty(title))
+                        throw new ChalkableException("Title parameter is empty");
                     if (existsTitleAction(da, title))
                         throw new ChalkableException("The item with current title already exists");
                     announcement.Title = title;
@@ -669,6 +672,18 @@ namespace Chalkable.BusinessLogic.Services.School
                             AnnouncementRef = announcementId,
                             StandardRef = standardId
                         });
+                uow.Commit();
+                return new StandardDataAccess(uow).GetById(standardId);
+            }
+        }
+        public Standard RemoveStandard(int announcementId, int standardId)
+        {
+            var ann = GetAnnouncementById(announcementId);
+            if(!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new AnnouncementStandardDataAccess(uow).Delete(announcementId, standardId);
                 uow.Commit();
                 return new StandardDataAccess(uow).GetById(standardId);
             }

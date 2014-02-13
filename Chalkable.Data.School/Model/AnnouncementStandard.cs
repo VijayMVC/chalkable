@@ -15,6 +15,7 @@ namespace Chalkable.Data.School.Model
 
     public class AnnouncementStandardDetails : AnnouncementStandard
     {
+        [DataEntityAttr]
         public Standard Standard { get; set; }
     }
 }

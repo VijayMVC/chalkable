@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -13,9 +9,10 @@ namespace Chalkable.Web.Controllers
     public class StandardController : ChalkableController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult GetStandards(int? classId, int? subjectId, int? gradeLevelId)
+        public ActionResult GetStandards(int? classId, int? subjectId, int? gradeLevelId, int? parentStandardId, bool? allStandards)
         {
-            var standards = SchoolLocator.StandardService.GetStandardes(classId, gradeLevelId, subjectId);
+            var standards = SchoolLocator.StandardService.GetStandardes(classId, gradeLevelId
+                , subjectId, parentStandardId, allStandards ?? false);
             return Json(AnnouncementStandardViewData.Create(standards));
         }
 
