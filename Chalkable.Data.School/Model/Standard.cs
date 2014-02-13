@@ -8,7 +8,7 @@ namespace Chalkable.Data.School.Model
         public const string STANDARD_SUBJECT_ID_FIELD = "StandardSubjectRef";
         public const string LOWER_GRADE_LEVEL_REF_FIELD = "LowerGradeLevelRef";
         public const string UPPER_GRADE_LEVEL_REF_FIELD = "UpperGradeLevelRef";
-
+        public const string PARENT_STANDARD_REF_FIELD = "ParentStandardRef";
 
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
