@@ -179,6 +179,9 @@
         <AssociationConnector Association="StiModel.FK_Standard_UpperGradeLevelID" />
         <AssociationConnector Association="StiModel.FK_Standard_ParentStandardID" />
         <AssociationConnector Association="StiModel.FK_Standard_StandardSubjectID" />
+        <EntityTypeShape EntityType="StiModel.AlphaGrade" Width="1.5" PointX="1.2138471515913714" PointY="22.778431143042834" />
+        <EntityTypeShape EntityType="StiModel.AlternateScore" Width="1.5" PointX="1.7824073684319888" PointY="28.69394852067062" />
+        <AssociationConnector Association="StiModel.FK_AlphaGrade_SchoolID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -8,6 +8,8 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Model;
+using AlphaGrade = Chalkable.Data.School.Model.AlphaGrade;
+using AlternateScore = Chalkable.Data.School.Model.AlternateScore;
 using Standard = Chalkable.Data.School.Model.Standard;
 using StandardSubject = Chalkable.Data.School.Model.StandardSubject;
 
@@ -89,6 +91,7 @@ namespace Chalkable.StiConnector.Services
             ImportClassPersons();
             Log.LogInfo("Import attendance reasons");
             ImportAttendanceReasons();
+            ImportGradingStyles();
         }
 
         private void ImportSchools()
@@ -378,7 +381,7 @@ namespace Chalkable.StiConnector.Services
                     ClassRef = x.CourseID,
                     StandardRef = x.StandardID
                 }).ToList();
-            
+            ServiceLocatorSchool.StandardService.AddClassStandards(cs);
         }
 
         private void ImportMarkingPeriodClasses()
@@ -493,6 +496,29 @@ namespace Chalkable.StiConnector.Services
                                                          Level = x.AbsenceLevel
                                                      }).ToList();
             ServiceLocatorSchool.AttendanceReasonService.AddAttendanceLevelReasons(absenceLevelReasons);
+        }
+
+        private void ImportGradingStyles()
+        {
+            var alphaGrades = stiEntities.AlphaGrades.ToList().Select(x => new AlphaGrade
+                {
+                    Id = x.AlphaGradeID,
+                    Description = x.Description,
+                    Name = x.Name,
+                    SchoolRef = x.SchoolID
+                }).ToList();
+
+            ServiceLocatorSchool.AlphaGradeService.AddAlphaGrades(alphaGrades);
+
+            var alternateScores = stiEntities.AlternateScores.ToList().Select(x => new AlternateScore
+                {
+                    Id = x.AlternateScoreID,
+                    Description = x.Description,
+                    IncludeInAverage = x.IncludeInAverage,
+                    Name = x.Name,
+                    PercentOfMaximumScore = x.PercentOfMaximumScore
+                }).ToList();
+            ServiceLocatorSchool.AlternateScoreService.AddAlternateScores(alternateScores);
         }
     }
 

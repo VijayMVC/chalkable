@@ -104,6 +104,12 @@
     <Compile Include="Model\Address.cs">
       <DependentUpon>StiEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\AlphaGrade.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\AlternateScore.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model\AttendanceCalendar.cs">
       <DependentUpon>StiEntities.tt</DependentUpon>
     </Compile>

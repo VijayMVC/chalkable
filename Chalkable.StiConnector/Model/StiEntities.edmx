@@ -11,6 +11,8 @@
           <EntitySet Name="AcadSession" EntityType="INOWDEMOModel.Store.AcadSession" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ActivityCategory" EntityType="INOWDEMOModel.Store.ActivityCategory" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Address" EntityType="INOWDEMOModel.Store.Address" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="AlphaGrade" EntityType="INOWDEMOModel.Store.AlphaGrade" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="AlternateScore" EntityType="INOWDEMOModel.Store.AlternateScore" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="AttendanceCalendar" EntityType="INOWDEMOModel.Store.AttendanceCalendar" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="AttendanceCalendarDay" EntityType="INOWDEMOModel.Store.AttendanceCalendarDay" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="AttendanceSetting" EntityType="INOWDEMOModel.Store.AttendanceSetting" store:Type="Tables" Schema="dbo" />
@@ -73,6 +75,10 @@
           <AssociationSet Name="FK_ActivityCategory_SectionID" Association="INOWDEMOModel.Store.FK_ActivityCategory_SectionID">
             <End Role="Course" EntitySet="Course" />
             <End Role="ActivityCategory" EntitySet="ActivityCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlphaGrade_SchoolID" Association="INOWDEMOModel.Store.FK_AlphaGrade_SchoolID">
+            <End Role="School" EntitySet="School" />
+            <End Role="AlphaGrade" EntitySet="AlphaGrade" />
           </AssociationSet>
           <AssociationSet Name="FK_AttendanceCalendar_AcadSessionID" Association="INOWDEMOModel.Store.FK_AttendanceCalendar_AcadSessionID">
             <End Role="AcadSession" EntitySet="AcadSession" />
@@ -621,6 +627,31 @@
           <Property Name="DistrictGuid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="StateID" Type="smallint" />
           <Property Name="CountryID" Type="smallint" />
+        </EntityType>
+        <EntityType Name="AlphaGrade">
+          <Key>
+            <PropertyRef Name="AlphaGradeID" />
+          </Key>
+          <Property Name="AlphaGradeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="SchoolID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="Description" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="RowVersion" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="HonorRollEquivalentId" Type="int" />
+          <Property Name="DistrictGuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="StateCode" Type="varchar" Nullable="false" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="AlternateScore">
+          <Key>
+            <PropertyRef Name="AlternateScoreID" />
+          </Key>
+          <Property Name="AlternateScoreID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="3" />
+          <Property Name="Description" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="IncludeInAverage" Type="bit" Nullable="false" />
+          <Property Name="PercentOfMaximumScore" Type="decimal" Precision="6" Scale="2" />
+          <Property Name="RowVersion" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DistrictGuid" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="AttendanceCalendar">
           <Key>
@@ -1603,6 +1634,18 @@
             </Principal>
             <Dependent Role="ActivityCategory">
               <PropertyRef Name="SectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlphaGrade_SchoolID">
+          <End Role="School" Type="INOWDEMOModel.Store.School" Multiplicity="1" />
+          <End Role="AlphaGrade" Type="INOWDEMOModel.Store.AlphaGrade" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="School">
+              <PropertyRef Name="SchoolID" />
+            </Principal>
+            <Dependent Role="AlphaGrade">
+              <PropertyRef Name="SchoolID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3519,6 +3562,12 @@
             <End Role="StandardSubject" EntitySet="StandardSubjects" />
             <End Role="Standard" EntitySet="Standards" />
           </AssociationSet>
+          <EntitySet Name="AlphaGrades" EntityType="StiModel.AlphaGrade" />
+          <EntitySet Name="AlternateScores" EntityType="StiModel.AlternateScore" />
+          <AssociationSet Name="FK_AlphaGrade_SchoolID" Association="StiModel.FK_AlphaGrade_SchoolID">
+            <End Role="School" EntitySet="Schools" />
+            <End Role="AlphaGrade" EntitySet="AlphaGrades" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="AbsenceLevelReason">
           <Key>
@@ -4094,6 +4143,7 @@
           <NavigationProperty Name="Document" Relationship="StiModel.FK_School_SchoolLogoID" FromRole="School" ToRole="Document" />
           <Property Type="Boolean" Name="IsLEEnabled" Nullable="false" />
           <Property Type="Boolean" Name="IsLESyncComplete" Nullable="false" />
+          <NavigationProperty Name="AlphaGrades" Relationship="StiModel.FK_AlphaGrade_SchoolID" FromRole="School" ToRole="AlphaGrade" />
         </EntityType>
         <EntityType Name="SchoolGradeLevel">
           <Key>
@@ -6207,6 +6257,44 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="AlphaGrade">
+          <Key>
+            <PropertyRef Name="AlphaGradeID" />
+          </Key>
+          <Property Type="Int32" Name="AlphaGradeID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="SchoolID" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Description" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="Guid" Name="RowVersion" Nullable="false" />
+          <Property Type="Int32" Name="HonorRollEquivalentId" />
+          <Property Type="Guid" Name="DistrictGuid" Nullable="false" />
+          <Property Type="String" Name="StateCode" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="School" Relationship="StiModel.FK_AlphaGrade_SchoolID" FromRole="AlphaGrade" ToRole="School" />
+        </EntityType>
+        <EntityType Name="AlternateScore">
+          <Key>
+            <PropertyRef Name="AlternateScoreID" />
+          </Key>
+          <Property Type="Int32" Name="AlternateScoreID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Description" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="IncludeInAverage" Nullable="false" />
+          <Property Type="Decimal" Name="PercentOfMaximumScore" Precision="6" Scale="2" />
+          <Property Type="Guid" Name="RowVersion" Nullable="false" />
+          <Property Type="Guid" Name="DistrictGuid" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_AlphaGrade_SchoolID">
+          <End Type="StiModel.School" Role="School" Multiplicity="1" />
+          <End Type="StiModel.AlphaGrade" Role="AlphaGrade" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="School">
+              <PropertyRef Name="SchoolID" />
+            </Principal>
+            <Dependent Role="AlphaGrade">
+              <PropertyRef Name="SchoolID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -7274,6 +7362,33 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="AssessmentSubjectID" ColumnName="AssessmentSubjectID" />
                 <ScalarProperty Name="StandardSubjectID" ColumnName="StandardSubjectID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AlphaGrades">
+            <EntityTypeMapping TypeName="StiModel.AlphaGrade">
+              <MappingFragment StoreEntitySet="AlphaGrade">
+                <ScalarProperty Name="StateCode" ColumnName="StateCode" />
+                <ScalarProperty Name="DistrictGuid" ColumnName="DistrictGuid" />
+                <ScalarProperty Name="HonorRollEquivalentId" ColumnName="HonorRollEquivalentId" />
+                <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SchoolID" ColumnName="SchoolID" />
+                <ScalarProperty Name="AlphaGradeID" ColumnName="AlphaGradeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AlternateScores">
+            <EntityTypeMapping TypeName="StiModel.AlternateScore">
+              <MappingFragment StoreEntitySet="AlternateScore">
+                <ScalarProperty Name="DistrictGuid" ColumnName="DistrictGuid" />
+                <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
+                <ScalarProperty Name="PercentOfMaximumScore" ColumnName="PercentOfMaximumScore" />
+                <ScalarProperty Name="IncludeInAverage" ColumnName="IncludeInAverage" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AlternateScoreID" ColumnName="AlternateScoreID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -12,6 +12,6 @@ namespace Chalkable.Data.School.Model
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IncludeInAverage { get; set; }
-        public decimal PercentOfMaximumScore { get; set; }
+        public decimal? PercentOfMaximumScore { get; set; }
     }
 }
