@@ -529,7 +529,7 @@ BODY {
 
             TEXTAREA, .text-field{
               padding: 4px 4px 8px;
-              width: 370px;
+              width: 373px;
               font-size: 14px;
               margin-bottom: 15px;
               border: 1px solid #a1a1a1;
@@ -542,13 +542,45 @@ BODY {
             .add-standards{
               border-top: dashed 3px #e0e0e0;
               background-color: white;
-              width: 359px;
+              width: 364px;
               position: relative;
               top: -62px;
               left: 11px;
               text-align: center;
               @include border-radius(0px 0px 5px 5px);
               .standards-list{
+                text-align: left;
+
+                .grey-button{
+                  min-width: 44px;
+                  padding: 4px 8px 6px 9px;
+                  font-size: 12px;
+                  margin-bottom: 2px;
+                  margin-right: 8px;
+                  cursor: pointer;
+                  position: relative;
+
+                  .remove-standard{
+                    display: none;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: url(images/icons/remove.png) center center no-repeat;
+                  }
+
+                  &:hover{
+                    .remove-standard{
+                      display: block;
+                    }
+
+                    SPAN{
+                      opacity: 0.3;
+                    }
+                  }
+                }
+
               }
               .title{
                 color: #e0e0e0;

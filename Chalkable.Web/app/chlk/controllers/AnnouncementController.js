@@ -7,6 +7,7 @@ REQUIRE('chlk.services.GradingService');
 REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.AnnouncementReminderService');
 REQUIRE('chlk.services.AppMarketService');
+REQUIRE('chlk.services.StandardService');
 
 REQUIRE('chlk.activities.announcement.AdminAnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
@@ -29,9 +30,13 @@ REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.ReminderId');
 REQUIRE('chlk.models.id.AttachmentId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
+REQUIRE('chlk.models.id.StandardSubjectId');
+REQUIRE('chlk.models.id.StandardId');
 REQUIRE('chlk.models.announcement.QnAForm');
 REQUIRE('chlk.models.common.attachments.BaseAttachmentViewData');
 REQUIRE('chlk.models.announcement.AddStandardViewData');
+REQUIRE('chlk.models.standard.Standard');
+REQUIRE('chlk.models.standard.StandardsListViewData');
 
 REQUIRE('chlk.lib.exception.AppErrorException');
 
@@ -67,6 +72,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.GradeLevelService, 'gradeLevelService',
+
+        [ria.mvc.Inject],
+        chlk.services.StandardService, 'standardService',
 
         ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
 
@@ -241,6 +249,44 @@ NAMESPACE('chlk.controllers', function (){
                 return item.getId().valueOf()
             }).join(',');
             announcement.setApplicationsIds(applicationsIds);
+
+            /*var Serializer = new chlk.lib.serialize.ChlkJsonSerializer;
+            announcement.setStandards(Serializer.deserialize([{
+                standardid: 1,
+                parentstandardref: null,
+                name: "standard1",
+                description: "first standard",
+                standardsubjectref: 0,
+                lowergradelevelref: null,
+                uppergradelevelref: null,
+                isactive: false
+            }, {
+                standardid: 2,
+                parentstandardref: null,
+                name: "standard2",
+                description: "second standard",
+                standardsubjectref: 0,
+                lowergradelevelref: null,
+                uppergradelevelref: null,
+                isactive: false
+            }, {
+                standardid: 3,
+                parentstandardref: 1,
+                name: "standard3",
+                description: "third standard",
+                standardsubjectref: 0,
+                lowergradelevelref: null,
+                uppergradelevelref: null,
+                isactive: false
+            }], ArrayOf(chlk.models.standard.Standard)));*/
+
+            var standardsIds = [];
+            announcement.getStandards().forEach(function(item){
+                standardsIds.push(item.getStandardId().valueOf());
+            });
+
+            this.getContext().getSession().set('StandardsIds', standardsIds);
+
             return new ria.async.DeferredData(model);
         },
 
@@ -727,10 +773,46 @@ NAMESPACE('chlk.controllers', function (){
             model.setAdminRecipients(new chlk.models.announcement.AdminRecipients([], recipientsData));
          },
 
-        function addStandardsAction(){
-            var data = new chlk.models.announcement.AddStandardViewData('test', []);
-            var res = new ria.async.DeferredData(data);
-            this.ShadeView(chlk.activities.announcement.AddStandardsDialog, res);
+        [chlk.controllers.SidebarButton('add-new')],
+        [[String, chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
+        function showStandardsAction(typeName, announcementId, classId){
+            var standardIds = this.getContext().getSession().get('StandardsIds', []);
+            var res = this.standardService.getSubjects()
+                .then(function(subjects){
+                    return new chlk.models.announcement.AddStandardViewData(typeName, announcementId, classId, subjects, standardIds);
+                });
+            return this.ShadeView(chlk.activities.announcement.AddStandardsDialog, res);
+        },
+
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.id.ClassId, chlk.models.id.StandardSubjectId, String, chlk.models.id.StandardId]],
+        function showStandardsByCategoryAction(classId, subjectId, description_, standardId_){
+            var res = this.standardService.getStandards(classId, subjectId, standardId_)
+                .then(function(standards){
+                    return new chlk.models.standard.StandardsListViewData(description_, classId, subjectId, standards);
+                });
+            return this.UpdateView(chlk.activities.announcement.AddStandardsDialog, res);
+        },
+
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.standard.Standard]],
+        function addStandardsAction(model){
+            var res = this.announcementService.addStandard(model.getAnnouncementId(), model.getStandardId())
+                .then(function(announcement){
+                    this.BackgroundCloseView(chlk.activities.announcement.AddStandardsDialog);
+                    return chlk.models.standard.StandardsListViewData(null, null, null, announcement.getStandards(), announcement.getId());
+                }, this);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, res);
+        },
+
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.id.AnnouncementId, chlk.models.id.StandardId]],
+        function removeStandardAction(announcementId, standardId){
+            var res = this.announcementService.removeStandard(announcementId, standardId)
+                .then(function(announcement){
+                    return chlk.models.standard.StandardsListViewData(null, null, null, announcement.getStandards(), announcement.getId());
+                }, this);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, res);
         }
     ])
 });
