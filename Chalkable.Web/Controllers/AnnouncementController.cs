@@ -74,7 +74,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult EditTitle(int announcementId, string title)
         {
-            if (!SchoolLocator.AnnouncementService.Exists(title))
+            if (!SchoolLocator.AnnouncementService.Exists(title) && !string.IsNullOrEmpty(title))
             {
                 SchoolLocator.AnnouncementService.EditTitle(announcementId, title);
                 return Json(true);
@@ -243,5 +243,12 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.AnnouncementService.AddAnnouncementStandard(announcemntId, standardId);
             return Json(PrepareFullAnnouncementViewData(announcemntId, true, true));
         }
-    }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        public ActionResult RemoveStandard(int announcemntId, int standardId)
+        {
+            SchoolLocator.AnnouncementService.AddAnnouncementStandard(announcemntId, standardId);
+            return Json(PrepareFullAnnouncementViewData(announcemntId, true, true));
+        }
+
 }

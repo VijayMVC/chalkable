@@ -70,6 +70,15 @@ namespace Chalkable.Data.School.DataAccess
         public AnnouncementStandardDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
+
+        public void Delete(int announcementId, int standardId)
+        {
+            SimpleDelete(new AndQueryCondition
+                {
+                    {AnnouncementStandard.ANNOUNCEMENT_REF_FIELD, announcementId},
+                    {AnnouncementStandard.STANDARD_REF_FIELD, standardId}
+                });
+        }
     }
 
     public class StandardQuery
