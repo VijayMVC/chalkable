@@ -187,12 +187,14 @@ namespace Chalkable.BusinessLogic.Services.School
         private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count)
         {
             var schoolYear = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+            var end = count + start;
+            start = start + 1;
+            if (classId.HasValue)
+                return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, start, end, toDate, fromDate);
             if (Context.Role == CoreRoles.TEACHER_ROLE)
-                //return ConnectorLocator.ActivityConnector.GetStudentAcivities(schoolYear.Id, 19, classId, start + 1, start + count, toDate, fromDate);
-                return ConnectorLocator.ActivityConnector.GetTeacherActivities(schoolYear.Id, Context.UserLocalId.Value, classId, start + 1, start + count, toDate, fromDate);
+                return ConnectorLocator.ActivityConnector.GetTeacherActivities(schoolYear.Id, Context.UserLocalId.Value, start, end, toDate, fromDate);
             if (Context.Role == CoreRoles.STUDENT_ROLE)
-                //return ConnectorLocator.ActivityConnector.GetTeacherActivities(schoolYear.Id, 1195, classId, start + 1, start + count, toDate, fromDate);
-                return ConnectorLocator.ActivityConnector.GetStudentAcivities(schoolYear.Id, Context.UserLocalId.Value, classId, start + 1, start + count, toDate, fromDate);
+                return ConnectorLocator.ActivityConnector.GetStudentAcivities(schoolYear.Id, Context.UserLocalId.Value, start, end, toDate, fromDate);
             return new List<Activity>();
         }
  
