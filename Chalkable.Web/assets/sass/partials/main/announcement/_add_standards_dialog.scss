@@ -1,0 +1,64 @@
+#chlk-dialogs{
+  .dialog{
+
+    &.add-standards{
+      background-color: #eaeaea;
+      min-height: 470px;
+      width: 974px;
+      @include border-radius(5px);
+      .header{
+        h1{
+          font-size: 18px;
+          font-weight: bold;
+          padding-top: 22px;
+          padding-bottom: 10px;
+        }
+        span{
+          font-size: 14px;
+        }
+        text-align: center;
+      }
+      .add-standards-form{
+        margin-top: 20px;
+        .standards-list-container{
+          height: 340px;
+          background-color: white;
+        }
+        .buttons-container{
+          text-align: right;
+          margin: 10px 35px 10px 0px;
+
+          .special-button2{
+            >span{
+              >span{
+                >button{
+                  font-size: 14px;
+                  padding-left: 6px;
+                  padding-right: 6px;
+                }
+              }
+            }
+            &.cancel{
+              border: 1px solid #a4a4a4;
+              margin-right: 10px;
+              @include border-radius(4px);
+              @include background(linear-gradient(top, #ffffff,#dadada));
+              @include box-shadow(rgba(0, 0, 0, 0.4) 0 0 3px, white 0px 1px 0px 0px inset);
+
+              min-height: 30px;
+              span{
+                min-height: 30px;
+                span{
+                  min-height: 30px;
+                  button{
+                    color: #3a3a3a;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
