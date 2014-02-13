@@ -30,10 +30,13 @@ REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.ReminderId');
 REQUIRE('chlk.models.id.AttachmentId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
+REQUIRE('chlk.models.id.StandardSubjectId');
+REQUIRE('chlk.models.id.StandardId');
 REQUIRE('chlk.models.announcement.QnAForm');
 REQUIRE('chlk.models.common.attachments.BaseAttachmentViewData');
 REQUIRE('chlk.models.announcement.AddStandardViewData');
 REQUIRE('chlk.models.standard.Standard');
+REQUIRE('chlk.models.standard.StandardsListViewData');
 
 REQUIRE('chlk.lib.exception.AppErrorException');
 
@@ -766,13 +769,23 @@ NAMESPACE('chlk.controllers', function (){
          },
 
         [chlk.controllers.SidebarButton('add-new')],
-        [[String]],
-        function showStandardsAction(typeName){
+        [[String, chlk.models.id.ClassId]],
+        function showStandardsAction(typeName, classId){
             var res = this.standardService.getSubjects()
                 .then(function(subjects){
-                    return new chlk.models.announcement.AddStandardViewData(typeName, subjects);
+                    return new chlk.models.announcement.AddStandardViewData(typeName, classId, subjects);
                 });
             return this.ShadeView(chlk.activities.announcement.AddStandardsDialog, res);
+        },
+
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.id.ClassId, chlk.models.id.StandardSubjectId, String, chlk.models.id.StandardId]],
+        function showStandardsByCategoryAction(classId, subjectId, description_, standardId_){
+            var res = this.standardService.getStandards(classId, subjectId, standardId_)
+                .then(function(standards){
+                    return new chlk.models.standard.StandardsListViewData(description_, classId, subjectId, standards);
+                });
+            return this.UpdateView(chlk.activities.announcement.AddStandardsDialog, res);
         }
     ])
 });

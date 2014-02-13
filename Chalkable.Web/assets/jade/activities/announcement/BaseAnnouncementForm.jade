@@ -57,7 +57,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                             span=standard.getName()
                             .remove-standard
                 .title=Msg.Click_to_add_standard
-                +ActionLink('announcement', 'showStandards', announcement.getAnnouncementTypeName()).add-standards-btn.x-hidden
+                +ActionLink('announcement', 'showStandards', announcement.getAnnouncementTypeName(), classId).add-standards-btn.x-hidden
         .drop-down-container
         input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
         if !announcement.getState()
