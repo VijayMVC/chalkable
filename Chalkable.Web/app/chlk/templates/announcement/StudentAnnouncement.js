@@ -61,20 +61,13 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'complete',
 
-            String, function getAlertClass(){
-                if(this.isLate()){
-                    if(!this.isIncomplete())
-                        return Msg.Late.toLowerCase();
-                    if(this.isIncomplete())
-                        return Msg.Multiple.toLowerCase();
-                }
-                else
-                    if(this.isIncomplete())
-                        return Msg.Incomplete.toLowerCase();
-                    else
-                        if(this.isAbsent())
-                            return Msg.Absent.toLowerCase();
-                return '';
+            Object, function getNormalValue(){
+                var value = this.getGradeValue();
+                if(this.isDropped())
+                    return Msg.Dropped;
+                if(this.isExempt())
+                    return Msg.Exempt;
+                return (value >= 0) ? value : '';
             },
 
             String, function getTooltipText(){
@@ -90,19 +83,6 @@ NAMESPACE('chlk.templates.announcement', function () {
                 return res.join('<hr>');
             },
 
-            Object, function getGrade(value){
-                return GradingStyler.getLetterByGrade(value, this.getGradingMapping(), this.getGradingStyle())
-            },
-
-            Object, function getNormalValue(){
-                var value = this.getGradeValue();
-                if(this.isDropped())
-                    return Msg.Dropped;
-                if(this.isExempt())
-                    return Msg.Exempt;
-                return (value >= 0) ? value : '';
-            },
-
             Object, function getDisplayValue(){
                 var value = this.getGradeValue();
                 if(this.isDropped())
@@ -110,6 +90,22 @@ NAMESPACE('chlk.templates.announcement', function () {
                 if(this.isExempt())
                     return Msg.Exempt;
                 return (value >= 0) ? value : '';
+            },
+
+            String, function getAlertClass(){
+                if(this.isLate()){
+                    if(!this.isIncomplete())
+                        return Msg.Late.toLowerCase();
+                    if(this.isIncomplete())
+                        return Msg.Multiple.toLowerCase();
+                }
+                else
+                    if(this.isIncomplete())
+                        return Msg.Incomplete.toLowerCase();
+                    else
+                        if(this.isAbsent())
+                            return Msg.Absent.toLowerCase();
+                return '';
             },
 
             Object, function isGradeDisabled(){

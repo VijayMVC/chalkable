@@ -17,6 +17,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             returnObj.Late = sourceObj.Late;
             returnObj.Incomplete = sourceObj.Incomplete;
             returnObj.Absent = sourceObj.Absent;
+            returnObj.Dropped = sourceObj.Dropped;
         }
     }
 }

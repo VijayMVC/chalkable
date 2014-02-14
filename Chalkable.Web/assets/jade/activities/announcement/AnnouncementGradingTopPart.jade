@@ -4,7 +4,8 @@ autoCount = self.getAutoGradeCount()
         =Msg.Auto_grade
     +ActionLinkButton('announcement', 'applyManualGrade', self.getAnnouncementId())(disabled = autoCount == 0).special-button2.red
         =Msg.Grade_manually
-div(data-tooltip=Msg.Class_Avg).class-avg=self.getGrade(self.getClassAvg())
+div(data-tooltip=Msg.Class_Avg).class-avg="?"
+//self.getGrade(self.getClassAvg())
 div(class=self.isShowToStudents() ? "" : "not-show", data-value="#{self.isShowToStudents()}").show-student-grades
     .chlk-pop-up-container.popup-top
         .pop-up-triangle

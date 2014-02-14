@@ -14,17 +14,16 @@ namespace Chalkable.StiConnector.Connectors
         private const string START_DATE_PARAM = "startDate";
         private const string START_PARAM = "start";
         private const string END_PARAM = "end";
-        private const string SECTION_ID_PARAM = "sectionId";
 
         private string urlFormat;
         public ActivityConnector(ConnectorLocator locator) : base(locator)
         {
-            urlFormat = BaseUrl + "Chalkable/activities";
+            urlFormat = BaseUrl + "Chalkable/activities/{0}";
         }
 
-        public Activity GetActivity(int sectionId, int id)
+        public Activity GetActivity(int id)
         {
-            string url = string.Format(urlFormat + "/{1}", sectionId, id);
+            string url = string.Format(urlFormat, id);
             return Call<Activity>(url);
         }
 
@@ -74,17 +73,17 @@ namespace Chalkable.StiConnector.Connectors
             return Call<IList<Activity>>(url, optinalParams);
         } 
 
-        public void DeleteActivity(int sectionId, int id)
+        public void DeleteActivity(int id)
         {
-            Delete(string.Format(urlFormat + "/{1}", sectionId, id));           
+            Delete(string.Format(urlFormat, id));           
         }
         public Activity CreateActivity(int sectionId, Activity activity)
         {
             return Post(string.Format(urlFormat, sectionId), activity);
         }
-        public void UpdateActivity(int sectionId, int id, Activity activity)
+        public void UpdateActivity(int id, Activity activity)
         {
-            Put(string.Format(urlFormat + "/{1}", sectionId, id), activity);
+            Put(string.Format(urlFormat, id), activity);
         }
     }
 }

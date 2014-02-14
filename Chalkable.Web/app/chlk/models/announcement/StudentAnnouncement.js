@@ -14,6 +14,23 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('studentinfo')],
             chlk.models.people.User, 'studentInfo',
 
-            chlk.models.people.User, 'owner'
+            chlk.models.people.User, 'owner',
+
+            Object, function getGrade(value){
+                return value;//GradingStyler.getLetterByGrade(value, this.getGradingMapping(), this.getGradingStyle())
+            },
+
+            Object, function getNormalValue(){
+                var value = this.getGradeValue();
+                if(this.isDropped())
+                    return Msg.Dropped;
+                if(this.isExempt())
+                    return Msg.Exempt;
+                return (value >= 0) ? value : '';
+            },
+
+            Object, function isGradeDisabled(){
+                return this.isDropped() || this.isExempt();
+            }
         ]);
 });

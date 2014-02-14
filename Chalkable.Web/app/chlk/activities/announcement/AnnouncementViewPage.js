@@ -5,7 +5,6 @@ REQUIRE('chlk.templates.announcement.AnnouncementForStudentAttachments');
 REQUIRE('chlk.templates.announcement.AnnouncementGradingPartTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementQnAs');
 REQUIRE('chlk.templates.classes.TopBar');
-REQUIRE('chlk.models.grading.Mapping');
 REQUIRE('chlk.models.grading.AlertsEnum');
 
 NAMESPACE('chlk.activities.announcement', function () {
@@ -22,7 +21,6 @@ NAMESPACE('chlk.activities.announcement', function () {
         'AnnouncementViewPage', EXTENDS(chlk.activities.lib.TemplatePage), [
             //ria.dom.Dom, 'currentContainer',
 
-            chlk.models.grading.Mapping, 'mapping',
             Array, 'applicationsInGradeView',
             Array, 'applications',
             Array, 'autoGradeApps',
@@ -69,7 +67,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             },
 
             function getGradeNumber(value){
-                return GradingStyler.getGradeNumberValue(value.toUpperCase(), this.getMapping(), 1)
+                return value;
             },
 
             [ria.mvc.DomEventBind('keyup', '.grade-input')],
@@ -197,7 +195,8 @@ NAMESPACE('chlk.activities.announcement', function () {
             function commentPress(node, event){
                 if(event.keyCode == ria.dom.Keys.ENTER){
                     this.updateItem(node, false);
-                    node.parent('.small-pop-up').addClass('x-hidden');
+                    node.parent('.small-pop-up').hide();
+                    node.parent('.comment-grade').find('.comment-text').setHTML(node.getValue() ? Msg.Commented : Msg.Comment);
                 }
             },
 
@@ -359,7 +358,6 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
-                model.getStudentAnnouncements() && this.setMapping(model.getStudentAnnouncements().getMapping());
                 this.setOwner(model.getOwner());
                 this.setMaxScore(model.getMaxScore());
                 this.setApplicationsInGradeView(model.getGradeViewApps());
@@ -395,6 +393,12 @@ NAMESPACE('chlk.activities.announcement', function () {
             VOID, function doUpdateItem(allTpl, allModel, msg_) {
                 var tpl = new chlk.templates.announcement.StudentAnnouncementsTpl;
                 var model = allModel.getStudentAnnouncements();
+                var gradedStudentCount = 0;
+                model.getItems().forEach(function(item){
+                    if(!item.isGradeDisabled() && item.getGradeValue())
+                        gradedStudentCount++;
+                });
+                model.setGradedStudentCount(gradedStudentCount);
                 tpl.assign(model);
                 tpl.options({
                     announcementId: this.getAnnouncementId()
@@ -403,16 +407,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var itemModel = model.getCurrentItem();
                 var itemTpl = new chlk.templates.announcement.StudentAnnouncement;
                 itemTpl.assign(itemModel);
-                itemTpl.setOwner(this.getOwner());
-                itemTpl.options({
-                    gradingMapping: this.getMapping(),
-                    applicationsInGradeView: this.getApplicationsInGradeView(),
-                    readonly: false,
-                    gradingStyle: parseInt(this.dom.find('[name=gradingStyle]').getValue(), 10)
-                });
-                var container = this.dom.find('#top-content-' + itemModel.getId().valueOf());
+                var container = this.dom.find('#grade-container-' + itemModel.getId().valueOf());
                 container.empty();
-                itemTpl.renderTo(container.removeClass('loading'));
+                this.dom.find('#top-content-' + itemModel.getId().valueOf()).removeClass('loading');
+                itemTpl.renderTo(container);
                 var grades = this.dom.find('.grade-input[value]').valueOf()
                     .map(function(_){return parseInt((new ria.dom.Dom(_)).getValue());});
                 var gradedCount = grades.length;
