@@ -23,10 +23,22 @@ NAMESPACE('chlk.services', function () {
                         var apiRoles = [];
                         items.forEach(function(dataItem){
                             var controllers = dataItem.getControllers() || [];
-                            controllers = controllers.filter(function(contr){
-                               var methods = contr.getMethods() || [];
-                                return methods.length > 0;
-                            });
+                            controllers = controllers
+                                .filter(function(contr){
+                                   var methods = contr.getMethods() || [];
+                                    return methods.length > 0;
+                                })
+                                .map(function(contr){
+                                    var controllerName = contr.getName().toLowerCase();
+
+                                    if (controllerName.toLowerCase() != 'person'){
+                                        var filteredMethods = (contr.getMethods() || []).filter(function(method){
+                                            return method.getName().toLowerCase() != 'me';
+                                        });
+                                        contr.setMethods(filteredMethods);
+                                    }
+                                    return contr;
+                                });
                             dataItem.setControllers(controllers);
                             apiCache[dataItem.getRole()] = dataItem;
                             apiRoles.push(dataItem.getRole());
