@@ -389,11 +389,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 da.Update(ann);
                 uow.Commit();
 
-                var res = GetAnnouncementDetails(announcement.AnnouncementId);
-                //if (string.IsNullOrEmpty(announcement.Title) && string.IsNullOrEmpty(res.Title))
-                //    announcement.Title = res.DefaultTitle;
-                //var isCreated = res.State == AnnouncementState.Created;
-                //res = (AnnouncementDetails)EditTitle(res, announcement.Title, (annDa, t) => annDa.Exists(t) && isCreated);
+                var res = da.GetDetails(announcement.AnnouncementId, Context.UserLocalId.Value, Context.RoleId);
                 if (res.State == AnnouncementState.Created && res.ClassRef.HasValue && res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value, res.SisActivityId.Value);
