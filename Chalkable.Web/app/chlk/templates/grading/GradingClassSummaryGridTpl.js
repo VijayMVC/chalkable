@@ -12,7 +12,10 @@ NAMESPACE('chlk.templates.grading', function () {
             ArrayOf(chlk.models.grading.GradingClassSummaryGridItems), 'items',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.grading.Mapping, 'gradingStyleMapper',
+            ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores',
 
             Array, function getAutoFillValues(){
                 return ['A+', 'A', 'A-','B+', 'B', 'B-','C+', 'C', 'C-','D+', 'D', 'D-','F',

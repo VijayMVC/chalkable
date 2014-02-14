@@ -96,13 +96,13 @@ NAMESPACE('chlk.controllers', function (){
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
                 var classes = this.classService.getClassesForTopBar(true);
                 var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
-                var model = new chlk.models.grading.GradingClassSummaryGridViewData();
-                model.setTopData(topData);
+                var alphaGrades = this.getContext().getSession().get('alphaGrades', []);
+                var alternateScores = this.getContext().getSession().get('alternateScores', []);
                 var result = this.gradingService
                     .getClassSummaryGrid(classId_)
                     .attach(this.validateResponse_())
                     .then(function(items){
-                        model.setItems(items);
+                        var model = new chlk.models.grading.GradingClassSummaryGridViewData(topData, null, items, alphaGrades, alternateScores);
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassSummaryGridPage, result);
