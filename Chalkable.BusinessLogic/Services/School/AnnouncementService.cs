@@ -264,15 +264,33 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public AnnouncementDetails GetAnnouncementDetails(int announcementId)
         {
-            using (var uow = Read())
+            if(!Context.UserLocalId.HasValue)
+                throw new UnassignedUserException();
+            using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                var res = da.GetDetails(announcementId, Context.UserLocalId ?? 0, Context.Role.Id);
+                var res = da.GetDetails(announcementId, Context.UserLocalId.Value, Context.Role.Id);
                 if (res.ClassRef.HasValue && res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value, res.SisActivityId.Value);
                     MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
+                    if (Context.Role == CoreRoles.TEACHER_ROLE)
+                    {
+                        //TODO: rewrite this later 
+                        var atts = res.AnnouncementAttachments.Where(x => x.SisAttachmentId.HasValue && x.Id <= 0).ToList();
+                        foreach (var annAtt in atts)
+                        {
+                            annAtt.PersonRef = Context.UserLocalId.Value;
+                            if (string.IsNullOrEmpty(annAtt.Uuid) && ServiceLocator.CrocodocService.IsDocument(annAtt.Name))
+                            {
+                                var content = ConnectorLocator.AttachmentConnector.GetAttachmentContent(annAtt.SisAttachmentId.Value);
+                                annAtt.Uuid = ServiceLocator.CrocodocService.UploadDocument(annAtt.Uuid, content).uuid;
+                            }
+                            new AnnouncementAttachmentDataAccess(uow).Insert(annAtt);
+                        }
+                    }
                 }
+                uow.Commit();
                 return res;
             }
         }
@@ -405,7 +423,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (classId.HasValue)
                 {
                     var activity = new Activity();
-                    //MapAnnDetailsToActivity(res, activity);
                     MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
                     activity = ConnectorLocator.ActivityConnector.CreateActivity(classId.Value, activity);
                     res.SisActivityId = activity.Id;
