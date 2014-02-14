@@ -323,6 +323,7 @@ BODY {
                   @include border-radius(5px);
                   font-size: 12px;
                   width: 245px;
+                  z-index: 1;
                   .new-input-container{
                     input{
                       margin-left: 10px;

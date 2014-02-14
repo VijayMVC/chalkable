@@ -388,11 +388,6 @@ NAMESPACE('chlk.controllers', function (){
                     }
                     announcement.setAbleEdit(announcement.isAnnOwner()
                         && this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHANGE_ACTIVITY_DATES));
-                    //TODO Remove fake data
-                    var studentAnnouncements = announcement.getStudentAnnouncements();
-                    if(studentAnnouncements){
-                        studentAnnouncements.setShowToStudents(Math.random() > 0.5);
-                    }
 
                     this.getContext().getSession().set('announcement', announcement);
 

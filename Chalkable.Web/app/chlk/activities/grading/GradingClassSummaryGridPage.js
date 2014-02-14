@@ -9,52 +9,20 @@ NAMESPACE('chlk.activities.grading', function () {
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.grading.GradingClassSummaryGridTpl)],
         'GradingClassSummaryGridPage', EXTENDS(chlk.activities.common.InfoByMpPage), [
+            //ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
+
+            //ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores',
+
+            ArrayOf(String), 'allScores',
+
             [[String]],
             ArrayOf(String), function getSuggestedValues(text){
                 var text = text.toLowerCase();
-                var res1 =  {
-                    'a': ['A+', 'A', 'A-', 'A (fill all)'],
-                    'a+': ['A+', 'A+ (fill all)'],
-                    'a-': ['A-', 'A- (fill all)'],
-                    'b': ['B+', 'B', 'B-', 'B (fill all)'],
-                    'b+': ['B+', 'B+ (fill all)'],
-                    'b-': ['B-', 'B- (fill all)'],
-                    'c': ['C+', 'C', 'C-', 'Complete', 'C (fill all)', 'Complete (fill all)'],
-                    'c+': ['C+', 'C+ (fill all)'],
-                    'c-': ['C-', 'C- (fill all)'],
-                    'd': ['D+', 'D', 'D-', 'D (fill all)', 'Dropped', 'Dropped (fill all)'],
-                    'd+': ['D+', 'D+ (fill all)'],
-                    'd-': ['D-', 'D- (fill all)'],
-                    'f': ['F', ' F (fill all)'],
-                    'e': ['Exempt', 'Exempt (fill all)'],
-                    'x': ['Exempt', 'Exempt (fill all)']
-                };
-
-                var res2 =  {
-                    'complete': ['Complete', 'Complete (fill all)'],
-                    'complete (fill all)': ['Complete (fill all)'],
-                    'exempt': ['Exempt', 'Exempt (fill all)'],
-                    'exempt (fill all)': ['Exempt (fill all)'],
-                    'fail': ['Fail', 'Fail (fill all)'],
-                    'fail (fill all)': ['Fail (fill all)'],
-                    'incomplete': ['Incomplete', 'Incomplete (fill all)'],
-                    'incomplete (fill all)': ['Incomplete (fill all)'],
-                    'late': ['Late', 'Late (fill all)'],
-                    'late (fill all)': ['Late (fill all)'],
-                    'pass': ['Pass', 'Pass (fill all)'],
-                    'pass (fill all)': ['Pass (fill all)'],
-                    'dropped': ['Dropped', 'Dropped (fill all)'],
-                    'dropped (fill all)': ['Dropped (fill all)']
-                };
-
-                if(res1[text])
-                    return res1[text];
                 var res = [];
-                if(text.length > 1)
-                    for(var p in res2)
-                        if(res2.hasOwnProperty(p))
-                            if(p.indexOf(text) == 0 && (res.length < res2[p].length))
-                                res = res2[p];
+                this.getAllScores().forEach(function(score){
+                    if(score.toLowerCase().indexOf(text) == 0)
+                        res.push(score);
+                });
                 return res;
             },
 
@@ -149,12 +117,7 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('click', '.see-all')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function seeAllClick(node, event){
-                var res = ['A+', 'A', 'A-','B+', 'B', 'B-','C+', 'C', 'C-','D+', 'D', 'D-','F',
-                    'F (fill all)','A (fill all)','B (fill all)','C (fill all)','D (fill all)',
-                    'Complete', 'Complete (fill all)', 'Dropped', 'Dropped (fill all)', 'Exempt',
-                    'Exempt (fill all)', 'Fail', 'Fail (fill all)', 'Incomplete',
-                    'Incomplete (fill all)', 'Late', 'Late (fill all)', 'Pass', 'Pass (fill all)'];
-                this.updateDropDown(res, this.dom.find('.active-cell'), true);
+                this.updateDropDown(this.getAllScores(), this.dom.find('.active-cell'), true);
                 return false;
             },
 
@@ -252,18 +215,23 @@ NAMESPACE('chlk.activities.grading', function () {
                 }
             },
 
-            /*function getNormalValue(text){
-                var mapping = this.getGradingStyleMapper();
-                var gradingStyle = 1;
-
-                var value = GradingStyler.getGradeNumberValue(text, mapping, gradingStyle);
-            },
-
-            chlk.models.grading.Mapping, 'gradingStyleMapper',*/
-
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
-                //this.setGradingStyleMapper(model.getGradingStyleMapper());
+                //this.setAlternateScores(model.getAlternateScores());
+                //this.setAlphaGrades(model.getAlphaGrades());
+                var allScores = [];
+                model.getAlternateScores().forEach(function(item){
+                    allScores.push(item.getName());
+                    allScores.push(item.getName() + ' (fill all)');
+                });
+                model.getAlphaGrades().forEach(function(item){
+                    allScores.push(item.getName());
+                    allScores.push(item.getName() + ' (fill all)');
+                });
+
+                allScores = allScores.concat(['Exempt', 'Exempt (fill all)', 'Incomplete', 'Incomplete (fill all)',
+                    'Late', 'Late (fill all)', 'Dropped', 'Dropped (fill all)', 'Absent', 'Absent (fill all)']);
+                this.setAllScores(allScores);
                 var dom = this.dom;
                 new ria.dom.Dom().on('click.grade', function(doc, event){
                     var popUp = dom.find('.chlk-pop-up-container.comment');
