@@ -22,7 +22,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
     {
 
         //TODO: stduent grade rank ... get last grades 
-        [RequireRequestValue("schoolPersonId")]
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User, AppPermissionType.Attendance, AppPermissionType.Discipline, AppPermissionType.Grade })]
         public ActionResult Summary(int schoolPersonId)
         {
@@ -79,8 +78,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
             //return Json(res, 7);
         }
         
-        
-        [RequireRequestValue("personId")]
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_INFO, true, CallType.Get, new[] { AppPermissionType.User })]
         public ActionResult Info(int personId)
         {
@@ -111,8 +108,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(res);
         }
 
-       
-        [RequireRequestValue("personId")]
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_GRADING_STAT, true, CallType.Get, new[] {AppPermissionType.User, AppPermissionType.Grade})]
         public ActionResult Grading(int personId, int markingPeriodId)
         {

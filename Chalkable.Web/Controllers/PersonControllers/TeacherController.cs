@@ -12,7 +12,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
     [RequireHttps, TraceControllerFilter]
     public class TeacherController : PersonController
     {
-        [RequireRequestValue("personId")]
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_TEACHER_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User })]
         public ActionResult Summary(int personId)
         {

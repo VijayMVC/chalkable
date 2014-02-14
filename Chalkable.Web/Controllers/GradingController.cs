@@ -93,7 +93,6 @@ namespace Chalkable.Web.Controllers
         }
 
         //TODO: do we need this in API still?
-        [RequireRequestValue("studentAnnouncementId")]
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADE_UPDATE_ITEM, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
         public ActionResult UpdateItem(int studentAnnouncementId, string gradeValue, string extraCredits
             , string comment, bool dropped, bool? exempt, bool? incomplete, bool? late, bool? absent)

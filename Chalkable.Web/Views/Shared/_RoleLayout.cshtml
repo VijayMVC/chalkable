@@ -189,6 +189,18 @@
                 return cnt == guids.length;
             };
 
+            var isValidIntList = function(value) {
+                if (!value) 
+                    return false;
+
+                var ints = (value || "").split(',') || [];
+                var cnt = 0;
+                for(var i = 0; i < ints.length; ++i) {
+                    if (jQuery.isNumeric(ints[i])) ++cnt;
+                }
+                return cnt == ints.length;
+            };
+
             jQuery.validator.addMethod("guid", function(value, element) {
                 return isGuidValid(value);
             },  'Please select a valid and non empty Guid value.');
@@ -196,7 +208,12 @@
             jQuery.validator.addMethod("guidlist", function(value, element) {
                 return isValidGuidList(value);
                 
-            }, 'Please select one or more(coma separated) valid Guid value.');
+            }, 'Please select one or more(coma separated) valid Guid values.');
+
+            jQuery.validator.addMethod("intlist", function(value, element) {
+                return isValidIntList(value);
+                
+            }, 'Please select one or more(coma separated) valid integer values.');
         </script>
 
         <script type="text/javascript">
