@@ -187,12 +187,14 @@ namespace Chalkable.BusinessLogic.Services.School
         private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count)
         {
             var schoolYear = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+            var end = count + start;
+            start = start + 1;
+            if (classId.HasValue)
+                return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, start, end, toDate, fromDate);
             if (Context.Role == CoreRoles.TEACHER_ROLE)
-                //return ConnectorLocator.ActivityConnector.GetStudentAcivities(schoolYear.Id, 19, classId, start + 1, start + count, toDate, fromDate);
-                return ConnectorLocator.ActivityConnector.GetTeacherActivities(schoolYear.Id, Context.UserLocalId.Value, classId, start + 1, start + count, toDate, fromDate);
+                return ConnectorLocator.ActivityConnector.GetTeacherActivities(schoolYear.Id, Context.UserLocalId.Value, start, end, toDate, fromDate);
             if (Context.Role == CoreRoles.STUDENT_ROLE)
-                //return ConnectorLocator.ActivityConnector.GetTeacherActivities(schoolYear.Id, 1195, classId, start + 1, start + count, toDate, fromDate);
-                return ConnectorLocator.ActivityConnector.GetStudentAcivities(schoolYear.Id, Context.UserLocalId.Value, classId, start + 1, start + count, toDate, fromDate);
+                return ConnectorLocator.ActivityConnector.GetStudentAcivities(schoolYear.Id, Context.UserLocalId.Value, start, end, toDate, fromDate);
             return new List<Activity>();
         }
  
@@ -262,15 +264,33 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public AnnouncementDetails GetAnnouncementDetails(int announcementId)
         {
-            using (var uow = Read())
+            if(!Context.UserLocalId.HasValue)
+                throw new UnassignedUserException();
+            using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                var res = da.GetDetails(announcementId, Context.UserLocalId ?? 0, Context.Role.Id);
+                var res = da.GetDetails(announcementId, Context.UserLocalId.Value, Context.Role.Id);
                 if (res.ClassRef.HasValue && res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value, res.SisActivityId.Value);
                     MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
+                    if (Context.Role == CoreRoles.TEACHER_ROLE)
+                    {
+                        //TODO: rewrite this later 
+                        var atts = res.AnnouncementAttachments.Where(x => x.SisAttachmentId.HasValue && x.Id <= 0).ToList();
+                        foreach (var annAtt in atts)
+                        {
+                            annAtt.PersonRef = Context.UserLocalId.Value;
+                            if (string.IsNullOrEmpty(annAtt.Uuid) && ServiceLocator.CrocodocService.IsDocument(annAtt.Name))
+                            {
+                                var content = ConnectorLocator.AttachmentConnector.GetAttachmentContent(annAtt.SisAttachmentId.Value);
+                                annAtt.Uuid = ServiceLocator.CrocodocService.UploadDocument(annAtt.Uuid, content).uuid;
+                            }
+                            new AnnouncementAttachmentDataAccess(uow).Insert(annAtt);
+                        }
+                    }
                 }
+                uow.Commit();
                 return res;
             }
         }
@@ -369,11 +389,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 da.Update(ann);
                 uow.Commit();
 
-                var res = GetAnnouncementDetails(announcement.AnnouncementId);
-                //if (string.IsNullOrEmpty(announcement.Title) && string.IsNullOrEmpty(res.Title))
-                //    announcement.Title = res.DefaultTitle;
-                //var isCreated = res.State == AnnouncementState.Created;
-                //res = (AnnouncementDetails)EditTitle(res, announcement.Title, (annDa, t) => annDa.Exists(t) && isCreated);
+                var res = da.GetDetails(announcement.AnnouncementId, Context.UserLocalId.Value, Context.RoleId);
                 if (res.State == AnnouncementState.Created && res.ClassRef.HasValue && res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value, res.SisActivityId.Value);
@@ -403,7 +419,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (classId.HasValue)
                 {
                     var activity = new Activity();
-                    //MapAnnDetailsToActivity(res, activity);
                     MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
                     activity = ConnectorLocator.ActivityConnector.CreateActivity(classId.Value, activity);
                     res.SisActivityId = activity.Id;

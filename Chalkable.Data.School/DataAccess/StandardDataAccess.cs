@@ -45,7 +45,7 @@ namespace Chalkable.Data.School.DataAccess
             if (query.ClassId.HasValue)
             {
                 dbQuery.Parameters.Add("classId", query.ClassId);
-                dbQuery.Sql.AppendFormat(" and [{0}][{1}] in (select [{2}] from [{3}] where [{4}] = @classId)", "Standard"
+                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in (select [{2}] from [{3}] where [{4}] = @classId)", "Standard"
                     , Standard.ID_FIELD , ClassStandard.STANDARD_REF_FIELD, "ClassStandard", ClassStandard.CLASS_REF_FIELD);
             }
             return ReadMany<Standard>(dbQuery);
@@ -76,7 +76,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Delete(int announcementId, int standardId)
         {
-            SimpleDelete(new AndQueryCondition
+            SimpleDelete<AnnouncementStandard>(new AndQueryCondition
                 {
                     {AnnouncementStandard.ANNOUNCEMENT_REF_FIELD, announcementId},
                     {AnnouncementStandard.STANDARD_REF_FIELD, standardId}

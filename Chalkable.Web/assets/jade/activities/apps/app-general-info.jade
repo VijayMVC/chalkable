@@ -50,9 +50,10 @@ mixin AppStatus_(appState, appDraftId, liveAppId)
     isRejected = stateId == chlk.models.apps.AppStateEnum.REJECTED
     isAppLive = liveAppId != null && liveAppId.valueOf() != ""
 
-    appStatus = "You app is live in Chalkable app store"
+
 
     if isAppLive
+        appStatus = "You app is live in Chalkable app store"
         if isApproved || isRejected
             +ActionLinkButton('apps', 'goLive', self.draftAppId).special-button.blue-button.go-live-btn(disabled = !isApproved? "disabled" : undefined) Go Live
             if isApproved
@@ -63,6 +64,7 @@ mixin AppStatus_(appState, appDraftId, liveAppId)
            appStatus = "Your app update has been submitted and is awaiting approval."
         .app-status=appStatus
     else
+        appStatus = "You app is not submitted"
         if isApproved || isRejected
             +ActionLinkButton('apps', 'goLive', self.draftAppId).special-button.blue-button.go-live-btn(disabled = !isApproved? "disabled" : undefined) Go Live
             if isApproved
@@ -95,19 +97,21 @@ mixin AppStatus_(appState, appDraftId, liveAppId)
 
     .app-reviews.reviews.developer
         .review-link Reviews
+        if self.liveAppId != null
             devAppReviews = self.getAppReviews()
-        +Rating("appRating", self.getAppRating(), false).all
-        +ActionForm('apps', 'getAppReviews')#appReviews
-            +Hidden('start',devAppReviews.getPageIndex()) * devAppReviews.getPageSize())
-            +Hidden('totalCount', devAppReviews.getTotalCount())
-            +Hidden('pageSize', devAppReviews.getPageSize())
-            +Hidden('appId', self.liveAppId)
-            +Hidden('scroll', 0)
-        +ScrollBox('appReviews', 50)
-            .user-reviews
-                .rating-persons
-                    +RenderWith(self.getModel(), chlk.templates.developer.AppReviewsTpl)
-
+            +Rating("appRating", self.getAppRating(), false).all
+            +ActionForm('apps', 'getAppReviews')#appReviews
+                +Hidden('start',devAppReviews.getPageIndex()) * devAppReviews.getPageSize())
+                +Hidden('totalCount', devAppReviews.getTotalCount())
+                +Hidden('pageSize', devAppReviews.getPageSize())
+                +Hidden('appId', self.liveAppId)
+                +Hidden('scroll', 0)
+            +ScrollBox('appReviews', 50)
+                .user-reviews
+                    .rating-persons
+                        +RenderWith(self.getModel(), chlk.templates.developer.AppReviewsTpl)
+        else
+            div Your app is not live in the app store
 
 
 

@@ -44,23 +44,18 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var saDa = new StudentAnnouncementDataAccess(uow);
                 var sa = saDa.GetById(studentAnnouncementId);
-                var annDa = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId);
-                var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(sa.AnnouncementRef);
-
+                var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(sa.AnnouncementRef);
                 if(!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
                     throw new ChalkableSecurityException();
 
                 sa.ExtraCredit = extraCredits;
                 sa.Comment = comment;
                 sa.State = StudentAnnouncementStateEnum.Manual;
-
-
                 sa.Dropped = dropped;
                 sa.Incomplete = incomplete;
                 sa.Late = late;
                 sa.Exempt = exempt;
                 sa.Absent = absent;
-                ann.Dropped = dropped && !ann.StudentAnnouncements.Any(x => !x.Dropped && x.Id != studentAnnouncementId);
                 
                 saDa.Update(sa);
                 if (!string.IsNullOrEmpty(value))
@@ -76,12 +71,12 @@ namespace Chalkable.BusinessLogic.Services.School
                     }
 
                 }
-                annDa.Update(ann);
                 var score = new Score {ActivityId = ann.SisActivityId.Value};
                 MapperFactory.GetMapper<Score, StudentAnnouncement>().Map(score, sa);
-                ConnectorLocator.ActivityScoreConnector.UpdateScore(score.ActivityId, score.StudentId, score);
+                score = ConnectorLocator.ActivityScoreConnector.UpdateScore(score.ActivityId, score.StudentId, score);
+                MapperFactory.GetMapper<StudentAnnouncement, Score>().Map(sa, score);
                 uow.Commit();
-                var recipientId =  ann.StudentAnnouncements.First(x=>x.Id == sa.Id).Person.Id;
+                var recipientId = sa.PersonRef;
                 ServiceLocator.NotificationService.AddAnnouncementSetGradeNotificationToPerson(sa.AnnouncementRef, recipientId);
                 return sa;
             }

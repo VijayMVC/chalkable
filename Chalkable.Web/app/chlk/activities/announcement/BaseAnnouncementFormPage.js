@@ -102,7 +102,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.DomEventBind('focus keydown keyup', '#content')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function showDropDown(node, event){
+            Boolean, function showDropDown(node, event){
                 if(this.dom.find('[name=announcementtypeid]').getValue() != chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf()){
                     var dropDown = this.dom.find('.new-item-dropdown');
                     if(!node.getValue() && !dropDown.is(':visible')){
@@ -128,12 +128,13 @@ NAMESPACE('chlk.activities.announcement', function () {
                                 }
                             }else{
                                 dropDown.addClass('x-hidden');
-                                if(event.keyCode == ria.dom.Keys.ENTER.valueOf())
-                                    return false;
+                                //if(event.keyCode == ria.dom.Keys.ENTER.valueOf())
+                                    //return false;
                             }
                         }
                     }
                 }
+                return true;
             },
 
             OVERRIDE, VOID, function onPartialRender_(model, msg_) {

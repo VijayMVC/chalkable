@@ -79,7 +79,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              DateTime start, end;
              int? teacherId, studentId;
              WeekCalendar(ref date, out start, out end);
-             PreperingUsersIdsForCalendar(SchoolLocator, schoolPersonId, out teacherId, out studentId);
+             PrepareUsersIdsForCalendar(SchoolLocator, schoolPersonId, out teacherId, out studentId);
              var anns = SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, gradeLevelIds, classId);
              var rooms = SchoolLocator.RoomService.GetRooms();
              IList<ClassPeriod> classPeriods = new List<ClassPeriod>();
@@ -117,7 +117,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              WeekCalendar(ref date, out start, out end, locator.Context);
              var res = new List<AnnouncementDayCalendarViewData>();
              int? teacherId, studentId;
-             PreperingUsersIdsForCalendar(locator, personId, out teacherId, out studentId);
+             PrepareUsersIdsForCalendar(locator, personId, out teacherId, out studentId);
 
              IList<ClassDetails> classes = new List<ClassDetails>();
              if (classId.HasValue)
@@ -149,7 +149,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
          }
 
 
-         private static void PreperingUsersIdsForCalendar(IServiceLocatorSchool locator, int? personId, out int? teacherId, out int? studentId)
+         private static void PrepareUsersIdsForCalendar(IServiceLocatorSchool locator, int? personId, out int? teacherId, out int? studentId)
          {
              if (!personId.HasValue)
              {

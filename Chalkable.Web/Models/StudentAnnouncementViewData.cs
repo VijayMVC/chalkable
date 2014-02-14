@@ -61,22 +61,55 @@ namespace Chalkable.Web.Models
 
     }
 
-    public class StudentAnnouncementViewData
+    public class ShortStudentAnnouncementViewData
     {
-        public ShortPersonViewData StudentInfo { get; set; }
         public string GradeValue { get; set; }
         public bool Dropped { get; set; }
         public bool IsExempt { get; set; }
         public bool IsIncomplete { get; set; }
         public bool IsLate { get; set; }
         public bool IsAbsent { get; set; }
-        public string Raw { get; set; }
-        public string ExtraCredits { get; set; }
         public int Id { get; set; }
         public int AnnouncementId { get; set; }
-        public IList<AnnouncementAttachmentViewData> Attachments { get; set; }
         public string Comment { get; set; }
+        public string ExtraCredits { get; set; }
         public int State { get; set; }
+
+        protected ShortStudentAnnouncementViewData(StudentAnnouncement studentAnnouncement)
+        {
+            IsAbsent = studentAnnouncement.Absent;
+            IsExempt = studentAnnouncement.Exempt;
+            IsIncomplete = studentAnnouncement.Incomplete;
+            IsLate = studentAnnouncement.Late;
+            AnnouncementId = studentAnnouncement.AnnouncementRef;
+            Comment = studentAnnouncement.Comment;
+            Dropped = studentAnnouncement.Dropped;
+            GradeValue = studentAnnouncement.StiScoreValue;
+            ExtraCredits = studentAnnouncement.ExtraCredit;
+            Id = studentAnnouncement.Id;
+            State = (int) studentAnnouncement.State;
+            if (string.IsNullOrEmpty(GradeValue))
+                GradeValue = studentAnnouncement.GradeValue.ToString();
+        }
+
+        public static ShortStudentAnnouncementViewData Create(StudentAnnouncement studentAnnouncement)
+        {
+            return new ShortStudentAnnouncementViewData(studentAnnouncement);
+        }
+        
+    }
+
+    public class StudentAnnouncementViewData : ShortStudentAnnouncementViewData
+    {
+        public ShortPersonViewData StudentInfo { get; set; }
+        public string Raw { get; set; }
+        public IList<AnnouncementAttachmentViewData> Attachments { get; set; }
+
+        protected StudentAnnouncementViewData(StudentAnnouncement studentAnnouncement)
+            : base(studentAnnouncement)
+        {
+        }
+
         public static IList<StudentAnnouncementViewData> Create(IList<StudentAnnouncementDetails> items, IList<AnnouncementAttachmentInfo> attachments)
         {
             var res = new List<StudentAnnouncementViewData>();
@@ -88,27 +121,13 @@ namespace Chalkable.Web.Models
             }
             return res;
         }
-        public static StudentAnnouncementViewData Create(StudentAnnouncementDetails studentAnnouncements, IList<AnnouncementAttachmentInfo> attachments)
+        public static StudentAnnouncementViewData Create(StudentAnnouncementDetails studentAnnouncement, IList<AnnouncementAttachmentInfo> attachments)
         {
-            var res = new StudentAnnouncementViewData
+            return new StudentAnnouncementViewData(studentAnnouncement)
             {
-                StudentInfo = ShortPersonViewData.Create(studentAnnouncements.Person),
-                Dropped = studentAnnouncements.Dropped,
-                GradeValue = studentAnnouncements.StiScoreValue,
-                ExtraCredits = studentAnnouncements.ExtraCredit,
-                Id = studentAnnouncements.Id,
+                StudentInfo = ShortPersonViewData.Create(studentAnnouncement.Person),
                 Attachments = attachments.Select(x => AnnouncementAttachmentViewData.Create(x, true)).ToList(),
-                AnnouncementId = studentAnnouncements.AnnouncementRef,
-                Comment = studentAnnouncements.Comment,
-                State = (int)studentAnnouncements.State,
-                IsAbsent = studentAnnouncements.Absent,
-                IsExempt = studentAnnouncements.Exempt,
-                IsIncomplete = studentAnnouncements.Incomplete,
-                IsLate = studentAnnouncements.Late
             };
-            if (string.IsNullOrEmpty(res.GradeValue))
-                res.GradeValue = studentAnnouncements.GradeValue.ToString();
-            return res;
         }
     }
 }

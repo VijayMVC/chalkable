@@ -57,10 +57,10 @@ namespace Chalkable.BusinessLogic.Services.School
                 IList<AnnouncementAttachment> atts;
                 if (CoreRoles.TEACHER_ROLE == Context.Role)
                 {
-                    var stiAtts = ConnectorLocator.AttachmentConnector.DownloadAttachment(name, content);
-                    atts = MapStiAttsToAnnAtts(stiAtts.ToList());
+                    var stiAtts = ConnectorLocator.AttachmentConnector.DownloadAttachment(name, content).ToList();
                     var lastStiAtts = stiAtts.Last();
-                    lastStiAtts.CrocoDocId = Guid.Parse(uuid);
+                    if(!string.IsNullOrEmpty(uuid))
+                        lastStiAtts.CrocoDocId = Guid.Parse(uuid);
                     if (ann.SisActivityId.HasValue)
                     {
                         var activityAtt = ActivityAttachment.Create(ann.SisActivityId.Value, lastStiAtts, null);
@@ -148,7 +148,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     var content = ConnectorLocator.AttachmentConnector.GetAttachmentContent(stiAttachment.AttachmentId);
                     atts.Uuid = ServiceLocator.CrocodocService.UploadDocument(stiAttachment.Name, content).uuid;
-                    ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, atts.Id.ToString(), content);
+                    //ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, atts.Id.ToString(), content);
                 }
                 res.Add(atts);
             }
@@ -167,7 +167,9 @@ namespace Chalkable.BusinessLogic.Services.School
         public AttachmentContentInfo GetAttachmentContent(int announcementAttachmentId)
         {
             var att = GetAttachmentById(announcementAttachmentId);
-            var content =  ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS, announcementAttachmentId.ToString());
+            var content = att.SisAttachmentId.HasValue 
+                                 ? ConnectorLocator.AttachmentConnector.GetAttachmentContent(att.SisAttachmentId.Value)
+                                 : ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS, announcementAttachmentId.ToString());
             return AttachmentContentInfo.Create(att, content);
         }
         public IList<AnnouncementAttachment> GetAttachments(string filter)

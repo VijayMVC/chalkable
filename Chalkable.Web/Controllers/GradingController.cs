@@ -100,7 +100,7 @@ namespace Chalkable.Web.Controllers
             var studentAnn = SchoolLocator.StudentAnnouncementService.SetGrade(studentAnnouncementId, gradeValue, extraCredits
                 , comment, dropped, late ?? false, absent ?? false, exempt ?? false, incomplete ?? false
                 , (int)GradingStyleEnum.Numeric100);
-            return PrepareStudentAnnouncementResponse(studentAnn);
+            return Json(ShortStudentAnnouncementViewData.Create(studentAnn));
         }
 
         [AuthorizationFilter("Teacher ,AdminGrade, Student", Preference.API_DESCR_SET_AUTO_GRADE, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]

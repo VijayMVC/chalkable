@@ -13,6 +13,7 @@ REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.announcement.Reminder');
 REQUIRE('chlk.models.announcement.AnnouncementQnA');
 REQUIRE('chlk.models.apps.AppAttachment');
+REQUIRE('chlk.models.standard.Standard');
 
 
 
@@ -164,6 +165,8 @@ NAMESPACE('chlk.models.announcement', function () {
 
             [ria.serialize.SerializeProperty('showgradingicon')],
             Boolean, 'showGradingIcon',
+
+            ArrayOf(chlk.models.standard.Standard), 'standards',
 
             Boolean, 'starred',
 

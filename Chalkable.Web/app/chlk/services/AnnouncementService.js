@@ -10,6 +10,7 @@ REQUIRE('chlk.models.calendar.announcement.Month');
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.AttachmentId');
 REQUIRE('chlk.models.id.ClassId');
+REQUIRE('chlk.models.id.StandardId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.AnnouncementAttachmentId');
@@ -283,6 +284,22 @@ NAMESPACE('chlk.services', function () {
                     result.setAnnouncementQnAs(qnas);
                     return result;
                 }, this);
+            },
+
+            [[chlk.models.id.AnnouncementId, chlk.models.id.StandardId]],
+            ria.async.Future, function addStandard(announcementId, standardId) {
+                return this.get('Announcement/AddStandard.json', chlk.models.announcement.Announcement, {
+                    announcementId: announcementId.valueOf(),
+                    standardId: standardId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.AnnouncementId, chlk.models.id.StandardId]],
+            ria.async.Future, function removeStandard(announcementId, standardId) {
+                return this.get('Announcement/RemoveStandard.json', chlk.models.announcement.Announcement, {
+                    announcementId: announcementId.valueOf(),
+                    standardId: standardId.valueOf()
+                });
             }
         ])
 });

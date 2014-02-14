@@ -73,8 +73,7 @@ NAMESPACE('chlk.activities.developer', function () {
                 var message = {
                     required: " *",
                     digits: "only integers are allowed",
-                    date: "invalid date format",
-                    intlist: "only comma separated integers are allowed"
+                    date: "invalid date format"
                 };
 
                 return {

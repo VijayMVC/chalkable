@@ -185,8 +185,7 @@ namespace Chalkable.Web.Controllers
 
             var res = Save(announcement, classId);
             SchoolLocator.AnnouncementService.SubmitAnnouncement(res.Id, classId);
-            SchoolLocator.AnnouncementService.DeleteAnnouncements(classId, res.ClassAnnouncementTypeRef.Value,
-                                                                  AnnouncementState.Draft);
+            SchoolLocator.AnnouncementService.DeleteAnnouncements(classId, res.ClassAnnouncementTypeRef.Value, AnnouncementState.Draft);
 
 
             //TODO: mixpanelService
@@ -244,17 +243,17 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult AddStandard(int announcemntId, int standardId)
+        public ActionResult AddStandard(int announcementId, int standardId)
         {
-            SchoolLocator.AnnouncementService.AddAnnouncementStandard(announcemntId, standardId);
-            return Json(PrepareFullAnnouncementViewData(announcemntId, true, true));
+            SchoolLocator.AnnouncementService.AddAnnouncementStandard(announcementId, standardId);
+            return Json(PrepareFullAnnouncementViewData(announcementId, true, true));
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult RemoveStandard(int announcemntId, int standardId)
+        public ActionResult RemoveStandard(int announcementId, int standardId)
         {
-            SchoolLocator.AnnouncementService.AddAnnouncementStandard(announcemntId, standardId);
-            return Json(PrepareFullAnnouncementViewData(announcemntId, true, true));
+            SchoolLocator.AnnouncementService.RemoveStandard(announcementId, standardId);
+            return Json(PrepareFullAnnouncementViewData(announcementId, true, true));
         }
     }
 

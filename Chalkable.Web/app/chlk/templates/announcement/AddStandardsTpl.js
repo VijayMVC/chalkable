@@ -13,6 +13,15 @@ NAMESPACE('chlk.templates.announcement', function(){
             String, 'announcementTypeName',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.ItemStandard), 'itemStandards'
+            chlk.models.id.AnnouncementId, 'announcementId',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.ClassId, 'classId',
+
+            [ria.templates.ModelPropertyBind],
+            Array, 'standardIds',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.standard.StandardSubject), 'itemStandards'
     ]);
 });
