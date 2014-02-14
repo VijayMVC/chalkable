@@ -280,14 +280,18 @@ NAMESPACE('chlk.controllers', function (){
                 isactive: false
             }], ArrayOf(chlk.models.standard.Standard)));*/
 
+            this.saveStandardIds(announcement);
+
+            return new ria.async.DeferredData(model);
+        },
+
+        VOID, function saveStandardIds(announcement){
             var standardsIds = [];
             announcement.getStandards().forEach(function(item){
                 standardsIds.push(item.getStandardId().valueOf());
             });
 
             this.getContext().getSession().set('StandardsIds', standardsIds);
-
-            return new ria.async.DeferredData(model);
         },
 
         [chlk.controllers.SidebarButton('add-new')],
@@ -800,6 +804,7 @@ NAMESPACE('chlk.controllers', function (){
             var res = this.announcementService.addStandard(model.getAnnouncementId(), model.getStandardId())
                 .then(function(announcement){
                     this.BackgroundCloseView(chlk.activities.announcement.AddStandardsDialog);
+                    this.saveStandardIds(announcement);
                     return chlk.models.standard.StandardsListViewData(null, null, null, announcement.getStandards(), announcement.getId());
                 }, this);
             return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, res);
@@ -810,6 +815,7 @@ NAMESPACE('chlk.controllers', function (){
         function removeStandardAction(announcementId, standardId){
             var res = this.announcementService.removeStandard(announcementId, standardId)
                 .then(function(announcement){
+                    this.saveStandardIds(announcement);
                     return chlk.models.standard.StandardsListViewData(null, null, null, announcement.getStandards(), announcement.getId());
                 }, this);
             return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, res);

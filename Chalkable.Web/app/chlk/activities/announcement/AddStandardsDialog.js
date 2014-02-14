@@ -12,26 +12,28 @@ NAMESPACE('chlk.activities.announcement', function(){
         'AddStandardsDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
             [ria.mvc.DomEventBind('click', '.column-cell')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function cellClick(node, event){
-                if(!node.hasClass('active')){
-                    node.parent('.column').find('.column-cell.active').removeClass('active');
-                    node.addClass('active');
-                    var id = node.getData('id') || '';
-                    var standardIds = this.dom.find('.standard-ids').getValue().split(',');
-                    this.dom.find('input[name=standardid]').setValue(id);
-                    var btnC = this.dom.find('.add-standard-btn');
-                    var btn = btnC.find('button');
-                    if(id && standardIds.indexOf(id.toString()) == -1){
-                        btnC.removeClass('disabled');
-                        btnC.removeAttr('disabled');
-                        btn.removeAttr('disabled');
-                    }else{
-                        btnC.addClass('disabled');
-                        btnC.setAttr('disabled', true);
-                        btn.setAttr('disabled', true);
-                    }
-                    node.parent('td').find('~ td').remove();
+            Boolean, function cellClick(node, event){
+                if(node.hasClass('active'))
+                    return false;
+                node.parent('.column').find('.column-cell.active').removeClass('active');
+                node.addClass('active');
+                var id = node.getData('id') || '';
+                var value = this.dom.find('.standard-ids').getValue();
+                var standardIds = value ? value.split(',') : [];
+                this.dom.find('input[name=standardid]').setValue(id);
+                var btnC = this.dom.find('.add-standard-btn');
+                var btn = btnC.find('button');
+                if(id && standardIds.indexOf(id.toString()) == -1){
+                    btnC.removeClass('disabled');
+                    btnC.removeAttr('disabled');
+                    btn.removeAttr('disabled');
+                }else{
+                    btnC.addClass('disabled');
+                    btnC.setAttr('disabled', true);
+                    btn.setAttr('disabled', true);
                 }
+                node.parent('td').find('~ td').remove();
+                return true;
             },
 
             [ria.mvc.DomEventBind('click', '.add-standard-btn')],
