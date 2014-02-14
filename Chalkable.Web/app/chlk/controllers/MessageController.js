@@ -25,49 +25,46 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('messages')],
             [[Boolean, Boolean, String, String, Number]],
             function pageAction(postback_, inbox_, role_, keyword_, start_) {
+
+                var result = this.getMessages_(inbox_, role_, keyword_, start_);
+                return postback_ ?
+                    this.UpdateView(chlk.activities.messages.MessageListPage, result) :
+                    this.PushView(chlk.activities.messages.MessageListPage, result);
+            },
+            [[Boolean, String, String, Number]],
+            ria.async.Future, function getMessages_(inbox_, role_, keyword_, start_){
                 inbox_ = inbox_ !== false;
                 role_ = role_ || null;
                 keyword_ = keyword_ || null;
 
-                var result = this.messageService
+                return this.messageService
                     .getMessages(start_ | 0, null, inbox_, role_, keyword_)
                     .attach(this.validateResponse_())
                     .then(function(model){
                         this.getContext().getSession().set('currentMessages', model.getItems());
                         return this.convertModel(model, inbox_, role_, keyword_);
                     }, this);
-                return postback_ ?
-                    this.UpdateView(chlk.activities.messages.MessageListPage, result) :
-                    this.PushView(chlk.activities.messages.MessageListPage, result);
             },
 
             [chlk.controllers.SidebarButton('messages')],
             [[chlk.models.messages.MessageList]],
             function doAction(model) {
                 if (model.getSubmitType() == "search")
-                    return this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
+                    return  this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
+                var res;
                 if (model.getSubmitType() == "delete")
-                    this.messageService
-                        .del(model.getSelectedIds())
-                        .attach(this.validateResponse_())
-                        .then(function(x){
-                            this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
-                        }, this);
+                    res = this.messageService.del(model.getSelectedIds());
                 if (model.getSubmitType() == "markAsRead")
-                    this.messageService
-                        .markAs(model.getSelectedIds(), true)
-                        .attach(this.validateResponse_())
-                        .then(function(x){
-                            this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
-                        }, this);
+                    res = this.messageService.markAs(model.getSelectedIds(), true);
                 if (model.getSubmitType() == "markAsUnread")
-                    this.messageService
-                        .markAs(model.getSelectedIds(), false)
-                        .attach(this.validateResponse_())
+                    res = this.messageService.markAs(model.getSelectedIds(), false);
+                if(res){
+                    res = res.attach(this.validateResponse_())
                         .then(function(x){
-                            this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
+                            return this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), 0);
                         }, this);
-
+                    return  this.UpdateView(chlk.activities.messages.MessageListPage, res);
+                }
             },
 
             [[chlk.models.common.PaginatedList, Boolean, String, String]],

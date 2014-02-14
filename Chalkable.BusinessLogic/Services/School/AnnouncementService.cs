@@ -272,7 +272,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var res = da.GetDetails(announcementId, Context.UserLocalId.Value, Context.Role.Id);
                 if (res.ClassRef.HasValue && res.SisActivityId.HasValue)
                 {
-                    var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value, res.SisActivityId.Value);
+                    var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
                     MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
                     if (Context.Role == CoreRoles.TEACHER_ROLE)
                     {
@@ -305,7 +305,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableSecurityException();
 
                 if(announcement.ClassRef.HasValue && announcement.SisActivityId.HasValue)
-                    ConnectorLocator.ActivityConnector.DeleteActivity(announcement.ClassRef.Value, announcement.SisActivityId.Value);
+                    ConnectorLocator.ActivityConnector.DeleteActivity(announcement.SisActivityId.Value);
                 da.Delete(announcementId, null, null, null, null);
                 uow.Commit();
             }
@@ -392,9 +392,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 var res = da.GetDetails(announcement.AnnouncementId, Context.UserLocalId.Value, Context.RoleId);
                 if (res.State == AnnouncementState.Created && res.ClassRef.HasValue && res.SisActivityId.HasValue)
                 {
-                    var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassRef.Value, res.SisActivityId.Value);
+                    var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
                     MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res); 
-                    ConnectorLocator.ActivityConnector.UpdateActivity(res.ClassRef.Value, res.SisActivityId.Value, activity);
+                    ConnectorLocator.ActivityConnector.UpdateActivity(res.SisActivityId.Value, activity);
                 }
                 return res;
             }                
@@ -600,9 +600,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 //    //CreateAnnoucnementDataAccess(uow).Update(ann);
                 //    //uow.Commit();
                 //}
-                var activity = ConnectorLocator.ActivityConnector.GetActivity(ann.ClassRef.Value, ann.SisActivityId.Value);
+                var activity = ConnectorLocator.ActivityConnector.GetActivity(ann.SisActivityId.Value);
                 activity.DisplayInHomePortal = visible;
-                ConnectorLocator.ActivityConnector.UpdateActivity(ann.ClassRef.Value, ann.SisActivityId.Value, activity);
+                ConnectorLocator.ActivityConnector.UpdateActivity(ann.SisActivityId.Value, activity);
                 ann.VisibleForStudent = visible;
             }
             return ann;
