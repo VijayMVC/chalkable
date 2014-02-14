@@ -43,7 +43,8 @@ namespace Chalkable.Web.Models
         {
             var res = Create(announcementAttachment.Attachment, isOwner);
 
-            if (!(string.IsNullOrEmpty(announcementAttachment.Token) || string.IsNullOrEmpty(announcementAttachment.StorageUrl)))
+            if (!(string.IsNullOrEmpty(announcementAttachment.Token) || string.IsNullOrEmpty(announcementAttachment.StorageUrl)
+                || string.IsNullOrEmpty(announcementAttachment.Attachment.Uuid)))
             {
                 var ispdf = IsPdf(announcementAttachment.Attachment);
                 res.Url = string.Format(announcementAttachment.CrocodocApiUrl + CROCODOC_API_URL_FORMAT,

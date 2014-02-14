@@ -185,8 +185,7 @@ namespace Chalkable.Web.Controllers
 
             var res = Save(announcement, classId);
             SchoolLocator.AnnouncementService.SubmitAnnouncement(res.Id, classId);
-            SchoolLocator.AnnouncementService.DeleteAnnouncements(classId, res.ClassAnnouncementTypeRef.Value,
-                                                                  AnnouncementState.Draft);
+            SchoolLocator.AnnouncementService.DeleteAnnouncements(classId, res.ClassAnnouncementTypeRef.Value, AnnouncementState.Draft);
 
 
             //TODO: mixpanelService

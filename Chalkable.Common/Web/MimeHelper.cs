@@ -61,7 +61,7 @@ namespace Chalkable.Common.Web
 
         public static string GetContentTypeByName(string fileName)
         {
-            string ext = (Path.GetExtension(fileName) ?? string.Empty).Replace(".", "");
+            var ext = GetExtension(fileName);
             if (attachmenTypes.ContainsKey(ext.ToLower()))
             {
                 return attachmenTypes[ext.ToLower()].Second;
@@ -71,12 +71,12 @@ namespace Chalkable.Common.Web
 
         public static AttachmenType GetTypeByName(string fileName)
         {
-            string ext = (Path.GetExtension(fileName) ?? string.Empty).Replace(".", "");
-            if (attachmenTypes.ContainsKey(ext.ToLower()))
-            {
-                return attachmenTypes[ext.ToLower()].First;
-            }
-            return AttachmenType.Unknown;
+            var ext = GetExtension(fileName);
+            return attachmenTypes.ContainsKey(ext.ToLower()) ? attachmenTypes[ext.ToLower()].First : AttachmenType.Unknown;
+        }
+        private static string GetExtension(string fileName)
+        {
+            return (Path.GetExtension(fileName) ?? string.Empty).Replace(".", "").Trim(' ');
         }
     }
 }
