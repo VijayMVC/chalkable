@@ -992,11 +992,7 @@ end
 
 GO
 
-
-
-
-
------------------------------
+----------------------------
 -- CREATE ANNOUNCEMENT 
 -----------------------------
 create procedure [dbo].[spCreateAnnouncement] @schoolId int, @classAnnouncementTypeId int, @personId int, @created datetime2,
@@ -1064,6 +1060,11 @@ where AnnouncementRef in (Select id from announcement where PersonRef = @personI
 AND ClassAnnouncementTypeRef = @classAnnouncementTypeId
 AND [state] = 0)
 
+/*DELETE AnnouncementStandard*/
+delete from AnnouncementStandard
+where AnnouncementRef in (Select id from announcement where PersonRef = @personId
+AND ClassAnnouncementTypeRef = @classAnnouncementTypeId
+AND [state] = 0)
 
 /*DELETE Announcement*/
 delete from Announcement where PersonRef = @personId
@@ -1078,10 +1079,11 @@ begin
 end
 else begin
 	/*INSERT TO ANNOUNCEMENT*/
-	insert into Announcement (PersonRef, Created, Expires, ClassAnnouncementTypeRef, [State],GradingStyle,[Order], ClassRef, Dropped, SchoolRef)
-	values(@personId, @created, @expires, @classAnnouncementTypeId, @state, @gradingStyle, 1, @classId, 0, @schoolId);
+	insert into Announcement (PersonRef, Created, Expires, ClassAnnouncementTypeRef, [State],GradingStyle,[Order], ClassRef, Dropped, SchoolRef, MayBeDropped, VisibleForStudent)
+	values(@personId, @created, @expires, @classAnnouncementTypeId, @state, @gradingStyle, 1, @classId, 0, @schoolId, 0, 0);
 	set @announcementId = SCOPE_IDENTITY()
 end
+
 
 /*GET CONTENT FROM PREV ANNOUNCEMENT*/
 declare @prevContent nvarchar(1024)
@@ -1117,8 +1119,8 @@ commit
 --select * from @tmp
 
 exec spGetAnnouncementDetails @announcementId, @personId, @callerRole, @schoolId
-
 GO
+
 
 create procedure [dbo].[spReorderAnnouncements] @schoolYearId int, @classAnnType int, 
 												@ownerId int, @classId int
@@ -1138,8 +1140,7 @@ where AnnView.Id = Announcement.Id
 select  1
 GO
 
-CREATE PROCEDURE [dbo].[spDeleteAnnouncement] @id int, @personId int, @classId int,
-												@state int, @classAnnouncementTypeId int
+CREATE PROCEDURE [dbo].[spDeleteAnnouncement] @id int, @personId int, @classId int, @state int, @classAnnouncementTypeId int
 AS
 
 declare @ann table
@@ -1185,6 +1186,10 @@ where AnnouncementRef in (select Id from @ann)
 
 /*DELETE AnnouncementApplication*/
 delete from AnnouncementApplication
+where AnnouncementRef in (select Id from @ann)
+
+/*DELETE AnnouncementStandard*/
+delete from AnnouncementStandard
 where AnnouncementRef in (select Id from @ann)
 
 /*DELETE Announcement*/
