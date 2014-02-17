@@ -57,6 +57,7 @@
           <EntitySet Name="StudentGradeLevel" EntityType="INOWDEMOModel.Store.StudentGradeLevel" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="StudentPeriodAbsence" EntityType="INOWDEMOModel.Store.StudentPeriodAbsence" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="StudentSchedule" EntityType="INOWDEMOModel.Store.StudentSchedule" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="StudentScheduleTerm" EntityType="INOWDEMOModel.Store.StudentScheduleTerm" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="StudentSchool" EntityType="INOWDEMOModel.Store.StudentSchool" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Term" EntityType="INOWDEMOModel.Store.Term" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="TimeSlot" EntityType="INOWDEMOModel.Store.TimeSlot" store:Type="Tables" Schema="dbo" />
@@ -503,6 +504,18 @@
           <AssociationSet Name="FK_StudentSchedule_StudentID" Association="INOWDEMOModel.Store.FK_StudentSchedule_StudentID">
             <End Role="Student" EntitySet="Student" />
             <End Role="StudentSchedule" EntitySet="StudentSchedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentScheduleTerm_SectionID" Association="INOWDEMOModel.Store.FK_StudentScheduleTerm_SectionID">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="StudentScheduleTerm" EntitySet="StudentScheduleTerm" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentScheduleTerm_StudentID" Association="INOWDEMOModel.Store.FK_StudentScheduleTerm_StudentID">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="StudentScheduleTerm" EntitySet="StudentScheduleTerm" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentScheduleTerm_TermID" Association="INOWDEMOModel.Store.FK_StudentScheduleTerm_TermID">
+            <End Role="Term" EntitySet="Term" />
+            <End Role="StudentScheduleTerm" EntitySet="StudentScheduleTerm" />
           </AssociationSet>
           <AssociationSet Name="FK_StudentSchool_CounselorID" Association="INOWDEMOModel.Store.FK_StudentSchool_CounselorID">
             <End Role="Staff" EntitySet="Staff" />
@@ -1481,6 +1494,18 @@
           <Property Name="DistrictGuid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="CareerTechAverage" Type="decimal" Precision="5" Scale="2" />
           <Property Name="CareerTechStatusId" Type="smallint" />
+        </EntityType>
+        <EntityType Name="StudentScheduleTerm">
+          <Key>
+            <PropertyRef Name="StudentID" />
+            <PropertyRef Name="SectionID" />
+            <PropertyRef Name="TermID" />
+          </Key>
+          <Property Name="StudentID" Type="int" Nullable="false" />
+          <Property Name="SectionID" Type="int" Nullable="false" />
+          <Property Name="TermID" Type="int" Nullable="false" />
+          <Property Name="IsEnrolled" Type="bit" Nullable="false" />
+          <Property Name="DistrictGuid" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="StudentSchool">
           <Key>
@@ -2921,6 +2946,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_StudentScheduleTerm_SectionID">
+          <End Role="Course" Type="INOWDEMOModel.Store.Course" Multiplicity="1" />
+          <End Role="StudentScheduleTerm" Type="INOWDEMOModel.Store.StudentScheduleTerm" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseID" />
+            </Principal>
+            <Dependent Role="StudentScheduleTerm">
+              <PropertyRef Name="SectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudentScheduleTerm_StudentID">
+          <End Role="Student" Type="INOWDEMOModel.Store.Student" Multiplicity="1" />
+          <End Role="StudentScheduleTerm" Type="INOWDEMOModel.Store.StudentScheduleTerm" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StudentID" />
+            </Principal>
+            <Dependent Role="StudentScheduleTerm">
+              <PropertyRef Name="StudentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudentScheduleTerm_TermID">
+          <End Role="Term" Type="INOWDEMOModel.Store.Term" Multiplicity="1" />
+          <End Role="StudentScheduleTerm" Type="INOWDEMOModel.Store.StudentScheduleTerm" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Term">
+              <PropertyRef Name="TermID" />
+            </Principal>
+            <Dependent Role="StudentScheduleTerm">
+              <PropertyRef Name="TermID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_StudentSchool_CounselorID">
           <End Role="Staff" Type="INOWDEMOModel.Store.Staff" Multiplicity="0..1" />
           <End Role="StudentSchool" Type="INOWDEMOModel.Store.StudentSchool" Multiplicity="*" />
@@ -3568,6 +3629,19 @@
             <End Role="School" EntitySet="Schools" />
             <End Role="AlphaGrade" EntitySet="AlphaGrades" />
           </AssociationSet>
+          <EntitySet Name="StudentScheduleTerms" EntityType="StiModel.StudentScheduleTerm" />
+          <AssociationSet Name="FK_StudentScheduleTerm_SectionID" Association="StiModel.FK_StudentScheduleTerm_SectionID">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="StudentScheduleTerm" EntitySet="StudentScheduleTerms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentScheduleTerm_StudentID" Association="StiModel.FK_StudentScheduleTerm_StudentID">
+            <End Role="Student" EntitySet="Students" />
+            <End Role="StudentScheduleTerm" EntitySet="StudentScheduleTerms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentScheduleTerm_TermID" Association="StiModel.FK_StudentScheduleTerm_TermID">
+            <End Role="Term" EntitySet="Terms" />
+            <End Role="StudentScheduleTerm" EntitySet="StudentScheduleTerms" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="AbsenceLevelReason">
           <Key>
@@ -3828,6 +3902,7 @@
           <Property Type="Boolean" Name="MergeRostersForAttendance" Nullable="false" />
           <NavigationProperty Name="ActivityCategories" Relationship="StiModel.FK_ActivityCategory_SectionID" FromRole="Course" ToRole="ActivityCategory" />
           <NavigationProperty Name="CourseStandards" Relationship="StiModel.FK_CourseStandard_CourseID" FromRole="Course" ToRole="CourseStandard" />
+          <NavigationProperty Name="StudentScheduleTerms" Relationship="StiModel.FK_StudentScheduleTerm_SectionID" FromRole="Course" ToRole="StudentScheduleTerm" />
         </EntityType>
         <EntityType Name="CourseSchool">
           <Key>
@@ -4285,6 +4360,7 @@
           <NavigationProperty Name="StudentGradeLevels" Relationship="StiModel.FK_StudentGradeLevel_StudentID" FromRole="Student" ToRole="StudentGradeLevel" />
           <NavigationProperty Name="StudentPeriodAbsences" Relationship="StiModel.FK_StudentPeriodAbsence_StudentID" FromRole="Student" ToRole="StudentPeriodAbsence" />
           <NavigationProperty Name="Document" Relationship="StiModel.FK_Student_PhotographID" FromRole="Student" ToRole="Document" />
+          <NavigationProperty Name="StudentScheduleTerms" Relationship="StiModel.FK_StudentScheduleTerm_StudentID" FromRole="Student" ToRole="StudentScheduleTerm" />
         </EntityType>
         <EntityType Name="StudentAcadSession">
           <Key>
@@ -4452,6 +4528,7 @@
           <Property Name="NCESCode" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="AcadSession" Relationship="StiModel.FK_Term_AcadSessionID" FromRole="Term" ToRole="AcadSession" />
           <NavigationProperty Name="SectionTerms" Relationship="StiModel.FK_SectionTerm_TermID" FromRole="Term" ToRole="SectionTerm" />
+          <NavigationProperty Name="StudentScheduleTerms" Relationship="StiModel.FK_StudentScheduleTerm_TermID" FromRole="Term" ToRole="StudentScheduleTerm" />
         </EntityType>
         <EntityType Name="TimeSlot">
           <Key>
@@ -6295,6 +6372,57 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="StudentScheduleTerm">
+          <Key>
+            <PropertyRef Name="StudentID" />
+            <PropertyRef Name="SectionID" />
+            <PropertyRef Name="TermID" />
+          </Key>
+          <Property Type="Int32" Name="StudentID" Nullable="false" />
+          <Property Type="Int32" Name="SectionID" Nullable="false" />
+          <Property Type="Int32" Name="TermID" Nullable="false" />
+          <Property Type="Boolean" Name="IsEnrolled" Nullable="false" />
+          <Property Type="Guid" Name="DistrictGuid" Nullable="false" />
+          <NavigationProperty Name="Course" Relationship="StiModel.FK_StudentScheduleTerm_SectionID" FromRole="StudentScheduleTerm" ToRole="Course" />
+          <NavigationProperty Name="Student" Relationship="StiModel.FK_StudentScheduleTerm_StudentID" FromRole="StudentScheduleTerm" ToRole="Student" />
+          <NavigationProperty Name="Term" Relationship="StiModel.FK_StudentScheduleTerm_TermID" FromRole="StudentScheduleTerm" ToRole="Term" />
+        </EntityType>
+        <Association Name="FK_StudentScheduleTerm_SectionID">
+          <End Type="StiModel.Course" Role="Course" Multiplicity="1" />
+          <End Type="StiModel.StudentScheduleTerm" Role="StudentScheduleTerm" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseID" />
+            </Principal>
+            <Dependent Role="StudentScheduleTerm">
+              <PropertyRef Name="SectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudentScheduleTerm_StudentID">
+          <End Type="StiModel.Student" Role="Student" Multiplicity="1" />
+          <End Type="StiModel.StudentScheduleTerm" Role="StudentScheduleTerm" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StudentID" />
+            </Principal>
+            <Dependent Role="StudentScheduleTerm">
+              <PropertyRef Name="StudentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudentScheduleTerm_TermID">
+          <End Type="StiModel.Term" Role="Term" Multiplicity="1" />
+          <End Type="StiModel.StudentScheduleTerm" Role="StudentScheduleTerm" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Term">
+              <PropertyRef Name="TermID" />
+            </Principal>
+            <Dependent Role="StudentScheduleTerm">
+              <PropertyRef Name="TermID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -7389,6 +7517,17 @@
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="AlternateScoreID" ColumnName="AlternateScoreID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StudentScheduleTerms">
+            <EntityTypeMapping TypeName="StiModel.StudentScheduleTerm">
+              <MappingFragment StoreEntitySet="StudentScheduleTerm">
+                <ScalarProperty Name="DistrictGuid" ColumnName="DistrictGuid" />
+                <ScalarProperty Name="IsEnrolled" ColumnName="IsEnrolled" />
+                <ScalarProperty Name="TermID" ColumnName="TermID" />
+                <ScalarProperty Name="SectionID" ColumnName="SectionID" />
+                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -258,6 +258,9 @@
     <Compile Include="Model\StudentSchedule.cs">
       <DependentUpon>StiEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\StudentScheduleTerm.cs">
+      <DependentUpon>StiEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model\StudentSchool.cs">
       <DependentUpon>StiEntities.tt</DependentUpon>
     </Compile>

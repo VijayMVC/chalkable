@@ -17,6 +17,7 @@ namespace Chalkable.StiConnector.Model
         public Term()
         {
             this.SectionTerms = new HashSet<SectionTerm>();
+            this.StudentScheduleTerms = new HashSet<StudentScheduleTerm>();
         }
     
         public int TermID { get; set; }
@@ -38,5 +39,6 @@ namespace Chalkable.StiConnector.Model
     
         public virtual AcadSession AcadSession { get; set; }
         public virtual ICollection<SectionTerm> SectionTerms { get; set; }
+        public virtual ICollection<StudentScheduleTerm> StudentScheduleTerms { get; set; }
     }
 }

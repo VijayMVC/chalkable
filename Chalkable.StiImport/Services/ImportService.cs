@@ -461,12 +461,13 @@ namespace Chalkable.StiConnector.Services
 
         private void ImportClassPersons()
         {
-            var studentSchedules = stiEntities.StudentSchedules.ToList()
+            var studentSchedules = stiEntities.StudentScheduleTerms.ToList()
                 .Select(x => new ClassPerson
                 {
                     ClassRef = x.SectionID,
                     PersonRef = x.StudentID,
-                    SchoolRef = x.Course1.AcadSession.SchoolID
+                    MarkingPeriodRef = x.TermID,
+                    SchoolRef = x.Term.AcadSession.SchoolID
                 }).ToList();
             ServiceLocatorSchool.ClassService.AddStudents(studentSchedules);
         }
