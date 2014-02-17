@@ -284,7 +284,7 @@ namespace Chalkable.BusinessLogic.Services.School
                             if (string.IsNullOrEmpty(annAtt.Uuid) && ServiceLocator.CrocodocService.IsDocument(annAtt.Name))
                             {
                                 var content = ConnectorLocator.AttachmentConnector.GetAttachmentContent(annAtt.SisAttachmentId.Value);
-                                annAtt.Uuid = ServiceLocator.CrocodocService.UploadDocument(annAtt.Uuid, content).uuid;
+                                annAtt.Uuid = ServiceLocator.CrocodocService.UploadDocument(annAtt.Name, content).uuid;
                             }
                             new AnnouncementAttachmentDataAccess(uow).Insert(annAtt);
                         }

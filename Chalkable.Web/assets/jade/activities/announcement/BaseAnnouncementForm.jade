@@ -25,6 +25,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
     typesEnum = chlk.models.announcement.AnnouncementTypeEnum
     isAdminAnnouncement = adminRecipients && announcement.isAdminAnnouncement()
     isAnnouncement = (announcement.isStandartAnnouncement() || isAdminAnnouncement)
+    disableDeleteBtn = announcement.getGradingStudentsCount() <= 0
     if !isAdminAnnouncement
         .title-block-container
             +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
@@ -128,13 +129,15 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
         ).special-button.blue-button.submit-btn
             =(announcement.getState() ? Msg.Save : Msg.Submit)
         if announcement.getState()
-            +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName())
-                +Button()(
-                type="submit",
-                name="submitType",
-                value="submit",
-                disabled=announcement.getNonGradingStudentsCount() != announcement.getStudentsCount()
-                ).special-button.red-button.submit-btn.add-loader-btn
-                    =Msg.Delete
+            if !disableDeleteBtn
+                +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName())(
+                disable=disableDeleteBtn)
+                    +Button()(
+                    type="submit",
+                    name="submitType",
+                    value="submit",
+                    disable=disableDeleteBtn
+                    ).special-button.red-button.submit-btn.add-loader-btn
+                        =Msg.Delete
         else
             +ActionLink('announcement', 'discard', announcement.getPersonId()).grey-link.not-blue.add-loader-btn=Msg.Discard
