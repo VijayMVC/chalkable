@@ -16,7 +16,7 @@ namespace Chalkable.BusinessLogic.Services.School
         ClassDetails Edit(int classId, Guid? chlkableDepartmentId, string name, string description, int teacherId, int gradeLevelId);
         void Delete(int id);
 
-        ClassDetails AddStudent(int classId, int personId);
+        ClassDetails AddStudent(int classId, int personId, int markingPeriodId);
         void AddStudents(IList<ClassPerson> classPersons);
         ClassDetails DeleteStudent(int classId, int personId);
         ClassDetails GetClassById(int id);
@@ -170,7 +170,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return GetClassById(classId);
         }
 
-        public ClassDetails AddStudent(int classId, int personId)
+        public ClassDetails AddStudent(int classId, int personId, int markingPeriodId)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
@@ -183,6 +183,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     PersonRef = personId,
                     ClassRef = classId,
+                    MarkingPeriodRef = markingPeriodId,
                     SchoolRef = cClass.SchoolRef.Value
                 });    
                 uow.Commit();
@@ -279,7 +280,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     .GetClassesComplex(query);
             }
         }
-
+        //TODO: add markingPeriodId param 
         public ClassPerson GetClassPerson(int classId, int personId)
         {
             using (var uow = Read())

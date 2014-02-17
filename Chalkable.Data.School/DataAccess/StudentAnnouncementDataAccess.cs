@@ -64,6 +64,7 @@ namespace Chalkable.Data.School.DataAccess
             return res;
         }
 
+        //TODO: rewrite this methods ... it's probably not working now
         public IList<StudentAnnouncementGrade> GetStudentAnnouncementGrades(StudentAnnouncementQuery query)
         {
             var conds = BuildConditions(query);
