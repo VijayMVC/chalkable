@@ -1,0 +1,168 @@
+@import "compass/css3/border-radius";
+@import "compass/css3/images";
+
+$border-color: #a1a1a1;
+
+DIV#content-wrapper{
+  &.profile{
+    .action-bar{
+      &.buttons{
+        .container{
+          .action-link, .action-button{
+            &:not(.disabled):not(.no-action-link-styles){
+              color: #957633;
+              text-shadow: 0 1px 0 white;
+
+              &:hover, &.pressed{
+                @include background(linear-gradient(top, #f3eedf, #e1d3a6));
+
+                &.back{
+                  @include background(url(images/profile/back.png) 3px center no-repeat, linear-gradient(top, #f3eedf, #e1d3a6));
+                }
+              }
+            }
+
+            &.settings:hover{
+              @include background(url(images/common/settings-bar-icon.png) 5px 9px no-repeat, linear-gradient(top, #f3eedf, #e1d3a6));
+            }
+          }
+        }
+      }
+    }
+  }
+  &.messages{
+    .action-bar{
+      &.buttons{
+        .container{
+          .action-link, .action-button{
+            &:not(.disabled):not(.no-action-link-styles){
+              color: #957633;
+              text-shadow: 0 1px 0 white;
+
+              &:hover, &.pressed{
+                @include background(linear-gradient(top, #f5ead6,#dac6a5));
+
+                &.back{
+                  @include background(url(images/profile/back.png) 3px center no-repeat, linear-gradient(top, #f3eedf, #e1d3a6));
+                }
+              }
+            }
+
+            &.settings:hover{
+              @include background(url(images/common/settings-bar-icon.png) 5px 9px no-repeat, linear-gradient(top, #f3eedf, #e1d3a6));
+            }
+
+            &.disabled, &[disabled]{
+              opacity: 0.6;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.action-bar{
+  &.buttons{
+    .container{
+      .action-link, .action-button{
+        &:not(.no-action-link-styles){
+          padding: 0 10px;
+          border-left: 1px solid white;
+          border-right: 1px solid #d0d0d0;
+          color: #828282;
+          font-size: 12px;
+          font-style: normal;
+          cursor: pointer;
+          background: transparent;
+          margin: 0;
+          border-width: 0 1px 0 1px;
+          text-align: center;
+
+          &:hover, &.pressed{
+            color: #2f7790;
+            @include background(linear-gradient(top, #f6f6f6,#d8d8d8));
+          }
+
+          &.back{
+            background: url(images/profile/back.png) 3px center no-repeat;
+            padding-left: 26px !important;
+
+            &:hover, &.pressed{
+              @include background(url(images/profile/back.png) 3px center no-repeat, linear-gradient(top, #f6f6f6,#d8d8d8));
+            }
+          }
+        }
+
+        &.settings{
+          background: url(images/common/settings-bar-icon.png) 5px 9px no-repeat;
+          padding-left: 19px;
+          width: 65px;
+        }
+
+        &.disabled, &[disabled]{
+          opacity: 0.6;
+        }
+      }
+
+      >.center:not(.no-border){
+        >.action-link:first-child, >.action-button:first-child{
+          &:not(.no-action-link-styles){
+            box-shadow: -1px 0 0 #d0d0d0;
+          }
+        }
+      }
+
+      >.left, >.right{
+        height: 34px;
+      }
+
+      >.left:not(.no-border){
+        border-right: 1px solid white;
+
+        >.action-link:first-child, >.action-button:first-child{
+          &:not(.no-action-link-styles){
+            border-left: none;
+            @include border-radius(5px 0 0 5px);
+          }
+        }
+      }
+
+      >.right:not(.no-border){
+        border-left: 1px solid #d0d0d0;
+
+        >.action-link:last-child, >.action-button:last-child{
+          &:not(.no-action-link-styles){
+            border-right: none;
+            @include border-radius(0 5px 5px 0);
+          }
+        }
+      }
+    }
+  }
+
+  &.not-transparent{
+    .container{
+      @include border-radius(5px);
+    }
+  }
+
+  .container{
+    height: 34px;
+    border-bottom: 1px solid $border-color;
+    border-top: 1px solid white;
+    white-space: nowrap;
+
+    .action-link, .action-button{
+      &:not(.no-action-link-styles){
+        text-decoration: none;
+        font: normal 11px/34px arial,tahoma,verdana,helvetica;
+        color: #333;
+        height: 34px;
+        font-style: italic;
+        display: inline-block;
+        text-shadow: 1px 1px 0 white;
+      }
+    }
+  }
+}
