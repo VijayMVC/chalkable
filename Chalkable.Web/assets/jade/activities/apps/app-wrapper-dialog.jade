@@ -9,7 +9,7 @@ if self.isMyAppsError()
 else if self.isBanned()
     +AppBannedDialog()
 else
-    +AttachmentDialog(self.getUrl(), self.getToolbarButtons(), announcementId, announcementAppId).app-wrapper
+    +AttachmentDialog(self.getUrl(), self.getToolbarButtons(), announcementId, announcementAppId, self.getType()).app-wrapper
 
 
 

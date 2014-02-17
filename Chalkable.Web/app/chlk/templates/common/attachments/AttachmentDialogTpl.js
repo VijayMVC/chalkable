@@ -15,6 +15,9 @@ NAMESPACE('chlk.templates.common.attachments', function () {
             ArrayOf(chlk.models.common.attachments.ToolbarButton), 'toolbarButtons',
 
             [ria.templates.ModelPropertyBind],
-            String, 'url'
+            String, 'url',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'type'
         ])
 });
