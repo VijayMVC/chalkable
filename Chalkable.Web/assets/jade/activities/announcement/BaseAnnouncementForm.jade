@@ -129,7 +129,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
         ).special-button.blue-button.submit-btn
             =(announcement.getState() ? Msg.Save : Msg.Submit)
         if announcement.getState()
-            if !disableDeleteBtn
+            if disableDeleteBtn
                 +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName())(
                 disable=disableDeleteBtn)
                     +Button()(
