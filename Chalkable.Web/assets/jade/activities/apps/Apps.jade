@@ -33,7 +33,10 @@ mixin AppManagementControls(id, state, liveId)
                     .td.app-state
                         +AppManagementControls(item.getId(), item.getState(), item.getLiveAppId())
                     .td
-                        +Checkbox('isInternal', item.isInternal())
+                        +ActionForm('apps', 'changeAppType')
+                            +Checkbox('isInternal', item.isInternal())
+                            +Hidden('appId', item.getId())
+
                     .td.action-links
                         +ActionLink('apps', 'details', item.getId()).profile
                         +ActionLink('apps', 'delete', item.getId()).remove

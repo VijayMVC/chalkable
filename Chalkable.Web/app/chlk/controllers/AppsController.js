@@ -576,6 +576,25 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
 
             return this.PushView(chlk.activities.apps.AppGeneralInfoPage, result);
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.SYSADMIN
+        ])],
+
+        [[Object]],
+        function changeAppTypeAction(data){
+
+            var isInternal = Boolean(data.isInternal === 'true' || data.isInternal === 'on');
+            var appId = new chlk.models.id.AppId(data.appId);
+
+            return this.appsService
+                .changeAppType(appId, isInternal)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return this.Redirect('apps', 'page', []);
+                }, this);
+
         }
     ])
 });
