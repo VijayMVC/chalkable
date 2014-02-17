@@ -120,6 +120,11 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.setAdminAnnouncement(!classId);
             },
 
+            Boolean, function setAdminAnnouncement(isAdminAnnouncement){
+                if(isAdminAnnouncement === null)
+                    this.adminAnnouncement = !this.classId;
+            },
+
             Boolean, 'gradable',
             Number, 'grade',
 

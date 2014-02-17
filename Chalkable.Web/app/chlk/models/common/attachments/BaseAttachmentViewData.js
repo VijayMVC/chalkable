@@ -8,13 +8,18 @@ NAMESPACE('chlk.models.common.attachments', function () {
     CLASS(
         'BaseAttachmentViewData', [
             ArrayOf(chlk.models.common.attachments.ToolbarButton), 'toolbarButtons',
+
             String, 'url',
 
-            [[String, ArrayOf(chlk.models.common.attachments.ToolbarButton)]],
-            function $(url, buttons){
+            Number, 'type',
+
+            [[String, ArrayOf(chlk.models.common.attachments.ToolbarButton), Number]],
+            function $(url, buttons, type_){
                 BASE();
                 this.setUrl(url);
                 this.setToolbarButtons(buttons);
+                if(type_)
+                    this.setType(type_);
             }
         ]);
 });

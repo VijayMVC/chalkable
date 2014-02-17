@@ -13,13 +13,17 @@ mixin Toolbar(buttons, announcementAppId, announcementId)
             +ToolbarButton(btn, announcementAppId, announcementId)
     .x-close-btn.close
 
-mixin AttachmentDialog(url, buttons, announcementId, announcementAppId)
+mixin AttachmentDialog(url, buttons, announcementId, announcementAppId, type)
     .base-attachment-dialog
         .x-window-header
             +Toolbar(buttons, announcementAppId, announcementId)
         .iframe-wrap
-            iframe(src=url)
-                attributes.class
+            if type == chlk.models.announcement.ApplicationOrAttachmentEnum.PICTURE
+                .picture-container
+                    img(src=url)
+            else
+                iframe(src=url)
+                    attributes.class
 
 
 

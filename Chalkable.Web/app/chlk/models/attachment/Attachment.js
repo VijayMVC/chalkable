@@ -17,6 +17,8 @@ NAMESPACE('chlk.models.attachment', function () {
             [ria.serialize.SerializeProperty('thumbnailurl')],
             String, 'thumbnailUrl',
 
+            String, 'bigUrl',
+
             Number, 'type',
 
             String, 'url'

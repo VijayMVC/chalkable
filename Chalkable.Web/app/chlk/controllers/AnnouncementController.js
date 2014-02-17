@@ -133,8 +133,11 @@ NAMESPACE('chlk.controllers', function (){
             var attachments = model.getAnnouncementAttachments() || [], ids = [];
             attachments.forEach(function(item){
                 ids.push(item.getId().valueOf());
-                if(item.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf())
+                if(item.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf()){
                     item.setThumbnailUrl(this.announcementService.getAttachmentUri(item.getId(), false, 170, 110));
+                    item.setUrl(this.announcementService.getAttachmentUri(item.getId(), false, null, null));
+                }
+
             }, this);
             model.setAttachments(ids.join(','));
             this.getContext().getSession().set('AnnouncementAttachments', attachments);
@@ -455,7 +458,7 @@ NAMESPACE('chlk.controllers', function (){
                     "Download Attachment",
                     "/AnnouncementAttachment/DownloadAttachment.json?needsDownload=true&announcementAttachmentId=" + attachments[0].getId().valueOf()
                 );
-                var attachmentViewData = new chlk.models.common.attachments.BaseAttachmentViewData(attachmentUrl, [downloadAttachmentButton]);
+                var attachmentViewData = new chlk.models.common.attachments.BaseAttachmentViewData(attachmentUrl, [downloadAttachmentButton], attachments[0].getType());
                 return this.ShadeView(chlk.activities.common.attachments.AttachmentDialog, new ria.async.DeferredData(attachmentViewData));
             }
             return null;
@@ -493,7 +496,8 @@ NAMESPACE('chlk.controllers', function (){
                 .deleteAnnouncement(announcementId)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    chlk.controls.updateWeekCalendar();
+                    if(!this.userIsAdmin())
+                        chlk.controls.updateWeekCalendar();
                     return this.BackgroundNavigate('feed', 'list', []);
                 }, this);
         },
@@ -695,7 +699,8 @@ NAMESPACE('chlk.controllers', function (){
                 if(isEdit)
                     return this.BackgroundNavigate('announcement', 'view', [model.getId()]);
                 else{
-                    chlk.controls.updateWeekCalendar();
+                    if(!this.userIsAdmin())
+                        chlk.controls.updateWeekCalendar();
                     return this.BackgroundNavigate('feed', 'list', []);
                 }
             }, this);
