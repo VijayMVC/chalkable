@@ -26,6 +26,7 @@ namespace Chalkable.StiConnector.Model
             this.StudentPeriodAbsences = new HashSet<StudentPeriodAbsence>();
             this.ActivityCategories = new HashSet<ActivityCategory>();
             this.CourseStandards = new HashSet<CourseStandard>();
+            this.StudentScheduleTerms = new HashSet<StudentScheduleTerm>();
         }
     
         public int CourseID { get; set; }
@@ -83,5 +84,6 @@ namespace Chalkable.StiConnector.Model
         public virtual ICollection<StudentPeriodAbsence> StudentPeriodAbsences { get; set; }
         public virtual ICollection<ActivityCategory> ActivityCategories { get; set; }
         public virtual ICollection<CourseStandard> CourseStandards { get; set; }
+        public virtual ICollection<StudentScheduleTerm> StudentScheduleTerms { get; set; }
     }
 }

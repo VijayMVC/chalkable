@@ -83,5 +83,6 @@ namespace Chalkable.StiConnector.Model
         public DbSet<StandardSubject> StandardSubjects { get; set; }
         public DbSet<AlphaGrade> AlphaGrades { get; set; }
         public DbSet<AlternateScore> AlternateScores { get; set; }
+        public DbSet<StudentScheduleTerm> StudentScheduleTerms { get; set; }
     }
 }
