@@ -79,7 +79,8 @@ namespace Chalkable.StiConnector.Connectors
         }
         public Activity CreateActivity(int sectionId, Activity activity)
         {
-            return Post(string.Format(urlFormat, sectionId), activity);
+            activity.SectionId = sectionId;
+            return Post(BaseUrl + "Chalkable/activities", activity);
         }
         public void UpdateActivity(int id, Activity activity)
         {

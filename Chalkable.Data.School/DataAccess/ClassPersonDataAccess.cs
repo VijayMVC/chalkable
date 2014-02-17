@@ -24,7 +24,9 @@ namespace Chalkable.Data.School.DataAccess
                 conds.Add(ClassPerson.CLASS_REF_FIELD, query.ClassId);
             if(query.PersonId.HasValue)
                 conds.Add(ClassPerson.PERSON_REF_FIELD, query.PersonId);
-            return conds;// FilterBySchool(conds);
+            if(query.MarkingPeriodId.HasValue)
+                conds.Add(ClassPerson.MARKING_PERIOD_REF, query.MarkingPeriodId);
+            return conds;
         }
 
         public bool Exists(ClassPersonQuery query)
@@ -52,5 +54,6 @@ namespace Chalkable.Data.School.DataAccess
     {
         public int? ClassId { get; set; }
         public int? PersonId { get; set; }
+        public int? MarkingPeriodId { get; set; }
     }
 }

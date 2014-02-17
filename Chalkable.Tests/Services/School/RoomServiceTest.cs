@@ -72,7 +72,7 @@ namespace Chalkable.Tests.Services.School
 
             var clPeriod = DistrictTestContext.DistrictLocatorFirstSchool.ClassPeriodService.Add(currentPeriod.Id, cl.Id, r1.Id, dayType.Id);
 
-            DistrictTestContext.DistrictLocatorFirstSchool.ClassService.AddStudent(cl.Id, FirstSchoolContext.FirstStudent.Id);
+            DistrictTestContext.DistrictLocatorFirstSchool.ClassService.AddStudent(cl.Id, FirstSchoolContext.FirstStudent.Id, mp.Id);
             var r2 = FirstSchoolContext.AdminGradeSl.RoomService.WhereIsPerson(FirstSchoolContext.FirstTeacher.Id, nowDate);
             AssertAreEqual(r1, r2);
             r2 = FirstSchoolContext.AdminGradeSl.RoomService.WhereIsPerson(FirstSchoolContext.FirstStudent.Id, nowDate);

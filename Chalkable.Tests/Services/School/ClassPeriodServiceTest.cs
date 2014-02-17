@@ -19,7 +19,7 @@ namespace Chalkable.Tests.Services.School
             var room2 = district1Sl.RoomService.AddRoom(2, school1Id, "002", "room2", "10X10", null, "333-555");
             var c1 = district1Sl.ClassService.Add(1, sy.Id, null, "class1", "class1", FirstSchoolContext.FirstTeacher.Id, gl.Id);
             var c2 = district1Sl.ClassService.Add(2, sy.Id, null, "class2", "class2", FirstSchoolContext.FirstTeacher.Id, gl.Id);
-            district1Sl.ClassService.AddStudent(c1.Id, FirstSchoolContext.FirstStudent.Id);
+            district1Sl.ClassService.AddStudent(c1.Id, FirstSchoolContext.FirstStudent.Id, mp.Id);
 
             var dt1 = district1Sl.DayTypeService.Add(1, 1, "A", sy.Id);
             var dt2 = district1Sl.DayTypeService.Add(2, 2, "B", sy.Id);
@@ -53,11 +53,11 @@ namespace Chalkable.Tests.Services.School
             AssertAreEqual(availableRooms[0], room1);
             AssertException<Exception>(() => cPeriodService.Add(period1.Id, c2.Id, room1.Id, dt1.Id));
             AssertException<Exception>(() => cPeriodService.Add(period1.Id, c1.Id, room2.Id, dt1.Id));
-            district1Sl.ClassService.AddStudent(c2.Id, FirstSchoolContext.FirstStudent.Id);
+            district1Sl.ClassService.AddStudent(c2.Id, FirstSchoolContext.FirstStudent.Id, mp.Id);
             AssertException<Exception>(() => cPeriodService.Add(period1.Id, c2.Id, room2.Id, dt1.Id));
             district1Sl.ClassService.DeleteStudent(c2.Id, FirstSchoolContext.FirstStudent.Id);
 
-            district1Sl.ClassService.AddStudent(c2.Id, FirstSchoolContext.SecondStudent.Id);
+            district1Sl.ClassService.AddStudent(c2.Id, FirstSchoolContext.SecondStudent.Id, mp.Id);
             cPeriodService.Add(period1.Id, c2.Id, room2.Id, dt1.Id);
             var period2 = district1Sl.PeriodService.Add(2, sy.Id, period1.EndTime + 10, period1.EndTime + 50, 2);
             cPeriodService.Add(period2.Id, c2.Id, room1.Id, dt1.Id);

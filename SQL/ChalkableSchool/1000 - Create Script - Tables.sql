@@ -215,12 +215,13 @@ CREATE TABLE ClassPerson
 (	
 	ClassRef INT NOT NULL CONSTRAINT FK_ClassPerson_Class FOREIGN KEY REFERENCES Class(Id),
 	PersonRef INT NOT NULL CONSTRAINT FK_ClassPerson_Person FOREIGN KEY REFERENCES Person(Id),
+	MarkingPeriodRef INT NOT NULL CONSTRAINT FK_ClassPerson_MarkingPeriod FOREIGN KEY REFERENCES MarkingPeriod(Id),
 	SchoolRef INT not null CONSTRAINT FK_ClassPerson_School FOREIGN KEY REFERENCES School(Id)
 )
 GO
 
 Alter TABLE ClassPerson
-	ADD CONSTRAINT PK_ClassPerson PRIMARY KEY(PersonRef, ClassRef)
+	ADD CONSTRAINT PK_ClassPerson PRIMARY KEY(PersonRef, ClassRef, MarkingPeriodRef)
 GO
 
 CREATE TABLE StudentSchoolYear

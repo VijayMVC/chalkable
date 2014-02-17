@@ -85,7 +85,7 @@ namespace Chalkable.Tests.Services.School
                     , SchoolContextRoles.AdminGrade | SchoolContextRoles.AdminEditor | SchoolContextRoles.FirstTeacher
                     | SchoolContextRoles.FirstStudent | SchoolContextRoles.FirstParent
                     | SchoolContextRoles.AdminViewer | SchoolContextRoles.Checkin);
-            cService.AddStudent(c.Id, FirstSchoolContext.FirstStudent.Id);
+            cService.AddStudent(c.Id, FirstSchoolContext.FirstStudent.Id, mp.Id);
             cService.Delete(c.Id);
             Assert.AreEqual(cService.GetClasses(mp.SchoolYearRef, null, null).Count, 0);
         }
@@ -102,13 +102,13 @@ namespace Chalkable.Tests.Services.School
             var newId = 1;
             var c = cService.Add(newId, mp.SchoolYearRef, null, "class1", "first class", FirstSchoolContext.FirstTeacher.Id, gradeLevelId);
 
-            AssertForDeny(sl => sl.ClassService.AddStudent(c.Id, FirstSchoolContext.FirstStudent.Id), FirstSchoolContext
+            AssertForDeny(sl => sl.ClassService.AddStudent(c.Id, FirstSchoolContext.FirstStudent.Id, mp.Id), FirstSchoolContext
                 , SchoolContextRoles.AdminGrade | SchoolContextRoles.AdminEditor | SchoolContextRoles.FirstTeacher
                 | SchoolContextRoles.FirstStudent | SchoolContextRoles.FirstParent | SchoolContextRoles.AdminViewer | SchoolContextRoles.Checkin);
 
-            AssertException<Exception>(() => cService.AddStudent(c.Id, FirstSchoolContext.FirstTeacher.Id));
-            AssertException<Exception>(()=> DistrictTestContext.DistrictLocatorSecondSchool.ClassService.AddStudent(c.Id, FirstSchoolContext.FirstStudent.Id));
-            c = cService.AddStudent(c.Id, FirstSchoolContext.FirstStudent.Id);
+            AssertException<Exception>(() => cService.AddStudent(c.Id, FirstSchoolContext.FirstTeacher.Id, mp.Id));
+            AssertException<Exception>(() => DistrictTestContext.DistrictLocatorSecondSchool.ClassService.AddStudent(c.Id, FirstSchoolContext.FirstStudent.Id, mp.Id));
+            c = cService.AddStudent(c.Id, FirstSchoolContext.FirstStudent.Id, mp.Id);
             var clPerson = FirstSchoolContext.AdminGradeSl.ClassService.GetClassPerson(c.Id, FirstSchoolContext.FirstStudent.Id);
 
             AssertException<Exception>(() => DistrictTestContext.DistrictLocatorSecondSchool.ClassService.GetClassPerson(c.Id, FirstSchoolContext.FirstStudent.Id));
@@ -119,7 +119,7 @@ namespace Chalkable.Tests.Services.School
             var classes = cService.GetClasses(null, null, FirstSchoolContext.FirstStudent.Id);
             Assert.AreEqual(classes.Count, 1);
             AssertAreEqual(classes[0], c);
-            c = cService.AddStudent(c.Id, FirstSchoolContext.FirstStudent.Id);
+            c = cService.AddStudent(c.Id, FirstSchoolContext.FirstStudent.Id, mp.Id);
             Assert.AreEqual(c.StudentsCount, 1);
 
             var dayType = districtSl.DayTypeService.Add(1, 1, "A", mp.SchoolYearRef);
@@ -130,7 +130,7 @@ namespace Chalkable.Tests.Services.School
             var c2 = cService.Add(2, mp.SchoolYearRef, null, "class2", "second class", FirstSchoolContext.FirstTeacher.Id, gradeLevelId);
             var room2 = districtSl.RoomService.AddRoom(2, school1Id, "002", "second room", "10X10", null, "333-444");
             districtSl.ClassPeriodService.Add(period.Id, c2.Id, room2.Id, dayType.Id);
-            AssertException<Exception>(() => cService.AddStudent(c2.Id, FirstSchoolContext.FirstStudent.Id));
+            AssertException<Exception>(() => cService.AddStudent(c2.Id, FirstSchoolContext.FirstStudent.Id, mp.Id));
 
 
             AssertForDeny(sl => sl.ClassService.DeleteStudent(c.Id, FirstSchoolContext.FirstStudent.Id), FirstSchoolContext
@@ -212,9 +212,9 @@ namespace Chalkable.Tests.Services.School
             
             var mathClass = serviceLocator.ClassService.Add(classId.Value, mp.SchoolYearRef, null, name, name, teacher.Id, gl.Id);
             if (student1 != null)
-                mathClass = serviceLocator.ClassService.AddStudent(mathClass.Id, student1.Id);
+                mathClass = serviceLocator.ClassService.AddStudent(mathClass.Id, student1.Id, mp.Id);
             if (student2 != null)
-                mathClass = serviceLocator.ClassService.AddStudent(mathClass.Id, student2.Id);
+                mathClass = serviceLocator.ClassService.AddStudent(mathClass.Id, student2.Id, mp.Id);
 
             return mathClass;
         }
