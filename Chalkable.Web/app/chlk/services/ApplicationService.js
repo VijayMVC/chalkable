@@ -292,6 +292,16 @@ NAMESPACE('chlk.services', function () {
                         announcementId: announcementId.valueOf(),
                         applicationId: appId.valueOf()
                     });
+            },
+
+            [[chlk.models.id.AppId, Boolean]],
+            ria.async.Future, function changeAppType(appId, isInternal){
+                return this
+                    .post('Application/ChangeApplicationType.json', chlk.models.Success, {
+                        isInternal: isInternal,
+                        applicationId: appId.valueOf()
+                    });
             }
+
         ])
 });
