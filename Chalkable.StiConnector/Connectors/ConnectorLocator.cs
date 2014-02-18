@@ -37,6 +37,7 @@ namespace Chalkable.StiConnector.Connectors
             AttachmentConnector = new AttachmentConnector(this);
             SectionStandardConnector = new SectionStandardConnector(this);
             ActivityScoreConnector = new ActivityScoreConnector(this);
+            ReportConnector = new ReportConnector(this);
         }
 
         public UsersConnector UsersConnector { get; private set; }
@@ -52,6 +53,7 @@ namespace Chalkable.StiConnector.Connectors
         public AttachmentConnector AttachmentConnector { get; private set; }
         public SectionStandardConnector SectionStandardConnector { get; private set; }
         public ActivityScoreConnector ActivityScoreConnector { get; private set; }
+        public ReportConnector ReportConnector { get; private set; }
 
         public class TokenModel
         {
@@ -92,12 +94,6 @@ namespace Chalkable.StiConnector.Connectors
                 if(stream != null)
                     stream.Close();
             }
-            //using (var stream = new MemoryStream(client.DownloadData(url)))
-            //{
-            //    var tm = (TokenModel)ser.ReadObject(stream);
-            //    expires = expires.AddSeconds(tm.expires_in);
-            //    return tm.access_token;
-            //}
         }
 
 
