@@ -1,6 +1,7 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.announcement.AnnouncementForm');
+REQUIRE('chlk.models.announcement.AnnouncementView');
 
 REQUIRE('chlk.models.attachment.Attachment');
 REQUIRE('chlk.models.classes.ClassesForTopBar');
@@ -221,7 +222,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId]],
             ria.async.Future, function getAnnouncement(id) {
-                return this.get('Announcement/Read.json', chlk.models.announcement.Announcement, {
+                return this.get('Announcement/Read.json', chlk.models.announcement.AnnouncementView, {
                     announcementId: id.valueOf()
                 })
                 .then(function(announcement){

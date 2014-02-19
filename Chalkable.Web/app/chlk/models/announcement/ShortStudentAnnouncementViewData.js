@@ -18,7 +18,7 @@ NAMESPACE('chlk.models.announcement', function () {
             ArrayOf(String), 'alerts',
 
             [ria.serialize.SerializeProperty('gradevalue')],
-            Number, 'gradeValue',
+            String, 'gradeValue',
 
             chlk.models.id.StudentAnnouncementId, 'id',
 

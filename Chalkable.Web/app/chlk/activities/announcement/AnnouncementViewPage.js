@@ -19,8 +19,6 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementForStudentAttachments, 'update-attachments',
             '.student-attachments', ria.mvc.PartialUpdateRuleActions.Replace)],
         'AnnouncementViewPage', EXTENDS(chlk.activities.lib.TemplatePage), [
-            //ria.dom.Dom, 'currentContainer',
-
             Array, 'applicationsInGradeView',
             Array, 'applications',
             Array, 'autoGradeApps',
@@ -66,25 +64,12 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
-            function getGradeNumber(value){
-                return value;
-            },
-
             [ria.mvc.DomEventBind('keyup', '.grade-input')],
             [[ria.dom.Dom, ria.dom.Event]],
             function inputKeyUp(node, event){
                 var row = node.parent('.row');
                 var value = node.getValue();
                 var item = row.find('.fill-item');
-                if(parseInt(value, 10) == value){
-                    if(value > this.getMaxScore()){
-                        row.find('.alert-flag').addClass('error');
-                    }else{
-                        row.find('.alert-flag').removeClass('error');
-                    }
-                }else{
-                    row.find('.alert-flag').removeClass('error');
-                }
                 if(!value){
                     item.addClass('disabled');
                     node.addClass('empty-grade');
@@ -93,18 +78,12 @@ NAMESPACE('chlk.activities.announcement', function () {
                 else{
                     item.removeClass('disabled');
                     node.removeClass('empty-grade');
-                    var valueFromLetter = this.getGradeNumber(value);
-                    if(parseInt(value, 10) != value && !valueFromLetter && value != Msg.Dropped && value != Msg.Exempt || parseInt(value, 10) == value && value > this.getMaxScore()){
+                    /*if(parseInt(value, 10) != value && value != Msg.Dropped && value != Msg.Exempt){
                         node.addClass('error');
-                        if(value > this.getMaxScore()){
-                            row.find('.alert-flag').addClass('error');
-                        }
                     }
                     else{
                         node.removeClass('error');
-                        if(valueFromLetter)
-                            node.setValue(valueFromLetter);
-                    }
+                    }*/
                 }
 
             },
@@ -150,20 +129,10 @@ NAMESPACE('chlk.activities.announcement', function () {
             function setGrade(node){
                 if(!node.hasClass('error')){
                     var value = node.getValue();
-                    if(value == node.getData('value'))
+                    var savedValue = node.getData('value');
+                    if(value == savedValue || (!value && !savedValue))
                         return;
-                    value = parseInt(value, 10);
-                    if(!value && value != 0)
-                        value = '';
-                    if(value){
-                        if(value > 100)
-                            value = 100;
-                        if(value < 0)
-                            value = 0;
-                    }
-                    node.setValue(value);
-                    if(value != node.getData('value'))
-                        this.updateItem(node, true);
+                    this.updateItem(node, true);
                 }
             },
 
@@ -213,50 +182,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 row.find('[name=' + stateName +']').setValue(true);
                 this.updateItem(node, true);
             },
-
-
-            /*[ria.mvc.DomEventBind('click', '.drop-link')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function dropClick(node, event){
-                var row = node.parent('.row');
-                if(node.hasClass('undrop')){
-                    row.find('[name=dropped]').setValue(false);
-                    this.updateItem(node, false);
-                }else{
-                    row.find('[name=dropped]').setValue(true);
-                    //row.find('.grade-input').setValue('');
-                    this.updateItem(node, true);
-                }
-            },
-
-            [ria.mvc.DomEventBind('keyup', '.edit-question-input')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function editQnASubmitClick(node, event){
-                var f = node.parent('.row').parent('form');
-                if (!node.getValue())
-                    f.find('.edit-answer-input').removeClass('validate[required]');
-                else
-                    f.find('.edit-answer-input').addClass('validate[required]');
-            },
-
-            [ria.mvc.DomEventBind('click', '.edit-question-link')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function editQuestionClick(node, event){
-                var row = node.parent('.row');
-                row.find('.edit-question-link, .edit-question-text').fadeOut(function(){
-                    row.find('.edit-question-input, .edit-question-btn, .cancel-question-link').removeClass('x-hidden').fadeIn();
-                });
-            },
-
-
-            [ria.mvc.DomEventBind('click', '.cancel-question-link')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function cancelQuestionClick(node, event){
-                var row = node.parent('.row');
-                row.find('.edit-question-input, .edit-question-btn, .cancel-question-link').removeClass('x-hidden').fadeOut(function(){
-                    row.find('.edit-question-link, .edit-question-text').fadeIn();
-                });
-            },*/
 
             [ria.mvc.DomEventBind('click', '.edit-answer-link, .edit-question-link')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -347,7 +272,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                 if(selectNext_){
                     setTimeout(function(){
                         var next = row.next().next();
-                        if(next.exists()){
+                        var selected = row.parent().find('.selected');
+                        if(next.exists() && !(selected.exists() && selected.getAttr('index') != row.getAttr('index'))){
                             row.removeClass('selected');
                             next.addClass('selected');
                             jQuery(next.find('.grade-input:not(.with-grid-focus)').valueOf()).focus();
@@ -358,19 +284,27 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
+
+                var allScores = [];
+                model.getAlternateScores().forEach(function(item){
+                    allScores.push(item.getName());
+                    allScores.push(item.getName() + ' (fill all)');
+                });
+                model.getAlphaGrades().forEach(function(item){
+                    allScores.push(item.getName());
+                    allScores.push(item.getName() + ' (fill all)');
+                });
+
+                allScores = allScores.concat(['Exempt', 'Exempt (fill all)', 'Incomplete', 'Incomplete (fill all)',
+                    'Late', 'Late (fill all)', 'Dropped', 'Dropped (fill all)', 'Absent', 'Absent (fill all)']);
+                this.setAllScores(allScores);
+
                 this.setOwner(model.getOwner());
                 this.setMaxScore(model.getMaxScore());
                 this.setApplicationsInGradeView(model.getGradeViewApps());
                 this.setApplications(model.getApplications());
                 this.setAutoGradeApps(model.getAutoGradeApps());
                 this.setAnnouncementId(model.getId());
-                var that = this;
-                jQuery(this.dom.valueOf()).on('change', '.grade-select', function(){
-                    var node = new ria.dom.Dom(this);
-                    var row = node.parent('.row');
-                    row.find('.grade-input').setValue(node.getValue());
-                    that.updateItem(node, true);
-                });
                 var moving = new ria.dom.Dom('.moving-wrapper');
                 if(moving.exists()){
                     this.dom.setCss('display', 'none');
@@ -407,6 +341,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var itemModel = model.getCurrentItem();
                 var itemTpl = new chlk.templates.announcement.StudentAnnouncement;
                 itemTpl.assign(itemModel);
+                itemTpl.options({
+                    maxScore: this.getMaxScore()
+                });
                 var container = this.dom.find('#grade-container-' + itemModel.getId().valueOf());
                 container.empty();
                 this.dom.find('#top-content-' + itemModel.getId().valueOf()).removeClass('loading');

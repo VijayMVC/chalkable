@@ -16,7 +16,7 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.GradingService*/
     CLASS(
         'GradingService', EXTENDS(chlk.services.BaseService), [
-            [[chlk.models.id.StudentAnnouncementId, Number, String, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean]],
+            [[chlk.models.id.StudentAnnouncementId, String, String, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean]],
             ria.async.Future, function updateItem(studentAnnouncementId, gradeValue, comment, dropped, late, absent, incomplete, exempt, passed, complete) {
                 return this.get('Grading/UpdateItem', chlk.models.announcement.StudentAnnouncement, {
                     studentAnnouncementId: studentAnnouncementId.valueOf(),

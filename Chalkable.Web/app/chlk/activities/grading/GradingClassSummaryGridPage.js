@@ -89,14 +89,6 @@ NAMESPACE('chlk.activities.grading', function () {
                         if(parsed){
                             node.removeClass('error');
                             if(parsed != text){
-                                /*var len = parsed.toString().length;
-                                if(text[len] == ' '){
-                                    var comment = text.slice(len);
-                                    cell.find('.comment-value').setValue(comment);
-                                    node.parent('.marking-period-container').find('.comment-button').trigger('click');
-                                }else{
-                                    node.addClass('error');
-                                }*/
                                 node.addClass('error');
                             }else{
                                 this.hideDropDown();

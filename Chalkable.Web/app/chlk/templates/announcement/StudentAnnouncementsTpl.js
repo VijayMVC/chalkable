@@ -48,6 +48,8 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             chlk.models.id.AnnouncementId, 'announcementId',
 
+            Number, 'maxScore',
+
             Number, function getAutoGradeCount(){
                 return this.getItems().filter(function(item){
                     return item.getState() == 0;

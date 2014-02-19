@@ -18,7 +18,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'comment',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'gradeValue',
+            String, 'gradeValue',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.StudentAnnouncementId, 'id',
@@ -61,13 +61,15 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'complete',
 
+            Number, 'maxScore',
+
             Object, function getNormalValue(){
                 var value = this.getGradeValue();
                 if(this.isDropped())
                     return Msg.Dropped;
                 if(this.isExempt())
                     return Msg.Exempt;
-                return (value >= 0) ? value : '';
+                return value;
             },
 
             String, function getTooltipText(){
@@ -81,15 +83,6 @@ NAMESPACE('chlk.templates.announcement', function () {
                 if(!res.length)
                     return '';
                 return res.join('<hr>');
-            },
-
-            Object, function getDisplayValue(){
-                var value = this.getGradeValue();
-                if(this.isDropped())
-                    return Msg.Drop;
-                if(this.isExempt())
-                    return Msg.Exempt;
-                return (value >= 0) ? value : '';
             },
 
             String, function getAlertClass(){

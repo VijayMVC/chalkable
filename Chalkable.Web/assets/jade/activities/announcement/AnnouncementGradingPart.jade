@@ -82,6 +82,7 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                     div(id = "grade-container-" + item.getId()).i-b.grade-block
                         +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
                             userRole = self.getUserRole()
+                            maxScore = self.getMaxScore()
                         )
         .attachments-container.z-10
             .attachments-container-2

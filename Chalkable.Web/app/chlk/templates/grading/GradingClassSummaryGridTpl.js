@@ -17,15 +17,6 @@ NAMESPACE('chlk.templates.grading', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores',
 
-            Array, function getAutoFillValues(){
-                return ['A+', 'A', 'A-','B+', 'B', 'B-','C+', 'C', 'C-','D+', 'D', 'D-','F',
-                    'F (fill all)','A (fill all)','B (fill all)','C (fill all)','D (fill all)',
-                    'Complete', 'Complete (fill all)', 'Exempt', 'Exempt (fill all)', 'Fail',
-                    'Fail (fill all)', 'Incomplete', 'Incomplete (fill all)', 'Late', 'Late (fill all)',
-                    'Pass', 'Pass (fill all)'
-                ];
-            },
-
             String, function getTooltipText(item){
                 var res = [];
                 if(item.isLate())
