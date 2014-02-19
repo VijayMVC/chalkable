@@ -36,7 +36,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                     autoGradeApps: this.getAutoGradeApps(),
                     applications: this.getApplications(),
                     owner: this.getOwner(),
-                    announcementId: this.getAnnouncementId()
+                    announcementId: this.getAnnouncementId(),
+                    ableDropStudentScore : this.isAbleDropStudentScore()
                 });
                 var container = this.dom.find('.grading-part');
                 container.empty();

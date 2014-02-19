@@ -87,6 +87,7 @@
     <Compile Include="Connectors\Model\Score.cs" />
     <Compile Include="Connectors\Model\SectionAttendance.cs" />
     <Compile Include="Connectors\Model\StiAttachment.cs" />
+    <Compile Include="Connectors\ReportConnector.cs" />
     <Compile Include="Connectors\SchoolConnector.cs" />
     <Compile Include="Connectors\SectionStandardConnector.cs" />
     <Compile Include="Model\AbsenceLevelReason.cs">

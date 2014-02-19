@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using Chalkable.StiConnector.Connectors;
 using NUnit.Framework;
 
@@ -24,6 +25,25 @@ namespace Chalkable.Tests.Sis
             }
 
             //Debug.WriteLine(s);
+        }
+
+        [Test]
+        public void ReportTest()
+        {
+            var cl = ConnectorLocator.Create("administrator", "qwertyui1234", "http://sandbox.sti-k12.com/chalkable/");
+
+
+            var obj = new ReportConnector.ProgressReportParams
+            {
+                AcadSessionId = 18,
+                GradingPeriodId = 31,
+                IdToPrint = 1,
+                SectionId = 576,
+                StudentIds = new[] { 126 }
+            };
+
+            var r = cl.ReportConnector.ProgressReport(obj);
+            Assert.NotNull(r);
         }
     }
 }

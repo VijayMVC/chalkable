@@ -46,7 +46,7 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                         .alerts-pop-up-content
                             div(
                                 data-type=alertsEnum.DROP.valueOf(),
-                                class=isDrop ? 'disabled' : ''
+                                class=isDrop || !self.isAbleDropStudentScore() ? 'disabled' : ''
                             ).alerts-pop-up-item=Msg.Drop
                             div(
                                 data-type=alertsEnum.FILL.valueOf(),

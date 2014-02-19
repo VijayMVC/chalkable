@@ -64,6 +64,7 @@ namespace Chalkable.Web.Models
     public class ShortStudentAnnouncementViewData
     {
         public string GradeValue { get; set; }
+        public int? NumericGradeValue { get; set; }
         public bool Dropped { get; set; }
         public bool IsExempt { get; set; }
         public bool IsIncomplete { get; set; }
@@ -88,6 +89,7 @@ namespace Chalkable.Web.Models
             ExtraCredits = studentAnnouncement.ExtraCredit;
             Id = studentAnnouncement.Id;
             State = (int) studentAnnouncement.State;
+            NumericGradeValue = studentAnnouncement.GradeValue;
             if (string.IsNullOrEmpty(GradeValue))
                 GradeValue = studentAnnouncement.GradeValue.ToString();
         }

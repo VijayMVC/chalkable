@@ -69,7 +69,7 @@ $(document).ready(function () {
         var form = jQuery(this);
         if (!form.validationEngine('validate')) { return; }
         var options = {
-            url: WEB_SITE_ROOT + 'User/LogOn.json',
+            url: WEB_SITE_ROOT + 'Developer/SignUp.json',
             type: "post",
             dataType: "json",
             data: form.serialize(),
