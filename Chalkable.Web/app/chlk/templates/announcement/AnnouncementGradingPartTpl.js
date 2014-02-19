@@ -21,6 +21,8 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             chlk.models.people.User, 'owner',
 
+            Boolean, 'ableDropStudentScore',
+
             ArrayOf(chlk.models.announcement.StudentAnnouncement), function getSortedStudentAnnouncements(){
                 var studentAnnouncement = this.getItems().slice(), res=[];
                 studentAnnouncement.forEach(function(item){
