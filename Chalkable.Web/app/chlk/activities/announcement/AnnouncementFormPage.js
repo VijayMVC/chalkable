@@ -112,7 +112,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(!target.parent('.title-block').exists() || target.hasClass('save-title-btn')){
                         var titleBlock = dom.find('.title-block');
                         titleBlock.removeClass('active');
-                        if(titleBlock.hasClass('exists')){
+                        var text = titleBlock.find('#title').text();
+                        if(titleBlock.hasClass('exists') || text == '' || text == null || text == undefined){
                             titleBlock.removeClass('exists');
                             titleBlock.find('#title').setValue(titleBlock.find('.title-text').getHTML());
                         }

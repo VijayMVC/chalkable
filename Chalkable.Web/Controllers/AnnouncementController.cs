@@ -86,7 +86,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult Exists(string title)
         {
-            return Json(SchoolLocator.AnnouncementService.Exists(title));
+            return Json(SchoolLocator.AnnouncementService.Exists(title) && !string.IsNullOrEmpty(title));
         }
 
 
