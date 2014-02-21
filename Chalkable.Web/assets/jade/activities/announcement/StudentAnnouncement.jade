@@ -1,9 +1,8 @@
 normalValue = self.getNormalValue()
 itemCls = (self.isDropped() ? 'dropped' :'')
 selectedCls = (!self.isReadonly() ? 'not-selected' : '')
-.grade-triangle
 div(class=self.getAlertClass(), data-tooltip=self.getTooltipText()).alert-flag
-div(class=selectedCls + ' ' + itemCls).i-b=normalValue
+div(class=selectedCls + ' ' + itemCls).i-b.text-value=normalValue
 div(class="selected " + itemCls, rowIndex=i, recId=self.getId()).i-b
     if !self.isReadonly()
         .input-container
@@ -14,5 +13,5 @@ div(class="selected " + itemCls, rowIndex=i, recId=self.getId()).i-b
                 name="gradevalue",
                 data-value=normalValue,
                 class=self.isGradeDisabled() ? "disabled-grade" : "with-grid-focus" + ((!normalValue && normalValue != 0) ? " empty-grade" : "")
-            ).no-padding.grade-input
+            ).no-padding.grade-input.grade-autocomplete
             .letters 0 - #{self.getMaxScore()}

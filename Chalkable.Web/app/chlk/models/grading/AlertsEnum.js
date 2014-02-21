@@ -7,7 +7,6 @@ NAMESPACE('chlk.models.grading', function () {
             LATE: 2,
             INCOMPLETE: 3,
             EXEMPT: 4,
-            ABSENT: 5,
-            FILL: 6
+            ABSENT: 5
         });
 });

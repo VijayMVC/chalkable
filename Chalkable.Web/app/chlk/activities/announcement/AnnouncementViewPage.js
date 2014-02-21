@@ -79,12 +79,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 else{
                     item.removeClass('disabled');
                     node.removeClass('empty-grade');
-                    /*if(parseInt(value, 10) != value && value != Msg.Dropped && value != Msg.Exempt){
-                        node.addClass('error');
-                    }
-                    else{
-                        node.removeClass('error');
-                    }*/
                 }
 
             },
@@ -156,6 +150,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number]],
             function deSelectStudent(node, event, row, index){
                 node.find('.attachments-container:eq(' + index + ')').slideUp(250);
+                this.hideDropDown();
                 row.find('.grade-triangle').removeClass('down');
                 this.setGrade(row.find('.grade-input'));
             },
@@ -170,16 +165,11 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
-            [[ria.dom.Dom]],
-            function dropItem(node){
-                var row = node.parent('.row');
-                row.find('[name=dropped]').setValue(true);
-                this.updateItem(node, true);
-            },
-
             [[ria.dom.Dom, String]],
             function setItemState_(node, stateName){
                 var row = node.parent('.row');
+                var input = row.find('.grade-input');
+                input.setValue(input.getData('value'));
                 row.find('[name=' + stateName +']').setValue(true);
                 this.updateItem(node, true);
             },
@@ -267,7 +257,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var row = node.parent('.row');
                 var container = row.find('.top-content');
                 container.addClass('loading');
-                //this.setCurrentContainer(container.addClass('loading'));
                 var form = row.find('form');
                 form.trigger('submit');
                 if(selectNext_){
@@ -328,12 +317,18 @@ NAMESPACE('chlk.activities.announcement', function () {
             VOID, function doUpdateItem(allTpl, allModel, msg_) {
                 var tpl = new chlk.templates.announcement.StudentAnnouncementsTpl;
                 var model = allModel.getStudentAnnouncements();
-                var gradedStudentCount = 0;
+                var gradedStudentCount = 0, sum = 0, numericGrade;
                 model.getItems().forEach(function(item){
-                    if(!item.isGradeDisabled() && item.getGradeValue())
+                    numericGrade = item.getNumericGradeValue();
+                    if(numericGrade || item.getGradeValue()){
                         gradedStudentCount++;
+                        sum += (numericGrade || 0);
+                    }
                 });
                 model.setGradedStudentCount(gradedStudentCount);
+                if(gradedStudentCount)
+                    model.setClassAvg(Math.floor(sum / gradedStudentCount + 0.5));
+
                 tpl.assign(model);
                 tpl.options({
                     announcementId: this.getAnnouncementId()
@@ -349,14 +344,137 @@ NAMESPACE('chlk.activities.announcement', function () {
                 container.empty();
                 this.dom.find('#top-content-' + itemModel.getId().valueOf()).removeClass('loading');
                 itemTpl.renderTo(container);
-                var grades = this.dom.find('.grade-input[value]').valueOf()
-                    .map(function(_){return parseInt((new ria.dom.Dom(_)).getValue());});
-                var gradedCount = grades.length;
-                this.dom.find('#graded-count').setHTML(gradedCount.toString());
-                var classAvg = 0;
-                for(var i = 0; i < gradedCount; i++)
-                    classAvg += grades[i];
-                this.dom.find('#class-avg').setHTML(Math.round(classAvg / gradedCount).toString());
+            },
+
+            //TODO copied from GridPage
+
+            ArrayOf(String), 'allScores',
+
+            [[String]],
+            ArrayOf(String), function getSuggestedValues(text){
+                var text = text.toLowerCase();
+                var res = [];
+                this.getAllScores().forEach(function(score){
+                    if(score.toLowerCase().indexOf(text) == 0)
+                        res.push(score);
+                });
+                return res;
+            },
+
+            VOID, function updateDropDown(suggestions, node, all_){
+                var list = this.dom.find('.autocomplete-list');
+                if(suggestions.length || node.hasClass('error')){
+                    var html = '<div class="autocomplete-item">' + suggestions.join('</div><div class="autocomplete-item">') + '</div>';
+                    if(!all_){
+                        html += '<div class="autocomplete-item see-all">See all »</div>';
+                        var top = node.offset().top - list.parent().offset().top + node.height() + 43;
+                        var left = node.offset().left - list.parent().offset().left + 61;
+                        list.setCss('top', top)
+                            .setCss('left', left);
+                    }
+                    list.setHTML(html)
+                        .show();
+                }else{
+                    this.hideDropDown();
+                }
+            },
+
+            VOID, function hideDropDown(){
+                var list = this.dom.find('.autocomplete-list');
+                list.setHTML('')
+                    .hide();
+            },
+
+            [ria.mvc.DomEventBind('keyup', '.grade-autocomplete')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function gradeKeyUp(node, event){
+                var suggestions = [], cell = node.parent('.active-cell');
+                var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
+                var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
+                var list = this.dom.find('.autocomplete-list:visible');
+                if(isDown || isUp){
+                    if(list.exists()){
+                        var hovered = list.find('.hovered');
+                        if(hovered.exists()){
+                            if(isDown && hovered.next().exists()){
+                                hovered.removeClass('hovered');
+                                hovered.next().addClass('hovered');
+                            }
+                            if(isUp && hovered.previous().exists()){
+                                hovered.removeClass('hovered');
+                                hovered.previous().addClass('hovered');
+                            }
+                        }else{
+                            if(isDown){
+                                list.find('.autocomplete-item:eq(0)').addClass('hovered');
+                            }
+                        }
+                    }
+                }else{
+                    if(event.keyCode == ria.dom.Keys.ENTER.valueOf() && !node.hasClass('error')){
+                        if(list.exists() && list.find('.see-all').hasClass('hovered')){
+                            list.find('.see-all').trigger('click');
+                            return false;
+                        }
+                        else
+                            this.setValue(cell);
+                    }else{
+                        var text = node.getValue() ? node.getValue().trim() : '';
+                        var parsed = parseInt(text,10);
+                        if(parsed){
+                            node.removeClass('error');
+                            if(parsed != text){
+                                node.addClass('error');
+                            }else{
+                                this.hideDropDown();
+                            }
+                        }else{
+                            suggestions = text  ? this.getSuggestedValues(text) : [];
+                            if(!suggestions.length)
+                                node.addClass('error');
+                            else
+                                node.removeClass('error');
+                            this.updateDropDown(suggestions, node);
+                        }
+                    }
+                    this.updateDropDown(suggestions, node);
+                }
+            },
+
+            [ria.mvc.DomEventBind('click', '.see-all')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            Boolean, function seeAllClick(node, event){
+                this.updateDropDown(this.getAllScores(), this.dom.find('.active-cell'), true);
+                return false;
+            },
+
+            [ria.mvc.DomEventBind('mouseover', '.autocomplete-item')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function itemHover(node, event){
+                if(!node.hasClass('hovered'))
+                    node.parent().find('.hovered').removeClass('hovered');
+                node.addClass('hovered');
+            },
+
+            [ria.mvc.DomEventBind('click', '.autocomplete-item:not(.see-all)')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function listItemBtnClick(node, event){
+                var text = node.getHTML().trim();
+                var value = text, isFill = false;
+                var input = this.dom.find('.row.selected').find('.grade-input');
+                if(text.toLowerCase().indexOf('fill')){
+                    isFill = true;
+                    value = text.split('(fill all)')[0].trim();
+                }
+                switch(value.toLowerCase()){
+                    case Msg.Dropped.toLowerCase(): this.setItemState_(input, 'dropped'); break;
+                    case Msg.Incomplete.toLowerCase(): this.setItemState_(input, 'isincomplete'); break;
+                    case Msg.Late.toLowerCase(): this.setItemState_(input, 'islate'); break;
+                    case Msg.Absent.toLowerCase(): this.setItemState_(input, 'isabsent'); break;
+                    case Msg.Exempt.toLowerCase(): this.setItemState_(input, 'isexempt'); break;
+                    default: input.setValue(value);this.updateItem(input, true);
+                }
+                this.hideDropDown();
             }
         ]
     );

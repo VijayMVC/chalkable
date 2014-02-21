@@ -21,6 +21,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'gradeValue',
 
             [ria.templates.ModelPropertyBind],
+            Number, 'numericGradeValue',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.id.StudentAnnouncementId, 'id',
 
             [ria.templates.ModelPropertyBind],

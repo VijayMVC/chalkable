@@ -530,14 +530,17 @@ $red-color: #842727;
 
         .grade-block{
           height: 25px;
-          font-family: 'Reenie Beanie';
-          color: $red-color;
-          font-size: 40px;
           overflow: visible;
           position: relative;
           width: 175px;
           padding-right: 45px;
           margin-top: 13px;
+
+          .text-value{
+            font-family: 'Reenie Beanie';
+            color: $red-color;
+            font-size: 40px;
+          }
 
           .grade-triangle{
             position: absolute;
@@ -569,9 +572,6 @@ $red-color: #842727;
 
             .input-container{
               margin-left: 6px;
-            }
-
-            .input-container, .select-container{
               position: relative;
               display: inline-block;
               width: 80px;
@@ -579,34 +579,7 @@ $red-color: #842727;
               vertical-align: top;
             }
 
-            .select-container2{
-
-            }
-
-            SELECT.grade-select{
-              display: none;
-            }
-
-            A.chzn-single{
-              DIV{
-                B{
-                  background: url(images/grading/select-arrow.png) 5px 13px no-repeat;
-                }
-              }
-            }
-
-            DIV.chzn-container{
-              width: 65px!important;
-
-              .chzn-results LI {
-                font-family: Arial;
-                color: gray;
-                text-align: left;
-                padding-left: 15px;
-              }
-            }
-
-            INPUT, A.chzn-single{
+            INPUT{
               height: 31px;
               line-height: 31px;
               border: 1px solid #BCBCBC;
@@ -618,10 +591,6 @@ $red-color: #842727;
               &.error{
                 border: 1px solid red;
               }
-            }
-
-            A.chzn-single{
-              width: 61px;
             }
 
             INPUT{

@@ -175,6 +175,7 @@ NAMESPACE('chlk.controllers', function (){
                     announcement.getStudentAnnouncements().getItems().forEach(function(item){
                         if(item.getId() == model.getId()){
                             item.setGradeValue(model.getGradeValue());
+                            item.setNumericGradeValue(model.getNumericGradeValue());
                             item.setAbsent(model.isAbsent());
                             item.setExempt(model.isExempt());
                             item.setIncomplete(model.isIncomplete());
@@ -382,6 +383,10 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(announcement){
                     this.prepareAttachments(announcement);
+                    var alphaGrades = this.getContext().getSession().get('alphaGrades', []);
+                    var alternateScores = this.getContext().getSession().get('alternateScores', []);
+                    announcement.setAlphaGrades(alphaGrades);
+                    announcement.setAlternateScores(alternateScores);
                     var apps = announcement.getApplications() || [];
                     var gradeViewApps = apps.filter(function(app){
                         return app.getAppAccess().isVisibleInGradingView();

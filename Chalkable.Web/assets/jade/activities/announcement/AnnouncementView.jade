@@ -20,11 +20,8 @@ mixin AnnouncementTooltip()
     gradeViewApps = self.getGradeViewApps()
     if studentAnnouncementsInfo
         studentAnnouncements = studentAnnouncementsInfo.getItems()
-        //gradingStyle = studentAnnouncementsInfo.getGradingStyle()
-        //gradingMapping = studentAnnouncementsInfo.getMapping()
-        //getGrade = function(value){return GradingStyler.getLetterByGrade(value, gradingMapping, gradingStyle)}
-        //getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, gradingMapping, gradingStyle)}
     +FeedItem(self).animated-item
+    .autocomplete-list.announcement-view
     .panel-bg
         .action-bar.buttons
             .container

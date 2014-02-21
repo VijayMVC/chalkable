@@ -41,29 +41,6 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                     +Hidden('isexempt', item.isExempt())
                     +ActionLink('students', 'info', student.getId())(data-tooltip=student.getFullName()).left.image-container.white.shadow
                         +PersonImg(student, 47)
-                    .chlk-pop-up-container.popup-bottom.alerts-pop-up
-                        .pop-up-triangle.big
-                        .alerts-pop-up-content
-                            div(
-                                data-type=alertsEnum.DROP.valueOf(),
-                                class=isDrop || !self.isAbleDropStudentScore() ? 'disabled' : ''
-                            ).alerts-pop-up-item=Msg.Drop
-                            div(
-                                data-type=alertsEnum.FILL.valueOf(),
-                                class=(!normalValue && normalValue != 0 || item.isGradeDisabled()) ? 'disabled' : ''
-                            ).alerts-pop-up-item.fill-item=Msg.Fill
-                            div(
-                                data-type=alertsEnum.LATE.valueOf(),
-                                class=item.isLate() ? 'disabled' : ''
-                            ).alerts-pop-up-item=Msg.Late
-                            div(
-                                data-type=alertsEnum.INCOMPLETE.valueOf(),
-                                class=item.isIncomplete() ? 'disabled' : ''
-                            ).alerts-pop-up-item=Msg.Incomplete
-                            div(
-                                data-type=alertsEnum.EXEMPT.valueOf(),
-                                class=item.isExempt() ? 'disabled' : ''
-                            ).alerts-pop-up-item=Msg.Exempt
                     .i-b.name-block
                         p= student.getFullName()
                         if !self.isReadonly()

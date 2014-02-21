@@ -17,6 +17,14 @@ BODY {
               z-index: 9999;
               border: 1px solid #d1d1d1;
 
+              &.announcement-view{
+                margin-top: -10px;
+
+                .autocomplete-item{
+                  width: 61px;
+                }
+              }
+
               .autocomplete-item{
                 line-height: 28px;
                 font-size: 13px;
