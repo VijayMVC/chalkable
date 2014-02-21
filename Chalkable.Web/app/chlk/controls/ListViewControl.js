@@ -98,15 +98,16 @@ NAMESPACE('chlk.controls', function () {
 //                                //todo : add go top button
 //                          }
                         }
+                        var isLastLoad = (configs.currentStart + configs.pageSize) > configs.totalCount;
                         this.initScrollAction_();
-                        if(configs.showLoadAllInPage < (configs.currentStart / configs.pageSize)){
+                        if(configs.showLoadAllInPage < (configs.currentStart / configs.pageSize) && !isLastLoad){
                             this.showLoadAllPopUp_(this.getGrid());
                         }
                         if(this._loadAllButtonClicked){
                             this.scrollToBottom_();
                             this._loadAllButtonClicked = false;
                         }
-                        if((configs.currentStart + configs.pageSize) > configs.totalCount){
+                        if(isLastLoad){
                             this.hideLoadAllPopUp_(this.getGrid());
                         }
                     }.bind(this));

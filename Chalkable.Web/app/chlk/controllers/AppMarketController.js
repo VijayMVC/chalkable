@@ -298,7 +298,7 @@ NAMESPACE('chlk.controllers', function (){
         function installAction(appInstallData) {
             var totalAppPrice = this.appMarketService.getSelectedAppTotalPrice().getTotalPrice() || 0;
 
-            return this.appMarketService
+            this.appMarketService
                 .getPersonBalance(this.getCurrentPerson().getId())
                 .attach(this.validateResponse_())
                 .then(function(personBalance){
@@ -327,12 +327,13 @@ NAMESPACE('chlk.controllers', function (){
                                }], 'center');
                         }, this);
                 }, this);
+
         },
 
         [chlk.controllers.SidebarButton('apps')],
         [[String]],
         function uninstallAction(ids) {
-            return this.appMarketService
+            this.appMarketService
                 .uninstallApps(ids)
                 .attach(this.validateResponse_())
                 .then(function(result){

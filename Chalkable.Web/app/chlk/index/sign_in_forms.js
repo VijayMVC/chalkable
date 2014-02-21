@@ -1,9 +1,10 @@
 $(document).ready(function () {
 
-    var options = { distance: 13, times: 3 };
+    var options = { distance: 10, times: 3 };
     function unSuccessLogIn() {
         var fieldPassword = $('#login-form').find('input[type=password]');
-        if (!fieldPassword.hasClass('shaking')){
+        var password = fieldPassword.text();
+        if (!fieldPassword.hasClass('shaking') && password != ''){
             fieldPassword.addClass('shaking');
             fieldPassword.effect('shake', options, 250, function () {
                 fieldPassword.focus();

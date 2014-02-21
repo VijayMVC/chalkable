@@ -105,6 +105,15 @@ DIV.page {
               }
 
               .sort{
+                .chzn-container{
+                  .chzn-single{
+                    span{
+                      margin: 0px;
+                      text-align: center;
+                      width: 95%;
+                    }
+                  }
+                }
                 span{
                   color: #8f8f8f;
                   font-size: 14px;
