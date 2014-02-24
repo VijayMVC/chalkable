@@ -64,7 +64,9 @@ namespace Chalkable.StiConnector.Connectors
                 if (ex.Response is HttpWebResponse &&
                     (ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
                     return default(T);
-                ThrowWebException(ex);
+                var reader = new StreamReader(ex.Response.GetResponseStream());
+                var msg = reader.ReadToEnd();
+                throw new Exception(msg);
             }
             finally
             {
@@ -97,7 +99,9 @@ namespace Chalkable.StiConnector.Connectors
             }
             catch (WebException ex)
             {
-                ThrowWebException(ex);
+                var reader = new StreamReader(ex.Response.GetResponseStream());
+                var msg = reader.ReadToEnd();
+                throw new Exception(msg);
             }
             finally
             {
