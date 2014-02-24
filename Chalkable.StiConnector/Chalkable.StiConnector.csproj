@@ -80,13 +80,17 @@
     <Compile Include="Connectors\AttachmentConnector.cs" />
     <Compile Include="Connectors\ConnectorBase.cs" />
     <Compile Include="Connectors\ConnectorLocator.cs" />
+    <Compile Include="Connectors\GradebookConnector.cs" />
     <Compile Include="Connectors\Model\Activity.cs" />
     <Compile Include="Connectors\Model\ActivityAttachment.cs" />
     <Compile Include="Connectors\Model\ActivityStandard.cs" />
+    <Compile Include="Connectors\Model\ClassroomOption.cs" />
+    <Compile Include="Connectors\Model\Gradebook.cs" />
     <Compile Include="Connectors\Model\School.cs" />
     <Compile Include="Connectors\Model\Score.cs" />
     <Compile Include="Connectors\Model\SectionAttendance.cs" />
     <Compile Include="Connectors\Model\StiAttachment.cs" />
+    <Compile Include="Connectors\Model\StudentAverages.cs" />
     <Compile Include="Connectors\ReportConnector.cs" />
     <Compile Include="Connectors\SchoolConnector.cs" />
     <Compile Include="Connectors\SectionStandardConnector.cs" />

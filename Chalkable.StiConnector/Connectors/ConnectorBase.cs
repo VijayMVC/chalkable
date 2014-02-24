@@ -64,9 +64,7 @@ namespace Chalkable.StiConnector.Connectors
                 if (ex.Response is HttpWebResponse &&
                     (ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
                     return default(T);
-                var reader = new StreamReader(ex.Response.GetResponseStream());
-                var msg = reader.ReadToEnd();
-                throw new Exception(msg);
+                ThrowWebException(ex);
             }
             finally
             {
@@ -75,7 +73,7 @@ namespace Chalkable.StiConnector.Connectors
             }
         }
 
-        public T Post<T>(string url, T obj, HttpMethod httpMethod = null) 
+        public T Post<T>(string url, T obj, NameValueCollection optionalParams = null, HttpMethod httpMethod = null) 
         {
             httpMethod = httpMethod ?? HttpMethod.Post;
             var client = InitWebClient();           
@@ -84,6 +82,7 @@ namespace Chalkable.StiConnector.Connectors
             MemoryStream stream2 = null;
             try
             {
+                client.QueryString = optionalParams ?? new NameValueCollection();
                 var serializer = new JsonSerializer();
                 var writer = new StreamWriter(stream);
                 serializer.Serialize(writer, obj);
@@ -98,9 +97,7 @@ namespace Chalkable.StiConnector.Connectors
             }
             catch (WebException ex)
             {
-                var reader = new StreamReader(ex.Response.GetResponseStream());
-                var msg = reader.ReadToEnd();
-                throw new Exception(msg);
+                ThrowWebException(ex);
             }
             finally
             {
@@ -120,11 +117,11 @@ namespace Chalkable.StiConnector.Connectors
 
         public void Delete(string url) 
         {
-            Post<Object>(url, null, HttpMethod.Delete);
+            Post<Object>(url, null, null, HttpMethod.Delete);
         }
         public T Put<T>(string url, T obj)
         {
-            return Post(url, obj, HttpMethod.Put);
+            return Post(url, obj, null, HttpMethod.Put);
         }
 
         private static void ThrowWebException(WebException exception)
