@@ -27,7 +27,7 @@ namespace Chalkable.StiConnector.Connectors
 
         public Score UpdateScore(int activityId, int studentId, Score score)
         {
-            return Post(string.Format(urlFormat + "/{1}", activityId, studentId), score, HttpMethod.Put);
+            return Post(string.Format(urlFormat + "/{1}", activityId, studentId), score, null, HttpMethod.Put);
         }
     }
 }
