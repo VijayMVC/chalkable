@@ -589,3 +589,18 @@ CREATE TABLE [dbo].[AlternateScore](
 )
 GO
 
+create table GradingPeriod
+(
+	Id int not null primary key,
+	Code nvarchar(5) not null,
+	Name nvarchar(20) not null,
+	[Description] nvarchar(255) null,
+	MarkingPeriodRef int not null constraint FK_GradingPeriod_MarkingPeriod foreign key references MarkingPeriod(Id),
+	SchoolYearRef int not null constraint FK_GradingPeriod_SchoolYear foreign key references SchoolYear(Id),
+	StartDate datetime2 not null,
+	EndDate datetime2 not null,
+	EndTime datetime2 not null,
+	SchoolAnnouncement nvarchar(255) null, 
+	AllowGradePosting bit not null
+)
+go

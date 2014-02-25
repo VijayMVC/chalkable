@@ -13,7 +13,7 @@ namespace Chalkable.StiConnector.Connectors
         private string url_format;
         public GradebookConnector(ConnectorLocator locator) : base(locator)
         {
-            url_format = BaseUrl + "chlkable/sections/{0}/gradebook";
+            url_format = BaseUrl + "chalkable/sections/{0}/gradebook";
         }
 
         public Gradebook Calculate(int sectionId, int? gradingPeriodId = null)
