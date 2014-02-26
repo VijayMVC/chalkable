@@ -25,5 +25,9 @@ namespace Chalkable.Data.School.Model
         public int SchoolRef { get; set; }
     }
 
+    public class MarkingPeriodDetails : MarkingPeriod
+    {
+        public IList<GradingPeriod> GradingPeriods { get; set; }
+    }
 
 }

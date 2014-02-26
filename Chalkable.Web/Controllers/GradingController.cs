@@ -28,7 +28,9 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY_GRID, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ClassSummaryGrid(int classId)
         {
-            return FakeJson("~/fakeData/teacherGradingGrid.json");
+            var gradeBooks = SchoolLocator.GradingStatisticService.GetGradeBooks(classId);
+            return Json(GradingGridViewData.Create(gradeBooks));
+            //return FakeJson("~/fakeData/teacherGradingGrid.json");
         }
 
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]

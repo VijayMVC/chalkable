@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using Chalkable.BusinessLogic.Mapping.ModelMappers;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -17,8 +20,9 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<DepartmentGradeAvg> GetDepartmentGradeAvgPerMp(int markingPeriodId, IList<int> gradeLevelIds);
         IList<ClassPersonGradingStats> GetFullGradingStats(int markingPeriodId, int studentId);
         IList<StudentGradingRank> GetStudentGradingRanks(int schoolYearId, int? studentId, int? gradeLevelId, int? classId);
+        IList<ChalkableGradeBook> GetGradeBooks(int classId);
     }
-    public class GradingStatisticService : SchoolServiceBase, IGradingStatisticService
+    public class GradingStatisticService : SisConnectedService, IGradingStatisticService
     {
         public GradingStatisticService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
@@ -168,6 +172,59 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<StudentGradingRank> GetStudentGradingRanks(int schoolYearId, int? studentId, int? gradeLevelId, int? classId)
         {
             throw new NotImplementedException();
+        }
+
+
+        public IList<ChalkableGradeBook> GetGradeBooks(int classId)
+        {
+            var stiGradeBook = ConnectorLocator.GradebookConnector.Get_BySectionAndGradingPeriod(classId);
+            var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
+                            {
+                                ClassId = classId,
+                                RoleId = CoreRoles.STUDENT_ROLE.Id
+                            });
+            var schoolYear = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+            var gradingPeriods = ServiceLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYear.Id);
+            var mpIds = gradingPeriods.GroupBy(x => x.MarkingPeriodRef).Select(x => x.Key).ToList();
+            var res = new List<ChalkableGradeBook>();
+            foreach (var mpId in mpIds)
+            {
+                var currentGradingPeriods = gradingPeriods.Where(x => x.MarkingPeriodRef == mpId).ToList();
+                var markingPeriod = currentGradingPeriods.First().MarkingPeriod;
+                var gradeBook = new ChalkableGradeBook
+                    {
+                        MarkingPeriod = markingPeriod,
+                        Students = students
+                    };
+                var activities = stiGradeBook.Activities.Where(x => x.Date >= markingPeriod.StartDate
+                                                                && x.Date <= markingPeriod.EndDate).ToList();
+                var stAvgs = stiGradeBook.StudentAverages.Where(x => x.IsGradingPeriodAverage 
+                    && currentGradingPeriods.Any(y=>y.Id == x.GradingPeriodId)).ToList();
+                stAvgs = stAvgs.Where(x => x.Score.HasValue).ToList();
+                if (stAvgs.Count > 0)
+                {
+                    var avg = stAvgs.Average(x => x.Score != null ? x.Score.Value : 0);
+                    gradeBook.Avg = (int)avg;   
+                }
+                var anns = new List<AnnouncementDetails>();
+                foreach (var activity in activities)
+                {
+                    var ann = new AnnouncementDetails();
+                    MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(ann, activity);
+                    var scores = stiGradeBook.Scores.Where(x => x.ActivityId == activity.Id).ToList();
+                    ann.StudentAnnouncements = new List<StudentAnnouncementDetails>();
+                    foreach (var score in scores)
+                    {
+                        var stAn = new StudentAnnouncementDetails();
+                        MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAn, score);
+                        ann.StudentAnnouncements.Add(stAn);
+                    }
+                    anns.Add(ann);
+                }
+                gradeBook.Announcements = anns;
+                res.Add(gradeBook);
+            }
+            return res;
         }
     }
 }

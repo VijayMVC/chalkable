@@ -87,6 +87,7 @@
     <Compile Include="Model\BlobContainerInfo.cs" />
     <Compile Include="Model\BlobInfo.cs" />
     <Compile Include="Model\ChalkableAnnouncementType.cs" />
+    <Compile Include="Model\ChalkableGradeBook.cs" />
     <Compile Include="Model\ClassAttendance.cs" />
     <Compile Include="Model\EmailInfo.cs" />
     <Compile Include="Model\RecipientInfo.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="Services\School\ClassService.cs" />
     <Compile Include="Services\School\DisciplineTypeService.cs" />
     <Compile Include="Services\School\GradeLevelService.cs" />
+    <Compile Include="Services\School\GradingPeriodService.cs" />
     <Compile Include="Services\School\GradingStatisticService.cs" />
     <Compile Include="Services\School\GradingStyleService.cs" />
     <Compile Include="Services\School\MarkingPeriodService.cs" />

@@ -73,6 +73,7 @@ namespace Chalkable.Data.School.DataAccess
             return SelectMany<MarkingPeriod>(conds);
         } 
 
+        
         public MarkingPeriod GetMarkingPeriod(DateTime date)
         {
             var conds = new AndQueryCondition
