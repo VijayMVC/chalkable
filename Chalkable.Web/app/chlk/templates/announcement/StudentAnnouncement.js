@@ -75,35 +75,6 @@ NAMESPACE('chlk.templates.announcement', function () {
                 return value;
             },
 
-            String, function getTooltipText(){
-                var res = [];
-                if(this.isLate())
-                    res.push(Msg.Late);
-                if(this.isIncomplete())
-                    res.push(Msg.Incomplete);
-                if(this.isAbsent())
-                    res.push(Msg.Student_marked_absent);
-                if(!res.length)
-                    return '';
-                return res.join('<hr>');
-            },
-
-            String, function getAlertClass(){
-                if(this.isLate()){
-                    if(!this.isIncomplete())
-                        return Msg.Late.toLowerCase();
-                    if(this.isIncomplete())
-                        return Msg.Multiple.toLowerCase();
-                }
-                else
-                    if(this.isIncomplete())
-                        return Msg.Incomplete.toLowerCase();
-                    else
-                        if(this.isAbsent())
-                            return Msg.Absent.toLowerCase();
-                return '';
-            },
-
             Boolean, function isEmptyGrade(){
                 return !(this.getGradeValue() || this.isLate() || this.isAbsent() || this.isDropped() || this.isExempt() || this.isIncomplete());
             },

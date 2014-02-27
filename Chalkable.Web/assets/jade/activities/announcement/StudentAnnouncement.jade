@@ -1,7 +1,8 @@
 normalValue = self.getNormalValue()
 itemCls = (self.isDropped() ? 'dropped' :'')
 selectedCls = (!self.isReadonly() ? 'not-selected' : '')
-div(class=self.getAlertClass(), data-tooltip=self.getTooltipText()).alert-flag
+maxScore = self.getMaxScore()
+div(class=self.getModel().getAlertClass(maxScore, true), data-tooltip=self.getModel().getTooltipText(maxScore, true)).alert-flag
 div(class=selectedCls + ' ' + itemCls).i-b.text-value=normalValue
 div(class="selected " + itemCls, rowIndex=i, recId=self.getId()).i-b
     if !self.isReadonly()
@@ -13,5 +14,6 @@ div(class="selected " + itemCls, rowIndex=i, recId=self.getId()).i-b
                 name="gradevalue",
                 data-value=normalValue,
                 class=self.getGradeInputClass()
+                data-id=self.getId().valueOf()
             ).no-padding.grade-input.grade-autocomplete
             .letters 0 - #{self.getMaxScore()}
