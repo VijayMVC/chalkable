@@ -463,7 +463,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var text = node.getHTML().trim();
                 var value = text, isFill = false;
                 var input = this.dom.find('.row.selected').find('.grade-input');
-                if(text.toLowerCase().indexOf('fill')){
+                if(text.toLowerCase().indexOf('fill') > -1){
                     isFill = true;
                     value = text.split('(fill all)')[0].trim();
                 }

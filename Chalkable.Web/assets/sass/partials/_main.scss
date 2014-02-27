@@ -62,7 +62,7 @@
 @import "partials/main/notification/_list-new";
 @import "partials/main/notification/_notifications_by_days";
 
-INPUT, TEXTAREA, .text-field{
+INPUT:not([type="checkbox"]), TEXTAREA, .text-field{
   @include border-radius(5px);
   background: #fff;
   border: 1px solid #c5c5c5;
