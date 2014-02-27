@@ -25,7 +25,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             chlk.models.people.User, 'owner',
             chlk.models.id.AnnouncementId, 'announcementId',
             Number, 'maxScore',
-
+            ArrayOf(chlk.models.announcement.StudentAnnouncement), 'studentAnnouncements',
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementGradingPartTpl)],
             VOID, function updateGradingPart(tpl, model, msg_) {
@@ -291,6 +291,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 this.setOwner(model.getOwner());
                 this.setMaxScore(model.getMaxScore());
+                this.setStudentAnnouncements(model.getStudentAnnouncements().getItems());
                 this.setApplicationsInGradeView(model.getGradeViewApps());
                 this.setApplications(model.getApplications());
                 this.setAutoGradeApps(model.getAutoGradeApps());
@@ -305,18 +306,13 @@ NAMESPACE('chlk.activities.announcement', function () {
                         moving.remove();
                     }, 501);
                 }
-                //new ria.dom.Dom().on('click', function(){console.info('aaaa');this.wholeDomClick()}.bind(this));
-            },
-
-            OVERRIDE, VOID, function onStop_() {
-                BASE();
-                //new ria.dom.Dom().off('click', this.wholeDomClick);
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, chlk.activities.lib.DontShowLoader())],
-            VOID, function doUpdateItem(allTpl, allModel, msg_) {//console.info('doUpdateItem', allModel.getStudentAnnouncements().getCurrentItem().getId().valueOf());
+            VOID, function doUpdateItem(allTpl, allModel, msg_) {
                 var tpl = new chlk.templates.announcement.StudentAnnouncementsTpl;
                 var model = allModel.getStudentAnnouncements();
+                this.setStudentAnnouncements(model.getItems());
                 var gradedStudentCount = 0, sum = 0, numericGrade;
                 model.getItems().forEach(function(item){
                     numericGrade = item.getNumericGradeValue();
@@ -340,7 +336,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 itemTpl.options({
                     maxScore: this.getMaxScore()
                 });
-                //console.info('container', this.dom.find('#grade-container-' + itemModel.getId().valueOf()).valueOf(), this.dom.find('#top-content-' + itemModel.getId().valueOf()).valueOf());
                 var container = this.dom.find('#grade-container-' + itemModel.getId().valueOf());
                 container.empty();
                 this.dom.find('#top-content-' + itemModel.getId().valueOf()).removeClass('loading');
@@ -417,8 +412,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                             list.find('.see-all').trigger('click');
                             return false;
                         }
-                        else
-                            this.setValue(cell);
+                        //else
+                            //this.setValue(cell);
                     }else{
                         var text = node.getValue() ? node.getValue().trim() : '';
                         var parsed = parseInt(text,10);
@@ -439,6 +434,26 @@ NAMESPACE('chlk.activities.announcement', function () {
                         }
                     }
                     this.updateDropDown(suggestions, node);
+                }
+                var id = node.getData('id'), value = parseInt(node.getValue(), 10);
+                if(value){
+                    var maxValue = this.getMaxScore();
+                    this.getStudentAnnouncements().forEach(function(item){
+                        if(item.getId().valueOf() == id){
+                            item.setGradeValue(node.getValue());
+
+                            var flag = node.parent('.grade-block').find('.alert-flag');
+
+                            flag.removeClass(Msg.Error.toLowerCase())
+                                .removeClass(Msg.Late.toLowerCase())
+                                .removeClass(Msg.Incomplete.toLowerCase())
+                                .removeClass(Msg.Absent.toLowerCase())
+                                .removeClass(Msg.Multiple.toLowerCase());
+
+                            flag.addClass(item.getAlertClass(maxValue));
+                            flag.setData('tooltip', item.getTooltipText(maxValue));
+                        }
+                    });
                 }
             },
 

@@ -29,6 +29,54 @@ NAMESPACE('chlk.models.announcement', function () {
                 return (value >= 0) ? value : '';
             },
 
+            [[Number, Boolean]],
+            String, function getTooltipText(maxScore, byNumeric_){
+                var res = [];
+                if(this.isLate())
+                    res.push(Msg.Late);
+                if(this.isIncomplete())
+                    res.push(Msg.Incomplete);
+                if(this.isAbsent())
+                    res.push(Msg.Student_marked_absent);
+                if(byNumeric_){
+                   if(this.getNumericGradeValue() > maxScore)
+                        res.push(Msg.Scores_exceeds);
+                }
+                else{
+                    var value = parseInt(this.getGradeValue(), 10);
+                    if(value && value > maxScore)
+                        res.push(Msg.Scores_exceeds);
+                }
+                if(!res.length)
+                    return '';
+                return res.join('<hr>');
+            },
+
+            [[Number, Boolean]],
+            String, function getAlertClass(maxScore, byNumeric_){
+                var classes = [];
+                if(byNumeric_){
+                    if(this.getNumericGradeValue() > maxScore)
+                        classes.push(Msg.Error.toLowerCase());
+                }
+                else{
+                    var value = parseInt(this.getGradeValue(), 10);
+                    if(value && value > maxScore)
+                        classes.push(Msg.Error.toLowerCase());
+                }
+                if(this.isLate())
+                    classes.push(Msg.Late.toLowerCase());
+                if(this.isIncomplete())
+                    classes.push(Msg.Incomplete.toLowerCase());
+                if(this.isAbsent())
+                    classes.push(Msg.Absent.toLowerCase());
+                if(classes.length > 1)
+                    return Msg.Multiple.toLowerCase();
+                if(classes.length == 1)
+                    return classes[0];
+                return '';
+            },
+
             Object, function isGradeDisabled(){
                 return this.isDropped() || this.isExempt();
             }

@@ -437,6 +437,7 @@ var Msg = {
     Room_number: 'Room number',
     Room_shortcut: 'RM',
     Search_api: 'Search for an api method or parameter to view its call tree...',
+    Scores_exceeds: 'Score exceeds maximum points allowed',
     School_Avg: 'School Avg.',
     School_cost: 'School cost',
     School_flat_rate: 'School flat rate',
