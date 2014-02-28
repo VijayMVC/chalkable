@@ -1,0 +1,167 @@
+@import "compass/css3/background-size";
+
+.announcement-week {
+  overflow:hidden;
+  background: url(images/common/week-calendar.gif) 0 0 no-repeat;
+  padding: 6px 0 0;
+  width: 230px;
+
+  .wrapper {
+    background: url(images/common/week-calendar.gif) 0 100% no-repeat;
+    padding: 0 7px 11px;
+    > DIV {
+      display: block;
+      position: relative;
+      > DIV{
+        > LABEL {
+          font-weight: bold;
+          float: left;
+          position: relative;
+          top: 2px;
+          left: 12px;
+
+          font: {
+            size: 18pt;
+            family: Arial;
+          }
+
+          opactity: 0.5;
+          z-index: 1;
+        }
+      }
+
+      UL {
+        position: relative;
+        padding: 5px 5px 10px 50px;
+        min-height: 22px;
+        z-index: 2;
+
+        > LI {
+          > A {
+            text-decoration: none;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 160px;
+            display: inline-block;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+    }
+  }
+
+  DIV.controls {
+    margin-top: 22px;
+    position: relative;
+    height: 30px;
+    overflow: hidden;
+    color: #666;
+
+    //@include border-bottom-radius(15px);
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    line-height: 27px;
+
+    >DIV.week{
+      cursor : pointer;
+    }
+
+    > A {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 30px;
+
+      &.left-btn {
+        left: 0;
+      }
+
+      &.right-btn {
+        right: 0;
+      }
+    }
+
+  }
+
+  $item-width: 218px;
+
+  .chlk-gradient-cnt, .chlk-gradient-cnt-today {
+    background: url(images/common/week-calendar-item-bg.gif) left center repeat-y;
+    @include background-size(1308px 100% !important);
+
+    >.day-content {
+
+      min-height: 20px;
+      text-align: left;
+      width: 100%;
+
+      H2, P {
+        margin: 5px;
+        font-size: 1.2em;
+      }
+    }
+  }
+
+  .chlk-gradient-cnt-today{
+    >.day-content{
+      >LABEL {
+        color: #ffffff !important;
+      }
+
+      >UL {
+        >LI{
+          >A{
+            color: #ffffff !important;
+          }
+        }
+      }
+    }
+  }
+
+  .chlk-gradient-cnt{
+    >.day-content{
+      >LABEL {
+        color: #666666;
+        text-shadow: 0 1px 0 #f3f1ee, 0 0 1px #b5b4b1;
+      }
+
+      >UL {
+        >LI{
+          vertical-align: middle;
+          display: inline-block;
+
+          >A{
+            color: #5c5c5c;
+            text-shadow: 0 1px 0 #f3f1ee, -1px 0 0 #b5b4b1;
+          }
+        }
+      }
+    }
+  }
+
+  .chlk-gradient-cnt-today {
+    background: url(images/common/week-calendar-item-bg.gif) -3 * $item-width center repeat-y;
+
+    .chlk-gradient-cnt-top{
+      background: url(images/common/week-calendar-item-bg.gif) -5 * $item-width top no-repeat;
+    }
+
+    .chlk-gradient-cnt-bottom{
+      background: url(images/common/week-calendar-item-bg.gif) -4 * $item-width bottom no-repeat;
+    }
+  }
+
+  .chlk-gradient-cnt-top{
+    height:7px;
+    background: url(images/common/week-calendar-item-bg.gif) -2 * $item-width top no-repeat;
+  }
+
+  .chlk-gradient-cnt-bottom{
+    height:5px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    background: url(images/common/week-calendar-item-bg.gif) -1 * $item-width bottom no-repeat;
+  }
+}
