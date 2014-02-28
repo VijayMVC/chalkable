@@ -93,18 +93,22 @@ namespace Chalkable.BusinessLogic.Services.School
                 var attendances = new List<ClassAttendanceDetails>();
                 foreach (var ssa in sa.StudentAttendance)
                 {
-                    attendances.Add(new ClassAttendanceDetails
+                    var student = persons.FirstOrDefault(x => x.Id == ssa.StudentId);
+                    if (student != null)
                     {
-                        ClassRef = ssa.SectionId,
-                        AttendanceReasonRef = ssa.ReasonId,
-                        Date = date,
-                        PersonRef = ssa.StudentId,
-                        Level = ssa.Level,
-                        Class = clazz,
-                        Student = persons.First(x => x.Id == ssa.StudentId),
-                        Category = ssa.Category,
-                        IsPosted = sa.IsPosted
-                    });
+                        attendances.Add(new ClassAttendanceDetails
+                        {
+                            ClassRef = ssa.SectionId,
+                            AttendanceReasonRef = ssa.ReasonId,
+                            Date = date,
+                            PersonRef = ssa.StudentId,
+                            Level = ssa.Level,
+                            Class = clazz,
+                            Student = student,
+                            Category = ssa.Category,
+                            IsPosted = sa.IsPosted
+                        });
+                    }
                 }
                 return attendances;    
             }
