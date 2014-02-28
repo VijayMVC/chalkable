@@ -53,7 +53,8 @@ namespace Chalkable.Web.Controllers
             var res = new CreateAnnouncementViewData
                 {
                     Announcement = avd,
-                    IsDraft = annDetails.IsDraft
+                    IsDraft = annDetails.IsDraft,
+                    CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(annDetails.Id)
                 };
             return Json(res, 7);
         }
@@ -97,6 +98,7 @@ namespace Chalkable.Web.Controllers
             var res = new CreateAnnouncementViewData
                 {
                     Announcement = viewData,
+                    CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(announcementId)
                 };
             if (BaseSecurity.IsAdminViewer(SchoolLocator.Context))
             {

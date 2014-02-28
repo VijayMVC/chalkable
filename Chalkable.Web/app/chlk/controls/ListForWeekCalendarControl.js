@@ -25,16 +25,18 @@ NAMESPACE('chlk.controls', function () {
             [[chlk.models.common.ChlkDate]],
             VOID, function addCalendar(date_)
             {
-                var calendarService = this.getContext().getService(chlk.services.CalendarService);
-                calendarService.getListForWeek(date_).then(function(model){
-                    var res = new chlk.models.calendar.ListForWeekCalendar(model);
-                    var tpl = new chlk.templates.calendar.ListForWeekCalendarTpl();
-                    tpl.assign(res);
-                    var dom = new ria.dom.Dom('.announcement-week');
-                    dom.setData('control', this);
-                    dom.setData('date', date_ || null);
-                    tpl.renderTo(dom.empty());
-                }, this)
+                if(this.getContext){
+                    var calendarService = this.getContext().getService(chlk.services.CalendarService);
+                    calendarService.getListForWeek(date_).then(function(model){
+                        var res = new chlk.models.calendar.ListForWeekCalendar(model);
+                        var tpl = new chlk.templates.calendar.ListForWeekCalendarTpl();
+                        tpl.assign(res);
+                        var dom = new ria.dom.Dom('.announcement-week');
+                        dom.setData('control', this);
+                        dom.setData('date', date_ || null);
+                        tpl.renderTo(dom.empty());
+                    }, this)
+                }
             },
 
             [ria.mvc.DomEventBind('click', '.list-for-week-btn')],

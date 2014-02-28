@@ -245,6 +245,15 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
             return false;
         }
+        public bool CanAddStandard(int announcementId)
+        {
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.Append(string.Format("select [{0}].[{4}] from [{0}] join [{1}] on [{1}].[{2}] = [{0}].[{3}]"
+                , "Announcement", "ClassStandard", ClassStandard.CLASS_REF_FIELD, Announcement.CLASS_REF_FIELD, Announcement.ID_FIELD));
+            var conds = new AndQueryCondition {{Announcement.ID_FIELD, announcementId}};
+            conds.BuildSqlWhere(dbQuery, "Announcement");
+            return Exists(dbQuery);
+        }
     }
 
     public class AnnouncementsQuery

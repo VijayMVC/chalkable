@@ -28,7 +28,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public bool HideFromStudents { get; set; }
         public bool CanDropStudentScore { get; set; }
         public bool MayBeExempt { get; set; }
-
+        
         public int? Grade { get; set; }
         public int? StudentAnnouncementId { get; set; }
         public int StudentsCount { get; set; }

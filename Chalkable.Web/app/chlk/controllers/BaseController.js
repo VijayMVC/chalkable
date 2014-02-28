@@ -94,7 +94,7 @@ NAMESPACE('chlk.controllers', function (){
            },
 
            function ShadeLoader(){
-               this.ShadeView(chlk.activities.lib.PendingActionDialog, new ria.async.DeferredData(new Class()));
+               return this.ShadeView(chlk.activities.lib.PendingActionDialog, new ria.async.DeferredData(new Class()));
            },
 
            [[String, String, Array, String]],

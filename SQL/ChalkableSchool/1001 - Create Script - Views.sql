@@ -24,7 +24,7 @@ FROM
 	--left join GradeLevel on StudentSchoolYear.GradeLevelRef = GradeLevel.Id	
 GO
 
-CREATE VIEW [dbo].[vwAnnouncement] 
+Create VIEW [dbo].[vwAnnouncement] 
 AS 
 SELECT
 	Announcement.Id as Id,
@@ -44,6 +44,7 @@ SELECT
     Announcement.WeightAddition as WeightAddition,
     Announcement.WeightMultiplier as WeightMultiplier,
     Announcement.MayBeDropped as MayBeDropped,
+	Announcement.VisibleForStudent as VisibleForStudent,
 	ClassAnnouncementType.Name as ClassAnnouncementTypeName,
 	ClassAnnouncementType.ChalkableAnnouncementTypeRef as ChalkableAnnouncementType, 
 	Announcement.PersonRef as PersonRef,
@@ -70,8 +71,9 @@ FROM
 	left join ClassAnnouncementType on Announcement.ClassAnnouncementTypeRef = ClassAnnouncementType.Id
 	left join Class on Class.Id = Announcement.ClassRef
 	left join Person on Person.Id = Announcement.PersonRef
-
 GO
+
+
 
 
 
