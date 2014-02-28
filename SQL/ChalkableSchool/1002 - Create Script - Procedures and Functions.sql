@@ -994,10 +994,10 @@ end
 
 GO
 
-----------------------------
+---------------------------
 -- CREATE ANNOUNCEMENT 
 -----------------------------
-create procedure [dbo].[spCreateAnnouncement] @schoolId int, @classAnnouncementTypeId int, @personId int, @created datetime2,
+CREATE procedure [dbo].[spCreateAnnouncement] @schoolId int, @classAnnouncementTypeId int, @personId int, @created datetime2,
 											  @expires datetime2, @state int, @gradingStyle int, @classId int
 as
 begin transaction
@@ -1120,11 +1120,22 @@ commit
 
 --select * from @tmp
 
+---Get schoolYearId 
+
+if(@classAnnouncementTypeId is not null and @classId is not null)
+begin 
+	declare @schoolYearId int
+	select @schoolYearId = Id from SchoolYear where @created between StartDate and EndDate
+	exec [spReorderAnnouncements] @schoolYearId, @classAnnouncementTypeId, @personId, @classId
+end
 exec spGetAnnouncementDetails @announcementId, @personId, @callerRole, @schoolId
 GO
 
 
-create procedure [dbo].[spReorderAnnouncements] @schoolYearId int, @classAnnType int, 
+
+
+
+CREATE procedure [dbo].[spReorderAnnouncements] @schoolYearId int, @classAnnType int, 
 												@ownerId int, @classId int
 as
 with AnnView as
@@ -1133,13 +1144,14 @@ with AnnView as
                 from Announcement a
                 join Class c on c.Id = a.ClassRef
 				where c.SchoolYearRef = @schoolYearId and a.ClassAnnouncementTypeRef = @classAnnType 
-                      and a.PersonRef = @ownerId and [State] = 1 and a.ClassRef = @classId
+                      and a.PersonRef = @ownerId and a.ClassRef = @classId
                )
 update Announcement
 set [Order] = AnnView.[Order]
 from AnnView 
 where AnnView.Id = Announcement.Id
 select  1
+
 GO
 
 CREATE PROCEDURE [dbo].[spDeleteAnnouncement] @id int, @personId int, @classId int, @state int, @classAnnouncementTypeId int

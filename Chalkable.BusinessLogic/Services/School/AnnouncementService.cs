@@ -118,8 +118,8 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var q = new AnnouncementsQuery
                 {
-                    FromDate = fromDate,
-                    ToDate = toDate,
+                    FromDate = fromDate.Date,
+                    ToDate = toDate.Date,
                     GradeLevelIds = gradeLevelsIds,
                     ClassId = classId
                 };
@@ -147,6 +147,8 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             return MapActivitiesToAnnouncements(anns, activities);
         }
+
+
         private void AddActivitiesToChalkable(IEnumerable<Activity> activities)
         {
             using (var uow = Read())
@@ -184,7 +186,9 @@ namespace Chalkable.BusinessLogic.Services.School
                         if (addToChlkAnns.Any(x => classes.All(y => y.Id != x.ClassRef)))
                             throw new SecurityException();
                     }
-                    CreateAnnoucnementDataAccess(uow).Insert(addToChlkAnns);
+                    var da = CreateAnnoucnementDataAccess(uow); 
+                    da.Insert(addToChlkAnns);
+                    
                     uow.Commit();
                 }
             }
@@ -393,8 +397,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 ann = PreperingReminderData(uow, ann); //todo : remove this later 
                 ann = ReCreateRecipients(uow, ann, recipients);
                 da.Update(ann);
+                if (ann.ClassAnnouncementTypeRef.HasValue && ann.ClassRef.HasValue)
+                {
+                    var date = ann.Expires > DateTime.MinValue ? ann.Expires : ann.Created;
+                    var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(date);
+                    da.ReorderAnnouncements(sy.Id, ann.ClassAnnouncementTypeRef.Value, ann.PersonRef, ann.ClassRef.Value);
+                }
                 uow.Commit();
-
                 var res = da.GetDetails(announcement.AnnouncementId, Context.UserLocalId.Value, Context.RoleId);
                 if (res.State == AnnouncementState.Created && res.ClassRef.HasValue && res.SisActivityId.HasValue)
                 {
