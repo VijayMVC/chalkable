@@ -71,8 +71,6 @@ namespace Chalkable.BusinessLogic.Mapping
                 throw new ChalkableException(string.Format(ChlkResources.ERR_GRADING_STYLE_INVALID_GRADE_VALUE, styledValue));
             if (styleEnum == GradingStyleEnum.Numeric100)
             {
-                if (styledValue > 100)
-                    throw new ChalkableException(string.Format(ChlkResources.ERR_GRADING_STYLE_INVALID_GRADE_VALUE, styledValue));
                 return styledValue;
             }
             IList<int> mapping = mappers[styleEnum];
