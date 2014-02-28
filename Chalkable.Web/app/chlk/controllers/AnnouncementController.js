@@ -190,7 +190,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.AnnouncementForm, Boolean]],
         function addEditAction(model, isEdit){
-
+            this.disableAnnouncementSaving(false);
             var announcement = model.getAnnouncement();
             var reminders = announcement.getAnnouncementReminders() || [];
             var remindersArray = [];
@@ -311,7 +311,6 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate, Boolean]],
         function addAction(classId_, announcementTypeId_, date_, noDraft_) {
-            this.disableAnnouncementSaving(false);
             this.getView().reset();
             if(classId_ && announcementTypeId_){
                 var classInfo = this.classService.getClassAnnouncementInfo(classId_);
