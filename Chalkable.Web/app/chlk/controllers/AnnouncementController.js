@@ -170,19 +170,19 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.StudentAnnouncement]],
         function updateAnnouncementGradeAction(model){
             var result = this.setAnnouncementGrade(model)
-                .then(function(item){
+                .then(function(currentItem){
                     var announcement = this.getContext().getSession().get('announcement', {});
                     announcement.getStudentAnnouncements().getItems().forEach(function(item){
-                        if(item.getId() == model.getId()){
-                            item.setGradeValue(model.getGradeValue());
-                            item.setNumericGradeValue(model.getNumericGradeValue());
-                            item.setAbsent(model.isAbsent());
-                            item.setExempt(model.isExempt());
-                            item.setIncomplete(model.isIncomplete());
-                            item.setLate(model.isLate());
+                        if(item.getId() == currentItem.getId()){
+                            item.setGradeValue(currentItem.getGradeValue());
+                            item.setNumericGradeValue(currentItem.getNumericGradeValue());
+                            item.setAbsent(currentItem.isAbsent());
+                            item.setExempt(currentItem.isExempt());
+                            item.setIncomplete(currentItem.isIncomplete());
+                            item.setLate(currentItem.isLate());
                         }
                     });
-                    announcement.getStudentAnnouncements().setCurrentItem(item);
+                    announcement.getStudentAnnouncements().setCurrentItem(currentItem);
                     return announcement;
             }, this);
             return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, result, chlk.activities.lib.DontShowLoader());
