@@ -87,7 +87,7 @@
                                                 +Hidden('complete', info.isComplete())
                                                 input(value=normalValue,
                                                     name="gradevalue",
-                                                    data-max-score=(announcement.getMaxScore() || 100,
+                                                    data-max-score=announcement.getMaxScore() || 100,
                                                     data-announcemnt-id=announcement.getId().valueOf(),
                                                     data-marking-period-id=item.getMarkingPeriod().getId().valueOf(),
                                                     data-student-announcement-id=info.getId().valueOf()
