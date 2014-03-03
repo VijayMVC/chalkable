@@ -420,6 +420,11 @@ NAMESPACE('ria.dom', function () {
                 return this._dom.index();
             },
 
+            [[Number]],
+            OVERRIDE, function scrollTop(top_) {
+                return top_ ? this._dom.scrollTop(top_) : this._dom.scrollTop();
+            },
+
             /* Form */
 
             Object, function serialize(){

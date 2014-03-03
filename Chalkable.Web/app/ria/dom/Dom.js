@@ -671,6 +671,11 @@ NAMESPACE('ria.dom', function () {
                 return this;
             },
 
+            [[Number]],
+            function scrollTop(top_) {
+                return null;
+            },
+
             /* iterator */
 
             [[ria.dom.DomIterator]],
