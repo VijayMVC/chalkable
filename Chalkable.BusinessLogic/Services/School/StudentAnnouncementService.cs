@@ -57,20 +57,22 @@ namespace Chalkable.BusinessLogic.Services.School
                 sa.Exempt = exempt;
                 sa.Absent = absent;
                 
-                saDa.Update(sa);
+                sa.StiScoreValue = value;
                 if (!string.IsNullOrEmpty(value))
                 {
-                    sa.StiScoreValue = value;
                     int number;
                     if (int.TryParse(value, out number))
                     {
                         //TODO:remove this later
                         var mapper = ServiceLocator.GradingStyleService.GetMapper();
-                        sa.GradeValue = gradingStyle.HasValue ? mapper.MapBack(gradingStyle.Value, number)
-                                                              : mapper.MapBack(ann.GradingStyle, number);
+                        sa.GradeValue = gradingStyle.HasValue
+                                            ? mapper.MapBack(gradingStyle.Value, number)
+                                            : mapper.MapBack(ann.GradingStyle, number);
                     }
 
                 }
+                else sa.GradeValue = null;
+                saDa.Update(sa);
                 var score = new Score {ActivityId = ann.SisActivityId.Value};
                 MapperFactory.GetMapper<Score, StudentAnnouncement>().Map(score, sa);
                 score = ConnectorLocator.ActivityScoreConnector.UpdateScore(score.ActivityId, score.StudentId, score);
