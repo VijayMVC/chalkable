@@ -9,9 +9,6 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public AnnouncementViewData Announcement { get; set; }
         public IList<AnnouncementRecipientViewData> Recipients { get; set; }
         public bool IsDraft { get; set; }
-        public bool CanAddStandard { get; set; }
-
-        //public static CreateAnnouncementViewData Create(AnnouncementViewData announcement, bool isDra)
     }
 
     public class AnnouncementRecipientViewData

@@ -50,11 +50,11 @@ namespace Chalkable.Web.Controllers
             var annDetails = SchoolLocator.AnnouncementService.CreateAnnouncement(classAnnouncementTypeId, classId);
             var attachments = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments);
             var avd = AnnouncementDetailedViewData.Create(annDetails, null, Context.UserLocalId.Value, attachments);
+            avd.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(annDetails.Id);
             var res = new CreateAnnouncementViewData
                 {
                     Announcement = avd,
-                    IsDraft = annDetails.IsDraft,
-                    CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(annDetails.Id)
+                    IsDraft = annDetails.IsDraft
                 };
             return Json(res, 7);
         }
@@ -95,10 +95,10 @@ namespace Chalkable.Web.Controllers
         public ActionResult Edit(int announcementId)
         {
             var viewData = PrepareFullAnnouncementViewData(announcementId, false);
+            viewData.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(announcementId);
             var res = new CreateAnnouncementViewData
                 {
                     Announcement = viewData,
-                    CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(announcementId)
                 };
             if (BaseSecurity.IsAdminViewer(SchoolLocator.Context))
             {
@@ -149,7 +149,9 @@ namespace Chalkable.Web.Controllers
         public ActionResult SaveAnnouncement(AnnouncementInfo announcementInfo, int? classId)
         {
             var ann = Save(announcementInfo, classId);
-            return Json(AnnouncementViewData.Create(ann));
+            var res = AnnouncementViewData.Create(ann);
+            res.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(ann.Id);
+            return Json(res);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
