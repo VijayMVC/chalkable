@@ -1,0 +1,6 @@
+schedule = self.getUser()
+.loader-container
+    .loader
+    +UserProfileTopBar(self, 'schedule')
+    actions = {currentAction: 'weekSchedule', day: 'daySchedule', week: 'weekSchedule', month: 'monthSchedule'}
+    +Calendar(self, chlk.templates.calendar.announcement.WeekCalendarBodyTpl, self.getCalendar(), self.getControllerName(), actions, [schedule.getId()])
