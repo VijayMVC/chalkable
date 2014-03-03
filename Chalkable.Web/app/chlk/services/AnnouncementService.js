@@ -112,7 +112,7 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function saveAnnouncement(id, classId_, classAnnouncementTypeId_, title_, content_
                 , expiresdate_, attachments_, applications_, markingPeriodId_, maxScore_, weightAddition_, weighMultiplier_
                 , hideFromStudent_, canDropStudentScore_) {
-                return this.get('Announcement/SaveAnnouncement.json', chlk.models.announcement.AnnouncementTitleViewData, {
+                return this.get('Announcement/SaveAnnouncement.json', chlk.models.announcement.Announcement, {
                     announcementId:id.valueOf(),
                     classAnnouncementTypeId:classAnnouncementTypeId_,
                     classId: classId_ ? classId_.valueOf() : null,

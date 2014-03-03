@@ -12,9 +12,6 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('isdraft')],
             Boolean, 'isDraft',
 
-            [ria.serialize.SerializeProperty('canaddstandard')],
-            Boolean, 'canAddStandard',
-
             Array, 'recipients'
         ]);
 });

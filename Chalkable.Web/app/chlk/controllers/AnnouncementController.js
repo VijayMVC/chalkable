@@ -655,8 +655,9 @@ NAMESPACE('chlk.controllers', function (){
                     )
                     .attach(this.validateResponse_());
                 if(form_){
-                    res.then(function(titleModel){
-                        form_.getAnnouncement().setTitle(titleModel.getTitle());
+                    res.then(function(model){
+                        form_.getAnnouncement().setTitle(model.getTitle());
+                        form_.getAnnouncement().setCanAddStandard(model.isCanAddStandard());
                         return this.addEditAction(form_, false);
                     }, this);
                     return this.UpdateView(this.getAnnouncementFormPageType_(), res);

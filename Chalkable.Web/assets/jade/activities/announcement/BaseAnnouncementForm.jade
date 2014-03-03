@@ -6,7 +6,7 @@ mixin AddEditReminderForm(announcement, reminders)
         +Hidden('duplicate', false)
 
 //TODO refactor
-mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adminRecipients, userRole, canAddStandard)
+mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adminRecipients, userRole)
     +Hidden('id', announcement.getId().valueOf())
     +Hidden('announcementtypeid', announcement.getAnnouncementTypeId())#announcement-type-id
     +Hidden('statetyped', announcement.getStateTyped())
@@ -48,7 +48,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
             .recipient-part
                 +RenderWith(adminRecipients, chlk.templates.announcement.AdminRecipients)
         +TextArea(id="content",name="content",placeholder=isAnnouncement ? "Message" : "Assignment")=announcement.getContent()
-        if !isAdminAnnouncement && canAddStandard
+        if !isAdminAnnouncement && announcement.isCanAddStandard()
             .add-standards-container
                 .add-standards
                     .standards-list

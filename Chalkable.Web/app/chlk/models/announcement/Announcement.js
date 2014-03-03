@@ -38,6 +38,9 @@ NAMESPACE('chlk.models.announcement', function () {
                 this._annTypeEnum = chlk.models.announcement.AnnouncementTypeEnum;
             },
 
+            [ria.serialize.SerializeProperty('canaddstandard')],
+            Boolean, 'canAddStandard',
+
             [ria.serialize.SerializeProperty('announcementattachments')],
             ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
 

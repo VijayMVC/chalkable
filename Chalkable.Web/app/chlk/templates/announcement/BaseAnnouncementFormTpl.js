@@ -19,9 +19,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'isDraft',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'canAddStandard',
-
-            [ria.templates.ModelPropertyBind],
             Array, 'reminders'
         ]);
 });
