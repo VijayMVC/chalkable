@@ -35,6 +35,7 @@ NAMESPACE('chlk.controls', function () {
 
             Number, 'currentIndex',
             Number, 'count',
+            Number, 'scrollTop',
             ria.dom.Dom, 'grid',
 
             [[Object, Object]],
@@ -102,6 +103,7 @@ NAMESPACE('chlk.controls', function () {
                         this.initScrollAction_();
                         if(configs.showLoadAllInPage < (configs.currentStart / configs.pageSize) && !isLastLoad){
                             this.showLoadAllPopUp_(this.getGrid());
+                            this.setScrollTop(new ria.dom.Dom().scrollTop());
                         }
                         if(this._loadAllButtonClicked){
                             this.scrollToBottom_();
@@ -123,6 +125,9 @@ NAMESPACE('chlk.controls', function () {
                     } else {
                         backTopNode.fadeOut();
                     }
+                    var scrollTop = this.getScrollTop() || 0;
+                    if(scrollTop && new ria.dom.Dom().scrollTop() < scrollTop)
+                        this.hideLoadAllPopUp_(this.getGrid());
                 }.bind(this));
             },
 
