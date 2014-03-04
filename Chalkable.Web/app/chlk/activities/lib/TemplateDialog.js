@@ -46,7 +46,8 @@ NAMESPACE('chlk.activities.lib', function () {
             [ria.mvc.DomEventBind('click', '.close')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function onCloseBtnClick(node, event) {
-                return this._clickMeHandler();
+                this.close();
+                return false;
             }
         ]);
 });
