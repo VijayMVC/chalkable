@@ -140,7 +140,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 query.Count = int.MaxValue;
             }
             var anns = GetAnnouncements(query).Announcements;
-            if (anns.Count < activities.Count && (Context.Role == CoreRoles.TEACHER_ROLE))
+            if (anns.Count < activities.Count && (Context.Role == CoreRoles.TEACHER_ROLE || Context.Role == CoreRoles.STUDENT_ROLE))
             {
                 var noInDbActivities = activities.Where(x => anns.All(y => y.SisActivityId != x.Id)).ToList();
                 AddActivitiesToChalkable(noInDbActivities);
@@ -152,12 +152,15 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private void AddActivitiesToChalkable(IEnumerable<Activity> activities)
         {
+            IList<ClassDetails> classes = new List<ClassDetails>();
             using (var uow = Read())
             {
                 if(CreateAnnoucnementDataAccess(uow).Exists(activities.Select(x=>x.Id).ToList()))
                     throw new ChalkableException("Announcement with such activityId already exists");
+                    
             }
-
+            classes = ServiceLocator.ClassService.GetClasses(null, null, Context.UserLocalId);
+            
             IList<Announcement> addToChlkAnns = new List<Announcement>();
             foreach (var activity in activities)
             {
@@ -169,6 +172,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     SisActivityId = activity.Id,
                     PersonRef = Context.UserLocalId.Value
                 };
+                if (Context.Role == CoreRoles.STUDENT_ROLE)
+                    ann.PersonRef = classes.First(x => x.Id == activity.SectionId).TeacherRef.Value; 
                 MapperFactory.GetMapper<Announcement, Activity>().Map(ann, activity);
                 addToChlkAnns.Add(ann);
                 
@@ -179,11 +184,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     if (addToChlkAnns.All(x => x.ClassRef.HasValue))
                     {
-                        var classes = new ClassDataAccess(uow, Context.SchoolLocalId)
-                            .GetAll(new AndQueryCondition
-                                    {
-                                        {Class.TEACHER_REF_FIELD, Context.UserLocalId},
-                                    });
                         if (addToChlkAnns.Any(x => classes.All(y => y.Id != x.ClassRef)))
                             throw new SecurityException();
                     }
