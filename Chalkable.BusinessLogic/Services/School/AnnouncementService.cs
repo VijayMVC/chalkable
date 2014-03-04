@@ -130,7 +130,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query)
         {
             var activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count);
-            if (Context.Role == CoreRoles.TEACHER_ROLE)
+            if (Context.Role == CoreRoles.TEACHER_ROLE || Context.Role == CoreRoles.STUDENT_ROLE )
             {
                 query.SisActivitiesIds = activities.Select(x => x.Id).ToList();
                 query.OwnedOnly = false;
