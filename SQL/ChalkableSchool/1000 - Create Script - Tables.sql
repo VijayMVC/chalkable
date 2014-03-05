@@ -605,6 +605,11 @@ create table GradingPeriod
 )
 go
 
+alter table StudentAnnouncement
+add constraint QU_StudentAnnouncement_PersonRef_AnnouncementRef unique(PersonRef, AnnouncementRef)
+go
+
+
 alter table Announcement
 add VisibleForStudent bit not null 
 go
