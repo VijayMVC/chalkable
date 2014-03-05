@@ -389,7 +389,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.DomEventBind('keyup', '.grade-autocomplete')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function gradeKeyUp(node, event){
+            Boolean, function gradeKeyUp(node, event){
                 var suggestions = [], cell = node.parent('.active-cell');
                 var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
                 var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
@@ -413,9 +413,13 @@ NAMESPACE('chlk.activities.announcement', function () {
                         }
                     }
                 }else{
-                    if(event.keyCode == ria.dom.Keys.ENTER.valueOf() && !node.hasClass('error')){
-                        if(list.exists() && list.find('.see-all').hasClass('hovered')){
-                            list.find('.see-all').trigger('click');
+                    if(event.keyCode == ria.dom.Keys.ENTER.valueOf()){
+                        if(!node.hasClass('error')){
+                            if(list.exists() && list.find('.see-all').hasClass('hovered')){
+                                list.find('.see-all').trigger('click');
+                                return false;
+                            }
+                        } else {
                             return false;
                         }
                         //else
@@ -461,6 +465,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                         }
                     });
                 }
+                return true;
             },
 
             [ria.mvc.DomEventBind('click', '.see-all')],
@@ -505,8 +510,25 @@ NAMESPACE('chlk.activities.announcement', function () {
                     case Msg.Late.toLowerCase(): this.setItemState_(input, 'islate', selectNext); break;
                     case Msg.Absent.toLowerCase(): this.setItemState_(input, 'isabsent', selectNext); break;
                     case Msg.Exempt.toLowerCase(): this.setItemState_(input, 'isexempt', selectNext); break;
-                    default: input.setValue(value);this.updateItem(input, selectNext);
+                    default:{
+                        var numericValue = parseFloat(value);
+                        if(Number.NaN == numericValue){
+                            var allScores = this.getAllScores();
+                            allScores = allScores.find(function(score){
+                                return score.toLowerCase() == value;
+                            });
+                            if(allScores.length == 0) return;
+                        }
+                        input.setValue(value);
+                        this.updateItem(input, selectNext);
+                    }
                 }
+            },
+
+            [ria.mvc.DomEventBind('submit', 'form.update-grade-form')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            Boolean, function submitForm(node, event){
+                return node.find('.error').valueOf().length == 0;
             }
         ]
     );
