@@ -28,7 +28,11 @@ NAMESPACE('chlk.controllers', function (){
                         return res;
                     }, this);
 
-                this.notificationService.markAllAsShown();
+                this.notificationService.markAllAsShown().then(function(data){
+                    return this.notificationService.getUnShownNotificationCount().then(function(data2){
+                        this.setNewNotificationCount_(data2);
+                    }, this);
+                }, this);
                 return this.ShadeView(chlk.activities.notification.ListNewPopup, result);
             },
 

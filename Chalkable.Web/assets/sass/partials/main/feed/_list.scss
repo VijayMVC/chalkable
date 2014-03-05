@@ -20,6 +20,18 @@ $star-size: 18px;
 
   .container{
     .feed-notifications {
+      .new-notification-count{
+        background-color: red;
+        @include border-radius(5px);
+        width: auto;
+        padding: 0px 2px 0px 2px;
+        color: white;
+        position: absolute;
+        font-weight: bold;
+        top: -8px;
+        left: -7px;
+      }
+
       background: url(images/icons/new-notifications.png) 0% 50% no-repeat;
       margin: 8px 5px 0px 7px;
       padding: 0px 3px 0px 26px;

@@ -18,6 +18,9 @@ NAMESPACE('chlk.templates.feed', function () {
             Boolean, 'starredOnly',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'importantCount'
+            Number, 'importantCount',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'newNotificationCount'
         ])
 });

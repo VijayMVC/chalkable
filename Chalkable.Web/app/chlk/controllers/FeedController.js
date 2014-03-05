@@ -59,7 +59,8 @@ NAMESPACE('chlk.controllers', function (){
                     return new chlk.models.feed.Feed(
                         feedItems,
                         classBarItemsMdl,
-                        starredOnly_
+                        starredOnly_,
+                        this.getNewNotificationCount_()
                     );
                 }, this);
         },

@@ -25,6 +25,10 @@ NAMESPACE('chlk.services', function () {
                     start: start_,
                     count: count_
                 });
+            },
+
+            ria.async.Future, function getUnShownNotificationCount(){
+                return this.get('Notification/GetUnShownCount', Number,{});
             }
         ]);
 });

@@ -94,6 +94,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, 'userClaims', ArrayOf(chlk.models.people.Claim));
                 this.saveInSession(session, 'alphaGrades', ArrayOf(chlk.models.grading.AlphaGrade));
                 this.saveInSession(session, 'alternateScores', ArrayOf(chlk.models.grading.AlternateScore));
+                this.saveInSession(session, 'newNotifications', Number);
 
                 window.gradeLevels.forEach(function(item){
                     var numberPart = parseInt(item.name, 10);
@@ -121,10 +122,12 @@ NAMESPACE('chlk', function (){
                if (cls_ && (ria.__API.isIdentifier(cls_)))
                    defaultValue = "";
 
-               var value = window[key] || defaultValue;
+               var value = window[key];
+               if(value == undefined || value == null)
+                  value = defaultValue;
 
                var destK = destKey_ ?  destKey_ : key;
-               if (value){
+               if (value != undefined && value != null){
                        cls_ ? session.set(destK, serializer.deserialize(value, cls_))
                             : session.set(destK, value);
                }

@@ -12,6 +12,7 @@ div(class = noStarred ? "no-starred" : "").feed-container
                 +ActionLink('feed', 'list', true, !self.starredOnly, selectedId, 0)(class=self.starredOnly ? 'pr' : 'unpr')
                     span#importan-count= self.importantCount
             .feed-notifications Notifications
+                .new-notification-count=self.getNewNotificationCount()
                 +ActionLink('notification', 'listNew')
     if noStarred
         label#feed-arrow.blue-arrow.left-up-arrow=Msg.See_more_items

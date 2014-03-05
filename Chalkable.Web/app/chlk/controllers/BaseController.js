@@ -125,6 +125,15 @@ NAMESPACE('chlk.controllers', function (){
                    this.userInRole(chlk.models.common.RoleEnum.ADMINVIEW);
            },
 
+
+           [[Number]],
+           VOID, function setNewNotificationCount_(value){
+               this.getContext().getSession().set('newNotifications', value);
+           },
+           Number, function getNewNotificationCount_(){
+               return this.getContext().getSession().get('newNotifications');
+           },
+
            chlk.models.people.User, function getCurrentPerson(){
                return this.getContext().getSession().get('currentPerson');
            },
