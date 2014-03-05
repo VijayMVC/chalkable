@@ -284,11 +284,14 @@ NAMESPACE('chlk.activities.announcement', function () {
                     allScores.push(item.getName() + ' (fill all)');
                 });
 
-                allScores = allScores.concat(['Exempt', 'Exempt (fill all)', 'Incomplete', 'Incomplete (fill all)',
+                allScores = allScores.concat(['Incomplete', 'Incomplete (fill all)',
                     'Late', 'Late (fill all)', 'Absent', 'Absent (fill all)']);
 
                 if(model.isAbleDropStudentScore()){
                     allScores = allScores.content(['Dropped', 'Dropped (fill all)']);
+                }
+                if(model.isAbleToExempt()){
+                    allScores = allScores.content(['Exempt', 'Exempt (fill all)']);
                 }
                 this.setAllScores(allScores);
 
