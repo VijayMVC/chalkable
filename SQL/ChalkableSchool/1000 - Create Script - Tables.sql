@@ -604,3 +604,7 @@ create table GradingPeriod
 	AllowGradePosting bit not null
 )
 go
+
+alter table Announcement
+add VisibleForStudent bit not null 
+go
