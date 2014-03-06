@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
+using Chalkable.StiConnector.SyncModel;
 using Newtonsoft.Json;
 
 namespace Chalkable.StiConnector.Connectors
@@ -14,29 +15,28 @@ namespace Chalkable.StiConnector.Connectors
         {
         }
 
-        public SyncResult<T> GetDiff<T>(string table, int? fromVersion)
+        public object GetDiff(Type type, int? fromVersion)
         {
 
             var client = InitWebClient();
             MemoryStream stream = null;
             try
             {
-                var url = BaseUrl + string.Format("sync/tables/{0}/", table);
+                var url = BaseUrl + string.Format("sync/tables/{0}/", type.Name);
                 if (fromVersion.HasValue)
                     url = url + fromVersion;
                 client.QueryString = new NameValueCollection();
                 var data = client.DownloadData(url);
                 var res = Encoding.UTF8.GetString(data);
                 Debug.WriteLine(res);
-
-                
-
                 stream = new MemoryStream(data);
-
                 var serializer = new JsonSerializer();
                 var reader = new StreamReader(stream);
                 var jsonReader = new JsonTextReader(reader);
-                return serializer.Deserialize<SyncResult<T>>(jsonReader);
+
+
+                var resType = (typeof (SyncResult<>)).MakeGenericType(new []{type});
+                return serializer.Deserialize(jsonReader, resType);
             }
             catch (WebException ex)
             {
@@ -53,14 +53,5 @@ namespace Chalkable.StiConnector.Connectors
                     stream.Dispose();
             }
         }
-    }
-
-    public class SyncResult<T>
-    {
-        public T[] Created { get; set; }
-        public T[] Updated { get; set; }
-        public T[] Deleted { get; set; }
-        public T[] Data { get; set; }
-        public int VersionNumber { get; set; }
     }
 }

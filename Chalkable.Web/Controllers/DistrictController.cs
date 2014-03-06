@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
@@ -11,6 +12,19 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class DistrictController : ChalkableController
     {
+        public ActionResult Register(string userName, string password, Guid guid, string sisUrl, string sisUserName, string sisPassword, string timeZone)
+        {
+            string name = guid.ToString();
+            var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
+            var context = sl.UserService.Login(userName, password);
+            if (context != null)
+            {
+                sl.DistrictService.Create(name, sisUrl, sisUserName, sisPassword, timeZone ?? "UTC", guid);
+                return Json(true);
+            }
+            return Json("Invalid credentials");
+        }
+
         [AuthorizationFilter("SysAdmin")]
         public ActionResult List(int? start, int? count)
         {
@@ -20,11 +34,10 @@ namespace Chalkable.Web.Controllers
             return Json(districts.Transform(DistrictViewData.Create));
         }
 
-
         [AuthorizationFilter("SysAdmin")]
-        public ActionResult Create(string name, string dbName, string sisUrl, string sisUserName, string sisPassword, string timeZone)
+        public ActionResult Create(string name, Guid guid, string sisUrl, string sisUserName, string sisPassword, string timeZone)
         {
-            var district = MasterLocator.DistrictService.Create(name, dbName, sisUrl, sisUserName, sisPassword, timeZone ?? "UTC");
+            var district = MasterLocator.DistrictService.Create(name, sisUrl, sisUserName, sisPassword, timeZone ?? "UTC", guid);
             return Json(DistrictViewData.Create(district));
         }
 

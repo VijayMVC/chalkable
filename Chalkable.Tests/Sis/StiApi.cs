@@ -9,26 +9,6 @@ namespace Chalkable.Tests.Sis
     public class StiApi : TestBase
     {
         [Test]
-        public void TestApi()
-        {
-
-            var cl = ConnectorLocator.Create("administrator", "1234qwer", "http://localhost/Api/");
-            var schools = cl.SchoolConnector.GetSchools();
-            foreach (var school in schools)
-            {
-                Debug.WriteLine(school.Name);
-                var sc = cl.SchoolConnector.GetSchoolDetails(school.Id);
-                var sessions = cl.AcadSessionConnector.GetSessions(school.Id);
-                foreach (var acadSession in sessions)
-                {
-                    cl.StudentConnector.GetSessionStudents(acadSession.Id);
-                }
-            }
-
-            //Debug.WriteLine(s);
-        }
-
-        [Test]
         public void ReportTest()
         {
             var cl = ConnectorLocator.Create("administrator", "qwertyui1234", "http://sandbox.sti-k12.com/chalkable/");
@@ -48,8 +28,8 @@ namespace Chalkable.Tests.Sis
         public void SyncTest()
         {
             //var cl = ConnectorLocator.Create("administrator", "1234qwer", "http://localhost/");
-            var cl = ConnectorLocator.Create("administrator", "qwertyui1234", "http://sandbox.sti-k12.com/chalkable/");
-            var r = cl.SyncConnector.GetDiff<School>("school", null);
+            var cl = ConnectorLocator.Create("administrator", "Ee9E(#UQe/5(G$U", "http://sandbox.sti-k12.com/chalkable/");
+            var r = cl.SyncConnector.GetDiff(typeof(School), null);
             Assert.NotNull(r);
         }
     }

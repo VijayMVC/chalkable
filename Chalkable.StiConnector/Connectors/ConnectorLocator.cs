@@ -25,12 +25,6 @@ namespace Chalkable.StiConnector.Connectors
         private void InitServices()
         {
             UsersConnector = new UsersConnector(this);
-            SchoolConnector = new SchoolConnector(this);
-            AcadSessionConnector = new AcadSessionConnector(this);
-            StudentConnector = new StudentConnector(this);
-            GradeLevelConnector = new GradeLevelConnector(this);
-            GenderConnector = new GenderConnector(this);
-            ContactConnector = new ContactConnector(this);
             AttendanceConnector = new AttendanceConnector(this);
             ActivityConnector = new ActivityConnector(this);
             ActivityAttachmentsConnector = new ActivityAttachmentsConnector(this);
@@ -43,12 +37,6 @@ namespace Chalkable.StiConnector.Connectors
         }
 
         public UsersConnector UsersConnector { get; private set; }
-        public SchoolConnector SchoolConnector { get; private set; }
-        public AcadSessionConnector AcadSessionConnector { get; private set; }
-        public StudentConnector StudentConnector { get; private set; }
-        public GradeLevelConnector GradeLevelConnector { get; private set; }
-        public GenderConnector GenderConnector { get; private set; }
-        public ContactConnector ContactConnector { get; private set; }
         public AttendanceConnector AttendanceConnector { get; private set; }
         public ActivityConnector ActivityConnector { get; private set; }
         public ActivityAttachmentsConnector ActivityAttachmentsConnector { get; private set; }

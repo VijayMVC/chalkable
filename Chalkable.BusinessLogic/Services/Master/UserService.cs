@@ -23,6 +23,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         UserContext ReLogin(Guid id);
         User GetByLogin(string login);
         User GetById(Guid id);
+        IList<User> GetByDistrict(Guid districtId);
         User CreateSysAdmin(string login, string password);
         User CreateDeveloperUser(string login, string password, Guid districtId);
         User CreateSchoolUser(string login, string password, Guid? districtId, int? localId, string sisUserName);
@@ -224,6 +225,16 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new UserDataAccess(uow);
                 var res = da.GetUser(null, null, id);
+                return res;
+            }
+        }
+
+        public IList<User> GetByDistrict(Guid districtId)
+        {
+            using (var uow = Read())
+            {
+                var da = new UserDataAccess(uow);
+                var res = da.GetUsers(districtId);
                 return res;
             }
         }
