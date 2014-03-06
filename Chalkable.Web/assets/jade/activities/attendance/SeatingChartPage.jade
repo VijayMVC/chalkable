@@ -1,0 +1,15 @@
+topData = self.getTopData()
+topItems = topData.getTopItems()
+selectedId = topData.getSelectedItemId()
++LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'seatingChart')(
+    selectedItemId=selectedId ? selectedId.valueOf() : ""
+).classes-bar
+.action-bar.not-transparent.buttons
+    .container.panel-bg
+        .left.no-border
+
+        .right
+            +ActionLink('attendance', 'classList', self.getSelectedTypeId()) List
+            a.action-link.pressed Seating Chart
+.some-div Some text
+h1.some-h Some text2
