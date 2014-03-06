@@ -102,6 +102,7 @@
     <Compile Include="DataAccess\StudentAnnouncementDataAccess.cs" />
     <Compile Include="DataAccess\StudentSchoolYearDataAccess.cs" />
     <Compile Include="DataAccess\StudentParentDataAccess.cs" />
+    <Compile Include="DataAccess\SyncVersionDataAccess.cs" />
     <Compile Include="Model\Address.cs" />
     <Compile Include="Model\AlphaGrade.cs" />
     <Compile Include="Model\AlternateScore.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Model\StudentDailyAttendance.cs" />
     <Compile Include="Model\StudentSchoolYear.cs" />
     <Compile Include="Model\StudentParent.cs" />
+    <Compile Include="Model\SyncVersion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
