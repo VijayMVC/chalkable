@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
@@ -22,6 +23,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         Application GetApplicationById(Guid id);
         Application GetApplicationByUrl(string url);
         ApplicationRating WriteReview(Guid applicationId, int rating, string review);
+        bool ExistsReview(Guid applicationId);
         IList<ApplicationRating> GetRatings(Guid applicationId);
         bool CanGetSecretKey(IList<Application> applications);
         bool HasMyApps(Application application);
@@ -99,6 +101,9 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             using (var uow = Update())
             {
+                var da = new ApplicationRatingDataAccess(uow);
+                if(da.Exists(applicationId, Context.UserId))
+                    throw new ChalkableException("User can send only one review per application");
                 var res = new ApplicationRating
                     {
                         Id = Guid.NewGuid(),
@@ -107,7 +112,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         Review = review,
                         UserRef = Context.UserId
                     };
-                new ApplicationRatingDataAccess(uow).Insert(res);
+                da.Insert(res);
                 uow.Commit();
                 return res;
             }
@@ -169,6 +174,15 @@ namespace Chalkable.BusinessLogic.Services.Master
                     break;
             }
             return GetApplications(query);
+        }
+
+
+        public bool ExistsReview(Guid applicationId)
+        {
+            using (var uow = Read())
+            {
+                return new ApplicationRatingDataAccess(uow).Exists(applicationId, Context.UserId);
+            }
         }
     }
 

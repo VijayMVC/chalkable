@@ -27,6 +27,16 @@ namespace Chalkable.Data.Master.DataAccess
             var conds = new AndQueryCondition { { ApplicationRating.ID_FIELD, key } };
             return ReadOneOrNull<ApplicationRating>(BuildGetRaitingQuery(conds), true);
         }
+        
+        public bool Exists(Guid applicationId, Guid userId)
+        {
+            var conds = new AndQueryCondition
+                {
+                    {ApplicationRating.APPLICATION_REF_FIELD, applicationId},
+                    {ApplicationRating.USER_REF_FIELD, userId}
+                };
+            return Exists<ApplicationRating>(conds);
+        }
 
         private DbQuery BuildGetRaitingQuery(QueryCondition conditions)
         {

@@ -263,7 +263,6 @@ CREATE TABLE FundRequestRoleDistribution
 	[FundRequestRef] uniqueidentifier NOT NULL Constraint FK_FUND_ROLE_DEST_RUND_REQUETS Foreign Key References FundRequest(Id),
 	[Amount] [money] NOT NULL
 )
-
 GO
 
 Create Procedure spDeleteDistrict @id uniqueidentifier
@@ -291,3 +290,7 @@ as
 	END CATCH
 
 GO
+
+alter table ApplicationRating
+add constraint QU_ApplicationRating_Application_User unique (ApplicationRef, UserRef)
+go
