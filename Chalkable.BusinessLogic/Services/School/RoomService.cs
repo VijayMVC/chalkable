@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -14,6 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void AddRooms(IList<Room> rooms);
         Room EditRoom(int id, string roomNumber, string description, string size, int? capacity, string phoneNumber);
         void DeleteRoom(int id);
+        void DeleteRooms(IList<int> ids);
         PaginatedList<Room> GetRooms(int start = 0, int count = int.MaxValue);
         Room WhereIsPerson(int personId, DateTime dateTime);
         Room GetRoomById(int id);
@@ -108,7 +110,9 @@ namespace Chalkable.BusinessLogic.Services.School
         public Room WhereIsPerson(int personId, DateTime dateTime)
         {
             var classPeriod = ServiceLocator.ClassPeriodService.GetClassPeriodForSchoolPersonByDate(personId, dateTime);
-            return classPeriod != null && classPeriod.RoomRef.HasValue ? GetRoomById(classPeriod.RoomRef.Value) : null;
+            if (classPeriod == null) return null;
+            var c = ServiceLocator.ClassService.GetClassById(classPeriod.ClassRef);
+            return c.RoomRef.HasValue ? GetRoomById(c.RoomRef.Value) : null;
         }
 
         public Room GetRoomById(int id)
@@ -116,6 +120,22 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 return new RoomDataAccess(uow, Context.SchoolLocalId).GetById(id);
+            }
+        }
+
+        public void DeleteRooms(IList<int> ids)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+
+            using (var uow = Update())
+            {
+                var cpDa = new ClassPeriodDataAccess(uow, Context.SchoolLocalId);
+                if (ids.Any(id => cpDa.Exists(new ClassPeriodQuery { RoomId = id })))
+                    throw new ChalkableException(ChlkResources.ERR_ROOM_CANT_DELETE_ROOM_TYPE_ASSIGNED_TO_CLASSPERIOD);
+                
+                new RoomDataAccess(uow, Context.SchoolLocalId).Delete(ids);
+                uow.Commit();
             }
         }
     }

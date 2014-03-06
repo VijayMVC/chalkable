@@ -58,7 +58,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
             {
                 var clazz = classes.First(x => x.Id == classPeriod.ClassRef);
                 if (rooms != null && rooms.Count > 0)
-                    room = classPeriod.RoomRef.HasValue ? rooms.First(x => x.Id == classPeriod.RoomRef) : null;
+                    room = clazz.RoomRef.HasValue ? rooms.First(x => x.Id == clazz.RoomRef) : null;
                 res.ClassPeriods.Add(ClassPeriodViewData.Create(classPeriod, clazz, room));
             }
             return res;

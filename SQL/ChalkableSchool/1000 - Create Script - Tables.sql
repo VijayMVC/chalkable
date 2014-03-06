@@ -613,3 +613,20 @@ go
 alter table Announcement
 add VisibleForStudent bit not null 
 go
+
+alter table Class
+add RoomRef int null constraint FK_Class_RoomRef foreign key references Room(Id)
+go
+
+update Class
+set RoomRef = ClassPeriod.RoomRef
+from ClassPeriod
+join Class on Class.Id = ClassPeriod.ClassRef
+
+alter table ClassPeriod
+drop constraint FK_ClassPeriod_Room
+go
+
+alter table ClassPeriod
+drop column RoomRef 
+go

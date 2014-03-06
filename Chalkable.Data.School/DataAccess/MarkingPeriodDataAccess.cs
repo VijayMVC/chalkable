@@ -98,5 +98,10 @@ namespace Chalkable.Data.School.DataAccess
             
         } 
 
+        public void Delete(IList<int> ids)
+        {
+            SimpleDelete<MarkingPeriod>(ids.Select(x=>new MarkingPeriod{Id = x}).ToList());
+        }
+
     }
 }

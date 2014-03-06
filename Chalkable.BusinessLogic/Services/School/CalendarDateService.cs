@@ -16,6 +16,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Date Add(DateTime date, bool schoolDay, int schoolYearId, int? dateTypeId);
         void Add(IList<Date> days);
         void Delete(DateTime date);
+        void Delete(IList<DateTime> date);
     }
 
     //TODO: needs tests
@@ -130,6 +131,21 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
- 
+        public void Delete(IList<DateTime> dates)
+        {
+            //if (!BaseSecurity.IsDistrict(Context))
+            //    throw new ChalkableSecurityException();
+            //using (var uow = Update())
+            //{
+                
+            //    uow.Commit();
+            //}
+            //throw new NotImplementedException();
+            //todo : rewrite later
+            foreach (var date in dates)
+            {
+                Delete(date);
+            }
+        }
     }
 }

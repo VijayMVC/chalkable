@@ -15,8 +15,10 @@ namespace Chalkable.BusinessLogic.Services.School
         DayType GetSectionById(int id);
         bool CanDeleteSections(int schoolYearId);
         DayType Add(int id, int number, string name, int schoolYearId);
+        IList<DayType> Add(IList<DayType> dayTypes); 
         DayType Edit(int id, int number, string name);
         void Delete(int id);
+        void Delete(IList<int> ids);
     }
 
     public class DayTypeService : SchoolServiceBase, IDayTypeService
@@ -147,6 +149,35 @@ namespace Chalkable.BusinessLogic.Services.School
                 var sections = AdjustNumbering(da.GetDateTypes(dateType.SchoolYearRef));
                 da.Update(sections);
                 uow.Commit();
+            }
+        }
+
+
+        public IList<DayType> Add(IList<DayType> dayTypes)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+
+            //TODO: adjust numbering
+            using (var uow = Update())
+            {
+                new DayTypeDataAccess(uow).Insert(dayTypes);
+                uow.Commit();
+                return dayTypes;
+            }
+             
+        }
+
+        public void Delete(IList<int> ids)
+        {
+            //if (!BaseSecurity.IsDistrict(Context))
+            //    throw new ChalkableSecurityException();
+            //throw new NotImplementedException();
+            
+            //TODO: rewrite this later 
+            foreach (var id in ids)
+            {
+                Delete(id);
             }
         }
     }

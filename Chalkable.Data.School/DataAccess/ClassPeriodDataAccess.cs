@@ -68,7 +68,8 @@ namespace Chalkable.Data.School.DataAccess
         {
             var dbQuery = new DbQuery();
             dbQuery.Sql.Append(@"select r.* from ClassPeriod  
-                                 join Room r on r.Id = ClassPeriod.RoomRef");
+                                 join Class c on c.Id = ClassPeriod.ClassRef
+                                 join Room r on r.Id = c.RoomRef");
             var conds = new AndQueryCondition {{ClassPeriod.PERIOD_REF_FIELD, periodId}};
             conds.BuildSqlWhere(dbQuery, typeof(ClassPeriod).Name);
             return ReadMany<Room>(dbQuery);
@@ -97,13 +98,18 @@ namespace Chalkable.Data.School.DataAccess
             var classPeriodTName = "ClassPeriod";
             if (query.PeriodId.HasValue)
                 conds.Add(ClassPeriod.PERIOD_REF_FIELD, query.PeriodId);
-            if (query.RoomId.HasValue)
-                conds.Add(ClassPeriod.ROOM_REF_FIELD, query.RoomId);
             if (query.DateTypeId.HasValue)
                 conds.Add(ClassPeriod.DAY_TYPE_REF_FIELD, query.DateTypeId);
 
             FilterBySchool(conds).BuildSqlWhere(dbQuery, classPeriodTName);
 
+            if (query.RoomId.HasValue)
+            {
+                conds.Add("roomId", query.RoomId);
+                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in (select [{2}].[{4}] from [{2}] where [{2}].[{3}] = @roomId)"
+                    , classPeriodTName, ClassPeriod.CLASS_REF_FIELD, "Class", Class.ROOM_REF_FIELD, Class.ID_FIELD);
+            }
+            
             if (query.StudentId.HasValue)
             {
                 dbQuery.Parameters.Add("studentId", query.StudentId);

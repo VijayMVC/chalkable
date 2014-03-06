@@ -43,7 +43,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     ClassRef = classId,
                     PeriodRef = periodId,
-                    RoomRef = roomId,
                     DayTypeRef = dateTypeId,
                     SchoolRef = new PeriodDataAccess(uow, Context.SchoolLocalId).GetById(periodId).SchoolRef
                 };

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -41,6 +42,11 @@ namespace Chalkable.Data.School.DataAccess
                 conds.Add(SchoolYear.ID_FIELD, currentSchoolYearId.Value, ConditionRelation.NotEqual);
             
             return Exists<SchoolYear>(conds);
+        }
+
+        public void Delete(IList<int> ids)
+        {
+            SimpleDelete<SchoolYear>(ids.Select(x => new SchoolYear {Id = x}).ToList());
         }
     }
 }

@@ -11,10 +11,11 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IClassService
     {
-        ClassDetails Add(int classId, int? schoolYearId, Guid? chlkableDepartmentId, string name, string description, int? teacherId, int gradeLevelId);
+        ClassDetails Add(int classId, int? schoolYearId, Guid? chlkableDepartmentId, string name, string description, int? teacherId, int gradeLevelId, int? roomId = null);
         void Add(IList<Class> classes);
         ClassDetails Edit(int classId, Guid? chlkableDepartmentId, string name, string description, int teacherId, int gradeLevelId);
         void Delete(int id);
+        void Delete(IList<int> ids);
 
         ClassDetails AddStudent(int classId, int personId, int markingPeriodId);
         void AddStudents(IList<ClassPerson> classPersons);
@@ -40,7 +41,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         //TODO: needs test
         public ClassDetails Add(int classId, int? schoolYearId, Guid? chlkableDepartmentId, string name
-            , string description, int? teacherId, int gradeLevelId)
+            , string description, int? teacherId, int gradeLevelId, int? roomId = null)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
@@ -63,6 +64,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         Name = name,
                         SchoolYearRef = schoolYearId,
                         TeacherRef = teacherId,
+                        RoomRef = roomId,
                         SchoolRef = sy != null ? sy.SchoolRef : (int?)null
                     };
                 da.Insert(cClass);
@@ -98,12 +100,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                var da = new ClassDataAccess(uow, Context.SchoolLocalId);
-                var mpcDa = new MarkingPeriodClassDataAccess(uow, Context.SchoolLocalId);
-                var classPersonDa = new ClassPersonDataAccess(uow, Context.SchoolLocalId);
-                mpcDa.Delete(new MarkingPeriodClassQuery {ClassId = id});
-                classPersonDa.Delete(new ClassPersonQuery{ClassId = id});
-                da.Delete(id);
+                new ClassDataAccess(uow, Context.SchoolLocalId).Delete(id);
+                //var mpcDa = new MarkingPeriodClassDataAccess(uow, Context.SchoolLocalId);
+                //var classPersonDa = new ClassPersonDataAccess(uow, Context.SchoolLocalId);
+                //mpcDa.Delete(new MarkingPeriodClassQuery {ClassId = id});
+                //classPersonDa.Delete(new ClassPersonQuery{ClassId = id});
+                //da.Delete(id);
                 uow.Commit();
             }
         }
@@ -308,6 +310,11 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<ClassDetails> GetClasses(string filter)
         {
             return GetClasses(new ClassQuery {Filter = filter});
+        }
+        
+        public void Delete(IList<int> ids)
+        {
+            throw new NotImplementedException();
         }
     }
 }

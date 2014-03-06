@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
@@ -22,6 +23,11 @@ namespace Chalkable.Data.School.DataAccess
                                          , "SchoolGradeLevel", SchoolGradeLevel.GRADE_LEVEL_REF_FIELD, SchoolGradeLevel.SCHOOL_REF_FIELD);
             }
             return ReadMany<GradeLevel>(dbQuery);
+        }
+
+        public void Delete(IList<int> ids)
+        {
+            SimpleDelete<GradeLevel>(ids.Select(x=>new GradeLevel{Id = x}).ToList());
         }
     }
 

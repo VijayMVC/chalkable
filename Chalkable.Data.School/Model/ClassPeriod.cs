@@ -6,14 +6,12 @@ namespace Chalkable.Data.School.Model
     {
         public const string PERIOD_REF_FIELD = "PeriodRef";
         public const string DAY_TYPE_REF_FIELD = "DayTypeRef";
-        public const string ROOM_REF_FIELD = "RoomRef";
         public const string CLASS_REF_FIELD = "ClassRef";
 
         [PrimaryKeyFieldAttr]
         public int PeriodRef { get; set; }
         [PrimaryKeyFieldAttr]
         public int ClassRef { get; set; }
-        public int? RoomRef { get; set; }
         [PrimaryKeyFieldAttr]
         public int DayTypeRef { get; set; }
         public int SchoolRef { get; set; }
@@ -34,7 +32,7 @@ namespace Chalkable.Data.School.Model
 
     public class ClassPeriodDetails : ClassPeriod
     {
-        [DataEntityAttr]
-        public Room Room { get; set; }
+        //[DataEntityAttr]
+        //public Room Room { get; set; }
     }
 }

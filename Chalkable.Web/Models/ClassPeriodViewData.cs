@@ -14,7 +14,8 @@ namespace Chalkable.Web.Models
         protected ClassPeriodShortViewData(ClassPeriod classPeriod, Room room)
         {
             Period = PeriodViewData.Create(classPeriod.Period);
-            RoomId = classPeriod.RoomRef;
+            //todo : get roomId from class or remove this property 
+            //RoomId = classPeriod.RoomRef;
             ClassId = classPeriod.ClassRef;
             DateTypeId = classPeriod.DayTypeRef;
             if (room != null)

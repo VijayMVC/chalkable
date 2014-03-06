@@ -37,7 +37,6 @@ namespace Chalkable.Tests.Services.School
 
             Assert.AreEqual(cPeriod1.ClassRef, c1.Id);
             Assert.AreEqual(cPeriod1.PeriodRef, period1.Id);
-            Assert.AreEqual(cPeriod1.RoomRef, room1.Id);
             AssertAreEqual(cPeriod1, cPeriodService.GetClassPeriodForSchoolPersonByDate(FirstSchoolContext.FirstStudent.Id, FirstSchoolContext.NowTime));
             AssertAreEqual(cPeriod1, cPeriodService.GetClassPeriodForSchoolPersonByDate(FirstSchoolContext.FirstTeacher.Id, FirstSchoolContext.NowTime));
             Assert.IsNull(cPeriodService.GetClassPeriodForSchoolPersonByDate(FirstSchoolContext.SecondStudent.Id, FirstSchoolContext.NowTime));

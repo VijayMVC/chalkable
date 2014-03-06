@@ -11,11 +11,13 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface ISchoolYearService
     {
         SchoolYear Add(int id, int schoolId, string name, string description, DateTime startDate, DateTime endDate);
+        IList<SchoolYear> AddSchoolYears(IList<SchoolYear> schoolYears); 
         SchoolYear Edit(int id, string name, string description, DateTime startDate, DateTime endDate);
         SchoolYear GetSchoolYearById(int id);
         PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue);
         void AssignStudent(int schoolYearId, int personId, int gradeLevelId);
         void Delete(int schoolYearId);
+        void Delete(IList<int> schoolYearIds);
         SchoolYear GetCurrentSchoolYear();
         IList<SchoolYear> GetSortedYears();
         IList<StudentSchoolYear> GetStudentAssignments();
@@ -137,14 +139,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(int schoolYearId)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
-                da.Delete(schoolYearId);
-                uow.Commit();
-            }
+            Delete(new List<int> {schoolYearId});
         }
 
         public SchoolYear GetCurrentSchoolYear()
@@ -173,6 +168,30 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new StudentSchoolYearDataAccess(uow);
                 return da.GetAll();
+            }
+        }
+
+
+        public IList<SchoolYear> AddSchoolYears(IList<SchoolYear> schoolYears)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new SchoolYearDataAccess(uow, Context.SchoolLocalId).Insert(schoolYears);
+                uow.Commit();
+                return schoolYears;
+            }
+        }
+
+        public void Delete(IList<int> schoolYearIds)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new SchoolYearDataAccess(uow, Context.SchoolLocalId).Delete(schoolYearIds);
+                uow.Commit();
             }
         }
     }

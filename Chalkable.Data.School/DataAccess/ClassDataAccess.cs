@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
@@ -81,6 +82,18 @@ namespace Chalkable.Data.School.DataAccess
                 }
                 return new ClassQueryResult { Classes = classes, Query = query, SourceCount = sourceCount };
             }
+        }
+
+        public new void Delete(int id)
+        {
+            var dbQueries = new List<DbQuery>
+                {
+                    Orm.SimpleDelete<ClassPerson>(new AndQueryCondition {{ClassPerson.CLASS_REF_FIELD, id}}),
+                    Orm.SimpleDelete<MarkingPeriodClass>(new AndQueryCondition {{MarkingPeriodClass.CLASS_REF_FIELD, id}}),
+                    Orm.SimpleDelete<Class>(new AndQueryCondition {{Class.ID_FIELD, id}})
+                };
+            var res = new DbQuery(dbQueries);
+            ExecuteNonQueryParametrized(res.Sql.ToString(), res.Parameters);
         }
     }
 

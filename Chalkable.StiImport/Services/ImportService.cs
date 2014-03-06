@@ -453,7 +453,6 @@ namespace Chalkable.StiConnector.Services
                     ClassRef = x.SectionID,
                     DayTypeRef = x.DayTypeID,
                     PeriodRef = x.TimeSlotID,
-                    RoomRef = x.Course.RoomID,
                     SchoolRef = x.DayType.AcadSession.SchoolID
                 }).ToList();
             ServiceLocatorSchool.ClassPeriodService.Add(scheduledSections);

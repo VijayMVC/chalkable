@@ -254,6 +254,12 @@ namespace Chalkable.Data.Common
         {
             SimpleDelete<TEntity>(BuildCondsByKey(key));
         }
+
+        //public virtual void Delete(IList<TParam> keys)
+        //{
+        //    SimpleDelete<TEntity>(BuildCondsByKey());
+        //}
+
         public virtual TEntity GetById(TParam key)
         {
             return SelectOne<TEntity>(BuildCondsByKey(key));
