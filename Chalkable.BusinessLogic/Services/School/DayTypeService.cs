@@ -170,14 +170,21 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(IList<int> ids)
         {
-            //if (!BaseSecurity.IsDistrict(Context))
-            //    throw new ChalkableSecurityException();
-            //throw new NotImplementedException();
-            
-            //TODO: rewrite this later 
-            foreach (var id in ids)
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
             {
-                Delete(id);
+                var da = new DayTypeDataAccess(uow);
+                var dayTypes = da.GetDateTypes(ids);
+                var syIds = dayTypes.GroupBy(x => x.SchoolYearRef).Select(x=>x.Key).ToList();
+                da.Delete(ids);
+                var dayTypesForUpdate = new List<DayType>();
+                foreach (var syId in syIds)
+                {
+                    dayTypesForUpdate.AddRange(AdjustNumbering(da.GetDateTypes(syId)));
+                }
+                da.Update(dayTypesForUpdate);
+                uow.Commit();
             }
         }
     }

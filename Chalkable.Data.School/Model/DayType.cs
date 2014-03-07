@@ -11,6 +11,7 @@ namespace Chalkable.Data.School.Model
     {
         public const string NUMBER_FIELD = "Number";
         public const string SCHOOL_YEAR_REF = "SchoolYearRef";
+        public const string ID_FIELD = "Id";
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public int Number { get; set; }

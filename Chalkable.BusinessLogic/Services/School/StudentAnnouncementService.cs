@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
@@ -94,7 +95,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 var notGraded = new List<StudentAnnouncement>();
                 if (ann.SisActivityId.HasValue)
                 {
-                    var scores = ConnectorLocator.ActivityScoreConnector.GetSores(ann.SisActivityId.Value);
+                    IList<Score> scores = new List<Score>();
+                    if(CoreRoles.STUDENT_ROLE == Context.Role)
+                        scores.Add(ConnectorLocator.ActivityScoreConnector.GetScore(ann.SisActivityId.Value, Context.UserLocalId.Value));
+                    else
+                        scores = ConnectorLocator.ActivityScoreConnector.GetSores(ann.SisActivityId.Value);
                     foreach (var score in scores)
                     {
                         var stAnn = res.FirstOrDefault(x => x.PersonRef == score.StudentId);

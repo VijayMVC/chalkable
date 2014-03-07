@@ -23,10 +23,10 @@ namespace Chalkable.Data.School.DataAccess
         {
             var res = new StringBuilder();
             var idsS = ids.Select(x => x.ToString()).JoinString(",");
-            res.AppendFormat(" delete from [{0}] where [{0}].[{1}] in ({2})", "SchoolPerson",
-                             SchoolPerson.PERSON_REF_FIELD, idsS);
-            res.AppendFormat("delete from [{0}] where [{0}].[{1}] in ({2})"
-                             , "Person", Person.ID_FIELD, idsS);
+            var sqlFormat = " delete from [{0}] where [{0}].[{1}] in ({2})";
+            res.AppendFormat(sqlFormat, typeof(SchoolPerson).Name, SchoolPerson.PERSON_REF_FIELD, idsS);
+            res.AppendFormat(sqlFormat, typeof(StudentSchoolYear).Name, StudentSchoolYear.STUDENT_FIELD_REF_FIELD, idsS);
+            res.AppendFormat(sqlFormat, typeof(Person).Name, Person.ID_FIELD, idsS);
             ExecuteNonQueryParametrized(res.ToString(), new Dictionary<string, object>());
         }
 
