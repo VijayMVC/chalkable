@@ -1,0 +1,785 @@
+{"data":{
+    "sizex":7,
+    "sizey":6,
+    "seatinglist":[{
+        "index":0,
+        "info":{
+            "id":0,
+            "personid":248,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":248,
+                "displayname":"ERNA WILCOX",
+                "fullname":"ERNA WILCOX",
+                "firstname":"ERNA",
+                "lastname":"WILCOX",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":1,
+        "info":{
+            "id":0,
+            "personid":2619,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":2619,
+                "displayname":"MELISSA BISHOP",
+                "fullname":"MELISSA BISHOP",
+                "firstname":"MELISSA",
+                "lastname":"BISHOP",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":2,
+        "info":{
+            "id":0,
+            "personid":8,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":8,
+                "displayname":"ALBERTA HOOD",
+                "fullname":"ALBERTA HOOD",
+                "firstname":"ALBERTA",
+                "lastname":"HOOD",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":3,
+        "info":{
+            "id":0,
+            "personid":1951,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":1951,
+                "displayname":"KARI ROBLES",
+                "fullname":"KARI ROBLES",
+                "firstname":"KARI",
+                "lastname":"ROBLES",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":4,
+        "info":{
+            "id":0,
+            "personid":10,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":10,
+                "displayname":"LUCIA SNYDER",
+                "fullname":"LUCIA SNYDER",
+                "firstname":"LUCIA",
+                "lastname":"SNYDER",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":5,
+        "info":{
+            "id":0,
+            "personid":244,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":244,
+                "displayname":"MARIANA CHANG",
+                "fullname":"MARIANA CHANG",
+                "firstname":"MARIANA",
+                "lastname":"CHANG",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":6,
+        "info":{
+            "id":0,
+            "personid":2612,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":2612,
+                "displayname":"TAMMIE RUSSELL",
+                "fullname":"TAMMIE RUSSELL",
+                "firstname":"TAMMIE",
+                "lastname":"RUSSELL",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":7,
+        "info":null
+    }, {
+        "index":8,
+        "info":{
+            "id":0,
+            "personid":2302,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":2302,
+                "displayname":"SANDY HANSEN",
+                "fullname":"SANDY HANSEN",
+                "firstname":"SANDY",
+                "lastname":"HANSEN",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":9,
+        "info":{
+            "id":0,
+            "personid":1839,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":"A",
+            "period":null,
+            "student":{
+                "id":1839,
+                "displayname":"SHAWNA ATKINSON",
+                "fullname":"SHAWNA ATKINSON",
+                "firstname":"SHAWNA",
+                "lastname":"ATKINSON",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":1,
+            "attendancereason":{
+                "id":1,
+                "code":"IL",
+                "name":"Illness",
+                "description":"",
+                "category":null
+            },"teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":10,
+        "info":null
+    }, {
+        "index":11,
+        "info":{
+            "id":0,
+            "personid":2127,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":2127,
+                "displayname":"MARINA TRAN",
+                "fullname":"MARINA TRAN",
+                "firstname":"MARINA",
+                "lastname":"TRAN",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":12,
+        "info":null
+    }, {
+        "index":13,
+        "info":null
+    }, {
+        "index":14,
+        "info":{
+            "id":0,
+            "personid":1171,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":1171,
+                "displayname":"ANGELIQUE VAUGHN",
+                "fullname":"ANGELIQUE VAUGHN",
+                "firstname":"ANGELIQUE",
+                "lastname":"VAUGHN",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":15,
+        "info":null
+    }, {
+        "index":16,
+        "info":null
+    }, {
+        "index":17,
+        "info":{
+            "id":0,
+            "personid":29,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":29,
+                "displayname":"BEATRIZ GAMBLE",
+                "fullname":"BEATRIZ GAMBLE",
+                "firstname":"BEATRIZ",
+                "lastname":"GAMBLE",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":18,
+        "info":null
+    }, {
+        "index":19,
+        "info":null
+    }, {
+        "index":20,
+        "info":{
+            "id":0,
+            "personid":21,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":21,
+                "displayname":"ELBA VAUGHAN",
+                "fullname":"ELBA VAUGHAN",
+                "firstname":"ELBA",
+                "lastname":"VAUGHAN",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":21,
+        "info":null
+    }, {
+        "index":22,
+        "info":null
+    }, {
+        "index":23,
+        "info":null
+    }, {
+        "index":24,
+        "info":null
+    }, {
+        "index":25,
+        "info":{
+            "id":0,
+            "personid":1833,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":1833,
+                "displayname":"LYNDA REID",
+                "fullname":"LYNDA REID",
+                "firstname":"LYNDA",
+                "lastname":"REID",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":26,
+        "info":null
+    }, {
+        "index":27,
+        "info":null
+    }, {
+        "index":28,
+        "info":{
+            "id":0,
+            "personid":23,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":23,
+                "displayname":"ESPERANZA BRUCE",
+                "fullname":"ESPERANZA BRUCE",
+                "firstname":"ESPERANZA",
+                "lastname":"BRUCE",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":29,
+        "info":{
+            "id":0,
+            "personid":2498,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":2498,
+                "displayname":"LISA FERNANDEZ",
+                "fullname":"LISA FERNANDEZ",
+                "firstname":"LISA",
+                "lastname":"FERNANDEZ",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":30,
+        "info":{
+            "id":0,
+            "personid":2285,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":2285,
+                "displayname":"INGRID LOWERY",
+                "fullname":"INGRID LOWERY",
+                "firstname":"INGRID",
+                "lastname":"LOWERY",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":31,
+        "info":null
+    }, {
+        "index":32,
+        "info":{
+        "id":0,
+            "personid":1158,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":1158,
+                "displayname":"VICKY CHANDLER",
+                "fullname":"VICKY CHANDLER",
+                "firstname":"VICKY",
+                "lastname":"CHANDLER",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":33,
+        "info":{
+            "id":0,
+            "personid":2623,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":2623,
+                "displayname":"GERALDINE GUERRERO",
+                "fullname":"GERALDINE GUERRERO",
+                "firstname":"GERALDINE",
+                "lastname":"GUERRERO",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":34,
+        "info":{
+            "id":0,
+            "personid":19,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":19,
+                "displayname":"KAYE BURGESS",
+                "fullname":"KAYE BURGESS",
+                "firstname":"KAYE",
+                "lastname":"BURGESS",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":35,
+        "info":{
+            "id":0,
+            "personid":1505,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":1505,
+                "displayname":"ADDIE CLAY",
+                "fullname":"ADDIE CLAY",
+                "firstname":"ADDIE",
+                "lastname":"CLAY",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":36,
+        "info":null
+    }, {
+        "index":37,
+        "info":null
+    }, {
+        "index":38,
+        "info":null
+    }, {
+        "index":39,
+        "info":{
+            "id":0,
+            "personid":245,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":245,
+                "displayname":"COLLEEN HOLDEN",
+                "fullname":"COLLEEN HOLDEN",
+                "firstname":"COLLEEN",
+                "lastname":"HOLDEN",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":40,
+        "info":{
+            "id":0,
+            "personid":30,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":30,
+                "displayname":"JANELL MARSH",
+                "fullname":"JANELL MARSH",
+                "firstname":"JANELL",
+                "lastname":"MARSH",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }, {
+        "index":41,
+        "info":{
+            "id":0,
+            "personid":243,
+            "classperiodid":0,
+            "date":"2014-03-04",
+            "level":null,
+            "period":null,
+            "student":{
+                "id":243,
+                "displayname":"MELISA LEACH",
+                "fullname":"MELISA LEACH",
+                "firstname":"MELISA",
+                "lastname":"LEACH",
+                "gender":"F",
+                "role":{
+                    "id":3,
+                    "name":"Student",
+                    "description":"Student",
+                    "namelowered":"student"
+                }
+            },
+            "attendancereasonid":null,
+            "attendancereason":null,
+            "teacherid":0,
+            "classid":725,
+            "classname":"Bib Wrldview",
+            "isposted":true
+        }
+    }],
+    "notseatingstudents":[]
+},"success":true}
