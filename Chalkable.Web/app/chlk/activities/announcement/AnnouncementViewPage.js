@@ -2,8 +2,10 @@ REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.announcement.AnnouncementView');
 REQUIRE('chlk.templates.announcement.StudentAnnouncement');
 REQUIRE('chlk.templates.announcement.AnnouncementForStudentAttachments');
+REQUIRE('chlk.templates.announcement.AnnouncementViewStandardsTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementGradingPartTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementQnAs');
+REQUIRE('chlk.templates.announcement.AddStandardsTpl');
 REQUIRE('chlk.templates.classes.TopBar');
 REQUIRE('chlk.models.grading.AlertsEnum');
 
@@ -46,6 +48,27 @@ NAMESPACE('chlk.activities.announcement', function () {
                 grid.trigger(chlk.controls.GridEvents.SELECT_ROW.valueOf(), [grid.find('.row:eq(0)'), 0]);
             },
 
+            [[ria.dom.Dom]],
+            function updateStandardsInfo(node){
+                var parent = node.parent('.attachments-container');
+                var form = parent.previous('.row').find('form');
+                var standardIds = [];
+                var standardGrades = [];
+                parent.find('.standard-grade').forEach(function(item){
+                    standardIds.push(item.getData('id'));
+                    standardGrades.push(item.getValue());
+                });
+                form.find('.standard-grades').setValue(standardGrades.join(','));
+                form.find('.standard-ids').setValue(standardIds.join(','));
+                form.trigger('submit');
+            },
+
+            [ria.mvc.DomEventBind('keyup', '.standard-grade')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function standardGradeKey(node, event){
+                if(event.keyCode == ria.dom.Keys.ENTER)
+                    this.updateStandardsInfo(node)
+            },
 
             [ria.mvc.DomEventBind('click', '.make-visible-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -158,7 +181,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function commentPress(node, event){
                 if(event.keyCode == ria.dom.Keys.ENTER){
-                    this.updateItem(node, false);
+                    this.updateItem(node, false, true);
                     node.parent('.small-pop-up').hide();
                     node.parent('.comment-grade').find('.comment-text').setHTML(node.getValue() ? Msg.Commented : Msg.Comment);
                 }
@@ -251,11 +274,19 @@ NAMESPACE('chlk.activities.announcement', function () {
                     popUp.hide();
             },
 
-            [[ria.dom.Dom, Boolean]],
-            VOID, function updateItem(node, selectNext_){
+            [[ria.dom.Dom, Boolean, Boolean]],
+            VOID, function updateItem(node, selectNext_, noStandardUpdates_){
                 var row = node.parent('.row');
                 var container = row.find('.top-content');
                 container.addClass('loading');
+                if(!noStandardUpdates_){
+                    var standards = row.next().find('.standard-grade');
+                    standards.forEach(function(item){
+                        item.setValue(row.find('.grade-autocomplete').getValue());
+                    });
+                    if(standards.valueOf().length)
+                        this.updateStandardsInfo(standards);
+                }
                 var form = row.find('form');
                 form.trigger('submit');
                 if(selectNext_){
@@ -344,8 +375,14 @@ NAMESPACE('chlk.activities.announcement', function () {
                 });
                 var container = this.dom.find('#grade-container-' + itemModel.getId().valueOf());
                 container.empty();
-                this.dom.find('#top-content-' + itemModel.getId().valueOf()).removeClass('loading');
+                var topContent = this.dom.find('#top-content-' + itemModel.getId().valueOf());
+                topContent.removeClass('loading');
                 itemTpl.renderTo(container);
+
+                var standardsDom = topContent.parent('.row').next().find('.standards-block');
+                var standardsTpl = new chlk.templates.announcement.AnnouncementViewStandardsTpl;
+                standardsTpl.assign(itemModel);
+                standardsTpl.renderTo(standardsDom.empty());
             },
 
             //TODO copied from GridPage
@@ -422,11 +459,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                         } else {
                             return false;
                         }
-                        //else
-                            //this.setValue(cell);
                     }else{
                         var text = node.getValue() ? node.getValue().trim() : '';
-                        var parsed = parseInt(text,10);
+                        var parsed = parseFloat(text);
                         if(parsed){
                             node.removeClass('error');
                             if(parsed != text){
@@ -445,7 +480,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     }
                     this.updateDropDown(suggestions, node);
                 }
-                var id = node.getData('id'), value = parseInt(node.getValue(), 10);
+                var id = node.getData('id'), value = parseFloat(node.getValue());
                 if(value){
                     var maxValue = this.getMaxScore();
                     this.getStudentAnnouncements().forEach(function(item){

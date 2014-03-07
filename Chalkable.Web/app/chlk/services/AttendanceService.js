@@ -12,6 +12,7 @@ REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.attendance.StudentDayAttendances');
 REQUIRE('chlk.models.attendance.SetClassListAttendance');
+REQUIRE('chlk.models.attendance.SeatingChart');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -33,7 +34,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId]],
             ria.async.Future, function getSeatingChartInfo(classId) {
-                return this.get('Attendance/ClassList.json', ArrayOf(chlk.models.attendance.ClassAttendance), {
+                return this.get('Attendance/SeatingChart.json', chlk.models.attendance.SeatingChart, {
                     classId: classId.valueOf()
                 });
             },

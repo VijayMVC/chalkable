@@ -515,6 +515,13 @@ namespace Chalkable.BusinessLogic.Services.Master
                 Value = "returns attendance summary"
             });
 
+            res.Add(Preference.API_DESCR_ATTENDANCE_SEATING_CHART, new PreferenceInfo
+            {
+                Category = PreferenceCategoryEnum.ControllerDescriptions,
+                Type = PreferenceTypeEnum.ShortText,
+                Value = "returns attendance seating chart"
+            });
+
             res.Add(Preference.API_DESCR_ATTENDANCE_LIST_CLASS_ATTENDANCE, new PreferenceInfo
             {
                 Category = PreferenceCategoryEnum.ControllerDescriptions,

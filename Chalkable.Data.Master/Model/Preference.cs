@@ -144,6 +144,7 @@ namespace Chalkable.Data.Master.Model
         public const string API_DESCR_GET_APP_ANNOUNCEMENT_APPLICATION = "api_desc_app_get_announcement_app";
         public const string API_DESCR_ATTENDANCE_SET_ATTENDANCE = "api_desc_attendance_set_attendance";
         public const string API_DESCR_ATTENDANCE_SUMMARY = "api_desc_attendance_summary";
+        public const string API_DESCR_ATTENDANCE_SEATING_CHART = "api_desc_attendance_seating_chart";
         public const string API_DESCR_ATTENDANCE_LIST_CLASS_ATTENDANCE = "api_desc_attendance_list_class_attendance";
         public const string API_DESCR_CLASS_DISCIPLINE_LIST = "api_desc_class_discipline_list";
         public const string API_DESCR_CLASS_DISCIPLINE_LIST_POSSIBLE_STUDENTS = "api_desc_class_discipline_list_possible_students";

@@ -244,7 +244,9 @@ var Msg = {
     Add_a_comment: 'Add a comment',
     Add_discipline: 'Add discipline',
     Add_reminder: 'Add Reminder',
+    Add_remove_students: 'Add/Remove students',
     Add_student: 'Add student',
+    Add_your_students: 'Add your students',
     Advanced_options: 'Advanced options...',
     All_day: 'All day',
     All_categories: 'All categories',
@@ -311,6 +313,7 @@ var Msg = {
     Comments_for: 'Comments for',
     Cost_per_user: 'Cost per user',
     Create_AutoEmail: 'Create AutoEmail',
+    Create_grid: 'Create grid',
     Day_Of_Month: 'Day Of Month',
     Day_Of_Week: 'Day Of Week',
     Days_Ago: function(n){
@@ -342,6 +345,7 @@ var Msg = {
     Due_today: 'Due today',
     Due_tomorrow: 'Due tomorrow',
     Due_yesterday: 'Due yesterday',
+    Edit_grid: 'Edit grid',
     Email: 'Email',
     Empty_new_item_message_text: 'Message',
     Enter_app_name: 'Enter app name',
@@ -448,6 +452,7 @@ var Msg = {
     Select_file: 'Select a file',
     Select_file_to_upload: 'Select file to upload...',
     Searching_text: 'Searching...',
+    Seating_Chart: 'Seating Chart',
     Send_message: 'Send message',
     Sent_today: 'Sent today',
     Sent_in_date: function(date){
@@ -463,6 +468,7 @@ var Msg = {
     Step_of: function(a,b){
         return 'Step ' + a + ' of ' + b;
     },
+    Start_by_creating_a_grid: 'Start by creating a grid',
     Student: oneOrMany('Student'),
     Student_marked_absent: 'Student marked as absent on the date of that item',
     Students_are_in_trouble: function(count){

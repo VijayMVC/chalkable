@@ -7,6 +7,8 @@ NAMESPACE('chlk.models.grading', function () {
             chlk.models.people.ShortUserInfo, 'studentInfo',
 
             [ria.serialize.SerializeProperty('iswithdrawn')],
-            Boolean, 'withdrawn'
+            Boolean, 'withdrawn',
+
+            Number, 'avg'
         ]);
 });

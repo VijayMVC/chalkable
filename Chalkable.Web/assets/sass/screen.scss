@@ -514,6 +514,12 @@ BODY {
   }
 }
 
+.black-arrow{
+  font: normal 19px Jrhand;
+  background: url(images/attendance/top-left-arrow.png) 0 0 no-repeat;
+  padding: 22px 0 0 53px;
+}
+
 :focus {
   outline: none;
 }

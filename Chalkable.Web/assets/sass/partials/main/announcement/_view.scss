@@ -397,7 +397,23 @@ $red-color: #842727;
         }
       }
 
+      .standard-item{
+        display: inline-block;
+
+        .grey-input{
+          width:65px;
+        }
+      }
+
+      .grey-input{
+        height: 31px;
+        line-height: 31px;
+        border: 1px solid #BCBCBC;
+        @include border-radius(3px);
+      }
+
       .row{
+
         .top-content{
           &.loading{
             background: url(images/loaders/horizontal-small.gif) right 26px no-repeat;
@@ -580,10 +596,6 @@ $red-color: #842727;
             }
 
             INPUT{
-              height: 31px;
-              line-height: 31px;
-              border: 1px solid #BCBCBC;
-              @include border-radius(3px);
               background: white;
               text-align: center;
               overflow: hidden;

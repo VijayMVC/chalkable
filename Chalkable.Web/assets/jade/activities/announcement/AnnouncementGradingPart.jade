@@ -33,6 +33,8 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                 +ActionForm('announcement', 'updateAnnouncementGrade').update-grade-form
                     input(type="submit").x-hidden
                     +Hidden('id', item.getId())
+                    +Hidden('standardGrades', item.getStandardsGrades()).standard-grades
+                    +Hidden('standardIds', item.getStandardsIds()).standard-ids
                     +Hidden('announcementId', item.getAnnouncementId())
                     +Hidden('dropped', isDrop)
                     +Hidden('isincomplete', item.isIncomplete())
@@ -63,6 +65,8 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                         )
         .attachments-container.z-10
             .attachments-container-2
+                .standards-block
+                    +RenderWith(item, chlk.templates.announcement.AnnouncementViewStandardsTpl)
                 each attachment, i in item.getAttachments()
                     +ActionLink('announcement', 'viewAttachment', attachment.getId()).announcement-item.attachment
                         +AppAttachmentBlock(attachment, attachment.getThumbnailUrl(), i)

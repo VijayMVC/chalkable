@@ -37,6 +37,10 @@ BODY {
     }
   }
 
+  .no-class-scheduled{
+    margin-left: 65px;
+  }
+
   DIV.page{
     >DIV#content {
       DIV#content-wrapper{
@@ -1066,6 +1070,22 @@ BODY {
           display: block;
         }
       }
+    }
+  }
+}
+
+.seating-chart-page{
+  margin-top: 25px;
+
+  .grey-button{
+    font-size: 14px;
+    padding: 9px 12px;
+    line-height: 14px;
+  }
+
+  .black-arrow{
+    &.start{
+      margin: 24px 64px;
     }
   }
 }

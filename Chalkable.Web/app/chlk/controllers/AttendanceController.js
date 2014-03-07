@@ -211,15 +211,27 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(this.getActivityClass_(isProfile_), result);
         },
 
-        [[chlk.models.id.ClassId]],
-        function seatingChartAction(classId){
-            var result = this.attendanceService.getSeatingChartInfo(classId).then(function(classItems){
+        [chlk.controllers.SidebarButton('attendance')],
+        [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
+        function seatingChartAction(classId, date_, isUpdate_){
+            var result = this.attendanceService.getSeatingChartInfo(classId).then(function(model){
+                date_ = date_ || new chlk.models.common.ChlkDate(getDate());
                 var classes = this.classService.getClassesForTopBar(true);
                 var topModel = new chlk.models.classes.ClassesForTopBar(classes);
-                var model = new chlk.models.attendance.ClassList(topModel, classId, classItems);
+                topModel.setSelectedItemId(classId);
+                model.setTopData(topModel);
+                model.setDate(date_);
                 return model;
             }, this);
-            return this.PushView(chlk.activities.attendance.SeatingChartPage, result);
+            if(!(date_ && isUpdate_))
+                return this.PushView(chlk.activities.attendance.SeatingChartPage, result);
+            return this.UpdateView(chlk.activities.attendance.SeatingChartPage, result);
+        },
+
+        [chlk.controllers.SidebarButton('attendance')],
+        [[chlk.models.id.ClassId]],
+        function showEditGridWindowAction(classId){
+
         },
 
         [chlk.controllers.SidebarButton('attendance')],
@@ -232,10 +244,6 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(items){
                     date_ = date_ || new chlk.models.common.ChlkDate(getDate());
-                    if(items.length == 0)
-                        this.ShowMsgBox(Msg.No_class_scheduled(date_.format('mm/dd/yy')), null, [{
-                            text: Msg.GOT_IT.toUpperCase()
-                        }]);
                     this.getContext().getSession().set('attendanceData', items);
                     var classes = this.classService.getClassesForTopBar(true);
                     var topModel = new chlk.models.classes.ClassesForTopBar(classes);
