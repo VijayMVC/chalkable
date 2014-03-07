@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.attachment.Attachment');
+REQUIRE('chlk.models.standard.Standard');
 REQUIRE('chlk.models.announcement.ShortStudentAnnouncementViewData');
 
 NAMESPACE('chlk.models.announcement', function () {
@@ -31,6 +32,28 @@ NAMESPACE('chlk.models.announcement', function () {
 
             Object, function isGradeDisabled(){
                 return this.isDropped() || this.isExempt();
-            }
+            },
+
+            ArrayOf(chlk.models.standard.Standard), 'standards',
+
+            String, function getStandardsGrades(){
+                var res = [];
+                this.getStandards().forEach(function(item){
+                    res.push(item.getGrade());
+                });
+                return res.join(',');
+            },
+
+            String, function getStandardsIds(){
+                var res = [];
+                this.getStandards().forEach(function(item){
+                    res.push(item.getStandardId().valueOf());
+                });
+                return res.join(',');
+            },
+
+            String, 'standardIds',
+
+            String, 'standardGrades'
         ]);
 });

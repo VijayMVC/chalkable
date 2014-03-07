@@ -173,6 +173,34 @@ namespace Chalkable.Web.Controllers
             return FakeJson("~/fakeData/attendanceSummary.json");
         }
 
+        [AuthorizationFilter("Teacher", Preference.API_DESCR_ATTENDANCE_SEATING_CHART, true, CallType.Get, new[] { AppPermissionType.Attendance })]
+        public ActionResult SeatingChart(DateTime? date, int classId)
+        {
+            if (classId == 645)
+                return FakeJson("~/fakeData/seatingChart2.json");
+            if (classId == 723)
+                return FakeJson("~/fakeData/seatingChart3.json");
+            return FakeJson("~/fakeData/seatingChart1.json");
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult UpdateSeatingChart(int classId, int sizeX, int sizeY)
+        {
+            if (classId == 645)
+                return FakeJson("~/fakeData/seatingChart2.json");
+            if (classId == 723)
+                return FakeJson("~/fakeData/seatingChart3.json");
+            return FakeJson("~/fakeData/seatingChart.json");
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult ChangeStudentSeat(DateTime? date, int classId)
+        {
+            if (classId == 723 || classId == 645)
+                return FakeJson("~/fakeData/seatingChart3.json");
+            return FakeJson("~/fakeData/seatingChart2.json");
+        }
+
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
         public ActionResult AdminAttendanceSummary(bool renderNow, bool renderDay, bool renderMp, IntList gradeLevelsIds, 
             DateTime? nowDateTime, Guid? fromMarkingPeriodId, Guid? toMarkingPeriodId, DateTime? startDate, DateTime? endDate)

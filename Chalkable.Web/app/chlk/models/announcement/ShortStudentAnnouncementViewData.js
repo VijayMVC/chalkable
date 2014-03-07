@@ -53,7 +53,7 @@ NAMESPACE('chlk.models.announcement', function () {
                         classes.push(Msg.Error.toLowerCase());
                 }
                 else{
-                    var value = parseInt(this.getGradeValue(), 10);
+                    var value = parseFloat(this.getGradeValue());
                     if(value && value > maxScore)
                         classes.push(Msg.Error.toLowerCase());
                 }
@@ -84,7 +84,7 @@ NAMESPACE('chlk.models.announcement', function () {
                         res.push(Msg.Scores_exceeds);
                 }
                 else{
-                    var value = parseInt(this.getGradeValue(), 10);
+                    var value = parseFloat(this.getGradeValue());
                     if(value && value > maxScore)
                         res.push(Msg.Scores_exceeds);
                 }

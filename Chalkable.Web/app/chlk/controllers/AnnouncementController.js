@@ -23,6 +23,7 @@ REQUIRE('chlk.models.attachment.Attachment');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
 REQUIRE('chlk.models.apps.InstalledAppsViewData');
 REQUIRE('chlk.models.announcement.ShowGradesToStudents');
+REQUIRE('chlk.models.standard.Standard');
 
 
 REQUIRE('chlk.models.id.ClassId');
@@ -156,7 +157,9 @@ NAMESPACE('chlk.controllers', function (){
                     model.isIncomplete(),
                     model.isExempt(),
                     model.isPassed(),
-                    model.isComplete()
+                    model.isComplete(),
+                    model.getStandardIds(),
+                    model.getStandardGrades()
                 )
                 .attach(this.validateResponse_());
             return result;
@@ -172,6 +175,13 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.setAnnouncementGrade(model)
                 .then(function(currentItem){
                     var announcement = this.getContext().getSession().get('announcement', {});
+
+                    //TODO Remove fake standards
+                    var standard1 = new chlk.models.standard.Standard(new chlk.models.id.StandardId(1), 'ASD.f-1', '50'),
+                        standard2 = new chlk.models.standard.Standard(new chlk.models.id.StandardId(2), 'ASD.f-2', 'C+'),
+                        standards = [standard1, standard2];
+                    currentItem.setStandards(standards);
+
                     announcement.getStudentAnnouncements().getItems().forEach(function(item){
                         if(item.getId() == currentItem.getId()){
                             item.setGradeValue(currentItem.getGradeValue());
@@ -402,6 +412,13 @@ NAMESPACE('chlk.controllers', function (){
                         && this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHANGE_ACTIVITY_DATES));
 
                     this.getContext().getSession().set('announcement', announcement);
+
+                    announcement.getStudentAnnouncements().getItems().forEach(function(item){
+                        var standard1 = new chlk.models.standard.Standard(new chlk.models.id.StandardId(1), 'ASD.f-1', '10'),
+                            standard2 = new chlk.models.standard.Standard(new chlk.models.id.StandardId(2), 'ASD.f-2', 'A+'),
+                            standards = [standard1, standard2];
+                        item.setStandards(standards);
+                    });
 
                     return new ria.async.DeferredData(announcement);
                 }, this);
